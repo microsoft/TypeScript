@@ -1,0 +1,9 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of7.ts ===
+v;
+>v : any
+
+for (let v of [0]) { }
+>v : number
+>[0] : number[]
+>0 : 0
+

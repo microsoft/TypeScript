@@ -1,0 +1,37 @@
+=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName02.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 0, 0))
+
+    a: string;
+>a : Symbol(Foo.a, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 0, 15))
+
+    b: number;
+>b : Symbol(Foo.b, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 1, 14))
+
+    c: boolean;
+>c : Symbol(Foo.c, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 2, 14))
+}
+
+export const obj = {
+>obj : Symbol(obj, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 6, 12))
+
+    m(): this is Foo {
+>m : Symbol(m, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 6, 20))
+>Foo : Symbol(Foo, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 0, 0))
+
+        let dis = this as {} as Foo;
+>dis : Symbol(dis, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 8, 11))
+>Foo : Symbol(Foo, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 0, 0))
+
+        return dis.a != null && dis.b != null && dis.c != null;
+>dis.a : Symbol(Foo.a, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 0, 15))
+>dis : Symbol(dis, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 8, 11))
+>a : Symbol(Foo.a, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 0, 15))
+>dis.b : Symbol(Foo.b, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 1, 14))
+>dis : Symbol(dis, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 8, 11))
+>b : Symbol(Foo.b, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 1, 14))
+>dis.c : Symbol(Foo.c, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 2, 14))
+>dis : Symbol(dis, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 8, 11))
+>c : Symbol(Foo.c, Decl(declarationEmitThisPredicatesWithPrivateName02.ts, 2, 14))
+    }
+}

@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty52.ts ===
+var obj = {
+>obj : Symbol(obj, Decl(symbolProperty52.ts, 0, 3))
+
+    [Symbol.nonsense]: 0
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+
+};
+
+obj = {};
+>obj : Symbol(obj, Decl(symbolProperty52.ts, 0, 3))
+
+obj[Symbol.nonsense];
+>obj : Symbol(obj, Decl(symbolProperty52.ts, 0, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+

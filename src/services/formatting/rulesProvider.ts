@@ -10,7 +10,7 @@ namespace ts.formatting {
         constructor() {
             this.globalRules = new Rules();
             const activeRules = this.globalRules.HighPriorityCommonRules.concat(this.globalRules.UserConfigurableRules).concat(this.globalRules.LowPriorityCommonRules);
-            this.rulesMap = RulesMap.create(activeRules);
+            this.rulesMap = new RulesMap(activeRules);
         }
 
         public getRulesMap() {

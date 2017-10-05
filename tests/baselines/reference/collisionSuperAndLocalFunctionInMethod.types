@@ -1,0 +1,53 @@
+=== tests/cases/compiler/collisionSuperAndLocalFunctionInMethod.ts ===
+function _super() { // No error
+>_super : () => void
+} 
+class Foo {
+>Foo : Foo
+
+    x() {
+>x : () => void
+
+        function _super() { // No error
+>_super : () => void
+        } 
+    }
+    _super() { // No error
+>_super : () => void
+    }
+}
+class b extends Foo {
+>b : b
+>Foo : Foo
+
+    public foo() {
+>foo : () => void
+
+        function _super() { // should be error
+>_super : () => void
+        } 
+    }
+    _super() { // No Error
+>_super : () => void
+    }
+}
+class c extends Foo {
+>c : c
+>Foo : Foo
+
+    public foo() {
+>foo : () => void
+
+        var x = () => {
+>x : () => void
+>() => {            function _super() { // should be error            }         } : () => void
+
+            function _super() { // should be error
+>_super : () => void
+            } 
+        }
+    }
+    _super() { // No error
+>_super : () => void
+    }
+}

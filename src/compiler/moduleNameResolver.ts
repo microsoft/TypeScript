@@ -98,7 +98,7 @@ namespace ts {
             }
 
             const fileName = jsonContent[fieldName];
-            if (typeof fileName !== "string") {
+            if (!isString(fileName)) {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, fieldName, typeof fileName);
                 }
@@ -663,8 +663,8 @@ namespace ts {
         }
 
         if (matchedPattern) {
-            const matchedStar = typeof matchedPattern === "string" ? undefined : matchedText(matchedPattern, moduleName);
-            const matchedPatternText = typeof matchedPattern === "string" ? matchedPattern : patternText(matchedPattern);
+            const matchedStar = isString(matchedPattern) ? undefined : matchedText(matchedPattern, moduleName);
+            const matchedPatternText = isString(matchedPattern) ? matchedPattern : patternText(matchedPattern);
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Module_name_0_matched_pattern_1, moduleName, matchedPatternText);
             }
@@ -976,8 +976,8 @@ namespace ts {
     }
 
     function loadModuleFromNodeModulesFolder(extensions: Extensions, moduleName: string, nodeModulesFolder: string, nodeModulesFolderExists: boolean, failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
-        const { top, rest } = getNameOfTopDirectory(moduleName);
-        const packageRootPath = combinePaths(nodeModulesFolder, top);
+        const { packageName, rest } = getPackageName(moduleName);
+        const packageRootPath = combinePaths(nodeModulesFolder, packageName);
         const { packageJsonContent, packageId } = getPackageJsonInfo(packageRootPath, rest, failedLookupLocations, !nodeModulesFolderExists, state);
         const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
         const pathAndExtension = loadModuleFromFile(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state) ||
@@ -985,9 +985,12 @@ namespace ts {
         return withPackageId(packageId, pathAndExtension);
     }
 
-    function getNameOfTopDirectory(name: string): { top: string, rest: string } {
-        const idx = name.indexOf(directorySeparator);
-        return idx === -1 ? { top: name, rest: "" } : { top: name.slice(0, idx), rest: name.slice(idx + 1) };
+    function getPackageName(moduleName: string): { packageName: string, rest: string } {
+        let idx = moduleName.indexOf(directorySeparator);
+        if (moduleName[0] === "@") {
+            idx = moduleName.indexOf(directorySeparator, idx + 1);
+        }
+        return idx === -1 ? { packageName: moduleName, rest: "" } : { packageName: moduleName.slice(0, idx), rest: moduleName.slice(idx + 1) };
     }
 
     function loadModuleFromNodeModules(extensions: Extensions, moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState, cache: NonRelativeModuleNameResolutionCache): SearchResult<Resolved> {
@@ -1149,22 +1152,5 @@ namespace ts {
      */
     function toSearchResult<T>(value: T | undefined): SearchResult<T> {
         return value !== undefined ? { value } : undefined;
-    }
-
-    /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */
-    function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => SearchResult<T>): SearchResult<T> {
-        while (true) {
-            const result = callback(directory);
-            if (result !== undefined) {
-                return result;
-            }
-
-            const parentPath = getDirectoryPath(directory);
-            if (parentPath === directory) {
-                return undefined;
-            }
-
-            directory = parentPath;
-        }
     }
 }

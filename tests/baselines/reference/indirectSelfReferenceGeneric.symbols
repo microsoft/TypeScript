@@ -1,0 +1,13 @@
+=== tests/cases/compiler/indirectSelfReferenceGeneric.ts ===
+class a<T> extends b<T> { }
+>a : Symbol(a, Decl(indirectSelfReferenceGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(indirectSelfReferenceGeneric.ts, 0, 8))
+>b : Symbol(b, Decl(indirectSelfReferenceGeneric.ts, 0, 27))
+>T : Symbol(T, Decl(indirectSelfReferenceGeneric.ts, 0, 8))
+
+class b<T> extends a<T> { }
+>b : Symbol(b, Decl(indirectSelfReferenceGeneric.ts, 0, 27))
+>T : Symbol(T, Decl(indirectSelfReferenceGeneric.ts, 1, 8))
+>a : Symbol(a, Decl(indirectSelfReferenceGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(indirectSelfReferenceGeneric.ts, 1, 8))
+

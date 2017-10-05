@@ -152,7 +152,9 @@ namespace ts.textChanges {
             return position === Position.Start ? start : fullStart;
         }
         // get start position of the line following the line that contains fullstart position
-        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + 1, sourceFile);
+        // (but only if the fullstart isn't the very beginning of the file)
+        const nextLineStart = fullStart > 0 ? 1 : 0;
+        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + nextLineStart, sourceFile);
         // skip whitespaces/newlines
         adjustedStartPosition = skipWhitespacesAndLineBreaks(sourceFile.text, adjustedStartPosition);
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
@@ -224,7 +226,7 @@ namespace ts.textChanges {
                 Debug.fail("node is not a list element");
                 return this;
             }
-            const index = containingList.indexOf(node);
+            const index = indexOfNode(containingList, node);
             if (index < 0) {
                 return this;
             }
@@ -356,7 +358,7 @@ namespace ts.textChanges {
                 Debug.fail("node is not a list element");
                 return this;
             }
-            const index = containingList.indexOf(after);
+            const index = indexOfNode(containingList, after);
             if (index < 0) {
                 return this;
             }

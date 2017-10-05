@@ -1,3 +1,4 @@
+/// <reference path="addMissingInvocationForDecorator.ts" />
 /// <reference path="correctQualifiedNameToIndexedAccessType.ts" />
 /// <reference path="fixClassIncorrectlyImplementsInterface.ts" />
 /// <reference path="fixAddMissingMember.ts" />

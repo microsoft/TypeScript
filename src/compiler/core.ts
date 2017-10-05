@@ -247,6 +247,8 @@ namespace ts {
     }
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
+    export function find<T, U extends T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => element is U): U | undefined;
+    export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined;
     export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = 0; i < array.length; i++) {
             const value = array[i];
@@ -467,13 +469,20 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | undefined): U[] {
+    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U | U[] | undefined): U[] {
         const result: U[] = [];
         while (true) {
             const { value, done } = iter.next();
             if (done) break;
             const res = mapfn(value);
-            if (res) result.push(...res);
+            if (res) {
+                if (isArray(res)) {
+                    result.push(...res);
+                }
+                else {
+                    result.push(res);
+                }
+            }
         }
         return result;
     }
@@ -518,6 +527,19 @@ namespace ts {
                 if (mapped !== undefined) {
                     result.push(mapped);
                 }
+            }
+        }
+        return result;
+    }
+
+    export function mapDefinedIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): U[] {
+        const result: U[] = [];
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) break;
+            const res = mapFn(value);
+            if (res !== undefined) {
+                result.push(res);
             }
         }
         return result;
@@ -766,7 +788,7 @@ namespace ts {
      * @param end The offset in `from` at which to stop copying values (non-inclusive).
      */
     export function addRange<T>(to: T[] | undefined, from: ReadonlyArray<T> | undefined, start?: number, end?: number): T[] | undefined {
-        if (from === undefined) return to;
+        if (from === undefined || from.length === 0) return to;
         if (to === undefined) return from.slice(start, end);
         start = start === undefined ? 0 : toOffset(from, start);
         end = end === undefined ? from.length : toOffset(from, end);
@@ -846,11 +868,21 @@ namespace ts {
         return elementAt(array, 0);
     }
 
+    export function first<T>(array: ReadonlyArray<T>): T {
+        Debug.assert(array.length !== 0);
+        return array[0];
+    }
+
     /**
      * Returns the last element of an array if non-empty, `undefined` otherwise.
      */
     export function lastOrUndefined<T>(array: ReadonlyArray<T>): T | undefined {
         return elementAt(array, -1);
+    }
+
+    export function last<T>(array: ReadonlyArray<T>): T {
+        Debug.assert(array.length !== 0);
+        return array[array.length - 1];
     }
 
     /**
@@ -994,11 +1026,6 @@ namespace ts {
 
     /**
      * Gets the owned, enumerable property keys of a map-like.
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       Object.keys instead as it offers better performance.
-     *
-     * @param map A map-like.
      */
     export function getOwnKeys<T>(map: MapLike<T>): string[] {
         const keys: string[] = [];
@@ -1009,6 +1036,17 @@ namespace ts {
         }
 
         return keys;
+    }
+
+    export function getOwnValues<T>(sparseArray: T[]): T[] {
+        const values: T[] = [];
+        for (const key in sparseArray) {
+            if (hasOwnProperty.call(sparseArray, key)) {
+                values.push(sparseArray[key]);
+            }
+        }
+
+        return values;
     }
 
     /** Shims `Array.from`. */
@@ -1216,6 +1254,13 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
+    /**
+     * Tests whether a value is string
+     */
+    export function isString(text: any): text is string {
+        return typeof text === "string";
+    }
+
     export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
         return value !== undefined && test(value) ? value : undefined;
     }
@@ -1226,7 +1271,13 @@ namespace ts {
     }
 
     /** Does nothing. */
-    export function noop(): void {}
+    export function noop(): void { }
+
+    /** Do nothing and return false */
+    export function returnFalse(): false { return false; }
+
+    /** Do nothing and return true */
+    export function returnTrue(): true { return true; }
 
     /** Returns its argument. */
     export function identity<T>(x: T) { return x; }
@@ -1470,16 +1521,16 @@ namespace ts {
     function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
         while (text1 && text2) {
             // We still have both chains.
-            const string1 = typeof text1 === "string" ? text1 : text1.messageText;
-            const string2 = typeof text2 === "string" ? text2 : text2.messageText;
+            const string1 = isString(text1) ? text1 : text1.messageText;
+            const string2 = isString(text2) ? text2 : text2.messageText;
 
             const res = compareValues(string1, string2);
             if (res) {
                 return res;
             }
 
-            text1 = typeof text1 === "string" ? undefined : text1.next;
-            text2 = typeof text2 === "string" ? undefined : text2.next;
+            text1 = isString(text1) ? undefined : text1.next;
+            text2 = isString(text2) ? undefined : text2.next;
         }
 
         if (!text1 && !text2) {
@@ -1659,7 +1710,7 @@ namespace ts {
     }
 
     export function isRootedDiskPath(path: string) {
-        return getRootLength(path) !== 0;
+        return path && getRootLength(path) !== 0;
     }
 
     export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
@@ -1805,6 +1856,8 @@ namespace ts {
      * Removes a trailing directory separator from a path.
      * @param path The path.
      */
+    export function removeTrailingDirectorySeparator(path: Path): Path;
+    export function removeTrailingDirectorySeparator(path: string): string;
     export function removeTrailingDirectorySeparator(path: string) {
         if (path.charAt(path.length - 1) === directorySeparator) {
             return path.substr(0, path.length - 1);
@@ -2067,8 +2120,8 @@ namespace ts {
     }
 
     export interface FileSystemEntries {
-        files: ReadonlyArray<string>;
-        directories: ReadonlyArray<string>;
+        readonly files: ReadonlyArray<string>;
+        readonly directories: ReadonlyArray<string>;
     }
 
     export interface FileMatcherPatterns {
@@ -2221,7 +2274,7 @@ namespace ts {
                 return ScriptKind.TS;
             case Extension.Tsx:
                 return ScriptKind.TSX;
-            case ".json":
+            case Extension.Json:
                 return ScriptKind.JSON;
             default:
                 return ScriptKind.Unknown;
@@ -2625,5 +2678,203 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function assertTypeIsNever(_: never): void {}
+    export function assertTypeIsNever(_: never): void { }
+
+    export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
+        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): void;
+        addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
+        clearCache(): void;
+    }
+
+    interface MutableFileSystemEntries {
+        readonly files: string[];
+        readonly directories: string[];
+    }
+
+    export function createCachedDirectoryStructureHost(host: DirectoryStructureHost): CachedDirectoryStructureHost {
+        const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
+        const getCurrentDirectory = memoize(() => host.getCurrentDirectory());
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        return {
+            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames,
+            newLine: host.newLine,
+            readFile: (path, encoding) => host.readFile(path, encoding),
+            write: s => host.write(s),
+            writeFile,
+            fileExists,
+            directoryExists,
+            createDirectory,
+            getCurrentDirectory,
+            getDirectories,
+            readDirectory,
+            addOrDeleteFileOrDirectory,
+            addOrDeleteFile,
+            clearCache,
+            exit: code => host.exit(code)
+        };
+
+        function toPath(fileName: string) {
+            return ts.toPath(fileName, getCurrentDirectory(), getCanonicalFileName);
+        }
+
+        function getCachedFileSystemEntries(rootDirPath: Path): MutableFileSystemEntries | undefined {
+            return cachedReadDirectoryResult.get(rootDirPath);
+        }
+
+        function getCachedFileSystemEntriesForBaseDir(path: Path): MutableFileSystemEntries | undefined {
+            return getCachedFileSystemEntries(getDirectoryPath(path));
+        }
+
+        function getBaseNameOfFileName(fileName: string) {
+            return getBaseFileName(normalizePath(fileName));
+        }
+
+        function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
+            const resultFromHost: MutableFileSystemEntries = {
+                files: map(host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
+                directories: host.getDirectories(rootDir) || []
+            };
+
+            cachedReadDirectoryResult.set(rootDirPath, resultFromHost);
+            return resultFromHost;
+        }
+
+        /**
+         * If the readDirectory result was already cached, it returns that
+         * Otherwise gets result from host and caches it.
+         * The host request is done under try catch block to avoid caching incorrect result
+         */
+        function tryReadDirectory(rootDir: string, rootDirPath: Path): MutableFileSystemEntries | undefined {
+            const cachedResult = getCachedFileSystemEntries(rootDirPath);
+            if (cachedResult) {
+                return cachedResult;
+            }
+
+            try {
+                return createCachedFileSystemEntries(rootDir, rootDirPath);
+            }
+            catch (_e) {
+                // If there is exception to read directories, dont cache the result and direct the calls to host
+                Debug.assert(!cachedReadDirectoryResult.has(rootDirPath));
+                return undefined;
+            }
+        }
+
+        function fileNameEqual(name1: string, name2: string) {
+            return getCanonicalFileName(name1) === getCanonicalFileName(name2);
+        }
+
+        function hasEntry(entries: ReadonlyArray<string>, name: string) {
+            return some(entries, file => fileNameEqual(file, name));
+        }
+
+        function updateFileSystemEntry(entries: string[], baseName: string, isValid: boolean) {
+            if (hasEntry(entries, baseName)) {
+                if (!isValid) {
+                    return filterMutate(entries, entry => !fileNameEqual(entry, baseName));
+                }
+            }
+            else if (isValid) {
+                return entries.push(baseName);
+            }
+        }
+
+        function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
+            const path = toPath(fileName);
+            const result = getCachedFileSystemEntriesForBaseDir(path);
+            if (result) {
+                updateFilesOfFileSystemEntry(result, getBaseNameOfFileName(fileName), /*fileExists*/ true);
+            }
+            return host.writeFile(fileName, data, writeByteOrderMark);
+        }
+
+        function fileExists(fileName: string): boolean {
+            const path = toPath(fileName);
+            const result = getCachedFileSystemEntriesForBaseDir(path);
+            return result && hasEntry(result.files, getBaseNameOfFileName(fileName)) ||
+                host.fileExists(fileName);
+        }
+
+        function directoryExists(dirPath: string): boolean {
+            const path = toPath(dirPath);
+            return cachedReadDirectoryResult.has(path) || host.directoryExists(dirPath);
+        }
+
+        function createDirectory(dirPath: string) {
+            const path = toPath(dirPath);
+            const result = getCachedFileSystemEntriesForBaseDir(path);
+            const baseFileName = getBaseNameOfFileName(dirPath);
+            if (result) {
+                updateFileSystemEntry(result.directories, baseFileName, /*isValid*/ true);
+            }
+            host.createDirectory(dirPath);
+        }
+
+        function getDirectories(rootDir: string): string[] {
+            const rootDirPath = toPath(rootDir);
+            const result = tryReadDirectory(rootDir, rootDirPath);
+            if (result) {
+                return result.directories.slice();
+            }
+            return host.getDirectories(rootDir);
+        }
+
+        function readDirectory(rootDir: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
+            const rootDirPath = toPath(rootDir);
+            const result = tryReadDirectory(rootDir, rootDirPath);
+            if (result) {
+                return matchFiles(rootDir, extensions, excludes, includes, host.useCaseSensitiveFileNames, getCurrentDirectory(), depth, getFileSystemEntries);
+            }
+            return host.readDirectory(rootDir, extensions, excludes, includes, depth);
+
+            function getFileSystemEntries(dir: string) {
+                const path = toPath(dir);
+                if (path === rootDirPath) {
+                    return result;
+                }
+                return getCachedFileSystemEntries(path) || createCachedFileSystemEntries(dir, path);
+            }
+        }
+
+        function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
+            const existingResult = getCachedFileSystemEntries(fileOrDirectoryPath);
+            if (existingResult) {
+                // This was a folder already present, remove it if this doesnt exist any more
+                if (!host.directoryExists(fileOrDirectory)) {
+                    cachedReadDirectoryResult.delete(fileOrDirectoryPath);
+                }
+            }
+            else {
+                // This was earlier a file (hence not in cached directory contents)
+                // or we never cached the directory containing it
+                const parentResult = getCachedFileSystemEntriesForBaseDir(fileOrDirectoryPath);
+                if (parentResult) {
+                    const baseName = getBaseNameOfFileName(fileOrDirectory);
+                    if (parentResult) {
+                        updateFilesOfFileSystemEntry(parentResult, baseName, host.fileExists(fileOrDirectoryPath));
+                        updateFileSystemEntry(parentResult.directories, baseName, host.directoryExists(fileOrDirectoryPath));
+                    }
+                }
+            }
+        }
+
+        function addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind) {
+            if (eventKind === FileWatcherEventKind.Changed) {
+                return;
+            }
+
+            const parentResult = getCachedFileSystemEntriesForBaseDir(filePath);
+            if (parentResult) {
+                updateFilesOfFileSystemEntry(parentResult, getBaseNameOfFileName(fileName), eventKind === FileWatcherEventKind.Created);
+            }
+        }
+
+        function updateFilesOfFileSystemEntry(parentResult: MutableFileSystemEntries, baseName: string, fileExists: boolean) {
+            updateFileSystemEntry(parentResult.files, baseName, fileExists);
+        }
+
+        function clearCache() {
+            cachedReadDirectoryResult.clear();
+        }
+    }
 }

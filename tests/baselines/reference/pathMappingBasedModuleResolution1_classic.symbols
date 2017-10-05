@@ -1,0 +1,4 @@
+=== c:/root/f1.ts ===
+export var x = 1;
+>x : Symbol(x, Decl(f1.ts, 0, 10))
+
