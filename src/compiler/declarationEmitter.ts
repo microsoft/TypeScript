@@ -18,16 +18,16 @@ namespace ts {
         referencesOutput: string;
     }
 
-    export interface SymbolAccessibilityDiagnostic {
+    type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
+
+    interface EmitTextWriterWithSymbolWriter extends EmitTextWriter {
+        getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
+    }
+
+    interface SymbolAccessibilityDiagnostic {
         errorNode: Node;
         diagnosticMessage: DiagnosticMessage;
         typeName?: DeclarationName | QualifiedName;
-    }
-
-    export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
-
-    export interface EmitTextWriterWithSymbolWriter extends EmitTextWriter {
-        getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
     }
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
