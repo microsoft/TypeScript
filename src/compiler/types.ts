@@ -2848,6 +2848,7 @@ namespace ts {
         AllowAnyNodeKind = 0x00000004,
     }
 
+    /* @internal */
     export const enum SymbolAccessibility {
         Accessible,
         NotAccessible,
@@ -2882,8 +2883,10 @@ namespace ts {
 
     export type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
 
+    /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
+    /* @internal */
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
         aliasesToMakeVisible?: AnyImportSyntax[]; // aliases that need to have this symbol visible
@@ -2891,6 +2894,7 @@ namespace ts {
         errorNode?: Node; // optional node that results in error
     }
 
+    /* @internal */
     export interface SymbolAccessibilityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
@@ -4685,18 +4689,6 @@ namespace ts {
     // SyntaxKind.SyntaxList
     export interface SyntaxList extends Node {
         _children: Node[];
-    }
-
-    export interface SymbolAccessibilityDiagnostic {
-        errorNode: Node;
-        diagnosticMessage: DiagnosticMessage;
-        typeName?: DeclarationName | QualifiedName;
-    }
-
-    export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
-
-    export interface EmitTextWriterForDeclarations extends EmitTextWriter {
-        getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
     }
 
     export const enum ListFormat {

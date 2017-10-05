@@ -18,6 +18,18 @@ namespace ts {
         referencesOutput: string;
     }
 
+    export interface SymbolAccessibilityDiagnostic {
+        errorNode: Node;
+        diagnosticMessage: DiagnosticMessage;
+        typeName?: DeclarationName | QualifiedName;
+    }
+
+    export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
+
+    export interface EmitTextWriterWithSymbolWriter extends EmitTextWriter {
+        getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
+    }
+
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         const declarationDiagnostics = createDiagnosticCollection();
         forEachEmittedFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
@@ -41,7 +53,7 @@ namespace ts {
         let decreaseIndent: () => void;
         let writeTextOfNode: (text: string, node: Node) => void;
 
-        let writer: EmitTextWriterForDeclarations;
+        let writer: EmitTextWriterWithSymbolWriter;
 
         createAndSetNewTextWriterWithSymbolWriter();
 
@@ -175,7 +187,7 @@ namespace ts {
         }
 
         function createAndSetNewTextWriterWithSymbolWriter(): void {
-            const writer = <EmitTextWriterForDeclarations>createTextWriter(newLine);
+            const writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
             writer.reportInaccessibleThisError = reportInaccessibleThisError;
             writer.reportPrivateInBaseOfClassExpression = reportPrivateInBaseOfClassExpression;
@@ -190,7 +202,7 @@ namespace ts {
             setWriter(writer);
         }
 
-        function setWriter(newWriter: EmitTextWriterForDeclarations) {
+        function setWriter(newWriter: EmitTextWriterWithSymbolWriter) {
             writer = newWriter;
             write = newWriter.write;
             writeTextOfNode = newWriter.writeTextOfNode;

@@ -1852,11 +1852,6 @@ declare namespace ts {
         UseOnlyExternalAliasing = 2,
         AllowAnyNodeKind = 4,
     }
-    enum SymbolAccessibility {
-        Accessible = 0,
-        NotAccessible = 1,
-        CannotBeNamed = 2,
-    }
     enum TypePredicateKind {
         This = 0,
         Identifier = 1,
@@ -1874,16 +1869,6 @@ declare namespace ts {
         parameterIndex: number;
     }
     type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
-    type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
-    interface SymbolVisibilityResult {
-        accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: AnyImportSyntax[];
-        errorSymbolName?: string;
-        errorNode?: Node;
-    }
-    interface SymbolAccessibilityResult extends SymbolVisibilityResult {
-        errorModuleName?: string;
-    }
     enum SymbolFlags {
         None = 0,
         FunctionScopedVariable = 1,
@@ -2734,15 +2719,6 @@ declare namespace ts {
     }
     interface SyntaxList extends Node {
         _children: Node[];
-    }
-    interface SymbolAccessibilityDiagnostic {
-        errorNode: Node;
-        diagnosticMessage: DiagnosticMessage;
-        typeName?: DeclarationName | QualifiedName;
-    }
-    type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
-    interface EmitTextWriterForDeclarations extends EmitTextWriter {
-        getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
     }
     enum ListFormat {
         None = 0,
