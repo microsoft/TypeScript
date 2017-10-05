@@ -431,6 +431,11 @@ namespace ts.server {
                 this.watchFilePath = (host, file, cb, path, watchType, project) => ts.addFilePathWatcherWithLogging(host, file, cb, path, this.createWatcherLog(watchType, project));
                 this.watchDirectory = (host, dir, cb, flags, watchType, project) => ts.addDirectoryWatcherWithLogging(host, dir, cb, flags, this.createWatcherLog(watchType, project));
             }
+            else if (this.logger.loggingEnabled()) {
+                this.watchFile = (host, file, cb, watchType, project) => ts.addFileWatcherWithOnlyTriggerLogging(host, file, cb, this.createWatcherLog(watchType, project));
+                this.watchFilePath = (host, file, cb, path, watchType, project) => ts.addFilePathWatcherWithOnlyTriggerLogging(host, file, cb, path, this.createWatcherLog(watchType, project));
+                this.watchDirectory = (host, dir, cb, flags, watchType, project) => ts.addDirectoryWatcherWithOnlyTriggerLogging(host, dir, cb, flags, this.createWatcherLog(watchType, project));
+            }
             else {
                 this.watchFile = ts.addFileWatcher;
                 this.watchFilePath = ts.addFilePathWatcher;
