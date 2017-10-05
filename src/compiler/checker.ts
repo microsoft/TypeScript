@@ -5573,6 +5573,25 @@ namespace ts {
          * Performs late-binding of a dynamic member. This performs the same function for
          * late-bound members that `declareSymbol` in binder.ts performs for early-bound
          * members.
+         *
+         * If a symbol is a dynamic name from a computed property, we perform an additional "late"
+         * binding phase to attempt to resolve the name for the symbol from the type of the computed
+         * property's expression. If the type of the expression is a string-literal, numeric-literal,
+         * or unique symbol type, we can use that type as the name of the symbol.
+         *
+         * For example, given:
+         *
+         *   const x = Symbol();
+         *
+         *   interface I {
+         *     [x]: number;
+         *   }
+         *
+         * The binder gives the property `[x]: number` a special symbol with the name "__computed".
+         * In the late-binding phase we can type-check the expression `x` and see that it has a
+         * unique symbol type which we can then use as the name of the member. This allows users
+         * to define custom symbols that can be used in the members of an object type.
+         *
          * @param parent The containing symbol for the member.
          * @param earlySymbols The early-bound symbols of the parent.
          * @param lateSymbols The late-bound symbols of the parent.
@@ -5590,26 +5609,26 @@ namespace ts {
                     const memberName = getLateBoundNameFromType(type);
 
                     // Get or add a late-bound symbol for the member. This allows us to merge late-bound accessor declarations.
-                    let symbol = lateSymbols.get(memberName);
-                    if (!symbol) lateSymbols.set(memberName, symbol = createSymbol(SymbolFlags.Late, memberName));
+                    let lateSymbol = lateSymbols.get(memberName);
+                    if (!lateSymbol) lateSymbols.set(memberName, lateSymbol = createSymbol(SymbolFlags.Late, memberName));
 
                     // Report an error if a late-bound member has the same name as an early-bound member,
                     // or if we have another early-bound symbol declaration with the same name and
                     // conflicting flags.
                     const earlySymbol = earlySymbols && earlySymbols.get(memberName);
-                    if (symbol.flags & getExcludedSymbolFlags(decl.symbol.flags) || earlySymbol) {
+                    if (lateSymbol.flags & getExcludedSymbolFlags(decl.symbol.flags) || earlySymbol) {
                         // If we have an existing early-bound member, combine its declarations so that we can
                         // report an error at each declaration.
-                        const declarations = earlySymbol ? concatenate(earlySymbol.declarations, symbol.declarations) : symbol.declarations;
+                        const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
                         const name = declarationNameToString(decl.name);
                         forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_declaration_0, name));
                         error(decl.name || decl, Diagnostics.Duplicate_declaration_0, name);
-                        symbol = createSymbol(SymbolFlags.Late, memberName);
+                        lateSymbol = createSymbol(SymbolFlags.Late, memberName);
                     }
 
-                    addDeclarationToLateBoundSymbol(symbol, decl, decl.symbol.flags);
-                    symbol.parent = parent;
-                    return links.resolvedSymbol = symbol;
+                    addDeclarationToLateBoundSymbol(lateSymbol, decl, decl.symbol.flags);
+                    lateSymbol.parent = parent;
+                    return links.resolvedSymbol = lateSymbol;
                 }
             }
             return links.resolvedSymbol;
@@ -5617,16 +5636,22 @@ namespace ts {
 
         /**
          * Gets a SymbolTable containing both the early- and late-bound members of a symbol.
+         *
+         * For a description of late-binding, see `lateBindMember`.
          */
         function getMembersOfSymbol(symbol: Symbol) {
             if (symbol.flags & SymbolFlags.LateBindableContainer) {
                 const links = getSymbolLinks(symbol);
                 if (!links.resolvedMembers) {
-                    const earlyMembers = symbol.members;
+                    // Get (or create) the SymbolTable from the parent used to store late-
+                    // bound symbols. We get a shared table so that we can correctly merge
+                    // late-bound symbols across accessor pairs.
                     const lateMembers = getLateBoundMembersOfSymbol(symbol);
+                    const earlyMembers = symbol.members;
 
                     // In the event we recursively resolve the members of the symbol, we
-                    // should only see the early-bound members of the symbol here.
+                    // set the initial value of resolvedMembers to the early-bound members
+                    // of the symbol.
                     links.resolvedMembers = earlyMembers || emptySymbols;
 
                     // fill in any as-yet-unresolved late-bound members.
@@ -5635,11 +5660,12 @@ namespace ts {
                         if (members) {
                             for (const member of members) {
                                 if (!hasModifier(member, ModifierFlags.Static) && hasLateBindableName(member)) {
-                                    lateBindMember(decl.symbol, earlyMembers, lateMembers, member);
+                                    lateBindMember(symbol, earlyMembers, lateMembers, member);
                                 }
                             }
                         }
                     }
+
                     links.resolvedMembers = combineSymbolTables(earlyMembers, lateMembers) || emptySymbols;
                 }
                 return links.resolvedMembers;
@@ -5648,11 +5674,9 @@ namespace ts {
         }
 
         /**
-         * Gets the late-bound symbol for a symbol (if it has one). The symbol is
-         * resolved dynamically but allows accessors to share the same symbol.
+         * If a symbol is the dynamic name of the member of an object type, get its late-bound member.
          *
-         * We do not aggressively resolve the entire late-bound symbol table here as
-         * that requires a type-check on every computed property name.
+         * For a description of late-binding, see `lateBindMember`.
          */
         function getLateBoundSymbol(symbol: Symbol) {
             if (symbol && (symbol.flags & SymbolFlags.ClassMember) && symbol.escapedName === InternalSymbolName.Computed) {
@@ -5661,8 +5685,15 @@ namespace ts {
                 if (parent && (parent.flags & (isStaticMember ? SymbolFlags.Class : SymbolFlags.LateBindableContainer))) {
                     const links = getSymbolLinks(symbol);
                     if (!links.lateSymbol) {
-                        const earlySymbols = isStaticMember ? parent.exports : parent.members;
+                        // Get (or create) the SymbolTable from the parent used to store late-
+                        // bound symbols. We get a shared table so that we can correctly merge
+                        // late-bound symbols across accessor pairs.
+                        //
+                        // We do not eagerly resolve all of the members of the parent here as
+                        // that results in an eager type-check of the expression of every member
+                        // with a computed property name.
                         const lateSymbols = isStaticMember ? getLateBoundExportsOfSymbol(parent) : getLateBoundMembersOfSymbol(parent);
+                        const earlySymbols = isStaticMember ? parent.exports : parent.members;
 
                         // In the event we attempt to get the late-bound symbol for a symbol recursively,
                         // fall back to the early-bound symbol.
