@@ -34,9 +34,6 @@ namespace ts {
             (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
-    type LateBoundName = ComputedPropertyName & { expression: EntityNameExpression; };
-    type LateBoundDeclaration = Declaration & { name: LateBoundName; };
-
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
         // In general cancelling is *not* safe for the type checker.  We might be in the middle of
@@ -3525,7 +3522,7 @@ namespace ts {
                     }
                     if (prop.flags & SymbolFlags.Late) {
                         const decl = firstOrUndefined(prop.declarations);
-                        const name = hasLateBoundName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
+                        const name = hasLateBindableName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
                         if (name) {
                             writer.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
                         }
@@ -4340,7 +4337,7 @@ namespace ts {
             if (declaration.kind === SyntaxKind.Parameter) {
                 const func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
-                if (func.kind === SyntaxKind.SetAccessor && !hasUnboundDynamicName(func)) {
+                if (func.kind === SyntaxKind.SetAccessor && !hasNonBindableDynamicName(func)) {
                     const getter = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(declaration.parent), SyntaxKind.GetAccessor);
                     if (getter) {
                         const getterSignature = getSignatureFromDeclaration(getter);
@@ -5446,80 +5443,46 @@ namespace ts {
         }
 
         /**
-         * Gets a SymbolTable containing both the early- and late-bound members of a symbol.
+         * Indicates whether a type can be used as a late-bound name.
          */
-        function getMembersOfSymbol(symbol: Symbol) {
-            const links = getSymbolLinks(symbol);
-            if (!links.resolvedMembers) {
-                links.resolvedMembers = emptySymbols;
-                const lateMembers = getLateBoundMembersOfSymbol(symbol);
-                if (lateMembers) {
-                    for (const decl of symbol.declarations) {
-                        lateBindMembers(lateMembers, decl);
-                    }
-                }
-                links.resolvedMembers = combineSymbolTables(symbol.members, lateMembers) || emptySymbols;
-            }
-            return links.resolvedMembers;
-        }
-
-        /**
-         * Gets the late-bound members of a symbol.
-         */
-        function getLateBoundMembersOfSymbol(symbol: Symbol): UnderscoreEscapedMap<TransientSymbol> | undefined {
-            if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral)) {
-                const links = getSymbolLinks(symbol);
-                return links.lateMembers || (links.lateMembers = createUnderscoreEscapedMap<TransientSymbol>());
-            }
-        }
-
-        /**
-         * Tests whether a declaration has a late-bound dynamic name.
-         */
-        function hasLateBoundName(node: Declaration): node is LateBoundDeclaration {
-            const name = getNameOfDeclaration(node);
-            return name && isLateBoundName(name);
-        }
-
-        /**
-         * Tests whether a declaration name is definitely late-bindable.
-         */
-        function isLateBoundName(node: DeclarationName): node is LateBoundName {
-            return isComputedPropertyName(node)
-                && isEntityNameExpression(node.expression)
-                && isLateBoundNameType(checkComputedPropertyName(node));
-        }
-
-        function isLateBoundNameType(type: Type): type is LiteralType | UniqueESSymbolType {
+        function isTypeUsableAsLateBoundName(type: Type): type is LiteralType | UniqueESSymbolType {
             return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
         }
 
         /**
-         * Performs late-binding of the dynamic members of a declaration.
+         * Indicates whether a declaration name is definitely late-bindable.
+         * A declaration name is only late-bindable if:
+         * - It is a `ComputedPropertyName`.
+         * - Its expression is either an `Identifier` or is a `PropertyAccessExpression` consisting only of
+         *   other `PropertyAccessExpression` or `Identifier` nodes.
+         * - The type of its expression is a string or numeric literal type, or is a `unique symbol` type.
          */
-        function lateBindMembers(lateMembers: UnderscoreEscapedMap<TransientSymbol>, node: Declaration) {
-            const members = getMembersOfDeclaration(node);
-            if (members) {
-                for (const member of members) {
-                    if (hasLateBoundName(member)) {
-                        lateBindMember(lateMembers, node.symbol, member);
-                    }
-                }
-            }
+        function isLateBindableName(node: DeclarationName): node is LateBoundName {
+            return isComputedPropertyName(node)
+                && isEntityNameExpression(node.expression)
+                && isTypeUsableAsLateBoundName(checkComputedPropertyName(node));
         }
 
         /**
-         * Tests whether a declaration has a dynamic name that cannot be late-bound.
+         * Indicates whether a declaration has a late-bindable dynamic name.
          */
-        function hasUnboundDynamicName(node: Declaration) {
-            return hasDynamicName(node) && !hasLateBoundName(node);
+        function hasLateBindableName(node: Declaration): node is LateBoundDeclaration {
+            const name = getNameOfDeclaration(node);
+            return name && isLateBindableName(name);
         }
 
         /**
-         * Tests whether a declaration name is a dynamic name that cannot be late-bound.
+         * Indicates whether a declaration has a dynamic name that cannot be late-bound.
          */
-        function isUnboundDynamicName(node: DeclarationName) {
-            return isDynamicName(node) && !isLateBoundName(node);
+        function hasNonBindableDynamicName(node: Declaration) {
+            return hasDynamicName(node) && !hasLateBindableName(node);
+        }
+
+        /**
+         * Indicates whether a declaration name is a dynamic name that cannot be late-bound.
+         */
+        function isNonBindableDynamicName(node: DeclarationName) {
+            return isDynamicName(node) && !isLateBindableName(node);
         }
 
         /**
@@ -5535,63 +5498,22 @@ namespace ts {
         }
 
         /**
-         * Gets the late-bound symbol for a symbol (if it has one).
+         * Gets the symbol table used to store members added during late-binding.
+         * This table is filled in as the late-bound names for dynamic members are resolved.
          */
-        function getLateBoundSymbol(symbol: Symbol) {
-            if (symbol && (symbol.flags & SymbolFlags.ClassMember) && symbol.escapedName === InternalSymbolName.Computed) {
-                const links = getSymbolLinks(symbol);
-                if (!links.lateSymbol) {
-                    links.lateSymbol = symbol;
-                    const parent = symbol.parent;
-                    if (parent && (parent.flags & SymbolFlags.HasMembers)) {
-                        const lateMembers = getLateBoundMembersOfSymbol(parent);
-                        for (const decl of symbol.declarations) {
-                            if (hasLateBoundName(decl)) {
-                                lateBindMember(lateMembers, parent, decl);
-                            }
-                        }
-                    }
-                }
-                return links.lateSymbol;
-            }
-            return symbol;
+        function getLateBoundMembersOfSymbol(symbol: Symbol): SymbolTable {
+            Debug.assert(!!(symbol.flags & SymbolFlags.LateBindableContainer), "Expected a container that supports late-binding.");
+            const links = getSymbolLinks(symbol);
+            return links.lateMembers || (links.lateMembers = createSymbolTable());
         }
 
         /**
-         * Performs late-binding of a dynamic member.
+         * Adds a declaration to a late-bound dynamic member. This performs the same function for
+         * late-bound members that `addDeclarationToSymbol` in binder.ts performs for early-bound
+         * members.
          */
-        function lateBindMember(lateMembers: UnderscoreEscapedMap<TransientSymbol>, parent: Symbol, member: LateBoundDeclaration) {
-            const links = getNodeLinks(member);
-            if (!links.resolvedSymbol) {
-                const memberSymbol = member.symbol;
-                links.resolvedSymbol = memberSymbol || unknownSymbol;
-                const type = checkComputedPropertyName(member.name);
-                if (isLateBoundNameType(type)) {
-                    const memberName = getLateBoundNameFromType(type);
-                    let symbol = lateMembers.get(memberName);
-                    if (!symbol) {
-                        lateMembers.set(memberName, symbol = createSymbol(SymbolFlags.Late, memberName));
-                    }
-                    const staticMember = parent.members && parent.members.get(memberName);
-                    if (symbol.flags & getExcludedSymbolFlags(memberSymbol.flags) || staticMember) {
-                        const declarations = staticMember ? concatenate(staticMember.declarations, symbol.declarations) : symbol.declarations;
-                        const name = declarationNameToString(member.name);
-                        forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_declaration_0, name));
-                        error(member.name || member, Diagnostics.Duplicate_declaration_0, name);
-                        symbol = createSymbol(SymbolFlags.Late, memberName);
-                    }
-                    addDeclarationToLateBoundMember(symbol, member, memberSymbol.flags);
-                    symbol.parent = parent;
-                    return links.resolvedSymbol = symbol;
-                }
-            }
-            return links.resolvedSymbol;
-        }
-
-        /**
-         * Adds a declaration to a late-bound dynamic member.
-         */
-        function addDeclarationToLateBoundMember(symbol: TransientSymbol, member: LateBoundDeclaration, symbolFlags: SymbolFlags) {
+        function addDeclarationToLateBoundMember(symbol: Symbol, member: LateBoundDeclaration, symbolFlags: SymbolFlags) {
+            Debug.assert(!!(symbol.flags & SymbolFlags.Late), "Expected a late-bound symbol.");
             symbol.flags |= symbolFlags;
             getSymbolLinks(member.symbol).lateSymbol = symbol;
             if (!symbol.declarations) {
@@ -5606,6 +5528,107 @@ namespace ts {
                     symbol.valueDeclaration = member;
                 }
             }
+        }
+
+        /**
+         * Performs late-binding of a dynamic member. This performs the same function for
+         * late-bound members that `declareSymbol` in binder.ts performs for early-bound
+         * members.
+         */
+        function lateBindMember(lateMembers: SymbolTable, parent: Symbol, member: LateBoundDeclaration) {
+            Debug.assert(!!member.symbol, "The member is expected to have a symbol.");
+            const links = getNodeLinks(member);
+            if (!links.resolvedSymbol) {
+                // In the event we attempt to resolve the late-bound name of this member recursively,
+                // fall back to the early-bound name of this member.
+                links.resolvedSymbol = member.symbol;
+                const type = checkComputedPropertyName(member.name);
+                if (isTypeUsableAsLateBoundName(type)) {
+                    const memberName = getLateBoundNameFromType(type);
+
+                    // Get or add a late-bound symbol for the member. This allows us to merge late-bound accessor declarations.
+                    let symbol = lateMembers.get(memberName);
+                    if (!symbol) lateMembers.set(memberName, symbol = createSymbol(SymbolFlags.Late, memberName));
+
+                    // Report an error if a late-bound member has the same name as an early-bound member,
+                    // or if we have another early-bound symbol declaration with the same name and
+                    // conflicting flags.
+                    const earlyMember = parent.members && parent.members.get(memberName);
+                    if (symbol.flags & getExcludedSymbolFlags(member.symbol.flags) || earlyMember) {
+                        // If we have an existing early-bound member, combine its declarations so that we can
+                        // report an error at each declaration.
+                        const declarations = earlyMember ? concatenate(earlyMember.declarations, symbol.declarations) : symbol.declarations;
+                        const name = declarationNameToString(member.name);
+                        forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_declaration_0, name));
+                        error(member.name || member, Diagnostics.Duplicate_declaration_0, name);
+                        symbol = createSymbol(SymbolFlags.Late, memberName);
+                    }
+
+                    addDeclarationToLateBoundMember(symbol, member, member.symbol.flags);
+                    symbol.parent = parent;
+                    return links.resolvedSymbol = symbol;
+                }
+            }
+            return links.resolvedSymbol;
+        }
+
+        /**
+         * Gets a SymbolTable containing both the early- and late-bound members of a symbol.
+         */
+        function getMembersOfSymbol(symbol: Symbol) {
+            if (symbol.flags & SymbolFlags.LateBindableContainer) {
+                const links = getSymbolLinks(symbol);
+                if (!links.resolvedMembers) {
+                    // In the event we recursively resolve the members of the symbol, we
+                    // should only see the early-bound members of the symbol here.
+                    links.resolvedMembers = symbol.members || emptySymbols;
+
+                    // fill in any as-yet-unresolved late-bound members.
+                    const lateMembers = getLateBoundMembersOfSymbol(symbol);
+                    for (const decl of symbol.declarations) {
+                        const members = getMembersOfDeclaration(decl);
+                        if (members) {
+                            for (const member of members) {
+                                if (hasLateBindableName(member)) {
+                                    lateBindMember(lateMembers, decl.symbol, member);
+                                }
+                            }
+                        }
+                    }
+                    links.resolvedMembers = combineSymbolTables(symbol.members, lateMembers) || emptySymbols;
+                }
+                return links.resolvedMembers;
+            }
+            return symbol.members || emptySymbols;
+        }
+
+        /**
+         * Gets the late-bound symbol for a symbol (if it has one). The symbol is
+         * resolved dynamically but allows accessors to share the same symbol.
+         *
+         * We do not aggressively resolve the entire late-bound symbol table here as
+         * that requires a type-check on every computed property name.
+         */
+        function getLateBoundSymbol(symbol: Symbol) {
+            if (symbol && (symbol.flags & SymbolFlags.ClassMember) && symbol.escapedName === InternalSymbolName.Computed &&
+                symbol.parent && (symbol.parent.flags & SymbolFlags.LateBindableContainer)) {
+                const links = getSymbolLinks(symbol);
+                if (!links.lateSymbol) {
+                    // In the event we attempt to get the late-bound symbol for a symbol recursively,
+                    // fall back to the early-bound symbol.
+                    links.lateSymbol = symbol;
+
+                    // Fill in the late-bound symbol for each declaration of this symbol.
+                    const lateMembers = getLateBoundMembersOfSymbol(symbol.parent);
+                    for (const decl of symbol.declarations) {
+                        if (hasLateBindableName(decl)) {
+                            lateBindMember(lateMembers, symbol.parent, decl);
+                        }
+                    }
+                }
+                return links.lateSymbol;
+            }
+            return symbol;
         }
 
         function getTypeWithThisArgument(type: Type, thisArgument?: Type): Type {
@@ -6649,7 +6672,7 @@ namespace ts {
 
                 // If only one accessor includes a this-type annotation, the other behaves as if it had the same type annotation
                 if ((declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) &&
-                    !hasUnboundDynamicName(declaration) &&
+                    !hasNonBindableDynamicName(declaration) &&
                     (!hasThisParameter || !thisParameter)) {
                     const otherKind = declaration.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
                     const other = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(declaration), otherKind);
@@ -6696,7 +6719,7 @@ namespace ts {
 
             // TypeScript 1.0 spec (April 2014):
             // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-            if (declaration.kind === SyntaxKind.GetAccessor && !hasUnboundDynamicName(declaration)) {
+            if (declaration.kind === SyntaxKind.GetAccessor && !hasNonBindableDynamicName(declaration)) {
                 const setter = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(declaration), SyntaxKind.SetAccessor);
                 return getAnnotatedAccessorType(setter);
             }
@@ -7853,7 +7876,7 @@ namespace ts {
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
-            const propName = isLateBoundNameType(indexType) ? getLateBoundNameFromType(indexType) :
+            const propName = isTypeUsableAsLateBoundName(indexType) ? getLateBoundNameFromType(indexType) :
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName(idText((<Identifier>(<PropertyAccessExpression>accessExpression.argumentExpression).name))) :
                     undefined;
@@ -13585,7 +13608,7 @@ namespace ts {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
             const type = getApparentTypeOfContextualType(objectLiteral);
             if (type) {
-                if (!hasUnboundDynamicName(element)) {
+                if (!hasNonBindableDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
                     // in the type. It will just be "__computed", which does not appear in any
                     // SymbolTable.
@@ -14072,9 +14095,9 @@ namespace ts {
                     typeFlags |= type.flags;
 
                     let prop: TransientSymbol;
-                    if (hasLateBoundName(memberDecl)) {
+                    if (hasLateBindableName(memberDecl)) {
                         const nameType = checkComputedPropertyName(memberDecl.name);
-                        if (nameType && isLateBoundNameType(nameType)) {
+                        if (nameType && isTypeUsableAsLateBoundName(nameType)) {
                             prop = createSymbol(SymbolFlags.Property | SymbolFlags.Late | member.flags, getLateBoundNameFromType(nameType));
                         }
                     }
@@ -14150,7 +14173,7 @@ namespace ts {
                     checkNodeDeferred(memberDecl);
                 }
 
-                if (!literalName && hasUnboundDynamicName(memberDecl)) {
+                if (!literalName && hasNonBindableDynamicName(memberDecl)) {
                     if (isNumericName(memberDecl.name)) {
                         hasComputedNumberProperty = true;
                     }
@@ -19261,7 +19284,7 @@ namespace ts {
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     checkComputedPropertyName(<ComputedPropertyName>node.name);
                 }
-                if (!hasUnboundDynamicName(node)) {
+                if (!hasNonBindableDynamicName(node)) {
                     // TypeScript 1.0 spec (April 2014): 8.4.3
                     // Accessors for the same member name must specify the same accessibility.
                     const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
@@ -20319,7 +20342,7 @@ namespace ts {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
-            if (!hasUnboundDynamicName(node)) {
+            if (!hasNonBindableDynamicName(node)) {
                 // first we want to check the local symbol that contain this declaration
                 // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
                 // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
@@ -21729,7 +21752,7 @@ namespace ts {
                         // Only process instance properties with computed names here.
                         // Static properties cannot be in conflict with indexers,
                         // and properties with literal names were already checked.
-                        if (!hasModifier(member, ModifierFlags.Static) && hasUnboundDynamicName(member)) {
+                        if (!hasModifier(member, ModifierFlags.Static) && hasNonBindableDynamicName(member)) {
                             const symbol = getSymbolOfNode(member);
                             const propType = getTypeOfSymbol(symbol);
                             checkIndexConstraintForProperty(symbol, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
@@ -25399,7 +25422,7 @@ namespace ts {
         }
 
         function checkGrammarForInvalidDynamicName(node: DeclarationName, message: DiagnosticMessage) {
-            if (isUnboundDynamicName(node)) {
+            if (isNonBindableDynamicName(node)) {
                 return grammarErrorOnNode(node, message);
             }
         }

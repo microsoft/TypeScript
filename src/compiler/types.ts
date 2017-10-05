@@ -662,6 +662,12 @@ namespace ts {
         name?: DeclarationName;
     }
 
+    /* @internal */
+    // A declaration that supports late-binding (used in checker)
+    export interface LateBoundDeclaration extends NamedDeclaration {
+        name: LateBoundName;
+    }
+
     export interface DeclarationStatement extends NamedDeclaration, Statement {
         name?: Identifier | StringLiteral | NumericLiteral;
     }
@@ -669,6 +675,12 @@ namespace ts {
     export interface ComputedPropertyName extends Node {
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
+    }
+
+    /* @internal */
+    // A name that supports late-binding (used in checker)
+    export interface LateBoundName extends ComputedPropertyName {
+        expression: EntityNameExpression;
     }
 
     export interface Decorator extends Node {
@@ -3008,6 +3020,9 @@ namespace ts {
         // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.
         Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module,
+
+        /* @internal */
+        LateBindableContainer = Class | Interface | TypeLiteral | ObjectLiteral,
     }
 
     export interface Symbol {
@@ -3053,7 +3068,7 @@ namespace ts {
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
         enumKind?: EnumKind;                // Enum declaration classification
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
-        lateMembers?: UnderscoreEscapedMap<TransientSymbol>; // Late-bound members resolved during check
+        lateMembers?: SymbolTable;          // Late-bound members resolved during check
         resolvedMembers?: SymbolTable;      // Combined early- and late-bound members of a symbol
     }
 

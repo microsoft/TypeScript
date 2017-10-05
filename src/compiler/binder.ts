@@ -1678,7 +1678,7 @@ namespace ts {
 
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: __String) {
             const symbol = createSymbol(symbolFlags, name);
-            if (symbolFlags & SymbolFlags.EnumMember) {
+            if (symbolFlags & (SymbolFlags.EnumMember | SymbolFlags.ClassMember)) {
                 symbol.parent = container.symbol;
             }
             addDeclarationToSymbol(symbol, node, symbolFlags);
