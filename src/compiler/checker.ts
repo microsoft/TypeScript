@@ -5512,7 +5512,7 @@ namespace ts {
          * late-bound members that `addDeclarationToSymbol` in binder.ts performs for early-bound
          * members.
          */
-        function addDeclarationToLateBoundMember(symbol: Symbol, member: LateBoundDeclaration, symbolFlags: SymbolFlags) {
+        function addDeclarationToLateBoundSymbol(symbol: Symbol, member: LateBoundDeclaration, symbolFlags: SymbolFlags) {
             Debug.assert(!!(symbol.flags & SymbolFlags.Late), "Expected a late-bound symbol.");
             symbol.flags |= symbolFlags;
             getSymbolLinks(member.symbol).lateSymbol = symbol;
@@ -5534,37 +5534,41 @@ namespace ts {
          * Performs late-binding of a dynamic member. This performs the same function for
          * late-bound members that `declareSymbol` in binder.ts performs for early-bound
          * members.
+         * @param parent The containing symbol for the member.
+         * @param earlySymbols The early-bound symbols of the parent.
+         * @param lateSymbols The late-bound symbols of the parent.
+         * @param decl The member to bind.
          */
-        function lateBindMember(lateMembers: SymbolTable, parent: Symbol, member: LateBoundDeclaration) {
-            Debug.assert(!!member.symbol, "The member is expected to have a symbol.");
-            const links = getNodeLinks(member);
+        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration) {
+            Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
+            const links = getNodeLinks(decl);
             if (!links.resolvedSymbol) {
                 // In the event we attempt to resolve the late-bound name of this member recursively,
                 // fall back to the early-bound name of this member.
-                links.resolvedSymbol = member.symbol;
-                const type = checkComputedPropertyName(member.name);
+                links.resolvedSymbol = decl.symbol;
+                const type = checkComputedPropertyName(decl.name);
                 if (isTypeUsableAsLateBoundName(type)) {
                     const memberName = getLateBoundNameFromType(type);
 
                     // Get or add a late-bound symbol for the member. This allows us to merge late-bound accessor declarations.
-                    let symbol = lateMembers.get(memberName);
-                    if (!symbol) lateMembers.set(memberName, symbol = createSymbol(SymbolFlags.Late, memberName));
+                    let symbol = lateSymbols.get(memberName);
+                    if (!symbol) lateSymbols.set(memberName, symbol = createSymbol(SymbolFlags.Late, memberName));
 
                     // Report an error if a late-bound member has the same name as an early-bound member,
                     // or if we have another early-bound symbol declaration with the same name and
                     // conflicting flags.
-                    const earlyMember = parent.members && parent.members.get(memberName);
-                    if (symbol.flags & getExcludedSymbolFlags(member.symbol.flags) || earlyMember) {
+                    const earlySymbol = earlySymbols && earlySymbols.get(memberName);
+                    if (symbol.flags & getExcludedSymbolFlags(decl.symbol.flags) || earlySymbol) {
                         // If we have an existing early-bound member, combine its declarations so that we can
                         // report an error at each declaration.
-                        const declarations = earlyMember ? concatenate(earlyMember.declarations, symbol.declarations) : symbol.declarations;
-                        const name = declarationNameToString(member.name);
+                        const declarations = earlySymbol ? concatenate(earlySymbol.declarations, symbol.declarations) : symbol.declarations;
+                        const name = declarationNameToString(decl.name);
                         forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_declaration_0, name));
-                        error(member.name || member, Diagnostics.Duplicate_declaration_0, name);
+                        error(decl.name || decl, Diagnostics.Duplicate_declaration_0, name);
                         symbol = createSymbol(SymbolFlags.Late, memberName);
                     }
 
-                    addDeclarationToLateBoundMember(symbol, member, member.symbol.flags);
+                    addDeclarationToLateBoundSymbol(symbol, decl, decl.symbol.flags);
                     symbol.parent = parent;
                     return links.resolvedSymbol = symbol;
                 }
@@ -5579,23 +5583,25 @@ namespace ts {
             if (symbol.flags & SymbolFlags.LateBindableContainer) {
                 const links = getSymbolLinks(symbol);
                 if (!links.resolvedMembers) {
+                    const earlyMembers = symbol.members;
+                    const lateMembers = getLateBoundMembersOfSymbol(symbol);
+
                     // In the event we recursively resolve the members of the symbol, we
                     // should only see the early-bound members of the symbol here.
-                    links.resolvedMembers = symbol.members || emptySymbols;
+                    links.resolvedMembers = earlyMembers || emptySymbols;
 
                     // fill in any as-yet-unresolved late-bound members.
-                    const lateMembers = getLateBoundMembersOfSymbol(symbol);
                     for (const decl of symbol.declarations) {
                         const members = getMembersOfDeclaration(decl);
                         if (members) {
                             for (const member of members) {
-                                if (hasLateBindableName(member)) {
-                                    lateBindMember(lateMembers, decl.symbol, member);
+                                if (!hasModifier(member, ModifierFlags.Static) && hasLateBindableName(member)) {
+                                    lateBindMember(decl.symbol, earlyMembers, lateMembers, member);
                                 }
                             }
                         }
                     }
-                    links.resolvedMembers = combineSymbolTables(symbol.members, lateMembers) || emptySymbols;
+                    links.resolvedMembers = combineSymbolTables(earlyMembers, lateMembers) || emptySymbols;
                 }
                 return links.resolvedMembers;
             }
@@ -5610,23 +5616,29 @@ namespace ts {
          * that requires a type-check on every computed property name.
          */
         function getLateBoundSymbol(symbol: Symbol) {
-            if (symbol && (symbol.flags & SymbolFlags.ClassMember) && symbol.escapedName === InternalSymbolName.Computed &&
-                symbol.parent && (symbol.parent.flags & SymbolFlags.LateBindableContainer)) {
-                const links = getSymbolLinks(symbol);
-                if (!links.lateSymbol) {
-                    // In the event we attempt to get the late-bound symbol for a symbol recursively,
-                    // fall back to the early-bound symbol.
-                    links.lateSymbol = symbol;
+            if (symbol && (symbol.flags & SymbolFlags.ClassMember) && symbol.escapedName === InternalSymbolName.Computed) {
+                // NOTE: This does not yet support late-bound static members of a class.
+                const isStaticMember = some(symbol.declarations, declaration => hasModifier(declaration, ModifierFlags.Static));
+                const parent = symbol.parent;
+                if (parent && (parent.flags & (isStaticMember ? SymbolFlags.Class : SymbolFlags.LateBindableContainer)) && !isStaticMember) {
+                    const links = getSymbolLinks(symbol);
+                    if (!links.lateSymbol) {
+                        const earlySymbols = parent.members;
+                        const lateSymbols = getLateBoundMembersOfSymbol(symbol.parent);
 
-                    // Fill in the late-bound symbol for each declaration of this symbol.
-                    const lateMembers = getLateBoundMembersOfSymbol(symbol.parent);
-                    for (const decl of symbol.declarations) {
-                        if (hasLateBindableName(decl)) {
-                            lateBindMember(lateMembers, symbol.parent, decl);
+                        // In the event we attempt to get the late-bound symbol for a symbol recursively,
+                        // fall back to the early-bound symbol.
+                        links.lateSymbol = symbol;
+
+                        // Fill in the late-bound symbol for each declaration of this symbol.
+                        for (const decl of symbol.declarations) {
+                            if (hasLateBindableName(decl)) {
+                                lateBindMember(parent, earlySymbols, lateSymbols, decl);
+                            }
                         }
                     }
+                    return links.lateSymbol;
                 }
-                return links.lateSymbol;
             }
             return symbol;
         }

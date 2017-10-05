@@ -3060,7 +3060,8 @@ namespace ts {
         syntheticOrigin?: Symbol;           // For a property on a mapped or spread type, points back to the original property
         syntheticLiteralTypeOrigin?: StringLiteralType; // For a property on a mapped type, indicates the type whose text to use as the declaration name, instead of the symbol name
         isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
-        resolvedExports?: SymbolTable;      // Resolved exports of module
+        resolvedExports?: SymbolTable;      // Resolved exports of module or combined early- and late-bound static members of a class.
+        resolvedMembers?: SymbolTable;      // Combined early- and late-bound members of a symbol
         exportsChecked?: boolean;           // True if exports of external module have been checked
         typeParametersChecked?: boolean;    // True if type parameters of merged class and interface declarations have been checked.
         isDeclarationWithCollidingName?: boolean; // True if symbol is block scoped redeclaration
@@ -3069,7 +3070,6 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
         lateMembers?: SymbolTable;          // Late-bound members resolved during check
-        resolvedMembers?: SymbolTable;      // Combined early- and late-bound members of a symbol
     }
 
     /* @internal */
