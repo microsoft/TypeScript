@@ -7229,7 +7229,7 @@ declare namespace ts.server {
         getScriptKind(fileName: string): ScriptKind;
         getScriptVersion(filename: string): string;
         getScriptSnapshot(filename: string): IScriptSnapshot;
-        getCancellationToken(): ThrottledCancellationToken;
+        getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(): string;
         useCaseSensitiveFileNames(): boolean;
