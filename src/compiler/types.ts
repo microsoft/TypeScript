@@ -2727,6 +2727,44 @@ namespace ts {
         /* @internal */ getJsxNamespace(): string;
     }
 
+    export const enum NodeBuilderFlags {
+        None                                    = 0,
+        // Options
+        NoTruncation                            = 1 << 0,   // Don't truncate result
+        WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
+        WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
+        UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
+        UseOnlyExternalAliasing                 = 1 << 7,   // Only use external aliases for a symbol
+        SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
+        WriteTypeParametersInQualifiedName      = 1 << 9,
+        MultilineObjectLiterals                 = 1 << 10,  // Always write object literals across multiple lines
+        WriteClassExpressionAsTypeLiteral       = 1 << 11,  // Write class {} as { new(): {} } - used for mixin declaration emit
+        UseTypeOfFunction                       = 1 << 12,  // Build using typeof instead of function type literal
+        OmitParameterModifiers                  = 1 << 13,  // Omit modifiers on parameters
+        UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
+
+        // Error handling
+        AllowThisInObjectLiteral                = 1 << 15,
+        AllowQualifedNameInPlaceOfIdentifier    = 1 << 16,
+        AllowAnonymousIdentifier                = 1 << 17,
+        AllowEmptyUnionOrIntersection           = 1 << 18,
+        AllowEmptyTuple                         = 1 << 19,
+
+        IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple,
+
+        // State
+        InObjectTypeLiteral                     = 1 << 20,
+        InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+    }
+
+    /* @internal */
+    export interface SymbolWalker {
+        /** Note: Return values are not ordered. */
+        walkType(root: Type): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
+        /** Note: Return values are not ordered. */
+        walkSymbol(root: Symbol): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
+    }
+
     /**
      * @deprecated
      */
@@ -2768,44 +2806,6 @@ namespace ts {
 
         reportInaccessibleThisError(): void;
         reportPrivateInBaseOfClassExpression(propertyName: string): void;
-    }
-
-    export const enum NodeBuilderFlags {
-        None                                    = 0,
-        // Options
-        NoTruncation                            = 1 << 0,   // Don't truncate result
-        WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
-        WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
-        UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
-        UseOnlyExternalAliasing                 = 1 << 7,   // Only use external aliases for a symbol
-        SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
-        WriteTypeParametersInQualifiedName      = 1 << 9,
-        MultilineObjectLiterals                 = 1 << 10,  // Always write object literals across multiple lines
-        WriteClassExpressionAsTypeLiteral       = 1 << 11,  // Write class {} as { new(): {} } - used for mixin declaration emit
-        UseTypeOfFunction                       = 1 << 12,  // Build using typeof instead of function type literal
-        OmitParameterModifiers                  = 1 << 13,  // Omit modifiers on parameters
-        UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
-
-        // Error handling
-        AllowThisInObjectLiteral                = 1 << 15,
-        AllowQualifedNameInPlaceOfIdentifier    = 1 << 16,
-        AllowAnonymousIdentifier                = 1 << 17,
-        AllowEmptyUnionOrIntersection           = 1 << 18,
-        AllowEmptyTuple                         = 1 << 19,
-
-        IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple,
-
-        // State
-        InObjectTypeLiteral                     = 1 << 20,
-        InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
-    }
-
-    /* @internal */
-    export interface SymbolWalker {
-        /** Note: Return values are not ordered. */
-        walkType(root: Type): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
-        /** Note: Return values are not ordered. */
-        walkSymbol(root: Symbol): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
     }
 
     export const enum TypeFormatFlags {

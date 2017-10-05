@@ -1767,6 +1767,29 @@ declare namespace ts {
         getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
     }
+    enum NodeBuilderFlags {
+        None = 0,
+        NoTruncation = 1,
+        WriteArrayAsGenericType = 2,
+        WriteTypeArgumentsOfSignature = 32,
+        UseFullyQualifiedType = 64,
+        UseOnlyExternalAliasing = 128,
+        SuppressAnyReturnType = 256,
+        WriteTypeParametersInQualifiedName = 512,
+        MultilineObjectLiterals = 1024,
+        WriteClassExpressionAsTypeLiteral = 2048,
+        UseTypeOfFunction = 4096,
+        OmitParameterModifiers = 8192,
+        UseAliasDefinedOutsideCurrentScope = 16384,
+        AllowThisInObjectLiteral = 32768,
+        AllowQualifedNameInPlaceOfIdentifier = 65536,
+        AllowAnonymousIdentifier = 131072,
+        AllowEmptyUnionOrIntersection = 262144,
+        AllowEmptyTuple = 524288,
+        IgnoreErrors = 1015808,
+        InObjectTypeLiteral = 1048576,
+        InTypeAlias = 8388608,
+    }
     /**
      * @deprecated
      */
@@ -1802,29 +1825,6 @@ declare namespace ts {
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         reportInaccessibleThisError(): void;
         reportPrivateInBaseOfClassExpression(propertyName: string): void;
-    }
-    enum NodeBuilderFlags {
-        None = 0,
-        NoTruncation = 1,
-        WriteArrayAsGenericType = 2,
-        WriteTypeArgumentsOfSignature = 32,
-        UseFullyQualifiedType = 64,
-        UseOnlyExternalAliasing = 128,
-        SuppressAnyReturnType = 256,
-        WriteTypeParametersInQualifiedName = 512,
-        MultilineObjectLiterals = 1024,
-        WriteClassExpressionAsTypeLiteral = 2048,
-        UseTypeOfFunction = 4096,
-        OmitParameterModifiers = 8192,
-        UseAliasDefinedOutsideCurrentScope = 16384,
-        AllowThisInObjectLiteral = 32768,
-        AllowQualifedNameInPlaceOfIdentifier = 65536,
-        AllowAnonymousIdentifier = 131072,
-        AllowEmptyUnionOrIntersection = 262144,
-        AllowEmptyTuple = 524288,
-        IgnoreErrors = 1015808,
-        InObjectTypeLiteral = 1048576,
-        InTypeAlias = 8388608,
     }
     enum TypeFormatFlags {
         None = 0,
