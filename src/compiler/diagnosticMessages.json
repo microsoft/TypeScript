@@ -907,49 +907,53 @@
         "category": "Error",
         "code": 1328
     },
-    "'unique symbol' types are not allowed in a union type.": {
+    "'{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?": {
         "category": "Error",
         "code": 1329
     },
-    "'unique symbol' types are not allowed in an intersection type.": {
+    "'unique symbol' types are not allowed in a union type.": {
         "category": "Error",
         "code": 1330
     },
-    "'unique symbol' types are not allowed in an array type.": {
+    "'unique symbol' types are not allowed in an intersection type.": {
         "category": "Error",
         "code": 1331
     },
-    "'unique symbol' types are not allowed in a tuple type.": {
+    "'unique symbol' types are not allowed in an array type.": {
         "category": "Error",
         "code": 1332
     },
-    "'unique symbol' types are not allowed in a mapped type.": {
+    "'unique symbol' types are not allowed in a tuple type.": {
         "category": "Error",
         "code": 1333
     },
-    "A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.": {
+    "'unique symbol' types are not allowed in a mapped type.": {
         "category": "Error",
         "code": 1334
     },
-    "A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.": {
+    "A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.": {
         "category": "Error",
         "code": 1335
     },
-    "A variable whose type is a 'unique symbol' type must be 'const'.": {
+    "A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.": {
         "category": "Error",
         "code": 1336
     },
-    "'unique symbol' types may not be used on a variable declaration with a binding name.": {
+    "A variable whose type is a 'unique symbol' type must be 'const'.": {
         "category": "Error",
         "code": 1337
     },
-    "'unique symbol' types are only allowed on variables in a variable statement.": {
+    "'unique symbol' types may not be used on a variable declaration with a binding name.": {
         "category": "Error",
         "code": 1338
     },
-    "'unique symbol' types are not allowed here.": {
+    "'unique symbol' types are only allowed on variables in a variable statement.": {
         "category": "Error",
         "code": 1339
+    },
+    "'unique symbol' types are not allowed here.": {
+        "category": "Error",
+        "code": 1340
     },
 
     "Duplicate identifier '{0}'.": {

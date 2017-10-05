@@ -4210,13 +4210,13 @@ namespace ts {
             if (parentType === unknownType) {
                 return unknownType;
             }
-            // If no type was specified or inferred for parent, or if the specified or inferred type is any,
-            // infer from the initializer of the binding element if one is present. Otherwise, go with the
-            // undefined or any type of the parent.
-            if (!parentType || isTypeAny(parentType)) {
-                if (declaration.initializer) {
-                    return checkDeclarationInitializer(declaration);
-                }
+            // If no type was specified or inferred for parent,
+            // infer from the initializer of the binding element if one is present.
+            // Otherwise, go with the undefined type of the parent.
+            if (!parentType) {
+                return declaration.initializer ? checkDeclarationInitializer(declaration) : parentType;
+            }
+            if (isTypeAny(parentType)) {
                 return parentType;
             }
 
@@ -4241,9 +4241,6 @@ namespace ts {
                     if (isComputedNonLiteralName(name)) {
                         // computed properties with non-literal names are treated as 'any'
                         return anyType;
-                    }
-                    if (declaration.initializer) {
-                        getContextualType(declaration.initializer);
                     }
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
@@ -16921,6 +16918,12 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
+            if (isPotentiallyUncalledDecorator(node, callSignatures)) {
+                const nodeStr = getTextOfNode(node.expression, /*includeTrivia*/ false);
+                error(node, Diagnostics._0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0, nodeStr);
+                return resolveErrorCall(node);
+            }
+
             const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
                 let errorInfo: DiagnosticMessageChain;
@@ -16931,6 +16934,18 @@ namespace ts {
             }
 
             return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
+        }
+
+        /**
+         * Sometimes, we have a decorator that could accept zero arguments,
+         * but is receiving too many arguments as part of the decorator invocation.
+         * In those cases, a user may have meant to *call* the expression before using it as a decorator.
+         */
+        function isPotentiallyUncalledDecorator(decorator: Decorator, signatures: Signature[]) {
+            return signatures.length && every(signatures, signature =>
+                signature.minArgumentCount === 0 &&
+                !signature.hasRestParameter &&
+                signature.parameters.length < getEffectiveArgumentCount(decorator, /*args*/ undefined, signature));
         }
 
         /**
