@@ -13917,13 +13917,15 @@ namespace ts {
                 if (propertiesArray.length > 0) {
                     spread = getSpreadType(spread, createObjectLiteralType());
                 }
-                if (spread.flags & TypeFlags.Object) {
-                    // only set the symbol and flags if this is a (fresh) object type
-                    spread.flags |= propagatedFlags;
-                    spread.flags |= TypeFlags.FreshLiteral;
-                    (spread as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
-                    spread.symbol = node.symbol;
-                }
+                // only set the symbol and flags if this is a (fresh) object type
+                forEachType(spread, t => {
+                    if (t.flags & TypeFlags.Object) {
+                        t.flags |= propagatedFlags;
+                        t.flags |= TypeFlags.FreshLiteral;
+                        (t as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
+                        t.symbol = node.symbol
+                    }
+                });
                 return spread;
             }
 
