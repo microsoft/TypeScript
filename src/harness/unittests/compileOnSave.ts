@@ -588,5 +588,40 @@ namespace ts.projectSystem {
             assert.isTrue(outFileContent.indexOf(file2.content) === -1);
             assert.isTrue(outFileContent.indexOf(file3.content) === -1);
         });
+
+        it("should emit js files in inferred projects when possible input", () => {
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "var test = \"\";"
+            };
+            const host = createServerHost([file1]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+            projectService.openClientFile(file1.path);
+
+            assert.isTrue(projectService.getDefaultProjectForFile(server.toNormalizedPath(file1.path), /*ensureProject*/ true).projectKind === server.ProjectKind.Inferred);
+
+            const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path });
+            session.executeCommand(emitRequest);
+
+            const emitFilePath = "/a/b/file1.js";
+            assert.isTrue(host.fileExists(emitFilePath));
+            let emittedContent = host.readFile(emitFilePath);
+            assert.isTrue(emittedContent.indexOf(file1.content) !== -1);
+
+            projectService.openClientFile(emitFilePath);
+            const editRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
+                file: file1.path,
+                line: 1,
+                offset: 1,
+                endLine: 1,
+                endOffset: 1,
+                insertString: `var a = \"\";`
+            });
+            session.executeCommand(editRequest);
+            session.executeCommand(emitRequest);
+            emittedContent = host.readFile(emitFilePath);
+            assert.isTrue(emittedContent.indexOf(file1.content) !== -1);
+        });
     });
 }

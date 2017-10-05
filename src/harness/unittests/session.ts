@@ -156,7 +156,8 @@ namespace ts.server {
                         jsx: JsxEmit.React,
                         newLine: NewLineKind.LineFeed,
                         moduleResolution: ModuleResolutionKind.NodeJs,
-                        allowNonTsExtensions: true // injected by tsserver
+                        allowNonTsExtensions: true, // injected by tsserver
+                        isInferredProject: true // injected by tsserver
                     });
             });
         });
