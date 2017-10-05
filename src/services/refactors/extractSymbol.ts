@@ -1064,7 +1064,7 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function transformFunctionBody(body: Node, writes: ReadonlyArray<UsageEntry>, substitutions: ReadonlyMap<() => Node>, hasReturn: boolean): { body: Block, returnValueProperty: string } {
+    function transformFunctionBody(body: Node, writes: ReadonlyArray<UsageEntry>, substitutions: ReadonlyMap<Node>, hasReturn: boolean): { body: Block, returnValueProperty: string } {
         if (isBlock(body) && !writes && substitutions.size === 0) {
             // already block, no writes to propagate back, no substitutions - can use node as is
             return { body: createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
@@ -1112,21 +1112,21 @@ namespace ts.refactor.extractSymbol {
                 const oldIgnoreReturns = ignoreReturns;
                 ignoreReturns = ignoreReturns || isFunctionLikeDeclaration(node) || isClassLike(node);
                 const substitution = substitutions.get(getNodeId(node).toString());
-                const result = substitution ? substitution() : visitEachChild(node, visitor, nullTransformationContext);
+                const result = substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, nullTransformationContext);
                 ignoreReturns = oldIgnoreReturns;
                 return result;
             }
         }
     }
 
-    function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyMap<() => Node>): Expression {
+    function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyMap<Node>): Expression {
         return substitutions.size
             ? visitor(initializer) as Expression
             : initializer;
 
         function visitor(node: Node): VisitResult<Node> {
             const substitution = substitutions.get(getNodeId(node).toString());
-            return substitution ? substitution() : visitEachChild(node, visitor, nullTransformationContext);
+            return substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, nullTransformationContext);
         }
     }
 
@@ -1255,7 +1255,7 @@ namespace ts.refactor.extractSymbol {
     interface ScopeUsages {
         readonly usages: Map<UsageEntry>;
         readonly typeParameterUsages: Map<TypeParameter>; // Key is type ID
-        readonly substitutions: Map<() => Node>;
+        readonly substitutions: Map<Node>;
     }
 
     interface ReadsAndWrites {
@@ -1274,7 +1274,7 @@ namespace ts.refactor.extractSymbol {
 
         const allTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
         const usagesPerScope: ScopeUsages[] = [];
-        const substitutionsPerScope: Map<() => Node>[] = [];
+        const substitutionsPerScope: Map<Node>[] = [];
         const functionErrorsPerScope: Diagnostic[][] = [];
         const constantErrorsPerScope: Diagnostic[][] = [];
         const visibleDeclarationsInExtractedRange: Symbol[] = [];
@@ -1298,8 +1298,8 @@ namespace ts.refactor.extractSymbol {
 
         // initialize results
         for (const scope of scopes) {
-            usagesPerScope.push({ usages: createMap<UsageEntry>(), typeParameterUsages: createMap<TypeParameter>(), substitutions: createMap<() => Expression>() });
-            substitutionsPerScope.push(createMap<() => Expression>());
+            usagesPerScope.push({ usages: createMap<UsageEntry>(), typeParameterUsages: createMap<TypeParameter>(), substitutions: createMap<Expression>() });
+            substitutionsPerScope.push(createMap<Expression>());
 
             functionErrorsPerScope.push(
                 isFunctionLikeDeclaration(scope) && scope.kind !== SyntaxKind.FunctionDeclaration
@@ -1598,20 +1598,20 @@ namespace ts.refactor.extractSymbol {
             }
         }
 
-        function tryReplaceWithQualifiedNameOrPropertyAccess(symbol: Symbol, scopeDecl: Node, isTypeNode: boolean): () => (PropertyAccessExpression | EntityName) {
+        function tryReplaceWithQualifiedNameOrPropertyAccess(symbol: Symbol, scopeDecl: Node, isTypeNode: boolean): PropertyAccessExpression | EntityName {
             if (!symbol) {
                 return undefined;
             }
             if (symbol.getDeclarations().some(d => d.parent === scopeDecl)) {
-                return () => createIdentifier(symbol.name);
+                return createIdentifier(symbol.name);
             }
             const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent, scopeDecl, isTypeNode);
             if (prefix === undefined) {
                 return undefined;
             }
             return isTypeNode
-                ? () => createQualifiedName(<EntityName>prefix(), createIdentifier(symbol.name))
-                : () => createPropertyAccess(<Expression>prefix(), symbol.name);
+                ? createQualifiedName(<EntityName>prefix, createIdentifier(symbol.name))
+                : createPropertyAccess(<Expression>prefix, symbol.name);
         }
     }
 
