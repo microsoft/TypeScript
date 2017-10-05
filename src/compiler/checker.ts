@@ -8540,7 +8540,7 @@ namespace ts {
             }
 
             const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
-            const strictVariance = strictFunctionTypes && kind !== SyntaxKind.MethodDeclaration &&
+            const strictVariance = !checkAsCallback && strictFunctionTypes && kind !== SyntaxKind.MethodDeclaration &&
                 kind !== SyntaxKind.MethodSignature && kind !== SyntaxKind.Constructor;
             let result = Ternary.True;
 
@@ -8579,7 +8579,7 @@ namespace ts {
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
-                const callbacks = sourceSig && targetSig && !sourceSig.typePredicate && !targetSig.typePredicate &&
+                const callbacks = !strictVariance && sourceSig && targetSig && !sourceSig.typePredicate && !targetSig.typePredicate &&
                     (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
                 const related = callbacks ?
                     compareSignaturesRelated(targetSig, sourceSig, /*checkAsCallback*/ true, /*ignoreReturnTypes*/ false, reportErrors, errorReporter, compareTypes) :
