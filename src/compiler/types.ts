@@ -3070,6 +3070,7 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
         lateMembers?: SymbolTable;          // Late-bound members resolved during check
+        lateExports?: SymbolTable;          // Late-bound exports resolved during check
     }
 
     /* @internal */

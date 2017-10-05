@@ -90,6 +90,12 @@ declare type T15 = {
     [s2]: boolean;
 };
 
+declare class C {
+    static a: number;
+    static 1: string;
+    static [s2]: boolean;
+}
+
 let t0: T0;
 let t1: T1;
 let t2: T2;
@@ -115,6 +121,7 @@ let t15: T15;
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
 t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
+t0 = C; // static side
 
 // object literals
 export const o1 = {
@@ -173,6 +180,7 @@ let t15;
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
 t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
+t0 = C; // static side
 // object literals
 exports.o1 = {
     [exports.c4]: 1,

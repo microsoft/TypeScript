@@ -1867,12 +1867,41 @@ namespace ts {
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
-            return symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) : symbol.exports || emptySymbols;
+            return symbol.flags & SymbolFlags.Class ? getExportsOfClass(symbol) :
+                symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) :
+                symbol.exports || emptySymbols;
         }
 
         function getExportsOfModule(moduleSymbol: Symbol): SymbolTable {
             const links = getSymbolLinks(moduleSymbol);
             return links.resolvedExports || (links.resolvedExports = getExportsOfModuleWorker(moduleSymbol));
+        }
+
+        function getExportsOfClass(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.resolvedExports) {
+                const earlySymbols = symbol.flags & SymbolFlags.Module ? getExportsOfModuleWorker(symbol) : symbol.exports;
+                const lateSymbols = getLateBoundExportsOfSymbol(symbol);
+
+                // In the event we recursively resolve the members of the symbol, we
+                // should only see the early-bound members of the symbol here.
+                links.resolvedExports = earlySymbols || emptySymbols;
+
+                // fill in any as-yet-unresolved late-bound members.
+                for (const decl of symbol.declarations) {
+                    const members = getMembersOfDeclaration(decl);
+                    if (members) {
+                        for (const member of members) {
+                            if (hasModifier(member, ModifierFlags.Static) && hasLateBindableName(member)) {
+                                lateBindMember(decl.symbol, earlySymbols, lateSymbols, member);
+                            }
+                        }
+                    }
+                }
+
+                links.resolvedExports = combineSymbolTables(earlySymbols, lateSymbols) || emptySymbols;
+            }
+            return links.resolvedExports;
         }
 
         interface ExportCollisionTracker {
@@ -5508,6 +5537,16 @@ namespace ts {
         }
 
         /**
+         * Gets the symbol table used to store exports added during late-binding.
+         * This table is filled in as the late-bound names for dynamic members are resolved.
+         */
+        function getLateBoundExportsOfSymbol(symbol: Symbol): SymbolTable {
+            Debug.assert(!!(symbol.flags & SymbolFlags.Class), "Expected a container that supports late-binding of exports.");
+            const links = getSymbolLinks(symbol);
+            return links.lateExports || (links.lateExports = createSymbolTable());
+        }
+
+        /**
          * Adds a declaration to a late-bound dynamic member. This performs the same function for
          * late-bound members that `addDeclarationToSymbol` in binder.ts performs for early-bound
          * members.
@@ -5617,14 +5656,13 @@ namespace ts {
          */
         function getLateBoundSymbol(symbol: Symbol) {
             if (symbol && (symbol.flags & SymbolFlags.ClassMember) && symbol.escapedName === InternalSymbolName.Computed) {
-                // NOTE: This does not yet support late-bound static members of a class.
                 const isStaticMember = some(symbol.declarations, declaration => hasModifier(declaration, ModifierFlags.Static));
                 const parent = symbol.parent;
-                if (parent && (parent.flags & (isStaticMember ? SymbolFlags.Class : SymbolFlags.LateBindableContainer)) && !isStaticMember) {
+                if (parent && (parent.flags & (isStaticMember ? SymbolFlags.Class : SymbolFlags.LateBindableContainer))) {
                     const links = getSymbolLinks(symbol);
                     if (!links.lateSymbol) {
-                        const earlySymbols = parent.members;
-                        const lateSymbols = getLateBoundMembersOfSymbol(symbol.parent);
+                        const earlySymbols = isStaticMember ? parent.exports : parent.members;
+                        const lateSymbols = isStaticMember ? getLateBoundExportsOfSymbol(parent) : getLateBoundMembersOfSymbol(parent);
 
                         // In the event we attempt to get the late-bound symbol for a symbol recursively,
                         // fall back to the early-bound symbol.

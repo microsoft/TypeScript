@@ -239,6 +239,17 @@ declare type T15 = {
 
 };
 
+declare class C {
+>C : C
+
+    static a: number;
+>a : number
+
+    static 1: string;
+    static [s2]: boolean;
+>s2 : unique symbol
+}
+
 let t0: T0;
 >t0 : T0
 >T0 : T0
@@ -458,6 +469,11 @@ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 >t15 = t0 : T0
 >t15 : { a: number; 1: string; [s2]: boolean; }
 >t0 : T0
+
+t0 = C; // static side
+>t0 = C : typeof C
+>t0 : T0
+>C : typeof C
 
 // object literals
 export const o1 = {
