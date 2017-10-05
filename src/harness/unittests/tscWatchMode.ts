@@ -1655,5 +1655,147 @@ namespace ts.tscWatch {
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
             checkOutputDoesNotContain(host, [barNotFound]);
         });
+
+        it("works when module resolution changes to ambient module", () => {
+            const root = {
+                path: "/a/b/foo.ts",
+                content: `import * as fs from "fs";`
+            };
+
+            const packageJson = {
+                path: "/a/b/node_modules/@types/node/package.json",
+                content: `
+{
+  "main": ""
+}
+`
+            };
+
+            const nodeType = {
+                path: "/a/b/node_modules/@types/node/index.d.ts",
+                content: `
+declare module "fs" {
+    export interface Stats {
+        isFile(): boolean;
+        isDirectory(): boolean;
+        isBlockDevice(): boolean;
+        isCharacterDevice(): boolean;
+        isSymbolicLink(): boolean;
+        isFIFO(): boolean;
+        isSocket(): boolean;
+        dev: number;
+        ino: number;
+        mode: number;
+        nlink: number;
+        uid: number;
+        gid: number;
+        rdev: number;
+        size: number;
+        blksize: number;
+        blocks: number;
+        atimeMs: number;
+        mtimeMs: number;
+        ctimeMs: number;
+        birthtimeMs: number;
+        atime: Date;
+        mtime: Date;
+        ctime: Date;
+        birthtime: Date;
+    }
+}`
+            };
+
+            const files = [root, libFile];
+            const filesWithNodeType = files.concat(packageJson, nodeType);
+            const host = createWatchedSystem(files, { currentDirectory: "/a/b" });
+
+            createWatchModeWithoutConfigFile([root.path], host, { });
+
+            const fsNotFound = `foo.ts(1,21): error TS2307: Cannot find module 'fs'.\n`;
+            checkOutputContains(host, [fsNotFound]);
+            host.clearOutput();
+
+            host.reloadFS(filesWithNodeType);
+            host.runQueuedTimeoutCallbacks();
+            checkOutputDoesNotContain(host, [fsNotFound]);
+        });
+
+        it("works when included file with ambient module changes", () => {
+            const root = {
+                path: "/a/b/foo.ts",
+                content: `
+import * as fs from "fs";
+import * as u from "url";
+`
+            };
+
+            const file = {
+                path: "/a/b/bar.d.ts",
+                content: `
+declare module "url" {
+    export interface Url {
+        href?: string;
+        protocol?: string;
+        auth?: string;
+        hostname?: string;
+        port?: string;
+        host?: string;
+        pathname?: string;
+        search?: string;
+        query?: string | any;
+        slashes?: boolean;
+        hash?: string;
+        path?: string;
+    }
+}
+`
+            };
+
+            const fileContentWithFS = `
+declare module "fs" {
+    export interface Stats {
+        isFile(): boolean;
+        isDirectory(): boolean;
+        isBlockDevice(): boolean;
+        isCharacterDevice(): boolean;
+        isSymbolicLink(): boolean;
+        isFIFO(): boolean;
+        isSocket(): boolean;
+        dev: number;
+        ino: number;
+        mode: number;
+        nlink: number;
+        uid: number;
+        gid: number;
+        rdev: number;
+        size: number;
+        blksize: number;
+        blocks: number;
+        atimeMs: number;
+        mtimeMs: number;
+        ctimeMs: number;
+        birthtimeMs: number;
+        atime: Date;
+        mtime: Date;
+        ctime: Date;
+        birthtime: Date;
+    }
+}
+`;
+
+            const files = [root, file, libFile];
+            const host = createWatchedSystem(files, { currentDirectory: "/a/b" });
+
+            createWatchModeWithoutConfigFile([root.path, file.path], host, {});
+
+            const fsNotFound = `foo.ts(2,21): error TS2307: Cannot find module 'fs'.\n`;
+            checkOutputContains(host, [fsNotFound]);
+            host.clearOutput();
+
+            file.content += fileContentWithFS;
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            checkOutputDoesNotContain(host, [fsNotFound]);
+        });
     });
 }

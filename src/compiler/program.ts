@@ -663,8 +663,7 @@ namespace ts {
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
             sourceFileToPackageName,
-            redirectTargetsSet,
-            hasInvalidatedResolution
+            redirectTargetsSet
         };
 
         verifyCompilerOptions();

@@ -77,8 +77,8 @@ namespace ts {
          */
         onUpdateSourceFile(program: Program, sourceFile: SourceFile): void;
         /**
-         * Called when source file has not changed but has some of the resolutions invalidated
-         * If returned true, builder will mark the file as changed (noting that something associated with file has changed)
+         * Called when source file has not changed
+         * If returned true, builder will mark the file as changed (noting that something associated with file has changed eg. module resolution)
          */
         onUpdateSourceFileWithSameVersion(program: Program, sourceFile: SourceFile): boolean;
         /**
@@ -161,8 +161,7 @@ namespace ts {
                 existingInfo.version = sourceFile.version;
                 emitHandler.onUpdateSourceFile(program, sourceFile);
             }
-            else if (program.hasInvalidatedResolution(sourceFile.path) &&
-                emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
+            else if (emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
                 registerChangedFile(sourceFile.path, sourceFile.fileName);
             }
         }
