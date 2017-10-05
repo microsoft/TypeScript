@@ -549,7 +549,7 @@ namespace ts.projectSystem {
             assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
-        it("shoud not emit js files in external projects", () => {
+        it("should not emit js files in external projects", () => {
             const file1 = {
                 path: "/a/b/file1.ts",
                 content: "consonle.log('file1');"
@@ -589,39 +589,36 @@ namespace ts.projectSystem {
             assert.isTrue(outFileContent.indexOf(file3.content) === -1);
         });
 
-        it("should emit js files in inferred projects when possible input", () => {
-            const file1 = {
-                path: "/a/b/file1.ts",
+        it("should emit js files in inferred projects when they could be input files", () => {
+            const f1 = {
+                path: "/a/b/f1.ts",
                 content: "var test = \"\";"
             };
-            const host = createServerHost([file1]);
-            const session = createSession(host);
+            const f1js = {
+                path: "/a/b/f1.js",
+                content: "var test = \"\";"
+            };
+            const host = createServerHost([f1, f1js, libFile]);
+            const session = createSession(host, { useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
             const projectService = session.getProjectService();
-            projectService.openClientFile(file1.path);
+            projectService.setCompilerOptionsForInferredProjects({});
 
-            assert.isTrue(projectService.getDefaultProjectForFile(server.toNormalizedPath(file1.path), /*ensureProject*/ true).projectKind === server.ProjectKind.Inferred);
+            openFilesForSession([f1, f1js], session);
 
-            const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path });
-            session.executeCommand(emitRequest);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const projectName = projectService.inferredProjects[0].getProjectName();
 
-            const emitFilePath = "/a/b/file1.js";
-            assert.isTrue(host.fileExists(emitFilePath));
-            let emittedContent = host.readFile(emitFilePath);
-            assert.isTrue(emittedContent.indexOf(file1.content) !== -1);
+            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 2,
+                arguments: { projectFileName: projectName }
+            }).response;
+            assert.isTrue(diags.length === 0);
 
-            projectService.openClientFile(emitFilePath);
-            const editRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
-                file: file1.path,
-                line: 1,
-                offset: 1,
-                endLine: 1,
-                endOffset: 1,
-                insertString: `var a = \"\";`
-            });
-            session.executeCommand(editRequest);
-            session.executeCommand(emitRequest);
-            emittedContent = host.readFile(emitFilePath);
-            assert.isTrue(emittedContent.indexOf(file1.content) !== -1);
+            const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: f1.path });
+            const emitResponse = session.executeCommand(emitRequest).response;
+            assert.isTrue(emitResponse);
         });
     });
 }
