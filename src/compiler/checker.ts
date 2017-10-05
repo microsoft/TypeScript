@@ -526,7 +526,7 @@ namespace ts {
                     typeToString(type, enclosingDeclaration, flags, emitTextWriterWrapper(writer));
                 },
                 buildSymbolDisplay(symbol, writer, enclosingDeclaration?, meaning?, flags?) {
-                    symbolToString(symbol, enclosingDeclaration, meaning, flags, emitTextWriterWrapper(writer));
+                    symbolToString(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.AllowAnyNodeKind, emitTextWriterWrapper(writer));
                 },
                 buildSignatureDisplay(signature, writer, enclosing?, flags?, kind?) {
                     signatureToString(signature, enclosing, flags, kind, emitTextWriterWrapper(writer));
@@ -567,6 +567,11 @@ namespace ts {
                     printer.writeList(ListFormat.TypeParameters, args, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
                 },
                 buildReturnTypeDisplay(signature, writer, enclosing?, flags?) {
+                    writer.writePunctuation(":");
+                    writer.writeSpace(" ");
+                    if (signature.typePredicate) {
+                        return typePredicateToString(signature.typePredicate, enclosing, flags, emitTextWriterWrapper(writer));
+                    }
                     const node = nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
                     const printer = createPrinter({ removeComments: true });
                     printer.writeNode(EmitHint.Unspecified, node, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
