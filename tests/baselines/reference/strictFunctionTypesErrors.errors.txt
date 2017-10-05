@@ -40,26 +40,22 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(58,1): error TS2322: Type 'Fun
   Type 'Object' is not assignable to type 'string'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(61,1): error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<string, void>, Object>'.
   Types of parameters 'x' and 'x' are incompatible.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type 'Object' is not assignable to type 'string'.
+    Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'Object' is not assignable to type 'string'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(62,1): error TS2322: Type 'Func<Func<Object, void>, string>' is not assignable to type 'Func<Func<string, void>, Object>'.
   Types of parameters 'x' and 'x' are incompatible.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type 'Object' is not assignable to type 'string'.
+    Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(65,1): error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<string, void>, string>'.
   Types of parameters 'x' and 'x' are incompatible.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type 'Object' is not assignable to type 'string'.
+    Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(66,1): error TS2322: Type 'Func<Func<Object, void>, string>' is not assignable to type 'Func<Func<string, void>, string>'.
   Types of parameters 'x' and 'x' are incompatible.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type 'Object' is not assignable to type 'string'.
+    Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(67,1): error TS2322: Type 'Func<Func<string, void>, Object>' is not assignable to type 'Func<Func<string, void>, string>'.
   Type 'Object' is not assignable to type 'string'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(74,1): error TS2322: Type 'Func<Object, Func<string, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type 'Object' is not assignable to type 'string'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(75,1): error TS2322: Type 'Func<string, Func<Object, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'Object' is not assignable to type 'string'.
@@ -210,28 +206,26 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(127,1): error TS2322: Type 'Cr
     ~~
 !!! error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<string, void>, Object>'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:       Type 'Object' is not assignable to type 'string'.
+!!! error TS2322:     Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:         Type 'Object' is not assignable to type 'string'.
     h3 = h2;  // Error
     ~~
 !!! error TS2322: Type 'Func<Func<Object, void>, string>' is not assignable to type 'Func<Func<string, void>, Object>'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:       Type 'Object' is not assignable to type 'string'.
+!!! error TS2322:     Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
     h3 = h4;  // Ok
     
     h4 = h1;  // Error
     ~~
 !!! error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<string, void>, string>'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:       Type 'Object' is not assignable to type 'string'.
+!!! error TS2322:     Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
     h4 = h2;  // Error
     ~~
 !!! error TS2322: Type 'Func<Func<Object, void>, string>' is not assignable to type 'Func<Func<string, void>, string>'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:       Type 'Object' is not assignable to type 'string'.
+!!! error TS2322:     Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
     h4 = h3;  // Error
     ~~
 !!! error TS2322: Type 'Func<Func<string, void>, Object>' is not assignable to type 'Func<Func<string, void>, string>'.
@@ -246,8 +240,6 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(127,1): error TS2322: Type 'Cr
     ~~
 !!! error TS2322: Type 'Func<Object, Func<string, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
 !!! error TS2322:   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
-!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:       Type 'Object' is not assignable to type 'string'.
     i1 = i3;  // Error
     ~~
 !!! error TS2322: Type 'Func<string, Func<Object, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
