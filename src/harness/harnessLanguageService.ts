@@ -130,7 +130,7 @@ namespace Harness.LanguageService {
         }
 
         public getNewLine(): string {
-            return "\r\n";
+            return harnessNewLine;
         }
 
         public getFilenames(): string[] {
@@ -854,9 +854,5 @@ namespace Harness.LanguageService {
         getLanguageService(): ts.LanguageService { return this.client; }
         getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
         getPreProcessedFileInfo(): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
-    }
-
-    export function mockHash(s: string): string {
-        return `hash-${s}`;
     }
 }

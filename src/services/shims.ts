@@ -527,7 +527,7 @@ namespace ts {
         if (logPerformance) {
             const end = timestamp();
             logger.log(`${actionDescription} completed in ${end - start} msec`);
-            if (typeof result === "string") {
+            if (isString(result)) {
                 let str = result;
                 if (str.length > 128) {
                     str = str.substring(0, 128) + "...";
@@ -568,11 +568,18 @@ namespace ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
+    interface RealizedDiagnostic {
+        message: string;
+        start: number;
+        length: number;
+        category: string;
+        code: number;
+    }
+    export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
-    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number; } {
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): RealizedDiagnostic {
         return {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
             start: diagnostic.start,
@@ -641,7 +648,7 @@ namespace ts {
                 });
         }
 
-        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
+        private realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): { message: string; start: number; length: number; category: string; }[] {
             const newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }

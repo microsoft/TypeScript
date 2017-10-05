@@ -1,0 +1,61 @@
+=== tests/cases/compiler/constructorOverloads3.ts ===
+declare class FooBase {
+>FooBase : Symbol(FooBase, Decl(constructorOverloads3.ts, 0, 0))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(constructorOverloads3.ts, 1, 16))
+
+    constructor(n: number);
+>n : Symbol(n, Decl(constructorOverloads3.ts, 2, 16))
+
+    constructor(x: any);
+>x : Symbol(x, Decl(constructorOverloads3.ts, 3, 16))
+}
+
+
+ class Foo extends FooBase {
+>Foo : Symbol(Foo, Decl(constructorOverloads3.ts, 4, 1))
+>FooBase : Symbol(FooBase, Decl(constructorOverloads3.ts, 0, 0))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(constructorOverloads3.ts, 8, 16))
+
+    constructor(n: number);
+>n : Symbol(n, Decl(constructorOverloads3.ts, 9, 16))
+
+    constructor(a: any);
+>a : Symbol(a, Decl(constructorOverloads3.ts, 10, 16))
+
+    constructor(x: any, y?: any) { }
+>x : Symbol(x, Decl(constructorOverloads3.ts, 11, 16))
+>y : Symbol(y, Decl(constructorOverloads3.ts, 11, 23))
+
+    bar1() { /*WScript.Echo("Yo");*/}
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads3.ts, 11, 36))
+}
+
+var f1 = new Foo("hey");
+>f1 : Symbol(f1, Decl(constructorOverloads3.ts, 15, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads3.ts, 4, 1))
+
+var f2 = new Foo(0);
+>f2 : Symbol(f2, Decl(constructorOverloads3.ts, 16, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads3.ts, 4, 1))
+
+var f3 = new Foo(f1);
+>f3 : Symbol(f3, Decl(constructorOverloads3.ts, 17, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads3.ts, 4, 1))
+>f1 : Symbol(f1, Decl(constructorOverloads3.ts, 15, 3))
+
+var f4 = new Foo([f1,f2,f3]);
+>f4 : Symbol(f4, Decl(constructorOverloads3.ts, 18, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads3.ts, 4, 1))
+>f1 : Symbol(f1, Decl(constructorOverloads3.ts, 15, 3))
+>f2 : Symbol(f2, Decl(constructorOverloads3.ts, 16, 3))
+>f3 : Symbol(f3, Decl(constructorOverloads3.ts, 17, 3))
+
+f1.bar1();
+>f1.bar1 : Symbol(Foo.bar1, Decl(constructorOverloads3.ts, 11, 36))
+>f1 : Symbol(f1, Decl(constructorOverloads3.ts, 15, 3))
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads3.ts, 11, 36))
+

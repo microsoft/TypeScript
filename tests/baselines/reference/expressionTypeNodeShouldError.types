@@ -1,0 +1,148 @@
+=== tests/cases/compiler/base.d.ts ===
+declare const x: "foo".charCodeAt(0);
+>x : "foo"
+>charCodeAt : 0
+>(0) : 0
+>0 : 0
+
+=== tests/cases/compiler/string.ts ===
+interface String {
+>String : String
+
+    typeof<T>(x: T): T;
+>typeof : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
+}
+
+class C {
+>C : C
+
+    foo() {
+>foo : () => void
+
+        const x: "".typeof(this.foo);
+>x : ""
+>typeof(this.foo) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(this.foo) : () => void
+>this.foo : () => void
+>this : this
+>foo : () => void
+    }
+}
+
+const nodes = document.getElementsByTagName("li");
+>nodes : any
+>document.getElementsByTagName("li") : any
+>document.getElementsByTagName : any
+>document : any
+>getElementsByTagName : any
+>"li" : "li"
+
+type ItemType = "".typeof(nodes.item(0));
+>ItemType : ""
+>typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(nodes.item(0)) : any
+>nodes.item(0) : any
+>nodes.item : any
+>nodes : any
+>item : any
+>0 : 0
+
+=== tests/cases/compiler/number.ts ===
+interface Number {
+>Number : Number
+
+    typeof<T>(x: T): T;
+>typeof : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
+}
+
+class C2 {
+>C2 : C2
+
+    foo() {
+>foo : () => void
+
+        const x: 3.141592.typeof(this.foo);
+>x : 3.141592
+>typeof(this.foo) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(this.foo) : () => void
+>this.foo : () => void
+>this : this
+>foo : () => void
+    }
+}
+
+const nodes2 = document.getElementsByTagName("li");
+>nodes2 : any
+>document.getElementsByTagName("li") : any
+>document.getElementsByTagName : any
+>document : any
+>getElementsByTagName : any
+>"li" : "li"
+
+type ItemType2 = 4..typeof(nodes.item(0));
+>ItemType2 : 4
+>typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(nodes.item(0)) : any
+>nodes.item(0) : any
+>nodes.item : any
+>nodes : any
+>item : any
+>0 : 0
+
+=== tests/cases/compiler/boolean.ts ===
+interface Boolean {
+>Boolean : Boolean
+
+    typeof<T>(x: T): T;
+>typeof : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
+}
+
+class C3 {
+>C3 : C3
+
+    foo() {
+>foo : () => void
+
+        const x: false.typeof(this.foo);
+>x : false
+>false : false
+>typeof(this.foo) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(this.foo) : () => void
+>this.foo : () => void
+>this : this
+>foo : () => void
+    }
+}
+
+const nodes3 = document.getElementsByTagName("li");
+>nodes3 : any
+>document.getElementsByTagName("li") : any
+>document.getElementsByTagName : any
+>document : any
+>getElementsByTagName : any
+>"li" : "li"
+
+type ItemType3 = true.typeof(nodes.item(0));
+>ItemType3 : true
+>true : true
+>typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(nodes.item(0)) : any
+>nodes.item(0) : any
+>nodes.item : any
+>nodes : any
+>item : any
+>0 : 0
+
+

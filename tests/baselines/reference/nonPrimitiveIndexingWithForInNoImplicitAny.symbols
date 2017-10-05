@@ -1,0 +1,14 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts ===
+var a: object;
+>a : Symbol(a, Decl(nonPrimitiveIndexingWithForInNoImplicitAny.ts, 0, 3))
+
+for (var key in a) {
+>key : Symbol(key, Decl(nonPrimitiveIndexingWithForInNoImplicitAny.ts, 2, 8))
+>a : Symbol(a, Decl(nonPrimitiveIndexingWithForInNoImplicitAny.ts, 0, 3))
+
+    var value = a[key]; // error
+>value : Symbol(value, Decl(nonPrimitiveIndexingWithForInNoImplicitAny.ts, 3, 7))
+>a : Symbol(a, Decl(nonPrimitiveIndexingWithForInNoImplicitAny.ts, 0, 3))
+>key : Symbol(key, Decl(nonPrimitiveIndexingWithForInNoImplicitAny.ts, 2, 8))
+}
+

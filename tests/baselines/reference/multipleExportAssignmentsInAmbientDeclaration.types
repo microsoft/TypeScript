@@ -1,0 +1,14 @@
+=== tests/cases/compiler/multipleExportAssignmentsInAmbientDeclaration.ts ===
+declare module "m1" {
+    var a: number
+>a : number
+
+    var b: number;
+>b : number
+
+    export = a;
+>a : number
+
+    export = b;
+>b : number
+}

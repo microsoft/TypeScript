@@ -52,7 +52,7 @@ var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.a = _this = _super.call(this) || this;
+        _this.a = ();
         return _this;
     }
     Derived.prototype.b = function () {
@@ -83,6 +83,6 @@ var Derived = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Derived.a = _this = _super.call(this) || this;
+    Derived.a = ();
     return Derived;
 }(Base));

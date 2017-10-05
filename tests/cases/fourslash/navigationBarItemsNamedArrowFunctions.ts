@@ -17,11 +17,13 @@ verify.navigationBar([
             },
             {
                 "text": "func",
-                "kind": "function"
+                "kind": "const",
+                "kindModifiers": "export",
             },
             {
                 "text": "func2",
-                "kind": "function"
+                "kind": "const",
+                "kindModifiers": "export",
             },
             {
                 "text": "value",
@@ -32,18 +34,6 @@ verify.navigationBar([
     },
     {
         "text": "exportedFunction",
-        "kind": "function",
-        "kindModifiers": "export",
-        "indent": 1
-    },
-    {
-        "text": "func",
-        "kind": "function",
-        "kindModifiers": "export",
-        "indent": 1
-    },
-    {
-        "text": "func2",
         "kind": "function",
         "kindModifiers": "export",
         "indent": 1
@@ -61,12 +51,12 @@ verify.navigationTree({
         },
         {
             "text": "func",
-            "kind": "function",
+            "kind": "const",
             "kindModifiers": "export"
         },
         {
             "text": "func2",
-            "kind": "function",
+            "kind": "const",
             "kindModifiers": "export"
         },
         {

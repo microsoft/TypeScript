@@ -1,0 +1,107 @@
+=== tests/cases/compiler/propertiesAndIndexers.ts ===
+interface X { }
+>X : X
+
+interface Y {
+>Y : Y
+
+    n: number;
+>n : number
+}
+interface Z {
+>Z : Z
+
+    s: string;
+>s : string
+}
+
+interface A {
+>A : A
+
+    a: Y;
+>a : Y
+>Y : Y
+
+    b: X;
+>b : X
+>X : X
+
+    1: Z;
+>Z : Z
+}
+
+interface B extends A {
+>B : B
+>A : A
+
+    [n: number]: string;
+>n : number
+
+    c: boolean;
+>c : boolean
+
+    3: boolean;
+    6(): string;
+}
+
+interface B {
+>B : B
+
+    4: boolean;
+    5: string;
+}
+
+interface C extends A {
+>C : C
+>A : A
+
+    [s: string]: number;
+>s : string
+
+    c: boolean;
+>c : boolean
+
+    3: boolean;
+}
+
+interface D extends B, C {
+>D : D
+>B : B
+>C : C
+
+    2: Z;
+>Z : Z
+
+    Infinity: number;
+>Infinity : number
+
+    zoo: string;
+>zoo : string
+}
+
+class P {
+>P : P
+
+    [n: string]: string
+>n : string
+}
+
+class Q extends P {
+>Q : Q
+>P : P
+
+    t: number;
+>t : number
+}
+
+var c: {
+>c : { [n: number]: string; c: boolean; 3: boolean; }
+
+    [n: number]: string;
+>n : number
+
+    c: boolean;
+>c : boolean
+
+    3: boolean;
+};

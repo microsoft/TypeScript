@@ -1,5 +1,4 @@
 === tests/cases/compiler/null.ts ===
-
 var x=null; 
 >x : any
 >null : null
@@ -11,8 +10,8 @@ var y=3+x;
 >x : any
 
 var z=3+null; 
->z : number
->3+null : number
+>z : any
+>3+null : any
 >3 : 3
 >null : null
 

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/overridingPrivateStaticMembers.ts ===
+class Base2 {
+>Base2 : Base2
+
+    private static y: { foo: string };
+>y : { foo: string; }
+>foo : string
+}
+ 
+class Derived2 extends Base2 {
+>Derived2 : Derived2
+>Base2 : Base2
+
+    private static y: { foo: string; bar: string; };
+>y : { foo: string; bar: string; }
+>foo : string
+>bar : string
+}

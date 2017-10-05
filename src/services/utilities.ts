@@ -244,27 +244,25 @@ namespace ts {
             isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
-    export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
-        if (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) {
-            switch (node.parent.kind) {
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.ModuleDeclaration:
-                    return getNameOfDeclaration(<Declaration>node.parent) === node;
-                case SyntaxKind.ElementAccessExpression:
-                    return (<ElementAccessExpression>node.parent).argumentExpression === node;
-                case SyntaxKind.ComputedPropertyName:
-                    return true;
-            }
+    export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLiteral | NumericLiteral): boolean {
+        switch (node.parent.kind) {
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ModuleDeclaration:
+                return getNameOfDeclaration(<Declaration>node.parent) === node;
+            case SyntaxKind.ElementAccessExpression:
+                return (<ElementAccessExpression>node.parent).argumentExpression === node;
+            case SyntaxKind.ComputedPropertyName:
+                return true;
+            case SyntaxKind.LiteralType:
+                return node.parent.parent.kind === SyntaxKind.IndexedAccessType;
         }
-
-        return false;
     }
 
     export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
@@ -345,6 +343,28 @@ namespace ts {
                 return ScriptElementKind.alias;
             case SyntaxKind.JSDocTypedefTag:
                 return ScriptElementKind.typeElement;
+            case SyntaxKind.BinaryExpression:
+                const kind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                const { right } = node as BinaryExpression;
+                switch (kind) {
+                    case SpecialPropertyAssignmentKind.None:
+                        return ScriptElementKind.unknown;
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                        const rightKind = getNodeKind(right);
+                        return rightKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : rightKind;
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        return ScriptElementKind.memberFunctionElement; // instance method
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                        return ScriptElementKind.memberVariableElement; // property
+                    case SpecialPropertyAssignmentKind.Property:
+                        // static method / property
+                        return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
+                    default: {
+                        assertTypeIsNever(kind);
+                        return ScriptElementKind.unknown;
+                    }
+                }
             default:
                 return ScriptElementKind.unknown;
         }
@@ -577,7 +597,7 @@ namespace ts {
         }
 
         const children = list.getChildren();
-        const listItemIndex = indexOf(children, node);
+        const listItemIndex = indexOfNode(children, node);
 
         return {
             listItemIndex,
@@ -979,26 +999,6 @@ namespace ts {
         return result;
     }
 
-    export function compareDataObjects(dst: any, src: any): boolean {
-        if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
-            return false;
-        }
-
-        for (const e in dst) {
-            if (typeof dst[e] === "object") {
-                if (!compareDataObjects(dst[e], src[e])) {
-                    return false;
-                }
-            }
-            else if (typeof dst[e] !== "function") {
-                if (dst[e] !== src[e]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node) {
         if (node.kind === SyntaxKind.ArrayLiteralExpression ||
             node.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -1080,7 +1080,7 @@ namespace ts {
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
     export function nodeSeenTracker<T extends Node>(): (node: T) => boolean {
-        const seen: Array<true> = [];
+        const seen: true[] = [];
         return node => {
             const id = getNodeId(node);
             return !seen[id] && (seen[id] = true);
@@ -1311,5 +1311,27 @@ namespace ts {
 
     export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
         return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
+    }
+
+    export function getSourceFileImportLocation(node: SourceFile) {
+        // For a source file, it is possible there are detached comments we should not skip
+        const text = node.text;
+        let ranges = getLeadingCommentRanges(text, 0);
+        if (!ranges) return 0;
+        let position = 0;
+        // However we should still skip a pinned comment at the top
+        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+            position = ranges[0].end + 1;
+            ranges = ranges.slice(1);
+        }
+        // As well as any triple slash references
+        for (const range of ranges) {
+            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
+                position = range.end + 1;
+                continue;
+            }
+            break;
+        }
+        return position;
     }
 }

@@ -1,0 +1,13 @@
+tests/cases/compiler/unusedSetterInClass.ts(2,13): error TS6133: '_fullName' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedSetterInClass.ts (1 errors) ====
+    class Employee {
+        private _fullName: string;
+                ~~~~~~~~~
+!!! error TS6133: '_fullName' is declared but its value is never read.
+    
+        set fullName(newName: string) {
+            this._fullName = newName;
+        }
+    }

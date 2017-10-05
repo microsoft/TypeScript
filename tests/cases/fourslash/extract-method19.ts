@@ -5,18 +5,22 @@
 //// function fn() {
 ////     /*a*/console.log("hi");/*b*/
 //// }
-//// 
+////
 //// function newFunction() { }
 
 goTo.select('a', 'b')
-verify.refactorAvailable('Extract Method');
-edit.applyRefactor('Extract Method', "scope_0");
-verify.currentFileContentIs(`function fn() {
-    newFunction_1();
+edit.applyRefactor({
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
+    actionDescription: "Extract to inner function in function 'fn'",
+    newContent:
+`function fn() {
+    /*RENAME*/newFunction_1();
 
     function newFunction_1() {
         console.log("hi");
     }
 }
 
-function newFunction() { }`);
+function newFunction() { }`
+});

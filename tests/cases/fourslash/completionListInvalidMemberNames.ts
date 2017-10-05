@@ -11,15 +11,8 @@
 ////    "\u0031\u0062": "invalid unicode identifer name (1b)"
 ////};
 ////
-////x./**/
+////x./*a*/;
+////x["/*b*/"];
 
-goTo.marker();
-
-verify.completionListContains("bar");
-verify.completionListContains("break");
-verify.completionListContains("any");
-verify.completionListContains("$");
-verify.completionListContains("b");
-
-// Nothing else should show up
-verify.completionListCount(5);
+verify.completionsAt("a", ["bar", "break", "any", "$", "b"]);
+verify.completionsAt("b", ["foo ", "bar", "break", "any", "#", "$", "b", "\u0031\u0062"]);

@@ -25,6 +25,8 @@ TypeScript is authored by:
 * Anton Khlynovskiy 
 * Anton Tolmachev
 * Anubha Mathur 
+* Armando Aguirre 
+* Arnaud Tournier 
 * Arnav Singh
 * Arthur Ozga
 * Asad Saeeduddin
@@ -33,6 +35,7 @@ TypeScript is authored by:
 * Ben Duffield
 * Ben Mosher 
 * Benjamin Bock 
+* Benjamin Lichtman 
 * Benny Neugebauer 
 * Bill Ticehurst
 * Blaine Bublitz 
@@ -85,7 +88,9 @@ TypeScript is authored by:
 * Eyas Sharaiha
 * Fabian Cook 
 * @falsandtru
+* Filipe Silva 
 * @flowmemo
+* Francois Wouts 
 * Frank Wallis
 * Franklin Tse
 * František Žiacik
@@ -112,6 +117,7 @@ TypeScript is authored by:
 * Jakub Młokosiewicz 
 * James Henry 
 * James Whitney
+* Jan Melcher 
 * Jason Freeman
 * Jason Jarrett 
 * Jason Killian
@@ -162,9 +168,11 @@ TypeScript is authored by:
 * Masahiro Wakame
 * Matt Bierner 
 * Matt McCutchen
+* Matt Mitchell 
 * Mattias Buelens
 * Mattias Buelens 
 * Max Deepfield
+* Maxwell Paul Brickner 
 * Micah Zoltu
 * Michael 
 * Michael Bromley
@@ -243,6 +251,7 @@ TypeScript is authored by:
 * Torben Fitschen 
 * @TravCav
 * TruongSinh Tran-Nguyen
+* Tycho Grouwstra 
 * Vadi Taslim 
 * Vidar Tonaas Fauske
 * Viktor Zozulyak

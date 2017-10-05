@@ -1,0 +1,10 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of23.ts ===
+for (var x of [1, 2, 3]) {
+>x : Symbol(x, Decl(ES5For-of23.ts, 0, 8))
+
+    var _a = 0;
+>_a : Symbol(_a, Decl(ES5For-of23.ts, 1, 7))
+
+    console.log(x);
+>x : Symbol(x, Decl(ES5For-of23.ts, 0, 8))
+}

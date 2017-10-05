@@ -69,7 +69,7 @@ function boxify<T>(obj: T): Boxified<T> {
 
         result[k] = box(obj[k]);
 >result[k] = box(obj[k]) : Box<T[keyof T]>
->result[k] : Box<T[keyof T]>
+>result[k] : Boxified<T>[keyof T]
 >result : Boxified<T>
 >k : keyof T
 >box(obj[k]) : Box<T[keyof T]>
@@ -107,7 +107,7 @@ function unboxify<T>(obj: Boxified<T>): T {
 >k : keyof T
 >unbox(obj[k]) : T[keyof T]
 >unbox : <T>(x: Box<T>) => T
->obj[k] : Box<T[keyof T]>
+>obj[k] : Boxified<T>[keyof T]
 >obj : Boxified<T>
 >k : keyof T
     }
@@ -131,7 +131,7 @@ function assignBoxified<T>(obj: Boxified<T>, values: T) {
         obj[k].value = values[k];
 >obj[k].value = values[k] : T[keyof T]
 >obj[k].value : T[keyof T]
->obj[k] : Box<T[keyof T]>
+>obj[k] : Boxified<T>[keyof T]
 >obj : Boxified<T>
 >k : keyof T
 >value : T[keyof T]

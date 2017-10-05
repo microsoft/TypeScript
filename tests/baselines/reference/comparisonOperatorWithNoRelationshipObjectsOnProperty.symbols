@@ -1,0 +1,213 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts ===
+class A1 {
+>A1 : Symbol(A1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 0, 0))
+
+    public a: number;
+>a : Symbol(A1.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 0, 10))
+}
+
+class B1 {
+>B1 : Symbol(B1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 2, 1))
+
+    public a: string;
+>a : Symbol(B1.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 4, 10))
+}
+
+class A2 {
+>A2 : Symbol(A2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 6, 1))
+
+    private a: string;
+>a : Symbol(A2.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 8, 10))
+}
+
+class B2 {
+>B2 : Symbol(B2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 10, 1))
+
+    private a: string;
+>a : Symbol(B2.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 12, 10))
+}
+
+var a1: A1;
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+>A1 : Symbol(A1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 0, 0))
+
+var b1: B1;
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+>B1 : Symbol(B1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 2, 1))
+
+var a2: A2;
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+>A2 : Symbol(A2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 6, 1))
+
+var b2: B2;
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+>B2 : Symbol(B2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 10, 1))
+
+// operator <
+var r1a1 = a1 < b1;
+>r1a1 : Symbol(r1a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 22, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+
+var r1a2 = a2 < b2;
+>r1a2 : Symbol(r1a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 23, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+
+var r1b1 = b1 < a1;
+>r1b1 : Symbol(r1b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 25, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+
+var r1b2 = b2 < a2;
+>r1b2 : Symbol(r1b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 26, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+
+// operator >
+var r2a1 = a1 > b1;
+>r2a1 : Symbol(r2a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 29, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+
+var r2a2 = a2 > b2;
+>r2a2 : Symbol(r2a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 30, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+
+var r2b1 = b1 > a1;
+>r2b1 : Symbol(r2b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 32, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+
+var r2b2 = b2 > a2;
+>r2b2 : Symbol(r2b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 33, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+
+// operator <=
+var r3a1 = a1 <= b1;
+>r3a1 : Symbol(r3a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 36, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+
+var r3a2 = a2 <= b2;
+>r3a2 : Symbol(r3a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 37, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+
+var r3b1 = b1 <= a1;
+>r3b1 : Symbol(r3b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 39, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+
+var r3b2 = b2 <= a2;
+>r3b2 : Symbol(r3b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 40, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+
+// operator >=
+var r4a1 = a1 >= b1;
+>r4a1 : Symbol(r4a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 43, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+
+var r4a2 = a2 >= b2;
+>r4a2 : Symbol(r4a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 44, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+
+var r4b1 = b1 >= a1;
+>r4b1 : Symbol(r4b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 46, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+
+var r4b2 = b2 >= a2;
+>r4b2 : Symbol(r4b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 47, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+
+// operator ==
+var r5a1 = a1 == b1;
+>r5a1 : Symbol(r5a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 50, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+
+var r5a2 = a2 == b2;
+>r5a2 : Symbol(r5a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 51, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+
+var r5b1 = b1 == a1;
+>r5b1 : Symbol(r5b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 53, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+
+var r5b2 = b2 == a2;
+>r5b2 : Symbol(r5b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 54, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+
+// operator !=
+var r6a1 = a1 != b1;
+>r6a1 : Symbol(r6a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 57, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+
+var r6a2 = a2 != b2;
+>r6a2 : Symbol(r6a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 58, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+
+var r6b1 = b1 != a1;
+>r6b1 : Symbol(r6b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 60, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+
+var r6b2 = b2 != a2;
+>r6b2 : Symbol(r6b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 61, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+
+// operator ===
+var r7a1 = a1 === b1;
+>r7a1 : Symbol(r7a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 64, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+
+var r7a2 = a2 === b2;
+>r7a2 : Symbol(r7a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 65, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+
+var r7b1 = b1 === a1;
+>r7b1 : Symbol(r7b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 67, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+
+var r7b2 = b2 === a2;
+>r7b2 : Symbol(r7b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 68, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+
+// operator !==
+var r8a1 = a1 !== b1;
+>r8a1 : Symbol(r8a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 71, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+
+var r8a2 = a2 !== b2;
+>r8a2 : Symbol(r8a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 72, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+
+var r8b1 = b1 !== a1;
+>r8b1 : Symbol(r8b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 74, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 17, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 16, 3))
+
+var r8b2 = b2 !== a2;
+>r8b2 : Symbol(r8b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 75, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 19, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 18, 3))
+

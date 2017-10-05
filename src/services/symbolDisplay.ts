@@ -61,7 +61,8 @@ namespace ts.SymbolDisplay {
                     if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                         return ScriptElementKind.memberVariableElement;
                     }
-                    Debug.assert(!!(rootSymbolFlags & SymbolFlags.Method));
+                    // May be a Function if this was from `typeof N` with `namespace N { function f();. }`.
+                    Debug.assert(!!(rootSymbolFlags & (SymbolFlags.Method | SymbolFlags.Function)));
                 });
                 if (!unionPropertyKind) {
                     // If this was union of all methods,
@@ -135,10 +136,6 @@ namespace ts.SymbolDisplay {
             if (callExpressionLike) {
                 const candidateSignatures: Signature[] = [];
                 signature = typeChecker.getResolvedSignature(callExpressionLike, candidateSignatures);
-                if (!signature && candidateSignatures.length) {
-                    // Use the first candidate:
-                    signature = candidateSignatures[0];
-                }
 
                 const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 

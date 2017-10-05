@@ -1,0 +1,90 @@
+=== tests/cases/conformance/externalModules/exportNonInitializedVariablesSystem.ts ===
+var;
+let;
+const;
+
+export var a;
+>a : Symbol(a, Decl(exportNonInitializedVariablesSystem.ts, 4, 10))
+
+export let b;
+>b : Symbol(b, Decl(exportNonInitializedVariablesSystem.ts, 5, 10))
+
+export var c: string;
+>c : Symbol(c, Decl(exportNonInitializedVariablesSystem.ts, 6, 10))
+
+export let d: number;
+>d : Symbol(d, Decl(exportNonInitializedVariablesSystem.ts, 7, 10))
+
+class A {}
+>A : Symbol(A, Decl(exportNonInitializedVariablesSystem.ts, 7, 21))
+
+export var e: A;
+>e : Symbol(e, Decl(exportNonInitializedVariablesSystem.ts, 9, 10))
+>A : Symbol(A, Decl(exportNonInitializedVariablesSystem.ts, 7, 21))
+
+export let f: A;
+>f : Symbol(f, Decl(exportNonInitializedVariablesSystem.ts, 10, 10))
+>A : Symbol(A, Decl(exportNonInitializedVariablesSystem.ts, 7, 21))
+
+namespace B {
+>B : Symbol(B, Decl(exportNonInitializedVariablesSystem.ts, 10, 16))
+
+    export let a = 1, b, c = 2;
+>a : Symbol(a, Decl(exportNonInitializedVariablesSystem.ts, 13, 14))
+>b : Symbol(b, Decl(exportNonInitializedVariablesSystem.ts, 13, 21))
+>c : Symbol(c, Decl(exportNonInitializedVariablesSystem.ts, 13, 24))
+
+    export let x, y, z;
+>x : Symbol(x, Decl(exportNonInitializedVariablesSystem.ts, 14, 14))
+>y : Symbol(y, Decl(exportNonInitializedVariablesSystem.ts, 14, 17))
+>z : Symbol(z, Decl(exportNonInitializedVariablesSystem.ts, 14, 20))
+}
+
+module C {
+>C : Symbol(C, Decl(exportNonInitializedVariablesSystem.ts, 15, 1))
+
+    export var a = 1, b, c = 2;
+>a : Symbol(a, Decl(exportNonInitializedVariablesSystem.ts, 18, 14))
+>b : Symbol(b, Decl(exportNonInitializedVariablesSystem.ts, 18, 21))
+>c : Symbol(c, Decl(exportNonInitializedVariablesSystem.ts, 18, 24))
+
+    export var x, y, z;
+>x : Symbol(x, Decl(exportNonInitializedVariablesSystem.ts, 19, 14))
+>y : Symbol(y, Decl(exportNonInitializedVariablesSystem.ts, 19, 17))
+>z : Symbol(z, Decl(exportNonInitializedVariablesSystem.ts, 19, 20))
+}
+
+// Shouldn't be filtered
+export var a1 = 1;
+>a1 : Symbol(a1, Decl(exportNonInitializedVariablesSystem.ts, 23, 10))
+
+export let b1 = 1;
+>b1 : Symbol(b1, Decl(exportNonInitializedVariablesSystem.ts, 24, 10))
+
+export var c1: string = 'a';
+>c1 : Symbol(c1, Decl(exportNonInitializedVariablesSystem.ts, 25, 10))
+
+export let d1: number = 1;
+>d1 : Symbol(d1, Decl(exportNonInitializedVariablesSystem.ts, 26, 10))
+
+class D {}
+>D : Symbol(D, Decl(exportNonInitializedVariablesSystem.ts, 26, 26))
+
+export var e1 = new D;
+>e1 : Symbol(e1, Decl(exportNonInitializedVariablesSystem.ts, 28, 10))
+>D : Symbol(D, Decl(exportNonInitializedVariablesSystem.ts, 26, 26))
+
+export let f1 = new D;
+>f1 : Symbol(f1, Decl(exportNonInitializedVariablesSystem.ts, 29, 10))
+>D : Symbol(D, Decl(exportNonInitializedVariablesSystem.ts, 26, 26))
+
+export var g1: D = new D;
+>g1 : Symbol(g1, Decl(exportNonInitializedVariablesSystem.ts, 30, 10))
+>D : Symbol(D, Decl(exportNonInitializedVariablesSystem.ts, 26, 26))
+>D : Symbol(D, Decl(exportNonInitializedVariablesSystem.ts, 26, 26))
+
+export let h1: D = new D;
+>h1 : Symbol(h1, Decl(exportNonInitializedVariablesSystem.ts, 31, 10))
+>D : Symbol(D, Decl(exportNonInitializedVariablesSystem.ts, 26, 26))
+>D : Symbol(D, Decl(exportNonInitializedVariablesSystem.ts, 26, 26))
+

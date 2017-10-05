@@ -1,0 +1,14 @@
+=== tests/cases/conformance/decorators/invalid/decoratorOnFunctionDeclaration.ts ===
+declare function dec<T>(target: T): T;
+>dec : Symbol(dec, Decl(decoratorOnFunctionDeclaration.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnFunctionDeclaration.ts, 0, 21))
+>target : Symbol(target, Decl(decoratorOnFunctionDeclaration.ts, 0, 24))
+>T : Symbol(T, Decl(decoratorOnFunctionDeclaration.ts, 0, 21))
+>T : Symbol(T, Decl(decoratorOnFunctionDeclaration.ts, 0, 21))
+
+@dec
+>dec : Symbol(dec, Decl(decoratorOnFunctionDeclaration.ts, 0, 0))
+
+function F() {
+>F : Symbol(F, Decl(decoratorOnFunctionDeclaration.ts, 0, 38))
+}

@@ -1,0 +1,372 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts ===
+// name
+class StaticName {
+>StaticName : StaticName
+
+    static name: number; // error
+>name : number
+
+    name: string; // ok
+>name : string
+}
+
+class StaticNameFn {
+>StaticNameFn : StaticNameFn
+
+    static name() {} // error
+>name : () => void
+
+    name() {} // ok
+>name : () => void
+}
+
+// length
+class StaticLength {
+>StaticLength : StaticLength
+
+    static length: number; // error
+>length : number
+
+    length: string; // ok
+>length : string
+}
+
+class StaticLengthFn {
+>StaticLengthFn : StaticLengthFn
+
+    static length() {} // error
+>length : () => void
+
+    length() {} // ok
+>length : () => void
+}
+
+// prototype
+class StaticPrototype {
+>StaticPrototype : StaticPrototype
+
+    static prototype: number; // error
+>prototype : StaticPrototype
+
+    prototype: string; // ok
+>prototype : string
+}
+
+class StaticPrototypeFn {
+>StaticPrototypeFn : StaticPrototypeFn
+
+    static prototype() {} // error
+>prototype : () => void
+
+    prototype() {} // ok
+>prototype : () => void
+}
+
+// caller
+class StaticCaller {
+>StaticCaller : StaticCaller
+
+    static caller: number; // error
+>caller : number
+
+    caller: string; // ok
+>caller : string
+}
+
+class StaticCallerFn {
+>StaticCallerFn : StaticCallerFn
+
+    static caller() {} // error
+>caller : () => void
+
+    caller() {} // ok
+>caller : () => void
+}
+
+// arguments
+class StaticArguments {
+>StaticArguments : StaticArguments
+
+    static arguments: number; // error
+>arguments : number
+
+    arguments: string; // ok
+>arguments : string
+}
+
+class StaticArgumentsFn {
+>StaticArgumentsFn : StaticArgumentsFn
+
+    static arguments() {} // error
+>arguments : () => void
+
+    arguments() {} // ok
+>arguments : () => void
+}
+
+
+
+// === Static properties on anonymous classes ===
+
+// name
+var StaticName_Anonymous = class {
+>StaticName_Anonymous : typeof StaticName_Anonymous
+>class {    static name: number; // error    name: string; // ok} : typeof StaticName_Anonymous
+
+    static name: number; // error
+>name : number
+
+    name: string; // ok
+>name : string
+}
+
+var StaticNameFn_Anonymous = class {
+>StaticNameFn_Anonymous : typeof StaticNameFn_Anonymous
+>class {    static name() {} // error    name() {} // ok} : typeof StaticNameFn_Anonymous
+
+    static name() {} // error
+>name : () => void
+
+    name() {} // ok
+>name : () => void
+}
+
+// length
+var StaticLength_Anonymous = class {
+>StaticLength_Anonymous : typeof StaticLength_Anonymous
+>class {    static length: number; // error    length: string; // ok} : typeof StaticLength_Anonymous
+
+    static length: number; // error
+>length : number
+
+    length: string; // ok
+>length : string
+}
+
+var StaticLengthFn_Anonymous = class {
+>StaticLengthFn_Anonymous : typeof StaticLengthFn_Anonymous
+>class {    static length() {} // error    length() {} // ok} : typeof StaticLengthFn_Anonymous
+
+    static length() {} // error
+>length : () => void
+
+    length() {} // ok
+>length : () => void
+}
+
+// prototype
+var StaticPrototype_Anonymous = class {
+>StaticPrototype_Anonymous : typeof StaticPrototype_Anonymous
+>class {    static prototype: number; // error    prototype: string; // ok} : typeof StaticPrototype_Anonymous
+
+    static prototype: number; // error
+>prototype : StaticPrototype_Anonymous
+
+    prototype: string; // ok
+>prototype : string
+}
+
+var StaticPrototypeFn_Anonymous = class {
+>StaticPrototypeFn_Anonymous : typeof StaticPrototypeFn_Anonymous
+>class {    static prototype() {} // error    prototype() {} // ok} : typeof StaticPrototypeFn_Anonymous
+
+    static prototype() {} // error
+>prototype : () => void
+
+    prototype() {} // ok
+>prototype : () => void
+}
+
+// caller
+var StaticCaller_Anonymous = class {
+>StaticCaller_Anonymous : typeof StaticCaller_Anonymous
+>class {    static caller: number; // error    caller: string; // ok} : typeof StaticCaller_Anonymous
+
+    static caller: number; // error
+>caller : number
+
+    caller: string; // ok
+>caller : string
+}
+
+var StaticCallerFn_Anonymous = class {
+>StaticCallerFn_Anonymous : typeof StaticCallerFn_Anonymous
+>class {    static caller() {} // error    caller() {} // ok} : typeof StaticCallerFn_Anonymous
+
+    static caller() {} // error
+>caller : () => void
+
+    caller() {} // ok
+>caller : () => void
+}
+
+// arguments
+var StaticArguments_Anonymous = class {
+>StaticArguments_Anonymous : typeof StaticArguments_Anonymous
+>class {    static arguments: number; // error    arguments: string; // ok} : typeof StaticArguments_Anonymous
+
+    static arguments: number; // error
+>arguments : number
+
+    arguments: string; // ok
+>arguments : string
+}
+
+var StaticArgumentsFn_Anonymous = class {
+>StaticArgumentsFn_Anonymous : typeof StaticArgumentsFn_Anonymous
+>class {    static arguments() {} // error    arguments() {} // ok} : typeof StaticArgumentsFn_Anonymous
+
+    static arguments() {} // error
+>arguments : () => void
+
+    arguments() {} // ok
+>arguments : () => void
+}
+
+
+// === Static properties on default exported classes ===
+
+// name
+module TestOnDefaultExportedClass_1 {
+>TestOnDefaultExportedClass_1 : typeof TestOnDefaultExportedClass_1
+
+    class StaticName {
+>StaticName : StaticName
+
+        static name: number; // error
+>name : number
+
+        name: string; // ok
+>name : string
+    }
+}
+
+module TestOnDefaultExportedClass_2 {
+>TestOnDefaultExportedClass_2 : typeof TestOnDefaultExportedClass_2
+
+    class StaticNameFn {
+>StaticNameFn : StaticNameFn
+
+        static name() {} // error
+>name : () => void
+
+        name() {} // ok
+>name : () => void
+    }
+}
+
+// length
+module TestOnDefaultExportedClass_3 {
+>TestOnDefaultExportedClass_3 : typeof TestOnDefaultExportedClass_3
+
+    export default class StaticLength {
+>StaticLength : StaticLength
+
+        static length: number; // error
+>length : number
+
+        length: string; // ok
+>length : string
+    }
+}
+
+module TestOnDefaultExportedClass_4 {
+>TestOnDefaultExportedClass_4 : typeof TestOnDefaultExportedClass_4
+
+    export default class StaticLengthFn {
+>StaticLengthFn : StaticLengthFn
+
+        static length() {} // error
+>length : () => void
+
+        length() {} // ok
+>length : () => void
+    }
+}
+
+// prototype
+module TestOnDefaultExportedClass_5 {    
+>TestOnDefaultExportedClass_5 : typeof TestOnDefaultExportedClass_5
+
+    export default class StaticPrototype {
+>StaticPrototype : StaticPrototype
+
+        static prototype: number; // error
+>prototype : StaticPrototype
+
+        prototype: string; // ok
+>prototype : string
+    }
+}
+
+module TestOnDefaultExportedClass_6 {
+>TestOnDefaultExportedClass_6 : typeof TestOnDefaultExportedClass_6
+
+    export default class StaticPrototypeFn {
+>StaticPrototypeFn : StaticPrototypeFn
+
+        static prototype() {} // error
+>prototype : () => void
+
+        prototype() {} // ok
+>prototype : () => void
+    }
+}
+
+// caller
+module TestOnDefaultExportedClass_7 {
+>TestOnDefaultExportedClass_7 : typeof TestOnDefaultExportedClass_7
+
+    export default class StaticCaller {
+>StaticCaller : StaticCaller
+
+        static caller: number; // error
+>caller : number
+
+        caller: string; // ok
+>caller : string
+    }
+}
+
+module TestOnDefaultExportedClass_8 {
+>TestOnDefaultExportedClass_8 : typeof TestOnDefaultExportedClass_8
+
+    export default class StaticCallerFn {
+>StaticCallerFn : StaticCallerFn
+
+        static caller() {} // error
+>caller : () => void
+
+        caller() {} // ok
+>caller : () => void
+    }
+}
+
+// arguments
+module TestOnDefaultExportedClass_9 {
+>TestOnDefaultExportedClass_9 : typeof TestOnDefaultExportedClass_9
+
+    export default class StaticArguments {
+>StaticArguments : StaticArguments
+
+        static arguments: number; // error
+>arguments : number
+
+        arguments: string; // ok
+>arguments : string
+    }
+}
+
+module TestOnDefaultExportedClass_10 {
+>TestOnDefaultExportedClass_10 : typeof TestOnDefaultExportedClass_10
+
+    export default class StaticArgumentsFn {
+>StaticArgumentsFn : StaticArgumentsFn
+
+        static arguments() {} // error
+>arguments : () => void
+
+        arguments() {} // ok
+>arguments : () => void
+    }
+}

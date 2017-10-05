@@ -1,0 +1,63 @@
+=== tests/cases/compiler/lift.ts ===
+class B {
+>B : B
+
+    constructor(public y:number) {
+>y : number
+    }
+    public ll:number;  // to be shadowed
+>ll : number
+}
+
+class C extends B {
+>C : C
+>B : B
+
+    constructor(y:number,z:number,w:number) {
+>y : number
+>z : number
+>w : number
+
+        super(y)
+>super(y) : void
+>super : typeof B
+>y : number
+
+        var x=10+w;
+>x : number
+>10+w : number
+>10 : 10
+>w : number
+
+        var ll=x*w;
+>ll : number
+>x*w : number
+>x : number
+>w : number
+    }
+
+    public liftxyz () { return x+z+this.y; }
+>liftxyz : () => any
+>x+z+this.y : any
+>x+z : any
+>x : any
+>z : any
+>this.y : number
+>this : this
+>y : number
+
+    public liftxylocllz () { return x+z+this.y+this.ll; }
+>liftxylocllz : () => any
+>x+z+this.y+this.ll : any
+>x+z+this.y : any
+>x+z : any
+>x : any
+>z : any
+>this.y : number
+>this : this
+>y : number
+>this.ll : number
+>this : this
+>ll : number
+}
+

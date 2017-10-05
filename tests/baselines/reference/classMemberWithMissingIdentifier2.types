@@ -1,0 +1,11 @@
+=== tests/cases/compiler/classMemberWithMissingIdentifier2.ts ===
+class C { 
+>C : C
+
+    public {[name:string]:VariableDeclaration};
+> : { [x: number]: any; VariableDeclaration: any; }
+>{[name:string]:VariableDeclaration} : { [x: number]: any; VariableDeclaration: any; }
+>name : any
+>string : any
+>VariableDeclaration : any
+}

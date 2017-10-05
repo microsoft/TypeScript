@@ -207,7 +207,7 @@ namespace ts.JsTyping {
             }
 
             // depth of 2, so we access `node_modules/foo` but not `node_modules/foo/bar`
-            const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
+            const fileNames = host.readDirectory(packagesFolderPath, [Extension.Json], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(fileNames)}`);
             const packageNames: string[] = [];
             for (const fileName of fileNames) {

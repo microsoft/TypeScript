@@ -55,7 +55,6 @@ namespace ts.projectSystem {
             let configFile: FileOrFolder;
             let changeModuleFile1ShapeRequest1: server.protocol.Request;
             let changeModuleFile1InternalRequest1: server.protocol.Request;
-            let changeModuleFile1ShapeRequest2: server.protocol.Request;
             // A compile on save affected file request using file1
             let moduleFile1FileListRequest: server.protocol.Request;
 
@@ -110,16 +109,6 @@ namespace ts.projectSystem {
                     endLine: 1,
                     endOffset: 1,
                     insertString: `var T1: number;`
-                });
-
-                // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `export var T2: number;`
                 });
 
                 moduleFile1FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path, projectFileName: configFile.path });
@@ -209,7 +198,6 @@ namespace ts.projectSystem {
 
                 file1Consumer1.content = `let y = 10;`;
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer1.path, FileWatcherEventKind.Changed);
 
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
@@ -226,7 +214,6 @@ namespace ts.projectSystem {
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 // Delete file1Consumer2
                 host.reloadFS([moduleFile1, file1Consumer1, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer2.path, FileWatcherEventKind.Deleted);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
             });
 
@@ -243,7 +230,6 @@ namespace ts.projectSystem {
                     content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3, globalFile3, configFile, libFile]);
-                host.triggerDirectoryWatcherCallback(ts.getDirectoryPath(file1Consumer3.path), file1Consumer3.path);
                 host.runQueuedTimeoutCallbacks();
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3] }]);
@@ -476,7 +462,6 @@ namespace ts.projectSystem {
 
                 openFilesForSession([referenceFile1], session);
                 host.reloadFS([referenceFile1, configFile]);
-                host.triggerFileWatcherCallback(moduleFile1.path, FileWatcherEventKind.Deleted);
 
                 const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, request, [

@@ -210,6 +210,24 @@ namespace ts {
         function sourceElementVisitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.ExportDeclaration:
+                    return visitEllidableStatement(<ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration>node);
+                default:
+                    return visitorWorker(node);
+            }
+        }
+
+        function visitEllidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node> {
+            const parsed = getParseTreeNode(node);
+            if (parsed !== node) {
+                // If the node has been transformed by a `before` transformer, perform no ellision on it
+                // As the type information we would attempt to lookup to perform ellision is potentially unavailable for the synthesized nodes
+                return node;
+            }
+            switch (node.kind) {
+                case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
@@ -218,7 +236,7 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                     return visitExportDeclaration(<ExportDeclaration>node);
                 default:
-                    return visitorWorker(node);
+                    Debug.fail("Unhandled ellided statement");
             }
         }
 
@@ -503,7 +521,7 @@ namespace ts {
 
         function visitSourceFile(node: SourceFile) {
             const alwaysStrict = (compilerOptions.alwaysStrict === undefined ? compilerOptions.strict : compilerOptions.alwaysStrict) &&
-                !(isExternalModule(node) && moduleKind === ModuleKind.ES2015);
+                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015);
             return updateSourceFileNode(
                 node,
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
@@ -613,13 +631,16 @@ namespace ts {
 
                 addRange(statements, context.endLexicalEnvironment());
 
+                const iife = createImmediatelyInvokedArrowFunction(statements);
+                setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
+
                 const varStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
                             /*type*/ undefined,
-                            createImmediatelyInvokedFunctionExpression(statements)
+                            iife
                         )
                     ])
                 );
@@ -1944,7 +1965,7 @@ namespace ts {
                     const name = getMutableClone(<Identifier>node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
-                    name.parent = currentScope;
+                    name.parent = getParseTreeNode(currentScope); // ensure the parent is set to a parse tree node.
                     if (useFallback) {
                         return createLogicalAnd(
                             createStrictInequality(
@@ -2017,7 +2038,7 @@ namespace ts {
                     : (<ComputedPropertyName>name).expression;
             }
             else if (isIdentifier(name)) {
-                return createLiteral(unescapeLeadingUnderscores(name.escapedText));
+                return createLiteral(idText(name));
             }
             else {
                 return getSynthesizedClone(name);
@@ -2288,7 +2309,8 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                visitFunctionBody(node.body, visitor, context)
+                node.equalsGreaterThanToken,
+                visitFunctionBody(node.body, visitor, context),
             );
             return updated;
         }
@@ -2643,6 +2665,7 @@ namespace ts {
             return isExportOfNamespace(node)
                 || (isExternalModuleExport(node)
                     && moduleKind !== ModuleKind.ES2015
+                    && moduleKind !== ModuleKind.ESNext
                     && moduleKind !== ModuleKind.System);
         }
 
@@ -3217,7 +3240,7 @@ namespace ts {
         function getClassAliasIfNeeded(node: ClassDeclaration) {
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                 enableSubstitutionForClassAliases();
-                const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? unescapeLeadingUnderscores(node.name.escapedText) : "default");
+                const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? idText(node.name) : "default");
                 classAliases[getOriginalNodeId(node)] = classAlias;
                 hoistVariableDeclaration(classAlias);
                 return classAlias;

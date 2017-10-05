@@ -353,7 +353,7 @@ namespace ts {
                     // write name of indirectly exported entry, i.e. 'export {x} from ...'
                     exportedNames.push(
                         createPropertyAssignment(
-                            createLiteral(unescapeLeadingUnderscores((element.name || element.propertyName).escapedText)),
+                            createLiteral(idText(element.name || element.propertyName)),
                             createTrue()
                         )
                     );
@@ -504,10 +504,10 @@ namespace ts {
                                 for (const e of (<ExportDeclaration>entry).exportClause.elements) {
                                     properties.push(
                                         createPropertyAssignment(
-                                            createLiteral(unescapeLeadingUnderscores(e.name.escapedText)),
+                                            createLiteral(idText(e.name)),
                                             createElementAccess(
                                                 parameterName,
-                                                createLiteral(unescapeLeadingUnderscores((e.propertyName || e.name).escapedText))
+                                                createLiteral(idText(e.propertyName || e.name))
                                             )
                                         )
                                     );
@@ -1028,7 +1028,7 @@ namespace ts {
                 let excludeName: string;
                 if (exportSelf) {
                     statements = appendExportStatement(statements, decl.name, getLocalName(decl));
-                    excludeName = unescapeLeadingUnderscores(decl.name.escapedText);
+                    excludeName = idText(decl.name);
                 }
 
                 statements = appendExportsOfDeclaration(statements, decl, excludeName);
@@ -1080,7 +1080,7 @@ namespace ts {
             }
 
             const name = getDeclarationName(decl);
-            const exportSpecifiers = moduleInfo.exportSpecifiers.get(unescapeLeadingUnderscores(name.escapedText));
+            const exportSpecifiers = moduleInfo.exportSpecifiers.get(idText(name));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     if (exportSpecifier.name.escapedText !== excludeName) {
@@ -1132,7 +1132,8 @@ namespace ts {
          */
         function createExportExpression(name: Identifier | StringLiteral, value: Expression) {
             const exportName = isIdentifier(name) ? createLiteral(name) : name;
-            return createCall(exportFunction, /*typeArguments*/ undefined, [exportName, value]);
+            setEmitFlags(value, getEmitFlags(value) | EmitFlags.NoComments);
+            return setCommentRange(createCall(exportFunction, /*typeArguments*/ undefined, [exportName, value]), value);
         }
 
         //

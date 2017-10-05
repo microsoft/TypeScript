@@ -1,0 +1,35 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts ===
+var x: { foo: string; }
+>x : { foo: string; }
+>foo : string
+
+var y: { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
+>foo : string
+>bar : string
+
+class Base {
+>Base : Base
+
+    protected a: typeof x;
+>a : { foo: string; }
+>x : { foo: string; }
+}
+
+class Derived1 extends Base {
+>Derived1 : Derived1
+>Base : Base
+
+    public a: typeof x;
+>a : { foo: string; }
+>x : { foo: string; }
+}
+
+class Derived2 extends Derived1 {
+>Derived2 : Derived2
+>Derived1 : Derived1
+
+    protected a: typeof x; // Error, parent was public
+>a : { foo: string; }
+>x : { foo: string; }
+}
