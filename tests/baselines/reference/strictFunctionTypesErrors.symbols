@@ -400,3 +400,27 @@ dogCrate = animalCrate;  // Error
 >dogCrate : Symbol(dogCrate, Decl(strictFunctionTypesErrors.ts, 121, 11))
 >animalCrate : Symbol(animalCrate, Decl(strictFunctionTypesErrors.ts, 120, 11))
 
+// Verify that callback parameters are strictly checked
+
+declare let fc1: (f: (x: Animal) => Animal) => void;
+>fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
+>f : Symbol(f, Decl(strictFunctionTypesErrors.ts, 130, 18))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 130, 22))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+declare let fc2: (f: (x: Dog) => Dog) => void;
+>fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
+>f : Symbol(f, Decl(strictFunctionTypesErrors.ts, 131, 18))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 131, 22))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+
+fc1 = fc2;  // Error
+>fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
+>fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
+
+fc2 = fc1;  // Error
+>fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
+>fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
+

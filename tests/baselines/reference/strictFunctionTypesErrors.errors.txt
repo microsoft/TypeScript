@@ -83,9 +83,18 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(126,1): error TS2322: Type 'Cr
 tests/cases/compiler/strictFunctionTypesErrors.ts(127,1): error TS2322: Type 'Crate<Animal>' is not assignable to type 'Crate<Dog>'.
   Types of property 'item' are incompatible.
     Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(133,1): error TS2322: Type '(f: (x: Dog) => Dog) => void' is not assignable to type '(f: (x: Animal) => Animal) => void'.
+  Types of parameters 'f' and 'f' are incompatible.
+    Type '(x: Animal) => Animal' is not assignable to type '(x: Dog) => Dog'.
+      Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(134,1): error TS2322: Type '(f: (x: Animal) => Animal) => void' is not assignable to type '(f: (x: Dog) => Dog) => void'.
+  Types of parameters 'f' and 'f' are incompatible.
+    Type '(x: Dog) => Dog' is not assignable to type '(x: Animal) => Animal'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'Animal' is not assignable to type 'Dog'.
 
 
-==== tests/cases/compiler/strictFunctionTypesErrors.ts (31 errors) ====
+==== tests/cases/compiler/strictFunctionTypesErrors.ts (33 errors) ====
     export {}
     
     
@@ -329,4 +338,22 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(127,1): error TS2322: Type 'Cr
 !!! error TS2322: Type 'Crate<Animal>' is not assignable to type 'Crate<Dog>'.
 !!! error TS2322:   Types of property 'item' are incompatible.
 !!! error TS2322:     Type 'Animal' is not assignable to type 'Dog'.
+    
+    // Verify that callback parameters are strictly checked
+    
+    declare let fc1: (f: (x: Animal) => Animal) => void;
+    declare let fc2: (f: (x: Dog) => Dog) => void;
+    fc1 = fc2;  // Error
+    ~~~
+!!! error TS2322: Type '(f: (x: Dog) => Dog) => void' is not assignable to type '(f: (x: Animal) => Animal) => void'.
+!!! error TS2322:   Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2322:     Type '(x: Animal) => Animal' is not assignable to type '(x: Dog) => Dog'.
+!!! error TS2322:       Type 'Animal' is not assignable to type 'Dog'.
+    fc2 = fc1;  // Error
+    ~~~
+!!! error TS2322: Type '(f: (x: Animal) => Animal) => void' is not assignable to type '(f: (x: Dog) => Dog) => void'.
+!!! error TS2322:   Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2322:     Type '(x: Dog) => Dog' is not assignable to type '(x: Animal) => Animal'.
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:         Type 'Animal' is not assignable to type 'Dog'.
     

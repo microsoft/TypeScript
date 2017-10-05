@@ -126,3 +126,10 @@ declare let dogCrate: Crate<Dog>;
 
 animalCrate = dogCrate;  // Error
 dogCrate = animalCrate;  // Error
+
+// Verify that callback parameters are strictly checked
+
+declare let fc1: (f: (x: Animal) => Animal) => void;
+declare let fc2: (f: (x: Dog) => Dog) => void;
+fc1 = fc2;  // Error
+fc2 = fc1;  // Error

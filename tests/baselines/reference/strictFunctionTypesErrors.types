@@ -454,3 +454,29 @@ dogCrate = animalCrate;  // Error
 >dogCrate : Crate<Dog>
 >animalCrate : Crate<Animal>
 
+// Verify that callback parameters are strictly checked
+
+declare let fc1: (f: (x: Animal) => Animal) => void;
+>fc1 : (f: (x: Animal) => Animal) => void
+>f : (x: Animal) => Animal
+>x : Animal
+>Animal : Animal
+>Animal : Animal
+
+declare let fc2: (f: (x: Dog) => Dog) => void;
+>fc2 : (f: (x: Dog) => Dog) => void
+>f : (x: Dog) => Dog
+>x : Dog
+>Dog : Dog
+>Dog : Dog
+
+fc1 = fc2;  // Error
+>fc1 = fc2 : (f: (x: Dog) => Dog) => void
+>fc1 : (f: (x: Animal) => Animal) => void
+>fc2 : (f: (x: Dog) => Dog) => void
+
+fc2 = fc1;  // Error
+>fc2 = fc1 : (f: (x: Animal) => Animal) => void
+>fc2 : (f: (x: Dog) => Dog) => void
+>fc1 : (f: (x: Animal) => Animal) => void
+
