@@ -1,0 +1,56 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverloads.ts ===
+abstract class A {
+>A : A
+
+    abstract foo();
+>foo : { (): any; (): number; (): any; }
+
+    abstract foo() : number;
+>foo : { (): any; (): number; (): any; }
+
+    abstract foo();
+>foo : { (): any; (): number; (): any; }
+    
+    abstract bar();
+>bar : { (): any; (): any; (): any; }
+
+    bar();
+>bar : { (): any; (): any; (): any; }
+
+    abstract bar();
+>bar : { (): any; (): any; (): any; }
+    
+    abstract baz();
+>baz : { (): any; (): any; (): any; }
+
+    baz();
+>baz : { (): any; (): any; (): any; }
+
+    abstract baz();
+>baz : { (): any; (): any; (): any; }
+
+    baz() {}
+>baz : { (): any; (): any; (): any; }
+    
+    qux();
+>qux : () => any
+}
+
+abstract class B {
+>B : B
+
+    abstract foo() : number;
+>foo : { (): number; (): any; (): any; (): any; }
+
+    abstract foo();
+>foo : { (): number; (): any; (): any; (): any; }
+
+    x : number;
+>x : number
+
+    abstract foo();
+>foo : { (): number; (): any; (): any; (): any; }
+
+    abstract foo();
+>foo : { (): number; (): any; (): any; (): any; }
+}

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/parameterPropertyOutsideConstructor.ts ===
+class C {
+>C : Symbol(C, Decl(parameterPropertyOutsideConstructor.ts, 0, 0))
+
+    foo(public x) {
+>foo : Symbol(C.foo, Decl(parameterPropertyOutsideConstructor.ts, 0, 9))
+>x : Symbol(x, Decl(parameterPropertyOutsideConstructor.ts, 1, 8))
+    }
+}

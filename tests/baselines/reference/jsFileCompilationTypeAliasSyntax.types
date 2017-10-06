@@ -1,0 +1,5 @@
+=== tests/cases/compiler/a.js ===
+type a = b;
+>a : any
+>b : No type information available!
+

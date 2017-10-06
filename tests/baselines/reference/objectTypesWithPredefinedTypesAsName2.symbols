@@ -1,0 +1,5 @@
+=== tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName2.ts ===
+// it is an error to use a predefined type as a type name
+No type information for this code.
+No type information for this code.class void {} // parse error unlike the others
+No type information for this code.

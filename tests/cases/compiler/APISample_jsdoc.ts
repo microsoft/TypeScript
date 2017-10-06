@@ -1,4 +1,5 @@
 // @module: commonjs
+// @skipLibCheck: true
 // @includebuiltfile: typescript_standalone.d.ts
 // @strict:true
 
@@ -104,7 +105,7 @@ function getAllTags(node: ts.Node) {
 
 function getSomeOtherTags(node: ts.Node) {
     const tags: (ts.JSDocTag | undefined)[] = [];
-    tags.push(ts.getJSDocAugmentsOrExtendsTag(node));
+    tags.push(ts.getJSDocAugmentsTag(node));
     tags.push(ts.getJSDocClassTag(node));
     tags.push(ts.getJSDocReturnTag(node));
     const type = ts.getJSDocTypeTag(node);

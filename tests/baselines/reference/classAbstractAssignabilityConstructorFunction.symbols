@@ -1,0 +1,17 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts ===
+abstract class A { }
+>A : Symbol(A, Decl(classAbstractAssignabilityConstructorFunction.ts, 0, 0))
+
+// var AA: typeof A;
+var AAA: new() => A;
+>AAA : Symbol(AAA, Decl(classAbstractAssignabilityConstructorFunction.ts, 3, 3))
+>A : Symbol(A, Decl(classAbstractAssignabilityConstructorFunction.ts, 0, 0))
+
+// AA = A; // okay
+AAA = A; // error. 
+>AAA : Symbol(AAA, Decl(classAbstractAssignabilityConstructorFunction.ts, 3, 3))
+>A : Symbol(A, Decl(classAbstractAssignabilityConstructorFunction.ts, 0, 0))
+
+AAA = "asdf";
+>AAA : Symbol(AAA, Decl(classAbstractAssignabilityConstructorFunction.ts, 3, 3))
+

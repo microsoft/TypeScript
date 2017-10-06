@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration13.ts ===
+class C {
+>C : Symbol(C, Decl(parserClassDeclaration13.ts, 0, 0))
+
+   foo();
+>foo : Symbol(C.foo, Decl(parserClassDeclaration13.ts, 0, 9))
+
+   bar() { }
+>bar : Symbol(C.bar, Decl(parserClassDeclaration13.ts, 1, 9))
+}

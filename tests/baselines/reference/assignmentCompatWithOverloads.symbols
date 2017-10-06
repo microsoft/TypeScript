@@ -1,0 +1,64 @@
+=== tests/cases/compiler/assignmentCompatWithOverloads.ts ===
+function f1(x: string): number { return null; }
+>f1 : Symbol(f1, Decl(assignmentCompatWithOverloads.ts, 0, 0))
+>x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 0, 12))
+
+function f2(x: string): string { return null; }
+>f2 : Symbol(f2, Decl(assignmentCompatWithOverloads.ts, 0, 47))
+>x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 2, 12))
+
+function f3(x: number): number { return null; }
+>f3 : Symbol(f3, Decl(assignmentCompatWithOverloads.ts, 2, 47))
+>x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 4, 12))
+
+function f4(x: string): string;
+>f4 : Symbol(f4, Decl(assignmentCompatWithOverloads.ts, 4, 47), Decl(assignmentCompatWithOverloads.ts, 6, 31), Decl(assignmentCompatWithOverloads.ts, 8, 31))
+>x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 6, 12))
+
+function f4(x: number): number;
+>f4 : Symbol(f4, Decl(assignmentCompatWithOverloads.ts, 4, 47), Decl(assignmentCompatWithOverloads.ts, 6, 31), Decl(assignmentCompatWithOverloads.ts, 8, 31))
+>x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 8, 12))
+
+function f4(x: any): any { return undefined; }
+>f4 : Symbol(f4, Decl(assignmentCompatWithOverloads.ts, 4, 47), Decl(assignmentCompatWithOverloads.ts, 6, 31), Decl(assignmentCompatWithOverloads.ts, 8, 31))
+>x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 10, 12))
+>undefined : Symbol(undefined)
+
+var g: (s1: string) => number;
+>g : Symbol(g, Decl(assignmentCompatWithOverloads.ts, 12, 3))
+>s1 : Symbol(s1, Decl(assignmentCompatWithOverloads.ts, 12, 8))
+
+g = f1; // OK 
+>g : Symbol(g, Decl(assignmentCompatWithOverloads.ts, 12, 3))
+>f1 : Symbol(f1, Decl(assignmentCompatWithOverloads.ts, 0, 0))
+
+g = f2; // Error
+>g : Symbol(g, Decl(assignmentCompatWithOverloads.ts, 12, 3))
+>f2 : Symbol(f2, Decl(assignmentCompatWithOverloads.ts, 0, 47))
+
+g = f3; // Error
+>g : Symbol(g, Decl(assignmentCompatWithOverloads.ts, 12, 3))
+>f3 : Symbol(f3, Decl(assignmentCompatWithOverloads.ts, 2, 47))
+
+g = f4; // Error
+>g : Symbol(g, Decl(assignmentCompatWithOverloads.ts, 12, 3))
+>f4 : Symbol(f4, Decl(assignmentCompatWithOverloads.ts, 4, 47), Decl(assignmentCompatWithOverloads.ts, 6, 31), Decl(assignmentCompatWithOverloads.ts, 8, 31))
+
+class C {
+>C : Symbol(C, Decl(assignmentCompatWithOverloads.ts, 20, 7))
+
+    constructor(x: string);
+>x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 23, 16))
+
+constructor(x: any) {}
+>x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 24, 12))
+}
+
+var d: new(x: number) => void;
+>d : Symbol(d, Decl(assignmentCompatWithOverloads.ts, 27, 3))
+>x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 27, 11))
+
+d = C; // Error
+>d : Symbol(d, Decl(assignmentCompatWithOverloads.ts, 27, 3))
+>C : Symbol(C, Decl(assignmentCompatWithOverloads.ts, 20, 7))
+

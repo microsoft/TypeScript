@@ -39,7 +39,7 @@ var {1: b3} = { 1: "string" };
 >"string" : "string"
 
 var {b4 = 1}: any = { b4: 100000 };
->b4 : number
+>b4 : any
 >1 : 1
 >{ b4: 100000 } : { b4: number; }
 >b4 : number

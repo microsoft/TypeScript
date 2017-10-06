@@ -1,0 +1,3 @@
+=== tests/cases/conformance/salsa/myFile01.js ===
+export default "hello";
+No type information for this code.

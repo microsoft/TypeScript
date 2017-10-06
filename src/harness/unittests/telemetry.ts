@@ -11,18 +11,24 @@ namespace ts.projectSystem {
         });
 
         it("only sends an event once", () => {
-            const file = makeFile("/a.ts");
-            const tsconfig = makeFile("/tsconfig.json", {});
+            const file = makeFile("/a/a.ts");
+            const file2 = makeFile("/b.ts");
+            const tsconfig = makeFile("/a/tsconfig.json", {});
 
-            const et = new EventTracker([file, tsconfig]);
+            const et = new EventTracker([file, file2, tsconfig]);
             et.service.openClientFile(file.path);
-            et.assertProjectInfoTelemetryEvent({});
+            et.assertProjectInfoTelemetryEvent({}, tsconfig.path);
 
             et.service.closeClientFile(file.path);
-            checkNumberOfProjects(et.service, { configuredProjects: 0 });
+            checkNumberOfProjects(et.service, { configuredProjects: 1 });
+
+            et.service.openClientFile(file2.path);
+            checkNumberOfProjects(et.service, { inferredProjects: 1 });
+
+            assert.equal(et.getEvents().length, 0);
 
             et.service.openClientFile(file.path);
-            checkNumberOfProjects(et.service, { configuredProjects: 1 });
+            checkNumberOfProjects(et.service, { configuredProjects: 1, inferredProjects: 1 });
 
             assert.equal(et.getEvents().length, 0);
         });
@@ -53,7 +59,7 @@ namespace ts.projectSystem {
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
             et.assertProjectInfoTelemetryEvent({
-                projectId: Harness.LanguageService.mockHash("/hunter2/foo.csproj"),
+                projectId: Harness.mockHash("/hunter2/foo.csproj"),
                 compilerOptions: { strict: true },
                 compileOnSave: true,
                 // These properties can't be present for an external project, so they are undefined instead of false.
@@ -195,7 +201,7 @@ namespace ts.projectSystem {
             const et = new EventTracker([jsconfig, file]);
             et.service.openClientFile(file.path);
             et.assertProjectInfoTelemetryEvent({
-                projectId: Harness.LanguageService.mockHash("/jsconfig.json"),
+                projectId: Harness.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 typeAcquisition: {
@@ -215,7 +221,7 @@ namespace ts.projectSystem {
             et.service.openClientFile(file.path);
             et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent, /*mayBeMore*/ true);
             et.assertProjectInfoTelemetryEvent({
-                projectId: Harness.LanguageService.mockHash("/jsconfig.json"),
+                projectId: Harness.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 configFileName: "jsconfig.json",
@@ -249,9 +255,9 @@ namespace ts.projectSystem {
             return events;
         }
 
-        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>): void {
+        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
             assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
-                projectId: Harness.LanguageService.mockHash("/tsconfig.json"),
+                projectId: Harness.mockHash(configFile || "/tsconfig.json"),
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {},
                 extends: false,
@@ -282,7 +288,7 @@ namespace ts.projectSystem {
     }
 
     function makeFile(path: string, content: {} = ""): projectSystem.FileOrFolder {
-        return { path, content: typeof content === "string" ? "" : JSON.stringify(content) };
+        return { path, content: isString(content) ? "" : JSON.stringify(content) };
     }
 
     function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {

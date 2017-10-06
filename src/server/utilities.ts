@@ -50,7 +50,7 @@ namespace ts.server {
         return {
             projectName: project.getProjectName(),
             fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
-            compilerOptions: project.getCompilerOptions(),
+            compilerOptions: project.getCompilationSettings(),
             typeAcquisition,
             unresolvedImports,
             projectRootPath: getProjectRootPath(project),
@@ -173,10 +173,15 @@ namespace ts.server {
     export function createSortedArray<T>(): SortedArray<T> {
         return [] as SortedArray<T>;
     }
+}
 
+/* @internal */
+namespace ts.server {
     export class ThrottledOperations {
-        private pendingTimeouts: Map<any> = createMap<any>();
-        constructor(private readonly host: ServerHost) {
+        private readonly pendingTimeouts: Map<any> = createMap<any>();
+        private readonly logger?: Logger | undefined;
+        constructor(private readonly host: ServerHost, logger: Logger) {
+            this.logger = logger.hasLevel(LogLevel.verbose) && logger;
         }
 
         /**
@@ -193,10 +198,16 @@ namespace ts.server {
             }
             // schedule new operation, pass arguments
             this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb));
+            if (this.logger) {
+                this.logger.info(`Scheduled: ${operationId}${pendingTimeout ? ", Cancelled earlier one" : ""}`);
+            }
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
             self.pendingTimeouts.delete(operationId);
+            if (self.logger) {
+                self.logger.info(`Running: ${operationId}`);
+            }
             cb();
         }
     }
@@ -227,10 +238,12 @@ namespace ts.server {
             }
         }
     }
-}
 
-/* @internal */
-namespace ts.server {
+    export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
+        const base = getBaseFileName(configFilePath);
+        return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
+    }
+
     export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
         if (array.length === 0) {
             array.push(insert);

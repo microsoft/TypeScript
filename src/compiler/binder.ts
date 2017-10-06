@@ -244,7 +244,7 @@ namespace ts {
                     }
 
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
-                    return getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores((<PropertyAccessExpression>nameExpression).name.escapedText));
+                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
                 }
                 return getEscapedTextOfIdentifierOrLiteral(<Identifier | LiteralExpression>name);
             }
@@ -1456,11 +1456,6 @@ namespace ts {
         }
 
         function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
-            // Just call this directly so that the return type of this function stays "void".
-            return declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
-        }
-
-        function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             switch (container.kind) {
                 // Modules, source files, and classes need specialized handling for how their
                 // members are declared (for example, a member of a class will go into a specific
@@ -1683,6 +1678,9 @@ namespace ts {
 
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: __String) {
             const symbol = createSymbol(symbolFlags, name);
+            if (symbolFlags & SymbolFlags.EnumMember) {
+                symbol.parent = container.symbol;
+            }
             addDeclarationToSymbol(symbol, node, symbolFlags);
         }
 
@@ -1779,7 +1777,7 @@ namespace ts {
                     // otherwise report generic error message.
                     const span = getErrorSpanForNode(file, name);
                     file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
-                        getStrictModeEvalOrArgumentsMessage(contextNode), unescapeLeadingUnderscores(identifier.escapedText)));
+                        getStrictModeEvalOrArgumentsMessage(contextNode), idText(identifier)));
                 }
             }
         }
@@ -2433,7 +2431,7 @@ namespace ts {
                 if (node.name) {
                     node.name.parent = node;
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(prototypeSymbol.escapedName)));
+                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
             }
             symbol.exports.set(prototypeSymbol.escapedName, prototypeSymbol);
             prototypeSymbol.parent = symbol;

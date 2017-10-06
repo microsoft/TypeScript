@@ -155,6 +155,13 @@ declare namespace FourSlashInterface {
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
+        codeFix(options: {
+            description: string,
+            newFileContent?: string,
+            newRangeContent?: string,
+            errorCode?: number,
+            index?: number,
+        });
         codeFixAvailable(): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;

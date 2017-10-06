@@ -148,6 +148,8 @@ namespace Utils {
         });
     }
 
+    export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
+
     export function assertInvariants(node: ts.Node, parent: ts.Node): void {
         if (node) {
             assert.isFalse(node.pos < 0, "node.pos < 0");
@@ -225,7 +227,7 @@ namespace Utils {
         return JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    ");
 
         function getKindName(k: number | string): string {
-            if (typeof k === "string") {
+            if (ts.isString(k)) {
                 return k;
             }
 
@@ -753,6 +755,10 @@ namespace Harness {
                 });
             }
         }
+    }
+
+    export function mockHash(s: string): string {
+        return `hash-${s}`;
     }
 
     const environment = Utils.getExecutionEnvironment();
@@ -1446,10 +1452,7 @@ namespace Harness {
             });
         }
 
-        export function doTypeAndSymbolBaseline(baselinePath: string, result: CompilerResult, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions, multifile?: boolean) {
-            if (result.errors.length !== 0) {
-                return;
-            }
+        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions, multifile?: boolean, skipTypeAndSymbolbaselines?: boolean) {
             // The full walker simulates the types that you would get from doing a full
             // compile.  The pull walker simulates the types you get when you just do
             // a type query for a random node (like how the LS would do it).  Most of the
@@ -1465,15 +1468,7 @@ namespace Harness {
             // These types are equivalent, but depend on what order the compiler observed
             // certain parts of the program.
 
-            const program = result.program;
-
             const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
-
-            const fullResults = ts.createMap<TypeWriterResult[]>();
-
-            for (const sourceFile of allFiles) {
-                fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
-            }
 
             // Produce baselines.  The first gives the types for all expressions.
             // The second gives symbols for all identifiers.
@@ -1515,76 +1510,77 @@ namespace Harness {
                     baselinePath.replace(/\.tsx?/, "") : baselinePath;
 
                 if (!multifile) {
-                    const fullBaseLine = generateBaseLine(fullResults, isSymbolBaseLine);
+                    const fullBaseLine = generateBaseLine(isSymbolBaseLine, skipTypeAndSymbolbaselines);
                     Harness.Baseline.runBaseline(outputFileName + fullExtension, () => fullBaseLine, opts);
                 }
                 else {
                     Harness.Baseline.runMultifileBaseline(outputFileName, fullExtension, () => {
-                        return iterateBaseLine(fullResults, isSymbolBaseLine);
+                        return iterateBaseLine(isSymbolBaseLine, skipTypeAndSymbolbaselines);
                     }, opts);
                 }
             }
 
-            function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+            function generateBaseLine(isSymbolBaseline: boolean, skipTypeAndSymbolbaselines?: boolean): string {
                 let result = "";
-                const gen = iterateBaseLine(typeWriterResults, isSymbolBaseline);
+                const gen = iterateBaseLine(isSymbolBaseline, skipTypeAndSymbolbaselines);
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [, content] = value;
                     result += content;
                 }
-                return result;
+                /* tslint:disable:no-null-keyword */
+                return result || null;
+                /* tslint:enable:no-null-keyword */
             }
 
-            function *iterateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): IterableIterator<[string, string]> {
-                let typeLines = "";
-                const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+            function *iterateBaseLine(isSymbolBaseline: boolean, skipTypeAndSymbolbaselines?: boolean): IterableIterator<[string, string]> {
+                if (skipTypeAndSymbolbaselines) {
+                    return;
+                }
                 const dupeCase = ts.createMap<number>();
 
                 for (const file of allFiles) {
-                    const codeLines = file.content.split("\n");
-                    const key = file.unitName;
-                    typeWriterResults.get(file.unitName).forEach(result => {
+                    const { unitName } = file;
+                    let typeLines = "=== " + unitName + " ===\r\n";
+                    const codeLines = ts.flatMap(file.content.split(/\r?\n/g), e => e.split(/[\r\u2028\u2029]/g));
+                    const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
+                    let lastIndexWritten: number | undefined;
+                    for (let {done, value: result} = gen.next(); !done; { done, value: result } = gen.next()) {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
                         }
-
+                        if (lastIndexWritten === undefined) {
+                            typeLines += codeLines.slice(0, result.line + 1).join("\r\n") + "\r\n";
+                        }
+                        else if (result.line !== lastIndexWritten) {
+                            if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                                typeLines += "\r\n";
+                            }
+                            typeLines += codeLines.slice(lastIndexWritten + 1, result.line + 1).join("\r\n") + "\r\n";
+                        }
+                        lastIndexWritten = result.line;
                         const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
                         const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
-                        if (!typeMap[key]) {
-                            typeMap[key] = {};
-                        }
+                        typeLines += ">" + formattedLine + "\r\n";
+                    }
 
-                        let typeInfo = [formattedLine];
-                        const existingTypeInfo = typeMap[key][result.line];
-                        if (existingTypeInfo) {
-                            typeInfo = existingTypeInfo.concat(typeInfo);
-                        }
-                        typeMap[key][result.line] = typeInfo;
-                    });
-
-                    typeLines += "=== " + file.unitName + " ===\r\n";
-                    for (let i = 0; i < codeLines.length; i++) {
-                        const currentCodeLine = codeLines[i];
-                        typeLines += currentCodeLine + "\r\n";
-                        if (typeMap[key]) {
-                            const typeInfo = typeMap[key][i];
-                            if (typeInfo) {
-                                typeInfo.forEach(ty => {
-                                    typeLines += ">" + ty + "\r\n";
-                                });
-                                if (i + 1 < codeLines.length && (codeLines[i + 1].match(/^\s*[{|}]\s*$/) || codeLines[i + 1].trim() === "")) {
-                                }
-                                else {
-                                    typeLines += "\r\n";
-                                }
-                            }
-                        }
-                        else {
+                    // Preserve legacy behavior
+                    if (lastIndexWritten === undefined) {
+                        for (let i = 0; i < codeLines.length; i++) {
+                            const currentCodeLine = codeLines[i];
+                            typeLines += currentCodeLine + "\r\n";
                             typeLines += "No type information for this code.";
                         }
                     }
-                    yield [checkDuplicatedFileName(file.unitName, dupeCase), typeLines];
-                    typeLines = "";
+                    else {
+                        if (lastIndexWritten + 1 < codeLines.length) {
+                            if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                                typeLines += "\r\n";
+                            }
+                            typeLines += codeLines.slice(lastIndexWritten + 1).join("\r\n");
+                        }
+                        typeLines += "\r\n";
+                    }
+                    yield [checkDuplicatedFileName(unitName, dupeCase), typeLines];
                 }
             }
         }
@@ -1725,8 +1721,12 @@ namespace Harness {
             return resultName;
         }
 
-        function sanitizeTestFilePath(name: string) {
-            return ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/").toLowerCase();
+        export function sanitizeTestFilePath(name: string) {
+            const path = ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", Utils.canonicalizeForHarness);
+            if (ts.startsWith(path, "/")) {
+                return path.substring(1);
+            }
+            return path;
         }
 
         // This does not need to exist strictly speaking, but many tests will need to be updated if it's removed
@@ -2070,14 +2070,13 @@ namespace Harness {
         export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]>, opts?: BaselineOptions, referencedExtensions?: string[]): void {
             const gen = generateContent();
             const writtenFiles = ts.createMap<true>();
-            const canonicalize = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
-            /* tslint:disable-next-line:no-null-keyword */
             const errors: Error[] = [];
+            // tslint:disable-next-line:no-null-keyword
             if (gen !== null) {
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];
                     if (count === 0) continue; // Allow error reporter to skip writing files without errors
-                    const relativeFileName = relativeFileBase + (ts.startsWith(name, "/") ? "" : "/") + name + extension;
+                    const relativeFileName = relativeFileBase + "/" + name + extension;
                     const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
                     const comparison = compareToBaseline(content, relativeFileName, opts);
                     try {
@@ -2086,8 +2085,7 @@ namespace Harness {
                     catch (e) {
                         errors.push(e);
                     }
-                    const path = ts.toPath(relativeFileName, "", canonicalize);
-                    writtenFiles.set(path, true);
+                    writtenFiles.set(relativeFileName, true);
                 }
             }
 
@@ -2100,8 +2098,7 @@ namespace Harness {
             const missing: string[] = [];
             for (const name of existing) {
                 const localCopy = name.substring(referenceDir.length - relativeFileBase.length);
-                const path = ts.toPath(localCopy, "", canonicalize);
-                if (!writtenFiles.has(path)) {
+                if (!writtenFiles.has(localCopy)) {
                     missing.push(localCopy);
                 }
             }
@@ -2114,13 +2111,14 @@ namespace Harness {
             if (errors.length || missing.length) {
                 let errorMsg = "";
                 if (errors.length) {
-                    errorMsg += `The baseline for ${relativeFileBase} has changed:${"\n    " + errors.map(e => e.message).join("\n    ")}`;
+                    errorMsg += `The baseline for ${relativeFileBase} in ${errors.length} files has changed:${"\n    " + errors.slice(0, 5).map(e => e.message).join("\n    ") + (errors.length > 5 ? "\n" + `    and ${errors.length - 5} more` : "")}`;
                 }
                 if (errors.length && missing.length) {
                     errorMsg += "\n";
                 }
                 if (missing.length) {
-                    errorMsg += `Baseline missing files:${"\n    " + missing.join("\n    ") + "\n"}Written:${"\n    " + ts.arrayFrom(writtenFiles.keys()).join("\n    ")}`;
+                    const writtenFilesArray = ts.arrayFrom(writtenFiles.keys());
+                    errorMsg += `Baseline missing ${missing.length} files:${"\n    " + missing.slice(0, 5).join("\n    ") + (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"}Written ${writtenFiles.size} files:${"\n    " + writtenFilesArray.slice(0, 5).join("\n    ") + (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")}`;
                 }
                 throw new Error(errorMsg);
             }

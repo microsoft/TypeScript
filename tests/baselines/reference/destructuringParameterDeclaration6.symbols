@@ -1,0 +1,55 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts ===
+// A parameter declaration may specify either an identifier or a binding pattern.
+
+// Reserved words are not allowed to be used as an identifier in parameter declaration
+"use strict"
+
+// Error
+function a({while}) { }
+>a : Symbol(a, Decl(destructuringParameterDeclaration6.ts, 3, 12))
+>while : Symbol(while)
+> : Symbol((Missing), Decl(destructuringParameterDeclaration6.ts, 6, 12))
+
+function a1({public}) { }
+>a1 : Symbol(a1, Decl(destructuringParameterDeclaration6.ts, 6, 23))
+>public : Symbol(public, Decl(destructuringParameterDeclaration6.ts, 7, 13))
+
+function a4([while, for, public]){ }
+>a4 : Symbol(a4, Decl(destructuringParameterDeclaration6.ts, 7, 25))
+
+function a5(...while) { }
+>a5 : Symbol(a5, Decl(destructuringParameterDeclaration6.ts, 8, 36))
+> : Symbol((Missing), Decl(destructuringParameterDeclaration6.ts, 9, 12))
+
+function a6(...public) { }
+>a6 : Symbol(a6, Decl(destructuringParameterDeclaration6.ts, 9, 25))
+>public : Symbol(public, Decl(destructuringParameterDeclaration6.ts, 10, 12))
+
+function a7(...a: string) { }
+>a7 : Symbol(a7, Decl(destructuringParameterDeclaration6.ts, 10, 26))
+>a : Symbol(a, Decl(destructuringParameterDeclaration6.ts, 11, 12))
+
+a({ while: 1 });
+>a : Symbol(a, Decl(destructuringParameterDeclaration6.ts, 3, 12))
+>while : Symbol(while, Decl(destructuringParameterDeclaration6.ts, 12, 3))
+
+// No Error
+function b1({public: x}) { }
+>b1 : Symbol(b1, Decl(destructuringParameterDeclaration6.ts, 12, 16))
+>public : Symbol(public)
+>x : Symbol(x, Decl(destructuringParameterDeclaration6.ts, 15, 13))
+
+function b2({while: y}) { }
+>b2 : Symbol(b2, Decl(destructuringParameterDeclaration6.ts, 15, 28))
+>while : Symbol(while)
+>y : Symbol(y, Decl(destructuringParameterDeclaration6.ts, 16, 13))
+
+b1({ public: 1 });
+>b1 : Symbol(b1, Decl(destructuringParameterDeclaration6.ts, 12, 16))
+>public : Symbol(public, Decl(destructuringParameterDeclaration6.ts, 17, 4))
+
+b2({ while: 1 });
+>b2 : Symbol(b2, Decl(destructuringParameterDeclaration6.ts, 15, 28))
+>while : Symbol(while, Decl(destructuringParameterDeclaration6.ts, 18, 4))
+
+

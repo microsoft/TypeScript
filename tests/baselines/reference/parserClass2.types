@@ -1,0 +1,22 @@
+=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass2.ts ===
+    export class LoggerAdapter implements ILogger {
+>LoggerAdapter : LoggerAdapter
+>ILogger : No type information available!
+
+        constructor (public logger: ILogger) { 
+>logger : any
+>ILogger : No type information available!
+
+            this._information = this.logger.information();
+>this._information = this.logger.information() : any
+>this._information : any
+>this : this
+>_information : any
+>this.logger.information() : any
+>this.logger.information : any
+>this.logger : any
+>this : this
+>logger : any
+>information : any
+        }
+    }

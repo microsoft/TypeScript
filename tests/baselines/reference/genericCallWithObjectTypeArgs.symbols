@@ -1,0 +1,64 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts ===
+class C {
+>C : Symbol(C, Decl(genericCallWithObjectTypeArgs.ts, 0, 0))
+
+    private x: string;
+>x : Symbol(C.x, Decl(genericCallWithObjectTypeArgs.ts, 0, 9))
+}
+
+class D {
+>D : Symbol(D, Decl(genericCallWithObjectTypeArgs.ts, 2, 1))
+
+    private x: string;
+>x : Symbol(D.x, Decl(genericCallWithObjectTypeArgs.ts, 4, 9))
+}
+
+class X<T> {
+>X : Symbol(X, Decl(genericCallWithObjectTypeArgs.ts, 6, 1))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 8, 8))
+
+    x: T;
+>x : Symbol(X.x, Decl(genericCallWithObjectTypeArgs.ts, 8, 12))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 8, 8))
+}
+
+function foo<T>(t: X<T>, t2: X<T>) {
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgs.ts, 10, 1))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 12, 13))
+>t : Symbol(t, Decl(genericCallWithObjectTypeArgs.ts, 12, 16))
+>X : Symbol(X, Decl(genericCallWithObjectTypeArgs.ts, 6, 1))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 12, 13))
+>t2 : Symbol(t2, Decl(genericCallWithObjectTypeArgs.ts, 12, 24))
+>X : Symbol(X, Decl(genericCallWithObjectTypeArgs.ts, 6, 1))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 12, 13))
+
+    var x: T;
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgs.ts, 13, 7))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 12, 13))
+
+    return x;
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgs.ts, 13, 7))
+}
+
+var c1 = new X<C>();
+>c1 : Symbol(c1, Decl(genericCallWithObjectTypeArgs.ts, 17, 3))
+>X : Symbol(X, Decl(genericCallWithObjectTypeArgs.ts, 6, 1))
+>C : Symbol(C, Decl(genericCallWithObjectTypeArgs.ts, 0, 0))
+
+var d1 = new X<D>();
+>d1 : Symbol(d1, Decl(genericCallWithObjectTypeArgs.ts, 18, 3))
+>X : Symbol(X, Decl(genericCallWithObjectTypeArgs.ts, 6, 1))
+>D : Symbol(D, Decl(genericCallWithObjectTypeArgs.ts, 2, 1))
+
+var r = foo(c1, d1); // error
+>r : Symbol(r, Decl(genericCallWithObjectTypeArgs.ts, 19, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgs.ts, 10, 1))
+>c1 : Symbol(c1, Decl(genericCallWithObjectTypeArgs.ts, 17, 3))
+>d1 : Symbol(d1, Decl(genericCallWithObjectTypeArgs.ts, 18, 3))
+
+var r2 = foo(c1, c1); // ok
+>r2 : Symbol(r2, Decl(genericCallWithObjectTypeArgs.ts, 20, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgs.ts, 10, 1))
+>c1 : Symbol(c1, Decl(genericCallWithObjectTypeArgs.ts, 17, 3))
+>c1 : Symbol(c1, Decl(genericCallWithObjectTypeArgs.ts, 17, 3))
+

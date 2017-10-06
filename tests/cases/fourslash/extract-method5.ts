@@ -10,8 +10,8 @@
 
 goTo.select('start', 'end');
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
     actionDescription: "Extract to inner function in function 'f'",
     newContent:
 `function f() {

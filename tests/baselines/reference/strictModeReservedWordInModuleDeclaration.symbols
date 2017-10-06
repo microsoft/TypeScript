@@ -1,0 +1,17 @@
+=== tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts ===
+"use strict"
+module public { }
+>public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 0, 12), Decl(strictModeReservedWordInModuleDeclaration.ts, 2, 18))
+
+module private { }
+>private : Symbol(private, Decl(strictModeReservedWordInModuleDeclaration.ts, 1, 17), Decl(strictModeReservedWordInModuleDeclaration.ts, 4, 1))
+
+module public.whatever {
+>public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 0, 12), Decl(strictModeReservedWordInModuleDeclaration.ts, 2, 18))
+>whatever : Symbol(whatever, Decl(strictModeReservedWordInModuleDeclaration.ts, 3, 14))
+}
+module private.public.foo { }
+>private : Symbol(private, Decl(strictModeReservedWordInModuleDeclaration.ts, 1, 17), Decl(strictModeReservedWordInModuleDeclaration.ts, 4, 1))
+>public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 5, 15))
+>foo : Symbol(foo, Decl(strictModeReservedWordInModuleDeclaration.ts, 5, 22))
+
