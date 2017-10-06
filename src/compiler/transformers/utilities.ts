@@ -178,4 +178,12 @@ namespace ts {
         }
         return values;
     }
+
+    export function isSimpleCopiableExpression(expression: Expression) {
+        return expression.kind === SyntaxKind.StringLiteral ||
+            expression.kind === SyntaxKind.NumericLiteral ||
+            expression.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
+            isKeyword(expression.kind) ||
+            isEntityNameExpression(expression);
+    }
 }

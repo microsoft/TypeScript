@@ -21,7 +21,8 @@ namespace ts {
 
         const {
             startLexicalEnvironment,
-            endLexicalEnvironment
+            endLexicalEnvironment,
+            hoistVariableDeclaration
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -519,18 +520,22 @@ namespace ts {
         }
 
         function visitImportCallExpression(node: ImportCall): Expression {
+            let argument = node.arguments && node.arguments[0];
+            if (argument) {
+                argument = visitNode(argument, importCallExpressionVisitor);
+            }
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
-                    return transformImportCallExpressionAMD(node);
+                    return createImportCallExpressionAMD(argument);
                 case ModuleKind.UMD:
-                    return transformImportCallExpressionUMD(node);
+                    return createImportCallExpressionUMD(argument);
                 case ModuleKind.CommonJS:
                 default:
-                    return transformImportCallExpressionCommonJS(node);
+                    return createImportCallExpressionCommonJS(argument);
             }
         }
 
-        function transformImportCallExpressionUMD(node: ImportCall): Expression {
+        function createImportCallExpressionUMD(arg: Expression | undefined): Expression {
             // (function (factory) {
             //      ... (regular UMD)
             // }
@@ -545,14 +550,24 @@ namespace ts {
             //          : new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
             // });
             needUMDDynamicImportHelper = true;
-            return createConditional(
-                /*condition*/ createIdentifier("__syncRequire"),
-                /*whenTrue*/ transformImportCallExpressionCommonJS(node),
-                /*whenFalse*/ transformImportCallExpressionAMD(node)
-            );
+            if (isSimpleCopiableExpression(arg)) {
+                return createConditional(
+                    /*condition*/ createIdentifier("__syncRequire"),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(arg),
+                    /*whenFalse*/ createImportCallExpressionAMD(arg)
+                );
+            }
+            else {
+                const temp = createTempVariable(hoistVariableDeclaration);
+                return createComma(createAssignment(temp, arg), createConditional(
+                    /*condition*/ createIdentifier("__syncRequire"),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(temp),
+                    /*whenFalse*/ createImportCallExpressionAMD(temp)
+                ));
+            }
         }
 
-        function transformImportCallExpressionAMD(node: ImportCall): Expression {
+        function createImportCallExpressionAMD(arg: Expression | undefined): Expression {
             // improt("./blah")
             // emit as
             // define(["require", "exports", "blah"], function (require, exports) {
@@ -576,12 +591,12 @@ namespace ts {
                         createCall(
                             createIdentifier("require"),
                             /*typeArguments*/ undefined,
-                            [createArrayLiteral([visitNode(firstOrUndefined(node.arguments) || createOmittedExpression(), importCallExpressionVisitor)]), resolve, reject]
+                            [createArrayLiteral([arg || createOmittedExpression()]), resolve, reject]
                         ))])
             )]);
         }
 
-    function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
+    function createImportCallExpressionCommonJS(arg: Expression | undefined): Expression {
             // import("./blah")
             // emit as
             // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
@@ -602,7 +617,7 @@ namespace ts {
                     createBlock([createReturn(createCall(
                         createIdentifier("require"),
                         /*typeArguments*/ undefined,
-                        node.arguments && node.arguments.length ? [visitNode(node.arguments[0], importCallExpressionVisitor)] : []
+                        arg ? [arg] : []
                     ))])
                 )]);
         }

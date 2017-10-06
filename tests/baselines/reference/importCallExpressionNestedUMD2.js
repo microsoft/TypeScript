@@ -74,9 +74,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require("./foo"); }) : new Promise(function (resolve_1, reject_1) { require(["./foo"], resolve_1, reject_1); })];
-                    case 1: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require((_a.sent()).default); }) : new Promise(function (resolve_2, reject_2) { require([(_a.sent()).default], resolve_2, reject_2); })];
+                    case 1: return [4 /*yield*/, (_b = (_a.sent()).default, __syncRequire ? Promise.resolve().then(function () { return require(_b); }) : new Promise(function (resolve_2, reject_2) { require([_b], resolve_2, reject_2); }))];
                     case 2: return [2 /*return*/, _a.sent()];
                 }
+                var _b;
             });
         });
     }
