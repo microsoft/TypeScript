@@ -4112,27 +4112,35 @@ namespace ts {
         if (!declaration) {
             return undefined;
         }
-        if (isJSDocPropertyLikeTag(declaration) && declaration.name.kind === SyntaxKind.QualifiedName) {
-            return declaration.name.right;
-        }
-        if (declaration.kind === SyntaxKind.BinaryExpression) {
-            const expr = declaration as BinaryExpression;
-            switch (getSpecialPropertyAssignmentKind(expr)) {
-                case SpecialPropertyAssignmentKind.ExportsProperty:
-                case SpecialPropertyAssignmentKind.ThisProperty:
-                case SpecialPropertyAssignmentKind.Property:
-                case SpecialPropertyAssignmentKind.PrototypeProperty:
-                    return (expr.left as PropertyAccessExpression).name;
-                default:
-                    return undefined;
+        switch (declaration.kind) {
+            case SyntaxKind.JSDocPropertyTag:
+            case SyntaxKind.JSDocParameterTag: {
+                const { name } = declaration as JSDocPropertyLikeTag;
+                if (name.kind === SyntaxKind.QualifiedName) {
+                    return name.right;
+                }
+                break;
+            }
+            case SyntaxKind.BinaryExpression: {
+                const expr = declaration as BinaryExpression;
+                switch (getSpecialPropertyAssignmentKind(expr)) {
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case SpecialPropertyAssignmentKind.Property:
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        return (expr.left as PropertyAccessExpression).name;
+                    default:
+                        return undefined;
+                }
+            }
+            case SyntaxKind.JSDocTypedefTag:
+                return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
+            case SyntaxKind.ExportAssignment: {
+                const { expression } = declaration as ExportAssignment;
+                return isIdentifier(expression) ? expression : undefined;
             }
         }
-        else if (declaration.kind === SyntaxKind.JSDocTypedefTag) {
-            return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
-        }
-        else {
-            return (declaration as NamedDeclaration).name;
-        }
+        return (declaration as NamedDeclaration).name;
     }
 
     /**
