@@ -94,9 +94,17 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(134,1): error TS2322: Type '(f
   Types of parameters 'f' and 'f' are incompatible.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(147,5): error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
+  Types of parameters 'cb' and 'cb' are incompatible.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(155,5): error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
+  Types of parameters 'cb' and 'cb' are incompatible.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'Animal' is not assignable to type 'Dog'.
 
 
-==== tests/cases/compiler/strictFunctionTypesErrors.ts (33 errors) ====
+==== tests/cases/compiler/strictFunctionTypesErrors.ts (35 errors) ====
     export {}
     
     
@@ -361,3 +369,34 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(134,1): error TS2322: Type '(f
 !!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:       Type 'Animal' is not assignable to type 'Dog'.
     
+    // Verify that callback parameters aren't loosely checked when types
+    // originate in method declarations
+    
+    namespace n1 {
+        class Foo {
+            static f1(x: Animal): Animal { throw "wat"; }
+            static f2(x: Dog): Animal { throw "wat"; };
+        }
+        declare let f1: (cb: typeof Foo.f1) => void;
+        declare let f2: (cb: typeof Foo.f2) => void;
+        f1 = f2;
+        f2 = f1;  // Error
+        ~~
+!!! error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
+!!! error TS2322:   Types of parameters 'cb' and 'cb' are incompatible.
+!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:       Type 'Animal' is not assignable to type 'Dog'.
+    }
+    
+    namespace n2 {
+        type BivariantHack<Input, Output> = { foo(x: Input): Output }["foo"];
+        declare let f1: (cb: BivariantHack<Animal, Animal>) => void;
+        declare let f2: (cb: BivariantHack<Dog, Animal>) => void;
+        f1 = f2;
+        f2 = f1;  // Error
+        ~~
+!!! error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
+!!! error TS2322:   Types of parameters 'cb' and 'cb' are incompatible.
+!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:       Type 'Animal' is not assignable to type 'Dog'.
+    }

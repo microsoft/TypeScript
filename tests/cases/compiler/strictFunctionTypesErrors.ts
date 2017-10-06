@@ -133,3 +133,25 @@ declare let fc1: (f: (x: Animal) => Animal) => void;
 declare let fc2: (f: (x: Dog) => Dog) => void;
 fc1 = fc2;  // Error
 fc2 = fc1;  // Error
+
+// Verify that callback parameters aren't loosely checked when types
+// originate in method declarations
+
+namespace n1 {
+    class Foo {
+        static f1(x: Animal): Animal { throw "wat"; }
+        static f2(x: Dog): Animal { throw "wat"; };
+    }
+    declare let f1: (cb: typeof Foo.f1) => void;
+    declare let f2: (cb: typeof Foo.f2) => void;
+    f1 = f2;
+    f2 = f1;  // Error
+}
+
+namespace n2 {
+    type BivariantHack<Input, Output> = { foo(x: Input): Output }["foo"];
+    declare let f1: (cb: BivariantHack<Animal, Animal>) => void;
+    declare let f2: (cb: BivariantHack<Dog, Animal>) => void;
+    f1 = f2;
+    f2 = f1;  // Error
+}
