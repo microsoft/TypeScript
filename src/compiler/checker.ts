@@ -16572,6 +16572,12 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
+            if (isPotentiallyUncalledDecorator(node, callSignatures)) {
+                const nodeStr = getTextOfNode(node.expression, /*includeTrivia*/ false);
+                error(node, Diagnostics._0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0, nodeStr);
+                return resolveErrorCall(node);
+            }
+
             const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
                 let errorInfo: DiagnosticMessageChain;
@@ -16582,6 +16588,18 @@ namespace ts {
             }
 
             return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
+        }
+
+        /**
+         * Sometimes, we have a decorator that could accept zero arguments,
+         * but is receiving too many arguments as part of the decorator invocation.
+         * In those cases, a user may have meant to *call* the expression before using it as a decorator.
+         */
+        function isPotentiallyUncalledDecorator(decorator: Decorator, signatures: Signature[]) {
+            return signatures.length && every(signatures, signature =>
+                signature.minArgumentCount === 0 &&
+                !signature.hasRestParameter &&
+                signature.parameters.length < getEffectiveArgumentCount(decorator, /*args*/ undefined, signature));
         }
 
         /**
