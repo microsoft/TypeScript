@@ -179,6 +179,11 @@ namespace ts {
         return values;
     }
 
+    /**
+     * Used in the module transformer to check if an expression is reasonably without sideeffect,
+     *  and thus better to copy into multiple places rather than to cache in a temporary variable
+     *  - this is mostly subjective beyond the requirement that the expression not be sideeffecting
+     */
     export function isSimpleCopiableExpression(expression: Expression) {
         return expression.kind === SyntaxKind.StringLiteral ||
             expression.kind === SyntaxKind.NumericLiteral ||

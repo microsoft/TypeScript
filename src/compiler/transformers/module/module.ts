@@ -520,10 +520,7 @@ namespace ts {
         }
 
         function visitImportCallExpression(node: ImportCall): Expression {
-            let argument = node.arguments && node.arguments[0];
-            if (argument) {
-                argument = visitNode(argument, importCallExpressionVisitor);
-            }
+            const argument = visitNode(firstOrUndefined(node.arguments), importCallExpressionVisitor);
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
                     return createImportCallExpressionAMD(argument);
@@ -554,7 +551,7 @@ namespace ts {
                 return createConditional(
                     /*condition*/ createIdentifier("__syncRequire"),
                     /*whenTrue*/ createImportCallExpressionCommonJS(arg),
-                    /*whenFalse*/ createImportCallExpressionAMD(arg)
+                    /*whenFalse*/ createImportCallExpressionAMD(isGeneratedIdentifier(arg) ? arg : getSynthesizedClone(arg)) // TODO (weswigham): Use getSynthesizedDeepClone instead of getSynthesizedClone once #18979 is merged
                 );
             }
             else {

@@ -1495,7 +1495,7 @@ namespace ts {
                     createIdentifier("import")
                 ),
                 /*typeArguments*/ undefined,
-                node.arguments && node.arguments.length ? [visitNode(node.arguments[0], destructuringAndImportCallVisitor)] : []
+                some(node.arguments) ? [visitNode(node.arguments[0], destructuringAndImportCallVisitor)] : []
             );
         }
 

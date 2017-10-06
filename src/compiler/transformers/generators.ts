@@ -1128,11 +1128,11 @@ namespace ts {
                 if (isImportCall(node)) {
                     const elements = visitElements(node.arguments);
                     Debug.assert(elements.kind === SyntaxKind.ArrayLiteralExpression);
-                    // Import call should always have one argument
-                    const firstExpression = (elements as ArrayLiteralExpression).elements[0];
+                    // Import call should always have one argument, but we parse more for error reporting
+                    const firstExpression = firstOrUndefined((elements as ArrayLiteralExpression).elements);
                     return setOriginalNode(createCall(
                         node.expression,
-                        node.typeArguments,
+                        /* typeArguments */ undefined,
                         firstExpression ? [firstExpression] : []
                     ), node);
                 }
