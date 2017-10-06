@@ -21764,7 +21764,7 @@ namespace ts {
             }
         }
 
-        function computeMemberValue(member: EnumMember, autoValue: number) {
+        function computeMemberValue(member: EnumMember, autoValue: number): string | number | undefined {
             if (isComputedNonLiteralName(<PropertyName>member.name)) {
                 error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
             }
@@ -21793,7 +21793,7 @@ namespace ts {
             return undefined;
         }
 
-        function computeConstantValue(member: EnumMember): string | number {
+        function computeConstantValue(member: EnumMember): string | number | undefined {
             const enumKind = getEnumKind(getSymbolOfNode(member.parent));
             const isConstEnum = isConst(member.parent);
             const initializer = member.initializer;
@@ -21810,10 +21810,10 @@ namespace ts {
                 return 0;
             }
             else if (isConstEnum) {
-                error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
+                error(initializer, Diagnostics.In_const_enum_declarations_a_member_initializer_must_have_a_string_or_number_literal_type);
             }
             else if (isInAmbientContext(member.parent)) {
-                error(initializer, Diagnostics.In_ambient_enum_declarations_member_initializer_must_be_constant_expression);
+                error(initializer, Diagnostics.In_ambient_enum_declarations_a_member_initializer_must_have_a_string_or_number_literal_type);
             }
             else {
                 // Only here do we need to check that the initializer is assignable to the enum type.
@@ -21821,7 +21821,7 @@ namespace ts {
             }
             return value;
 
-            function evaluate(expr: Expression): string | number {
+            function evaluate(expr: Expression): string | number | undefined {
                 switch (expr.kind) {
                     case SyntaxKind.PrefixUnaryExpression:
                         const value = evaluate((<PrefixUnaryExpression>expr).operand);
@@ -21865,7 +21865,7 @@ namespace ts {
                             return 0;
                         }
                         const fromEnum = evaluateEnumMember(id, getSymbolOfNode(member.parent), id.escapedText);
-                        return fromEnum !== undefined ? fromEnum : getFromLiteralType(id);
+                        return fromEnum !== undefined ? fromEnum : getFromExpression(id);
                     }
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.PropertyAccessExpression:
@@ -21887,7 +21887,7 @@ namespace ts {
                                     return fromEnum;
                                 }
                             }
-                            return getFromLiteralType(ex);
+                            return getFromExpression(ex);
                         }
                         break;
                 }
@@ -21909,7 +21909,7 @@ namespace ts {
                 return undefined;
             }
 
-            function getFromLiteralType(expr: Identifier | ElementAccessExpression | PropertyAccessExpression): string | number | undefined {
+            function getFromExpression(expr: Identifier | ElementAccessExpression | PropertyAccessExpression): string | number | undefined {
                 const type = checkExpression(expr);
                 if (type.flags & TypeFlags.StringOrNumberLiteral) {
                     return (type as LiteralType).value;

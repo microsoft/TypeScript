@@ -1,7 +1,7 @@
 tests/cases/conformance/ambient/ambientErrors.ts(2,15): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(17,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/ambient/ambientErrors.ts(20,24): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(29,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
+tests/cases/conformance/ambient/ambientErrors.ts(29,9): error TS1066: In ambient enum declarations, a member initializer must have a string or number literal type.
 tests/cases/conformance/ambient/ambientErrors.ts(34,11): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(35,19): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(37,20): error TS1039: Initializers are not allowed in ambient contexts.
@@ -51,7 +51,7 @@ tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export 
     declare enum E2 {
         x = 'foo'.length
             ~~~~~~~~~~~~
-!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
+!!! error TS1066: In ambient enum declarations, a member initializer must have a string or number literal type.
     }
     
     // Ambient module with initializers for values, bodies for functions / classes
