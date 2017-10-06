@@ -4,11 +4,11 @@ namespace N {
     export const value = 1;
 
     () => {
-        var c = class {
+        /*[#|*/var c = class {
             M() {
                 return value;
             }
-        }
+        }/*|]*/
     }
 }
 // ==SCOPE::Extract to function in namespace 'N'==

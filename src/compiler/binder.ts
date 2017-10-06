@@ -244,7 +244,7 @@ namespace ts {
                     }
 
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
-                    return getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores((<PropertyAccessExpression>nameExpression).name.escapedText));
+                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
                 }
                 return getEscapedTextOfIdentifierOrLiteral(<Identifier | LiteralExpression>name);
             }
@@ -1777,7 +1777,7 @@ namespace ts {
                     // otherwise report generic error message.
                     const span = getErrorSpanForNode(file, name);
                     file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
-                        getStrictModeEvalOrArgumentsMessage(contextNode), unescapeLeadingUnderscores(identifier.escapedText)));
+                        getStrictModeEvalOrArgumentsMessage(contextNode), idText(identifier)));
                 }
             }
         }
@@ -2431,7 +2431,7 @@ namespace ts {
                 if (node.name) {
                     node.name.parent = node;
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(prototypeSymbol.escapedName)));
+                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
             }
             symbol.exports.set(prototypeSymbol.escapedName, prototypeSymbol);
             prototypeSymbol.parent = symbol;

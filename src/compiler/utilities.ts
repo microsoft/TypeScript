@@ -377,7 +377,7 @@ namespace ts {
     }
 
     export function getTextOfConstantValue(value: string | number) {
-        return typeof value === "string" ? '"' + escapeNonAsciiString(value) + '"' : "" + value;
+        return isString(value) ? '"' + escapeNonAsciiString(value) + '"' : "" + value;
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
@@ -414,7 +414,10 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
-    /* @internal */
+    export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
+        return isModuleDeclaration(node) && node.name.kind === SyntaxKind.StringLiteral;
+    }
+
     export function isNonGlobalAmbientModule(node: Node): node is ModuleDeclaration & { name: StringLiteral } {
         return isModuleDeclaration(node) && isStringLiteral(node.name);
     }
@@ -560,7 +563,7 @@ namespace ts {
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:
-                return getFullWidth(name) === 0 ? unescapeLeadingUnderscores(name.escapedText) : getTextOfNode(name);
+                return getFullWidth(name) === 0 ? idText(name) : getTextOfNode(name);
             case SyntaxKind.QualifiedName:
                 return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
@@ -1459,8 +1462,8 @@ namespace ts {
         if (node.kind === SyntaxKind.ExportDeclaration) {
             return (<ExportDeclaration>node).moduleSpecifier;
         }
-        if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-            return (<ModuleDeclaration>node).name;
+        if (isModuleWithStringLiteralName(node)) {
+            return node.name;
         }
     }
 
@@ -1580,14 +1583,18 @@ namespace ts {
             return undefined;
         }
         const name = node.name.escapedText;
-        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
-        const func = node.parent!.parent!;
+        const func = getJSDocHost(node);
         if (!isFunctionLike(func)) {
             return undefined;
         }
         const parameter = find(func.parameters, p =>
             p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
         return parameter && parameter.symbol;
+    }
+
+    export function getJSDocHost(node: JSDocTag): HasJSDoc {
+        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
+        return node.parent!.parent!;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -1958,8 +1965,7 @@ namespace ts {
         if (name.kind === SyntaxKind.ComputedPropertyName) {
             const nameExpression = name.expression;
             if (isWellKnownSymbolSyntactically(nameExpression)) {
-                const rightHandSideName = (<PropertyAccessExpression>nameExpression).name.escapedText;
-                return getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores(rightHandSideName));
+                return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
             }
             else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
                 return escapeLeadingUnderscores((<LiteralExpression>nameExpression).text);
@@ -1972,7 +1978,7 @@ namespace ts {
     export function getTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
         if (node) {
             if (node.kind === SyntaxKind.Identifier) {
-                return unescapeLeadingUnderscores((node as Identifier).escapedText);
+                return idText(node as Identifier);
             }
             if (node.kind === SyntaxKind.StringLiteral ||
                 node.kind === SyntaxKind.NumericLiteral) {
@@ -3178,17 +3184,14 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: System): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
             case NewLineKind.LineFeed:
                 return lineFeed;
         }
-        if (sys) {
-            return sys.newLine;
-        }
-        return carriageReturnLineFeed;
+        return system ? system.newLine : sys ? sys.newLine : carriageReturnLineFeed;
     }
 
     /**
@@ -3480,6 +3483,93 @@ namespace ts {
         function writeOrReadWrite(): AccessKind {
             // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
             return parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
+        }
+    }
+
+    export function compareDataObjects(dst: any, src: any): boolean {
+        if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
+            return false;
+        }
+
+        for (const e in dst) {
+            if (typeof dst[e] === "object") {
+                if (!compareDataObjects(dst[e], src[e])) {
+                    return false;
+                }
+            }
+            else if (typeof dst[e] !== "function") {
+                if (dst[e] !== src[e]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
+     */
+    export function clearMap<T>(map: Map<T>, onDeleteValue: (valueInMap: T, key: string) => void) {
+        // Remove all
+        map.forEach(onDeleteValue);
+        map.clear();
+    }
+
+    export interface MutateMapOptions<T, U> {
+        createNewValue(key: string, valueInNewMap: U): T;
+        onDeleteValue(existingValue: T, key: string): void;
+
+        /**
+         * If present this is called with the key when there is value for that key both in new map as well as existing map provided
+         * Caller can then decide to update or remove this key.
+         * If the key is removed, caller will get callback of createNewValue for that key.
+         * If this callback is not provided, the value of such keys is not updated.
+         */
+        onExistingValue?(existingValue: T, valueInNewMap: U, key: string): void;
+    }
+
+    /**
+     * Mutates the map with newMap such that keys in map will be same as newMap.
+     */
+    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
+        const { createNewValue, onDeleteValue, onExistingValue } = options;
+        // Needs update
+        map.forEach((existingValue, key) => {
+            const valueInNewMap = newMap.get(key);
+            // Not present any more in new map, remove it
+            if (valueInNewMap === undefined) {
+                map.delete(key);
+                onDeleteValue(existingValue, key);
+            }
+            // If present notify about existing values
+            else if (onExistingValue) {
+                onExistingValue(existingValue, valueInNewMap, key);
+            }
+        });
+
+        // Add new values that are not already present
+        newMap.forEach((valueInNewMap, key) => {
+            if (!map.has(key)) {
+                // New values
+                map.set(key, createNewValue(key, valueInNewMap));
+            }
+        });
+    }
+
+    /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */
+    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T): T {
+        while (true) {
+            const result = callback(directory);
+            if (result !== undefined) {
+                return result;
+            }
+
+            const parentPath = getDirectoryPath(directory);
+            if (parentPath === directory) {
+                return undefined;
+            }
+
+            directory = parentPath;
         }
     }
 }
@@ -3926,6 +4016,13 @@ namespace ts {
     export function unescapeLeadingUnderscores(identifier: __String): string {
         const id = identifier as string;
         return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
+    }
+
+    export function idText(identifier: Identifier): string {
+        return unescapeLeadingUnderscores(identifier.escapedText);
+    }
+    export function symbolName(symbol: Symbol): string {
+        return unescapeLeadingUnderscores(symbol.escapedName);
     }
 
     /**

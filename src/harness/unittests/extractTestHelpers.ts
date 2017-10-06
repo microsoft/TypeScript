@@ -98,38 +98,44 @@ namespace ts {
     }
 
     export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage) {
-        it(caption, () => {
-            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}.ts`, () => {
-                const t = extractTest(text);
-                const selectionRange = t.ranges.get("selection");
-                if (!selectionRange) {
-                    throw new Error(`Test ${caption} does not specify selection range`);
-                }
-                const f = {
-                    path: "/a.ts",
-                    content: t.source
-                };
-                const host = projectSystem.createServerHost([f, projectSystem.libFile]);
-                const projectService = projectSystem.createProjectService(host);
-                projectService.openClientFile(f.path);
-                const program = projectService.inferredProjects[0].getLanguageService().getProgram();
-                const sourceFile = program.getSourceFile(f.path);
-                const context: RefactorContext = {
-                    cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
-                    newLineCharacter,
-                    program,
-                    file: sourceFile,
-                    startPosition: selectionRange.start,
-                    endPosition: selectionRange.end,
-                    rulesProvider: getRuleProvider()
-                };
-                const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
-                assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
-                const infos = refactor.extractSymbol.getAvailableActions(context);
-                const actions = find(infos, info => info.description === description.message).actions;
+        const t = extractTest(text);
+        const selectionRange = t.ranges.get("selection");
+        if (!selectionRange) {
+            throw new Error(`Test ${caption} does not specify selection range`);
+        }
+
+        [Extension.Ts, Extension.Js].forEach(extension =>
+            it(`${caption} [${extension}]`, () => runBaseline(extension)));
+
+        function runBaseline(extension: Extension) {
+            const path = "/a" + extension;
+            const program = makeProgram({ path, content: t.source });
+
+            if (hasSyntacticDiagnostics(program)) {
+                // Don't bother generating JS baselines for inputs that aren't valid JS.
+                assert.equal(Extension.Js, extension, "Syntactic diagnostics found in non-JS file");
+                return;
+            }
+
+            const sourceFile = program.getSourceFile(path);
+            const context: RefactorContext = {
+                cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
+                newLineCharacter,
+                program,
+                file: sourceFile,
+                startPosition: selectionRange.start,
+                endPosition: selectionRange.end,
+                rulesProvider: getRuleProvider()
+            };
+            const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+            assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
+            const infos = refactor.extractSymbol.getAvailableActions(context);
+            const actions = find(infos, info => info.description === description.message).actions;
+
+            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
                 const data: string[] = [];
                 data.push(`// ==ORIGINAL==`);
-                data.push(sourceFile.text);
+                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
                 for (const action of actions) {
                     const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name);
                     assert.lengthOf(edits, 1);
@@ -137,10 +143,26 @@ namespace ts {
                     const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
+
+                    const diagProgram = makeProgram({ path, content: newText });
+                    assert.isFalse(hasSyntacticDiagnostics(diagProgram));
                 }
                 return data.join(newLineCharacter);
             });
-        });
+        }
+
+        function makeProgram(f: {path: string, content: string }) {
+            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
+            const projectService = projectSystem.createProjectService(host);
+            projectService.openClientFile(f.path);
+            const program = projectService.inferredProjects[0].getLanguageService().getProgram();
+            return program;
+        }
+
+        function hasSyntacticDiagnostics(program: Program) {
+            const diags = program.getSyntacticDiagnostics();
+            return length(diags) > 0;
+        }
     }
 
     export function testExtractSymbolFailed(caption: string, text: string, description: DiagnosticMessage) {

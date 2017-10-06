@@ -38,7 +38,7 @@ namespace ts.projectSystem {
     function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
         self.addPostExecAction(installedTypings, success => {
             for (const file of typingFiles) {
-                host.createFileOrFolder(file, /*createParentDirectory*/ true);
+                host.ensureFileOrFolder(file);
             }
             cb(success);
         });
@@ -92,7 +92,7 @@ namespace ts.projectSystem {
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(f1.path);
             service.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(service, 0), [f1.path, f2.path, config.path]);
             installer.installAll(0);
         });
     });
@@ -144,12 +144,13 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = projectService.configuredProjects[0];
+            const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [file1.path, tsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
         });
 
@@ -350,6 +351,8 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path, file3.path, lodash.path, react.path]);
         });
 
@@ -471,6 +474,8 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path, file3.path, commander.path, express.path, jquery.path, moment.path]);
         });
 
@@ -548,7 +553,7 @@ namespace ts.projectSystem {
             for (const f of typingFiles) {
                 assert.isTrue(host.fileExists(f.path), `expected file ${f.path} to exist`);
             }
-
+            host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [lodashJs.path, commanderJs.path, file3.path, commander.path, express.path, jquery.path, moment.path, lodash.path]);
         });
@@ -651,7 +656,7 @@ namespace ts.projectSystem {
             assert.equal(installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
             installer.executePendingCommands();
-
+            host.checkTimeoutQueueLengthAndRun(3); // for 2 projects and 1 refreshing inferred project
             checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
         });
@@ -699,12 +704,13 @@ namespace ts.projectSystem {
             projectService.openClientFile(app.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = projectService.configuredProjects[0];
+            const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
@@ -745,13 +751,14 @@ namespace ts.projectSystem {
             projectService.openClientFile(app.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = projectService.configuredProjects[0];
+            const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
             checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", libFile.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
@@ -792,12 +799,13 @@ namespace ts.projectSystem {
             projectService.openClientFile(app.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = projectService.configuredProjects[0];
+            const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
@@ -836,10 +844,10 @@ namespace ts.projectSystem {
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
             host.reloadFS([f, fixedPackageJson]);
-            host.triggerFileWatcherCallback(fixedPackageJson.path, FileWatcherEventKind.Changed);
+            host.checkTimeoutQueueLengthAndRun(2); // To refresh the project and refresh inferred projects
             // expected install request
             installer.installAll(/*expectedCount*/ 1);
-
+            host.checkTimeoutQueueLengthAndRun(2);
             service.checkNumberOfProjects({ inferredProjects: 1 });
             checkProjectActualFiles(service.inferredProjects[0], [f.path, commander.path]);
         });
@@ -963,8 +971,7 @@ namespace ts.projectSystem {
                 }
             };
             session.executeCommand(changeRequest);
-            host.checkTimeoutQueueLength(1);
-            host.runQueuedTimeoutCallbacks();
+            host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
             const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
             assert.equal(version1, version2, "set of unresolved imports should not change");
         });
@@ -1171,6 +1178,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             assert.isTrue(seenTelemetryEvent);
+            host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
         });
@@ -1224,6 +1232,7 @@ namespace ts.projectSystem {
             assert.isTrue(!!endEvent);
             assert.isTrue(beginEvent.eventId === endEvent.eventId);
             assert.isTrue(endEvent.installSuccess);
+            host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
         });

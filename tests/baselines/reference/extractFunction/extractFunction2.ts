@@ -5,10 +5,10 @@ namespace A {
     }
     namespace B {
         function a() {
-        
+        /*[#|*/
             let y = 5;
             let z = x;
-            return foo();
+            return foo();/*|]*/
         }
     }
 }

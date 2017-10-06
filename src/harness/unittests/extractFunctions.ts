@@ -110,16 +110,6 @@ namespace ts {
         }
     }
 }`);
-        testExtractFunction("extractFunction8",
-            `namespace A {
-    let x = 1;
-    namespace B {
-        function a() {
-            let a1 = 1;
-            return 1 + [#|a1 + x|] + 100;
-        }
-    }
-}`);
         testExtractFunction("extractFunction9",
             `namespace A {
     export interface I { x: number };
@@ -365,12 +355,11 @@ function parsePrimaryExpression(): any {
     [#|function G() { }|]
 }`);
 
-// TODO (acasey): handle repeated substitution
-//         testExtractFunction("extractFunction_RepeatedSubstitution",
-//             `namespace X {
-//     export const j = 10;
-//     export const y = [#|j * j|];
-// }`);
+        testExtractFunction("extractFunction_RepeatedSubstitution",
+            `namespace X {
+    export const j = 10;
+    export const y = [#|j * j|];
+}`);
     });
 
     function testExtractFunction(caption: string, text: string) {

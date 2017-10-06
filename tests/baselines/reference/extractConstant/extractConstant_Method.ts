@@ -1,10 +1,10 @@
 // ==ORIGINAL==
 class C {
     M() {
-        let x = 1;
+        let x = /*[#|*/1/*|]*/;
     }
 }
-// ==SCOPE::Extract to constant in method 'M==
+// ==SCOPE::Extract to constant in enclosing scope==
 class C {
     M() {
         const newLocal = 1;

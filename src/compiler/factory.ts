@@ -81,7 +81,7 @@ namespace ts {
         if (typeof value === "boolean") {
             return value ? createTrue() : createFalse();
         }
-        if (typeof value === "string") {
+        if (isString(value)) {
             return createStringLiteral(value);
         }
         return createLiteralFromNode(value);
@@ -126,7 +126,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(unescapeLeadingUnderscores(node.escapedText), typeArguments), node)
+        ? updateNode(createIdentifier(idText(node), typeArguments), node)
         : node;
     }
 
@@ -2204,7 +2204,7 @@ namespace ts {
 
     export function createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block) {
         const node = <CatchClause>createSynthesizedNode(SyntaxKind.CatchClause);
-        node.variableDeclaration = typeof variableDeclaration === "string" ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
+        node.variableDeclaration = isString(variableDeclaration) ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
         node.block = block;
         return node;
     }
@@ -2530,11 +2530,11 @@ namespace ts {
     function asName(name: string | EntityName): EntityName;
     function asName(name: string | Identifier | ThisTypeNode): Identifier | ThisTypeNode;
     function asName(name: string | Identifier | BindingName | PropertyName | QualifiedName | ThisTypeNode) {
-        return typeof name === "string" ? createIdentifier(name) : name;
+        return isString(name) ? createIdentifier(name) : name;
     }
 
     function asExpression(value: string | number | Expression) {
-        return typeof value === "string" || typeof value === "number" ? createLiteral(value) : value;
+        return isString(value) || typeof value === "number" ? createLiteral(value) : value;
     }
 
     function asNodeArray<T extends Node>(array: ReadonlyArray<T> | undefined): NodeArray<T> | undefined {
@@ -2951,12 +2951,12 @@ namespace ts {
     function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
-            const right = createIdentifier(unescapeLeadingUnderscores(jsxFactory.right.escapedText));
+            const right = createIdentifier(idText(jsxFactory.right));
             right.escapedText = jsxFactory.right.escapedText;
             return createPropertyAccess(left, right);
         }
         else {
-            return createReactNamespace(unescapeLeadingUnderscores(jsxFactory.escapedText), parent);
+            return createReactNamespace(idText(jsxFactory), parent);
         }
     }
 
@@ -3877,15 +3877,15 @@ namespace ts {
      * @param expression The Expression node.
      */
     export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
-        const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        switch (emittedExpression.kind) {
+        const leftmostExpr = getLeftmostExpression(expression, /*stopAtCallExpressions*/ true);
+        switch (leftmostExpr.kind) {
             case SyntaxKind.CallExpression:
                 return createParen(expression);
 
             case SyntaxKind.NewExpression:
-                return (<NewExpression>emittedExpression).arguments
-                    ? <LeftHandSideExpression>expression
-                    : createParen(expression);
+                return !(leftmostExpr as NewExpression).arguments
+                    ? createParen(expression)
+                    : <LeftHandSideExpression>expression;
         }
 
         return parenthesizeForAccess(expression);
@@ -3966,7 +3966,7 @@ namespace ts {
             }
         }
 
-        const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
+        const leftmostExpressionKind = getLeftmostExpression(emittedExpression, /*stopAtCallExpressions*/ false).kind;
         if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
             return setTextRange(createParen(expression), expression);
         }
@@ -4012,7 +4012,7 @@ namespace ts {
         }
     }
 
-    function getLeftmostExpression(node: Expression): Expression {
+    function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
                 case SyntaxKind.PostfixUnaryExpression:
@@ -4028,6 +4028,10 @@ namespace ts {
                     continue;
 
                 case SyntaxKind.CallExpression:
+                    if (stopAtCallExpressions) {
+                        return node;
+                    }
+                    // falls through
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
                     node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
@@ -4040,10 +4044,11 @@ namespace ts {
 
             return node;
         }
+
     }
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        if (!isBlock(body) && getLeftmostExpression(body).kind === SyntaxKind.ObjectLiteralExpression) {
+        if (!isBlock(body) && getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression) {
             return setTextRange(createParen(<Expression>body), body);
         }
 

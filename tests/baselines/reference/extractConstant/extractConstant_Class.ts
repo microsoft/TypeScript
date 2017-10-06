@@ -1,6 +1,6 @@
 // ==ORIGINAL==
 class C {
-    x = 1;
+    x = /*[#|*/1/*|]*/;
 }
 // ==SCOPE::Extract to readonly field in class 'C'==
 class C {
