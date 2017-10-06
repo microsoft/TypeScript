@@ -13,3 +13,22 @@ const enum E {
 >x : E
 }
 
+namespace N {
+>N : typeof N
+
+    export const a = F.a;
+>a : F
+>F.a : F
+>F : typeof F
+>a : F
+}
+const enum F {
+>F : F
+
+    a = N.a,
+>a : F
+>N.a : F
+>N : typeof N
+>a : F
+}
+

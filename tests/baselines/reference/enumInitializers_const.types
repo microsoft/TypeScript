@@ -3,14 +3,23 @@ const stride = 5;
 >stride : 5
 >5 : 5
 
+namespace N {
+>N : typeof N
+
+    export const two = 2;
+>two : 2
+>2 : 2
+}
 const enum E {
 >E : E
 
-    x = stride * 2,
+    x = stride * N.two,
 >x : E
->stride * 2 : number
+>stride * N.two : number
 >stride : 5
->2 : 2
+>N.two : 2
+>N : typeof N
+>two : 2
 }
 E.x;
 >E.x : E

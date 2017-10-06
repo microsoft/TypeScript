@@ -1,6 +1,9 @@
 const stride = 5;
+namespace N {
+    export const two = 2;
+}
 const enum E {
-    x = stride * 2,
+    x = stride * N.two,
 }
 E.x;
 

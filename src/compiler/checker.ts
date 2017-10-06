@@ -21861,13 +21861,17 @@ namespace ts {
                         return evaluate((<ParenthesizedExpression>expr).expression);
                     case SyntaxKind.Identifier: {
                         const id = expr as Identifier;
-                        return nodeIsMissing(expr) ? 0 : evaluateEnumMember(id, getSymbolOfNode(member.parent), id.escapedText);
+                        if (nodeIsMissing(expr)) {
+                            return 0;
+                        }
+                        const fromEnum = evaluateEnumMember(id, getSymbolOfNode(member.parent), id.escapedText);
+                        return fromEnum !== undefined ? fromEnum : getFromLiteralType(id);
                     }
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.PropertyAccessExpression:
                         const ex = <PropertyAccessExpression | ElementAccessExpression>expr;
                         if (isConstantMemberAccess(ex)) {
-                            const type = getTypeOfExpression(ex.expression);
+                            const type = checkExpression(ex.expression);
                             if (type.symbol && type.symbol.flags & SymbolFlags.Enum) {
                                 let name: __String;
                                 if (ex.kind === SyntaxKind.PropertyAccessExpression) {
@@ -21878,15 +21882,19 @@ namespace ts {
                                     Debug.assert(isLiteralExpression(argument));
                                     name = escapeLeadingUnderscores((argument as LiteralExpression).text);
                                 }
-                                return evaluateEnumMember(ex, type.symbol, name);
+                                const fromEnum = evaluateEnumMember(ex, type.symbol, name);
+                                if (fromEnum !== undefined) {
+                                    return fromEnum;
+                                }
                             }
+                            return getFromLiteralType(ex);
                         }
                         break;
                 }
                 return undefined;
             }
 
-            function evaluateEnumMember(expr: Identifier | ElementAccessExpression | PropertyAccessExpression, enumSymbol: Symbol, name: __String): string | number {
+            function evaluateEnumMember(expr: Identifier | ElementAccessExpression | PropertyAccessExpression, enumSymbol: Symbol, name: __String): string | number | undefined {
                 const memberSymbol = enumSymbol.exports.get(name);
                 if (memberSymbol) {
                     const declaration = memberSymbol.valueDeclaration;
@@ -21898,13 +21906,14 @@ namespace ts {
                         return 0;
                     }
                 }
-                else {
-                    const type = checkExpression(expr);
-                    if (type.flags & TypeFlags.StringOrNumberLiteral) {
-                        return (type as LiteralType).value;
-                    }
-                }
                 return undefined;
+            }
+
+            function getFromLiteralType(expr: Identifier | ElementAccessExpression | PropertyAccessExpression): string | number | undefined {
+                const type = checkExpression(expr);
+                if (type.flags & TypeFlags.StringOrNumberLiteral) {
+                    return (type as LiteralType).value;
+                }
             }
         }
 
