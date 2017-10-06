@@ -3527,6 +3527,10 @@
         "category": "Error",
         "code": 8024
     },
+    "The total number of `@augments` and `@extends` tags allowed for a single class declaration is at most 1.": {
+        "category": "Error",
+        "code": 8025
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
