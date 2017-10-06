@@ -592,11 +592,11 @@ namespace ts.projectSystem {
         it("should emit js files in inferred projects when they could be input files", () => {
             const f1 = {
                 path: "/a/b/f1.ts",
-                content: "var test = \"\";"
+                content: "var test = 0;"
             };
             const f1js = {
                 path: "/a/b/f1.js",
-                content: "var test = \"\";"
+                content: "var test = 0;"
             };
             const host = createServerHost([f1, f1js, libFile]);
             const session = createSession(host, { useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
@@ -614,7 +614,7 @@ namespace ts.projectSystem {
                 seq: 2,
                 arguments: { projectFileName: projectName }
             }).response;
-            assert.isTrue(diags.length === 0);
+            assert.lengthOf(diags, 0);
 
             const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: f1.path });
             const emitResponse = session.executeCommand(emitRequest).response;
