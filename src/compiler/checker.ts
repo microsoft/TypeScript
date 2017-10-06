@@ -18451,9 +18451,8 @@ namespace ts {
             checkGrammarDecorators(node) || checkGrammarModifiers(node);
 
             checkVariableLikeDeclaration(node);
-            let func = getContainingFunction(node);
+            const func = getContainingFunction(node);
             if (hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
-                func = getContainingFunction(node);
                 if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
