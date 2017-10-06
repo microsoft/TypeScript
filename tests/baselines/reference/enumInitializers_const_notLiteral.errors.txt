@@ -1,0 +1,11 @@
+tests/cases/compiler/enumInitializers_const_notLiteral.ts(3,9): error TS2474: In 'const' enum declarations, a member initializer must have a string or number literal type.
+
+
+==== tests/cases/compiler/enumInitializers_const_notLiteral.ts (1 errors) ====
+    const notALiteralType = 1 ? 2 : 3;
+    const enum E {
+        x = notALiteralType,
+            ~~~~~~~~~~~~~~~
+!!! error TS2474: In 'const' enum declarations, a member initializer must have a string or number literal type.
+    }
+    

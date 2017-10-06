@@ -1,0 +1,12 @@
+=== tests/cases/compiler/enumInitializers_const_notLiteral.ts ===
+const notALiteralType = 1 ? 2 : 3;
+>notALiteralType : Symbol(notALiteralType, Decl(enumInitializers_const_notLiteral.ts, 0, 5))
+
+const enum E {
+>E : Symbol(E, Decl(enumInitializers_const_notLiteral.ts, 0, 34))
+
+    x = notALiteralType,
+>x : Symbol(E.x, Decl(enumInitializers_const_notLiteral.ts, 1, 14))
+>notALiteralType : Symbol(notALiteralType, Decl(enumInitializers_const_notLiteral.ts, 0, 5))
+}
+
