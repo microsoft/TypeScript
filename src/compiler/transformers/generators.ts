@@ -1124,6 +1124,18 @@ namespace ts {
                 //  .mark resumeLabel
                 //      _b.apply(_a, _c.concat([%sent%, 2]));
 
+                // The `ImportCall` Expression isn't really a call expression, and the import keyword cannot be removed from its arguments
+                if (isImportCall(node)) {
+                    const elements = visitElements(node.arguments);
+                    Debug.assert(elements.kind === SyntaxKind.ArrayLiteralExpression);
+                    // Import call should always have one argument
+                    const firstExpression = (elements as ArrayLiteralExpression).elements[0];
+                    return setOriginalNode(createCall(
+                        node.expression,
+                        node.typeArguments,
+                        firstExpression ? [firstExpression] : []
+                    ), node);
+                }
                 const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
                 return setOriginalNode(
                     createFunctionApply(
