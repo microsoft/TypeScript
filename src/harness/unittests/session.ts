@@ -25,7 +25,7 @@ namespace ts.server {
         clearTimeout: noop,
         setImmediate: () => 0,
         clearImmediate: noop,
-        createHash: Harness.LanguageService.mockHash,
+        createHash: Harness.mockHash,
     };
 
     class TestSession extends Session {
@@ -509,7 +509,7 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks: Array<(resp: protocol.Response) => void> = [];
+            private callbacks: ((resp: protocol.Response) => void)[] = [];
             private eventHandlers = createMap<(args: any) => void>();
 
             handle(msg: protocol.Message): void {

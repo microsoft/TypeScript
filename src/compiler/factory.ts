@@ -81,7 +81,7 @@ namespace ts {
         if (typeof value === "boolean") {
             return value ? createTrue() : createFalse();
         }
-        if (typeof value === "string") {
+        if (isString(value)) {
             return createStringLiteral(value);
         }
         return createLiteralFromNode(value);
@@ -126,7 +126,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(unescapeLeadingUnderscores(node.escapedText), typeArguments), node)
+        ? updateNode(createIdentifier(idText(node), typeArguments), node)
         : node;
     }
 
@@ -281,7 +281,7 @@ namespace ts {
             || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer), node)
+            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
             : node;
     }
 
@@ -773,13 +773,13 @@ namespace ts {
             : node;
     }
 
-    export function createLiteralTypeNode(literal: Expression) {
+    export function createLiteralTypeNode(literal: LiteralTypeNode["literal"]) {
         const node = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
         node.literal = literal;
         return node;
     }
 
-    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: Expression) {
+    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]) {
         return node.literal !== literal
             ? updateNode(createLiteralTypeNode(literal), node)
             : node;
@@ -1016,19 +1016,49 @@ namespace ts {
         return node;
     }
 
+    /* @deprecated */ export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: ConciseBody): ArrowFunction;
     export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
         parameters: ReadonlyArray<ParameterDeclaration>,
         type: TypeNode | undefined,
-        body: ConciseBody) {
+        equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>,
+        body: ConciseBody): ArrowFunction;
+    export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        equalsGreaterThanTokenOrBody: Token<SyntaxKind.EqualsGreaterThanToken> | ConciseBody,
+        bodyOrUndefined?: ConciseBody,
+    ): ArrowFunction {
+        let equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>;
+        let body: ConciseBody;
+        if (bodyOrUndefined === undefined) {
+            equalsGreaterThanToken = node.equalsGreaterThanToken;
+            body = cast(equalsGreaterThanTokenOrBody, isConciseBody);
+        }
+        else {
+            equalsGreaterThanToken = cast(equalsGreaterThanTokenOrBody, (n): n is Token<SyntaxKind.EqualsGreaterThanToken> =>
+                n.kind === SyntaxKind.EqualsGreaterThanToken);
+            body = bodyOrUndefined;
+        }
+
         return node.modifiers !== modifiers
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
+            || node.equalsGreaterThanToken !== equalsGreaterThanToken
             || node.body !== body
-            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, node.equalsGreaterThanToken, body), node)
+            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
             : node;
     }
 
@@ -1135,11 +1165,31 @@ namespace ts {
         return node;
     }
 
-    export function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression) {
+    /* @deprecated */ export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        whenTrue: Expression,
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        questionToken: Token<SyntaxKind.QuestionToken>,
+        whenTrue: Expression,
+        colonToken: Token<SyntaxKind.ColonToken>,
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(node: ConditionalExpression, condition: Expression, ...args: any[]) {
+        if (args.length === 2) {
+            const [whenTrue, whenFalse] = args;
+            return updateConditional(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
+        }
+        Debug.assert(args.length === 4);
+        const [questionToken, whenTrue, colonToken, whenFalse] = args;
         return node.condition !== condition
+            || node.questionToken !== questionToken
             || node.whenTrue !== whenTrue
+            || node.colonToken !== colonToken
             || node.whenFalse !== whenFalse
-            ? updateNode(createConditional(condition, node.questionToken, whenTrue, node.colonToken, whenFalse), node)
+            ? updateNode(createConditional(condition, questionToken, whenTrue, colonToken, whenFalse), node)
             : node;
     }
 
@@ -1155,6 +1205,30 @@ namespace ts {
             || node.templateSpans !== templateSpans
             ? updateNode(createTemplateExpression(head, templateSpans), node)
             : node;
+    }
+
+    export function createTemplateHead(text: string) {
+        const node = <TemplateHead>createSynthesizedNode(SyntaxKind.TemplateHead);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateMiddle(text: string) {
+        const node = <TemplateMiddle>createSynthesizedNode(SyntaxKind.TemplateMiddle);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateTail(text: string) {
+        const node = <TemplateTail>createSynthesizedNode(SyntaxKind.TemplateTail);
+        node.text = text;
+        return node;
+    }
+
+    export function createNoSubstitutionTemplateLiteral(text: string) {
+        const node = <NoSubstitutionTemplateLiteral>createSynthesizedNode(SyntaxKind.NoSubstitutionTemplateLiteral);
+        node.text = text;
+        return node;
     }
 
     export function createYield(expression?: Expression): YieldExpression;
@@ -2130,7 +2204,7 @@ namespace ts {
 
     export function createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block) {
         const node = <CatchClause>createSynthesizedNode(SyntaxKind.CatchClause);
-        node.variableDeclaration = typeof variableDeclaration === "string" ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
+        node.variableDeclaration = isString(variableDeclaration) ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
         node.block = block;
         return node;
     }
@@ -2456,11 +2530,11 @@ namespace ts {
     function asName(name: string | EntityName): EntityName;
     function asName(name: string | Identifier | ThisTypeNode): Identifier | ThisTypeNode;
     function asName(name: string | Identifier | BindingName | PropertyName | QualifiedName | ThisTypeNode) {
-        return typeof name === "string" ? createIdentifier(name) : name;
+        return isString(name) ? createIdentifier(name) : name;
     }
 
     function asExpression(value: string | number | Expression) {
-        return typeof value === "string" || typeof value === "number" ? createLiteral(value) : value;
+        return isString(value) || typeof value === "number" ? createLiteral(value) : value;
     }
 
     function asNodeArray<T extends Node>(array: ReadonlyArray<T> | undefined): NodeArray<T> | undefined {
@@ -2877,12 +2951,12 @@ namespace ts {
     function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
-            const right = createIdentifier(unescapeLeadingUnderscores(jsxFactory.right.escapedText));
+            const right = createIdentifier(idText(jsxFactory.right));
             right.escapedText = jsxFactory.right.escapedText;
             return createPropertyAccess(left, right);
         }
         else {
-            return createReactNamespace(unescapeLeadingUnderscores(jsxFactory.escapedText), parent);
+            return createReactNamespace(idText(jsxFactory), parent);
         }
     }
 
@@ -3803,15 +3877,15 @@ namespace ts {
      * @param expression The Expression node.
      */
     export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
-        const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        switch (emittedExpression.kind) {
+        const leftmostExpr = getLeftmostExpression(expression, /*stopAtCallExpressions*/ true);
+        switch (leftmostExpr.kind) {
             case SyntaxKind.CallExpression:
                 return createParen(expression);
 
             case SyntaxKind.NewExpression:
-                return (<NewExpression>emittedExpression).arguments
-                    ? <LeftHandSideExpression>expression
-                    : createParen(expression);
+                return !(leftmostExpr as NewExpression).arguments
+                    ? createParen(expression)
+                    : <LeftHandSideExpression>expression;
         }
 
         return parenthesizeForAccess(expression);
@@ -3891,11 +3965,10 @@ namespace ts {
                 return recreateOuterExpressions(expression, mutableCall, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
-        else {
-            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
-            if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
-                return setTextRange(createParen(expression), expression);
-            }
+
+        const leftmostExpressionKind = getLeftmostExpression(emittedExpression, /*stopAtCallExpressions*/ false).kind;
+        if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+            return setTextRange(createParen(expression), expression);
         }
 
         return expression;
@@ -3939,7 +4012,7 @@ namespace ts {
         }
     }
 
-    function getLeftmostExpression(node: Expression): Expression {
+    function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
                 case SyntaxKind.PostfixUnaryExpression:
@@ -3955,6 +4028,10 @@ namespace ts {
                     continue;
 
                 case SyntaxKind.CallExpression:
+                    if (stopAtCallExpressions) {
+                        return node;
+                    }
+                    // falls through
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
                     node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
@@ -3967,10 +4044,11 @@ namespace ts {
 
             return node;
         }
+
     }
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        if (!isBlock(body) && getLeftmostExpression(body).kind === SyntaxKind.ObjectLiteralExpression) {
+        if (!isBlock(body) && getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression) {
             return setTextRange(createParen(<Expression>body), body);
         }
 
@@ -4108,7 +4186,8 @@ namespace ts {
             const moduleKind = getEmitModuleKind(compilerOptions);
             let create = hasExportStarsToExportValues
                 && moduleKind !== ModuleKind.System
-                && moduleKind !== ModuleKind.ES2015;
+                && moduleKind !== ModuleKind.ES2015
+                && moduleKind !== ModuleKind.ESNext;
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {

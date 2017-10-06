@@ -1,0 +1,17 @@
+=== tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts ===
+export class C {
+>C : C
+
+    public a =  { b: this.b };
+>a : { b: number; }
+>{ b: this.b } : { b: number; }
+>b : number
+>this.b : number
+>this : this
+>b : number
+
+    private b = 0;
+>b : number
+>0 : 0
+}
+

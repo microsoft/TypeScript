@@ -1,0 +1,19 @@
+=== tests/cases/compiler/server.ts ===
+var a = 10;
+>a : number
+>10 : 10
+
+export default a;
+>a : number
+
+=== tests/cases/compiler/client.ts ===
+export import defaultBinding from "server";
+>defaultBinding : number
+
+export var x = defaultBinding;
+>x : number
+>defaultBinding : number
+
+export import defaultBinding2 from "server"; // non referenced
+>defaultBinding2 : number
+

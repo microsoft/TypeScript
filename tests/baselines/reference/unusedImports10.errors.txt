@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedImports10.ts(9,12): error TS6133: 'a' is declared but never used.
+tests/cases/compiler/unusedImports10.ts(9,12): error TS6133: 'a' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedImports10.ts (1 errors) ====
@@ -12,5 +12,5 @@ tests/cases/compiler/unusedImports10.ts(9,12): error TS6133: 'a' is declared but
     module B {
         import a = A;
                ~
-!!! error TS6133: 'a' is declared but never used.
+!!! error TS6133: 'a' is declared but its value is never read.
     }

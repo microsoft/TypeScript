@@ -35,12 +35,16 @@ namespace ts {
 
         export function getApplicableRefactors(context: RefactorContext): ApplicableRefactorInfo[] {
             return flatMapIter(refactors.values(), refactor =>
-                context.cancellationToken && context.cancellationToken.isCancellationRequested() ? [] : refactor.getAvailableActions(context));
+                context.cancellationToken && context.cancellationToken.isCancellationRequested() ? undefined : refactor.getAvailableActions(context));
         }
 
         export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string): RefactorEditInfo | undefined {
             const refactor = refactors.get(refactorName);
             return refactor && refactor.getEditsForAction(context, actionName);
         }
+    }
+
+    export function getRefactorContextLength(context: RefactorContext): number {
+        return context.endPosition === undefined ? 0 : context.endPosition - context.startPosition;
     }
 }

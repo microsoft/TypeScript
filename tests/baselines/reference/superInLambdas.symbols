@@ -1,0 +1,140 @@
+=== tests/cases/compiler/superInLambdas.ts ===
+class User {
+>User : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+
+    name: string = "Bob";
+>name : Symbol(User.name, Decl(superInLambdas.ts, 0, 12))
+
+    sayHello(): void {
+>sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+
+        //console.log("Hello, " + this.name);
+    }
+}
+
+class RegisteredUser extends User {
+>RegisteredUser : Symbol(RegisteredUser, Decl(superInLambdas.ts, 5, 1))
+>User : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+
+    name: string = "Frank";
+>name : Symbol(RegisteredUser.name, Decl(superInLambdas.ts, 7, 35))
+
+    constructor() {
+        super();
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+
+        // super call in a constructor
+        super.sayHello();
+>super.sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+>sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+
+        // super call in a lambda in a constructor 
+        var x = () => super.sayHello();
+>x : Symbol(x, Decl(superInLambdas.ts, 16, 11))
+>super.sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+>sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+    }
+    sayHello(): void {
+>sayHello : Symbol(RegisteredUser.sayHello, Decl(superInLambdas.ts, 17, 5))
+
+        // super call in a method
+        super.sayHello();
+>super.sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+>sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+
+        // super call in a lambda in a method
+       var x = () => super.sayHello();
+>x : Symbol(x, Decl(superInLambdas.ts, 23, 10))
+>super.sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+>sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+    }
+}
+class RegisteredUser2 extends User {
+>RegisteredUser2 : Symbol(RegisteredUser2, Decl(superInLambdas.ts, 25, 1))
+>User : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+
+    name: string = "Joe";
+>name : Symbol(RegisteredUser2.name, Decl(superInLambdas.ts, 26, 36))
+
+    constructor() {
+        super();
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+
+        // super call in a nested lambda in a constructor 
+        var x = () => () => () => super.sayHello();
+>x : Symbol(x, Decl(superInLambdas.ts, 32, 11))
+>super.sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+>sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+    }
+    sayHello(): void {
+>sayHello : Symbol(RegisteredUser2.sayHello, Decl(superInLambdas.ts, 33, 5))
+
+        // super call in a nested lambda in a method
+        var x = () => () => () => super.sayHello();
+>x : Symbol(x, Decl(superInLambdas.ts, 36, 11))
+>super.sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+>sayHello : Symbol(User.sayHello, Decl(superInLambdas.ts, 1, 25))
+    }
+}
+
+class RegisteredUser3 extends User {
+>RegisteredUser3 : Symbol(RegisteredUser3, Decl(superInLambdas.ts, 38, 1))
+>User : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+
+    name: string = "Sam";
+>name : Symbol(RegisteredUser3.name, Decl(superInLambdas.ts, 40, 36))
+
+    constructor() {
+        super();
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+
+        // super property in a nested lambda in a constructor 
+        var superName = () => () => () => super.name;
+>superName : Symbol(superName, Decl(superInLambdas.ts, 46, 11))
+>super.name : Symbol(User.name, Decl(superInLambdas.ts, 0, 12))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+>name : Symbol(User.name, Decl(superInLambdas.ts, 0, 12))
+    }
+    sayHello(): void {
+>sayHello : Symbol(RegisteredUser3.sayHello, Decl(superInLambdas.ts, 47, 5))
+
+        // super property in a nested lambda in a method
+        var superName = () => () => () => super.name;
+>superName : Symbol(superName, Decl(superInLambdas.ts, 50, 11))
+>super.name : Symbol(User.name, Decl(superInLambdas.ts, 0, 12))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+>name : Symbol(User.name, Decl(superInLambdas.ts, 0, 12))
+    }
+}
+
+class RegisteredUser4 extends User {
+>RegisteredUser4 : Symbol(RegisteredUser4, Decl(superInLambdas.ts, 52, 1))
+>User : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+
+    name: string = "Mark";
+>name : Symbol(RegisteredUser4.name, Decl(superInLambdas.ts, 54, 36))
+
+    constructor() {
+        super();
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+
+        // super in a nested lambda in a constructor 
+        var x = () => () => super;
+>x : Symbol(x, Decl(superInLambdas.ts, 60, 11))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+    }
+    sayHello(): void {
+>sayHello : Symbol(RegisteredUser4.sayHello, Decl(superInLambdas.ts, 61, 5))
+
+        // super in a nested lambda in a method
+        var x = () => () => super;
+>x : Symbol(x, Decl(superInLambdas.ts, 64, 11))
+>super : Symbol(User, Decl(superInLambdas.ts, 0, 0))
+    }
+}

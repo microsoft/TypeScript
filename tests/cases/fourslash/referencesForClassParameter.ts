@@ -11,13 +11,13 @@
 ////    }
 ////
 ////    public f(p) {
-////        this.[|p|] = p;
+////        this.[|{| "isWriteAccess": true |}p|] = p;
 ////    }
 ////
 ////}
 ////
 ////var n = new foo(undefined);
-////n.[|p|] = null;
+////n.[|{| "isWriteAccess": true |}p|] = null;
 
 const ranges = test.ranges();
 const [r0, r1, r2] = ranges;

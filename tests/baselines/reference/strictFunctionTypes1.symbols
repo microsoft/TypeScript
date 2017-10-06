@@ -1,0 +1,96 @@
+=== tests/cases/compiler/strictFunctionTypes1.ts ===
+declare function f1<T>(f1: (x: T) => void, f2: (x: T) => void): (x: T) => void;
+>f1 : Symbol(f1, Decl(strictFunctionTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 0, 20))
+>f1 : Symbol(f1, Decl(strictFunctionTypes1.ts, 0, 23))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 0, 28))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 0, 20))
+>f2 : Symbol(f2, Decl(strictFunctionTypes1.ts, 0, 42))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 0, 48))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 0, 20))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 0, 65))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 0, 20))
+
+declare function f2<T>(obj: T, f1: (x: T) => void, f2: (x: T) => void): T;
+>f2 : Symbol(f2, Decl(strictFunctionTypes1.ts, 0, 79))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 1, 20))
+>obj : Symbol(obj, Decl(strictFunctionTypes1.ts, 1, 23))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 1, 20))
+>f1 : Symbol(f1, Decl(strictFunctionTypes1.ts, 1, 30))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 1, 36))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 1, 20))
+>f2 : Symbol(f2, Decl(strictFunctionTypes1.ts, 1, 50))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 1, 56))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 1, 20))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 1, 20))
+
+declare function f3<T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void): T;
+>f3 : Symbol(f3, Decl(strictFunctionTypes1.ts, 1, 74))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 2, 20))
+>obj : Symbol(obj, Decl(strictFunctionTypes1.ts, 2, 23))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 2, 20))
+>f1 : Symbol(f1, Decl(strictFunctionTypes1.ts, 2, 30))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 2, 36))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 2, 20))
+>f2 : Symbol(f2, Decl(strictFunctionTypes1.ts, 2, 50))
+>f : Symbol(f, Decl(strictFunctionTypes1.ts, 2, 56))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 2, 60))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 2, 20))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 2, 20))
+
+interface Func<T> { (x: T): void }
+>Func : Symbol(Func, Decl(strictFunctionTypes1.ts, 2, 87))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 4, 15))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 4, 21))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 4, 15))
+
+declare function f4<T>(f1: Func<T>, f2: Func<T>): Func<T>;
+>f4 : Symbol(f4, Decl(strictFunctionTypes1.ts, 4, 34))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 6, 20))
+>f1 : Symbol(f1, Decl(strictFunctionTypes1.ts, 6, 23))
+>Func : Symbol(Func, Decl(strictFunctionTypes1.ts, 2, 87))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 6, 20))
+>f2 : Symbol(f2, Decl(strictFunctionTypes1.ts, 6, 35))
+>Func : Symbol(Func, Decl(strictFunctionTypes1.ts, 2, 87))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 6, 20))
+>Func : Symbol(Func, Decl(strictFunctionTypes1.ts, 2, 87))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 6, 20))
+
+declare function fo(x: Object): void;
+>fo : Symbol(fo, Decl(strictFunctionTypes1.ts, 6, 58))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 8, 20))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+declare function fs(x: string): void;
+>fs : Symbol(fs, Decl(strictFunctionTypes1.ts, 8, 37))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 9, 20))
+
+declare function fx(f: (x: "def") => void): void;
+>fx : Symbol(fx, Decl(strictFunctionTypes1.ts, 9, 37))
+>f : Symbol(f, Decl(strictFunctionTypes1.ts, 10, 20))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 10, 24))
+
+const x1 = f1(fo, fs);  // (x: string) => void
+>x1 : Symbol(x1, Decl(strictFunctionTypes1.ts, 12, 5))
+>f1 : Symbol(f1, Decl(strictFunctionTypes1.ts, 0, 0))
+>fo : Symbol(fo, Decl(strictFunctionTypes1.ts, 6, 58))
+>fs : Symbol(fs, Decl(strictFunctionTypes1.ts, 8, 37))
+
+const x2 = f2("abc", fo, fs);  // "abc"
+>x2 : Symbol(x2, Decl(strictFunctionTypes1.ts, 13, 5))
+>f2 : Symbol(f2, Decl(strictFunctionTypes1.ts, 0, 79))
+>fo : Symbol(fo, Decl(strictFunctionTypes1.ts, 6, 58))
+>fs : Symbol(fs, Decl(strictFunctionTypes1.ts, 8, 37))
+
+const x3 = f3("abc", fo, fx);  // "abc" | "def"
+>x3 : Symbol(x3, Decl(strictFunctionTypes1.ts, 14, 5))
+>f3 : Symbol(f3, Decl(strictFunctionTypes1.ts, 1, 74))
+>fo : Symbol(fo, Decl(strictFunctionTypes1.ts, 6, 58))
+>fx : Symbol(fx, Decl(strictFunctionTypes1.ts, 9, 37))
+
+const x4 = f4(fo, fs);  // Func<string>
+>x4 : Symbol(x4, Decl(strictFunctionTypes1.ts, 15, 5))
+>f4 : Symbol(f4, Decl(strictFunctionTypes1.ts, 4, 34))
+>fo : Symbol(fo, Decl(strictFunctionTypes1.ts, 6, 58))
+>fs : Symbol(fs, Decl(strictFunctionTypes1.ts, 8, 37))
+

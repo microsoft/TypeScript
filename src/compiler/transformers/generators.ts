@@ -244,7 +244,6 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
-        let currentSourceFile: SourceFile;
         let renamedCatchVariables: Map<boolean>;
         let renamedCatchVariableDeclarations: Identifier[];
 
@@ -300,12 +299,9 @@ namespace ts {
                 return node;
             }
 
-            currentSourceFile = node;
 
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
-
-            currentSourceFile = undefined;
             return visited;
         }
 
@@ -1638,7 +1634,7 @@ namespace ts {
         }
 
         function transformAndEmitContinueStatement(node: ContinueStatement): void {
-            const label = findContinueTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
+            const label = findContinueTarget(node.label ? idText(node.label) : undefined);
             if (label > 0) {
                 emitBreak(label, /*location*/ node);
             }
@@ -1650,7 +1646,7 @@ namespace ts {
 
         function visitContinueStatement(node: ContinueStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findContinueTarget(node.label && unescapeLeadingUnderscores(node.label.escapedText));
+                const label = findContinueTarget(node.label && idText(node.label));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1660,7 +1656,7 @@ namespace ts {
         }
 
         function transformAndEmitBreakStatement(node: BreakStatement): void {
-            const label = findBreakTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
+            const label = findBreakTarget(node.label ? idText(node.label) : undefined);
             if (label > 0) {
                 emitBreak(label, /*location*/ node);
             }
@@ -1672,7 +1668,7 @@ namespace ts {
 
         function visitBreakStatement(node: BreakStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findBreakTarget(node.label && unescapeLeadingUnderscores(node.label.escapedText));
+                const label = findBreakTarget(node.label && idText(node.label));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1851,7 +1847,7 @@ namespace ts {
                 //      /*body*/
                 //  .endlabeled
                 //  .mark endLabel
-                beginLabeledBlock(unescapeLeadingUnderscores(node.label.escapedText));
+                beginLabeledBlock(idText(node.label));
                 transformAndEmitEmbeddedStatement(node.statement);
                 endLabeledBlock();
             }
@@ -1862,7 +1858,7 @@ namespace ts {
 
         function visitLabeledStatement(node: LabeledStatement) {
             if (inStatementContainingYield) {
-                beginScriptLabeledBlock(unescapeLeadingUnderscores(node.label.escapedText));
+                beginScriptLabeledBlock(idText(node.label));
             }
 
             node = visitEachChild(node, visitor, context);
@@ -1963,7 +1959,7 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier) {
-            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(unescapeLeadingUnderscores(node.escapedText))) {
+            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(idText(node))) {
                 const original = getOriginalNode(node);
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
@@ -2132,7 +2128,7 @@ namespace ts {
                 hoistVariableDeclaration(variable.name);
             }
             else {
-                const text = unescapeLeadingUnderscores((<Identifier>variable.name).escapedText);
+                const text = idText(<Identifier>variable.name);
                 name = declareLocal(text);
                 if (!renamedCatchVariables) {
                     renamedCatchVariables = createMap<boolean>();

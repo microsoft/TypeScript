@@ -11,4 +11,4 @@
 
 // Should rewrite to a = newFunc(); function() { return b = c = d; }
 goTo.select('1', '2');
-verify.not.refactorAvailable('Extract Method');
+verify.not.refactorAvailable('Extract Symbol');

@@ -1,0 +1,106 @@
+=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts ===
+module m {
+>m : Symbol(m, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 0, 0))
+
+    class private1 {
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 0, 10))
+    }
+
+    export class public1 {
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 2, 5))
+    }
+
+    // Directly using names from this module
+    function foo1(): private1 {
+>foo1 : Symbol(foo1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 5, 5))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 0, 10))
+
+        return;
+    }
+    function foo2() {
+>foo2 : Symbol(foo2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 10, 5))
+
+        return new private1();
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 0, 10))
+    }
+
+    export function foo3(): private1 {
+>foo3 : Symbol(foo3, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 13, 5))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 0, 10))
+
+        return;
+    }
+    export function foo4() {
+>foo4 : Symbol(foo4, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 17, 5))
+
+        return new private1();
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 0, 10))
+    }
+
+    function foo11(): public1 {
+>foo11 : Symbol(foo11, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 20, 5))
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 2, 5))
+
+        return;
+    }
+    function foo12() {
+>foo12 : Symbol(foo12, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 24, 5))
+
+        return new public1();
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 2, 5))
+    }
+
+    export function foo13(): public1 {
+>foo13 : Symbol(foo13, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 27, 5))
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 2, 5))
+
+        return;
+    }
+    export function foo14() {
+>foo14 : Symbol(foo14, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 31, 5))
+
+        return new public1();
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 2, 5))
+    }
+
+    module m2 {
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 34, 5))
+
+        export class public2 {
+>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+        }
+    }
+
+    function foo111(): m2.public2 {
+>foo111 : Symbol(foo111, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 39, 5))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 34, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+
+        return;
+    }
+    function foo112() {
+>foo112 : Symbol(foo112, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 43, 5))
+
+        return new m2.public2();
+>m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 34, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+    }
+
+    export function foo113(): m2.public2 {
+>foo113 : Symbol(foo113, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 46, 5))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 34, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+
+        return;
+    }
+    export function foo114() {
+>foo114 : Symbol(foo114, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 50, 5))
+
+        return new m2.public2();
+>m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 34, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+    }
+}
+

@@ -1,0 +1,11 @@
+=== tests/cases/compiler/invalidContinueInDownlevelAsync.ts ===
+async function func() {
+>func : Symbol(func, Decl(invalidContinueInDownlevelAsync.ts, 0, 0))
+
+    if (true) {
+        continue;
+    }
+    else {
+        await 1;
+    }
+}
