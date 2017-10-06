@@ -1106,7 +1106,7 @@ namespace ts {
         }
     }
 
-    export function getImmediatelyInvokedFunctionExpression(func: Node): CallExpression {
+    export function getImmediatelyInvokedFunctionExpression(func: Node): CallExpression | PipelineExpression | undefined {
         if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
             let prev = func;
             let parent = func.parent;
@@ -1116,6 +1116,9 @@ namespace ts {
             }
             if (parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === prev) {
                 return parent as CallExpression;
+            }
+            if (isPipelineExpression(parent) && parent.right === prev) {
+                return parent;
             }
         }
     }
@@ -2155,49 +2158,49 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
-                return 19;
+                return 20;
 
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
-                return 18;
+                return 19;
 
             case SyntaxKind.NewExpression:
-                return hasArguments ? 18 : 17;
+                return hasArguments ? 19 : 18;
 
             case SyntaxKind.CallExpression:
-                return 17;
+                return 18;
 
             case SyntaxKind.PostfixUnaryExpression:
-                return 16;
+                return 17;
 
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.AwaitExpression:
-                return 15;
+                return 16;
 
             case SyntaxKind.BinaryExpression:
                 switch (operatorKind) {
                     case SyntaxKind.ExclamationToken:
                     case SyntaxKind.TildeToken:
-                        return 15;
+                        return 16;
 
                     case SyntaxKind.AsteriskAsteriskToken:
                     case SyntaxKind.AsteriskToken:
                     case SyntaxKind.SlashToken:
                     case SyntaxKind.PercentToken:
-                        return 14;
+                        return 15;
 
                     case SyntaxKind.PlusToken:
                     case SyntaxKind.MinusToken:
-                        return 13;
+                        return 14;
 
                     case SyntaxKind.LessThanLessThanToken:
                     case SyntaxKind.GreaterThanGreaterThanToken:
                     case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                        return 12;
+                        return 13;
 
                     case SyntaxKind.LessThanToken:
                     case SyntaxKind.LessThanEqualsToken:
@@ -2205,27 +2208,30 @@ namespace ts {
                     case SyntaxKind.GreaterThanEqualsToken:
                     case SyntaxKind.InKeyword:
                     case SyntaxKind.InstanceOfKeyword:
-                        return 11;
+                        return 12;
 
                     case SyntaxKind.EqualsEqualsToken:
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
                     case SyntaxKind.ExclamationEqualsEqualsToken:
-                        return 10;
+                        return 11;
 
                     case SyntaxKind.AmpersandToken:
-                        return 9;
+                        return 10;
 
                     case SyntaxKind.CaretToken:
-                        return 8;
+                        return 9;
 
                     case SyntaxKind.BarToken:
-                        return 7;
+                        return 8;
 
                     case SyntaxKind.AmpersandAmpersandToken:
-                        return 6;
+                        return 7;
 
                     case SyntaxKind.BarBarToken:
+                        return 6;
+
+                    case SyntaxKind.BarGreaterThanToken:
                         return 5;
 
                     case SyntaxKind.EqualsToken:
@@ -4518,6 +4524,11 @@ namespace ts {
 
     export function isBinaryExpression(node: Node): node is BinaryExpression {
         return node.kind === SyntaxKind.BinaryExpression;
+    }
+
+    export function isPipelineExpression(node: Node): node is PipelineExpression {
+        return isBinaryExpression(node)
+            && node.operatorToken.kind === SyntaxKind.BarGreaterThanToken;
     }
 
     export function isConditionalExpression(node: Node): node is ConditionalExpression {

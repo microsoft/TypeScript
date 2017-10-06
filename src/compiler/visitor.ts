@@ -1549,6 +1549,14 @@ namespace ts {
                 assertOptionalNode)
             : noop;
 
+        export const assertToken = shouldAssert(AssertionLevel.Normal)
+            ? (node: Node, kind: SyntaxKind, message?: string): void => assert(
+                kind === undefined || node.kind === kind,
+                message || "Unexpected node.",
+                () => `Node ${formatSyntaxKind(node.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
+                assertOptionalToken)
+            : noop;
+
         export const assertOptionalToken = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, kind: SyntaxKind, message?: string): void => assert(
                 kind === undefined || node === undefined || node.kind === kind,

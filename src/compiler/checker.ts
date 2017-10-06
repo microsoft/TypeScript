@@ -6319,7 +6319,7 @@ namespace ts {
             if (iife) {
                 return !node.type &&
                     !node.dotDotDotToken &&
-                    indexOf((node.parent as SignatureDeclaration).parameters, node) >= iife.arguments.length;
+                    indexOf((node.parent as SignatureDeclaration).parameters, node) >= (isPipelineExpression(iife) ? 1 : iife.arguments.length);
             }
 
             return false;
@@ -6430,7 +6430,7 @@ namespace ts {
 
                     // Record a new minimum argument count if this is not an optional parameter
                     const isOptionalParameter = param.initializer || param.questionToken || param.dotDotDotToken ||
-                        iife && parameters.length > iife.arguments.length && !param.type ||
+                        iife && parameters.length > (isPipelineExpression(iife) ? 1 : iife.arguments.length) && !param.type ||
                         isJSDocOptionalParameter(param) ||
                         isUntypedSignatureInJSFile;
                     if (!isOptionalParameter) {
@@ -12371,7 +12371,8 @@ namespace ts {
             const parent = node.parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
-                parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node;
+                parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node ||
+                isPipelineExpression(parent) && parent.right === node;
         }
 
         function typeHasNullableConstraint(type: Type) {
@@ -13089,20 +13090,21 @@ namespace ts {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                 const iife = getImmediatelyInvokedFunctionExpression(func);
-                if (iife && iife.arguments) {
+                if (iife && (isPipelineExpression(iife) || iife.arguments)) {
+                    const args = getEffectiveCallArguments(iife);
                     const indexOfParameter = indexOf(func.parameters, parameter);
                     if (parameter.dotDotDotToken) {
                         const restTypes: Type[] = [];
-                        for (let i = indexOfParameter; i < iife.arguments.length; i++) {
-                            restTypes.push(getWidenedLiteralType(checkExpression(iife.arguments[i])));
+                        for (let i = indexOfParameter; i < args.length; i++) {
+                            restTypes.push(getWidenedLiteralType(checkExpression(args[i])));
                         }
                         return restTypes.length ? createArrayType(getUnionType(restTypes)) : undefined;
                     }
                     const links = getNodeLinks(iife);
                     const cached = links.resolvedSignature;
                     links.resolvedSignature = anySignature;
-                    const type = indexOfParameter < iife.arguments.length ?
-                        getWidenedLiteralType(checkExpression(iife.arguments[indexOfParameter])) :
+                    const type = indexOfParameter < args.length ?
+                        getWidenedLiteralType(checkExpression(args[indexOfParameter])) :
                         parameter.initializer ? undefined : undefinedWideningType;
                     links.resolvedSignature = cached;
                     return type;
@@ -13289,6 +13291,11 @@ namespace ts {
             else if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.CommaToken) {
                 if (node === binaryExpression.right) {
                     return getContextualType(binaryExpression);
+                }
+            }
+            else if (operator === SyntaxKind.BarGreaterThanToken) {
+                if (node === binaryExpression.left) {
+                    return getContextualTypeForArgument(<PipelineExpression>binaryExpression, node);
                 }
             }
 
@@ -15296,7 +15303,10 @@ namespace ts {
             }
 
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
-                checkExpression((<TaggedTemplateExpression>node).template);
+                checkExpression(node.template);
+            }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                checkExpression(node.left);
             }
             else if (node.kind !== SyntaxKind.Decorator) {
                 forEach((<CallExpression>node).arguments, argument => {
@@ -15414,6 +15424,10 @@ namespace ts {
             else if (node.kind === SyntaxKind.Decorator) {
                 typeArguments = undefined;
                 argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
+            }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                typeArguments = undefined;
+                argCount = getEffectiveArgumentCount(node, args, signature);
             }
             else {
                 const callExpression = <CallExpression | NewExpression>node;
@@ -15690,8 +15704,12 @@ namespace ts {
          * Returns the this argument in calls like x.f(...) and x[f](...). Undefined otherwise.
          */
         function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression {
-            if (node.kind === SyntaxKind.CallExpression) {
-                const callee = (<CallExpression>node).expression;
+            let callee = node.kind === SyntaxKind.CallExpression ? node.expression :
+                node.kind === SyntaxKind.Decorator ? node.expression :
+                node.kind === SyntaxKind.TaggedTemplateExpression ? node.tag :
+                node.kind === SyntaxKind.BinaryExpression ? node.right :
+                undefined;
+            if (callee) {
                 if (callee.kind === SyntaxKind.PropertyAccessExpression) {
                     return (callee as PropertyAccessExpression).expression;
                 }
@@ -15712,14 +15730,17 @@ namespace ts {
          */
         function getEffectiveCallArguments(node: CallLikeExpression): ReadonlyArray<Expression> {
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
-                const template = (<TaggedTemplateExpression>node).template;
+                const template = node.template;
                 const args: Expression[] = [undefined];
                 if (template.kind === SyntaxKind.TemplateExpression) {
-                    forEach((<TemplateExpression>template).templateSpans, span => {
+                    forEach(template.templateSpans, span => {
                         args.push(span.expression);
                     });
                 }
                 return args;
+            }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                return [node.left];
             }
             else if (node.kind === SyntaxKind.Decorator) {
                 // For a decorator, we return undefined as we will determine
@@ -16008,21 +16029,22 @@ namespace ts {
             }
         }
 
+        function getEffectiveTypeArguments(node: CallLikeExpression): NodeArray<TypeNode> {
+            if (node.kind === SyntaxKind.CallExpression || node.kind === SyntaxKind.NewExpression) {
+                const typeArguments = node.typeArguments;
+                // We already perform checking on the type arguments on the class declaration itself.
+                if (node.expression.kind !== SyntaxKind.SuperKeyword) {
+                    forEach(typeArguments, checkSourceElement);
+                }
+                return typeArguments;
+            }
+        }
+
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], fallbackError?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
-
-            let typeArguments: ReadonlyArray<TypeNode>;
-
-            if (!isTaggedTemplate && !isDecorator && !isJsxOpeningOrSelfClosingElement) {
-                typeArguments = (<CallExpression>node).typeArguments;
-
-                // We already perform checking on the type arguments on the class declaration itself.
-                if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
-                    forEach(typeArguments, checkSourceElement);
-                }
-            }
+            const typeArguments = getEffectiveTypeArguments(node);
 
             const candidates = candidatesOutArray || [];
             // reorderCandidates fills up the candidates array directly
@@ -16578,6 +16600,27 @@ namespace ts {
                 signature.parameters.length < getEffectiveArgumentCount(decorator, /*args*/ undefined, signature));
         }
 
+        function resolvePipelineExpression(node: PipelineExpression, candidatesOutArray: Signature[]): Signature {
+            const type = checkNonNullExpression(node.right);
+            const apparentType = getApparentType(type);
+            if (apparentType === unknownType) {
+                return resolveErrorCall(node);
+            }
+
+            const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            if (isUntypedFunctionCall(type, apparentType, callSignatures.length, constructSignatures.length)) {
+                return resolveUntypedCall(node);
+            }
+
+            if (!callSignatures.length) {
+                error(node, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
+                return resolveErrorCall(node);
+            }
+
+            return resolveCall(node, callSignatures, candidatesOutArray);
+        }
+
         /**
          * This function is similar to getResolvedSignature but is exclusively for trying to resolve JSX stateless-function component.
          * The main reason we have to use this function instead of getResolvedSignature because, the caller of this function will already check the type of openingLikeElement's tagName
@@ -16625,17 +16668,19 @@ namespace ts {
         function resolveSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
-                    return resolveCallExpression(<CallExpression>node, candidatesOutArray);
+                    return resolveCallExpression(node, candidatesOutArray);
                 case SyntaxKind.NewExpression:
-                    return resolveNewExpression(<NewExpression>node, candidatesOutArray);
+                    return resolveNewExpression(node, candidatesOutArray);
                 case SyntaxKind.TaggedTemplateExpression:
-                    return resolveTaggedTemplateExpression(<TaggedTemplateExpression>node, candidatesOutArray);
+                    return resolveTaggedTemplateExpression(node, candidatesOutArray);
                 case SyntaxKind.Decorator:
-                    return resolveDecorator(<Decorator>node, candidatesOutArray);
+                    return resolveDecorator(node, candidatesOutArray);
+                case SyntaxKind.BinaryExpression:
+                    return resolvePipelineExpression(node, candidatesOutArray);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     // This code-path is called by language service
-                    return resolveStatelessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray) || unknownSignature;
+                    return resolveStatelessJsxOpeningLikeElement(node, checkExpression(node.tagName), candidatesOutArray) || unknownSignature;
             }
             Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
         }
@@ -17828,6 +17873,9 @@ namespace ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
+            if (node.operatorToken.kind === SyntaxKind.BarGreaterThanToken) {
+                return checkPipelineExpression(<PipelineExpression>node);
+            }
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
         }
 
@@ -18027,6 +18075,12 @@ namespace ts {
             function reportOperatorError() {
                 error(errorNode || operatorToken, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(operatorToken.kind), typeToString(leftType), typeToString(rightType));
             }
+        }
+
+        function checkPipelineExpression(node: PipelineExpression) {
+            checkGrammarPipelineExpression(node);
+            const signature = getResolvedSignature(node);
+            return getReturnTypeOfSignature(signature);
         }
 
         function isYieldExpressionInClass(node: YieldExpression): boolean {
@@ -25279,6 +25333,12 @@ namespace ts {
                 if (node.name.escapedText !== "target") {
                     return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, node.name.escapedText, tokenToString(node.keywordToken), "target");
                 }
+            }
+        }
+
+        function checkGrammarPipelineExpression(node: PipelineExpression) {
+            if (!compilerOptions.experimentalPipeline) {
+                return grammarErrorOnNode(node.operatorToken, Diagnostics.Pipeline_expressions_are_part_of_a_stage_1_ECMAScript_proposal_and_are_subject_to_change_in_future_releases_Set_the_experimentalPipeline_option_to_remove_this_warning);
             }
         }
 
