@@ -9062,6 +9062,13 @@ namespace ts {
                         (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                         return false;
                     }
+                    if (target.flags & TypeFlags.Union) {
+                        const discriminantType = findMatchingDiscriminantType(source, target as UnionType);
+                        if (discriminantType)  {
+                            // check excess properties against discriminant type only, not the entire union
+                            return hasExcessProperties(source, discriminantType, reportErrors);
+                        }
+                    }
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (!isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
                             if (reportErrors) {
@@ -9138,20 +9145,24 @@ namespace ts {
             }
 
             function findMatchingDiscriminantType(source: Type, target: UnionOrIntersectionType) {
+                let match: Type;
                 const sourceProperties = getPropertiesOfObjectType(source);
                 if (sourceProperties) {
-                    for (const sourceProperty of sourceProperties) {
-                        if (isDiscriminantProperty(target, sourceProperty.escapedName)) {
-                            const sourceType = getTypeOfSymbol(sourceProperty);
-                            for (const type of target.types) {
-                                const targetType = getTypeOfPropertyOfType(type, sourceProperty.escapedName);
-                                if (targetType && isRelatedTo(sourceType, targetType)) {
-                                    return type;
+                    const sourceProperty = findSingleDiscriminantProperty(sourceProperties, target);
+                    if (sourceProperty) {
+                        const sourceType = getTypeOfSymbol(sourceProperty);
+                        for (const type of target.types) {
+                            const targetType = getTypeOfPropertyOfType(type, sourceProperty.escapedName);
+                            if (targetType && isRelatedTo(sourceType, targetType)) {
+                                if (match) {
+                                    return undefined;
                                 }
+                                match = type;
                             }
                         }
                     }
                 }
+                return match;
             }
 
             function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
@@ -11152,6 +11163,19 @@ namespace ts {
                 }
             }
             return false;
+        }
+
+        function findSingleDiscriminantProperty(sourceProperties: Symbol[], target: Type): Symbol | undefined {
+            let result: Symbol;
+            for (const sourceProperty of sourceProperties) {
+                if (isDiscriminantProperty(target, sourceProperty.escapedName)) {
+                    if (result) {
+                        return undefined;
+                    }
+                    result = sourceProperty;
+                }
+            }
+            return result;
         }
 
         function isOrContainsMatchingReference(source: Node, target: Node) {
