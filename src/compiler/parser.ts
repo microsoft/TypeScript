@@ -3549,6 +3549,7 @@ namespace ts {
 
         function getBinaryOperatorPrecedence(): number {
             switch (token()) {
+                case SyntaxKind.QuestionQuestionToken:
                 case SyntaxKind.BarBarToken:
                     return 1;
                 case SyntaxKind.AmpersandAmpersandToken:
@@ -4310,6 +4311,7 @@ namespace ts {
                 case SyntaxKind.ColonToken:                     // foo<x>:
                 case SyntaxKind.SemicolonToken:                 // foo<x>;
                 case SyntaxKind.QuestionToken:                  // foo<x>?
+                case SyntaxKind.QuestionQuestionToken:          // foo<x> ??
                 case SyntaxKind.EqualsEqualsToken:              // foo<x> ==
                 case SyntaxKind.EqualsEqualsEqualsToken:        // foo<x> ===
                 case SyntaxKind.ExclamationEqualsToken:         // foo<x> !=

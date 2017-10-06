@@ -2225,6 +2225,7 @@ namespace ts {
                     case SyntaxKind.AmpersandAmpersandToken:
                         return 6;
 
+                    case SyntaxKind.QuestionQuestionToken:
                     case SyntaxKind.BarBarToken:
                         return 5;
 

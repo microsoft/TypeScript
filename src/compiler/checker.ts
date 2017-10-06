@@ -8385,7 +8385,8 @@ namespace ts {
                     return isContextSensitive((<ConditionalExpression>node).whenTrue) ||
                         isContextSensitive((<ConditionalExpression>node).whenFalse);
                 case SyntaxKind.BinaryExpression:
-                    return (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken &&
+                    return ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken ||
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken) &&
                         (isContextSensitive((<BinaryExpression>node).left) || isContextSensitive((<BinaryExpression>node).right));
                 case SyntaxKind.PropertyAssignment:
                     return isContextSensitive((<PropertyAssignment>node).initializer);
@@ -13301,7 +13302,7 @@ namespace ts {
                     return getTypeOfExpression(binaryExpression.left);
                 }
             }
-            else if (operator === SyntaxKind.BarBarToken) {
+            else if (operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                 // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
                 // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
                 let type = getContextualType(binaryExpression);
@@ -17988,6 +17989,10 @@ namespace ts {
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
                         getBestChoiceType(removeDefinitelyFalsyTypes(leftType), rightType) :
+                        leftType;
+                case SyntaxKind.QuestionQuestionToken:
+                    return getTypeFacts(leftType) & TypeFacts.EQUndefinedOrNull ?
+                        getBestChoiceType(getNonNullableType(leftType), rightType) :
                         leftType;
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);

@@ -225,6 +225,34 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
+        function createNotUndefinedCondition(node: Expression) {
+            return isIdentifier(node) && !isGeneratedIdentifier(node)
+                ? createStrictInequality(createTypeOf(node), createLiteral("undefined"))
+                : createStrictInequality(node, createVoidZero());
+        }
+
+        function createNotNullCondition(node: Expression) {
+            return createStrictInequality(node, createNull());
+        }
+
+        function transformCoalesceExpression(node: BinaryExpression) {
+            const expressions: Expression[] = [];
+            let left = visitNode(node.left, visitor, isExpression);
+            if (!isIdentifier(left)) {
+                const temp = createTempVariable(hoistVariableDeclaration);
+                expressions.push(createAssignment(temp, left));
+                left = temp;
+            }
+            expressions.push(
+                createConditional(
+                    createLogicalAnd(
+                        createNotUndefinedCondition(left),
+                        createNotNullCondition(left)),
+                    left,
+                    visitNode(node.right, visitor, isExpression)));
+            return inlineExpressions(expressions);
+        }
+
         /**
          * Visits a BinaryExpression that contains a destructuring assignment.
          *
@@ -239,6 +267,9 @@ namespace ts {
                     FlattenLevel.ObjectRest,
                     !noDestructuringValue
                 );
+            }
+            else if (node.operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
+                return transformCoalesceExpression(node);
             }
             else if (node.operatorToken.kind === SyntaxKind.CommaToken) {
                 return updateBinary(
