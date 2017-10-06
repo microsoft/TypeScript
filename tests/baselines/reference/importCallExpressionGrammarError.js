@@ -16,4 +16,4 @@ Promise.resolve().then(function () { return require(...["PathModule"]); });
 var p1 = Promise.resolve().then(function () { return require(...a); });
 const p2 = Promise.resolve().then(function () { return require(); });
 const p3 = Promise.resolve().then(function () { return require(); });
-const p4 = Promise.resolve().then(function () { return require("pathToModule", "secondModule"); });
+const p4 = Promise.resolve().then(function () { return require("pathToModule"); });

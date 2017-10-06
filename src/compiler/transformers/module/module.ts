@@ -576,7 +576,7 @@ namespace ts {
                         createCall(
                             createIdentifier("require"),
                             /*typeArguments*/ undefined,
-                            [createArrayLiteral([firstOrUndefined(node.arguments) || createOmittedExpression()]), resolve, reject]
+                            [createArrayLiteral([visitNode(firstOrUndefined(node.arguments) || createOmittedExpression(), importCallExpressionVisitor)]), resolve, reject]
                         ))])
             )]);
         }
@@ -599,7 +599,11 @@ namespace ts {
                     /*typeParameters*/ undefined,
                     /*parameters*/ undefined,
                     /*type*/ undefined,
-                    createBlock([createReturn(createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments))])
+                    createBlock([createReturn(createCall(
+                        createIdentifier("require"),
+                        /*typeArguments*/ undefined,
+                        node.arguments && node.arguments.length ? [visitNode(node.arguments[0], importCallExpressionVisitor)] : []
+                    ))])
                 )]);
         }
 
