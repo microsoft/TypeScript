@@ -2689,18 +2689,18 @@ namespace ts {
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
         /* @internal */ getBaseConstraintOfType(type: Type): Type | undefined;
 
-        getAnyType(): Type;
-        getStringType(): Type;
-        getNumberType(): Type;
-        getBooleanType(): Type;
-        getVoidType(): Type;
-        getUndefinedType(): Type;
-        getNullType(): Type;
-        getESSymbolType(): Type;
-        getNeverType(): Type;
-        getUnionType(types: Type[], subtypeReduction?: boolean): Type;
-        createArrayType(elementType: Type): Type;
-        createPromiseType(type: Type): Type;
+        /* @internal */ getAnyType(): Type;
+        /* @internal */ getStringType(): Type;
+        /* @internal */ getNumberType(): Type;
+        /* @internal */ getBooleanType(): Type;
+        /* @internal */ getVoidType(): Type;
+        /* @internal */ getUndefinedType(): Type;
+        /* @internal */ getNullType(): Type;
+        /* @internal */ getESSymbolType(): Type;
+        /* @internal */ getNeverType(): Type;
+        /* @internal */ getUnionType(types: Type[], subtypeReduction?: boolean): Type;
+        /* @internal */ createArrayType(elementType: Type): Type;
+        /* @internal */ createPromiseType(type: Type): Type;
 
         /* @internal */ createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): Type;
         /* @internal */ createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[], resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
