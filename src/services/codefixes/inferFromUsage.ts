@@ -25,6 +25,7 @@ namespace ts.codefix {
 
     function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken }: CodeFixContext): CodeAction[] | undefined {
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+        let writer: StringSymbolWriter;
 
         switch (token.kind) {
             case SyntaxKind.Identifier:
@@ -147,7 +148,7 @@ namespace ts.codefix {
 
         function createCodeActions(name: string, start: number, typeString: string) {
             return [{
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_type_of_0), [name]),
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_type_of_0_from_usage), [name]),
                 changes: [{
                     fileName: sourceFile.fileName,
                     textChanges: [{
@@ -194,25 +195,43 @@ namespace ts.codefix {
             }
         }
 
+        function getTypeAccessiblityWriter() {
+            if (!writer) {
+                let str = "";
+                let typeIsAccessible = true;
+
+                const writeText: (text: string) => void = text => str += text;
+                writer = {
+                    string: () => typeIsAccessible ? str : undefined,
+                    writeKeyword: writeText,
+                    writeOperator: writeText,
+                    writePunctuation: writeText,
+                    writeSpace: writeText,
+                    writeStringLiteral: writeText,
+                    writeParameter: writeText,
+                    writeProperty: writeText,
+                    writeSymbol: writeText,
+                    writeLine: () => str += " ",
+                    increaseIndent: noop,
+                    decreaseIndent: noop,
+                    clear: () => { str = ""; typeIsAccessible = true; },
+                    trackSymbol: (symbol, declaration, meaning) => {
+                        if (checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                            typeIsAccessible = false;
+                        }
+                    },
+                    reportInaccessibleThisError: () => { typeIsAccessible = false; },
+                    reportPrivateInBaseOfClassExpression: () => { typeIsAccessible = false; },
+                };
+            }
+            writer.clear();
+            return writer;
+        }
+
         function typeToString(type: Type, enclosingDeclaration: Declaration) {
-            let typeIsAccessible = true;
-
-            const result = usingSingleLineStringWriter(writer => {
-                writer.trackSymbol = (symbol, declaration, meaning) => {
-                    if (checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
-                        typeIsAccessible = false;
-                    }
-                };
-
-                writer.reportPrivateInBaseOfClassExpression = writer.reportInaccessibleThisError = () => {
-                    typeIsAccessible = false;
-                };
-
-                checker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration);
-                writer.trackSymbol = writer.reportPrivateInBaseOfClassExpression = writer.reportInaccessibleThisError = noop;
-            });
-
-            return typeIsAccessible ? result : undefined;
+            const writer = getTypeAccessiblityWriter()
+            checker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration);
+            return writer.string();
         }
 
         function getParameterIndexInList(parameter: ParameterDeclaration, list: NodeArray<ParameterDeclaration>) {
