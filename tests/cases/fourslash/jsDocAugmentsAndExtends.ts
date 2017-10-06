@@ -10,6 +10,7 @@
 ////  */
 //// class MyStringThing extends Thing {
 ////     constructor() {
+////         super();
 ////         var x = this.mine;
 ////         x/**/;
 ////     }
@@ -27,24 +28,10 @@ verify.quickInfoIs("(local var) x: number");
 verify.getSemanticDiagnostics(
 `[
   {
-    "message": "The total number of \`@augments\` and \`@extends\` tags allowed for a single class declaration is at most 1.",
+    "message": "Class declarations cannot have more than one \`@augments\` or \`@extends\` tag.",
     "start": 36,
     "length": 24,
     "category": "error",
     "code": 8025
-  },
-  {
-    "message": "Constructors for derived classes must contain a \'super\' call.",
-    "start": 105,
-    "length": 59,
-    "category": "error",
-    "code": 2377
-  },
-  {
-    "message": "\'super\' must be called before accessing \'this\' in the constructor of a derived class.",
-    "start": 137,
-    "length": 4,
-    "category": "error",
-    "code": 17009
   }
 ]`);

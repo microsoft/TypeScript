@@ -20018,7 +20018,7 @@ namespace ts {
             const augmentsTags = getAllJSDocTagsOfKind(classLike, SyntaxKind.JSDocAugmentsTag);
             Debug.assert(augmentsTags.length > 0);
             if (augmentsTags.length > 1) {
-                error(augmentsTags[1], Diagnostics.The_total_number_of_augments_and_extends_tags_allowed_for_a_single_class_declaration_is_at_most_1);
+                error(augmentsTags[1], Diagnostics.Class_declarations_cannot_have_more_than_one_augments_or_extends_tag);
             }
 
             const name = getIdentifierFromEntityNameExpression(node.class.expression);

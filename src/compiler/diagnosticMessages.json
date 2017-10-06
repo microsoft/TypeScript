@@ -3527,7 +3527,7 @@
         "category": "Error",
         "code": 8024
     },
-    "The total number of `@augments` and `@extends` tags allowed for a single class declaration is at most 1.": {
+    "Class declarations cannot have more than one `@augments` or `@extends` tag.": {
         "category": "Error",
         "code": 8025
     },
