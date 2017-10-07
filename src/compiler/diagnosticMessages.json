@@ -3749,5 +3749,9 @@
     "Infer type of '{0}' from usage.": {
         "category": "Message",
         "code": 95009
+    },
+    "Infer parameter types from usage.": {
+        "category": "Message",
+        "code": 95010
     }
 }

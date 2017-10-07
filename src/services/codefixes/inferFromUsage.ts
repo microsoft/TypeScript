@@ -58,7 +58,7 @@ namespace ts.codefix {
                 }
             // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
-                return getCodeActionForParameter(<ParameterDeclaration>token.parent);
+                return getCodeActionForParameters(<ParameterDeclaration>token.parent);
 
             // Get Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
@@ -96,23 +96,50 @@ namespace ts.codefix {
             return symbol && symbol.valueDeclaration && getCodeActionForVariableDeclaration(<VariableDeclaration>symbol.valueDeclaration);
         }
 
-        function getCodeActionForParameter(parameterDeclaration: ParameterDeclaration) {
-            if (!isIdentifier(parameterDeclaration.name)) {
+        function isApplicableFunctionForInference(declaration: FunctionLike): declaration is MethodDeclaration | FunctionDeclaration | ConstructorDeclaration {
+            switch (declaration.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                    return true;
+                case SyntaxKind.FunctionExpression:
+                    return !!(declaration as FunctionExpression).name;
+            }
+            return false;
+        }
+
+        function getCodeActionForParameters(parameterDeclaration: ParameterDeclaration): CodeAction[] {
+            if (!isIdentifier(parameterDeclaration.name) || !isApplicableFunctionForInference(containingFunction)) {
                 return undefined;
             }
 
-            const isRestParameter = !!parameterDeclaration.dotDotDotToken;
-            const parameterIndex = getParameterIndexInList(parameterDeclaration, containingFunction.parameters);
+            const types = inferTypeForParametersFromUsage(containingFunction) ||
+                map(containingFunction.parameters, p => isIdentifier(p.name) && inferTypeForVariableFromUsage(p.name));
 
-            const type = inferTypeForParameterFromUsage(containingFunction, parameterIndex, isRestParameter) ||
-                inferTypeForVariableFromUsage(parameterDeclaration.name);
-
-            const typeString = type && typeToString(type, containingFunction);
-            if (!typeString) {
-                return undefined;
+            if (types) {
+                const textChanges = reduceLeft(containingFunction.parameters, (memo, parameter, index) => {
+                    if (types[index] && !parameter.type && !parameter.initializer) {
+                        const typeString = types[index] && typeToString(types[index], containingFunction);
+                        if (typeString) {
+                            (memo || (memo = [])).push({
+                                span: { start: parameter.end, length: 0 },
+                                newText: `: ${typeString}`
+                            });
+                        }
+                    }
+                    return memo;
+                }, <TextChange[]>undefined);
+                if (textChanges) {
+                    return [{
+                        description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_parameter_types_from_usage), [parameterDeclaration.name.getText()]),
+                        changes: [{
+                            fileName: sourceFile.fileName,
+                            textChanges
+                        }]
+                    }];
+                }
             }
-
-            return createCodeActions(parameterDeclaration.name.getText(), parameterDeclaration.getEnd(), `: ${typeString}`);
+            return undefined;
         }
 
         function getCodeActionForSetAccessor(setAccessorDeclaration: SetAccessorDeclaration) {
@@ -177,20 +204,18 @@ namespace ts.codefix {
             return InferFromReference.inferTypeFromReferences(getReferences(token), checker, cancellationToken);
         }
 
-        function inferTypeForParameterFromUsage(containingFunction: FunctionLike, parameterIndex: number, isRestParameter: boolean) {
-            // TODO: Handle other function-like syntax.
+        function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration) {
             switch (containingFunction.kind) {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
                     const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
                     const searchToken = isConstructor ?
                         <Token<SyntaxKind.ConstructorKeyword>>getFirstChildOfKind(containingFunction, sourceFile, SyntaxKind.ConstructorKeyword) :
                         containingFunction.name;
                     if (searchToken) {
-                        return InferFromReference.inferTypeForParameterFromReferences(getReferences(searchToken), parameterIndex, isConstructor, isRestParameter, checker, cancellationToken);
+                        return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken), containingFunction, checker, cancellationToken);
                     }
             }
         }
@@ -229,16 +254,9 @@ namespace ts.codefix {
         }
 
         function typeToString(type: Type, enclosingDeclaration: Declaration) {
-            const writer = getTypeAccessiblityWriter()
+            const writer = getTypeAccessiblityWriter();
             checker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration);
             return writer.string();
-        }
-
-        function getParameterIndexInList(parameter: ParameterDeclaration, list: NodeArray<ParameterDeclaration>) {
-            for (let i = 0; i < list.length; i++) {
-                if (parameter === list[i]) return i;
-            }
-            return -1;
         }
 
         function getFirstChildOfKind(node: Node, sourcefile: SourceFile, kind: SyntaxKind) {
@@ -275,14 +293,41 @@ namespace ts.codefix {
             return getTypeFromUsageContext(usageContext, checker);
         }
 
-        export function inferTypeForParameterFromReferences(references: Identifier[], parameterIndex: number, isConstructor: boolean, isRestParameter: boolean, checker: TypeChecker, cancellationToken: CancellationToken): Type | undefined {
-            const usageContext: UsageContext = {};
-            for (const reference of references) {
-                cancellationToken.throwIfCancellationRequested();
-                inferTypeFromContext(reference, checker, usageContext);
+        export function inferTypeForParametersFromReferences(references: Identifier[], declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
+            if (declaration.parameters) {
+                const usageContext: UsageContext = {};
+                for (const reference of references) {
+                    cancellationToken.throwIfCancellationRequested();
+                    inferTypeFromContext(reference, checker, usageContext);
+                }
+                const isConstructor = declaration.kind === SyntaxKind.Constructor;
+                const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
+                if (callContexts) {
+                    const paramTypes: Type[] = [];
+                    for (let parameterIndex = 0; parameterIndex < declaration.parameters.length; parameterIndex++) {
+                        let types: Type[] = [];
+                        const isRestParameter = ts.isRestParameter(declaration.parameters[parameterIndex]);
+                        for (const callContext of callContexts) {
+                            if (callContext.argumentTypes.length > parameterIndex) {
+                                if (isRestParameter) {
+                                    types = concatenate(types, map(callContext.argumentTypes.slice(parameterIndex), a => checker.getBaseTypeOfLiteralType(a)));
+                                }
+                                else {
+                                    types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
+                                }
+                            }
+                        }
+                        if (types.length) {
+                            const type = checker.getWidenedType(checker.getUnionType(types, /*subtypeReduction*/ true));
+                            paramTypes[parameterIndex] = isRestParameter ? checker.createArrayType(type) : type;
+                        }
+                    }
+                    return paramTypes;
+                }
             }
-            return getParameterTypeFromCallContexts(parameterIndex, isConstructor ? usageContext.constructContexts : usageContext.callContexts, isRestParameter, checker);
+            return undefined;
         }
+
 
         function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type | undefined {
             if (usageContext.isNumberOrString && !usageContext.isNumber && !usageContext.isString) {
