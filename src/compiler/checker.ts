@@ -25338,7 +25338,7 @@ namespace ts {
 
         function checkGrammarPipelineExpression(node: PipelineExpression) {
             if (!compilerOptions.experimentalPipeline) {
-                return grammarErrorOnNode(node.operatorToken, Diagnostics.Pipeline_expressions_are_part_of_a_stage_1_ECMAScript_proposal_and_are_subject_to_change_in_future_releases_Set_the_experimentalPipeline_option_to_remove_this_warning);
+                return grammarErrorOnNode(node.operatorToken, Diagnostics.Pipeline_expressions_are_part_of_a_stage_1_ECMAScript_proposal_and_are_subject_to_change_in_future_releases_Set_the_experimentalPipelineStage1_option_to_remove_this_warning);
             }
         }
 

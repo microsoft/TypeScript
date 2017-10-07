@@ -831,7 +831,7 @@
         "category": "Error",
         "code": 1254
     },
-    "Pipeline expressions are part of a stage 1 ECMAScript proposal and are subject to change in future releases. Set the 'experimentalPipeline' option to remove this warning.": {
+    "Pipeline expressions are part of a stage 1 ECMAScript proposal and are subject to change in future releases. Set the 'experimentalPipelineStage1' option to remove this warning.": {
         "category": "Error",
         "code": 1255
     },

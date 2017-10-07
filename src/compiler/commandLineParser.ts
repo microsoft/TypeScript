@@ -441,7 +441,7 @@ namespace ts {
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
         {
-            name: "experimentalPipeline",
+            name: "experimentalPipelineStage1",
             type: "boolean",
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_the_stage_1_ECMAScript_pipeline_operator
