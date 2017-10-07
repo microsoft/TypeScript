@@ -51,7 +51,7 @@ namespace ts.codefix {
             case Diagnostics.Variable_0_implicitly_has_an_1_type.code:
                 return getCodeActionForVariableUsage(<Identifier>token);
 
-            // Paramtert declarations
+            // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
                 if (isSetAccessor(containingFunction)) {
                     return getCodeActionForSetAccessor(containingFunction);
@@ -263,6 +263,7 @@ namespace ts.codefix {
             for (const child of node.getChildren(sourcefile)) {
                 if (child.kind === kind) return child;
             }
+            return undefined;
         }
     }
 
