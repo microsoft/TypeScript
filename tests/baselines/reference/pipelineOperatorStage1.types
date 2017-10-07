@@ -1,0 +1,63 @@
+=== tests/cases/conformance/expressions/pipelineOperatorStage1/pipelineOperatorStage1.ts ===
+declare const ar: Iterable<number>;
+>ar : Iterable<number>
+>Iterable : Iterable<T>
+
+declare function map<T, U>(ar: Iterable<T>, fn: (v: T) => U): Iterable<U>;
+>map : <T, U>(ar: Iterable<T>, fn: (v: T) => U) => Iterable<U>
+>T : T
+>U : U
+>ar : Iterable<T>
+>Iterable : Iterable<T>
+>T : T
+>fn : (v: T) => U
+>v : T
+>T : T
+>U : U
+>Iterable : Iterable<T>
+>U : U
+
+declare function filter<T>(ar: Iterable<T>, fn: (v: T) => boolean): Iterable<T>;
+>filter : <T>(ar: Iterable<T>, fn: (v: T) => boolean) => Iterable<T>
+>T : T
+>ar : Iterable<T>
+>Iterable : Iterable<T>
+>T : T
+>fn : (v: T) => boolean
+>v : T
+>T : T
+>Iterable : Iterable<T>
+>T : T
+
+const x = ar
+>x : Iterable<number>
+>ar    |> (_ => map(_, x => x + 1))    |> (_ => filter(_, x => x > 2)) : Iterable<number>
+>ar    |> (_ => map(_, x => x + 1)) : Iterable<number>
+>ar : Iterable<number>
+
+    |> (_ => map(_, x => x + 1))
+>(_ => map(_, x => x + 1)) : (_: Iterable<number>) => Iterable<number>
+>_ => map(_, x => x + 1) : (_: Iterable<number>) => Iterable<number>
+>_ : Iterable<number>
+>map(_, x => x + 1) : Iterable<number>
+>map : <T, U>(ar: Iterable<T>, fn: (v: T) => U) => Iterable<U>
+>_ : Iterable<number>
+>x => x + 1 : (x: number) => number
+>x : number
+>x + 1 : number
+>x : number
+>1 : 1
+
+    |> (_ => filter(_, x => x > 2));
+>(_ => filter(_, x => x > 2)) : (_: Iterable<number>) => Iterable<number>
+>_ => filter(_, x => x > 2) : (_: Iterable<number>) => Iterable<number>
+>_ : Iterable<number>
+>filter(_, x => x > 2) : Iterable<number>
+>filter : <T>(ar: Iterable<T>, fn: (v: T) => boolean) => Iterable<T>
+>_ : Iterable<number>
+>x => x > 2 : (x: number) => boolean
+>x : number
+>x > 2 : boolean
+>x : number
+>2 : 2
+

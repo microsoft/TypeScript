@@ -1,0 +1,48 @@
+=== tests/cases/conformance/emitter/es2015/pipelineOperatorStage1/emitter.pipelineOperatorStage1.es2015.ts ===
+declare const ar: Iterable<number>;
+>ar : Iterable<number>
+>Iterable : Iterable<T>
+
+declare function map<T, U>(ar: Iterable<T>, fn: (v: T) => U): Iterable<U>;
+>map : <T, U>(ar: Iterable<T>, fn: (v: T) => U) => Iterable<U>
+>T : T
+>U : U
+>ar : Iterable<T>
+>Iterable : Iterable<T>
+>T : T
+>fn : (v: T) => U
+>v : T
+>T : T
+>U : U
+>Iterable : Iterable<T>
+>U : U
+
+declare function identity<T>(value: T): T;
+>identity : <T>(value: T) => T
+>T : T
+>value : T
+>T : T
+>T : T
+
+const x = ar |> (_ => map(_, x => x + 1));
+>x : Iterable<number>
+>ar |> (_ => map(_, x => x + 1)) : Iterable<number>
+>ar : Iterable<number>
+>(_ => map(_, x => x + 1)) : (_: Iterable<number>) => Iterable<number>
+>_ => map(_, x => x + 1) : (_: Iterable<number>) => Iterable<number>
+>_ : Iterable<number>
+>map(_, x => x + 1) : Iterable<number>
+>map : <T, U>(ar: Iterable<T>, fn: (v: T) => U) => Iterable<U>
+>_ : Iterable<number>
+>x => x + 1 : (x: number) => number
+>x : number
+>x + 1 : number
+>x : number
+>1 : 1
+
+const y = ar |> identity;
+>y : Iterable<number>
+>ar |> identity : Iterable<number>
+>ar : Iterable<number>
+>identity : <T>(value: T) => T
+
