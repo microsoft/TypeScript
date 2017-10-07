@@ -3515,11 +3515,11 @@
         "category": "Error",
         "code": 8021
     },
-    "JSDoc '@augments' is not attached to a class declaration.": {
+    "JSDoc '@{0}' is not attached to a class.": {
         "category": "Error",
         "code": 8022
     },
-    "JSDoc '@augments {0}' does not match the 'extends {1}' clause.": {
+    "JSDoc '@{0} {1}' does not match the 'extends {2}' clause.": {
         "category": "Error",
         "code": 8023
     },
