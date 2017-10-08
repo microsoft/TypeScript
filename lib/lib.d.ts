@@ -18012,7 +18012,7 @@ declare var URLSearchParams: {
     /**
      * Constructor returning a URLSearchParams object.
      */
-    new (init?: string|[string, string][] | {[key: string]: string} | URLSearchParams): URLSearchParams;
+    new (init?: string | URLSearchParams): URLSearchParams;
 };
 
 interface NodeListOf<TNode extends Node> extends NodeList {
