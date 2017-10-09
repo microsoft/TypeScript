@@ -1,0 +1,40 @@
+=== tests/cases/conformance/emitter/esnext/pipelineOperatorStage1/emitter.pipelineOperatorStage1.esnext.ts ===
+declare const ar: Iterable<number>;
+>ar : Symbol(ar, Decl(emitter.pipelineOperatorStage1.esnext.ts, 0, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare function map<T, U>(ar: Iterable<T>, fn: (v: T) => U): Iterable<U>;
+>map : Symbol(map, Decl(emitter.pipelineOperatorStage1.esnext.ts, 0, 35))
+>T : Symbol(T, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 21))
+>U : Symbol(U, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 23))
+>ar : Symbol(ar, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 27))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 21))
+>fn : Symbol(fn, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 43))
+>v : Symbol(v, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 49))
+>T : Symbol(T, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 21))
+>U : Symbol(U, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 23))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>U : Symbol(U, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 23))
+
+declare function identity<T>(value: T): T;
+>identity : Symbol(identity, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 74))
+>T : Symbol(T, Decl(emitter.pipelineOperatorStage1.esnext.ts, 2, 26))
+>value : Symbol(value, Decl(emitter.pipelineOperatorStage1.esnext.ts, 2, 29))
+>T : Symbol(T, Decl(emitter.pipelineOperatorStage1.esnext.ts, 2, 26))
+>T : Symbol(T, Decl(emitter.pipelineOperatorStage1.esnext.ts, 2, 26))
+
+const x = ar |> (_ => map(_, x => x + 1));
+>x : Symbol(x, Decl(emitter.pipelineOperatorStage1.esnext.ts, 4, 5))
+>ar : Symbol(ar, Decl(emitter.pipelineOperatorStage1.esnext.ts, 0, 13))
+>_ : Symbol(_, Decl(emitter.pipelineOperatorStage1.esnext.ts, 4, 17))
+>map : Symbol(map, Decl(emitter.pipelineOperatorStage1.esnext.ts, 0, 35))
+>_ : Symbol(_, Decl(emitter.pipelineOperatorStage1.esnext.ts, 4, 17))
+>x : Symbol(x, Decl(emitter.pipelineOperatorStage1.esnext.ts, 4, 28))
+>x : Symbol(x, Decl(emitter.pipelineOperatorStage1.esnext.ts, 4, 28))
+
+const y = ar |> identity;
+>y : Symbol(y, Decl(emitter.pipelineOperatorStage1.esnext.ts, 5, 5))
+>ar : Symbol(ar, Decl(emitter.pipelineOperatorStage1.esnext.ts, 0, 13))
+>identity : Symbol(identity, Decl(emitter.pipelineOperatorStage1.esnext.ts, 1, 74))
+

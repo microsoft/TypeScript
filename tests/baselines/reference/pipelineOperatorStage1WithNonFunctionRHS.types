@@ -1,0 +1,39 @@
+=== tests/cases/conformance/expressions/pipelineOperatorStage1/pipelineOperatorStage1WithNonFunctionRHS.ts ===
+declare const ar: Iterable<number>;
+>ar : Iterable<number>
+>Iterable : Iterable<T>
+
+declare function map<T, U>(ar: Iterable<T>, fn: (v: T) => U): Iterable<U>;
+>map : <T, U>(ar: Iterable<T>, fn: (v: T) => U) => Iterable<U>
+>T : T
+>U : U
+>ar : Iterable<T>
+>Iterable : Iterable<T>
+>T : T
+>fn : (v: T) => U
+>v : T
+>T : T
+>U : U
+>Iterable : Iterable<T>
+>U : U
+
+declare function filter<T>(ar: Iterable<T>, fn: (v: T) => boolean): Iterable<T>;
+>filter : <T>(ar: Iterable<T>, fn: (v: T) => boolean) => Iterable<T>
+>T : T
+>ar : Iterable<T>
+>Iterable : Iterable<T>
+>T : T
+>fn : (v: T) => boolean
+>v : T
+>T : T
+>Iterable : Iterable<T>
+>T : T
+
+const x = ar
+>x : any
+>ar    |> 1 : any
+>ar : Iterable<number>
+
+    |> 1;
+>1 : 1
+

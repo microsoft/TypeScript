@@ -225,6 +225,31 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
+        function transformPipelineExpressionWorker(node: PipelineExpression, pipelineVariable: Identifier, expressions: Expression[], top: boolean) {
+            if (isPipelineExpression(node.left)) {
+                transformPipelineExpressionWorker(node.left, pipelineVariable, expressions, false);
+            }
+            else {
+                expressions.push(createAssignment(pipelineVariable, visitNode(node.left, visitor, isExpression)));
+            }
+
+            const right = visitNode(node.right, visitor, isExpression);
+            const call = createCall(right, /*typeArguments*/ undefined, [pipelineVariable]);
+            setSourceMapRange(call, node);
+            setCommentRange(call, node);
+            expressions.push(top ? call : createAssignment(pipelineVariable, call));
+        }
+
+        function transformPipelineExpression(node: PipelineExpression) {
+            const pipelineVariable = createTempVariable(hoistVariableDeclaration);
+            const expressions: Expression[] = [];
+            transformPipelineExpressionWorker(node, pipelineVariable, expressions, /*top*/ true);
+            const transformed = inlineExpressions(expressions);
+            setSourceMapRange(transformed, node);
+            setCommentRange(transformed, node);
+            return transformed;
+        }
+
         /**
          * Visits a BinaryExpression that contains a destructuring assignment.
          *
@@ -246,6 +271,9 @@ namespace ts {
                     visitNode(node.left, visitorNoDestructuringValue, isExpression),
                     visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
                 );
+            }
+            else if (node.operatorToken.kind === SyntaxKind.BarGreaterThanToken) {
+                return transformPipelineExpression(<PipelineExpression>node);
             }
             return visitEachChild(node, visitor, context);
         }

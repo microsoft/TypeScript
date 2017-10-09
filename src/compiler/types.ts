@@ -109,6 +109,7 @@ namespace ts {
         TildeToken,
         AmpersandAmpersandToken,
         BarBarToken,
+        BarGreaterThanToken,
         QuestionToken,
         ColonToken,
         AtToken,
@@ -1279,6 +1280,11 @@ namespace ts {
         | LogicalOperator
         ;
 
+    export type PipelineOperatorOrHigher
+        = LogicalOperatorOrHigher
+        | SyntaxKind.BarGreaterThanToken
+        ;
+
     // see: https://tc39.github.io/ecma262/#prod-AssignmentOperator
     export type CompoundAssignmentOperator
         = SyntaxKind.PlusEqualsToken
@@ -1303,7 +1309,7 @@ namespace ts {
 
     // see: https://tc39.github.io/ecma262/#prod-AssignmentExpression
     export type AssignmentOperatorOrHigher
-        = LogicalOperatorOrHigher
+        = PipelineOperatorOrHigher
         | AssignmentOperator
         ;
 
@@ -1315,11 +1321,16 @@ namespace ts {
 
     export type BinaryOperatorToken = Token<BinaryOperator>;
 
-    export interface BinaryExpression extends Expression, Declaration  {
+    export interface BinaryExpression extends Expression, Declaration {
         kind: SyntaxKind.BinaryExpression;
         left: Expression;
         operatorToken: BinaryOperatorToken;
         right: Expression;
+    }
+
+    /*@internal*/
+    export interface PipelineExpression extends BinaryExpression {
+        operatorToken: Token<SyntaxKind.BarGreaterThanToken>;
     }
 
     export type AssignmentOperatorToken = Token<AssignmentOperator>;
@@ -1581,7 +1592,7 @@ namespace ts {
         template: TemplateLiteral;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | PipelineExpression | JsxOpeningLikeElement;
 
     export interface AsExpression extends Expression {
         kind: SyntaxKind.AsExpression;
@@ -3673,6 +3684,7 @@ namespace ts {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalPipelineStage1?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;

@@ -1,0 +1,14 @@
+tests/cases/conformance/expressions/pipelineOperatorStage1/pipelineOperatorStage1WithNonFunctionRHS.ts(5,11): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Number' has no compatible call signatures.
+
+
+==== tests/cases/conformance/expressions/pipelineOperatorStage1/pipelineOperatorStage1WithNonFunctionRHS.ts (1 errors) ====
+    declare const ar: Iterable<number>;
+    declare function map<T, U>(ar: Iterable<T>, fn: (v: T) => U): Iterable<U>;
+    declare function filter<T>(ar: Iterable<T>, fn: (v: T) => boolean): Iterable<T>;
+    
+    const x = ar
+              ~~
+        |> 1;
+    ~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Number' has no compatible call signatures.
+    

@@ -831,6 +831,11 @@
         "category": "Error",
         "code": 1254
     },
+    "Pipeline expressions are part of a stage 1 ECMAScript proposal and are subject to change in future releases. Set the 'experimentalPipelineStage1' option to remove this warning.": {
+        "category": "Error",
+        "code": 1255
+    },
+
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -3322,6 +3327,12 @@
         "category": "Message",
         "code": 6186
     },
+    "Enables experimental support for the stage-1 ECMAScript pipeline operator.": {
+        "category": "Message",
+        "code": 6187
+    },
+
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
