@@ -323,19 +323,17 @@ namespace ts {
             let dir = getDirectoryPath(getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory()));
             let dirPath = getDirectoryPath(failedLookupLocationPath);
 
+            // If directory path contains node module, get the most parent node_modules directory for watching
+            while (dirPath.indexOf("/node_modules/") !== -1) {
+                dir = getDirectoryPath(dir);
+                dirPath = getDirectoryPath(dirPath);
+            }
+
             // If the directory is node_modules use it to watch
             if (isNodeModulesDirectory(dirPath)) {
                 return { dir, dirPath };
             }
 
-            // If directory path contains node module, get the node_modules directory for watching
-            if (dirPath.indexOf("/node_modules/") !== -1) {
-                while (!isNodeModulesDirectory(dirPath)) {
-                    dir = getDirectoryPath(dir);
-                    dirPath = getDirectoryPath(dirPath);
-                }
-                return { dir, dirPath };
-            }
 
             // Use some ancestor of the root directory
             if (rootPath !== undefined) {

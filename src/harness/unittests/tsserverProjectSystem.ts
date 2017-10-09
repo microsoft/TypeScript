@@ -2399,6 +2399,43 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
 
         });
+
+        it("Failed lookup locations are uses parent most node_modules directory", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/src/file1.ts",
+                content: 'import { classc } from "module1"'
+            };
+            const module1: FileOrFolder = {
+                path: "/a/b/node_modules/module1/index.d.ts",
+                content: `import { class2 } from "module2";
+                          export classc { method2a(): class2; }`
+            };
+            const module2: FileOrFolder = {
+                path: "/a/b/node_modules/module2/index.d.ts",
+                content: "export class2 { method2() { return 10; } }"
+            };
+            const module3: FileOrFolder = {
+                path: "/a/b/node_modules/module/node_modules/module3/index.d.ts",
+                content: "export class3 { method2() { return 10; } }"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/src/tsconfig.json",
+                content: JSON.stringify({ files: [file1.path] })
+            };
+            const files = [file1, module1, module2, module3, configFile, libFile];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects.get(configFile.path);
+            assert.isDefined(project);
+            checkProjectActualFiles(project, [file1.path, libFile.path, module1.path, module2.path, configFile.path]);
+            checkWatchedFiles(host, [libFile.path, module1.path, module2.path, configFile.path]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            const watchedRecursiveDirectories = getTypeRootsFromLocation("/a/b/src");
+            watchedRecursiveDirectories.push("/a/b/src", "/a/b/node_modules");
+            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+        });
     });
 
     describe("Proper errors", () => {
