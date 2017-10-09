@@ -229,8 +229,8 @@ namespace ts.server {
                 this.realpath = path => host.realpath(path);
             }
 
-            this.languageService = createLanguageService(this, this.documentRegistry);
             this.resolutionCache = createResolutionCache(this, rootDirectoryForResolution);
+            this.languageService = createLanguageService(this, this.documentRegistry);
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
             }
@@ -732,7 +732,6 @@ namespace ts.server {
          */
         updateGraph(): boolean {
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
-            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
 
             let hasChanges = this.updateGraphWorker();
 
@@ -795,6 +794,7 @@ namespace ts.server {
 
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
+            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram();
             this.resolutionCache.finishCachingPerDirectoryResolution();
@@ -1327,14 +1327,13 @@ namespace ts.server {
         }
 
         close() {
-            super.close();
-
             if (this.configFileWatcher) {
                 this.configFileWatcher.close();
                 this.configFileWatcher = undefined;
             }
 
             this.stopWatchingWildCards();
+            super.close();
         }
 
         addOpenRef() {
