@@ -14046,7 +14046,7 @@ namespace ts {
          * @remarks Because this function calls getSpreadType, it needs to use the same checks as checkObjectLiteral,
          * which also calls getSpreadType.
          */
-        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode?: CheckMode) {
+        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createSymbolTable();
             let spread: Type = neverType;
@@ -14166,7 +14166,7 @@ namespace ts {
          * (See "checkApplicableSignatureForJsxOpeningLikeElement" for how the function is used)
          * @param node a JSXAttributes to be resolved of its type
          */
-        function checkJsxAttributes(node: JsxAttributes, checkMode?: CheckMode) {
+        function checkJsxAttributes(node: JsxAttributes, checkMode: CheckMode) {
             return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, checkMode);
         }
 
@@ -15655,7 +15655,7 @@ namespace ts {
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getTypeAtPosition(signature, 0);
-            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
+            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, createTypeMapper([], [])); // Create a new mapper distinct form identity so inferrential typing is used, but not skip context sensitive
             const argProperties = getPropertiesOfType(attributesType);
             for (const arg of argProperties) {
                 if (!getPropertyOfType(paramType, arg.escapedName) && isUnhyphenatedJsxName(arg.escapedName)) {
