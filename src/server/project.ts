@@ -497,12 +497,7 @@ namespace ts.server {
             if (this.program) {
                 // if we have a program - release all files that are enlisted in program
                 for (const f of this.program.getSourceFiles()) {
-                    const info = this.projectService.getScriptInfo(f.fileName);
-                    // We might not find the script info in case its not associated with the project any more
-                    // and project graph was not updated (eg delayed update graph in case of files changed/deleted on the disk)
-                    if (info) {
-                        info.detachFromProject(this);
-                    }
+                    this.detachScriptInfo(f.fileName);
                 }
             }
             if (!this.program || !this.languageServiceEnabled) {
@@ -512,10 +507,13 @@ namespace ts.server {
                     root.detachFromProject(this);
                 }
             }
+
             this.rootFiles = undefined;
             this.rootFilesMap = undefined;
             this.program = undefined;
             this.builder = undefined;
+            forEach(this.externalFiles, externalFile => this.detachScriptInfo(externalFile));
+            this.externalFiles = undefined;
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
@@ -530,6 +528,15 @@ namespace ts.server {
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
             this.languageService = undefined;
+        }
+
+        private detachScriptInfo(uncheckedFilename: string) {
+            const info = this.projectService.getScriptInfo(uncheckedFilename);
+            // We might not find the script info in case its not associated with the project any more
+            // and project graph was not updated (eg delayed update graph in case of files changed/deleted on the disk)
+            if (info) {
+                info.detachFromProject(this);
+            }
         }
 
         isClosed() {
@@ -791,7 +798,7 @@ namespace ts.server {
 
         private updateGraphWorker() {
             const oldProgram = this.program;
-
+            Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
             this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();

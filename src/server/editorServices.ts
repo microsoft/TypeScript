@@ -832,6 +832,9 @@ namespace ts.server {
             this.logger.info(`remove project: ${project.getRootFiles().toString()}`);
 
             project.close();
+            if (Debug.shouldAssert(AssertionLevel.Normal)) {
+                this.filenameToScriptInfo.forEach(info => Debug.assert(!info.isAttached(project)));
+            }
             // Remove the project from pending project updates
             this.pendingProjectUpdates.delete(project.getProjectName());
 
