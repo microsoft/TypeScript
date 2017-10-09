@@ -501,6 +501,7 @@ namespace ts {
             Normal = 0,                // Normal type checking
             SkipContextSensitive = 1,  // Skip context sensitive function expressions
             Inferential = 2,           // Inferential typing
+            Contextual = 3,            // Normal type checking informed by a contextual type, therefore not cacheable
         }
 
         const enum CallbackCheck {
@@ -15655,7 +15656,7 @@ namespace ts {
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getTypeAtPosition(signature, 0);
-            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, createTypeMapper([], [])); // Create a new mapper distinct form identity so inferrential typing is used, but not skip context sensitive
+            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /* contextualMapper */ undefined);
             const argProperties = getPropertiesOfType(attributesType);
             for (const arg of argProperties) {
                 if (!getPropertyOfType(paramType, arg.escapedName) && isUnhyphenatedJsxName(arg.escapedName)) {
@@ -18168,13 +18169,13 @@ namespace ts {
             return stringType;
         }
 
-        function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper): Type {
+        function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper | undefined): Type {
             const saveContextualType = node.contextualType;
             const saveContextualMapper = node.contextualMapper;
             node.contextualType = contextualType;
             node.contextualMapper = contextualMapper;
             const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
-                contextualMapper ? CheckMode.Inferential : CheckMode.Normal;
+                contextualMapper ? CheckMode.Inferential : CheckMode.Contextual;
             const result = checkExpression(node, checkMode);
             node.contextualType = saveContextualType;
             node.contextualMapper = saveContextualMapper;
