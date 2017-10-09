@@ -168,7 +168,7 @@ interface Blob {
 
 declare var Blob: {
     prototype: Blob;
-    new (blobParts?: any[], options?: BlobPropertyBag): Blob;
+    new(blobParts?: any[], options?: BlobPropertyBag): Blob;
 };
 
 interface Cache {
@@ -421,7 +421,7 @@ interface File extends Blob {
 
 declare var File: {
     prototype: File;
-    new (parts: (ArrayBuffer | ArrayBufferView | Blob | string)[], filename: string, properties?: FilePropertyBag): File;
+    new(parts: (ArrayBuffer | ArrayBufferView | Blob | string)[], filename: string, properties?: FilePropertyBag): File;
 };
 
 interface FileList {
@@ -1575,7 +1575,7 @@ declare var URLSearchParams: {
     /**
      * Constructor returning a URLSearchParams object.
      */
-    new (init?: string | URLSearchParams): URLSearchParams;
+    new(init?: string | [string, string][] | { [key: string]: string } | URLSearchParams): URLSearchParams;
 };
 
 interface BlobPropertyBag {
