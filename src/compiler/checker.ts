@@ -23156,7 +23156,8 @@ namespace ts {
             return findAncestor(node, element => {
                 if (isConstructorDeclaration(element) && nodeIsPresent(element.body)) {
                     return true;
-                } else if (element === classDeclaration || isFunctionLikeDeclaration(element)) {
+                }
+                else if (element === classDeclaration || isFunctionLikeDeclaration(element)) {
                     return "quit";
                 }
 
