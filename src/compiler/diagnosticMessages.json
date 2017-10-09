@@ -2220,6 +2220,10 @@
         "category": "Error",
         "code": 2714
     },
+    "Abstract property '{0}' in class '{1}' cannot be accessed in the constructor.": {
+        "category": "Error",
+        "code": 2715
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

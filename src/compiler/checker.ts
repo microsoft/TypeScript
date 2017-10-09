@@ -14830,11 +14830,7 @@ namespace ts {
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
                 if (languageVersion < ScriptTarget.ES2015) {
-                    const hasNonMethodDeclaration = forEachProperty(prop, p => {
-                        const propKind = getDeclarationKindFromSymbol(p);
-                        return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
-                    });
-                    if (hasNonMethodDeclaration) {
+                    if (symbolHasNonMethodDeclaration(prop)) {
                         error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                         return false;
                     }
@@ -14845,6 +14841,16 @@ namespace ts {
                     // cannot simultaneously be private and abstract, so this will trigger an
                     // additional error elsewhere.
                     error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(getDeclaringClass(prop)));
+                    return false;
+                }
+            }
+
+            // Referencing Abstract Properties within Constructors is not allowed
+            if ((flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop)) {
+                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
+
+                if (declaringClassDeclaration && isNodeWithinConstructor(node, declaringClassDeclaration)) {
+                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
                 }
             }
@@ -14898,6 +14904,13 @@ namespace ts {
                 return false;
             }
             return true;
+        }
+
+        function symbolHasNonMethodDeclaration(symbol: Symbol) {
+            return forEachProperty(symbol, prop => {
+                const propKind = getDeclarationKindFromSymbol(prop);
+                return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
+            });
         }
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
@@ -23141,6 +23154,19 @@ namespace ts {
             }
 
             return result;
+        }
+
+        function isNodeWithinConstructor(node: Node, classDeclaration: ClassLikeDeclaration) {
+            return findAncestor(node, element => {
+                if (isConstructorDeclaration(element) && nodeIsPresent(element.body)) {
+                    return true;
+                }
+                else if (element === classDeclaration || isFunctionLikeDeclaration(element)) {
+                    return "quit";
+                }
+
+                return false;
+            });
         }
 
         function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {
