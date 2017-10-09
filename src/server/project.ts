@@ -296,7 +296,7 @@ namespace ts.server {
             }
         }
 
-        getCancellationToken() {
+        getCancellationToken(): HostCancellationToken {
             return this.cancellationToken;
         }
 

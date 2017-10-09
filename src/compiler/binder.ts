@@ -230,6 +230,10 @@ namespace ts {
         // Should not be called on a declaration with a computed property name,
         // unless it is a well known Symbol.
         function getDeclarationName(node: Declaration): __String {
+            if (node.kind === SyntaxKind.ExportAssignment) {
+                return (<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+            }
+
             const name = getNameOfDeclaration(node);
             if (name) {
                 if (isAmbientModule(node)) {
@@ -261,8 +265,6 @@ namespace ts {
                     return InternalSymbolName.Index;
                 case SyntaxKind.ExportDeclaration:
                     return InternalSymbolName.ExportStar;
-                case SyntaxKind.ExportAssignment:
-                    return (<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
                 case SyntaxKind.BinaryExpression:
                     if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
                         // module.exports = ...
@@ -2144,7 +2146,7 @@ namespace ts {
                     // falls through
                 case SyntaxKind.JSDocPropertyTag:
                     const propTag = node as JSDocPropertyLikeTag;
-                    const flags = propTag.isBracketed || propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
+                    const flags = propTag.isBracketed || propTag.typeExpression && propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
                         SymbolFlags.Property | SymbolFlags.Optional :
                         SymbolFlags.Property;
                     return declareSymbolAndAddToSymbolTable(propTag, flags, SymbolFlags.PropertyExcludes);

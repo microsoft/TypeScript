@@ -861,10 +861,10 @@ namespace ts {
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), node.expression, /*location*/ node, /*allowComments*/ true);
+                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
             }
             else {
-                statements = appendExportStatement(statements, createIdentifier("default"), node.expression, /*location*/ node, /*allowComments*/ true);
+                statements = appendExportStatement(statements, createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
             }
 
             return singleOrMany(statements);
