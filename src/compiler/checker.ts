@@ -13923,7 +13923,7 @@ namespace ts {
                         t.flags |= propagatedFlags;
                         t.flags |= TypeFlags.FreshLiteral;
                         (t as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
-                        t.symbol = node.symbol
+                        t.symbol = node.symbol;
                     }
                 });
                 return spread;
