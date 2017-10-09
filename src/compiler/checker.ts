@@ -20032,14 +20032,20 @@ namespace ts {
         }
 
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
-            const cls = getJSDocHost(node);
-            if (!isClassDeclaration(cls) && !isClassExpression(cls)) {
-                error(cls, Diagnostics.JSDoc_augments_is_not_attached_to_a_class_declaration);
+            const classLike = getJSDocHost(node);
+            if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
+                error(classLike, Diagnostics.JSDoc_augments_is_not_attached_to_a_class_declaration);
                 return;
             }
 
+            const augmentsTags = getAllJSDocTagsOfKind(classLike, SyntaxKind.JSDocAugmentsTag);
+            Debug.assert(augmentsTags.length > 0);
+            if (augmentsTags.length > 1) {
+                error(augmentsTags[1], Diagnostics.Class_declarations_cannot_have_more_than_one_augments_or_extends_tag);
+            }
+
             const name = getIdentifierFromEntityNameExpression(node.class.expression);
-            const extend = getClassExtendsHeritageClauseElement(cls);
+            const extend = getClassExtendsHeritageClauseElement(classLike);
             if (extend) {
                 const className = getIdentifierFromEntityNameExpression(extend.expression);
                 if (className && name.escapedText !== className.escapedText) {

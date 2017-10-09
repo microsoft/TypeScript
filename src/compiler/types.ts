@@ -2159,6 +2159,10 @@ namespace ts {
         kind: SyntaxKind.JSDocTag;
     }
 
+    /**
+     * Note that `@extends` is a synonym of `@augments`.
+     * Both tags are represented by this interface.
+     */
     export interface JSDocAugmentsTag extends JSDocTag {
         kind: SyntaxKind.JSDocAugmentsTag;
         class: ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };

@@ -4241,6 +4241,12 @@ namespace ts {
         return find(tags, doc => doc.kind === kind);
     }
 
+    /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
+    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> | undefined {
+        const tags = getJSDocTags(node);
+        return filter(tags, doc => doc.kind === kind);
+    }
+
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.

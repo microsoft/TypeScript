@@ -4,7 +4,7 @@
 // @Filename: dummy.js
 
 //// /**
-////  * @augments {Thing<string>}
+////  * @extends {Thing<string>}
 ////  */
 //// class MyStringThing extends Thing {
 ////     constructor() {
