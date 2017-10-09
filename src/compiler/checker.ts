@@ -908,6 +908,7 @@ namespace ts {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol;
             let lastLocation: Node;
+            let lastNonBlockLocation: Node;
             let propertyWithInvalidInitializer: Node;
             const errorLocation = location;
             let grandparent: Node;
@@ -1126,6 +1127,9 @@ namespace ts {
                         }
                         break;
                 }
+                if (location.kind !== SyntaxKind.Block) {
+                    lastNonBlockLocation = location;
+                }
                 lastLocation = location;
                 location = location.parent;
             }
@@ -1133,7 +1137,7 @@ namespace ts {
             // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
             // If `result === lastLocation.symbol`, that means that we are somewhere inside `lastLocation` looking up a name, and resolving to `lastLocation` itself.
             // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
-            if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && result !== lastLocation.symbol) {
+            if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && result !== lastNonBlockLocation.symbol) {
                 result.isReferenced = true;
             }
 
