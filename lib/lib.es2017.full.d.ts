@@ -689,7 +689,7 @@ interface IteratorResult<T> {
 
 interface Iterator<T> {
     next(value?: any): IteratorResult<T>;
-    return?(value?: any): IteratorResult<T>;
+    return?(value?: any): IteratorResult<any>;
     throw?(e?: any): IteratorResult<T>;
 }
 

@@ -1,0 +1,50 @@
+=== tests/cases/compiler/iteratorReturn.ts ===
+interface Coroutine extends Iterator<number> {
+>Coroutine : Coroutine
+>Iterator : Iterator<T>
+
+    return?(effect?: string): IteratorResult<string>;
+>return : (effect?: string) => IteratorResult<string>
+>effect : string
+>IteratorResult : IteratorResult<T>
+}
+
+interface Process extends Coroutine {
+>Process : Process
+>Coroutine : Coroutine
+
+    [Symbol.iterator](): Coroutine;
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>Coroutine : Coroutine
+}
+
+let good = function*(): Process {
+>good : () => Process
+>function*(): Process {    yield 1;    return "str";} : () => Process
+>Process : Process
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+
+    return "str";
+>"str" : "str"
+
+};
+
+let bad = function*(): Process {
+>bad : () => Process
+>function*(): Process {    yield "str";    return 1;} : () => Process
+>Process : Process
+
+    yield "str";
+>yield "str" : any
+>"str" : "str"
+
+    return 1;
+>1 : 1
+
+};
+

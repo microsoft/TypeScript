@@ -1,0 +1,27 @@
+tests/cases/compiler/iteratorReturn.ts(15,11): error TS2322: Type '"str"' is not assignable to type 'number'.
+tests/cases/compiler/iteratorReturn.ts(16,5): error TS2322: Type '1' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/iteratorReturn.ts (2 errors) ====
+    interface Coroutine extends Iterator<number> {
+        return?(effect?: string): IteratorResult<string>;
+    }
+    
+    interface Process extends Coroutine {
+        [Symbol.iterator](): Coroutine;
+    }
+    
+    let good = function*(): Process {
+        yield 1;
+        return "str";
+    };
+    
+    let bad = function*(): Process {
+        yield "str";
+              ~~~~~
+!!! error TS2322: Type '"str"' is not assignable to type 'number'.
+        return 1;
+        ~~~~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'string'.
+    };
+    

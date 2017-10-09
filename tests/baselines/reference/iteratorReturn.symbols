@@ -1,0 +1,38 @@
+=== tests/cases/compiler/iteratorReturn.ts ===
+interface Coroutine extends Iterator<number> {
+>Coroutine : Symbol(Coroutine, Decl(iteratorReturn.ts, 0, 0))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    return?(effect?: string): IteratorResult<string>;
+>return : Symbol(Coroutine.return, Decl(iteratorReturn.ts, 0, 46))
+>effect : Symbol(effect, Decl(iteratorReturn.ts, 1, 12))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+}
+
+interface Process extends Coroutine {
+>Process : Symbol(Process, Decl(iteratorReturn.ts, 2, 1))
+>Coroutine : Symbol(Coroutine, Decl(iteratorReturn.ts, 0, 0))
+
+    [Symbol.iterator](): Coroutine;
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Coroutine : Symbol(Coroutine, Decl(iteratorReturn.ts, 0, 0))
+}
+
+let good = function*(): Process {
+>good : Symbol(good, Decl(iteratorReturn.ts, 8, 3))
+>Process : Symbol(Process, Decl(iteratorReturn.ts, 2, 1))
+
+    yield 1;
+    return "str";
+};
+
+let bad = function*(): Process {
+>bad : Symbol(bad, Decl(iteratorReturn.ts, 13, 3))
+>Process : Symbol(Process, Decl(iteratorReturn.ts, 2, 1))
+
+    yield "str";
+    return 1;
+};
+
