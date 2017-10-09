@@ -2220,7 +2220,7 @@
         "category": "Error",
         "code": 2714
     },
-    "Abstract property '{0}' in class '{1}' cannot be accessed in constructor.": {
+    "Abstract property '{0}' in class '{1}' cannot be accessed in the constructor.": {
         "category": "Error",
         "code": 2715
     },
