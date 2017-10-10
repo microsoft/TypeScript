@@ -341,13 +341,19 @@ namespace ts.SymbolDisplay {
         }
         if (symbolFlags & SymbolFlags.Alias) {
             addNewLineIfDisplayPartsExist();
-            if (symbol.declarations[0].kind === SyntaxKind.NamespaceExportDeclaration) {
-                displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
-                displayParts.push(spacePart());
-                displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
-            }
-            else {
-                displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+            switch (symbol.declarations[0].kind) {
+                case SyntaxKind.NamespaceExportDeclaration:
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    displayParts.push(spacePart());
+                    displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
+                    break;
+                case SyntaxKind.ExportAssignment:
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    displayParts.push(spacePart());
+                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                    break;
+                default:
+                    displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
             }
             displayParts.push(spacePart());
             addFullSymbolName(symbol);

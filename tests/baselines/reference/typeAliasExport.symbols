@@ -1,7 +1,7 @@
 === tests/cases/compiler/typeAliasExport.ts ===
 declare module "a" {
   export default undefined
->undefined : Symbol(default)
+>undefined : Symbol(undefined)
 
   export var a;
 >a : Symbol(a, Decl(typeAliasExport.ts, 2, 12), Decl(typeAliasExport.ts, 2, 15))

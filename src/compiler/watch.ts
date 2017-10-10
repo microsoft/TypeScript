@@ -249,10 +249,10 @@ namespace ts {
         let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
         const loggingEnabled = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
-        const writeLog: (s: string) => void = loggingEnabled ? s => system.write(s) : noop;
-        const watchFile = loggingEnabled ? ts.addFileWatcherWithLogging : ts.addFileWatcher;
-        const watchFilePath = loggingEnabled ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
-        const watchDirectoryWorker = loggingEnabled ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
+        const writeLog: (s: string) => void = loggingEnabled ? s => { system.write(s); system.write(system.newLine); } : noop;
+        const watchFile = compilerOptions.extendedDiagnostics ? ts.addFileWatcherWithLogging : loggingEnabled ? ts.addFileWatcherWithOnlyTriggerLogging : ts.addFileWatcher;
+        const watchFilePath = compilerOptions.extendedDiagnostics ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
+        const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
 
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
