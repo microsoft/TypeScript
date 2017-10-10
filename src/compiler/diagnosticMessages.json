@@ -907,6 +907,10 @@
         "category": "Error",
         "code": 1328
     },
+    "'{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?": {
+        "category": "Error",
+        "code": 1329
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2216,6 +2220,10 @@
         "category": "Error",
         "code": 2714
     },
+    "Abstract property '{0}' in class '{1}' cannot be accessed in the constructor.": {
+        "category": "Error",
+        "code": 2715
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3090,10 +3098,6 @@
         "category": "Message",
         "code": 6128
     },
-    "The config file '{0}' found doesn't contain any source files.": {
-        "category": "Error",
-        "code": 6129
-    },
     "Resolving real path for '{0}', result '{1}'.": {
         "category": "Message",
         "code": 6130
@@ -3314,6 +3318,10 @@
         "category": "Message",
         "code": 6185
     },
+    "Enable strict checking of function types.": {
+        "category": "Message",
+        "code": 6186
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3511,6 +3519,22 @@
         "category": "Error",
         "code": 8021
     },
+    "JSDoc '@augments' is not attached to a class declaration.": {
+        "category": "Error",
+        "code": 8022
+    },
+    "JSDoc '@augments {0}' does not match the 'extends {1}' clause.": {
+        "category": "Error",
+        "code": 8023
+    },
+    "JSDoc '@param' tag has name '{0}', but there is no parameter with that name.": {
+        "category": "Error",
+        "code": 8024
+    },
+    "Class declarations cannot have more than one `@augments` or `@extends` tag.": {
+        "category": "Error",
+        "code": 8025
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -3693,6 +3717,10 @@
         "category": "Message",
         "code": 90027
     },
+    "Call decorator expression.": {
+        "category": "Message",
+        "code": 90028
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -3703,13 +3731,33 @@
         "code": 95002
     },
 
-    "Extract function": {
+    "Extract symbol": {
         "category": "Message",
         "code": 95003
     },
 
-    "Extract to {0}": {
+    "Extract to {0} in {1}": {
         "category": "Message",
         "code": 95004
+    },
+
+    "Extract function": {
+        "category": "Message",
+        "code": 95005
+    },
+
+    "Extract constant": {
+        "category": "Message",
+        "code": 95006
+    },
+
+    "Extract to {0} in enclosing scope": {
+        "category": "Message",
+        "code": 95007
+    },
+
+    "Extract to {0} in {1} scope": {
+        "category": "Message",
+        "code": 95008
     }
 }

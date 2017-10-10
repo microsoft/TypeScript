@@ -10,15 +10,15 @@ class A { constructor() { this.x = 0; } }
 /** @augments */
 class B extends A {
 >B : B
->A : A
+>A : typeof A
 
     m() {
 >m : () => void
 
         this.x
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
     }
 }
 

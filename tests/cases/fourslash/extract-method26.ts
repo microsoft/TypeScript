@@ -13,17 +13,17 @@
 
 goTo.select('a', 'b')
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_1",
     actionDescription: "Extract to method in class 'C'",
     newContent:
 `class C {
     M() {
-        const q = this./*RENAME*/newFunction();
+        const q = this./*RENAME*/newMethod();
         q.toString();
     }
 
-    newFunction() {
+    newMethod() {
         return 1 + 2;
     }
 }`

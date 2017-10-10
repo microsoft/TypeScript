@@ -390,7 +390,7 @@ namespace FourSlash {
 
         // Entry points from fourslash.ts
         public goToMarker(name: string | Marker = "") {
-            const marker = typeof name === "string" ? this.getMarkerByName(name) : name;
+            const marker = ts.isString(name) ? this.getMarkerByName(name) : name;
             if (this.activeFile.fileName !== marker.fileName) {
                 this.openFile(marker.fileName);
             }
@@ -399,7 +399,7 @@ namespace FourSlash {
             if (marker.position === -1 || marker.position > content.length) {
                 throw new Error(`Marker "${name}" has been invalidated by unrecoverable edits to the file.`);
             }
-            const mName = typeof name === "string" ? name : this.markerName(marker);
+            const mName = ts.isString(name) ? name : this.markerName(marker);
             this.lastKnownMarker = mName;
             this.goToPosition(marker.position);
         }
@@ -1027,7 +1027,7 @@ namespace FourSlash {
 
         public verifyNoReferences(markerNameOrRange?: string | Range) {
             if (markerNameOrRange) {
-                if (typeof markerNameOrRange === "string") {
+                if (ts.isString(markerNameOrRange)) {
                     this.goToMarker(markerNameOrRange);
                 }
                 else {
@@ -1037,8 +1037,7 @@ namespace FourSlash {
 
             const refs = this.getReferencesAtCaret();
             if (refs && refs.length) {
-                console.log(refs);
-                this.raiseError("Expected getReferences to fail");
+                this.raiseError(`Expected getReferences to fail, but saw references: ${stringify(refs)}`);
             }
         }
 
@@ -1050,9 +1049,9 @@ namespace FourSlash {
         private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
             const recur = <U>(actual: U, expected: U, path: string) => {
                 const fail = (msg: string) => {
-                    console.log("Expected:", stringify(fullExpected));
-                    console.log("Actual: ", stringify(fullActual));
-                    this.raiseError(`${msgPrefix}At ${path}: ${msg}`);
+                    this.raiseError(`${msgPrefix} At ${path}: ${msg}
+Expected: ${stringify(fullExpected)}
+Actual: ${stringify(fullActual)}`);
                 };
 
                 if ((actual === undefined) !== (expected === undefined)) {
@@ -1084,9 +1083,9 @@ namespace FourSlash {
                 if (fullActual === fullExpected) {
                     return;
                 }
-                console.log("Expected:", stringify(fullExpected));
-                console.log("Actual: ", stringify(fullActual));
-                this.raiseError(msgPrefix);
+                this.raiseError(`${msgPrefix}
+Expected: ${stringify(fullExpected)}
+Actual: ${stringify(fullActual)}`);
             }
             recur(fullActual, fullExpected, "");
 
@@ -1523,7 +1522,7 @@ namespace FourSlash {
                             resultString += "Diagnostics:" + Harness.IO.newLine();
                             const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (const diagnostic of diagnostics) {
-                                if (typeof diagnostic.messageText !== "string") {
+                                if (!ts.isString(diagnostic.messageText)) {
                                     let chainedMessage = <ts.DiagnosticMessageChain>diagnostic.messageText;
                                     let indentation = " ";
                                     while (chainedMessage) {
@@ -2825,7 +2824,7 @@ namespace FourSlash {
             const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
             const refactor = refactors.find(r => r.name === refactorName);
             if (!refactor) {
-                this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.`);
+                this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.\nAvailable refactors: ${refactors.map(r => r.name)}`);
             }
 
             const action = refactor.actions.find(a => a.name === actionName);
@@ -2977,7 +2976,7 @@ namespace FourSlash {
                     result = this.testData.files[index];
                 }
             }
-            else if (typeof indexOrName === "string") {
+            else if (ts.isString(indexOrName)) {
                 let name = <string>indexOrName;
 
                 // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
