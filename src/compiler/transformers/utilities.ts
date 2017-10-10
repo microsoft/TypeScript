@@ -189,6 +189,6 @@ namespace ts {
             expression.kind === SyntaxKind.NumericLiteral ||
             expression.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
             isKeyword(expression.kind) ||
-            isEntityNameExpression(expression);
+            isIdentifier(expression);
     }
 }

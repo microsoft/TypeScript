@@ -82,7 +82,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             var req;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_1, reject_1) { require(["./test"], resolve_1, reject_1); })]; // ONE
+                    case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_1, reject_1) { require(['./test'], resolve_1, reject_1); })]; // ONE
                     case 1:
                         req = _a.sent() // ONE
                         ;
@@ -100,7 +100,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 var req;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_2, reject_2) { require(["./test"], resolve_2, reject_2); })]; // TWO
+                        case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_2, reject_2) { require(['./test'], resolve_2, reject_2); })]; // TWO
                         case 1:
                             req = _a.sent() // TWO
                             ;
@@ -117,7 +117,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             var req;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_3, reject_3) { require(["./test"], resolve_3, reject_3); })]; // THREE
+                    case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_3, reject_3) { require(['./test'], resolve_3, reject_3); })]; // THREE
                     case 1:
                         req = _a.sent() // THREE
                         ;
@@ -134,7 +134,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     var req;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_4, reject_4) { require(["./test"], resolve_4, reject_4); })]; // FOUR
+                            case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_4, reject_4) { require(['./test'], resolve_4, reject_4); })]; // FOUR
                             case 1:
                                 req = _a.sent() // FOUR
                                 ;
@@ -151,7 +151,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         var req;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_5, reject_5) { require(["./test"], resolve_5, reject_5); })]; // FIVE
+                case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_5, reject_5) { require(['./test'], resolve_5, reject_5); })]; // FIVE
                 case 1:
                     req = _a.sent() // FIVE
                     ;

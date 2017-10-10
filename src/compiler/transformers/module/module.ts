@@ -548,10 +548,14 @@ namespace ts {
             // });
             needUMDDynamicImportHelper = true;
             if (isSimpleCopiableExpression(arg)) {
+                const argClone = isGeneratedIdentifier(arg) ? arg : setEmitFlags(setTextRange(getSynthesizedClone(arg), arg), EmitFlags.NoComments);
+                if (argClone.kind === SyntaxKind.StringLiteral && typeof (argClone as StringLiteral).singleQuote === "undefined") {
+                    (argClone as StringLiteral).singleQuote = getSourceTextOfNodeFromSourceFile(currentSourceFile, arg).charCodeAt(0) === CharacterCodes.singleQuote;
+                }
                 return createConditional(
                     /*condition*/ createIdentifier("__syncRequire"),
                     /*whenTrue*/ createImportCallExpressionCommonJS(arg),
-                    /*whenFalse*/ createImportCallExpressionAMD(isGeneratedIdentifier(arg) ? arg : getSynthesizedClone(arg)) // TODO (weswigham): Use getSynthesizedDeepClone instead of getSynthesizedClone once #18979 is merged
+                    /*whenFalse*/ createImportCallExpressionAMD(argClone)
                 );
             }
             else {
