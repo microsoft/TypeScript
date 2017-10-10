@@ -71,16 +71,6 @@ namespace ts {
         return clone;
     }
 
-    /**
-     * Creates a deep, memberwise clone of a node with no source map location.
-     */
-    /* @internal */
-    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
-        return node
-            ? getSynthesizedClone(visitEachChild(node, child => getSynthesizedDeepClone(child), nullTransformationContext))
-            : undefined;
-    }
-
     // Literals
 
     export function createLiteral(value: string): StringLiteral;

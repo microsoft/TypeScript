@@ -1334,4 +1334,16 @@ namespace ts {
         }
         return position;
     }
+
+    /**
+     * Creates a deep, memberwise clone of a node with no source map location.
+     *
+     * WARNING: This is an expensive operation and is only intended to be used in refactorings
+     * and code fixes (because those are triggered by explicit user actions).
+     */
+    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
+        return node
+            ? getSynthesizedClone(visitEachChild(node, child => getSynthesizedDeepClone(child), nullTransformationContext))
+            : undefined;
+    }
 }
