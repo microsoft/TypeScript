@@ -610,8 +610,6 @@ namespace ts {
                     /*typeParameters*/ undefined,
                     parameters,
                     /*type*/ undefined,
-
-
                     body);
 
                 // if there is a lexical 'this' in the import call arguments, ensure we indicate
