@@ -527,7 +527,7 @@ namespace ts {
         if (logPerformance) {
             const end = timestamp();
             logger.log(`${actionDescription} completed in ${end - start} msec`);
-            if (typeof result === "string") {
+            if (isString(result)) {
                 let str = result;
                 if (str.length > 128) {
                     str = str.substring(0, 128) + "...";

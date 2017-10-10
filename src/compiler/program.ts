@@ -1,6 +1,7 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
+/// <reference path="builder.ts" />
 
 namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
@@ -229,17 +230,23 @@ namespace ts {
         let output = "";
 
         for (const diagnostic of diagnostics) {
-            if (diagnostic.file) {
-                const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-                const fileName = diagnostic.file.fileName;
-                const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
-                output += `${relativeFileName}(${line + 1},${character + 1}): `;
-            }
-
-            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
+            output += formatDiagnostic(diagnostic, host);
         }
         return output;
+    }
+
+    export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
+        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        const errorMessage = `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
+
+        if (diagnostic.file) {
+            const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            const fileName = diagnostic.file.fileName;
+            const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
+            return `${relativeFileName}(${line + 1},${character + 1}): ` + errorMessage;
+        }
+
+        return errorMessage;
     }
 
     const redForegroundEscapeSequence = "\u001b[91m";
@@ -271,6 +278,7 @@ namespace ts {
     export function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string {
         let output = "";
         for (const diagnostic of diagnostics) {
+            let context = "";
             if (diagnostic.file) {
                 const { start, length, file } = diagnostic;
                 const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
@@ -284,12 +292,12 @@ namespace ts {
                     gutterWidth = Math.max(ellipsis.length, gutterWidth);
                 }
 
-                output += host.getNewLine();
+                context += host.getNewLine();
                 for (let i = firstLine; i <= lastLine; i++) {
                     // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                     // so we'll skip ahead to the second-to-last line.
                     if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                        output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
+                        context += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
                         i = lastLine - 1;
                     }
 
@@ -300,30 +308,28 @@ namespace ts {
                     lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
 
                     // Output the gutter and the actual contents of the line.
-                    output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    output += lineContent + host.getNewLine();
+                    context += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    context += lineContent + host.getNewLine();
 
                     // Output the gutter and the error span for the line using tildes.
-                    output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    output += redForegroundEscapeSequence;
+                    context += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    context += redForegroundEscapeSequence;
                     if (i === firstLine) {
                         // If we're on the last line, then limit it to the last character of the last line.
                         // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
                         const lastCharForLine = i === lastLine ? lastLineChar : undefined;
 
-                        output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
-                        output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
+                        context += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
+                        context += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
                     }
                     else if (i === lastLine) {
-                        output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
+                        context += lineContent.slice(0, lastLineChar).replace(/./g, "~");
                     }
                     else {
                         // Squiggle the entire line.
-                        output += lineContent.replace(/./g, "~");
+                        context += lineContent.replace(/./g, "~");
                     }
-                    output += resetEscapeSequence;
-
-                    output += host.getNewLine();
+                    context += resetEscapeSequence;
                 }
 
                 output += host.getNewLine();
@@ -333,13 +339,19 @@ namespace ts {
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
             output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }`;
+
+            if (diagnostic.file) {
+                output += host.getNewLine();
+                output += context;
+            }
+
             output += host.getNewLine();
         }
         return output;
     }
 
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
-        if (typeof messageText === "string") {
+        if (isString(messageText)) {
             return messageText;
         }
         else {
@@ -386,6 +398,79 @@ namespace ts {
     interface DiagnosticCache {
         perFile?: Map<Diagnostic[]>;
         allDiagnostics?: Diagnostic[];
+    }
+
+    /**
+     * Determines if program structure is upto date or needs to be recreated
+     */
+    /* @internal */
+    export function isProgramUptoDate(
+        program: Program | undefined,
+        rootFileNames: string[],
+        newOptions: CompilerOptions,
+        getSourceVersion: (path: Path) => string,
+        fileExists: (fileName: string) => boolean,
+        hasInvalidatedResolution: HasInvalidatedResolution,
+        hasChangedAutomaticTypeDirectiveNames: boolean,
+    ): boolean {
+        // If we haven't create a program yet or has changed automatic type directives, then it is not up-to-date
+        if (!program || hasChangedAutomaticTypeDirectiveNames) {
+            return false;
+        }
+
+        // If number of files in the program do not match, it is not up-to-date
+        if (program.getRootFileNames().length !== rootFileNames.length) {
+            return false;
+        }
+
+        // If any file is not up-to-date, then the whole program is not up-to-date
+        if (program.getSourceFiles().some(sourceFileNotUptoDate)) {
+            return false;
+        }
+
+        // If any of the missing file paths are now created
+        if (program.getMissingFilePaths().some(fileExists)) {
+            return false;
+        }
+
+        const currentOptions = program.getCompilerOptions();
+        // If the compilation settings do no match, then the program is not up-to-date
+        if (!compareDataObjects(currentOptions, newOptions)) {
+            return false;
+        }
+
+        // If everything matches but the text of config file is changed,
+        // error locations can change for program options, so update the program
+        if (currentOptions.configFile && newOptions.configFile) {
+            return currentOptions.configFile.text === newOptions.configFile.text;
+        }
+
+        return true;
+
+        function sourceFileNotUptoDate(sourceFile: SourceFile): boolean {
+            return sourceFile.version !== getSourceVersion(sourceFile.path) ||
+                hasInvalidatedResolution(sourceFile.path);
+        }
+    }
+
+    /**
+     * Determined if source file needs to be re-created even if its text hasnt changed
+     */
+    function shouldProgramCreateNewSourceFiles(program: Program, newOptions: CompilerOptions) {
+        // If any of these options change, we cant reuse old source file even if version match
+        // The change in options like these could result in change in syntax tree change
+        const oldOptions = program && program.getCompilerOptions();
+        return oldOptions && (
+            oldOptions.target !== newOptions.target ||
+            oldOptions.module !== newOptions.module ||
+            oldOptions.moduleResolution !== newOptions.moduleResolution ||
+            oldOptions.noResolve !== newOptions.noResolve ||
+            oldOptions.jsx !== newOptions.jsx ||
+            oldOptions.allowJs !== newOptions.allowJs ||
+            oldOptions.disableSizeLimit !== newOptions.disableSizeLimit ||
+            oldOptions.baseUrl !== newOptions.baseUrl ||
+            !equalOwnProperties(oldOptions.paths, newOptions.paths)
+        );
     }
 
     /**
@@ -449,9 +534,10 @@ namespace ts {
         let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression;
 
         let moduleResolutionCache: ModuleResolutionCache;
-        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
+        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[]) => ResolvedModuleFull[];
+        const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile).map(resolved => {
+            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile, reusedNames).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -486,10 +572,12 @@ namespace ts {
         let redirectTargetsSet = createMap<true>();
 
         const filesByName = createMap<SourceFile | undefined>();
+        let missingFilePaths: ReadonlyArray<Path>;
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
+        const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
@@ -523,12 +611,25 @@ namespace ts {
                     });
                 }
             }
+
+            missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
         }
 
-        const missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
+        Debug.assert(!!missingFilePaths);
 
         // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
         moduleResolutionCache = undefined;
+
+        // Release any files we have acquired in the old program but are
+        // not part of the new program.
+        if (oldProgram && host.onReleaseOldSourceFile) {
+            const oldSourceFiles = oldProgram.getSourceFiles();
+            for (const oldSourceFile of oldSourceFiles) {
+                if (!getSourceFile(oldSourceFile.path) || shouldCreateNewSourceFile) {
+                    host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions());
+                }
+            }
+        }
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
@@ -563,6 +664,7 @@ namespace ts {
             getSourceFileFromReference,
             sourceFileToPackageName,
             redirectTargetsSet,
+            hasInvalidatedResolution
         };
 
         verifyCompilerOptions();
@@ -657,21 +759,22 @@ namespace ts {
              * * ResolvedModuleFull instance: can be reused.
              */
             let result: ResolvedModuleFull[];
+            let reusedNames: string[];
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
 
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
-                // If we want to reuse resolutions more aggressively, we can refine this to check for whether the
-                // text of the corresponding modulenames has changed.
-                if (file === oldSourceFile) {
+                // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
+                if (file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
                     const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules.get(moduleName);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
                             trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, containingFile);
                         }
                         (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
+                        (reusedNames || (reusedNames = [])).push(moduleName);
                         continue;
                     }
                 }
@@ -700,7 +803,7 @@ namespace ts {
             }
 
             const resolutions = unknownModuleNames && unknownModuleNames.length
-                ? resolveModuleNamesWorker(unknownModuleNames, containingFile)
+                ? resolveModuleNamesWorker(unknownModuleNames, containingFile, reusedNames)
                 : emptyArray;
 
             // Combine results of resolutions and predicted results
@@ -788,14 +891,21 @@ namespace ts {
             const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
             oldProgram.structureIsReused = StructureIsReused.Completely;
 
+            // If the missing file paths are now present, it can change the progam structure,
+            // and hence cant reuse the structure.
+            // This is same as how we dont reuse the structure if one of the file from old program is now missing
+            if (oldProgram.getMissingFilePaths().some(missingFilePath => host.fileExists(missingFilePath))) {
+                return oldProgram.structureIsReused = StructureIsReused.Not;
+            }
+
             const oldSourceFiles = oldProgram.getSourceFiles();
             const enum SeenPackageName { Exists, Modified }
             const seenPackageNames = createMap<SeenPackageName>();
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
-                    : host.getSourceFile(oldSourceFile.fileName, options.target);
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target, /*onError*/ undefined, shouldCreateNewSourceFile)
+                    : host.getSourceFile(oldSourceFile.fileName, options.target, /*onError*/ undefined, shouldCreateNewSourceFile);
 
                 if (!newSourceFile) {
                     return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -878,6 +988,13 @@ namespace ts {
                     // tentatively approve the file
                     modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
                 }
+                else if (hasInvalidatedResolution(oldSourceFile.path)) {
+                    // 'module/types' references could have changed
+                    oldProgram.structureIsReused = StructureIsReused.SafeModules;
+
+                    // add file to the modified list so that we will resolve it later
+                    modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                }
 
                 // if file has passed all checks it should be safe to reuse it
                 newSourceFiles.push(newSourceFile);
@@ -924,20 +1041,11 @@ namespace ts {
                 return oldProgram.structureIsReused;
             }
 
-            // If a file has ceased to be missing, then we need to discard some of the old
-            // structure in order to pick it up.
-            // Caution: if the file has created and then deleted between since it was discovered to
-            // be missing, then the corresponding file watcher will have been closed and no new one
-            // will be created until we encounter a change that prevents complete structure reuse.
-            // During this interval, creation of the file will go unnoticed.  We expect this to be
-            // both rare and low-impact.
-            if (oldProgram.getMissingFilePaths().some(missingFilePath => host.fileExists(missingFilePath))) {
+            if (host.hasChangedAutomaticTypeDirectiveNames) {
                 return oldProgram.structureIsReused = StructureIsReused.SafeModules;
             }
 
-            for (const p of oldProgram.getMissingFilePaths()) {
-                filesByName.set(p, undefined);
-            }
+            missingFilePaths = oldProgram.getMissingFilePaths();
 
             // update fileName -> file mapping
             for (let i = 0; i < newSourceFiles.length; i++) {
@@ -1582,7 +1690,7 @@ namespace ts {
                         fail(Diagnostics.File_0_not_found, fileName);
                     }
                     else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
-                        fail(Diagnostics.A_file_cannot_have_a_reference_to_itself, fileName);
+                        fail(Diagnostics.A_file_cannot_have_a_reference_to_itself);
                     }
                 }
                 return sourceFile;
@@ -1684,7 +1792,7 @@ namespace ts {
                 else {
                     fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                 }
-            });
+            }, shouldCreateNewSourceFile);
 
             if (packageId) {
                 const packageIdKey = `${packageId.name}/${packageId.subModuleName}@${packageId.version}`;
