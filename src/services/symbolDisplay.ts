@@ -482,6 +482,10 @@ namespace ts.SymbolDisplay {
             addNewLineIfDisplayPartsExist();
             if (symbolKind) {
                 pushTypePart(symbolKind);
+                if (some(symbol.declarations, d => isFunctionLikeDeclaration(d) && !!d.asteriskToken)) {
+                    displayParts.push(punctuationPart(SyntaxKind.AsteriskToken));
+                }
+
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
             }
