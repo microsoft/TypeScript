@@ -2542,7 +2542,7 @@ namespace ts {
     export interface EmitFileNames {
         jsFilePath: string;
         sourceMapFilePath: string;
-        declarationFilePath: string;
+        declarationFilePath?: string;
     }
 
     /**

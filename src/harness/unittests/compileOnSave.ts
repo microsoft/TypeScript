@@ -549,7 +549,7 @@ namespace ts.projectSystem {
             assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
-        it("shoud not emit js files in external projects", () => {
+        it("should not emit js files in external projects", () => {
             const file1 = {
                 path: "/a/b/file1.ts",
                 content: "consonle.log('file1');"
@@ -587,6 +587,38 @@ namespace ts.projectSystem {
             assert.isTrue(outFileContent.indexOf(file1.content) !== -1);
             assert.isTrue(outFileContent.indexOf(file2.content) === -1);
             assert.isTrue(outFileContent.indexOf(file3.content) === -1);
+        });
+
+        it("should emit js files in inferred projects when they could be input files", () => {
+            const f1 = {
+                path: "/a/b/f1.ts",
+                content: "var test = 0;"
+            };
+            const f1js = {
+                path: "/a/b/f1.js",
+                content: "var test = 0;"
+            };
+            const host = createServerHost([f1, f1js, libFile]);
+            const session = createSession(host, { useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
+            const projectService = session.getProjectService();
+            projectService.setCompilerOptionsForInferredProjects({});
+
+            openFilesForSession([f1, f1js], session);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const projectName = projectService.inferredProjects[0].getProjectName();
+
+            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 2,
+                arguments: { projectFileName: projectName }
+            }).response;
+            assert.lengthOf(diags, 0);
+
+            const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: f1.path });
+            const emitResponse = session.executeCommand(emitRequest).response;
+            assert.isTrue(emitResponse);
         });
     });
 }

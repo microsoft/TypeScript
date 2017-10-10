@@ -2200,17 +2200,17 @@ namespace ts {
                 const emitHost = getEmitHost();
                 const emitFilesSeen = createMap<true>();
                 forEachEmittedFile(emitHost, (emitFileNames) => {
-                    verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
-                    verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
+                    verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen, /*isJsFile*/ true);
+                    verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen, /*isJsFile*/ false);
                 });
             }
 
             // Verify that all the emit files are unique and don't overwrite input files
-            function verifyEmitFilePath(emitFileName: string, emitFilesSeen: Map<true>) {
+            function verifyEmitFilePath(emitFileName: string, emitFilesSeen: Map<true>, isJsFile: boolean) {
                 if (emitFileName) {
                     const emitFilePath = toPath(emitFileName);
                     // Report error if the output overwrites input file
-                    if (filesByName.has(emitFilePath)) {
+                    if (filesByName.has(emitFilePath) && !(isJsFile && options.isInferredProject)) {
                         let chain: DiagnosticMessageChain;
                         if (!options.configFilePath) {
                             // The program is from either an inferred project or an external project
