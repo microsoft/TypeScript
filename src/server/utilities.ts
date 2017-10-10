@@ -318,4 +318,15 @@ namespace ts.server {
             deleted(oldItems[oldIndex++]);
         }
     }
+
+    /* @internal */
+    export function indent(string: string): string {
+        return "\n    " + string;
+    }
+
+    /** Put stringified JSON on the next line, indented. */
+    /* @internal */
+    export function stringifyIndented(json: {}): string {
+        return "\n    " + JSON.stringify(json);
+    }
 }
