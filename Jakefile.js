@@ -93,7 +93,9 @@ var typesMapOutputPath = path.join(builtLocalDirectory, 'typesMap.json');
 
 var harnessCoreSources = [
     "harness.ts",
-    "virtualFileSystem.ts",
+    "collections.ts",
+    "vpath.ts",
+    "vfs.ts",
     "virtualFileSystemWithWatch.ts",
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",

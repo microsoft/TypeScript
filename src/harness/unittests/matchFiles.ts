@@ -1,5 +1,5 @@
 /// <reference path="..\harness.ts" />
-/// <reference path="..\virtualFileSystem.ts" />
+/// <reference path="..\vfs.ts" />
 
 namespace ts {
     const caseInsensitiveBasePath = "c:/dev/";

@@ -20,7 +20,7 @@
 /// <reference path="..\server\client.ts" />
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
-/// <reference path="virtualFileSystem.ts" />
+/// <reference path="vfs.ts" />
 /// <reference types="node" />
 /// <reference types="mocha" />
 /// <reference types="chai" />
@@ -743,8 +743,8 @@ namespace Harness {
                     fs.addFile(file);
                 }
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), depth, path => {
-                    const entry = fs.traversePath(path);
-                    if (entry && entry.isDirectory()) {
+                    const entry = fs.getEntry(path);
+                    if (entry instanceof Utils.VirtualDirectory) {
                         const directory = <Utils.VirtualDirectory>entry;
                         return {
                             files: ts.map(directory.getFiles(), f => f.name),

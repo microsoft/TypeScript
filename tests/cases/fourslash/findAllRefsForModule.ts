@@ -18,6 +18,6 @@ verify.noErrors();
 
 const ranges = test.ranges();
 const [r0, r1, r2] = ranges;
-verify.referenceGroups([r0, r1], [{ definition: 'module "/a"', ranges: [r0, r2, r1] }]);
+verify.referenceGroups([r0, r1], [{ definition: 'module "/a"', ranges: [r0, r1, r2] }]);
 // TODO:GH#15736
 verify.referenceGroups(r2, undefined);

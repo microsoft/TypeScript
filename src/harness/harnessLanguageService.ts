@@ -123,7 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
-        protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
+        protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/ false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
             protected settings = ts.getDefaultCompilerOptions()) {
@@ -135,9 +135,9 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            for (const virtualEntry of this.virtualFileSystem.getAllFileEntries()) {
-                const scriptInfo = virtualEntry.content;
-                if (scriptInfo.isRootFile) {
+            for (const virtualEntry of this.virtualFileSystem.getFiles({ recursive: true })) {
+                const scriptInfo = virtualEntry.metadata.get("scriptInfo");
+                if (scriptInfo && scriptInfo.isRootFile) {
                     // only include root files here
                     // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
                     fileNames.push(scriptInfo.fileName);
@@ -147,18 +147,20 @@ namespace Harness.LanguageService {
         }
 
         public getScriptInfo(fileName: string): ScriptInfo {
-            const fileEntry = this.virtualFileSystem.traversePath(fileName);
-            return fileEntry && fileEntry.isFile() ? (<Utils.VirtualFile>fileEntry).content : undefined;
+            const fileEntry = this.virtualFileSystem.getFile(fileName);
+            return fileEntry ? fileEntry.metadata.get("scriptInfo") : undefined;
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
-            this.virtualFileSystem.addFile(fileName, new ScriptInfo(fileName, content, isRootFile));
+            this.virtualFileSystem.addFile(fileName, content, { overwrite: true }).metadata.set("scriptInfo", new ScriptInfo(fileName, content, isRootFile));
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
-            const script = this.getScriptInfo(fileName);
-            if (script !== undefined) {
+            const file = this.virtualFileSystem.getFile(fileName);
+            const script = file && file.metadata.get("scriptInfo") as ScriptInfo;
+            if (script) {
                 script.editContent(start, end, newText);
+                file.setContent(script.content);
                 return;
             }
 
@@ -185,9 +187,9 @@ namespace Harness.LanguageService {
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
         getDirectories(path: string): string[] {
-            const dir = this.virtualFileSystem.traversePath(path);
-            if (dir && dir.isDirectory()) {
-                return ts.map((<Utils.VirtualDirectory>dir).getDirectories(), (d) => ts.combinePaths(path, d.name));
+            const dir = this.virtualFileSystem.getDirectory(path);
+            if (dir) {
+                return ts.map(dir.getDirectories(), (d) => ts.combinePaths(path, d.name));
             }
             return [];
         }
