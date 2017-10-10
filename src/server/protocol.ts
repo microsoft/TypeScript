@@ -1659,8 +1659,8 @@ namespace ts.server.protocol {
          */
         replacementSpan?: TextSpan;
         /**
-         * Indicates whether commiting this completion entry will require additional code action to be
-         * made to avoid errors. The code action is normally adding an additional import statement.
+         * Indicates whether commiting this completion entry will require additional code actions to be
+         * made to avoid errors. The CompletionEntryDetails will have these actions.
          */
         hasAction?: true;
     }

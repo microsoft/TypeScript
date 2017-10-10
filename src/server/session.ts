@@ -1184,17 +1184,12 @@ namespace ts.server {
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position);
             if (simplifiedResult) {
-                return mapDefined(completions && completions.entries, entry => {
+                return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
                         const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
                         const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
-
-                        const newEntry: protocol.CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
-                        // avoid serialization when hasAction = false
-                        if (hasAction) {
-                            newEntry.hasAction = true;
-                        }
-                        return newEntry;
+                        // Use `hasAction || undefined` to avoid serializing `false`.
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined };
                     }
                 }).sort((a, b) => compareStrings(a.name, b.name));
             }

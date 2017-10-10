@@ -925,7 +925,11 @@ namespace ts.Completions {
             const tokenTextLowerCase = tokenText.toLowerCase();
             const symbolIdMap = arrayToNumericMap(symbols, s => getUniqueSymbolId(s, typeChecker));
 
-            codefix.eachOtherExternalModule(typeChecker, allSourceFiles, sourceFile, moduleSymbol => {
+            codefix.forEachExternalModule(typeChecker, allSourceFiles, moduleSymbol => {
+                if (moduleSymbol === sourceFile.symbol) {
+                    return;
+                }
+
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     let { name } = symbol;
                     const isDefaultExport = name === "default";

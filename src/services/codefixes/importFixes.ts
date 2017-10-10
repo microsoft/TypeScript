@@ -648,7 +648,11 @@ namespace ts.codefix {
         const symbolIdActionMap = new ImportCodeActionMap();
         const currentTokenMeaning = getMeaningFromLocation(symbolToken);
 
-        eachOtherExternalModule(checker, allSourceFiles, sourceFile, moduleSymbol => {
+        forEachExternalModule(checker, allSourceFiles, moduleSymbol => {
+            if (moduleSymbol === sourceFile.symbol) {
+                return;
+            }
+
             cancellationToken.throwIfCancellationRequested();
             // check the default export
             const defaultExport = checker.tryGetMemberInModuleExports("default", moduleSymbol);
@@ -676,13 +680,13 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function eachOtherExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, cb: (module: Symbol) => void) {
+    export function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
         for (const ambient of checker.getAmbientModules()) {
             cb(ambient);
         }
-        for (const otherSourceFile of allSourceFiles) {
-            if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
-                cb(otherSourceFile.symbol);
+        for (const sourceFile of allSourceFiles) {
+            if (isExternalOrCommonJsModule(sourceFile)) {
+                cb(sourceFile.symbol);
             }
         }
     }
