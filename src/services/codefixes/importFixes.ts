@@ -16,7 +16,7 @@ namespace ts.codefix {
         moduleSpecifier?: string;
     }
 
-    enum ModuleSpecifierComparison {
+    const enum ModuleSpecifierComparison {
         Better,
         Equal,
         Worse
@@ -26,10 +26,6 @@ namespace ts.codefix {
         private symbolIdToActionMap: ImportCodeAction[][] = [];
 
         addAction(symbolId: number, newAction: ImportCodeAction) {
-            if (!newAction) {
-                return;
-            }
-
             const actions = this.symbolIdToActionMap[symbolId];
             if (!actions) {
                 this.symbolIdToActionMap[symbolId] = [newAction];

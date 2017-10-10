@@ -6373,6 +6373,7 @@ namespace ts {
                     if (tagName) {
                         switch (tagName.escapedText) {
                             case "augments":
+                            case "extends":
                                 tag = parseAugmentsTag(atToken, tagName);
                                 break;
                             case "class":
