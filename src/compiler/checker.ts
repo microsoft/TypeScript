@@ -908,6 +908,7 @@ namespace ts {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol;
             let lastLocation: Node;
+            let lastNonBlockLocation: Node;
             let propertyWithInvalidInitializer: Node;
             const errorLocation = location;
             let grandparent: Node;
@@ -1126,6 +1127,9 @@ namespace ts {
                         }
                         break;
                 }
+                if (location.kind !== SyntaxKind.Block) {
+                    lastNonBlockLocation = location;
+                }
                 lastLocation = location;
                 location = location.parent;
             }
@@ -1133,7 +1137,7 @@ namespace ts {
             // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
             // If `result === lastLocation.symbol`, that means that we are somewhere inside `lastLocation` looking up a name, and resolving to `lastLocation` itself.
             // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
-            if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && result !== lastLocation.symbol) {
+            if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && result !== lastNonBlockLocation.symbol) {
                 result.isReferenced = true;
             }
 
@@ -14826,11 +14830,7 @@ namespace ts {
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
                 if (languageVersion < ScriptTarget.ES2015) {
-                    const hasNonMethodDeclaration = forEachProperty(prop, p => {
-                        const propKind = getDeclarationKindFromSymbol(p);
-                        return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
-                    });
-                    if (hasNonMethodDeclaration) {
+                    if (symbolHasNonMethodDeclaration(prop)) {
                         error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                         return false;
                     }
@@ -14841,6 +14841,16 @@ namespace ts {
                     // cannot simultaneously be private and abstract, so this will trigger an
                     // additional error elsewhere.
                     error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(getDeclaringClass(prop)));
+                    return false;
+                }
+            }
+
+            // Referencing Abstract Properties within Constructors is not allowed
+            if ((flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop)) {
+                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
+
+                if (declaringClassDeclaration && isNodeWithinConstructor(node, declaringClassDeclaration)) {
+                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
                 }
             }
@@ -14894,6 +14904,13 @@ namespace ts {
                 return false;
             }
             return true;
+        }
+
+        function symbolHasNonMethodDeclaration(symbol: Symbol) {
+            return forEachProperty(symbol, prop => {
+                const propKind = getDeclarationKindFromSymbol(prop);
+                return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
+            });
         }
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
@@ -20015,14 +20032,20 @@ namespace ts {
         }
 
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
-            const cls = getJSDocHost(node);
-            if (!isClassDeclaration(cls) && !isClassExpression(cls)) {
-                error(cls, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
+            const classLike = getJSDocHost(node);
+            if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
+                error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
                 return;
             }
 
+            const augmentsTags = getAllJSDocTagsOfKind(classLike, SyntaxKind.JSDocAugmentsTag);
+            Debug.assert(augmentsTags.length > 0);
+            if (augmentsTags.length > 1) {
+                error(augmentsTags[1], Diagnostics.Class_declarations_cannot_have_more_than_one_augments_or_extends_tag);
+            }
+
             const name = getIdentifierFromEntityNameExpression(node.class.expression);
-            const extend = getClassExtendsHeritageClauseElement(cls);
+            const extend = getClassExtendsHeritageClauseElement(classLike);
             if (extend) {
                 const className = getIdentifierFromEntityNameExpression(extend.expression);
                 if (className && name.escapedText !== className.escapedText) {
@@ -23137,6 +23160,19 @@ namespace ts {
             }
 
             return result;
+        }
+
+        function isNodeWithinConstructor(node: Node, classDeclaration: ClassLikeDeclaration) {
+            return findAncestor(node, element => {
+                if (isConstructorDeclaration(element) && nodeIsPresent(element.body)) {
+                    return true;
+                }
+                else if (element === classDeclaration || isFunctionLikeDeclaration(element)) {
+                    return "quit";
+                }
+
+                return false;
+            });
         }
 
         function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {

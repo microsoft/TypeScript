@@ -352,8 +352,6 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
-    const typeRootFromTsserverLocation = "/node_modules/@types";
-
     export function getTypeRootsFromLocation(currentDirectory: string) {
         currentDirectory = normalizePath(currentDirectory);
         const result: string[] = [];
@@ -401,7 +399,7 @@ namespace ts.projectSystem {
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, ["/a/b/c", typeRootFromTsserverLocation], /*recursive*/ true);
+            checkWatchedDirectories(host, ["/a/b/c", ...getTypeRootsFromLocation(getDirectoryPath(appFile.path))], /*recursive*/ true);
         });
 
         it("can handle tsconfig file name with difference casing", () => {
@@ -4331,7 +4329,7 @@ namespace ts.projectSystem {
 
             function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
                 const calledMap = calledMaps[callback];
-                assert.equal(calledMap.size, expectedKeys.size, `${callback}: incorrect size of map: Actual keys: ${arrayFrom(calledMap.keys())} Expected: ${arrayFrom(expectedKeys.keys())}`);
+                ts.TestFSWithWatch.verifyMapSize(callback, calledMap, arrayFrom(expectedKeys.keys()));
                 expectedKeys.forEach((called, name) => {
                     assert.isTrue(calledMap.has(name), `${callback} is expected to contain ${name}, actual keys: ${arrayFrom(calledMap.keys())}`);
                     assert.equal(calledMap.get(name).length, called, `${callback} is expected to be called ${called} times with ${name}. Actual entry: ${calledMap.get(name)}`);
@@ -4413,6 +4411,7 @@ namespace ts.projectSystem {
             }
             const f2Lookups = getLocationsForModuleLookup("f2");
             callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, f2Lookups, 1);
+            const typeRootLocations = getTypeRootsFromLocation(getDirectoryPath(root.path));
             const f2DirLookups = getLocationsForDirectoryLookup();
             callsTrackingHost.verifyCalledOnEachEntry(CalledMapsWithSingleArg.directoryExists, f2DirLookups);
             callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.getDirectories);
@@ -4423,7 +4422,7 @@ namespace ts.projectSystem {
             verifyImportedDiagnostics();
             const f1Lookups = f2Lookups.map(s => s.replace("f2", "f1"));
             f1Lookups.length = f1Lookups.indexOf(imported.path) + 1;
-            const f1DirLookups = ["/c/d", "/c", typeRootFromTsserverLocation];
+            const f1DirLookups = ["/c/d", "/c", ...typeRootLocations];
             vertifyF1Lookups();
 
             // setting compiler options discards module resolution cache
@@ -4475,7 +4474,7 @@ namespace ts.projectSystem {
             function getLocationsForDirectoryLookup() {
                 const result = createMap<number>();
                 // Type root
-                result.set(typeRootFromTsserverLocation, 1);
+                typeRootLocations.forEach(location => result.set(location, 1));
                 forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
                     // To resolve modules
                     result.set(ancestor, 2);

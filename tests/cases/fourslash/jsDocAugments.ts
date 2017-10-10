@@ -20,4 +20,3 @@
 
 goTo.marker();
 verify.quickInfoIs("(local var) x: string");
-
