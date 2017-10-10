@@ -1,0 +1,15 @@
+=== tests/cases/compiler/instanceofWithPrimitiveUnion.ts ===
+function foo(x: number | string) {
+>foo : (x: string | number) => void
+>x : string | number
+
+    if (x instanceof Object) {
+>x instanceof Object : boolean
+>x : string | number
+>Object : ObjectConstructor
+
+        x;
+>x : string | number
+    }
+}
+

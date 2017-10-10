@@ -1,0 +1,14 @@
+=== tests/cases/compiler/instanceofWithPrimitiveUnion.ts ===
+function foo(x: number | string) {
+>foo : Symbol(foo, Decl(instanceofWithPrimitiveUnion.ts, 0, 0))
+>x : Symbol(x, Decl(instanceofWithPrimitiveUnion.ts, 0, 13))
+
+    if (x instanceof Object) {
+>x : Symbol(x, Decl(instanceofWithPrimitiveUnion.ts, 0, 13))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+        x;
+>x : Symbol(x, Decl(instanceofWithPrimitiveUnion.ts, 0, 13))
+    }
+}
+
