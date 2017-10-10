@@ -257,11 +257,12 @@ namespace ts.projectSystem {
 
         getEventsWithName<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): ReadonlyArray<T> {
             let events: T[];
-            removeWhere(this.events, event => {
+            filterMutate(this.events, event => {
                 if (event.eventName === eventName) {
                     (events || (events = [])).push(event as T);
-                    return true;
+                    return false;
                 }
+                return true;
             });
             return events || emptyArray;
         }
@@ -291,14 +292,15 @@ namespace ts.projectSystem {
 
         getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
             let event: server.ProjectServiceEvent;
-            removeWhere(this.events, e => {
+            filterMutate(this.events, e => {
                 if (e.eventName === eventName) {
                     if (event) {
                         assert(false, "more than one event found");
                     }
                     event = e;
-                    return true;
+                    return false;
                 }
+                return true;
             });
             assert.equal(event.eventName, eventName);
             return event.data;
