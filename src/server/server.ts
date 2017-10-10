@@ -753,10 +753,21 @@ namespace ts.server {
     const sys = <ServerHost>ts.sys;
     // use watchGuard process on Windows when node version is 4 or later
     const useWatchGuard = process.platform === "win32" && getNodeMajorVersion() >= 4;
+    const originalWatchDirectory = sys.watchDirectory;
+    const noopWatcher: FileWatcher = { close: noop };
+    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+        try {
+            return originalWatchDirectory.call(sys, path, callback, recursive);
+        }
+        catch (e) {
+            logger.info(`Exception when creating directory watcher: ${e.message}`);
+            return noopWatcher;
+        }
+    }
+
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
         const statusCache = createMap<boolean>();
-        const originalWatchDirectory = sys.watchDirectory;
         sys.watchDirectory = function (path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
@@ -790,13 +801,16 @@ namespace ts.server {
             }
             if (status) {
                 // this drive is safe to use - call real 'watchDirectory'
-                return originalWatchDirectory.call(sys, path, callback, recursive);
+                return watchDirectorySwallowingException(path, callback, recursive);
             }
             else {
                 // this drive is unsafe - return no-op watcher
-                return { close() { } };
+                return noopWatcher;
             }
         };
+    }
+    else {
+        sys.watchDirectory = watchDirectorySwallowingException;
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
