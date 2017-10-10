@@ -27,7 +27,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     function foo() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield new Promise(function (resolve_1, reject_1) { require([(yield new Promise(function (resolve_2, reject_2) { require(["./foo"], resolve_2, reject_2); })).default], resolve_1, reject_1); });
+            return yield new Promise((resolve_1, reject_1) => { require([(yield new Promise((resolve_2, reject_2) => { require(["./foo"], resolve_2, reject_2); })).default], resolve_1, reject_1); });
         });
     }
 });

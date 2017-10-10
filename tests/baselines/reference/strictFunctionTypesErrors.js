@@ -127,6 +127,34 @@ declare let dogCrate: Crate<Dog>;
 animalCrate = dogCrate;  // Error
 dogCrate = animalCrate;  // Error
 
+// Verify that callback parameters are strictly checked
+
+declare let fc1: (f: (x: Animal) => Animal) => void;
+declare let fc2: (f: (x: Dog) => Dog) => void;
+fc1 = fc2;  // Error
+fc2 = fc1;  // Error
+
+// Verify that callback parameters aren't loosely checked when types
+// originate in method declarations
+
+namespace n1 {
+    class Foo {
+        static f1(x: Animal): Animal { throw "wat"; }
+        static f2(x: Dog): Animal { throw "wat"; };
+    }
+    declare let f1: (cb: typeof Foo.f1) => void;
+    declare let f2: (cb: typeof Foo.f2) => void;
+    f1 = f2;
+    f2 = f1;  // Error
+}
+
+namespace n2 {
+    type BivariantHack<Input, Output> = { foo(x: Input): Output }["foo"];
+    declare let f1: (cb: BivariantHack<Animal, Animal>) => void;
+    declare let f2: (cb: BivariantHack<Dog, Animal>) => void;
+    f1 = f2;
+    f2 = f1;  // Error
+}
 
 //// [strictFunctionTypesErrors.js]
 "use strict";
@@ -186,3 +214,25 @@ dogComparer2 = animalComparer2; // Ok
 // Errors below should elaborate the reason for invariance
 animalCrate = dogCrate; // Error
 dogCrate = animalCrate; // Error
+fc1 = fc2; // Error
+fc2 = fc1; // Error
+// Verify that callback parameters aren't loosely checked when types
+// originate in method declarations
+var n1;
+(function (n1) {
+    var Foo = /** @class */ (function () {
+        function Foo() {
+        }
+        Foo.f1 = function (x) { throw "wat"; };
+        Foo.f2 = function (x) { throw "wat"; };
+        ;
+        return Foo;
+    }());
+    f1 = f2;
+    f2 = f1; // Error
+})(n1 || (n1 = {}));
+var n2;
+(function (n2) {
+    f1 = f2;
+    f2 = f1; // Error
+})(n2 || (n2 = {}));

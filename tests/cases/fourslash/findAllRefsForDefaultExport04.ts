@@ -14,12 +14,10 @@ verify.referenceGroups([r0, r2], [
     { definition: "import a", ranges: [r3, r4] }
 ]);
 verify.referenceGroups(r1, [
-    // TODO:GH#17990
-    { definition: "import default", ranges: [r1] },
+    { definition: "export default a", ranges: [r1] },
     { definition: "import a", ranges: [r3, r4] },
 ]);
 verify.referenceGroups([r3, r4], [
     { definition: "import a", ranges: [r3, r4] },
-    // TODO:GH#17990
-    { definition: "import default", ranges: [r1] },
+    { definition: "export default a", ranges: [r1] },
 ]);

@@ -2220,6 +2220,10 @@
         "category": "Error",
         "code": 2714
     },
+    "Abstract property '{0}' in class '{1}' cannot be accessed in the constructor.": {
+        "category": "Error",
+        "code": 2715
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3515,17 +3519,21 @@
         "category": "Error",
         "code": 8021
     },
-    "JSDoc '@augments' is not attached to a class declaration.": {
+    "JSDoc '@{0}' is not attached to a class.": {
         "category": "Error",
         "code": 8022
     },
-    "JSDoc '@augments {0}' does not match the 'extends {1}' clause.": {
+    "JSDoc '@{0} {1}' does not match the 'extends {2}' clause.": {
         "category": "Error",
         "code": 8023
     },
     "JSDoc '@param' tag has name '{0}', but there is no parameter with that name.": {
         "category": "Error",
         "code": 8024
+    },
+    "Class declarations cannot have more than one `@augments` or `@extends` tag.": {
+        "category": "Error",
+        "code": 8025
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -3653,7 +3661,7 @@
         "category": "Message",
         "code": 90013
     },
-    "Change {0} to {1}.": {
+    "Change '{0}' to '{1}'.": {
         "category": "Message",
         "code": 90014
     },

@@ -16,8 +16,8 @@ namespace ts.server {
         directoryExists: () => false,
         getDirectories: () => [],
         createDirectory: noop,
-        getExecutingFilePath(): string { return void 0; },
-        getCurrentDirectory(): string { return void 0; },
+        getExecutingFilePath(): string { return ""; },
+        getCurrentDirectory(): string { return ""; },
         getEnvironmentVariable(): string { return ""; },
         readDirectory() { return []; },
         exit: noop,
@@ -383,6 +383,61 @@ namespace ts.server {
                     success: true
                 });
             });
+        });
+    });
+
+    describe("exceptions", () => {
+        const command = "testhandler";
+        class TestSession extends Session {
+            lastSent: protocol.Message;
+            private exceptionRaisingHandler(_request: protocol.Request): { response?: any, responseRequired: boolean } {
+                f1();
+                return;
+                function f1() {
+                    throw new Error("myMessage");
+                }
+            }
+
+            constructor() {
+                super({
+                    host: mockHost,
+                    cancellationToken: nullCancellationToken,
+                    useSingleInferredProject: false,
+                    useInferredProjectPerProjectRoot: false,
+                    typingsInstaller: undefined,
+                    byteLength: Utils.byteLength,
+                    hrtime: process.hrtime,
+                    logger: projectSystem.nullLogger,
+                    canUseEvents: true
+                });
+                this.addProtocolHandler(command, this.exceptionRaisingHandler);
+            }
+            send(msg: protocol.Message) {
+                this.lastSent = msg;
+            }
+        }
+
+        it("raised in a protocol handler generate an event", () => {
+
+            const session = new TestSession();
+
+            const request = {
+                command,
+                seq: 0,
+                type: "request"
+            };
+
+            session.onMessage(JSON.stringify(request));
+            const lastSent = session.lastSent as protocol.Response;
+
+            expect(lastSent).to.contain({
+                seq: 0,
+                type: "response",
+                command,
+                success: false
+            });
+
+            expect(lastSent.message).has.string("myMessage").and.has.string("f1");
         });
     });
 

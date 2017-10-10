@@ -82,7 +82,12 @@ namespace ts {
 
     export function addFileWatcherWithLogging(host: System, file: string, cb: FileWatcherCallback, log: (s: string) => void): FileWatcher {
         const watcherCaption = `FileWatcher:: `;
-        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, host, file, cb);
+        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, /*logOnlyTrigger*/ false, host, file, cb);
+    }
+
+    export function addFileWatcherWithOnlyTriggerLogging(host: System, file: string, cb: FileWatcherCallback, log: (s: string) => void): FileWatcher {
+        const watcherCaption = `FileWatcher:: `;
+        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, /*logOnlyTrigger*/ true, host, file, cb);
     }
 
     export type FilePathWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, filePath: Path) => void;
@@ -92,7 +97,12 @@ namespace ts {
 
     export function addFilePathWatcherWithLogging(host: System, file: string, cb: FilePathWatcherCallback, path: Path, log: (s: string) => void): FileWatcher {
         const watcherCaption = `FileWatcher:: `;
-        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, host, file, cb, path);
+        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, /*logOnlyTrigger*/ false, host, file, cb, path);
+    }
+
+    export function addFilePathWatcherWithOnlyTriggerLogging(host: System, file: string, cb: FilePathWatcherCallback, path: Path, log: (s: string) => void): FileWatcher {
+        const watcherCaption = `FileWatcher:: `;
+        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, /*logOnlyTrigger*/ true, host, file, cb, path);
     }
 
     export function addDirectoryWatcher(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher {
@@ -102,14 +112,21 @@ namespace ts {
 
     export function addDirectoryWatcherWithLogging(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, log: (s: string) => void): FileWatcher {
         const watcherCaption = `DirectoryWatcher ${(flags & WatchDirectoryFlags.Recursive) !== 0 ? "recursive" : ""}:: `;
-        return createWatcherWithLogging(addDirectoryWatcher, watcherCaption, log, host, directory, cb, flags);
+        return createWatcherWithLogging(addDirectoryWatcher, watcherCaption, log, /*logOnlyTrigger*/ false, host, directory, cb, flags);
+    }
+
+    export function addDirectoryWatcherWithOnlyTriggerLogging(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, log: (s: string) => void): FileWatcher {
+        const watcherCaption = `DirectoryWatcher ${(flags & WatchDirectoryFlags.Recursive) !== 0 ? "recursive" : ""}:: `;
+        return createWatcherWithLogging(addDirectoryWatcher, watcherCaption, log, /*logOnlyTrigger*/ true, host, directory, cb, flags);
     }
 
     type WatchCallback<T, U> = (fileName: string, cbOptional1?: T, optional?: U) => void;
     type AddWatch<T, U> = (host: System, file: string, cb: WatchCallback<T, U>, optional?: U) => FileWatcher;
-    function createWatcherWithLogging<T, U>(addWatch: AddWatch<T, U>, watcherCaption: string, log: (s: string) => void, host: System, file: string, cb: WatchCallback<T, U>, optional?: U): FileWatcher {
+    function createWatcherWithLogging<T, U>(addWatch: AddWatch<T, U>, watcherCaption: string, log: (s: string) => void, logOnlyTrigger: boolean, host: System, file: string, cb: WatchCallback<T, U>, optional?: U): FileWatcher {
         const info = `PathInfo: ${file}`;
-        log(`${watcherCaption}Added: ${info}`);
+        if (!logOnlyTrigger) {
+            log(`${watcherCaption}Added: ${info}`);
+        }
         const watcher = addWatch(host, file, (fileName, cbOptional1?) => {
             const optionalInfo = cbOptional1 !== undefined ? ` ${cbOptional1}` : "";
             log(`${watcherCaption}Trigger: ${fileName}${optionalInfo} ${info}`);
@@ -120,7 +137,9 @@ namespace ts {
         }, optional);
         return {
             close: () => {
-                log(`${watcherCaption}Close: ${info}`);
+                if (!logOnlyTrigger) {
+                    log(`${watcherCaption}Close: ${info}`);
+                }
                 watcher.close();
             }
         };
