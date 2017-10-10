@@ -230,6 +230,10 @@ namespace ts {
         // Should not be called on a declaration with a computed property name,
         // unless it is a well known Symbol.
         function getDeclarationName(node: Declaration): __String {
+            if (node.kind === SyntaxKind.ExportAssignment) {
+                return (<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+            }
+
             const name = getNameOfDeclaration(node);
             if (name) {
                 if (isAmbientModule(node)) {
@@ -261,8 +265,6 @@ namespace ts {
                     return InternalSymbolName.Index;
                 case SyntaxKind.ExportDeclaration:
                     return InternalSymbolName.ExportStar;
-                case SyntaxKind.ExportAssignment:
-                    return (<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
                 case SyntaxKind.BinaryExpression:
                     if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
                         // module.exports = ...
@@ -2144,7 +2146,7 @@ namespace ts {
                     // falls through
                 case SyntaxKind.JSDocPropertyTag:
                     const propTag = node as JSDocPropertyLikeTag;
-                    const flags = propTag.isBracketed || propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
+                    const flags = propTag.isBracketed || propTag.typeExpression && propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
                         SymbolFlags.Property | SymbolFlags.Optional :
                         SymbolFlags.Property;
                     return declareSymbolAndAddToSymbolTable(propTag, flags, SymbolFlags.PropertyExcludes);
@@ -2269,16 +2271,13 @@ namespace ts {
         function isExportsOrModuleExportsOrAlias(node: Node): boolean {
             return isExportsIdentifier(node) ||
                 isModuleExportsPropertyAccessExpression(node) ||
-                isNameOfExportsOrModuleExportsAliasDeclaration(node);
+                isIdentifier(node) && isNameOfExportsOrModuleExportsAliasDeclaration(node);
         }
 
-        function isNameOfExportsOrModuleExportsAliasDeclaration(node: Node) {
-            if (isIdentifier(node)) {
-                const symbol = lookupSymbolForName(node.escapedText);
-                return symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
-                    symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(symbol.valueDeclaration.initializer);
-            }
-            return false;
+        function isNameOfExportsOrModuleExportsAliasDeclaration(node: Identifier): boolean {
+            const symbol = lookupSymbolForName(node.escapedText);
+            return symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
+                symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(symbol.valueDeclaration.initializer);
         }
 
         function isExportsOrModuleExportsOrAliasOrAssignment(node: Node): boolean {
@@ -2352,20 +2351,22 @@ namespace ts {
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
             const leftSideOfAssignment = node.left as PropertyAccessExpression;
-            const target = leftSideOfAssignment.expression as Identifier;
+            const target = leftSideOfAssignment.expression;
 
-            // Fix up parent pointers since we're going to use these nodes before we bind into them
-            leftSideOfAssignment.parent = node;
-            target.parent = leftSideOfAssignment;
+            if (isIdentifier(target)) {
+                // Fix up parent pointers since we're going to use these nodes before we bind into them
+                leftSideOfAssignment.parent = node;
+                target.parent = leftSideOfAssignment;
 
-            if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
-                // This can be an alias for the 'exports' or 'module.exports' names, e.g.
-                //    var util = module.exports;
-                //    util.property = function ...
-                bindExportsPropertyAssignment(node);
-            }
-            else {
-                bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+                if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
+                    // This can be an alias for the 'exports' or 'module.exports' names, e.g.
+                    //    var util = module.exports;
+                    //    util.property = function ...
+                    bindExportsPropertyAssignment(node);
+                }
+                else {
+                    bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+                }
             }
         }
 
@@ -2697,6 +2698,12 @@ namespace ts {
 
         if (expression.kind === SyntaxKind.ImportKeyword) {
             transformFlags |= TransformFlags.ContainsDynamicImport;
+
+            // A dynamic 'import()' call that contains a lexical 'this' will
+            // require a captured 'this' when emitting down-level.
+            if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
+                transformFlags |= TransformFlags.ContainsCapturedLexicalThis;
+            }
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;

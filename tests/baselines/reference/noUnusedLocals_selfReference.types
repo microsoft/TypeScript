@@ -1,10 +1,19 @@
 === tests/cases/compiler/noUnusedLocals_selfReference.ts ===
 export {}; // Make this a module scope, so these are local variables.
 
-function f() { f; }
->f : () => void
+function f() {
 >f : () => void
 
+    f;
+>f : () => void
+
+    function g() {
+>g : () => void
+
+        g;
+>g : () => void
+    }
+}
 class C {
 >C : C
 

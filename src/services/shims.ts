@@ -16,7 +16,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-let debugObjectHost = (function (this: any) { return this; })();
+let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })();
 
 // We need to use 'null' to interface with the managed side.
 /* tslint:disable:no-null-keyword */
@@ -119,13 +119,13 @@ namespace ts {
     }
 
     export interface Shim {
-        dispose(_dummy: any): void;
+        dispose(_dummy: {}): void;
     }
 
     export interface LanguageServiceShim extends Shim {
         languageService: LanguageService;
 
-        dispose(_dummy: any): void;
+        dispose(_dummy: {}): void;
 
         refresh(throwOnError: boolean): void;
 
@@ -417,7 +417,7 @@ namespace ts {
             return this.shimHost.getScriptVersion(fileName);
         }
 
-        public getLocalizedDiagnosticMessages(): any {
+        public getLocalizedDiagnosticMessages() {
             const diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
             if (diagnosticMessagesJson === null || diagnosticMessagesJson === "") {
                 return null;
@@ -515,7 +515,7 @@ namespace ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): any {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): {} {
         let start: number;
         if (logPerformance) {
             logger.log(actionDescription);
@@ -539,14 +539,14 @@ namespace ts {
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): string {
         return <string>forwardCall(logger, actionDescription, /*returnJson*/ true, action, logPerformance);
     }
 
     function forwardCall<T>(logger: Logger, actionDescription: string, returnJson: boolean, action: () => T, logPerformance: boolean): T | string {
         try {
             const result = simpleForwardCall(logger, actionDescription, action, logPerformance);
-            return returnJson ? JSON.stringify({ result }) : result;
+            return returnJson ? JSON.stringify({ result }) : result as T;
         }
         catch (err) {
             if (err instanceof OperationCanceledException) {
@@ -563,7 +563,7 @@ namespace ts {
         constructor(private factory: ShimFactory) {
             factory.registerShim(this);
         }
-        public dispose(_dummy: any): void {
+        public dispose(_dummy: {}): void {
             this.factory.unregisterShim(this);
         }
     }
@@ -601,7 +601,7 @@ namespace ts {
             this.logger = this.host;
         }
 
-        public forwardJSONCall(actionDescription: string, action: () => any): string {
+        public forwardJSONCall(actionDescription: string, action: () => {}): string {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
@@ -611,7 +611,7 @@ namespace ts {
          * Ensure (almost) deterministic release of internal Javascript resources when
          * some external native objects holds onto us (e.g. Com/Interop).
          */
-        public dispose(dummy: any): void {
+        public dispose(dummy: {}): void {
             this.logger.log("dispose()");
             this.languageService.dispose();
             this.languageService = null;
@@ -635,7 +635,7 @@ namespace ts {
         public refresh(throwOnError: boolean): void {
             this.forwardJSONCall(
                 `refresh(${throwOnError})`,
-                () => <any>null
+                () => null
             );
         }
 
@@ -644,7 +644,7 @@ namespace ts {
                 "cleanupSemanticCache()",
                 () => {
                     this.languageService.cleanupSemanticCache();
-                    return <any>null;
+                    return null;
                 });
         }
 
@@ -980,13 +980,13 @@ namespace ts {
             );
         }
 
-        public getEmitOutputObject(fileName: string): any {
+        public getEmitOutputObject(fileName: string): EmitOutput {
             return forwardCall(
                 this.logger,
                 `getEmitOutput('${fileName}')`,
                 /*returnJson*/ false,
                 () => this.languageService.getEmitOutput(fileName),
-                this.logPerformance);
+                this.logPerformance) as EmitOutput;
         }
     }
 
@@ -1030,7 +1030,7 @@ namespace ts {
             super(factory);
         }
 
-        private forwardJSONCall(actionDescription: string, action: () => any): any {
+        private forwardJSONCall(actionDescription: string, action: () => {}): string {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
@@ -1221,7 +1221,7 @@ namespace ts {
 
     // Here we expose the TypeScript services as an external module
     // so that it may be consumed easily like a node module.
-    declare const module: any;
+    declare const module: { exports: {} };
     if (typeof module !== "undefined" && module.exports) {
         module.exports = ts;
     }
