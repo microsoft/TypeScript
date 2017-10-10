@@ -495,25 +495,25 @@ namespace ts.server {
 
         close() {
             if (this.program) {
-                // if we have a program - release all files that are enlisted in program
+                // if we have a program - release all files that are enlisted in program but arent root
+                // The releasing of the roots happens later
+                // The project could have pending update remaining and hence the info could be in the files but not in program graph
                 for (const f of this.program.getSourceFiles()) {
-                    this.detachScriptInfo(f.fileName);
+                    this.detachScriptInfoIfNotRoot(f.fileName);
                 }
             }
-            if (!this.program || !this.languageServiceEnabled) {
-                // release all root files either if there is no program or language service is disabled.
-                // in the latter case set of root files can be larger than the set of files in program.
-                for (const root of this.rootFiles) {
-                    root.detachFromProject(this);
-                }
+            // Release external files
+            forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
+            // Always remove root files from the project
+            for (const root of this.rootFiles) {
+                root.detachFromProject(this);
             }
 
             this.rootFiles = undefined;
             this.rootFilesMap = undefined;
+            this.externalFiles = undefined;
             this.program = undefined;
             this.builder = undefined;
-            forEach(this.externalFiles, externalFile => this.detachScriptInfo(externalFile));
-            this.externalFiles = undefined;
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
@@ -530,11 +530,11 @@ namespace ts.server {
             this.languageService = undefined;
         }
 
-        private detachScriptInfo(uncheckedFilename: string) {
+        private detachScriptInfoIfNotRoot(uncheckedFilename: string) {
             const info = this.projectService.getScriptInfo(uncheckedFilename);
             // We might not find the script info in case its not associated with the project any more
             // and project graph was not updated (eg delayed update graph in case of files changed/deleted on the disk)
-            if (info) {
+            if (info && !this.isRoot(info)) {
                 info.detachFromProject(this);
             }
         }

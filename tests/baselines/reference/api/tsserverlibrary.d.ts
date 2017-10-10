@@ -7136,6 +7136,7 @@ declare namespace ts.server {
         getExternalFiles(): SortedReadonlyArray<string>;
         getSourceFile(path: Path): SourceFile;
         close(): void;
+        private detachScriptInfoIfNotRoot(uncheckedFilename);
         isClosed(): boolean;
         hasRoots(): boolean;
         getRootFiles(): NormalizedPath[];
