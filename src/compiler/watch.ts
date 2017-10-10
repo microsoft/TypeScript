@@ -322,7 +322,7 @@ namespace ts {
 
             if (hasChangedCompilerOptions) {
                 newLine = getNewLineCharacter(compilerOptions, system);
-                if (changesAffectModuleResolution(program && program.getCompilerOptions(), compilerOptions)) {
+                if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
                     resolutionCache.clear();
                 }
             }
