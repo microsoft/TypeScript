@@ -64,30 +64,30 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     class C {
         constructor() {
-            this.myModule = new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); });
+            this.myModule = new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); });
         }
         method() {
-            const loadAsync = new Promise(function (resolve_2, reject_2) { require(["./0"], resolve_2, reject_2); });
+            const loadAsync = new Promise((resolve_2, reject_2) => { require(["./0"], resolve_2, reject_2); });
             this.myModule.then(Zero => {
                 console.log(Zero.foo());
             }, async (err) => {
                 console.log(err);
-                let one = await new Promise(function (resolve_3, reject_3) { require(["./1"], resolve_3, reject_3); });
+                let one = await new Promise((resolve_3, reject_3) => { require(["./1"], resolve_3, reject_3); });
                 console.log(one.backup());
             });
         }
     }
     class D {
         constructor() {
-            this.myModule = new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); });
+            this.myModule = new Promise((resolve_4, reject_4) => { require(["./0"], resolve_4, reject_4); });
         }
         method() {
-            const loadAsync = new Promise(function (resolve_5, reject_5) { require(["./0"], resolve_5, reject_5); });
+            const loadAsync = new Promise((resolve_5, reject_5) => { require(["./0"], resolve_5, reject_5); });
             this.myModule.then(Zero => {
                 console.log(Zero.foo());
             }, async (err) => {
                 console.log(err);
-                let one = await new Promise(function (resolve_6, reject_6) { require(["./1"], resolve_6, reject_6); });
+                let one = await new Promise((resolve_6, reject_6) => { require(["./1"], resolve_6, reject_6); });
                 console.log(one.backup());
             });
         }

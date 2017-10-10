@@ -17,6 +17,6 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     return async function () {
-        const something = await new Promise(function (resolve_1, reject_1) { require(["./something"], resolve_1, reject_1); });
+        const something = await new Promise((resolve_1, reject_1) => { require(["./something"], resolve_1, reject_1); });
     };
 });

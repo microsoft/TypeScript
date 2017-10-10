@@ -6,4 +6,7 @@
 ////    public b: Z;
 ////}
 
-verify.rangeAfterCodeFix("class greeter<X, Z>");
+verify.codeFix({
+    description: "Remove declaration for: 'Y'.",
+    newRangeContent: "class greeter<X, Z> ",
+});
