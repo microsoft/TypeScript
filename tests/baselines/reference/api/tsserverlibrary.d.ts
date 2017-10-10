@@ -7266,7 +7266,6 @@ declare namespace ts.server {
         enableLanguageService(): void;
         disableLanguageService(): void;
         getProjectName(): string;
-        abstract getProjectRootPath(): string | undefined;
         abstract getTypeAcquisition(): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
         getSourceFile(path: Path): SourceFile;
@@ -7319,7 +7318,6 @@ declare namespace ts.server {
         addRoot(info: ScriptInfo): void;
         removeRoot(info: ScriptInfo): void;
         isProjectWithSingleRoot(): boolean;
-        getProjectRootPath(): string;
         close(): void;
         getTypeAcquisition(): TypeAcquisition;
     }
@@ -7346,7 +7344,6 @@ declare namespace ts.server {
         enablePlugins(): void;
         private enablePlugin(pluginConfigEntry, searchPaths);
         private enableProxy(pluginModuleFactory, configEntry);
-        getProjectRootPath(): string;
         /**
          * Get the errors that dont have any file name associated
          */
@@ -7372,11 +7369,9 @@ declare namespace ts.server {
     class ExternalProject extends Project {
         externalProjectName: string;
         compileOnSaveEnabled: boolean;
-        private readonly projectFilePath;
         excludedFiles: ReadonlyArray<NormalizedPath>;
         private typeAcquisition;
         getExcludedFiles(): ReadonlyArray<NormalizedPath>;
-        getProjectRootPath(): string;
         getTypeAcquisition(): TypeAcquisition;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
     }
@@ -7654,7 +7649,7 @@ declare namespace ts.server {
         private updateNonInferredProject<T>(project, newUncheckedFiles, propertyReader, newOptions, newTypeAcquisition, compileOnSave);
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath);
         private getOrCreateSingleInferredProjectIfEnabled();
-        private createInferredProject(rootDirectoryForResolution, isSingleInferredProject?, projectRootPath?);
+        private createInferredProject(currentDirectory, isSingleInferredProject?, projectRootPath?);
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
         private watchClosedScriptInfo(info);
         private stopWatchingScriptInfo(info);
