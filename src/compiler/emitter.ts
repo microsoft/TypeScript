@@ -1631,13 +1631,13 @@ namespace ts {
 
         function emitContinueStatement(node: ContinueStatement) {
             writeToken(SyntaxKind.ContinueKeyword, node.pos, writeKeyword);
-            emitWithPrefix(" ", writeSpace, node.label);
+            emitNodeWithPrefix(" ", writeSpace, node.label);
             writePunctuation(";");
         }
 
         function emitBreakStatement(node: BreakStatement) {
             writeToken(SyntaxKind.BreakKeyword, node.pos, writeKeyword);
-            emitWithPrefix(" ", writeSpace, node.label);
+            emitNodeWithPrefix(" ", writeSpace, node.label);
             writePunctuation(";");
         }
 
@@ -2166,7 +2166,7 @@ namespace ts {
 
         function emitJsxAttribute(node: JsxAttribute) {
             emit(node.name);
-            emitWithPrefix("=", writePunctuation, node.initializer);
+            emitNodeWithPrefix("=", writePunctuation, node.initializer);
         }
 
         function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
@@ -2441,18 +2441,14 @@ namespace ts {
             }
         }
 
-        function emitWithPrefix(prefix: string, writer: (s: string) => void, node: Node) {
-            emitNodeWithPrefix(prefix, writer, node, emit);
+        function emitExpressionWithPrefix(prefix: string, prefixWriter: (s: string) => void, node: Node) {
+            emitNodeWithPrefix(prefix, prefixWriter, node, emitExpression);
         }
 
-        function emitExpressionWithPrefix(prefix: string, writer: (s: string) => void, node: Node) {
-            emitNodeWithPrefix(prefix, writer, node, emitExpression);
-        }
-
-        function emitNodeWithPrefix(prefix: string, writer: (s: string) => void, node: Node, emit: (node: Node) => void) {
+        function emitNodeWithPrefix(prefix: string, prefixWriter: (s: string) => void, node: Node, emitHandler: (node: Node) => void = emit) {
             if (node) {
-                writer(prefix);
-                emit(node);
+                prefixWriter(prefix);
+                emitHandler(node);
             }
         }
 
