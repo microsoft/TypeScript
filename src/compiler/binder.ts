@@ -1401,11 +1401,11 @@ namespace ts {
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
+                // @ts-ignore falls through
                 case SyntaxKind.MethodDeclaration:
                     if (isObjectLiteralOrClassExpressionMethod(node)) {
                         return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethod;
                     }
-                // falls through
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -1700,12 +1700,12 @@ namespace ts {
                 case SyntaxKind.ModuleDeclaration:
                     declareModuleMember(node, symbolFlags, symbolExcludes);
                     break;
+                // @ts-ignore falls through
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>container)) {
                         declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
-                // falls through
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = createSymbolTable();
@@ -1980,6 +1980,7 @@ namespace ts {
         function bindWorker(node: Node) {
             switch (node.kind) {
                 /* Strict mode checks */
+                // @ts-ignore falls through
                 case SyntaxKind.Identifier:
                     // for typedef type names with namespaces, bind the new jsdoc type symbol here
                     // because it requires all containing namespaces to be in effect, namely the
@@ -1992,7 +1993,6 @@ namespace ts {
                         bindBlockScopedDeclaration(<Declaration>parentNode, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                         break;
                     }
-                // falls through
                 case SyntaxKind.ThisKeyword:
                     if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                         node.flowNode = currentFlow;
@@ -2140,19 +2140,19 @@ namespace ts {
                 case SyntaxKind.SourceFile:
                     updateStrictModeStatementList((<SourceFile>node).statements);
                     return bindSourceFileIfExternalModule();
+                // @ts-ignore falls through
                 case SyntaxKind.Block:
                     if (!isFunctionLike(node.parent)) {
                         return;
                     }
-                // falls through
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
+                // @ts-ignore falls through
                 case SyntaxKind.JSDocParameterTag:
                     if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {
                         break;
                     }
-                    // falls through
                 case SyntaxKind.JSDocPropertyTag:
                     const propTag = node as JSDocPropertyLikeTag;
                     const flags = propTag.isBracketed || propTag.typeExpression && propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?

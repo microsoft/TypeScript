@@ -304,11 +304,11 @@ namespace ts {
            const ch = text.charCodeAt(pos);
            pos++;
            switch (ch) {
+                // @ts-ignore falls through
                 case CharacterCodes.carriageReturn:
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // falls through
                 case CharacterCodes.lineFeed:
                     result.push(lineStart);
                     lineStart = pos;
@@ -459,11 +459,11 @@ namespace ts {
           while (true) {
               const ch = text.charCodeAt(pos);
               switch (ch) {
+                  // @ts-ignore falls through
                   case CharacterCodes.carriageReturn:
                       if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                           pos++;
                       }
-                      // falls through
                   case CharacterCodes.lineFeed:
                       pos++;
                       if (stopAfterLineBreak) {
@@ -632,11 +632,11 @@ namespace ts {
         scan: while (pos >= 0 && pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
+                // @ts-ignore falls through
                 case CharacterCodes.carriageReturn:
                     if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // falls through
                 case CharacterCodes.lineFeed:
                     pos++;
                     if (trailing) {
@@ -1081,11 +1081,11 @@ namespace ts {
 
                 // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
                 // the line terminator is interpreted to be "the empty code unit sequence".
+                // @ts-ignore falls through
                 case CharacterCodes.carriageReturn:
                     if (pos < end && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // falls through
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.lineSeparator:
                 case CharacterCodes.paragraphSeparator:
@@ -1429,6 +1429,7 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.SlashToken;
 
+                    // @ts-ignore falls through
                     case CharacterCodes._0:
                         if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
@@ -1472,7 +1473,6 @@ namespace ts {
                         // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
                         // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
                         // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
-                        // falls through
                     case CharacterCodes._1:
                     case CharacterCodes._2:
                     case CharacterCodes._3:

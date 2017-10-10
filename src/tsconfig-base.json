@@ -4,6 +4,7 @@
         "noEmitOnError": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
+        "noFallthroughCasesInSwitch": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "alwaysStrict": true,

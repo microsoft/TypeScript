@@ -735,6 +735,7 @@ namespace ts {
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container
+            // @ts-ignore falls through
             case SyntaxKind.Identifier:
                 // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
                 if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) {
@@ -746,7 +747,6 @@ namespace ts {
                 // At this point, node is either a qualified name or an identifier
                 Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
                     "'node' was expected to be a qualified name, identifier or property access in 'isPartOfTypeNode'.");
-                // falls through
             case SyntaxKind.QualifiedName:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ThisKeyword:
@@ -1017,11 +1017,11 @@ namespace ts {
                         node = node.parent;
                     }
                     break;
+                // @ts-ignore falls through
                 case SyntaxKind.ArrowFunction:
                     if (!includeArrowFunctions) {
                         continue;
                     }
-                    // falls through
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
@@ -1076,11 +1076,11 @@ namespace ts {
                     break;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
+                // @ts-ignore falls through
                 case SyntaxKind.ArrowFunction:
                     if (!stopOnFunctions) {
                         continue;
                     }
-                    // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
@@ -1260,11 +1260,11 @@ namespace ts {
                     node = node.parent;
                 }
                 return node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node);
+            // @ts-ignore falls through
             case SyntaxKind.Identifier:
                 if (node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node)) {
                     return true;
                 }
-                // falls through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ThisKeyword:
@@ -1890,11 +1890,11 @@ namespace ts {
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+            // @ts-ignore falls through
             case SyntaxKind.MethodDeclaration:
                 if (node.asteriskToken) {
                     flags |= FunctionFlags.Generator;
                 }
-                // falls through
             case SyntaxKind.ArrowFunction:
                 if (hasModifier(node, ModifierFlags.Async)) {
                     flags |= FunctionFlags.Async;

@@ -1262,11 +1262,11 @@ namespace ts.FindAllReferences.Core {
 
         switch (searchSpaceNode.kind) {
             case SyntaxKind.MethodDeclaration:
+            // @ts-ignore falls through
             case SyntaxKind.MethodSignature:
                 if (isObjectLiteralMethod(searchSpaceNode)) {
                     break;
                 }
-                // falls through
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.Constructor:
@@ -1275,11 +1275,11 @@ namespace ts.FindAllReferences.Core {
                 staticFlag &= getModifierFlags(searchSpaceNode);
                 searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                 break;
+            // @ts-ignore falls through
             case SyntaxKind.SourceFile:
                 if (isExternalModule(<SourceFile>searchSpaceNode)) {
                     return undefined;
                 }
-                // falls through
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 break;

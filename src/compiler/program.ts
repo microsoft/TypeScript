@@ -1329,12 +1329,12 @@ namespace ts {
 
                     switch (parent.kind) {
                         case SyntaxKind.Parameter:
+                        // @ts-ignore falls through
                         case SyntaxKind.PropertyDeclaration:
                             if ((<ParameterDeclaration | PropertyDeclaration>parent).questionToken === node) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
                                 return;
                             }
-                        // falls through
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
@@ -1410,13 +1410,13 @@ namespace ts {
                         case SyntaxKind.SetAccessor:
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.FunctionDeclaration:
+                        // @ts-ignore falls through
                         case SyntaxKind.ArrowFunction:
                             // Check type parameters
                             if (nodes === (<ClassDeclaration | FunctionLikeDeclaration>parent).typeParameters) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                                 return;
                             }
-                        // falls through
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
                             if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
@@ -1460,12 +1460,11 @@ namespace ts {
                 function checkModifiers(modifiers: NodeArray<Modifier>, isConstValid: boolean) {
                     for (const modifier of modifiers) {
                         switch (modifier.kind) {
+                            // @ts-ignore falls through
                             case SyntaxKind.ConstKeyword:
                                 if (isConstValid) {
                                     continue;
                                 }
-                            // to report error,
-                            // falls through
                             case SyntaxKind.PublicKeyword:
                             case SyntaxKind.PrivateKeyword:
                             case SyntaxKind.ProtectedKeyword:

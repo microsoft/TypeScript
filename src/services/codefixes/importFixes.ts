@@ -46,6 +46,7 @@ namespace ts.codefix {
                 }
 
                 switch (this.compareModuleSpecifiers(existingAction.moduleSpecifier, newAction.moduleSpecifier)) {
+                    // @ts-ignore falls through
                     case ModuleSpecifierComparison.Better:
                         // the new one is not worth considering if it is a new import.
                         // However if it is instead a insertion into existing import, the user might want to use
@@ -53,7 +54,6 @@ namespace ts.codefix {
                         if (newAction.kind === "NewImport") {
                             return;
                         }
-                        // falls through
                     case ModuleSpecifierComparison.Equal:
                         // the current one is safe. But it is still possible that the new one is worse
                         // than another existing one. For example, you may have new imports from "./foo/bar"

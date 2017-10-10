@@ -471,13 +471,13 @@ namespace ts {
                 for (const entry of group.externalImports) {
                     const importVariableName = getLocalNameForExternalImport(entry, currentSourceFile);
                     switch (entry.kind) {
+                        // @ts-ignore falls through
                         case SyntaxKind.ImportDeclaration:
                             if (!(<ImportDeclaration>entry).importClause) {
                                 // 'import "..."' case
                                 // module is imported only for side-effects, no emit required
                                 break;
                             }
-                            // falls through
 
                         case SyntaxKind.ImportEqualsDeclaration:
                             Debug.assert(importVariableName !== undefined);

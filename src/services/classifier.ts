@@ -157,10 +157,10 @@ namespace ts {
                     text = "`\n" + text;
                     offset = 2;
                     break;
+                // @ts-ignore falls through
                 case EndOfLineState.InTemplateMiddleOrTail:
                     text = "}\n" + text;
                     offset = 2;
-                    // falls through
                 case EndOfLineState.InTemplateSubstitutionPosition:
                     templateStack.push(SyntaxKind.TemplateHead);
                     break;

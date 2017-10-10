@@ -4027,11 +4027,11 @@ namespace ts {
                     node = (<ConditionalExpression>node).condition;
                     continue;
 
+                // @ts-ignore falls through
                 case SyntaxKind.CallExpression:
                     if (stopAtCallExpressions) {
                         return node;
                     }
-                    // falls through
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
                     node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;

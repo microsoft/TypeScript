@@ -451,11 +451,11 @@ namespace ts {
                 return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
             case SyntaxKind.CatchClause:
                 return isCompletedNode((<CatchClause>n).block, sourceFile);
+            // @ts-ignore falls through
             case SyntaxKind.NewExpression:
                 if (!(<NewExpression>n).arguments) {
                     return true;
                 }
-            // falls through
             case SyntaxKind.CallExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.ParenthesizedType:

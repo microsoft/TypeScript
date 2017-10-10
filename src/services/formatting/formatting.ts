@@ -512,11 +512,11 @@ namespace ts.formatting {
                 case SyntaxKind.EnumDeclaration: return SyntaxKind.EnumDeclaration;
                 case SyntaxKind.GetAccessor: return SyntaxKind.GetKeyword;
                 case SyntaxKind.SetAccessor: return SyntaxKind.SetKeyword;
+                // @ts-ignore falls through
                 case SyntaxKind.MethodDeclaration:
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
                     }
-                    // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
                     return getNameOfDeclaration(<Declaration>node).kind;

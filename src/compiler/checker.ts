@@ -959,10 +959,10 @@ namespace ts {
                     }
                 }
                 switch (location.kind) {
+                    // @ts-ignore falls through
                     case SyntaxKind.SourceFile:
                         if (!isExternalOrCommonJsModule(<SourceFile>location)) break;
                         isInExternalModule = true;
-                        // falls through
                     case SyntaxKind.ModuleDeclaration:
                         const moduleExports = getSymbolOfNode(location).exports;
                         if (location.kind === SyntaxKind.SourceFile || isAmbientModule(location)) {
@@ -1288,11 +1288,11 @@ namespace ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.PropertyAccessExpression:
                     return node.parent ? getEntityNameForExtendingInterface(node.parent) : undefined;
+                // @ts-ignore falls through
                 case SyntaxKind.ExpressionWithTypeArguments:
                     if (isEntityNameExpression((<ExpressionWithTypeArguments>node).expression)) {
                         return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
                     }
-                    // falls through
                 default:
                     return undefined;
             }
@@ -2075,11 +2075,11 @@ namespace ts {
                     }
                 }
                 switch (location.kind) {
+                    // @ts-ignore falls through
                     case SyntaxKind.SourceFile:
                         if (!isExternalOrCommonJsModule(<SourceFile>location)) {
                             break;
                         }
-                        // falls through
                     case SyntaxKind.ModuleDeclaration:
                         if (result = callback(getSymbolOfNode(location).exports)) {
                             return result;
@@ -3899,13 +3899,13 @@ namespace ts {
                 switch (node.kind) {
                     case SyntaxKind.BindingElement:
                         return isDeclarationVisible(<Declaration>node.parent.parent);
+                    // @ts-ignore falls through
                     case SyntaxKind.VariableDeclaration:
                         if (isBindingPattern((node as VariableDeclaration).name) &&
                             !((node as VariableDeclaration).name as BindingPattern).elements.length) {
                             // If the binding pattern is empty, this variable declaration is not visible
                             return false;
                         }
-                        // falls through
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
@@ -3931,13 +3931,13 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.MethodDeclaration:
+                    // @ts-ignore falls through
                     case SyntaxKind.MethodSignature:
                         if (hasModifier(node, ModifierFlags.Private | ModifierFlags.Protected)) {
                             // Private/protected properties/methods are not visible
                             return false;
                         }
                         // Public properties/methods are visible if its parents are visible, so:
-                        // falls through
 
                     case SyntaxKind.Constructor:
                     case SyntaxKind.ConstructSignature:
@@ -13319,13 +13319,13 @@ namespace ts {
                     switch (getSpecialPropertyAssignmentKind(binaryExpression)) {
                         case SpecialPropertyAssignmentKind.None:
                             break;
+                        // @ts-ignore falls through
                         case SpecialPropertyAssignmentKind.Property:
                             // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                             // See `bindStaticPropertyAssignment` in `binder.ts`.
                             if (!binaryExpression.left.symbol) {
                                 break;
                             }
-                            // falls through
                         case SpecialPropertyAssignmentKind.ExportsProperty:
                         case SpecialPropertyAssignmentKind.ModuleExports:
                         case SpecialPropertyAssignmentKind.PrototypeProperty:
@@ -18430,11 +18430,11 @@ namespace ts {
                     return checkPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return checkIndexedAccess(<ElementAccessExpression>node);
+                // @ts-ignore falls through
                 case SyntaxKind.CallExpression:
                     if ((<CallExpression>node).expression.kind === SyntaxKind.ImportKeyword) {
                         return checkImportCallExpression(<ImportCall>node);
                     }
-                    /* falls through */
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
@@ -22383,6 +22383,7 @@ namespace ts {
                     grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
                     break;
                 case SyntaxKind.BindingElement:
+                // @ts-ignore falls through
                 case SyntaxKind.VariableDeclaration:
                     const name = (<VariableDeclaration | BindingElement>node).name;
                     if (isBindingPattern(name)) {
@@ -22392,7 +22393,6 @@ namespace ts {
                         }
                         break;
                     }
-                    // falls through
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.FunctionDeclaration:
@@ -22795,9 +22795,9 @@ namespace ts {
                     return checkJSDocTypedefTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
+                // @ts-ignore falls through
                 case SyntaxKind.JSDocFunctionType:
                     checkSignatureDeclaration(node as JSDocFunctionType);
-                    // falls through
                 case SyntaxKind.JSDocVariadicType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocNullableType:
@@ -23077,12 +23077,12 @@ namespace ts {
                         case SyntaxKind.EnumDeclaration:
                             copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.EnumMember);
                             break;
+                        // @ts-ignore falls through
                         case SyntaxKind.ClassExpression:
                             const className = (<ClassExpression>location).name;
                             if (className) {
                                 copySymbol(location.symbol, meaning);
                             }
-                        // falls through
                         // this fall-through is necessary because we would like to handle
                         // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
                         case SyntaxKind.ClassDeclaration:
@@ -23387,6 +23387,7 @@ namespace ts {
                 case SyntaxKind.QualifiedName:
                     return getSymbolOfEntityNameOrPropertyAccessExpression(<EntityName | PropertyAccessExpression>node);
 
+                // @ts-ignore falls through
                 case SyntaxKind.ThisKeyword:
                     const container = getThisContainer(node, /*includeArrowFunctions*/ false);
                     if (isFunctionLike(container)) {
@@ -23398,7 +23399,6 @@ namespace ts {
                     if (isInExpressionContext(node)) {
                         return checkExpression(node as Expression).symbol;
                     }
-                    // falls through
 
                 case SyntaxKind.ThisType:
                     return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode).symbol;
@@ -23414,6 +23414,7 @@ namespace ts {
                     }
                     return undefined;
 
+                // @ts-ignore falls through
                 case SyntaxKind.StringLiteral:
                     // 1). import x = require("./mo/*gotToDefinitionHere*/d")
                     // 2). External module name in an import declaration
@@ -23423,7 +23424,6 @@ namespace ts {
                         ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) || isImportCall(node.parent))) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
-                    // falls through
 
                 case SyntaxKind.NumericLiteral:
                     // index access
