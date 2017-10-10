@@ -403,7 +403,7 @@ namespace ts.server {
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
-            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.host.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
+            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 
@@ -450,6 +450,16 @@ namespace ts.server {
 
         toPath(fileName: string) {
             return toPath(fileName, this.currentDirectory, this.toCanonicalFileName);
+        }
+
+        /*@internal*/
+        getExecutingFilePath() {
+            return this.getNormalizedAbsolutePath(this.host.getExecutingFilePath());
+        }
+
+        /*@internal*/
+        getNormalizedAbsolutePath(fileName: string) {
+            return getNormalizedAbsolutePath(fileName, this.host.getCurrentDirectory());
         }
 
         /* @internal */
@@ -1626,12 +1636,13 @@ namespace ts.server {
                 return this.inferredProjects[0];
             }
 
-            return this.createInferredProject(/*rootDirectoryForResolution*/ undefined, /*isSingleInferredProject*/ true);
+            // Single inferred project does not have a project root and hence no current directory
+            return this.createInferredProject(/*currentDirectory*/ undefined, /*isSingleInferredProject*/ true);
         }
 
-        private createInferredProject(rootDirectoryForResolution: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: string): InferredProject {
+        private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: string): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects;
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, rootDirectoryForResolution);
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, currentDirectory);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
