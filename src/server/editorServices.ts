@@ -1933,12 +1933,10 @@ namespace ts.server {
             // At this point if file is part of any any configured or external project, then it would be present in the containing projects
             // So if it still doesnt have any containing projects, it needs to be part of inferred project
             if (info.isOrphan()) {
-                // Since the file isnt part of configured project,
-                // report config file and its error only if config file found had errors (and hence may be didnt include the file)
-                if (sendConfigFileDiagEvent && !project.getAllProjectErrors().length) {
-                    configFileName = undefined;
-                    sendConfigFileDiagEvent = false;
-                }
+                // Since the file isnt part of configured project, do not send config file event
+                configFileName = undefined;
+                sendConfigFileDiagEvent = false;
+
                 this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
             }
             this.addToListOfOpenFiles(info);

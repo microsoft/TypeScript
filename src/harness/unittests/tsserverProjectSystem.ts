@@ -3168,7 +3168,7 @@ namespace ts.projectSystem {
             serverEventManager.checkEventCountOfType("configFileDiag", 3);
         });
 
-        it("are generated when the config file doesnot include file opened but has errors", () => {
+        it("are not generated when the config file doesnot include file opened and config file has errors", () => {
             const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
@@ -3195,14 +3195,7 @@ namespace ts.projectSystem {
                 eventHandler: serverEventManager.handler
             });
             openFilesForSession([file2], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
-            for (const event of serverEventManager.events) {
-                if (event.eventName === "configFileDiag") {
-                    assert.equal(event.data.configFileName, configFile.path);
-                    assert.equal(event.data.triggerFile, file2.path);
-                    return;
-                }
-            }
+            serverEventManager.checkEventCountOfType("configFileDiag", 0);
         });
 
         it("are not generated when the config file doesnot include file opened and doesnt contain any errors", () => {
