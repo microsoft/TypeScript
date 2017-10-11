@@ -129,7 +129,11 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
-            const _crypto = require("crypto");
+            let _crypto: any;
+            try {
+                _crypto = require("crypto");
+            }
+            catch { }
 
             const useNonPollingWatchers = process.env["TSC_NONPOLLING_WATCHER"];
 
@@ -493,7 +497,7 @@ namespace ts {
                         return undefined;
                     }
                 },
-                createHash(data) {
+                createHash: _crypto && (data) => {
                     const hash = _crypto.createHash("md5");
                     hash.update(data);
                     return hash.digest("hex");
