@@ -2743,6 +2743,7 @@ namespace ts {
         // Options
         NoTruncation                            = 1 << 0,   // Don't truncate result
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
+        WriteClassExpressionAsTypeLiteral       = 1 << 4,   // Should write class expressions as type literals
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.

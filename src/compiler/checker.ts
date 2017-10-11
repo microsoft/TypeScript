@@ -2716,6 +2716,11 @@ namespace ts {
                         context.encounteredError = true;
                         return undefined;
                     }
+                    else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
+                        type.symbol.valueDeclaration &&
+                        type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
+                        return createAnonymousTypeNode(type);
+                    }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
                         let i = 0;
@@ -3398,7 +3403,7 @@ namespace ts {
                     else if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral &&
                              type.symbol.valueDeclaration &&
                              type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
-                        writeAnonymousType(getDeclaredTypeOfClassOrInterface(type.symbol), flags);
+                        writeAnonymousType(type, flags);
                     }
                     else {
                         // Write the type reference in the format f<A>.g<B>.C<X, Y> where A and B are type arguments
