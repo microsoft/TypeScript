@@ -1205,7 +1205,7 @@ namespace ts.server {
             projectRootPath?: NormalizedPath) {
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
 
-            while (!projectRootPath || searchPath.indexOf(projectRootPath) >= 0) {
+            while (!projectRootPath || stringContains(searchPath, projectRootPath)) {
                 const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));

@@ -1608,7 +1608,7 @@ namespace ts.server {
             }
 
             // No need to analyze lib.d.ts
-            const fileNamesInProject = fileNames.filter(value => value.indexOf("lib.d.ts") < 0);
+            const fileNamesInProject = fileNames.filter(value => !stringContains(value, "lib.d.ts"));
             if (fileNamesInProject.length === 0) {
                 return;
             }

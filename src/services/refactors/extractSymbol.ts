@@ -660,7 +660,7 @@ namespace ts.refactor.extractSymbol {
 
     function getUniqueName(baseName: string, fileText: string): string {
         let nameText = baseName;
-        for (let i = 1; fileText.indexOf(nameText) !== -1; i++) {
+        for (let i = 1; stringContains(fileText, nameText); i++) {
             nameText = `${baseName}_${i}`;
         }
         return nameText;

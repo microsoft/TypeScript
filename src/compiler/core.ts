@@ -1663,7 +1663,7 @@ namespace ts {
     }
 
     export function isUrl(path: string) {
-        return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
+        return path && !isRootedDiskPath(path) && stringContains(path, "://");
     }
 
     export function pathIsRelative(path: string): boolean {
@@ -1932,8 +1932,12 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function stringContains(str: string, substring: string): boolean {
+        return str.indexOf(substring) !== -1;
+    }
+
     export function hasExtension(fileName: string): boolean {
-        return getBaseFileName(fileName).indexOf(".") >= 0;
+        return stringContains(getBaseFileName(fileName), ".");
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
