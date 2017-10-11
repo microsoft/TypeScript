@@ -22,3 +22,8 @@ combined(comb => {
   comb.b
   comb.a
 })
+
+// Repro from #19091
+
+declare function f<T>(a: T): { a: typeof a };
+let n: number = f(2).a;
