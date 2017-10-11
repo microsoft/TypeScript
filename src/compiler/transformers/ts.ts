@@ -1870,6 +1870,9 @@ namespace ts {
             // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode;
             for (const typeNode of node.types) {
+                if (!compilerOptions.strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                    continue; // Elide null and undefined from unions for metadata, just like pre-implementation of strict null checks
+                }
                 const serializedIndividual = serializeTypeNode(typeNode);
 
                 if (isIdentifier(serializedIndividual) && serializedIndividual.escapedText === "Object") {
