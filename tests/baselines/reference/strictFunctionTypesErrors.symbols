@@ -400,3 +400,105 @@ dogCrate = animalCrate;  // Error
 >dogCrate : Symbol(dogCrate, Decl(strictFunctionTypesErrors.ts, 121, 11))
 >animalCrate : Symbol(animalCrate, Decl(strictFunctionTypesErrors.ts, 120, 11))
 
+// Verify that callback parameters are strictly checked
+
+declare let fc1: (f: (x: Animal) => Animal) => void;
+>fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
+>f : Symbol(f, Decl(strictFunctionTypesErrors.ts, 130, 18))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 130, 22))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+declare let fc2: (f: (x: Dog) => Dog) => void;
+>fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
+>f : Symbol(f, Decl(strictFunctionTypesErrors.ts, 131, 18))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 131, 22))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+
+fc1 = fc2;  // Error
+>fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
+>fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
+
+fc2 = fc1;  // Error
+>fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
+>fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
+
+// Verify that callback parameters aren't loosely checked when types
+// originate in method declarations
+
+namespace n1 {
+>n1 : Symbol(n1, Decl(strictFunctionTypesErrors.ts, 133, 10))
+
+    class Foo {
+>Foo : Symbol(Foo, Decl(strictFunctionTypesErrors.ts, 138, 14))
+
+        static f1(x: Animal): Animal { throw "wat"; }
+>f1 : Symbol(Foo.f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 140, 18))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+        static f2(x: Dog): Animal { throw "wat"; };
+>f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 141, 18))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+    }
+    declare let f1: (cb: typeof Foo.f1) => void;
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 143, 15))
+>cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 143, 21))
+>Foo.f1 : Symbol(Foo.f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
+>Foo : Symbol(Foo, Decl(strictFunctionTypesErrors.ts, 138, 14))
+>f1 : Symbol(Foo.f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
+
+    declare let f2: (cb: typeof Foo.f2) => void;
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 144, 15))
+>cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 144, 21))
+>Foo.f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
+>Foo : Symbol(Foo, Decl(strictFunctionTypesErrors.ts, 138, 14))
+>f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
+
+    f1 = f2;
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 143, 15))
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 144, 15))
+
+    f2 = f1;  // Error
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 144, 15))
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 143, 15))
+}
+
+namespace n2 {
+>n2 : Symbol(n2, Decl(strictFunctionTypesErrors.ts, 147, 1))
+
+    type BivariantHack<Input, Output> = { foo(x: Input): Output }["foo"];
+>BivariantHack : Symbol(BivariantHack, Decl(strictFunctionTypesErrors.ts, 149, 14))
+>Input : Symbol(Input, Decl(strictFunctionTypesErrors.ts, 150, 23))
+>Output : Symbol(Output, Decl(strictFunctionTypesErrors.ts, 150, 29))
+>foo : Symbol(foo, Decl(strictFunctionTypesErrors.ts, 150, 41))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 150, 46))
+>Input : Symbol(Input, Decl(strictFunctionTypesErrors.ts, 150, 23))
+>Output : Symbol(Output, Decl(strictFunctionTypesErrors.ts, 150, 29))
+
+    declare let f1: (cb: BivariantHack<Animal, Animal>) => void;
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 151, 15))
+>cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 151, 21))
+>BivariantHack : Symbol(BivariantHack, Decl(strictFunctionTypesErrors.ts, 149, 14))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+    declare let f2: (cb: BivariantHack<Dog, Animal>) => void;
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 152, 15))
+>cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 152, 21))
+>BivariantHack : Symbol(BivariantHack, Decl(strictFunctionTypesErrors.ts, 149, 14))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+    f1 = f2;
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 151, 15))
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 152, 15))
+
+    f2 = f1;  // Error
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 152, 15))
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 151, 15))
+}

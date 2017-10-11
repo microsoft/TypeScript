@@ -1,7 +1,7 @@
 // ==ORIGINAL==
 class C<T1, T2> {
     M(t1: T1, t2: T2) {
-        t1.toString();
+        /*[#|*/t1.toString()/*|]*/;
     }
 }
 // ==SCOPE::Extract to method in class 'C'==

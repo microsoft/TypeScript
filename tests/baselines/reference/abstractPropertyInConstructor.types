@@ -1,0 +1,81 @@
+=== tests/cases/compiler/abstractPropertyInConstructor.ts ===
+abstract class AbstractClass {
+>AbstractClass : AbstractClass
+
+    constructor(str: string) {
+>str : string
+
+        this.method(parseInt(str));
+>this.method(parseInt(str)) : void
+>this.method : (num: number) => void
+>this : this
+>method : (num: number) => void
+>parseInt(str) : number
+>parseInt : (s: string, radix?: number) => number
+>str : string
+
+        let val = this.prop.toLowerCase();
+>val : string
+>this.prop.toLowerCase() : string
+>this.prop.toLowerCase : () => string
+>this.prop : string
+>this : this
+>prop : string
+>toLowerCase : () => string
+
+        if (!str) {
+>!str : boolean
+>str : string
+
+            this.prop = "Hello World";
+>this.prop = "Hello World" : "Hello World"
+>this.prop : string
+>this : this
+>prop : string
+>"Hello World" : "Hello World"
+        }
+        this.cb(str);
+>this.cb(str) : void
+>this.cb : (s: string) => void
+>this : this
+>cb : (s: string) => void
+>str : string
+
+        const innerFunction = () => {
+>innerFunction : () => string
+>() => {            return this.prop;        } : () => string
+
+            return this.prop;
+>this.prop : string
+>this : this
+>prop : string
+        }
+    }
+
+    abstract prop: string;
+>prop : string
+
+    abstract cb: (s: string) => void;
+>cb : (s: string) => void
+>s : string
+
+    abstract method(num: number): void;
+>method : (num: number) => void
+>num : number
+
+    method2() {
+>method2 : () => void
+
+        this.prop = this.prop + "!";
+>this.prop = this.prop + "!" : string
+>this.prop : string
+>this : this
+>prop : string
+>this.prop + "!" : string
+>this.prop : string
+>this : this
+>prop : string
+>"!" : "!"
+    }
+}
+

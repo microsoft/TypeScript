@@ -113,7 +113,7 @@ namespace ts {
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
-                assert.equal(Extension.Js, extension);
+                assert.equal(Extension.Js, extension, "Syntactic diagnostics found in non-JS file");
                 return;
             }
 
@@ -135,7 +135,7 @@ namespace ts {
             Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
                 const data: string[] = [];
                 data.push(`// ==ORIGINAL==`);
-                data.push(sourceFile.text);
+                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
                 for (const action of actions) {
                     const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name);
                     assert.lengthOf(edits, 1);

@@ -342,7 +342,7 @@ namespace ts.server {
         convertDiagnostic(entry: protocol.DiagnosticWithLinePosition, _fileName: string): Diagnostic {
             let category: DiagnosticCategory;
             for (const id in DiagnosticCategory) {
-                if (typeof id === "string" && entry.category === id.toLowerCase()) {
+                if (isString(id) && entry.category === id.toLowerCase()) {
                     category = (<any>DiagnosticCategory)[id];
                 }
             }

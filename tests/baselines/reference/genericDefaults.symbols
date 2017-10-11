@@ -2291,3 +2291,9 @@ const t03c04 = (<t03<number, 1>>x).a;
 >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
 >a : Symbol(a, Decl(genericDefaults.ts, 483, 47))
 
+// https://github.com/Microsoft/TypeScript/issues/16221
+interface SelfReference<T = SelfReference<string>> {}
+>SelfReference : Symbol(SelfReference, Decl(genericDefaults.ts, 488, 37))
+>T : Symbol(T, Decl(genericDefaults.ts, 491, 24))
+>SelfReference : Symbol(SelfReference, Decl(genericDefaults.ts, 488, 37))
+
