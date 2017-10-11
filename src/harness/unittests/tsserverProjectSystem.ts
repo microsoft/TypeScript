@@ -2917,6 +2917,52 @@ namespace ts.projectSystem {
         function checkSnapLength(snap: IScriptSnapshot, expectedLength: number) {
             assert.equal(snap.getLength(), expectedLength, "Incorrect snapshot size");
         }
+
+        function verifyOpenFileWorks(useCaseSensitiveFileNames: boolean) {
+            const file1: FileOrFolder = {
+                path: "/a/b/src/app.ts",
+                content: "let x = 10;"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/B/lib/module2.ts",
+                content: "let z = 10;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: ""
+            };
+            const configFile2: FileOrFolder = {
+                path: "/a/tsconfig.json",
+                content: ""
+            };
+            const host = createServerHost([file1, file2, configFile, configFile2], {
+                useCaseSensitiveFileNames
+            });
+            const service = createProjectService(host);
+
+            // Open file1 -> configFile
+            verifyConfigFileName(file1, "/a", configFile);
+            verifyConfigFileName(file1, "/a/b", configFile);
+            verifyConfigFileName(file1, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
+
+            // Open file2 use root "/a/b"
+            verifyConfigFileName(file2, "/a", useCaseSensitiveFileNames ? configFile2 : configFile);
+            verifyConfigFileName(file2, "/a/b", useCaseSensitiveFileNames ? undefined : configFile);
+            verifyConfigFileName(file2, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
+
+            function verifyConfigFileName(file: FileOrFolder, projectRoot: string, expectedConfigFile: FileOrFolder | undefined) {
+                const { configFileName } = service.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRoot);
+                assert.equal(configFileName, expectedConfigFile && expectedConfigFile.path);
+                service.closeClientFile(file.path);
+            }
+        }
+        it("works when project root is used with case-sensitive system", () => {
+            verifyOpenFileWorks(/*useCaseSensitiveFileNames*/ true);
+        });
+
+        it("works when project root is used with case-insensitive system", () => {
+            verifyOpenFileWorks(/*useCaseSensitiveFileNames*/ false);
+        });
     });
 
     describe("Language service", () => {
