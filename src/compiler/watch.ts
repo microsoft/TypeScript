@@ -322,6 +322,9 @@ namespace ts {
 
             if (hasChangedCompilerOptions) {
                 newLine = getNewLineCharacter(compilerOptions, system);
+                if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
+                    resolutionCache.clear();
+                }
             }
 
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution();
@@ -329,14 +332,11 @@ namespace ts {
                 return;
             }
 
-            if (hasChangedCompilerOptions && changesAffectModuleResolution(program && program.getCompilerOptions(), compilerOptions)) {
-                resolutionCache.clear();
-            }
-            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
-            hasChangedCompilerOptions = false;
             beforeCompile(compilerOptions);
 
             // Compile the program
+            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
+            hasChangedCompilerOptions = false;
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;

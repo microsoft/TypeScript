@@ -233,9 +233,9 @@ namespace ts.server {
                 this.realpath = path => host.realpath(path);
             }
 
-            this.languageService = createLanguageService(this, this.documentRegistry);
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory);
+            this.languageService = createLanguageService(this, this.documentRegistry);
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
             }
@@ -498,25 +498,23 @@ namespace ts.server {
 
         close() {
             if (this.program) {
-                // if we have a program - release all files that are enlisted in program
+                // if we have a program - release all files that are enlisted in program but arent root
+                // The releasing of the roots happens later
+                // The project could have pending update remaining and hence the info could be in the files but not in program graph
                 for (const f of this.program.getSourceFiles()) {
-                    const info = this.projectService.getScriptInfo(f.fileName);
-                    // We might not find the script info in case its not associated with the project any more
-                    // and project graph was not updated (eg delayed update graph in case of files changed/deleted on the disk)
-                    if (info) {
-                        info.detachFromProject(this);
-                    }
+                    this.detachScriptInfoIfNotRoot(f.fileName);
                 }
             }
-            if (!this.program || !this.languageServiceEnabled) {
-                // release all root files either if there is no program or language service is disabled.
-                // in the latter case set of root files can be larger than the set of files in program.
-                for (const root of this.rootFiles) {
-                    root.detachFromProject(this);
-                }
+            // Release external files
+            forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
+            // Always remove root files from the project
+            for (const root of this.rootFiles) {
+                root.detachFromProject(this);
             }
+
             this.rootFiles = undefined;
             this.rootFilesMap = undefined;
+            this.externalFiles = undefined;
             this.program = undefined;
             this.builder = undefined;
             this.resolutionCache.clear();
@@ -533,6 +531,15 @@ namespace ts.server {
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
             this.languageService = undefined;
+        }
+
+        private detachScriptInfoIfNotRoot(uncheckedFilename: string) {
+            const info = this.projectService.getScriptInfo(uncheckedFilename);
+            // We might not find the script info in case its not associated with the project any more
+            // and project graph was not updated (eg delayed update graph in case of files changed/deleted on the disk)
+            if (info && !this.isRoot(info)) {
+                info.detachFromProject(this);
+            }
         }
 
         isClosed() {
@@ -735,7 +742,6 @@ namespace ts.server {
          */
         updateGraph(): boolean {
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
-            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
 
             let hasChanges = this.updateGraphWorker();
 
@@ -795,9 +801,10 @@ namespace ts.server {
 
         private updateGraphWorker() {
             const oldProgram = this.program;
-
+            Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
+            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram();
             this.resolutionCache.finishCachingPerDirectoryResolution();
@@ -1320,8 +1327,6 @@ namespace ts.server {
         }
 
         close() {
-            super.close();
-
             if (this.configFileWatcher) {
                 this.configFileWatcher.close();
                 this.configFileWatcher = undefined;
@@ -1330,6 +1335,7 @@ namespace ts.server {
             this.stopWatchingWildCards();
             this.projectErrors = undefined;
             this.configFileSpecs = undefined;
+            super.close();
         }
 
         addOpenRef() {

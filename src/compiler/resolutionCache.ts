@@ -141,7 +141,10 @@ namespace ts {
             resolvedModuleNames.clear();
             resolvedTypeReferenceDirectives.clear();
             allFilesHaveInvalidatedResolution = false;
-            Debug.assert(perDirectoryResolvedModuleNames.size === 0 && perDirectoryResolvedTypeReferenceDirectives.size === 0);
+            // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
+            // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
+            perDirectoryResolvedModuleNames.clear();
+            perDirectoryResolvedTypeReferenceDirectives.clear();
         }
 
         function startRecordingFilesWithChangedResolutions() {
@@ -166,7 +169,10 @@ namespace ts {
         }
 
         function startCachingPerDirectoryResolution() {
-            Debug.assert(perDirectoryResolvedModuleNames.size === 0 && perDirectoryResolvedTypeReferenceDirectives.size === 0);
+            // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
+            // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
+            perDirectoryResolvedModuleNames.clear();
+            perDirectoryResolvedTypeReferenceDirectives.clear();
         }
 
         function finishCachingPerDirectoryResolution() {

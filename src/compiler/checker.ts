@@ -20034,7 +20034,7 @@ namespace ts {
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
             const classLike = getJSDocHost(node);
             if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
-                error(classLike, Diagnostics.JSDoc_augments_is_not_attached_to_a_class_declaration);
+                error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
                 return;
             }
 
@@ -20049,7 +20049,7 @@ namespace ts {
             if (extend) {
                 const className = getIdentifierFromEntityNameExpression(extend.expression);
                 if (className && name.escapedText !== className.escapedText) {
-                    error(name, Diagnostics.JSDoc_augments_0_does_not_match_the_extends_1_clause, idText(name), idText(className));
+                    error(name, Diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, idText(node.tagName), idText(name), idText(className));
                 }
             }
         }
