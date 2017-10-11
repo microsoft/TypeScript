@@ -460,13 +460,13 @@ let x2 = makeObject2({
 >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 144, 26))
 
             this.x += dx;  // Strongly typed this
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 142, 11))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 142, 11))
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 122, 11))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 122, 11))
 >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 144, 15))
 
             this.y += dy;  // Strongly typed this
->this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 142, 17))
->y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 142, 17))
+>this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 122, 17))
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 122, 17))
 >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 144, 26))
         }
     }
@@ -725,8 +725,8 @@ let vue = new Vue({
 >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 218, 10))
 
             return this.x;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 122, 11))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 122, 11))
         }
     },
     computed: {
@@ -736,8 +736,8 @@ let vue = new Vue({
 >test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 222, 15))
 
             return this.x;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 122, 11))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 122, 11))
 
         },
         hello: {
@@ -760,9 +760,9 @@ vue;
 >vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 215, 3))
 
 vue.x;
->vue.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
+>vue.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 122, 11))
 >vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 215, 3))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 122, 11))
 
 vue.f("abc");
 >vue.f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 217, 14))

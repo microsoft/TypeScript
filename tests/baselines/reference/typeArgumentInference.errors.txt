@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(68,29): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(82,69): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: number; z: Date; }'.
   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; z: Date; }'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(84,74): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(84,66): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
 
 
@@ -95,7 +95,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(84,74
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; z: Date; }'.
     var a9e: {};
     var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
-                                                                             ~~~~~
+                                                                     ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
     var a9f: A92;
