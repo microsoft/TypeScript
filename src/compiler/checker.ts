@@ -14012,7 +14012,7 @@ namespace ts {
          */
         function isUnhyphenatedJsxName(name: string | __String) {
             // - is the only character supported in JSX attribute names that isn't valid in JavaScript identifiers
-            return (name as string).indexOf("-") < 0;
+            return !stringContains(name as string, "-");
         }
 
         /**

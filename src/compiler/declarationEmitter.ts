@@ -172,7 +172,7 @@ namespace ts {
 
         function hasInternalAnnotation(range: CommentRange) {
             const comment = currentText.substring(range.pos, range.end);
-            return comment.indexOf("@internal") >= 0;
+            return stringContains(comment, "@internal");
         }
 
         function stripInternal(node: Node) {
