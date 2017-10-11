@@ -18,4 +18,4 @@ verify.fileAfterApplyingRefactorAtMarker('1',
      */
     m(x): any[] {
     }
-}`, 'Annotate with return type from JSDoc', 'annotate');
+}`, 'Annotate with types from JSDoc', 'annotate');

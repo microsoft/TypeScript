@@ -1,11 +1,18 @@
 /// <reference path='fourslash.ts' />
 ////class C {
-////    /** @return {number} */
-////    get /*1*/c() { return 12 }
+////    /**
+////     * @param {number} x - the first parameter
+////     */
+////    constructor(/*1*/x) {
+////    }
 ////}
 verify.applicableRefactorAvailableAtMarker('1');
 verify.fileAfterApplyingRefactorAtMarker('1',
 `class C {
-    /** @return {number} */
-    get c(): number { return 12; }
+    /**
+     * @param {number} x - the first parameter
+     */
+    constructor(x: number) {
+    }
 }`, 'Annotate with types from JSDoc', 'annotate');
+

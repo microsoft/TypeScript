@@ -13,5 +13,5 @@ verify.fileAfterApplyingRefactorAtMarker('1',
  * @param {number} x
  * @returns {number}
  */
-var f = function(x): number {
-}`, 'Annotate with return type from JSDoc', 'annotate');
+var f = function(x: number): number {
+}`, 'Annotate with types from JSDoc', 'annotate');
