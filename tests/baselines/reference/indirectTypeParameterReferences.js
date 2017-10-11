@@ -24,6 +24,11 @@ combined(comb => {
   comb.a
 })
 
+// Repro from #19091
+
+declare function f<T>(a: T): { a: typeof a };
+let n: number = f(2).a;
+
 
 //// [indirectTypeParameterReferences.js]
 // Repro from #19043
@@ -41,3 +46,4 @@ combined(function (comb) {
     comb.b;
     comb.a;
 });
+var n = f(2).a;
