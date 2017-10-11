@@ -73,12 +73,16 @@ namespace ts {
          */
         onRemoveSourceFile(path: Path): void;
         /**
-         * Called when sourceFile is changed
+         * For all source files, either "onUpdateSourceFile" or "onUpdateSourceFileWithSameVersion" will be called.
+         * If the builder is sure that the source file needs an update, "onUpdateSourceFile" will be called;
+         * otherwise "onUpdateSourceFileWithSameVersion" will be called.
          */
         onUpdateSourceFile(program: Program, sourceFile: SourceFile): void;
         /**
-         * Called when source file has not changed but has some of the resolutions invalidated
-         * If returned true, builder will mark the file as changed (noting that something associated with file has changed)
+         * For all source files, either "onUpdateSourceFile" or "onUpdateSourceFileWithSameVersion" will be called.
+         * If the builder is sure that the source file needs an update, "onUpdateSourceFile" will be called;
+         * otherwise "onUpdateSourceFileWithSameVersion" will be called.
+         * This function should return whether the source file should be marked as changed (meaning that something associated with file has changed, e.g. module resolution)
          */
         onUpdateSourceFileWithSameVersion(program: Program, sourceFile: SourceFile): boolean;
         /**
@@ -161,8 +165,7 @@ namespace ts {
                 existingInfo.version = sourceFile.version;
                 emitHandler.onUpdateSourceFile(program, sourceFile);
             }
-            else if (program.hasInvalidatedResolution(sourceFile.path) &&
-                emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
+            else if (emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
                 registerChangedFile(sourceFile.path, sourceFile.fileName);
             }
         }
