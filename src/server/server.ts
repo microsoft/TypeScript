@@ -753,11 +753,13 @@ namespace ts.server {
     const sys = <ServerHost>ts.sys;
     // use watchGuard process on Windows when node version is 4 or later
     const useWatchGuard = process.platform === "win32" && getNodeMajorVersion() >= 4;
-    const originalWatchDirectory = sys.watchDirectory;
+    const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
     const noopWatcher: FileWatcher = { close: noop };
+    // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
+    // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
     function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
         try {
-            return originalWatchDirectory.call(sys, path, callback, recursive);
+            return originalWatchDirectory(path, callback, recursive);
         }
         catch (e) {
             logger.info(`Exception when creating directory watcher: ${e.message}`);
