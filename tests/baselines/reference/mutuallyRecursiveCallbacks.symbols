@@ -1,0 +1,33 @@
+=== tests/cases/compiler/mutuallyRecursiveCallbacks.ts ===
+// #18277
+interface Foo<T> { (bar: Bar<T>): void };
+>Foo : Symbol(Foo, Decl(mutuallyRecursiveCallbacks.ts, 0, 0))
+>T : Symbol(T, Decl(mutuallyRecursiveCallbacks.ts, 1, 14))
+>bar : Symbol(bar, Decl(mutuallyRecursiveCallbacks.ts, 1, 20))
+>Bar : Symbol(Bar, Decl(mutuallyRecursiveCallbacks.ts, 1, 41))
+>T : Symbol(T, Decl(mutuallyRecursiveCallbacks.ts, 1, 14))
+
+type Bar<T> = (foo: Foo<T>) => Foo<T>;
+>Bar : Symbol(Bar, Decl(mutuallyRecursiveCallbacks.ts, 1, 41))
+>T : Symbol(T, Decl(mutuallyRecursiveCallbacks.ts, 2, 9))
+>foo : Symbol(foo, Decl(mutuallyRecursiveCallbacks.ts, 2, 15))
+>Foo : Symbol(Foo, Decl(mutuallyRecursiveCallbacks.ts, 0, 0))
+>T : Symbol(T, Decl(mutuallyRecursiveCallbacks.ts, 2, 9))
+>Foo : Symbol(Foo, Decl(mutuallyRecursiveCallbacks.ts, 0, 0))
+>T : Symbol(T, Decl(mutuallyRecursiveCallbacks.ts, 2, 9))
+
+declare function foo<T>(bar: Bar<T>): void;
+>foo : Symbol(foo, Decl(mutuallyRecursiveCallbacks.ts, 2, 38))
+>T : Symbol(T, Decl(mutuallyRecursiveCallbacks.ts, 3, 21))
+>bar : Symbol(bar, Decl(mutuallyRecursiveCallbacks.ts, 3, 24))
+>Bar : Symbol(Bar, Decl(mutuallyRecursiveCallbacks.ts, 1, 41))
+>T : Symbol(T, Decl(mutuallyRecursiveCallbacks.ts, 3, 21))
+
+declare var bar: Bar<{}>;
+>bar : Symbol(bar, Decl(mutuallyRecursiveCallbacks.ts, 4, 11))
+>Bar : Symbol(Bar, Decl(mutuallyRecursiveCallbacks.ts, 1, 41))
+
+bar = foo;
+>bar : Symbol(bar, Decl(mutuallyRecursiveCallbacks.ts, 4, 11))
+>foo : Symbol(foo, Decl(mutuallyRecursiveCallbacks.ts, 2, 38))
+
