@@ -281,6 +281,7 @@ namespace ts {
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const circularConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const resolvingDefaultType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         const markerSuperType = <TypeParameter>createType(TypeFlags.TypeParameter);
         const markerSubType = <TypeParameter>createType(TypeFlags.TypeParameter);
@@ -6055,27 +6056,51 @@ namespace ts {
             return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type));
         }
 
+        function getResolvedTypeParameterDefault(typeParameter: TypeParameter): Type | undefined {
+            if (!typeParameter.default) {
+                if (typeParameter.target) {
+                    const targetDefault = getResolvedTypeParameterDefault(typeParameter.target);
+                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintType;
+                }
+                else {
+                    // To block recursion, set the initial value to the resolvingDefaultType.
+                    typeParameter.default = resolvingDefaultType;
+                    const defaultDeclaration = typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameterDeclaration(decl) && decl.default);
+                    const defaultType = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noConstraintType;
+                    if (typeParameter.default === resolvingDefaultType) {
+                        // If we have not been called recursively, set the correct default type.
+                        typeParameter.default = defaultType;
+                    }
+                }
+            }
+            else if (typeParameter.default === resolvingDefaultType) {
+                // If we are called recursively for this type parameter, mark the default as circular.
+                typeParameter.default = circularConstraintType;
+            }
+            return typeParameter.default;
+        }
+
         /**
          * Gets the default type for a type parameter.
          *
          * If the type parameter is the result of an instantiation, this gets the instantiated
-         * default type of its target. If the type parameter has no default type, `undefined`
-         * is returned.
-         *
-         * This function *does not* perform a circularity check.
+         * default type of its target. If the type parameter has no default type or the default is
+         * circular, `undefined` is returned.
          */
         function getDefaultFromTypeParameter(typeParameter: TypeParameter): Type | undefined {
-            if (!typeParameter.default) {
-                if (typeParameter.target) {
-                    const targetDefault = getDefaultFromTypeParameter(typeParameter.target);
-                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintType;
-                }
-                else {
-                    const defaultDeclaration = typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameterDeclaration(decl) && decl.default);
-                    typeParameter.default = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noConstraintType;
-                }
-            }
-            return typeParameter.default === noConstraintType ? undefined : typeParameter.default;
+            const defaultType = getResolvedTypeParameterDefault(typeParameter);
+            return defaultType !== noConstraintType && defaultType !== circularConstraintType ? defaultType : undefined;
+        }
+
+        function hasNonCircularTypeParameterDefault(typeParameter: TypeParameter) {
+            return getResolvedTypeParameterDefault(typeParameter) !== circularConstraintType;
+        }
+
+        /**
+         * Indicates whether the declaration of a typeParameter has a default type.
+         */
+        function hasTypeParameterDefault(typeParameter: TypeParameter): boolean {
+            return !!(typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameterDeclaration(decl) && decl.default));
         }
 
         /**
@@ -6361,7 +6386,7 @@ namespace ts {
             let minTypeArgumentCount = 0;
             if (typeParameters) {
                 for (let i = 0; i < typeParameters.length; i++) {
-                    if (!getDefaultFromTypeParameter(typeParameters[i])) {
+                    if (!hasTypeParameterDefault(typeParameters[i])) {
                         minTypeArgumentCount = i + 1;
                     }
                 }
@@ -18477,6 +18502,9 @@ namespace ts {
             const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
             if (!hasNonCircularBaseConstraint(typeParameter)) {
                 error(node.constraint, Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(typeParameter));
+            }
+            if (!hasNonCircularTypeParameterDefault(typeParameter)) {
+                error(node.default, Diagnostics.Type_parameter_0_has_a_circular_default, typeToString(typeParameter));
             }
             const constraintType = getConstraintOfTypeParameter(typeParameter);
             const defaultType = getDefaultFromTypeParameter(typeParameter);
