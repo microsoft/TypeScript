@@ -8610,16 +8610,16 @@ namespace ts {
             for (let i = 0; i < checkCount; i++) {
                 const sourceType = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
                 const targetType = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
-                const sourceSig = getSingleCallSignature(getNonNullableType(sourceType));
-                const targetSig = getSingleCallSignature(getNonNullableType(targetType));
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
-                // function types with a single call signature, we known we are relating two callback parameters. In
+                // function types with a single call signature, we know we are relating two callback parameters. In
                 // that case it is sufficient to only relate the parameters of the signatures co-variantly because,
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
+                const sourceSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
+                const targetSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(targetType));
                 const callbacks = sourceSig && targetSig && !sourceSig.typePredicate && !targetSig.typePredicate &&
                     (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
                 const related = callbacks ?
