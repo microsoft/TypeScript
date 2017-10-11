@@ -212,13 +212,13 @@ namespace ts.TestFSWithWatch {
         directoryName: string;
     }
 
-    export class TestServerHost implements server.ServerHost {
+    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
         args: string[] = [];
 
         private readonly output: string[] = [];
 
         private fs: Map<FSEntry> = createMap<FSEntry>();
-        private getCanonicalFileName: (s: string) => string;
+        getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
@@ -232,6 +232,10 @@ namespace ts.TestFSWithWatch {
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
 
             this.reloadFS(fileOrFolderList);
+        }
+
+        getNewLine() {
+            return this.newLine;
         }
 
         toNormalizedAbsolutePath(s: string) {
