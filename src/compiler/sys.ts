@@ -497,11 +497,11 @@ namespace ts {
                         return undefined;
                     }
                 },
-                createHash: _crypto && (data) => {
+                createHash: _crypto && ((data: string) => {
                     const hash = _crypto.createHash("md5");
                     hash.update(data);
                     return hash.digest("hex");
-                },
+                }),
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();
