@@ -177,7 +177,8 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`    Succeeded. stdout:${indent(sys.newLine, stdout)}`);
                 }
                 return false;
-            } catch (error) {
+            }
+            catch (error) {
                 const { stdout, stderr } = error;
                 this.log.writeLine(`    Failed. stdout:${indent(sys.newLine, stdout)}${sys.newLine}    stderr:${indent(sys.newLine, stderr)}`);
                 return true;
