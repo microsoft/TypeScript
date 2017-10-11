@@ -173,8 +173,7 @@ namespace ts.projectSystem {
         }
 
         hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {
-            const eventCount = countWhere(this.events, event => event.eventName === eventName);
-            assert.equal(eventCount, 0);
+            this.events.forEach(event => assert.notEqual(event.eventName, eventName));
         }
 
         checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string) {
