@@ -8289,11 +8289,11 @@ namespace ts {
                 // The first time an anonymous type is instantiated we compute and store a list of the type
                 // parameters that are in scope (and therefore potentially referenced). For type literals that
                 // aren't the right hand side of a generic type alias declaration we optimize by reducing the
-                // set of type parameters to those that are actually referenced somewhere in the literal.
+                // set of type parameters to those that are possibly referenced in the literal.
                 const declaration = symbol.declarations[0];
                 const outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true) || emptyArray;
                 typeParameters = symbol.flags & SymbolFlags.TypeLiteral && !target.aliasTypeArguments ?
-                    filter(outerTypeParameters, tp => isTypeParameterReferencedWithin(tp, declaration)) :
+                    filter(outerTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
                     outerTypeParameters;
                 links.typeParameters = typeParameters;
                 if (typeParameters.length) {
@@ -8319,13 +8319,27 @@ namespace ts {
             return type;
         }
 
-        function isTypeParameterReferencedWithin(tp: TypeParameter, node: Node) {
-            return tp.isThisType ? forEachChild(node, checkThis) : forEachChild(node, checkIdentifier);
-            function checkThis(node: Node): boolean {
-                return node.kind === SyntaxKind.ThisType || forEachChild(node, checkThis);
+        function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
+            // If the type parameter doesn't have exactly one declaration, if there are invening statement blocks
+            // between the node and the type parameter declaration, if the node contains actual references to the
+            // type parameter, or if the node contains type queries, we consider the type parameter possibly referenced.
+            if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
+                const container = tp.symbol.declarations[0].parent;
+                if (findAncestor(node, n => n.kind === SyntaxKind.Block ? "quit" : n === container)) {
+                    return forEachChild(node, containsReference);
+                }
             }
-            function checkIdentifier(node: Node): boolean {
-                return node.kind === SyntaxKind.Identifier && isPartOfTypeNode(node) && getTypeFromTypeNode(<TypeNode>node) === tp || forEachChild(node, checkIdentifier);
+            return true;
+            function containsReference(node: Node): boolean {
+                switch (node.kind) {
+                    case SyntaxKind.ThisType:
+                        return tp.isThisType;
+                    case SyntaxKind.Identifier:
+                        return !tp.isThisType && isPartOfTypeNode(node) && getTypeFromTypeNode(<TypeNode>node) === tp;
+                    case SyntaxKind.TypeQuery:
+                        return true;
+                }
+                return forEachChild(node, containsReference);
             }
         }
 
