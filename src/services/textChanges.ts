@@ -174,7 +174,7 @@ namespace ts.textChanges {
     /**
      * Checks if 'candidate' argument is a legal separator in the list that contains 'node' as an element
      */
-    function isSeparator(node: Node, candidate: Node): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
+    function isSeparator(node: Node, candidate: Node): candidate is Token<SyntaxKind.CommaToken> | Token<SyntaxKind.SemicolonToken> {
         return candidate && node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
     }
 
@@ -429,7 +429,7 @@ namespace ts.textChanges {
                 const afterStart = after.getStart(sourceFile);
                 const afterStartLinePosition = getLineStartPositionForPosition(afterStart, sourceFile);
 
-                let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken;
+                let separator: Token<SyntaxKind.CommaToken> | Token<SyntaxKind.SemicolonToken>;
                 let multilineList = false;
 
                 // insert element after the last element in the list that has more than one item
@@ -440,12 +440,12 @@ namespace ts.textChanges {
                     // if list has only one element then we'll format is as multiline if node has comment in trailing trivia, or as singleline otherwise
                     // i.e. var x = 1 // this is x
                     //     | new element will be inserted at this position
-                    separator = SyntaxKind.CommaToken;
+                    separator = createToken(SyntaxKind.CommaToken);
                 }
                 else {
                     // element has more than one element, pick separator from the list
                     const tokenBeforeInsertPosition = findPrecedingToken(after.pos, sourceFile);
-                    separator = isSeparator(after, tokenBeforeInsertPosition) ? tokenBeforeInsertPosition.kind : SyntaxKind.CommaToken;
+                    separator = isSeparator(after, tokenBeforeInsertPosition) ? createToken(tokenBeforeInsertPosition.kind) as typeof separator : createToken(SyntaxKind.CommaToken);
                     // determine if list is multiline by checking lines of after element and element that precedes it.
                     const afterMinusOneStartLinePosition = getLineStartPositionForPosition(containingList[index - 1].getStart(sourceFile), sourceFile);
                     multilineList = afterMinusOneStartLinePosition !== afterStartLinePosition;
@@ -460,7 +460,7 @@ namespace ts.textChanges {
                         kind: ChangeKind.ReplaceWithSingleNode,
                         sourceFile,
                         range: { pos: end, end },
-                        node: createToken(separator),
+                        node: separator,
                         options: {}
                     });
                     // use the same indentation as 'after' item
@@ -484,7 +484,7 @@ namespace ts.textChanges {
                         sourceFile,
                         range: { pos: end, end },
                         node: newNode,
-                        options: { prefix: `${tokenToString(separator)} ` }
+                        options: { prefix: `${tokenToString(separator.kind)} ` }
                     });
                 }
             }

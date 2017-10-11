@@ -25,7 +25,7 @@ namespace ts {
             return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, pos, end);
         }
         else if (!isNodeKind(kind)) {
-            return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, pos, end);
+            return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind as SyntaxKind, pos, end);
         }
         else {
             return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
@@ -93,12 +93,13 @@ namespace ts {
             case SyntaxKind.BindingElement:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).propertyName) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).name) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).questionToken) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).type) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).initializer);
+                    // TODO: Specialize, remove casts to VariableLikeDeclarationBase
+                    visitNode(cbNode, (<VariableLikeDeclarationBase>node).propertyName) ||
+                    visitNode(cbNode, (<VariableLikeDeclarationBase>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<VariableLikeDeclarationBase>node).name) ||
+                    visitNode(cbNode, (<VariableLikeDeclarationBase>node).questionToken) ||
+                    visitNode(cbNode, (<VariableLikeDeclarationBase>node).type) ||
+                    visitNode(cbNode, (<VariableLikeDeclarationBase>node).initializer);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
@@ -298,9 +299,9 @@ namespace ts {
             case SyntaxKind.InterfaceDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<InterfaceDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<InterfaceDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<ClassDeclaration>node).heritageClauses) ||
+                    visitNode(cbNode, node.name) ||
+                    visitNodes(cbNode, cbNodes, node.typeParameters) ||
+                    visitNodes(cbNode, cbNodes, node.heritageClauses) ||
                     visitNodes(cbNode, cbNodes, (<InterfaceDeclaration>node).members);
             case SyntaxKind.TypeAliasDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
@@ -1087,7 +1088,7 @@ namespace ts {
 
         function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Token<TKind>;
         function parseExpectedToken(t: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
-            return parseOptionalToken(t) ||
+            return parseOptionalToken(t) as Node ||
                 createMissingNode(t, reportAtCurrentPosition, diagnosticMessage, arg0);
         }
 
@@ -1179,7 +1180,7 @@ namespace ts {
                 (result as LiteralLikeNode).text = "";
             }
 
-            return finishNode(result) as T;
+            return finishNode(result as Node) as T;
         }
 
         function internIdentifier(text: string): string {
@@ -1611,11 +1612,11 @@ namespace ts {
 
             // Ok, we have a node that looks like it could be reused.  Now verify that it is valid
             // in the current list parsing context that we're currently at.
-            if (!canReuseNode(node, parsingContext)) {
+            if (!canReuseNode(node as Node, parsingContext)) {
                 return undefined;
             }
 
-            return node;
+            return node as Node;
         }
 
         function consumeNode(node: Node) {
@@ -6975,14 +6976,14 @@ namespace ts {
 
         function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
             if (isArray) {
-                visitArray(<IncrementalNodeArray>element);
+                visitArray(<NodeArray<Node>><IncrementalNodeArray>element);
             }
             else {
-                visitNode(<IncrementalNode>element);
+                visitNode(<Node><IncrementalNode>element);
             }
             return;
 
-            function visitNode(node: IncrementalNode) {
+            function visitNode(node: Node) {
                 let text = "";
                 if (aggressiveChecks && shouldCheckNode(node)) {
                     text = oldText.substring(node.pos, node.end);
@@ -6990,8 +6991,8 @@ namespace ts {
 
                 // Ditch any existing LS children we may have created.  This way we can avoid
                 // moving them forward.
-                if (node._children) {
-                    node._children = undefined;
+                if ((node as IncrementalNode)._children) {
+                    (node as IncrementalNode)._children = undefined;
                 }
 
                 node.pos += delta;
@@ -7001,7 +7002,7 @@ namespace ts {
                     Debug.assert(text === newText.substring(node.pos, node.end));
                 }
 
-                forEachChild(node, visitNode, visitArray);
+                forEachChild(node as Node, visitNode, visitArray);
                 if (hasJSDocNodes(node)) {
                     for (const jsDocComment of node.jsDoc) {
                         forEachChild(jsDocComment, visitNode, visitArray);
@@ -7010,8 +7011,8 @@ namespace ts {
                 checkNodePositions(node, aggressiveChecks);
             }
 
-            function visitArray(array: IncrementalNodeArray) {
-                array._children = undefined;
+            function visitArray(array: NodeArray<Node>) {
+                (array as IncrementalNodeArray)._children = undefined;
                 array.pos += delta;
                 array.end += delta;
 
@@ -7021,7 +7022,7 @@ namespace ts {
             }
         }
 
-        function shouldCheckNode(node: Node) {
+        function shouldCheckNode(node: BaseNode) {
             switch (node.kind) {
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -7150,9 +7151,9 @@ namespace ts {
 
                     // Adjust the pos or end (or both) of the intersecting element accordingly.
                     adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                    forEachChild(child, visitNode, visitArray);
+                    forEachChild(child as Node, visitNode as (n: Node) => undefined, visitArray as (n: NodeArray<Node>) => undefined);
 
-                    checkNodePositions(child, aggressiveChecks);
+                    checkNodePositions(child as Node, aggressiveChecks);
                     return;
                 }
 
@@ -7341,7 +7342,7 @@ namespace ts {
             _children: Node[];
         }
 
-        export interface IncrementalNode extends Node, IncrementalElement {
+        export interface IncrementalNode extends BaseNode, IncrementalElement {
             hasBeenIncrementallyParsed: boolean;
         }
 

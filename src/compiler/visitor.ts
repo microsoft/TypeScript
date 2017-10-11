@@ -1025,11 +1025,11 @@ namespace ts {
                 break;
 
             case SyntaxKind.SetAccessor:
-                result = reduceNodes((<GetAccessorDeclaration>node).decorators, cbNodes, result);
-                result = reduceNodes((<GetAccessorDeclaration>node).modifiers, cbNodes, result);
-                result = reduceNode((<GetAccessorDeclaration>node).name, cbNode, result);
-                result = reduceNodes((<GetAccessorDeclaration>node).parameters, cbNodes, result);
-                result = reduceNode((<GetAccessorDeclaration>node).body, cbNode, result);
+                result = reduceNodes(node.decorators, cbNodes, result);
+                result = reduceNodes(node.modifiers, cbNodes, result);
+                result = reduceNode(node.name, cbNode, result);
+                result = reduceNodes(node.parameters, cbNodes, result);
+                result = reduceNode(node.body, cbNode, result);
                 break;
 
             // Binding patterns

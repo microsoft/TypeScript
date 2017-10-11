@@ -1138,7 +1138,7 @@ namespace ts {
 
     export function createBinary(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression) {
         const node = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
-        const operatorToken = asToken(operator);
+        const operatorToken = asToken(operator) as BinaryOperatorToken;
         const operatorKind = operatorToken.kind;
         node.left = parenthesizeBinaryOperand(operatorKind, left, /*isLeftSideOfBinary*/ true, /*leftOperand*/ undefined);
         node.operatorToken = operatorToken;

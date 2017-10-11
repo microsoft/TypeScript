@@ -375,7 +375,7 @@ namespace ts.refactor.extractSymbol {
                         permittedJumps = PermittedJumps.None;
                         break;
                     case SyntaxKind.Block:
-                        if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (<TryStatement>node).finallyBlock === node) {
+                        if (node.parent && node.parent.kind === SyntaxKind.TryStatement && node.parent.finallyBlock === node) {
                             // allow unconditional returns from finally blocks
                             permittedJumps = PermittedJumps.Return;
                         }

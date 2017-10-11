@@ -44,7 +44,7 @@ namespace ts {
         return node;
     }
 
-    class NodeObject implements Node {
+    class NodeObject implements BaseNode {
         public kind: SyntaxKind;
         public pos: number;
         public end: number;
@@ -65,11 +65,11 @@ namespace ts {
         }
 
         public getSourceFile(): SourceFile {
-            return getSourceFileOfNode(this);
+            return getSourceFileOfNode(this as Node);
         }
 
         public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-            return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+            return getTokenPosOfNode(this as Node, sourceFile, includeJsDocComment);
         }
 
         public getFullStart(): number {
@@ -109,7 +109,7 @@ namespace ts {
                 const token = scanner.scan();
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
-                    nodes.push(createNode(token, pos, textPos, this));
+                    nodes.push(createNode(token, pos, textPos, this as Node) as Node);
                 }
                 pos = textPos;
                 if (token === SyntaxKind.EndOfFileToken) {
@@ -120,7 +120,7 @@ namespace ts {
         }
 
         private createSyntaxList(nodes: NodeArray<Node>): Node {
-            const list = <NodeObject>createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, this);
+            const list = <NodeObject>createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, this as Node);
             list._children = [];
             let pos = nodes.pos;
 
@@ -134,7 +134,7 @@ namespace ts {
             if (pos < nodes.end) {
                 this.addSyntheticNodes(list._children, pos, nodes.end);
             }
-            return list;
+            return list as Node;
         }
 
         private createChildren(sourceFile?: SourceFileLike) {
@@ -143,7 +143,7 @@ namespace ts {
                 return;
             }
 
-            if (isJSDocCommentContainingNode(this)) {
+            if (isJSDocCommentContainingNode(this as Node)) {
                 /** Don't add trivia for "tokens" since this is in a comment. */
                 const children: Node[] = [];
                 this.forEachChild(child => { children.push(child); });
@@ -176,7 +176,7 @@ namespace ts {
             // For that to work, the jsdoc comments should still be the leading trivia of the first child.
             // Restoring the scanner position ensures that.
             pos = this.pos;
-            forEachChild(this, processNode, processNodes);
+            forEachChild(this as Node, processNode, processNodes);
             if (pos < this.end) {
                 this.addSyntheticNodes(children, pos, this.end);
             }
@@ -223,11 +223,11 @@ namespace ts {
         }
 
         public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T {
-            return forEachChild(this, cbNode, cbNodeArray);
+            return forEachChild(this as Node, cbNode, cbNodeArray);
         }
     }
 
-    class TokenOrIdentifierObject implements Node {
+    class TokenOrIdentifierObject implements BaseNode {
         public kind: SyntaxKind;
         public pos: number;
         public end: number;
@@ -244,11 +244,11 @@ namespace ts {
         }
 
         public getSourceFile(): SourceFile {
-            return getSourceFileOfNode(this);
+            return getSourceFileOfNode(this as Node);
         }
 
         public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-            return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+            return getTokenPosOfNode(this as Node, sourceFile, includeJsDocComment);
         }
 
         public getFullStart(): number {
@@ -746,8 +746,8 @@ namespace ts {
 
     function getServicesObjectAllocator(): ObjectAllocator {
         return {
-            getNodeConstructor: () => NodeObject,
-            getTokenConstructor: () => TokenObject,
+            getNodeConstructor: () => NodeObject as new (kind: SyntaxKind, pos?: number, end?: number) => Node,
+            getTokenConstructor: () => TokenObject as new (kind: SyntaxKind, pos?: number, end?: number) => Node,
 
             getIdentifierConstructor: () => IdentifierObject,
             getSourceFileConstructor: () => SourceFileObject,
@@ -1566,7 +1566,7 @@ namespace ts {
                     return;
             }
 
-            let nodeForStartPos = node;
+            let nodeForStartPos: Node = node;
             while (true) {
                 if (isRightSideOfPropertyAccess(nodeForStartPos) || isRightSideOfQualifiedName(nodeForStartPos)) {
                     // If on the span is in right side of the the property or qualified name, return the span from the qualified name pos to end of this node

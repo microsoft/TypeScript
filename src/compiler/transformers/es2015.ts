@@ -350,7 +350,7 @@ namespace ts {
         function shouldVisitNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
-                || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && (isStatement(node) || (node.kind === SyntaxKind.Block)))
+                || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && (isStatement(node) || ((node as Node).kind === SyntaxKind.Block)))
                 || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node))
                 || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
         }

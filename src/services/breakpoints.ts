@@ -329,9 +329,9 @@ namespace ts.BreakpointResolver {
 
                         // If this is name of property assignment, set breakpoint in the initializer
                         if (node.parent.kind === SyntaxKind.PropertyAssignment &&
-                            (<PropertyDeclaration>node.parent).name === node &&
+                            node.parent.name === node &&
                             !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)) {
-                            return spanInNode((<PropertyDeclaration>node.parent).initializer);
+                            return spanInNode(node.parent.initializer);
                         }
 
                         // Breakpoint in type assertion goes to its operand

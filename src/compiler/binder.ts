@@ -2149,7 +2149,7 @@ namespace ts {
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
                 case SyntaxKind.JSDocParameterTag:
-                    if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {
+                    if ((node as Node).parent.kind !== SyntaxKind.JSDocTypeLiteral) {
                         break;
                     }
                     // falls through
@@ -2563,11 +2563,11 @@ namespace ts {
                     // report error on all statements except empty ones
                     (isStatementButNotDeclaration(node) && node.kind !== SyntaxKind.EmptyStatement) ||
                     // report error on class declarations
-                    node.kind === SyntaxKind.ClassDeclaration ||
+                    (node as Declaration).kind === SyntaxKind.ClassDeclaration ||
                     // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
-                    (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
+                    ((node as Declaration).kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>(node as Declaration))) ||
                     // report error on regular enums and const enums if preserveConstEnums is set
-                    (node.kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
+                    ((node as Declaration).kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
 
                 if (reportError) {
                     currentFlow = reportedUnreachableFlow;

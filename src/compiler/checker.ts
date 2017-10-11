@@ -542,9 +542,9 @@ namespace ts {
             return emitResolver;
         }
 
-        function error(location: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): void {
+        function error(location: Node | Token<SyntaxKind>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): void {
             const diagnostic = location
-                ? createDiagnosticForNode(location, message, arg0, arg1, arg2)
+                ? createDiagnosticForNode(location as Node, message, arg0, arg1, arg2)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2);
             diagnostics.add(diagnostic);
         }
@@ -3944,16 +3944,9 @@ namespace ts {
                     case SyntaxKind.CallSignature:
                     case SyntaxKind.IndexSignature:
                     case SyntaxKind.Parameter:
-                    case SyntaxKind.ModuleBlock:
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
                     case SyntaxKind.TypeLiteral:
-                    case SyntaxKind.TypeReference:
-                    case SyntaxKind.ArrayType:
-                    case SyntaxKind.TupleType:
-                    case SyntaxKind.UnionType:
-                    case SyntaxKind.IntersectionType:
-                    case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
 
                     // Default binding, import specifier and namespace import is visible
@@ -3975,6 +3968,17 @@ namespace ts {
                         return false;
 
                     default:
+                        // TODO (weswig): These are not declarations, yet appear here - why?
+                        switch ((node as Node).kind) {
+                            case SyntaxKind.ModuleBlock:
+                            case SyntaxKind.TypeReference:
+                            case SyntaxKind.ArrayType:
+                            case SyntaxKind.TupleType:
+                            case SyntaxKind.UnionType:
+                            case SyntaxKind.IntersectionType:
+                            case SyntaxKind.ParenthesizedType:
+                                return isDeclarationVisible(<Declaration>node.parent);
+                        }
                         return false;
                 }
             }
@@ -4293,7 +4297,7 @@ namespace ts {
             const typeNode = getEffectiveTypeAnnotationNode(declaration);
             if (typeNode) {
                 const declaredType = getTypeFromTypeNode(typeNode);
-                return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
+                return addOptionality(declaredType, hasQuestionToken(declaration) && includeOptionality);
             }
 
             if ((noImplicitAny || isInJavaScriptFile(declaration)) &&
@@ -4342,9 +4346,9 @@ namespace ts {
             }
 
             // Use the type of the initializer expression if one is present
-            if (declaration.initializer) {
-                const type = checkDeclarationInitializer(declaration);
-                return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+            if (hasInitializer(declaration)) {
+                const type = checkDeclarationInitializer(declaration as VariableLikeInitializedDeclaration);
+                return addOptionality(type, hasQuestionToken(declaration) && includeOptionality);
             }
 
             if (isJsxAttribute(declaration)) {
@@ -4517,7 +4521,7 @@ namespace ts {
             }
 
             // Rest parameters default to type any[], other parameters default to type any
-            type = declaration.dotDotDotToken ? anyArrayType : anyType;
+            type = hasDotDotDot(declaration) ? anyArrayType : anyType;
 
             // Report implicit any errors unless this is a private property within an ambient declaration
             if (reportErrors && noImplicitAny) {
@@ -5340,7 +5344,7 @@ namespace ts {
         // that specifies an independent type, or if it has no type annotation and no initializer (and thus of type any).
         function isIndependentVariableLikeDeclaration(node: VariableLikeDeclaration): boolean {
             const typeNode = getEffectiveTypeAnnotationNode(node);
-            return typeNode ? isIndependentType(typeNode) : !node.initializer;
+            return typeNode ? isIndependentType(typeNode) : !hasInitializer(node);
         }
 
         // A function-like declaration is considered independent (free of this references) if it has a return type
@@ -8051,7 +8055,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getTypeFromTypeNode(node: TypeNode): Type {
+        function getTypeFromTypeNode(node: TypeNode | Identifier | QualifiedName): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.JSDocAllType:
@@ -8079,30 +8083,30 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
                 case SyntaxKind.LiteralType:
-                    return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
+                    return getTypeFromLiteralTypeNode(node);
                 case SyntaxKind.TypeReference:
-                    return getTypeFromTypeReference(<TypeReferenceNode>node);
+                    return getTypeFromTypeReference(node);
                 case SyntaxKind.TypePredicate:
                     return booleanType;
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
+                    return getTypeFromTypeReference(node);
                 case SyntaxKind.TypeQuery:
-                    return getTypeFromTypeQueryNode(<TypeQueryNode>node);
+                    return getTypeFromTypeQueryNode(node);
                 case SyntaxKind.ArrayType:
-                    return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
+                    return getTypeFromArrayTypeNode(node);
                 case SyntaxKind.TupleType:
-                    return getTypeFromTupleTypeNode(<TupleTypeNode>node);
+                    return getTypeFromTupleTypeNode(node);
                 case SyntaxKind.UnionType:
-                    return getTypeFromUnionTypeNode(<UnionTypeNode>node);
+                    return getTypeFromUnionTypeNode(node);
                 case SyntaxKind.IntersectionType:
-                    return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
+                    return getTypeFromIntersectionTypeNode(node);
                 case SyntaxKind.JSDocNullableType:
-                    return getTypeFromJSDocNullableTypeNode(<JSDocNullableType>node);
+                    return getTypeFromJSDocNullableTypeNode(node);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocTypeExpression:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
+                    return getTypeFromTypeNode(node.type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
@@ -8110,11 +8114,11 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 case SyntaxKind.TypeOperator:
-                    return getTypeFromTypeOperatorNode(<TypeOperatorNode>node);
+                    return getTypeFromTypeOperatorNode(node);
                 case SyntaxKind.IndexedAccessType:
-                    return getTypeFromIndexedAccessTypeNode(<IndexedAccessTypeNode>node);
+                    return getTypeFromIndexedAccessTypeNode(node);
                 case SyntaxKind.MappedType:
-                    return getTypeFromMappedTypeNode(<MappedTypeNode>node);
+                    return getTypeFromMappedTypeNode(node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -8122,7 +8126,7 @@ namespace ts {
                     const symbol = getSymbolAtLocation(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
                 case SyntaxKind.JSDocVariadicType:
-                    return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
+                    return getTypeFromJSDocVariadicType(node);
                 default:
                     return unknownType;
             }
@@ -8325,7 +8329,7 @@ namespace ts {
                 return node.kind === SyntaxKind.ThisType || forEachChild(node, checkThis);
             }
             function checkIdentifier(node: Node): boolean {
-                return node.kind === SyntaxKind.Identifier && isPartOfTypeNode(node) && getTypeFromTypeNode(<TypeNode>node) === tp || forEachChild(node, checkIdentifier);
+                return node.kind === SyntaxKind.Identifier && isPartOfTypeNode(node) && getTypeFromTypeNode(node) === tp || forEachChild(node, checkIdentifier);
             }
         }
 
@@ -8411,35 +8415,35 @@ namespace ts {
 
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
-        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean {
+        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike | JsxExpression | JsxAttributes): boolean {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.MethodDeclaration:
-                    return isContextSensitiveFunctionLikeDeclaration(<FunctionExpression | ArrowFunction | MethodDeclaration>node);
+                    return isContextSensitiveFunctionLikeDeclaration(node);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return forEach((<ObjectLiteralExpression>node).properties, isContextSensitive);
+                    return forEach(node.properties, isContextSensitive);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return forEach((<ArrayLiteralExpression>node).elements, isContextSensitive);
+                    return forEach(node.elements, isContextSensitive);
                 case SyntaxKind.ConditionalExpression:
-                    return isContextSensitive((<ConditionalExpression>node).whenTrue) ||
-                        isContextSensitive((<ConditionalExpression>node).whenFalse);
+                    return isContextSensitive(node.whenTrue) ||
+                        isContextSensitive(node.whenFalse);
                 case SyntaxKind.BinaryExpression:
-                    return (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken &&
-                        (isContextSensitive((<BinaryExpression>node).left) || isContextSensitive((<BinaryExpression>node).right));
+                    return node.operatorToken.kind === SyntaxKind.BarBarToken &&
+                        (isContextSensitive(node.left) || isContextSensitive(node.right));
                 case SyntaxKind.PropertyAssignment:
-                    return isContextSensitive((<PropertyAssignment>node).initializer);
+                    return isContextSensitive(node.initializer);
                 case SyntaxKind.ParenthesizedExpression:
-                    return isContextSensitive((<ParenthesizedExpression>node).expression);
+                    return isContextSensitive(node.expression);
                 case SyntaxKind.JsxAttributes:
-                    return forEach((<JsxAttributes>node).properties, isContextSensitive);
+                    return forEach(node.properties, isContextSensitive);
                 case SyntaxKind.JsxAttribute:
                     // If there is no initializer, JSX attribute has a boolean value of true which is not context sensitive.
-                    return (<JsxAttribute>node).initializer && isContextSensitive((<JsxAttribute>node).initializer);
+                    return node.initializer && isContextSensitive(node.initializer);
                 case SyntaxKind.JsxExpression:
                     // It is possible to that node.expression is undefined (e.g <div x={} />)
-                    return (<JsxExpression>node).expression && isContextSensitive((<JsxExpression>node).expression);
+                    return node.expression && isContextSensitive(node.expression);
             }
 
             return false;
@@ -13201,7 +13205,13 @@ namespace ts {
         // Otherwise, in a binding pattern inside a variable or parameter declaration,
         //   the contextual type of an initializer expression is the type annotation of the containing declaration, if present.
         function getContextualTypeForInitializerExpression(node: Expression): Type {
-            const declaration = <VariableLikeDeclaration>node.parent;
+            const declaration = node.parent;
+            if (!isDeclaration(declaration)) {
+                return undefined;
+            }
+            if (!canHaveInitializer(declaration)) {
+                return undefined;
+            }
             if (node === declaration.initializer) {
                 const typeNode = getEffectiveTypeAnnotationNode(declaration);
                 if (typeNode) {
@@ -13218,7 +13228,7 @@ namespace ts {
                 }
                 if (isBindingPattern(declaration.parent)) {
                     const parentDeclaration = declaration.parent.parent;
-                    const name = declaration.propertyName || declaration.name;
+                    const name = (declaration as BindingElement).propertyName || declaration.name;
                     if (parentDeclaration.kind !== SyntaxKind.BindingElement) {
                         const parentTypeNode = getEffectiveTypeAnnotationNode(parentDeclaration);
                         if (parentTypeNode && !isBindingPattern(name)) {
@@ -13742,7 +13752,7 @@ namespace ts {
                 strictNullChecks ? neverType : undefinedWideningType);
         }
 
-        function isNumericName(name: DeclarationName): boolean {
+        function isNumericName(name: DeclarationName | QualifiedName): boolean {
             switch (name.kind) {
                 case SyntaxKind.ComputedPropertyName:
                     return isNumericComputedName(name);
@@ -16969,7 +16979,7 @@ namespace ts {
             const type = getTypeOfSymbol(symbol);
             if (strictNullChecks) {
                 const declaration = symbol.valueDeclaration;
-                if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
+                if (declaration && hasInitializer(declaration)) {
                     return getNullableType(type, TypeFlags.Undefined);
                 }
             }
@@ -17902,7 +17912,7 @@ namespace ts {
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
         }
 
-        function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, errorNode?: Node) {
+        function checkBinaryLikeExpression(left: Expression, operatorToken: Token<SyntaxKind>, right: Expression, checkMode?: CheckMode, errorNode?: Node) {
             const operator = operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode);
@@ -18242,7 +18252,7 @@ namespace ts {
             return node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression;
         }
 
-        function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
+        function checkDeclarationInitializer(declaration: VariableLikeInitializedDeclaration) {
             const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
@@ -19451,7 +19461,7 @@ namespace ts {
             }
         }
 
-        function checkExportsOnMergedDeclarations(node: Node): void {
+        function checkExportsOnMergedDeclarations(node: Declaration): void {
             if (!produceDiagnostics) {
                 return;
             }
@@ -19999,7 +20009,7 @@ namespace ts {
                 // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
-                        const constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
+                        const constructor = getFirstConstructorWithBody(node);
                         if (constructor) {
                             for (const parameter of constructor.parameters) {
                                 markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
@@ -20010,19 +20020,19 @@ namespace ts {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        for (const parameter of (<FunctionLikeDeclaration>node).parameters) {
+                        for (const parameter of node.parameters) {
                             markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                         }
 
-                        markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(<FunctionLikeDeclaration>node));
+                        markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(node));
                         break;
 
                     case SyntaxKind.PropertyDeclaration:
-                        markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveTypeAnnotationNode(<ParameterDeclaration>node));
+                        markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveTypeAnnotationNode(node));
                         break;
 
                     case SyntaxKind.Parameter:
-                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
+                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(node));
                         break;
                 }
             }
@@ -20176,15 +20186,15 @@ namespace ts {
                     switch (node.kind) {
                         case SyntaxKind.SourceFile:
                         case SyntaxKind.ModuleDeclaration:
-                            checkUnusedModuleMembers(<ModuleDeclaration | SourceFile>node);
+                            checkUnusedModuleMembers(node);
                             break;
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.ClassExpression:
-                            checkUnusedClassMembers(<ClassDeclaration | ClassExpression>node);
-                            checkUnusedTypeParameters(<ClassDeclaration | ClassExpression>node);
+                            checkUnusedClassMembers(node);
+                            checkUnusedTypeParameters(node);
                             break;
                         case SyntaxKind.InterfaceDeclaration:
-                            checkUnusedTypeParameters(<InterfaceDeclaration>node);
+                            checkUnusedTypeParameters(node);
                             break;
                         case SyntaxKind.Block:
                         case SyntaxKind.CaseBlock:
@@ -20200,10 +20210,10 @@ namespace ts {
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
-                            if ((<FunctionLikeDeclaration>node).body) {
-                                checkUnusedLocalsAndParameters(<FunctionLikeDeclaration>node);
+                            if (node.body) {
+                                checkUnusedLocalsAndParameters(node);
                             }
-                            checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
+                            checkUnusedTypeParameters(node);
                             break;
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.CallSignature:
@@ -20211,10 +20221,10 @@ namespace ts {
                         case SyntaxKind.IndexSignature:
                         case SyntaxKind.FunctionType:
                         case SyntaxKind.ConstructorType:
-                            checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
+                            checkUnusedTypeParameters(node);
                             break;
                         case SyntaxKind.TypeAliasDeclaration:
-                            checkUnusedTypeParameters(<TypeAliasDeclaration>node);
+                            checkUnusedTypeParameters(node);
                             break;
                     }
                 }
@@ -20266,7 +20276,7 @@ namespace ts {
             }
         }
 
-        function parameterNameStartsWithUnderscore(parameterName: DeclarationName) {
+        function parameterNameStartsWithUnderscore(parameterName: DeclarationName | QualifiedName) {
             return parameterName && isIdentifierThatStartsWithUnderScore(parameterName);
         }
 
@@ -20572,7 +20582,7 @@ namespace ts {
         }
 
         // Check that a parameter initializer contains no references to parameters declared to the right of itself
-        function checkParameterInitializer(node: VariableLikeDeclaration): void {
+        function checkParameterInitializer(node: VariableLikeInitializedDeclaration): void {
             if (getRootDeclaration(node).kind !== SyntaxKind.Parameter) {
                 return;
             }
@@ -20644,9 +20654,10 @@ namespace ts {
         }
 
         // Check variable, parameter, or property declaration
+        // TODO: Specialize and remove `VariableLikeDeclarationBase` casts
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkDecorators(node);
-            checkSourceElement(node.type);
+            checkSourceElement((node as VariableLikeDeclarationBase).type);
 
             // JSDoc `function(string, string): string` syntax results in parameters with no name
             if (!node.name) {
@@ -20658,8 +20669,8 @@ namespace ts {
             // well known symbols.
             if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
-                if (node.initializer) {
-                    checkExpressionCached(node.initializer);
+                if (hasInitializer(node)) {
+                    checkExpressionCached((node as VariableLikeInitializedDeclaration).initializer);
                 }
             }
 
@@ -20673,7 +20684,7 @@ namespace ts {
                 }
 
                 // check private/protected variable access
-                const parent = <VariableLikeDeclaration>(<BindingPattern>node.parent).parent;
+                const parent = node.parent.parent;
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
@@ -20692,16 +20703,16 @@ namespace ts {
                 forEach((<BindingPattern>node.name).elements, checkSourceElement);
             }
             // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
-            if (node.initializer && getRootDeclaration(node).kind === SyntaxKind.Parameter && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
+            if (hasInitializer(node) && getRootDeclaration(node).kind === SyntaxKind.Parameter && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
                 error(node, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
                 return;
             }
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
                 // Don't validate for-in initializer as it is already an error
-                if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
-                    checkParameterInitializer(node);
+                if (hasInitializer(node) && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
+                    checkTypeAssignableTo(checkExpressionCached((node as VariableLikeInitializedDeclaration).initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
+                    checkParameterInitializer(node as VariableLikeInitializedDeclaration);
                 }
                 return;
             }
@@ -20710,9 +20721,9 @@ namespace ts {
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 // Don't validate for-in initializer as it is already an error
-                if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), type, node, /*headMessage*/ undefined);
-                    checkParameterInitializer(node);
+                if (hasInitializer(node) && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
+                    checkTypeAssignableTo(checkExpressionCached((node as VariableLikeInitializedDeclaration).initializer), type, node, /*headMessage*/ undefined);
+                    checkParameterInitializer(node as VariableLikeInitializedDeclaration);
                 }
             }
             else {
@@ -20722,8 +20733,8 @@ namespace ts {
                 if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
                     error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
                 }
-                if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, /*headMessage*/ undefined);
+                if (hasInitializer(node)) {
+                    checkTypeAssignableTo(checkExpressionCached((node as VariableLikeInitializedDeclaration).initializer), declarationType, node, /*headMessage*/ undefined);
                 }
                 if (!areDeclarationFlagsIdentical(node, symbol.valueDeclaration)) {
                     error(getNameOfDeclaration(symbol.valueDeclaration), Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));

@@ -1,5 +1,5 @@
 namespace ts {
-    export interface Node {
+    export interface BaseNode {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;

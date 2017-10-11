@@ -1597,7 +1597,7 @@ namespace ts {
                         ? setTextRange(
                             createBinary(
                                 node.operand,
-                                createToken(node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
+                                node.operator === SyntaxKind.PlusPlusToken ? createToken(SyntaxKind.PlusEqualsToken) : createToken(SyntaxKind.MinusEqualsToken),
                                 createLiteral(1)
                             ),
                             /*location*/ node)
