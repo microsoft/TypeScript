@@ -132,7 +132,7 @@ namespace ts {
                 outputFingerprints = createMap<OutputFingerprint>();
             }
 
-            const hash = sys.createHash(data);
+            const hash = sys.createHash ? sys.createHash(data) : data;
             const mtimeBefore = sys.getModifiedTime(fileName);
 
             if (mtimeBefore) {
