@@ -16203,8 +16203,10 @@ namespace ts {
                 checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
+                const isJavascript = isInJavaScriptFile(candidateForTypeArgumentError.declaration);
                 const typeArguments = (<CallExpression>node).typeArguments;
-                checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), /*reportErrors*/ true, fallbackError);
+                const typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidateForTypeArgumentError.typeParameters, getMinTypeArgumentCount(candidateForTypeArgumentError.typeParameters), isJavascript);
+                checkTypeArguments(candidateForTypeArgumentError, typeArguments, typeArgumentTypes, /*reportErrors*/ true, fallbackError);
             }
             else if (typeArguments && every(signatures, sig => length(sig.typeParameters) !== typeArguments.length)) {
                 let min = Number.POSITIVE_INFINITY;
