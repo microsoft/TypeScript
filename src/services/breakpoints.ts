@@ -93,11 +93,11 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.ArrowFunction:
                         return spanInFunctionDeclaration(<FunctionLikeDeclaration>node);
 
+                    // @ts-ignore falls through
                     case SyntaxKind.Block:
                         if (isFunctionBlock(node)) {
                             return spanInFunctionBlock(<Block>node);
                         }
-                        // falls through
                     case SyntaxKind.ModuleBlock:
                         return spanInBlock(<Block>node);
 
@@ -181,12 +181,12 @@ namespace ts.BreakpointResolver {
                         // import statement without including semicolon
                         return textSpan(node, (<ExportDeclaration>node).moduleSpecifier);
 
+                    // @ts-ignore falls through
                     case SyntaxKind.ModuleDeclaration:
                         // span on complete module if it is instantiated
                         if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
-                        // falls through
 
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
@@ -470,11 +470,11 @@ namespace ts.BreakpointResolver {
 
             function spanInBlock(block: Block): TextSpan {
                 switch (block.parent.kind) {
+                    // @ts-ignore falls through
                     case SyntaxKind.ModuleDeclaration:
                         if (getModuleInstanceState(block.parent) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
-                        // falls through
 
                     // Set on parent if on same line otherwise on first statement
                     case SyntaxKind.WhileStatement:
@@ -579,24 +579,24 @@ namespace ts.BreakpointResolver {
 
             function spanInCloseBraceToken(node: Node): TextSpan {
                 switch (node.parent.kind) {
+                    // @ts-ignore falls through
                     case SyntaxKind.ModuleBlock:
                         // If this is not an instantiated module block, no bp span
                         if (getModuleInstanceState(node.parent.parent) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
-                        // falls through
 
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ClassDeclaration:
                         // Span on close brace token
                         return textSpan(node);
 
+                    // @ts-ignore falls through
                     case SyntaxKind.Block:
                         if (isFunctionBlock(node.parent)) {
                             // Span on close brace token
                             return textSpan(node);
                         }
-                        // falls through
 
                     case SyntaxKind.CatchClause:
                         return spanInNode(lastOrUndefined((<Block>node.parent).statements));

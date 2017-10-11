@@ -1362,9 +1362,9 @@ namespace ts {
                 break;
 
             // Clauses
+            // @ts-ignore falls through
             case SyntaxKind.CaseClause:
                 result = reduceNode((<CaseClause>node).expression, cbNode, result);
-                // falls through
 
             case SyntaxKind.DefaultClause:
                 result = reduceNodes((<CaseClause | DefaultClause>node).statements, cbNodes, result);

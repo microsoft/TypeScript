@@ -667,13 +667,14 @@ namespace ts {
                         forEachChild(node, visit);
                         break;
 
+                    // @ts-ignore falls through
                     case SyntaxKind.Parameter:
                         // Only consider parameter properties
                         if (!hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                             break;
                         }
-                    // falls through
                     case SyntaxKind.VariableDeclaration:
+                    // @ts-ignore falls through
                     case SyntaxKind.BindingElement: {
                         const decl = <VariableDeclaration>node;
                         if (isBindingPattern(decl.name)) {
@@ -684,7 +685,6 @@ namespace ts {
                             visit(decl.initializer);
                         }
                     }
-                    // falls through
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
@@ -722,11 +722,11 @@ namespace ts {
                         }
                         break;
 
+                    // @ts-ignore falls through
                     case SyntaxKind.BinaryExpression:
                         if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
                            addDeclaration(node as BinaryExpression);
                         }
-                        // falls through
 
                     default:
                         forEachChild(node, visit);
@@ -2103,11 +2103,11 @@ namespace ts {
     export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElement {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
+            // @ts-ignore falls through
             case SyntaxKind.NumericLiteral:
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
                     return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
-            // falls through
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&

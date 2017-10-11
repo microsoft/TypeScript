@@ -517,12 +517,12 @@ namespace ts.Completions {
                         }
                         break;
 
+                    // @ts-ignore falls through
                     case SyntaxKind.BinaryExpression:
                         if (!((parent as BinaryExpression).left.flags & NodeFlags.ThisNodeHasError)) {
                             // It has a left-hand side, so we're not in an opening JSX tag.
                             break;
                         }
-                    // falls through
 
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxElement:
@@ -1372,11 +1372,11 @@ namespace ts.Completions {
                         containingNodeKind === SyntaxKind.NamespaceImport;
 
                 case SyntaxKind.GetKeyword:
+                // @ts-ignore falls through
                 case SyntaxKind.SetKeyword:
                     if (isFromClassElementDeclaration(contextToken)) {
                         return false;
                     }
-                // falls through
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.InterfaceKeyword:

@@ -137,6 +137,7 @@ namespace ts.OutliningElementsCollector {
             }
 
             switch (n.kind) {
+                // @ts-ignore falls through
                 case SyntaxKind.Block:
                     if (!isFunctionBlock(n)) {
                         const parent = n.parent;
@@ -188,7 +189,6 @@ namespace ts.OutliningElementsCollector {
                         });
                         break;
                     }
-                    // falls through
 
                 case SyntaxKind.ModuleBlock: {
                     const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);

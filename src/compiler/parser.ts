@@ -3738,11 +3738,11 @@ namespace ts {
                     //  UnaryExpression (modified):
                     //      < type > UnaryExpression
                     return parseTypeAssertion();
+                // @ts-ignore falls through
                 case SyntaxKind.AwaitKeyword:
                     if (isAwaitExpression()) {
                         return parseAwaitExpression();
                     }
-                    // falls through
                 default:
                     return parseUpdateExpression();
             }
@@ -3771,13 +3771,13 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.AwaitKeyword:
                     return false;
+                // @ts-ignore falls through
                 case SyntaxKind.LessThanToken:
                     // If we are not in JSX context, we are parsing TypeAssertion which is an UnaryExpression
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return false;
                     }
                     // We are in JSX context and the token is part of JSXElement.
-                    // falls through
                 default:
                     return true;
             }
@@ -6450,6 +6450,7 @@ namespace ts {
                                     indent += whitespace.length;
                                 }
                                 break;
+                            // @ts-ignore falls through
                             case SyntaxKind.AsteriskToken:
                                 if (state === JSDocState.BeginningOfLine) {
                                     // leading asterisks start recording on the *next* (non-whitespace) token
@@ -6458,7 +6459,6 @@ namespace ts {
                                     break;
                                 }
                                 // record the * as a comment
-                                // falls through
                             default:
                                 state = JSDocState.SavingComments; // leading identifiers start recording as well
                                 pushComment(scanner.getTokenText());

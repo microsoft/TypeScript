@@ -238,11 +238,11 @@ namespace ts.DocumentHighlights {
     function getBreakOrContinueOwner(statement: BreakOrContinueStatement): Node {
         for (let node = statement.parent; node; node = node.parent) {
             switch (node.kind) {
+                // @ts-ignore falls through
                 case SyntaxKind.SwitchStatement:
                     if (statement.kind === SyntaxKind.ContinueStatement) {
                         continue;
                     }
-                    // falls through
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
