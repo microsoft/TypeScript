@@ -1871,7 +1871,7 @@ namespace ts {
             let serializedUnion: SerializedTypeNode;
             for (const typeNode of node.types) {
                 if (!compilerOptions.strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
-                    continue; // Elide null and undefined from unions for metadata, just like pre-implementation of strict null checks
+                    continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
                 }
                 const serializedIndividual = serializeTypeNode(typeNode);
 
