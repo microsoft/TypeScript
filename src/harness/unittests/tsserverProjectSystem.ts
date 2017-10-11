@@ -132,16 +132,78 @@ namespace ts.projectSystem {
         return map(fileNames, toExternalFile);
     }
 
-    class TestServerEventManager {
-        public events: server.ProjectServiceEvent[] = [];
+    export function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
+        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, ...nonZeroStats };
+    }
 
-        handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
-            this.events.push(event);
+    export class TestServerEventManager {
+        private events: server.ProjectServiceEvent[] = [];
+        readonly session: TestSession;
+        readonly service: server.ProjectService;
+        readonly host: projectSystem.TestServerHost;
+        constructor(files: projectSystem.FileOrFolder[]) {
+            this.host = createServerHost(files);
+            this.session = createSession(this.host, {
+                canUseEvents: true,
+                eventHandler: event => this.events.push(event),
+            });
+            this.service = this.session.getProjectService();
         }
 
-        checkEventCountOfType(eventType: "configFileDiag", expectedCount: number) {
-            const eventsOfType = filter(this.events, e => e.eventName === eventType);
-            assert.equal(eventsOfType.length, expectedCount, `The actual event counts of type ${eventType} is ${eventsOfType.length}, while expected ${expectedCount}`);
+        getEvents(): ReadonlyArray<server.ProjectServiceEvent> {
+            const events = this.events;
+            this.events = [];
+            return events;
+        }
+
+        getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
+            let eventData: T["data"];
+            filterMutate(this.events, e => {
+                if (e.eventName === eventName) {
+                    if (eventData !== undefined) {
+                        assert(false, "more than one event found");
+                    }
+                    eventData = e.data;
+                    return false;
+                }
+                return true;
+            });
+            assert.isDefined(eventData);
+            return eventData;
+        }
+
+        hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {
+            const eventCount = countWhere(this.events, event => event.eventName === eventName);
+            assert.equal(eventCount, 0);
+        }
+
+        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string) {
+            const eventData = this.getEvent<server.ConfigFileDiagEvent>(server.ConfigFileDiagEvent);
+            assert.equal(eventData.configFileName, configFileName);
+            assert.equal(eventData.triggerFile, triggerFile);
+        }
+
+        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
+            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
+                projectId: Harness.mockHash(configFile || "/tsconfig.json"),
+                fileStats: fileStats({ ts: 1 }),
+                compilerOptions: {},
+                extends: false,
+                files: false,
+                include: false,
+                exclude: false,
+                compileOnSave: false,
+                typeAcquisition: {
+                    enable: false,
+                    exclude: false,
+                    include: false,
+                },
+                configFileName: "tsconfig.json",
+                projectType: "configured",
+                languageServiceEnabled: true,
+                version: ts.version,
+                ...partial,
+            });
         }
     }
 
@@ -3076,7 +3138,6 @@ namespace ts.projectSystem {
     describe("Configure file diagnostics events", () => {
 
         it("are generated when the config file has errors", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3090,26 +3151,12 @@ namespace ts.projectSystem {
                     }
                 }`
             };
-
-            const host = createServerHost([file, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
-
-            for (const event of serverEventManager.events) {
-                if (event.eventName === "configFileDiag") {
-                    assert.equal(event.data.configFileName, configFile.path);
-                    assert.equal(event.data.triggerFile, file.path);
-                    return;
-                }
-            }
+            const serverEventManager = new TestServerEventManager([file, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
         });
 
         it("are generated when the config file doesn't have errors", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3120,18 +3167,12 @@ namespace ts.projectSystem {
                     "compilerOptions": {}
                 }`
             };
-
-            const host = createServerHost([file, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+            const serverEventManager = new TestServerEventManager([file, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
         });
 
         it("are generated when the config file changes", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3143,33 +3184,28 @@ namespace ts.projectSystem {
                 }`
             };
 
-            const host = createServerHost([file, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+            const serverEventManager = new TestServerEventManager([file, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
 
             configFile.content = `{
                 "compilerOptions": {
                     "haha": 123
                 }
             }`;
-            host.reloadFS([file, configFile]);
-            host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkEventCountOfType("configFileDiag", 2);
+            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
 
             configFile.content = `{
                 "compilerOptions": {}
             }`;
-            host.reloadFS([file, configFile]);
-            host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkEventCountOfType("configFileDiag", 3);
+            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
         });
 
         it("are not generated when the config file doesnot include file opened and config file has errors", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3188,18 +3224,12 @@ namespace ts.projectSystem {
                     "files": ["app.ts"]
                 }`
             };
-
-            const host = createServerHost([file, file2, libFile, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file2], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 0);
+            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
         });
 
         it("are not generated when the config file doesnot include file opened and doesnt contain any errors", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3215,13 +3245,9 @@ namespace ts.projectSystem {
                 }`
             };
 
-            const host = createServerHost([file, file2, libFile, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file2], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 0);
+            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
         });
     });
 
