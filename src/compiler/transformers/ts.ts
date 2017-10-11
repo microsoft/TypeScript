@@ -45,6 +45,7 @@ namespace ts {
 
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
+        const strictNullChecks = typeof compilerOptions.strictNullChecks === "undefined" ? compilerOptions.strict : compilerOptions.strictNullChecks;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
 
@@ -1876,7 +1877,7 @@ namespace ts {
                 if (typeNode.kind === SyntaxKind.NeverKeyword) {
                     continue; // Always elide `never` from the union/intersection if possible
                 }
-                if (!compilerOptions.strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                if (!strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
                     continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
                 }
                 const serializedIndividual = serializeTypeNode(typeNode);
