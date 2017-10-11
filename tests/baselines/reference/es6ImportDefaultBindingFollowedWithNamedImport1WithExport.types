@@ -1,0 +1,60 @@
+=== tests/cases/compiler/server.ts ===
+var a = 10;
+>a : number
+>10 : 10
+
+export default a;
+>a : number
+
+=== tests/cases/compiler/client.ts ===
+export import defaultBinding1, { } from "./server";
+>defaultBinding1 : number
+
+export var x1: number = defaultBinding1;
+>x1 : number
+>defaultBinding1 : number
+
+export import defaultBinding2, { a } from "./server";
+>defaultBinding2 : number
+>a : any
+
+export var x1: number = defaultBinding2;
+>x1 : number
+>defaultBinding2 : number
+
+export import defaultBinding3, { a as b } from "./server";
+>defaultBinding3 : number
+>a : any
+>b : any
+
+export var x1: number = defaultBinding3;
+>x1 : number
+>defaultBinding3 : number
+
+export import defaultBinding4, { x, a as y } from "./server";
+>defaultBinding4 : number
+>x : any
+>a : any
+>y : any
+
+export var x1: number = defaultBinding4;
+>x1 : number
+>defaultBinding4 : number
+
+export import defaultBinding5, { x as z,  } from "./server";
+>defaultBinding5 : number
+>x : any
+>z : any
+
+export var x1: number = defaultBinding5;
+>x1 : number
+>defaultBinding5 : number
+
+export import defaultBinding6, { m,  } from "./server";
+>defaultBinding6 : number
+>m : any
+
+export var x1: number = defaultBinding6;
+>x1 : number
+>defaultBinding6 : number
+

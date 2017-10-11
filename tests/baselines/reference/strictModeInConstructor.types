@@ -1,0 +1,122 @@
+=== tests/cases/compiler/strictModeInConstructor.ts ===
+class A {
+>A : A
+}
+
+ 
+
+class B extends A {
+>B : B
+>A : A
+
+    public s: number = 9;
+>s : number
+>9 : 9
+
+    constructor () {
+        "use strict";   // No error
+>"use strict" : "use strict"
+
+        super();
+>super() : void
+>super : typeof A
+    }
+}
+
+class C extends A {
+>C : C
+>A : A
+
+    public s: number = 9;
+>s : number
+>9 : 9
+
+    constructor () {
+        super();            // No error
+>super() : void
+>super : typeof A
+
+        "use strict";
+>"use strict" : "use strict"
+    }
+}
+
+class D extends A {
+>D : D
+>A : A
+
+    public s: number = 9;
+>s : number
+>9 : 9
+
+    constructor () {
+        var x = 1; // Error
+>x : number
+>1 : 1
+
+        super();
+>super() : void
+>super : typeof A
+
+        "use strict";
+>"use strict" : "use strict"
+    }
+}
+
+class Bs extends A {
+>Bs : Bs
+>A : A
+
+    public static s: number = 9;
+>s : number
+>9 : 9
+
+    constructor () {
+        "use strict";   // No error
+>"use strict" : "use strict"
+
+        super();
+>super() : void
+>super : typeof A
+    }
+}
+
+class Cs extends A {
+>Cs : Cs
+>A : A
+
+    public static s: number = 9;
+>s : number
+>9 : 9
+
+    constructor () {
+        super();            // No error
+>super() : void
+>super : typeof A
+
+        "use strict";
+>"use strict" : "use strict"
+    }
+}
+
+class Ds extends A {
+>Ds : Ds
+>A : A
+
+    public static s: number = 9;
+>s : number
+>9 : 9
+
+    constructor () {
+        var x = 1; // no Error
+>x : number
+>1 : 1
+
+        super();
+>super() : void
+>super : typeof A
+
+        "use strict";
+>"use strict" : "use strict"
+    }
+}

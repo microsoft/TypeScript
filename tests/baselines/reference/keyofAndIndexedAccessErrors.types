@@ -1,0 +1,301 @@
+=== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts ===
+class Shape {
+>Shape : Shape
+
+    name: string;
+>name : string
+
+    width: number;
+>width : number
+
+    height: number;
+>height : number
+
+    visible: boolean;
+>visible : boolean
+}
+
+type Dictionary<T> = { [x: string]: T };
+>Dictionary : Dictionary<T>
+>T : T
+>x : string
+>T : T
+
+type T00 = keyof K0;  // Error
+>T00 : string
+>K0 : No type information available!
+
+type T01 = keyof Object;
+>T01 : "toString" | "constructor" | "toLocaleString" | "valueOf" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
+>Object : Object
+
+type T02 = keyof keyof Object;
+>T02 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>Object : Object
+
+type T03 = keyof keyof keyof Object;
+>T03 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>Object : Object
+
+type T04 = keyof keyof keyof keyof Object;
+>T04 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>Object : Object
+
+type T05 = keyof keyof keyof keyof keyof Object;
+>T05 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>Object : Object
+
+type T06 = keyof keyof keyof keyof keyof keyof Object;
+>T06 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>Object : Object
+
+type T10 = Shape["name"];
+>T10 : string
+>Shape : Shape
+
+type T11 = Shape["foo"];  // Error
+>T11 : any
+>Shape : Shape
+
+type T12 = Shape["name" | "foo"];  // Error
+>T12 : any
+>Shape : Shape
+
+type T13 = Shape[any];  // Error
+>T13 : any
+>Shape : Shape
+
+type T14 = Shape[string];  // Error
+>T14 : any
+>Shape : Shape
+
+type T15 = Shape[number];  // Error
+>T15 : any
+>Shape : Shape
+
+type T16 = Shape[boolean];  // Error
+>T16 : any
+>Shape : Shape
+
+type T17 = Shape[void];  // Error
+>T17 : any
+>Shape : Shape
+
+type T18 = Shape[undefined];  // Error
+>T18 : any
+>Shape : Shape
+
+type T19 = Shape[{ x: string }];  // Error
+>T19 : any
+>Shape : Shape
+>x : string
+
+type T20 = Shape[string | number];  // Error
+>T20 : any
+>Shape : Shape
+
+type T21 = Shape[string & number];  // Error
+>T21 : any
+>Shape : Shape
+
+type T22 = Shape[string | boolean];  // Error
+>T22 : any
+>Shape : Shape
+
+type T30 = string[]["length"];
+>T30 : number
+
+type T31 = string[][number];
+>T31 : string
+
+type T32 = string[][string];  // Error
+>T32 : any
+
+type T33 = string[][boolean];  // Error
+>T33 : any
+
+type T40 = Dictionary<string>[any];
+>T40 : string
+>Dictionary : Dictionary<T>
+
+type T41 = Dictionary<string>[number];
+>T41 : string
+>Dictionary : Dictionary<T>
+
+type T42 = Dictionary<string>[string];
+>T42 : string
+>Dictionary : Dictionary<T>
+
+type T43 = Dictionary<string>[boolean];  // Error
+>T43 : any
+>Dictionary : Dictionary<T>
+
+type T50 = any[any];
+>T50 : any
+
+type T51 = any[number];
+>T51 : any
+
+type T52 = any[string];
+>T52 : any
+
+type T53 = any[boolean];  // Error
+>T53 : any
+
+type T60 = {}["toString"];
+>T60 : () => string
+
+type T61 = []["toString"];
+>T61 : () => string
+
+declare let cond: boolean;
+>cond : boolean
+
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>T : T
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+
+    return obj[key];
+>obj[key] : T[K]
+>obj : T
+>key : K
+}
+
+function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>T : T
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+>value : T[K]
+>T : T
+>K : K
+
+    obj[key] = value;
+>obj[key] = value : T[K]
+>obj[key] : T[K]
+>obj : T
+>key : K
+>value : T[K]
+}
+
+function f10(shape: Shape) {
+>f10 : (shape: Shape) => void
+>shape : Shape
+>Shape : Shape
+
+    let x1 = getProperty(shape, "name");
+>x1 : string
+>getProperty(shape, "name") : string
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : Shape
+>"name" : "name"
+
+    let x2 = getProperty(shape, "size");  // Error
+>x2 : any
+>getProperty(shape, "size") : any
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : Shape
+>"size" : "size"
+
+    let x3 = getProperty(shape, cond ? "name" : "size");  // Error
+>x3 : any
+>getProperty(shape, cond ? "name" : "size") : any
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : Shape
+>cond ? "name" : "size" : "name" | "size"
+>cond : boolean
+>"name" : "name"
+>"size" : "size"
+
+    setProperty(shape, "name", "rectangle");
+>setProperty(shape, "name", "rectangle") : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>shape : Shape
+>"name" : "name"
+>"rectangle" : "rectangle"
+
+    setProperty(shape, "size", 10);  // Error
+>setProperty(shape, "size", 10) : any
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>shape : Shape
+>"size" : "size"
+>10 : 10
+
+    setProperty(shape, cond ? "name" : "size", 10);  // Error
+>setProperty(shape, cond ? "name" : "size", 10) : any
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>shape : Shape
+>cond ? "name" : "size" : "name" | "size"
+>cond : boolean
+>"name" : "name"
+>"size" : "size"
+>10 : 10
+}
+
+function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
+>f20 : <T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) => void
+>T : T
+>U : U
+>k1 : keyof (T | U)
+>T : T
+>U : U
+>k2 : keyof (T & U)
+>T : T
+>U : U
+>o1 : T | U
+>T : T
+>U : U
+>o2 : T & U
+>T : T
+>U : U
+
+    o1[k1];
+>o1[k1] : (T | U)[keyof (T | U)]
+>o1 : T | U
+>k1 : keyof (T | U)
+
+    o1[k2];   // Error
+>o1[k2] : (T | U)[keyof (T & U)]
+>o1 : T | U
+>k2 : keyof (T & U)
+
+    o2[k1];
+>o2[k1] : (T & U)[keyof (T | U)]
+>o2 : T & U
+>k1 : keyof (T | U)
+
+    o2[k2];
+>o2[k2] : (T & U)[keyof (T & U)]
+>o2 : T & U
+>k2 : keyof (T & U)
+
+    o1 = o2;
+>o1 = o2 : T & U
+>o1 : T | U
+>o2 : T & U
+
+    o2 = o1;  // Error
+>o2 = o1 : T | U
+>o2 : T & U
+>o1 : T | U
+
+    k1 = k2;  // Error
+>k1 = k2 : keyof (T & U)
+>k1 : keyof (T | U)
+>k2 : keyof (T & U)
+
+    k2 = k1;
+>k2 = k1 : keyof (T | U)
+>k2 : keyof (T & U)
+>k1 : keyof (T | U)
+}

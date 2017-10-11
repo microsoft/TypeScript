@@ -10,9 +10,9 @@
 ////     }
 //// }
 
-// Don't offer to 'extract method' a single identifier
+// Don't offer to 'extract symbol' a single identifier
 
 goTo.marker('a');
-verify.not.refactorAvailable('Extract Method');
+verify.not.refactorAvailable('Extract Symbol');
 goTo.select('a', 'b');
-verify.not.refactorAvailable('Extract Method');
+verify.not.refactorAvailable('Extract Symbol');

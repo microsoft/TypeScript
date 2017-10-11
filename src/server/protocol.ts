@@ -2040,6 +2040,19 @@ namespace ts.server.protocol {
         languageServiceEnabled: boolean;
     }
 
+    export type ProjectsUpdatedInBackgroundEventName = "projectsUpdatedInBackground";
+    export interface ProjectsUpdatedInBackgroundEvent extends Event {
+        event: ProjectsUpdatedInBackgroundEventName;
+        body: ProjectsUpdatedInBackgroundEventBody;
+    }
+
+    export interface ProjectsUpdatedInBackgroundEventBody {
+        /**
+         * Current set of open files
+         */
+        openFiles: string[];
+    }
+
     /**
      * Arguments for reload request.
      */

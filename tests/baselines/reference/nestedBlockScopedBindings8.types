@@ -1,0 +1,25 @@
+=== tests/cases/compiler/nestedBlockScopedBindings8.ts ===
+var x;
+>x : any
+
+for (let x; false; ) {
+>x : any
+>false : false
+
+    () => x;
+>() => x : () => any
+>x : any
+}
+
+var y;
+>y : any
+
+for (let y; false; ) {
+>y : any
+>false : false
+
+    y = 1;
+>y = 1 : 1
+>y : any
+>1 : 1
+}

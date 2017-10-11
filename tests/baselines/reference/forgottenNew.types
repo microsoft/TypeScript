@@ -1,0 +1,15 @@
+=== tests/cases/conformance/expressions/functionCalls/forgottenNew.ts ===
+module Tools {
+>Tools : typeof Tools
+
+    export class NullLogger { }
+>NullLogger : NullLogger
+}
+
+var logger = Tools.NullLogger();
+>logger : any
+>Tools.NullLogger() : any
+>Tools.NullLogger : typeof Tools.NullLogger
+>Tools : typeof Tools
+>NullLogger : typeof Tools.NullLogger
+

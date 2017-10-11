@@ -200,6 +200,7 @@ namespace ts {
          */
         function transformUMDModule(node: SourceFile) {
             const { aliasedModuleNames, unaliasedModuleNames, importAliasNames } = collectAsynchronousDependencies(node, /*includeNonAmdDependencies*/ false);
+            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             const umdHeader = createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
@@ -260,6 +261,8 @@ namespace ts {
                                                 createIdentifier("define"),
                                                 /*typeArguments*/ undefined,
                                                 [
+                                                    // Add the module name (if provided).
+                                                    ...(moduleName ? [moduleName] : []),
                                                     createArrayLiteral([
                                                         createLiteral("require"),
                                                         createLiteral("exports"),
@@ -558,46 +561,89 @@ namespace ts {
             // });
             const resolve = createUniqueName("resolve");
             const reject = createUniqueName("reject");
-            return createNew(
-                createIdentifier("Promise"),
-                /*typeArguments*/ undefined,
-                [createFunctionExpression(
+            const parameters = [
+                createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
+                createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
+            ];
+            const body = createBlock([
+                createStatement(
+                    createCall(
+                        createIdentifier("require"),
+                        /*typeArguments*/ undefined,
+                        [createArrayLiteral([firstOrUndefined(node.arguments) || createOmittedExpression()]), resolve, reject]
+                    )
+                )
+            ]);
+
+            let func: FunctionExpression | ArrowFunction;
+            if (languageVersion >= ScriptTarget.ES2015) {
+                func = createArrowFunction(
+                    /*modifiers*/ undefined,
+                    /*typeParameters*/ undefined,
+                    parameters,
+                    /*type*/ undefined,
+                    /*equalsGreaterThanToken*/ undefined,
+                    body);
+            }
+            else {
+                func = createFunctionExpression(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
-                     createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)],
+                    parameters,
                     /*type*/ undefined,
-                    createBlock([createStatement(
-                        createCall(
-                            createIdentifier("require"),
-                            /*typeArguments*/ undefined,
-                            [createArrayLiteral([firstOrUndefined(node.arguments) || createOmittedExpression()]), resolve, reject]
-                        ))])
-            )]);
+                    body);
+
+                // if there is a lexical 'this' in the import call arguments, ensure we indicate
+                // that this new function expression indicates it captures 'this' so that the
+                // es2015 transformer will properly substitute 'this' with '_this'.
+                if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
+                    setEmitFlags(func, EmitFlags.CapturesThis);
+                }
+            }
+
+            return createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
         }
 
-    function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
+        function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
             // import("./blah")
             // emit as
             // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-            return createCall(
-                createPropertyAccess(
-                    createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []),
-                    "then"),
-                /*typeArguments*/ undefined,
-                [createFunctionExpression(
+            const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
+            const requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments);
+
+            let func: FunctionExpression | ArrowFunction;
+            if (languageVersion >= ScriptTarget.ES2015) {
+                func = createArrowFunction(
+                    /*modifiers*/ undefined,
+                    /*typeParameters*/ undefined,
+                    /*parameters*/ [],
+                    /*type*/ undefined,
+                    /*equalsGreaterThanToken*/ undefined,
+                    requireCall);
+            }
+            else {
+                func = createFunctionExpression(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    /*parameters*/ undefined,
+                    /*parameters*/ [],
                     /*type*/ undefined,
-                    createBlock([createReturn(createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments))])
-                )]);
+                    createBlock([createReturn(requireCall)]));
+
+                // if there is a lexical 'this' in the import call arguments, ensure we indicate
+                // that this new function expression indicates it captures 'this' so that the
+                // es2015 transformer will properly substitute 'this' with '_this'.
+                if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
+                    setEmitFlags(func, EmitFlags.CapturesThis);
+                }
+            }
+
+            return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
         /**
@@ -858,10 +904,10 @@ namespace ts {
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), node.expression, /*location*/ node, /*allowComments*/ true);
+                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
             }
             else {
-                statements = appendExportStatement(statements, createIdentifier("default"), node.expression, /*location*/ node, /*allowComments*/ true);
+                statements = appendExportStatement(statements, createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
             }
 
             return singleOrMany(statements);
@@ -1228,7 +1274,7 @@ namespace ts {
          */
         function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
             const name = getDeclarationName(decl);
-            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(unescapeLeadingUnderscores(name.escapedText));
+            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);

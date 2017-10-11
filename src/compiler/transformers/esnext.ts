@@ -378,7 +378,7 @@ namespace ts {
             const catchVariable = getGeneratedNameForNode(errorRecord);
             const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
             const callValues = createAsyncValuesHelper(context, expression, /*location*/ node.expression);
-            const callNext = createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, []);
+            const callNext = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
             const getDone = createPropertyAccess(result, "done");
             const getValue = createPropertyAccess(result, "value");
             const callReturn = createFunctionCall(returnMethod, iterator, []);
@@ -595,7 +595,8 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node)
+                node.equalsGreaterThanToken,
+                transformFunctionBody(node),
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
             return updated;
@@ -789,7 +790,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    createLiteral(unescapeLeadingUnderscores(node.name.escapedText)),
+                    createLiteral(idText(node.name)),
                     node
                 );
             }

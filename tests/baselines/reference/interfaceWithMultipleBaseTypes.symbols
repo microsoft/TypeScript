@@ -1,0 +1,153 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts ===
+// an interface may have multiple bases with properties of the same name as long as the interface's implementation satisfies all base type versions
+
+interface Base1 {
+>Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 0, 0))
+
+    x: {
+>x : Symbol(Base1.x, Decl(interfaceWithMultipleBaseTypes.ts, 2, 17))
+
+        a: string;
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 3, 8))
+    }
+}
+
+interface Base2 {
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 6, 1))
+
+    x: {
+>x : Symbol(Base2.x, Decl(interfaceWithMultipleBaseTypes.ts, 8, 17))
+
+        b: string;
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 9, 8))
+    }
+}
+
+interface Derived extends Base1, Base2 {
+>Derived : Symbol(Derived, Decl(interfaceWithMultipleBaseTypes.ts, 12, 1))
+>Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 0, 0))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 6, 1))
+
+    x: {
+>x : Symbol(Derived.x, Decl(interfaceWithMultipleBaseTypes.ts, 14, 40))
+
+        a: string; b: string;
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 15, 8))
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 16, 18))
+    }
+}
+
+interface Derived2 extends Base1, Base2 { // error
+>Derived2 : Symbol(Derived2, Decl(interfaceWithMultipleBaseTypes.ts, 18, 1))
+>Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 0, 0))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 6, 1))
+
+    x: {
+>x : Symbol(Derived2.x, Decl(interfaceWithMultipleBaseTypes.ts, 20, 41))
+
+        a: string; b: number;
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 21, 8))
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 22, 18))
+    }
+}
+
+module Generic {
+>Generic : Symbol(Generic, Decl(interfaceWithMultipleBaseTypes.ts, 24, 1))
+
+    interface Base1<T> {
+>Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 26, 16))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 27, 20))
+
+        x: {
+>x : Symbol(Base1.x, Decl(interfaceWithMultipleBaseTypes.ts, 27, 24))
+
+            a: T;
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 28, 12))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 27, 20))
+        }
+    }
+
+    interface Base2<T> {
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 33, 20))
+
+        x: {
+>x : Symbol(Base2.x, Decl(interfaceWithMultipleBaseTypes.ts, 33, 24))
+
+            b: T;
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 34, 12))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 33, 20))
+        }
+    }
+
+    interface Derived<T> extends Base1<string>, Base2<number> {
+>Derived : Symbol(Derived, Decl(interfaceWithMultipleBaseTypes.ts, 37, 5))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 39, 22))
+>Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 26, 16))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
+
+        x: {
+>x : Symbol(Derived.x, Decl(interfaceWithMultipleBaseTypes.ts, 39, 63))
+
+            a: string; b: number;
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 40, 12))
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 41, 22))
+        }
+    }
+
+    interface Derived2<T, U> extends Base1<T>, Base2<U> {
+>Derived2 : Symbol(Derived2, Decl(interfaceWithMultipleBaseTypes.ts, 43, 5))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 45, 23))
+>U : Symbol(U, Decl(interfaceWithMultipleBaseTypes.ts, 45, 25))
+>Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 26, 16))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 45, 23))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
+>U : Symbol(U, Decl(interfaceWithMultipleBaseTypes.ts, 45, 25))
+
+        x: {
+>x : Symbol(Derived2.x, Decl(interfaceWithMultipleBaseTypes.ts, 45, 57))
+
+            a: T; b: U;
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 46, 12))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 45, 23))
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 47, 17))
+>U : Symbol(U, Decl(interfaceWithMultipleBaseTypes.ts, 45, 25))
+        }
+    }
+
+    interface Derived3<T> extends Base1<number>, Base2<number> { } // error
+>Derived3 : Symbol(Derived3, Decl(interfaceWithMultipleBaseTypes.ts, 49, 5))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 51, 23))
+>Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 26, 16))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
+
+    interface Derived4<T> extends Base1<number>, Base2<number> { // error
+>Derived4 : Symbol(Derived4, Decl(interfaceWithMultipleBaseTypes.ts, 51, 66))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 53, 23))
+>Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 26, 16))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
+
+        x: {
+>x : Symbol(Derived4.x, Decl(interfaceWithMultipleBaseTypes.ts, 53, 64))
+
+            a: T; b: T;
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 54, 12))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 53, 23))
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 55, 17))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 53, 23))
+        }
+    }
+
+    interface Derived5<T> extends Base1<T>, Base2<T> { // error
+>Derived5 : Symbol(Derived5, Decl(interfaceWithMultipleBaseTypes.ts, 57, 5))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 59, 23))
+>Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 26, 16))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 59, 23))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 59, 23))
+
+        x: T;
+>x : Symbol(Derived5.x, Decl(interfaceWithMultipleBaseTypes.ts, 59, 54))
+>T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 59, 23))
+    }
+}

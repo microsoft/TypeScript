@@ -342,7 +342,7 @@ namespace ts.server {
         convertDiagnostic(entry: protocol.DiagnosticWithLinePosition, _fileName: string): Diagnostic {
             let category: DiagnosticCategory;
             for (const id in DiagnosticCategory) {
-                if (typeof id === "string" && entry.category === id.toLowerCase()) {
+                if (isString(id) && entry.category === id.toLowerCase()) {
                     category = (<any>DiagnosticCategory)[id];
                 }
             }
@@ -586,9 +586,7 @@ namespace ts.server {
             const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
 
             if (!response.body) {
-                return {
-                    edits: []
-                };
+                return { edits: [], renameFilename: undefined, renameLocation: undefined };
             }
 
             const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);

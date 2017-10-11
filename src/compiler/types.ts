@@ -1041,7 +1041,7 @@ namespace ts {
 
     export interface LiteralTypeNode extends TypeNodeBase {
         kind: SyntaxKind.LiteralType;
-        literal: Expression;
+        literal: BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
     }
 
     export interface StringLiteral extends LiteralExpressionBase {
@@ -2226,9 +2226,13 @@ namespace ts {
         kind: SyntaxKind.JSDocTag;
     }
 
+    /**
+     * Note that `@extends` is a synonym of `@augments`.
+     * Both tags are represented by this interface.
+     */
     export interface JSDocAugmentsTag extends JSDocTagBase {
         kind: SyntaxKind.JSDocAugmentsTag;
-        typeExpression: JSDocTypeExpression;
+        class: ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
     }
 
     export interface JSDocClassTag extends JSDocTagBase {
@@ -2261,7 +2265,7 @@ namespace ts {
     export interface JSDocPropertyLikeTagBase extends JSDocTagBase, DeclarationBase {
         parent: JSDoc;
         name: EntityName;
-        typeExpression: JSDocTypeExpression;
+        typeExpression?: JSDocTypeExpression;
         /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
         isNameFirst: boolean;
         isBracketed: boolean;
@@ -2278,7 +2282,6 @@ namespace ts {
     export interface JSDocTypeLiteral extends JSDocTypeBase {
         kind: SyntaxKind.JSDocTypeLiteral;
         jsDocPropertyTags?: ReadonlyArray<JSDocPropertyLikeTag>;
-        jsDocTypeTag?: JSDocTypeTag;
         /** If true, then this type literal represents an *array* of its type. */
         isArrayType?: boolean;
     }
@@ -2476,6 +2479,7 @@ namespace ts {
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
+        /* @internal */ version: string;
     }
 
     export interface Bundle extends BaseNode {
@@ -2510,7 +2514,7 @@ namespace ts {
     }
 
     export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: ReadonlyArray<SourceFile>): void;
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles: ReadonlyArray<SourceFile>): void;
     }
 
     export class OperationCanceledException { }
@@ -2581,6 +2585,8 @@ namespace ts {
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        /* @internal */ isSourceFileDefaultLibrary(file: SourceFile): boolean;
+
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
 
@@ -2590,6 +2596,8 @@ namespace ts {
         /* @internal */ sourceFileToPackageName: Map<string>;
         /** Set of all source files that some other source file redirects to. */
         /* @internal */ redirectTargetsSet: Map<true>;
+        /** Returns true when file in the program had invalidated resolution at the time of program creation. */
+        /* @internal */ hasInvalidatedResolution: HasInvalidatedResolution;
     }
 
     /* @internal */
@@ -2712,16 +2720,20 @@ namespace ts {
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
+        /**
+         * @deprecated Use the createX factory functions or XToY typechecker methods and `createPrinter` or the `xToString` methods instead
+         * This will be removed in a future version.
+         */
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
         /**
-         * returns unknownSignature in the case of an error. Don't know when it returns undefined.
+         * returns unknownSignature in the case of an error.
          * @param argumentCount Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
          */
-        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
+        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
@@ -2771,7 +2783,8 @@ namespace ts {
          * So for `{ a } | { b }`, this will include both `a` and `b`.
          * Does not include properties of primitive types.
          */
-        /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
+        /* @internal */ isArrayLikeType(type: Type): boolean;
+        /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
     }
@@ -3280,10 +3293,12 @@ namespace ts {
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
+        MarkerType              = 1 << 26,  // Marker type used for variance probing
 
         /* @internal */
         Nullable = Undefined | Null,
         Literal = StringLiteral | NumberLiteral | BooleanLiteral,
+        Unit = Literal | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
@@ -3407,10 +3422,21 @@ namespace ts {
         typeArguments?: Type[];  // Type reference type arguments (undefined if none)
     }
 
+    /* @internal */
+    export const enum Variance {
+        Invariant     = 0,  // Neither covariant nor contravariant
+        Covariant     = 1,  // Covariant
+        Contravariant = 2,  // Contravariant
+        Bivariant     = 3,  // Both covariant and contravariant
+        Independent   = 4,  // Unwitnessed type parameter
+    }
+
     // Generic class and interface types
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
-        instantiations: Map<TypeReference>;   // Generic instantiation cache
+        instantiations: Map<TypeReference>;  // Generic instantiation cache
+        /* @internal */
+        variances?: Variance[];  // Variance of each type parameter
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -3586,9 +3612,10 @@ namespace ts {
     }
 
     export const enum InferencePriority {
-        NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
-        MappedType        = 1 << 1,  // Reverse inference for mapped type
-        ReturnType        = 1 << 2,  // Inference made from return type of generic function
+        Contravariant     = 1 << 0,  // Inference from contravariant position
+        NakedTypeVariable = 1 << 1,  // Naked type variable in union or intersection type
+        MappedType        = 1 << 2,  // Reverse inference for mapped type
+        ReturnType        = 1 << 3,  // Inference made from return type of generic function
     }
 
     export interface InferenceInfo {
@@ -3710,6 +3737,7 @@ namespace ts {
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
+        /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
         declarationDir?: string;
@@ -3771,6 +3799,7 @@ namespace ts {
         sourceMap?: boolean;
         sourceRoot?: string;
         strict?: boolean;
+        strictFunctionTypes?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
@@ -3878,6 +3907,7 @@ namespace ts {
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
+        /* @internal */ configFileSpecs?: ConfigFileSpecs;
     }
 
     export const enum WatchDirectoryFlags {
@@ -3885,9 +3915,26 @@ namespace ts {
         Recursive = 1 << 0,
     }
 
+    /* @internal */
+    export interface ConfigFileSpecs {
+        filesSpecs: ReadonlyArray<string>;
+        /**
+         * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
+         */
+        includeSpecs: ReadonlyArray<string>;
+        /**
+         * Present to report errors (user specified specs), validatedExcludeSpecs are used for file name matching
+         */
+        excludeSpecs: ReadonlyArray<string>;
+        validatedIncludeSpecs: ReadonlyArray<string>;
+        validatedExcludeSpecs: ReadonlyArray<string>;
+        wildcardDirectories: MapLike<WatchDirectoryFlags>;
+    }
+
     export interface ExpandResult {
         fileNames: string[];
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
+        /* @internal */ spec: ConfigFileSpecs;
     }
 
     /* @internal */
@@ -4122,6 +4169,11 @@ namespace ts {
          * If accessing a non-index file, this should include its name e.g. "foo/bar".
          */
         name: string;
+        /**
+         * Name of a submodule within this package.
+         * May be "".
+         */
+        subModuleName: string;
         /** Version of the package, e.g. "1.2.3" */
         version: string;
     }
@@ -4131,30 +4183,37 @@ namespace ts {
         Tsx = ".tsx",
         Dts = ".d.ts",
         Js = ".js",
-        Jsx = ".jsx"
+        Jsx = ".jsx",
+        Json = ".json"
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModuleFull | undefined;
+        readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
-        failedLookupLocations: string[];
+        readonly failedLookupLocations: ReadonlyArray<string>;
     }
 
     export interface ResolvedTypeReferenceDirective {
         // True if the type declaration file was found in a primary lookup location
         primary: boolean;
         // The location of the .d.ts file we located, or undefined if resolution failed
-        resolvedFileName?: string;
+        resolvedFileName: string | undefined;
+        packageId?: PackageId;
     }
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
-        resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
-        failedLookupLocations: string[];
+        readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
+        readonly failedLookupLocations: ReadonlyArray<string>;
+    }
+
+    /* @internal */
+    export interface HasInvalidatedResolution {
+        (sourceFile: Path): boolean;
     }
 
     export interface CompilerHost extends ModuleResolutionHost {
-        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
@@ -4172,12 +4231,15 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string;
+        /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
+        /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
     }
 
     /* @internal */
@@ -4329,22 +4391,25 @@ namespace ts {
      */
     /* @internal */
     export const enum ExternalEmitHelpers {
-        Extends = 1 << 0,           // __extends (used by the ES2015 class transformation)
-        Assign = 1 << 1,            // __assign (used by Jsx and ESNext object spread transformations)
-        Rest = 1 << 2,              // __rest (used by ESNext object rest transformation)
-        Decorate = 1 << 3,          // __decorate (used by TypeScript decorators transformation)
-        Metadata = 1 << 4,          // __metadata (used by TypeScript decorators transformation)
-        Param = 1 << 5,             // __param (used by TypeScript decorators transformation)
-        Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
-        Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
-        Values = 1 << 8,            // __values (used by ES2015 for..of and yield* transformations)
-        Read = 1 << 9,              // __read (used by ES2015 iterator destructuring transformation)
-        Spread = 1 << 10,           // __spread (used by ES2015 array spread and argument list spread transformations)
-        Await = 1 << 11,            // __await (used by ES2017 async generator transformation)
-        AsyncGenerator = 1 << 12,   // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncDelegator = 1 << 13,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
-        AsyncValues = 1 << 14,      // __asyncValues (used by ES2017 for..await..of transformation)
-        ExportStar = 1 << 15,       // __exportStar (used by CommonJS/AMD/UMD module transformation)
+        Extends = 1 << 0,               // __extends (used by the ES2015 class transformation)
+        Assign = 1 << 1,                // __assign (used by Jsx and ESNext object spread transformations)
+        Rest = 1 << 2,                  // __rest (used by ESNext object rest transformation)
+        Decorate = 1 << 3,              // __decorate (used by TypeScript decorators transformation)
+        Metadata = 1 << 4,              // __metadata (used by TypeScript decorators transformation)
+        Param = 1 << 5,                 // __param (used by TypeScript decorators transformation)
+        Awaiter = 1 << 6,               // __awaiter (used by ES2017 async functions transformation)
+        Generator = 1 << 7,             // __generator (used by ES2015 generator transformation)
+        Values = 1 << 8,                // __values (used by ES2015 for..of and yield* transformations)
+        Read = 1 << 9,                  // __read (used by ES2015 iterator destructuring transformation)
+        Spread = 1 << 10,               // __spread (used by ES2015 array spread and argument list spread transformations)
+        Await = 1 << 11,                // __await (used by ES2017 async generator transformation)
+        AsyncGenerator = 1 << 12,       // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 13,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 14,          // __asyncValues (used by ES2017 for..await..of transformation)
+        ExportStar = 1 << 15,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
+        MakeTemplateObject = 1 << 16,   // __makeTemplateObject (used for constructing template string array objects)
+        FirstEmitHelper = Extends,
+        LastEmitHelper = MakeTemplateObject,
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
@@ -4361,15 +4426,14 @@ namespace ts {
         // Helpers included by ES2015 spread
         SpreadIncludes = Read | Spread,
 
-        FirstEmitHelper = Extends,
-        LastEmitHelper = ExportStar
     }
 
     export const enum EmitHint {
-        SourceFile,         // Emitting a SourceFile
-        Expression,         // Emitting an Expression
-        IdentifierName,     // Emitting an IdentifierName
-        Unspecified,        // Emitting an otherwise unspecified node
+        SourceFile,          // Emitting a SourceFile
+        Expression,          // Emitting an Expression
+        IdentifierName,      // Emitting an IdentifierName
+        MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
+        Unspecified,         // Emitting an otherwise unspecified node
     }
 
     /* @internal */

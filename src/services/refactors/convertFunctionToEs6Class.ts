@@ -97,7 +97,9 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         return {
-            edits: changeTracker.getChanges()
+            edits: changeTracker.getChanges(),
+            renameFilename: undefined,
+            renameLocation: undefined,
         };
 
         function deleteNode(node: Node, inList = false) {
@@ -241,7 +243,8 @@ namespace ts.refactor.convertFunctionToES6Class {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
 
-            const cls = createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
+            const modifiers = getExportModifierFromSource(precedingNode);
+            const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
             // Don't call copyComments here because we'll already leave them in place
             return cls;
@@ -253,10 +256,15 @@ namespace ts.refactor.convertFunctionToES6Class {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, node.parameters, node.body));
             }
 
-            const cls = createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
+            const modifiers = getExportModifierFromSource(node);
+            const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
             // Don't call copyComments here because we'll already leave them in place
             return cls;
+        }
+
+        function getExportModifierFromSource(source: Node) {
+            return filter(source.modifiers, modifier => modifier.kind === SyntaxKind.ExportKeyword);
         }
     }
 }

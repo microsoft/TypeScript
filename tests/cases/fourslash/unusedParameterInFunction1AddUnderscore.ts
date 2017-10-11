@@ -4,4 +4,8 @@
 ////function [|greeter( x) |] {
 ////}
 
-verify.rangeAfterCodeFix("greeter( _x)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 1);
+verify.codeFix({
+    description: "Prefix 'x' with an underscore.",
+    index: 1,
+    newRangeContent: "greeter( _x)",
+});

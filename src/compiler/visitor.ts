@@ -488,6 +488,7 @@ namespace ts {
                     nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
+                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, isToken),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
@@ -523,7 +524,9 @@ namespace ts {
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,
                     visitNode((<ConditionalExpression>node).condition, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).questionToken, visitor, isToken),
                     visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).colonToken, visitor, isToken),
                     visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression));
 
             case SyntaxKind.TemplateExpression:

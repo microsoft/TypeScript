@@ -1,0 +1,6 @@
+=== tests/cases/compiler/ExportAssignment8.ts ===
+export = B;
+
+export class C {
+>C : Symbol(C, Decl(ExportAssignment8.ts, 0, 11))
+}
