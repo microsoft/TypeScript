@@ -1869,7 +1869,13 @@ namespace ts {
             // Note when updating logic here also update getEntityNameForDecoratorMetadata
             // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode;
-            for (const typeNode of node.types) {
+            for (let typeNode of node.types) {
+                while (typeNode.kind === SyntaxKind.ParenthesizedType) {
+                    typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
+                }
+                if (typeNode.kind === SyntaxKind.NeverKeyword) {
+                    continue; // Always elide `never` from the union/intersection if possible
+                }
                 if (!compilerOptions.strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
                     continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
                 }
@@ -1896,7 +1902,7 @@ namespace ts {
             }
 
             // If we were able to find common type, use it
-            return serializedUnion;
+            return serializedUnion || createVoidZero(); // Fallback is only hit if all union constituients are null/undefined/never
         }
 
         /**
