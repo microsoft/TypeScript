@@ -1112,7 +1112,7 @@ namespace ts {
         }
 
         function visitCallExpression(node: CallExpression) {
-            if (forEach(node.arguments, containsYield)) {
+            if (!isImportCall(node) && forEach(node.arguments, containsYield)) {
                 // [source]
                 //      a.b(1, yield, 2);
                 //
@@ -1123,19 +1123,6 @@ namespace ts {
                 //  .yield resumeLabel
                 //  .mark resumeLabel
                 //      _b.apply(_a, _c.concat([%sent%, 2]));
-
-                // The `ImportCall` Expression isn't really a call expression, and the import keyword cannot be removed from its arguments
-                if (isImportCall(node)) {
-                    const elements = visitElements(node.arguments);
-                    Debug.assert(elements.kind === SyntaxKind.ArrayLiteralExpression);
-                    // Import call should always have one argument, but we parse more for error reporting
-                    const firstExpression = firstOrUndefined((elements as ArrayLiteralExpression).elements);
-                    return setOriginalNode(createCall(
-                        node.expression,
-                        /* typeArguments */ undefined,
-                        firstExpression ? [firstExpression] : []
-                    ), node);
-                }
                 const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
                 return setOriginalNode(
                     createFunctionApply(

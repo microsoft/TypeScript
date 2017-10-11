@@ -549,10 +549,7 @@ namespace ts {
             // });
             needUMDDynamicImportHelper = true;
             if (isSimpleCopiableExpression(arg)) {
-                const argClone = isGeneratedIdentifier(arg) ? arg : setEmitFlags(setTextRange(getSynthesizedClone(arg), arg), EmitFlags.NoComments);
-                if (argClone.kind === SyntaxKind.StringLiteral && typeof (argClone as StringLiteral).singleQuote === "undefined") {
-                    (argClone as StringLiteral).singleQuote = getSourceTextOfNodeFromSourceFile(currentSourceFile, arg).charCodeAt(0) === CharacterCodes.singleQuote;
-                }
+                const argClone = isGeneratedIdentifier(arg) ? arg : isStringLiteral(arg) ? createLiteral(arg) : setEmitFlags(setTextRange(getSynthesizedClone(arg), arg), EmitFlags.NoComments);
                 return createConditional(
                     /*condition*/ createIdentifier("__syncRequire"),
                     /*whenTrue*/ createImportCallExpressionCommonJS(arg, containsLexicalThis),
