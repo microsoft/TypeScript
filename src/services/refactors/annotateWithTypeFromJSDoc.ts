@@ -5,13 +5,13 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
     const annotateTypeFromJSDoc: Refactor = {
         name: "Annotate with type from JSDoc",
         description: Diagnostics.Annotate_with_type_from_JSDoc.message,
-        getEditsForAction,
+        getEditsForAction: getEditsForAnnotation,
         getAvailableActions
     };
-    const annotateReturnTypeFromJSDoc: Refactor = {
-        name: "Annotate with return type from JSDoc",
-        description: Diagnostics.Annotate_with_return_type_from_JSDoc.message,
-        getEditsForAction,
+    const annotateFunctionFromJSDoc: Refactor = {
+        name: "Annotate with types from JSDoc",
+        description: Diagnostics.Annotate_with_types_from_JSDoc.message,
+        getEditsForAction: getEditsForFunctionAnnotation,
         getAvailableActions
     };
 
@@ -23,7 +23,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         | PropertyDeclaration;
 
     registerRefactor(annotateTypeFromJSDoc);
-    registerRefactor(annotateReturnTypeFromJSDoc);
+    registerRefactor(annotateFunctionFromJSDoc);
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         if (isInJavaScriptFile(context.file)) {
@@ -33,8 +33,10 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(node, isTypedNode);
         if (decl && !decl.type) {
-            const annotate = getJSDocType(decl) ? annotateTypeFromJSDoc :
-                getJSDocReturnType(decl) ? annotateReturnTypeFromJSDoc :
+            const type = getJSDocType(decl);
+            const returnType = getJSDocReturnType(decl);
+            const annotate = (returnType || type && decl.kind === SyntaxKind.Parameter) ? annotateFunctionFromJSDoc :
+                type ? annotateTypeFromJSDoc :
                     undefined;
             if (annotate) {
                 return [{
@@ -51,16 +53,14 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         }
     }
 
-    function getEditsForAction(context: RefactorContext, action: string): RefactorEditInfo | undefined {
-        // Somehow wrong action got invoked?
+    function getEditsForAnnotation(context: RefactorContext, action: string): RefactorEditInfo | undefined {
         if (actionName !== action) {
             Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
             return undefined;
         }
 
-        const start = context.startPosition;
         const sourceFile = context.file;
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(token, isTypedNode);
         const jsdocType = getJSDocReturnType(decl) || getJSDocType(decl);
         if (!decl || !jsdocType || decl.type) {
@@ -69,19 +69,25 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         }
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        if (isParameterOfSimpleArrowFunction(decl)) {
-            // `x => x` becomes `(x: number) => x`, but in order to make the changeTracker generate the parentheses,
-            // we have to replace the entire function; it doesn't check that the node it's replacing might require
-            // other syntax changes
-            const arrow = decl.parent as ArrowFunction;
-            const param = decl as ParameterDeclaration;
-            const replacementParam = createParameter(param.decorators, param.modifiers, param.dotDotDotToken, param.name, param.questionToken, transformJSDocType(jsdocType) as TypeNode, param.initializer);
-            const replacement = createArrowFunction(arrow.modifiers, arrow.typeParameters, [replacementParam], arrow.type, arrow.equalsGreaterThanToken, arrow.body);
-            changeTracker.replaceRange(sourceFile, { pos: arrow.getStart(), end: arrow.end }, replacement);
+        changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, addType(decl, transformJSDocType(jsdocType) as TypeNode));
+        return {
+            edits: changeTracker.getChanges(),
+            renameFilename: undefined,
+            renameLocation: undefined
+        };
+    }
+
+    function getEditsForFunctionAnnotation(context: RefactorContext, action: string): RefactorEditInfo | undefined {
+        if (actionName !== action) {
+            Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
+            return undefined;
         }
-        else {
-            changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, replaceType(decl, transformJSDocType(jsdocType) as TypeNode));
-        }
+
+        const sourceFile = context.file;
+        const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
+        const decl = findAncestor(token, isFunctionLikeDeclaration);
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
+        changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, addTypesToFunctionLike(decl));
         return {
             edits: changeTracker.getChanges(),
             renameFilename: undefined,
@@ -97,51 +103,42 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             node.kind === SyntaxKind.PropertyDeclaration;
     }
 
-    function replaceType(decl: DeclarationWithType, jsdocType: TypeNode) {
+    function addTypesToFunctionLike(decl: FunctionLikeDeclaration) {
+        const returnType = decl.type || transformJSDocType(getJSDocReturnType(decl)) as TypeNode;
+        const parameters = decl.parameters.map(
+            p => createParameter(p.decorators, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || transformJSDocType(getJSDocType(p)) as TypeNode, p.initializer));
+        switch (decl.kind) {
+            case SyntaxKind.FunctionDeclaration:
+                return createFunctionDeclaration(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, parameters, returnType, decl.body);
+            case SyntaxKind.Constructor:
+                return createConstructor(decl.decorators, decl.modifiers, parameters, decl.body);
+            case SyntaxKind.FunctionExpression:
+                return createFunctionExpression(decl.modifiers, decl.asteriskToken, (decl as FunctionExpression).name, decl.typeParameters, parameters, returnType, decl.body);
+            case SyntaxKind.ArrowFunction:
+                return createArrowFunction(decl.modifiers, decl.typeParameters, parameters, returnType, decl.equalsGreaterThanToken, decl.body);
+            case SyntaxKind.MethodDeclaration:
+                return createMethod(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.questionToken, decl.typeParameters, parameters, returnType, decl.body);
+            case SyntaxKind.GetAccessor:
+                return createGetAccessor(decl.decorators, decl.modifiers, decl.name, parameters, returnType, decl.body);
+            case SyntaxKind.SetAccessor:
+                return createSetAccessor(decl.decorators, decl.modifiers, decl.name, parameters, decl.body);
+            default:
+                return Debug.fail(`Unexpected SyntaxKind: ${(decl as any).kind}`);
+        }
+    }
+
+    function addType(decl: DeclarationWithType, jsdocType: TypeNode) {
         switch (decl.kind) {
             case SyntaxKind.VariableDeclaration:
                 return createVariableDeclaration(decl.name, jsdocType, decl.initializer);
-            case SyntaxKind.Parameter:
-                return createParameter(decl.decorators, decl.modifiers, decl.dotDotDotToken, decl.name, decl.questionToken, jsdocType, decl.initializer);
             case SyntaxKind.PropertySignature:
                 return createPropertySignature(decl.modifiers, decl.name, decl.questionToken, jsdocType, decl.initializer);
             case SyntaxKind.PropertyDeclaration:
                 return createProperty(decl.decorators, decl.modifiers, decl.name, decl.questionToken, jsdocType, decl.initializer);
-            case SyntaxKind.FunctionDeclaration:
-                return createFunctionDeclaration(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocType, decl.body);
-            case SyntaxKind.FunctionExpression:
-                return createFunctionExpression(decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocType, decl.body);
-            case SyntaxKind.ArrowFunction:
-                return createArrowFunction(decl.modifiers, decl.typeParameters, decl.parameters, jsdocType, decl.equalsGreaterThanToken, decl.body);
-            case SyntaxKind.MethodDeclaration:
-                return createMethod(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.questionToken, decl.typeParameters, decl.parameters, jsdocType, decl.body);
-            case SyntaxKind.GetAccessor:
-                return createGetAccessor(decl.decorators, decl.modifiers, decl.name, decl.parameters, jsdocType, decl.body);
             default:
                 Debug.fail(`Unexpected SyntaxKind: ${decl.kind}`);
                 return undefined;
         }
-    }
-
-    function isParameterOfSimpleArrowFunction(decl: DeclarationWithType) {
-        return decl.kind === SyntaxKind.Parameter && decl.parent.kind === SyntaxKind.ArrowFunction && isSimpleArrowFunction(decl.parent);
-    }
-
-    function isSimpleArrowFunction(parentNode: FunctionTypeNode | ArrowFunction | JSDocFunctionType) {
-        const parameter = singleOrUndefined(parentNode.parameters);
-        return parameter
-            && parameter.pos === parentNode.pos // may not have parsed tokens between parent and parameter
-            && !(isArrowFunction(parentNode) && parentNode.type) // arrow function may not have return type annotation
-            && !some(parentNode.decorators)     // parent may not have decorators
-            && !some(parentNode.modifiers)      // parent may not have modifiers
-            && !some(parentNode.typeParameters) // parent may not have type parameters
-            && !some(parameter.decorators)      // parameter may not have decorators
-            && !some(parameter.modifiers)       // parameter may not have modifiers
-            && !parameter.dotDotDotToken        // parameter may not be rest
-            && !parameter.questionToken         // parameter may not be optional
-            && !parameter.type                  // parameter may not have a type annotation
-            && !parameter.initializer           // parameter may not have an initializer
-            && isIdentifier(parameter.name);    // parameter name must be identifier
     }
 
     function transformJSDocType(node: Node): Node | undefined {

@@ -3738,7 +3738,7 @@
         "category": "Message",
         "code": 95007
     },
-    "Annotate with return type from JSDoc": {
+    "Annotate with types from JSDoc": {
         "category": "Message",
         "code": 95008
     }
