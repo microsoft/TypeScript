@@ -73,12 +73,17 @@ namespace ts {
          */
         onRemoveSourceFile(path: Path): void;
         /**
-         * Called when sourceFile is changed
+         * For all source files, either "onUpdateSourceFile" or "onUpdateSourceFileWithSameVersion" will be called.
+         * If the builder is sure that the source file needs an update, "onUpdateSourceFile" will be called;
+         * otherwise "onUpdateSourceFileWithSameVersion" will be called.
+         * This should return whether the source file should be marked as changed (meaning that something associated with file has changed, e.g. module resolution)
          */
         onUpdateSourceFile(program: Program, sourceFile: SourceFile): void;
         /**
-         * Called when source file has not changed
-         * If returned true, builder will mark the file as changed (noting that something associated with file has changed eg. module resolution)
+         * For all source files, either "onUpdateSourceFile" or "onUpdateSourceFileWithSameVersion" will be called.
+         * If the builder is sure that the source file needs an update, "onUpdateSourceFile" will be called;
+         * otherwise "onUpdateSourceFileWithSameVersion" will be called.
+         * This should return whether the source file should be marked as changed (meaning that something associated with file has changed, e.g. module resolution)
          */
         onUpdateSourceFileWithSameVersion(program: Program, sourceFile: SourceFile): boolean;
         /**
