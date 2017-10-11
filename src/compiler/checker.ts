@@ -2909,7 +2909,7 @@ namespace ts {
                     else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
                         type.symbol.valueDeclaration &&
                         type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
-                        return createAnonymousTypeNode(getDeclaredTypeOfClassOrInterface(type.symbol));
+                        return createAnonymousTypeNode(type);
                     }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
