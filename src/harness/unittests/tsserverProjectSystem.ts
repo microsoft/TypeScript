@@ -335,6 +335,10 @@ namespace ts.projectSystem {
         return countWhere(recursiveWatchedDirs, dir => file.length > dir.length && startsWith(file, dir) && file[dir.length] === directorySeparator);
     }
 
+    function checkOpenFiles(projectService: server.ProjectService, expectedFiles: FileOrFolder[]) {
+        checkFileNames("Open files", projectService.openFiles.map(info => info.fileName), expectedFiles.map(file => file.path));
+    }
+
     /**
      * Test server cancellation token used to mock host token cancellation requests.
      * The cancelAfterRequest constructor param specifies how many isCancellationRequested() calls
@@ -2107,6 +2111,90 @@ namespace ts.projectSystem {
             assert.strictEqual(projectService.configuredProjects.get(tsconfig1.path), project1);
             assert.isUndefined(projectService.configuredProjects.get(tsconfig2.path));
             assert.equal(project1.openRefCount, 1, "Open ref count in project1 - 5");
+        });
+
+        it("Open ref of configured project when open file gets added to the project as part of configured file update", () => {
+            const file1 = {
+                path: "/a/b/src/file1.ts",
+                content: "let x = 1;"
+            };
+            const file2 = {
+                path: "/a/b/src/file2.ts",
+                content: "let y = 1;"
+            };
+            const file3 = {
+                path: "/a/b/file3.ts",
+                content: "let z = 1;"
+            };
+            const file4 = {
+                path: "/a/file4.ts",
+                content: "let z = 1;"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ files: ["src/file1.ts", "file3.ts"] })
+            };
+
+            const files = [file1, file2, file3, file4];
+            const host = createServerHost(files.concat(configFile));
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            projectService.openClientFile(file2.path);
+            projectService.openClientFile(file3.path);
+            projectService.openClientFile(file4.path);
+
+            const infos = files.map(file => projectService.getScriptInfoForPath(file.path as Path));
+            checkOpenFiles(projectService, files);
+            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 2 });
+            const configProject1 = projectService.configuredProjects.get(configFile.path);
+            assert.equal(configProject1.openRefCount, 2);
+            checkProjectActualFiles(configProject1, [file1.path, file3.path, configFile.path]);
+            const inferredProject1 = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject1, [file2.path]);
+            const inferredProject2 = projectService.inferredProjects[1];
+            checkProjectActualFiles(inferredProject2, [file4.path]);
+
+            configFile.content = "{}";
+            host.reloadFS(files.concat(configFile));
+            host.runQueuedTimeoutCallbacks();
+
+            verifyScriptInfos();
+            checkOpenFiles(projectService, files);
+            verifyConfiguredProjectStateAfterUpdate(3);
+            checkNumberOfInferredProjects(projectService, 1);
+            const inferredProject3 = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject3, [file4.path]);
+            assert.strictEqual(inferredProject2, inferredProject3);
+
+            projectService.closeClientFile(file1.path);
+            projectService.closeClientFile(file2.path);
+            projectService.closeClientFile(file4.path);
+
+            verifyScriptInfos();
+            checkOpenFiles(projectService, [file3]);
+            verifyConfiguredProjectStateAfterUpdate(1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            projectService.openClientFile(file4.path);
+            //verifyScriptInfos();
+            checkOpenFiles(projectService, [file3, file4]);
+            //verifyConfiguredProjectStateAfterUpdate(1);
+            checkNumberOfInferredProjects(projectService, 1);
+            const inferredProject4 = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject4, [file4.path]);
+
+            function verifyScriptInfos() {
+                infos.forEach(info => assert.strictEqual(projectService.getScriptInfoForPath(info.path), info));
+            }
+
+            function verifyConfiguredProjectStateAfterUpdate(_openRefCount: number) {
+                checkNumberOfConfiguredProjects(projectService, 1);
+                const configProject2 = projectService.configuredProjects.get(configFile.path);
+                assert.strictEqual(configProject1, configProject2);
+                checkProjectActualFiles(configProject2, [file1.path, file2.path, file3.path, configFile.path]);
+                //assert.equal(configProject2.openRefCount, openRefCount);
+            }
         });
 
         it("language service disabled state is updated in external projects", () => {
