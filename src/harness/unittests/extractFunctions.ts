@@ -532,6 +532,14 @@ function f() {
     [#|let x;|]
     return { x };
 }`);
+
+        testExtractFunction("extractFunction_PreserveTrivia", `
+// a
+var q = /*b*/ //c
+    /*d*/ [#|1 /*e*/ //f
+    /*g*/ + /*h*/ //i
+    /*j*/ 2|] /*k*/ //l
+    /*m*/; /*n*/ //o`);
     });
 
     function testExtractFunction(caption: string, text: string) {

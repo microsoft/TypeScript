@@ -223,6 +223,14 @@ const f = () => {
         testExtractConstant("extractConstant_ArrowFunction_Expression",
             `const f = () => [#|2 + 1|];`);
 
+        testExtractConstant("extractConstant_PreserveTrivia", `
+// a
+var q = /*b*/ //c
+    /*d*/ [#|1 /*e*/ //f
+    /*g*/ + /*h*/ //i
+    /*j*/ 2|] /*k*/ //l
+    /*m*/; /*n*/ //o`);
+
         testExtractConstantFailed("extractConstant_Void", `
 function f(): void { }
 [#|f();|]`);

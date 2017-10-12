@@ -740,6 +740,8 @@ namespace ts.refactor.extractSymbol {
         }
 
         const { body, returnValueProperty } = transformFunctionBody(node, exposedVariableDeclarations, writes, substitutions, !!(range.facts & RangeFacts.HasReturn));
+        suppressLeadingAndTrailingTrivia(body);
+
         let newFunction: MethodDeclaration | FunctionDeclaration;
 
         if (isClassLike(scope)) {
@@ -926,15 +928,10 @@ namespace ts.refactor.extractSymbol {
             }
         }
 
-        if (isReadonlyArray(range.range)) {
-            changeTracker.replaceNodesWithNodes(context.file, range.range, newNodes, {
-                nodeSeparator: context.newLineCharacter,
-                suffix: context.newLineCharacter // insert newline only when replacing statements
-            });
-        }
-        else {
-            changeTracker.replaceNodeWithNodes(context.file, range.range, newNodes, { nodeSeparator: context.newLineCharacter });
-        }
+        const replacementRange = isReadonlyArray(range.range)
+            ? { pos: first(range.range).getStart(), end: last(range.range).end }
+            : { pos: range.range.getStart(), end: range.range.end };
+        changeTracker.replaceRangeWithNodes(context.file, replacementRange, newNodes, { nodeSeparator: context.newLineCharacter });
 
         const edits = changeTracker.getChanges();
         const renameRange = isReadonlyArray(range.range) ? first(range.range) : range.range;
@@ -982,6 +979,7 @@ namespace ts.refactor.extractSymbol {
             : checker.typeToTypeNode(checker.getContextualType(node), scope, NodeBuilderFlags.NoTruncation);
 
         const initializer = transformConstantInitializer(node, substitutions);
+        suppressLeadingAndTrailingTrivia(initializer);
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
@@ -1014,7 +1012,7 @@ namespace ts.refactor.extractSymbol {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, { suffix: context.newLineCharacter + context.newLineCharacter });
 
             // Consume
-            changeTracker.replaceNodeWithNodes(context.file, node, [localReference], { nodeSeparator: context.newLineCharacter });
+            changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
         }
         else {
             const newVariableDeclaration = createVariableDeclaration(localNameText, variableType, initializer);
