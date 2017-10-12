@@ -31,11 +31,11 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         }
 
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
-        const decl = findAncestor(node, isTypedNode);
+        const decl = findAncestor(node, isDeclarationWithType);
         if (decl && !decl.type) {
             const type = getJSDocType(decl);
-            const returnType = getJSDocReturnType(decl);
-            const annotate = (returnType || type && decl.kind === SyntaxKind.Parameter) ? annotateFunctionFromJSDoc :
+            const isFunctionWithJSDoc = isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)));
+            const annotate = (isFunctionWithJSDoc || type && decl.kind === SyntaxKind.Parameter) ? annotateFunctionFromJSDoc :
                 type ? annotateTypeFromJSDoc :
                     undefined;
             if (annotate) {
@@ -61,7 +61,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
 
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
-        const decl = findAncestor(token, isTypedNode);
+        const decl = findAncestor(token, isDeclarationWithType);
         const jsdocType = getJSDocReturnType(decl) || getJSDocType(decl);
         if (!decl || !jsdocType || decl.type) {
             Debug.fail(`!decl || !jsdocType || decl.type: !${decl} || !${jsdocType} || ${decl.type}`);
@@ -95,7 +95,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         };
     }
 
-    function isTypedNode(node: Node): node is DeclarationWithType {
+    function isDeclarationWithType(node: Node): node is DeclarationWithType {
         return isFunctionLikeDeclaration(node) ||
             node.kind === SyntaxKind.VariableDeclaration ||
             node.kind === SyntaxKind.Parameter ||
@@ -104,22 +104,23 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
     }
 
     function addTypesToFunctionLike(decl: FunctionLikeDeclaration) {
-        const returnType = decl.type || transformJSDocType(getJSDocReturnType(decl)) as TypeNode;
+        const typeParameters = getEffectiveTypeParameterDeclarations(decl, /*checkJSDoc*/ true);
         const parameters = decl.parameters.map(
-            p => createParameter(p.decorators, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || transformJSDocType(getJSDocType(p)) as TypeNode, p.initializer));
+            p => createParameter(p.decorators, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, transformJSDocType(getEffectiveTypeAnnotationNode(p, /*checkJSDoc*/ true)) as TypeNode, p.initializer));
+        const returnType = transformJSDocType(getEffectiveReturnTypeNode(decl, /*checkJSDoc*/ true)) as TypeNode;
         switch (decl.kind) {
             case SyntaxKind.FunctionDeclaration:
-                return createFunctionDeclaration(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, parameters, returnType, decl.body);
+                return createFunctionDeclaration(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, typeParameters, parameters, returnType, decl.body);
             case SyntaxKind.Constructor:
                 return createConstructor(decl.decorators, decl.modifiers, parameters, decl.body);
             case SyntaxKind.FunctionExpression:
-                return createFunctionExpression(decl.modifiers, decl.asteriskToken, (decl as FunctionExpression).name, decl.typeParameters, parameters, returnType, decl.body);
+                return createFunctionExpression(decl.modifiers, decl.asteriskToken, (decl as FunctionExpression).name, typeParameters, parameters, returnType, decl.body);
             case SyntaxKind.ArrowFunction:
-                return createArrowFunction(decl.modifiers, decl.typeParameters, parameters, returnType, decl.equalsGreaterThanToken, decl.body);
+                return createArrowFunction(decl.modifiers, typeParameters, parameters, returnType, decl.equalsGreaterThanToken, decl.body);
             case SyntaxKind.MethodDeclaration:
-                return createMethod(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.questionToken, decl.typeParameters, parameters, returnType, decl.body);
+                return createMethod(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.questionToken, typeParameters, parameters, returnType, decl.body);
             case SyntaxKind.GetAccessor:
-                return createGetAccessor(decl.decorators, decl.modifiers, decl.name, parameters, returnType, decl.body);
+                return createGetAccessor(decl.decorators, decl.modifiers, decl.name, decl.parameters, returnType, decl.body);
             case SyntaxKind.SetAccessor:
                 return createSetAccessor(decl.decorators, decl.modifiers, decl.name, parameters, decl.body);
             default:
