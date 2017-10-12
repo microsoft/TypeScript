@@ -4,6 +4,8 @@
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
+    import validatePackageName = JsTyping.validatePackageName;
+    import PackageNameValidationResult = JsTyping.PackageNameValidationResult;
 
     interface InstallerParams {
         globalTypingsCacheLocation?: string;

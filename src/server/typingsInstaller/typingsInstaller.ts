@@ -216,8 +216,8 @@ namespace ts.server.typingsInstaller {
                 if (this.missingTypingsSet.get(typing) || this.packageNameToTypingLocation.get(typing)) {
                     continue;
                 }
-                const validationResult = validatePackageName(typing);
-                if (validationResult === PackageNameValidationResult.Ok) {
+                const validationResult = JsTyping.validatePackageName(typing);
+                if (validationResult === JsTyping.PackageNameValidationResult.Ok) {
                     if (this.typesRegistry.has(typing)) {
                         result.push(typing);
                     }
@@ -231,7 +231,7 @@ namespace ts.server.typingsInstaller {
                     // add typing name to missing set so we won't process it again
                     this.missingTypingsSet.set(typing, true);
                     if (this.log.isEnabled()) {
-                        this.log.writeLine(renderPackageNameValidationFailure(validationResult, typing));
+                        this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
                     }
                 }
             }

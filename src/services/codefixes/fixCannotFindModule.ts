@@ -21,8 +21,8 @@ namespace ts.codefix {
         const { packageName } = getPackageName(moduleName);
 
         // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
-        const validationResult = validatePackageName(packageName);
-        if (validationResult !== PackageNameValidationResult.Ok) {
+        const validationResult = JsTyping.validatePackageName(packageName);
+        if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
             return undefined;
         }
 
