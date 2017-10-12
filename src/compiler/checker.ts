@@ -15675,34 +15675,32 @@ namespace ts {
             return getInferredTypes(context);
         }
 
-        function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, typeArgumentTypes: Type[], reportErrors: boolean, headMessage?: DiagnosticMessage): boolean {
+        function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | false {
+            const isJavascript = isInJavaScriptFile(signature.declaration);
             const typeParameters = signature.typeParameters;
-            let typeArgumentsAreAssignable = true;
+            const typeArgumentTypes = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
             let mapper: TypeMapper;
             for (let i = 0; i < typeArgumentNodes.length; i++) {
-                if (typeArgumentsAreAssignable /* so far */) {
-                    const constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                    if (constraint) {
-                        let errorInfo: DiagnosticMessageChain;
-                        let typeArgumentHeadMessage = Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
-                        if (reportErrors && headMessage) {
-                            errorInfo = chainDiagnosticMessages(errorInfo, typeArgumentHeadMessage);
-                            typeArgumentHeadMessage = headMessage;
-                        }
-                        if (!mapper) {
-                            mapper = createTypeMapper(typeParameters, typeArgumentTypes);
-                        }
-                        const typeArgument = typeArgumentTypes[i];
-                        typeArgumentsAreAssignable = checkTypeAssignableTo(
-                            typeArgument,
-                            getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
-                            reportErrors ? typeArgumentNodes[i] : undefined,
-                            typeArgumentHeadMessage,
-                            errorInfo);
-                    }
+                Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
+                const constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                if (!constraint) continue;
+
+                const errorInfo = reportErrors && headMessage && chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                const typeArgumentHeadMessage = headMessage || Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
+                if (!mapper) {
+                    mapper = createTypeMapper(typeParameters, typeArgumentTypes);
+                }
+                const typeArgument = typeArgumentTypes[i];
+                if (!checkTypeAssignableTo(
+                    typeArgument,
+                    getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
+                    reportErrors ? typeArgumentNodes[i] : undefined,
+                    typeArgumentHeadMessage,
+                    errorInfo)) {
+                    return false;
                 }
             }
-            return typeArgumentsAreAssignable;
+            return typeArgumentTypes;
         }
 
         /**
@@ -16235,8 +16233,7 @@ namespace ts {
                 checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
-                const typeArguments = (<CallExpression>node).typeArguments;
-                checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), /*reportErrors*/ true, fallbackError);
+                checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression).typeArguments, /*reportErrors*/ true, fallbackError);
             }
             else if (typeArguments && every(signatures, sig => length(sig.typeParameters) !== typeArguments.length)) {
                 let min = Number.POSITIVE_INFINITY;
@@ -16335,10 +16332,12 @@ namespace ts {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[];
-                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             if (typeArguments) {
-                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters), isJavascript);
-                                if (!checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
+                                const typeArgumentResult = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
+                                if (typeArgumentResult) {
+                                    typeArgumentTypes = typeArgumentResult;
+                                }
+                                else {
                                     candidateForTypeArgumentError = originalCandidate;
                                     break;
                                 }
@@ -16346,6 +16345,7 @@ namespace ts {
                             else {
                                 typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                             }
+                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript);
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
