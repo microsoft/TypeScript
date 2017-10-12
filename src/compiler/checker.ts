@@ -7971,8 +7971,7 @@ namespace ts {
             }
 
             const spread = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
-            spread.flags |= propagatedFlags;
-            spread.flags |= TypeFlags.FreshLiteral;
+            spread.flags |= propagatedFlags | TypeFlags.ContainsObjectLiteral;
             (spread as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
             spread.symbol = symbol;
             return spread;
@@ -13872,7 +13871,7 @@ namespace ts {
             let propertiesTable = createSymbolTable();
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
-            let propagatedFlags: TypeFlags = 0;
+            let propagatedFlags: TypeFlags = TypeFlags.FreshLiteral;
 
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
@@ -14110,7 +14109,7 @@ namespace ts {
         function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createSymbolTable();
-            let spread: Type = neverType;
+            let spread: Type = emptyObjectType;
             let hasSpreadAnyType = false;
             let typeToIntersect: Type;
             let explicitlySpecifyChildrenAttribute = false;
@@ -14201,10 +14200,7 @@ namespace ts {
             if (hasSpreadAnyType) {
                 return anyType;
             }
-            if (spread !== neverType) {
-                return typeToIntersect ? getIntersectionType([typeToIntersect, spread]) : spread;
-            }
-            return typeToIntersect ? typeToIntersect : emptyObjectType;
+            return typeToIntersect ? getIntersectionType([typeToIntersect, ...spread === emptyObjectType ? [] : [spread]]) : spread;
 
             /**
              * Create anonymous type from given attributes symbol table.
