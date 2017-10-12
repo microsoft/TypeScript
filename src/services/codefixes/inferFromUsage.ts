@@ -27,7 +27,7 @@ namespace ts.codefix {
 
     function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken }: CodeFixContext): CodeAction[] | undefined {
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        let writer: StringSymbolWriter;
+        let writer: EmitTextWriter;
 
         if (isInJavaScriptFile(token)) {
             return undefined;
@@ -226,7 +226,7 @@ namespace ts.codefix {
 
                 const writeText: (text: string) => void = text => str += text;
                 writer = {
-                    string: () => typeIsAccessible ? str : undefined,
+                    getText: () => typeIsAccessible ? str : undefined,
                     writeKeyword: writeText,
                     writeOperator: writeText,
                     writePunctuation: writeText,
@@ -235,6 +235,15 @@ namespace ts.codefix {
                     writeParameter: writeText,
                     writeProperty: writeText,
                     writeSymbol: writeText,
+                    write: writeText,
+                    writeTextOfNode: writeText,
+                    rawWrite: writeText,
+                    writeLiteral: writeText,
+                    getTextPos: () => 0,
+                    getLine: () => 0,
+                    getColumn: () => 0,
+                    getIndent: () => 0,
+                    isAtStartOfLine: () => false,
                     writeLine: () => str += " ",
                     increaseIndent: noop,
                     decreaseIndent: noop,
@@ -254,8 +263,8 @@ namespace ts.codefix {
 
         function typeToString(type: Type, enclosingDeclaration: Declaration) {
             const writer = getTypeAccessiblityWriter();
-            checker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration);
-            return writer.string();
+            checker.typeToString(type, enclosingDeclaration, /*flags*/ undefined, writer);
+            return writer.getText();
         }
 
         function getFirstChildOfKind(node: Node, sourcefile: SourceFile, kind: SyntaxKind) {

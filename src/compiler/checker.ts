@@ -2563,7 +2563,7 @@ namespace ts {
             const result = writer.getText();
 
             const maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
-            if (maxLength && result.length >= maxLength) {
+            if (maxLength && result && result.length >= maxLength) {
                 return result.substr(0, maxLength - "...".length) + "...";
             }
             return result;
