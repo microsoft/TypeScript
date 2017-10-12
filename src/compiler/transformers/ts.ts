@@ -45,6 +45,7 @@ namespace ts {
 
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
+        const strictNullChecks = typeof compilerOptions.strictNullChecks === "undefined" ? compilerOptions.strict : compilerOptions.strictNullChecks;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
 
@@ -1869,7 +1870,16 @@ namespace ts {
             // Note when updating logic here also update getEntityNameForDecoratorMetadata
             // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode;
-            for (const typeNode of node.types) {
+            for (let typeNode of node.types) {
+                while (typeNode.kind === SyntaxKind.ParenthesizedType) {
+                    typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
+                }
+                if (typeNode.kind === SyntaxKind.NeverKeyword) {
+                    continue; // Always elide `never` from the union/intersection if possible
+                }
+                if (!strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                    continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
+                }
                 const serializedIndividual = serializeTypeNode(typeNode);
 
                 if (isIdentifier(serializedIndividual) && serializedIndividual.escapedText === "Object") {
@@ -1893,7 +1903,7 @@ namespace ts {
             }
 
             // If we were able to find common type, use it
-            return serializedUnion;
+            return serializedUnion || createVoidZero(); // Fallback is only hit if all union constituients are null/undefined/never
         }
 
         /**
