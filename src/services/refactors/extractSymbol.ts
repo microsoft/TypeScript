@@ -476,7 +476,10 @@ namespace ts.refactor.extractSymbol {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
             if (containingClass) {
-                return [containingClass];
+                const containingFunction = findAncestor(current, isFunctionLikeDeclaration);
+                return containingFunction
+                    ? [containingFunction, containingClass]
+                    : [containingClass];
             }
         }
 
