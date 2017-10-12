@@ -66,6 +66,7 @@
         }
     }
 }
+
 function newFunction<U1a, T1a, U2a, T2a, U3a>(t1a: T1a, t2a: T2a, u1a: U1a, u2a: U2a, u3a: U3a) {
     t1a.toString();
     t2a.toString();

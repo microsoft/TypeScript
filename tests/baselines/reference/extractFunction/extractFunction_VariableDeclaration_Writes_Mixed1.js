@@ -30,6 +30,7 @@ function f() {
     ({ x, y, a } = /*RENAME*/newFunction(a));
     a; x; y;
 }
+
 function newFunction(a) {
     const x = 1;
     let y = 2;

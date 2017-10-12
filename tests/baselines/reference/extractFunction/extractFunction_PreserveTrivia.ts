@@ -12,6 +12,7 @@ var q = /*b*/ //c
 var q = /*b*/ //c
     /*d*/ /*RENAME*/newFunction() /*k*/ //l
     /*m*/; /*n*/ //o
+
 function newFunction() {
     return 1 /*e*/ //f
         /*g*/ + /*h*/ //i

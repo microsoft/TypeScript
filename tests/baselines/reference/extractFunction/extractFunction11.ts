@@ -61,6 +61,7 @@ namespace A {
         }
     }
 }
+
 function newFunction(y: number, z: number) {
     let a1 = { x: 1 };
     y = 10;

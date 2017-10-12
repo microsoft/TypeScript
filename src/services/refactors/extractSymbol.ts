@@ -785,7 +785,10 @@ namespace ts.refactor.extractSymbol {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
         }
         else {
-            changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+            changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, {
+                prefix: isLineBreak(file.text.charCodeAt(scope.getLastToken().pos)) ? context.newLineCharacter : context.newLineCharacter + context.newLineCharacter,
+                suffix: context.newLineCharacter
+            });
         }
 
         const newNodes: Node[] = [];

@@ -13,6 +13,7 @@ edit.applyRefactor({
     newContent:
 `// newFunction
 /*RENAME*/newFunction_1();
+
 function newFunction_1() {
     1 + 1;
 }

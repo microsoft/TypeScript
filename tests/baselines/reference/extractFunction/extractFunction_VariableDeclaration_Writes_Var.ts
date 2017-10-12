@@ -27,6 +27,7 @@ function f() {
     ({ x, a } = /*RENAME*/newFunction(a));
     a; x;
 }
+
 function newFunction(a: number) {
     var x = 1;
     a++;
