@@ -213,11 +213,13 @@ namespace ts {
         return undefined;
     }
 
-    export function zipWith<T, U>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => void): void {
+    export function zipWith<T, U, V>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => V): V[] {
+        const result: V[] = [];
         Debug.assert(arrayA.length === arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
-            callback(arrayA[i], arrayB[i], i);
+            result.push(callback(arrayA[i], arrayB[i], i));
         }
+        return result;
     }
 
     export function zipToMap<T>(keys: ReadonlyArray<string>, values: ReadonlyArray<T>): Map<T> {

@@ -4,6 +4,8 @@ namespace ts.codefix {
         errorCodes: [
             // Variable declarations
             Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code,
+
+            // Variable uses
             Diagnostics.Variable_0_implicitly_has_an_1_type.code,
 
             // Parameter declarations
@@ -26,6 +28,10 @@ namespace ts.codefix {
     function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken }: CodeFixContext): CodeAction[] | undefined {
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
         let writer: StringSymbolWriter;
+
+        if (isInJavaScriptFile(token)) {
+            return undefined;
+        }
 
         switch (token.kind) {
             case SyntaxKind.Identifier:
@@ -68,10 +74,6 @@ namespace ts.codefix {
             // Set Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
                 return isSetAccessor(containingFunction) ? getCodeActionForSetAccessor(containingFunction) : undefined;
-
-            // Property declarations
-            case Diagnostics.Member_0_implicitly_has_an_1_type.code:
-                return getCodeActionForVariableDeclaration(<VariableDeclaration>token.parent);
         }
 
         return undefined;
@@ -116,30 +118,27 @@ namespace ts.codefix {
             const types = inferTypeForParametersFromUsage(containingFunction) ||
                 map(containingFunction.parameters, p => isIdentifier(p.name) && inferTypeForVariableFromUsage(p.name));
 
-            if (types) {
-                const textChanges = reduceLeft(containingFunction.parameters, (memo, parameter, index) => {
-                    if (types[index] && !parameter.type && !parameter.initializer) {
-                        const typeString = types[index] && typeToString(types[index], containingFunction);
-                        if (typeString) {
-                            (memo || (memo = [])).push({
-                                span: { start: parameter.end, length: 0 },
-                                newText: `: ${typeString}`
-                            });
-                        }
-                    }
-                    return memo;
-                }, <TextChange[]>undefined);
-                if (textChanges) {
-                    return [{
-                        description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_parameter_types_from_usage), [parameterDeclaration.name.getText()]),
-                        changes: [{
-                            fileName: sourceFile.fileName,
-                            textChanges
-                        }]
-                    }];
-                }
+            if (!types) {
+                return undefined;
             }
-            return undefined;
+
+            const textChanges: TextChange[] = zipWith(containingFunction.parameters, types, (parameter, type) => {
+                if (type && !parameter.type && !parameter.initializer) {
+                    const typeString = typeToString(type, containingFunction);
+                    return typeString ? {
+                        span: { start: parameter.end, length: 0 },
+                        newText: `: ${typeString}`
+                    } : undefined;
+                }
+            }).filter(c => !!c);
+
+            return textChanges.length ? [{
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_parameter_types_from_usage), [parameterDeclaration.name.getText()]),
+                changes: [{
+                    fileName: sourceFile.fileName,
+                    textChanges
+                }]
+            }] : undefined;
         }
 
         function getCodeActionForSetAccessor(setAccessorDeclaration: SetAccessorDeclaration) {
@@ -327,103 +326,6 @@ namespace ts.codefix {
                 }
             }
             return undefined;
-        }
-
-
-        function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type | undefined {
-            if (usageContext.isNumberOrString && !usageContext.isNumber && !usageContext.isString) {
-                return checker.getUnionType([checker.getNumberType(), checker.getStringType()]);
-            }
-            else if (usageContext.isNumber) {
-                return checker.getNumberType();
-            }
-            else if (usageContext.isString) {
-                return checker.getStringType();
-            }
-            else if (usageContext.candidateTypes) {
-                return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), /*subtypeReduction*/ true));
-            }
-            else if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
-                const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String).callContexts, /*isRestParameter*/ false, checker);
-                const types = paramType.getCallSignatures().map(c => c.getReturnType());
-                return checker.createPromiseType(types.length ? checker.getUnionType(types, /*subtypeReduction*/ true) : checker.getAnyType());
-            }
-            else if (usageContext.properties && hasCallContext(usageContext.properties.get("push" as __String))) {
-                return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String).callContexts, /*isRestParameter*/ false, checker));
-            }
-            else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.numberIndexContext || usageContext.stringIndexContext) {
-                const members = createUnderscoreEscapedMap<Symbol>();
-                const callSignatures: Signature[] = [];
-                const constructSignatures: Signature[] = [];
-                let stringIndexInfo: IndexInfo;
-                let numberIndexInfo: IndexInfo;
-
-                if (usageContext.properties) {
-                    usageContext.properties.forEach((context, name) => {
-                        const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                        symbol.type = getTypeFromUsageContext(context, checker);
-                        members.set(name, symbol);
-                    });
-                }
-
-                if (usageContext.callContexts) {
-                    for (const callConext of usageContext.callContexts) {
-                        callSignatures.push(getSignatureFromCallContext(callConext, checker));
-                    }
-                }
-
-                if (usageContext.constructContexts) {
-                    for (const constructContext of usageContext.constructContexts) {
-                        constructSignatures.push(getSignatureFromCallContext(constructContext, checker));
-                    }
-                }
-
-                if (usageContext.numberIndexContext) {
-                    numberIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.numberIndexContext, checker), /*isReadonly*/ false);
-                }
-
-                if (usageContext.stringIndexContext) {
-                    stringIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.stringIndexContext, checker), /*isReadonly*/ false);
-                }
-
-                return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
-            }
-            else {
-                return undefined;
-            }
-        }
-
-        function getParameterTypeFromCallContexts(parameterIndex: number, callContexts: CallContext[], isRestParameter: boolean, checker: TypeChecker) {
-            let types: Type[] = [];
-            if (callContexts) {
-                for (const callContext of callContexts) {
-                    if (callContext.argumentTypes.length > parameterIndex) {
-                        if (isRestParameter) {
-                            types = concatenate(types, map(callContext.argumentTypes.slice(parameterIndex), a => checker.getBaseTypeOfLiteralType(a)));
-                        }
-                        else {
-                            types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
-                        }
-                    }
-                }
-            }
-
-            if (types.length) {
-                const type = checker.getWidenedType(checker.getUnionType(types, /*subtypeReduction*/ true));
-                return isRestParameter ? checker.createArrayType(type) : type;
-            }
-            return undefined;
-        }
-
-        function getSignatureFromCallContext(callContext: CallContext, checker: TypeChecker): Signature {
-            const parameters: Symbol[] = [];
-            for (let i = 0; i < callContext.argumentTypes.length; i++) {
-                const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`p${i}`));
-                symbol.type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
-                parameters.push(symbol);
-            }
-            const returnType = getTypeFromUsageContext(callContext.returnType, checker);
-            return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }
 
         function inferTypeFromContext(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
@@ -630,16 +532,112 @@ namespace ts.codefix {
                 return;
             }
             else {
-                const indextType = checker.getTypeAtLocation(parent);
+                const indexType = checker.getTypeAtLocation(parent);
                 const indexUsageContext = {};
                 inferTypeFromContext(parent, checker, indexUsageContext);
-                if (indextType.flags & TypeFlags.NumberLike) {
+                if (indexType.flags & TypeFlags.NumberLike) {
                     usageContext.numberIndexContext = indexUsageContext;
                 }
                 else {
                     usageContext.stringIndexContext = indexUsageContext;
                 }
             }
+        }
+
+        function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type | undefined {
+            if (usageContext.isNumberOrString && !usageContext.isNumber && !usageContext.isString) {
+                return checker.getUnionType([checker.getNumberType(), checker.getStringType()]);
+            }
+            else if (usageContext.isNumber) {
+                return checker.getNumberType();
+            }
+            else if (usageContext.isString) {
+                return checker.getStringType();
+            }
+            else if (usageContext.candidateTypes) {
+                return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), /*subtypeReduction*/ true));
+            }
+            else if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
+                const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String).callContexts, /*isRestParameter*/ false, checker);
+                const types = paramType.getCallSignatures().map(c => c.getReturnType());
+                return checker.createPromiseType(types.length ? checker.getUnionType(types, /*subtypeReduction*/ true) : checker.getAnyType());
+            }
+            else if (usageContext.properties && hasCallContext(usageContext.properties.get("push" as __String))) {
+                return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String).callContexts, /*isRestParameter*/ false, checker));
+            }
+            else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.numberIndexContext || usageContext.stringIndexContext) {
+                const members = createUnderscoreEscapedMap<Symbol>();
+                const callSignatures: Signature[] = [];
+                const constructSignatures: Signature[] = [];
+                let stringIndexInfo: IndexInfo;
+                let numberIndexInfo: IndexInfo;
+
+                if (usageContext.properties) {
+                    usageContext.properties.forEach((context, name) => {
+                        const symbol = checker.createSymbol(SymbolFlags.Property, name);
+                        symbol.type = getTypeFromUsageContext(context, checker);
+                        members.set(name, symbol);
+                    });
+                }
+
+                if (usageContext.callContexts) {
+                    for (const callContext of usageContext.callContexts) {
+                        callSignatures.push(getSignatureFromCallContext(callContext, checker));
+                    }
+                }
+
+                if (usageContext.constructContexts) {
+                    for (const constructContext of usageContext.constructContexts) {
+                        constructSignatures.push(getSignatureFromCallContext(constructContext, checker));
+                    }
+                }
+
+                if (usageContext.numberIndexContext) {
+                    numberIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.numberIndexContext, checker), /*isReadonly*/ false);
+                }
+
+                if (usageContext.stringIndexContext) {
+                    stringIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.stringIndexContext, checker), /*isReadonly*/ false);
+                }
+
+                return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+            }
+            else {
+                return undefined;
+            }
+        }
+
+        function getParameterTypeFromCallContexts(parameterIndex: number, callContexts: CallContext[], isRestParameter: boolean, checker: TypeChecker) {
+            let types: Type[] = [];
+            if (callContexts) {
+                for (const callContext of callContexts) {
+                    if (callContext.argumentTypes.length > parameterIndex) {
+                        if (isRestParameter) {
+                            types = concatenate(types, map(callContext.argumentTypes.slice(parameterIndex), a => checker.getBaseTypeOfLiteralType(a)));
+                        }
+                        else {
+                            types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
+                        }
+                    }
+                }
+            }
+
+            if (types.length) {
+                const type = checker.getWidenedType(checker.getUnionType(types, /*subtypeReduction*/ true));
+                return isRestParameter ? checker.createArrayType(type) : type;
+            }
+            return undefined;
+        }
+
+        function getSignatureFromCallContext(callContext: CallContext, checker: TypeChecker): Signature {
+            const parameters: Symbol[] = [];
+            for (let i = 0; i < callContext.argumentTypes.length; i++) {
+                const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`arg${i}`));
+                symbol.type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
+                parameters.push(symbol);
+            }
+            const returnType = getTypeFromUsageContext(callContext.returnType, checker);
+            return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }
 
         function addCandidateType(context: UsageContext, type: Type) {
