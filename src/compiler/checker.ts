@@ -157,16 +157,16 @@ namespace ts {
                 location = getParseTreeNode(location, isIdentifier);
                 return location ? getPropertySymbolOfDestructuringAssignment(location) : undefined;
             },
-            signatureToString: (signature, enclosingDeclaration?, flags?, kind?, writer?) => {
+            signatureToString: (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter) => {
                 return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
             },
-            typeToString: (type, enclosingDeclaration?, flags?, writer?) => {
+            typeToString: (type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter) => {
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
-            symbolToString: (symbol, enclosingDeclaration?, meaning?, flags?, writer?) => {
+            symbolToString: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter) => {
                 return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
             },
-            typePredicateToString: (predicate, enclosingDeclaration?, flags?, writer?) => {
+            typePredicateToString: (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter) => {
                 return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
             getSymbolDisplayBuilder, // TODO (weswigham): Remove once deprecation process is complete

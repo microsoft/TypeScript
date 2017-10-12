@@ -1738,10 +1738,10 @@ declare namespace ts {
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
-        signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string;
-        typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
-        symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
-        typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
+        signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
+        typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
+        typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         /**
          * @deprecated Use the createX factory functions or XToY typechecker methods and `createPrinter` or the `xToString` methods instead
          * This will be removed in a future version.
@@ -1815,7 +1815,7 @@ declare namespace ts {
         /** @deprecated */ buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
     }
     /**
-     * @deprecated Migrate to EmitTextWriter
+     * @deprecated Migrate to other methods of generating symbol names, ex symbolToEntityName + a printer or symbolToString
      */
     interface SymbolWriter extends SymbolTracker {
         writeKeyword(text: string): void;
@@ -2684,30 +2684,6 @@ declare namespace ts {
         removeComments?: boolean;
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
-    }
-    interface EmitTextWriter extends SymbolTracker, SymbolWriter {
-        write(s: string): void;
-        writeTextOfNode(text: string, node: Node): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
-        getText(): string;
-        rawWrite(s: string): void;
-        writeLiteral(s: string): void;
-        getTextPos(): number;
-        getLine(): number;
-        getColumn(): number;
-        getIndent(): number;
-        isAtStartOfLine(): boolean;
-        clear(): void;
-        writeKeyword(text: string): void;
-        writeOperator(text: string): void;
-        writePunctuation(text: string): void;
-        writeSpace(text: string): void;
-        writeStringLiteral(text: string): void;
-        writeParameter(text: string): void;
-        writeProperty(text: string): void;
-        writeSymbol(text: string, symbol: Symbol): void;
     }
     interface SymbolTracker {
         trackSymbol?(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
@@ -4703,9 +4679,6 @@ declare namespace ts {
 declare namespace ts {
     /** The version of the language service API */
     const servicesVersion = "0.5";
-    interface DisplayPartsSymbolWriter extends EmitTextWriter {
-        displayParts(): SymbolDisplayPart[];
-    }
     function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
     function displayPartsToString(displayParts: SymbolDisplayPart[]): string;
     function getDefaultCompilerOptions(): CompilerOptions;

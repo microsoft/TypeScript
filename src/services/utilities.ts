@@ -1234,6 +1234,7 @@ namespace ts {
         return displayPart("\n", SymbolDisplayPartKind.lineBreak);
     }
 
+    /* @internal */
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
         try {
             writeDisplayParts(displayPartWriter);

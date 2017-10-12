@@ -768,6 +768,7 @@ namespace ts {
         scriptKind: ScriptKind;
     }
 
+    /* @internal */
     export interface DisplayPartsSymbolWriter extends EmitTextWriter {
         displayParts(): SymbolDisplayPart[];
     }
