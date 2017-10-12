@@ -1352,7 +1352,8 @@ namespace ts {
             const clone = getSynthesizedClone(node);
             if (isStringLiteral(clone)) {
                 clone.textSourceNode = node as any;
-            } else if (isNumericLiteral(clone)) {
+            }
+            else if (isNumericLiteral(clone)) {
                 clone.numericLiteralFlags = (node as any).numericLiteralFlags;
             }
             clone.pos = node.pos;
