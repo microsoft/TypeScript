@@ -17,6 +17,14 @@ namespace ts {
     let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
+    let inSpeculation = false;
+    const GIVE_UP_SPECULATION = {};
+    function giveUpSpeculation() {
+        if (inSpeculation) {
+            throw GIVE_UP_SPECULATION;
+        }
+    }
+
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
         if (kind === SyntaxKind.SourceFile) {
             return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
@@ -835,9 +843,13 @@ namespace ts {
             if (contextFlagsToClear) {
                 // clear the requested context flags
                 setContextFlag(/*val*/ false, contextFlagsToClear);
-                const result = func();
-                // restore the context flags we just cleared
-                setContextFlag(/*val*/ true, contextFlagsToClear);
+                let result: T;
+                try {
+                    result = func();
+                } finally {
+                    // restore the context flags we just cleared
+                    setContextFlag(/*val*/ true, contextFlagsToClear);
+                }
                 return result;
             }
 
@@ -856,9 +868,14 @@ namespace ts {
             if (contextFlagsToSet) {
                 // set the requested context flags
                 setContextFlag(/*val*/ true, contextFlagsToSet);
-                const result = func();
-                // reset the context flags we just set
-                setContextFlag(/*val*/ false, contextFlagsToSet);
+                let result: T;
+                try {
+                    result = func();
+                }
+                finally {
+                    // reset the context flags we just set
+                    setContextFlag(/*val*/ false, contextFlagsToSet);
+                }
                 return result;
             }
 
@@ -993,23 +1010,35 @@ namespace ts {
             // assert that invariant holds.
             const saveContextFlags = contextFlags;
 
+            const saveInSpeculation = inSpeculation;
+            inSpeculation = true;
+
             // If we're only looking ahead, then tell the scanner to only lookahead as well.
             // Otherwise, if we're actually speculatively parsing, then tell the scanner to do the
             // same.
-            const result = isLookAhead
-                ? scanner.lookAhead(callback)
-                : scanner.tryScan(callback);
-
-            Debug.assert(saveContextFlags === contextFlags);
-
-            // If our callback returned something 'falsy' or we're just looking ahead,
-            // then unconditionally restore us to where we were.
-            if (!result || isLookAhead) {
-                currentToken = saveToken;
-                parseDiagnostics.length = saveParseDiagnosticsLength;
-                parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
+            let result: T | undefined;
+            try {
+                result = isLookAhead
+                    ? scanner.lookAhead(callback)
+                    : scanner.tryScan(callback);
             }
+            catch (e) {
+                if (e !== GIVE_UP_SPECULATION) {
+                    throw e;
+                }
+            } finally {
+                inSpeculation = saveInSpeculation;
 
+                Debug.assert(saveContextFlags === contextFlags);
+
+                // If our callback returned something 'falsy' or we're just looking ahead,
+                // then unconditionally restore us to where we were.
+                if (!result || isLookAhead) {
+                    currentToken = saveToken;
+                    parseDiagnostics.length = saveParseDiagnosticsLength;
+                    parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
+                }
+            }
             return result;
         }
 
@@ -2243,7 +2272,7 @@ namespace ts {
                 isStartOfType(/*inStartOfParameter*/ true);
         }
 
-        function parseParameter(requireEqualsToken?: boolean): ParameterDeclaration {
+        function parseParameter(): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
                 node.name = createIdentifier(/*isIdentifier*/ true);
@@ -2272,7 +2301,7 @@ namespace ts {
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
-            node.initializer = parseInitializer(/*inParameter*/ true, requireEqualsToken);
+            node.initializer = parseInitializer(/*inParameter*/ true);
 
             return addJSDocComment(finishNode(node));
         }
@@ -2329,11 +2358,14 @@ namespace ts {
                 setYieldContext(!!(flags & SignatureFlags.Yield));
                 setAwaitContext(!!(flags & SignatureFlags.Await));
 
-                const result = parseDelimitedList(ParsingContext.Parameters,
-                                                  flags & SignatureFlags.JSDoc ? parseJSDocParameter : () => parseParameter(!!(flags & SignatureFlags.RequireCompleteParameterList)));
-
-                setYieldContext(savedYieldContext);
-                setAwaitContext(savedAwaitContext);
+                let result;
+                try {
+                    result = parseDelimitedList(ParsingContext.Parameters, flags & SignatureFlags.JSDoc ? parseJSDocParameter : parseParameter);
+                }
+                finally {
+                    setYieldContext(savedYieldContext);
+                    setAwaitContext(savedAwaitContext);
+                }
 
                 if (!parseExpected(SyntaxKind.CloseParenToken) && (flags & SignatureFlags.RequireCompleteParameterList)) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
@@ -2999,19 +3031,24 @@ namespace ts {
                 setDecoratorContext(/*val*/ false);
             }
 
-            let expr = parseAssignmentExpressionOrHigher();
-            let operatorToken: BinaryOperatorToken;
-            while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
-                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
+            let expr;
+            try {
+                expr = parseAssignmentExpressionOrHigher();
+                let operatorToken: BinaryOperatorToken;
+                while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
+                    expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
+                }
+            }
+            finally {
+                if (saveDecoratorContext) {
+                    setDecoratorContext(/*val*/ true);
+                }
             }
 
-            if (saveDecoratorContext) {
-                setDecoratorContext(/*val*/ true);
-            }
             return expr;
         }
 
-        function parseInitializer(inParameter: boolean, requireEqualsToken?: boolean): Expression {
+        function parseInitializer(inParameter: boolean): Expression | undefined {
             if (token() !== SyntaxKind.EqualsToken) {
                 // It's not uncommon during typing for the user to miss writing the '=' token.  Check if
                 // there is no newline after the last token and if we're on an expression.  If so, parse
@@ -3026,13 +3063,7 @@ namespace ts {
                     // do not try to parse initializer
                     return undefined;
                 }
-                if (inParameter && requireEqualsToken) {
-                    // = is required when speculatively parsing arrow function parameters,
-                    // so return a fake initializer as a signal that the equals token was missing
-                    const result = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics._0_expected, "=") as Identifier;
-                    result.escapedText = "= not found" as __String;
-                    return result;
-                }
+                giveUpSpeculation();
             }
 
             // Initializer[In, Yield] :
@@ -3407,8 +3438,7 @@ namespace ts {
             //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
-            if (!allowAmbiguity && ((token() !== SyntaxKind.EqualsGreaterThanToken && token() !== SyntaxKind.OpenBraceToken) ||
-                                    find(node.parameters, p => p.initializer && ts.isIdentifier(p.initializer) && p.initializer.escapedText === "= not found"))) {
+            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && token() !== SyntaxKind.OpenBraceToken) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                 return undefined;
             }
@@ -4509,25 +4539,28 @@ namespace ts {
             if (saveDecoratorContext) {
                 setDecoratorContext(/*val*/ false);
             }
+            let node;
+            try {
+                node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
+                node.modifiers = parseModifiers();
+                parseExpected(SyntaxKind.FunctionKeyword);
+                node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
 
-            const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
-            node.modifiers = parseModifiers();
-            parseExpected(SyntaxKind.FunctionKeyword);
-            node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
+                const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
+                const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
+                node.name =
+                    isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
+                        isGenerator ? doInYieldContext(parseOptionalIdentifier) :
+                            isAsync ? doInAwaitContext(parseOptionalIdentifier) :
+                                parseOptionalIdentifier();
 
-            const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
-            const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
-            node.name =
-                isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
-                    isGenerator ? doInYieldContext(parseOptionalIdentifier) :
-                        isAsync ? doInAwaitContext(parseOptionalIdentifier) :
-                            parseOptionalIdentifier();
-
-            fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
-            node.body = parseFunctionBlock(isGenerator | isAsync);
-
-            if (saveDecoratorContext) {
-                setDecoratorContext(/*val*/ true);
+                fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
+                node.body = parseFunctionBlock(isGenerator | isAsync);
+            }
+            finally {
+                if (saveDecoratorContext) {
+                    setDecoratorContext(/*val*/ true);
+                }
             }
 
             return addJSDocComment(finishNode(node));
@@ -4587,14 +4620,18 @@ namespace ts {
                 setDecoratorContext(/*val*/ false);
             }
 
-            const block = parseBlock(!!(flags & SignatureFlags.IgnoreMissingOpenBrace), diagnosticMessage);
-
-            if (saveDecoratorContext) {
-                setDecoratorContext(/*val*/ true);
+            let block;
+            try {
+                block = parseBlock(!!(flags & SignatureFlags.IgnoreMissingOpenBrace), diagnosticMessage);
             }
+            finally {
+                if (saveDecoratorContext) {
+                    setDecoratorContext(/*val*/ true);
+                }
 
-            setYieldContext(savedYieldContext);
-            setAwaitContext(savedAwaitContext);
+                setYieldContext(savedYieldContext);
+                setAwaitContext(savedAwaitContext);
+            }
 
             return block;
         }
@@ -5251,10 +5288,12 @@ namespace ts {
             else {
                 const savedDisallowIn = inDisallowInContext();
                 setDisallowInContext(inForStatementInitializer);
-
-                node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
-
-                setDisallowInContext(savedDisallowIn);
+                try {
+                    node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+                }
+                finally {
+                    setDisallowInContext(savedDisallowIn);
+                }
             }
 
             return finishNode(node);

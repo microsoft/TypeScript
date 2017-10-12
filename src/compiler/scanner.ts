@@ -1892,17 +1892,21 @@ namespace ts {
             const saveToken = token;
             const saveTokenValue = tokenValue;
             const savePrecedingLineBreak = precedingLineBreak;
-            const result = callback();
 
-            // If our callback returned something 'falsy' or we're just looking ahead,
-            // then unconditionally restore us to where we were.
-            if (!result || isLookahead) {
-                pos = savePos;
-                startPos = saveStartPos;
-                tokenPos = saveTokenPos;
-                token = saveToken;
-                tokenValue = saveTokenValue;
-                precedingLineBreak = savePrecedingLineBreak;
+            let result: T;
+            try {
+                result = callback();
+            } finally {
+                // If our callback returned something 'falsy' or we're just looking ahead,
+                // then unconditionally restore us to where we were.
+                if (!result || isLookahead) {
+                    pos = savePos;
+                    startPos = saveStartPos;
+                    tokenPos = saveTokenPos;
+                    token = saveToken;
+                    tokenValue = saveTokenValue;
+                    precedingLineBreak = savePrecedingLineBreak;
+                }
             }
             return result;
         }
