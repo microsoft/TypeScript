@@ -6,5 +6,5 @@
 //// class C<Y> implements I<Y> {[| |]}
 
 verify.rangeAfterCodeFix(`
-x: { readonly [K in keyof X]: Y[K]; };
+x: { readonly [K in keyof Y]: Y[K]; };
 `); 

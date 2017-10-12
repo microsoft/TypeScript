@@ -375,14 +375,24 @@ namespace ts.SignatureHelp {
                 const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
                 signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                 suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
-                const parameterParts = mapToDisplayParts(writer =>
-                    typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.thisParameter, candidateSignature.parameters, writer, invocation));
+                const parameterParts = mapToDisplayParts(writer => {
+                    const printer = createPrinter({ removeComments: true });
+                    const flags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors;
+                    const thisParameter = candidateSignature.thisParameter ? [typeChecker.symbolToParameterDeclaration(candidateSignature.thisParameter, invocation, flags)] : [];
+                    const params = createNodeArray([...thisParameter, ...map(candidateSignature.parameters, param => typeChecker.symbolToParameterDeclaration(param, invocation, flags))]);
+                    printer.writeList(ListFormat.CallExpressionArguments, params, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
+                });
                 addRange(suffixDisplayParts, parameterParts);
             }
             else {
                 isVariadic = candidateSignature.hasRestParameter;
-                const typeParameterParts = mapToDisplayParts(writer =>
-                    typeChecker.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
+                const typeParameterParts = mapToDisplayParts(writer => {
+                    if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
+                        const printer = createPrinter({ removeComments: true });
+                        const args = createNodeArray(map(candidateSignature.typeParameters, p => typeChecker.typeParameterToDeclaration(p, invocation)));
+                        printer.writeList(ListFormat.TypeParameters, args, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
+                    }
+                });
                 addRange(prefixDisplayParts, typeParameterParts);
                 prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
@@ -390,8 +400,16 @@ namespace ts.SignatureHelp {
                 suffixDisplayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
 
-            const returnTypeParts = mapToDisplayParts(writer =>
-                typeChecker.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
+            const returnTypeParts = mapToDisplayParts(writer => {
+                writer.writePunctuation(":");
+                writer.writeSpace(" ");
+                if (candidateSignature.typePredicate) {
+                    typeChecker.typePredicateToString(candidateSignature.typePredicate, invocation, /*flags*/ undefined, writer);
+                }
+                else {
+                    typeChecker.typeToString(typeChecker.getReturnTypeOfSignature(candidateSignature), invocation, /*flags*/ undefined, writer);
+                }
+            });
             addRange(suffixDisplayParts, returnTypeParts);
 
             return {
@@ -415,8 +433,11 @@ namespace ts.SignatureHelp {
         return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
 
         function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
-            const displayParts = mapToDisplayParts(writer =>
-                typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
+            const displayParts = mapToDisplayParts(writer => {
+                const printer = createPrinter({ removeComments: true });
+                const param = typeChecker.symbolToParameterDeclaration(parameter, invocation, NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors);
+                printer.writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
+            });
 
             return {
                 name: parameter.name,
@@ -427,8 +448,11 @@ namespace ts.SignatureHelp {
         }
 
         function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
-            const displayParts = mapToDisplayParts(writer =>
-                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
+            const displayParts = mapToDisplayParts(writer => {
+                const printer = createPrinter({ removeComments: true });
+                const param = typeChecker.typeParameterToDeclaration(typeParameter, invocation);
+                printer.writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
+            });
 
             return {
                 name: typeParameter.symbol.name,

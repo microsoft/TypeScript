@@ -183,7 +183,7 @@ namespace ts.SymbolDisplay {
                                 displayParts.push(spacePart());
                             }
                             if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous) && type.symbol) {
-                                addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
                             }
                             addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);
                             break;
@@ -404,7 +404,9 @@ namespace ts.SymbolDisplay {
                         // If the type is type parameter, format it specially
                         if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                             const typeParameterParts = mapToDisplayParts(writer => {
-                                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
+                                const printer = createPrinter({ removeComments: true });
+                                const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration);
+                                printer.writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                             });
                             addRange(displayParts, typeParameterParts);
                         }
@@ -474,7 +476,7 @@ namespace ts.SymbolDisplay {
 
         function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {
             const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
-                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
+                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
             addRange(displayParts, fullSymbolDisplayParts);
         }
 
@@ -521,7 +523,9 @@ namespace ts.SymbolDisplay {
 
         function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
             const typeParameterParts = mapToDisplayParts(writer => {
-                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
+                const printer = createPrinter({ removeComments: true });
+                const params = typeChecker.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration);
+                printer.writeList(ListFormat.TypeParameters, params, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
             });
             addRange(displayParts, typeParameterParts);
         }

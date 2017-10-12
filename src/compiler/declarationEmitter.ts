@@ -20,14 +20,14 @@ namespace ts {
 
     type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
 
-    interface EmitTextWriterWithSymbolWriter extends EmitTextWriter, SymbolWriter {
+    interface EmitTextWriterWithSymbolWriter extends EmitTextWriter {
         getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
     }
 
     interface SymbolAccessibilityDiagnostic {
         errorNode: Node;
         diagnosticMessage: DiagnosticMessage;
-        typeName?: DeclarationName;
+        typeName?: DeclarationName | QualifiedName;
     }
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {

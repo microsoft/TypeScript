@@ -1102,6 +1102,7 @@ namespace ts {
         let indent: number;
 
         resetWriter();
+        const unknownWrite = (text: string) => writeKind(text, SymbolDisplayPartKind.text);
         return {
             displayParts: () => displayParts,
             writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
@@ -1111,11 +1112,21 @@ namespace ts {
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
             writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
+            writeLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeSymbol,
             writeLine,
+            write: unknownWrite,
+            writeTextOfNode: unknownWrite,
+            getText: () => "",
+            getTextPos: () => 0,
+            getColumn: () => 0,
+            getLine: () => 0,
+            isAtStartOfLine: () => false,
+            rawWrite: noop,
+            getIndent: () => indent,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
-            clear: resetWriter,
+            reset: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
             reportPrivateInBaseOfClassExpression: noop,
@@ -1229,26 +1240,26 @@ namespace ts {
             return displayPartWriter.displayParts();
         }
         finally {
-            displayPartWriter.clear();
+            displayPartWriter.reset();
         }
     }
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            typechecker.typeToString(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         });
     }
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags);
+            typeChecker.symbolToString(symbol, enclosingDeclaration, meaning, flags, writer);
         });
     }
 
     export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
+            typechecker.signatureToString(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
         });
     }
 
