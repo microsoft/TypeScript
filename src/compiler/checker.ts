@@ -15643,32 +15643,28 @@ namespace ts {
             return getInferredTypes(context);
         }
 
-        function checkTypeArguments(signature: Signature, typeArguments: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | false {
+        function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | false {
             const isJavascript = isInJavaScriptFile(signature.declaration);
             const typeParameters = signature.typeParameters;
-            const typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
+            const typeArgumentTypes = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
             let mapper: TypeMapper;
-            for (let i = 0; i < typeArguments.length; i++) {
+            for (let i = 0; i < typeArgumentNodes.length; i++) {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                if (constraint) {
-                    let errorInfo: DiagnosticMessageChain;
-                    let typeArgumentHeadMessage = Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
-                    if (reportErrors && headMessage) {
-                        errorInfo = chainDiagnosticMessages(errorInfo, typeArgumentHeadMessage);
-                        typeArgumentHeadMessage = headMessage;
-                    }
-                    if (!mapper) {
-                        mapper = createTypeMapper(typeParameters, typeArgumentTypes);
-                    }
-                    const typeArgument = typeArgumentTypes[i];
-                    if (!checkTypeAssignableTo(
-                        typeArgument,
-                        getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
-                        reportErrors ? typeArguments[i] : undefined,
-                        typeArgumentHeadMessage,
-                        errorInfo)) {
-                        return false;
-                    }
+                if (!constraint) continue;
+
+                const errorInfo = reportErrors && headMessage && chainDiagnosticMessages(undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                const typeArgumentHeadMessage = headMessage || Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
+                if (!mapper) {
+                    mapper = createTypeMapper(typeParameters, typeArgumentTypes);
+                }
+                const typeArgument = typeArgumentTypes[i];
+                if (!checkTypeAssignableTo(
+                    typeArgument,
+                    getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
+                    reportErrors ? typeArgumentNodes[i] : undefined,
+                    typeArgumentHeadMessage,
+                    errorInfo)) {
+                    return false;
                 }
             }
             return typeArgumentTypes;
