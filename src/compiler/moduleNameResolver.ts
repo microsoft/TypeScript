@@ -901,7 +901,7 @@ namespace ts {
         failedLookupLocations: Push<string>,
         onlyRecordFailures: boolean,
         { host, traceEnabled }: ModuleResolutionState,
-    ): { packageJsonContent: PackageJson | undefined, packageId: PackageId | undefined } {
+    ): { found: boolean, packageJsonContent: PackageJson | undefined, packageId: PackageId | undefined } | undefined {
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(nodeModuleDirectory, host);
         const packageJsonPath = pathToPackageJson(nodeModuleDirectory);
         if (directoryExists && host.fileExists(packageJsonPath)) {
@@ -912,7 +912,7 @@ namespace ts {
             const packageId: PackageId = typeof packageJsonContent.name === "string" && typeof packageJsonContent.version === "string"
                 ? { name: packageJsonContent.name, subModuleName, version: packageJsonContent.version }
                 : undefined;
-            return { packageJsonContent, packageId };
+            return { found: true, packageJsonContent, packageId };
         }
         else {
             if (directoryExists && traceEnabled) {
@@ -920,7 +920,7 @@ namespace ts {
             }
             // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
             failedLookupLocations.push(packageJsonPath);
-            return { packageJsonContent: undefined, packageId: undefined };
+            return { found: false, packageJsonContent: undefined, packageId: undefined };
         }
     }
 
@@ -976,10 +976,17 @@ namespace ts {
     }
 
     function loadModuleFromNodeModulesFolder(extensions: Extensions, moduleName: string, nodeModulesFolder: string, nodeModulesFolderExists: boolean, failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
-        const { packageName, rest } = getPackageName(moduleName);
-        const packageRootPath = combinePaths(nodeModulesFolder, packageName);
-        const { packageJsonContent, packageId } = getPackageJsonInfo(packageRootPath, rest, failedLookupLocations, !nodeModulesFolderExists, state);
         const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
+        // First look for a nested package.json, as in `node_modules/foo/bar/package.json`.
+        let packageInfo = getPackageJsonInfo(candidate, "", failedLookupLocations, /*onlyRecordFailures*/ !nodeModulesFolderExists, state);
+        if (!packageInfo.found) {
+            const { packageName, rest } = getPackageName(moduleName);
+            if (rest !== "") { // If "rest" is empty, we just did this search above.
+                const packageRootPath = combinePaths(nodeModulesFolder, packageName);
+                packageInfo = getPackageJsonInfo(packageRootPath, rest, failedLookupLocations, !nodeModulesFolderExists, state);
+            }
+        }
+        const { packageJsonContent, packageId } = packageInfo;
         const pathAndExtension = loadModuleFromFile(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state) ||
             loadNodeModuleFromDirectoryWorker(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state, packageJsonContent);
         return withPackageId(packageId, pathAndExtension);
