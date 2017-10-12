@@ -1155,14 +1155,15 @@ namespace ts {
             if (!node.members) return;
             const result: PropertyDeclaration[] = [];
             for (let member of node.members) {
-                if (!isStatic && isComputedNameWhichRequiresHoisting(member, isStatic)) {
+                if (!isStatic && hasComputedNameWhichRequiresHoisting(member)) {
+                    const memberProp = member as PropertyDeclaration;
                     const tempId = getGeneratedNameForNode(member);
                     const hoistedExpression = createAssignment(tempId, (member.name as ComputedPropertyName).expression);
-                    member = updateProperty(member, member.decorators, member.modifiers, createComputedPropertyName(tempId), member.questionToken, member.type, member.initializer);
+                    member = updateProperty(memberProp, member.decorators, member.modifiers, createComputedPropertyName(tempId), memberProp.questionToken, memberProp.type, memberProp.initializer);
                     hoistedComputedNames.push(hoistedExpression);
                 }
                 if (isInitializedProperty(member, isStatic)) {
-                    result.push(member);
+                    result.push(member as PropertyDeclaration);
                 }
                 if (isDecoratedClassElement(member, node, isStatic)) {
                     decoratedMembers.push(member);
@@ -1176,7 +1177,7 @@ namespace ts {
          *
          * @param member The class element node.
          */
-        function isInstanceInitializedProperty(member: ClassElement): member is PropertyDeclaration {
+        function isInstanceInitializedProperty(member: ClassElement) {
             return isInitializedProperty(member, /*isStatic*/ false);
         }
 
@@ -1186,15 +1187,15 @@ namespace ts {
          * @param member The class element node.
          * @param isStatic A value indicating whether the member should be a static or instance member.
          */
-        function isInitializedProperty(member: ClassElement, isStatic: boolean): member is PropertyDeclaration {
+        function isInitializedProperty(member: ClassElement, isStatic: boolean) {
             return member.kind === SyntaxKind.PropertyDeclaration
                 && isStatic === hasModifier(member, ModifierFlags.Static)
                 && (<PropertyDeclaration>member).initializer !== undefined;
         }
 
-        function isComputedNameWhichRequiresHoisting(member: ClassElement, isStatic: boolean): member is PropertyDeclaration {
+        function hasComputedNameWhichRequiresHoisting(member: ClassElement) {
             return member.kind === SyntaxKind.PropertyDeclaration
-                && isStatic === hasModifier(member, ModifierFlags.Static)
+                && !hasModifier(member, ModifierFlags.Static)
                 && isComputedPropertyName(member.name)
                 && !isSimpleComputedPropertyName(member.name.expression);
         }
