@@ -892,9 +892,7 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
-                fileName, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.directoryStructureHost
-            );
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
             }
@@ -902,7 +900,7 @@ namespace ts.server {
         }
 
         getScriptInfo(uncheckedFileName: string) {
-            return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
+            return this.projectService.getScriptInfo(uncheckedFileName);
         }
 
         filesToString(writeProjectFileNames: boolean) {
@@ -1130,8 +1128,8 @@ namespace ts.server {
 
         private plugins: PluginModule[] = [];
 
-        /** Used for configured projects which may have multiple open roots */
-        openRefCount = 0;
+        /** Ref count to the project when opened from external project */
+        private externalProjectRefCount = 0;
 
         private projectErrors: Diagnostic[];
 
@@ -1342,17 +1340,43 @@ namespace ts.server {
             super.close();
         }
 
-        addOpenRef() {
-            this.openRefCount++;
+        /* @internal */
+        addExternalProjectReference() {
+            this.externalProjectRefCount++;
         }
 
-        deleteOpenRef() {
-            this.openRefCount--;
-            return this.openRefCount;
+        /* @internal */
+        deleteExternalProjectReference() {
+            this.externalProjectRefCount--;
         }
 
+        /** Returns true if the project is needed by any of the open script info/external project */
+        /* @internal */
         hasOpenRef() {
-            return !!this.openRefCount;
+            if (!!this.externalProjectRefCount) {
+                return true;
+            }
+
+            // Closed project doesnt have any reference
+            if (this.isClosed()) {
+                return false;
+            }
+
+            const configFileExistenceInfo = this.projectService.getConfigFileExistenceInfo(this);
+            if (this.projectService.hasPendingProjectUpdate(this)) {
+                // If there is pending update for this project,
+                // we dont know if this project would be needed by any of the open files impacted by this config file
+                // In that case keep the project alive if there are open files impacted by this project
+                return !!configFileExistenceInfo.openFilesImpactedByConfigFile.size;
+            }
+
+            // If there is no pending update for this project,
+            // We know exact set of open files that get impacted by this configured project as the files in the project
+            // The project is referenced only if open files impacted by this project are present in this project
+            return forEachEntry(
+                configFileExistenceInfo.openFilesImpactedByConfigFile,
+                (_value, infoPath) => this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path))
+            ) || false;
         }
 
         getEffectiveTypeRoots() {
