@@ -279,6 +279,7 @@ namespace ts {
         let output = "";
         for (const diagnostic of diagnostics) {
             let context = "";
+            const categoryColor = getCategoryFormat(diagnostic.category);
             if (diagnostic.file) {
                 const { start, length, file } = diagnostic;
                 const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
@@ -313,7 +314,7 @@ namespace ts {
 
                     // Output the gutter and the error span for the line using tildes.
                     context += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    context += redForegroundEscapeSequence;
+                    context += categoryColor;
                     if (i === firstLine) {
                         // If we're on the last line, then limit it to the last character of the last line.
                         // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
@@ -336,7 +337,6 @@ namespace ts {
                 output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
             }
 
-            const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
             output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }`;
 
