@@ -15652,7 +15652,7 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (!constraint) continue;
 
-                const errorInfo = reportErrors && headMessage && chainDiagnosticMessages(undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                const errorInfo = reportErrors && headMessage && chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 const typeArgumentHeadMessage = headMessage || Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
                 if (!mapper) {
                     mapper = createTypeMapper(typeParameters, typeArgumentTypes);
