@@ -196,6 +196,9 @@ namespace ts.server {
         }
 
         /*@internal*/
+        readonly currentDirectory: string;
+
+        /*@internal*/
         constructor(
             /*@internal*/readonly projectName: string,
             readonly projectKind: ProjectKind,
@@ -206,7 +209,8 @@ namespace ts.server {
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
             /*@internal*/public directoryStructureHost: DirectoryStructureHost,
-            rootDirectoryForResolution: string | undefined) {
+            currentDirectory: string | undefined) {
+            this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
 
             this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
             if (!this.compilerOptions) {
@@ -229,8 +233,9 @@ namespace ts.server {
                 this.realpath = path => host.realpath(path);
             }
 
+            // Use the current directory as resolution root only if the project created using current directory string
+            this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory);
             this.languageService = createLanguageService(this, this.documentRegistry);
-            this.resolutionCache = createResolutionCache(this, rootDirectoryForResolution);
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
             }
@@ -301,11 +306,11 @@ namespace ts.server {
         }
 
         getCurrentDirectory(): string {
-            return this.directoryStructureHost.getCurrentDirectory();
+            return this.currentDirectory;
         }
 
         getDefaultLibFileName() {
-            const nodeModuleBinDir = getDirectoryPath(normalizePath(this.projectService.host.getExecutingFilePath()));
+            const nodeModuleBinDir = getDirectoryPath(normalizePath(this.projectService.getExecutingFilePath()));
             return combinePaths(nodeModuleBinDir, getDefaultLibFileName(this.compilerOptions));
         }
 
@@ -448,9 +453,8 @@ namespace ts.server {
             this.ensureBuilder();
             const { emitSkipped, outputFiles } = this.builder.emitFile(this.program, scriptInfo.path);
             if (!emitSkipped) {
-                const projectRootPath = this.getProjectRootPath();
                 for (const outputFile of outputFiles) {
-                    const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, projectRootPath ? projectRootPath : getDirectoryPath(scriptInfo.fileName));
+                    const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, this.currentDirectory);
                     writeFile(outputFileAbsoluteFileName, outputFile.text, outputFile.writeByteOrderMark);
                 }
             }
@@ -479,7 +483,6 @@ namespace ts.server {
         getProjectName() {
             return this.projectName;
         }
-        abstract getProjectRootPath(): string | undefined;
         abstract getTypeAcquisition(): TypeAcquisition;
 
         getExternalFiles(): SortedReadonlyArray<string> {
@@ -495,25 +498,23 @@ namespace ts.server {
 
         close() {
             if (this.program) {
-                // if we have a program - release all files that are enlisted in program
+                // if we have a program - release all files that are enlisted in program but arent root
+                // The releasing of the roots happens later
+                // The project could have pending update remaining and hence the info could be in the files but not in program graph
                 for (const f of this.program.getSourceFiles()) {
-                    const info = this.projectService.getScriptInfo(f.fileName);
-                    // We might not find the script info in case its not associated with the project any more
-                    // and project graph was not updated (eg delayed update graph in case of files changed/deleted on the disk)
-                    if (info) {
-                        info.detachFromProject(this);
-                    }
+                    this.detachScriptInfoIfNotRoot(f.fileName);
                 }
             }
-            if (!this.program || !this.languageServiceEnabled) {
-                // release all root files either if there is no program or language service is disabled.
-                // in the latter case set of root files can be larger than the set of files in program.
-                for (const root of this.rootFiles) {
-                    root.detachFromProject(this);
-                }
+            // Release external files
+            forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
+            // Always remove root files from the project
+            for (const root of this.rootFiles) {
+                root.detachFromProject(this);
             }
+
             this.rootFiles = undefined;
             this.rootFilesMap = undefined;
+            this.externalFiles = undefined;
             this.program = undefined;
             this.builder = undefined;
             this.resolutionCache.clear();
@@ -530,6 +531,15 @@ namespace ts.server {
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
             this.languageService = undefined;
+        }
+
+        private detachScriptInfoIfNotRoot(uncheckedFilename: string) {
+            const info = this.projectService.getScriptInfo(uncheckedFilename);
+            // We might not find the script info in case its not associated with the project any more
+            // and project graph was not updated (eg delayed update graph in case of files changed/deleted on the disk)
+            if (info && !this.isRoot(info)) {
+                info.detachFromProject(this);
+            }
         }
 
         isClosed() {
@@ -561,7 +571,7 @@ namespace ts.server {
             return map(this.program.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
                 if (!scriptInfo) {
-                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' is missing.`);
+                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' is missing.`);
                 }
                 return scriptInfo;
             });
@@ -732,7 +742,6 @@ namespace ts.server {
          */
         updateGraph(): boolean {
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
-            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
 
             let hasChanges = this.updateGraphWorker();
 
@@ -792,9 +801,10 @@ namespace ts.server {
 
         private updateGraphWorker() {
             const oldProgram = this.program;
-
+            Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
+            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram();
             this.resolutionCache.finishCachingPerDirectoryResolution();
@@ -1042,8 +1052,8 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
-            public readonly projectRootPath: string | undefined,
-            rootDirectoryForResolution: string | undefined) {
+            readonly projectRootPath: string | undefined,
+            currentDirectory: string | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -1053,7 +1063,7 @@ namespace ts.server {
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 projectService.host,
-                rootDirectoryForResolution);
+                currentDirectory);
         }
 
         addRoot(info: ScriptInfo) {
@@ -1080,12 +1090,6 @@ namespace ts.server {
             // - other wise it has single root if it has single root script info
             return (!this.projectRootPath && !this.projectService.useSingleInferredProject) ||
                 this.getRootScriptInfos().length === 1;
-        }
-
-        getProjectRootPath() {
-            return this.projectRootPath ||
-                // Single inferred project does not have a project root.
-                !this.projectService.useSingleInferredProject && getDirectoryPath(this.getRootFiles()[0]);
         }
 
         close() {
@@ -1183,7 +1187,7 @@ namespace ts.server {
 
             // Search our peer node_modules, then any globally-specified probe paths
             // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-            const searchPaths = [combinePaths(host.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
+            const searchPaths = [combinePaths(this.projectService.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
 
             if (this.projectService.allowLocalPluginLoads) {
                 const local = getDirectoryPath(this.canonicalConfigFilePath);
@@ -1263,22 +1267,18 @@ namespace ts.server {
             }
         }
 
-        getProjectRootPath() {
-            return getDirectoryPath(this.getConfigFilePath());
-        }
-
         /**
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic> {
-            return filter(this.projectErrors, diagnostic => !diagnostic.file);
+            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
         }
 
         /**
          * Get all the project errors
          */
         getAllProjectErrors(): ReadonlyArray<Diagnostic> {
-            return this.projectErrors;
+            return this.projectErrors || emptyArray;
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {
@@ -1327,14 +1327,15 @@ namespace ts.server {
         }
 
         close() {
-            super.close();
-
             if (this.configFileWatcher) {
                 this.configFileWatcher.close();
                 this.configFileWatcher = undefined;
             }
 
             this.stopWatchingWildCards();
+            this.projectErrors = undefined;
+            this.configFileSpecs = undefined;
+            super.close();
         }
 
         addOpenRef() {
@@ -1379,13 +1380,14 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,
-            private readonly projectFilePath?: string) {
+            projectFilePath?: string) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
                 documentRegistry,
                 /*hasExplicitListOfFiles*/ true,
-                languageServiceEnabled, compilerOptions,
+                languageServiceEnabled,
+                compilerOptions,
                 compileOnSaveEnabled,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
@@ -1393,16 +1395,6 @@ namespace ts.server {
 
         getExcludedFiles() {
             return this.excludedFiles;
-        }
-
-        getProjectRootPath() {
-            if (this.projectFilePath) {
-                return getDirectoryPath(this.projectFilePath);
-            }
-            // if the projectFilePath is not given, we make the assumption that the project name
-            // is the path of the project file. AS the project name is provided by VS, we need to
-            // normalize slashes before using it as a file name.
-            return getDirectoryPath(normalizeSlashes(this.getProjectName()));
         }
 
         getTypeAcquisition() {

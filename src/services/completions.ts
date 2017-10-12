@@ -1195,6 +1195,11 @@ namespace ts.Completions {
                         if (isClassLike(location)) {
                             return location;
                         }
+                        // class c { method() { } b| }
+                        if (isFromClassElementDeclaration(location) &&
+                            (location.parent as ClassElement).name === location) {
+                            return location.parent.parent as ClassLikeDeclaration;
+                        }
                         break;
 
                     default:

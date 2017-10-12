@@ -4241,6 +4241,12 @@ namespace ts {
         return find(tags, doc => doc.kind === kind);
     }
 
+    /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
+    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> | undefined {
+        const tags = getJSDocTags(node);
+        return filter(tags, doc => doc.kind === kind);
+    }
+
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.
@@ -5641,6 +5647,14 @@ namespace ts {
     /* @internal */
     export function isJSDocTag(node: Node): boolean {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
+    }
+
+    export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor;
+    }
+
+    export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
+        return node.kind === SyntaxKind.GetAccessor;
     }
 
     /** True if has jsdoc nodes attached to it. */

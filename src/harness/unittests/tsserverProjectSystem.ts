@@ -132,16 +132,77 @@ namespace ts.projectSystem {
         return map(fileNames, toExternalFile);
     }
 
-    class TestServerEventManager {
-        public events: server.ProjectServiceEvent[] = [];
+    export function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
+        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, ...nonZeroStats };
+    }
 
-        handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
-            this.events.push(event);
+    export class TestServerEventManager {
+        private events: server.ProjectServiceEvent[] = [];
+        readonly session: TestSession;
+        readonly service: server.ProjectService;
+        readonly host: projectSystem.TestServerHost;
+        constructor(files: projectSystem.FileOrFolder[]) {
+            this.host = createServerHost(files);
+            this.session = createSession(this.host, {
+                canUseEvents: true,
+                eventHandler: event => this.events.push(event),
+            });
+            this.service = this.session.getProjectService();
         }
 
-        checkEventCountOfType(eventType: "configFileDiag", expectedCount: number) {
-            const eventsOfType = filter(this.events, e => e.eventName === eventType);
-            assert.equal(eventsOfType.length, expectedCount, `The actual event counts of type ${eventType} is ${eventsOfType.length}, while expected ${expectedCount}`);
+        getEvents(): ReadonlyArray<server.ProjectServiceEvent> {
+            const events = this.events;
+            this.events = [];
+            return events;
+        }
+
+        getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
+            let eventData: T["data"];
+            filterMutate(this.events, e => {
+                if (e.eventName === eventName) {
+                    if (eventData !== undefined) {
+                        assert(false, "more than one event found");
+                    }
+                    eventData = e.data;
+                    return false;
+                }
+                return true;
+            });
+            assert.isDefined(eventData);
+            return eventData;
+        }
+
+        hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {
+            this.events.forEach(event => assert.notEqual(event.eventName, eventName));
+        }
+
+        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string) {
+            const eventData = this.getEvent<server.ConfigFileDiagEvent>(server.ConfigFileDiagEvent);
+            assert.equal(eventData.configFileName, configFileName);
+            assert.equal(eventData.triggerFile, triggerFile);
+        }
+
+        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
+            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
+                projectId: Harness.mockHash(configFile || "/tsconfig.json"),
+                fileStats: fileStats({ ts: 1 }),
+                compilerOptions: {},
+                extends: false,
+                files: false,
+                include: false,
+                exclude: false,
+                compileOnSave: false,
+                typeAcquisition: {
+                    enable: false,
+                    exclude: false,
+                    include: false,
+                },
+                configFileName: "tsconfig.json",
+                projectType: "configured",
+                languageServiceEnabled: true,
+                version: ts.version,
+                ...partial,
+            });
         }
     }
 
@@ -352,8 +413,6 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
-    const typeRootFromTsserverLocation = "/node_modules/@types";
-
     export function getTypeRootsFromLocation(currentDirectory: string) {
         currentDirectory = normalizePath(currentDirectory);
         const result: string[] = [];
@@ -401,7 +460,7 @@ namespace ts.projectSystem {
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, ["/a/b/c", typeRootFromTsserverLocation], /*recursive*/ true);
+            checkWatchedDirectories(host, ["/a/b/c", ...getTypeRootsFromLocation(getDirectoryPath(appFile.path))], /*recursive*/ true);
         });
 
         it("can handle tsconfig file name with difference casing", () => {
@@ -463,7 +522,7 @@ namespace ts.projectSystem {
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
-            assert.isTrue(!configFileErrors, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
+            assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
             checkNumberOfInferredProjects(projectService, 0);
             checkNumberOfConfiguredProjects(projectService, 1);
 
@@ -503,7 +562,7 @@ namespace ts.projectSystem {
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
-            assert.isTrue(!configFileErrors, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
+            assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
             checkNumberOfInferredProjects(projectService, 0);
             checkNumberOfConfiguredProjects(projectService, 1);
 
@@ -2399,6 +2458,43 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
 
         });
+
+        it("Failed lookup locations are uses parent most node_modules directory", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/src/file1.ts",
+                content: 'import { classc } from "module1"'
+            };
+            const module1: FileOrFolder = {
+                path: "/a/b/node_modules/module1/index.d.ts",
+                content: `import { class2 } from "module2";
+                          export classc { method2a(): class2; }`
+            };
+            const module2: FileOrFolder = {
+                path: "/a/b/node_modules/module2/index.d.ts",
+                content: "export class2 { method2() { return 10; } }"
+            };
+            const module3: FileOrFolder = {
+                path: "/a/b/node_modules/module/node_modules/module3/index.d.ts",
+                content: "export class3 { method2() { return 10; } }"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/src/tsconfig.json",
+                content: JSON.stringify({ files: [file1.path] })
+            };
+            const files = [file1, module1, module2, module3, configFile, libFile];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects.get(configFile.path);
+            assert.isDefined(project);
+            checkProjectActualFiles(project, [file1.path, libFile.path, module1.path, module2.path, configFile.path]);
+            checkWatchedFiles(host, [libFile.path, module1.path, module2.path, configFile.path]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            const watchedRecursiveDirectories = getTypeRootsFromLocation("/a/b/src");
+            watchedRecursiveDirectories.push("/a/b/src", "/a/b/node_modules");
+            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+        });
     });
 
     describe("Proper errors", () => {
@@ -2882,6 +2978,52 @@ namespace ts.projectSystem {
         function checkSnapLength(snap: IScriptSnapshot, expectedLength: number) {
             assert.equal(snap.getLength(), expectedLength, "Incorrect snapshot size");
         }
+
+        function verifyOpenFileWorks(useCaseSensitiveFileNames: boolean) {
+            const file1: FileOrFolder = {
+                path: "/a/b/src/app.ts",
+                content: "let x = 10;"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/B/lib/module2.ts",
+                content: "let z = 10;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: ""
+            };
+            const configFile2: FileOrFolder = {
+                path: "/a/tsconfig.json",
+                content: ""
+            };
+            const host = createServerHost([file1, file2, configFile, configFile2], {
+                useCaseSensitiveFileNames
+            });
+            const service = createProjectService(host);
+
+            // Open file1 -> configFile
+            verifyConfigFileName(file1, "/a", configFile);
+            verifyConfigFileName(file1, "/a/b", configFile);
+            verifyConfigFileName(file1, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
+
+            // Open file2 use root "/a/b"
+            verifyConfigFileName(file2, "/a", useCaseSensitiveFileNames ? configFile2 : configFile);
+            verifyConfigFileName(file2, "/a/b", useCaseSensitiveFileNames ? undefined : configFile);
+            verifyConfigFileName(file2, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
+
+            function verifyConfigFileName(file: FileOrFolder, projectRoot: string, expectedConfigFile: FileOrFolder | undefined) {
+                const { configFileName } = service.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRoot);
+                assert.equal(configFileName, expectedConfigFile && expectedConfigFile.path);
+                service.closeClientFile(file.path);
+            }
+        }
+        it("works when project root is used with case-sensitive system", () => {
+            verifyOpenFileWorks(/*useCaseSensitiveFileNames*/ true);
+        });
+
+        it("works when project root is used with case-insensitive system", () => {
+            verifyOpenFileWorks(/*useCaseSensitiveFileNames*/ false);
+        });
     });
 
     describe("Language service", () => {
@@ -3078,7 +3220,6 @@ namespace ts.projectSystem {
     describe("Configure file diagnostics events", () => {
 
         it("are generated when the config file has errors", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3092,26 +3233,12 @@ namespace ts.projectSystem {
                     }
                 }`
             };
-
-            const host = createServerHost([file, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
-
-            for (const event of serverEventManager.events) {
-                if (event.eventName === "configFileDiag") {
-                    assert.equal(event.data.configFileName, configFile.path);
-                    assert.equal(event.data.triggerFile, file.path);
-                    return;
-                }
-            }
+            const serverEventManager = new TestServerEventManager([file, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
         });
 
         it("are generated when the config file doesn't have errors", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3122,18 +3249,12 @@ namespace ts.projectSystem {
                     "compilerOptions": {}
                 }`
             };
-
-            const host = createServerHost([file, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+            const serverEventManager = new TestServerEventManager([file, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
         });
 
         it("are generated when the config file changes", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3145,29 +3266,70 @@ namespace ts.projectSystem {
                 }`
             };
 
-            const host = createServerHost([file, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+            const serverEventManager = new TestServerEventManager([file, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
 
             configFile.content = `{
                 "compilerOptions": {
                     "haha": 123
                 }
             }`;
-            host.reloadFS([file, configFile]);
-            host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkEventCountOfType("configFileDiag", 2);
+            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
 
             configFile.content = `{
                 "compilerOptions": {}
             }`;
-            host.reloadFS([file, configFile]);
-            host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkEventCountOfType("configFileDiag", 3);
+            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
+        });
+
+        it("are not generated when the config file doesnot include file opened and config file has errors", () => {
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const file2 = {
+                path: "/a/b/test.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    },
+                    "files": ["app.ts"]
+                }`
+            };
+            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("are not generated when the config file doesnot include file opened and doesnt contain any errors", () => {
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const file2 = {
+                path: "/a/b/test.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "files": ["app.ts"]
+                }`
+            };
+
+            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
         });
     });
 
@@ -4331,7 +4493,7 @@ namespace ts.projectSystem {
 
             function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
                 const calledMap = calledMaps[callback];
-                assert.equal(calledMap.size, expectedKeys.size, `${callback}: incorrect size of map: Actual keys: ${arrayFrom(calledMap.keys())} Expected: ${arrayFrom(expectedKeys.keys())}`);
+                ts.TestFSWithWatch.verifyMapSize(callback, calledMap, arrayFrom(expectedKeys.keys()));
                 expectedKeys.forEach((called, name) => {
                     assert.isTrue(calledMap.has(name), `${callback} is expected to contain ${name}, actual keys: ${arrayFrom(calledMap.keys())}`);
                     assert.equal(calledMap.get(name).length, called, `${callback} is expected to be called ${called} times with ${name}. Actual entry: ${calledMap.get(name)}`);
@@ -4413,6 +4575,7 @@ namespace ts.projectSystem {
             }
             const f2Lookups = getLocationsForModuleLookup("f2");
             callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, f2Lookups, 1);
+            const typeRootLocations = getTypeRootsFromLocation(getDirectoryPath(root.path));
             const f2DirLookups = getLocationsForDirectoryLookup();
             callsTrackingHost.verifyCalledOnEachEntry(CalledMapsWithSingleArg.directoryExists, f2DirLookups);
             callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.getDirectories);
@@ -4423,7 +4586,7 @@ namespace ts.projectSystem {
             verifyImportedDiagnostics();
             const f1Lookups = f2Lookups.map(s => s.replace("f2", "f1"));
             f1Lookups.length = f1Lookups.indexOf(imported.path) + 1;
-            const f1DirLookups = ["/c/d", "/c", typeRootFromTsserverLocation];
+            const f1DirLookups = ["/c/d", "/c", ...typeRootLocations];
             vertifyF1Lookups();
 
             // setting compiler options discards module resolution cache
@@ -4475,7 +4638,7 @@ namespace ts.projectSystem {
             function getLocationsForDirectoryLookup() {
                 const result = createMap<number>();
                 // Type root
-                result.set(typeRootFromTsserverLocation, 1);
+                typeRootLocations.forEach(location => result.set(location, 1));
                 forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
                     // To resolve modules
                     result.set(ancestor, 2);

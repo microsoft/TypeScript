@@ -95,7 +95,7 @@ namespace ts.TestFSWithWatch {
         }
     }
 
-    function getDiffInKeys(map: Map<any>, expectedKeys: ReadonlyArray<string>) {
+    function getDiffInKeys<T>(map: Map<T>, expectedKeys: ReadonlyArray<string>) {
         if (map.size === expectedKeys.length) {
             return "";
         }
@@ -122,8 +122,12 @@ namespace ts.TestFSWithWatch {
         return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
     }
 
-    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: ReadonlyArray<string>) {
+    export function verifyMapSize(caption: string, map: Map<any>, expectedKeys: ReadonlyArray<string>) {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
+    }
+
+    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: ReadonlyArray<string>) {
+        verifyMapSize(caption, map, expectedKeys);
         for (const name of expectedKeys) {
             assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
@@ -212,13 +216,13 @@ namespace ts.TestFSWithWatch {
         directoryName: string;
     }
 
-    export class TestServerHost implements server.ServerHost {
+    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
         args: string[] = [];
 
         private readonly output: string[] = [];
 
         private fs: Map<FSEntry> = createMap<FSEntry>();
-        private getCanonicalFileName: (s: string) => string;
+        getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
@@ -232,6 +236,10 @@ namespace ts.TestFSWithWatch {
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
 
             this.reloadFS(fileOrFolderList);
+        }
+
+        getNewLine() {
+            return this.newLine;
         }
 
         toNormalizedAbsolutePath(s: string) {
@@ -548,7 +556,7 @@ namespace ts.TestFSWithWatch {
             const folder = this.toFolder(directoryName);
 
             // base folder has to be present
-            const base = getDirectoryPath(folder.fullPath);
+            const base = getDirectoryPath(folder.path);
             const baseFolder = this.fs.get(base) as Folder;
             Debug.assert(isFolder(baseFolder));
 
@@ -560,7 +568,7 @@ namespace ts.TestFSWithWatch {
             const file = this.toFile({ path, content });
 
             // base folder has to be present
-            const base = getDirectoryPath(file.fullPath);
+            const base = getDirectoryPath(file.path);
             const folder = this.fs.get(base) as Folder;
             Debug.assert(isFolder(folder));
 
