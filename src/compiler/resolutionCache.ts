@@ -107,7 +107,9 @@ namespace ts {
         return {
             startRecordingFilesWithChangedResolutions,
             finishRecordingFilesWithChangedResolutions,
-            startCachingPerDirectoryResolution,
+            // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
+            // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
+            startCachingPerDirectoryResolution: clearPerDirectoryResolutions,
             finishCachingPerDirectoryResolution,
             resolveModuleNames,
             resolveTypeReferenceDirectives,
@@ -143,8 +145,7 @@ namespace ts {
             allFilesHaveInvalidatedResolution = false;
             // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
             // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
-            perDirectoryResolvedModuleNames.clear();
-            perDirectoryResolvedTypeReferenceDirectives.clear();
+            clearPerDirectoryResolutions();
         }
 
         function startRecordingFilesWithChangedResolutions() {
@@ -168,9 +169,7 @@ namespace ts {
             return path => collected && collected.has(path);
         }
 
-        function startCachingPerDirectoryResolution() {
-            // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
-            // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
+        function clearPerDirectoryResolutions() {
             perDirectoryResolvedModuleNames.clear();
             perDirectoryResolvedTypeReferenceDirectives.clear();
         }
@@ -184,8 +183,7 @@ namespace ts {
                 }
             });
 
-            perDirectoryResolvedModuleNames.clear();
-            perDirectoryResolvedTypeReferenceDirectives.clear();
+            clearPerDirectoryResolutions();
         }
 
         function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
