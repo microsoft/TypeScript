@@ -15649,6 +15649,7 @@ namespace ts {
             const typeArgumentTypes = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
             let mapper: TypeMapper;
             for (let i = 0; i < typeArgumentNodes.length; i++) {
+                Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (!constraint) continue;
 
