@@ -8884,6 +8884,10 @@ namespace ts {
             return false;
         }
 
+        function isIgnoredJsxProperty(source: Type, sourceProp: Symbol, targetMemberType: Type | undefined) {
+            return source.flags & TypeFlags.JsxAttributes && !(isUnhyphenatedJsxName(sourceProp.escapedName) || targetMemberType);
+        }
+
         /**
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
@@ -9578,10 +9582,6 @@ namespace ts {
                     }
                 }
                 return Ternary.False;
-            }
-
-            function isIgnoredJsxProperty(source: Type, sourceProp: Symbol, targetMemberType: Type | undefined) {
-                return source.flags & TypeFlags.JsxAttributes && !(isUnhyphenatedJsxName(sourceProp.escapedName) || !!targetMemberType);
             }
 
             function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
@@ -14200,7 +14200,7 @@ namespace ts {
             if (hasSpreadAnyType) {
                 return anyType;
             }
-            return typeToIntersect ? getIntersectionType([typeToIntersect, ...spread === emptyObjectType ? [] : [spread]]) : spread;
+            return typeToIntersect && spread !== emptyObjectType ? getIntersectionType([typeToIntersect, spread]) : (typeToIntersect || spread);
 
             /**
              * Create anonymous type from given attributes symbol table.
@@ -14810,11 +14810,16 @@ namespace ts {
                 // Check if sourceAttributesType assignable to targetAttributesType though this check will allow excess properties
                 const isSourceAttributeTypeAssignableToTarget = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
                 // After we check for assignability, we will do another pass to check that all explicitly specified attributes have correct name corresponding in targetAttributeType.
-                // This will allow excess properties in spread type as it is very common pattern to spread outter attributes into React component in its render method.
+                // This will allow excess properties in spread type as it is very common pattern to spread outer attributes into React component in its render method.
                 if (isSourceAttributeTypeAssignableToTarget && !isTypeAny(sourceAttributesType) && !isTypeAny(targetAttributesType)) {
                     for (const attribute of openingLikeElement.attributes.properties) {
-                        if (isJsxAttribute(attribute) && (isUnhyphenatedJsxName(idText(attribute.name)) || !!(getPropertyOfType(targetAttributesType, attribute.name.escapedText))) && !isKnownProperty(targetAttributesType, attribute.name.escapedText, /*isComparingJsxAttributes*/ true)) {
-                            error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, idText(attribute.name), typeToString(targetAttributesType));
+                        if (!isJsxAttribute(attribute)) {
+                            continue;
+                        }
+                        const attrName = attribute.name as Identifier;
+                        const isNotIgnoredJsxProperty = (isUnhyphenatedJsxName(idText(attrName)) || !!(getPropertyOfType(targetAttributesType, attrName.escapedText)));
+                        if (isNotIgnoredJsxProperty && !isKnownProperty(targetAttributesType, attrName.escapedText, /*isComparingJsxAttributes*/ true)) {
+                            error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, idText(attrName), typeToString(targetAttributesType));
                             // We break here so that errors won't be cascading
                             break;
                         }
@@ -15720,7 +15725,7 @@ namespace ts {
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getTypeAtPosition(signature, 0);
-            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /* contextualMapper */ undefined);
+            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
             const argProperties = getPropertiesOfType(attributesType);
             for (const arg of argProperties) {
                 if (!getPropertyOfType(paramType, arg.escapedName) && isUnhyphenatedJsxName(arg.escapedName)) {
