@@ -1218,7 +1218,7 @@ namespace ts.server {
             projectRootPath?: NormalizedPath) {
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
 
-            while (!projectRootPath || stringContains(searchPath, projectRootPath)) {
+            while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
                 const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
@@ -1579,14 +1579,17 @@ namespace ts.server {
                 project.watchWildcards(projectOptions.wildcardDirectories);
             }
             this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave);
+            this.sendConfigFileDiagEvent(project, configFileName);
+        }
 
+        private sendConfigFileDiagEvent(project: ConfiguredProject, triggerFile: NormalizedPath) {
             if (!this.eventHandler) {
                 return;
             }
 
             this.eventHandler(<ConfigFileDiagEvent>{
                 eventName: ConfigFileDiagEvent,
-                data: { configFileName, diagnostics: project.getGlobalProjectErrors() || [], triggerFile: configFileName }
+                data: { configFileName: project.getConfigFilePath(), diagnostics: project.getAllProjectErrors(), triggerFile }
             });
         }
 
@@ -1907,6 +1910,7 @@ namespace ts.server {
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             let configFileName: NormalizedPath;
+            let sendConfigFileDiagEvent = false;
             let configFileErrors: ReadonlyArray<Diagnostic>;
 
             const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, fileContent, scriptKind, hasMixedContent);
@@ -1917,14 +1921,8 @@ namespace ts.server {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
                         project = this.createConfiguredProject(configFileName);
-
-                        // even if opening config file was successful, it could still
-                        // contain errors that were tolerated.
-                        const errors = project.getGlobalProjectErrors();
-                        if (errors && errors.length > 0) {
-                            // set configFileErrors only when the errors array is non-empty
-                            configFileErrors = errors;
-                        }
+                        // Send the event only if the project got created as part of this open request
+                        sendConfigFileDiagEvent = true;
                     }
                 }
             }
@@ -1938,9 +1936,18 @@ namespace ts.server {
             // At this point if file is part of any any configured or external project, then it would be present in the containing projects
             // So if it still doesnt have any containing projects, it needs to be part of inferred project
             if (info.isOrphan()) {
+                // Since the file isnt part of configured project, do not send config file event
+                configFileName = undefined;
+                sendConfigFileDiagEvent = false;
+
                 this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
             }
             this.addToListOfOpenFiles(info);
+
+            if (sendConfigFileDiagEvent) {
+                configFileErrors = project.getAllProjectErrors();
+                this.sendConfigFileDiagEvent(project as ConfiguredProject, fileName);
+            }
 
             // Remove the configured projects that have zero references from open files.
             // This was postponed from closeOpenFile to after opening next file,
@@ -1957,6 +1964,7 @@ namespace ts.server {
             // the file from that old project is reopened because of opening file from here.
             this.deleteOrphanScriptInfoNotInAnyProject();
             this.printProjects();
+
             return { configFileName, configFileErrors };
         }
 

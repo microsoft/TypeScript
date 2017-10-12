@@ -5656,6 +5656,14 @@ namespace ts {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
 
+    export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor;
+    }
+
+    export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
+        return node.kind === SyntaxKind.GetAccessor;
+    }
+
     /** True if has jsdoc nodes attached to it. */
     /* @internal */
     export function hasJSDocNodes(node: Node): node is HasJSDoc {

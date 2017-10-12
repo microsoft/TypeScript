@@ -3068,6 +3068,8 @@ declare namespace ts {
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
     function isJSDocCommentContainingNode(node: Node): boolean;
+    function isSetAccessor(node: Node): node is SetAccessorDeclaration;
+    function isGetAccessor(node: Node): node is GetAccessorDeclaration;
 }
 declare namespace ts {
     interface ErrorCallback {
@@ -7523,6 +7525,7 @@ declare namespace ts.server {
         private createConfiguredProject(configFileName);
         private updateNonInferredProjectFiles<T>(project, files, propertyReader);
         private updateNonInferredProject<T>(project, newUncheckedFiles, propertyReader, newOptions, newTypeAcquisition, compileOnSave);
+        private sendConfigFileDiagEvent(project, triggerFile);
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath);
         private getOrCreateSingleInferredProjectIfEnabled();
         private createInferredProject(currentDirectory, isSingleInferredProject?, projectRootPath?);

@@ -226,6 +226,23 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
+            getUnionType,
+            createAnonymousType,
+            createSignature,
+            createSymbol,
+            createIndexInfo,
+            getAnyType: () => anyType,
+            getStringType: () => stringType,
+            getNumberType: () => numberType,
+            createPromiseType,
+            createArrayType,
+            getBooleanType: () => booleanType,
+            getVoidType: () => voidType,
+            getUndefinedType: () => undefinedType,
+            getNullType: () => nullType,
+            getESSymbolType: () => esSymbolType,
+            getNeverType: () => neverType,
+            isSymbolAccessible,
             isArrayLikeType,
             getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
@@ -3675,6 +3692,7 @@ namespace ts {
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const parameterNode = <ParameterDeclaration>p.valueDeclaration;
+
                 if (parameterNode ? isRestParameter(parameterNode) : isTransientSymbol(p) && p.isRestParameter) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
@@ -6274,7 +6292,7 @@ namespace ts {
         }
 
         function getImplicitIndexTypeOfType(type: Type, kind: IndexKind): Type {
-            if (isObjectLiteralType(type)) {
+            if (isObjectTypeWithInferableIndex(type)) {
                 const propTypes: Type[] = [];
                 for (const prop of getPropertiesOfType(type)) {
                     if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName)) {
@@ -8289,11 +8307,11 @@ namespace ts {
                 // The first time an anonymous type is instantiated we compute and store a list of the type
                 // parameters that are in scope (and therefore potentially referenced). For type literals that
                 // aren't the right hand side of a generic type alias declaration we optimize by reducing the
-                // set of type parameters to those that are actually referenced somewhere in the literal.
+                // set of type parameters to those that are possibly referenced in the literal.
                 const declaration = symbol.declarations[0];
                 const outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true) || emptyArray;
                 typeParameters = symbol.flags & SymbolFlags.TypeLiteral && !target.aliasTypeArguments ?
-                    filter(outerTypeParameters, tp => isTypeParameterReferencedWithin(tp, declaration)) :
+                    filter(outerTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
                     outerTypeParameters;
                 links.typeParameters = typeParameters;
                 if (typeParameters.length) {
@@ -8319,13 +8337,27 @@ namespace ts {
             return type;
         }
 
-        function isTypeParameterReferencedWithin(tp: TypeParameter, node: Node) {
-            return tp.isThisType ? forEachChild(node, checkThis) : forEachChild(node, checkIdentifier);
-            function checkThis(node: Node): boolean {
-                return node.kind === SyntaxKind.ThisType || forEachChild(node, checkThis);
+        function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
+            // If the type parameter doesn't have exactly one declaration, if there are invening statement blocks
+            // between the node and the type parameter declaration, if the node contains actual references to the
+            // type parameter, or if the node contains type queries, we consider the type parameter possibly referenced.
+            if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
+                const container = tp.symbol.declarations[0].parent;
+                if (findAncestor(node, n => n.kind === SyntaxKind.Block ? "quit" : n === container)) {
+                    return forEachChild(node, containsReference);
+                }
             }
-            function checkIdentifier(node: Node): boolean {
-                return node.kind === SyntaxKind.Identifier && isPartOfTypeNode(node) && getTypeFromTypeNode(<TypeNode>node) === tp || forEachChild(node, checkIdentifier);
+            return true;
+            function containsReference(node: Node): boolean {
+                switch (node.kind) {
+                    case SyntaxKind.ThisType:
+                        return tp.isThisType;
+                    case SyntaxKind.Identifier:
+                        return !tp.isThisType && isPartOfTypeNode(node) && getTypeFromTypeNode(<TypeNode>node) === tp;
+                    case SyntaxKind.TypeQuery:
+                        return true;
+                }
+                return forEachChild(node, containsReference);
             }
         }
 
@@ -8610,16 +8642,16 @@ namespace ts {
             for (let i = 0; i < checkCount; i++) {
                 const sourceType = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
                 const targetType = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
-                const sourceSig = getSingleCallSignature(getNonNullableType(sourceType));
-                const targetSig = getSingleCallSignature(getNonNullableType(targetType));
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
-                // function types with a single call signature, we known we are relating two callback parameters. In
+                // function types with a single call signature, we know we are relating two callback parameters. In
                 // that case it is sufficient to only relate the parameters of the signatures co-variantly because,
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
+                const sourceSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
+                const targetSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(targetType));
                 const callbacks = sourceSig && targetSig && !sourceSig.typePredicate && !targetSig.typePredicate &&
                     (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
                 const related = callbacks ?
@@ -9831,7 +9863,7 @@ namespace ts {
                     // if T is related to U.
                     return kind === IndexKind.String && isRelatedTo(getTemplateTypeFromMappedType(<MappedType>source), targetInfo.type, reportErrors);
                 }
-                if (isObjectLiteralType(source)) {
+                if (isObjectTypeWithInferableIndex(source)) {
                     let related = Ternary.True;
                     if (kind === IndexKind.String) {
                         const sourceNumberInfo = getIndexInfoOfType(source, IndexKind.Number);
@@ -10344,11 +10376,11 @@ namespace ts {
         }
 
         /**
-         * Return true if type was inferred from an object literal or written as an object type literal
+         * Return true if type was inferred from an object literal, written as an object type literal, or is the shape of a module
          * with no call or construct signatures.
          */
-        function isObjectLiteralType(type: Type) {
-            return type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral)) !== 0 &&
+        function isObjectTypeWithInferableIndex(type: Type) {
+            return type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.ValueModule)) !== 0 &&
                 getSignaturesOfType(type, SignatureKind.Call).length === 0 &&
                 getSignaturesOfType(type, SignatureKind.Construct).length === 0;
         }

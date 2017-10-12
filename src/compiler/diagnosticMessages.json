@@ -3681,6 +3681,7 @@
         "category": "Message",
         "code": 90017
     },
+
     "Disable checking for this file.": {
         "category": "Message",
         "code": 90018
@@ -3725,7 +3726,6 @@
         "category": "Message",
         "code": 90028
     },
-
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -3765,5 +3765,13 @@
     "Annotate with types from JSDoc": {
         "category": "Message",
         "code": 95010
+    },
+    "Infer type of '{0}' from usage.": {
+        "category": "Message",
+        "code": 95011
+    },
+    "Infer parameter types from usage.": {
+        "category": "Message",
+        "code": 95012
     }
 }
