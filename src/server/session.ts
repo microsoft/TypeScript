@@ -969,13 +969,7 @@ namespace ts.server {
          * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
          */
         private openClientFile(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: NormalizedPath) {
-            const { configFileName, configFileErrors } = this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath);
-            if (this.eventHandler) {
-                this.eventHandler({
-                    eventName: "configFileDiag",
-                    data: { triggerFile: fileName, configFileName, diagnostics: configFileErrors || emptyArray }
-                });
-            }
+            this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath);
         }
 
         private getPosition(args: protocol.FileLocationRequestArgs, scriptInfo: ScriptInfo): number {
