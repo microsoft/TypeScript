@@ -21,7 +21,8 @@ namespace ts {
 
         const {
             startLexicalEnvironment,
-            endLexicalEnvironment
+            endLexicalEnvironment,
+            hoistVariableDeclaration
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -519,18 +520,20 @@ namespace ts {
         }
 
         function visitImportCallExpression(node: ImportCall): Expression {
+            const argument = visitNode(firstOrUndefined(node.arguments), importCallExpressionVisitor);
+            const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
-                    return transformImportCallExpressionAMD(node);
+                    return createImportCallExpressionAMD(argument, containsLexicalThis);
                 case ModuleKind.UMD:
-                    return transformImportCallExpressionUMD(node);
+                    return createImportCallExpressionUMD(argument, containsLexicalThis);
                 case ModuleKind.CommonJS:
                 default:
-                    return transformImportCallExpressionCommonJS(node);
+                    return createImportCallExpressionCommonJS(argument, containsLexicalThis);
             }
         }
 
-        function transformImportCallExpressionUMD(node: ImportCall): Expression {
+        function createImportCallExpressionUMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
             // (function (factory) {
             //      ... (regular UMD)
             // }
@@ -545,14 +548,25 @@ namespace ts {
             //          : new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
             // });
             needUMDDynamicImportHelper = true;
-            return createConditional(
-                /*condition*/ createIdentifier("__syncRequire"),
-                /*whenTrue*/ transformImportCallExpressionCommonJS(node),
-                /*whenFalse*/ transformImportCallExpressionAMD(node)
-            );
+            if (isSimpleCopiableExpression(arg)) {
+                const argClone = isGeneratedIdentifier(arg) ? arg : isStringLiteral(arg) ? createLiteral(arg) : setEmitFlags(setTextRange(getSynthesizedClone(arg), arg), EmitFlags.NoComments);
+                return createConditional(
+                    /*condition*/ createIdentifier("__syncRequire"),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(arg, containsLexicalThis),
+                    /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis)
+                );
+            }
+            else {
+                const temp = createTempVariable(hoistVariableDeclaration);
+                return createComma(createAssignment(temp, arg), createConditional(
+                    /*condition*/ createIdentifier("__syncRequire"),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(temp, containsLexicalThis),
+                    /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
+                ));
+            }
         }
 
-        function transformImportCallExpressionAMD(node: ImportCall): Expression {
+        function createImportCallExpressionAMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
             // improt("./blah")
             // emit as
             // define(["require", "exports", "blah"], function (require, exports) {
@@ -570,7 +584,7 @@ namespace ts {
                     createCall(
                         createIdentifier("require"),
                         /*typeArguments*/ undefined,
-                        [createArrayLiteral([firstOrUndefined(node.arguments) || createOmittedExpression()]), resolve, reject]
+                        [createArrayLiteral([arg || createOmittedExpression()]), resolve, reject]
                     )
                 )
             ]);
@@ -598,7 +612,7 @@ namespace ts {
                 // if there is a lexical 'this' in the import call arguments, ensure we indicate
                 // that this new function expression indicates it captures 'this' so that the
                 // es2015 transformer will properly substitute 'this' with '_this'.
-                if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
+                if (containsLexicalThis) {
                     setEmitFlags(func, EmitFlags.CapturesThis);
                 }
             }
@@ -606,14 +620,14 @@ namespace ts {
             return createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
         }
 
-        function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
+        function createImportCallExpressionCommonJS(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
             // import("./blah")
             // emit as
             // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
-            const requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments);
+            const requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
 
             let func: FunctionExpression | ArrowFunction;
             if (languageVersion >= ScriptTarget.ES2015) {
@@ -638,7 +652,7 @@ namespace ts {
                 // if there is a lexical 'this' in the import call arguments, ensure we indicate
                 // that this new function expression indicates it captures 'this' so that the
                 // es2015 transformer will properly substitute 'this' with '_this'.
-                if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
+                if (containsLexicalThis) {
                     setEmitFlags(func, EmitFlags.CapturesThis);
                 }
             }
