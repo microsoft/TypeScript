@@ -7188,11 +7188,12 @@ declare namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     class InferredProject extends Project {
-        readonly projectRootPath: string | undefined;
         private static readonly newName;
         private _isJsInferredProject;
         toggleJsInferredProject(isJsInferredProject: boolean): void;
         setCompilerOptions(options?: CompilerOptions): void;
+        /** this is canonical project root path */
+        readonly projectRootPath: string | undefined;
         addRoot(info: ScriptInfo): void;
         removeRoot(info: ScriptInfo): void;
         isProjectWithSingleRoot(): boolean;
