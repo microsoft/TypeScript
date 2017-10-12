@@ -10,6 +10,5 @@ verify.applicableRefactorAvailableAtMarker('1');
 verify.fileAfterApplyingRefactorAtMarker('1',
 `class C {
     /** @type {number | null} */
-    /** @type {number | null} */
     p: number | null = null;
 }`, 'Annotate with type from JSDoc', 'annotate');
