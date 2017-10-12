@@ -18,7 +18,7 @@ edit.applyRefactor({
     newContent:
 `function foo() {
     var i = 10;
-    var __return: any;
+    let __return;
     ({ __return, i } = /*RENAME*/newFunction(i));
     return __return;
 }
