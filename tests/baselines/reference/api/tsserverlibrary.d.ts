@@ -7190,7 +7190,7 @@ declare namespace ts.server {
         private _isJsInferredProject;
         toggleJsInferredProject(isJsInferredProject: boolean): void;
         setCompilerOptions(options?: CompilerOptions): void;
-        /** this is canonical project root path*/
+        /** this is canonical project root path */
         readonly projectRootPath: string | undefined;
         addRoot(info: ScriptInfo): void;
         removeRoot(info: ScriptInfo): void;
