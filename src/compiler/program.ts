@@ -1290,10 +1290,21 @@ namespace ts {
             });
         }
 
+        function shouldTreatWarningsAsErrors() {
+            const setValue = program.getCompilerOptions().treatWarningsAsErrors;
+            if (typeof setValue === "undefined") {
+                return true;
+            }
+            return setValue;
+        }
+
         /**
          * Skip errors if previous line start with '// @ts-ignore' comment, not counting non-empty non-comment lines
          */
         function shouldReportDiagnostic(diagnostic: Diagnostic) {
+            if (diagnostic.category === DiagnosticCategory.Warning && shouldTreatWarningsAsErrors()) {
+                diagnostic.category = DiagnosticCategory.Error;
+            }
             const { file, start } = diagnostic;
             if (file) {
                 const lineStarts = getLineStarts(file);

@@ -1,0 +1,36 @@
+=== tests/cases/compiler/treatWarningsAsErrorsFalse.ts ===
+function foo(p: any): string { // unused parameter
+>foo : Symbol(foo, Decl(treatWarningsAsErrorsFalse.ts, 0, 0))
+>p : Symbol(p, Decl(treatWarningsAsErrorsFalse.ts, 0, 13))
+
+    foo: while (false) {} // unused label
+
+    const x: { kind: "a" } | { kind: "b" } = { kind: "a" };
+>x : Symbol(x, Decl(treatWarningsAsErrorsFalse.ts, 3, 9))
+>kind : Symbol(kind, Decl(treatWarningsAsErrorsFalse.ts, 3, 14))
+>kind : Symbol(kind, Decl(treatWarningsAsErrorsFalse.ts, 3, 30))
+>kind : Symbol(kind, Decl(treatWarningsAsErrorsFalse.ts, 3, 46))
+
+    const y = "any"; // unused variable
+>y : Symbol(y, Decl(treatWarningsAsErrorsFalse.ts, 4, 9))
+
+    switch (x.kind) {
+>x.kind : Symbol(kind, Decl(treatWarningsAsErrorsFalse.ts, 3, 14))
+>x : Symbol(x, Decl(treatWarningsAsErrorsFalse.ts, 3, 9))
+>kind : Symbol(kind, Decl(treatWarningsAsErrorsFalse.ts, 3, 14))
+
+        case "a":
+            void x; // implicit fallthrough
+>x : Symbol(x, Decl(treatWarningsAsErrorsFalse.ts, 3, 9))
+
+        case "b":
+            return; // implicit return
+            if (x === x) { // unreachable code
+>x : Symbol(x, Decl(treatWarningsAsErrorsFalse.ts, 3, 9))
+>x : Symbol(x, Decl(treatWarningsAsErrorsFalse.ts, 3, 9))
+
+                void x;
+>x : Symbol(x, Decl(treatWarningsAsErrorsFalse.ts, 3, 9))
+            }
+    }
+}
