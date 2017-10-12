@@ -3681,6 +3681,7 @@
         "category": "Message",
         "code": 90017
     },
+
     "Disable checking for this file.": {
         "category": "Message",
         "code": 90018
@@ -3725,7 +3726,6 @@
         "category": "Message",
         "code": 90028
     },
-
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -3734,34 +3734,36 @@
         "category": "Message",
         "code": 95002
     },
-
     "Extract symbol": {
         "category": "Message",
         "code": 95003
     },
-
     "Extract to {0} in {1}": {
         "category": "Message",
         "code": 95004
     },
-
     "Extract function": {
         "category": "Message",
         "code": 95005
     },
-
     "Extract constant": {
         "category": "Message",
         "code": 95006
     },
-
     "Extract to {0} in enclosing scope": {
         "category": "Message",
         "code": 95007
     },
-
     "Extract to {0} in {1} scope": {
         "category": "Message",
         "code": 95008
+    },
+    "Infer type of '{0}' from usage.": {
+        "category": "Message",
+        "code": 95009
+    },
+    "Infer parameter types from usage.": {
+        "category": "Message",
+        "code": 95010
     }
 }

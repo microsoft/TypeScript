@@ -226,6 +226,23 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
+            getUnionType,
+            createAnonymousType,
+            createSignature,
+            createSymbol,
+            createIndexInfo,
+            getAnyType: () => anyType,
+            getStringType: () => stringType,
+            getNumberType: () => numberType,
+            createPromiseType,
+            createArrayType,
+            getBooleanType: () => booleanType,
+            getVoidType: () => voidType,
+            getUndefinedType: () => undefinedType,
+            getNullType: () => nullType,
+            getESSymbolType: () => esSymbolType,
+            getNeverType: () => neverType,
+            isSymbolAccessible,
             isArrayLikeType,
             getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
@@ -3675,6 +3692,7 @@ namespace ts {
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const parameterNode = <ParameterDeclaration>p.valueDeclaration;
+
                 if (parameterNode ? isRestParameter(parameterNode) : isTransientSymbol(p) && p.isRestParameter) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
