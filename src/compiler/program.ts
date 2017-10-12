@@ -1142,12 +1142,14 @@ namespace ts {
                     ...program.getGlobalDiagnostics(cancellationToken),
                     ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
                 ];
+                const hasError = some(diagnostics, d => d.category === DiagnosticCategory.Error);
 
-                if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
+                if (!hasError && program.getCompilerOptions().declaration) {
                     declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
                 }
 
-                if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
+                const hasDeclarationError = some(declarationDiagnostics, d => d.category === DiagnosticCategory.Error);
+                if (hasError || hasDeclarationError) {
                     return {
                         diagnostics: concatenate(diagnostics, declarationDiagnostics),
                         sourceMaps: undefined,

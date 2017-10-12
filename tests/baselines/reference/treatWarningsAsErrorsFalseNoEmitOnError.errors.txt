@@ -1,0 +1,36 @@
+tests/cases/compiler/treatWarningsAsErrorsFalseNoEmitOnError.ts(1,14): warning TS6133: 'p' is declared but its value is never read.
+tests/cases/compiler/treatWarningsAsErrorsFalseNoEmitOnError.ts(2,5): warning TS7028: Unused label.
+tests/cases/compiler/treatWarningsAsErrorsFalseNoEmitOnError.ts(5,11): warning TS6133: 'y' is declared but its value is never read.
+tests/cases/compiler/treatWarningsAsErrorsFalseNoEmitOnError.ts(7,9): warning TS7029: Fallthrough case in switch.
+tests/cases/compiler/treatWarningsAsErrorsFalseNoEmitOnError.ts(10,13): warning TS7030: Not all code paths return a value.
+tests/cases/compiler/treatWarningsAsErrorsFalseNoEmitOnError.ts(11,13): warning TS7027: Unreachable code detected.
+
+
+==== tests/cases/compiler/treatWarningsAsErrorsFalseNoEmitOnError.ts (6 errors) ====
+    function foo(p: any): string { // unused parameter
+                 ~
+!!! warning TS6133: 'p' is declared but its value is never read.
+        foo: while (false) {} // unused label
+        ~~~
+!!! warning TS7028: Unused label.
+    
+        const x: { kind: "a" } | { kind: "b" } = { kind: "a" };
+        const y = "any"; // unused variable
+              ~
+!!! warning TS6133: 'y' is declared but its value is never read.
+        switch (x.kind) {
+            case "a":
+            ~~~~
+!!! warning TS7029: Fallthrough case in switch.
+                void x; // implicit fallthrough
+            case "a":
+                return; // implicit return
+                ~~~~~~~
+!!! warning TS7030: Not all code paths return a value.
+                if (x === x) { // unreachable code
+                ~~
+!!! warning TS7027: Unreachable code detected.
+                    void x;
+                }
+        }
+    }
