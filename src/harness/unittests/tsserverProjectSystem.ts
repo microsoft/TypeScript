@@ -4412,9 +4412,9 @@ namespace ts.projectSystem {
                         fileName: "/a.ts",
                         textChanges: [
                             {
-                                start: { line: 2, offset: 1 },
-                                end: { line: 3, offset: 1 },
-                                newText: "  newFunction();\n",
+                                start: { line: 2, offset: 3 },
+                                end: { line: 2, offset: 5 },
+                                newText: "newFunction();",
                             },
                             {
                                 start: { line: 3, offset: 2 },
