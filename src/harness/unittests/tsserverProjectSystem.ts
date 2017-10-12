@@ -4526,7 +4526,7 @@ namespace ts.projectSystem {
                             {
                                 start: { line: 3, offset: 2 },
                                 end: { line: 3, offset: 2 },
-                                newText: "\nfunction newFunction() {\n  1;\n}\n",
+                                newText: "\n\nfunction newFunction() {\n  1;\n}\n",
                             },
                         ]
                     }

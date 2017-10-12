@@ -38,6 +38,7 @@ namespace NS {
     }
     function M3() { }
 }
+
 function newFunction() {
     return 1;
 }
