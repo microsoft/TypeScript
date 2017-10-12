@@ -1282,7 +1282,7 @@ namespace ts {
                 // check if numeric literal is a decimal literal that was originally written with a dot
                 const text = getLiteralTextOfNode(<LiteralExpression>expression);
                 return !expression.numericLiteralFlags
-                    && text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+                    && !stringContains(text, tokenToString(SyntaxKind.DotToken));
             }
             else if (isPropertyAccessExpression(expression) || isElementAccessExpression(expression)) {
                 // check if constant enum value is integer

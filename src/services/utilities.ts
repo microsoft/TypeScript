@@ -1345,4 +1345,39 @@ namespace ts {
         }
         return position;
     }
+
+    /**
+     * Creates a deep, memberwise clone of a node with no source map location.
+     *
+     * WARNING: This is an expensive operation and is only intended to be used in refactorings
+     * and code fixes (because those are triggered by explicit user actions).
+     */
+    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
+        if (node === undefined) {
+            return undefined;
+        }
+
+        const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+        if (visited === node) {
+            // This only happens for leaf nodes - internal nodes always see their children change.
+            const clone = getSynthesizedClone(node);
+            if (isStringLiteral(clone)) {
+                clone.textSourceNode = node as any;
+            }
+            else if (isNumericLiteral(clone)) {
+                clone.numericLiteralFlags = (node as any).numericLiteralFlags;
+            }
+            clone.pos = node.pos;
+            clone.end = node.end;
+            return clone;
+        }
+
+        // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
+        // the new node created by visitEachChild with the extra changes getSynthesizedClone
+        // would have made.
+
+        visited.parent = undefined;
+
+        return visited;
+    }
 }

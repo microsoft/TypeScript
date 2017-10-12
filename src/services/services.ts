@@ -1952,7 +1952,7 @@ namespace ts {
             function isNodeModulesFile(path: string): boolean {
                 const node_modulesFolderName = "/node_modules/";
 
-                return path.indexOf(node_modulesFolderName) !== -1;
+                return stringContains(path, node_modulesFolderName);
             }
         }
 
