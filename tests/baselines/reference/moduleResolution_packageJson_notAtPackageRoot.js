@@ -12,7 +12,7 @@
 export const x: number;
 
 //// [a.ts]
-import { x } from "foo/bar";
+import { x } from "foo/@bar";
 
 
 //// [a.js]
