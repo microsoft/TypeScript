@@ -438,6 +438,42 @@ function f() {
     a; x;
 }`);
 
+        // We propagate numericLiteralFlags, but it's not consumed by the emitter,
+        // so everything comes out decimal.  It would be nice to improve this.
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_LiteralType1", `
+function f() {
+    let a = 1;
+    [#|let x: 0o10 | 10 | 0b10 = 10;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_LiteralType2", `
+function f() {
+    let a = 1;
+    [#|let x: "a" | 'b' = 'a';
+    a++;|]
+    a; x;
+}`);
+
+        // We propagate numericLiteralFlags, but it's not consumed by the emitter,
+        // so everything comes out decimal.  It would be nice to improve this.
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_LiteralType1", `
+function f() {
+    let a = 1;
+    [#|let x: 0o10 | 10 | 0b10 = 10;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_TypeWithComments", `
+function f() {
+    let a = 1;
+    [#|let x: /*A*/ "a" /*B*/ | /*C*/ 'b' /*D*/ = 'a';
+    a++;|]
+    a; x;
+}`);
+
         testExtractFunction("extractFunction_VariableDeclaration_Writes_Const_NoType", `
 function f() {
     let a = 1;
