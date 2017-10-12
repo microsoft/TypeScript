@@ -58,7 +58,7 @@ namespace ts {
             writeLine: () => str += " ",
             increaseIndent: noop,
             decreaseIndent: noop,
-            reset: () => str = "",
+            clear: () => str = "",
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
             reportPrivateInBaseOfClassExpression: noop,
@@ -72,7 +72,7 @@ namespace ts {
             return stringWriter.getText();
         }
         finally {
-            stringWriter.reset();
+            stringWriter.clear();
             stringWriter.writeKeyword(oldString);
         }
     }
@@ -2494,7 +2494,7 @@ namespace ts {
             getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
             getText: () => output,
             isAtStartOfLine: () => lineStart,
-            reset,
+            clear: reset,
             reportInaccessibleThisError: noop,
             reportPrivateInBaseOfClassExpression: noop,
             trackSymbol: noop,

@@ -2792,7 +2792,7 @@ namespace ts {
     /**
      * @deprecated Migrate to EmitTextWriter
      */
-    export interface SymbolWriter {
+    export interface SymbolWriter extends SymbolTracker {
         writeKeyword(text: string): void;
         writeOperator(text: string): void;
         writePunctuation(text: string): void;
@@ -2804,14 +2804,7 @@ namespace ts {
         writeLine(): void;
         increaseIndent(): void;
         decreaseIndent(): void;
-        /** @deprecated */ clear(): void;
-
-        // Called when the symbol writer encounters a symbol to write.  Currently only used by the
-        // declaration emitter to help determine if it should patch up the final declaration file
-        // with import statements it previously saw (but chose not to emit).
-        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
-        reportInaccessibleThisError(): void;
-        reportPrivateInBaseOfClassExpression(propertyName: string): void;
+        clear(): void;
     }
 
     export const enum TypeFormatFlags {
@@ -4625,7 +4618,7 @@ namespace ts {
         /*@internal*/ extendedDiagnostics?: boolean;
     }
 
-    export interface EmitTextWriter extends SymbolTracker {
+    export interface EmitTextWriter extends SymbolTracker, SymbolWriter {
         write(s: string): void;
         writeTextOfNode(text: string, node: Node): void;
         writeLine(): void;
@@ -4639,7 +4632,7 @@ namespace ts {
         getColumn(): number;
         getIndent(): number;
         isAtStartOfLine(): boolean;
-        reset(): void;
+        clear(): void;
 
         writeKeyword(text: string): void;
         writeOperator(text: string): void;

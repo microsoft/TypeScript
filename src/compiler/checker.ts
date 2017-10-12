@@ -617,7 +617,7 @@ namespace ts {
                     isAtStartOfLine() {
                         return false;
                     },
-                    reset() {
+                    clear() {
                         return underlying.clear();
                     },
 
@@ -646,13 +646,13 @@ namespace ts {
                         return underlying.writeSymbol(text, symbol);
                     },
                     trackSymbol(symbol, enclosing?, meaning?) {
-                        return underlying.trackSymbol(symbol, enclosing, meaning);
+                        return underlying.trackSymbol && underlying.trackSymbol(symbol, enclosing, meaning);
                     },
                     reportInaccessibleThisError() {
-                        return underlying.reportInaccessibleThisError();
+                        return underlying.reportInaccessibleThisError && underlying.reportInaccessibleThisError();
                     },
                     reportPrivateInBaseOfClassExpression(name) {
-                        return underlying.reportPrivateInBaseOfClassExpression(name);
+                        return underlying.reportPrivateInBaseOfClassExpression && underlying.reportPrivateInBaseOfClassExpression(name);
                     }
                 };
             }

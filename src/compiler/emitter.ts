@@ -194,7 +194,7 @@ namespace ts {
 
             // Reset state
             sourceMap.reset();
-            writer.reset();
+            writer.clear();
 
             currentSourceFile = undefined;
             bundledHelpers = undefined;
@@ -393,7 +393,7 @@ namespace ts {
 
         function endPrint() {
             const text = ownWriter.getText();
-            ownWriter.reset();
+            ownWriter.clear();
             return text;
         }
 

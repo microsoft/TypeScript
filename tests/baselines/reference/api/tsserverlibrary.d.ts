@@ -1817,7 +1817,7 @@ declare namespace ts {
     /**
      * @deprecated Migrate to EmitTextWriter
      */
-    interface SymbolWriter {
+    interface SymbolWriter extends SymbolTracker {
         writeKeyword(text: string): void;
         writeOperator(text: string): void;
         writePunctuation(text: string): void;
@@ -1829,10 +1829,7 @@ declare namespace ts {
         writeLine(): void;
         increaseIndent(): void;
         decreaseIndent(): void;
-        /** @deprecated */ clear(): void;
-        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
-        reportInaccessibleThisError(): void;
-        reportPrivateInBaseOfClassExpression(propertyName: string): void;
+        clear(): void;
     }
     enum TypeFormatFlags {
         None = 0,
@@ -2688,7 +2685,7 @@ declare namespace ts {
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
     }
-    interface EmitTextWriter extends SymbolTracker {
+    interface EmitTextWriter extends SymbolTracker, SymbolWriter {
         write(s: string): void;
         writeTextOfNode(text: string, node: Node): void;
         writeLine(): void;
@@ -2702,7 +2699,7 @@ declare namespace ts {
         getColumn(): number;
         getIndent(): number;
         isAtStartOfLine(): boolean;
-        reset(): void;
+        clear(): void;
         writeKeyword(text: string): void;
         writeOperator(text: string): void;
         writePunctuation(text: string): void;

@@ -767,8 +767,8 @@ namespace ts.textChanges {
         isAtStartOfLine(): boolean {
             return this.writer.isAtStartOfLine();
         }
-        reset(): void {
-            this.writer.reset();
+        clear(): void {
+            this.writer.clear();
             this.lastNonTriviaPosition = 0;
         }
     }

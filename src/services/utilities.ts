@@ -1126,7 +1126,7 @@ namespace ts {
             getIndent: () => indent,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
-            reset: resetWriter,
+            clear: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
             reportPrivateInBaseOfClassExpression: noop,
@@ -1240,7 +1240,7 @@ namespace ts {
             return displayPartWriter.displayParts();
         }
         finally {
-            displayPartWriter.reset();
+            displayPartWriter.clear();
         }
     }
 
