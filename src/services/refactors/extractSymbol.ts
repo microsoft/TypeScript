@@ -245,11 +245,42 @@ namespace ts.refactor.extractSymbol {
         }
 
         // We have a single node (start)
-        const errors = checkRootNode(start) || checkNode(start);
+        let node = start;
+
+        if (isReturnStatement(start)) {
+            if (!start.expression) {
+                // Makes no sense to extract an expression-less return statement.
+                return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.CannotExtractRange)] };
+            }
+
+            node = start.expression;
+        }
+        else if (isVariableStatement(start)) {
+            let numInitializers = 0;
+            let lastInitializer: Expression | undefined = undefined;
+            for (const declaration of start.declarationList.declarations) {
+                if (declaration.initializer) {
+                    numInitializers++;
+                    lastInitializer = declaration.initializer;
+                }
+            }
+
+            if (numInitializers === 1) {
+                node = lastInitializer;
+            }
+            // No special handling if there are multiple initializers.
+        }
+        else if (isVariableDeclaration(node)) {
+            if (node.initializer) {
+                node = node.initializer;
+            }
+        }
+
+        const errors = checkRootNode(node) || checkNode(node);
         if (errors) {
             return { errors };
         }
-        return { targetRange: { range: getStatementOrExpressionRange(start), facts: rangeFacts, declarations } };
+        return { targetRange: { range: getStatementOrExpressionRange(node), facts: rangeFacts, declarations } };
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
             if (isIdentifier(isExpressionStatement(node) ? node.expression : node)) {
