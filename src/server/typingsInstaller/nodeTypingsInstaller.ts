@@ -68,10 +68,14 @@ namespace ts.server.typingsInstaller {
         return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${TypesRegistryPackageName}/index.json`);
     }
 
-    type ExecSync = (command: string, options: { cwd: string, stdio?: "ignore" }) => any;
+    interface ExecSyncOptions {
+        cwd: string;
+        encoding: "utf-8";
+    }
+    type ExecSync = (command: string, options: ExecSyncOptions) => string;
 
     export class NodeTypingsInstaller extends TypingsInstaller {
-        private readonly execSync: ExecSync;
+        private readonly nodeExecSync: ExecSync;
         private readonly npmPath: string;
         readonly typesRegistry: Map<void>;
 
@@ -88,14 +92,14 @@ namespace ts.server.typingsInstaller {
             this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0]);
 
             // If the NPM path contains spaces and isn't wrapped in quotes, do so.
-            if (this.npmPath.indexOf(" ") !== -1 && this.npmPath[0] !== `"`) {
+            if (stringContains(this.npmPath, " ") && this.npmPath[0] !== `"`) {
                 this.npmPath = `"${this.npmPath}"`;
             }
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
                 this.log.writeLine(`NPM location: ${this.npmPath} (explicit '${Arguments.NpmLocation}' ${npmLocation === undefined ? "not " : ""} provided)`);
             }
-            ({ execSync: this.execSync } = require("child_process"));
+            ({ execSync: this.nodeExecSync } = require("child_process"));
 
             this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
 
@@ -103,7 +107,7 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updating ${TypesRegistryPackageName} npm package...`);
                 }
-                this.execSync(`${this.npmPath} install --ignore-scripts ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation, stdio: "ignore" });
+                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation });
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updated ${TypesRegistryPackageName} npm package`);
                 }
@@ -155,21 +159,30 @@ namespace ts.server.typingsInstaller {
             }
             const command = `${this.npmPath} install --ignore-scripts ${args.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
-            let stdout: Buffer;
-            let stderr: Buffer;
-            let hasError = false;
-            try {
-                stdout = this.execSync(command, { cwd });
-            }
-            catch (e) {
-                stdout = e.stdout;
-                stderr = e.stderr;
-                hasError = true;
-            }
+            const hasError = this.execSyncAndLog(command, { cwd });
             if (this.log.isEnabled()) {
-                this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms${sys.newLine}stdout: ${stdout && stdout.toString()}${sys.newLine}stderr: ${stderr && stderr.toString()}`);
+                this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms`);
             }
             onRequestCompleted(!hasError);
+        }
+
+        /** Returns 'true' in case of error. */
+        private execSyncAndLog(command: string, options: Pick<ExecSyncOptions, "cwd">): boolean {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Exec: ${command}`);
+            }
+            try {
+                const stdout = this.nodeExecSync(command, { ...options, encoding: "utf-8" });
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`    Succeeded. stdout:${indent(sys.newLine, stdout)}`);
+                }
+                return false;
+            }
+            catch (error) {
+                const { stdout, stderr } = error;
+                this.log.writeLine(`    Failed. stdout:${indent(sys.newLine, stdout)}${sys.newLine}    stderr:${indent(sys.newLine, stderr)}`);
+                return true;
+            }
         }
     }
 
@@ -193,4 +206,8 @@ namespace ts.server.typingsInstaller {
     });
     const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, /*throttleLimit*/5, log);
     installer.listen();
+
+    function indent(newline: string, string: string): string {
+        return `${newline}    ` + string.replace(/\r?\n/, `${newline}    `);
+    }
 }

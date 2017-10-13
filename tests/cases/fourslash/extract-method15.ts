@@ -18,6 +18,7 @@ edit.applyRefactor({
     var i = 10;
     i = /*RENAME*/newFunction(i);
 }
+
 function newFunction(i: number) {
     i++;
     return i;

@@ -12,6 +12,7 @@ edit.applyRefactor({
     newContent: `function f() {
     /*RENAME*/newFunction();
 }
+
 function newFunction() {
     namespace N { }
 }

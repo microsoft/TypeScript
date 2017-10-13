@@ -47,10 +47,15 @@ namespace ts {
      * Creates a shallow, memberwise clone of a node with no source map location.
      */
     /* @internal */
-    export function getSynthesizedClone<T extends Node>(node: T | undefined): T {
+    export function getSynthesizedClone<T extends Node>(node: T | undefined): T | undefined {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
+
+        if (node === undefined) {
+            return undefined;
+        }
+
         const clone = <T>createSynthesizedNode(node.kind);
         clone.flags |= node.flags;
         setOriginalNode(clone, node);
@@ -2604,6 +2609,16 @@ namespace ts {
      */
     export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
         getOrCreateEmitNode(node).flags = emitFlags;
+        return node;
+    }
+
+    /**
+     * Sets flags that control emit behavior of a node.
+     */
+    /* @internal */
+    export function addEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.flags = emitNode.flags | emitFlags;
         return node;
     }
 

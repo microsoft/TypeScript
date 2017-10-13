@@ -14,6 +14,7 @@ function F<T>() {
 function F<T>() {
     /*RENAME*/newFunction<T>();
 }
+
 function newFunction<T>() {
     let t: T;
 }

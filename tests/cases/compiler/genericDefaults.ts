@@ -488,3 +488,6 @@ const t03c01 = (<t03<1>>x).a;
 const t03c02 = (<t03<number, number>>x).a;
 const t03c03 = (<t03<1, 1>>x).a;
 const t03c04 = (<t03<number, 1>>x).a;
+
+// https://github.com/Microsoft/TypeScript/issues/16221
+interface SelfReference<T = SelfReference<string>> {}
