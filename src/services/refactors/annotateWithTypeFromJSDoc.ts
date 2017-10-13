@@ -56,8 +56,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
 
     function getEditsForAnnotation(context: RefactorContext, action: string): RefactorEditInfo | undefined {
         if (actionName !== action) {
-            Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
-            return undefined;
+            return Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
         }
 
         const sourceFile = context.file;
@@ -81,8 +80,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
 
     function getEditsForFunctionAnnotation(context: RefactorContext, action: string): RefactorEditInfo | undefined {
         if (actionName !== action) {
-            Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
-            return undefined;
+            return Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
         }
 
         const sourceFile = context.file;
@@ -141,8 +139,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.PropertyDeclaration:
                 return createProperty(decl.decorators, decl.modifiers, decl.name, decl.questionToken, jsdocType, decl.initializer);
             default:
-                Debug.fail(`Unexpected SyntaxKind: ${decl.kind}`);
-                return undefined;
+                return Debug.fail(`Unexpected SyntaxKind: ${decl.kind}`);
         }
     }
 
