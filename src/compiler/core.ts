@@ -225,11 +225,13 @@ namespace ts {
         return undefined;
     }
 
-    export function zipWith<T, U>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => void): void {
+    export function zipWith<T, U, V>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => V): V[] {
+        const result: V[] = [];
         Debug.assert(arrayA.length === arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
-            callback(arrayA[i], arrayB[i], i);
+            result.push(callback(arrayA[i], arrayB[i], i));
         }
+        return result;
     }
 
     export function zipToMap<T>(keys: ReadonlyArray<string>, values: ReadonlyArray<T>): Map<T> {
@@ -376,21 +378,6 @@ namespace ts {
             }
         }
         return array;
-    }
-
-    export function removeWhere<T>(array: T[], f: (x: T) => boolean): boolean {
-        let outIndex = 0;
-        for (const item of array) {
-            if (!f(item)) {
-                array[outIndex] = item;
-                outIndex++;
-            }
-        }
-        if (outIndex !== array.length) {
-            array.length = outIndex;
-            return true;
-        }
-        return false;
     }
 
     export function filterMutate<T>(array: T[], f: (x: T, i: number, array: T[]) => boolean): void {
@@ -1693,7 +1680,7 @@ namespace ts {
     }
 
     export function isUrl(path: string) {
-        return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
+        return path && !isRootedDiskPath(path) && stringContains(path, "://");
     }
 
     export function pathIsRelative(path: string): boolean {
@@ -1962,8 +1949,12 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function stringContains(str: string, substring: string): boolean {
+        return str.indexOf(substring) !== -1;
+    }
+
     export function hasExtension(fileName: string): boolean {
-        return getBaseFileName(fileName).indexOf(".") >= 0;
+        return stringContains(getBaseFileName(fileName), ".");
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {

@@ -38,6 +38,7 @@ function Outer() {
     }
     function M3() { }
 }
+
 function newFunction() {
     return 1;
 }

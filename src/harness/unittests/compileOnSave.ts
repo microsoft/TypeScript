@@ -619,7 +619,7 @@ namespace ts.projectSystem {
             assert.isTrue(host.fileExists(expectedOutFileName));
             const outFileContent = host.readFile(expectedOutFileName);
             verifyContentHasString(outFileContent, file1.content);
-            verifyContentHasString(outFileContent, `//# sourceMappingURL=${outFileName}.map`);
+            verifyContentHasString(outFileContent, `//# ${"sourceMappingURL"}=${outFileName}.map`); // Sometimes tools can sometimes see this line as a source mapping url comment, so we obfuscate it a little
 
             // Verify map file
             const expectedMapFileName = expectedOutFileName + ".map";

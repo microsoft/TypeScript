@@ -11,6 +11,7 @@ edit.applyRefactor({
     newContent:
 `export {}; // Make this a module
 (x => x)(/*RENAME*/newFunction())(1);
+
 function newFunction(): (x: any) => any {
     return x => x;
 }

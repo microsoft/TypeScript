@@ -17,6 +17,7 @@ edit.applyRefactor({
     let x = 0;
     console.log(/*RENAME*/newFunction(a, x));
 }
+
 function newFunction(a: number[], x: number): any {
     return a[x];
 }

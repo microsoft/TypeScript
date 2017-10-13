@@ -132,16 +132,77 @@ namespace ts.projectSystem {
         return map(fileNames, toExternalFile);
     }
 
-    class TestServerEventManager {
-        public events: server.ProjectServiceEvent[] = [];
+    export function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
+        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, ...nonZeroStats };
+    }
 
-        handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
-            this.events.push(event);
+    export class TestServerEventManager {
+        private events: server.ProjectServiceEvent[] = [];
+        readonly session: TestSession;
+        readonly service: server.ProjectService;
+        readonly host: projectSystem.TestServerHost;
+        constructor(files: projectSystem.FileOrFolder[]) {
+            this.host = createServerHost(files);
+            this.session = createSession(this.host, {
+                canUseEvents: true,
+                eventHandler: event => this.events.push(event),
+            });
+            this.service = this.session.getProjectService();
         }
 
-        checkEventCountOfType(eventType: "configFileDiag", expectedCount: number) {
-            const eventsOfType = filter(this.events, e => e.eventName === eventType);
-            assert.equal(eventsOfType.length, expectedCount, `The actual event counts of type ${eventType} is ${eventsOfType.length}, while expected ${expectedCount}`);
+        getEvents(): ReadonlyArray<server.ProjectServiceEvent> {
+            const events = this.events;
+            this.events = [];
+            return events;
+        }
+
+        getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
+            let eventData: T["data"];
+            filterMutate(this.events, e => {
+                if (e.eventName === eventName) {
+                    if (eventData !== undefined) {
+                        assert(false, "more than one event found");
+                    }
+                    eventData = e.data;
+                    return false;
+                }
+                return true;
+            });
+            assert.isDefined(eventData);
+            return eventData;
+        }
+
+        hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {
+            this.events.forEach(event => assert.notEqual(event.eventName, eventName));
+        }
+
+        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string) {
+            const eventData = this.getEvent<server.ConfigFileDiagEvent>(server.ConfigFileDiagEvent);
+            assert.equal(eventData.configFileName, configFileName);
+            assert.equal(eventData.triggerFile, triggerFile);
+        }
+
+        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
+            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
+                projectId: Harness.mockHash(configFile || "/tsconfig.json"),
+                fileStats: fileStats({ ts: 1 }),
+                compilerOptions: {},
+                extends: false,
+                files: false,
+                include: false,
+                exclude: false,
+                compileOnSave: false,
+                typeAcquisition: {
+                    enable: false,
+                    exclude: false,
+                    include: false,
+                },
+                configFileName: "tsconfig.json",
+                projectType: "configured",
+                languageServiceEnabled: true,
+                version: ts.version,
+                ...partial,
+            });
         }
     }
 
@@ -220,11 +281,11 @@ namespace ts.projectSystem {
             checkNumberOfProjects(this, count);
         }
     }
-    export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}) {
+    export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}, options?: Partial<server.ProjectServiceOptions>) {
         const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
         const logger = parameters.logger || nullLogger;
         const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
-        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller, parameters.eventHandler);
+        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller, parameters.eventHandler, options);
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
@@ -461,7 +522,7 @@ namespace ts.projectSystem {
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
-            assert.isTrue(!configFileErrors, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
+            assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
             checkNumberOfInferredProjects(projectService, 0);
             checkNumberOfConfiguredProjects(projectService, 1);
 
@@ -501,7 +562,7 @@ namespace ts.projectSystem {
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
-            assert.isTrue(!configFileErrors, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
+            assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
             checkNumberOfInferredProjects(projectService, 0);
             checkNumberOfConfiguredProjects(projectService, 1);
 
@@ -2397,6 +2458,43 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
 
         });
+
+        it("Failed lookup locations are uses parent most node_modules directory", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/src/file1.ts",
+                content: 'import { classc } from "module1"'
+            };
+            const module1: FileOrFolder = {
+                path: "/a/b/node_modules/module1/index.d.ts",
+                content: `import { class2 } from "module2";
+                          export classc { method2a(): class2; }`
+            };
+            const module2: FileOrFolder = {
+                path: "/a/b/node_modules/module2/index.d.ts",
+                content: "export class2 { method2() { return 10; } }"
+            };
+            const module3: FileOrFolder = {
+                path: "/a/b/node_modules/module/node_modules/module3/index.d.ts",
+                content: "export class3 { method2() { return 10; } }"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/src/tsconfig.json",
+                content: JSON.stringify({ files: [file1.path] })
+            };
+            const files = [file1, module1, module2, module3, configFile, libFile];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects.get(configFile.path);
+            assert.isDefined(project);
+            checkProjectActualFiles(project, [file1.path, libFile.path, module1.path, module2.path, configFile.path]);
+            checkWatchedFiles(host, [libFile.path, module1.path, module2.path, configFile.path]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            const watchedRecursiveDirectories = getTypeRootsFromLocation("/a/b/src");
+            watchedRecursiveDirectories.push("/a/b/src", "/a/b/node_modules");
+            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+        });
     });
 
     describe("Proper errors", () => {
@@ -2880,6 +2978,52 @@ namespace ts.projectSystem {
         function checkSnapLength(snap: IScriptSnapshot, expectedLength: number) {
             assert.equal(snap.getLength(), expectedLength, "Incorrect snapshot size");
         }
+
+        function verifyOpenFileWorks(useCaseSensitiveFileNames: boolean) {
+            const file1: FileOrFolder = {
+                path: "/a/b/src/app.ts",
+                content: "let x = 10;"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/B/lib/module2.ts",
+                content: "let z = 10;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: ""
+            };
+            const configFile2: FileOrFolder = {
+                path: "/a/tsconfig.json",
+                content: ""
+            };
+            const host = createServerHost([file1, file2, configFile, configFile2], {
+                useCaseSensitiveFileNames
+            });
+            const service = createProjectService(host);
+
+            // Open file1 -> configFile
+            verifyConfigFileName(file1, "/a", configFile);
+            verifyConfigFileName(file1, "/a/b", configFile);
+            verifyConfigFileName(file1, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
+
+            // Open file2 use root "/a/b"
+            verifyConfigFileName(file2, "/a", useCaseSensitiveFileNames ? configFile2 : configFile);
+            verifyConfigFileName(file2, "/a/b", useCaseSensitiveFileNames ? undefined : configFile);
+            verifyConfigFileName(file2, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
+
+            function verifyConfigFileName(file: FileOrFolder, projectRoot: string, expectedConfigFile: FileOrFolder | undefined) {
+                const { configFileName } = service.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRoot);
+                assert.equal(configFileName, expectedConfigFile && expectedConfigFile.path);
+                service.closeClientFile(file.path);
+            }
+        }
+        it("works when project root is used with case-sensitive system", () => {
+            verifyOpenFileWorks(/*useCaseSensitiveFileNames*/ true);
+        });
+
+        it("works when project root is used with case-insensitive system", () => {
+            verifyOpenFileWorks(/*useCaseSensitiveFileNames*/ false);
+        });
     });
 
     describe("Language service", () => {
@@ -3076,7 +3220,6 @@ namespace ts.projectSystem {
     describe("Configure file diagnostics events", () => {
 
         it("are generated when the config file has errors", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3090,26 +3233,12 @@ namespace ts.projectSystem {
                     }
                 }`
             };
-
-            const host = createServerHost([file, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
-
-            for (const event of serverEventManager.events) {
-                if (event.eventName === "configFileDiag") {
-                    assert.equal(event.data.configFileName, configFile.path);
-                    assert.equal(event.data.triggerFile, file.path);
-                    return;
-                }
-            }
+            const serverEventManager = new TestServerEventManager([file, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
         });
 
         it("are generated when the config file doesn't have errors", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3120,18 +3249,12 @@ namespace ts.projectSystem {
                     "compilerOptions": {}
                 }`
             };
-
-            const host = createServerHost([file, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+            const serverEventManager = new TestServerEventManager([file, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
         });
 
         it("are generated when the config file changes", () => {
-            const serverEventManager = new TestServerEventManager();
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -3143,29 +3266,70 @@ namespace ts.projectSystem {
                 }`
             };
 
-            const host = createServerHost([file, configFile]);
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: serverEventManager.handler
-            });
-            openFilesForSession([file], session);
-            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+            const serverEventManager = new TestServerEventManager([file, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
 
             configFile.content = `{
                 "compilerOptions": {
                     "haha": 123
                 }
             }`;
-            host.reloadFS([file, configFile]);
-            host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkEventCountOfType("configFileDiag", 2);
+            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
 
             configFile.content = `{
                 "compilerOptions": {}
             }`;
-            host.reloadFS([file, configFile]);
-            host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkEventCountOfType("configFileDiag", 3);
+            serverEventManager.host.reloadFS([file, configFile]);
+            serverEventManager.host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
+        });
+
+        it("are not generated when the config file doesnot include file opened and config file has errors", () => {
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const file2 = {
+                path: "/a/b/test.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    },
+                    "files": ["app.ts"]
+                }`
+            };
+            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("are not generated when the config file doesnot include file opened and doesnt contain any errors", () => {
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const file2 = {
+                path: "/a/b/test.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "files": ["app.ts"]
+                }`
+            };
+
+            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
         });
     });
 
@@ -3619,6 +3783,113 @@ namespace ts.projectSystem {
             assert.equal(projectService.inferredProjects[0].getCompilationSettings().target, ScriptTarget.ESNext);
             assert.equal(projectService.inferredProjects[1].getCompilationSettings().target, ScriptTarget.ESNext);
             assert.equal(projectService.inferredProjects[2].getCompilationSettings().target, ScriptTarget.ES2015);
+        });
+
+        function checkInferredProject(inferredProject: server.InferredProject, actualFiles: FileOrFolder[], target: ScriptTarget) {
+            checkProjectActualFiles(inferredProject, actualFiles.map(f => f.path));
+            assert.equal(inferredProject.getCompilationSettings().target, target);
+        }
+
+        function verifyProjectRootWithCaseSensitivity(useCaseSensitiveFileNames: boolean) {
+            const files: [FileOrFolder, FileOrFolder, FileOrFolder, FileOrFolder] = [
+                { path: "/a/file1.ts", content: "let x = 1;" },
+                { path: "/A/file2.ts", content: "let y = 2;" },
+                { path: "/b/file2.ts", content: "let x = 3;" },
+                { path: "/c/file3.ts", content: "let z = 4;" }
+            ];
+            const host = createServerHost(files, { useCaseSensitiveFileNames });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, }, { useInferredProjectPerProjectRoot: true });
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                target: ScriptTarget.ESNext
+            });
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                target: ScriptTarget.ES2015
+            }, "/a");
+
+            openClientFiles(["/a", "/a", "/b", undefined]);
+            verifyInferredProjectsState([
+                [[files[3]], ScriptTarget.ESNext],
+                [[files[0], files[1]], ScriptTarget.ES2015],
+                [[files[2]], ScriptTarget.ESNext]
+            ]);
+            closeClientFiles();
+
+            openClientFiles(["/a", "/A", "/b", undefined]);
+            if (useCaseSensitiveFileNames) {
+                verifyInferredProjectsState([
+                    [[files[3]], ScriptTarget.ESNext],
+                    [[files[0]], ScriptTarget.ES2015],
+                    [[files[1]], ScriptTarget.ESNext],
+                    [[files[2]], ScriptTarget.ESNext]
+                ]);
+            }
+            else {
+                verifyInferredProjectsState([
+                    [[files[3]], ScriptTarget.ESNext],
+                    [[files[0], files[1]], ScriptTarget.ES2015],
+                    [[files[2]], ScriptTarget.ESNext]
+                ]);
+            }
+            closeClientFiles();
+
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                target: ScriptTarget.ES2017
+            }, "/A");
+
+            openClientFiles(["/a", "/a", "/b", undefined]);
+            verifyInferredProjectsState([
+                [[files[3]], ScriptTarget.ESNext],
+                [[files[0], files[1]], useCaseSensitiveFileNames ? ScriptTarget.ES2015 : ScriptTarget.ES2017],
+                [[files[2]], ScriptTarget.ESNext]
+            ]);
+            closeClientFiles();
+
+            openClientFiles(["/a", "/A", "/b", undefined]);
+            if (useCaseSensitiveFileNames) {
+                verifyInferredProjectsState([
+                    [[files[3]], ScriptTarget.ESNext],
+                    [[files[0]], ScriptTarget.ES2015],
+                    [[files[1]], ScriptTarget.ES2017],
+                    [[files[2]], ScriptTarget.ESNext]
+                ]);
+            }
+            else {
+                verifyInferredProjectsState([
+                    [[files[3]], ScriptTarget.ESNext],
+                    [[files[0], files[1]], ScriptTarget.ES2017],
+                    [[files[2]], ScriptTarget.ESNext]
+                ]);
+            }
+            closeClientFiles();
+
+            function openClientFiles(projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined]) {
+                files.forEach((file, index) => {
+                    projectService.openClientFile(file.path, file.content, ScriptKind.JS, projectRoots[index]);
+                });
+            }
+
+            function closeClientFiles() {
+                files.forEach(file => projectService.closeClientFile(file.path));
+            }
+
+            function verifyInferredProjectsState(expected: [FileOrFolder[], ScriptTarget][]) {
+                checkNumberOfProjects(projectService, { inferredProjects: expected.length });
+                projectService.inferredProjects.forEach((p, index) => {
+                    const [actualFiles, target] = expected[index];
+                    checkInferredProject(p, actualFiles, target);
+                });
+            }
+        }
+
+        it("inferred projects per project root with case sensitive system", () => {
+            verifyProjectRootWithCaseSensitivity(/*useCaseSensitiveFileNames*/ true);
+        });
+
+        it("inferred projects per project root with case insensitive system", () => {
+            verifyProjectRootWithCaseSensitivity(/*useCaseSensitiveFileNames*/ false);
         });
     });
 
@@ -4248,14 +4519,14 @@ namespace ts.projectSystem {
                         fileName: "/a.ts",
                         textChanges: [
                             {
-                                start: { line: 2, offset: 1 },
-                                end: { line: 3, offset: 1 },
-                                newText: "  newFunction();\n",
+                                start: { line: 2, offset: 3 },
+                                end: { line: 2, offset: 5 },
+                                newText: "newFunction();",
                             },
                             {
                                 start: { line: 3, offset: 2 },
                                 end: { line: 3, offset: 2 },
-                                newText: "\nfunction newFunction() {\n  1;\n}\n",
+                                newText: "\n\nfunction newFunction() {\n  1;\n}\n",
                             },
                         ]
                     }
