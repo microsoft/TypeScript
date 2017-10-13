@@ -23,41 +23,16 @@ abstract class AbstractClass {
 >prop : string
 >toLowerCase : () => string
 
-        if (!str) {
->!str : boolean
->str : string
-
-            this.prop = "Hello World";
+        this.prop = "Hello World";
 >this.prop = "Hello World" : "Hello World"
 >this.prop : string
 >this : this
 >prop : string
 >"Hello World" : "Hello World"
-        }
-        this.cb(str);
->this.cb(str) : void
->this.cb : (s: string) => void
->this : this
->cb : (s: string) => void
->str : string
-
-        const innerFunction = () => {
->innerFunction : () => string
->() => {            return this.prop;        } : () => string
-
-            return this.prop;
->this.prop : string
->this : this
->prop : string
-        }
     }
 
     abstract prop: string;
 >prop : string
-
-    abstract cb: (s: string) => void;
->cb : (s: string) => void
->s : string
 
     abstract method(num: number): void;
 >method : (num: number) => void

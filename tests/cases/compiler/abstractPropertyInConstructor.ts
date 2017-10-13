@@ -2,19 +2,10 @@ abstract class AbstractClass {
     constructor(str: string) {
         this.method(parseInt(str));
         let val = this.prop.toLowerCase();
-
-        if (!str) {
-            this.prop = "Hello World";
-        }
-        this.cb(str);
-
-        const innerFunction = () => {
-            return this.prop;
-        }
+        this.prop = "Hello World";
     }
 
     abstract prop: string;
-    abstract cb: (s: string) => void;
 
     abstract method(num: number): void;
 

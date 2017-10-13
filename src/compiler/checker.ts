@@ -14904,9 +14904,10 @@ namespace ts {
             // Referencing Abstract Properties within Constructors is not allowed
             if ((flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop)) {
                 const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
+                const declaringClassConstructor = declaringClassDeclaration && findConstructorDeclaration(declaringClassDeclaration);
 
-                if (declaringClassDeclaration && isNodeWithinConstructor(node, declaringClassDeclaration)) {
-                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), typeToString(getDeclaringClass(prop)));
+                if (declaringClassConstructor && isNodeWithinFunction(node, declaringClassConstructor)) {
+                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_constructor, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
                 }
             }
@@ -23221,16 +23222,8 @@ namespace ts {
             return result;
         }
 
-        function isNodeWithinConstructor(node: Node, classDeclaration: ClassLikeDeclaration) {
-            return findAncestor(node, element => {
-                if (isConstructorDeclaration(element) && nodeIsPresent(element.body)) {
-                    return true;
-                } else if (element === classDeclaration || isFunctionLikeDeclaration(element)) {
-                    return "quit";
-                }
-
-                return false;
-            });
+        function isNodeWithinFunction(node: Node, functionDeclaration: FunctionLike) {
+            return getContainingFunction(node) === functionDeclaration;
         }
 
         function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {
