@@ -5,7 +5,6 @@
 ////    /*1*/p = null
 ////}
 
-// NOTE: The duplicated comment is unintentional but needs a serious fix in trivia handling
 verify.applicableRefactorAvailableAtMarker('1');
 verify.fileAfterApplyingRefactorAtMarker('1',
 `class C {

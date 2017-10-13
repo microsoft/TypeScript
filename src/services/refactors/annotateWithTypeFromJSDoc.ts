@@ -32,24 +32,25 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
 
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(node, isDeclarationWithType);
-        if (decl && !decl.type) {
-            const type = getJSDocType(decl);
-            const isFunctionWithJSDoc = isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)));
-            const annotate = (isFunctionWithJSDoc || type && decl.kind === SyntaxKind.Parameter) ? annotateFunctionFromJSDoc :
-                type ? annotateTypeFromJSDoc :
-                    undefined;
-            if (annotate) {
-                return [{
-                    name: annotate.name,
-                    description: annotate.description,
-                    actions: [
-                        {
-                            description: annotate.description,
-                            name: actionName
-                        }
-                    ]
-                }];
-            }
+        if (!decl || decl.type) {
+            return undefined;
+        }
+        const jsdocType = getJSDocType(decl);
+        const isFunctionWithJSDoc = isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)));
+        const refactor = (isFunctionWithJSDoc || jsdocType && decl.kind === SyntaxKind.Parameter) ? annotateFunctionFromJSDoc :
+            jsdocType ? annotateTypeFromJSDoc :
+            undefined;
+        if (refactor) {
+            return [{
+                name: refactor.name,
+                description: refactor.description,
+                actions: [
+                    {
+                    description: refactor.description,
+                    name: actionName
+                }
+                ]
+            }];
         }
     }
 
@@ -64,8 +65,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const decl = findAncestor(token, isDeclarationWithType);
         const jsdocType = getJSDocType(decl);
         if (!decl || !jsdocType || decl.type) {
-            Debug.fail(`!decl || !jsdocType || decl.type: !${decl} || !${jsdocType} || ${decl.type}`);
-            return undefined;
+            return Debug.fail(`!decl || !jsdocType || decl.type: !${decl} || !${jsdocType} || ${decl.type}`);
         }
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
@@ -128,7 +128,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.SetAccessor:
                 return createSetAccessor(decl.decorators, decl.modifiers, decl.name, parameters, decl.body);
             default:
-                return Debug.fail(`Unexpected SyntaxKind: ${(decl as any).kind}`);
+                return Debug.assertNever(decl,`Unexpected SyntaxKind: ${(decl as any).kind}`);
         }
     }
 
@@ -155,42 +155,42 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.JSDocUnknownType:
                 return createTypeReferenceNode("any", emptyArray);
             case SyntaxKind.JSDocOptionalType:
-                return visitJSDocOptionalType(node as JSDocOptionalType);
+                return transformJSDocOptionalType(node as JSDocOptionalType);
             case SyntaxKind.JSDocNonNullableType:
                 return transformJSDocType((node as JSDocNonNullableType).type);
             case SyntaxKind.JSDocNullableType:
-                return visitJSDocNullableType(node as JSDocNullableType);
+                return transformJSDocNullableType(node as JSDocNullableType);
             case SyntaxKind.JSDocVariadicType:
-                return visitJSDocVariadicType(node as JSDocVariadicType);
+                return transformJSDocVariadicType(node as JSDocVariadicType);
             case SyntaxKind.JSDocFunctionType:
-                return visitJSDocFunctionType(node as JSDocFunctionType);
+                return transformJSDocFunctionType(node as JSDocFunctionType);
             case SyntaxKind.Parameter:
-                return visitJSDocParameter(node as ParameterDeclaration);
+                return transformJSDocParameter(node as ParameterDeclaration);
             case SyntaxKind.TypeReference:
-                return visitJSDocTypeReference(node as TypeReferenceNode);
+                return transformJSDocTypeReference(node as TypeReferenceNode);
             default:
                 return visitEachChild(node, transformJSDocType, /*context*/ undefined) as TypeNode;
         }
     }
 
-    function visitJSDocOptionalType(node: JSDocOptionalType) {
+    function transformJSDocOptionalType(node: JSDocOptionalType) {
         return createUnionTypeNode([visitNode(node.type, transformJSDocType), createTypeReferenceNode("undefined", emptyArray)]);
     }
 
-    function visitJSDocNullableType(node: JSDocNullableType) {
+    function transformJSDocNullableType(node: JSDocNullableType) {
         return createUnionTypeNode([visitNode(node.type, transformJSDocType), createTypeReferenceNode("null", emptyArray)]);
     }
 
-    function visitJSDocVariadicType(node: JSDocVariadicType) {
+    function transformJSDocVariadicType(node: JSDocVariadicType) {
         return createArrayTypeNode(visitNode(node.type, transformJSDocType));
     }
 
-    function visitJSDocFunctionType(node: JSDocFunctionType) {
+    function transformJSDocFunctionType(node: JSDocFunctionType) {
         const parameters = node.parameters && node.parameters.map(transformJSDocType);
         return createFunctionTypeNode(emptyArray, parameters as ParameterDeclaration[], node.type);
     }
 
-    function visitJSDocParameter(node: ParameterDeclaration) {
+    function transformJSDocParameter(node: ParameterDeclaration) {
         const index = node.parent.parameters.indexOf(node);
         const isRest = node.type.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1;
         const name = node.name || (isRest ? "rest" : "arg" + index);
@@ -198,7 +198,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         return createParameter(node.decorators, node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
     }
 
-    function visitJSDocTypeReference(node: TypeReferenceNode) {
+    function transformJSDocTypeReference(node: TypeReferenceNode) {
         let name = node.typeName;
         let args = node.typeArguments;
         if (isIdentifier(node.typeName)) {
