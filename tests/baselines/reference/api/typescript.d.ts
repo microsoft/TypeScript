@@ -44,9 +44,9 @@ declare namespace ts {
             value: T;
             done: false;
         } | {
-                value: never;
-                done: true;
-            };
+            value: never;
+            done: true;
+        };
     }
     /** Array that is only intended to be pushed to, never read. */
     interface Push<T> {

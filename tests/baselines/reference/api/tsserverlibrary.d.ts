@@ -44,9 +44,9 @@ declare namespace ts {
             value: T;
             done: false;
         } | {
-                value: never;
-                done: true;
-            };
+            value: never;
+            done: true;
+        };
     }
     /** Array that is only intended to be pushed to, never read. */
     interface Push<T> {
@@ -4610,12 +4610,12 @@ declare namespace ts.server {
         module: {};
         error: undefined;
     } | {
-            module: undefined;
-            error: {
-                stack?: string;
-                message?: string;
-            };
+        module: undefined;
+        error: {
+            stack?: string;
+            message?: string;
         };
+    };
     interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
