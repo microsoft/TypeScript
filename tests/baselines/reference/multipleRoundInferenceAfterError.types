@@ -1,0 +1,25 @@
+=== tests/cases/compiler/multipleRoundInferenceAfterError.ts ===
+// Fixes #18715
+declare function inference<T>(target: T, name: keyof T): void;
+>inference : <T>(target: T, name: keyof T) => void
+>T : T
+>target : T
+>T : T
+>name : keyof T
+>T : T
+
+inference({ a: 1, b: 2, c: 3, d(n) { return n } }, "d");
+>inference({ a: 1, b: 2, c: 3, d(n) { return n } }, "d") : void
+>inference : <T>(target: T, name: keyof T) => void
+>{ a: 1, b: 2, c: 3, d(n) { return n } } : { a: number; b: number; c: number; d(n: any): any; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>c : number
+>3 : 3
+>d : (n: any) => any
+>n : any
+>n : any
+>"d" : "d"
+
