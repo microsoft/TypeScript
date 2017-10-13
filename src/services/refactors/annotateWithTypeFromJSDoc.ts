@@ -126,7 +126,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.SetAccessor:
                 return createSetAccessor(decl.decorators, decl.modifiers, decl.name, parameters, decl.body);
             default:
-                return Debug.assertNever(decl,`Unexpected SyntaxKind: ${(decl as any).kind}`);
+                return Debug.assertNever(decl, `Unexpected SyntaxKind: ${(decl as any).kind}`);
         }
     }
 
