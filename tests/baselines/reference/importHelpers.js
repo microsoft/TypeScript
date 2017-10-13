@@ -83,8 +83,8 @@ var C = /** @class */ (function () {
 function id(x) {
     return x;
 }
-exports.result = id(_a || (_a = tslib_1.__makeTemplateObject(["hello world"], ["hello world"])));
-var _a;
+exports.result = id(templateObject_1 || (templateObject_1 = tslib_1.__makeTemplateObject(["hello world"], ["hello world"])));
+var templateObject_1;
 //// [script.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
