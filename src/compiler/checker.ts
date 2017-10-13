@@ -14886,7 +14886,11 @@ namespace ts {
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
                 if (languageVersion < ScriptTarget.ES2015) {
-                    if (symbolHasNonMethodDeclaration(prop)) {
+                    const hasNonMethodDeclaration = forEachProperty(prop, p => {
+                        const propKind = getDeclarationKindFromSymbol(p);
+                        return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
+                    });
+                    if (hasNonMethodDeclaration) {
                         error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                         return false;
                     }
@@ -14897,17 +14901,6 @@ namespace ts {
                     // cannot simultaneously be private and abstract, so this will trigger an
                     // additional error elsewhere.
                     error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(getDeclaringClass(prop)));
-                    return false;
-                }
-            }
-
-            // Referencing Abstract Properties within Constructors is not allowed
-            if ((flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop)) {
-                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
-                const declaringClassConstructor = declaringClassDeclaration && findConstructorDeclaration(declaringClassDeclaration);
-
-                if (declaringClassConstructor && isNodeWithinFunction(node, declaringClassConstructor)) {
-                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_constructor, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
                 }
             }
@@ -14961,13 +14954,6 @@ namespace ts {
                 return false;
             }
             return true;
-        }
-
-        function symbolHasNonMethodDeclaration(symbol: Symbol) {
-            return forEachProperty(symbol, prop => {
-                const propKind = getDeclarationKindFromSymbol(prop);
-                return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
-            });
         }
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
@@ -23220,10 +23206,6 @@ namespace ts {
             }
 
             return result;
-        }
-
-        function isNodeWithinFunction(node: Node, functionDeclaration: FunctionLike) {
-            return getContainingFunction(node) === functionDeclaration;
         }
 
         function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {
