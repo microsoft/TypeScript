@@ -721,7 +721,7 @@ namespace ts {
             processReferenceComments(sourceFile);
 
             sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
-            Debug.assert(token() === SyntaxKind.EndOfFileToken);
+            Debug.assertEqual(token(), SyntaxKind.EndOfFileToken);
             sourceFile.endOfFileToken = addJSDocComment(parseTokenNode() as EndOfFileToken);
 
             setExternalModuleIndicator(sourceFile);
@@ -843,13 +843,9 @@ namespace ts {
             if (contextFlagsToClear) {
                 // clear the requested context flags
                 setContextFlag(/*val*/ false, contextFlagsToClear);
-                let result: T;
-                try {
-                    result = func();
-                } finally {
-                    // restore the context flags we just cleared
-                    setContextFlag(/*val*/ true, contextFlagsToClear);
-                }
+                const result = func();
+                // restore the context flags we just cleared
+                setContextFlag(/*val*/ true, contextFlagsToClear);
                 return result;
             }
 
@@ -868,14 +864,9 @@ namespace ts {
             if (contextFlagsToSet) {
                 // set the requested context flags
                 setContextFlag(/*val*/ true, contextFlagsToSet);
-                let result: T;
-                try {
-                    result = func();
-                }
-                finally {
-                    // reset the context flags we just set
-                    setContextFlag(/*val*/ false, contextFlagsToSet);
-                }
+                const result = func();
+                // reset the context flags we just set
+                setContextFlag(/*val*/ false, contextFlagsToSet);
                 return result;
             }
 
@@ -997,12 +988,13 @@ namespace ts {
             return currentToken = scanner.scanJsxAttributeValue();
         }
 
-        function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
+        function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T | undefined {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
             const saveToken = currentToken;
             const saveParseDiagnosticsLength = parseDiagnostics.length;
             const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
+            const saveParsingContext = parsingContext;
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
             // because the saving/restoring of these flags happens naturally through the recursive
@@ -1016,29 +1008,34 @@ namespace ts {
             // If we're only looking ahead, then tell the scanner to only lookahead as well.
             // Otherwise, if we're actually speculatively parsing, then tell the scanner to do the
             // same.
+            const reset = scanner.startSpeculation();
             let result: T | undefined;
             try {
-                result = isLookAhead
-                    ? scanner.lookAhead(callback)
-                    : scanner.tryScan(callback);
+                result = callback();
             }
             catch (e) {
                 if (e !== GIVE_UP_SPECULATION) {
                     throw e;
                 }
-            } finally {
-                inSpeculation = saveInSpeculation;
-
-                Debug.assert(saveContextFlags === contextFlags);
-
-                // If our callback returned something 'falsy' or we're just looking ahead,
-                // then unconditionally restore us to where we were.
-                if (!result || isLookAhead) {
-                    currentToken = saveToken;
-                    parseDiagnostics.length = saveParseDiagnosticsLength;
-                    parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
-                }
+                // Else swallow the exception and let 'result' be undefined
             }
+
+            inSpeculation = saveInSpeculation;
+
+            // Usually contextFlags === saveContextFlags,
+            // but if there was a GIVE_UP_SPECULATION exception, resets won't have happened.
+            contextFlags = saveContextFlags;
+            parsingContext = saveParsingContext;
+
+            // If our callback returned something 'falsy' or we're just looking ahead,
+            // then unconditionally restore us to where we were.
+            if (!result || isLookAhead) {
+                scanner.resetAfterSpeculation(reset);
+                currentToken = saveToken;
+                parseDiagnostics.length = saveParseDiagnosticsLength;
+                parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
+            }
+
             return result;
         }
 
@@ -2358,14 +2355,9 @@ namespace ts {
                 setYieldContext(!!(flags & SignatureFlags.Yield));
                 setAwaitContext(!!(flags & SignatureFlags.Await));
 
-                let result;
-                try {
-                    result = parseDelimitedList(ParsingContext.Parameters, flags & SignatureFlags.JSDoc ? parseJSDocParameter : parseParameter);
-                }
-                finally {
-                    setYieldContext(savedYieldContext);
-                    setAwaitContext(savedAwaitContext);
-                }
+                const result = parseDelimitedList(ParsingContext.Parameters, flags & SignatureFlags.JSDoc ? parseJSDocParameter : parseParameter);
+                setYieldContext(savedYieldContext);
+                setAwaitContext(savedAwaitContext);
 
                 if (!parseExpected(SyntaxKind.CloseParenToken) && (flags & SignatureFlags.RequireCompleteParameterList)) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
@@ -3031,18 +3023,13 @@ namespace ts {
                 setDecoratorContext(/*val*/ false);
             }
 
-            let expr;
-            try {
-                expr = parseAssignmentExpressionOrHigher();
-                let operatorToken: BinaryOperatorToken;
-                while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
-                    expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
-                }
+            let expr = parseAssignmentExpressionOrHigher();
+            let operatorToken: BinaryOperatorToken;
+            while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
+                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
             }
-            finally {
-                if (saveDecoratorContext) {
-                    setDecoratorContext(/*val*/ true);
-                }
+            if (saveDecoratorContext) {
+                setDecoratorContext(/*val*/ true);
             }
 
             return expr;
@@ -4539,28 +4526,23 @@ namespace ts {
             if (saveDecoratorContext) {
                 setDecoratorContext(/*val*/ false);
             }
-            let node;
-            try {
-                node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
-                node.modifiers = parseModifiers();
-                parseExpected(SyntaxKind.FunctionKeyword);
-                node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
+            const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
+            node.modifiers = parseModifiers();
+            parseExpected(SyntaxKind.FunctionKeyword);
+            node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
 
-                const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
-                const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
-                node.name =
-                    isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
-                        isGenerator ? doInYieldContext(parseOptionalIdentifier) :
-                            isAsync ? doInAwaitContext(parseOptionalIdentifier) :
-                                parseOptionalIdentifier();
+            const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
+            const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
+            node.name =
+                isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
+                    isGenerator ? doInYieldContext(parseOptionalIdentifier) :
+                        isAsync ? doInAwaitContext(parseOptionalIdentifier) :
+                            parseOptionalIdentifier();
 
-                fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
-                node.body = parseFunctionBlock(isGenerator | isAsync);
-            }
-            finally {
-                if (saveDecoratorContext) {
-                    setDecoratorContext(/*val*/ true);
-                }
+            fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
+            node.body = parseFunctionBlock(isGenerator | isAsync);
+            if (saveDecoratorContext) {
+                setDecoratorContext(/*val*/ true);
             }
 
             return addJSDocComment(finishNode(node));
@@ -4620,18 +4602,13 @@ namespace ts {
                 setDecoratorContext(/*val*/ false);
             }
 
-            let block;
-            try {
-                block = parseBlock(!!(flags & SignatureFlags.IgnoreMissingOpenBrace), diagnosticMessage);
+            const block = parseBlock(!!(flags & SignatureFlags.IgnoreMissingOpenBrace), diagnosticMessage);
+            if (saveDecoratorContext) {
+                setDecoratorContext(/*val*/ true);
             }
-            finally {
-                if (saveDecoratorContext) {
-                    setDecoratorContext(/*val*/ true);
-                }
 
-                setYieldContext(savedYieldContext);
-                setAwaitContext(savedAwaitContext);
-            }
+            setYieldContext(savedYieldContext);
+            setAwaitContext(savedAwaitContext);
 
             return block;
         }
@@ -5288,12 +5265,8 @@ namespace ts {
             else {
                 const savedDisallowIn = inDisallowInContext();
                 setDisallowInContext(inForStatementInitializer);
-                try {
-                    node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
-                }
-                finally {
-                    setDisallowInContext(savedDisallowIn);
-                }
+                node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+                setDisallowInContext(savedDisallowIn);
             }
 
             return finishNode(node);

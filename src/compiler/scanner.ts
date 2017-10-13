@@ -45,6 +45,7 @@ namespace ts {
         // Invokes the provided callback then unconditionally restores the scanner to the state it
         // was in immediately prior to invoking the callback.  The result of invoking the callback
         // is returned from this function.
+        // Present for backwards compatibility only.
         lookAhead<T>(callback: () => T): T;
 
         // Invokes the callback with the scanner set to scan the specified range. When the callback
@@ -55,7 +56,23 @@ namespace ts {
         // the scanner to the state it was in immediately prior to invoking the callback.  If the
         // callback returns something truthy, then the scanner state is not rolled back.  The result
         // of invoking the callback is returned from this function.
+        // Present for backwards compatibility only.
         tryScan<T>(callback: () => T): T;
+
+        /* @internal */
+        startSpeculation(): SpeculationReset;
+        /* @internal */
+        resetAfterSpeculation(reset: SpeculationReset): void;
+    }
+
+    /* @internal */
+    export interface SpeculationReset {
+        pos: number;
+        startPos: number;
+        tokenPos: number;
+        token: SyntaxKind;
+        tokenValue: string;
+        precedingLineBreak: boolean;
     }
 
     const textToToken = createMapFromTemplate({
@@ -849,6 +866,8 @@ namespace ts {
             tryScan,
             lookAhead,
             scanRange,
+            startSpeculation,
+            resetAfterSpeculation,
         };
 
         function error(message: DiagnosticMessage, length?: number): void {
@@ -1886,29 +1905,28 @@ namespace ts {
         }
 
         function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
-            const savePos = pos;
-            const saveStartPos = startPos;
-            const saveTokenPos = tokenPos;
-            const saveToken = token;
-            const saveTokenValue = tokenValue;
-            const savePrecedingLineBreak = precedingLineBreak;
+            const reset = startSpeculation();
 
             let result: T;
             try {
                 result = callback();
-            } finally {
+            }
+            finally {
                 // If our callback returned something 'falsy' or we're just looking ahead,
                 // then unconditionally restore us to where we were.
                 if (!result || isLookahead) {
-                    pos = savePos;
-                    startPos = saveStartPos;
-                    tokenPos = saveTokenPos;
-                    token = saveToken;
-                    tokenValue = saveTokenValue;
-                    precedingLineBreak = savePrecedingLineBreak;
+                    resetAfterSpeculation(reset);
                 }
             }
             return result;
+        }
+
+        function startSpeculation(): SpeculationReset {
+            return { pos, startPos, tokenPos, token, tokenValue, precedingLineBreak };
+        }
+
+        function resetAfterSpeculation(reset: SpeculationReset): void {
+            ({ pos, startPos, tokenPos, token, tokenValue, precedingLineBreak } = reset);
         }
 
         function scanRange<T>(start: number, length: number, callback: () => T): T {
