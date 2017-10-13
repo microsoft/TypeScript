@@ -44,9 +44,9 @@ declare namespace ts {
             value: T;
             done: false;
         } | {
-            value: never;
-            done: true;
-        };
+                value: never;
+                done: true;
+            };
     }
     /** Array that is only intended to be pushed to, never read. */
     interface Push<T> {
@@ -3942,6 +3942,7 @@ declare namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
+        getSpanForPosition(fileName: string, position: number): TextSpan;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;

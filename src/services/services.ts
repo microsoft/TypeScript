@@ -724,9 +724,9 @@ namespace ts {
 
                     case SyntaxKind.BinaryExpression:
                         if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
-                           addDeclaration(node as BinaryExpression);
+                            addDeclaration(node as BinaryExpression);
                         }
-                        // falls through
+                    // falls through
 
                     default:
                         forEachChild(node, visit);
@@ -1807,6 +1807,15 @@ namespace ts {
             return range && createTextSpanFromRange(range);
         }
 
+        function getSpanForPosition(fileName: string, position: number): TextSpan {
+            synchronizeHostData();
+
+            const sourceFile = getValidSourceFile(fileName);
+            const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocCcomment*/ false);
+
+            return createTextSpan(node.getStart(), node.getWidth());
+        }
+
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             // Note: while getting todo comments seems like a syntactic operation, we actually
             // treat it as a semantic operation here.  This is because we expect our host to call
@@ -2032,6 +2041,7 @@ namespace ts {
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
             getSpanOfEnclosingComment,
+            getSpanForPosition,
             getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,

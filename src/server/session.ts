@@ -167,7 +167,7 @@ namespace ts.server {
         private timerHandle: any;
         private immediateId: number | undefined;
 
-        constructor(private readonly operationHost: MultistepOperationHost) {}
+        constructor(private readonly operationHost: MultistepOperationHost) { }
 
         public startNew(action: (next: NextStep) => void) {
             this.complete();
@@ -579,7 +579,7 @@ namespace ts.server {
 
         private getDiagnosticsWorker(
             args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => ReadonlyArray<Diagnostic>, includeLinePosition: boolean
-            ): ReadonlyArray<protocol.DiagnosticWithLinePosition> | ReadonlyArray<protocol.Diagnostic> {
+        ): ReadonlyArray<protocol.DiagnosticWithLinePosition> | ReadonlyArray<protocol.Diagnostic> {
             const { project, file } = this.getFileAndProject(args);
             if (isSemantic && isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
                 return emptyArray;
@@ -1079,6 +1079,13 @@ namespace ts.server {
             else {
                 return quickInfo;
             }
+        }
+
+        private getSpanForLocation(args: protocol.FileLocationRequestArgs): TextSpan {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+
+            return project.getLanguageService().getSpanForPosition(file, this.getPosition(args, scriptInfo));
         }
 
         private getFormattingEditsForRange(args: protocol.FormatRequestArgs): protocol.CodeEdit[] {
@@ -1706,6 +1713,15 @@ namespace ts.server {
             },
             [CommandNames.DefinitionFull]: (request: protocol.DefinitionRequest) => {
                 return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.DefinitionAndBoundSpan]: (request: protocol.DefinitionRequest) => {
+                const definitions = this.getDefinition(request.arguments, /*simplifiedResult*/ false);
+                const textSpan = definitions.length !== 0 ? this.getSpanForLocation(request.arguments) : {};
+
+                return this.requiredResponse({
+                    definitions,
+                    textSpan
+                });
             },
             [CommandNames.TypeDefinition]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getTypeDefinition(request.arguments));

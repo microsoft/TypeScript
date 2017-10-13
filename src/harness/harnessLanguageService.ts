@@ -490,6 +490,9 @@ namespace Harness.LanguageService {
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
             return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
         }
+        getSpanForPosition(): ts.TextSpan {
+            throw new Error("Not supportred on the shim.");
+        }
         getCodeFixesAtPosition(): ts.CodeAction[] {
             throw new Error("Not supported on the shim.");
         }

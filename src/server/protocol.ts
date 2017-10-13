@@ -21,6 +21,8 @@ namespace ts.server.protocol {
         Definition = "definition",
         /* @internal */
         DefinitionFull = "definition-full",
+        /* @internal */
+        DefinitionAndBoundSpan = "definitionAndBoundSpan",
         Implementation = "implementation",
         /* @internal */
         ImplementationFull = "implementation-full",

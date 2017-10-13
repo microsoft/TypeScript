@@ -44,9 +44,9 @@ declare namespace ts {
             value: T;
             done: false;
         } | {
-            value: never;
-            done: true;
-        };
+                value: never;
+                done: true;
+            };
     }
     /** Array that is only intended to be pushed to, never read. */
     interface Push<T> {
@@ -3942,6 +3942,7 @@ declare namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
+        getSpanForPosition(fileName: string, position: number): TextSpan;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
@@ -4609,12 +4610,12 @@ declare namespace ts.server {
         module: {};
         error: undefined;
     } | {
-        module: undefined;
-        error: {
-            stack?: string;
-            message?: string;
+            module: undefined;
+            error: {
+                stack?: string;
+                message?: string;
+            };
         };
-    };
     interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
@@ -6887,6 +6888,7 @@ declare namespace ts.server {
         private getNameOrDottedNameSpan(args);
         private isValidBraceCompletion(args);
         private getQuickInfoWorker(args, simplifiedResult);
+        private getSpanForLocation(args);
         private getFormattingEditsForRange(args);
         private getFormattingEditsForRangeFull(args);
         private getFormattingEditsForDocumentFull(args);

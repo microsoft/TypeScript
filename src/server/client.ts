@@ -322,7 +322,7 @@ namespace ts.server {
         }
 
         getSyntacticDiagnostics(file: string): Diagnostic[] {
-            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file,  includeLinePosition: true };
+            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file, includeLinePosition: true };
 
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest>(CommandNames.SyntacticDiagnosticsSync, args);
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse>(request);
@@ -528,6 +528,10 @@ namespace ts.server {
         }
 
         getSpanOfEnclosingComment(_fileName: string, _position: number, _onlyMultiLine: boolean): TextSpan {
+            return notImplemented();
+        }
+
+        getSpanForPosition(_fileName: string, _position: number): TextSpan {
             return notImplemented();
         }
 
