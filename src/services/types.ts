@@ -203,7 +203,7 @@ namespace ts {
          */
         getCustomTransformers?(): CustomTransformers | undefined;
 
-        tryGetTypesRegistry?(): Map<void> | undefined;
+        isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult>;
     }
 

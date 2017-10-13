@@ -1765,7 +1765,9 @@ namespace ts {
             fileName = toPath(fileName, currentDirectory, getCanonicalFileName);
             switch (action.type) {
                 case "install package":
-                    return host.installPackage({ fileName, packageName: action.packageName });
+                    return host.installPackage
+                        ? host.installPackage({ fileName, packageName: action.packageName })
+                        : PromiseImpl.reject("Host does not implement `installPackage`");
                 default:
                     Debug.fail();
                     // TODO: Debug.assertNever(action); will only work if there is more than one type.

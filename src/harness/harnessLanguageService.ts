@@ -183,11 +183,8 @@ namespace Harness.LanguageService {
 
     /// Native adapter
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
-        tryGetTypesRegistry(): ts.Map<void> | undefined {
-            if (this.typesRegistry === undefined) {
-                ts.Debug.fail("fourslash test should set types registry.");
-            }
-            return this.typesRegistry;
+        isKnownTypesPackageName(name: string): boolean {
+            return this.typesRegistry && this.typesRegistry.has(name);
         }
         installPackage = ts.notImplemented;
 

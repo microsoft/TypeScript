@@ -540,15 +540,7 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, file));
         }
 
-        applyCodeActionCommand(file: string, command: CodeActionCommand): PromiseLike<ApplyCodeActionCommandResult> {
-            const args: protocol.ApplyCodeActionCommandRequestArgs = { file, command };
-
-            const request = this.processRequest<protocol.ApplyCodeActionCommandRequest>(CommandNames.ApplyCodeActionCommand, args);
-            // TODO: how can we possibly get it synchronously here? But is SessionClient test-only?
-            const response = this.processResponse<protocol.ApplyCodeActionCommandResponse>(request);
-
-            return PromiseImpl.resolved({ successMessage: response.message });
-        }
+        applyCodeActionCommand = notImplemented;
 
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
             return typeof positionOrRange === "number"

@@ -250,6 +250,8 @@ namespace ts.server {
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
+        private requestedRegistry: boolean;
         private typesRegistryCache: Map<void> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
@@ -279,13 +281,20 @@ namespace ts.server {
             }
         }
 
-        tryGetTypesRegistry(): Map<void> | undefined {
-            if (this.typesRegistryCache) {
-                return this.typesRegistryCache;
+        isKnownTypesPackageName(name: string): boolean {
+            // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
+            const validationResult = JsTyping.validatePackageName(name);
+            if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
+                return undefined;
             }
 
+            if (this.requestedRegistry) {
+                return !!this.typesRegistryCache && this.typesRegistryCache.has(name);
+            }
+
+            this.requestedRegistry = true;
             this.send({ kind: "typesRegistry" });
-            return undefined;
+            return false;
         }
 
         installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult> {

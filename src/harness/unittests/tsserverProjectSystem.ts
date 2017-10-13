@@ -70,7 +70,7 @@ namespace ts.projectSystem {
 
         protected postExecActions: PostExecAction[] = [];
 
-        tryGetTypesRegistry = notImplemented;
+        isKnownTypesPackageName = notImplemented;
         installPackage = notImplemented;
 
         executePendingCommands() {

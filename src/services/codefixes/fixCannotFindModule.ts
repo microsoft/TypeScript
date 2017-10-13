@@ -20,19 +20,12 @@ namespace ts.codefix {
     export function tryGetCodeActionForInstallPackageTypes(host: LanguageServiceHost, moduleName: string): CodeAction | undefined {
         const { packageName } = getPackageName(moduleName);
 
-        // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
-        const validationResult = JsTyping.validatePackageName(packageName);
-        if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
-            return undefined;
-        }
-
-        const registry = host.tryGetTypesRegistry();
-        if (!registry || !registry.has(packageName)) {
+        if (!host.isKnownTypesPackageName(packageName)) {
             // If !registry, registry not available yet, can't do anything.
             return undefined;
         }
 
-        const typesPackageName = `@types/${packageName}`;
+        const typesPackageName = getTypesPackageName(packageName);
         return {
             description: `Install '${typesPackageName}'`,
             changes: [],

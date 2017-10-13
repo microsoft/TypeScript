@@ -245,8 +245,8 @@ namespace ts.server {
         /*@internal*/
         protected abstract getProjectRootPath(): Path | undefined;
 
-        tryGetTypesRegistry(): Map<void> | undefined {
-            return this.typingsCache.tryGetTypesRegistry();
+        isKnownTypesPackageName(name: string): boolean {
+            return this.typingsCache.isKnownTypesPackageName(name);
         }
         installPackage(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult> {
             return this.typingsCache.installPackage({ ...options, projectRootPath: this.getProjectRootPath() });

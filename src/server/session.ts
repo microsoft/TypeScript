@@ -411,7 +411,12 @@ namespace ts.server {
             this.send(ev);
         }
 
-        public output(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string) {
+        // For backwards-compatibility only.
+        public output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void {
+            this.doOutput(info, cmdName, reqSeq, /*success*/ !errorMsg, errorMsg);
+        }
+
+        private doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
             const res: protocol.Response = {
                 seq: 0,
                 type: "response",
@@ -1299,7 +1304,7 @@ namespace ts.server {
             this.changeSeq++;
             // make sure no changes happen before this one is finished
             if (project.reloadScript(file, tempFileName)) {
-                this.output(undefined, CommandNames.Reload, reqSeq, /*success*/ true);
+                this.doOutput(/*info*/ undefined, CommandNames.Reload, reqSeq, /*success*/ true);
             }
         }
 
@@ -1539,7 +1544,7 @@ namespace ts.server {
 
         private applyCodeActionCommand(commandName: string, requestSeq: number, args: protocol.ApplyCodeActionCommandRequestArgs): void {
             const { file, project } = this.getFileAndProject(args);
-            const output = (success: boolean, message: string) => this.output({}, commandName, requestSeq, success, message);
+            const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
             const command = args.command as CodeActionCommand; // They should be sending back the command we sent them.
             project.getLanguageService().applyCodeActionCommand(file, command).then(
                 ({ successMessage }) => { output(/*success*/ true, successMessage); },
@@ -1845,7 +1850,7 @@ namespace ts.server {
             },
             [CommandNames.Configure]: (request: protocol.ConfigureRequest) => {
                 this.projectService.setHostConfiguration(request.arguments);
-                this.output(undefined, CommandNames.Configure, request.seq, /*success*/ true);
+                this.doOutput(/*info*/ undefined, CommandNames.Configure, request.seq, /*success*/ true);
                 return this.notRequired();
             },
             [CommandNames.Reload]: (request: protocol.ReloadRequest) => {
@@ -1966,7 +1971,7 @@ namespace ts.server {
             }
             else {
                 this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);
-                this.output(undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
+                this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }
         }
@@ -1997,21 +2002,21 @@ namespace ts.server {
                 }
 
                 if (response) {
-                    this.output(response, request.command, request.seq, /*success*/ true);
+                    this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
                 else if (responseRequired) {
-                    this.output(undefined, request.command, request.seq, /*success*/ false, "No content available.");
+                    this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
                 }
             }
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
-                    this.output({ canceled: true }, request.command, request.seq, /*success*/ true);
+                    this.doOutput({ canceled: true }, request.command, request.seq, /*success*/ true);
                     return;
                 }
                 this.logError(err, message);
-                this.output(
-                    undefined,
+                this.doOutput(
+                    /*info*/ undefined,
                     request ? request.command : CommandNames.Unknown,
                     request ? request.seq : 0,
                     /*success*/ false,

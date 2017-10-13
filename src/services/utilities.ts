@@ -1107,8 +1107,12 @@ namespace ts {
             return new PromiseImpl(PromiseState.Unresolved, undefined, undefined, undefined);
         }
 
-        static resolved<T>(value: T): PromiseImpl<T> {
+        static resolve<T>(value: T): PromiseImpl<T> {
             return new PromiseImpl<T>(PromiseState.Success, value, undefined, undefined);
+        }
+
+        static reject(value: {}): PromiseImpl<never> {
+            return new PromiseImpl<never>(PromiseState.Failure, undefined as never, value, undefined);
         }
 
         resolve(value: T): void {
@@ -1176,7 +1180,7 @@ namespace ts {
     }
 
     function toPromiseLike<T>(x: T | PromiseLike<T>): PromiseLike<T> {
-        return isPromiseLike(x) ? x as PromiseLike<T> : PromiseImpl.resolved(x as T);
+        return isPromiseLike(x) ? x as PromiseLike<T> : PromiseImpl.resolve(x as T);
     }
 }
 

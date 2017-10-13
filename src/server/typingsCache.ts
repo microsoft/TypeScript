@@ -6,7 +6,7 @@ namespace ts.server {
     }
 
     export interface ITypingsInstaller {
-        tryGetTypesRegistry(): Map<void> | undefined;
+        isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
@@ -15,7 +15,7 @@ namespace ts.server {
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
-        tryGetTypesRegistry: () => undefined,
+        isKnownTypesPackageName: returnFalse,
         // Should never be called because we never provide a types registry.
         installPackage: notImplemented,
         enqueueInstallTypingsRequest: noop,
@@ -86,8 +86,8 @@ namespace ts.server {
         constructor(private readonly installer: ITypingsInstaller) {
         }
 
-        tryGetTypesRegistry(): Map<void> | undefined {
-            return this.installer.tryGetTypesRegistry();
+        isKnownTypesPackageName(name: string): boolean {
+            return this.installer.isKnownTypesPackageName(name);
         }
 
         installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult> {

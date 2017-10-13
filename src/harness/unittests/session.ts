@@ -372,7 +372,7 @@ namespace ts.server {
                 };
                 const command = "test";
 
-                session.output(body, command, /*reqSeq*/ 0, /*success*/ true);
+                session.output(body, command, /*reqSeq*/ 0);
 
                 expect(lastSent).to.deep.equal({
                     seq: 0,
@@ -475,7 +475,7 @@ namespace ts.server {
             };
             const command = "test";
 
-            session.output(body, command, /*reqSeq*/ 0, /*success*/ true);
+            session.output(body, command, /*reqSeq*/ 0);
 
             expect(session.lastSent).to.deep.equal({
                 seq: 0,
@@ -549,7 +549,7 @@ namespace ts.server {
                     return;
                 }
                 if (response) {
-                    this.output(response, msg.command, msg.seq, /*success*/ true);
+                    this.output(response, msg.command, msg.seq);
                 }
             }
 
