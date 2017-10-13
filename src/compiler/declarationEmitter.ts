@@ -582,8 +582,9 @@ namespace ts {
             }
 
             function emitMatchType(node: MatchTypeNode) {
+                write("match (")
                 emitType(node.typeArgument);
-                write(" match {");
+                write(") {");
                 if (node.matchBlock.clauses.length) {
                     increaseIndent();
                     emitCommaList(node.matchBlock.clauses, emitNode);

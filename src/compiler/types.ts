@@ -3452,7 +3452,7 @@ namespace ts {
         type: TypeVariable | UnionOrIntersectionType;
     }
 
-    // T match {} types (TypeFlags.Match)
+    // match (T) {} types (TypeFlags.Match)
     export interface MatchType extends Type {
         typeArgument: Type;
         clauses: ReadonlyArray<MatchTypeClause>;

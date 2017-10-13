@@ -1124,10 +1124,10 @@ namespace ts {
         }
 
         function emitMatchType(node: MatchTypeNode) {
-            emit(node.typeArgument);
-            write(" ");
             writeToken(SyntaxKind.MatchKeyword, node.typeArgument.end);
-            write(" ");
+            write(" (");
+            emit(node.typeArgument);
+            write(") ");
             emit(node.matchBlock);
         }
 

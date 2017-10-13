@@ -3329,9 +3329,11 @@ namespace ts {
                 }
 
                 function writeMatchType(type: MatchType) {
-                    writeType((<MatchType>type).typeArgument, TypeFormatFlags.None);
-                    writeSpace(writer);
                     writer.writeKeyword("match");
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.OpenParenToken);
+                    writeType((<MatchType>type).typeArgument, TypeFormatFlags.None);
+                    writePunctuation(writer, SyntaxKind.CloseParenToken);
                     writeSpace(writer);
                     writePunctuation(writer, SyntaxKind.OpenBracketToken);
                     writer.writeLine();

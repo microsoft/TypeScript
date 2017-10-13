@@ -2633,23 +2633,18 @@ namespace ts {
             return token() === SyntaxKind.ElseKeyword ? parseMatchTypeElseClause() : parseMatchTypeMatchClause();
         }
 
-        function parseMatchTypeRest(type: TypeNode) {
-            while (true) {
-                type = parseArrayTypeRest(type);
-                if (!scanner.hasPrecedingLineBreak() && token() === SyntaxKind.MatchKeyword) {
-                    const node = <MatchTypeNode>createNode(SyntaxKind.MatchType, type.pos);
-                    node.typeArgument = type;
-                    parseExpected(SyntaxKind.MatchKeyword);
-                    const matchBlock = <MatchTypeBlock>createNode(SyntaxKind.MatchTypeBlock);
-                    parseExpected(SyntaxKind.OpenBraceToken);
-                    matchBlock.clauses = parseDelimitedList(ParsingContext.MatchTypeClauses, parseMatchTypeCaseOrElseClause, /*considerSemicolonAsDelimiter*/ true);
-                    parseExpected(SyntaxKind.CloseBraceToken);
-                    node.matchBlock = finishNode(matchBlock);
-                    type = finishNode(node);
-                    continue;
-                }
-                return type;
-            }
+        function parseMatchType() {
+            const node = <MatchTypeNode>createNode(SyntaxKind.MatchType);
+            parseExpected(SyntaxKind.MatchKeyword);
+            parseExpected(SyntaxKind.OpenParenToken);
+            node.typeArgument = parseType();
+            parseExpected(SyntaxKind.CloseParenToken);
+            const matchBlock = <MatchTypeBlock>createNode(SyntaxKind.MatchTypeBlock);
+            parseExpected(SyntaxKind.OpenBraceToken);
+            matchBlock.clauses = parseDelimitedList(ParsingContext.MatchTypeClauses, parseMatchTypeCaseOrElseClause, /*considerSemicolonAsDelimiter*/ true);
+            parseExpected(SyntaxKind.CloseBraceToken);
+            node.matchBlock = finishNode(matchBlock);
+            return finishNode(node);
         }
 
         function parseTupleType(): TupleTypeNode {
@@ -2760,6 +2755,8 @@ namespace ts {
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
+                case SyntaxKind.MatchKeyword:
+                    return parseMatchType();
                 default:
                     return parseTypeReference();
             }
@@ -2793,6 +2790,7 @@ namespace ts {
                 case SyntaxKind.QuestionToken:
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DotDotDotToken:
+                case SyntaxKind.MatchKeyword:
                     return true;
                 case SyntaxKind.MinusToken:
                     return lookAhead(nextTokenIsNumericLiteral);
@@ -2834,8 +2832,9 @@ namespace ts {
         }
 
         function parseArrayTypeOrHigher(): TypeNode {
-            let type = parseJSDocPostfixTypeOrHigher();
-            return parseMatchTypeRest(type);
+            const type = parseJSDocPostfixTypeOrHigher();
+            // return parseMatchTypeRest(type);
+            return parseArrayTypeRest(type);
         }
 
         function parseArrayTypeRest(type: TypeNode): TypeNode {
