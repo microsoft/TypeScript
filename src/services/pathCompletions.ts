@@ -6,7 +6,7 @@ namespace ts.Completions.PathCompletions {
         const scriptPath = node.getSourceFile().path;
         const scriptDirectory = getDirectoryPath(scriptPath);
 
-        const span = getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1);
+        const span = getDirectoryFragmentTextSpan(node.text, node.getStart() + 1);
         let entries: CompletionEntry[];
         if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
             const extensions = getSupportedExtensions(compilerOptions);
@@ -47,7 +47,17 @@ namespace ts.Completions.PathCompletions {
         return deduplicate(map(rootDirs, rootDirectory => combinePaths(rootDirectory, relativeDirectory)));
     }
 
-    function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: ReadonlyArray<string>, includeExtensions: boolean, span: TextSpan, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude?: string): CompletionEntry[] {
+    function getCompletionEntriesForDirectoryFragmentWithRootDirs(
+        rootDirs: string[],
+        fragment: string,
+        scriptPath: string,
+        extensions: ReadonlyArray<string>,
+        includeExtensions: boolean,
+        span: TextSpan,
+        compilerOptions: CompilerOptions,
+        host: LanguageServiceHost,
+        exclude?: string,
+    ): CompletionEntry[] {
         const basePath = compilerOptions.project || host.getCurrentDirectory();
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
         const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptPath, ignoreCase);
@@ -64,7 +74,16 @@ namespace ts.Completions.PathCompletions {
     /**
      * Given a path ending at a directory, gets the completions for the path, and filters for those entries containing the basename.
      */
-    function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: ReadonlyArray<string>, includeExtensions: boolean, span: TextSpan, host: LanguageServiceHost, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
+    function getCompletionEntriesForDirectoryFragment(
+        fragment: string,
+        scriptPath: string,
+        extensions: ReadonlyArray<string>,
+        includeExtensions: boolean,
+        span: TextSpan,
+        host: LanguageServiceHost,
+        exclude?: string,
+        result: CompletionEntry[] = [],
+    ): CompletionEntry[] {
         if (fragment === undefined) {
             fragment = "";
         }
