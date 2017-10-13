@@ -373,23 +373,23 @@ namespace ts {
         const maximumSuggestionCount = 10;
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
-        const nodeLinks: {[K in keyof NodeLinks]: Map<NodeLinks[K]>} = {
-            containsArgumentsReference: createMap(),
-            enumMemberValue: createMap(),
-            flags: createMap(),
-            hasReportedStatementInAmbientContext: createMap(),
-            hasSuperCall: createMap(),
-            isVisible: createMap(),
-            jsxFlags: createMap(),
-            maybeTypePredicate: createMap(),
-            resolvedIndexInfo: createMap(),
-            resolvedJsxElementAllAttributesType: createMap(),
-            resolvedJsxElementAttributesType: createMap(),
-            resolvedSignature: createMap(),
-            resolvedSymbol: createMap(),
-            resolvedType: createMap(),
-            superCall: createMap(),
-            switchTypes: createMap(),
+        const nodeLinks: {[K in keyof NodeLinks]: NodeLinks[K][]} = {
+            containsArgumentsReference: [],
+            enumMemberValue: [],
+            flags: [],
+            hasReportedStatementInAmbientContext: [],
+            hasSuperCall: [],
+            isVisible: [],
+            jsxFlags: [],
+            maybeTypePredicate: [],
+            resolvedIndexInfo: [],
+            resolvedJsxElementAllAttributesType: [],
+            resolvedJsxElementAttributesType: [],
+            resolvedSignature: [],
+            resolvedSymbol: [],
+            resolvedType: [],
+            superCall: [],
+            switchTypes: [],
         };
         const flowLoopCaches: Map<Type>[] = [];
         const flowLoopNodes: FlowNode[] = [];
@@ -752,11 +752,11 @@ namespace ts {
         }
 
         function getNodeLink<K extends keyof NodeLinks>(node: Node, prop: K): NodeLinks[K] {
-            return nodeLinks[prop].get("" + getNodeId(node));
+            return nodeLinks[prop][getNodeId(node)];
         }
 
         function setNodeLink<K extends keyof NodeLinks>(node: Node, prop: K, value: NodeLinks[K]): NodeLinks[K] {
-            (nodeLinks[prop].set as (key: string, value: NodeLinks[K]) => void)("" + getNodeId(node), value);
+            nodeLinks[prop][getNodeId(node)] = value;
             return value;
         }
 
