@@ -13467,32 +13467,37 @@ namespace ts {
 
         function getContextualTypeForJsxExpression(node: JsxExpression): Type {
             // JSX expression can appear in two position : JSX Element's children or JSX attribute
-            const jsxAttributes = isJsxAttributeLike(node.parent) ?
+            const jsxAttributes: JsxAttributes = isJsxAttributeLike(node.parent) ?
                 node.parent.parent :
-                node.parent.openingElement.attributes; // node.parent is JsxElement
+                    isJsxElement(node.parent) ?
+                        node.parent.openingElement.attributes :
+                        undefined; // node.parent is JsxFragment with no attributes
 
-            // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
-            // which is a type of the parameter of the signature we are trying out.
-            // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
-            const attributesType = getContextualType(jsxAttributes);
+            if (jsxAttributes) {
+                // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
+                // which is a type of the parameter of the signature we are trying out.
+                // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
+                const attributesType = getContextualType(jsxAttributes);
 
-            if (!attributesType || isTypeAny(attributesType)) {
-                return undefined;
-            }
+                if (!attributesType || isTypeAny(attributesType)) {
+                    return undefined;
+                }
 
-            if (isJsxAttribute(node.parent)) {
-                // JSX expression is in JSX attribute
-                return getTypeOfPropertyOfContextualType(attributesType, node.parent.name.escapedText);
+                if (isJsxAttribute(node.parent)) {
+                    // JSX expression is in JSX attribute
+                    return getTypeOfPropertyOfContextualType(attributesType, node.parent.name.escapedText);
+                }
+                else if (node.parent.kind === SyntaxKind.JsxElement) {
+                    // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
+                    const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+                    return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : anyType;
+                }
+                else {
+                    // JSX expression is in JSX spread attribute
+                    return attributesType;
+                }
             }
-            else if (node.parent.kind === SyntaxKind.JsxElement) {
-                // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
-                const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
-                return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : anyType;
-            }
-            else {
-                // JSX expression is in JSX spread attribute
-                return attributesType;
-            }
+            return anyType; // don't check children of a fragment
         }
 
         function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
@@ -14049,13 +14054,13 @@ namespace ts {
         }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement): Type {
-            checkJsxOpeningLikeElement(node);
+            checkJsxOpeningLikeElementOrOpeningFragment(node);
             return getJsxGlobalElementType() || anyType;
         }
 
         function checkJsxElement(node: JsxElement): Type {
             // Check attributes
-            checkJsxOpeningLikeElement(node.openingElement);
+            checkJsxOpeningLikeElementOrOpeningFragment(node.openingElement);
 
             // Perform resolution on the closing tag so that rename/go to definition/etc work
             if (isJsxIntrinsicIdentifier(node.closingElement.tagName)) {
@@ -14065,6 +14070,11 @@ namespace ts {
                 checkExpression(node.closingElement.tagName);
             }
 
+            return getJsxGlobalElementType() || anyType;
+        }
+
+        function checkJsxFragment(node: JsxFragment): Type {
+            checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment);
             return getJsxGlobalElementType() || anyType;
         }
 
@@ -14731,14 +14741,19 @@ namespace ts {
             }
         }
 
-        function checkJsxOpeningLikeElement(node: JsxOpeningLikeElement) {
-            checkGrammarJsxElement(node);
+        function checkJsxOpeningLikeElementOrOpeningFragment(node: JsxOpeningLikeElement | JsxOpeningFragment) {
+            const isNodeOpeningLikeElement = isJsxOpeningLikeElement(node);
+
+            if (isNodeOpeningLikeElement) {
+                checkGrammarJsxElement(<JsxOpeningLikeElement>node);
+            }
             checkJsxPreconditions(node);
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
             const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
             const reactNamespace = getJsxNamespace();
-            const reactSym = resolveName(node.tagName, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
+            const reactLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
+            const reactSym = resolveName(reactLocation, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
             if (reactSym) {
                 // Mark local symbol as referenced here because it might not have been marked
                 // if jsx emit was not react as there wont be error being emitted
@@ -14750,7 +14765,9 @@ namespace ts {
                 }
             }
 
-            checkJsxAttributesAssignableToTagNameAttributes(node);
+            if (isNodeOpeningLikeElement) {
+                checkJsxAttributesAssignableToTagNameAttributes(<JsxOpeningLikeElement>node);
+            }
         }
 
         /**
@@ -18518,6 +18535,8 @@ namespace ts {
                     return checkJsxElement(<JsxElement>node);
                 case SyntaxKind.JsxSelfClosingElement:
                     return checkJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                case SyntaxKind.JsxFragment:
+                    return checkJsxFragment(<JsxFragment>node);
                 case SyntaxKind.JsxAttributes:
                     return checkJsxAttributes(<JsxAttributes>node, checkMode);
                 case SyntaxKind.JsxOpeningElement:

@@ -11,6 +11,11 @@ namespace ts {
         return token >= SyntaxKind.Identifier;
     }
 
+    /* @internal */
+    export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): boolean {
+        return token === SyntaxKind.GreaterThanToken || token >= SyntaxKind.Identifier;
+    }
+
     export interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
