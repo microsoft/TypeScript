@@ -186,6 +186,7 @@ namespace ts {
         DeclareKeyword,
         GetKeyword,
         IsKeyword,
+        InferKeyword,
         KeyOfKeyword,
         MatchKeyword,
         ModuleKeyword,
@@ -244,6 +245,7 @@ namespace ts {
         MatchTypeBlock,
         MatchTypeMatchClause,
         MatchTypeElseClause,
+        InferType,
         LiteralType,
         // Binding patterns
         ObjectBindingPattern,
@@ -995,6 +997,16 @@ namespace ts {
         type: TypeNode;
     }
 
+    export interface KeyOfTypeOperatorNode extends TypeOperatorNode {
+        operator: SyntaxKind.KeyOfKeyword;
+    }
+
+    export interface InferTypeNode extends TypeNode {
+        kind: SyntaxKind.InferType;
+        operator: SyntaxKind.InferKeyword;
+        typeParameter: TypeParameterDeclaration;
+    }
+
     export interface IndexedAccessTypeNode extends TypeNode {
         kind: SyntaxKind.IndexedAccessType;
         objectType: TypeNode;
@@ -1025,7 +1037,7 @@ namespace ts {
         | MatchTypeMatchClause
         | MatchTypeElseClause;
 
-    export interface MatchTypeMatchClause extends Node {
+    export interface MatchTypeMatchClause extends Declaration {
         kind: SyntaxKind.MatchTypeMatchClause;
         matchType: TypeNode;
         resultType: TypeNode;
@@ -2933,6 +2945,7 @@ namespace ts {
         ExportStar              = 1 << 23,  // Export * declaration
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
+        MatchTypeClause         = 1 << 26,  // Match clause in a match type
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -2972,7 +2985,7 @@ namespace ts {
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
         HasExports = Class | Enum | Module,
-        HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
+        HasMembers = Class | Interface | TypeLiteral | ObjectLiteral | MatchTypeClause,
 
         BlockScoped = BlockScopedVariable | Class | Enum,
 
@@ -3071,6 +3084,7 @@ namespace ts {
         Class = "__class", // Unnamed class expression
         Function = "__function", // Unnamed function expression
         Computed = "__computed", // Computed property name declaration with dynamic name
+        Match = "__match", // Match clause in a match type
         Resolving = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
         ExportEquals = "export=", // Export assignment symbol
         Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
@@ -3460,8 +3474,17 @@ namespace ts {
     }
 
     export interface MatchTypeClause {
+        declaration: MatchTypeMatchClause;
+        typeParameters?: TypeParameter[];
         matchType: Type;
-        resultType: Type;
+        /* @internal */
+        resolvedResultType?: Type;
+        /* @internal */
+        target?: MatchTypeClause;
+        /* @internal */
+        mapper?: TypeMapper;
+        /* @internal */
+        instantiations?: Map<MatchTypeClause>;
     }
 
     export const enum SignatureKind {
@@ -3556,11 +3579,15 @@ namespace ts {
     export type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
 
     /* @internal */
-    export interface InferenceContext extends TypeMapper {
-        signature: Signature;               // Generic signature for which inferences are made
+    export type InferenceSource = Signature | MatchTypeClause;
+
+    /* @internal */
+    export interface InferenceContext<T extends InferenceSource> extends TypeMapper {
+        source: T;                          // Generic signature or clause for which inferences are made
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         flags: InferenceFlags;              // Inference flags
         compareTypes: TypeComparer;         // Type comparer function
+        getResultType: (source: T) => Type;
     }
 
     /* @internal */

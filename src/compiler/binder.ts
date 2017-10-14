@@ -90,6 +90,7 @@ namespace ts {
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
         IsObjectLiteralOrClassExpressionMethod = 1 << 7,
+        IsMatchTypeMatchClause = 1 << 8,
     }
 
     const binder = createBinder();
@@ -108,6 +109,7 @@ namespace ts {
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
+        let inferTypeContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
 
@@ -166,6 +168,7 @@ namespace ts {
             parent = undefined;
             container = undefined;
             blockScopeContainer = undefined;
+            inferTypeContainer = undefined;
             lastContainer = undefined;
             seenThisKeyword = false;
             currentFlow = undefined;
@@ -551,22 +554,26 @@ namespace ts {
             blockScopeContainer = savedBlockScopeContainer;
         }
 
-        function bindChildren(node: Node): void {
+        function aggregateFlagsAndInvoke<T extends Node>(node: T, callback: (node: T) => void): void {
             if (skipTransformFlagAggregation) {
-                bindChildrenWorker(node);
+                callback(node);
             }
             else if (node.transformFlags & TransformFlags.HasComputedFlags) {
                 skipTransformFlagAggregation = true;
-                bindChildrenWorker(node);
+                callback(node);
                 skipTransformFlagAggregation = false;
                 subtreeTransformFlags |= node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
             }
             else {
                 const savedSubtreeTransformFlags = subtreeTransformFlags;
                 subtreeTransformFlags = 0;
-                bindChildrenWorker(node);
+                callback(node);
                 subtreeTransformFlags = savedSubtreeTransformFlags | computeTransformFlagsForNode(node, subtreeTransformFlags);
             }
+        }
+
+        function bindChildren(node: Node): void {
+            aggregateFlagsAndInvoke(node, bindChildrenWorker);
         }
 
         function bindEach(nodes: NodeArray<Node>) {
@@ -675,6 +682,9 @@ namespace ts {
                     break;
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
+                    break;
+                case SyntaxKind.MatchTypeMatchClause:
+                    bindMatchTypeMatchClause(<MatchTypeMatchClause>node);
                     break;
                 case SyntaxKind.JSDocComment:
                     bindJSDocComment(<JSDoc>node);
@@ -1331,6 +1341,15 @@ namespace ts {
             }
         }
 
+        function bindMatchTypeMatchClause(node: MatchTypeMatchClause): void {
+            // only set the container in the match type.
+            const savedInferTypeContainer = inferTypeContainer;
+            inferTypeContainer = node;
+            bind(node.matchType);
+            inferTypeContainer = savedInferTypeContainer;
+            bind(node.resultType);
+        }
+
         function bindJSDocComment(node: JSDoc) {
             forEachChild(node, n => {
                 if (n.kind !== SyntaxKind.JSDocTypedefTag) {
@@ -1385,6 +1404,9 @@ namespace ts {
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JsxAttributes:
                     return ContainerFlags.IsContainer;
+
+                case SyntaxKind.MatchTypeMatchClause:
+                    return ContainerFlags.IsContainer | ContainerFlags.IsMatchTypeMatchClause;
 
                 case SyntaxKind.InterfaceDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsInterface;
@@ -2044,7 +2066,7 @@ namespace ts {
                 case SyntaxKind.TypePredicate:
                     return checkTypePredicate(node as TypePredicateNode);
                 case SyntaxKind.TypeParameter:
-                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                    return bindTypeParameter(<TypeParameterDeclaration>node);
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
@@ -2089,6 +2111,8 @@ namespace ts {
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.MappedType:
                     return bindAnonymousTypeWorker(node as TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral);
+                case SyntaxKind.MatchTypeMatchClause:
+                    return bindAnonymousDeclaration(node as MatchTypeMatchClause, SymbolFlags.MatchTypeClause, InternalSymbolName.Match);
                 case SyntaxKind.ObjectLiteralExpression:
                     return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:
@@ -2476,6 +2500,17 @@ namespace ts {
                 else {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
                 }
+            }
+        }
+
+        function bindTypeParameter(node: TypeParameterDeclaration) {
+            if (parent.kind === SyntaxKind.InferType) {
+                if (inferTypeContainer) {
+                    declareSymbol(inferTypeContainer.symbol.members, inferTypeContainer.symbol, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                }
+            }
+            else {
+                declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
             }
         }
 

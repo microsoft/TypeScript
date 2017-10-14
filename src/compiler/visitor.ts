@@ -423,6 +423,10 @@ namespace ts {
                 return updateMatchTypeElseClause(<MatchTypeElseClause>node,
                     visitNode((<MatchTypeElseClause>node).resultType, visitor, isTypeNode));
 
+            case SyntaxKind.InferType:
+                return updateInferTypeNode(<InferTypeNode>node,
+                    visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
+
             case SyntaxKind.LiteralType:
                 return updateLiteralTypeNode(<LiteralTypeNode>node,
                     visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));

@@ -825,6 +825,19 @@ namespace ts {
             : node;
     }
 
+    export function createInferTypeNode(typeParameter: TypeParameterDeclaration) {
+        Debug.assert(!typeParameter.constraint && !typeParameter.default, "The type parameter of an InferType may not have a constraint or default.");
+        const node = createSynthesizedNode(SyntaxKind.InferType) as InferTypeNode;
+        node.typeParameter = typeParameter;
+        return node;
+    }
+
+    export function updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration) {
+        return node.typeParameter !== typeParameter
+            ? updateNode(createInferTypeNode(typeParameter), node)
+            : node;
+    }
+
     export function createLiteralTypeNode(literal: Expression) {
         const node = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
         node.literal = literal;

@@ -6,7 +6,7 @@ namespace ts {
         None = 0,
         Yield = 1 << 0,
         Await = 1 << 1,
-        Type  = 1 << 2,
+        Type = 1 << 2,
         RequireCompleteParameterList = 1 << 3,
         IgnoreMissingOpenBrace = 1 << 4,
         JSDoc = 1 << 5,
@@ -165,6 +165,8 @@ namespace ts {
                     visitNode(cbNode, (<MatchTypeMatchClause>node).resultType);
             case SyntaxKind.MatchTypeElseClause:
                 return visitNode(cbNode, (<MatchTypeElseClause>node).resultType);
+            case SyntaxKind.InferType:
+                return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
             case SyntaxKind.ObjectBindingPattern:
@@ -671,7 +673,7 @@ namespace ts {
 
         function getLanguageVariant(scriptKind: ScriptKind) {
             // .tsx and .jsx files are treated as jsx language variant.
-            return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS  || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
+            return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
         }
 
         function initializeState(_sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
@@ -2647,6 +2649,19 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseInferType() {
+            const node = <InferTypeNode>createNode(SyntaxKind.InferType);
+            parseExpected(SyntaxKind.InferKeyword);
+            node.typeParameter = parseInferTypeParameter();
+            return finishNode(node);
+        }
+
+        function parseInferTypeParameter() {
+            const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+            node.name = parseIdentifier();
+            return finishNode(node);
+        }
+
         function parseTupleType(): TupleTypeNode {
             const node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
             node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
@@ -2757,6 +2772,8 @@ namespace ts {
                     return parseParenthesizedType();
                 case SyntaxKind.MatchKeyword:
                     return parseMatchType();
+                case SyntaxKind.InferKeyword:
+                    return parseInferType();
                 default:
                     return parseTypeReference();
             }
@@ -2791,6 +2808,7 @@ namespace ts {
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DotDotDotToken:
                 case SyntaxKind.MatchKeyword:
+                case SyntaxKind.InferKeyword:
                     return true;
                 case SyntaxKind.MinusToken:
                     return lookAhead(nextTokenIsNumericLiteral);
@@ -3815,7 +3833,7 @@ namespace ts {
                     if (isAwaitExpression()) {
                         return parseAwaitExpression();
                     }
-                    // falls through
+                // falls through
                 default:
                     return parseUpdateExpression();
             }
@@ -3849,8 +3867,8 @@ namespace ts {
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return false;
                     }
-                    // We are in JSX context and the token is part of JSXElement.
-                    // falls through
+                // We are in JSX context and the token is part of JSXElement.
+                // falls through
                 default:
                     return true;
             }
@@ -6540,8 +6558,8 @@ namespace ts {
                                     indent += scanner.getTokenText().length;
                                     break;
                                 }
-                                // record the * as a comment
-                                // falls through
+                            // record the * as a comment
+                            // falls through
                             default:
                                 state = JSDocState.SavingComments; // leading identifiers start recording as well
                                 pushComment(scanner.getTokenText());

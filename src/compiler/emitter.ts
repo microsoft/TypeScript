@@ -565,6 +565,8 @@ namespace ts {
                     return emitMatchTypeMatchClause(<MatchTypeMatchClause>node);
                 case SyntaxKind.MatchTypeElseClause:
                     return emitMatchTypeElseClause(<MatchTypeElseClause>node);
+                case SyntaxKind.InferType:
+                    return emitInferType(<InferTypeNode>node);
 
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
@@ -1146,6 +1148,11 @@ namespace ts {
         function emitMatchTypeElseClause(node: MatchTypeElseClause) {
             write("else: ");
             emit(node.resultType);
+        }
+
+        function emitInferType(node: InferTypeNode) {
+            write("infer ");
+            emit(node.typeParameter.name);
         }
 
         function emitLiteralType(node: LiteralTypeNode) {

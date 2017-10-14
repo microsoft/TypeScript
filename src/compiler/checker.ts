@@ -479,13 +479,14 @@ namespace ts {
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         let _displayBuilder: SymbolDisplayBuilder;
 
-        type TypeSystemEntity = Symbol | Type | Signature;
+        type TypeSystemEntity = Symbol | Type | Signature | MatchTypeClause;
 
         const enum TypeSystemPropertyName {
             Type,
             ResolvedBaseConstructorType,
             DeclaredType,
             ResolvedReturnType,
+            ResolvedResultType,
         }
 
         const enum CheckMode {
@@ -891,7 +892,6 @@ namespace ts {
             const errorLocation = location;
             let grandparent: Node;
             let isInExternalModule = false;
-
             loop: while (location) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (location.locals && !isGlobalSourceFile(location)) {
@@ -1024,6 +1024,11 @@ namespace ts {
                                 result = location.symbol;
                                 break loop;
                             }
+                        }
+                        break;
+                    case SyntaxKind.MatchTypeMatchClause:
+                        if (result = lookup(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
+                            break loop;
                         }
                         break;
                     case SyntaxKind.ExpressionWithTypeArguments:
@@ -2538,7 +2543,7 @@ namespace ts {
                     const typeArgument = typeToTypeNodeHelper((<MatchType>type).typeArgument, context);
                     const clauses: MatchTypeMatchOrElseClause[] = map((<MatchType>type).clauses, clause => {
                         const matchType = typeToTypeNodeHelper(clause.matchType, context);
-                        const resultType = typeToTypeNodeHelper(clause.resultType, context);
+                        const resultType = typeToTypeNodeHelper(getResultTypeOfMatchTypeClause(clause), context);
                         return createMatchTypeMatchClause(matchType, resultType);
                     });
                     const elseType = (<MatchType>type).elseType;
@@ -3342,7 +3347,8 @@ namespace ts {
                         writeType(clause.matchType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
-                        writeType(clause.resultType, TypeFormatFlags.None);
+                        writeType(getResultTypeOfMatchTypeClause(clause), TypeFormatFlags.None);
+                        writeType(neverType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writer.writeLine();
                     }
@@ -4092,6 +4098,9 @@ namespace ts {
             }
             if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
                 return (<Signature>target).resolvedReturnType;
+            }
+            if (propertyName === TypeSystemPropertyName.ResolvedResultType) {
+                return (<MatchTypeClause>target).resolvedResultType;
             }
 
             Debug.fail("Unhandled TypeSystemPropertyName " + propertyName);
@@ -7783,7 +7792,7 @@ namespace ts {
             if (type.clauses.length === 0) return type.elseType || neverType;
             const constituents: Type[] = [];
             for (const clause of type.clauses) {
-                constituents.push(clause.resultType);
+                constituents.push(getResultTypeOfMatchTypeClause(clause));
             }
             if (type.elseType) {
                 constituents.push(type.elseType);
@@ -7791,16 +7800,38 @@ namespace ts {
             return getUnionType(constituents);
         }
 
+        function inferMatchTypeClauseTypeArguments(clause: MatchTypeClause, typeArgument: Type) {
+            const inferenceContext = createInferenceContext(clause, getResultTypeOfMatchTypeClause, /*flags*/ 0);
+            inferTypes(inferenceContext.inferences, typeArgument, clause.matchType);
+            return getInferredTypes(inferenceContext);
+        }
+
+        function getResultTypeOfMatchTypeClause(clause: MatchTypeClause) {
+            if (!clause.resolvedResultType) {
+                if (clause.target) {
+                    clause.resolvedResultType = instantiateType(getResultTypeOfMatchTypeClause(clause.target), clause.mapper);
+                }
+                else {
+                    clause.resolvedResultType = unknownType;
+                }
+            }
+            return clause.resolvedResultType;
+        }
+
+        function createMatchType(typeArgument: Type, clauses: ReadonlyArray<MatchTypeClause>, elseType: Type | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]) {
+            const type = <MatchType>createType(TypeFlags.Match);
+            type.typeArgument = typeArgument;
+            type.clauses = clauses;
+            type.elseType = elseType;
+            type.aliasSymbol = aliasSymbol;
+            type.aliasTypeArguments = aliasTypeArguments;
+            return type;
+        }
+
         function getMatchType(typeArgument: Type, clauses: ReadonlyArray<MatchTypeClause>, elseType: Type | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (clauses.length > 0) {
                 if (isGenericObjectType(typeArgument) || forEach(clauses, isGenericMatchTypeClause)) {
-                    const type = <MatchType>createType(TypeFlags.Match);
-                    type.typeArgument = typeArgument;
-                    type.clauses = clauses;
-                    type.elseType = elseType;
-                    type.aliasSymbol = aliasSymbol;
-                    type.aliasTypeArguments = aliasTypeArguments;
-                    return type;
+                    return createMatchType(typeArgument, clauses, elseType, aliasSymbol, aliasTypeArguments);
                 }
 
                 // distribute `match` across unions
@@ -7810,12 +7841,21 @@ namespace ts {
                 }
 
                 for (const clause of clauses) {
-                    if (isTypeAssignableTo(typeArgument, clause.matchType)) {
-                        return clause.resultType;
+                    let candidate = clause;
+                    if (candidate.typeParameters) {
+                        const typeArgumentTypes: Type[] = inferMatchTypeClauseTypeArguments(candidate, typeArgument);
+                        candidate = getMatchTypeClauseInstantiation(candidate, typeArgumentTypes);
+                    }
+                    if (isTypeAssignableTo(typeArgument, candidate.matchType)) {
+                        return getResultTypeOfMatchTypeClause(candidate);
                     }
                 }
             }
             return elseType || neverType;
+        }
+
+        function createMatchTypeClause(declaration: MatchTypeMatchClause, typeParameters: TypeParameter[], matchType: Type, resolvedResultType: Type): MatchTypeClause {
+            return { declaration, typeParameters, matchType, resolvedResultType }
         }
 
         function getTypeFromMatchTypeNode(node: MatchTypeNode) {
@@ -7830,13 +7870,25 @@ namespace ts {
                     }
                     else {
                         const matchType = getTypeFromTypeNode(clause.matchType);
+
+                        let typeParameters: TypeParameter[];
+                        clause.symbol.members.forEach(symbol => {
+                            if (symbol.flags & SymbolFlags.TypeParameter) {
+                                typeParameters = append(typeParameters, getDeclaredTypeOfTypeParameter(symbol));
+                            }
+                        });
+
                         const resultType = getTypeFromTypeNode(clause.resultType);
-                        clauses.push({ matchType, resultType });
+                        clauses.push(createMatchTypeClause(clause, typeParameters, matchType, resultType));
                     }
                 }
                 links.resolvedType = getMatchType(typeArgument, clauses, elseType, getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
             }
             return links.resolvedType;
+        }
+
+        function getTypeFromInferTypeNode(node: InferTypeNode) {
+            return getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
         }
 
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: TypeNode): Type {
@@ -8103,6 +8155,8 @@ namespace ts {
                     return getTypeFromMappedTypeNode(<MappedTypeNode>node);
                 case SyntaxKind.MatchType:
                     return getTypeFromMatchTypeNode(<MatchTypeNode>node);
+                case SyntaxKind.InferType:
+                    return getTypeFromInferTypeNode(<InferTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -8184,13 +8238,13 @@ namespace ts {
             return mapper;
         }
 
-        function isInferenceContext(mapper: TypeMapper): mapper is InferenceContext {
-            return !!(<InferenceContext>mapper).signature;
+        function isInferenceContext(mapper: TypeMapper): mapper is InferenceContext<InferenceSource> {
+            return !!(<InferenceContext<InferenceSource>>mapper).source;
         }
 
         function cloneTypeMapper(mapper: TypeMapper): TypeMapper {
             return mapper && isInferenceContext(mapper) ?
-                createInferenceContext(mapper.signature, mapper.flags | InferenceFlags.NoDefault, mapper.compareTypes, mapper.inferences) :
+                createInferenceContext(mapper.source, mapper.getResultType, mapper.flags | InferenceFlags.NoDefault, mapper.compareTypes, mapper.inferences) :
                 mapper;
         }
 
@@ -8480,10 +8534,38 @@ namespace ts {
             return type;
         }
 
-        function instantiateMatchTypeClause(clause: MatchTypeClause, mapper: TypeMapper) {
-            const matchType = instantiateType(clause.matchType, mapper);
-            const resultType = instantiateType(clause.resultType, mapper);
-            return { matchType, resultType };
+        function getMatchTypeClauseInstantiation(clause: MatchTypeClause, typeArguments: Type[]): MatchTypeClause {
+            const instantiations = clause.instantiations || (clause.instantiations = createMap<MatchTypeClause>());
+            const id = getTypeListId(typeArguments);
+            let instantiation = instantiations.get(id);
+            if (!instantiation) {
+                instantiations.set(id, instantiation = createMatchTypeClauseInstantiation(clause, typeArguments));
+            }
+            return instantiation;
+        }
+
+        function createMatchTypeClauseInstantiation(clause: MatchTypeClause, typeArguments: Type[]): MatchTypeClause {
+            return instantiateMatchTypeClause(clause, createTypeMapper(clause.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
+        }
+
+        function instantiateMatchTypeClause(clause: MatchTypeClause, mapper: TypeMapper, eraseTypeParameters?: boolean): MatchTypeClause {
+            let freshTypeParameters: TypeParameter[];
+            if (clause.typeParameters && !eraseTypeParameters) {
+                // First create a fresh set of type parameters, then include a mapping from the old to the
+                // new type parameters in the mapper function. Finally store this mapper in the new type
+                // parameters such that we can use it when instantiating constraints.
+                freshTypeParameters = map(clause.typeParameters, cloneTypeParameter);
+                mapper = combineTypeMappers(createTypeMapper(clause.typeParameters, freshTypeParameters), mapper);
+                for (const tp of freshTypeParameters) {
+                    tp.mapper = mapper;
+                }
+            }
+
+            const result = createMatchTypeClause(clause.declaration, freshTypeParameters,
+            instantiateType(clause.matchType, mapper), /*resolvedResultType*/ undefined);
+            result.target = clause;
+            result.mapper = mapper;
+            return result;
         }
 
         function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper): IndexInfo {
@@ -10500,14 +10582,15 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(signature: Signature, flags: InferenceFlags, compareTypes?: TypeComparer, baseInferences?: InferenceInfo[]): InferenceContext {
-            const inferences = baseInferences ? map(baseInferences, cloneInferenceInfo) : map(signature.typeParameters, createInferenceInfo);
-            const context = mapper as InferenceContext;
-            context.mappedTypes = signature.typeParameters;
-            context.signature = signature;
+        function createInferenceContext<T extends InferenceSource>(source: T, getResultType: (source: T) => Type, flags: InferenceFlags, compareTypes?: TypeComparer, baseInferences?: InferenceInfo[]): InferenceContext<T> {
+            const inferences = baseInferences ? map(baseInferences, cloneInferenceInfo) : map(source.typeParameters, createInferenceInfo);
+            const context = mapper as InferenceContext<T>;
+            context.mappedTypes = source.typeParameters;
+            context.source = source;
             context.inferences = inferences;
             context.flags = flags;
             context.compareTypes = compareTypes || compareTypesAssignable;
+            context.getResultType = getResultType;
             return context;
 
             function mapper(t: Type): Type {
@@ -10907,7 +10990,7 @@ namespace ts {
             return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
-        function getInferredType(context: InferenceContext, index: number): Type {
+        function getInferredType<T extends InferenceSource>(context: InferenceContext<T>, index: number): Type {
             const inference = context.inferences[index];
             let inferredType = inference.inferredType;
             if (!inferredType) {
@@ -10916,10 +10999,10 @@ namespace ts {
                     // all inferences were made to top-level ocurrences of the type parameter, and
                     // the type parameter has no constraint or its constraint includes no primitive or literal types, and
                     // the type parameter was fixed during inference or does not occur at top-level in the return type.
-                    const signature = context.signature;
+                    const source = context.source;
                     const widenLiteralTypes = inference.topLevel &&
                         !hasPrimitiveConstraint(inference.typeParameter) &&
-                        (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
+                        (inference.isFixed || !isTypeParameterAtTopLevel(context.getResultType(source), inference.typeParameter));
                     const baseCandidates = widenLiteralTypes ? sameMap(inference.candidates, getWidenedLiteralType) : inference.candidates;
                     // Infer widened union or supertype, or the unknown type for no common supertype. We infer union types
                     // for inferences coming from return types in order to avoid common supertype failures.
@@ -10943,7 +11026,7 @@ namespace ts {
                         // parameter should be instantiated to the empty object type.
                         inferredType = instantiateType(defaultType,
                             combineTypeMappers(
-                                createBackreferenceMapper(context.signature.typeParameters, index),
+                                createBackreferenceMapper(context.source.typeParameters, index),
                                 context));
                     }
                     else {
@@ -10952,7 +11035,7 @@ namespace ts {
                 }
                 inference.inferredType = inferredType;
 
-                const constraint = getConstraintOfTypeParameter(context.signature.typeParameters[index]);
+                const constraint = getConstraintOfTypeParameter(context.source.typeParameters[index]);
                 if (constraint) {
                     const instantiatedConstraint = instantiateType(constraint, context);
                     if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
@@ -10967,7 +11050,7 @@ namespace ts {
             return isInJavaScriptFile ? anyType : emptyObjectType;
         }
 
-        function getInferredTypes(context: InferenceContext): Type[] {
+        function getInferredTypes<T extends InferenceSource>(context: InferenceContext<T>): Type[] {
             const result: Type[] = [];
             for (let i = 0; i < context.inferences.length; i++) {
                 result.push(getInferredType(context, i));
@@ -15366,7 +15449,7 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper?: TypeMapper, compareTypes?: TypeComparer): Signature {
-            const context = createInferenceContext(signature, InferenceFlags.InferUnionTypes, compareTypes);
+            const context = createInferenceContext(signature, getReturnTypeOfSignature, InferenceFlags.InferUnionTypes, compareTypes);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context.inferences, instantiateType(source, contextualMapper || identityMapper), target);
@@ -15377,7 +15460,7 @@ namespace ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: boolean[], context: InferenceContext): Type[] {
+        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: boolean[], context: InferenceContext<Signature>): Type[] {
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
             for (const inference of context.inferences) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
@@ -16118,7 +16201,7 @@ namespace ts {
 
                     let candidate: Signature;
                     const inferenceContext = originalCandidate.typeParameters ?
-                        createInferenceContext(originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0) :
+                        createInferenceContext(originalCandidate, getReturnTypeOfSignature, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0) :
                         undefined;
 
                     while (true) {
@@ -16794,7 +16877,7 @@ namespace ts {
                 if (declaration.type) {
                     const typeNode = getEffectiveTypeAnnotationNode(declaration);
                     if (typeNode) {
-                        inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
+                        inferTypes((<InferenceContext<Signature>>mapper).inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
                     }
                 }
             }
@@ -19012,6 +19095,10 @@ namespace ts {
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
             checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);
+        }
+
+        function checkInferTypeNode(_node: InferTypeNode) {
+            // TODO(rbuckton):
         }
 
         function checkMatchType(node: MatchTypeNode) {
@@ -22577,6 +22664,8 @@ namespace ts {
                     return checkMappedType(<MappedTypeNode>node);
                 case SyntaxKind.MatchType:
                     return checkMatchType(<MatchTypeNode>node);
+                case SyntaxKind.InferType:
+                    return checkInferTypeNode(<InferTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:

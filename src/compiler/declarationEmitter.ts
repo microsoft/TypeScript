@@ -449,6 +449,8 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>type);
                 case SyntaxKind.MatchType:
                     return emitMatchType(<MatchTypeNode>type);
+                case SyntaxKind.InferType:
+                    return emitInferType(<InferTypeNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return emitSignatureDeclarationWithJsDocComments(<FunctionOrConstructorTypeNode>type);
@@ -592,6 +594,11 @@ namespace ts {
                     decreaseIndent();
                 }
                 write("}");
+            }
+
+            function emitInferType(node: InferTypeNode) {
+                write("infer ");
+                writeEntityName(node.typeParameter.name);
             }
 
             function emitTypeLiteral(type: TypeLiteralNode) {
@@ -1824,10 +1831,13 @@ namespace ts {
         }
 
         function emitMatchTypeMatchClause(node: MatchTypeMatchClause) {
+            const prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
             writeLine();
             emitType(node.matchType);
             write(": ");
             emitType(node.resultType);
+            enclosingDeclaration = prevEnclosingDeclaration;
         }
 
         function emitMatchTypeElseClause(node: MatchTypeElseClause) {
