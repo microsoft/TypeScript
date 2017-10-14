@@ -5821,7 +5821,7 @@ namespace ts {
                     prop.syntheticLiteralTypeOrigin = t as StringLiteralType;
                     members.set(propName, prop);
                 }
-                else if (t.flags & TypeFlags.String) {
+                else if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
                     stringIndexInfo = createIndexInfo(propType, templateReadonly);
                 }
             }
