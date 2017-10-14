@@ -3603,6 +3603,14 @@
         "category": "Error",
         "code": 17013
     },
+    "JSX fragment has no corresponding closing tag.": {
+        "category": "Error",
+        "code": 17014
+    },
+    "Expected corresponding JSX fragment closing tag.": {
+        "category": "Error",
+        "code": 17015
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",

@@ -328,6 +328,9 @@ namespace ts {
         JsxSelfClosingElement,
         JsxOpeningElement,
         JsxClosingElement,
+        JsxFragment,
+        JsxOpeningFragment,
+        JsxClosingFragment,
         JsxAttribute,
         JsxAttributes,
         JsxSpreadAttribute,
@@ -1621,7 +1624,7 @@ namespace ts {
         closingElement: JsxClosingElement;
     }
 
-    /// Either the opening tag in a <Tag>...</Tag> pair, or the lone <Tag /> in a self-closing form
+    /// Either the opening tag in a <Tag>...</Tag> pair, the opening tag in a <>...</> pair, or the lone <Tag /> in a self-closing form
     export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
 
     export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
@@ -1645,6 +1648,26 @@ namespace ts {
         kind: SyntaxKind.JsxSelfClosingElement;
         tagName: JsxTagNameExpression;
         attributes: JsxAttributes;
+    }
+
+    /// A JSX expression of the form <>...</>
+    export interface JsxFragment extends PrimaryExpression {
+        kind: SyntaxKind.JsxFragment;
+        openingFragment: JsxOpeningFragment;
+        children: NodeArray<JsxChild>;
+        closingFragment: JsxClosingFragment;
+    }
+
+    /// The opening element of a <>...</> JsxFragment
+    export interface JsxOpeningFragment extends Expression {
+        kind: SyntaxKind.JsxOpeningFragment;
+        parent?: JsxFragment;
+    }
+
+    /// The closing element of a <>...</> JsxFragment
+    export interface JsxClosingFragment extends Expression {
+        kind: SyntaxKind.JsxClosingFragment;
+        parent?: JsxFragment;
     }
 
     export interface JsxAttribute extends ObjectLiteralElement {
@@ -1680,7 +1703,7 @@ namespace ts {
         parent?: JsxElement;
     }
 
-    export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
+    export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
 
     export interface Statement extends Node {
         _statementBrand: any;
