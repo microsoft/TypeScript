@@ -113,6 +113,14 @@
 /////*86*/        (        a )           =>        (        b )           =>        (        c )           =>    121   ,
 /////*87*/        false       ?            (        a )           =>    0     :        (        b )           =>    122
 //// /*88*/)      ;
+////const exprFunc = (
+//// )   =>  (
+/////*89*/       undefined
+/////*90*/  );
+////const stmtFunc = (
+////  )  =>    {
+/////*91*/       undefined ;
+/////*92*/ };
 format.document();
 goTo.marker("1");
 verify.currentLineContentIs("() => 1;");
@@ -291,3 +299,11 @@ goTo.marker("86");
 verify.currentLineContentIs("    (a) => (b) => (c) => 121,");
 goTo.marker("87");
 verify.currentLineContentIs("    false ? (a) => 0 : (b) => 122");
+goTo.marker("89");
+verify.currentLineContentIs("    undefined");
+goTo.marker("90");
+verify.currentLineContentIs(");");
+goTo.marker("91");
+verify.currentLineContentIs("    undefined;");
+goTo.marker("92");
+verify.currentLineContentIs("};");

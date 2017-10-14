@@ -525,7 +525,6 @@ namespace ts.formatting {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -537,6 +536,8 @@ namespace ts.formatting {
                         ((<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
+                case SyntaxKind.ArrowFunction:
+                    return false;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
