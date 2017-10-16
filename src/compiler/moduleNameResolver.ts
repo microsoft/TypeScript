@@ -77,16 +77,20 @@ namespace ts {
         traceEnabled: boolean;
     }
 
-    interface PackageJson {
-        name?: string;
-        version?: string;
+    /** Just the fields that we use for module resolution. */
+    interface PackageJsonPathFields {
         typings?: string;
         types?: string;
         main?: string;
     }
 
+    interface PackageJson extends PackageJsonPathFields {
+        name?: string;
+        version?: string;
+    }
+
     /** Reads from "main" or "types"/"typings" depending on `extensions`. */
-    function tryReadPackageJsonFields(readTypes: boolean, jsonContent: PackageJson, baseDirectory: string, state: ModuleResolutionState): string | undefined {
+    function tryReadPackageJsonFields(readTypes: boolean, jsonContent: PackageJsonPathFields, baseDirectory: string, state: ModuleResolutionState): string | undefined {
         return readTypes ? tryReadFromField("typings") || tryReadFromField("types") : tryReadFromField("main");
 
         function tryReadFromField(fieldName: "typings" | "types" | "main"): string | undefined {
@@ -886,7 +890,7 @@ namespace ts {
         return withPackageId(packageId, loadNodeModuleFromDirectoryWorker(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, packageJsonContent));
     }
 
-    function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, onlyRecordFailures: boolean, state: ModuleResolutionState, packageJsonContent: PackageJson | undefined): PathAndExtension | undefined {
+    function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, onlyRecordFailures: boolean, state: ModuleResolutionState, packageJsonContent: PackageJsonPathFields | undefined): PathAndExtension | undefined {
         const fromPackageJson = packageJsonContent && loadModuleFromPackageJson(packageJsonContent, extensions, candidate, failedLookupLocations, state);
         if (fromPackageJson) {
             return fromPackageJson;
@@ -901,7 +905,7 @@ namespace ts {
         failedLookupLocations: Push<string>,
         onlyRecordFailures: boolean,
         { host, traceEnabled }: ModuleResolutionState,
-    ): { found: boolean, packageJsonContent: PackageJson | undefined, packageId: PackageId | undefined } | undefined {
+    ): { found: boolean, packageJsonContent: PackageJsonPathFields | undefined, packageId: PackageId | undefined } {
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(nodeModuleDirectory, host);
         const packageJsonPath = pathToPackageJson(nodeModuleDirectory);
         if (directoryExists && host.fileExists(packageJsonPath)) {
@@ -924,7 +928,7 @@ namespace ts {
         }
     }
 
-    function loadModuleFromPackageJson(jsonContent: PackageJson, extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, state: ModuleResolutionState): PathAndExtension | undefined {
+    function loadModuleFromPackageJson(jsonContent: PackageJsonPathFields, extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, state: ModuleResolutionState): PathAndExtension | undefined {
         const file = tryReadPackageJsonFields(extensions !== Extensions.JavaScript, jsonContent, candidate, state);
         if (!file) {
             return undefined;
@@ -978,15 +982,20 @@ namespace ts {
     function loadModuleFromNodeModulesFolder(extensions: Extensions, moduleName: string, nodeModulesFolder: string, nodeModulesFolderExists: boolean, failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
         const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
         // First look for a nested package.json, as in `node_modules/foo/bar/package.json`.
-        let packageInfo = getPackageJsonInfo(candidate, "", failedLookupLocations, /*onlyRecordFailures*/ !nodeModulesFolderExists, state);
-        if (!packageInfo.found) {
+        let packageJsonContent: PackageJsonPathFields | undefined;
+        let packageId: PackageId | undefined;
+        const packageInfo = getPackageJsonInfo(candidate, "", failedLookupLocations, /*onlyRecordFailures*/ !nodeModulesFolderExists, state);
+        if (packageInfo.found) {
+            ({ packageJsonContent, packageId } = packageInfo);
+        }
+        else {
             const { packageName, rest } = getPackageName(moduleName);
             if (rest !== "") { // If "rest" is empty, we just did this search above.
                 const packageRootPath = combinePaths(nodeModulesFolder, packageName);
-                packageInfo = getPackageJsonInfo(packageRootPath, rest, failedLookupLocations, !nodeModulesFolderExists, state);
+                // Don't use a "types" or "main" from here because we're not loading the root, but a subdirectory -- just here for the packageId.
+                packageId = getPackageJsonInfo(packageRootPath, rest, failedLookupLocations, !nodeModulesFolderExists, state).packageId;
             }
         }
-        const { packageJsonContent, packageId } = packageInfo;
         const pathAndExtension = loadModuleFromFile(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state) ||
             loadNodeModuleFromDirectoryWorker(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state, packageJsonContent);
         return withPackageId(packageId, pathAndExtension);
