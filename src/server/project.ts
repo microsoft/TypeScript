@@ -246,6 +246,10 @@ namespace ts.server {
             return this.compilerOptions;
         }
 
+        getCompilerOptions() {
+            return this.compilerOptions;
+        }
+
         getNewLine() {
             return this.directoryStructureHost.newLine;
         }
