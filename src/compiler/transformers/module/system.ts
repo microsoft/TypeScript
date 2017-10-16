@@ -826,7 +826,7 @@ namespace ts {
                     /*needsValue*/ false,
                     createAssignment
                 )
-                : createAssignment(node.name, visitNode(node.initializer, destructuringAndImportCallVisitor, isExpression));
+                : node.initializer ? createAssignment(node.name, visitNode(node.initializer, destructuringAndImportCallVisitor, isExpression)) : node.name;
         }
 
         /**
@@ -1296,6 +1296,9 @@ namespace ts {
                 let expressions: Expression[];
                 for (const variable of node.declarations) {
                     expressions = append(expressions, transformInitializedVariable(variable, /*isExportedDeclaration*/ false));
+                    if (!variable.initializer) {
+                        hoistBindingElement(variable);
+                    }
                 }
 
                 return expressions ? inlineExpressions(expressions) : createOmittedExpression();
