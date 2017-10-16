@@ -2589,7 +2589,7 @@ interface RTCIceParameters {
 
 interface RTCIceServer {
     credential?: string | null;
-    urls?: any;
+    urls?: string | string[];
     username?: string | null;
 }
 
