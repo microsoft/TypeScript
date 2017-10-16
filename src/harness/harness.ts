@@ -844,9 +844,7 @@ namespace Harness {
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
         // Cache of lib files from "built/local"
-        const libFileNameSourceFileMap = ts.createMapFromTemplate<ts.SourceFile>({
-            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
-        });
+        let libFileNameSourceFileMap: ts.Map<ts.SourceFile> | undefined;
 
         // Cache of lib files from  "tests/lib/"
         const testLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
@@ -855,6 +853,12 @@ namespace Harness {
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
                 return undefined;
+            }
+
+            if (!libFileNameSourceFileMap) {
+                libFileNameSourceFileMap = ts.createMapFromTemplate({
+                    [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
+                });
             }
 
             let sourceFile = libFileNameSourceFileMap.get(fileName);

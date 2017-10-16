@@ -2289,6 +2289,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declare_static_property_0_90027" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dichiarare la proprietà statica '{0}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Decorators_are_not_valid_here_1206" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Decorators are not valid here.]]></Val>
@@ -2715,6 +2724,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enable_strict_checking_of_function_types_6186" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable strict checking of function types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Abilitare il controllo tassativo dei tipi funzione.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enable_strict_null_checks_6113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable strict null checks.]]></Val>
@@ -3081,20 +3099,56 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Extract_function_95003" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Extract_constant_95006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Extract function]]></Val>
+          <Val><![CDATA[Extract constant]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Estrai funzione]]></Val>
+            <Val><![CDATA[Estrarre la costante]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Extract_to_0_95004" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Extract_function_95005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Extract to {0}]]></Val>
+          <Val><![CDATA[Extract function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Estrai in {0}]]></Val>
+            <Val><![CDATA[Estrarre la funzione]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Extract_symbol_95003" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Extract symbol]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Estrarre il simbolo]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Extract_to_0_in_1_95004" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Extract to {0} in {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Estrarre in {0} in {1}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Extract_to_0_in_1_scope_95008" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Extract to {0} in {1} scope]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Estrarre in {0} nell'ambito {1}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Extract_to_0_in_enclosing_scope_95007" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Extract to {0} in enclosing scope]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Estrarre in {0} nell'ambito che lo contiene]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3924,6 +3978,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";JSDoc_augments_0_does_not_match_the_extends_1_clause_8023" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '@augments {0}' does not match the 'extends {1}' clause.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Il tag '@augments {0}' di JSDoc non corrisponde alla clausola 'extends {1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSDoc_augments_is_not_attached_to_a_class_declaration_8022" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '@augments' is not attached to a class declaration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Il tag '@augments' di JSDoc non è collegato a una dichiarazione di classe.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_8024" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Il nome del tag '@param' di JSDoc è '{0}', ma non esiste alcun parametro con questo nome.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags_8021" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Il tag '@typedef' di JSDoc deve contenere un'annotazione di tipo o essere seguito dal tag '@property' o '@member'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";JSDoc_types_can_only_be_used_inside_documentation_comments_8020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSDoc types can only be used inside documentation comments.]]></Val>
@@ -4337,15 +4427,6 @@
           <Val><![CDATA[Module '{0}' was resolved as locally declared ambient module in file '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Il modulo '{0}' è stato risolto come modulo di ambiente dichiarato in locale nel file '{1}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Module_0_was_resolved_to_1_but_allowJs_is_not_set_6143" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' was resolved to '{1}', but '--allowJs' is not set.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il modulo '{0}' è stato risolto in '{1}', ma '--allowJs' non è impostato.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6065,10 +6146,13 @@
       </Item>
       <Item ItemId=";Specify_module_code_generation_Colon_none_commonjs_amd_system_umd_es2015_or_ESNext_6016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify module code generation: 'none', commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.]]></Val>
+          <Val><![CDATA[Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specificare il tipo di generazione del codice del modulo: 'none', commonjs', 'amd', 'system', 'umd', 'es2015' o 'ESNext'.]]></Val>
+            <Val><![CDATA[Consente di specificare il tipo di generazione del codice del modulo, ovvero 'none', commonjs', 'amd', 'system', 'umd', 'es2015' o 'ESNext'.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify module code generation: 'none', commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6384,15 +6468,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_config_file_0_found_doesn_t_contain_any_source_files_6129" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The config file '{0}' found doesn't contain any source files.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il file config trovato '{0}' non contiene file di origine.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_containing_function_or_module_body_is_too_large_for_control_flow_analysis_2563" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The containing function or module body is too large for control flow analysis.]]></Val>
@@ -6414,6 +6489,9 @@
       <Item ItemId=";The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context_2714" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The expression of an export assignment must be an identifier or qualified name in an ambient context.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[L'espressione di un'assegnazione di esportazione deve essere un identificatore o un nome completo in un contesto di ambiente.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

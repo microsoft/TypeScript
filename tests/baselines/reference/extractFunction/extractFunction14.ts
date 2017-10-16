@@ -33,6 +33,7 @@ function F<T>(t1: T) {
         /*RENAME*/newFunction<T, T>(t1, t2);
     }
 }
+
 function newFunction<T, T>(t1: T, t2: T) {
     t1.toString();
     t2.toString();
