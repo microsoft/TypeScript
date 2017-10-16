@@ -232,13 +232,28 @@ namespace ts.server {
 
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
-        getScriptKind(f: T): ScriptKind;
+        getScriptKind(f: T, extraFileExtensions?: JsFileExtensionInfo[]): ScriptKind;
         hasMixedContent(f: T, extraFileExtensions: JsFileExtensionInfo[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
-        getScriptKind: _ => undefined,
+        getScriptKind: (fileName, extraFileExtensions) => {
+            let result: ScriptKind;
+            if (extraFileExtensions) {
+                const fileExtension = getAnyExtensionFromPath(fileName);
+                if (fileExtension) {
+                    some(extraFileExtensions, info => {
+                        if (info.extension === fileExtension) {
+                            result = info.scriptKind;
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+            }
+            return result;
+        },
         hasMixedContent: (fileName, extraFileExtensions) => some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
     };
 
@@ -1178,7 +1193,7 @@ namespace ts.server {
             let errors: Diagnostic[];
             for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
-                const scriptKind = propertyReader.getScriptKind(f);
+                const scriptKind = propertyReader.getScriptKind(f, this.hostConfiguration.extraFileExtensions);
                 const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                 if (this.host.fileExists(rootFilename)) {
                     const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
