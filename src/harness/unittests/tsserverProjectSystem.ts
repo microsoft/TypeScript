@@ -323,12 +323,29 @@ namespace ts.projectSystem {
         checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
-    function getNodeModuleDirectories(dir: string) {
+    function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
+        dir = normalizePath(dir);
         const result: string[] = [];
         forEachAncestorDirectory(dir, ancestor => {
-            result.push(combinePaths(ancestor, "node_modules"));
+            if (mapAncestor(ancestor)) {
+                result.push(combinePaths(ancestor, path2));
+            }
         });
         return result;
+    }
+
+    function getRootsToWatchWithAncestorDirectory(dir: string, path2: string) {
+        return mapCombinedPathsInAncestor(dir, path2, ancestor => ancestor.split(directorySeparator).length > 4);
+    }
+
+    const nodeModules = "node_modules";
+    function getNodeModuleDirectories(dir: string) {
+        return getRootsToWatchWithAncestorDirectory(dir, nodeModules);
+    }
+
+    export const nodeModulesAtTypes = "node_modules/@types";
+    export function getTypeRootsFromLocation(currentDirectory: string) {
+        return getRootsToWatchWithAncestorDirectory(currentDirectory, nodeModulesAtTypes);
     }
 
     function getNumberOfWatchesInvokedForRecursiveWatches(recursiveWatchedDirs: string[], file: string) {
@@ -413,15 +430,6 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
-    export function getTypeRootsFromLocation(currentDirectory: string) {
-        currentDirectory = normalizePath(currentDirectory);
-        const result: string[] = [];
-        forEachAncestorDirectory(currentDirectory, ancestor => {
-            result.push(combinePaths(ancestor, "node_modules/@types"));
-        });
-        return result;
-    }
-
     describe("tsserverProjectSystem", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
@@ -460,7 +468,7 @@ namespace ts.projectSystem {
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, ["/a/b/c", ...getTypeRootsFromLocation(getDirectoryPath(appFile.path))], /*recursive*/ true);
+            checkWatchedDirectories(host, ["/a/b/c", combinePaths(getDirectoryPath(appFile.path), nodeModulesAtTypes)], /*recursive*/ true);
         });
 
         it("can handle tsconfig file name with difference casing", () => {
@@ -532,7 +540,7 @@ namespace ts.projectSystem {
             // watching all files except one that was open
             checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
             const configFileDirectory = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, getTypeRootsFromLocation(configFileDirectory).concat(configFileDirectory), /*recursive*/ true);
+            checkWatchedDirectories(host, [configFileDirectory, combinePaths(configFileDirectory, nodeModulesAtTypes)], /*recursive*/ true);
         });
 
         it("create configured project with the file list", () => {
@@ -621,7 +629,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(commonFile1.path);
             const configFileDir = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, getTypeRootsFromLocation(configFileDir).concat(configFileDir), /*recursive*/ true);
+            checkWatchedDirectories(host, [configFileDir, combinePaths(configFileDir, nodeModulesAtTypes)], /*recursive*/ true);
             checkNumberOfConfiguredProjects(projectService, 1);
 
             const project = configuredProjectAt(projectService, 0);
@@ -2433,7 +2441,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(project, map(files, file => file.path));
             checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            const watchedRecursiveDirectories = getTypeRootsFromLocation("/a/b");
+            const watchedRecursiveDirectories = ["/a/b/node_modules/@types"];
             watchedRecursiveDirectories.push("/a/b");
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
 
@@ -2459,7 +2467,8 @@ namespace ts.projectSystem {
 
         });
 
-        it("Failed lookup locations are uses parent most node_modules directory", () => {
+        it("Failed lookup locations uses parent most node_modules directory", () => {
+            const root = "/user/username/rootfolder";
             const file1: FileOrFolder = {
                 path: "/a/b/src/file1.ts",
                 content: 'import { classc } from "module1"'
@@ -2479,9 +2488,11 @@ namespace ts.projectSystem {
             };
             const configFile: FileOrFolder = {
                 path: "/a/b/src/tsconfig.json",
-                content: JSON.stringify({ files: [file1.path] })
+                content: JSON.stringify({ files: ["file1.ts"] })
             };
-            const files = [file1, module1, module2, module3, configFile, libFile];
+            const nonLibFiles = [file1, module1, module2, module3, configFile];
+            nonLibFiles.forEach(f => f.path = root + f.path);
+            const files = nonLibFiles.concat(libFile);
             const host = createServerHost(files);
             const projectService = createProjectService(host);
             projectService.openClientFile(file1.path);
@@ -2491,8 +2502,8 @@ namespace ts.projectSystem {
             checkProjectActualFiles(project, [file1.path, libFile.path, module1.path, module2.path, configFile.path]);
             checkWatchedFiles(host, [libFile.path, module1.path, module2.path, configFile.path]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            const watchedRecursiveDirectories = getTypeRootsFromLocation("/a/b/src");
-            watchedRecursiveDirectories.push("/a/b/src", "/a/b/node_modules");
+            const watchedRecursiveDirectories = getTypeRootsFromLocation(root + "/a/b/src");
+            watchedRecursiveDirectories.push(`${root}/a/b/src`, `${root}/a/b/node_modules`);
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
         });
     });
@@ -4682,7 +4693,6 @@ namespace ts.projectSystem {
             }
             const f2Lookups = getLocationsForModuleLookup("f2");
             callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, f2Lookups, 1);
-            const typeRootLocations = getTypeRootsFromLocation(getDirectoryPath(root.path));
             const f2DirLookups = getLocationsForDirectoryLookup();
             callsTrackingHost.verifyCalledOnEachEntry(CalledMapsWithSingleArg.directoryExists, f2DirLookups);
             callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.getDirectories);
@@ -4693,7 +4703,7 @@ namespace ts.projectSystem {
             verifyImportedDiagnostics();
             const f1Lookups = f2Lookups.map(s => s.replace("f2", "f1"));
             f1Lookups.length = f1Lookups.indexOf(imported.path) + 1;
-            const f1DirLookups = ["/c/d", "/c", ...typeRootLocations];
+            const f1DirLookups = ["/c/d", "/c", ...mapCombinedPathsInAncestor(getDirectoryPath(root.path), nodeModulesAtTypes, returnTrue)];
             vertifyF1Lookups();
 
             // setting compiler options discards module resolution cache
@@ -4744,13 +4754,12 @@ namespace ts.projectSystem {
 
             function getLocationsForDirectoryLookup() {
                 const result = createMap<number>();
-                // Type root
-                typeRootLocations.forEach(location => result.set(location, 1));
                 forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
                     // To resolve modules
                     result.set(ancestor, 2);
                     // for type roots
-                    result.set(combinePaths(ancestor, `node_modules`), 1);
+                    result.set(combinePaths(ancestor, nodeModules), 1);
+                    result.set(combinePaths(ancestor, nodeModulesAtTypes), 1);
                 });
                 return result;
             }
@@ -4990,15 +4999,20 @@ namespace ts.projectSystem {
 
         describe("Verify npm install in directory with tsconfig file works when", () => {
             function verifyNpmInstall(timeoutDuringPartialInstallation: boolean) {
-                const app: FileOrFolder = {
+                const root = "/user/username/rootfolder/otherfolder";
+                const getRootedFileOrFolder = (fileOrFolder: FileOrFolder) => {
+                    fileOrFolder.path = root + fileOrFolder.path;
+                    return fileOrFolder;
+                };
+                const app: FileOrFolder = getRootedFileOrFolder({
                     path: "/a/b/app.ts",
                     content: "import _ from 'lodash';"
-                };
-                const tsconfigJson: FileOrFolder = {
+                });
+                const tsconfigJson: FileOrFolder = getRootedFileOrFolder({
                     path: "/a/b/tsconfig.json",
                     content: '{ "compilerOptions": { } }'
-                };
-                const packageJson: FileOrFolder = {
+                });
+                const packageJson: FileOrFolder = getRootedFileOrFolder({
                     path: "/a/b/package.json",
                     content: `
 {
@@ -5022,7 +5036,7 @@ namespace ts.projectSystem {
   "license": "ISC"
 }
 `
-                };
+                });
                 const appFolder = getDirectoryPath(app.path);
                 const projectFiles = [app, libFile, tsconfigJson];
                 const typeRootDirectories = getTypeRootsFromLocation(getDirectoryPath(tsconfigJson.path));
@@ -5053,16 +5067,16 @@ namespace ts.projectSystem {
                     { "path": "/a/b/node_modules/.staging/symbol-observable-24bcbbff/index.d.ts", "content": "declare const observableSymbol: symbol;\nexport default observableSymbol;\n" },
                     { "path": "/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib" },
                     { "path": "/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js", "content": "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _ponyfill = require('./ponyfill');\n\nvar _ponyfill2 = _interopRequireDefault(_ponyfill);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }\n\nvar root; /* global window */\n\n\nif (typeof self !== 'undefined') {\n  root = self;\n} else if (typeof window !== 'undefined') {\n  root = window;\n} else if (typeof global !== 'undefined') {\n  root = global;\n} else if (typeof module !== 'undefined') {\n  root = module;\n} else {\n  root = Function('return this')();\n}\n\nvar result = (0, _ponyfill2['default'])(root);\nexports['default'] = result;" },
-                ];
+                ].map(getRootedFileOrFolder);
                 verifyAfterPartialOrCompleteNpmInstall(2);
 
-                filesAndFoldersToAdd.push(
+                filesAndFoldersToAdd.push(...[
                     { "path": "/a/b/node_modules/.staging/typescript-8493ea5d/lib" },
                     { "path": "/a/b/node_modules/.staging/rxjs-22375c61/add/operator" },
                     { "path": "/a/b/node_modules/.staging/@types/lodash-e56c4fe7/package.json", "content": "{\n    \"name\": \"@types/lodash\",\n    \"version\": \"4.14.74\",\n    \"description\": \"TypeScript definitions for Lo-Dash\",\n    \"license\": \"MIT\",\n    \"contributors\": [\n        {\n            \"name\": \"Brian Zengel\",\n            \"url\": \"https://github.com/bczengel\"\n        },\n        {\n            \"name\": \"Ilya Mochalov\",\n            \"url\": \"https://github.com/chrootsu\"\n        },\n        {\n            \"name\": \"Stepan Mikhaylyuk\",\n            \"url\": \"https://github.com/stepancar\"\n        },\n        {\n            \"name\": \"Eric L Anderson\",\n            \"url\": \"https://github.com/ericanderson\"\n        },\n        {\n            \"name\": \"AJ Richardson\",\n            \"url\": \"https://github.com/aj-r\"\n        },\n        {\n            \"name\": \"Junyoung Clare Jang\",\n            \"url\": \"https://github.com/ailrun\"\n        }\n    ],\n    \"main\": \"\",\n    \"repository\": {\n        \"type\": \"git\",\n        \"url\": \"https://www.github.com/DefinitelyTyped/DefinitelyTyped.git\"\n    },\n    \"scripts\": {},\n    \"dependencies\": {},\n    \"typesPublisherContentHash\": \"12af578ffaf8d86d2df37e591857906a86b983fa9258414326544a0fe6af0de8\",\n    \"typeScriptVersion\": \"2.2\"\n}" },
                     { "path": "/a/b/node_modules/.staging/lodash-b0733faa/index.js", "content": "module.exports = require('./lodash');" },
                     { "path": "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594" }
-                );
+                ].map(getRootedFileOrFolder));
                 // Since we didnt add any supported extension file, there wont be any timeout scheduled
                 verifyAfterPartialOrCompleteNpmInstall(0);
 
@@ -5070,27 +5084,27 @@ namespace ts.projectSystem {
                 filesAndFoldersToAdd.length--;
                 verifyAfterPartialOrCompleteNpmInstall(0);
 
-                filesAndFoldersToAdd.push(
+                filesAndFoldersToAdd.push(...[
                     { "path": "/a/b/node_modules/.staging/rxjs-22375c61/bundles" },
                     { "path": "/a/b/node_modules/.staging/rxjs-22375c61/operator" },
                     { "path": "/a/b/node_modules/.staging/rxjs-22375c61/src/add/observable/dom" },
                     { "path": "/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts", "content": "\n// Stub for lodash\nexport = _;\nexport as namespace _;\ndeclare var _: _.LoDashStatic;\ndeclare namespace _ {\n    interface LoDashStatic {\n        someProp: string;\n    }\n    class SomeClass {\n        someMethod(): void;\n    }\n}" }
-                );
+                ].map(getRootedFileOrFolder));
                 verifyAfterPartialOrCompleteNpmInstall(2);
 
-                filesAndFoldersToAdd.push(
+                filesAndFoldersToAdd.push(...[
                     { "path": "/a/b/node_modules/.staging/rxjs-22375c61/src/scheduler" },
                     { "path": "/a/b/node_modules/.staging/rxjs-22375c61/src/util" },
                     { "path": "/a/b/node_modules/.staging/rxjs-22375c61/symbol" },
                     { "path": "/a/b/node_modules/.staging/rxjs-22375c61/testing" },
                     { "path": "/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041", "content": "{\n  \"_args\": [\n    [\n      {\n        \"raw\": \"rxjs@^5.4.2\",\n        \"scope\": null,\n        \"escapedName\": \"rxjs\",\n        \"name\": \"rxjs\",\n        \"rawSpec\": \"^5.4.2\",\n        \"spec\": \">=5.4.2 <6.0.0\",\n        \"type\": \"range\"\n      },\n      \"C:\\\\Users\\\\shkamat\\\\Desktop\\\\app\"\n    ]\n  ],\n  \"_from\": \"rxjs@>=5.4.2 <6.0.0\",\n  \"_id\": \"rxjs@5.4.3\",\n  \"_inCache\": true,\n  \"_location\": \"/rxjs\",\n  \"_nodeVersion\": \"7.7.2\",\n  \"_npmOperationalInternal\": {\n    \"host\": \"s3://npm-registry-packages\",\n    \"tmp\": \"tmp/rxjs-5.4.3.tgz_1502407898166_0.6800217325799167\"\n  },\n  \"_npmUser\": {\n    \"name\": \"blesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"_npmVersion\": \"5.3.0\",\n  \"_phantomChildren\": {},\n  \"_requested\": {\n    \"raw\": \"rxjs@^5.4.2\",\n    \"scope\": null,\n    \"escapedName\": \"rxjs\",\n    \"name\": \"rxjs\",\n    \"rawSpec\": \"^5.4.2\",\n    \"spec\": \">=5.4.2 <6.0.0\",\n    \"type\": \"range\"\n  },\n  \"_requiredBy\": [\n    \"/\"\n  ],\n  \"_resolved\": \"https://registry.npmjs.org/rxjs/-/rxjs-5.4.3.tgz\",\n  \"_shasum\": \"0758cddee6033d68e0fd53676f0f3596ce3d483f\",\n  \"_shrinkwrap\": null,\n  \"_spec\": \"rxjs@^5.4.2\",\n  \"_where\": \"C:\\\\Users\\\\shkamat\\\\Desktop\\\\app\",\n  \"author\": {\n    \"name\": \"Ben Lesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"bugs\": {\n    \"url\": \"https://github.com/ReactiveX/RxJS/issues\"\n  },\n  \"config\": {\n    \"commitizen\": {\n      \"path\": \"cz-conventional-changelog\"\n    }\n  },\n  \"contributors\": [\n    {\n      \"name\": \"Ben Lesh\",\n      \"email\": \"ben@benlesh.com\"\n    },\n    {\n      \"name\": \"Paul Taylor\",\n      \"email\": \"paul.e.taylor@me.com\"\n    },\n    {\n      \"name\": \"Jeff Cross\",\n      \"email\": \"crossj@google.com\"\n    },\n    {\n      \"name\": \"Matthew Podwysocki\",\n      \"email\": \"matthewp@microsoft.com\"\n    },\n    {\n      \"name\": \"OJ Kwon\",\n      \"email\": \"kwon.ohjoong@gmail.com\"\n    },\n    {\n      \"name\": \"Andre Staltz\",\n      \"email\": \"andre@staltz.com\"\n    }\n  ],\n  \"dependencies\": {\n    \"symbol-observable\": \"^1.0.1\"\n  },\n  \"description\": \"Reactive Extensions for modern JavaScript\",\n  \"devDependencies\": {\n    \"babel-polyfill\": \"^6.23.0\",\n    \"benchmark\": \"^2.1.0\",\n    \"benchpress\": \"2.0.0-beta.1\",\n    \"chai\": \"^3.5.0\",\n    \"color\": \"^0.11.1\",\n    \"colors\": \"1.1.2\",\n    \"commitizen\": \"^2.8.6\",\n    \"coveralls\": \"^2.11.13\",\n    \"cz-conventional-changelog\": \"^1.2.0\",\n    \"danger\": \"^1.1.0\",\n    \"doctoc\": \"^1.0.0\",\n    \"escape-string-regexp\": \"^1.0.5 \",\n    \"esdoc\": \"^0.4.7\",\n    \"eslint\": \"^3.8.0\",\n    \"fs-extra\": \"^2.1.2\",\n    \"get-folder-size\": \"^1.0.0\",\n    \"glob\": \"^7.0.3\",\n    \"gm\": \"^1.22.0\",\n    \"google-closure-compiler-js\": \"^20170218.0.0\",\n    \"gzip-size\": \"^3.0.0\",\n    \"http-server\": \"^0.9.0\",\n    \"husky\": \"^0.13.3\",\n    \"lint-staged\": \"3.2.5\",\n    \"lodash\": \"^4.15.0\",\n    \"madge\": \"^1.4.3\",\n    \"markdown-doctest\": \"^0.9.1\",\n    \"minimist\": \"^1.2.0\",\n    \"mkdirp\": \"^0.5.1\",\n    \"mocha\": \"^3.0.2\",\n    \"mocha-in-sauce\": \"0.0.1\",\n    \"npm-run-all\": \"^4.0.2\",\n    \"npm-scripts-info\": \"^0.3.4\",\n    \"nyc\": \"^10.2.0\",\n    \"opn-cli\": \"^3.1.0\",\n    \"platform\": \"^1.3.1\",\n    \"promise\": \"^7.1.1\",\n    \"protractor\": \"^3.1.1\",\n    \"rollup\": \"0.36.3\",\n    \"rollup-plugin-inject\": \"^2.0.0\",\n    \"rollup-plugin-node-resolve\": \"^2.0.0\",\n    \"rx\": \"latest\",\n    \"rxjs\": \"latest\",\n    \"shx\": \"^0.2.2\",\n    \"sinon\": \"^2.1.0\",\n    \"sinon-chai\": \"^2.9.0\",\n    \"source-map-support\": \"^0.4.0\",\n    \"tslib\": \"^1.5.0\",\n    \"tslint\": \"^4.4.2\",\n    \"typescript\": \"~2.0.6\",\n    \"typings\": \"^2.0.0\",\n    \"validate-commit-msg\": \"^2.14.0\",\n    \"watch\": \"^1.0.1\",\n    \"webpack\": \"^1.13.1\",\n    \"xmlhttprequest\": \"1.8.0\"\n  },\n  \"directories\": {},\n  \"dist\": {\n    \"integrity\": \"sha512-fSNi+y+P9ss+EZuV0GcIIqPUK07DEaMRUtLJvdcvMyFjc9dizuDjere+A4V7JrLGnm9iCc+nagV/4QdMTkqC4A==\",\n    \"shasum\": \"0758cddee6033d68e0fd53676f0f3596ce3d483f\",\n    \"tarball\": \"https://registry.npmjs.org/rxjs/-/rxjs-5.4.3.tgz\"\n  },\n  \"engines\": {\n    \"npm\": \">=2.0.0\"\n  },\n  \"homepage\": \"https://github.com/ReactiveX/RxJS\",\n  \"keywords\": [\n    \"Rx\",\n    \"RxJS\",\n    \"ReactiveX\",\n    \"ReactiveExtensions\",\n    \"Streams\",\n    \"Observables\",\n    \"Observable\",\n    \"Stream\",\n    \"ES6\",\n    \"ES2015\"\n  ],\n  \"license\": \"Apache-2.0\",\n  \"lint-staged\": {\n    \"*.@(js)\": [\n      \"eslint --fix\",\n      \"git add\"\n    ],\n    \"*.@(ts)\": [\n      \"tslint --fix\",\n      \"git add\"\n    ]\n  },\n  \"main\": \"Rx.js\",\n  \"maintainers\": [\n    {\n      \"name\": \"blesh\",\n      \"email\": \"ben@benlesh.com\"\n    }\n  ],\n  \"name\": \"rxjs\",\n  \"optionalDependencies\": {},\n  \"readme\": \"ERROR: No README data found!\",\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+ssh://git@github.com/ReactiveX/RxJS.git\"\n  },\n  \"scripts-info\": {\n    \"info\": \"List available script\",\n    \"build_all\": \"Build all packages (ES6, CJS, UMD) and generate packages\",\n    \"build_cjs\": \"Build CJS package with clean up existing build, copy source into dist\",\n    \"build_es6\": \"Build ES6 package with clean up existing build, copy source into dist\",\n    \"build_closure_core\": \"Minify Global core build using closure compiler\",\n    \"build_global\": \"Build Global package, then minify build\",\n    \"build_perf\": \"Build CJS & Global build, run macro performance test\",\n    \"build_test\": \"Build CJS package & test spec, execute mocha test runner\",\n    \"build_cover\": \"Run lint to current code, build CJS & test spec, execute test coverage\",\n    \"build_docs\": \"Build ES6 & global package, create documentation using it\",\n    \"build_spec\": \"Build test specs\",\n    \"check_circular_dependencies\": \"Check codebase has circular dependencies\",\n    \"clean_spec\": \"Clean up existing test spec build output\",\n    \"clean_dist_cjs\": \"Clean up existing CJS package output\",\n    \"clean_dist_es6\": \"Clean up existing ES6 package output\",\n    \"clean_dist_global\": \"Clean up existing Global package output\",\n    \"commit\": \"Run git commit wizard\",\n    \"compile_dist_cjs\": \"Compile codebase into CJS module\",\n    \"compile_module_es6\": \"Compile codebase into ES6\",\n    \"cover\": \"Execute test coverage\",\n    \"lint_perf\": \"Run lint against performance test suite\",\n    \"lint_spec\": \"Run lint against test spec\",\n    \"lint_src\": \"Run lint against source\",\n    \"lint\": \"Run lint against everything\",\n    \"perf\": \"Run macro performance benchmark\",\n    \"perf_micro\": \"Run micro performance benchmark\",\n    \"test_mocha\": \"Execute mocha test runner against existing test spec build\",\n    \"test_browser\": \"Execute mocha test runner on browser against existing test spec build\",\n    \"test\": \"Clean up existing test spec build, build test spec and execute mocha test runner\",\n    \"tests2png\": \"Generate marble diagram image from test spec\",\n    \"watch\": \"Watch codebase, trigger compile when source code changes\"\n  },\n  \"typings\": \"Rx.d.ts\",\n  \"version\": \"5.4.3\"\n}\n" }
-                );
+                ].map(getRootedFileOrFolder));
                 verifyAfterPartialOrCompleteNpmInstall(0);
 
                 // remove /a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041
                 filesAndFoldersToAdd.length--;
                 // and add few more folders/files
-                filesAndFoldersToAdd.push(
+                filesAndFoldersToAdd.push(...[
                     { "path": "/a/b/node_modules/symbol-observable" },
                     { "path": "/a/b/node_modules/@types" },
                     { "path": "/a/b/node_modules/@types/lodash" },
@@ -5098,7 +5112,7 @@ namespace ts.projectSystem {
                     { "path": "/a/b/node_modules/rxjs" },
                     { "path": "/a/b/node_modules/typescript" },
                     { "path": "/a/b/node_modules/.bin" }
-                );
+                ].map(getRootedFileOrFolder));
                 // From the type root update
                 verifyAfterPartialOrCompleteNpmInstall(2);
 
@@ -5108,7 +5122,7 @@ namespace ts.projectSystem {
                         .replace(/[\-\.][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w]/g, "");
                 });
 
-                const lodashIndexPath = "/a/b/node_modules/@types/lodash/index.d.ts";
+                const lodashIndexPath = root + "/a/b/node_modules/@types/lodash/index.d.ts";
                 projectFiles.push(find(filesAndFoldersToAdd, f => f.path === lodashIndexPath));
                 // we would now not have failed lookup in the parent of appFolder since lodash is available
                 recursiveWatchedDirectories.length = 1;
@@ -5570,27 +5584,32 @@ namespace ts.projectSystem {
             });
 
             describe("resolution when resolution cache size", () => {
-                function verifyWithMaxCacheLimit(limitHit: boolean) {
+                function verifyWithMaxCacheLimit(limitHit: boolean, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
+                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
                     const file1: FileOrFolder = {
-                        path: "/a/b/project/file1.ts",
+                        path: rootFolder + "a/b/project/file1.ts",
                         content: 'import a from "file2"'
                     };
                     const file2: FileOrFolder = {
-                        path: "/a/b/node_modules/file2.d.ts",
+                        path: rootFolder + "a/b/node_modules/file2.d.ts",
                         content: "export class a { }"
                     };
                     const file3: FileOrFolder = {
-                        path: "/a/b/project/file3.ts",
+                        path: rootFolder + "a/b/project/file3.ts",
                         content: "export class c { }"
                     };
                     const configFile: FileOrFolder = {
-                        path: "/a/b/project/tsconfig.json",
+                        path: rootFolder + "a/b/project/tsconfig.json",
                         content: JSON.stringify({ compilerOptions: { typeRoots: [] } })
                     };
 
                     const projectFiles = [file1, file3, libFile, configFile];
                     const openFiles = [file1.path];
-                    const watchedRecursiveDirectories = ["/a/b/project", "/a/b/node_modules", "/a/node_modules", "/node_modules"];
+                    const watchedRecursiveDirectories = useSlashRootAsSomeNotRootFolderInUserDirectory ?
+                        // Folders of node_modules lookup not in changedRoot
+                        ["a/b/project", "a/b/node_modules", "a/node_modules", "node_modules"].map(v => rootFolder + v) :
+                        // Folder of tsconfig
+                        ["/a/b/project"];
                     const host = createServerHost(projectFiles);
                     const { session, verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host);
                     const projectService = session.getProjectService();
@@ -5618,15 +5637,22 @@ namespace ts.projectSystem {
                     projectFiles.push(file2);
                     host.reloadFS(projectFiles);
                     host.runQueuedTimeoutCallbacks();
-                    watchedRecursiveDirectories.length = 2;
+                    if (useSlashRootAsSomeNotRootFolderInUserDirectory) {
+                        watchedRecursiveDirectories.length = 2;
+                    }
+                    else {
+                        // file2 addition wont be detected
+                        projectFiles.pop();
+                        assert.isTrue(host.fileExists(file2.path));
+                    }
                     verifyProject();
 
-                    verifyProjectsUpdatedInBackgroundEventHandler([{
+                    verifyProjectsUpdatedInBackgroundEventHandler(useSlashRootAsSomeNotRootFolderInUserDirectory ? [{
                         eventName: server.ProjectsUpdatedInBackgroundEvent,
                         data: {
                             openFiles
                         }
-                    }]);
+                    }] : []);
 
                     function verifyProject() {
                         checkProjectActualFiles(project, map(projectFiles, file => file.path));
@@ -5635,12 +5661,20 @@ namespace ts.projectSystem {
                     }
                 }
 
-                it("limit not hit", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ false);
+                it("limit not hit and project is not at root level", () => {
+                    verifyWithMaxCacheLimit(/*limitHit*/ false, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
                 });
 
-                it("limit hit", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ true);
+                it("limit hit and project is not at root level", () => {
+                    verifyWithMaxCacheLimit(/*limitHit*/ true, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
+                });
+
+                it("limit not hit and project is at root level", () => {
+                    verifyWithMaxCacheLimit(/*limitHit*/ false, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
+                });
+
+                it("limit hit and project is at root level", () => {
+                    verifyWithMaxCacheLimit(/*limitHit*/ true, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
                 });
             });
         }
