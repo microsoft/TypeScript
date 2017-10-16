@@ -19680,7 +19680,7 @@ namespace ts {
                     return undefined;
                 }
 
-                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types, /*subtypeReduction*/ true);
+                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types);
             }
 
             const promisedType = getPromisedTypeOfPromise(type);
