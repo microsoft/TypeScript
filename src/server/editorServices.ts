@@ -220,13 +220,28 @@ namespace ts.server {
 
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
-        getScriptKind(f: T): ScriptKind;
+        getScriptKind(f: T, extraFileExtensions?: JsFileExtensionInfo[]): ScriptKind;
         hasMixedContent(f: T, extraFileExtensions: JsFileExtensionInfo[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
-        getScriptKind: _ => undefined,
+        getScriptKind: (fileName, extraFileExtensions) => {
+            let result: ScriptKind;
+            if (extraFileExtensions) {
+                const fileExtension = getAnyExtensionFromPath(fileName);
+                if (fileExtension) {
+                    some(extraFileExtensions, info => {
+                        if (info.extension === fileExtension) {
+                            result = info.scriptKind;
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+            }
+            return result;
+        },
         hasMixedContent: (fileName, extraFileExtensions) => some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
     };
 
@@ -1504,7 +1519,7 @@ namespace ts.server {
                     scriptInfo = normalizedPath;
                 }
                 else {
-                    const scriptKind = propertyReader.getScriptKind(f);
+                    const scriptKind = propertyReader.getScriptKind(f, this.hostConfiguration.extraFileExtensions);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                     scriptInfo = this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(normalizedPath, scriptKind, hasMixedContent, project.directoryStructureHost);
                     path = scriptInfo.path;

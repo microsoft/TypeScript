@@ -2691,6 +2691,16 @@ namespace ts {
         return find<Extension>(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
     }
 
+    // Retrieves any string from the final "." onwards from a base file name.
+    // Unlike extensionFromPath, which throws an exception on unrecognized extensions.
+    export function getAnyExtensionFromPath(path: string): string | undefined {
+        const baseFileName = getBaseFileName(path);
+        const extensionIndex = baseFileName.lastIndexOf(".");
+        if (extensionIndex >= 0) {
+            return baseFileName.substring(extensionIndex);
+        }
+    }
+
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
