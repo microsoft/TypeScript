@@ -3897,7 +3897,7 @@ declare namespace ts {
          * Gets a set of custom transformers to use during emit.
          */
         getCustomTransformers?(): CustomTransformers | undefined;
-        tryGetTypesRegistry?(): Map<void> | undefined;
+        isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult>;
     }
     interface LanguageService {

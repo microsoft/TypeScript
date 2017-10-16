@@ -3897,7 +3897,7 @@ declare namespace ts {
          * Gets a set of custom transformers to use during emit.
          */
         getCustomTransformers?(): CustomTransformers | undefined;
-        tryGetTypesRegistry?(): Map<void> | undefined;
+        isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult>;
     }
     interface LanguageService {
@@ -5974,6 +5974,7 @@ declare namespace ts.server.protocol {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileCodeEdits[];
+        /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
         commands?: {}[];
     }
     /**
@@ -6882,7 +6883,8 @@ declare namespace ts.server {
         logError(err: Error, cmd: string): void;
         send(msg: protocol.Message): void;
         event<T>(info: T, eventName: string): void;
-        output(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void;
+        output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
+        private doOutput(info, cmdName, reqSeq, success, message?);
         private semanticCheck(file, project);
         private syntacticCheck(file, project);
         private updateErrorCheck(next, checkList, ms, requireOpen?);
@@ -7049,7 +7051,7 @@ declare namespace ts.server {
         projectRootPath: Path;
     }
     interface ITypingsInstaller {
-        tryGetTypesRegistry(): Map<void> | undefined;
+        isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
@@ -7061,7 +7063,7 @@ declare namespace ts.server {
         private readonly installer;
         private readonly perProjectCache;
         constructor(installer: ITypingsInstaller);
-        tryGetTypesRegistry(): Map<void> | undefined;
+        isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult>;
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string>;
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]): void;
@@ -7157,7 +7159,7 @@ declare namespace ts.server {
         isJsOnlyProject(): boolean;
         getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
-        tryGetTypesRegistry(): Map<void> | undefined;
+        isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult>;
         private readonly typingsCache;
         getCompilationSettings(): CompilerOptions;
