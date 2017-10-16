@@ -261,7 +261,7 @@ namespace ts.server {
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-        private packageInstalledPromise: PromiseImpl<ApplyCodeActionCommandResult>;
+        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: any): void };
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -301,8 +301,9 @@ namespace ts.server {
             const rq: InstallPackageRequest = { kind: "installPackage", ...options };
             this.send(rq);
             Debug.assert(this.packageInstalledPromise === undefined);
-            this.packageInstalledPromise = PromiseImpl.deferred();
-            return this.packageInstalledPromise;
+            return new Promise((resolve, reject) => {
+                this.packageInstalledPromise = { resolve, reject };
+            });
         }
 
         private reportInstallerProcessId() {
