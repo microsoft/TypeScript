@@ -24,6 +24,15 @@ abstract class AbstractClass {
     }
 }
 
+class User {
+    constructor(a: AbstractClass) {
+        a.prop;
+        a.cb("hi");
+        a.method(12);
+        a.method2();
+    }
+}
+
 
 //// [abstractPropertyInConstructor.js]
 var AbstractClass = /** @class */ (function () {
@@ -43,4 +52,13 @@ var AbstractClass = /** @class */ (function () {
         this.prop = this.prop + "!";
     };
     return AbstractClass;
+}());
+var User = /** @class */ (function () {
+    function User(a) {
+        a.prop;
+        a.cb("hi");
+        a.method(12);
+        a.method2();
+    }
+    return User;
 }());

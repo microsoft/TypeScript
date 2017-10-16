@@ -22,3 +22,12 @@ abstract class AbstractClass {
         this.prop = this.prop + "!";
     }
 }
+
+class User {
+    constructor(a: AbstractClass) {
+        a.prop;
+        a.cb("hi");
+        a.method(12);
+        a.method2();
+    }
+}

@@ -35,3 +35,12 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstr
         }
     }
     
+    class User {
+        constructor(a: AbstractClass) {
+            a.prop;
+            a.cb("hi");
+            a.method(12);
+            a.method2();
+        }
+    }
+    
