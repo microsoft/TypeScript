@@ -942,12 +942,36 @@ namespace ts.Completions {
                     }
 
                     const id = getUniqueSymbolId(symbol, typeChecker);
-                    if (!symbolIdMap[id] && startsWith(name.toLowerCase(), tokenTextLowerCase)) {
+                    if (!symbolIdMap[id] && stringContainsCharactersInOrder(name.toLowerCase(), tokenTextLowerCase)) {
                         symbols.push(symbol);
                         symbolToOriginInfoMap[id] = { moduleSymbol, isDefaultExport };
                     }
                 }
             });
+        }
+
+        /**
+         * True if you could remove some characters in `a` to get `b`.
+         * E.g., true for "abcdef" and "bdf".
+         * But not true for "abcdef" and "dbf".
+         */
+        function stringContainsCharactersInOrder(str: string, characters: string): boolean {
+            if (characters.length === 0) {
+                return true;
+            }
+
+            let characterIndex = 0;
+            for (let strIndex = 0; strIndex < str.length; strIndex++) {
+                if (str.charCodeAt(strIndex) === characters.charCodeAt(characterIndex)) {
+                    characterIndex++;
+                    if (characterIndex === characters.length) {
+                        return true;
+                    }
+                }
+            }
+
+            // Did not find all characters
+            return false;
         }
 
         /**
