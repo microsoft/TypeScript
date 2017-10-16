@@ -2716,11 +2716,6 @@ namespace ts {
                         context.encounteredError = true;
                         return undefined;
                     }
-                    else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
-                        type.symbol.valueDeclaration &&
-                        type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
-                        return createAnonymousTypeNode(type);
-                    }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
                         let i = 0;
