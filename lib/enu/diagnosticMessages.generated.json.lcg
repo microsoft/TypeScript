@@ -867,6 +867,18 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Annotate_with_type_from_JSDoc_95009" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Annotate with type from JSDoc]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Annotate_with_types_from_JSDoc_95010" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Annotate with types from JSDoc]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Argument_expression_expected_1135" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Argument expression expected.]]></Val>
@@ -2481,13 +2493,13 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Infer_parameter_types_from_usage_95010" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Infer parameter types from usage.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Infer_type_of_0_from_usage_95009" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Infer_type_of_0_from_usage_95011" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
               </Str>

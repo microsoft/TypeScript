@@ -7109,6 +7109,7 @@ declare namespace ts.server {
         getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
         getCompilationSettings(): CompilerOptions;
+        getCompilerOptions(): CompilerOptions;
         getNewLine(): string;
         getProjectVersion(): string;
         getScriptFileNames(): string[];
