@@ -13043,12 +13043,14 @@ namespace ts {
 
             // at this point the only legal case for parent is ClassLikeDeclaration
             const classLikeDeclaration = <ClassLikeDeclaration>container.parent;
+            if (!getClassExtendsHeritageClauseElement(classLikeDeclaration)) {
+                error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
+                return unknownType;
+            }
+
             const classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(classLikeDeclaration));
             const baseClassType = classType && getBaseTypes(classType)[0];
             if (!baseClassType) {
-                if (!getClassExtendsHeritageClauseElement(classLikeDeclaration)) {
-                    error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
-                }
                 return unknownType;
             }
 
