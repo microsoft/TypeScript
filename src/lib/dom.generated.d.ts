@@ -696,7 +696,7 @@ interface PaymentDetails {
 interface PaymentDetailsModifier {
     additionalDisplayItems?: PaymentItem[];
     data?: any;
-    supportedMethods: string[];
+    supportedMethods: string;
     total?: PaymentItem;
 }
 
@@ -708,7 +708,7 @@ interface PaymentItem {
 
 interface PaymentMethodData {
     data?: any;
-    supportedMethods: string[];
+    supportedMethods: string;
 }
 
 interface PaymentOptions {
