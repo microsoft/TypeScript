@@ -10648,10 +10648,32 @@ namespace ts {
             return type === typeParameter || type.flags & TypeFlags.UnionOrIntersection && forEach((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter));
         }
 
-        // Infer a suitable input type for a homomorphic mapped type { [P in keyof T]: X }. We construct
-        // an object type with the same set of properties as the source type, where the type of each
-        // property is computed by inferring from the source property type to X for the type
-        // variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
+        /** Create an object with properties named in the string literal type. Every property has type `{}` */
+        function createEmptyObjectTypeFromStringLiteral(type: Type) {
+            const members = createSymbolTable();
+            forEachType(type, t => {
+                if (!(t.flags & TypeFlags.StringLiteral)) {
+                    return;
+                }
+                const name = escapeLeadingUnderscores((t as StringLiteralType).value);
+                const literalProp = createSymbol(SymbolFlags.Property, name);
+                literalProp.type = emptyObjectType;
+                if (t.symbol) {
+                    literalProp.declarations = t.symbol.declarations;
+                    literalProp.valueDeclaration = t.symbol.valueDeclaration;
+                }
+                members.set(name, literalProp);
+            });
+            const indexInfo = type.flags & TypeFlags.String ? createIndexInfo(emptyObjectType, /*isReadonly*/ false) : undefined
+            return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
+        }
+
+        /**
+         * Infer a suitable input type for a homomorphic mapped type { [P in keyof T]: X }. We construct
+         * an object type with the same set of properties as the source type, where the type of each
+         * property is computed by inferring from the source property type to X for the type
+         * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
+         */
         function inferTypeForHomomorphicMappedType(source: Type, target: MappedType): Type {
             const properties = getPropertiesOfType(source);
             let indexInfo = getIndexInfoOfType(source, IndexKind.String);
@@ -10805,7 +10827,15 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
+                    priority ^= InferencePriority.Contravariant;
                     inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
+                    priority ^= InferencePriority.Contravariant;
+                }
+                else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
+                    const empty = createEmptyObjectTypeFromStringLiteral(source);
+                    priority ^= InferencePriority.Contravariant;
+                    inferFromTypes(empty, (target as IndexType).type);
+                    priority ^= InferencePriority.Contravariant;
                 }
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                     inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
