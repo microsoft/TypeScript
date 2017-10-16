@@ -1,5 +1,5 @@
 abstract class AbstractClass {
-    constructor(str: string) {
+    constructor(str: string, other: AbstractClass) {
         this.method(parseInt(str));
         let val = this.prop.toLowerCase();
 
@@ -8,9 +8,13 @@ abstract class AbstractClass {
         }
         this.cb(str);
 
+        // OK, reference is inside function
         const innerFunction = () => {
             return this.prop;
         }
+
+        // OK, references are to another instance
+        other.cb(other.prop);
     }
 
     abstract prop: string;

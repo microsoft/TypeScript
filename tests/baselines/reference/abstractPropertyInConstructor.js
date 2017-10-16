@@ -1,6 +1,6 @@
 //// [abstractPropertyInConstructor.ts]
 abstract class AbstractClass {
-    constructor(str: string) {
+    constructor(str: string, other: AbstractClass) {
         this.method(parseInt(str));
         let val = this.prop.toLowerCase();
 
@@ -9,9 +9,13 @@ abstract class AbstractClass {
         }
         this.cb(str);
 
+        // OK, reference is inside function
         const innerFunction = () => {
             return this.prop;
         }
+
+        // OK, references are to another instance
+        other.cb(other.prop);
     }
 
     abstract prop: string;
@@ -36,7 +40,7 @@ class User {
 
 //// [abstractPropertyInConstructor.js]
 var AbstractClass = /** @class */ (function () {
-    function AbstractClass(str) {
+    function AbstractClass(str, other) {
         var _this = this;
         this.method(parseInt(str));
         var val = this.prop.toLowerCase();
@@ -44,9 +48,12 @@ var AbstractClass = /** @class */ (function () {
             this.prop = "Hello World";
         }
         this.cb(str);
+        // OK, reference is inside function
         var innerFunction = function () {
             return _this.prop;
         };
+        // OK, references are to another instance
+        other.cb(other.prop);
     }
     AbstractClass.prototype.method2 = function () {
         this.prop = this.prop + "!";

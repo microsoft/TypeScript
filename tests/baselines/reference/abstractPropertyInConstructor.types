@@ -2,8 +2,10 @@
 abstract class AbstractClass {
 >AbstractClass : AbstractClass
 
-    constructor(str: string) {
+    constructor(str: string, other: AbstractClass) {
 >str : string
+>other : AbstractClass
+>AbstractClass : AbstractClass
 
         this.method(parseInt(str));
 >this.method(parseInt(str)) : void
@@ -41,6 +43,7 @@ abstract class AbstractClass {
 >cb : (s: string) => void
 >str : string
 
+        // OK, reference is inside function
         const innerFunction = () => {
 >innerFunction : () => string
 >() => {            return this.prop;        } : () => string
@@ -50,6 +53,16 @@ abstract class AbstractClass {
 >this : this
 >prop : string
         }
+
+        // OK, references are to another instance
+        other.cb(other.prop);
+>other.cb(other.prop) : void
+>other.cb : (s: string) => void
+>other : AbstractClass
+>cb : (s: string) => void
+>other.prop : string
+>other : AbstractClass
+>prop : string
     }
 
     abstract prop: string;
