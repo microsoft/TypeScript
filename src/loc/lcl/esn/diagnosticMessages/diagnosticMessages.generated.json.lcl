@@ -3990,12 +3990,18 @@
       <Item ItemId=";JSDoc_augments_0_does_not_match_the_extends_1_clause_8023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@augments {0}' does not match the 'extends {1}' clause.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La etiqueta "@augments {0}" de JSDoc no coincide con la cláusula "extends {1}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";JSDoc_augments_is_not_attached_to_a_class_declaration_8022" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@augments' is not attached to a class declaration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La etiqueta "@augments" de JSDoc no está asociada a una declaración de clase.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
