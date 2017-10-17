@@ -24154,6 +24154,16 @@ namespace ts {
         }
 
         /**
+         * The name cannot be used as 'Object' of user defined types with special target.
+         */
+        function checkClassNameCollisionWithObject(name: Identifier): void {
+            if (languageVersion === ScriptTarget.ES5 && name.escapedText === "Object"
+                && moduleKind !== ModuleKind.ES2015 && moduleKind !== ModuleKind.ESNext) {
+                error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
+            }
+        }
+
+        /**
          * Check each type parameter and check that type parameters have no duplicate type parameter declarations
          */
         function checkTypeParameters(typeParameterDeclarations: ReadonlyArray<TypeParameterDeclaration> | undefined) {
@@ -24279,8 +24289,10 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
+                checkClassNameCollisionWithObject(node.name);
             }
             checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
+            checkTypeParameters(node.typeParameters);
             checkExportsOnMergedDeclarations(node);
             const symbol = getSymbolOfNode(node);
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
