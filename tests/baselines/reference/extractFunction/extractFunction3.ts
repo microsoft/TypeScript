@@ -73,6 +73,7 @@ namespace A {
         }
     }
 }
+
 function* newFunction(z: number, foo: () => void) {
     let y = 5;
     yield z;

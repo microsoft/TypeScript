@@ -590,9 +590,9 @@ namespace ts.server {
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
             // previously we did not expose a way for user to change these settings and this option was enabled by default
             compilerOptions.allowNonTsExtensions = true;
-
-            if (projectRootPath) {
-                this.compilerOptionsForInferredProjectsPerProjectRoot.set(projectRootPath, compilerOptions);
+            const canonicalProjectRootPath = projectRootPath && this.toCanonicalFileName(projectRootPath);
+            if (canonicalProjectRootPath) {
+                this.compilerOptionsForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, compilerOptions);
             }
             else {
                 this.compilerOptionsForInferredProjects = compilerOptions;
@@ -608,9 +608,9 @@ namespace ts.server {
                 //   root path
                 // - Inferred projects with a projectRootPath, if the new options apply to that
                 //   project root path.
-                if (projectRootPath ?
-                        project.projectRootPath === projectRootPath :
-                        !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
+                if (canonicalProjectRootPath ?
+                    project.projectRootPath === canonicalProjectRootPath :
+                    !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
                     project.setCompilerOptions(compilerOptions);
                     project.compileOnSaveEnabled = compilerOptions.compileOnSave;
                     project.markAsDirty();
@@ -1599,9 +1599,10 @@ namespace ts.server {
             }
 
             if (projectRootPath) {
+                const canonicalProjectRootPath = this.toCanonicalFileName(projectRootPath);
                 // if we have an explicit project root path, find (or create) the matching inferred project.
                 for (const project of this.inferredProjects) {
-                    if (project.projectRootPath === projectRootPath) {
+                    if (project.projectRootPath === canonicalProjectRootPath) {
                         return project;
                     }
                 }

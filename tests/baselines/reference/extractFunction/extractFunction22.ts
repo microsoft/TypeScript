@@ -26,6 +26,7 @@ function test() {
         return /*RENAME*/newFunction();
     }
 }
+
 function newFunction() {
     return 1;
 }

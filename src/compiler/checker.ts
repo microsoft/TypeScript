@@ -226,6 +226,23 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
+            getUnionType,
+            createAnonymousType,
+            createSignature,
+            createSymbol,
+            createIndexInfo,
+            getAnyType: () => anyType,
+            getStringType: () => stringType,
+            getNumberType: () => numberType,
+            createPromiseType,
+            createArrayType,
+            getBooleanType: () => booleanType,
+            getVoidType: () => voidType,
+            getUndefinedType: () => undefinedType,
+            getNullType: () => nullType,
+            getESSymbolType: () => esSymbolType,
+            getNeverType: () => neverType,
+            isSymbolAccessible,
             isArrayLikeType,
             getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
@@ -3381,7 +3398,7 @@ namespace ts {
                     else if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral &&
                              type.symbol.valueDeclaration &&
                              type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
-                        writeAnonymousType(getDeclaredTypeOfClassOrInterface(type.symbol), flags);
+                        writeAnonymousType(type, flags);
                     }
                     else {
                         // Write the type reference in the format f<A>.g<B>.C<X, Y> where A and B are type arguments
@@ -3675,6 +3692,7 @@ namespace ts {
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const parameterNode = <ParameterDeclaration>p.valueDeclaration;
+
                 if (parameterNode ? isRestParameter(parameterNode) : isTransientSymbol(p) && p.isRestParameter) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
@@ -5759,7 +5777,7 @@ namespace ts {
                 for (const propertySymbol of getPropertiesOfType(modifiersType)) {
                     addMemberForKeyType(getLiteralTypeFromPropertyName(propertySymbol), propertySymbol);
                 }
-                if (getIndexInfoOfType(modifiersType, IndexKind.String)) {
+                if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
                 }
             }
@@ -5803,7 +5821,7 @@ namespace ts {
                     prop.syntheticLiteralTypeOrigin = t as StringLiteralType;
                     members.set(propName, prop);
                 }
-                else if (t.flags & TypeFlags.String) {
+                else if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
                     stringIndexInfo = createIndexInfo(propType, templateReadonly);
                 }
             }
@@ -8368,7 +8386,7 @@ namespace ts {
         }
 
         function isMappableType(type: Type) {
-            return type.flags & (TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.Intersection | TypeFlags.IndexedAccess);
+            return type.flags & (TypeFlags.Any | TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.Intersection | TypeFlags.IndexedAccess);
         }
 
         function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper): AnonymousType {
@@ -13164,7 +13182,7 @@ namespace ts {
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available
-        function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
+        function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type | undefined {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                 const iife = getImmediatelyInvokedFunctionExpression(func);
@@ -13190,7 +13208,12 @@ namespace ts {
                 if (contextualSignature) {
                     const funcHasRestParameters = hasRestParameter(func);
                     const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
-                    const indexOfParameter = indexOf(func.parameters, parameter);
+                    let indexOfParameter = indexOf(func.parameters, parameter);
+                    if (getThisParameter(func) !== undefined && !contextualSignature.thisParameter) {
+                        Debug.assert(indexOfParameter !== 0); // Otherwise we should not have called `getContextuallyTypedParameterType`.
+                        indexOfParameter -= 1;
+                    }
+
                     if (indexOfParameter < len) {
                         return getTypeAtPosition(contextualSignature, indexOfParameter);
                     }
@@ -15657,34 +15680,32 @@ namespace ts {
             return getInferredTypes(context);
         }
 
-        function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, typeArgumentTypes: Type[], reportErrors: boolean, headMessage?: DiagnosticMessage): boolean {
+        function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | false {
+            const isJavascript = isInJavaScriptFile(signature.declaration);
             const typeParameters = signature.typeParameters;
-            let typeArgumentsAreAssignable = true;
+            const typeArgumentTypes = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
             let mapper: TypeMapper;
             for (let i = 0; i < typeArgumentNodes.length; i++) {
-                if (typeArgumentsAreAssignable /* so far */) {
-                    const constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                    if (constraint) {
-                        let errorInfo: DiagnosticMessageChain;
-                        let typeArgumentHeadMessage = Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
-                        if (reportErrors && headMessage) {
-                            errorInfo = chainDiagnosticMessages(errorInfo, typeArgumentHeadMessage);
-                            typeArgumentHeadMessage = headMessage;
-                        }
-                        if (!mapper) {
-                            mapper = createTypeMapper(typeParameters, typeArgumentTypes);
-                        }
-                        const typeArgument = typeArgumentTypes[i];
-                        typeArgumentsAreAssignable = checkTypeAssignableTo(
-                            typeArgument,
-                            getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
-                            reportErrors ? typeArgumentNodes[i] : undefined,
-                            typeArgumentHeadMessage,
-                            errorInfo);
-                    }
+                Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
+                const constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                if (!constraint) continue;
+
+                const errorInfo = reportErrors && headMessage && chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                const typeArgumentHeadMessage = headMessage || Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
+                if (!mapper) {
+                    mapper = createTypeMapper(typeParameters, typeArgumentTypes);
+                }
+                const typeArgument = typeArgumentTypes[i];
+                if (!checkTypeAssignableTo(
+                    typeArgument,
+                    getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
+                    reportErrors ? typeArgumentNodes[i] : undefined,
+                    typeArgumentHeadMessage,
+                    errorInfo)) {
+                    return false;
                 }
             }
-            return typeArgumentsAreAssignable;
+            return typeArgumentTypes;
         }
 
         /**
@@ -16217,8 +16238,7 @@ namespace ts {
                 checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
-                const typeArguments = (<CallExpression>node).typeArguments;
-                checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), /*reportErrors*/ true, fallbackError);
+                checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression).typeArguments, /*reportErrors*/ true, fallbackError);
             }
             else if (typeArguments && every(signatures, sig => length(sig.typeParameters) !== typeArguments.length)) {
                 let min = Number.POSITIVE_INFINITY;
@@ -16317,10 +16337,12 @@ namespace ts {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[];
-                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             if (typeArguments) {
-                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters), isJavascript);
-                                if (!checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
+                                const typeArgumentResult = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
+                                if (typeArgumentResult) {
+                                    typeArgumentTypes = typeArgumentResult;
+                                }
+                                else {
                                     candidateForTypeArgumentError = originalCandidate;
                                     break;
                                 }
@@ -16328,6 +16350,7 @@ namespace ts {
                             else {
                                 typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                             }
+                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript);
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
@@ -16829,9 +16852,10 @@ namespace ts {
                     // in a JS file
                     // Note:JS inferred classes might come from a variable declaration instead of a function declaration.
                     // In this case, using getResolvedSymbol directly is required to avoid losing the members from the declaration.
-                    const funcSymbol = node.expression.kind === SyntaxKind.Identifier ?
-                        getResolvedSymbol(node.expression as Identifier) :
-                        checkExpression(node.expression).symbol;
+                    let funcSymbol = checkExpression(node.expression).symbol;
+                    if (!funcSymbol && node.expression.kind === SyntaxKind.Identifier) {
+                        funcSymbol = getResolvedSymbol(node.expression as Identifier);
+                    }
                     const type = funcSymbol && getJavaScriptClassType(funcSymbol);
                     if (type) {
                         return type;
@@ -19662,7 +19686,7 @@ namespace ts {
                     return undefined;
                 }
 
-                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types, /*subtypeReduction*/ true);
+                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types);
             }
 
             const promisedType = getPromisedTypeOfPromise(type);

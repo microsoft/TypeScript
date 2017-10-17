@@ -17,6 +17,7 @@ namespace X {
     export const j = 10;
     export const y = /*RENAME*/newFunction();
 }
+
 function newFunction() {
     return X.j * X.j;
 }

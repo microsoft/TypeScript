@@ -29,7 +29,8 @@ c.dynamic();
             this._path = './other';
         }
         dynamic() {
-            return __syncRequire ? Promise.resolve().then(() => require(this._path)) : new Promise((resolve_1, reject_1) => { require([this._path], resolve_1, reject_1); });
+            return _a = this._path, __syncRequire ? Promise.resolve().then(() => require(_a)) : new Promise((resolve_1, reject_1) => { require([_a], resolve_1, reject_1); });
+            var _a;
         }
     }
     const c = new C();

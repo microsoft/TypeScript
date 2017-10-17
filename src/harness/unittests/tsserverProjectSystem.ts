@@ -284,11 +284,11 @@ namespace ts.projectSystem {
             checkNumberOfProjects(this, count);
         }
     }
-    export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}) {
+    export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}, options?: Partial<server.ProjectServiceOptions>) {
         const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
         const logger = parameters.logger || nullLogger;
         const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
-        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller, parameters.eventHandler);
+        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller, parameters.eventHandler, options);
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
@@ -3787,6 +3787,113 @@ namespace ts.projectSystem {
             assert.equal(projectService.inferredProjects[1].getCompilationSettings().target, ScriptTarget.ESNext);
             assert.equal(projectService.inferredProjects[2].getCompilationSettings().target, ScriptTarget.ES2015);
         });
+
+        function checkInferredProject(inferredProject: server.InferredProject, actualFiles: FileOrFolder[], target: ScriptTarget) {
+            checkProjectActualFiles(inferredProject, actualFiles.map(f => f.path));
+            assert.equal(inferredProject.getCompilationSettings().target, target);
+        }
+
+        function verifyProjectRootWithCaseSensitivity(useCaseSensitiveFileNames: boolean) {
+            const files: [FileOrFolder, FileOrFolder, FileOrFolder, FileOrFolder] = [
+                { path: "/a/file1.ts", content: "let x = 1;" },
+                { path: "/A/file2.ts", content: "let y = 2;" },
+                { path: "/b/file2.ts", content: "let x = 3;" },
+                { path: "/c/file3.ts", content: "let z = 4;" }
+            ];
+            const host = createServerHost(files, { useCaseSensitiveFileNames });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, }, { useInferredProjectPerProjectRoot: true });
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                target: ScriptTarget.ESNext
+            });
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                target: ScriptTarget.ES2015
+            }, "/a");
+
+            openClientFiles(["/a", "/a", "/b", undefined]);
+            verifyInferredProjectsState([
+                [[files[3]], ScriptTarget.ESNext],
+                [[files[0], files[1]], ScriptTarget.ES2015],
+                [[files[2]], ScriptTarget.ESNext]
+            ]);
+            closeClientFiles();
+
+            openClientFiles(["/a", "/A", "/b", undefined]);
+            if (useCaseSensitiveFileNames) {
+                verifyInferredProjectsState([
+                    [[files[3]], ScriptTarget.ESNext],
+                    [[files[0]], ScriptTarget.ES2015],
+                    [[files[1]], ScriptTarget.ESNext],
+                    [[files[2]], ScriptTarget.ESNext]
+                ]);
+            }
+            else {
+                verifyInferredProjectsState([
+                    [[files[3]], ScriptTarget.ESNext],
+                    [[files[0], files[1]], ScriptTarget.ES2015],
+                    [[files[2]], ScriptTarget.ESNext]
+                ]);
+            }
+            closeClientFiles();
+
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                target: ScriptTarget.ES2017
+            }, "/A");
+
+            openClientFiles(["/a", "/a", "/b", undefined]);
+            verifyInferredProjectsState([
+                [[files[3]], ScriptTarget.ESNext],
+                [[files[0], files[1]], useCaseSensitiveFileNames ? ScriptTarget.ES2015 : ScriptTarget.ES2017],
+                [[files[2]], ScriptTarget.ESNext]
+            ]);
+            closeClientFiles();
+
+            openClientFiles(["/a", "/A", "/b", undefined]);
+            if (useCaseSensitiveFileNames) {
+                verifyInferredProjectsState([
+                    [[files[3]], ScriptTarget.ESNext],
+                    [[files[0]], ScriptTarget.ES2015],
+                    [[files[1]], ScriptTarget.ES2017],
+                    [[files[2]], ScriptTarget.ESNext]
+                ]);
+            }
+            else {
+                verifyInferredProjectsState([
+                    [[files[3]], ScriptTarget.ESNext],
+                    [[files[0], files[1]], ScriptTarget.ES2017],
+                    [[files[2]], ScriptTarget.ESNext]
+                ]);
+            }
+            closeClientFiles();
+
+            function openClientFiles(projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined]) {
+                files.forEach((file, index) => {
+                    projectService.openClientFile(file.path, file.content, ScriptKind.JS, projectRoots[index]);
+                });
+            }
+
+            function closeClientFiles() {
+                files.forEach(file => projectService.closeClientFile(file.path));
+            }
+
+            function verifyInferredProjectsState(expected: [FileOrFolder[], ScriptTarget][]) {
+                checkNumberOfProjects(projectService, { inferredProjects: expected.length });
+                projectService.inferredProjects.forEach((p, index) => {
+                    const [actualFiles, target] = expected[index];
+                    checkInferredProject(p, actualFiles, target);
+                });
+            }
+        }
+
+        it("inferred projects per project root with case sensitive system", () => {
+            verifyProjectRootWithCaseSensitivity(/*useCaseSensitiveFileNames*/ true);
+        });
+
+        it("inferred projects per project root with case insensitive system", () => {
+            verifyProjectRootWithCaseSensitivity(/*useCaseSensitiveFileNames*/ false);
+        });
     });
 
     describe("No overwrite emit error", () => {
@@ -4415,14 +4522,14 @@ namespace ts.projectSystem {
                         fileName: "/a.ts",
                         textChanges: [
                             {
-                                start: { line: 2, offset: 1 },
-                                end: { line: 3, offset: 1 },
-                                newText: "  newFunction();\n",
+                                start: { line: 2, offset: 3 },
+                                end: { line: 2, offset: 5 },
+                                newText: "newFunction();",
                             },
                             {
                                 start: { line: 3, offset: 2 },
                                 end: { line: 3, offset: 2 },
-                                newText: "\nfunction newFunction() {\n  1;\n}\n",
+                                newText: "\n\nfunction newFunction() {\n  1;\n}\n",
                             },
                         ]
                     }

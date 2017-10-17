@@ -3068,6 +3068,8 @@ declare namespace ts {
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
     function isJSDocCommentContainingNode(node: Node): boolean;
+    function isSetAccessor(node: Node): node is SetAccessorDeclaration;
+    function isGetAccessor(node: Node): node is GetAccessorDeclaration;
 }
 declare namespace ts {
     interface ErrorCallback {
@@ -7163,6 +7165,7 @@ declare namespace ts.server {
         installPackage(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult>;
         private readonly typingsCache;
         getCompilationSettings(): CompilerOptions;
+        getCompilerOptions(): CompilerOptions;
         getNewLine(): string;
         getProjectVersion(): string;
         getScriptFileNames(): string[];
@@ -7242,11 +7245,12 @@ declare namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     class InferredProject extends Project {
-        readonly projectRootPath: string | undefined;
         private static readonly newName;
         private _isJsInferredProject;
         toggleJsInferredProject(isJsInferredProject: boolean): void;
         setCompilerOptions(options?: CompilerOptions): void;
+        /** this is canonical project root path */
+        readonly projectRootPath: string | undefined;
         addRoot(info: ScriptInfo): void;
         removeRoot(info: ScriptInfo): void;
         isProjectWithSingleRoot(): boolean;

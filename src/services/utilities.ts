@@ -436,8 +436,11 @@ namespace ts {
         return start < end;
     }
 
+    /**
+     * Assumes `candidate.start <= position` holds.
+     */
     export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
-        return candidate.end > position || !isCompletedNode(candidate, sourceFile);
+        return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
     export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
@@ -1359,6 +1362,12 @@ namespace ts {
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
             const clone = getSynthesizedClone(node);
+            if (isStringLiteral(clone)) {
+                clone.textSourceNode = node as any;
+            }
+            else if (isNumericLiteral(clone)) {
+                clone.numericLiteralFlags = (node as any).numericLiteralFlags;
+            }
             clone.pos = node.pos;
             clone.end = node.end;
             return clone;
@@ -1371,5 +1380,40 @@ namespace ts {
         visited.parent = undefined;
 
         return visited;
+    }
+
+    /**
+     * Sets EmitFlags to suppress leading and trailing trivia on the node.
+     */
+    /* @internal */
+    export function suppressLeadingAndTrailingTrivia(node: Node) {
+        Debug.assert(node !== undefined);
+
+        suppressLeading(node);
+        suppressTrailing(node);
+
+        function suppressLeading(node: Node) {
+            addEmitFlags(node, EmitFlags.NoLeadingComments);
+
+            const firstChild = forEachChild(node, child => child);
+            firstChild && suppressLeading(firstChild);
+        }
+
+        function suppressTrailing(node: Node) {
+            addEmitFlags(node, EmitFlags.NoTrailingComments);
+
+            let lastChild: Node = undefined;
+            forEachChild(
+                node,
+                child => (lastChild = child, undefined),
+                children => {
+                    // As an optimization, jump straight to the end of the list.
+                    if (children.length) {
+                        lastChild = last(children);
+                    }
+                    return undefined;
+                });
+            lastChild && suppressTrailing(lastChild);
+        }
     }
 }

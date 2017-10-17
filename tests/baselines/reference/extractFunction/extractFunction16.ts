@@ -14,6 +14,7 @@ function F<T>() {
 function F<T>() {
     const array: T[] = /*RENAME*/newFunction<T>();
 }
+
 function newFunction<T>(): T[] {
     return [];
 }
