@@ -15083,12 +15083,11 @@ namespace ts {
             if (flags & ModifierFlags.Static) {
                 return true;
             }
-            // An instance property must be accessed through an instance of the enclosing class
-            if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
+             if (type.flags & TypeFlags.TypeParameter) {
                 // get the original type -- represented as the type constraint of the 'this' type
-                type = getConstraintOfTypeParameter(<TypeParameter>type);
+                type = (type as TypeParameter).isThisType ? getConstraintOfTypeParameter(<TypeParameter>type) : getBaseConstraintOfType(<TypeParameter>type);
             }
-            if (!(getObjectFlags(getTargetType(type)) & ObjectFlags.ClassOrInterface && hasBaseType(type, enclosingClass))) {
+            if (!type || !hasBaseType(type, enclosingClass)) {
                 error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
                 return false;
             }
