@@ -18,10 +18,10 @@ namespace ts {
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
     let inSpeculation = false;
-    const GIVE_UP_SPECULATION = {};
-    function giveUpSpeculation() {
+    const STOP_SPECULATION = {};
+    function stopSpeculation() {
         if (inSpeculation) {
-            throw GIVE_UP_SPECULATION;
+            throw STOP_SPECULATION;
         }
     }
 
@@ -1014,7 +1014,7 @@ namespace ts {
                 result = callback();
             }
             catch (e) {
-                if (e !== GIVE_UP_SPECULATION) {
+                if (e !== STOP_SPECULATION) {
                     throw e;
                 }
                 // Else swallow the exception and let 'result' be undefined
@@ -1023,7 +1023,7 @@ namespace ts {
             inSpeculation = saveInSpeculation;
 
             // Usually contextFlags === saveContextFlags,
-            // but if there was a GIVE_UP_SPECULATION exception, resets won't have happened.
+            // but if there was a STOP_SPECULATION exception, resets won't have happened.
             contextFlags = saveContextFlags;
             parsingContext = saveParsingContext;
 
@@ -3050,7 +3050,7 @@ namespace ts {
                     // do not try to parse initializer
                     return undefined;
                 }
-                giveUpSpeculation();
+                stopSpeculation();
             }
 
             // Initializer[In, Yield] :
