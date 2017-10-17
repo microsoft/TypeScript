@@ -254,7 +254,7 @@ namespace ts.tscWatch {
             checkProgramRootFiles(watch(), [file1.path, file2.path]);
             checkWatchedFiles(host, [configFile.path, file1.path, file2.path, libFile.path]);
             const configDir = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, projectSystem.getTypeRootsFromLocation(configDir).concat(configDir), /*recursive*/ true);
+            checkWatchedDirectories(host, [configDir, combinePaths(configDir, projectSystem.nodeModulesAtTypes)], /*recursive*/ true);
         });
 
         // TODO: if watching for config file creation
@@ -269,7 +269,7 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([commonFile1, libFile, configFile]);
             const watch = createWatchModeWithConfigFile(configFile.path, host);
             const configDir = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, projectSystem.getTypeRootsFromLocation(configDir).concat(configDir), /*recursive*/ true);
+            checkWatchedDirectories(host, [configDir, combinePaths(configDir, projectSystem.nodeModulesAtTypes)], /*recursive*/ true);
 
             checkProgramRootFiles(watch(), [commonFile1.path]);
 
