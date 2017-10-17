@@ -145,7 +145,7 @@ namespace ts.server.typingsInstaller {
 
         protected sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.log.isEnabled()) {
-                this.log.writeLine(`Sending response: ${JSON.stringify(response)}`);
+                this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
             }
             process.send(response);
             if (this.log.isEnabled()) {
