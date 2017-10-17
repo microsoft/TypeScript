@@ -636,7 +636,7 @@ namespace ts.codefix {
                 symbol.type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                 parameters.push(symbol);
             }
-            const returnType = getTypeFromUsageContext(callContext.returnType, checker);
+            const returnType = getTypeFromUsageContext(callContext.returnType, checker) || checker.getVoidType();
             return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }
 
