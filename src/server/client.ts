@@ -268,6 +268,10 @@ namespace ts.server {
             }));
         }
 
+        getDefinitionAndBoundSpan(_fileName: string, _position: number): DefinitionInfoAndBoundSpan {
+            return notImplemented();
+        }
+
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
@@ -528,10 +532,6 @@ namespace ts.server {
         }
 
         getSpanOfEnclosingComment(_fileName: string, _position: number, _onlyMultiLine: boolean): TextSpan {
-            return notImplemented();
-        }
-
-        getSpanForPosition(_fileName: string, _position: number): TextSpan {
             return notImplemented();
         }
 

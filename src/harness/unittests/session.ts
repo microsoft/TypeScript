@@ -176,6 +176,7 @@ namespace ts.server {
                 CommandNames.Definition,
                 CommandNames.DefinitionFull,
                 CommandNames.DefinitionAndBoundSpan,
+                CommandNames.DefinitionAndBoundSpanFull,
                 CommandNames.Implementation,
                 CommandNames.ImplementationFull,
                 CommandNames.Exit,

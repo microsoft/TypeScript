@@ -21,8 +21,9 @@ namespace ts.server.protocol {
         Definition = "definition",
         /* @internal */
         DefinitionFull = "definition-full",
-        /* @internal */
         DefinitionAndBoundSpan = "definitionAndBoundSpan",
+        /* @internal */
+        DefinitionAndBoundSpanFull = "definitionAndBoundSpan-full",
         Implementation = "implementation",
         /* @internal */
         ImplementationFull = "implementation-full",
@@ -688,6 +689,11 @@ namespace ts.server.protocol {
          * File containing text span.
          */
         file: string;
+    }
+
+    export interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<FileSpan>;
+        textSpan: TextSpan;
     }
 
     /**

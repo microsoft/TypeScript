@@ -601,18 +601,55 @@ namespace ts.server {
             }
 
             if (simplifiedResult) {
-                return definitions.map(def => {
-                    const defScriptInfo = project.getScriptInfo(def.fileName);
-                    return {
-                        file: def.fileName,
-                        start: defScriptInfo.positionToLineOffset(def.textSpan.start),
-                        end: defScriptInfo.positionToLineOffset(textSpanEnd(def.textSpan))
-                    };
-                });
+                return this.getSimplifiedDefinition(definitions, project);
             }
             else {
                 return definitions;
             }
+        }
+
+        private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
+            const { file, project } = this.getFileAndProject(args);
+            const position = this.getPositionInFile(args, file);
+            const scriptInfo = project.getScriptInfo(file);
+
+            const definitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
+
+            if (!definitionAndBoundSpan || !definitionAndBoundSpan.definitions) {
+                return {
+                    definitions: emptyArray,
+                    textSpan: undefined
+                };
+            }
+
+            if (simplifiedResult) {
+                return {
+                    definitions: this.getSimplifiedDefinition(definitionAndBoundSpan.definitions, project),
+                    textSpan: this.getSimplifiedTextSpan(definitionAndBoundSpan.textSpan, scriptInfo)
+                };
+            }
+
+            return definitionAndBoundSpan;
+        }
+
+        private getSimplifiedDefinition(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpan> {
+            return definitions.map(def => {
+                const defScriptInfo = project.getScriptInfo(def.fileName);
+                const simplifiedTextSpan = this.getSimplifiedTextSpan(def.textSpan, defScriptInfo);
+
+                return {
+                    file: def.fileName,
+                    start: simplifiedTextSpan.start,
+                    end: simplifiedTextSpan.end
+                };
+            });
+        }
+
+        private getSimplifiedTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
+            return {
+                start: scriptInfo.positionToLineOffset(textSpan.start),
+                end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
+            };
         }
 
         private getTypeDefinition(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.FileSpan> {
@@ -1079,13 +1116,6 @@ namespace ts.server {
             else {
                 return quickInfo;
             }
-        }
-
-        private getSpanForLocation(args: protocol.FileLocationRequestArgs): TextSpan {
-            const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-
-            return project.getLanguageService().getSpanForPosition(file, this.getPosition(args, scriptInfo));
         }
 
         private getFormattingEditsForRange(args: protocol.FormatRequestArgs): protocol.CodeEdit[] {
@@ -1715,13 +1745,10 @@ namespace ts.server {
                 return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.DefinitionAndBoundSpan]: (request: protocol.DefinitionRequest) => {
-                const definitions = this.getDefinition(request.arguments, /*simplifiedResult*/ false);
-                const textSpan = definitions.length !== 0 ? this.getSpanForLocation(request.arguments) : {};
-
-                return this.requiredResponse({
-                    definitions,
-                    textSpan
-                });
+                return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionRequest) => {
+                return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.TypeDefinition]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getTypeDefinition(request.arguments));

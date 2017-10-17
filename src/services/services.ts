@@ -1411,6 +1411,20 @@ namespace ts {
             return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
         }
 
+        function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+            const definitions = getDefinitionAtPosition(fileName, position);
+
+            if (!definitions) {
+                return undefined;
+            }
+
+            const sourceFile = getValidSourceFile(fileName);
+            const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+            const textSpan = createTextSpan(node.getStart(), node.getWidth());
+
+            return { definitions, textSpan };
+        }
+
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
             return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
@@ -1807,15 +1821,6 @@ namespace ts {
             return range && createTextSpanFromRange(range);
         }
 
-        function getSpanForPosition(fileName: string, position: number): TextSpan {
-            synchronizeHostData();
-
-            const sourceFile = getValidSourceFile(fileName);
-            const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocCcomment*/ false);
-
-            return createTextSpan(node.getStart(), node.getWidth());
-        }
-
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             // Note: while getting todo comments seems like a syntactic operation, we actually
             // treat it as a semantic operation here.  This is because we expect our host to call
@@ -2018,6 +2023,7 @@ namespace ts {
             getSignatureHelpItems,
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
+            getDefinitionAndBoundSpan,
             getImplementationAtPosition,
             getTypeDefinitionAtPosition,
             getReferencesAtPosition,
@@ -2041,7 +2047,6 @@ namespace ts {
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
             getSpanOfEnclosingComment,
-            getSpanForPosition,
             getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
