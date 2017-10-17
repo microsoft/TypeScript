@@ -194,3 +194,30 @@ over = { a: 1, b: 1, first: "ok", third: "error" }
 >third : string
 >"error" : "error"
 
+// Freshness disappears after spreading a union
+declare let t0: { a: any, b: any } | { d: any, e: any }
+>t0 : { a: any; b: any; } | { d: any; e: any; }
+>a : any
+>b : any
+>d : any
+>e : any
+
+declare let t1: { a: any, b: any, c: any } | { c: any, d: any, e: any }
+>t1 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>a : any
+>b : any
+>c : any
+>c : any
+>d : any
+>e : any
+
+let t2 = { ...t1 }
+>t2 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>{ ...t1 } : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>t1 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+
+t0 = t2
+>t0 = t2 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>t0 : { a: any; b: any; } | { d: any; e: any; }
+>t2 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+
