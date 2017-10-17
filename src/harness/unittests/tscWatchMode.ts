@@ -1819,4 +1819,44 @@ declare module "fs" {
             checkOutputErrors(host);
         });
     });
+
+    describe("tsc-watch with when module emit is specified as node", () => {
+        it("when instead of filechanged recursive directory watcher is invoked", () => {
+            const configFile: FileOrFolder = {
+                path: "/a/rootFolder/project/tsconfig.json",
+                content: JSON.stringify({
+                    "compilerOptions": {
+                        "module": "none",
+                        "allowJs": true,
+                        "outDir": "Static/scripts/"
+                    },
+                    "include": [
+                        "Scripts/**/*"
+                    ],
+                })
+            };
+            const outputFolder = "/a/rootFolder/project/Static/scripts/";
+            const file1: FileOrFolder = {
+                path: "/a/rootFolder/project/Scripts/TypeScript.ts",
+                content: "var z = 10;"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/rootFolder/project/Scripts/Javascript.js",
+                content: "var zz = 10;"
+            };
+            const files = [configFile, file1, file2, libFile];
+            const host = createWatchedSystem(files);
+            const watch = createWatchModeWithConfigFile(configFile.path, host);
+
+            checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+            file1.content = "var zz30 = 100;";
+            host.reloadFS(files, /*invokeDirectoryWatcherInsteadOfFileChanged*/ true);
+            host.runQueuedTimeoutCallbacks();
+
+            checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+            const outputFile1 = changeExtension((outputFolder + getBaseFileName(file1.path)), ".js");
+            assert.isTrue(host.fileExists(outputFile1));
+            assert.equal(host.readFile(outputFile1), file1.content + host.newLine);
+        });
+    });
 }

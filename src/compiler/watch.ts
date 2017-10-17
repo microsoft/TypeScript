@@ -605,8 +605,17 @@ namespace ts {
                     const fileOrDirectoryPath = toPath(fileOrDirectory);
 
                     // Since the file existance changed, update the sourceFiles cache
-                    (directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
-                    removeSourceFile(fileOrDirectoryPath);
+                    const result = (directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+
+                    // Instead of deleting the file, mark it as changed instead
+                    // Many times node calls add/remove/file when watching directories recursively
+                    const hostSourceFile = sourceFilesCache.get(fileOrDirectoryPath);
+                    if (hostSourceFile && !isString(hostSourceFile) && (result ? result.fileExists : directoryStructureHost.fileExists(fileOrDirectory))) {
+                        hostSourceFile.version++;
+                    }
+                    else {
+                        removeSourceFile(fileOrDirectoryPath);
+                    }
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
