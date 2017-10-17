@@ -24,5 +24,5 @@ function f(x: number, y: {
     a: string;
     b: Date;
 }, z: string, alpha, beta: any) {
-}`, 'Annotate with types from JSDoc', 'annotate');
+}`, 'Annotate with type from JSDoc', 'annotate');
 
