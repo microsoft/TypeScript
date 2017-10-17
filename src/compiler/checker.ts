@@ -13473,31 +13473,32 @@ namespace ts {
                         node.parent.openingElement.attributes :
                         undefined; // node.parent is JsxFragment with no attributes
 
-            if (jsxAttributes) {
-                // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
-                // which is a type of the parameter of the signature we are trying out.
-                // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
-                const attributesType = getContextualType(jsxAttributes);
-
-                if (!attributesType || isTypeAny(attributesType)) {
-                    return undefined;
-                }
-
-                if (isJsxAttribute(node.parent)) {
-                    // JSX expression is in JSX attribute
-                    return getTypeOfPropertyOfContextualType(attributesType, node.parent.name.escapedText);
-                }
-                else if (node.parent.kind === SyntaxKind.JsxElement) {
-                    // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
-                    const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
-                    return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : anyType;
-                }
-                else {
-                    // JSX expression is in JSX spread attribute
-                    return attributesType;
-                }
+            if (!jsxAttributes) {
+                return anyType; // don't check children of a fragment
             }
-            return anyType; // don't check children of a fragment
+
+            // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
+            // which is a type of the parameter of the signature we are trying out.
+            // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
+            const attributesType = getContextualType(jsxAttributes);
+
+            if (!attributesType || isTypeAny(attributesType)) {
+                return undefined;
+            }
+
+            if (isJsxAttribute(node.parent)) {
+                // JSX expression is in JSX attribute
+                return getTypeOfPropertyOfContextualType(attributesType, node.parent.name.escapedText);
+            }
+            else if (node.parent.kind === SyntaxKind.JsxElement) {
+                // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
+                const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+                return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : anyType;
+            }
+            else {
+                // JSX expression is in JSX spread attribute
+                return attributesType;
+            }
         }
 
         function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {

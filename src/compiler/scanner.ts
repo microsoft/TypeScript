@@ -13,7 +13,7 @@ namespace ts {
 
     /* @internal */
     export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): boolean {
-        return token === SyntaxKind.GreaterThanToken || token >= SyntaxKind.Identifier;
+        return token === SyntaxKind.GreaterThanToken || tokenIsIdentifierOrKeyword(token);
     }
 
     export interface Scanner {
