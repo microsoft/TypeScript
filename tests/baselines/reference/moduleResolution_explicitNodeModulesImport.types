@@ -5,8 +5,8 @@ import { x } from "../node_modules/foo";
 === /node_modules/foo/index.js ===
 exports.x = 0;
 >exports.x = 0 : 0
->exports.x : any
->exports : any
->x : any
+>exports.x : number
+>exports : typeof "/node_modules/foo/index"
+>x : number
 >0 : 0
 

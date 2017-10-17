@@ -12,7 +12,7 @@ namespace ts.projectSystem {
 
     describe("CompileOnSave affected list", () => {
         function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: FileOrFolder[] }[]) {
-            const response: server.protocol.CompileOnSaveAffectedFileListSingleProject[] = session.executeCommand(request).response;
+            const response = session.executeCommand(request).response as server.protocol.CompileOnSaveAffectedFileListSingleProject[];
             const actualResult = response.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
             expectedFileList = expectedFileList.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
 
@@ -55,7 +55,6 @@ namespace ts.projectSystem {
             let configFile: FileOrFolder;
             let changeModuleFile1ShapeRequest1: server.protocol.Request;
             let changeModuleFile1InternalRequest1: server.protocol.Request;
-            let changeModuleFile1ShapeRequest2: server.protocol.Request;
             // A compile on save affected file request using file1
             let moduleFile1FileListRequest: server.protocol.Request;
 
@@ -110,16 +109,6 @@ namespace ts.projectSystem {
                     endLine: 1,
                     endOffset: 1,
                     insertString: `var T1: number;`
-                });
-
-                // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `export var T2: number;`
                 });
 
                 moduleFile1FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path, projectFileName: configFile.path });
@@ -209,7 +198,6 @@ namespace ts.projectSystem {
 
                 file1Consumer1.content = `let y = 10;`;
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer1.path, FileWatcherEventKind.Changed);
 
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
@@ -226,7 +214,6 @@ namespace ts.projectSystem {
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 // Delete file1Consumer2
                 host.reloadFS([moduleFile1, file1Consumer1, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer2.path, FileWatcherEventKind.Deleted);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
             });
 
@@ -243,7 +230,6 @@ namespace ts.projectSystem {
                     content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3, globalFile3, configFile, libFile]);
-                host.triggerDirectoryWatcherCallback(ts.getDirectoryPath(file1Consumer3.path), file1Consumer3.path);
                 host.runQueuedTimeoutCallbacks();
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3] }]);
@@ -476,7 +462,6 @@ namespace ts.projectSystem {
 
                 openFilesForSession([referenceFile1], session);
                 host.reloadFS([referenceFile1, configFile]);
-                host.triggerFileWatcherCallback(moduleFile1.path, FileWatcherEventKind.Deleted);
 
                 const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, request, [
@@ -578,7 +563,7 @@ namespace ts.projectSystem {
                 path: "/a/b/file3.js",
                 content: "console.log('file3');"
             };
-            const externalProjectName = "externalproject";
+            const externalProjectName = "/a/b/externalproject";
             const host = createServerHost([file1, file2, file3, libFile]);
             const session = createSession(host);
             const projectService = session.getProjectService();
@@ -602,6 +587,49 @@ namespace ts.projectSystem {
             assert.isTrue(outFileContent.indexOf(file1.content) !== -1);
             assert.isTrue(outFileContent.indexOf(file2.content) === -1);
             assert.isTrue(outFileContent.indexOf(file3.content) === -1);
+        });
+
+        it("should use project root as current directory so that compile on save results in correct file mapping", () => {
+            const inputFileName = "Foo.ts";
+            const file1 = {
+                path: `/root/TypeScriptProject3/TypeScriptProject3/${inputFileName}`,
+                content: "consonle.log('file1');"
+            };
+            const externalProjectName = "/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
+            const host = createServerHost([file1, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+
+            const outFileName = "bar.js";
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([file1.path]),
+                options: {
+                    outFile: outFileName,
+                    sourceMap: true,
+                    compileOnSave: true
+                },
+                projectFileName: externalProjectName
+            });
+
+            const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path });
+            session.executeCommand(emitRequest);
+
+            // Verify js file
+            const expectedOutFileName = "/root/TypeScriptProject3/TypeScriptProject3/" + outFileName;
+            assert.isTrue(host.fileExists(expectedOutFileName));
+            const outFileContent = host.readFile(expectedOutFileName);
+            verifyContentHasString(outFileContent, file1.content);
+            verifyContentHasString(outFileContent, `//# ${"sourceMappingURL"}=${outFileName}.map`); // Sometimes tools can sometimes see this line as a source mapping url comment, so we obfuscate it a little
+
+            // Verify map file
+            const expectedMapFileName = expectedOutFileName + ".map";
+            assert.isTrue(host.fileExists(expectedMapFileName));
+            const mapFileContent = host.readFile(expectedMapFileName);
+            verifyContentHasString(mapFileContent, `"sources":["${inputFileName}"]`);
+
+            function verifyContentHasString(content: string, string: string) {
+                assert.isTrue(content.indexOf(string) !== -1, `Expected "${content}" to have "${string}"`);
+            }
         });
     });
 }

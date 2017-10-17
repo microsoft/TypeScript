@@ -1,0 +1,89 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+const obj = {};
+>obj : Symbol(obj, Decl(file.tsx, 2, 5))
+
+const obj1: {x: 2} = {
+>obj1 : Symbol(obj1, Decl(file.tsx, 3, 5))
+>x : Symbol(x, Decl(file.tsx, 3, 13))
+
+    x: 2
+>x : Symbol(x, Decl(file.tsx, 3, 22))
+}
+const obj3: {y: false, overwrite: string} = {
+>obj3 : Symbol(obj3, Decl(file.tsx, 6, 5))
+>y : Symbol(y, Decl(file.tsx, 6, 13))
+>overwrite : Symbol(overwrite, Decl(file.tsx, 6, 22))
+
+    y: false,
+>y : Symbol(y, Decl(file.tsx, 6, 45))
+
+    overwrite: "hi"
+>overwrite : Symbol(overwrite, Decl(file.tsx, 7, 13))
+}
+
+interface Prop {
+>Prop : Symbol(Prop, Decl(file.tsx, 9, 1))
+
+    x: 2
+>x : Symbol(Prop.x, Decl(file.tsx, 11, 16))
+
+    y: false
+>y : Symbol(Prop.y, Decl(file.tsx, 12, 8))
+
+    overwrite: string
+>overwrite : Symbol(Prop.overwrite, Decl(file.tsx, 13, 12))
+}
+
+class OverWriteAttr extends React.Component<Prop, {}> {
+>OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 15, 1))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>Prop : Symbol(Prop, Decl(file.tsx, 9, 1))
+
+    render() {
+>render : Symbol(OverWriteAttr.render, Decl(file.tsx, 17, 55))
+
+        return <div>Hello</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+    }
+}
+
+let anyobj: any;
+>anyobj : Symbol(anyobj, Decl(file.tsx, 23, 3))
+
+// Error
+let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
+>x : Symbol(x, Decl(file.tsx, 26, 3))
+>OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 15, 1))
+>obj : Symbol(obj, Decl(file.tsx, 2, 5))
+>y : Symbol(y, Decl(file.tsx, 26, 31))
+>overwrite : Symbol(overwrite, Decl(file.tsx, 26, 33))
+>obj1 : Symbol(obj1, Decl(file.tsx, 3, 5))
+
+let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
+>x1 : Symbol(x1, Decl(file.tsx, 27, 3))
+>OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 15, 1))
+>overwrite : Symbol(overwrite, Decl(file.tsx, 27, 23))
+>obj1 : Symbol(obj1, Decl(file.tsx, 3, 5))
+>x : Symbol(x, Decl(file.tsx, 27, 48))
+>y : Symbol(y, Decl(file.tsx, 27, 60))
+
+let x2 = <OverWriteAttr {...anyobj} x={3} />
+>x2 : Symbol(x2, Decl(file.tsx, 28, 3))
+>OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 15, 1))
+>anyobj : Symbol(anyobj, Decl(file.tsx, 23, 3))
+>x : Symbol(x, Decl(file.tsx, 28, 35))
+
+let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
+>x3 : Symbol(x3, Decl(file.tsx, 29, 3))
+>OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 15, 1))
+>overwrite : Symbol(overwrite, Decl(file.tsx, 29, 23))
+>obj1 : Symbol(obj1, Decl(file.tsx, 3, 5))
+>y : Symbol(y, Decl(file.tsx, 29, 54))
+
+

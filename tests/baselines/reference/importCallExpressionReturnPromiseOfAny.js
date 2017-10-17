@@ -42,20 +42,20 @@ exports.C = C;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-Promise.resolve().then(function () { return require(`${directory}\${moduleFile}`); });
-Promise.resolve().then(function () { return require(getSpecifier()); });
-var p1 = Promise.resolve().then(function () { return require(ValidSomeCondition() ? "./0" : "externalModule"); });
-var p1 = Promise.resolve().then(function () { return require(getSpecifier()); });
-var p11 = Promise.resolve().then(function () { return require(getSpecifier()); });
-const p2 = Promise.resolve().then(function () { return require(whatToLoad ? getSpecifier() : "defaulPath"); });
+Promise.resolve().then(() => require(`${directory}\${moduleFile}`));
+Promise.resolve().then(() => require(getSpecifier()));
+var p1 = Promise.resolve().then(() => require(ValidSomeCondition() ? "./0" : "externalModule"));
+var p1 = Promise.resolve().then(() => require(getSpecifier()));
+var p11 = Promise.resolve().then(() => require(getSpecifier()));
+const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "defaulPath"));
 p1.then(zero => {
     return zero.foo(); // ok, zero is any
 });
 let j;
-var p3 = Promise.resolve().then(function () { return require(j = getSpecifier()); });
+var p3 = Promise.resolve().then(() => require(j = getSpecifier()));
 function* loadModule(directories) {
     for (const directory of directories) {
         const path = `${directory}\moduleFile`;
-        Promise.resolve().then(function () { return require(yield path); });
+        Promise.resolve().then(() => require(yield path));
     }
 }

@@ -16,8 +16,8 @@ namespace ts.server {
         directoryExists: () => false,
         getDirectories: () => [],
         createDirectory: noop,
-        getExecutingFilePath(): string { return void 0; },
-        getCurrentDirectory(): string { return void 0; },
+        getExecutingFilePath(): string { return ""; },
+        getCurrentDirectory(): string { return ""; },
         getEnvironmentVariable(): string { return ""; },
         readDirectory() { return []; },
         exit: noop,
@@ -25,7 +25,7 @@ namespace ts.server {
         clearTimeout: noop,
         setImmediate: () => 0,
         clearImmediate: noop,
-        createHash: Harness.LanguageService.mockHash,
+        createHash: Harness.mockHash,
     };
 
     class TestSession extends Session {
@@ -315,7 +315,7 @@ namespace ts.server {
                     item: false
                 };
                 const command = "newhandle";
-                const result = {
+                const result: ts.server.HandlerResponse = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -332,7 +332,7 @@ namespace ts.server {
                 const respBody = {
                     item: false
                 };
-                const resp = {
+                const resp: ts.server.HandlerResponse = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -372,7 +372,7 @@ namespace ts.server {
                 };
                 const command = "test";
 
-                session.output(body, command);
+                session.output(body, command, /*reqSeq*/ 0);
 
                 expect(lastSent).to.deep.equal({
                     seq: 0,
@@ -383,6 +383,61 @@ namespace ts.server {
                     success: true
                 });
             });
+        });
+    });
+
+    describe("exceptions", () => {
+        const command = "testhandler";
+        class TestSession extends Session {
+            lastSent: protocol.Message;
+            private exceptionRaisingHandler(_request: protocol.Request): { response?: any, responseRequired: boolean } {
+                f1();
+                return;
+                function f1() {
+                    throw new Error("myMessage");
+                }
+            }
+
+            constructor() {
+                super({
+                    host: mockHost,
+                    cancellationToken: nullCancellationToken,
+                    useSingleInferredProject: false,
+                    useInferredProjectPerProjectRoot: false,
+                    typingsInstaller: undefined,
+                    byteLength: Utils.byteLength,
+                    hrtime: process.hrtime,
+                    logger: projectSystem.nullLogger,
+                    canUseEvents: true
+                });
+                this.addProtocolHandler(command, this.exceptionRaisingHandler);
+            }
+            send(msg: protocol.Message) {
+                this.lastSent = msg;
+            }
+        }
+
+        it("raised in a protocol handler generate an event", () => {
+
+            const session = new TestSession();
+
+            const request = {
+                command,
+                seq: 0,
+                type: "request"
+            };
+
+            session.onMessage(JSON.stringify(request));
+            const lastSent = session.lastSent as protocol.Response;
+
+            expect(lastSent).to.contain({
+                seq: 0,
+                type: "response",
+                command,
+                success: false
+            });
+
+            expect(lastSent.message).has.string("myMessage").and.has.string("f1");
         });
     });
 
@@ -420,7 +475,7 @@ namespace ts.server {
             };
             const command = "test";
 
-            session.output(body, command);
+            session.output(body, command, /*reqSeq*/ 0);
 
             expect(session.lastSent).to.deep.equal({
                 seq: 0,
@@ -487,7 +542,7 @@ namespace ts.server {
             handleRequest(msg: protocol.Request) {
                 let response: protocol.Response;
                 try {
-                    ({ response } = this.executeCommand(msg));
+                    response = this.executeCommand(msg).response as protocol.Response;
                 }
                 catch (e) {
                     this.output(undefined, msg.command, msg.seq, e.toString());
@@ -509,7 +564,7 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks: Array<(resp: protocol.Response) => void> = [];
+            private callbacks: ((resp: protocol.Response) => void)[] = [];
             private eventHandlers = createMap<(args: any) => void>();
 
             handle(msg: protocol.Message): void {

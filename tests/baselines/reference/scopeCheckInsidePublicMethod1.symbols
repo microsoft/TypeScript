@@ -1,0 +1,13 @@
+=== tests/cases/compiler/scopeCheckInsidePublicMethod1.ts ===
+class C {
+>C : Symbol(C, Decl(scopeCheckInsidePublicMethod1.ts, 0, 0))
+
+   static s;
+>s : Symbol(C.s, Decl(scopeCheckInsidePublicMethod1.ts, 0, 9))
+
+   public a() {
+>a : Symbol(C.a, Decl(scopeCheckInsidePublicMethod1.ts, 1, 12))
+
+      s = 1; // ERR
+   }
+}

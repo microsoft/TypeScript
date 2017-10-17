@@ -1,6 +1,7 @@
 {
-    "rulesDirectory": "built/local/tslint",
+    "rulesDirectory": "built/local/tslint/rules",
     "rules": {
+        "array-type": [true, "array"],
         "boolean-trivia": true,
         "class-name": true,
         "comment-format": [true,
@@ -11,6 +12,7 @@
         "indent": [true,
             "spaces"
         ],
+        "interface-over-type-literal": true,
         "jsdoc-format": true,
         "linebreak-style": [true, "CRLF"],
         "next-line": [true,
@@ -39,6 +41,7 @@
             "avoid-escape"
         ],
         "semicolon": [true, "always", "ignore-bound-class-methods"],
+        "space-within-parens": true,
         "triple-equals": true,
         "type-operator-spacing": true,
         "typedef-whitespace": [

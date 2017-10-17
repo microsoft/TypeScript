@@ -1,0 +1,39 @@
+=== tests/cases/compiler/classExtendsInterfaceThatExtendsClassWithPrivates1.ts ===
+class C {
+>C : Symbol(C, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 0, 0))
+
+    public foo(x: any) { return x; }
+>foo : Symbol(C.foo, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 0, 9))
+>x : Symbol(x, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 1, 15))
+>x : Symbol(x, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 1, 15))
+
+    private x = 1;
+>x : Symbol(C.x, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 1, 36))
+}
+
+interface I extends C {
+>I : Symbol(I, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 3, 1))
+>C : Symbol(C, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 0, 0))
+
+    other(x: any): any;
+>other : Symbol(I.other, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 5, 23))
+>x : Symbol(x, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 6, 10))
+}
+
+class D2 implements I {
+>D2 : Symbol(D2, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 7, 1))
+>I : Symbol(I, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 3, 1))
+
+    public foo(x: any) { return x }
+>foo : Symbol(D2.foo, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 9, 23))
+>x : Symbol(x, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 10, 15))
+>x : Symbol(x, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 10, 15))
+
+    private x = 3;
+>x : Symbol(D2.x, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 10, 35))
+
+    other(x: any) { return x }
+>other : Symbol(D2.other, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 11, 18))
+>x : Symbol(x, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 12, 10))
+>x : Symbol(x, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 12, 10))
+} 
