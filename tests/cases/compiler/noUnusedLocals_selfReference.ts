@@ -2,7 +2,12 @@
 
 export {}; // Make this a module scope, so these are local variables.
 
-function f() { f; }
+function f() {
+    f;
+    function g() {
+        g;
+    }
+}
 class C {
     m() { C; }
 }

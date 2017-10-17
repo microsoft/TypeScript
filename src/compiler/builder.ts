@@ -73,12 +73,16 @@ namespace ts {
          */
         onRemoveSourceFile(path: Path): void;
         /**
-         * Called when sourceFile is changed
+         * For all source files, either "onUpdateSourceFile" or "onUpdateSourceFileWithSameVersion" will be called.
+         * If the builder is sure that the source file needs an update, "onUpdateSourceFile" will be called;
+         * otherwise "onUpdateSourceFileWithSameVersion" will be called.
          */
         onUpdateSourceFile(program: Program, sourceFile: SourceFile): void;
         /**
-         * Called when source file has not changed but has some of the resolutions invalidated
-         * If returned true, builder will mark the file as changed (noting that something associated with file has changed)
+         * For all source files, either "onUpdateSourceFile" or "onUpdateSourceFileWithSameVersion" will be called.
+         * If the builder is sure that the source file needs an update, "onUpdateSourceFile" will be called;
+         * otherwise "onUpdateSourceFileWithSameVersion" will be called.
+         * This function should return whether the source file should be marked as changed (meaning that something associated with file has changed, e.g. module resolution)
          */
         onUpdateSourceFileWithSameVersion(program: Program, sourceFile: SourceFile): boolean;
         /**
@@ -93,12 +97,14 @@ namespace ts {
         signature: string;
     }
 
-    export function createBuilder(
-        getCanonicalFileName: (fileName: string) => string,
-        getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) => EmitOutput | EmitOutputDetailed,
-        computeHash: (data: string) => string,
-        shouldEmitFile: (sourceFile: SourceFile) => boolean
-    ): Builder {
+    export interface BuilderOptions {
+        getCanonicalFileName: (fileName: string) => string;
+        getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) => EmitOutput | EmitOutputDetailed;
+        computeHash: (data: string) => string;
+        shouldEmitFile: (sourceFile: SourceFile) => boolean;
+    }
+
+    export function createBuilder(options: BuilderOptions): Builder {
         let isModuleEmit: boolean | undefined;
         const fileInfos = createMap<FileInfo>();
         const semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
@@ -159,8 +165,7 @@ namespace ts {
                 existingInfo.version = sourceFile.version;
                 emitHandler.onUpdateSourceFile(program, sourceFile);
             }
-            else if (program.hasInvalidatedResolution(sourceFile.path) &&
-                emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
+            else if (emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
                 registerChangedFile(sourceFile.path, sourceFile.fileName);
             }
         }
@@ -181,7 +186,7 @@ namespace ts {
             ensureProgramGraph(program);
 
             const sourceFile = program.getSourceFile(path);
-            const singleFileResult = sourceFile && shouldEmitFile(sourceFile) ? [sourceFile.fileName] : [];
+            const singleFileResult = sourceFile && options.shouldEmitFile(sourceFile) ? [sourceFile.fileName] : [];
             const info = fileInfos.get(path);
             if (!info || !updateShapeSignature(program, sourceFile, info)) {
                 return singleFileResult;
@@ -197,7 +202,7 @@ namespace ts {
                 return { outputFiles: [], emitSkipped: true };
             }
 
-            return getEmitOutput(program, program.getSourceFileByPath(path), /*emitOnlyDtsFiles*/ false, /*isDetailed*/ false);
+            return options.getEmitOutput(program, program.getSourceFileByPath(path), /*emitOnlyDtsFiles*/ false, /*isDetailed*/ false);
         }
 
         function enumerateChangedFilesSet(
@@ -220,21 +225,21 @@ namespace ts {
             onChangedFile: (fileName: string, path: Path) => void,
             onEmitOutput: (emitOutput: EmitOutputDetailed, sourceFile: SourceFile) => void
         ) {
-            const seenFiles = createMap<SourceFile>();
+            const seenFiles = createMap<true>();
             enumerateChangedFilesSet(program, onChangedFile, (fileName, sourceFile) => {
                 if (!seenFiles.has(fileName)) {
-                    seenFiles.set(fileName, sourceFile);
+                    seenFiles.set(fileName, true);
                     if (sourceFile) {
                         // Any affected file shouldnt have the cached diagnostics
                         semanticDiagnosticsPerFile.delete(sourceFile.path);
 
-                        const emitOutput = getEmitOutput(program, sourceFile, emitOnlyDtsFiles, /*isDetailed*/ true) as EmitOutputDetailed;
+                        const emitOutput = options.getEmitOutput(program, sourceFile, emitOnlyDtsFiles, /*isDetailed*/ true) as EmitOutputDetailed;
                         onEmitOutput(emitOutput, sourceFile);
 
                         // mark all the emitted source files as seen
                         if (emitOutput.emittedSourceFiles) {
                             for (const file of emitOutput.emittedSourceFiles) {
-                                seenFiles.set(file.fileName, file);
+                                seenFiles.set(file.fileName, true);
                             }
                         }
                     }
@@ -309,13 +314,13 @@ namespace ts {
             const prevSignature = info.signature;
             let latestSignature: string;
             if (sourceFile.isDeclarationFile) {
-                latestSignature = computeHash(sourceFile.text);
+                latestSignature = options.computeHash(sourceFile.text);
                 info.signature = latestSignature;
             }
             else {
-                const emitOutput = getEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true, /*isDetailed*/ false);
+                const emitOutput = options.getEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true, /*isDetailed*/ false);
                 if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
-                    latestSignature = computeHash(emitOutput.outputFiles[0].text);
+                    latestSignature = options.computeHash(emitOutput.outputFiles[0].text);
                     info.signature = latestSignature;
                 }
                 else {
@@ -352,7 +357,7 @@ namespace ts {
             // Handle triple slash references
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = toPath(referencedFile.fileName, sourceFileDirectory, getCanonicalFileName);
+                    const referencedPath = toPath(referencedFile.fileName, sourceFileDirectory, options.getCanonicalFileName);
                     addReferencedFile(referencedPath);
                 }
             }
@@ -365,7 +370,7 @@ namespace ts {
                     }
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
-                    const typeFilePath = toPath(fileName, sourceFileDirectory, getCanonicalFileName);
+                    const typeFilePath = toPath(fileName, sourceFileDirectory, options.getCanonicalFileName);
                     addReferencedFile(typeFilePath);
                 });
             }
@@ -381,18 +386,26 @@ namespace ts {
         }
 
         /**
-         * Gets all the emittable files from the program
+         * Gets all the emittable files from the program.
+         * @param firstSourceFile This one will be emitted first. See https://github.com/Microsoft/TypeScript/issues/16888
          */
-        function getAllEmittableFiles(program: Program) {
+        function getAllEmittableFiles(program: Program, firstSourceFile: SourceFile): string[] {
             const defaultLibraryFileName = getDefaultLibFileName(program.getCompilerOptions());
             const sourceFiles = program.getSourceFiles();
             const result: string[] = [];
+            add(firstSourceFile);
             for (const sourceFile of sourceFiles) {
-                if (getBaseFileName(sourceFile.fileName) !== defaultLibraryFileName && shouldEmitFile(sourceFile)) {
-                    result.push(sourceFile.fileName);
+                if (sourceFile !== firstSourceFile) {
+                    add(sourceFile);
                 }
             }
             return result;
+
+            function add(sourceFile: SourceFile): void {
+                if (getBaseFileName(sourceFile.fileName) !== defaultLibraryFileName && options.shouldEmitFile(sourceFile)) {
+                    result.push(sourceFile.fileName);
+                }
+            }
         }
 
         function getNonModuleEmitHandler(): EmitHandler {
@@ -404,14 +417,14 @@ namespace ts {
                 getFilesAffectedByUpdatedShape
             };
 
-            function getFilesAffectedByUpdatedShape(program: Program, _sourceFile: SourceFile, singleFileResult: string[]): string[] {
+            function getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile, singleFileResult: string[]): string[] {
                 const options = program.getCompilerOptions();
                 // If `--out` or `--outFile` is specified, any new emit will result in re-emitting the entire project,
                 // so returning the file itself is good enough.
                 if (options && (options.out || options.outFile)) {
                     return singleFileResult;
                 }
-                return getAllEmittableFiles(program);
+                return getAllEmittableFiles(program, sourceFile);
             }
         }
 
@@ -484,11 +497,11 @@ namespace ts {
 
             function getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile, singleFileResult: string[]): string[] {
                 if (!isExternalModule(sourceFile) && !containsOnlyAmbientModules(sourceFile)) {
-                    return getAllEmittableFiles(program);
+                    return getAllEmittableFiles(program, sourceFile);
                 }
 
-                const options = program.getCompilerOptions();
-                if (options && (options.isolatedModules || options.out || options.outFile)) {
+                const compilerOptions = program.getCompilerOptions();
+                if (compilerOptions && (compilerOptions.isolatedModules || compilerOptions.out || compilerOptions.outFile)) {
                     return singleFileResult;
                 }
 
@@ -498,7 +511,7 @@ namespace ts {
 
                 const seenFileNamesMap = createMap<string>();
                 const setSeenFileName = (path: Path, sourceFile: SourceFile) => {
-                    seenFileNamesMap.set(path, sourceFile && shouldEmitFile(sourceFile) ? sourceFile.fileName : undefined);
+                    seenFileNamesMap.set(path, sourceFile && options.shouldEmitFile(sourceFile) ? sourceFile.fileName : undefined);
                 };
 
                 // Start with the paths this file was referenced by

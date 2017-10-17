@@ -783,10 +783,10 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
+        public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
             const completions = this.getCompletionListAtCaret();
             if (completions) {
-                this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind, spanIndex);
+                this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind, spanIndex, hasAction);
             }
             else {
                 this.raiseError(`No completions at position '${this.currentCaretPosition}' when looking for '${symbol}'.`);
@@ -1127,7 +1127,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private getCompletionEntryDetails(entryName: string) {
-            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName);
+            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings);
         }
 
         private getReferencesAtCaret() {
@@ -2289,6 +2289,29 @@ Actual: ${stringify(fullActual)}`);
             this.applyCodeActions(this.getCodeFixActions(fileName, errorCode), index);
         }
 
+        public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
+            this.goToMarker(markerName);
+
+            const actualCompletion = this.getCompletionListAtCaret().entries.find(e => e.name === options.name);
+
+            if (!actualCompletion.hasAction) {
+                this.raiseError(`Completion for ${options.name} does not have an associated action.`);
+            }
+
+            const details = this.getCompletionEntryDetails(options.name);
+            if (details.codeActions.length !== 1) {
+                this.raiseError(`Expected one code action, got ${details.codeActions.length}`);
+            }
+
+            if (details.codeActions[0].description !== options.description) {
+                this.raiseError(`Expected description to be:\n${options.description}\ngot:\n${details.codeActions[0].description}`);
+            }
+
+            this.applyCodeActions(details.codeActions);
+
+            this.verifyNewContent(options);
+        }
+
         public verifyRangeIs(expectedText: string, includeWhiteSpace?: boolean) {
             const ranges = this.getRanges();
             if (ranges.length !== 1) {
@@ -2360,6 +2383,10 @@ Actual: ${stringify(fullActual)}`);
                 this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
             }
 
+            this.verifyNewContent(options);
+        }
+
+        private verifyNewContent(options: FourSlashInterface.NewContentOptions) {
             if (options.newFileContent) {
                 assert(!options.newRangeContent);
                 this.verifyCurrentFileContent(options.newFileContent);
@@ -2381,7 +2408,7 @@ Actual: ${stringify(fullActual)}`);
             }));
 
             return ts.flatMap(ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties), diagnostic => {
-                if (errorCode && errorCode !== diagnostic.code) {
+                if (errorCode !== undefined && errorCode !== diagnostic.code) {
                     return;
                 }
 
@@ -2933,7 +2960,15 @@ Actual: ${stringify(fullActual)}`);
             return text.substring(startPos, endPos);
         }
 
-        private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
+        private assertItemInCompletionList(
+            items: ts.CompletionEntry[],
+            name: string,
+            text: string | undefined,
+            documentation: string | undefined,
+            kind: string | undefined,
+            spanIndex: number | undefined,
+            hasAction: boolean | undefined,
+        ) {
             for (const item of items) {
                 if (item.name === name) {
                     if (documentation !== undefined || text !== undefined) {
@@ -2955,6 +2990,8 @@ Actual: ${stringify(fullActual)}`);
                         const span = this.getTextSpanForRangeAtIndex(spanIndex);
                         assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + name));
                     }
+
+                    assert.equal(item.hasAction, hasAction);
 
                     return;
                 }
@@ -3669,12 +3706,12 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
+        public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
             if (this.negative) {
                 this.state.verifyCompletionListDoesNotContain(symbol, text, documentation, kind, spanIndex);
             }
             else {
-                this.state.verifyCompletionListContains(symbol, text, documentation, kind, spanIndex);
+                this.state.verifyCompletionListContains(symbol, text, documentation, kind, spanIndex, hasAction);
             }
         }
 
@@ -3997,6 +4034,10 @@ namespace FourSlashInterface {
 
         public getAndApplyCodeFix(errorCode?: number, index?: number): void {
             this.state.getAndApplyCodeActions(errorCode, index);
+        }
+
+        public applyCodeActionFromCompletion(markerName: string, options: VerifyCompletionActionOptions): void {
+            this.state.applyCodeActionFromCompletion(markerName, options);
         }
 
         public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
@@ -4396,12 +4437,20 @@ namespace FourSlashInterface {
         isNewIdentifierLocation?: boolean;
     }
 
-    export interface VerifyCodeFixOptions {
-        description: string;
-        // One of these should be defined.
+    export interface NewContentOptions {
+        // Exactly one of these should be defined.
         newFileContent?: string;
         newRangeContent?: string;
+    }
+
+    export interface VerifyCodeFixOptions extends NewContentOptions {
+        description: string;
         errorCode?: number;
         index?: number;
+    }
+
+    export interface VerifyCompletionActionOptions extends NewContentOptions {
+        name: string;
+        description: string;
     }
 }

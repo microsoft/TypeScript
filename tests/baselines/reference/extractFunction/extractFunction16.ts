@@ -1,6 +1,6 @@
 // ==ORIGINAL==
 function F<T>() {
-    const array: T[] = [];
+    const array: T[] = /*[#|*/[]/*|]*/;
 }
 // ==SCOPE::Extract to inner function in function 'F'==
 function F<T>() {
@@ -14,6 +14,7 @@ function F<T>() {
 function F<T>() {
     const array: T[] = /*RENAME*/newFunction<T>();
 }
+
 function newFunction<T>(): T[] {
     return [];
 }

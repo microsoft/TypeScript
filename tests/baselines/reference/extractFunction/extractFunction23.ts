@@ -2,7 +2,7 @@
 namespace NS {
     function M1() { }
     function M2() {
-        return 1;
+        /*[#|*/return 1;/*|]*/
     }
     function M3() { }
 }
@@ -38,6 +38,7 @@ namespace NS {
     }
     function M3() { }
 }
+
 function newFunction() {
     return 1;
 }

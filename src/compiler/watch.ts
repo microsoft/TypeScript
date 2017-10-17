@@ -249,10 +249,10 @@ namespace ts {
         let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
         const loggingEnabled = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
-        const writeLog: (s: string) => void = loggingEnabled ? s => system.write(s) : noop;
-        const watchFile = loggingEnabled ? ts.addFileWatcherWithLogging : ts.addFileWatcher;
-        const watchFilePath = loggingEnabled ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
-        const watchDirectoryWorker = loggingEnabled ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
+        const writeLog: (s: string) => void = loggingEnabled ? s => { system.write(s); system.write(system.newLine); } : noop;
+        const watchFile = compilerOptions.extendedDiagnostics ? ts.addFileWatcherWithLogging : loggingEnabled ? ts.addFileWatcherWithOnlyTriggerLogging : ts.addFileWatcher;
+        const watchFilePath = compilerOptions.extendedDiagnostics ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
+        const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
 
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
@@ -308,7 +308,7 @@ namespace ts {
             getCurrentDirectory()
         );
         // There is no extra check needed since we can just rely on the program to decide emit
-        const builder = createBuilder(getCanonicalFileName, getFileEmitOutput, computeHash, _sourceFile => true);
+        const builder = createBuilder({ getCanonicalFileName, getEmitOutput: getFileEmitOutput, computeHash, shouldEmitFile: () => true });
 
         synchronizeProgram();
 
@@ -322,6 +322,9 @@ namespace ts {
 
             if (hasChangedCompilerOptions) {
                 newLine = getNewLineCharacter(compilerOptions, system);
+                if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
+                    resolutionCache.clear();
+                }
             }
 
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution();
@@ -329,14 +332,11 @@ namespace ts {
                 return;
             }
 
-            if (hasChangedCompilerOptions && changesAffectModuleResolution(program && program.getCompilerOptions(), compilerOptions)) {
-                resolutionCache.clear();
-            }
-            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
-            hasChangedCompilerOptions = false;
             beforeCompile(compilerOptions);
 
             // Compile the program
+            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
+            hasChangedCompilerOptions = false;
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;

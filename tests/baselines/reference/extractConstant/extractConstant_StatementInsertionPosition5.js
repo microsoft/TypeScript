@@ -2,7 +2,7 @@
 
 function F0() {
     function F1() {
-        function F2(x = 2 + 1) {
+        function F2(x = /*[#|*/2 + 1/*|]*/) {
         }
     }
 }

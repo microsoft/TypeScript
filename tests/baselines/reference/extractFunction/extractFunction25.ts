@@ -1,7 +1,7 @@
 // ==ORIGINAL==
 function M1() { }
 function M2() {
-    return 1;
+    /*[#|*/return 1;/*|]*/
 }
 function M3() { }
 // ==SCOPE::Extract to inner function in function 'M2'==

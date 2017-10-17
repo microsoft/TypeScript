@@ -15,12 +15,12 @@ namespace ts {
         sourceText?: SourceText;
     }
 
-    interface NamedSourceText {
+    export interface NamedSourceText {
         name: string;
         text: SourceText;
     }
 
-    interface ProgramWithSourceTexts extends Program {
+    export interface ProgramWithSourceTexts extends Program {
         sourceTexts?: ReadonlyArray<NamedSourceText>;
         host: TestCompilerHost;
     }
@@ -29,7 +29,7 @@ namespace ts {
         getTrace(): string[];
     }
 
-    class SourceText implements IScriptSnapshot {
+    export class SourceText implements IScriptSnapshot {
         private fullText: string;
 
         constructor(private references: string,
@@ -103,10 +103,11 @@ namespace ts {
     function createSourceFileWithText(fileName: string, sourceText: SourceText, target: ScriptTarget) {
         const file = <SourceFileWithText>createSourceFile(fileName, sourceText.getFullText(), target);
         file.sourceText = sourceText;
+        file.version = "" + sourceText.getVersion();
         return file;
     }
 
-    function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
+    export function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
                 let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
@@ -154,7 +155,7 @@ namespace ts {
         };
     }
 
-    function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): ProgramWithSourceTexts {
+    export function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): ProgramWithSourceTexts {
         const host = createTestCompilerHost(texts, options.target);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host);
         program.sourceTexts = texts;
@@ -162,7 +163,7 @@ namespace ts {
         return program;
     }
 
-    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
+    export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
         if (!newTexts) {
             newTexts = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
         }
@@ -174,7 +175,7 @@ namespace ts {
         return program;
     }
 
-    function updateProgramText(files: ReadonlyArray<NamedSourceText>, fileName: string, newProgramText: string) {
+    export function updateProgramText(files: ReadonlyArray<NamedSourceText>, fileName: string, newProgramText: string) {
         const file = find(files, f => f.name === fileName)!;
         file.text = file.text.updateProgram(newProgramText);
     }

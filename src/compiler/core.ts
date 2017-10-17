@@ -191,6 +191,18 @@ namespace ts {
         }
         return undefined;
     }
+
+    /** Like `forEach`, but suitable for use with numbers and strings (which may be falsy). */
+    export function firstDefined<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+        for (let i = 0; i < array.length; i++) {
+            const result = callback(array[i], i);
+            if (result !== undefined) {
+                return result;
+            }
+        }
+        return undefined;
+    }
+
     /**
      * Iterates through the parent chain of a node and performs the callback on each parent until the callback
      * returns a truthy value, then returns that value.
@@ -213,11 +225,13 @@ namespace ts {
         return undefined;
     }
 
-    export function zipWith<T, U>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => void): void {
+    export function zipWith<T, U, V>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => V): V[] {
+        const result: V[] = [];
         Debug.assert(arrayA.length === arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
-            callback(arrayA[i], arrayB[i], i);
+            result.push(callback(arrayA[i], arrayB[i], i));
         }
+        return result;
     }
 
     export function zipToMap<T>(keys: ReadonlyArray<string>, values: ReadonlyArray<T>): Map<T> {
@@ -247,8 +261,20 @@ namespace ts {
     }
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
+    export function find<T, U extends T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => element is U): U | undefined;
+    export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined;
     export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = 0; i < array.length; i++) {
+            const value = array[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
+        for (let i = array.length - 1; i >= 0; i--) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -352,21 +378,6 @@ namespace ts {
             }
         }
         return array;
-    }
-
-    export function removeWhere<T>(array: T[], f: (x: T) => boolean): boolean {
-        let outIndex = 0;
-        for (const item of array) {
-            if (!f(item)) {
-                array[outIndex] = item;
-                outIndex++;
-            }
-        }
-        if (outIndex !== array.length) {
-            array.length = outIndex;
-            return true;
-        }
-        return false;
     }
 
     export function filterMutate<T>(array: T[], f: (x: T, i: number, array: T[]) => boolean): void {
@@ -1158,6 +1169,14 @@ namespace ts {
         return result;
     }
 
+    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[] {
+        const result: T[] = [];
+        for (const value of array) {
+            result[makeKey(value)] = value;
+        }
+        return result;
+    }
+
     /**
      * Creates a set from the elements of an array.
      *
@@ -1661,7 +1680,7 @@ namespace ts {
     }
 
     export function isUrl(path: string) {
-        return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
+        return path && !isRootedDiskPath(path) && stringContains(path, "://");
     }
 
     export function pathIsRelative(path: string): boolean {
@@ -1930,8 +1949,12 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function stringContains(str: string, substring: string): boolean {
+        return str.indexOf(substring) !== -1;
+    }
+
     export function hasExtension(fileName: string): boolean {
-        return getBaseFileName(fileName).indexOf(".") >= 0;
+        return stringContains(getBaseFileName(fileName), ".");
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
