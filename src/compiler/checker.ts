@@ -10664,7 +10664,7 @@ namespace ts {
                 }
                 members.set(name, literalProp);
             });
-            const indexInfo = type.flags & TypeFlags.String ? createIndexInfo(emptyObjectType, /*isReadonly*/ false) : undefined
+            const indexInfo = type.flags & TypeFlags.String ? createIndexInfo(emptyObjectType, /*isReadonly*/ false) : undefined;
             return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
         }
 
