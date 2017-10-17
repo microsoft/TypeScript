@@ -521,7 +521,7 @@ namespace ts.codefix {
             if (!usageContext.properties) {
                 usageContext.properties = createUnderscoreEscapedMap<UsageContext>();
             }
-            const propertyUsageContext = {};
+            const propertyUsageContext = usageContext.properties.get(name) || { };
             inferTypeFromContext(parent, checker, propertyUsageContext);
             usageContext.properties.set(name, propertyUsageContext);
         }
