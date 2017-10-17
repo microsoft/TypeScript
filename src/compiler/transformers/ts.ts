@@ -86,39 +86,26 @@ namespace ts {
          */
         let applicableSubstitutions: TypeScriptSubstitutionFlags;
 
-        const getInitializedProperties = filterMapProperties((_node, member, isStatic) => {
-            if (isInitializedProperty(member, isStatic)) {
-                return member as PropertyDeclaration;
-            }
-        });
-        const transformDecoratedProperties = filterMapProperties((_node, member): [[Identifier, Expression] | undefined, ClassElement] => {
-            if (hasComputedNameWhichRequiresHoisting(member)) {
-                const memberProp = member as PropertyDeclaration;
-                const tempId = getGeneratedNameForNode(member);
-                return [[tempId, (member.name as ComputedPropertyName).expression], updateProperty(memberProp, member.decorators, member.modifiers, createComputedPropertyName(tempId), memberProp.questionToken, memberProp.type, memberProp.initializer)];
-            }
-            return [undefined, member];
-        });
-        const getDecoratedProperties = filterMapProperties((node, member, isStatic) => {
-            if (isDecoratedClassElement(member, node, isStatic)) {
-                return member;
-            }
-        });
-
         return transformSourceFile;
 
-        function filterMapProperties<T>(cb: (node: ClassExpression | ClassDeclaration, member: ClassElement, isStatic: boolean) => T | undefined) {
-            return (node: ClassExpression | ClassDeclaration, members: ReadonlyArray<ClassElement>, isStatic?: boolean): ReadonlyArray<T> => {
-                if (!members) return;
-                const result: T[] = [];
-                for (const member of members) {
-                    const item = cb(node, member, isStatic);
-                    if (item) {
-                        result.push(item);
-                    }
+        function transformComputedPropertyNames(members: ReadonlyArray<ClassElement>, hoistName: (id: Identifier, expression: Expression) => void) {
+            return mapDefined(members, member => {
+                if (hasComputedNameWhichRequiresHoisting(member)) {
+                    const memberProp = member as PropertyDeclaration;
+                    const tempId = getGeneratedNameForNode(member);
+                    hoistName(tempId, (member.name as ComputedPropertyName).expression);
+                    return updateProperty(memberProp, member.decorators, member.modifiers, createComputedPropertyName(tempId), memberProp.questionToken, memberProp.type, memberProp.initializer);
                 }
-                return result;
-            };
+                return member;
+            });
+        }
+
+        function getDecoratedProperties(node: ClassExpression | ClassDeclaration, members: ReadonlyArray<ClassElement>, isStatic: boolean) {
+            return filter(members, member => isDecoratedClassElement(member, node, isStatic)) as PropertyDeclaration[];
+        }
+
+        function getInitializedProperties(members: ReadonlyArray<ClassElement>, isStatic: boolean) {
+            return filter(members, member => isInitializedProperty(member, isStatic)) as PropertyDeclaration[];
         }
 
         /**
@@ -610,10 +597,9 @@ namespace ts {
          * @param node The node to transform.
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-            const transformedMembersAndHoistedExpressions = transformDecoratedProperties(node, node.members);
-            const transformedMembers = map(transformedMembersAndHoistedExpressions, t => t[1]);
-            const hoistedExpressions = mapDefined(transformedMembersAndHoistedExpressions, t => t[0]);
-            const staticProperties = getInitializedProperties(node, transformedMembers, /*isStatic*/ true);
+            const hoistedAssignments: VariableDeclaration[] = [];
+            const transformedMembers = transformComputedPropertyNames(node.members, (id, expr) => hoistedAssignments.push(createVariableDeclaration(id, /*type*/ undefined, expr)));
+            const staticProperties = getInitializedProperties(transformedMembers, /*isStatic*/ true);
             const facts = getClassFacts(node, staticProperties);
 
             if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
@@ -689,8 +675,8 @@ namespace ts {
                 startOnNewLine(varStatement);
                 statements = [varStatement];
             }
-            if (hoistedExpressions.length) {
-                statements.unshift(createVariableStatement(/*modifiers*/ undefined, map(hoistedExpressions, ([left, right]) => createVariableDeclaration(left, /*type*/ undefined, right))));
+            if (hoistedAssignments.length) {
+                statements.unshift(createVariableStatement(/*modifiers*/ undefined, hoistedAssignments));
             }
 
             // If the class is exported as part of a TypeScript namespace, emit the namespace export.
@@ -888,10 +874,9 @@ namespace ts {
          * @param node The node to transform.
          */
         function visitClassExpression(node: ClassExpression): Expression {
-            const transformedMembersAndHoistedExpressions = transformDecoratedProperties(node, node.members);
-            const transformedMembers = map(transformedMembersAndHoistedExpressions, t => t[1]);
-            const hoistedExpressions = mapDefined(transformedMembersAndHoistedExpressions, t => t[0]);
-            const staticProperties = getInitializedProperties(node, transformedMembers, /*isStatic*/ true);
+            const hoistedExpressions: BinaryExpression[] = [];
+            const transformedMembers = transformComputedPropertyNames(node.members, (id, expr) => hoistedExpressions.push(createAssignment(id, expr)));
+            const staticProperties = getInitializedProperties(transformedMembers, /*isStatic*/ true);
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = transformClassMembers(node, transformedMembers, some(heritageClauses, c => c.token === SyntaxKind.ExtendsKeyword));
 
@@ -920,7 +905,7 @@ namespace ts {
                 // To preserve the behavior of the old emitter, we explicitly indent
                 // the body of a class with static initializers.
                 setEmitFlags(classExpression, EmitFlags.Indented | getEmitFlags(classExpression));
-                addRange(expressions, map(hoistedExpressions, ([left, right]) => createAssignment(left, right)));
+                addRange(expressions, hoistedExpressions);
                 expressions.push(startOnNewLine(createAssignment(temp, classExpression)));
                 addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
                 addRange(expressions, generateClassElementDecorationExpressions(node, instanceDecoratedMembers));
@@ -1075,7 +1060,7 @@ namespace ts {
             //      this.x = 1;
             //  }
             //
-            const properties = getInitializedProperties(node, members, /*isStatic*/ false);
+            const properties = getInitializedProperties(members, /*isStatic*/ false);
             addInitializedPropertyStatements(statements, properties, createThis());
 
             if (constructor) {
