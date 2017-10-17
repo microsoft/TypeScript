@@ -313,46 +313,49 @@ declare namespace ts {
         JsxSelfClosingElement = 250,
         JsxOpeningElement = 251,
         JsxClosingElement = 252,
-        JsxAttribute = 253,
-        JsxAttributes = 254,
-        JsxSpreadAttribute = 255,
-        JsxExpression = 256,
-        CaseClause = 257,
-        DefaultClause = 258,
-        HeritageClause = 259,
-        CatchClause = 260,
-        PropertyAssignment = 261,
-        ShorthandPropertyAssignment = 262,
-        SpreadAssignment = 263,
-        EnumMember = 264,
-        SourceFile = 265,
-        Bundle = 266,
-        JSDocTypeExpression = 267,
-        JSDocAllType = 268,
-        JSDocUnknownType = 269,
-        JSDocNullableType = 270,
-        JSDocNonNullableType = 271,
-        JSDocOptionalType = 272,
-        JSDocFunctionType = 273,
-        JSDocVariadicType = 274,
-        JSDocComment = 275,
-        JSDocTag = 276,
-        JSDocAugmentsTag = 277,
-        JSDocClassTag = 278,
-        JSDocParameterTag = 279,
-        JSDocReturnTag = 280,
-        JSDocTypeTag = 281,
-        JSDocTemplateTag = 282,
-        JSDocTypedefTag = 283,
-        JSDocPropertyTag = 284,
-        JSDocTypeLiteral = 285,
-        SyntaxList = 286,
-        NotEmittedStatement = 287,
-        PartiallyEmittedExpression = 288,
-        CommaListExpression = 289,
-        MergeDeclarationMarker = 290,
-        EndOfDeclarationMarker = 291,
-        Count = 292,
+        JsxFragment = 253,
+        JsxOpeningFragment = 254,
+        JsxClosingFragment = 255,
+        JsxAttribute = 256,
+        JsxAttributes = 257,
+        JsxSpreadAttribute = 258,
+        JsxExpression = 259,
+        CaseClause = 260,
+        DefaultClause = 261,
+        HeritageClause = 262,
+        CatchClause = 263,
+        PropertyAssignment = 264,
+        ShorthandPropertyAssignment = 265,
+        SpreadAssignment = 266,
+        EnumMember = 267,
+        SourceFile = 268,
+        Bundle = 269,
+        JSDocTypeExpression = 270,
+        JSDocAllType = 271,
+        JSDocUnknownType = 272,
+        JSDocNullableType = 273,
+        JSDocNonNullableType = 274,
+        JSDocOptionalType = 275,
+        JSDocFunctionType = 276,
+        JSDocVariadicType = 277,
+        JSDocComment = 278,
+        JSDocTag = 279,
+        JSDocAugmentsTag = 280,
+        JSDocClassTag = 281,
+        JSDocParameterTag = 282,
+        JSDocReturnTag = 283,
+        JSDocTypeTag = 284,
+        JSDocTemplateTag = 285,
+        JSDocTypedefTag = 286,
+        JSDocPropertyTag = 287,
+        JSDocTypeLiteral = 288,
+        SyntaxList = 289,
+        NotEmittedStatement = 290,
+        PartiallyEmittedExpression = 291,
+        CommaListExpression = 292,
+        MergeDeclarationMarker = 293,
+        EndOfDeclarationMarker = 294,
+        Count = 295,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -378,10 +381,10 @@ declare namespace ts {
         FirstBinaryOperator = 27,
         LastBinaryOperator = 70,
         FirstNode = 143,
-        FirstJSDocNode = 267,
-        LastJSDocNode = 285,
-        FirstJSDocTagNode = 276,
-        LastJSDocTagNode = 285,
+        FirstJSDocNode = 270,
+        LastJSDocNode = 288,
+        FirstJSDocTagNode = 279,
+        LastJSDocTagNode = 288,
     }
     enum NodeFlags {
         None = 0,
@@ -1061,6 +1064,20 @@ declare namespace ts {
         tagName: JsxTagNameExpression;
         attributes: JsxAttributes;
     }
+    interface JsxFragment extends PrimaryExpression {
+        kind: SyntaxKind.JsxFragment;
+        openingFragment: JsxOpeningFragment;
+        children: NodeArray<JsxChild>;
+        closingFragment: JsxClosingFragment;
+    }
+    interface JsxOpeningFragment extends Expression {
+        kind: SyntaxKind.JsxOpeningFragment;
+        parent?: JsxFragment;
+    }
+    interface JsxClosingFragment extends Expression {
+        kind: SyntaxKind.JsxClosingFragment;
+        parent?: JsxFragment;
+    }
     interface JsxAttribute extends ObjectLiteralElement {
         kind: SyntaxKind.JsxAttribute;
         parent?: JsxAttributes;
@@ -1088,7 +1105,7 @@ declare namespace ts {
         containsOnlyWhiteSpaces: boolean;
         parent?: JsxElement;
     }
-    type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
+    type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
     interface Statement extends Node {
         _statementBrand: any;
     }
@@ -2999,6 +3016,9 @@ declare namespace ts {
     function isJsxSelfClosingElement(node: Node): node is JsxSelfClosingElement;
     function isJsxOpeningElement(node: Node): node is JsxOpeningElement;
     function isJsxClosingElement(node: Node): node is JsxClosingElement;
+    function isJsxFragment(node: Node): node is JsxFragment;
+    function isJsxOpeningFragment(node: Node): node is JsxOpeningFragment;
+    function isJsxClosingFragment(node: Node): node is JsxClosingFragment;
     function isJsxAttribute(node: Node): node is JsxAttribute;
     function isJsxAttributes(node: Node): node is JsxAttributes;
     function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute;
@@ -3497,6 +3517,8 @@ declare namespace ts {
     function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributes): JsxOpeningElement;
     function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
     function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
+    function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
+    function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
     function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
     function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
     function createJsxAttributes(properties: ReadonlyArray<JsxAttributeLike>): JsxAttributes;
