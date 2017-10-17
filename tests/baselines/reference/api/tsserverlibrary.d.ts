@@ -7316,7 +7316,6 @@ declare namespace ts.server {
     class ExternalProject extends Project {
         externalProjectName: string;
         compileOnSaveEnabled: boolean;
-        private readonly projectFilePath;
         excludedFiles: ReadonlyArray<NormalizedPath>;
         private typeAcquisition;
         getExcludedFiles(): ReadonlyArray<NormalizedPath>;
