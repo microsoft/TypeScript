@@ -90,7 +90,6 @@ namespace ts {
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
         IsObjectLiteralOrClassExpressionMethod = 1 << 7,
-        IsMatchTypeMatchClause = 1 << 8,
     }
 
     const binder = createBinder();
@@ -683,8 +682,8 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
                     break;
-                case SyntaxKind.MatchTypeMatchClause:
-                    bindMatchTypeMatchClause(<MatchTypeMatchClause>node);
+                case SyntaxKind.MatchTypePatternClause:
+                    bindMatchTypePatternClause(<MatchTypePatternClause>node);
                     break;
                 case SyntaxKind.JSDocComment:
                     bindJSDocComment(<JSDoc>node);
@@ -1341,11 +1340,11 @@ namespace ts {
             }
         }
 
-        function bindMatchTypeMatchClause(node: MatchTypeMatchClause): void {
+        function bindMatchTypePatternClause(node: MatchTypePatternClause): void {
             // only set the container in the match type.
             const savedInferTypeContainer = inferTypeContainer;
             inferTypeContainer = node;
-            bind(node.matchType);
+            bind(node.patternType);
             inferTypeContainer = savedInferTypeContainer;
             bind(node.resultType);
         }
@@ -1403,10 +1402,8 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JsxAttributes:
+                case SyntaxKind.MatchTypePatternClause:
                     return ContainerFlags.IsContainer;
-
-                case SyntaxKind.MatchTypeMatchClause:
-                    return ContainerFlags.IsContainer | ContainerFlags.IsMatchTypeMatchClause;
 
                 case SyntaxKind.InterfaceDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsInterface;
@@ -2111,8 +2108,8 @@ namespace ts {
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.MappedType:
                     return bindAnonymousTypeWorker(node as TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral);
-                case SyntaxKind.MatchTypeMatchClause:
-                    return bindAnonymousDeclaration(node as MatchTypeMatchClause, SymbolFlags.MatchTypeClause, InternalSymbolName.Match);
+                case SyntaxKind.MatchTypePatternClause:
+                    return bindAnonymousDeclaration(node as MatchTypePatternClause, SymbolFlags.MatchTypeClause, InternalSymbolName.Match);
                 case SyntaxKind.ObjectLiteralExpression:
                     return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:
@@ -3404,7 +3401,7 @@ namespace ts {
             case SyntaxKind.MappedType:
             case SyntaxKind.MatchType:
             case SyntaxKind.MatchTypeBlock:
-            case SyntaxKind.MatchTypeMatchClause:
+            case SyntaxKind.MatchTypePatternClause:
             case SyntaxKind.MatchTypeElseClause:
             case SyntaxKind.LiteralType:
             case SyntaxKind.NamespaceExportDeclaration:

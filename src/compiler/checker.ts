@@ -276,8 +276,8 @@ namespace ts {
         // in getPropagatingFlagsOfTypes, and it is checked in inferFromTypes.
         anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
 
-        const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const circularConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const noType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const circularType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
@@ -1026,7 +1026,7 @@ namespace ts {
                             }
                         }
                         break;
-                    case SyntaxKind.MatchTypeMatchClause:
+                    case SyntaxKind.MatchTypePatternClause:
                         if (result = lookup(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
                             break loop;
                         }
@@ -2541,12 +2541,12 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Match) {
                     const typeArgument = typeToTypeNodeHelper((<MatchType>type).typeArgument, context);
-                    const clauses: MatchTypeMatchOrElseClause[] = map((<MatchType>type).clauses, clause => {
-                        const matchType = typeToTypeNodeHelper(clause.matchType, context);
+                    const clauses: MatchTypePatternOrElseClause[] = map((<MatchType>type).clauses, clause => {
+                        const matchType = typeToTypeNodeHelper(getPatternTypeOfMatchTypeClause(clause), context);
                         const resultType = typeToTypeNodeHelper(getResultTypeOfMatchTypeClause(clause), context);
-                        return createMatchTypeMatchClause(matchType, resultType);
+                        return createMatchTypePatternClause(matchType, resultType);
                     });
-                    const elseType = (<MatchType>type).elseType;
+                    const elseType = getElseTypeOfMatchType(<MatchType>type);
                     if (elseType) clauses.push(createMatchTypeElseClause(typeToTypeNodeHelper(elseType, context)));
                     return createMatchTypeNode(typeArgument, createMatchTypeBlock(clauses));
                 }
@@ -3344,7 +3344,7 @@ namespace ts {
                     writer.writeLine();
                     writer.increaseIndent();
                     for (const clause of (<MatchType>type).clauses) {
-                        writeType(clause.matchType, TypeFormatFlags.None);
+                        writeType(getPatternTypeOfMatchTypeClause(clause), TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
                         writeType(getResultTypeOfMatchTypeClause(clause), TypeFormatFlags.None);
@@ -3352,7 +3352,7 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writer.writeLine();
                     }
-                    const elseType = (<MatchType>type).elseType;
+                    const elseType = getElseTypeOfMatchType(<MatchType>type);
                     if (elseType) {
                         writer.writeKeyword("else");
                         writePunctuation(writer, SyntaxKind.ColonToken);
@@ -5986,7 +5986,7 @@ namespace ts {
         function getBaseConstraintOfType(type: Type): Type {
             if (type.flags & (TypeFlags.TypeVariable | TypeFlags.UnionOrIntersection)) {
                 const constraint = getResolvedBaseConstraint(<TypeVariable | UnionOrIntersectionType>type);
-                if (constraint !== noConstraintType && constraint !== circularConstraintType) {
+                if (constraint !== noType && constraint !== circularType) {
                     return constraint;
                 }
             }
@@ -5997,12 +5997,12 @@ namespace ts {
         }
 
         function hasNonCircularBaseConstraint(type: TypeVariable): boolean {
-            return getResolvedBaseConstraint(type) !== circularConstraintType;
+            return getResolvedBaseConstraint(type) !== circularType;
         }
 
         /**
-         * Return the resolved base constraint of a type variable. The noConstraintType singleton is returned if the
-         * type variable has no constraint, and the circularConstraintType singleton is returned if the constraint
+         * Return the resolved base constraint of a type variable. The noType singleton is returned if the
+         * type variable has no constraint, and the circularType singleton is returned if the constraint
          * circularly references the type variable.
          */
         function getResolvedBaseConstraint(type: TypeVariable | UnionOrIntersectionType): Type {
@@ -6011,7 +6011,7 @@ namespace ts {
             if (!type.resolvedBaseConstraint) {
                 typeStack = [];
                 const constraint = getBaseConstraint(type);
-                type.resolvedBaseConstraint = circular ? circularConstraintType : getTypeWithThisArgument(constraint || noConstraintType, type);
+                type.resolvedBaseConstraint = circular ? circularType : getTypeWithThisArgument(constraint || noType, type);
             }
             return type.resolvedBaseConstraint;
 
@@ -6082,14 +6082,14 @@ namespace ts {
             if (!typeParameter.default) {
                 if (typeParameter.target) {
                     const targetDefault = getDefaultFromTypeParameter(typeParameter.target);
-                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintType;
+                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noType;
                 }
                 else {
                     const defaultDeclaration = typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameterDeclaration(decl) && decl.default);
-                    typeParameter.default = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noConstraintType;
+                    typeParameter.default = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noType;
                 }
             }
-            return typeParameter.default === noConstraintType ? undefined : typeParameter.default;
+            return typeParameter.default === noType ? undefined : typeParameter.default;
         }
 
         /**
@@ -6737,14 +6737,14 @@ namespace ts {
             if (!typeParameter.constraint) {
                 if (typeParameter.target) {
                     const targetConstraint = getConstraintOfTypeParameter(typeParameter.target);
-                    typeParameter.constraint = targetConstraint ? instantiateType(targetConstraint, typeParameter.mapper) : noConstraintType;
+                    typeParameter.constraint = targetConstraint ? instantiateType(targetConstraint, typeParameter.mapper) : noType;
                 }
                 else {
                     const constraintDeclaration = getConstraintDeclaration(typeParameter);
-                    typeParameter.constraint = constraintDeclaration ? getTypeFromTypeNode(constraintDeclaration) : noConstraintType;
+                    typeParameter.constraint = constraintDeclaration ? getTypeFromTypeNode(constraintDeclaration) : noType;
                 }
             }
-            return typeParameter.constraint === noConstraintType ? undefined : typeParameter.constraint;
+            return typeParameter.constraint === noType ? undefined : typeParameter.constraint;
         }
 
         function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol {
@@ -7785,25 +7785,44 @@ namespace ts {
         }
 
         function isGenericMatchTypeClause(clause: MatchTypeClause): boolean {
-            return isGenericObjectType(clause.matchType);
+            return isGenericPatternType(getPatternTypeOfMatchTypeClause(clause), clause);
+        }
+
+        function isGenericPatternType(type: Type, clause: MatchTypeClause): boolean {
+            return type.flags & TypeFlags.TypeParameter ? !contains(clause.typeParameters, type) :
+                type.flags & TypeFlags.UnionOrIntersection ? forEach((<UnionOrIntersectionType>type).types, type => isGenericPatternType(type, clause)) :
+                isGenericObjectType(type);
         }
 
         function getMatchTypeConstituents(type: MatchType) {
-            if (type.clauses.length === 0) return type.elseType || neverType;
+            const elseType = getElseTypeOfMatchType(type);
+            if (type.clauses.length === 0) return elseType || neverType;
             const constituents: Type[] = [];
             for (const clause of type.clauses) {
                 constituents.push(getResultTypeOfMatchTypeClause(clause));
             }
-            if (type.elseType) {
-                constituents.push(type.elseType);
+            if (elseType) {
+                constituents.push(elseType);
             }
             return getUnionType(constituents);
         }
 
         function inferMatchTypeClauseTypeArguments(clause: MatchTypeClause, typeArgument: Type) {
             const inferenceContext = createInferenceContext(clause, getResultTypeOfMatchTypeClause, /*flags*/ 0);
-            inferTypes(inferenceContext.inferences, typeArgument, clause.matchType);
+            inferTypes(inferenceContext.inferences, typeArgument, getPatternTypeOfMatchTypeClause(clause));
             return getInferredTypes(inferenceContext);
+        }
+
+        function getPatternTypeOfMatchTypeClause(clause: MatchTypeClause) {
+            if (!clause.resolvedPatternType) {
+                if (clause.target) {
+                    clause.resolvedPatternType = instantiateType(getPatternTypeOfMatchTypeClause(clause.target), clause.mapper);
+                }
+                else {
+                    clause.resolvedPatternType = getTypeFromTypeNode(clause.declaration.patternType);
+                }
+            }
+            return clause.resolvedPatternType;
         }
 
         function getResultTypeOfMatchTypeClause(clause: MatchTypeClause) {
@@ -7812,50 +7831,68 @@ namespace ts {
                     clause.resolvedResultType = instantiateType(getResultTypeOfMatchTypeClause(clause.target), clause.mapper);
                 }
                 else {
-                    clause.resolvedResultType = unknownType;
+                    clause.resolvedResultType = getTypeFromTypeNode(clause.declaration.resultType);
                 }
             }
             return clause.resolvedResultType;
         }
 
-        function createMatchType(typeArgument: Type, clauses: ReadonlyArray<MatchTypeClause>, elseType: Type | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]) {
+        function getElseTypeOfMatchType(type: MatchType) {
+            if (!type.resolvedElseType) {
+                if (type.target) {
+                    type.resolvedElseType = instantiateType(getElseTypeOfMatchType(type.target), type.mapper);
+                }
+                else {
+                    const elseClause = find(type.declaration.matchBlock.clauses, isMatchTypeElseClause);
+                    type.resolvedElseType = elseClause ? getTypeFromTypeNode(elseClause.resultType) : noType;
+                }
+            }
+            return type.resolvedElseType !== noType ? type.resolvedElseType : undefined;
+        }
+
+        function createMatchTypeClause(declaration: MatchTypePatternClause, typeParameters: TypeParameter[], resolvedPatternType?: Type, resolvedResultType?: Type): MatchTypeClause {
+            return { declaration, typeParameters, resolvedPatternType, resolvedResultType }
+        }
+
+        function createMatchType(declaration: MatchTypeNode, typeArgument: Type, clauses: ReadonlyArray<MatchTypeClause>, resolvedElseType: Type | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]) {
             const type = <MatchType>createType(TypeFlags.Match);
+            type.declaration = declaration;
             type.typeArgument = typeArgument;
             type.clauses = clauses;
-            type.elseType = elseType;
+            type.resolvedElseType = resolvedElseType;
             type.aliasSymbol = aliasSymbol;
             type.aliasTypeArguments = aliasTypeArguments;
             return type;
         }
 
-        function getMatchType(typeArgument: Type, clauses: ReadonlyArray<MatchTypeClause>, elseType: Type | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
-            if (clauses.length > 0) {
-                if (isGenericObjectType(typeArgument) || forEach(clauses, isGenericMatchTypeClause)) {
-                    return createMatchType(typeArgument, clauses, elseType, aliasSymbol, aliasTypeArguments);
+        function resolveMatchType(type: MatchType) {
+            if (type.clauses.length > 0) {
+                if (isGenericObjectType(type.typeArgument) || forEach(type.clauses, isGenericMatchTypeClause)) {
+                    return type;
                 }
 
                 // distribute `match` across unions
-                if (typeArgument.flags & TypeFlags.Union) {
-                    const types = map((<UnionType>typeArgument).types, constituent => getMatchType(constituent, clauses, elseType));
+                if (type.typeArgument.flags & TypeFlags.Union) {
+                    const types = map((<UnionType>type.typeArgument).types, constituent => getMatchType(type.declaration, constituent, type.clauses, /*resolvedElseType*/ undefined));
                     return getUnionType(types, /*subtypeReduction*/ false);
                 }
 
-                for (const clause of clauses) {
+                for (const clause of type.clauses) {
                     let candidate = clause;
                     if (candidate.typeParameters) {
-                        const typeArgumentTypes: Type[] = inferMatchTypeClauseTypeArguments(candidate, typeArgument);
+                        const typeArgumentTypes: Type[] = inferMatchTypeClauseTypeArguments(candidate, type.typeArgument);
                         candidate = getMatchTypeClauseInstantiation(candidate, typeArgumentTypes);
                     }
-                    if (isTypeAssignableTo(typeArgument, candidate.matchType)) {
+                    if (isTypeAssignableTo(type.typeArgument, getPatternTypeOfMatchTypeClause(candidate))) {
                         return getResultTypeOfMatchTypeClause(candidate);
                     }
                 }
             }
-            return elseType || neverType;
+            return getElseTypeOfMatchType(type);
         }
 
-        function createMatchTypeClause(declaration: MatchTypeMatchClause, typeParameters: TypeParameter[], matchType: Type, resolvedResultType: Type): MatchTypeClause {
-            return { declaration, typeParameters, matchType, resolvedResultType }
+        function getMatchType(declaration: MatchTypeNode, typeArgument: Type, clauses: ReadonlyArray<MatchTypeClause>, elseType: Type | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            return resolveMatchType(createMatchType(declaration, typeArgument, clauses, elseType, aliasSymbol, aliasTypeArguments));
         }
 
         function getTypeFromMatchTypeNode(node: MatchTypeNode) {
@@ -7863,26 +7900,17 @@ namespace ts {
             if (!links.resolvedType) {
                 const typeArgument = getTypeFromTypeNode(node.typeArgument);
                 const clauses: MatchTypeClause[] = [];
-                let elseType: Type | undefined;
-                for (const clause of node.matchBlock.clauses) {
-                    if (clause.kind === SyntaxKind.MatchTypeElseClause) {
-                        if (!elseType) elseType = getTypeFromTypeNode(clause.resultType);
-                    }
-                    else {
-                        const matchType = getTypeFromTypeNode(clause.matchType);
-
-                        let typeParameters: TypeParameter[];
-                        clause.symbol.members.forEach(symbol => {
-                            if (symbol.flags & SymbolFlags.TypeParameter) {
-                                typeParameters = append(typeParameters, getDeclaredTypeOfTypeParameter(symbol));
-                            }
-                        });
-
-                        const resultType = getTypeFromTypeNode(clause.resultType);
-                        clauses.push(createMatchTypeClause(clause, typeParameters, matchType, resultType));
-                    }
+                const patternClauses = filter(node.matchBlock.clauses, isMatchTypePatternClause);
+                for (const clause of patternClauses) {
+                    let typeParameters: TypeParameter[];
+                    clause.symbol.members.forEach(symbol => {
+                        if (symbol.flags & SymbolFlags.TypeParameter) {
+                            typeParameters = append(typeParameters, getDeclaredTypeOfTypeParameter(symbol));
+                        }
+                    });
+                    clauses.push(createMatchTypeClause(clause, typeParameters));
                 }
-                links.resolvedType = getMatchType(typeArgument, clauses, elseType, getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+                links.resolvedType = getMatchType(node, typeArgument, clauses, /*resolvedElseType*/ undefined, getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
             }
             return links.resolvedType;
         }
@@ -8449,6 +8477,52 @@ namespace ts {
             });
         }
 
+        function instantiateMatchTypeClause(clause: MatchTypeClause, mapper: TypeMapper, eraseTypeParameters?: boolean): MatchTypeClause {
+            let freshTypeParameters: TypeParameter[];
+            if (clause.typeParameters && !eraseTypeParameters) {
+                // First create a fresh set of type parameters, then include a mapping from the old to the
+                // new type parameters in the mapper function. Finally store this mapper in the new type
+                // parameters such that we can use it when instantiating constraints.
+                freshTypeParameters = map(clause.typeParameters, cloneTypeParameter);
+                mapper = combineTypeMappers(createTypeMapper(clause.typeParameters, freshTypeParameters), mapper);
+                for (const tp of freshTypeParameters) {
+                    tp.mapper = mapper;
+                }
+            }
+
+            const result = createMatchTypeClause(clause.declaration, freshTypeParameters);
+            result.target = clause.target || clause;
+            result.mapper = clause.mapper ? combineTypeMappers(clause.mapper, mapper) : mapper;
+            return result;
+        }
+
+        function createMatchTypeClauseInstantiation(clause: MatchTypeClause, typeArguments: Type[]): MatchTypeClause {
+            return instantiateMatchTypeClause(clause, createTypeMapper(clause.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
+        }
+
+        function getMatchTypeClauseInstantiation(clause: MatchTypeClause, typeArguments: Type[]): MatchTypeClause {
+            const instantiations = clause.instantiations || (clause.instantiations = createMap<MatchTypeClause>());
+            const id = getTypeListId(typeArguments);
+            let instantiation = instantiations.get(id);
+            if (!instantiation) {
+                instantiations.set(id, instantiation = createMatchTypeClauseInstantiation(clause, typeArguments));
+            }
+            return instantiation;
+        }
+
+        function instantiateMatchType(type: MatchType, mapper: TypeMapper) {
+            const result = createMatchType(
+                type.declaration,
+                instantiateType((<MatchType>type).typeArgument, mapper),
+                instantiateList((<MatchType>type).clauses, mapper, instantiateMatchTypeClause),
+                /*resolvedElseType*/ undefined,
+                type.aliasSymbol,
+                instantiateTypes(type.aliasTypeArguments, mapper));
+            result.target = type.target || type;
+            result.mapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
+            return resolveMatchType(result);
+        }
+
         function isTopLevelTypeAlias(symbol: Symbol) {
             if (symbol.declarations && symbol.declarations.length) {
                 const parentKind = symbol.declarations[0].parent.kind;
@@ -8524,48 +8598,9 @@ namespace ts {
                 return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
             }
             if (type.flags & TypeFlags.Match) {
-                return getMatchType(
-                    instantiateType((<MatchType>type).typeArgument, mapper),
-                    instantiateList((<MatchType>type).clauses, mapper, instantiateMatchTypeClause),
-                    instantiateType((<MatchType>type).elseType, mapper),
-                    type.aliasSymbol,
-                    instantiateTypes(type.aliasTypeArguments, mapper));
+                return instantiateMatchType(<MatchType>type, mapper);
             }
             return type;
-        }
-
-        function getMatchTypeClauseInstantiation(clause: MatchTypeClause, typeArguments: Type[]): MatchTypeClause {
-            const instantiations = clause.instantiations || (clause.instantiations = createMap<MatchTypeClause>());
-            const id = getTypeListId(typeArguments);
-            let instantiation = instantiations.get(id);
-            if (!instantiation) {
-                instantiations.set(id, instantiation = createMatchTypeClauseInstantiation(clause, typeArguments));
-            }
-            return instantiation;
-        }
-
-        function createMatchTypeClauseInstantiation(clause: MatchTypeClause, typeArguments: Type[]): MatchTypeClause {
-            return instantiateMatchTypeClause(clause, createTypeMapper(clause.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
-        }
-
-        function instantiateMatchTypeClause(clause: MatchTypeClause, mapper: TypeMapper, eraseTypeParameters?: boolean): MatchTypeClause {
-            let freshTypeParameters: TypeParameter[];
-            if (clause.typeParameters && !eraseTypeParameters) {
-                // First create a fresh set of type parameters, then include a mapping from the old to the
-                // new type parameters in the mapper function. Finally store this mapper in the new type
-                // parameters such that we can use it when instantiating constraints.
-                freshTypeParameters = map(clause.typeParameters, cloneTypeParameter);
-                mapper = combineTypeMappers(createTypeMapper(clause.typeParameters, freshTypeParameters), mapper);
-                for (const tp of freshTypeParameters) {
-                    tp.mapper = mapper;
-                }
-            }
-
-            const result = createMatchTypeClause(clause.declaration, freshTypeParameters,
-            instantiateType(clause.matchType, mapper), /*resolvedResultType*/ undefined);
-            result.target = clause;
-            result.mapper = mapper;
-            return result;
         }
 
         function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper): IndexInfo {
@@ -19121,7 +19156,7 @@ namespace ts {
                     }
                 }
                 else {
-                    checkSourceElement(clause.matchType);
+                    checkSourceElement(clause.patternType);
                 }
 
                 checkSourceElement(clause.resultType);

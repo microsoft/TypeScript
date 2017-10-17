@@ -561,8 +561,8 @@ namespace ts {
                     return emitMatchType(<MatchTypeNode>node);
                 case SyntaxKind.MatchTypeBlock:
                     return emitMatchTypeBlock(<MatchTypeBlock>node);
-                case SyntaxKind.MatchTypeMatchClause:
-                    return emitMatchTypeMatchClause(<MatchTypeMatchClause>node);
+                case SyntaxKind.MatchTypePatternClause:
+                    return emitMatchTypePatternClause(<MatchTypePatternClause>node);
                 case SyntaxKind.MatchTypeElseClause:
                     return emitMatchTypeElseClause(<MatchTypeElseClause>node);
                 case SyntaxKind.InferType:
@@ -1139,8 +1139,8 @@ namespace ts {
             writeToken(SyntaxKind.CloseBraceToken, node.clauses.end);
         }
 
-        function emitMatchTypeMatchClause(node: MatchTypeMatchClause) {
-            emit(node.matchType);
+        function emitMatchTypePatternClause(node: MatchTypePatternClause) {
+            emit(node.patternType);
             write(": ");
             emit(node.resultType);
         }

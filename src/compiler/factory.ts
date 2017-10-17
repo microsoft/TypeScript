@@ -787,29 +787,29 @@ namespace ts {
             : node;
     }
 
-    export function createMatchTypeBlock(clauses: ReadonlyArray<MatchTypeMatchOrElseClause>) {
+    export function createMatchTypeBlock(clauses: ReadonlyArray<MatchTypePatternOrElseClause>) {
         const node = createSynthesizedNode(SyntaxKind.MatchTypeBlock) as MatchTypeBlock;
         node.clauses = createNodeArray(clauses);
         return node;
     }
 
-    export function updateMatchTypeBlock(node: MatchTypeBlock, clauses: ReadonlyArray<MatchTypeMatchOrElseClause>) {
+    export function updateMatchTypeBlock(node: MatchTypeBlock, clauses: ReadonlyArray<MatchTypePatternOrElseClause>) {
         return node.clauses !== clauses
             ? updateNode(createMatchTypeBlock(clauses), node)
             : node;
     }
 
-    export function createMatchTypeMatchClause(matchType: TypeNode, resultType: TypeNode) {
-        const node = createSynthesizedNode(SyntaxKind.MatchTypeMatchClause) as MatchTypeMatchClause;
-        node.matchType = matchType;
+    export function createMatchTypePatternClause(matchType: TypeNode, resultType: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.MatchTypePatternClause) as MatchTypePatternClause;
+        node.patternType = matchType;
         node.resultType = resultType;
         return node;
     }
 
-    export function updateMatchTypeMatchClause(node: MatchTypeMatchClause, matchType: TypeNode, resultType: TypeNode) {
-        return node.matchType !== matchType
+    export function updateMatchTypePatternClause(node: MatchTypePatternClause, matchType: TypeNode, resultType: TypeNode) {
+        return node.patternType !== matchType
             || node.resultType !== resultType
-            ? updateNode(createMatchTypeMatchClause(matchType, resultType), node)
+            ? updateNode(createMatchTypePatternClause(matchType, resultType), node)
             : node;
     }
 

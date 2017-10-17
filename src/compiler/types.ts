@@ -243,7 +243,7 @@ namespace ts {
         MappedType,
         MatchType,
         MatchTypeBlock,
-        MatchTypeMatchClause,
+        MatchTypePatternClause,
         MatchTypeElseClause,
         InferType,
         LiteralType,
@@ -1030,16 +1030,16 @@ namespace ts {
 
     export interface MatchTypeBlock extends Node {
         kind: SyntaxKind.MatchTypeBlock;
-        clauses: NodeArray<MatchTypeMatchOrElseClause>;
+        clauses: NodeArray<MatchTypePatternOrElseClause>;
     }
 
-    export type MatchTypeMatchOrElseClause =
-        | MatchTypeMatchClause
+    export type MatchTypePatternOrElseClause =
+        | MatchTypePatternClause
         | MatchTypeElseClause;
 
-    export interface MatchTypeMatchClause extends Declaration {
-        kind: SyntaxKind.MatchTypeMatchClause;
-        matchType: TypeNode;
+    export interface MatchTypePatternClause extends Declaration {
+        kind: SyntaxKind.MatchTypePatternClause;
+        patternType: TypeNode;
         resultType: TypeNode;
     }
 
@@ -3468,15 +3468,23 @@ namespace ts {
 
     // match (T) {} types (TypeFlags.Match)
     export interface MatchType extends Type {
+        declaration: MatchTypeNode;
         typeArgument: Type;
         clauses: ReadonlyArray<MatchTypeClause>;
-        elseType?: Type;
+        /* @internal */
+        resolvedElseType?: Type;
+        /* @internal */
+        target?: MatchType;
+        /* @internal */
+        mapper?: TypeMapper;
     }
 
     export interface MatchTypeClause {
-        declaration: MatchTypeMatchClause;
+        declaration: MatchTypePatternClause;
+        /* @internal */
         typeParameters?: TypeParameter[];
-        matchType: Type;
+        /* @internal */
+        resolvedPatternType: Type;
         /* @internal */
         resolvedResultType?: Type;
         /* @internal */

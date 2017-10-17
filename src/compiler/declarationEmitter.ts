@@ -1830,11 +1830,11 @@ namespace ts {
             }
         }
 
-        function emitMatchTypeMatchClause(node: MatchTypeMatchClause) {
+        function emitMatchTypePatternClause(node: MatchTypePatternClause) {
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             writeLine();
-            emitType(node.matchType);
+            emitType(node.patternType);
             write(": ");
             emitType(node.resultType);
             enclosingDeclaration = prevEnclosingDeclaration;
@@ -1879,8 +1879,8 @@ namespace ts {
                     return emitPropertyDeclaration(<PropertyDeclaration>node);
                 case SyntaxKind.EnumMember:
                     return emitEnumMemberDeclaration(<EnumMember>node);
-                case SyntaxKind.MatchTypeMatchClause:
-                    return emitMatchTypeMatchClause(<MatchTypeMatchClause>node);
+                case SyntaxKind.MatchTypePatternClause:
+                    return emitMatchTypePatternClause(<MatchTypePatternClause>node);
                 case SyntaxKind.MatchTypeElseClause:
                     return emitMatchTypeElseClause(<MatchTypeElseClause>node);
                 case SyntaxKind.ExportAssignment:

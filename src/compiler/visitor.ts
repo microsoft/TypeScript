@@ -412,12 +412,12 @@ namespace ts {
 
             case SyntaxKind.MatchTypeBlock:
                 return updateMatchTypeBlock(<MatchTypeBlock>node,
-                    nodesVisitor((<MatchTypeBlock>node).clauses, visitor, isMatchTypeMatchOrElseClause));
+                    nodesVisitor((<MatchTypeBlock>node).clauses, visitor, isMatchTypePatternOrElseClause));
 
-            case SyntaxKind.MatchTypeMatchClause:
-                return updateMatchTypeMatchClause(<MatchTypeMatchClause>node,
-                    visitNode((<MatchTypeMatchClause>node).matchType, visitor, isTypeNode),
-                    visitNode((<MatchTypeMatchClause>node).resultType, visitor, isTypeNode));
+            case SyntaxKind.MatchTypePatternClause:
+                return updateMatchTypePatternClause(<MatchTypePatternClause>node,
+                    visitNode((<MatchTypePatternClause>node).patternType, visitor, isTypeNode),
+                    visitNode((<MatchTypePatternClause>node).resultType, visitor, isTypeNode));
 
             case SyntaxKind.MatchTypeElseClause:
                 return updateMatchTypeElseClause(<MatchTypeElseClause>node,

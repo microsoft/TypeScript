@@ -160,9 +160,9 @@ namespace ts {
                     visitNode(cbNode, (<MatchTypeNode>node).matchBlock);
             case SyntaxKind.MatchTypeBlock:
                 return visitNodes(cbNode, cbNodes, (<MatchTypeBlock>node).clauses);
-            case SyntaxKind.MatchTypeMatchClause:
-                return visitNode(cbNode, (<MatchTypeMatchClause>node).matchType) ||
-                    visitNode(cbNode, (<MatchTypeMatchClause>node).resultType);
+            case SyntaxKind.MatchTypePatternClause:
+                return visitNode(cbNode, (<MatchTypePatternClause>node).patternType) ||
+                    visitNode(cbNode, (<MatchTypePatternClause>node).resultType);
             case SyntaxKind.MatchTypeElseClause:
                 return visitNode(cbNode, (<MatchTypeElseClause>node).resultType);
             case SyntaxKind.InferType:
@@ -1761,7 +1761,7 @@ namespace ts {
         function isReusableMatchTypeClause(node: Node) {
             if (node) {
                 switch (node.kind) {
-                    case SyntaxKind.MatchTypeMatchClause:
+                    case SyntaxKind.MatchTypePatternClause:
                     case SyntaxKind.MatchTypeElseClause:
                         return true;
                 }
@@ -2615,9 +2615,9 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseMatchTypeMatchClause() {
-            const node = <MatchTypeMatchClause>createNode(SyntaxKind.MatchTypeMatchClause);
-            node.matchType = parseType();
+        function parseMatchTypePatternClause() {
+            const node = <MatchTypePatternClause>createNode(SyntaxKind.MatchTypePatternClause);
+            node.patternType = parseType();
             parseExpected(SyntaxKind.ColonToken);
             node.resultType = parseType();
             return finishNode(node);
@@ -2631,8 +2631,8 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseMatchTypeCaseOrElseClause(): MatchTypeMatchOrElseClause {
-            return token() === SyntaxKind.ElseKeyword ? parseMatchTypeElseClause() : parseMatchTypeMatchClause();
+        function parseMatchTypePatternOrElseClause(): MatchTypePatternOrElseClause {
+            return token() === SyntaxKind.ElseKeyword ? parseMatchTypeElseClause() : parseMatchTypePatternClause();
         }
 
         function parseMatchType() {
@@ -2643,7 +2643,7 @@ namespace ts {
             parseExpected(SyntaxKind.CloseParenToken);
             const matchBlock = <MatchTypeBlock>createNode(SyntaxKind.MatchTypeBlock);
             parseExpected(SyntaxKind.OpenBraceToken);
-            matchBlock.clauses = parseDelimitedList(ParsingContext.MatchTypeClauses, parseMatchTypeCaseOrElseClause, /*considerSemicolonAsDelimiter*/ true);
+            matchBlock.clauses = parseDelimitedList(ParsingContext.MatchTypeClauses, parseMatchTypePatternOrElseClause, /*considerSemicolonAsDelimiter*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
             node.matchBlock = finishNode(matchBlock);
             return finishNode(node);

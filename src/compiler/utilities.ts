@@ -4874,9 +4874,17 @@ namespace ts {
         return node.kind === SyntaxKind.MatchTypeBlock;
     }
 
-    export function isMatchTypeMatchOrElseClause(node: Node): node is MatchTypeMatchOrElseClause {
+    export function isMatchTypePatternClause(node: Node): node is MatchTypePatternClause {
+        return node.kind === SyntaxKind.MatchTypePatternClause;
+    }
+
+    export function isMatchTypeElseClause(node: Node): node is MatchTypeElseClause {
+        return node.kind === SyntaxKind.MatchTypeElseClause;
+    }
+
+    export function isMatchTypePatternOrElseClause(node: Node): node is MatchTypePatternOrElseClause {
         const kind = node.kind;
-        return kind === SyntaxKind.MatchTypeMatchClause
+        return kind === SyntaxKind.MatchTypePatternClause
             || kind === SyntaxKind.MatchTypeElseClause;
     }
 
