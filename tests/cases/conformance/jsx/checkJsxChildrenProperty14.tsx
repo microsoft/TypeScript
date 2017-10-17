@@ -44,5 +44,5 @@ function SingleChildComp(p: SingleChildProp) {
 // OK
 let k4 = <SingleChildComp a={10} b="hi"><><Button /><AnotherButton /></></SingleChildComp>;
 
-// Errors
+// Error
 let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp>;
