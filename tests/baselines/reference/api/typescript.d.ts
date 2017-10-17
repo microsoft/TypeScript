@@ -3155,8 +3155,8 @@ declare namespace ts {
 }
 declare namespace ts {
     interface GetEffectiveTypeRootsHost {
-        directoryExists?: (directoryName: string) => boolean;
-        getCurrentDirectory?: () => string;
+        directoryExists?(directoryName: string): boolean;
+        getCurrentDirectory?(): string;
     }
     function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined;
     /**
@@ -3918,7 +3918,7 @@ declare namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
         getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
@@ -4299,6 +4299,7 @@ declare namespace ts {
          * be used in that case
          */
         replacementSpan?: TextSpan;
+        hasAction?: true;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -4307,6 +4308,7 @@ declare namespace ts {
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
+        codeActions?: CodeAction[];
     }
     interface OutliningSpan {
         /** The span of the document to actually collapse. */

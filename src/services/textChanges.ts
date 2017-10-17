@@ -186,12 +186,23 @@ namespace ts.textChanges {
         return s;
     }
 
+    export interface TextChangesContext {
+        newLineCharacter: string;
+        rulesProvider: formatting.RulesProvider;
+    }
+
     export class ChangeTracker {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
 
-        public static fromContext(context: RefactorContext | CodeFixContext) {
+        public static fromContext(context: TextChangesContext): ChangeTracker {
             return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.rulesProvider);
+        }
+
+        public static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[] {
+            const tracker = ChangeTracker.fromContext(context);
+            cb(tracker);
+            return tracker.getChanges();
         }
 
         constructor(
