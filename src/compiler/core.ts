@@ -2701,8 +2701,14 @@ namespace ts {
 
     export function assertTypeIsNever(_: never): void { }
 
+    export interface FileAndDirectoryExistence {
+        fileExists: boolean;
+        directoryExists: boolean;
+    }
+
     export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
-        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): void;
+        /** Returns the queried result for the file exists and directory exists if at all it was done */
+        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): FileAndDirectoryExistence | undefined;
         addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
         clearCache(): void;
     }
@@ -2872,8 +2878,13 @@ namespace ts {
                 if (parentResult) {
                     const baseName = getBaseNameOfFileName(fileOrDirectory);
                     if (parentResult) {
-                        updateFilesOfFileSystemEntry(parentResult, baseName, host.fileExists(fileOrDirectoryPath));
-                        updateFileSystemEntry(parentResult.directories, baseName, host.directoryExists(fileOrDirectoryPath));
+                        const fsQueryResult: FileAndDirectoryExistence = {
+                            fileExists: host.fileExists(fileOrDirectoryPath),
+                            directoryExists: host.directoryExists(fileOrDirectoryPath)
+                        };
+                        updateFilesOfFileSystemEntry(parentResult, baseName, fsQueryResult.fileExists);
+                        updateFileSystemEntry(parentResult.directories, baseName, fsQueryResult.directoryExists);
+                        return fsQueryResult;
                     }
                 }
             }

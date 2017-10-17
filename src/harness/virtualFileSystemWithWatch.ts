@@ -250,7 +250,7 @@ namespace ts.TestFSWithWatch {
             return this.toPath(this.toNormalizedAbsolutePath(s));
         }
 
-        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>) {
+        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, invokeDirectoryWatcherInsteadOfFileChanged?: boolean) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             // always inject safelist file in the list of files
@@ -265,7 +265,12 @@ namespace ts.TestFSWithWatch {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
                                 currentEntry.content = fileOrDirectory.content;
-                                this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                if (invokeDirectoryWatcherInsteadOfFileChanged) {
+                                    this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                }
+                                else {
+                                    this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                }
                             }
                         }
                         else {
