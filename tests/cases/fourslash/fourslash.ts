@@ -140,7 +140,14 @@ declare namespace FourSlashInterface {
         allowedConstructorParameterKeywords: string[];
         constructor(negative?: boolean);
         completionListCount(expectedCount: number): void;
-        completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
+        completionListContains(
+            symbol: string,
+            text?: string,
+            documentation?: string,
+            kind?: string,
+            spanIndex?: number,
+            hasAction?: boolean,
+        ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListContainsClassElementKeywords(): void;
@@ -173,6 +180,20 @@ declare namespace FourSlashInterface {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         completionsAt(markerName: string, completions: string[], options?: { isNewIdentifierLocation?: boolean }): void;
+        completionsAndDetailsAt(
+            markerName: string,
+            completions: {
+                excludes?: ReadonlyArray<string>,
+                //TODO: better type
+                entries: ReadonlyArray<{ entry: any, details: any }>,
+            },
+        ): void; //TODO: better type
+        applyCodeActionFromCompletion(markerName: string, options: {
+            name: string,
+            description: string,
+            newFileContent?: string,
+            newRangeContent?: string,
+        });
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
         textAtCaretIs(text: string): void;
