@@ -411,19 +411,27 @@ namespace ts.server {
             this.send(ev);
         }
 
-        public output(info: any, cmdName: string, reqSeq = 0, errorMsg?: string) {
+        // For backwards-compatibility only.
+        public output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void {
+            this.doOutput(info, cmdName, reqSeq, /*success*/ !errorMsg, errorMsg);
+        }
+
+        private doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
             const res: protocol.Response = {
                 seq: 0,
                 type: "response",
                 command: cmdName,
                 request_seq: reqSeq,
-                success: !errorMsg,
+                success,
             };
-            if (!errorMsg) {
+            if (success) {
                 res.body = info;
             }
             else {
-                res.message = errorMsg;
+                Debug.assert(info === undefined);
+            }
+            if (message) {
+                res.message = message;
             }
             this.send(res);
         }
@@ -1307,7 +1315,7 @@ namespace ts.server {
             this.changeSeq++;
             // make sure no changes happen before this one is finished
             if (project.reloadScript(file, tempFileName)) {
-                this.output(undefined, CommandNames.Reload, reqSeq);
+                this.doOutput(/*info*/ undefined, CommandNames.Reload, reqSeq, /*success*/ true);
             }
         }
 
@@ -1548,6 +1556,15 @@ namespace ts.server {
             }
         }
 
+        private applyCodeActionCommand(commandName: string, requestSeq: number, args: protocol.ApplyCodeActionCommandRequestArgs): void {
+            const { file, project } = this.getFileAndProject(args);
+            const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
+            const command = args.command as CodeActionCommand; // They should be sending back the command we sent them.
+            project.getLanguageService().applyCodeActionCommand(file, command).then(
+                ({ successMessage }) => { output(/*success*/ true, successMessage); },
+                error => { output(/*success*/ false, error); });
+        }
+
         private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {
             let startPosition: number = undefined, endPosition: number = undefined;
             if (args.startPosition !== undefined) {
@@ -1570,14 +1587,12 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction(codeAction: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
-            return {
-                description: codeAction.description,
-                changes: codeAction.changes.map(change => ({
-                    fileName: change.fileName,
-                    textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
-                }))
-            };
+        private mapCodeAction({ description, changes: unmappedChanges, commands }: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
+            const changes = unmappedChanges.map(change => ({
+                fileName: change.fileName,
+                textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
+            }));
+            return { description,  changes, commands };
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: FileTextChanges): protocol.FileCodeEdits {
@@ -1663,15 +1678,15 @@ namespace ts.server {
         exit() {
         }
 
-        private notRequired() {
+        private notRequired(): HandlerResponse {
             return { responseRequired: false };
         }
 
-        private requiredResponse(response: any) {
+        private requiredResponse(response: {}): HandlerResponse {
             return { response, responseRequired: true };
         }
 
-        private handlers = createMapFromTemplate<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
+        private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
                 // TODO: report errors
@@ -1849,7 +1864,7 @@ namespace ts.server {
             },
             [CommandNames.Configure]: (request: protocol.ConfigureRequest) => {
                 this.projectService.setHostConfiguration(request.arguments);
-                this.output(undefined, CommandNames.Configure, request.seq);
+                this.doOutput(/*info*/ undefined, CommandNames.Configure, request.seq, /*success*/ true);
                 return this.notRequired();
             },
             [CommandNames.Reload]: (request: protocol.ReloadRequest) => {
@@ -1916,6 +1931,10 @@ namespace ts.server {
             [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
             },
+            [CommandNames.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
+                this.applyCodeActionCommand(request.command, request.seq, request.arguments);
+                return this.notRequired(); // Response will come asynchronously.
+            },
             [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());
             },
@@ -1930,7 +1949,7 @@ namespace ts.server {
             }
         });
 
-        public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
+        public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
             if (this.handlers.has(command)) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
@@ -1959,14 +1978,14 @@ namespace ts.server {
             }
         }
 
-        public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
+        public executeCommand(request: protocol.Request): HandlerResponse {
             const handler = this.handlers.get(request.command);
             if (handler) {
                 return this.executeWithRequestId(request.seq, () => handler(request));
             }
             else {
                 this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
-                this.output(undefined, CommandNames.Unknown, request.seq, `Unrecognized JSON command: ${request.command}`);
+                this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }
         }
@@ -1997,26 +2016,32 @@ namespace ts.server {
                 }
 
                 if (response) {
-                    this.output(response, request.command, request.seq);
+                    this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
                 else if (responseRequired) {
-                    this.output(undefined, request.command, request.seq, "No content available.");
+                    this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
                 }
             }
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
-                    this.output({ canceled: true }, request.command, request.seq);
+                    this.doOutput({ canceled: true }, request.command, request.seq, /*success*/ true);
                     return;
                 }
                 this.logError(err, message);
-                this.output(
-                    undefined,
+                this.doOutput(
+                    /*info*/ undefined,
                     request ? request.command : CommandNames.Unknown,
                     request ? request.seq : 0,
+                    /*success*/ false,
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
         }
+    }
+
+    export interface HandlerResponse {
+        response?: {};
+        responseRequired?: boolean;
     }
 
     /* @internal */ // exported for tests only

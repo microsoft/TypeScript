@@ -1763,6 +1763,19 @@ namespace ts {
             });
         }
 
+        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): PromiseLike<ApplyCodeActionCommandResult> {
+            fileName = toPath(fileName, currentDirectory, getCanonicalFileName);
+            switch (action.type) {
+                case "install package":
+                    return host.installPackage
+                        ? host.installPackage({ fileName, packageName: action.packageName })
+                        : Promise.reject("Host does not implement `installPackage`");
+                default:
+                    Debug.fail();
+                    // TODO: Debug.assertNever(action); will only work if there is more than one type.
+            }
+        }
+
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
@@ -1972,8 +1985,9 @@ namespace ts {
                 endPosition,
                 program: getProgram(),
                 newLineCharacter: formatOptions ? formatOptions.newLineCharacter : host.getNewLine(),
+                host,
                 rulesProvider: getRuleProvider(formatOptions),
-                cancellationToken
+                cancellationToken,
             };
         }
 
@@ -2035,6 +2049,7 @@ namespace ts {
             isValidBraceCompletionAtPosition,
             getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
+            applyCodeActionCommand,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

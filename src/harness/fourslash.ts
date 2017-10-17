@@ -953,6 +953,10 @@ namespace FourSlash {
             return this.getChecker().getSymbolsInScope(node, ts.SymbolFlags.Value | ts.SymbolFlags.Type | ts.SymbolFlags.Namespace);
         }
 
+        public setTypesRegistry(map: ts.MapLike<void>): void {
+            this.languageServiceAdapterHost.typesRegistry = ts.createMapFromTemplate(map);
+        }
+
         public verifyTypeOfSymbolAtLocation(range: Range, symbol: ts.Symbol, expected: string): void {
             const node = this.goToAndGetNode(range);
             const checker = this.getChecker();
@@ -2777,15 +2781,25 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean) {
-            const codeFix = this.getCodeFixActions(this.activeFile.fileName);
+        public verifyCodeFixAvailable(negative: boolean, info: FourSlashInterface.VerifyCodeFixAvailableOptions[] | undefined) {
+            const codeFixes = this.getCodeFixActions(this.activeFile.fileName);
 
-            if (negative && codeFix.length) {
-                this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found one.`);
+            if (negative) {
+                if (codeFixes.length) {
+                    this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found one.`);
+                }
+                return;
             }
 
-            if (!(negative || codeFix.length)) {
+            if (!codeFixes.length) {
                 this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
+            }
+            if (info) {
+                assert.equal(info.length, codeFixes.length);
+                ts.zipWith(codeFixes, info, (fix, info) => {
+                    assert.equal(fix.description, info.description);
+                    this.assertObjectsEqual(fix.commands, info.commands);
+                });
             }
         }
 
@@ -2828,6 +2842,14 @@ Actual: ${stringify(fullActual)}`);
                     this.raiseError(`${refactors.length} available refactors both have name ${name} and action ${actionName}`);
                 }
             }
+        }
+
+        public verifyRefactor({ name, actionName, refactors }: FourSlashInterface.VerifyRefactorOptions) {
+            const selection = this.getSelection();
+
+            const actualRefactors = (this.languageService.getApplicableRefactors(this.activeFile.fileName, selection) || ts.emptyArray)
+                .filter(r => r.name === name && r.actions.some(a => a.name === actionName));
+            this.assertObjectsEqual(actualRefactors, refactors);
         }
 
         public verifyApplicableRefactorAvailableForRange(negative: boolean) {
@@ -3614,6 +3636,10 @@ namespace FourSlashInterface {
         public symbolsInScope(range: FourSlash.Range): ts.Symbol[] {
             return this.state.symbolsInScope(range);
         }
+
+        public setTypesRegistry(map: ts.MapLike<void>): void {
+            this.state.setTypesRegistry(map);
+        }
     }
 
     export class GoTo {
@@ -3789,8 +3815,8 @@ namespace FourSlashInterface {
             this.state.verifyCodeFix(options);
         }
 
-        public codeFixAvailable() {
-            this.state.verifyCodeFixAvailable(this.negative);
+        public codeFixAvailable(options?: VerifyCodeFixAvailableOptions[]) {
+            this.state.verifyCodeFixAvailable(this.negative, options);
         }
 
         public applicableRefactorAvailableAtMarker(markerName: string) {
@@ -3799,6 +3825,10 @@ namespace FourSlashInterface {
 
         public applicableRefactorAvailableForRange() {
             this.state.verifyApplicableRefactorAvailableForRange(this.negative);
+        }
+
+        public refactor(options: VerifyRefactorOptions) {
+            this.state.verifyRefactor(options);
         }
 
         public refactorAvailable(name: string, actionName?: string) {
@@ -4447,6 +4477,17 @@ namespace FourSlashInterface {
         description: string;
         errorCode?: number;
         index?: number;
+    }
+
+    export interface VerifyCodeFixAvailableOptions {
+        description: string;
+        commands?: ts.CodeActionCommand[];
+    }
+
+    export interface VerifyRefactorOptions {
+        name: string;
+        actionName: string;
+        refactors: ts.ApplicableRefactorInfo[];
     }
 
     export interface VerifyCompletionActionOptions extends NewContentOptions {

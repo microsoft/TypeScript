@@ -1861,7 +1861,7 @@ namespace ts {
         return i < 0 ? path : path.substring(i + 1);
     }
 
-    export function combinePaths(path1: string, path2: string) {
+    export function combinePaths(path1: string, path2: string): string {
         if (!(path1 && path1.length)) return path2;
         if (!(path2 && path2.length)) return path1;
         if (getRootLength(path2) !== 0) return path2;

@@ -12,7 +12,7 @@ namespace ts.projectSystem {
 
     describe("CompileOnSave affected list", () => {
         function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: FileOrFolder[] }[]) {
-            const response: server.protocol.CompileOnSaveAffectedFileListSingleProject[] = session.executeCommand(request).response;
+            const response = session.executeCommand(request).response as server.protocol.CompileOnSaveAffectedFileListSingleProject[];
             const actualResult = response.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
             expectedFileList = expectedFileList.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
 
