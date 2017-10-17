@@ -5,16 +5,9 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
     const annotateTypeFromJSDoc: Refactor = {
         name: "Annotate with type from JSDoc",
         description: Diagnostics.Annotate_with_type_from_JSDoc.message,
-        getEditsForAction: getEditsForAnnotation,
+        getEditsForAction,
         getAvailableActions
     };
-    const annotateFunctionFromJSDoc: Refactor = {
-        name: "Annotate with types from JSDoc",
-        description: Diagnostics.Annotate_with_types_from_JSDoc.message,
-        getEditsForAction: getEditsForFunctionAnnotation,
-        getAvailableActions
-    };
-
     type DeclarationWithType =
         | FunctionLikeDeclaration
         | VariableDeclaration
@@ -23,7 +16,6 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         | PropertyDeclaration;
 
     registerRefactor(annotateTypeFromJSDoc);
-    registerRefactor(annotateFunctionFromJSDoc);
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         if (isInJavaScriptFile(context.file)) {
@@ -37,16 +29,13 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         }
         const jsdocType = getJSDocType(decl);
         const isFunctionWithJSDoc = isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)));
-        const refactor = (isFunctionWithJSDoc || jsdocType && decl.kind === SyntaxKind.Parameter) ? annotateFunctionFromJSDoc :
-            jsdocType ? annotateTypeFromJSDoc :
-            undefined;
-        if (refactor) {
+        if (isFunctionWithJSDoc || jsdocType) {
             return [{
-                name: refactor.name,
-                description: refactor.description,
+                name: annotateTypeFromJSDoc.name,
+                description: annotateTypeFromJSDoc.description,
                 actions: [
                     {
-                    description: refactor.description,
+                    description: annotateTypeFromJSDoc.description,
                     name: actionName
                 }
                 ]
@@ -54,11 +43,29 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         }
     }
 
-    function getEditsForAnnotation(context: RefactorContext, action: string): RefactorEditInfo | undefined {
+    function getEditsForAction(context: RefactorContext, action: string): RefactorEditInfo | undefined {
         if (actionName !== action) {
             return Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
         }
+        const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
+        const decl = findAncestor(node, isDeclarationWithType);
+        if (!decl || decl.type) {
+            return undefined;
+        }
+        const jsdocType = getJSDocType(decl);
+        const isFunctionWithJSDoc = isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)));
+        if (isFunctionWithJSDoc || jsdocType && decl.kind === SyntaxKind.Parameter) {
+            return getEditsForFunctionAnnotation(context);
+        }
+        else if (jsdocType) {
+            return getEditsForAnnotation(context);
+        }
+        else {
+            Debug.assert(!!refactor, "No applicable refactor found.");
+        }
+    }
 
+    function getEditsForAnnotation(context: RefactorContext): RefactorEditInfo | undefined {
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(token, isDeclarationWithType);
@@ -78,11 +85,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         };
     }
 
-    function getEditsForFunctionAnnotation(context: RefactorContext, action: string): RefactorEditInfo | undefined {
-        if (actionName !== action) {
-            return Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
-        }
-
+    function getEditsForFunctionAnnotation(context: RefactorContext): RefactorEditInfo | undefined {
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(token, isFunctionLikeDeclaration);
