@@ -1624,7 +1624,7 @@ namespace ts {
         closingElement: JsxClosingElement;
     }
 
-    /// Either the opening tag in a <Tag>...</Tag> pair, the opening tag in a <>...</> pair, or the lone <Tag /> in a self-closing form
+    /// Either the opening tag in a <Tag>...</Tag> pair or the lone <Tag /> in a self-closing form
     export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
 
     export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
