@@ -88,12 +88,12 @@ namespace ts {
 
         return transformSourceFile;
 
-        function transformComputedPropertyNames(members: ReadonlyArray<ClassElement>, hoistName: (id: Identifier, expression: Expression) => void) {
+        function transformComputedPropertyNames<T>(members: ReadonlyArray<ClassElement>, result: T[], hoistName: (id: Identifier, expression: Expression) => T) {
             return mapDefined(members, member => {
                 if (hasComputedNameWhichRequiresHoisting(member)) {
                     const memberProp = member as PropertyDeclaration;
                     const tempId = getGeneratedNameForNode(member);
-                    hoistName(tempId, (member.name as ComputedPropertyName).expression);
+                    result.push(hoistName(tempId, (member.name as ComputedPropertyName).expression));
                     return updateProperty(memberProp, member.decorators, member.modifiers, createComputedPropertyName(tempId), memberProp.questionToken, memberProp.type, memberProp.initializer);
                 }
                 return member;
@@ -585,6 +585,10 @@ namespace ts {
             return facts;
         }
 
+        function intoDeclaration(id: Identifier, expr: Expression) {
+            return createVariableDeclaration(id, /*type*/ undefined, expr);
+        }
+
         /**
          * Transforms a class declaration with TypeScript syntax into compatible ES6.
          *
@@ -598,7 +602,7 @@ namespace ts {
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const hoistedAssignments: VariableDeclaration[] = [];
-            const transformedMembers = transformComputedPropertyNames(node.members, (id, expr) => hoistedAssignments.push(createVariableDeclaration(id, /*type*/ undefined, expr)));
+            const transformedMembers = transformComputedPropertyNames(node.members, hoistedAssignments, intoDeclaration);
             const staticProperties = getInitializedProperties(transformedMembers, /*isStatic*/ true);
             const facts = getClassFacts(node, staticProperties);
 
@@ -864,6 +868,11 @@ namespace ts {
             return statement;
         }
 
+        function intoAssignment(id: Identifier, expr: Expression) {
+            hoistVariableDeclaration(id);
+            return createAssignment(id, expr);
+        }
+
         /**
          * Transforms a class expression with TypeScript syntax into compatible ES6.
          *
@@ -875,7 +884,7 @@ namespace ts {
          */
         function visitClassExpression(node: ClassExpression): Expression {
             const hoistedExpressions: BinaryExpression[] = [];
-            const transformedMembers = transformComputedPropertyNames(node.members, (id, expr) => hoistedExpressions.push(createAssignment(id, expr)));
+            const transformedMembers = transformComputedPropertyNames(node.members, hoistedExpressions, intoAssignment);
             const staticProperties = getInitializedProperties(transformedMembers, /*isStatic*/ true);
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = transformClassMembers(node, transformedMembers, some(heritageClauses, c => c.token === SyntaxKind.ExtendsKeyword));

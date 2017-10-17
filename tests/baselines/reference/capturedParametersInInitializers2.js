@@ -28,5 +28,5 @@ function foo2(y, x) {
             }()),
         _b); }
     if (x === void 0) { x = 1; }
-    var _b;
+    var _a, _b;
 }

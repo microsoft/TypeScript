@@ -102,4 +102,4 @@ void (_g = foo(), _h = foo(), _j = foo(), _k = fieldNameA, _l = fieldNameB, _m =
             }
         },
     _o);
-var _o;
+var _g, _h, _j, _k, _l, _m, _o;
