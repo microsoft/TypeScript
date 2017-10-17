@@ -242,14 +242,11 @@ namespace ts.server {
             this.markAsDirty();
         }
 
-        /*@internal*/
-        protected abstract getProjectRootPath(): Path | undefined;
-
         isKnownTypesPackageName(name: string): boolean {
             return this.typingsCache.isKnownTypesPackageName(name);
         }
         installPackage(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult> {
-            return this.typingsCache.installPackage({ ...options, projectRootPath: this.getProjectRootPath() });
+            return this.typingsCache.installPackage({ ...options, projectRootPath: this.toPath(this.currentDirectory) });
         }
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
@@ -1127,11 +1124,6 @@ namespace ts.server {
                 exclude: []
             };
         }
-
-        /*@internal*/
-        protected getProjectRootPath(): Path | undefined {
-            return this.projectRootPath as Path;
-        }
     }
 
     /**
@@ -1392,11 +1384,6 @@ namespace ts.server {
                 this.projectErrors.push(getErrorForNoInputFiles(this.configFileSpecs, this.getConfigFilePath()));
             }
         }
-
-        /* @internal */
-        protected getProjectRootPath(): Path | undefined {
-            return this.canonicalConfigFilePath as string as Path;
-        }
     }
 
     /**
@@ -1413,7 +1400,7 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,
-            private readonly projectFilePath?: string) {
+            projectFilePath?: string) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
@@ -1456,11 +1443,6 @@ namespace ts.server {
                 }
             }
             this.typeAcquisition = newTypeAcquisition;
-        }
-
-        /* @internal */
-        protected getProjectRootPath(): Path | undefined {
-            return this.projectFilePath as Path;
         }
     }
 }
