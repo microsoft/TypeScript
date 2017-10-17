@@ -286,7 +286,6 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param {boolean} opts.generateDeclarations: true to compile using --declaration
     * @param {string}  opts.outDir: value for '--outDir' command line option
     * @param {boolean} opts.keepComments: false to compile using --removeComments
-    * @param {boolean} opts.preserveConstEnums: true if compiler should keep const enums in code
     * @param {boolean} opts.noResolve: true if compiler should not include non-rooted files in compilation
     * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
     * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
@@ -316,9 +315,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             options += " --declaration";
         }
 
-        if (opts.preserveConstEnums || useDebugMode) {
-            options += " --preserveConstEnums";
-        }
+        options += " --preserveConstEnums";
 
         if (opts.outDir) {
             options += " --outDir " + opts.outDir;
@@ -590,7 +587,6 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
             /*opts*/ {
         noOutFile: false,
         generateDeclarations: true,
-        preserveConstEnums: true,
         keepComments: true,
         noResolve: false,
         stripInternal: true
@@ -629,7 +625,7 @@ var watchGuardFile = path.join(builtLocalDirectory, "watchGuard.js");
 compileFile(watchGuardFile, watchGuardSources, [builtLocalDirectory].concat(watchGuardSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], outDir: builtLocalDirectory, noOutFile: false, lib: "es6" });
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
-compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources).concat(servicesSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], preserveConstEnums: true, lib: "es6" });
+compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources).concat(servicesSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], lib: "es6" });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 file(typesMapOutputPath, function() {
@@ -648,7 +644,7 @@ compileFile(
     [builtLocalDirectory, copyright, builtLocalCompiler].concat(languageServiceLibrarySources).concat(libraryTargets),
     /*prefixes*/[copyright],
     /*useBuiltCompiler*/ true,
-    { noOutFile: false, generateDeclarations: true, stripInternal: true, preserveConstEnums: true, keepComments: true },
+    { noOutFile: false, generateDeclarations: true, stripInternal: true, keepComments: true },
     /*callback*/ function () {
         prependFile(copyright, tsserverLibraryDefinitionFile);
 
@@ -766,7 +762,7 @@ compileFile(
     /*prereqs*/[builtLocalDirectory, tscFile, tsserverLibraryFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/[],
     /*useBuiltCompiler:*/ true,
-    /*opts*/ { types: ["node", "mocha", "chai"], lib: "es6" });
+    /*opts*/ { types: ["node", "mocha", "chai"], lib: "es6", keepComments: true });
 
 var internalTests = "internal/";
 
