@@ -5760,4 +5760,44 @@ namespace ts.projectSystem {
             }
         });
     });
+
+    describe("Watched recursive directories with windows style file system", () => {
+        function verifyWatchedDirectories(useProjectAtRoot: boolean) {
+            const root = useProjectAtRoot ? "c:/" : "c:/myfolder/allproject/";
+            const configFile: FileOrFolder = {
+                path: root + "project/tsconfig.json",
+                content: "{}"
+            };
+            const file1: FileOrFolder = {
+                path: root + "project/file1.ts",
+                content: "let x = 10;"
+            };
+            const file2: FileOrFolder = {
+                path: root + "project/file2.ts",
+                content: "let y = 10;"
+            };
+            const files = [configFile, file1, file2, libFile];
+            const host = createServerHost(files, { useWindowsStylePaths: true });
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+            const project = projectService.configuredProjects.get(configFile.path);
+            assert.isDefined(project);
+            const winsowsStyleLibFilePath = "c:/" + libFile.path.substring(1);
+            checkProjectActualFiles(project, files.map(f => f === libFile ? winsowsStyleLibFilePath : f.path));
+            checkWatchedFiles(host, mapDefined(files, f => f === libFile ? winsowsStyleLibFilePath : f === file1 ? undefined : f.path));
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, [
+                root + "project",
+                root + "project/node_modules/@types"
+            ].concat(useProjectAtRoot ? [] : [root + nodeModulesAtTypes]), /*recursive*/ true);
+        }
+
+        it("When project is in rootFolder", () => {
+            verifyWatchedDirectories(/*useProjectAtRoot*/ true);
+        });
+
+        it("When files at some folder other than root", () => {
+            verifyWatchedDirectories(/*useProjectAtRoot*/ false);
+        });
+    });
 }
