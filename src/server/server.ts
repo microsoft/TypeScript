@@ -382,14 +382,14 @@ namespace ts.server {
             const request = createInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Scheduling throttled operation: ${JSON.stringify(request)}`);
+                    this.logger.info(`Scheduling throttled operation:${stringifyIndented(request)}`);
                 }
             }
 
             const operationId = project.getProjectName();
             const operation = () => {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Sending request: ${JSON.stringify(request)}`);
+                    this.logger.info(`Sending request:${stringifyIndented(request)}`);
                 }
                 this.send(request);
             };
@@ -409,7 +409,7 @@ namespace ts.server {
 
         private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Received response: ${JSON.stringify(response)}`);
+                this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
 
             switch (response.kind) {
@@ -826,7 +826,7 @@ namespace ts.server {
                 try {
                     const args = [combinePaths(__dirname, "watchGuard.js"), path];
                     if (logger.hasLevel(LogLevel.verbose)) {
-                        logger.info(`Starting ${process.execPath} with args ${JSON.stringify(args)}`);
+                        logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
                     }
                     childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { "ELECTRON_RUN_AS_NODE": "1" } });
                     status = true;
