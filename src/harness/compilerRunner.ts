@@ -48,7 +48,7 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     public checkTestCodeOutput(fileName: string) {
-        describe("compiler tests for " + fileName, () => {
+        describe(`${this.testSuiteName} tests for ${fileName}`, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
             // Everything declared here should be cleared out in the "after" callback.
             let justName: string;

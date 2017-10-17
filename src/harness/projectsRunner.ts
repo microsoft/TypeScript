@@ -443,7 +443,7 @@ class ProjectRunner extends RunnerBase {
 
         const name = "Compiling project for " + testCase.scenario + ": testcase " + testCaseFileName;
 
-        describe("Projects tests", () => {
+        describe("projects tests", () => {
             describe(name, () => {
                 function verifyCompilerResults(moduleKind: ts.ModuleKind) {
                     let compilerResult: BatchCompileProjectTestCaseResult;
