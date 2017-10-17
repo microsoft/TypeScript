@@ -285,7 +285,7 @@ namespace ts.server {
             // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
             const validationResult = JsTyping.validatePackageName(name);
             if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
-                return undefined;
+                return false;
             }
 
             if (this.requestedRegistry) {
