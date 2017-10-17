@@ -1506,16 +1506,19 @@ namespace ts.server {
             }
 
             if (simplifiedResult) {
-                const file = result.renameFilename;
-                let location: protocol.Location | undefined;
-                if (file !== undefined && result.renameLocation !== undefined) {
-                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(file));
-                    location = renameScriptInfo.positionToLineOffset(result.renameLocation);
+                const { renameFilename, renameLocation, edits } = result;
+                let mappedRenameLocation: protocol.Location | undefined;
+                if (renameFilename !== undefined && result.renameLocation !== undefined) {
+                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename));
+                    const oldLocation = renameScriptInfo.positionToLineOffset(result.renameLocation);
+                    const snapshot = renameScriptInfo.getSnapshot();
+                    const oldText = snapshot.getText(0, snapshot.getLength());
+                    mappedRenameLocation = fixupLineAndOffset(oldLocation, oldText, renameLocation, renameFilename, edits);
                 }
                 return {
-                    renameLocation: location,
-                    renameFilename: file,
-                    edits: result.edits.map(change => this.mapTextChangesToCodeEdits(project, change))
+                    renameLocation: mappedRenameLocation,
+                    renameFilename,
+                    edits: edits.map(change => this.mapTextChangesToCodeEdits(project, change))
                 };
             }
             else {
@@ -2014,5 +2017,41 @@ namespace ts.server {
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
         }
+    }
+
+    /* @internal */ // exported for tests only
+    /** Since we will perform the rename in a changed document, line and offset information must be adjusted if the new text adds/deletes newlines. */
+    export function fixupLineAndOffset(oldPosition: protocol.Location, oldText: string, location: number, locationFileName: string, edits: ReadonlyArray<FileTextChanges>): protocol.Location {
+        let { line, offset } = oldPosition;
+        const lineStartOfLocation = location - (offset - 1); // offset is 1-based, location is 0-based
+
+        for (const { fileName, textChanges } of edits) {
+            if (fileName !== locationFileName) {
+                continue;
+            }
+
+            for (const { newText, span: { start, length } } of textChanges) {
+                const newTextNewlines = countNewlines(newText);
+                line += newTextNewlines - countNewlines(oldText.slice(start, start + length));
+                if (start > lineStartOfLocation && start < location) {
+                    offset += newText.length - length;
+                    if (newTextNewlines !== 0) {
+                        offset -= newText.lastIndexOf("\n");
+                    }
+                }
+            }
+        }
+
+        return { line, offset };
+    }
+
+    function countNewlines(s: string): number {
+        let count = 0;
+        for (let i = 0; i < s.length; i++) {
+            if (s.charCodeAt(i) === CharacterCodes.lineFeed) {
+                count++;
+            }
+        }
+        return count;
     }
 }

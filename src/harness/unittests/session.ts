@@ -661,4 +661,26 @@ namespace ts.server {
             session.consumeQueue();
         });
     });
+
+    describe("helpers", () => {
+        it(fixupLineAndOffset.name, () => {
+            const text = `// blank line\nconst x = 0;`;
+            const newLocation = text.indexOf("0");
+            const fileName = "/a.ts";
+            const edits: ts.FileTextChanges = {
+                fileName,
+                textChanges: [
+                    {
+                        span: { start: 0, length: 0 },
+                        newText: "const newLocal = 0;\n\n",
+                    },
+                    {
+                        span: { start: newLocation, length: 1 },
+                        newText: "newLocal",
+                    },
+                ],
+            };
+            fixupLineAndOffset({ line: 2, offset: 11 }, text, newLocation, fileName, [edits]);
+        });
+    });
 }
