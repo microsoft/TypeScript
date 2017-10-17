@@ -801,6 +801,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor_2715" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Abstract property '{0}' in class '{1}' cannot be accessed in the constructor.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Accessibility_modifier_already_seen_1028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Accessibility modifier already seen.]]></Val>
@@ -1338,6 +1344,18 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Annotate_with_type_from_JSDoc_95009" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Annotate with type from JSDoc]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Annotate_with_types_from_JSDoc_95010" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Annotate with types from JSDoc]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Argument_expression_expected_1135" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Argument expression expected.]]></Val>
@@ -1482,6 +1500,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Variable de portée de bloc '{0}' utilisée avant sa déclaration.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Call_decorator_expression_90028" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Call decorator expression.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1892,12 +1916,12 @@
       </Item>
       <Item ItemId=";Change_0_to_1_90014" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change {0} to {1}.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
+          <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Update" Orig="New">
             <Val><![CDATA[Changez {0} en {1}.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Change {0} to {1}]]></Val>
+            <Val><![CDATA[Change {0} to {1}.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -2010,6 +2034,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Classe '{0}' utilisée avant sa déclaration.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_declarations_cannot_have_more_than_one_augments_or_extends_tag_8025" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class declarations cannot have more than one `@augments` or `@extends` tag.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3795,6 +3825,18 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infer parameter types from usage.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Infer_type_of_0_from_usage_95011" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Initialize_property_0_in_the_constructor_90020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
@@ -3987,21 +4029,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";JSDoc_augments_0_does_not_match_the_extends_1_clause_8023" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";JSDoc_0_1_does_not_match_the_extends_2_clause_8023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[JSDoc '@augments {0}' does not match the 'extends {1}' clause.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La balise JSDoc '@augments {0}' ne correspond pas à la clause 'extends {1}'.]]></Val>
-          </Tgt>
+          <Val><![CDATA[JSDoc '@{0} {1}' does not match the 'extends {2}' clause.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";JSDoc_augments_is_not_attached_to_a_class_declaration_8022" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";JSDoc_0_is_not_attached_to_a_class_8022" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[JSDoc '@augments' is not attached to a class declaration.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La balise JSDoc '@augments' n'est pas attaché à une déclaration de classe.]]></Val>
-          </Tgt>
+          <Val><![CDATA[JSDoc '@{0}' is not attached to a class.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7263,6 +7299,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_parameter_0_has_a_circular_default_2716" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type parameter '{0}' has a circular default.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1_4008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
@@ -7740,6 +7782,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Vous ne pouvez pas renommer cet élément.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write__1329" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
