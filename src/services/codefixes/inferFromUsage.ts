@@ -575,7 +575,7 @@ namespace ts.codefix {
                 if (usageContext.properties) {
                     usageContext.properties.forEach((context, name) => {
                         const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                        symbol.type = getTypeFromUsageContext(context, checker);
+                        symbol.type = getTypeFromUsageContext(context, checker) || checker.getAnyType();
                         members.set(name, symbol);
                     });
                 }
