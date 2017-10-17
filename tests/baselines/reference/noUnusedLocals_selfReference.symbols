@@ -29,24 +29,23 @@ enum E { A = 0, B = E.A }
 >E : Symbol(E, Decl(noUnusedLocals_selfReference.ts, 10, 1))
 >A : Symbol(E.A, Decl(noUnusedLocals_selfReference.ts, 11, 8))
 
-// Does not detect mutual recursion.
-function g() { D; }
->g : Symbol(g, Decl(noUnusedLocals_selfReference.ts, 11, 25))
->D : Symbol(D, Decl(noUnusedLocals_selfReference.ts, 14, 19))
-
-class D { m() { g; } }
->D : Symbol(D, Decl(noUnusedLocals_selfReference.ts, 14, 19))
->m : Symbol(D.m, Decl(noUnusedLocals_selfReference.ts, 15, 9))
->g : Symbol(g, Decl(noUnusedLocals_selfReference.ts, 11, 25))
-
-// Does not work on private methods.
 class P { private m() { this.m; } }
->P : Symbol(P, Decl(noUnusedLocals_selfReference.ts, 15, 22))
->m : Symbol(P.m, Decl(noUnusedLocals_selfReference.ts, 18, 9))
->this.m : Symbol(P.m, Decl(noUnusedLocals_selfReference.ts, 18, 9))
->this : Symbol(P, Decl(noUnusedLocals_selfReference.ts, 15, 22))
->m : Symbol(P.m, Decl(noUnusedLocals_selfReference.ts, 18, 9))
+>P : Symbol(P, Decl(noUnusedLocals_selfReference.ts, 11, 25))
+>m : Symbol(P.m, Decl(noUnusedLocals_selfReference.ts, 13, 9))
+>this.m : Symbol(P.m, Decl(noUnusedLocals_selfReference.ts, 13, 9))
+>this : Symbol(P, Decl(noUnusedLocals_selfReference.ts, 11, 25))
+>m : Symbol(P.m, Decl(noUnusedLocals_selfReference.ts, 13, 9))
 
 P;
->P : Symbol(P, Decl(noUnusedLocals_selfReference.ts, 15, 22))
+>P : Symbol(P, Decl(noUnusedLocals_selfReference.ts, 11, 25))
+
+// Does not detect mutual recursion.
+function g() { D; }
+>g : Symbol(g, Decl(noUnusedLocals_selfReference.ts, 14, 2))
+>D : Symbol(D, Decl(noUnusedLocals_selfReference.ts, 17, 19))
+
+class D { m() { g; } }
+>D : Symbol(D, Decl(noUnusedLocals_selfReference.ts, 17, 19))
+>m : Symbol(D.m, Decl(noUnusedLocals_selfReference.ts, 18, 9))
+>g : Symbol(g, Decl(noUnusedLocals_selfReference.ts, 14, 2))
 

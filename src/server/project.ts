@@ -242,8 +242,14 @@ namespace ts.server {
             this.markAsDirty();
         }
 
+        // Method of LanguageServiceHost
         getCompilationSettings() {
             return this.compilerOptions;
+        }
+
+        // Method to support public API
+        getCompilerOptions() {
+            return this.getCompilationSettings();
         }
 
         getNewLine() {
@@ -1047,12 +1053,15 @@ namespace ts.server {
             super.setCompilerOptions(newOptions);
         }
 
+        /** this is canonical project root path */
+        readonly projectRootPath: string | undefined;
+
         /*@internal*/
         constructor(
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
-            readonly projectRootPath: string | undefined,
+            projectRootPath: string | undefined,
             currentDirectory: string | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
@@ -1064,6 +1073,7 @@ namespace ts.server {
                 /*compileOnSaveEnabled*/ false,
                 projectService.host,
                 currentDirectory);
+            this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
         }
 
         addRoot(info: ScriptInfo) {

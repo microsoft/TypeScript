@@ -93,6 +93,7 @@ namespace A {
         }
     }
 }
+
 function newFunction(x: number, a: number) {
     let y = 5;
     let z = x;

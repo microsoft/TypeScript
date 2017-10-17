@@ -152,6 +152,16 @@ namespace ts {
                     }
                 }
             `);
+            testExtractRange(`
+                function f(x: number) {
+                    [#|[$|try {
+                        x++;
+                    }
+                    finally {
+                        return 1;
+                    }|]|]
+                }
+            `);
         });
 
         testExtractRangeFailed("extractRangeFailed1",
@@ -311,6 +321,23 @@ switch (x) {
         `,
         [
             refactor.extractSymbol.Messages.CannotExtractRange.message
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed11",
+        `
+            function f(x: number) {
+                while (true) {
+                    [#|try {
+                        x++;
+                    }
+                    finally {
+                        break;
+                    }|]
+                }
+            }
+        `,
+        [
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.CannotExtractIdentifier.message]);

@@ -314,6 +314,7 @@ namespace ts {
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
 
         const globals = createSymbolTable();
+        let ambientModulesCache: Symbol[] | undefined;
         /**
          * List of every ambient module with a "*" wildcard.
          * Unlike other ambient modules, these can't be stored in `globals` because symbol tables only deal with exact matches.
@@ -3399,7 +3400,7 @@ namespace ts {
                     else if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral &&
                              type.symbol.valueDeclaration &&
                              type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
-                        writeAnonymousType(getDeclaredTypeOfClassOrInterface(type.symbol), flags);
+                        writeAnonymousType(type, flags);
                     }
                     else {
                         // Write the type reference in the format f<A>.g<B>.C<X, Y> where A and B are type arguments
@@ -5778,7 +5779,7 @@ namespace ts {
                 for (const propertySymbol of getPropertiesOfType(modifiersType)) {
                     addMemberForKeyType(getLiteralTypeFromPropertyName(propertySymbol), propertySymbol);
                 }
-                if (getIndexInfoOfType(modifiersType, IndexKind.String)) {
+                if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
                 }
             }
@@ -5822,7 +5823,7 @@ namespace ts {
                     prop.syntheticLiteralTypeOrigin = t as StringLiteralType;
                     members.set(propName, prop);
                 }
-                else if (t.flags & TypeFlags.String) {
+                else if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
                     stringIndexInfo = createIndexInfo(propType, templateReadonly);
                 }
             }
@@ -8386,7 +8387,7 @@ namespace ts {
         }
 
         function isMappableType(type: Type) {
-            return type.flags & (TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.Intersection | TypeFlags.IndexedAccess);
+            return type.flags & (TypeFlags.Any | TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.Intersection | TypeFlags.IndexedAccess);
         }
 
         function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper): AnonymousType {
@@ -13192,7 +13193,7 @@ namespace ts {
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available
-        function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
+        function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type | undefined {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                 const iife = getImmediatelyInvokedFunctionExpression(func);
@@ -13218,7 +13219,12 @@ namespace ts {
                 if (contextualSignature) {
                     const funcHasRestParameters = hasRestParameter(func);
                     const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
-                    const indexOfParameter = indexOf(func.parameters, parameter);
+                    let indexOfParameter = indexOf(func.parameters, parameter);
+                    if (getThisParameter(func) !== undefined && !contextualSignature.thisParameter) {
+                        Debug.assert(indexOfParameter !== 0); // Otherwise we should not have called `getContextuallyTypedParameterType`.
+                        indexOfParameter -= 1;
+                    }
+
                     if (indexOfParameter < len) {
                         return getTypeAtPosition(contextualSignature, indexOfParameter);
                     }
@@ -15020,7 +15026,7 @@ namespace ts {
 
             checkPropertyNotUsedBeforeDeclaration(prop, node, right);
 
-            markPropertyAsReferenced(prop, node);
+            markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
 
             getNodeLinks(node).resolvedSymbol = prop;
 
@@ -15210,12 +15216,21 @@ namespace ts {
             return bestCandidate;
         }
 
-        function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined) {
+        function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
             if (prop &&
                 noUnusedIdentifiers &&
                 (prop.flags & SymbolFlags.ClassMember) &&
                 prop.valueDeclaration && hasModifier(prop.valueDeclaration, ModifierFlags.Private)
                 && !(nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly))) {
+
+                if (isThisAccess) {
+                    // Find any FunctionLikeDeclaration because those create a new 'this' binding. But this should only matter for methods (or getters/setters).
+                    const containingMethod = findAncestor(nodeForCheckWriteOnly, isFunctionLikeDeclaration);
+                    if (containingMethod && containingMethod.symbol === prop) {
+                        return;
+                    }
+                }
+
                 if (getCheckFlags(prop) & CheckFlags.Instantiated) {
                     getSymbolLinks(prop).target.isReferenced = true;
                 }
@@ -16845,9 +16860,10 @@ namespace ts {
                     // in a JS file
                     // Note:JS inferred classes might come from a variable declaration instead of a function declaration.
                     // In this case, using getResolvedSymbol directly is required to avoid losing the members from the declaration.
-                    const funcSymbol = node.expression.kind === SyntaxKind.Identifier ?
-                        getResolvedSymbol(node.expression as Identifier) :
-                        checkExpression(node.expression).symbol;
+                    let funcSymbol = checkExpression(node.expression).symbol;
+                    if (!funcSymbol && node.expression.kind === SyntaxKind.Identifier) {
+                        funcSymbol = getResolvedSymbol(node.expression as Identifier);
+                    }
                     const type = funcSymbol && getJavaScriptClassType(funcSymbol);
                     if (type) {
                         return type;
@@ -19681,7 +19697,7 @@ namespace ts {
                     return undefined;
                 }
 
-                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types, /*subtypeReduction*/ true);
+                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types);
             }
 
             const promisedType = getPromisedTypeOfPromise(type);
@@ -20710,7 +20726,7 @@ namespace ts {
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
-                markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined); // A destructuring is never a write-only reference.
+                markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
                 if (parent.initializer && property) {
                     checkPropertyAccessibility(parent, parent.initializer, parentType, property);
                 }
@@ -25581,13 +25597,16 @@ namespace ts {
         }
 
         function getAmbientModules(): Symbol[] {
-            const result: Symbol[] = [];
-            globals.forEach((global, sym) => {
-                if (ambientModuleSymbolRegex.test(unescapeLeadingUnderscores(sym))) {
-                    result.push(global);
-                }
-            });
-            return result;
+            if (!ambientModulesCache) {
+                ambientModulesCache = [];
+                globals.forEach((global, sym) => {
+                    // No need to `unescapeLeadingUnderscores`, an escaped symbol is never an ambient module.
+                    if (ambientModuleSymbolRegex.test(sym as string)) {
+                        ambientModulesCache.push(global);
+                    }
+                });
+            }
+            return ambientModulesCache;
         }
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {

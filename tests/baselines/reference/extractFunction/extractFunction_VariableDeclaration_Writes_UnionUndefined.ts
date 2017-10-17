@@ -33,6 +33,7 @@ function f() {
     ({ x, y, z, a } = /*RENAME*/newFunction(a));
     a; x; y; z;
 }
+
 function newFunction(a: number) {
     let x: number | undefined = 1;
     let y: undefined | number = 2;

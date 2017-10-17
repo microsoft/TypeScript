@@ -14,6 +14,7 @@ function F<T, U extends T[], V extends U[]>(v: V) {
 function F<T, U extends T[], V extends U[]>(v: V) {
     /*RENAME*/newFunction<T, U, V>(v);
 }
+
 function newFunction<T, U extends T[], V extends U[]>(v: V) {
     v.toString();
 }

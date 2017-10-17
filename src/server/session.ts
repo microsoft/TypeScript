@@ -131,7 +131,7 @@ namespace ts.server {
 
         const json = JSON.stringify(msg);
         if (verboseLogging) {
-            logger.info(msg.type + ": " + json);
+            logger.info(msg.type + ":\n" + indent(json));
         }
 
         const len = byteLength(json, "utf8");
@@ -383,9 +383,9 @@ namespace ts.server {
         public logError(err: Error, cmd: string) {
             let msg = "Exception on executing command " + cmd;
             if (err.message) {
-                msg += ":\n" + err.message;
+                msg += ":\n" + indent(err.message);
                 if ((<StackTraceError>err).stack) {
-                    msg += "\n" + (<StackTraceError>err).stack;
+                    msg += "\n" + indent((<StackTraceError>err).stack);
                 }
             }
             this.logger.msg(msg, Msg.Err);
@@ -1178,11 +1178,12 @@ namespace ts.server {
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position);
             if (simplifiedResult) {
-                return mapDefined(completions && completions.entries, entry => {
+                return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
                         const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
-                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                        // Use `hasAction || undefined` to avoid serializing `false`.
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined };
                     }
                 }).sort((a, b) => compareStrings(a.name, b.name));
             }
@@ -1193,10 +1194,20 @@ namespace ts.server {
 
         private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs): ReadonlyArray<protocol.CompletionEntryDetails> {
             const { file, project } = this.getFileAndProject(args);
-            const position = this.getPositionInFile(args, file);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+            const position = this.getPosition(args, scriptInfo);
+            const formattingOptions = project.projectService.getFormatCodeOptions(file);
 
-            return mapDefined(args.entryNames, entryName =>
-                project.getLanguageService().getCompletionEntryDetails(file, position, entryName));
+            return mapDefined(args.entryNames, entryName => {
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName, formattingOptions);
+                if (details) {
+                    const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
+                    return { ...details, codeActions: mappedCodeActions };
+                }
+                else {
+                    return undefined;
+                }
+            });
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): ReadonlyArray<protocol.CompileOnSaveAffectedFileListSingleProject> {
@@ -1951,7 +1962,7 @@ namespace ts.server {
                 return this.executeWithRequestId(request.seq, () => handler(request));
             }
             else {
-                this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);
+                this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
                 this.output(undefined, CommandNames.Unknown, request.seq, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }
@@ -1963,7 +1974,7 @@ namespace ts.server {
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
                 if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`request: ${message}`);
+                    this.logger.info(`request:${indent(message)}`);
                 }
             }
 
