@@ -7971,7 +7971,7 @@ namespace ts {
 
             const spread = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             spread.flags |= propagatedFlags;
-            spread.flags |= TypeFlags.FreshLiteral;
+            spread.flags |= TypeFlags.FreshLiteral | TypeFlags.ContainsObjectLiteral;
             (spread as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
             spread.symbol = symbol;
             return spread;
