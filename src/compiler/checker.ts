@@ -11378,6 +11378,18 @@ namespace ts {
         }
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
+            if (type.flags & TypeFlags.IndexedAccess) {
+                // TODO (weswig): This is a substitute for a lazy negated type to remove the types indicated by the TypeFacts from the (potential) union the IndexedAccess refers to
+                //  - instead of defering the resolution of the access, we apply the facts to the base constraint of the access instead; so this works under most circumstances,
+                //    like when the index refers to an optional member and you want to access that member, but unfortunately if that member's type is supposed to vary with the base,
+                //    then the eager evaluation of this removes that relationship
+                const innerType = getBaseConstraintOfType(type) || emptyObjectType;
+                const result = filterType(innerType, t => (getTypeFacts(t) & include) !== 0);
+                if (result !== innerType) {
+                    return result;
+                }
+                return type;
+            }
             return filterType(type, t => (getTypeFacts(t) & include) !== 0);
         }
 
