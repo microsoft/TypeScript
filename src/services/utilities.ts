@@ -1,3 +1,12 @@
+/* @internal */ // Don't expose that we use this
+// Based on lib.es6.d.ts
+interface PromiseConstructor {
+    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    reject(reason: any): Promise<never>;
+}
+/* @internal */
+declare var Promise: PromiseConstructor;
+
 // These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {

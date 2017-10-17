@@ -14,7 +14,7 @@ namespace ts.server {
     }
 
     /* @internal */
-    export function extractMessage(message: string) {
+    export function extractMessage(message: string): string {
         // Read the content length
         const contentLengthPrefix = "Content-Length: ";
         const lines = message.split(/\r?\n/);
@@ -541,6 +541,8 @@ namespace ts.server {
 
             return response.body.map(entry => this.convertCodeActions(entry, file));
         }
+
+        applyCodeActionCommand = notImplemented;
 
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
             return typeof positionOrRange === "number"

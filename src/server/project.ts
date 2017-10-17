@@ -242,6 +242,16 @@ namespace ts.server {
             this.markAsDirty();
         }
 
+        isKnownTypesPackageName(name: string): boolean {
+            return this.typingsCache.isKnownTypesPackageName(name);
+        }
+        installPackage(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult> {
+            return this.typingsCache.installPackage({ ...options, projectRootPath: this.toPath(this.currentDirectory) });
+        }
+        private get typingsCache(): TypingsCache {
+            return this.projectService.typingsCache;
+        }
+
         // Method of LanguageServiceHost
         getCompilationSettings() {
             return this.compilerOptions;

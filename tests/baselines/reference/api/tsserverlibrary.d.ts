@@ -3869,7 +3869,11 @@ declare namespace ts {
     interface HostCancellationToken {
         isCancellationRequested(): boolean;
     }
-    interface LanguageServiceHost {
+    interface InstallPackageOptions {
+        fileName: Path;
+        packageName: string;
+    }
+    interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -3879,7 +3883,6 @@ declare namespace ts {
         getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): HostCancellationToken;
-        getCurrentDirectory(): string;
         getDefaultLibFileName(options: CompilerOptions): string;
         log?(s: string): void;
         trace?(s: string): void;
@@ -3891,12 +3894,13 @@ declare namespace ts {
         getTypeRootsVersion?(): number;
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-        directoryExists?(directoryName: string): boolean;
         getDirectories?(directoryName: string): string[];
         /**
          * Gets a set of custom transformers to use during emit.
          */
         getCustomTransformers?(): CustomTransformers | undefined;
+        isKnownTypesPackageName?(name: string): boolean;
+        installPackage?(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult>;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -3944,12 +3948,16 @@ declare namespace ts {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        applyCodeActionCommand(fileName: string, action: CodeActionCommand): PromiseLike<ApplyCodeActionCommandResult>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, isDetailed?: boolean): EmitOutput | EmitOutputDetailed;
         getProgram(): Program;
         dispose(): void;
+    }
+    interface ApplyCodeActionCommandResult {
+        successMessage: string;
     }
     interface Classifications {
         spans: number[];
@@ -4015,6 +4023,14 @@ declare namespace ts {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileTextChanges[];
+        /**
+         * If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
+         * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
+         */
+        commands?: CodeActionCommand[];
+    }
+    type CodeActionCommand = InstallPackageAction;
+    interface InstallPackageAction {
     }
     /**
      * A set of one or more available refactoring actions, grouped under a parent refactoring.
@@ -4063,6 +4079,7 @@ declare namespace ts {
         edits: FileTextChanges[];
         renameFilename: string | undefined;
         renameLocation: number | undefined;
+        commands?: CodeActionCommand[];
     }
     interface TextInsertion {
         newText: string;
@@ -4633,11 +4650,10 @@ declare namespace ts.server {
     interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
         " __sortedArrayBrand": any;
     }
-    interface TypingInstallerRequest {
+    interface TypingInstallerRequestWithProjectName {
         readonly projectName: string;
-        readonly kind: "discover" | "closeProject";
     }
-    interface DiscoverTypings extends TypingInstallerRequest {
+    interface DiscoverTypings extends TypingInstallerRequestWithProjectName {
         readonly fileNames: string[];
         readonly projectRootPath: Path;
         readonly compilerOptions: CompilerOptions;
@@ -4646,16 +4662,27 @@ declare namespace ts.server {
         readonly cachePath?: string;
         readonly kind: "discover";
     }
-    interface CloseProject extends TypingInstallerRequest {
+    interface CloseProject extends TypingInstallerRequestWithProjectName {
         readonly kind: "closeProject";
+    }
+    interface TypesRegistryRequest {
+        readonly kind: "typesRegistry";
+    }
+    interface InstallPackageRequest {
+        readonly kind: "installPackage";
+        readonly fileName: Path;
+        readonly packageName: string;
+        readonly projectRootPath: Path;
     }
     type ActionSet = "action::set";
     type ActionInvalidate = "action::invalidate";
+    type EventTypesRegistry = "event::typesRegistry";
+    type EventPackageInstalled = "event::packageInstalled";
     type EventBeginInstallTypes = "event::beginInstallTypes";
     type EventEndInstallTypes = "event::endInstallTypes";
     type EventInitializationFailed = "event::initializationFailed";
     interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | EventPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
     interface InitializationFailedResponse extends TypingInstallerResponse {
         readonly kind: EventInitializationFailed;
@@ -4691,6 +4718,8 @@ declare namespace ts.server {
 declare namespace ts.server {
     const ActionSet: ActionSet;
     const ActionInvalidate: ActionInvalidate;
+    const EventTypesRegistry: EventTypesRegistry;
+    const EventPackageInstalled: EventPackageInstalled;
     const EventBeginInstallTypes: EventBeginInstallTypes;
     const EventEndInstallTypes: EventEndInstallTypes;
     const EventInitializationFailed: EventInitializationFailed;
@@ -4828,6 +4857,7 @@ declare namespace ts.server.protocol {
         DocCommentTemplate = "docCommentTemplate",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
+        ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
         GetEditsForRefactor = "getEditsForRefactor",
@@ -4849,6 +4879,7 @@ declare namespace ts.server.protocol {
      * Client-initiated request message
      */
     interface Request extends Message {
+        type: "request";
         /**
          * The command to execute
          */
@@ -4868,6 +4899,7 @@ declare namespace ts.server.protocol {
      * Server-initiated event message
      */
     interface Event extends Message {
+        type: "event";
         /**
          * Name of event
          */
@@ -4881,6 +4913,7 @@ declare namespace ts.server.protocol {
      * Response by server to client request message.
      */
     interface Response extends Message {
+        type: "response";
         /**
          * Sequence number of the request message.
          */
@@ -4894,7 +4927,8 @@ declare namespace ts.server.protocol {
          */
         command: string;
         /**
-         * Contains error message if success === false.
+         * If success === false, this should always be provided.
+         * Otherwise, may (or may not) contain a success message.
          */
         message?: string;
         /**
@@ -5170,6 +5204,12 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
     }
+    interface ApplyCodeActionCommandRequest extends Request {
+        command: CommandTypes.ApplyCodeActionCommand;
+        arguments: ApplyCodeActionCommandRequestArgs;
+    }
+    interface ApplyCodeActionCommandResponse extends Response {
+    }
     interface FileRangeRequestArgs extends FileRequestArgs {
         /**
          * The line number for the request (1-based).
@@ -5196,6 +5236,9 @@ declare namespace ts.server.protocol {
          * Errorcodes we want to get the fixes for.
          */
         errorCodes?: number[];
+    }
+    interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+        command: {};
     }
     /**
      * Response for GetCodeFixes request.
@@ -5935,6 +5978,8 @@ declare namespace ts.server.protocol {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileCodeEdits[];
+        /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
+        commands?: {}[];
     }
     /**
      * Format and format on key response message.
@@ -6852,6 +6897,7 @@ declare namespace ts.server {
         send(msg: protocol.Message): void;
         event<T>(info: T, eventName: string): void;
         output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
+        private doOutput(info, cmdName, reqSeq, success, message?);
         private semanticCheck(file, project);
         private syntacticCheck(file, project);
         private updateErrorCheck(next, checkList, ms, requireOpen?);
@@ -6927,8 +6973,9 @@ declare namespace ts.server {
         private getApplicableRefactors(args);
         private getEditsForRefactor(args, simplifiedResult);
         private getCodeFixes(args, simplifiedResult);
+        private applyCodeActionCommand(commandName, requestSeq, args);
         private getStartAndEndPosition(args, scriptInfo);
-        private mapCodeAction(codeAction, scriptInfo);
+        private mapCodeAction({description, changes: unmappedChanges, commands}, scriptInfo);
         private mapTextChangesToCodeEdits(project, textChanges);
         private convertTextChangeToCodeEdit(change, scriptInfo);
         private getBraceMatching(args, simplifiedResult);
@@ -6938,18 +6985,16 @@ declare namespace ts.server {
         private notRequired();
         private requiredResponse(response);
         private handlers;
-        addProtocolHandler(command: string, handler: (request: protocol.Request) => {
-            response?: any;
-            responseRequired: boolean;
-        }): void;
+        addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse): void;
         private setCurrentRequest(requestId);
         private resetCurrentRequest(requestId);
         executeWithRequestId<T>(requestId: number, f: () => T): T;
-        executeCommand(request: protocol.Request): {
-            response?: any;
-            responseRequired?: boolean;
-        };
+        executeCommand(request: protocol.Request): HandlerResponse;
         onMessage(message: string): void;
+    }
+    interface HandlerResponse {
+        response?: {};
+        responseRequired?: boolean;
     }
 }
 declare namespace ts.server {
@@ -7015,7 +7060,12 @@ declare namespace ts {
     function updateWatchingWildcardDirectories(existingWatchedForWildcards: Map<WildcardDirectoryWatcher>, wildcardDirectories: Map<WatchDirectoryFlags>, watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher): void;
 }
 declare namespace ts.server {
+    interface InstallPackageOptionsWithProjectRootPath extends InstallPackageOptions {
+        projectRootPath: Path;
+    }
     interface ITypingsInstaller {
+        isKnownTypesPackageName(name: string): boolean;
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -7026,6 +7076,8 @@ declare namespace ts.server {
         private readonly installer;
         private readonly perProjectCache;
         constructor(installer: ITypingsInstaller);
+        isKnownTypesPackageName(name: string): boolean;
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult>;
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string>;
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]): void;
         deleteTypingsForProject(projectName: string): void;
@@ -7120,6 +7172,9 @@ declare namespace ts.server {
         isJsOnlyProject(): boolean;
         getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
+        isKnownTypesPackageName(name: string): boolean;
+        installPackage(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult>;
+        private readonly typingsCache;
         getCompilationSettings(): CompilerOptions;
         getCompilerOptions(): CompilerOptions;
         getNewLine(): string;

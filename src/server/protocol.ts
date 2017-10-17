@@ -94,6 +94,7 @@ namespace ts.server.protocol {
         BreakpointStatement = "breakpointStatement",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
+        ApplyCodeActionCommand = "applyCodeActionCommand",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
@@ -125,6 +126,8 @@ namespace ts.server.protocol {
      * Client-initiated request message
      */
     export interface Request extends Message {
+        type: "request";
+
         /**
          * The command to execute
          */
@@ -147,6 +150,8 @@ namespace ts.server.protocol {
      * Server-initiated event message
      */
     export interface Event extends Message {
+        type: "event";
+
         /**
          * Name of event
          */
@@ -162,6 +167,8 @@ namespace ts.server.protocol {
      * Response by server to client request message.
      */
     export interface Response extends Message {
+        type: "response";
+
         /**
          * Sequence number of the request message.
          */
@@ -178,7 +185,8 @@ namespace ts.server.protocol {
         command: string;
 
         /**
-         * Contains error message if success === false.
+         * If success === false, this should always be provided.
+         * Otherwise, may (or may not) contain a success message.
          */
         message?: string;
 
@@ -520,6 +528,14 @@ namespace ts.server.protocol {
         arguments: CodeFixRequestArgs;
     }
 
+    export interface ApplyCodeActionCommandRequest extends Request {
+        command: CommandTypes.ApplyCodeActionCommand;
+        arguments: ApplyCodeActionCommandRequestArgs;
+    }
+
+    // All we need is the `success` and `message` fields of Response.
+    export interface ApplyCodeActionCommandResponse extends Response {}
+
     export interface FileRangeRequestArgs extends FileRequestArgs {
         /**
          * The line number for the request (1-based).
@@ -562,6 +578,10 @@ namespace ts.server.protocol {
          * Errorcodes we want to get the fixes for.
          */
         errorCodes?: number[];
+    }
+
+    export interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+        command: {};
     }
 
     /**
@@ -1541,6 +1561,8 @@ namespace ts.server.protocol {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileCodeEdits[];
+        /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
+        commands?: {}[];
     }
 
     /**
