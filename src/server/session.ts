@@ -2049,8 +2049,17 @@ namespace ts.server {
     function countNewlines(s: string): number {
         let count = 0;
         for (let i = 0; i < s.length; i++) {
-            if (s.charCodeAt(i) === CharacterCodes.lineFeed) {
-                count++;
+            switch (s.charCodeAt(i)) {
+                case CharacterCodes.carriageReturn:
+                    count++;
+                    i++;
+                    // Skip a "\n" after a "\r" because "\r\n" is only one newline. But "\r\r" is two.
+                    if (s.charCodeAt(i) === CharacterCodes.carriageReturn) {
+                        count++;
+                    }
+                    break;
+                case CharacterCodes.lineFeed:
+                    count++;
             }
         }
         return count;
