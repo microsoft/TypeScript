@@ -680,7 +680,8 @@ namespace ts.server {
                     },
                 ],
             };
-            fixupLineAndOffset({ line: 2, offset: 11 }, text, newLocation, fileName, [edits]);
+            const res = fixupLineAndOffset({ line: 2, offset: 11 }, text, newLocation, fileName, [edits]);
+            assert.deepEqual(res, { line: 4, offset: 11 });
         });
     });
 }

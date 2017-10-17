@@ -1508,7 +1508,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 const { renameFilename, renameLocation, edits } = result;
                 let mappedRenameLocation: protocol.Location | undefined;
-                if (renameFilename !== undefined && result.renameLocation !== undefined) {
+                if (renameFilename !== undefined && renameLocation !== undefined) {
                     const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename));
                     const oldLocation = renameScriptInfo.positionToLineOffset(result.renameLocation);
                     const snapshot = renameScriptInfo.getSnapshot();
@@ -2023,17 +2023,18 @@ namespace ts.server {
     /** Since we will perform the rename in a changed document, line and offset information must be adjusted if the new text adds/deletes newlines. */
     export function fixupLineAndOffset(oldPosition: protocol.Location, oldText: string, location: number, locationFileName: string, edits: ReadonlyArray<FileTextChanges>): protocol.Location {
         let { line, offset } = oldPosition;
-        const lineStartOfLocation = location - (offset - 1); // offset is 1-based, location is 0-based
+        const oldLineStartOfLocation = location - (offset - 1); // offset is 1-based, location is 0-based
 
         for (const { fileName, textChanges } of edits) {
             if (fileName !== locationFileName) {
                 continue;
             }
 
+            // Text change spans are in the *old* document. They apply all at once rather than sequentially.
             for (const { newText, span: { start, length } } of textChanges) {
                 const newTextNewlines = countNewlines(newText);
                 line += newTextNewlines - countNewlines(oldText.slice(start, start + length));
-                if (start > lineStartOfLocation && start < location) {
+                if (start > oldLineStartOfLocation && start < location) {
                     offset += newText.length - length;
                     if (newTextNewlines !== 0) {
                         offset -= newText.lastIndexOf("\n");
