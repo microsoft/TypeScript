@@ -1372,13 +1372,30 @@ namespace ts.server {
             this.projectToSizeMap.forEach(val => (availableSpace -= (val || 0)));
 
             let totalNonTsFileSize = 0;
+            let top5LargestFiles = [] as { name: string, size: number }[];
+
             for (const f of fileNames) {
                 const fileName = propertyReader.getFileName(f);
                 if (hasTypeScriptFileExtension(fileName)) {
                     continue;
                 }
-                totalNonTsFileSize += this.host.getFileSize(fileName);
+
+                const fileSize = this.host.getFileSize(fileName);
+
+                if (top5LargestFiles.length < 5) {
+                    top5LargestFiles.push({ name: fileName, size: fileSize });
+                    top5LargestFiles.sort((a, b) => b.size - a.size);
+                }
+                else {
+                    let smallerFileIndex: number;
+                    const found = top5LargestFiles.some((file, index) => { smallerFileIndex = index; return file.size < fileSize; });
+                    if (found) {
+                        top5LargestFiles = [...top5LargestFiles.slice(0, smallerFileIndex!), { name: fileName, size: fileSize }, ...top5LargestFiles.slice(smallerFileIndex!, 4)];
+                    }
+                }
+                totalNonTsFileSize += fileSize;
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
+                    this.logger.info(`Non TS file size exceeded limit (${maxProgramSizeForNonTsFiles}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`);
                     // Keep the size as zero since it's disabled
                     return true;
                 }
