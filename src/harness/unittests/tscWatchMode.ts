@@ -1105,6 +1105,46 @@ namespace ts.tscWatch {
             const outJs = "/a/out.js";
             createWatchForOut(/*out*/ undefined, outJs);
         });
+
+        it("with --outFile and multiple declaration files in the program", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/output/AnotherDependency/file1.d.ts",
+                content: "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/dependencies/file2.d.ts",
+                content: "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }"
+            };
+            const file3: FileOrFolder = {
+                path: "/a/b/project/src/main.ts",
+                content: "namespace Main { export function fooBar() {} }"
+            };
+            const file4: FileOrFolder = {
+                path: "/a/b/project/src/main2.ts",
+                content: "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/project/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        outFile: "../output/common.js",
+                        target: "es5"
+                    },
+                    files: [file1.path, file2.path, file3.path, file4.path]
+                })
+            };
+            const files = [file1, file2, file3, file4];
+            const allfiles = files.concat(configFile);
+            const host = createWatchedSystem(allfiles);
+            const originalWriteFile = host.writeFile.bind(host);
+            let numberOfTimesFileWritten = 0;
+            host.writeFile = (p: string, content: string) => {
+                numberOfTimesFileWritten++;
+                return originalWriteFile(p, content);
+            };
+            createWatchModeWithConfigFile(configFile.path, host);
+            assert.equal(numberOfTimesFileWritten, 1);
+        });
     });
 
     describe("tsc-watch emit for configured projects", () => {
