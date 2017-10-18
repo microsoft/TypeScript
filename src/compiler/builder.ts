@@ -37,7 +37,7 @@ namespace ts {
         emitChangedFiles(program: Program, writeFileCallback: WriteFileCallback): ReadonlyArray<EmitResult>;
 
         /** When called gets the semantic diagnostics for the program. It also caches the diagnostics and manage them */
-        getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): Diagnostic[];
+        getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
 
         /** Called to reset the status of the builder */
         clear(): void;
@@ -189,7 +189,7 @@ namespace ts {
 
             // With --out or --outFile all outputs go into single file, do it only once
             if (compilerOptions.outFile || compilerOptions.out) {
-                semanticDiagnosticsPerFile.clear();
+                Debug.assert(semanticDiagnosticsPerFile.size === 0);
                 changedFilesSet.clear();
                 return [program.emit(/*targetSourceFile*/ undefined, writeFileCallback)];
             }
@@ -215,9 +215,16 @@ namespace ts {
             return result || emptyArray;
         }
 
-        function getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): Diagnostic[] {
+        function getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
             ensureProgramGraph(program);
             Debug.assert(changedFilesSet.size === 0);
+
+            const compilerOptions = program.getCompilerOptions();
+            if (compilerOptions.outFile || compilerOptions.out) {
+                Debug.assert(semanticDiagnosticsPerFile.size === 0);
+                // We dont need to cache the diagnostics just return them from program
+                return program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+            }
 
             let diagnostics: Diagnostic[];
             for (const sourceFile of program.getSourceFiles()) {
