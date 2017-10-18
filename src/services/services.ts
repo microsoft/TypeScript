@@ -1763,7 +1763,7 @@ namespace ts {
             });
         }
 
-        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): PromiseLike<ApplyCodeActionCommandResult> {
+        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
             fileName = toPath(fileName, currentDirectory, getCanonicalFileName);
             switch (action.type) {
                 case "install package":

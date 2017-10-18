@@ -3901,7 +3901,7 @@ declare namespace ts {
          */
         getCustomTransformers?(): CustomTransformers | undefined;
         isKnownTypesPackageName?(name: string): boolean;
-        installPackage?(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult>;
+        installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -3949,7 +3949,7 @@ declare namespace ts {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
-        applyCodeActionCommand(fileName: string, action: CodeActionCommand): PromiseLike<ApplyCodeActionCommandResult>;
+        applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;

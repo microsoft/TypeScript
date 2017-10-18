@@ -297,7 +297,7 @@ namespace ts.server {
             return false;
         }
 
-        installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult> {
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult> {
             const rq: InstallPackageRequest = { kind: "installPackage", ...options };
             this.send(rq);
             Debug.assert(this.packageInstalledPromise === undefined);
