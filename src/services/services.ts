@@ -1412,17 +1412,8 @@ namespace ts {
         }
 
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
-            const definitions = getDefinitionAtPosition(fileName, position);
-
-            if (!definitions) {
-                return undefined;
-            }
-
-            const sourceFile = getValidSourceFile(fileName);
-            const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
-            const textSpan = createTextSpan(node.getStart(), node.getWidth());
-
-            return { definitions, textSpan };
+            synchronizeHostData();
+            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
         }
 
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {

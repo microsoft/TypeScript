@@ -268,8 +268,23 @@ namespace ts.server {
             }));
         }
 
-        getDefinitionAndBoundSpan(_fileName: string, _position: number): DefinitionInfoAndBoundSpan {
-            return notImplemented();
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+            const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+
+            const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
+            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
+
+            return {
+                definitions: response.body.definitions.map(entry => ({
+                    containerKind: ScriptElementKind.unknown,
+                    containerName: "",
+                    fileName: entry.file,
+                    textSpan: this.decodeSpan(entry),
+                    kind: ScriptElementKind.unknown,
+                    name: ""
+                })),
+                textSpan: this.decodeSpan(response.body.textSpan, request.arguments.file)
+            };
         }
 
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {

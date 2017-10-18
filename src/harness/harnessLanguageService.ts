@@ -432,8 +432,8 @@ namespace Harness.LanguageService {
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
         }
-        getDefinitionAndBoundSpan(): ts.DefinitionInfoAndBoundSpan {
-            throw new Error("Not supported on the shim.");
+        getDefinitionAndBoundSpan(fileName: string, position: number): ts.DefinitionInfoAndBoundSpan {
+            return unwrapJSONCallResult(this.shim.getDefinitionAndBoundSpan(fileName, position));
         }
         getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getTypeDefinitionAtPosition(fileName, position));

@@ -703,6 +703,10 @@ namespace ts.server.protocol {
         body?: FileSpan[];
     }
 
+    export interface DefinitionInfoAndBoundSpanReponse extends Response {
+        body?: DefinitionInfoAndBoundSpan;
+    }
+
     /**
      * Definition response message.  Gives text range for definition.
      */

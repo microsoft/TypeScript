@@ -170,6 +170,8 @@ namespace ts {
          */
         getDefinitionAtPosition(fileName: string, position: number): string;
 
+        getDefinitionAndBoundSpan(fileName: string, position: number): string;
+
         /**
          * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
@@ -769,6 +771,17 @@ namespace ts {
             return this.forwardJSONCall(
                 `getDefinitionAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getDefinitionAtPosition(fileName, position)
+            );
+        }
+
+        /**
+         * Computes the definition location and file for the symbol
+         * at the requested position.
+         */
+        public getDefinitionAndBoundSpan(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getDefinitionAndBoundSpan('${fileName}', ${position})`,
+                () => this.languageService.getDefinitionAndBoundSpan(fileName, position)
             );
         }
 

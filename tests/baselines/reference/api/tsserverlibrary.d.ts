@@ -5313,6 +5313,9 @@ declare namespace ts.server.protocol {
     interface DefinitionResponse extends Response {
         body?: FileSpan[];
     }
+    interface DefinitionInfoAndBoundSpanReponse extends Response {
+        body?: DefinitionInfoAndBoundSpan;
+    }
     /**
      * Definition response message.  Gives text range for definition.
      */
@@ -6865,8 +6868,9 @@ declare namespace ts.server {
         private getDiagnosticsWorker(args, isSemantic, selector, includeLinePosition);
         private getDefinition(args, simplifiedResult);
         private getDefinitionAndBoundSpan(args, simplifiedResult);
-        private getSimplifiedDefinition(definitions, project);
-        private getSimplifiedTextSpan(textSpan, scriptInfo);
+        private getSimplifiedDefinitions(definitions, project);
+        private getSimplifiedFileSpan(fileName, textSpan, project);
+        private getSimplifiedTextSpan(scriptInfo, textSpan);
         private getTypeDefinition(args);
         private getImplementation(args, simplifiedResult);
         private getOccurrences(args);

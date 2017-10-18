@@ -601,7 +601,7 @@ namespace ts.server {
             }
 
             if (simplifiedResult) {
-                return this.getSimplifiedDefinition(definitions, project);
+                return this.getSimplifiedDefinitions(definitions, project);
             }
             else {
                 return definitions;
@@ -624,28 +624,29 @@ namespace ts.server {
 
             if (simplifiedResult) {
                 return {
-                    definitions: this.getSimplifiedDefinition(definitionAndBoundSpan.definitions, project),
-                    textSpan: this.getSimplifiedTextSpan(definitionAndBoundSpan.textSpan, scriptInfo)
+                    definitions: this.getSimplifiedDefinitions(definitionAndBoundSpan.definitions, project),
+                    textSpan: this.getSimplifiedTextSpan(scriptInfo, definitionAndBoundSpan.textSpan)
                 };
             }
 
             return definitionAndBoundSpan;
         }
 
-        private getSimplifiedDefinition(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpan> {
-            return definitions.map(def => {
-                const defScriptInfo = project.getScriptInfo(def.fileName);
-                const simplifiedTextSpan = this.getSimplifiedTextSpan(def.textSpan, defScriptInfo);
-
-                return {
-                    file: def.fileName,
-                    start: simplifiedTextSpan.start,
-                    end: simplifiedTextSpan.end
-                };
-            });
+        private getSimplifiedDefinitions(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpan> {
+            return definitions.map(def => this.getSimplifiedFileSpan(def.fileName, def.textSpan, project));
         }
 
-        private getSimplifiedTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
+        private getSimplifiedFileSpan(fileName: string, textSpan: TextSpan, project: Project): protocol.FileSpan {
+            const scriptInfo = project.getScriptInfo(fileName);
+            const simplifiedTextSpan = this.getSimplifiedTextSpan(scriptInfo, textSpan);
+
+            return {
+                file: fileName,
+                ...simplifiedTextSpan
+            };
+        }
+
+        private getSimplifiedTextSpan(scriptInfo: ScriptInfo, textSpan: TextSpan): protocol.TextSpan {
             return {
                 start: scriptInfo.positionToLineOffset(textSpan.start),
                 end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
