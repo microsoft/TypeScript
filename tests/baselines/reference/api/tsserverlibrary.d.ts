@@ -2306,6 +2306,7 @@ declare namespace ts {
         LineFeed = 1,
     }
     interface LineAndCharacter {
+        /** 0-based. */
         line: number;
         character: number;
     }
