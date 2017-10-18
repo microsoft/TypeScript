@@ -1,4 +1,5 @@
 {
+    "extends": "tslint:latest",
     "rulesDirectory": "built/local/tslint/rules",
     "rules": {
         "array-type": [true, "array"],
@@ -69,6 +70,54 @@
             "check-separator",
             "check-type"
         ],
-        "no-string-literal": true
+
+        // TODO
+        "arrow-parens": false, // [true, "ban-single-arg-parens"]
+        "arrow-return-shorthand": false,
+        "ban-types": false,
+        "callable-types": false,
+        "forin": false,
+        "interface-name": false, // [true, "never-prefix"],
+        "member-access": false, // [true, "no-public"]
+        "no-angle-bracket-type-assertion": false,
+        "no-conditional-assignment": false,
+        "no-console": false,
+        "no-debugger": false,
+        "no-empty": false,
+        "no-empty-interface": false,
+        "no-eval": false,
+        "no-invalid-template-strings": false,
+        "no-object-literal-type-assertion": false,
+        "no-shadowed-variable": false,
+        "no-submodule-imports": false,
+        "no-this-assignment": false,
+        "no-unused-expression": false,
+        "no-unnecessary-initializer": false,
+        "no-var-requires": false,
+        "object-literal-key-quotes": false,
+        "one-variable-per-declaration": false,
+        "only-arrow-functions": false,
+        "ordered-imports": false,
+        "prefer-conditional-expression": false,
+        "prefer-for-of": false,
+        "radix": false,
+        "space-before-function-paren": false,
+        "trailing-comma": false,
+        "unified-signatures": false,
+        "variable-name": false,
+
+        // https://github.com/Microsoft/TypeScript/issues/18340
+        "align": false,
+        "eofline": false,
+        "max-line-length": false,
+        "no-consecutive-blank-lines": false,
+
+        // Not doing
+        "max-classes-per-file": false,
+        "member-ordering": false,
+        "no-bitwise": false,
+        "no-namespace": false,
+        "no-reference": false,
+        "object-literal-sort-keys": false
 	}
 }
