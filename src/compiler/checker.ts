@@ -13486,7 +13486,7 @@ namespace ts {
                         undefined; // node.parent is JsxFragment with no attributes
 
             if (!jsxAttributes) {
-                return anyType; // don't check children of a fragment
+                return undefined; // don't check children of a fragment
             }
 
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
