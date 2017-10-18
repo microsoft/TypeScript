@@ -569,6 +569,11 @@ namespace ts.server {
             });
         }
 
+        /*@internal*/
+        hasPendingProjectUpdate(project: Project) {
+            return this.pendingProjectUpdates.has(project.getProjectName());
+        }
+
         private sendProjectsUpdatedInBackgroundEvent() {
             if (!this.eventHandler) {
                 return;
@@ -810,8 +815,14 @@ namespace ts.server {
             );
         }
 
+        /** Gets the config file existence info for the configured project */
+        /*@internal*/
+        getConfigFileExistenceInfo(project: ConfiguredProject) {
+            return this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath);
+        }
+
         private onConfigChangedForConfiguredProject(project: ConfiguredProject, eventKind: FileWatcherEventKind) {
-            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath);
+            const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
             if (eventKind === FileWatcherEventKind.Deleted) {
                 // Update the cached status
                 // We arent updating or removing the cached config file presence info as that will be taken care of by
@@ -913,18 +924,6 @@ namespace ts.server {
             return project;
         }
 
-        private addToListOfOpenFiles(info: ScriptInfo) {
-            Debug.assert(!info.isOrphan());
-            for (const p of info.containingProjects) {
-                // file is the part of configured project, addref the project
-                if (p.projectKind === ProjectKind.Configured) {
-                    ((<ConfiguredProject>p)).addOpenRef();
-                }
-            }
-
-            this.openFiles.push(info);
-        }
-
         /**
          * Remove this file from the set of open, non-configured files.
          * @param info The file that has been closed or newly configured
@@ -947,10 +946,8 @@ namespace ts.server {
                     if (info.hasMixedContent) {
                         info.registerFileUpdate();
                     }
-                    // Delete the reference to the open configured projects but
-                    // do not remove the project so that we can reuse this project
+                    // Do not remove the project so that we can reuse this project
                     // if it would need to be re-created with next file open
-                    (<ConfiguredProject>p).deleteOpenRef();
                 }
                 else if (p.projectKind === ProjectKind.Inferred && p.isRoot(info)) {
                     // If this was the open root file of inferred project
@@ -1040,7 +1037,7 @@ namespace ts.server {
         }
 
         private setConfigFileExistenceByNewConfiguredProject(project: ConfiguredProject) {
-            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath);
+            const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
             if (configFileExistenceInfo) {
                 Debug.assert(configFileExistenceInfo.exists);
                 // close existing watcher
@@ -1069,7 +1066,7 @@ namespace ts.server {
         }
 
         private setConfigFileExistenceInfoByClosedConfiguredProject(closedProject: ConfiguredProject) {
-            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(closedProject.canonicalConfigFilePath);
+            const configFileExistenceInfo = this.getConfigFileExistenceInfo(closedProject);
             Debug.assert(!!configFileExistenceInfo);
             if (configFileExistenceInfo.openFilesImpactedByConfigFile.size) {
                 const configFileName = closedProject.getConfigFilePath();
@@ -1958,7 +1955,8 @@ namespace ts.server {
 
                 this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
             }
-            this.addToListOfOpenFiles(info);
+            Debug.assert(!info.isOrphan());
+            this.openFiles.push(info);
 
             if (sendConfigFileDiagEvent) {
                 configFileErrors = project.getAllProjectErrors();
@@ -2058,11 +2056,14 @@ namespace ts.server {
             }
         }
 
-        private closeConfiguredProject(configFile: NormalizedPath): boolean {
+        private closeConfiguredProjectReferencedFromExternalProject(configFile: NormalizedPath): boolean {
             const configuredProject = this.findConfiguredProjectByProjectName(configFile);
-            if (configuredProject && configuredProject.deleteOpenRef() === 0) {
-                this.removeProject(configuredProject);
-                return true;
+            if (configuredProject) {
+                configuredProject.deleteExternalProjectReference();
+                if (!configuredProject.hasOpenRef()) {
+                    this.removeProject(configuredProject);
+                    return true;
+                }
             }
             return false;
         }
@@ -2073,7 +2074,7 @@ namespace ts.server {
             if (configFiles) {
                 let shouldRefreshInferredProjects = false;
                 for (const configFile of configFiles) {
-                    if (this.closeConfiguredProject(configFile)) {
+                    if (this.closeConfiguredProjectReferencedFromExternalProject(configFile)) {
                         shouldRefreshInferredProjects = true;
                     }
                 }
@@ -2268,7 +2269,7 @@ namespace ts.server {
                         const newConfig = tsConfigFiles[iNew];
                         const oldConfig = oldConfigFiles[iOld];
                         if (oldConfig < newConfig) {
-                            this.closeConfiguredProject(oldConfig);
+                            this.closeConfiguredProjectReferencedFromExternalProject(oldConfig);
                             iOld++;
                         }
                         else if (oldConfig > newConfig) {
@@ -2283,7 +2284,7 @@ namespace ts.server {
                     }
                     for (let i = iOld; i < oldConfigFiles.length; i++) {
                         // projects for all remaining old config files should be closed
-                        this.closeConfiguredProject(oldConfigFiles[i]);
+                        this.closeConfiguredProjectReferencedFromExternalProject(oldConfigFiles[i]);
                     }
                 }
             }
@@ -2298,7 +2299,7 @@ namespace ts.server {
                     }
                     if (project && !contains(exisingConfigFiles, tsconfigFile)) {
                         // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project
-                        project.addOpenRef();
+                        project.addExternalProjectReference();
                     }
                 }
             }

@@ -355,6 +355,10 @@ namespace ts.projectSystem {
         return countWhere(recursiveWatchedDirs, dir => file.length > dir.length && startsWith(file, dir) && file[dir.length] === directorySeparator);
     }
 
+    function checkOpenFiles(projectService: server.ProjectService, expectedFiles: FileOrFolder[]) {
+        checkFileNames("Open files", projectService.openFiles.map(info => info.fileName), expectedFiles.map(file => file.path));
+    }
+
     /**
      * Test server cancellation token used to mock host token cancellation requests.
      * The cancelAfterRequest constructor param specifies how many isCancellationRequested() calls
@@ -1060,16 +1064,19 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             const project = projectService.configuredProjects.get(configFile.path);
+            assert.isTrue(project.hasOpenRef()); // file1
 
             projectService.closeClientFile(file1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
-            assert.equal(project.openRefCount, 0);
+            assert.isFalse(project.hasOpenRef()); // No open files
+            assert.isFalse(project.isClosed());
 
             projectService.openClientFile(file2.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
-            assert.equal(project.openRefCount, 1);
+            assert.isTrue(project.hasOpenRef()); // file2
+            assert.isFalse(project.isClosed());
         });
 
         it("should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project", () => {
@@ -1091,14 +1098,18 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             const project = projectService.configuredProjects.get(configFile.path);
+            assert.isTrue(project.hasOpenRef()); // file1
 
             projectService.closeClientFile(file1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
-            assert.equal(project.openRefCount, 0);
+            assert.isFalse(project.hasOpenRef()); // No files
+            assert.isFalse(project.isClosed());
 
             projectService.openClientFile(libFile.path);
             checkNumberOfConfiguredProjects(projectService, 0);
+            assert.isFalse(project.hasOpenRef()); // No files + project closed
+            assert.isTrue(project.isClosed());
         });
 
         it("should not close external project with no open files", () => {
@@ -2085,39 +2096,224 @@ namespace ts.projectSystem {
             projectService.openClientFile(file2.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project1 = projectService.configuredProjects.get(tsconfig1.path);
-            assert.equal(project1.openRefCount, 1, "Open ref count in project1 - 1");
+            assert.isTrue(project1.hasOpenRef(), "Has open ref count in project1 - 1"); // file2
             assert.equal(project1.getScriptInfo(file2.path).containingProjects.length, 1, "containing projects count");
+            assert.isFalse(project1.isClosed());
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 2 });
-            assert.equal(project1.openRefCount, 2, "Open ref count in project1 - 2");
+            assert.isTrue(project1.hasOpenRef(), "Has open ref count in project1 - 2"); // file2
             assert.strictEqual(projectService.configuredProjects.get(tsconfig1.path), project1);
+            assert.isFalse(project1.isClosed());
 
             const project2 = projectService.configuredProjects.get(tsconfig2.path);
-            assert.equal(project2.openRefCount, 1, "Open ref count in project2 - 2");
+            assert.isTrue(project2.hasOpenRef(), "Has open ref count in project2 - 2"); // file1
+            assert.isFalse(project2.isClosed());
 
             assert.equal(project1.getScriptInfo(file1.path).containingProjects.length, 2, `${file1.path} containing projects count`);
             assert.equal(project1.getScriptInfo(file2.path).containingProjects.length, 1, `${file2.path} containing projects count`);
 
             projectService.closeClientFile(file2.path);
             checkNumberOfProjects(projectService, { configuredProjects: 2 });
-            assert.equal(project1.openRefCount, 1, "Open ref count in project1 - 3");
-            assert.equal(project2.openRefCount, 1, "Open ref count in project2 - 3");
+            assert.isFalse(project1.hasOpenRef(), "Has open ref count in project1 - 3"); // No files
+            assert.isTrue(project2.hasOpenRef(), "Has open ref count in project2 - 3"); // file1
             assert.strictEqual(projectService.configuredProjects.get(tsconfig1.path), project1);
             assert.strictEqual(projectService.configuredProjects.get(tsconfig2.path), project2);
+            assert.isFalse(project1.isClosed());
+            assert.isFalse(project2.isClosed());
 
             projectService.closeClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 2 });
-            assert.equal(project1.openRefCount, 0, "Open ref count in project1 - 4");
-            assert.equal(project2.openRefCount, 0, "Open ref count in project2 - 4");
+            assert.isFalse(project1.hasOpenRef(), "Has open ref count in project1 - 4"); // No files
+            assert.isFalse(project2.hasOpenRef(), "Has open ref count in project2 - 4"); // No files
             assert.strictEqual(projectService.configuredProjects.get(tsconfig1.path), project1);
             assert.strictEqual(projectService.configuredProjects.get(tsconfig2.path), project2);
+            assert.isFalse(project1.isClosed());
+            assert.isFalse(project2.isClosed());
 
             projectService.openClientFile(file2.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             assert.strictEqual(projectService.configuredProjects.get(tsconfig1.path), project1);
             assert.isUndefined(projectService.configuredProjects.get(tsconfig2.path));
-            assert.equal(project1.openRefCount, 1, "Open ref count in project1 - 5");
+            assert.isTrue(project1.hasOpenRef(), "Has open ref count in project1 - 5"); // file2
+            assert.isFalse(project1.isClosed());
+            assert.isTrue(project2.isClosed());
+        });
+
+        it("Open ref of configured project when open file gets added to the project as part of configured file update", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/src/file1.ts",
+                content: "let x = 1;"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/src/file2.ts",
+                content: "let y = 1;"
+            };
+            const file3: FileOrFolder = {
+                path: "/a/b/file3.ts",
+                content: "let z = 1;"
+            };
+            const file4: FileOrFolder = {
+                path: "/a/file4.ts",
+                content: "let z = 1;"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ files: ["src/file1.ts", "file3.ts"] })
+            };
+
+            const files = [file1, file2, file3, file4];
+            const host = createServerHost(files.concat(configFile));
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            projectService.openClientFile(file2.path);
+            projectService.openClientFile(file3.path);
+            projectService.openClientFile(file4.path);
+
+            const infos = files.map(file => projectService.getScriptInfoForPath(file.path as Path));
+            checkOpenFiles(projectService, files);
+            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 2 });
+            const configProject1 = projectService.configuredProjects.get(configFile.path);
+            assert.isTrue(configProject1.hasOpenRef()); // file1 and file3
+            checkProjectActualFiles(configProject1, [file1.path, file3.path, configFile.path]);
+            const inferredProject1 = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject1, [file2.path]);
+            const inferredProject2 = projectService.inferredProjects[1];
+            checkProjectActualFiles(inferredProject2, [file4.path]);
+
+            configFile.content = "{}";
+            host.reloadFS(files.concat(configFile));
+            host.runQueuedTimeoutCallbacks();
+
+            verifyScriptInfos();
+            checkOpenFiles(projectService, files);
+            verifyConfiguredProjectStateAfterUpdate(/*hasOpenRef*/ true); // file1, file2, file3
+            checkNumberOfInferredProjects(projectService, 1);
+            const inferredProject3 = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject3, [file4.path]);
+            assert.strictEqual(inferredProject3, inferredProject2);
+
+            projectService.closeClientFile(file1.path);
+            projectService.closeClientFile(file2.path);
+            projectService.closeClientFile(file4.path);
+
+            verifyScriptInfos();
+            checkOpenFiles(projectService, [file3]);
+            verifyConfiguredProjectStateAfterUpdate(/*hasOpenRef*/ true); // file3
+            checkNumberOfInferredProjects(projectService, 0);
+
+            projectService.openClientFile(file4.path);
+            verifyScriptInfos();
+            checkOpenFiles(projectService, [file3, file4]);
+            verifyConfiguredProjectStateAfterUpdate(/*hasOpenRef*/ true); // file3
+            checkNumberOfInferredProjects(projectService, 1);
+            const inferredProject4 = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject4, [file4.path]);
+
+            projectService.closeClientFile(file3.path);
+            verifyScriptInfos();
+            checkOpenFiles(projectService, [file4]);
+            verifyConfiguredProjectStateAfterUpdate(/*hasOpenRef*/ false); // No open files
+            checkNumberOfInferredProjects(projectService, 1);
+            const inferredProject5 = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject4, [file4.path]);
+            assert.strictEqual(inferredProject5, inferredProject4);
+
+            const file5: FileOrFolder = {
+                path: "/file5.ts",
+                content: "let zz = 1;"
+            };
+            host.reloadFS(files.concat(configFile, file5));
+            projectService.openClientFile(file5.path);
+            verifyScriptInfosAreUndefined([file1, file2, file3]);
+            assert.strictEqual(projectService.getScriptInfoForPath(file4.path as Path), find(infos, info => info.path === file4.path));
+            assert.isDefined(projectService.getScriptInfoForPath(file5.path as Path));
+            checkOpenFiles(projectService, [file4, file5]);
+            checkNumberOfConfiguredProjects(projectService, 0);
+
+            function verifyScriptInfos() {
+                infos.forEach(info => assert.strictEqual(projectService.getScriptInfoForPath(info.path), info));
+            }
+
+            function verifyScriptInfosAreUndefined(files: FileOrFolder[]) {
+                for (const file of files) {
+                    assert.isUndefined(projectService.getScriptInfoForPath(file.path as Path));
+                }
+            }
+
+            function verifyConfiguredProjectStateAfterUpdate(hasOpenRef: boolean) {
+                checkNumberOfConfiguredProjects(projectService, 1);
+                const configProject2 = projectService.configuredProjects.get(configFile.path);
+                assert.strictEqual(configProject2, configProject1);
+                checkProjectActualFiles(configProject2, [file1.path, file2.path, file3.path, configFile.path]);
+                assert.equal(configProject2.hasOpenRef(), hasOpenRef);
+            }
+        });
+
+        it("Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/src/file1.ts",
+                content: "let x = 1;"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/src/file2.ts",
+                content: "let y = 1;"
+            };
+            const file3: FileOrFolder = {
+                path: "/a/b/file3.ts",
+                content: "let z = 1;"
+            };
+            const file4: FileOrFolder = {
+                path: "/a/file4.ts",
+                content: "let z = 1;"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ files: ["src/file1.ts", "file3.ts"] })
+            };
+
+            const files = [file1, file2, file3];
+            const hostFiles = files.concat(file4, configFile);
+            const host = createServerHost(hostFiles);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            projectService.openClientFile(file2.path);
+            projectService.openClientFile(file3.path);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 1 });
+            const configuredProject = projectService.configuredProjects.get(configFile.path);
+            assert.isTrue(configuredProject.hasOpenRef()); // file1 and file3
+            checkProjectActualFiles(configuredProject, [file1.path, file3.path, configFile.path]);
+            const inferredProject1 = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject1, [file2.path]);
+
+            projectService.closeClientFile(file1.path);
+            projectService.closeClientFile(file3.path);
+            assert.isFalse(configuredProject.hasOpenRef()); // No files
+
+            configFile.content = "{}";
+            host.reloadFS(files.concat(configFile));
+            // Time out is not yet run so there is project update pending
+            assert.isTrue(configuredProject.hasOpenRef()); // Pending update and file2 might get into the project
+
+            projectService.openClientFile(file4.path);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 2 });
+            assert.strictEqual(projectService.configuredProjects.get(configFile.path), configuredProject);
+            assert.isTrue(configuredProject.hasOpenRef()); // Pending update and F2 might get into the project
+            assert.strictEqual(projectService.inferredProjects[0], inferredProject1);
+            const inferredProject2 = projectService.inferredProjects[1];
+            checkProjectActualFiles(inferredProject2, [file4.path]);
+
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(configFile.path), configuredProject);
+            assert.isTrue(configuredProject.hasOpenRef()); // file2
+            checkProjectActualFiles(configuredProject, [file1.path, file2.path, file3.path, configFile.path]);
+            assert.strictEqual(projectService.inferredProjects[0], inferredProject2);
+            checkProjectActualFiles(inferredProject2, [file4.path]);
         });
 
         it("language service disabled state is updated in external projects", () => {
@@ -2188,17 +2384,35 @@ namespace ts.projectSystem {
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             const project = projectService.configuredProjects.get(config.path);
+            assert.isTrue(project.hasOpenRef()); // f1
+            assert.isFalse(project.isClosed());
 
             projectService.closeClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             assert.strictEqual(projectService.configuredProjects.get(config.path), project);
-            assert.equal(project.openRefCount, 0);
+            assert.isFalse(project.hasOpenRef()); // No files
+            assert.isFalse(project.isClosed());
 
             for (const f of [f1, f2, f3]) {
-                // There shouldnt be any script info as we closed the file that resulted in creation of it
+                // All the script infos should be present and contain the project since it is still alive.
                 const scriptInfo = projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path));
                 assert.equal(scriptInfo.containingProjects.length, 1, `expect 1 containing projects for '${f.path}'`);
                 assert.equal(scriptInfo.containingProjects[0], project, `expect configured project to be the only containing project for '${f.path}'`);
+            }
+
+            const f4 = {
+                path: "/aa.js",
+                content: "var x = 1"
+            };
+            host.reloadFS([f1, f2, f3, config, f4]);
+            projectService.openClientFile(f4.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+            assert.isFalse(project.hasOpenRef()); // No files
+            assert.isTrue(project.isClosed());
+
+            for (const f of [f1, f2, f3]) {
+                // All the script infos should not be present since the project is closed and orphan script infos are collected
+                assert.isUndefined(projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path)));
             }
         });
 
@@ -2836,17 +3050,19 @@ namespace ts.projectSystem {
             projectService.openClientFile(f.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             const project = projectService.configuredProjects.get(config.path);
-            assert.equal(project.openRefCount, 1);
+            assert.isTrue(project.hasOpenRef()); // f
 
             projectService.closeClientFile(f.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             assert.strictEqual(projectService.configuredProjects.get(config.path), project);
-            assert.equal(project.openRefCount, 0);
+            assert.isFalse(project.hasOpenRef()); // No files
+            assert.isFalse(project.isClosed());
 
             projectService.openClientFile(f.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             assert.strictEqual(projectService.configuredProjects.get(config.path), project);
-            assert.equal(project.openRefCount, 1);
+            assert.isTrue(project.hasOpenRef()); // f
+            assert.isFalse(project.isClosed());
         });
     });
 

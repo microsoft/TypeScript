@@ -7280,8 +7280,8 @@ declare namespace ts.server {
         private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
         private plugins;
-        /** Used for configured projects which may have multiple open roots */
-        openRefCount: number;
+        /** Ref count to the project when opened from external project */
+        private externalProjectRefCount;
         private projectErrors;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
@@ -7305,9 +7305,6 @@ declare namespace ts.server {
         getTypeAcquisition(): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
         close(): void;
-        addOpenRef(): void;
-        deleteOpenRef(): number;
-        hasOpenRef(): boolean;
         getEffectiveTypeRoots(): string[];
     }
     /**
@@ -7537,7 +7534,6 @@ declare namespace ts.server {
          */
         private onConfigFileChangeForOpenScriptInfo(configFileName, eventKind);
         private removeProject(project);
-        private addToListOfOpenFiles(info);
         /**
          * Remove this file from the set of open, non-configured files.
          * @param info The file that has been closed or newly configured
@@ -7645,7 +7641,7 @@ declare namespace ts.server {
          */
         closeClientFile(uncheckedFileName: string): void;
         private collectChanges(lastKnownProjectVersions, currentProjects, result);
-        private closeConfiguredProject(configFile);
+        private closeConfiguredProjectReferencedFromExternalProject(configFile);
         closeExternalProject(uncheckedFileName: string, suppressRefresh?: boolean): void;
         openExternalProjects(projects: protocol.ExternalProject[]): void;
         /** Makes a filename safe to insert in a RegExp */
