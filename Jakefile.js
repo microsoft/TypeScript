@@ -239,6 +239,10 @@ var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
 });
 
+var localizationTargets = ["cs", "de", "enu", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
+    return path.join(builtLocalDirectory, f);
+});
+
 // Prepends the contents of prefixFile to destinationFile
 function prependFile(prefixFile, destinationFile) {
     if (!fs.existsSync(prefixFile)) {
@@ -736,8 +740,7 @@ desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].
         concat(libraryTargets).
-        concat(fs.readdirSync(lclDirectory).map(function (d) { return path.join(builtLocalDirectory, d) })).
-        concat(path.dirname(generatedLCGFile));
+        concat(localizationTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });

@@ -180,6 +180,11 @@ const libraryTargets = librarySourceMap.map(function(f) {
     return path.join(builtLocalDirectory, f.target);
 });
 
+const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
+var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
+    return path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json");
+}).concat(generatedLCGFile);
+
 for (const i in libraryTargets) {
     const entry = librarySourceMap[i];
     const target = libraryTargets[i];
@@ -398,7 +403,6 @@ gulp.task(generateLocalizedDiagnosticMessagesJs, /*help*/ false, [], () => {
 });
 
 // Localize diagnostics
-const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
 gulp.task(generatedLCGFile, [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs], (done) => {
     if (fs.existsSync(builtLocalDirectory) && needsUpdate(generatedDiagnosticMessagesJSON, generatedLCGFile)) {
         exec(host, [generateLocalizedDiagnosticMessagesJs, lclDirectory, builtLocalDirectory, generatedDiagnosticMessagesJSON], done, done);
@@ -576,8 +580,7 @@ gulp.task("dontUseDebugMode", /*help*/ false, [], (done) => { useDebugMode = fal
 gulp.task("VerifyLKG", /*help*/ false, [], () => {
     const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, typingsInstallerJs, cancellationTokenJs].concat(libraryTargets);
     const missingFiles = expectedFiles.
-        concat(fs.readdirSync(lclDirectory).map(function (d) { return path.join(builtLocalDirectory, d, "diagnosticMessages.generated.json"); })).
-        concat(generatedLCGFile).
+        concat(localizationTargets).
         filter(f => !fs.existsSync(f));
     if (missingFiles.length > 0) {
         throw new Error("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
