@@ -570,10 +570,9 @@ namespace ts {
                 realpath
             };
         }
-
         function recursiveCreateDirectory(directoryPath: string, sys: System) {
             const basePath = getDirectoryPath(directoryPath);
-            const shouldCreateParent = directoryPath !== basePath && !sys.directoryExists(basePath);
+            const shouldCreateParent = basePath !== "" && directoryPath !== basePath && !sys.directoryExists(basePath);
             if (shouldCreateParent) {
                 recursiveCreateDirectory(basePath, sys);
             }
