@@ -13522,7 +13522,7 @@ namespace ts {
 
         /**
          * This must be called when a contextual type function is attempting to dig into a type to contextually type a subexpression
-         * Otherwise, contextual typing stops when a type argument is encountered, and `any` is ued instead.
+         * Otherwise, contextual typing stops when a type argument is encountered, and `any` is used instead.
          */
         function getInstantiatedContextualType(node: Expression, checkMode?: CheckMode): Type {
             if (checkMode === CheckMode.Inferential && node.contextualType && node.contextualMapper) {
