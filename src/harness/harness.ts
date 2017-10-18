@@ -916,8 +916,8 @@ namespace Harness {
                 if (file.content !== undefined) {
                     const fileName = ts.normalizePath(file.unitName);
                     const path = ts.toPath(file.unitName, currentDirectory, getCanonicalFileName);
-                    if (file.fileOptions && file.fileOptions["symlink"]) {
-                        const links = file.fileOptions["symlink"].split(",");
+                    if (file.fileOptions && file.fileOptions.symlink) {
+                        const links = file.fileOptions.symlink.split(",");
                         for (const link of links) {
                             const linkPath = ts.toPath(link, currentDirectory, getCanonicalFileName);
                             realPathMap.set(linkPath, fileName);
@@ -1232,7 +1232,7 @@ namespace Harness {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings["currentDirectory"] };
+                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings.currentDirectory };
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
@@ -1676,7 +1676,7 @@ namespace Harness {
         }
 
         function fileOutput(file: GeneratedFile, harnessSettings: Harness.TestCaseParser.CompilerSettings): string {
-            const fileName = harnessSettings["fullEmitPaths"] ? file.fileName : ts.getBaseFileName(file.fileName);
+            const fileName = harnessSettings.fullEmitPaths ? file.fileName : ts.getBaseFileName(file.fileName);
             return "//// [" + fileName + "]\r\n" + getByteOrderMarkText(file) + file.code;
         }
 

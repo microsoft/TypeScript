@@ -87,7 +87,7 @@ function possiblyQuote(cmd: string) {
 }
 
 let useDebugMode = true;
-let host = cmdLineOptions["host"];
+let host = cmdLineOptions.host;
 
 // Constants
 const compilerDirectory = "src/compiler/";
@@ -636,15 +636,15 @@ function restoreSavedNodeEnv() {
 }
 
 function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void) {
-    const lintFlag = cmdLineOptions["lint"];
+    const lintFlag = cmdLineOptions.lint;
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
-        let testTimeout = cmdLineOptions["timeout"];
-        const debug = cmdLineOptions["debug"];
-        const inspect = cmdLineOptions["inspect"];
-        const tests = cmdLineOptions["tests"];
-        const light = cmdLineOptions["light"];
-        const stackTraceLimit = cmdLineOptions["stackTraceLimit"];
+        let testTimeout = cmdLineOptions.timeout;
+        const debug = cmdLineOptions.debug;
+        const inspect = cmdLineOptions.inspect;
+        const tests = cmdLineOptions.tests;
+        const light = cmdLineOptions.light;
+        const stackTraceLimit = cmdLineOptions.stackTraceLimit;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
@@ -660,7 +660,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             } while (fs.existsSync(taskConfigsFolder));
             fs.mkdirSync(taskConfigsFolder);
 
-            workerCount = cmdLineOptions["workers"];
+            workerCount = cmdLineOptions.workers;
         }
 
         if (tests || light || taskConfigsFolder) {
@@ -671,8 +671,8 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             testTimeout = 400000;
         }
 
-        const colors = cmdLineOptions["colors"];
-        const reporter = cmdLineOptions["reporter"] || defaultReporter;
+        const colors = cmdLineOptions.colors;
+        const reporter = cmdLineOptions.reporter || defaultReporter;
 
         // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
@@ -860,7 +860,7 @@ function cleanTestDirs(done: (e?: any) => void) {
 
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions["colors"] });
+    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
@@ -870,8 +870,8 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
     cleanTestDirs((err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
-        const tests = cmdLineOptions["tests"];
-        const light = cmdLineOptions["light"];
+        const tests = cmdLineOptions.tests;
+        const light = cmdLineOptions.light;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
@@ -881,8 +881,8 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         }
 
         const args = [nodeServerOutFile];
-        if (cmdLineOptions["browser"]) {
-            args.push(cmdLineOptions["browser"]);
+        if (cmdLineOptions.browser) {
+            args.push(cmdLineOptions.browser);
         }
         if (tests) {
             args.push(JSON.stringify(tests));
@@ -892,13 +892,13 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
 });
 
 gulp.task("generate-code-coverage", "Generates code coverage data via istanbul", ["tests"], (done) => {
-    const testTimeout = cmdLineOptions["timeout"];
+    const testTimeout = cmdLineOptions.timeout;
     exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", testTimeout.toString(), run], done, done);
 });
 
 
 function getDiffTool() {
-    const program = process.env["DIFF"];
+    const program = process.env.DIFF;
     if (!program) {
         console.error("Add the 'DIFF' environment variable to the path of the program you want to use.");
         process.exit(1);
@@ -1019,7 +1019,7 @@ gulp.task(instrumenterJsPath, /*help*/ false, [servicesFile], () => {
 });
 
 gulp.task("tsc-instrumented", "Builds an instrumented tsc.js - run with --test=[testname]", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
-    const test = cmdLineOptions["tests"] || "iocapture";
+    const test = cmdLineOptions.tests || "iocapture";
     exec(host, [instrumenterJsPath, "record", test, builtLocalCompiler], done, done);
 });
 
@@ -1088,7 +1088,7 @@ function spawnLintWorker(files: {path: string}[], callback: (failures: number) =
 
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-    const fileMatcher = cmdLineOptions["files"];
+    const fileMatcher = cmdLineOptions.files;
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
         : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";

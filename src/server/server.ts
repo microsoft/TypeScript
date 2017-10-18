@@ -626,7 +626,7 @@ namespace ts.server {
     function createLogger() {
         const cmdLineLogFileName = findArgument("--logFile");
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-        const envLogOptions = parseLoggingEnvironmentString(process.env["TSS_LOG"]);
+        const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
 
         const logFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)
