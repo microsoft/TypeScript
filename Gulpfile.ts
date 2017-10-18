@@ -187,7 +187,7 @@ const libraryTargets = librarySourceMap.map(function(f) {
 const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
 
 /**
- * The localization target produces the two following transformation:
+ * The localization target produces the two following transformations:
  *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
  *       convert localized resources into a .json file the compiler can understand
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
