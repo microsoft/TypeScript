@@ -23,7 +23,5 @@ verify.fileAfterApplyingRefactorAtMarker('5',
  * @param {number?} gamma
  * @param {number!} delta
  */
-function f(x: any, y: any, z: number | undefined, alpha: number[], beta: (this: {
-    a: string;
-}, arg1: string, arg2: number) => boolean, gamma: number | null, delta: number) {
-}`, 'Annotate with types from JSDoc', 'annotate');
+function f(x: any, y: any, z: number | undefined, alpha: number[], beta: (this: { a: string; }, arg1: string, arg2: number) => boolean, gamma: number | null, delta: number) {
+}`, 'Annotate with type from JSDoc', 'annotate');
