@@ -1,4 +1,4 @@
-//// [index.ts]
+//// [index.tsx]
 interface ActionsObject<State> {
     [prop: string]: (state: State) => State;
 }
@@ -48,7 +48,33 @@ app2({
 });
 
 
-//// [index.js]
+type ActionsArray<State> = ((state: State) => State)[];
+
+declare function app3<State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>): void;
+
+app3({
+    state: 100,
+    actions: [
+        s => s // Should be typed number => number
+    ],
+    view: (s, a) => undefined as any,
+});
+
+namespace JSX {
+    export interface Element {}
+    export interface IntrinsicElements {}
+}
+
+interface ActionsObjectOr<State> {
+    [prop: string]: ((state: State) => State) | State;
+}
+
+declare function App4<State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State }): JSX.Element;
+
+const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number, but JSX resolution is missing an inferential pass
+
+
+//// [index.jsx]
 app({
     state: 100,
     actions: {
@@ -67,3 +93,11 @@ app2({
     },
     view: function (s, a) { return undefined; }
 });
+app3({
+    state: 100,
+    actions: [
+        function (s) { return s; } // Should be typed number => number
+    ],
+    view: function (s, a) { return undefined; }
+});
+var a = <App4 state={100} foo={function (s) { return s; }}/>; // TODO: should be number => number, but JSX resolution is missing an inferential pass
