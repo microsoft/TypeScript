@@ -7064,14 +7064,6 @@ namespace ts {
             }
         }
 
-        function isJSDocIndexSignature(node: TypeReferenceNode | ExpressionWithTypeArguments) {
-            return isTypeReferenceNode(node) &&
-                isIdentifier(node.typeName) &&
-                node.typeName.escapedText === "Object" &&
-                node.typeArguments && node.typeArguments.length === 2 &&
-                (node.typeArguments[0].kind === SyntaxKind.StringKeyword || node.typeArguments[0].kind === SyntaxKind.NumberKeyword);
-        }
-
         function getTypeFromJSDocNullableTypeNode(node: JSDocNullableType) {
             const type = getTypeFromTypeNode(node.type);
             return strictNullChecks ? getUnionType([type, nullType]) : type;
