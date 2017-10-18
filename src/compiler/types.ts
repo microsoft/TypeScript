@@ -3626,6 +3626,7 @@ namespace ts {
     export interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
+        scriptKind?: ScriptKind;
     }
 
     export interface DiagnosticMessage {
