@@ -157,6 +157,10 @@ namespace ts.GoToDefinition {
         }
 
         // TODO: Add textSpan for triple slash references (file and type).
+        const comment = findReferenceInPosition(sourceFile.referencedFiles, position);
+        if (comment && tryResolveScriptReference(program, sourceFile, comment) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position)) {
+            return { definitions, textSpan: undefined };
+        }
 
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
         const textSpan = createTextSpan(node.getStart(), node.getWidth());

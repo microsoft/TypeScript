@@ -584,10 +584,15 @@ namespace FourSlash {
 
         public verifyGoToDefinition(arg0: any, endMarkerNames?: string | string[]) {
             this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinition());
+            this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
         }
 
         private getGoToDefinition(): ts.DefinitionInfo[] {
             return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+        }
+
+        private getGoToDefinitionAndBoundSpan(): ts.DefinitionInfoAndBoundSpan {
+            return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         public verifyGoToType(arg0: any, endMarkerNames?: string | string[]) {
@@ -595,7 +600,7 @@ namespace FourSlash {
                 this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition));
         }
 
-        private verifyGoToX(arg0: any, endMarkerNames: string | string[] | undefined, getDefs: () => ts.DefinitionInfo[] | undefined) {
+        private verifyGoToX(arg0: any, endMarkerNames: string | string[] | undefined, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             if (endMarkerNames) {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
@@ -615,7 +620,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXPlain(startMarkerNames: string | string[], endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | undefined) {
+        private verifyGoToXPlain(startMarkerNames: string | string[], endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             for (const start of toArray(startMarkerNames)) {
                 this.verifyGoToXSingle(start, endMarkerNames, getDefs);
             }
@@ -627,24 +632,58 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | undefined) {
+        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             this.goToMarker(startMarkerName);
-            this.verifyGoToXWorker(toArray(endMarkerNames), getDefs);
+            this.verifyGoToXWorker(toArray(endMarkerNames), getDefs, startMarkerName);
         }
 
-        private verifyGoToXWorker(endMarkers: string[], getDefs: () => ts.DefinitionInfo[] | undefined) {
-            const definitions = getDefs() || [];
+        private verifyGoToXWorker(endMarkers: string[], getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined, startMarkerName?: string) {
+            const defs = getDefs();
+            let definitions: ts.DefinitionInfo[] | ReadonlyArray<ts.DefinitionInfo>;
+            let testName: string;
+            if (this.isDefinitionInfoAndBoundSpan(defs)) {
+                this.verifyDefinitionTextSpan(defs, startMarkerName);
+
+                definitions = defs.definitions;
+                testName = "goToDefinitionsAndBoundSpan";
+            }
+            else {
+                definitions = defs || [];
+                testName = "goToDefinitions";
+            }
 
             if (endMarkers.length !== definitions.length) {
-                this.raiseError(`goToDefinitions failed - expected to find ${endMarkers.length} definitions but got ${definitions.length}`);
+                this.raiseError(`${testName} failed - expected to find ${endMarkers.length} definitions but got ${definitions.length}`);
             }
 
             ts.zipWith(endMarkers, definitions, (endMarker, definition, i) => {
                 const marker = this.getMarkerByName(endMarker);
                 if (marker.fileName !== definition.fileName || marker.position !== definition.textSpan.start) {
-                    this.raiseError(`goToDefinition failed for definition ${endMarker} (${i}): expected ${marker.fileName} at ${marker.position}, got ${definition.fileName} at ${definition.textSpan.start}`);
+                    this.raiseError(`${testName} failed for definition ${endMarker} (${i}): expected ${marker.fileName} at ${marker.position}, got ${definition.fileName} at ${definition.textSpan.start}`);
                 }
             });
+        }
+
+        private verifyDefinitionTextSpan(defs: ts.DefinitionInfoAndBoundSpan, startMarkerName: string) {
+            const range = this.testData.ranges.find(range => this.markerName(range.marker) === startMarkerName);
+
+            if (!range && !defs.textSpan) {
+                return;
+            }
+
+            if (!range) {
+                this.raiseError(`goToDefinitionsAndBoundSpan failed - found a TextSpan ${JSON.stringify(defs.textSpan)} when it wasn't expected.`);
+            }
+            else if (defs.textSpan.start !== range.start || defs.textSpan.length !== range.end - range.start) {
+                const expected: ts.TextSpan = {
+                    start: range.start, length: range.end - range.start
+                };
+                this.raiseError(`goToDefinitionsAndBoundSpan failed - expected to find TextSpan ${JSON.stringify(expected)} but got ${JSON.stringify(defs.textSpan)}`);
+            }
+        }
+
+        private isDefinitionInfoAndBoundSpan(definition: ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined): definition is ts.DefinitionInfoAndBoundSpan {
+            return definition && (<ts.DefinitionInfoAndBoundSpan>definition).definitions !== undefined;
         }
 
         public verifyGetEmitOutputForCurrentFile(expected: string): void {
@@ -3828,6 +3867,7 @@ namespace FourSlashInterface {
         }
 
         public goToDefinition(startMarkerName: string | string[], endMarkerName: string | string[]): void;
+        public goToDefinition(startMarkerName: string | string[], endMarkerName: string | string[], range: FourSlash.Range): void;
         public goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
         public goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
         public goToDefinition(arg0: any, endMarkerName?: string | string[]) {
