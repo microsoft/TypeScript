@@ -135,7 +135,10 @@ namespace ts {
         }
 
         function removeExistingFileInfo(_existingFileInfo: FileInfo, path: Path) {
-            registerChangedFile(path);
+            // Since we dont need to track removed file as changed file
+            // We can just remove its diagnostics
+            changedFilesSet.delete(path);
+            semanticDiagnosticsPerFile.delete(path);
             emitHandler.onRemoveSourceFile(path);
         }
 
@@ -179,9 +182,22 @@ namespace ts {
         function emitChangedFiles(program: Program, writeFileCallback: WriteFileCallback): ReadonlyArray<EmitResult> {
             ensureProgramGraph(program);
             const compilerOptions = program.getCompilerOptions();
-            let result: EmitResult[] | undefined;
+
+            if (!changedFilesSet.size) {
+                return emptyArray;
+            }
+
+            // With --out or --outFile all outputs go into single file, do it only once
+            if (compilerOptions.outFile || compilerOptions.out) {
+                semanticDiagnosticsPerFile.clear();
+                changedFilesSet.clear();
+                return [program.emit(/*targetSourceFile*/ undefined, writeFileCallback)];
+            }
+
             const seenFiles = createMap<true>();
+            let result: EmitResult[] | undefined;
             changedFilesSet.forEach((_true, path) => {
+                // Get the affected Files by this program
                 const affectedFiles = getFilesAffectedBy(program, path as Path);
                 affectedFiles.forEach(affectedFile => {
                     // Affected files shouldnt have cached diagnostics
@@ -190,16 +206,8 @@ namespace ts {
                     if (!seenFiles.has(affectedFile.path)) {
                         seenFiles.set(affectedFile.path, true);
 
-                        // With --out or --outFile all outputs go into single file, do it only once
-                        if (compilerOptions.outFile || compilerOptions.out) {
-                            if (!result) {
-                                result = [program.emit(affectedFile, writeFileCallback)];
-                            }
-                        }
-                        else {
-                            // Emit the affected file
-                            (result || (result = [])).push(program.emit(affectedFile, writeFileCallback));
-                        }
+                        // Emit the affected file
+                        (result || (result = [])).push(program.emit(affectedFile, writeFileCallback));
                     }
                 });
             });
@@ -274,7 +282,7 @@ namespace ts {
             const prevSignature = info.signature;
             let latestSignature: string;
             if (sourceFile.isDeclarationFile) {
-                latestSignature = options.computeHash(sourceFile.text);
+                latestSignature = sourceFile.version;
                 info.signature = latestSignature;
             }
             else {
