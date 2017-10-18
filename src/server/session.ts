@@ -131,7 +131,7 @@ namespace ts.server {
 
         const json = JSON.stringify(msg);
         if (verboseLogging) {
-            logger.info(msg.type + ":\n" + indent(json));
+            logger.info(`${msg.type}:${indent(json)}`);
         }
 
         const len = byteLength(json, "utf8");
