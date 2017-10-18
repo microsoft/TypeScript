@@ -2090,7 +2090,7 @@ namespace ts.server {
                     count++;
                     i++;
                     // Skip a "\n" after a "\r" because "\r\n" is only one newline. But "\r\r" is two.
-                    if (s.charCodeAt(i) === CharacterCodes.carriageReturn) {
+                    if (i < s.length && s.charCodeAt(i) === CharacterCodes.carriageReturn) {
                         count++;
                     }
                     break;
