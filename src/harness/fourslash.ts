@@ -2871,14 +2871,14 @@ Actual: ${stringify(fullActual)}`);
         public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker }: FourSlashInterface.ApplyRefactorOptions) {
             const range = this.getSelection();
             const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
-            const refactor = refactors.find(r => r.name === refactorName);
-            if (!refactor) {
+            const refactorsWithName = refactors.filter(r => r.name === refactorName);
+            if (refactorsWithName.length === 0) {
                 this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.\nAvailable refactors: ${refactors.map(r => r.name)}`);
             }
 
-            const action = refactor.actions.find(a => a.name === actionName);
+            const action = ts.firstDefined(refactorsWithName, refactor => refactor.actions.find(a => a.name === actionName));
             if (!action) {
-                this.raiseError(`The expected action: ${action} is not included in: ${refactor.actions.map(a => a.name)}`);
+                this.raiseError(`The expected action: ${actionName} is not included in: ${ts.flatMap(refactorsWithName, r => r.actions.map(a => a.name))}`);
             }
             if (action.description !== actionDescription) {
                 this.raiseError(`Expected action description to be ${JSON.stringify(actionDescription)}, got: ${JSON.stringify(action.description)}`);
