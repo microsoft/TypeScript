@@ -21,5 +21,5 @@ var b = 'some'
     + 'text';
 var c = 'some'
     /* comment */
-    +/*comment1*/ 
+    + /*comment1*/
         'text';

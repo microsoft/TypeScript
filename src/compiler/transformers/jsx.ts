@@ -114,7 +114,7 @@ namespace ts {
                 compilerOptions.reactNamespace,
                 tagName,
                 objectProperties,
-                filter(map(children, transformJsxChildToExpression), isDefined),
+                mapDefined(children, transformJsxChildToExpression),
                 node,
                 location
             );
@@ -253,7 +253,7 @@ namespace ts {
             else {
                 const name = (<JsxOpeningLikeElement>node).tagName;
                 if (isIdentifier(name) && isIntrinsicJsxName(name.escapedText)) {
-                    return createLiteral(unescapeLeadingUnderscores(name.escapedText));
+                    return createLiteral(idText(name));
                 }
                 else {
                     return createExpressionFromEntityName(name);
@@ -268,11 +268,12 @@ namespace ts {
          */
         function getAttributeName(node: JsxAttribute): StringLiteral | Identifier {
             const name = node.name;
-            if (/^[A-Za-z_]\w*$/.test(unescapeLeadingUnderscores(name.escapedText))) {
+            const text = idText(name);
+            if (/^[A-Za-z_]\w*$/.test(text)) {
                 return name;
             }
             else {
-                return createLiteral(unescapeLeadingUnderscores(name.escapedText));
+                return createLiteral(text);
             }
         }
 

@@ -1,0 +1,46 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts ===
+var strOrNum: string | number;
+>strOrNum : string | number
+
+var numOrBool: number | boolean;
+>numOrBool : number | boolean
+
+var str: string;
+>str : string
+
+var num: number;
+>num : number
+
+var bool: boolean;
+>bool : boolean
+
+switch (strOrNum) {
+>strOrNum : string | number
+
+    // Identical
+    case strOrNum:
+>strOrNum : string | number
+
+        break;
+
+    // Constituents
+    case str:
+>str : string
+
+    case num:
+>num : number
+
+        break;
+
+    // Overlap in constituents
+    case numOrBool:
+>numOrBool : number | boolean
+
+        break;
+
+    // No relation
+    case bool:
+>bool : boolean
+
+        break;
+}

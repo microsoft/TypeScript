@@ -3,7 +3,7 @@
 //// class Foo {
 ////     constructor(private [|{| "isWriteAccess": true, "isDefinition": true |}privateParam|]: number) {
 ////         let localPrivate = [|privateParam|];
-////         this.[|privateParam|] += 10;
+////         this.[|{| "isWriteAccess": true |}privateParam|] += 10;
 ////     }
 //// }
 

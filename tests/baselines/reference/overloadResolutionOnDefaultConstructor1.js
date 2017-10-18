@@ -6,7 +6,7 @@ class Bar {
 }
 
 //// [overloadResolutionOnDefaultConstructor1.js]
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     Bar.prototype.clone = function () {

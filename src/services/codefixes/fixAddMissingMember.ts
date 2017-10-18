@@ -87,12 +87,12 @@ namespace ts.codefix {
                     createPropertyAccess(createIdentifier(className), tokenName),
                     createIdentifier("undefined")));
 
-                const staticInitializationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                const staticInitializationChangeTracker = textChanges.ChangeTracker.fromContext(context);
                 staticInitializationChangeTracker.insertNodeAfter(
                     classDeclarationSourceFile,
                     classDeclaration,
                     staticInitialization,
-                    { suffix: context.newLineCharacter });
+                    { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
                 const initializeStaticAction = {
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_static_property_0), [tokenName]),
                     changes: staticInitializationChangeTracker.getChanges()
@@ -111,12 +111,12 @@ namespace ts.codefix {
                     createPropertyAccess(createThis(), tokenName),
                     createIdentifier("undefined")));
 
-                const propertyInitializationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
-                propertyInitializationChangeTracker.insertNodeAt(
+                const propertyInitializationChangeTracker = textChanges.ChangeTracker.fromContext(context);
+                propertyInitializationChangeTracker.insertNodeBefore(
                     classDeclarationSourceFile,
-                    classConstructor.body.getEnd() - 1,
+                    classConstructor.body.getLastToken(),
                     propertyInitialization,
-                    { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+                    { suffix: context.newLineCharacter });
 
                 const initializeAction = {
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_property_0_in_the_constructor), [tokenName]),
@@ -153,11 +153,12 @@ namespace ts.codefix {
                 /*questionToken*/ undefined,
                 typeNode,
                 /*initializer*/ undefined);
-            const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            const propertyChangeTracker = textChanges.ChangeTracker.fromContext(context);
             propertyChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, property, { suffix: context.newLineCharacter });
 
-            (actions || (actions = [])).push({
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Declare_property_0), [tokenName]),
+            const diag = makeStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0;
+            actions = append(actions, {
+                description: formatStringFromArgs(getLocaleSpecificMessage(diag), [tokenName]),
                 changes: propertyChangeTracker.getChanges()
             });
 
@@ -178,7 +179,7 @@ namespace ts.codefix {
                     [indexingParameter],
                     typeNode);
 
-                const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                const indexSignatureChangeTracker = textChanges.ChangeTracker.fromContext(context);
                 indexSignatureChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, indexSignature, { suffix: context.newLineCharacter });
 
                 actions.push({
@@ -195,13 +196,11 @@ namespace ts.codefix {
                 const callExpression = <CallExpression>token.parent.parent;
                 const methodDeclaration = createMethodFromCallExpression(callExpression, tokenName, includeTypeScriptSyntax, makeStatic);
 
-                const methodDeclarationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                const methodDeclarationChangeTracker = textChanges.ChangeTracker.fromContext(context);
                 methodDeclarationChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, methodDeclaration, { suffix: context.newLineCharacter });
+                const diag = makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0;
                 return {
-                    description: formatStringFromArgs(getLocaleSpecificMessage(makeStatic ?
-                        Diagnostics.Declare_method_0 :
-                        Diagnostics.Declare_static_method_0),
-                        [tokenName]),
+                    description: formatStringFromArgs(getLocaleSpecificMessage(diag), [tokenName]),
                     changes: methodDeclarationChangeTracker.getChanges()
                 };
             }

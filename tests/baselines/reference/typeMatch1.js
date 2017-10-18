@@ -31,12 +31,12 @@ var i2;
 var x3 = i;
 var x4 = i2;
 var x5 = i2;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;

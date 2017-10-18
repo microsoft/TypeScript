@@ -15,13 +15,13 @@ namespace ts {
         sourceText?: SourceText;
     }
 
-    interface NamedSourceText {
+    export interface NamedSourceText {
         name: string;
         text: SourceText;
     }
 
-    interface ProgramWithSourceTexts extends Program {
-        sourceTexts?: NamedSourceText[];
+    export interface ProgramWithSourceTexts extends Program {
+        sourceTexts?: ReadonlyArray<NamedSourceText>;
         host: TestCompilerHost;
     }
 
@@ -29,7 +29,7 @@ namespace ts {
         getTrace(): string[];
     }
 
-    class SourceText implements IScriptSnapshot {
+    export class SourceText implements IScriptSnapshot {
         private fullText: string;
 
         constructor(private references: string,
@@ -103,13 +103,17 @@ namespace ts {
     function createSourceFileWithText(fileName: string, sourceText: SourceText, target: ScriptTarget) {
         const file = <SourceFileWithText>createSourceFile(fileName, sourceText.getFullText(), target);
         file.sourceText = sourceText;
+        file.version = "" + sourceText.getVersion();
         return file;
     }
 
-    function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
+    export function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
-                const oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
+                let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
+                if (oldFile && oldFile.redirectInfo) {
+                    oldFile = oldFile.redirectInfo.unredirected;
+                }
                 if (oldFile && oldFile.sourceText.getVersion() === t.text.getVersion()) {
                     return oldFile;
                 }
@@ -151,7 +155,7 @@ namespace ts {
         };
     }
 
-    function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): ProgramWithSourceTexts {
+    export function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): ProgramWithSourceTexts {
         const host = createTestCompilerHost(texts, options.target);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host);
         program.sourceTexts = texts;
@@ -159,7 +163,7 @@ namespace ts {
         return program;
     }
 
-    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: string[], options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
+    export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
         if (!newTexts) {
             newTexts = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
         }
@@ -171,11 +175,16 @@ namespace ts {
         return program;
     }
 
+    export function updateProgramText(files: ReadonlyArray<NamedSourceText>, fileName: string, newProgramText: string) {
+        const file = find(files, f => f.name === fileName)!;
+        file.text = file.text.updateProgram(newProgramText);
+    }
+
     function checkResolvedTypeDirective(expected: ResolvedTypeReferenceDirective, actual: ResolvedTypeReferenceDirective): boolean {
         if (!expected === !actual) {
             if (expected) {
-                assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.isTrue(expected.primary === actual.primary, `'primary': expected '${expected.primary}' to be equal to '${actual.primary}'`);
+                assert.equal(expected.resolvedFileName, actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
+                assert.equal(expected.primary, actual.primary, `'primary': expected '${expected.primary}' to be equal to '${actual.primary}'`);
             }
             return true;
         }
@@ -238,7 +247,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["a.ts"], { target }, files => {
                 files[0].text = files[0].text.updateProgram("var x = 100");
             });
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
+            assert.equal(program_1.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program_1.getSemanticDiagnostics(program_1.getSourceFile("a.ts"));
             const program2Diagnostics = program_2.getSemanticDiagnostics(program_1.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
@@ -249,7 +258,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["a.ts"], { target }, files => {
                 files[0].text = files[0].text.updateProgram("var x = 100");
             });
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
+            assert.equal(program_1.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program_1.getSemanticDiagnostics(program_1.getSourceFile("a.ts"));
             const program2Diagnostics = program_2.getSemanticDiagnostics(program_1.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
@@ -263,19 +272,19 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.SafeModules);
+            assert.equal(program_1.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("fails if change affects type references", () => {
             const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
             updateProgram(program_1, ["a.ts"], { types: ["b"] }, noop);
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Not);
+            assert.equal(program_1.structureIsReused, StructureIsReused.Not);
         });
 
         it("succeeds if change doesn't affect type references", () => {
             const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
             updateProgram(program_1, ["a.ts"], { types: ["a"] }, noop);
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
+            assert.equal(program_1.structureIsReused, StructureIsReused.Completely);
         });
 
         it("fails if change affects imports", () => {
@@ -283,7 +292,7 @@ namespace ts {
             updateProgram(program_1, ["a.ts"], { target }, files => {
                 files[2].text = files[2].text.updateImportsAndExports("import x from 'b'");
             });
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.SafeModules);
+            assert.equal(program_1.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("fails if change affects type directives", () => {
@@ -295,25 +304,25 @@ namespace ts {
 /// <reference types="typerefs1" />`;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.SafeModules);
+            assert.equal(program_1.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("fails if module kind changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS });
             updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.AMD }, noop);
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Not);
+            assert.equal(program_1.structureIsReused, StructureIsReused.Not);
         });
 
         it("fails if rootdir changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/b" });
             updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, noop);
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Not);
+            assert.equal(program_1.structureIsReused, StructureIsReused.Not);
         });
 
         it("fails if config path changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
             updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, noop);
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Not);
+            assert.equal(program_1.structureIsReused, StructureIsReused.Not);
         });
 
         it("succeeds if missing files remain missing", () => {
@@ -338,7 +347,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["a.ts"], options, noop, newTexts);
             assert.deepEqual(emptyArray, program_2.getMissingFilePaths());
 
-            assert.equal(StructureIsReused.SafeModules, program_1.structureIsReused);
+            assert.equal(StructureIsReused.Not, program_1.structureIsReused);
         });
 
         it("resolution cache follows imports", () => {
@@ -357,7 +366,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram("var x = 2");
             });
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
+            assert.equal(program_1.structureIsReused, StructureIsReused.Completely);
 
             // content of resolution cache should not change
             checkResolvedModulesCache(program_1, "a.ts", createMapFromTemplate({ "b": createResolvedModule("b.ts") }));
@@ -367,7 +376,7 @@ namespace ts {
             const program_3 = updateProgram(program_2, ["a.ts"], options, files => {
                 files[0].text = files[0].text.updateImportsAndExports("");
             });
-            assert.isTrue(program_2.structureIsReused === StructureIsReused.SafeModules);
+            assert.equal(program_2.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedModulesCache(program_3, "a.ts", /*expectedContent*/ undefined);
 
             const program_4 = updateProgram(program_3, ["a.ts"], options, files => {
@@ -376,7 +385,7 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
-            assert.isTrue(program_3.structureIsReused === StructureIsReused.SafeModules);
+            assert.equal(program_3.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedModulesCache(program_4, "a.ts", createMapFromTemplate({ "b": createResolvedModule("b.ts"), "c": undefined }));
         });
 
@@ -394,7 +403,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["/a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram("var x = 2");
             });
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
+            assert.equal(program_1.structureIsReused, StructureIsReused.Completely);
 
             // content of resolution cache should not change
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
@@ -405,7 +414,7 @@ namespace ts {
                 files[0].text = files[0].text.updateReferences("");
             });
 
-            assert.isTrue(program_2.structureIsReused === StructureIsReused.SafeModules);
+            assert.equal(program_2.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedTypeDirectivesCache(program_3, "/a.ts", /*expectedContent*/ undefined);
 
             updateProgram(program_3, ["/a.ts"], options, files => {
@@ -414,7 +423,7 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.isTrue(program_3.structureIsReused === StructureIsReused.SafeModules);
+            assert.equal(program_3.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
         });
 
@@ -433,20 +442,20 @@ namespace ts {
                         "======== Resolving module 'a' from 'file1.ts'. ========",
                         "Explicitly specified module resolution kind: 'NodeJs'.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a.ts' does not exist.",
                         "File 'node_modules/a.tsx' does not exist.",
                         "File 'node_modules/a.d.ts' does not exist.",
-                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.ts' does not exist.",
                         "File 'node_modules/a/index.tsx' does not exist.",
                         "File 'node_modules/a/index.d.ts' does not exist.",
-                        "File 'node_modules/@types/a.d.ts' does not exist.",
                         "File 'node_modules/@types/a/package.json' does not exist.",
+                        "File 'node_modules/@types/a.d.ts' does not exist.",
                         "File 'node_modules/@types/a/index.d.ts' does not exist.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'JavaScript'.",
+                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a.js' does not exist.",
                         "File 'node_modules/a.jsx' does not exist.",
-                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.js' does not exist.",
                         "File 'node_modules/a/index.jsx' does not exist.",
                         "======== Module name 'a' was not resolved. ========"
@@ -454,7 +463,7 @@ namespace ts {
                     "initialProgram: execute module resolution normally.");
 
                 const initialProgramDiagnostics = initialProgram.getSemanticDiagnostics(initialProgram.getSourceFile("file1.ts"));
-                assert(initialProgramDiagnostics.length === 1, `initialProgram: import should fail.`);
+                assert.lengthOf(initialProgramDiagnostics, 1, `initialProgram: import should fail.`);
             }
 
             const afterNpmInstallProgram = updateProgram(initialProgram, rootFiles.map(f => f.name), options, f => {
@@ -466,10 +475,10 @@ namespace ts {
                         "======== Resolving module 'a' from 'file1.ts'. ========",
                         "Explicitly specified module resolution kind: 'NodeJs'.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a.ts' does not exist.",
                         "File 'node_modules/a.tsx' does not exist.",
                         "File 'node_modules/a.d.ts' does not exist.",
-                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.ts' does not exist.",
                         "File 'node_modules/a/index.tsx' does not exist.",
                         "File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.",
@@ -478,7 +487,7 @@ namespace ts {
                     "afterNpmInstallProgram: execute module resolution normally.");
 
                 const afterNpmInstallProgramDiagnostics = afterNpmInstallProgram.getSemanticDiagnostics(afterNpmInstallProgram.getSourceFile("file1.ts"));
-                assert(afterNpmInstallProgramDiagnostics.length === 0, `afterNpmInstallProgram: program is well-formed with import.`);
+                assert.lengthOf(afterNpmInstallProgramDiagnostics, 0, `afterNpmInstallProgram: program is well-formed with import.`);
             }
         });
 
@@ -502,14 +511,14 @@ namespace ts {
                     "File '/fs.ts' does not exist.",
                     "File '/fs.tsx' does not exist.",
                     "File '/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/index.d.ts' does not exist.",
                     "File '/a/b/fs.js' does not exist.",
                     "File '/a/b/fs.jsx' does not exist.",
@@ -544,14 +553,14 @@ namespace ts {
                     "File '/fs.ts' does not exist.",
                     "File '/fs.tsx' does not exist.",
                     "File '/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/index.d.ts' does not exist.",
                     "File '/a/b/fs.js' does not exist.",
                     "File '/a/b/fs.jsx' does not exist.",
@@ -617,10 +626,10 @@ namespace ts {
                         "File 'f1.ts' exist - use it as a name resolution result.",
                         "======== Module name './f1' was successfully resolved to 'f1.ts'. ========"
                     ],
-                    "program_1: execute module reoslution normally.");
+                    "program_1: execute module resolution normally.");
 
                 const program_1Diagnostics = program_1.getSemanticDiagnostics(program_1.getSourceFile("f2.ts"));
-                assert(program_1Diagnostics.length === expectedErrors, `initial program should be well-formed`);
+                assert.lengthOf(program_1Diagnostics, expectedErrors, `initial program should be well-formed`);
             }
             const indexOfF1 = 6;
             const program_2 = updateProgram(program_1, program_1.getRootFileNames(), options, f => {
@@ -630,7 +639,7 @@ namespace ts {
 
             {
                 const program_2Diagnostics = program_2.getSemanticDiagnostics(program_2.getSourceFile("f2.ts"));
-                assert(program_2Diagnostics.length === expectedErrors, `removing no-default-lib shouldn't affect any types used.`);
+                assert.lengthOf(program_2Diagnostics, expectedErrors, `removing no-default-lib shouldn't affect any types used.`);
 
                 assert.deepEqual(program_2.host.getTrace(), [
                     "======== Resolving type reference directive 'typerefs1', containing file 'f1.ts', root directory 'node_modules/@types'. ========",
@@ -659,7 +668,7 @@ namespace ts {
 
             {
                 const program_3Diagnostics = program_3.getSemanticDiagnostics(program_3.getSourceFile("f2.ts"));
-                assert(program_3Diagnostics.length === expectedErrors, `typerefs2 was unused, so diagnostics should be unaffected.`);
+                assert.lengthOf(program_3Diagnostics, expectedErrors, `typerefs2 was unused, so diagnostics should be unaffected.`);
 
                 assert.deepEqual(program_3.host.getTrace(), [
                     "======== Resolving module './b1' from 'f1.ts'. ========",
@@ -684,7 +693,7 @@ namespace ts {
 
             {
                 const program_4Diagnostics = program_4.getSemanticDiagnostics(program_4.getSourceFile("f2.ts"));
-                assert(program_4Diagnostics.length === expectedErrors, `a1.ts was unused, so diagnostics should be unaffected.`);
+                assert.lengthOf(program_4Diagnostics, expectedErrors, `a1.ts was unused, so diagnostics should be unaffected.`);
 
                 assert.deepEqual(program_4.host.getTrace(), [
                     "======== Resolving module './b1' from 'f1.ts'. ========",
@@ -708,7 +717,7 @@ namespace ts {
 
             {
                 const program_5Diagnostics = program_5.getSemanticDiagnostics(program_5.getSourceFile("f2.ts"));
-                assert(program_5Diagnostics.length === ++expectedErrors, `import of BB in f1 fails. BB is of type any. Add one error`);
+                assert.lengthOf(program_5Diagnostics, ++expectedErrors, `import of BB in f1 fails. BB is of type any. Add one error`);
 
                 assert.deepEqual(program_5.host.getTrace(), [
                     "======== Resolving module './b1' from 'f1.ts'. ========",
@@ -725,7 +734,7 @@ namespace ts {
 
             {
                 const program_6Diagnostics = program_6.getSemanticDiagnostics(program_6.getSourceFile("f2.ts"));
-                assert(program_6Diagnostics.length === expectedErrors, `import of BB in f1 fails.`);
+                assert.lengthOf(program_6Diagnostics, expectedErrors, `import of BB in f1 fails.`);
 
                 assert.deepEqual(program_6.host.getTrace(), [
                     "======== Resolving module './b1' from 'f1.ts'. ========",
@@ -749,7 +758,7 @@ namespace ts {
 
             {
                 const program_7Diagnostics = program_7.getSemanticDiagnostics(program_7.getSourceFile("f2.ts"));
-                assert(program_7Diagnostics.length === expectedErrors, `removing import is noop with respect to program, so no change in diagnostics.`);
+                assert.lengthOf(program_7Diagnostics, expectedErrors, `removing import is noop with respect to program, so no change in diagnostics.`);
 
                 assert.deepEqual(program_7.host.getTrace(), [
                     "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
@@ -762,11 +771,271 @@ namespace ts {
                 ], "program_7 should reuse module resolutions in f2 since it is unchanged");
             }
         });
+
+        describe("redirects", () => {
+            const axIndex = "/node_modules/a/node_modules/x/index.d.ts";
+            const axPackage = "/node_modules/a/node_modules/x/package.json";
+            const bxIndex = "/node_modules/b/node_modules/x/index.d.ts";
+            const bxPackage = "/node_modules/b/node_modules/x/package.json";
+            const root = "/a.ts";
+            const compilerOptions = { target, moduleResolution: ModuleResolutionKind.NodeJs };
+
+            function createRedirectProgram(options?: { bText: string, bVersion: string }): ProgramWithSourceTexts {
+                const files: NamedSourceText[] = [
+                    {
+                        name: "/node_modules/a/index.d.ts",
+                        text: SourceText.New("", 'import X from "x";', "export function a(x: X): void;"),
+                    },
+                    {
+                        name: axIndex,
+                        text: SourceText.New("", "", "export default class X { private x: number; }"),
+                    },
+                    {
+                        name: axPackage,
+                        text: SourceText.New("", "", JSON.stringify({ name: "x", version: "1.2.3" })),
+                    },
+                    {
+                        name: "/node_modules/b/index.d.ts",
+                        text: SourceText.New("", 'import X from "x";', "export const b: X;"),
+                    },
+                    {
+                        name: bxIndex,
+                        text: SourceText.New("", "", options ? options.bText : "export default class X { private x: number; }"),
+                    },
+                    {
+                        name: bxPackage,
+                        text: SourceText.New("", "", JSON.stringify({ name: "x", version: options ? options.bVersion : "1.2.3" })),
+                    },
+                    {
+                        name: root,
+                        text: SourceText.New("", 'import { a } from "a"; import { b } from "b";', "a(b)"),
+                    },
+                ];
+
+                return newProgram(files, [root], compilerOptions);
+            }
+
+            function updateRedirectProgram(program: ProgramWithSourceTexts, updater: (files: NamedSourceText[]) => void): ProgramWithSourceTexts {
+                return updateProgram(program, [root], compilerOptions, updater);
+            }
+
+            it("No changes -> redirect not broken", () => {
+                const program_1 = createRedirectProgram();
+
+                const program_2 = updateRedirectProgram(program_1, files => {
+                    updateProgramText(files, root, "const x = 1;");
+                });
+                assert.equal(program_1.structureIsReused, StructureIsReused.Completely);
+                assert.deepEqual(program_2.getSemanticDiagnostics(), emptyArray);
+            });
+
+            it("Target changes -> redirect broken", () => {
+                const program_1 = createRedirectProgram();
+                assert.deepEqual(program_1.getSemanticDiagnostics(), emptyArray);
+
+                const program_2 = updateRedirectProgram(program_1, files => {
+                    updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");
+                    updateProgramText(files, axPackage, JSON.stringify('{ name: "x", version: "1.2.4" }'));
+                });
+                assert.equal(program_1.structureIsReused, StructureIsReused.Not);
+                assert.lengthOf(program_2.getSemanticDiagnostics(), 1);
+            });
+
+            it("Underlying changes -> redirect broken", () => {
+                const program_1 = createRedirectProgram();
+
+                const program_2 = updateRedirectProgram(program_1, files => {
+                    updateProgramText(files, bxIndex, "export default class X { private x: number; private y: number; }");
+                    updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.4" }));
+                });
+                assert.equal(program_1.structureIsReused, StructureIsReused.Not);
+                assert.lengthOf(program_2.getSemanticDiagnostics(), 1);
+            });
+
+            it("Previously duplicate packages -> program structure not reused", () => {
+                const program_1 = createRedirectProgram({ bVersion: "1.2.4", bText: "export = class X { private x: number; }" });
+
+                const program_2 = updateRedirectProgram(program_1, files => {
+                    updateProgramText(files, bxIndex, "export default class X { private x: number; }");
+                    updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.3" }));
+                });
+                assert.equal(program_1.structureIsReused, StructureIsReused.Not);
+                assert.deepEqual(program_2.getSemanticDiagnostics(), []);
+            });
+        });
     });
 
     describe("host is optional", () => {
         it("should work if host is not provided", () => {
             createProgram([], {});
+        });
+    });
+
+    import TestSystem = ts.TestFSWithWatch.TestServerHost;
+    type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
+    import createTestSystem = ts.TestFSWithWatch.createWatchedSystem;
+    import libFile = ts.TestFSWithWatch.libFile;
+
+    describe("isProgramUptoDate should return true when there is no change in compiler options and", () => {
+        function verifyProgramIsUptoDate(
+            program: Program,
+            newRootFileNames: string[],
+            newOptions: CompilerOptions
+        ) {
+            const actual = isProgramUptoDate(
+                program, newRootFileNames, newOptions,
+                path => program.getSourceFileByPath(path).version, /*fileExists*/ returnFalse,
+                /*hasInvalidatedResolution*/ returnFalse,
+                /*hasChangedAutomaticTypeDirectiveNames*/ false
+            );
+            assert.isTrue(actual);
+        }
+
+        function duplicate(options: CompilerOptions): CompilerOptions;
+        function duplicate(fileNames: string[]): string[];
+        function duplicate(filesOrOptions: CompilerOptions | string[]) {
+            return JSON.parse(JSON.stringify(filesOrOptions));
+        }
+
+        function createWatchingSystemHost(host: TestSystem) {
+            return ts.createWatchingSystemHost(/*pretty*/ undefined, host);
+        }
+
+        function verifyProgramWithoutConfigFile(watchingSystemHost: WatchingSystemHost, rootFiles: string[], options: CompilerOptions) {
+            const program = createWatchModeWithoutConfigFile(rootFiles, options, watchingSystemHost)();
+            verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
+        }
+
+        function getConfigParseResult(watchingSystemHost: WatchingSystemHost, configFileName: string) {
+            return parseConfigFile(configFileName, {}, watchingSystemHost.system, watchingSystemHost.reportDiagnostic, watchingSystemHost.reportWatchDiagnostic);
+        }
+
+        function verifyProgramWithConfigFile(watchingSystemHost: WatchingSystemHost, configFile: string) {
+            const result = getConfigParseResult(watchingSystemHost, configFile);
+            const program = createWatchModeWithConfigFile(result, {}, watchingSystemHost)();
+            const { fileNames, options } = getConfigParseResult(watchingSystemHost, configFile);
+            verifyProgramIsUptoDate(program, fileNames, options);
+        }
+
+        function verifyProgram(files: FileOrFolder[], rootFiles: string[], options: CompilerOptions, configFile: string) {
+            const watchingSystemHost = createWatchingSystemHost(createTestSystem(files));
+            verifyProgramWithoutConfigFile(watchingSystemHost, rootFiles, options);
+            verifyProgramWithConfigFile(watchingSystemHost, configFile);
+        }
+
+        it("has empty options", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.ts",
+                content: "let x = 1"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/file2.ts",
+                content: "let y = 1"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            verifyProgram([file1, file2, libFile, configFile], [file1.path, file2.path], {}, configFile.path);
+        });
+
+        it("has lib specified in the options", () => {
+            const compilerOptions: CompilerOptions = { lib: ["es5", "es2015.promise"] };
+            const app: FileOrFolder = {
+                path: "/src/app.ts",
+                content: "var x: Promise<string>;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify({ compilerOptions })
+            };
+            const es5Lib: FileOrFolder = {
+                path: "/compiler/lib.es5.d.ts",
+                content: "declare const eval: any"
+            };
+            const es2015Promise: FileOrFolder = {
+                path: "/compiler/lib.es2015.promise.d.ts",
+                content: "declare class Promise<T> {}"
+            };
+
+            verifyProgram([app, configFile, es5Lib, es2015Promise], [app.path], compilerOptions, configFile.path);
+        });
+
+        it("has paths specified in the options", () => {
+            const compilerOptions: CompilerOptions = {
+                baseUrl: ".",
+                paths: {
+                    "*": [
+                        "packages/mail/data/*",
+                        "packages/styles/*",
+                        "*"
+                    ]
+                }
+            };
+            const app: FileOrFolder = {
+                path: "/src/packages/framework/app.ts",
+                content: 'import classc from "module1/lib/file1";\
+                          import classD from "module3/file3";\
+                          let x = new classc();\
+                          let y = new classD();'
+            };
+            const module1: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                content: 'import classc from "module2/file2";export default classc;',
+            };
+            const module2: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                content: 'class classc { method2() { return "hello"; } }\nexport default classc',
+            };
+            const module3: FileOrFolder = {
+                path: "/src/packages/styles/module3/file3.ts",
+                content: "class classD { method() { return 10; } }\nexport default classD;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify({ compilerOptions })
+            };
+
+            verifyProgram([app, module1, module2, module3, libFile, configFile], [app.path], compilerOptions, configFile.path);
+        });
+
+        it("has include paths specified in tsconfig file", () => {
+            const compilerOptions: CompilerOptions = {
+                baseUrl: ".",
+                paths: {
+                    "*": [
+                        "packages/mail/data/*",
+                        "packages/styles/*",
+                        "*"
+                    ]
+                }
+            };
+            const app: FileOrFolder = {
+                path: "/src/packages/framework/app.ts",
+                content: 'import classc from "module1/lib/file1";\
+                          import classD from "module3/file3";\
+                          let x = new classc();\
+                          let y = new classD();'
+            };
+            const module1: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                content: 'import classc from "module2/file2";export default classc;',
+            };
+            const module2: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                content: 'class classc { method2() { return "hello"; } }\nexport default classc',
+            };
+            const module3: FileOrFolder = {
+                path: "/src/packages/styles/module3/file3.ts",
+                content: "class classD { method() { return 10; } }\nexport default classD;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify({ compilerOptions, include: ["packages/**/ *.ts"] })
+            };
+
+            const watchingSystemHost = createWatchingSystemHost(createTestSystem([app, module1, module2, module3, libFile, configFile]));
+            verifyProgramWithConfigFile(watchingSystemHost, configFile.path);
         });
     });
 }

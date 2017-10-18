@@ -37,7 +37,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
-var Opt = (function (_super) {
+var Opt = /** @class */ (function (_super) {
     __extends(Opt, _super);
     function Opt() {
         return _super !== null && _super.apply(this, arguments) || this;

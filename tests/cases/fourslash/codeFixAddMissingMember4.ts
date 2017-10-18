@@ -4,19 +4,24 @@
 // @allowJs: true
 
 // @Filename: a.js
-////[|class C {
+////class C {
 ////    constructor() {
 ////    }
 ////    method() {
 ////        this.foo === 10;
 ////    }
-////}|]
+////}
 
-verify.rangeAfterCodeFix(`class C {
+verify.codeFix({
+    description: "Initialize property 'foo' in the constructor.",
+    index: 0,
+    // TODO: GH#18445
+    newFileContent: `class C {
     constructor() {
-    this.foo = undefined;
-}
+        this.foo = undefined;\r
+    }
     method() {
         this.foo === 10;
     }
-}`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 0);
+}`
+});

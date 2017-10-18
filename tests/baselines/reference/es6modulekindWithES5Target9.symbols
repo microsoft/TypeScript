@@ -1,0 +1,27 @@
+=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts ===
+import d from "mod";
+>d : Symbol(d, Decl(es6modulekindWithES5Target9.ts, 0, 6))
+
+import {a} from "mod";
+>a : Symbol(a, Decl(es6modulekindWithES5Target9.ts, 2, 8))
+
+import * as M from "mod";
+>M : Symbol(M, Decl(es6modulekindWithES5Target9.ts, 4, 6))
+
+export {a};
+>a : Symbol(a, Decl(es6modulekindWithES5Target9.ts, 6, 8))
+
+export {M};
+>M : Symbol(M, Decl(es6modulekindWithES5Target9.ts, 8, 8))
+
+export {d};
+>d : Symbol(d, Decl(es6modulekindWithES5Target9.ts, 10, 8))
+
+export * from "mod";
+
+export {b} from "mod"
+>b : Symbol(b, Decl(es6modulekindWithES5Target9.ts, 14, 8))
+
+export default d;
+>d : Symbol(d, Decl(es6modulekindWithES5Target9.ts, 0, 6))
+

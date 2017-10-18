@@ -1,6 +1,6 @@
 //// [typeAliasExport.ts]
 declare module "a" {
-  export default 0
+  export default undefined
   export var a;
   export type a = typeof a;
 }

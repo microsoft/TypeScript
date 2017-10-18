@@ -1,4 +1,5 @@
 // @target: esnext
+// @skipLibCheck: true
 // @lib: esnext
 // @noEmit: true
 // @filename: methodIsOk.ts

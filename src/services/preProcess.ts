@@ -273,13 +273,11 @@ namespace ts {
 
                 // skip open bracket
                 token = nextToken();
-                let i = 0;
                 // scan until ']' or EOF
                 while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
                     // record string literals as module names
                     if (token === SyntaxKind.StringLiteral) {
                         recordModuleName();
-                        i++;
                     }
 
                     token = nextToken();

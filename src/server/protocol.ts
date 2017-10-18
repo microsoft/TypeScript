@@ -8,6 +8,7 @@ namespace ts.server.protocol {
         /* @internal */
         BraceFull = "brace-full",
         BraceCompletion = "braceCompletion",
+        GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
         Completions = "completions",
@@ -93,6 +94,7 @@ namespace ts.server.protocol {
         BreakpointStatement = "breakpointStatement",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
+        ApplyCodeActionCommand = "applyCodeActionCommand",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
@@ -124,6 +126,8 @@ namespace ts.server.protocol {
      * Client-initiated request message
      */
     export interface Request extends Message {
+        type: "request";
+
         /**
          * The command to execute
          */
@@ -146,6 +150,8 @@ namespace ts.server.protocol {
      * Server-initiated event message
      */
     export interface Event extends Message {
+        type: "event";
+
         /**
          * Name of event
          */
@@ -161,6 +167,8 @@ namespace ts.server.protocol {
      * Response by server to client request message.
      */
     export interface Response extends Message {
+        type: "response";
+
         /**
          * Sequence number of the request message.
          */
@@ -177,7 +185,8 @@ namespace ts.server.protocol {
         command: string;
 
         /**
-         * Contains error message if success === false.
+         * If success === false, this should always be provided.
+         * Otherwise, may (or may not) contain a success message.
          */
         message?: string;
 
@@ -239,6 +248,21 @@ namespace ts.server.protocol {
      */
     export interface TodoCommentsResponse extends Response {
         body?: TodoComment[];
+    }
+
+    /**
+     * A request to determine if the caret is inside a comment.
+     */
+    export interface SpanOfEnclosingCommentRequest extends FileLocationRequest {
+        command: CommandTypes.GetSpanOfEnclosingComment;
+        arguments: SpanOfEnclosingCommentRequestArgs;
+    }
+
+    export interface SpanOfEnclosingCommentRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
+         */
+        onlyMultiLine: boolean;
     }
 
     /**
@@ -450,7 +474,7 @@ namespace ts.server.protocol {
      * Represents a single refactoring action - for example, the "Extract Method..." refactor might
      * offer several actions, each corresponding to a surround class or closure to extract into.
      */
-    export type RefactorActionInfo = {
+    export interface RefactorActionInfo {
         /**
          * The programmatic name of the refactoring action
          */
@@ -462,7 +486,7 @@ namespace ts.server.protocol {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
-    };
+    }
 
     export interface GetEditsForRefactorRequest extends Request {
         command: CommandTypes.GetEditsForRefactor;
@@ -485,7 +509,7 @@ namespace ts.server.protocol {
         body?: RefactorEditInfo;
     }
 
-    export type RefactorEditInfo = {
+    export interface RefactorEditInfo {
         edits: FileCodeEdits[];
 
         /**
@@ -494,7 +518,7 @@ namespace ts.server.protocol {
          */
         renameLocation?: Location;
         renameFilename?: string;
-    };
+    }
 
     /**
      * Request for the available codefixes at a specific position.
@@ -503,6 +527,14 @@ namespace ts.server.protocol {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
     }
+
+    export interface ApplyCodeActionCommandRequest extends Request {
+        command: CommandTypes.ApplyCodeActionCommand;
+        arguments: ApplyCodeActionCommandRequestArgs;
+    }
+
+    // All we need is the `success` and `message` fields of Response.
+    export interface ApplyCodeActionCommandResponse extends Response {}
 
     export interface FileRangeRequestArgs extends FileRequestArgs {
         /**
@@ -546,6 +578,10 @@ namespace ts.server.protocol {
          * Errorcodes we want to get the fixes for.
          */
         errorCodes?: number[];
+    }
+
+    export interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+        command: {};
     }
 
     /**
@@ -914,7 +950,7 @@ namespace ts.server.protocol {
         /**
          * An array of span groups (one per file) that refer to the item to be renamed.
          */
-        locs: SpanGroup[];
+        locs: ReadonlyArray<SpanGroup>;
     }
 
     /**
@@ -1304,6 +1340,13 @@ namespace ts.server.protocol {
          * Compiler options to be used with inferred projects.
          */
         options: ExternalProjectCompilerOptions;
+
+        /**
+         * Specifies the project root path used to scope compiler options.
+         * It is an error to provide this property if the server has not been started with
+         * `useInferredProjectPerProjectRoot` enabled.
+         */
+        projectRootPath?: string;
     }
 
     /**
@@ -1518,6 +1561,8 @@ namespace ts.server.protocol {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileCodeEdits[];
+        /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
+        commands?: {}[];
     }
 
     /**
@@ -1635,6 +1680,11 @@ namespace ts.server.protocol {
          * this span should be used instead of the default one.
          */
         replacementSpan?: TextSpan;
+        /**
+         * Indicates whether commiting this completion entry will require additional code actions to be
+         * made to avoid errors. The CompletionEntryDetails will have these actions.
+         */
+        hasAction?: true;
     }
 
     /**
@@ -1667,6 +1717,11 @@ namespace ts.server.protocol {
          * JSDoc tags for the symbol.
          */
         tags: JSDocTagInfo[];
+
+        /**
+         * The associated code actions for this entry
+         */
+        codeActions?: CodeAction[];
     }
 
     export interface CompletionsResponse extends Response {
@@ -2015,6 +2070,19 @@ namespace ts.server.protocol {
          * and false otherwise.
          */
         languageServiceEnabled: boolean;
+    }
+
+    export type ProjectsUpdatedInBackgroundEventName = "projectsUpdatedInBackground";
+    export interface ProjectsUpdatedInBackgroundEvent extends Event {
+        event: ProjectsUpdatedInBackgroundEventName;
+        body: ProjectsUpdatedInBackgroundEventBody;
+    }
+
+    export interface ProjectsUpdatedInBackgroundEventBody {
+        /**
+         * Current set of open files
+         */
+        openFiles: string[];
     }
 
     /**
@@ -2429,6 +2497,7 @@ namespace ts.server.protocol {
         paths?: MapLike<string[]>;
         plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;
@@ -2465,6 +2534,7 @@ namespace ts.server.protocol {
         System = "System",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ESNext = "ESNext"
     }
 
     export const enum ModuleResolutionKind {
@@ -2482,5 +2552,8 @@ namespace ts.server.protocol {
         ES5 = "ES5",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ES2016 = "ES2016",
+        ES2017 = "ES2017",
+        ESNext = "ESNext"
     }
 }

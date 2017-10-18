@@ -9,7 +9,7 @@ let o = { n: 12 };
 
 
 //// [typeofUsedBeforeBlockScoped.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.s = 2;

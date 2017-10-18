@@ -2,7 +2,7 @@
 class foo { constructor() { static f = 3; } }
 
 //// [class2.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     foo.f = 3;

@@ -43,7 +43,7 @@ suddenly(function (_a) {
     var _b = _a.x, _c = _b.z, z = _c === void 0 ? 12 : _c, nested = __rest(_b, ["z"]), rest = __rest(_a, ["x"]);
     return rest.y + nested.ka;
 });
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.m = function (_a) {

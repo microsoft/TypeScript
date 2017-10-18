@@ -30,7 +30,7 @@ strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 // have no effect on members of objects such as properties. 
 var num;
 var strOrNum;
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     Object.defineProperty(C1.prototype, "pp3", {

@@ -5,8 +5,10 @@
 /// <reference path="..\..\src\harness\typeWriter.ts" />
 
 interface FileInformation {
-    contents: string;
+    contents?: string;
+    contentsPath?: string;
     codepage: number;
+    bom?: string;
 }
 
 interface FindFileResult {
@@ -27,13 +29,15 @@ interface IOLog {
     filesRead: IOLogFile[];
     filesWritten: {
         path: string;
-        contents: string;
+        contents?: string;
+        contentsPath?: string;
         bom: boolean;
     }[];
     filesDeleted: string[];
     filesAppended: {
         path: string;
-        contents: string;
+        contents?: string;
+        contentsPath?: string;
     }[];
     fileExists: {
         path: string;
@@ -70,6 +74,7 @@ interface IOLog {
         depth: number,
         result: ReadonlyArray<string>,
     }[];
+    useCaseSensitiveFileNames?: boolean;
 }
 
 interface PlaybackControl {
@@ -128,6 +133,72 @@ namespace Playback {
         };
     }
 
+    export function newStyleLogIntoOldStyleLog(log: IOLog, host: ts.System | Harness.IO, baseName: string) {
+        for (const file of log.filesAppended) {
+            if (file.contentsPath) {
+                file.contents = host.readFile(ts.combinePaths(baseName, file.contentsPath));
+                delete file.contentsPath;
+            }
+        }
+        for (const file of log.filesWritten) {
+            if (file.contentsPath) {
+                file.contents = host.readFile(ts.combinePaths(baseName, file.contentsPath));
+                delete file.contentsPath;
+            }
+        }
+        for (const file of log.filesRead) {
+            if (file.result.contentsPath) {
+                // `readFile` strips away a BOM (and actually reinerprets the file contents according to the correct encoding)
+                // - but this has the unfortunate sideeffect of removing the BOM from any outputs based on the file, so we readd it here.
+                file.result.contents = (file.result.bom || "") + host.readFile(ts.combinePaths(baseName, file.result.contentsPath));
+                delete file.result.contentsPath;
+            }
+        }
+        return log;
+    }
+
+    export function oldStyleLogIntoNewStyleLog(log: IOLog, writeFile: typeof Harness.IO.writeFile, baseTestName: string) {
+        if (log.filesAppended) {
+            for (const file of log.filesAppended) {
+                if (file.contents !== undefined) {
+                    file.contentsPath = ts.combinePaths("appended", Harness.Compiler.sanitizeTestFilePath(file.path));
+                    writeFile(ts.combinePaths(baseTestName, file.contentsPath), file.contents);
+                    delete file.contents;
+                }
+            }
+        }
+        if (log.filesWritten) {
+            for (const file of log.filesWritten) {
+                if (file.contents !== undefined) {
+                    file.contentsPath = ts.combinePaths("written", Harness.Compiler.sanitizeTestFilePath(file.path));
+                    writeFile(ts.combinePaths(baseTestName, file.contentsPath), file.contents);
+                    delete file.contents;
+                }
+            }
+        }
+        if (log.filesRead) {
+            for (const file of log.filesRead) {
+                const { contents } = file.result;
+                if (contents !== undefined) {
+                    file.result.contentsPath = ts.combinePaths("read", Harness.Compiler.sanitizeTestFilePath(file.path));
+                    writeFile(ts.combinePaths(baseTestName, file.result.contentsPath), contents);
+                    const len = contents.length;
+                    if (len >= 2 && contents.charCodeAt(0) === 0xfeff) {
+                        file.result.bom = "\ufeff";
+                    }
+                    if (len >= 2 && contents.charCodeAt(0) === 0xfffe) {
+                        file.result.bom = "\ufffe";
+                    }
+                    if (len >= 3 && contents.charCodeAt(0) === 0xefbb && contents.charCodeAt(1) === 0xbf) {
+                        file.result.bom = "\uefbb\xbf";
+                    }
+                    delete file.result.contents;
+                }
+            }
+        }
+        return log;
+    }
+
     function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
     function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
     function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
@@ -151,7 +222,7 @@ namespace Playback {
         wrapper.startRecord = (fileNameBase) => {
             recordLogFileNameBase = fileNameBase;
             recordLog = createEmptyLog();
-
+            recordLog.useCaseSensitiveFileNames = typeof underlying.useCaseSensitiveFileNames === "function" ? underlying.useCaseSensitiveFileNames() : underlying.useCaseSensitiveFileNames;
             if (typeof underlying.args !== "function") {
                 recordLog.arguments = underlying.args;
             }
@@ -163,9 +234,9 @@ namespace Playback {
         wrapper.endRecord = () => {
             if (recordLog !== undefined) {
                 let i = 0;
-                const fn = () => recordLogFileNameBase + i + ".json";
-                while (underlying.fileExists(fn())) i++;
-                underlying.writeFile(fn(), JSON.stringify(recordLog));
+                const fn = () => recordLogFileNameBase + i;
+                while (underlying.fileExists(fn() + ".json")) i++;
+                underlying.writeFile(ts.combinePaths(fn(), "test.json"), JSON.stringify(oldStyleLogIntoNewStyleLog(recordLog, (path, string) => underlying.writeFile(ts.combinePaths(fn(), path), string), fn()), null, 4)); // tslint:disable-line:no-null-keyword
                 recordLog = undefined;
             }
         };
@@ -248,6 +319,13 @@ namespace Playback {
                 wrapper.endRecord();
             }
             underlying.exit(exitCode);
+        };
+
+        wrapper.useCaseSensitiveFileNames = () => {
+            if (replayLog !== undefined) {
+                return !!replayLog.useCaseSensitiveFileNames;
+            }
+            return typeof underlying.useCaseSensitiveFileNames === "function" ? underlying.useCaseSensitiveFileNames() : underlying.useCaseSensitiveFileNames;
         };
     }
 

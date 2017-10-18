@@ -1,0 +1,6 @@
+=== tests/cases/conformance/jsdoc/jsdocParseErrorsInTypescript.ts ===
+// parse error (blocks grammar errors from checker)
+function parse1(n: number=) { }
+>parse1 : Symbol(parse1, Decl(jsdocParseErrorsInTypescript.ts, 0, 0))
+>n : Symbol(n, Decl(jsdocParseErrorsInTypescript.ts, 1, 16))
+

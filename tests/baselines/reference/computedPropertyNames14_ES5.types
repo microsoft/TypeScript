@@ -1,0 +1,25 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts ===
+var b: boolean;
+>b : boolean
+
+class C {
+>C : C
+
+    [b]() {}
+>b : boolean
+
+    static [true]() { }
+>true : true
+
+    [[]]() { }
+>[] : undefined[]
+
+    static [{}]() { }
+>{} : {}
+
+    [undefined]() { }
+>undefined : undefined
+
+    static [null]() { }
+>null : null
+}

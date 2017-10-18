@@ -1,0 +1,59 @@
+=== tests/cases/compiler/ambiguousOverload.ts ===
+function foof(bar: string, y): number;
+>foof : { (bar: string, y: any): number; (bar: string, x: any): string; }
+>bar : string
+>y : any
+
+function foof(bar: string, x): string;
+>foof : { (bar: string, y: any): number; (bar: string, x: any): string; }
+>bar : string
+>x : any
+
+function foof(bar: any): any { return bar };
+>foof : { (bar: string, y: any): number; (bar: string, x: any): string; }
+>bar : any
+>bar : any
+
+var x: number = foof("s", null);
+>x : number
+>foof("s", null) : number
+>foof : { (bar: string, y: any): number; (bar: string, x: any): string; }
+>"s" : "s"
+>null : null
+
+var y: string = foof("s", null);
+>y : string
+>foof("s", null) : number
+>foof : { (bar: string, y: any): number; (bar: string, x: any): string; }
+>"s" : "s"
+>null : null
+
+function foof2(bar: string, x): string;
+>foof2 : { (bar: string, x: any): string; (bar: string, y: any): number; }
+>bar : string
+>x : any
+
+function foof2(bar: string, y): number;
+>foof2 : { (bar: string, x: any): string; (bar: string, y: any): number; }
+>bar : string
+>y : any
+
+function foof2(bar: any): any { return bar };
+>foof2 : { (bar: string, x: any): string; (bar: string, y: any): number; }
+>bar : any
+>bar : any
+
+var x2: string = foof2("s", null);
+>x2 : string
+>foof2("s", null) : string
+>foof2 : { (bar: string, x: any): string; (bar: string, y: any): number; }
+>"s" : "s"
+>null : null
+
+var y2: number = foof2("s", null);
+>y2 : number
+>foof2("s", null) : string
+>foof2 : { (bar: string, x: any): string; (bar: string, y: any): number; }
+>"s" : "s"
+>null : null
+

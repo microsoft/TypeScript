@@ -8,3 +8,4 @@ var a: any;
 ([] = a);
 >a : Symbol(a, Decl(emptyAssignmentPatterns01_ES5.ts, 0, 3))
 
+var [,] = [1,2];

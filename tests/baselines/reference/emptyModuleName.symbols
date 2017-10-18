@@ -1,0 +1,8 @@
+=== tests/cases/compiler/emptyModuleName.ts ===
+import * as A from "";
+>A : Symbol(A, Decl(emptyModuleName.ts, 0, 6))
+
+class B extends A {
+>B : Symbol(B, Decl(emptyModuleName.ts, 0, 22))
+>A : Symbol(A, Decl(emptyModuleName.ts, 0, 6))
+}

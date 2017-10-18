@@ -1,0 +1,232 @@
+=== tests/cases/compiler/f1.ts ===
+export var x = 1;
+>x : number
+>1 : 1
+
+=== tests/cases/compiler/f2.ts ===
+// all mutations below are illegal and should be fixed
+import * as stuff from './f1';
+>stuff : typeof stuff
+
+var n = 'baz';
+>n : string
+>'baz' : "baz"
+
+stuff.x = 0;
+>stuff.x = 0 : 0
+>stuff.x : any
+>stuff : typeof stuff
+>x : any
+>0 : 0
+
+stuff['x'] = 1;
+>stuff['x'] = 1 : 1
+>stuff['x'] : any
+>stuff : typeof stuff
+>'x' : "x"
+>1 : 1
+
+stuff.blah = 2;
+>stuff.blah = 2 : 2
+>stuff.blah : any
+>stuff : typeof stuff
+>blah : any
+>2 : 2
+
+stuff[n] = 3;
+>stuff[n] = 3 : 3
+>stuff[n] : any
+>stuff : typeof stuff
+>n : string
+>3 : 3
+
+stuff.x++;
+>stuff.x++ : number
+>stuff.x : any
+>stuff : typeof stuff
+>x : any
+
+stuff['x']++;
+>stuff['x']++ : number
+>stuff['x'] : any
+>stuff : typeof stuff
+>'x' : "x"
+
+stuff['blah']++;
+>stuff['blah']++ : number
+>stuff['blah'] : any
+>stuff : typeof stuff
+>'blah' : "blah"
+
+stuff[n]++;
+>stuff[n]++ : number
+>stuff[n] : any
+>stuff : typeof stuff
+>n : string
+
+(stuff.x) = 0;
+>(stuff.x) = 0 : 0
+>(stuff.x) : any
+>stuff.x : any
+>stuff : typeof stuff
+>x : any
+>0 : 0
+
+(stuff['x']) = 1;
+>(stuff['x']) = 1 : 1
+>(stuff['x']) : any
+>stuff['x'] : any
+>stuff : typeof stuff
+>'x' : "x"
+>1 : 1
+
+(stuff.blah) = 2;
+>(stuff.blah) = 2 : 2
+>(stuff.blah) : any
+>stuff.blah : any
+>stuff : typeof stuff
+>blah : any
+>2 : 2
+
+(stuff[n]) = 3;
+>(stuff[n]) = 3 : 3
+>(stuff[n]) : any
+>stuff[n] : any
+>stuff : typeof stuff
+>n : string
+>3 : 3
+
+(stuff.x)++;
+>(stuff.x)++ : number
+>(stuff.x) : any
+>stuff.x : any
+>stuff : typeof stuff
+>x : any
+
+(stuff['x'])++;
+>(stuff['x'])++ : number
+>(stuff['x']) : any
+>stuff['x'] : any
+>stuff : typeof stuff
+>'x' : "x"
+
+(stuff['blah'])++;
+>(stuff['blah'])++ : number
+>(stuff['blah']) : any
+>stuff['blah'] : any
+>stuff : typeof stuff
+>'blah' : "blah"
+
+(stuff[n])++;
+>(stuff[n])++ : number
+>(stuff[n]) : any
+>stuff[n] : any
+>stuff : typeof stuff
+>n : string
+
+for (stuff.x in []) {}
+>stuff.x : any
+>stuff : typeof stuff
+>x : any
+>[] : undefined[]
+
+for (stuff.x of []) {}
+>stuff.x : any
+>stuff : typeof stuff
+>x : any
+>[] : undefined[]
+
+for (stuff['x'] in []) {}
+>stuff['x'] : any
+>stuff : typeof stuff
+>'x' : "x"
+>[] : undefined[]
+
+for (stuff['x'] of []) {}
+>stuff['x'] : any
+>stuff : typeof stuff
+>'x' : "x"
+>[] : undefined[]
+
+for (stuff.blah in []) {}
+>stuff.blah : any
+>stuff : typeof stuff
+>blah : any
+>[] : undefined[]
+
+for (stuff.blah of []) {}
+>stuff.blah : any
+>stuff : typeof stuff
+>blah : any
+>[] : undefined[]
+
+for (stuff[n] in []) {}
+>stuff[n] : any
+>stuff : typeof stuff
+>n : string
+>[] : undefined[]
+
+for (stuff[n] of []) {}
+>stuff[n] : any
+>stuff : typeof stuff
+>n : string
+>[] : undefined[]
+
+for ((stuff.x) in []) {}
+>(stuff.x) : any
+>stuff.x : any
+>stuff : typeof stuff
+>x : any
+>[] : undefined[]
+
+for ((stuff.x) of []) {}
+>(stuff.x) : any
+>stuff.x : any
+>stuff : typeof stuff
+>x : any
+>[] : undefined[]
+
+for ((stuff['x']) in []) {}
+>(stuff['x']) : any
+>stuff['x'] : any
+>stuff : typeof stuff
+>'x' : "x"
+>[] : undefined[]
+
+for ((stuff['x']) of []) {}
+>(stuff['x']) : any
+>stuff['x'] : any
+>stuff : typeof stuff
+>'x' : "x"
+>[] : undefined[]
+
+for ((stuff.blah) in []) {}
+>(stuff.blah) : any
+>stuff.blah : any
+>stuff : typeof stuff
+>blah : any
+>[] : undefined[]
+
+for ((stuff.blah) of []) {}
+>(stuff.blah) : any
+>stuff.blah : any
+>stuff : typeof stuff
+>blah : any
+>[] : undefined[]
+
+for ((stuff[n]) in []) {}
+>(stuff[n]) : any
+>stuff[n] : any
+>stuff : typeof stuff
+>n : string
+>[] : undefined[]
+
+for ((stuff[n]) of []) {}
+>(stuff[n]) : any
+>stuff[n] : any
+>stuff : typeof stuff
+>n : string
+>[] : undefined[]
+
+
+

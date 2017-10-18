@@ -1,0 +1,15 @@
+=== tests/cases/compiler/invokingNonGenericMethodWithTypeArguments2.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(invokingNonGenericMethodWithTypeArguments2.ts, 0, 0))
+
+    private foo: any;
+>foo : Symbol(Foo.foo, Decl(invokingNonGenericMethodWithTypeArguments2.ts, 0, 11))
+
+    constructor() {
+        this.foo<string>();
+>this.foo : Symbol(Foo.foo, Decl(invokingNonGenericMethodWithTypeArguments2.ts, 0, 11))
+>this : Symbol(Foo, Decl(invokingNonGenericMethodWithTypeArguments2.ts, 0, 0))
+>foo : Symbol(Foo.foo, Decl(invokingNonGenericMethodWithTypeArguments2.ts, 0, 11))
+    }
+}
+

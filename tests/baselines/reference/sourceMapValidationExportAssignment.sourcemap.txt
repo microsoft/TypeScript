@@ -10,7 +10,7 @@ sourceFile:sourceMapValidationExportAssignment.ts
 -------------------------------------------------------------------
 >>>define(["require", "exports"], function (require, exports) {
 >>>    "use strict";
->>>    var a = (function () {
+>>>    var a = /** @class */ (function () {
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^->
 1 >

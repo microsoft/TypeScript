@@ -22,6 +22,22 @@ class C {
     }
 }
 
+function id<T>(x: T) {
+>id : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+
+    return x;
+>x : T
+}
+
+export const result = id`hello world`;
+>result : TemplateStringsArray
+>id`hello world` : TemplateStringsArray
+>id : <T>(x: T) => T
+>`hello world` : "hello world"
+
 === tests/cases/compiler/script.ts ===
 class A { }
 >A : A
@@ -45,6 +61,22 @@ class C {
 >x : number
     }
 }
+
+function id<T>(x: T) {
+>id : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+
+    return x;
+>x : T
+}
+
+const result = id`hello world`;
+>result : TemplateStringsArray
+>id`hello world` : TemplateStringsArray
+>id : <T>(x: T) => T
+>`hello world` : "hello world"
 
 === tests/cases/compiler/tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
@@ -88,4 +120,10 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 >Function : Function
 >generator : Function
 >Function : Function
+
+export declare function __makeTemplateObject(cooked: string[], raw: string[]): TemplateStringsArray;
+>__makeTemplateObject : (cooked: string[], raw: string[]) => TemplateStringsArray
+>cooked : string[]
+>raw : string[]
+>TemplateStringsArray : TemplateStringsArray
 

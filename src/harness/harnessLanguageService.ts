@@ -123,6 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
+        public typesRegistry: ts.Map<void> | undefined;
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
@@ -130,7 +131,7 @@ namespace Harness.LanguageService {
         }
 
         public getNewLine(): string {
-            return "\r\n";
+            return harnessNewLine;
         }
 
         public getFilenames(): string[] {
@@ -182,6 +183,11 @@ namespace Harness.LanguageService {
 
     /// Native adapter
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
+        isKnownTypesPackageName(name: string): boolean {
+            return this.typesRegistry && this.typesRegistry.has(name);
+        }
+        installPackage = ts.notImplemented;
+
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
         getDirectories(path: string): string[] {
@@ -193,7 +199,9 @@ namespace Harness.LanguageService {
         }
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
-        getScriptFileNames(): string[] { return this.getFilenames(); }
+        getScriptFileNames(): string[] {
+            return this.getFilenames().filter(ts.isAnySupportedFileExtension);
+        }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
             const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
@@ -403,8 +411,8 @@ namespace Harness.LanguageService {
         getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
             return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
         }
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): ts.CompletionEntryDetails {
-            return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName));
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: ts.FormatCodeOptions): ts.CompletionEntryDetails {
+            return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName, JSON.stringify(options)));
         }
         getCompletionEntrySymbol(): ts.Symbol {
             throw new Error("getCompletionEntrySymbol not implemented across the shim layer.");
@@ -485,9 +493,13 @@ namespace Harness.LanguageService {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
+        getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
+            return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
+        }
         getCodeFixesAtPosition(): ts.CodeAction[] {
             throw new Error("Not supported on the shim.");
         }
+        applyCodeActionCommand = ts.notImplemented;
         getCodeFixDiagnostics(): ts.Diagnostic[] {
             throw new Error("Not supported on the shim.");
         }
@@ -684,7 +696,7 @@ namespace Harness.LanguageService {
             this.host.log(message);
         }
 
-        err(message: string): void {
+        msg(message: string): void {
             this.host.log(message);
         }
 
@@ -700,7 +712,8 @@ namespace Harness.LanguageService {
             return false;
         }
 
-        group() { throw ts.notImplemented(); }
+        startGroup() { throw ts.notImplemented(); }
+        endGroup() { throw ts.notImplemented(); }
 
         perftrc(message: string): void {
             return this.host.log(message);
@@ -823,6 +836,7 @@ namespace Harness.LanguageService {
                 host: serverHost,
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
@@ -847,9 +861,5 @@ namespace Harness.LanguageService {
         getLanguageService(): ts.LanguageService { return this.client; }
         getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
         getPreProcessedFileInfo(): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
-    }
-
-    export function mockHash(s: string): string {
-        return `hash-${s}`;
     }
 }
