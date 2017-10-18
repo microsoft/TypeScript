@@ -10667,29 +10667,27 @@ namespace ts {
             const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
             const members = createSymbolTable();
             for (const prop of properties) {
-                const inferredPropType = inferTargetType(getTypeOfSymbol(prop));
-                if (!inferredPropType) {
+                const propType = getTypeOfSymbol(prop);
+                // If any property contains context sensitive functions that have been skipped, the source type
+                // is incomplete and we can't infer a meaningful input type.
+                if (propType.flags & TypeFlags.ContainsAnyFunctionType) {
                     return undefined;
                 }
                 const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName);
                 inferredProp.checkFlags = readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0;
                 inferredProp.declarations = prop.declarations;
-                inferredProp.type = inferredPropType;
+                inferredProp.type = inferTargetType(propType);
                 members.set(prop.escapedName, inferredProp);
             }
             if (indexInfo) {
-                const inferredIndexType = inferTargetType(indexInfo.type);
-                if (!inferredIndexType) {
-                    return undefined;
-                }
-                indexInfo = createIndexInfo(inferredIndexType, readonlyMask && indexInfo.isReadonly);
+                indexInfo = createIndexInfo(inferTargetType(indexInfo.type), readonlyMask && indexInfo.isReadonly);
             }
             return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
 
             function inferTargetType(sourceType: Type): Type {
                 inference.candidates = undefined;
                 inferTypes(inferences, sourceType, templateType);
-                return inference.candidates && getUnionType(inference.candidates, /*subtypeReduction*/ true);
+                return inference.candidates ? getUnionType(inference.candidates, /*subtypeReduction*/ true) : emptyObjectType;
             }
         }
 
