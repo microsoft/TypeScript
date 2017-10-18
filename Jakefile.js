@@ -239,6 +239,19 @@ var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
 });
 
+/**
+ * .lcg file is what localization team uses to know what messages to localize.
+ * The file is always generated in 'enu\diagnosticMessages.generated.json.lcg'
+ */
+var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
+
+/**
+ * The localization target produces the two following transformation:
+ *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
+ *       convert localized resources into a .json file the compiler can understand
+ *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
+ *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
+ */
 var localizationTargets = ["cs", "de", "enu", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
     return path.join(builtLocalDirectory, f);
 });
@@ -448,7 +461,6 @@ compileFile(generateLocalizedDiagnosticMessagesJs,
     /*useBuiltCompiler*/ false, { noOutFile: true, types: ["node", "xml2js"] });
 
 // Localize diagnostics
-var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
 file(generatedLCGFile, [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs, generatedDiagnosticMessagesJSON], function () {
     var cmd = host + " " + generateLocalizedDiagnosticMessagesJs + " " + lclDirectory + " " + builtLocalDirectory + " " + generatedDiagnosticMessagesJSON;
     console.log(cmd);
