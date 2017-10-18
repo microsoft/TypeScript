@@ -13398,11 +13398,18 @@ namespace ts {
             return undefined;
         }
 
-        function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
-            return mapType(type, t => {
+        function getTypeOfPropertyOfContextualType(type: Type, name: __String, checkMode: CheckMode, context: Node) {
+            return mapType(maybeInstantiateType(type, checkMode, context), t => {
                 const prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
                 return prop ? getTypeOfSymbol(prop) : undefined;
             });
+        }
+
+        function maybeInstantiateType(type: Type | undefined, checkMode: CheckMode | undefined, context: Node): Type | undefined {
+            if (type && checkMode === CheckMode.Inferential) {
+                return instantiateType(type, getContextualMapper(context));
+            }
+            return type;
         }
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
@@ -13429,14 +13436,14 @@ namespace ts {
 
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, checkMode?: CheckMode) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
-            const type = getInstantiatedContextualType(objectLiteral, checkMode);
+            const type = getApparentTypeOfContextualType(objectLiteral, checkMode);
             if (type) {
                 if (!hasDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
                     // in the type. It will just be "__computed", which does not appear in any
                     // SymbolTable.
                     const symbolName = getSymbolOfNode(element).escapedName;
-                    const propertyType = getTypeOfPropertyOfContextualType(type, symbolName);
+                    const propertyType = getTypeOfPropertyOfContextualType(type, symbolName, checkMode, element);
                     if (propertyType) {
                         return propertyType;
                     }
@@ -13453,9 +13460,9 @@ namespace ts {
         // the type of the property with the numeric name N in T, if one exists. Otherwise, if T has a numeric index signature,
         // it is the type of the numeric index signature in T. Otherwise, in ES6 and higher, the contextual type is the iterated
         // type of T.
-        function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
+        function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number, checkMode: CheckMode, context: Node): Type | undefined {
             return arrayContextualType && (
-                getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
+                getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String, checkMode, context)
                 || getIndexTypeOfContextualType(arrayContextualType, IndexKind.Number)
                 || getIteratedTypeOrElementType(arrayContextualType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false));
         }
@@ -13483,12 +13490,12 @@ namespace ts {
 
             if (isJsxAttribute(node.parent)) {
                 // JSX expression is in JSX attribute
-                return getTypeOfPropertyOfContextualType(attributesType, node.parent.name.escapedText);
+                return getTypeOfPropertyOfContextualType(attributesType, node.parent.name.escapedText, checkMode, node);
             }
             else if (node.parent.kind === SyntaxKind.JsxElement) {
                 // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
                 const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
-                return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : anyType;
+                return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName, checkMode, node) : anyType;
             }
             else {
                 // JSX expression is in JSX spread attribute
@@ -13506,7 +13513,7 @@ namespace ts {
                 if (!attributesType || isTypeAny(attributesType)) {
                     return undefined;
                 }
-                return getTypeOfPropertyOfContextualType(attributesType, attribute.name.escapedText);
+                return getTypeOfPropertyOfContextualType(attributesType, attribute.name.escapedText, checkMode, attribute);
             }
             else {
                 return attributesType;
@@ -13518,18 +13525,6 @@ namespace ts {
         function getApparentTypeOfContextualType(node: Expression, checkMode?: CheckMode): Type {
             const type = getContextualType(node, checkMode);
             return type && getApparentType(type);
-        }
-
-        /**
-         * This must be called when a contextual type function is attempting to dig into a type to contextually type a subexpression
-         * Otherwise, contextual typing stops when a type argument is encountered, and `any` is used instead.
-         */
-        function getInstantiatedContextualType(node: Expression, checkMode?: CheckMode): Type {
-            if (checkMode === CheckMode.Inferential && node.contextualType && node.contextualMapper) {
-                const type = instantiateType(node.contextualType, node.contextualMapper);
-                return type && getApparentType(type);
-            }
-            return getApparentTypeOfContextualType(node, checkMode);
         }
 
         /**
@@ -13586,7 +13581,7 @@ namespace ts {
                 case SyntaxKind.ArrayLiteralExpression: {
                     const arrayLiteral = <ArrayLiteralExpression>parent;
                     const type = getApparentTypeOfContextualType(arrayLiteral, checkMode);
-                    return getContextualTypeForElementExpression(type, indexOfNode(arrayLiteral.elements, node));
+                    return getContextualTypeForElementExpression(type, indexOfNode(arrayLiteral.elements, node), checkMode, node);
                 }
                 case SyntaxKind.ConditionalExpression:
                     return getContextualTypeForConditionalOperand(node, checkMode);
@@ -13748,7 +13743,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const elementContextualType = getContextualTypeForElementExpression(contextualType, index);
+                    const elementContextualType = getContextualTypeForElementExpression(contextualType, index, /*checkMode*/ undefined, node); // Match checkMode used for `contextualType`
                     const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType);
                     elementTypes.push(type);
                 }
