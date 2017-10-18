@@ -38,7 +38,7 @@ interface Foo {
     foo?: number;
 >foo : number | undefined
 }
-  
+
 class FooClass<P extends Foo = Foo> {
 >FooClass : FooClass<P>
 >P : P
@@ -62,5 +62,28 @@ class FooClass<P extends Foo = Foo> {
 
         return foo;
 >foo : number
+    }
+}
+
+class Test2<T extends A> {
+>Test2 : Test2<T>
+>T : T
+>A : A
+
+    attrs: Readonly<T>;
+>attrs : Readonly<T>
+>Readonly : Readonly<T>
+>T : T
+
+    m() {
+>m : () => { name: string; }
+
+        return this.attrs.params!; // Return type should maintain relationship with `T` after being not-null-asserted, ideally
+>this.attrs.params! : { name: string; }
+>this.attrs.params : T["params"]
+>this.attrs : Readonly<T>
+>this : this
+>attrs : Readonly<T>
+>params : T["params"]
     }
 }
