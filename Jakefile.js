@@ -252,9 +252,9 @@ var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-var localizationTargets = ["cs", "de", "enu", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
+var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
     return path.join(builtLocalDirectory, f);
-});
+}).concat(path.dirname(generatedLCGFile));
 
 // Prepends the contents of prefixFile to destinationFile
 function prependFile(prefixFile, destinationFile) {
