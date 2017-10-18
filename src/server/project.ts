@@ -448,9 +448,13 @@ namespace ts.server {
                     computeHash: data =>
                         this.projectService.host.createHash(data),
                     shouldEmitFile: sourceFile =>
-                        !this.projectService.getScriptInfoForPath(sourceFile.path).isDynamicOrHasMixedContent()
+                        !this.shouldEmitFile(sourceFile)
                 });
             }
+        }
+
+        private shouldEmitFile(sourceFile: SourceFile) {
+            return !this.projectService.getScriptInfoForPath(sourceFile.path).isDynamicOrHasMixedContent();
         }
 
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
@@ -459,7 +463,8 @@ namespace ts.server {
             }
             this.updateGraph();
             this.ensureBuilder();
-            return this.builder.getFilesAffectedBy(this.program, scriptInfo.path);
+            return mapDefined(this.builder.getFilesAffectedBy(this.program, scriptInfo.path),
+                sourceFile => this.shouldEmitFile(sourceFile) ? sourceFile.fileName : undefined);
         }
 
         /**
