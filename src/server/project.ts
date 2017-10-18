@@ -245,7 +245,7 @@ namespace ts.server {
         isKnownTypesPackageName(name: string): boolean {
             return this.typingsCache.isKnownTypesPackageName(name);
         }
-        installPackage(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult> {
+        installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
             return this.typingsCache.installPackage({ ...options, projectRootPath: this.toPath(this.currentDirectory) });
         }
         private get typingsCache(): TypingsCache {
