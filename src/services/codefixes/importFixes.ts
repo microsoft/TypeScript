@@ -367,7 +367,8 @@ namespace ts.codefix {
         getCanonicalFileName: (file: string) => string,
         moduleFileName: string,
     ): string | undefined {
-        return firstDefined(getEffectiveTypeRoots(options, host), unNormalizedTypeRoot => {
+        const roots = getEffectiveTypeRoots(options, host);
+        return roots && firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
                 return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1));
