@@ -154,6 +154,7 @@ var harnessSources = harnessCoreSources.concat([
     "symbolWalker.ts",
     "languageService.ts",
     "publicApi.ts",
+    "hostNewLineSupport.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
