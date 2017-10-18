@@ -3199,7 +3199,7 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: System): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: { newLine: string }): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
