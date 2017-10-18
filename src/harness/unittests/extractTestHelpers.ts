@@ -103,6 +103,7 @@ namespace ts {
         getScriptVersion: notImplemented,
         getScriptSnapshot: notImplemented,
         getDefaultLibFileName: notImplemented,
+        getCurrentDirectory: notImplemented,
     };
 
     export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage) {
