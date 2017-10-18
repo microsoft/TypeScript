@@ -181,7 +181,7 @@ const libraryTargets = librarySourceMap.map(function(f) {
 });
 
 const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
-var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
     return path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json");
 }).concat(generatedLCGFile);
 
