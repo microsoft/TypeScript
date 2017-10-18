@@ -2046,9 +2046,15 @@ namespace ts.server {
 
     /* @internal */ // exported for tests only
     /** Since we will perform the rename in a changed document, line and offset information must be adjusted if the new text adds/deletes newlines. */
-    export function fixupLineAndOffset(oldPosition: protocol.Location, oldText: string, location: number, locationFileName: string, edits: ReadonlyArray<FileTextChanges>): protocol.Location {
-        let { line, offset } = oldPosition;
-        const oldLineStartOfLocation = location - (offset - 1); // offset is 1-based, location is 0-based
+    export function fixupLineAndOffset(
+        locationInOldText: protocol.Location,
+        oldText: string,
+        positionInOldText: number,
+        locationFileName: string,
+        edits: ReadonlyArray<FileTextChanges>,
+    ): protocol.Location {
+        let { line, offset } = locationInOldText;
+        const oldLineStartOfLocation = positionInOldText - (offset - 1); // offset is 1-based, location is 0-based
 
         for (const { fileName, textChanges } of edits) {
             if (fileName !== locationFileName) {
@@ -2057,9 +2063,14 @@ namespace ts.server {
 
             // Text change spans are in the *old* document. They apply all at once rather than sequentially.
             for (const { newText, span: { start, length } } of textChanges) {
+                if (start > positionInOldText) {
+                    continue;
+                }
+
                 const newTextNewlines = countNewlines(newText);
                 line += newTextNewlines - countNewlines(oldText.slice(start, start + length));
-                if (start > oldLineStartOfLocation && start < location) {
+                // If this edit is applied to the line of the rename, update offset
+                if (start >= oldLineStartOfLocation && start < positionInOldText) {
                     offset += newText.length - length;
                     if (newTextNewlines !== 0) {
                         offset -= newText.lastIndexOf("\n");
