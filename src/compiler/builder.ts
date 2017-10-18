@@ -238,7 +238,7 @@ namespace ts {
             const cachedDiagnostics = semanticDiagnosticsPerFile.get(path);
             // Report the semantic diagnostics from the cache if we already have those diagnostics present
             if (cachedDiagnostics) {
-                cachedDiagnostics;
+                return cachedDiagnostics;
             }
 
             // Diagnostics werent cached, get them from program, and cache the result
