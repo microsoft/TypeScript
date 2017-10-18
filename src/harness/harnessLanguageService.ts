@@ -212,6 +212,11 @@ namespace Harness.LanguageService {
             return script ? script.version.toString() : undefined;
         }
 
+        directoryExists(dirName: string): boolean {
+            const fileEntry = this.virtualFileSystem.traversePath(dirName);
+            return fileEntry && fileEntry.isDirectory();
+        }
+
         fileExists(fileName: string): boolean {
             const script = this.getScriptSnapshot(fileName);
             return script !== undefined;
