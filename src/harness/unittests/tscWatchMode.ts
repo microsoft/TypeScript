@@ -1105,6 +1105,64 @@ namespace ts.tscWatch {
             const outJs = "/a/out.js";
             createWatchForOut(/*out*/ undefined, outJs);
         });
+
+        function verifyFilesEmittedOnce(useOutFile: boolean) {
+            const file1: FileOrFolder = {
+                path: "/a/b/output/AnotherDependency/file1.d.ts",
+                content: "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/dependencies/file2.d.ts",
+                content: "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }"
+            };
+            const file3: FileOrFolder = {
+                path: "/a/b/project/src/main.ts",
+                content: "namespace Main { export function fooBar() {} }"
+            };
+            const file4: FileOrFolder = {
+                path: "/a/b/project/src/main2.ts",
+                content: "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/project/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: useOutFile ?
+                        { outFile: "../output/common.js", target: "es5" } :
+                        { outDir: "../output", target: "es5" },
+                    files: [file1.path, file2.path, file3.path, file4.path]
+                })
+            };
+            const files = [file1, file2, file3, file4];
+            const allfiles = files.concat(configFile);
+            const host = createWatchedSystem(allfiles);
+            const originalWriteFile = host.writeFile.bind(host);
+            const mapOfFilesWritten = createMap<number>();
+            host.writeFile = (p: string, content: string) => {
+                const count = mapOfFilesWritten.get(p);
+                mapOfFilesWritten.set(p, count ? count + 1 : 1);
+                return originalWriteFile(p, content);
+            };
+            createWatchModeWithConfigFile(configFile.path, host);
+            if (useOutFile) {
+                // Only out file
+                assert.equal(mapOfFilesWritten.size, 1);
+            }
+            else {
+                // main.js and main2.js
+                assert.equal(mapOfFilesWritten.size, 2);
+            }
+            mapOfFilesWritten.forEach((value, key) => {
+                assert.equal(value, 1, "Key: " + key);
+            });
+        }
+
+        it("with --outFile and multiple declaration files in the program", () => {
+            verifyFilesEmittedOnce(/*useOutFile*/ true);
+        });
+
+        it("without --outFile and multiple declaration files in the program", () => {
+            verifyFilesEmittedOnce(/*useOutFile*/ false);
+        });
     });
 
     describe("tsc-watch emit for configured projects", () => {

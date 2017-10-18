@@ -144,13 +144,14 @@ namespace ts {
 
         function compileWatchedProgram(host: DirectoryStructureHost, program: Program, builder: Builder) {
             // First get and report any syntactic errors.
-            let diagnostics = program.getSyntacticDiagnostics().slice();
+            const diagnostics = program.getSyntacticDiagnostics().slice();
             let reportSemanticDiagnostics = false;
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === 0) {
-                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+                addRange(diagnostics, program.getOptionsDiagnostics());
+                addRange(diagnostics, program.getGlobalDiagnostics());
 
                 if (diagnostics.length === 0) {
                     reportSemanticDiagnostics = true;
@@ -162,7 +163,7 @@ namespace ts {
             let sourceMaps: SourceMapData[];
             let emitSkipped: boolean;
 
-            const result = builder.emitChangedFiles(program);
+            const result = builder.emitChangedFiles(program, writeFile);
             if (result.length === 0) {
                 emitSkipped = true;
             }
@@ -171,14 +172,13 @@ namespace ts {
                     if (emitOutput.emitSkipped) {
                         emitSkipped = true;
                     }
-                    diagnostics = concatenate(diagnostics, emitOutput.diagnostics);
+                    addRange(diagnostics, emitOutput.diagnostics);
                     sourceMaps = concatenate(sourceMaps, emitOutput.sourceMaps);
-                    writeOutputFiles(emitOutput.outputFiles);
                 }
             }
 
             if (reportSemanticDiagnostics) {
-                diagnostics = diagnostics.concat(builder.getSemanticDiagnostics(program));
+                addRange(diagnostics, builder.getSemanticDiagnostics(program));
             }
             return handleEmitOutputAndReportErrors(host, program, emittedFiles, emitSkipped,
                 diagnostics, reportDiagnostic);
@@ -191,31 +191,23 @@ namespace ts {
                 }
             }
 
-            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
+            function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
                 try {
                     performance.mark("beforeIOWrite");
                     ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-                    host.writeFile(fileName, data, writeByteOrderMark);
+                    host.writeFile(fileName, text, writeByteOrderMark);
 
                     performance.mark("afterIOWrite");
                     performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+
+                    if (emittedFiles) {
+                        emittedFiles.push(fileName);
+                    }
                 }
                 catch (e) {
-                    return createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, e);
-                }
-            }
-
-            function writeOutputFiles(outputFiles: OutputFile[]) {
-                if (outputFiles) {
-                    for (const outputFile of outputFiles) {
-                        const error = writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
-                        if (error) {
-                            diagnostics.push(error);
-                        }
-                        if (emittedFiles) {
-                            emittedFiles.push(outputFile.name);
-                        }
+                    if (onError) {
+                        onError(e.message);
                     }
                 }
             }
@@ -308,7 +300,7 @@ namespace ts {
             getCurrentDirectory()
         );
         // There is no extra check needed since we can just rely on the program to decide emit
-        const builder = createBuilder({ getCanonicalFileName, getEmitOutput: getFileEmitOutput, computeHash, shouldEmitFile: () => true });
+        const builder = createBuilder({ getCanonicalFileName, computeHash });
 
         synchronizeProgram();
 
