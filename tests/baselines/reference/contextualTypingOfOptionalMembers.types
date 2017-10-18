@@ -16,11 +16,11 @@ interface Options<State, Actions> {
 >Actions : Actions
 
     state?: State;
->state : State
+>state : State | undefined
 >State : State
 
     view?: (state: State, actions: Actions) => any;
->view : (state: State, actions: Actions) => any
+>view : ((state: State, actions: Actions) => any) | undefined
 >state : State
 >State : State
 >actions : Actions
@@ -43,9 +43,9 @@ declare function app<State, Actions extends ActionsObject<State>>(obj: Options<S
 >Actions : Actions
 
 app({
->app({    state: 100,    actions: {        foo: s => s    },    view: (s, a) => undefined as any,}) : void
+>app({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
 >app : <State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>) => void
->{    state: 100,    actions: {        foo: s => s    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: ActionsObject<number>) => any; }
+>{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: ActionsObject<number>) => any; }
 
     state: 100,
 >state : number
@@ -53,9 +53,100 @@ app({
 
     actions: {
 >actions : { foo: (s: number) => number; }
->{        foo: s => s    } : { foo: (s: number) => number; }
+>{        foo: s => s // Should be typed number => number    } : { foo: (s: number) => number; }
 
-        foo: s => s
+        foo: s => s // Should be typed number => number
+>foo : (s: number) => number
+>s => s : (s: number) => number
+>s : number
+>s : number
+
+    },
+    view: (s, a) => undefined as any,
+>view : (s: number, a: ActionsObject<number>) => any
+>(s, a) => undefined as any : (s: number, a: ActionsObject<number>) => any
+>s : number
+>a : ActionsObject<number>
+>undefined as any : any
+>undefined : undefined
+
+});
+
+
+interface Bar {
+>Bar : Bar
+
+    bar: (a: number) => void;
+>bar : (a: number) => void
+>a : number
+}
+
+declare function foo<T extends Bar>(x: string | T): T;
+>foo : <T extends Bar>(x: string | T) => T
+>T : T
+>Bar : Bar
+>x : string | T
+>T : T
+>T : T
+
+const y = foo({
+>y : Bar
+>foo({    bar(x) { // Should be typed number => void    }}) : Bar
+>foo : <T extends Bar>(x: string | T) => T
+>{    bar(x) { // Should be typed number => void    }} : { bar(x: number): void; }
+
+    bar(x) { // Should be typed number => void
+>bar : (x: number) => void
+>x : number
+    }
+});
+
+interface Options2<State, Actions> {
+>Options2 : Options2<State, Actions>
+>State : State
+>Actions : Actions
+
+    state?: State;
+>state : State | undefined
+>State : State
+
+    view?: (state: State, actions: Actions) => any;
+>view : ((state: State, actions: Actions) => any) | undefined
+>state : State
+>State : State
+>actions : Actions
+>Actions : Actions
+
+    actions?: Actions;
+>actions : Actions | undefined
+>Actions : Actions
+}
+
+declare function app2<State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>): void;
+>app2 : <State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>) => void
+>State : State
+>Actions : Actions
+>ActionsObject : ActionsObject<State>
+>State : State
+>obj : Options2<State, Actions>
+>Options2 : Options2<State, Actions>
+>State : State
+>Actions : Actions
+
+app2({
+>app2({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
+>app2 : <State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>) => void
+>{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: ActionsObject<number>) => any; }
+
+    state: 100,
+>state : number
+>100 : 100
+
+    actions: {
+>actions : { foo: (s: number) => number; }
+>{        foo: s => s // Should be typed number => number    } : { foo: (s: number) => number; }
+
+        foo: s => s // Should be typed number => number
 >foo : (s: number) => number
 >s => s : (s: number) => number
 >s : number
