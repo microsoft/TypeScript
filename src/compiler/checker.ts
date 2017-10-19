@@ -314,6 +314,7 @@ namespace ts {
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
 
         const globals = createSymbolTable();
+        let ambientModulesCache: Symbol[] | undefined;
         /**
          * List of every ambient module with a "*" wildcard.
          * Unlike other ambient modules, these can't be stored in `globals` because symbol tables only deal with exact matches.
@@ -7029,13 +7030,11 @@ namespace ts {
         function getIntendedTypeFromJSDocTypeReference(node: TypeReferenceNode): Type {
             if (isIdentifier(node.typeName)) {
                 if (node.typeName.escapedText === "Object") {
-                    if (node.typeArguments && node.typeArguments.length === 2) {
+                    if (isJSDocIndexSignature(node)) {
                         const indexed = getTypeFromTypeNode(node.typeArguments[0]);
                         const target = getTypeFromTypeNode(node.typeArguments[1]);
                         const index = createIndexInfo(target, /*isReadonly*/ false);
-                        if (indexed === stringType || indexed === numberType) {
-                            return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType && index, indexed === numberType && index);
-                        }
+                        return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType && index, indexed === numberType && index);
                     }
                     return anyType;
                 }
@@ -7971,7 +7970,7 @@ namespace ts {
 
             const spread = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             spread.flags |= propagatedFlags;
-            spread.flags |= TypeFlags.FreshLiteral;
+            spread.flags |= TypeFlags.FreshLiteral | TypeFlags.ContainsObjectLiteral;
             (spread as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
             spread.symbol = symbol;
             return spread;
@@ -11377,6 +11376,16 @@ namespace ts {
         }
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
+            if (type.flags & TypeFlags.IndexedAccess) {
+                // TODO (weswig): This is a substitute for a lazy negated type to remove the types indicated by the TypeFacts from the (potential) union the IndexedAccess refers to
+                //  - See discussion in https://github.com/Microsoft/TypeScript/pull/19275 for details, and test `strictNullNotNullIndexTypeShouldWork` for current behavior
+                const baseConstraint = getBaseConstraintOfType(type) || emptyObjectType;
+                const result = filterType(baseConstraint, t => (getTypeFacts(t) & include) !== 0);
+                if (result !== baseConstraint) {
+                    return result;
+                }
+                return type;
+            }
             return filterType(type, t => (getTypeFacts(t) & include) !== 0);
         }
 
@@ -15014,7 +15023,7 @@ namespace ts {
 
             checkPropertyNotUsedBeforeDeclaration(prop, node, right);
 
-            markPropertyAsReferenced(prop, node);
+            markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
 
             getNodeLinks(node).resolvedSymbol = prop;
 
@@ -15204,12 +15213,21 @@ namespace ts {
             return bestCandidate;
         }
 
-        function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined) {
+        function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
             if (prop &&
                 noUnusedIdentifiers &&
                 (prop.flags & SymbolFlags.ClassMember) &&
                 prop.valueDeclaration && hasModifier(prop.valueDeclaration, ModifierFlags.Private)
                 && !(nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly))) {
+
+                if (isThisAccess) {
+                    // Find any FunctionLikeDeclaration because those create a new 'this' binding. But this should only matter for methods (or getters/setters).
+                    const containingMethod = findAncestor(nodeForCheckWriteOnly, isFunctionLikeDeclaration);
+                    if (containingMethod && containingMethod.symbol === prop) {
+                        return;
+                    }
+                }
+
                 if (getCheckFlags(prop) & CheckFlags.Instantiated) {
                     getSymbolLinks(prop).target.isReferenced = true;
                 }
@@ -19156,7 +19174,10 @@ namespace ts {
                             // There is no resolved symbol cached if the type resolved to a builtin
                             // via JSDoc type reference resolution (eg, Boolean became boolean), none
                             // of which are generic when they have no associated symbol
-                            error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
+                            // (additionally, JSDoc's index signature syntax, Object<string, T> actually uses generic syntax without being generic)
+                            if (!isJSDocIndexSignature(node)) {
+                                error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
+                            }
                             return;
                         }
                         let typeParameters = symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters;
@@ -20702,7 +20723,7 @@ namespace ts {
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
-                markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined); // A destructuring is never a write-only reference.
+                markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
                 if (parent.initializer && property) {
                     checkPropertyAccessibility(parent, parent.initializer, parentType, property);
                 }
@@ -25560,13 +25581,16 @@ namespace ts {
         }
 
         function getAmbientModules(): Symbol[] {
-            const result: Symbol[] = [];
-            globals.forEach((global, sym) => {
-                if (ambientModuleSymbolRegex.test(unescapeLeadingUnderscores(sym))) {
-                    result.push(global);
-                }
-            });
-            return result;
+            if (!ambientModulesCache) {
+                ambientModulesCache = [];
+                globals.forEach((global, sym) => {
+                    // No need to `unescapeLeadingUnderscores`, an escaped symbol is never an ambient module.
+                    if (ambientModuleSymbolRegex.test(sym as string)) {
+                        ambientModulesCache.push(global);
+                    }
+                });
+            }
+            return ambientModulesCache;
         }
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {

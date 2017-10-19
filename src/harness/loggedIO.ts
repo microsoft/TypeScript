@@ -157,11 +157,20 @@ namespace Playback {
         return log;
     }
 
+    const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
+    function sanitizeTestFilePath(name: string) {
+        const path = ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", canonicalizeForHarness);
+        if (ts.startsWith(path, "/")) {
+            return path.substring(1);
+        }
+        return path;
+    }
+
     export function oldStyleLogIntoNewStyleLog(log: IOLog, writeFile: typeof Harness.IO.writeFile, baseTestName: string) {
         if (log.filesAppended) {
             for (const file of log.filesAppended) {
                 if (file.contents !== undefined) {
-                    file.contentsPath = ts.combinePaths("appended", Harness.Compiler.sanitizeTestFilePath(file.path));
+                    file.contentsPath = ts.combinePaths("appended", sanitizeTestFilePath(file.path));
                     writeFile(ts.combinePaths(baseTestName, file.contentsPath), file.contents);
                     delete file.contents;
                 }
@@ -170,7 +179,7 @@ namespace Playback {
         if (log.filesWritten) {
             for (const file of log.filesWritten) {
                 if (file.contents !== undefined) {
-                    file.contentsPath = ts.combinePaths("written", Harness.Compiler.sanitizeTestFilePath(file.path));
+                    file.contentsPath = ts.combinePaths("written", sanitizeTestFilePath(file.path));
                     writeFile(ts.combinePaths(baseTestName, file.contentsPath), file.contents);
                     delete file.contents;
                 }
@@ -180,7 +189,7 @@ namespace Playback {
             for (const file of log.filesRead) {
                 const { contents } = file.result;
                 if (contents !== undefined) {
-                    file.result.contentsPath = ts.combinePaths("read", Harness.Compiler.sanitizeTestFilePath(file.path));
+                    file.result.contentsPath = ts.combinePaths("read", sanitizeTestFilePath(file.path));
                     writeFile(ts.combinePaths(baseTestName, file.result.contentsPath), contents);
                     const len = contents.length;
                     if (len >= 2 && contents.charCodeAt(0) === 0xfeff) {
@@ -235,8 +244,8 @@ namespace Playback {
             if (recordLog !== undefined) {
                 let i = 0;
                 const fn = () => recordLogFileNameBase + i;
-                while (underlying.fileExists(fn() + ".json")) i++;
-                underlying.writeFile(ts.combinePaths(fn(), "test.json"), JSON.stringify(oldStyleLogIntoNewStyleLog(recordLog, (path, string) => underlying.writeFile(ts.combinePaths(fn(), path), string), fn()), null, 4)); // tslint:disable-line:no-null-keyword
+                while (underlying.fileExists(ts.combinePaths(fn(), "test.json"))) i++;
+                underlying.writeFile(ts.combinePaths(fn(), "test.json"), JSON.stringify(oldStyleLogIntoNewStyleLog(recordLog, (path, string) => underlying.writeFile(path, string), fn()), null, 4)); // tslint:disable-line:no-null-keyword
                 recordLog = undefined;
             }
         };
