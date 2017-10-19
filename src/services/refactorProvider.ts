@@ -14,13 +14,12 @@ namespace ts {
         getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined;
     }
 
-    export interface RefactorContext {
+    export interface RefactorContext extends textChanges.TextChangesContext {
         file: SourceFile;
         startPosition: number;
         endPosition?: number;
         program: Program;
-        newLineCharacter: string;
-        rulesProvider?: formatting.RulesProvider;
+        host: LanguageServiceHost;
         cancellationToken?: CancellationToken;
     }
 

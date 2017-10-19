@@ -254,7 +254,7 @@ namespace ts.tscWatch {
             checkProgramRootFiles(watch(), [file1.path, file2.path]);
             checkWatchedFiles(host, [configFile.path, file1.path, file2.path, libFile.path]);
             const configDir = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, projectSystem.getTypeRootsFromLocation(configDir).concat(configDir), /*recursive*/ true);
+            checkWatchedDirectories(host, [configDir, combinePaths(configDir, projectSystem.nodeModulesAtTypes)], /*recursive*/ true);
         });
 
         // TODO: if watching for config file creation
@@ -269,7 +269,7 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([commonFile1, libFile, configFile]);
             const watch = createWatchModeWithConfigFile(configFile.path, host);
             const configDir = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, projectSystem.getTypeRootsFromLocation(configDir).concat(configDir), /*recursive*/ true);
+            checkWatchedDirectories(host, [configDir, combinePaths(configDir, projectSystem.nodeModulesAtTypes)], /*recursive*/ true);
 
             checkProgramRootFiles(watch(), [commonFile1.path]);
 
@@ -1105,6 +1105,64 @@ namespace ts.tscWatch {
             const outJs = "/a/out.js";
             createWatchForOut(/*out*/ undefined, outJs);
         });
+
+        function verifyFilesEmittedOnce(useOutFile: boolean) {
+            const file1: FileOrFolder = {
+                path: "/a/b/output/AnotherDependency/file1.d.ts",
+                content: "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/dependencies/file2.d.ts",
+                content: "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }"
+            };
+            const file3: FileOrFolder = {
+                path: "/a/b/project/src/main.ts",
+                content: "namespace Main { export function fooBar() {} }"
+            };
+            const file4: FileOrFolder = {
+                path: "/a/b/project/src/main2.ts",
+                content: "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/project/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: useOutFile ?
+                        { outFile: "../output/common.js", target: "es5" } :
+                        { outDir: "../output", target: "es5" },
+                    files: [file1.path, file2.path, file3.path, file4.path]
+                })
+            };
+            const files = [file1, file2, file3, file4];
+            const allfiles = files.concat(configFile);
+            const host = createWatchedSystem(allfiles);
+            const originalWriteFile = host.writeFile.bind(host);
+            const mapOfFilesWritten = createMap<number>();
+            host.writeFile = (p: string, content: string) => {
+                const count = mapOfFilesWritten.get(p);
+                mapOfFilesWritten.set(p, count ? count + 1 : 1);
+                return originalWriteFile(p, content);
+            };
+            createWatchModeWithConfigFile(configFile.path, host);
+            if (useOutFile) {
+                // Only out file
+                assert.equal(mapOfFilesWritten.size, 1);
+            }
+            else {
+                // main.js and main2.js
+                assert.equal(mapOfFilesWritten.size, 2);
+            }
+            mapOfFilesWritten.forEach((value, key) => {
+                assert.equal(value, 1, "Key: " + key);
+            });
+        }
+
+        it("with --outFile and multiple declaration files in the program", () => {
+            verifyFilesEmittedOnce(/*useOutFile*/ true);
+        });
+
+        it("without --outFile and multiple declaration files in the program", () => {
+            verifyFilesEmittedOnce(/*useOutFile*/ false);
+        });
     });
 
     describe("tsc-watch emit for configured projects", () => {
@@ -1817,6 +1875,46 @@ declare module "fs" {
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
             checkOutputErrors(host);
+        });
+    });
+
+    describe("tsc-watch with when module emit is specified as node", () => {
+        it("when instead of filechanged recursive directory watcher is invoked", () => {
+            const configFile: FileOrFolder = {
+                path: "/a/rootFolder/project/tsconfig.json",
+                content: JSON.stringify({
+                    "compilerOptions": {
+                        "module": "none",
+                        "allowJs": true,
+                        "outDir": "Static/scripts/"
+                    },
+                    "include": [
+                        "Scripts/**/*"
+                    ],
+                })
+            };
+            const outputFolder = "/a/rootFolder/project/Static/scripts/";
+            const file1: FileOrFolder = {
+                path: "/a/rootFolder/project/Scripts/TypeScript.ts",
+                content: "var z = 10;"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/rootFolder/project/Scripts/Javascript.js",
+                content: "var zz = 10;"
+            };
+            const files = [configFile, file1, file2, libFile];
+            const host = createWatchedSystem(files);
+            const watch = createWatchModeWithConfigFile(configFile.path, host);
+
+            checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+            file1.content = "var zz30 = 100;";
+            host.reloadFS(files, /*invokeDirectoryWatcherInsteadOfFileChanged*/ true);
+            host.runQueuedTimeoutCallbacks();
+
+            checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+            const outputFile1 = changeExtension((outputFolder + getBaseFileName(file1.path)), ".js");
+            assert.isTrue(host.fileExists(outputFile1));
+            assert.equal(host.readFile(outputFile1), file1.content + host.newLine);
         });
     });
 }

@@ -533,7 +533,7 @@
             </Item>
             <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+                <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2399,7 +2399,7 @@
             </Item>
             <Item ItemId=";Import_0_from_1_90013" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Import {0} from {1}.]]></Val>
+                <Val><![CDATA[Import '{0}' from "{1}".]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>

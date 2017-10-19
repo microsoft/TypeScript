@@ -33,8 +33,8 @@ namespace ts {
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
         // constantly changing shape.
-        map["__"] = undefined;
-        delete map["__"];
+        map.__ = undefined;
+        delete map.__;
 
         return map;
     }
@@ -191,6 +191,18 @@ namespace ts {
         }
         return undefined;
     }
+
+    /** Like `forEach`, but suitable for use with numbers and strings (which may be falsy). */
+    export function firstDefined<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+        for (let i = 0; i < array.length; i++) {
+            const result = callback(array[i], i);
+            if (result !== undefined) {
+                return result;
+            }
+        }
+        return undefined;
+    }
+
     /**
      * Iterates through the parent chain of a node and performs the callback on each parent until the callback
      * returns a truthy value, then returns that value.
@@ -253,6 +265,16 @@ namespace ts {
     export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined;
     export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = 0; i < array.length; i++) {
+            const value = array[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
+        for (let i = array.length - 1; i >= 0; i--) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -1147,6 +1169,14 @@ namespace ts {
         return result;
     }
 
+    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[] {
+        const result: T[] = [];
+        for (const value of array) {
+            result[makeKey(value)] = value;
+        }
+        return result;
+    }
+
     /**
      * Creates a set from the elements of an array.
      *
@@ -1831,7 +1861,7 @@ namespace ts {
         return i < 0 ? path : path.substring(i + 1);
     }
 
-    export function combinePaths(path1: string, path2: string) {
+    export function combinePaths(path1: string, path2: string): string {
         if (!(path1 && path1.length)) return path2;
         if (!(path2 && path2.length)) return path1;
         if (getRootLength(path2) !== 0) return path2;
@@ -2681,8 +2711,14 @@ namespace ts {
 
     export function assertTypeIsNever(_: never): void { }
 
+    export interface FileAndDirectoryExistence {
+        fileExists: boolean;
+        directoryExists: boolean;
+    }
+
     export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
-        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): void;
+        /** Returns the queried result for the file exists and directory exists if at all it was done */
+        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): FileAndDirectoryExistence | undefined;
         addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
         clearCache(): void;
     }
@@ -2852,8 +2888,13 @@ namespace ts {
                 if (parentResult) {
                     const baseName = getBaseNameOfFileName(fileOrDirectory);
                     if (parentResult) {
-                        updateFilesOfFileSystemEntry(parentResult, baseName, host.fileExists(fileOrDirectoryPath));
-                        updateFileSystemEntry(parentResult.directories, baseName, host.directoryExists(fileOrDirectoryPath));
+                        const fsQueryResult: FileAndDirectoryExistence = {
+                            fileExists: host.fileExists(fileOrDirectoryPath),
+                            directoryExists: host.directoryExists(fileOrDirectoryPath)
+                        };
+                        updateFilesOfFileSystemEntry(parentResult, baseName, fsQueryResult.fileExists);
+                        updateFileSystemEntry(parentResult.directories, baseName, fsQueryResult.directoryExists);
+                        return fsQueryResult;
                     }
                 }
             }

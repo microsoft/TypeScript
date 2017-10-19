@@ -47,6 +47,7 @@ declare namespace ts.server.protocol {
         DocCommentTemplate = "docCommentTemplate",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
+        ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
         GetEditsForRefactor = "getEditsForRefactor",
@@ -68,6 +69,7 @@ declare namespace ts.server.protocol {
      * Client-initiated request message
      */
     interface Request extends Message {
+        type: "request";
         /**
          * The command to execute
          */
@@ -87,6 +89,7 @@ declare namespace ts.server.protocol {
      * Server-initiated event message
      */
     interface Event extends Message {
+        type: "event";
         /**
          * Name of event
          */
@@ -100,6 +103,7 @@ declare namespace ts.server.protocol {
      * Response by server to client request message.
      */
     interface Response extends Message {
+        type: "response";
         /**
          * Sequence number of the request message.
          */
@@ -113,7 +117,8 @@ declare namespace ts.server.protocol {
          */
         command: string;
         /**
-         * Contains error message if success === false.
+         * If success === false, this should always be provided.
+         * Otherwise, may (or may not) contain a success message.
          */
         message?: string;
         /**
@@ -389,6 +394,12 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
     }
+    interface ApplyCodeActionCommandRequest extends Request {
+        command: CommandTypes.ApplyCodeActionCommand;
+        arguments: ApplyCodeActionCommandRequestArgs;
+    }
+    interface ApplyCodeActionCommandResponse extends Response {
+    }
     interface FileRangeRequestArgs extends FileRequestArgs {
         /**
          * The line number for the request (1-based).
@@ -415,6 +426,9 @@ declare namespace ts.server.protocol {
          * Errorcodes we want to get the fixes for.
          */
         errorCodes?: number[];
+    }
+    interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+        command: {};
     }
     /**
      * Response for GetCodeFixes request.
@@ -1154,6 +1168,8 @@ declare namespace ts.server.protocol {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileCodeEdits[];
+        /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
+        commands?: {}[];
     }
     /**
      * Format and format on key response message.
@@ -1260,6 +1276,11 @@ declare namespace ts.server.protocol {
          * this span should be used instead of the default one.
          */
         replacementSpan?: TextSpan;
+        /**
+         * Indicates whether commiting this completion entry will require additional code actions to be
+         * made to avoid errors. The CompletionEntryDetails will have these actions.
+         */
+        hasAction?: true;
     }
     /**
      * Additional completion entry details, available on demand
@@ -1289,6 +1310,10 @@ declare namespace ts.server.protocol {
          * JSDoc tags for the symbol.
          */
         tags: JSDocTagInfo[];
+        /**
+         * The associated code actions for this entry
+         */
+        codeActions?: CodeAction[];
     }
     interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
@@ -2113,6 +2138,7 @@ declare namespace ts.server.protocol {
     interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
+        scriptKind?: ScriptKind;
     }
 
     interface JSDocTagInfo {

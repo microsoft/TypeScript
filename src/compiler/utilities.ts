@@ -520,6 +520,17 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function isAnyImportSyntax(node: Node): node is AnyImportSyntax {
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ImportEqualsDeclaration:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
@@ -1349,6 +1360,14 @@ namespace ts {
         return node && !!(node.flags & NodeFlags.JSDoc);
     }
 
+    export function isJSDocIndexSignature(node: TypeReferenceNode | ExpressionWithTypeArguments) {
+        return isTypeReferenceNode(node) &&
+            isIdentifier(node.typeName) &&
+            node.typeName.escapedText === "Object" &&
+            node.typeArguments && node.typeArguments.length === 2 &&
+            (node.typeArguments[0].kind === SyntaxKind.StringKeyword || node.typeArguments[0].kind === SyntaxKind.NumberKeyword);
+    }
+
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
      * exactly one argument (of the form 'require("name")').
@@ -1373,6 +1392,10 @@ namespace ts {
 
     export function isSingleOrDoubleQuote(charCode: number) {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
+    }
+
+    export function isStringDoubleQuoted(string: StringLiteral, sourceFile: SourceFile): boolean {
+        return getSourceTextOfNodeFromSourceFile(sourceFile, string).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
     /**
@@ -3184,7 +3207,7 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: System): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: { newLine: string }): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
