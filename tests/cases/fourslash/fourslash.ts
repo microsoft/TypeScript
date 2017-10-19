@@ -295,7 +295,7 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[]): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[]): void;
-        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string): void;
+        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */

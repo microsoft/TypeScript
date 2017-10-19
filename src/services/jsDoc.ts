@@ -65,17 +65,42 @@ namespace ts.JsDoc {
         return documentationComment;
     }
 
-    export function getJsDocTagsFromDeclarations(declarations?: Declaration[]) {
+    export function getJsDocTagsFromDeclarations(declarations?: Declaration[]): JSDocTagInfo[] {
         // Only collect doc comments from duplicate declarations once.
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
             for (const tag of getJSDocTags(declaration)) {
-                if (tag.kind === SyntaxKind.JSDocTag) {
-                    tags.push({ name: tag.tagName.text, text: tag.comment });
-                }
+                tags.push({ name: tag.tagName.text, text: getCommentText(tag) });
             }
         });
         return tags;
+    }
+
+    function getCommentText(tag: JSDocTag): string {
+        const { comment } = tag;
+        switch (tag.kind) {
+            case SyntaxKind.JSDocAugmentsTag:
+                return withNode((tag as JSDocAugmentsTag).class);
+            case SyntaxKind.JSDocTemplateTag:
+                return withList((tag as JSDocTemplateTag).typeParameters);
+            case SyntaxKind.JSDocTypeTag:
+                return withNode((tag as JSDocTypeTag).typeExpression);
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocPropertyTag:
+            case SyntaxKind.JSDocParameterTag:
+                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
+                return name ? withNode(name) : comment;
+            default:
+                return comment;
+        }
+
+        function withNode(node: Node) {
+            return `${node.getText()} ${comment}`;
+        }
+
+        function withList(list: NodeArray<Node>): string {
+            return `${list.map(x => x.getText())} ${comment}`;
+        }
     }
 
     /**
