@@ -1606,8 +1606,19 @@ namespace ts {
             return undefined;
         }
         const name = node.name.escapedText;
-        const func = getJSDocHost(node);
-        if (!isFunctionLike(func)) {
+        const decl = getJSDocHost(node);
+        let func: FunctionLike;
+        if (isExpressionStatement(decl) && isBinaryExpression(decl.expression) && isFunctionLike(decl.expression.right)) {
+            func = decl.expression.right;
+        }
+        else if (isVariableStatement(decl) && decl.declarationList.declarations.length === 1 && isVariableDeclaration(decl.declarationList.declarations[0])
+                 && isFunctionLike(decl.declarationList.declarations[0].initializer)) {
+            func = decl.declarationList.declarations[0].initializer as FunctionLike;
+        }
+        else if (isFunctionLike(decl)) {
+            func = decl;
+        }
+        else {
             return undefined;
         }
         const parameter = find(func.parameters, p =>
