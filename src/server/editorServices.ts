@@ -1350,10 +1350,10 @@ namespace ts.server {
             const projectOptions: ProjectOptions = {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
-                configHasExtendsProperty: parsedCommandLine.raw["extends"] !== undefined,
-                configHasFilesProperty: parsedCommandLine.raw["files"] !== undefined,
-                configHasIncludeProperty: parsedCommandLine.raw["include"] !== undefined,
-                configHasExcludeProperty: parsedCommandLine.raw["exclude"] !== undefined,
+                configHasExtendsProperty: parsedCommandLine.raw.extends !== undefined,
+                configHasFilesProperty: parsedCommandLine.raw.files !== undefined,
+                configHasIncludeProperty: parsedCommandLine.raw.include !== undefined,
+                configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined,
                 wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
                 typeAcquisition: parsedCommandLine.typeAcquisition,
                 compileOnSave: parsedCommandLine.compileOnSave
