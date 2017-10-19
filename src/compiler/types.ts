@@ -1055,6 +1055,7 @@ namespace ts {
     export interface StringLiteral extends LiteralExpression {
         kind: SyntaxKind.StringLiteral;
         /* @internal */ textSourceNode?: Identifier | StringLiteral | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
+        /** Note: this is only set when synthesizing a node, not during parsing. */
         /* @internal */ singleQuote?: boolean;
     }
 
@@ -2695,6 +2696,24 @@ namespace ts {
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
         /* @internal */ getBaseConstraintOfType(type: Type): Type | undefined;
 
+        /* @internal */ getAnyType(): Type;
+        /* @internal */ getStringType(): Type;
+        /* @internal */ getNumberType(): Type;
+        /* @internal */ getBooleanType(): Type;
+        /* @internal */ getVoidType(): Type;
+        /* @internal */ getUndefinedType(): Type;
+        /* @internal */ getNullType(): Type;
+        /* @internal */ getESSymbolType(): Type;
+        /* @internal */ getNeverType(): Type;
+        /* @internal */ getUnionType(types: Type[], subtypeReduction?: boolean): Type;
+        /* @internal */ createArrayType(elementType: Type): Type;
+        /* @internal */ createPromiseType(type: Type): Type;
+
+        /* @internal */ createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): Type;
+        /* @internal */ createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[], resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
+        /* @internal */ createSymbol(flags: SymbolFlags, name: __String): TransientSymbol;
+        /* @internal */ createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
+        /* @internal */ isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
 
         /* @internal */ getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
@@ -3607,6 +3626,7 @@ namespace ts {
     export interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
+        scriptKind?: ScriptKind;
     }
 
     export interface DiagnosticMessage {

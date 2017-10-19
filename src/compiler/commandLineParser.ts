@@ -1190,8 +1190,8 @@ namespace ts {
             }
         }
 
-        function isDoubleQuotedString(node: Node) {
-            return node.kind === SyntaxKind.StringLiteral && getSourceTextOfNodeFromSourceFile(sourceFile, node).charCodeAt(0) === CharacterCodes.doubleQuote;
+        function isDoubleQuotedString(node: Node): boolean {
+            return isStringLiteral(node) && isStringDoubleQuoted(node, sourceFile);
         }
     }
 

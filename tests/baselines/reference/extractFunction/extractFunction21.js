@@ -20,6 +20,7 @@ function foo() {
     x = /*RENAME*/newFunction(x);
     return;
 }
+
 function newFunction(x) {
     x++;
     return x;

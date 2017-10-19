@@ -1,0 +1,16 @@
+=== tests/cases/compiler/systemJsForInNoException.ts ===
+export const obj = { a: 1 };
+>obj : Symbol(obj, Decl(systemJsForInNoException.ts, 0, 12))
+>a : Symbol(a, Decl(systemJsForInNoException.ts, 0, 20))
+
+for (var key in obj)
+>key : Symbol(key, Decl(systemJsForInNoException.ts, 1, 8))
+>obj : Symbol(obj, Decl(systemJsForInNoException.ts, 0, 12))
+
+    console.log(obj[key]);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>obj : Symbol(obj, Decl(systemJsForInNoException.ts, 0, 12))
+>key : Symbol(key, Decl(systemJsForInNoException.ts, 1, 8))
+
