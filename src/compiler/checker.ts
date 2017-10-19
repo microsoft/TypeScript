@@ -11376,6 +11376,16 @@ namespace ts {
         }
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
+            if (type.flags & TypeFlags.IndexedAccess) {
+                // TODO (weswig): This is a substitute for a lazy negated type to remove the types indicated by the TypeFacts from the (potential) union the IndexedAccess refers to
+                //  - See discussion in https://github.com/Microsoft/TypeScript/pull/19275 for details, and test `strictNullNotNullIndexTypeShouldWork` for current behavior
+                const baseConstraint = getBaseConstraintOfType(type) || emptyObjectType;
+                const result = filterType(baseConstraint, t => (getTypeFacts(t) & include) !== 0);
+                if (result !== baseConstraint) {
+                    return result;
+                }
+                return type;
+            }
             return filterType(type, t => (getTypeFacts(t) & include) !== 0);
         }
 
