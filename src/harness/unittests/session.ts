@@ -663,9 +663,9 @@ namespace ts.server {
     });
 
     describe("helpers", () => {
-        it(fixupLineAndOffset.name, () => {
+        it(getLocationInNewDocument.name, () => {
             const text = `// blank line\nconst x = 0;`;
-            const newLocation = text.indexOf("0");
+            const renameLocationInOldText = text.indexOf("0");
             const fileName = "/a.ts";
             const edits: ts.FileTextChanges = {
                 fileName,
@@ -675,12 +675,13 @@ namespace ts.server {
                         newText: "const newLocal = 0;\n\n",
                     },
                     {
-                        span: { start: newLocation, length: 1 },
+                        span: { start: renameLocationInOldText, length: 1 },
                         newText: "newLocal",
                     },
                 ],
             };
-            const res = fixupLineAndOffset({ line: 2, offset: 11 }, text, newLocation, fileName, [edits]);
+            const renameLocationInNewText = renameLocationInOldText + edits.textChanges[0].newText.length;
+            const res = getLocationInNewDocument(text, fileName, renameLocationInNewText, [edits]);
             assert.deepEqual(res, { line: 4, offset: 11 });
         });
     });

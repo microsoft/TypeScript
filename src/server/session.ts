@@ -1518,10 +1518,9 @@ namespace ts.server {
                 let mappedRenameLocation: protocol.Location | undefined;
                 if (renameFilename !== undefined && renameLocation !== undefined) {
                     const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename));
-                    const oldLocation = renameScriptInfo.positionToLineOffset(result.renameLocation);
                     const snapshot = renameScriptInfo.getSnapshot();
                     const oldText = snapshot.getText(0, snapshot.getLength());
-                    mappedRenameLocation = fixupLineAndOffset(oldLocation, oldText, renameLocation, renameFilename, edits);
+                    mappedRenameLocation = getLocationInNewDocument(oldText, renameFilename, renameLocation, edits);
                 }
                 return {
                     renameLocation: mappedRenameLocation,
@@ -2044,60 +2043,25 @@ namespace ts.server {
         responseRequired?: boolean;
     }
 
-    /* @internal */ // exported for tests only
-    /** Since we will perform the rename in a changed document, line and offset information must be adjusted if the new text adds/deletes newlines. */
-    export function fixupLineAndOffset(
-        locationInOldText: protocol.Location,
-        oldText: string,
-        positionInOldText: number,
-        locationFileName: string,
-        edits: ReadonlyArray<FileTextChanges>,
-    ): protocol.Location {
-        let { line, offset } = locationInOldText;
-        const oldLineStartOfLocation = positionInOldText - (offset - 1); // offset is 1-based, location is 0-based
+    /* @internal */ // Exported only for tests
+    export function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: ReadonlyArray<FileTextChanges>): protocol.Location {
+        const newText = applyEdits(oldText, renameFilename, edits);
+        const { line, character } = computeLineAndCharacterOfPosition(computeLineStarts(newText), renameLocation);
+        return { line: line + 1, offset: character + 1 };
+    }
 
+    function applyEdits(text: string, textFilename: string, edits: ReadonlyArray<FileTextChanges>): string {
         for (const { fileName, textChanges } of edits) {
-            if (fileName !== locationFileName) {
+            if (fileName !== textFilename) {
                 continue;
             }
 
-            // Text change spans are in the *old* document. They apply all at once rather than sequentially.
-            for (const { newText, span: { start, length } } of textChanges) {
-                if (start > positionInOldText) {
-                    continue;
-                }
-
-                const newTextNewlines = countNewlines(newText);
-                line += newTextNewlines - countNewlines(oldText.slice(start, start + length));
-                // If this edit is applied to the line of the rename, update offset
-                if (start >= oldLineStartOfLocation && start < positionInOldText) {
-                    offset += newText.length - length;
-                    if (newTextNewlines !== 0) {
-                        offset -= newText.lastIndexOf("\n");
-                    }
-                }
+            for (let i = textChanges.length - 1; i >= 0; i--) {
+                const { newText, span: { start, length } } = textChanges[i];
+                text = text.slice(0, start) + newText + text.slice(start + length);
             }
         }
 
-        return { line, offset };
-    }
-
-    function countNewlines(s: string): number {
-        let count = 0;
-        for (let i = 0; i < s.length; i++) {
-            switch (s.charCodeAt(i)) {
-                case CharacterCodes.carriageReturn:
-                    count++;
-                    i++;
-                    // Skip a "\n" after a "\r" because "\r\n" is only one newline. But "\r\r" is two.
-                    if (i < s.length && s.charCodeAt(i) === CharacterCodes.carriageReturn) {
-                        count++;
-                    }
-                    break;
-                case CharacterCodes.lineFeed:
-                    count++;
-            }
-        }
-        return count;
+        return text;
     }
 }
