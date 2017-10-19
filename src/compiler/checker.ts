@@ -13149,7 +13149,31 @@ namespace ts {
                     // We have an object literal method. Check if the containing object literal has a contextual type
                     // that includes a ThisType<T>. If so, T is the contextual type for 'this'. We continue looking in
                     // any directly enclosing object literals.
-                    const contextualType = getApparentTypeOfContextualType(containingLiteral);
+                    let contextualType = getApparentTypeOfContextualType(containingLiteral);
+                    if (contextualType.flags & TypeFlags.Union) {
+                        let match: Type | undefined;
+                        propLoop: for (const prop of containingLiteral.properties) {
+                            if (!prop.symbol) continue;
+                            if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
+                            if (isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
+                                const discriminatingType = getTypeOfNode((prop as PropertyAssignment).initializer);
+                                for (const type of (contextualType as UnionType).types) {
+                                    const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
+                                    if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {
+                                        if (match) {
+                                            if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
+                                            match = undefined;
+                                            break propLoop;
+                                        }
+                                        match = type;
+                                    }
+                                }
+                            }
+                        }
+                        if (match) {
+                            contextualType = match;
+                        }
+                    }
                     let literal = containingLiteral;
                     let type = contextualType;
                     while (type) {

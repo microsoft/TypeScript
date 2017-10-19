@@ -1,11 +1,15 @@
+
+// @strict: true
 interface X {
     type: 'x';
     value: string;
+    method(): void;
 }
 
 interface Y {
     type: 'y';
     value: 'none' | 'done';
+    method(): void;
 }
 
 function foo(bar: X | Y) { }
@@ -13,16 +17,23 @@ function foo(bar: X | Y) { }
 foo({
     type: 'y',
     value: 'done',
+    method() {
+        this;
+        this.type;
+        this.value;
+    }
 });
 
 interface X2 {
     type1: 'x';
     value: string;
+    method(): void;
 }
 
 interface Y2 {
     type2: 'y';
     value: 'none' | 'done';
+    method(): void;
 }
 
 function foo2(bar: X2 | Y2) { }
@@ -30,6 +41,10 @@ function foo2(bar: X2 | Y2) { }
 foo2({
     type2: 'y',
     value: 'done',
+    method() {
+        this;
+        this.value;
+    }
 });
 
 interface X3 {
@@ -51,3 +66,32 @@ let xy: X3 | Y3 = {
 };
 
 xy;
+
+
+interface LikeA {
+    x: 'x';
+    y: 'y';
+    value: string;
+    method(): void;
+}
+
+interface LikeB {
+    x: 'xx';
+    y: 'yy';
+    value: number;
+    method(): void;
+}
+
+let xyz: LikeA | LikeB = {
+    x: 'x',
+    y: 'y',
+    value: "foo",
+    method() {
+        this;
+        this.x;
+        this.y;
+        this.value;
+    }
+};
+
+xyz;

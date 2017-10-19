@@ -7,6 +7,9 @@ interface X {
 
     value: string;
 >value : string
+
+    method(): void;
+>method : () => void
 }
 
 interface Y {
@@ -17,6 +20,9 @@ interface Y {
 
     value: 'none' | 'done';
 >value : "none" | "done"
+
+    method(): void;
+>method : () => void
 }
 
 function foo(bar: X | Y) { }
@@ -26,9 +32,9 @@ function foo(bar: X | Y) { }
 >Y : Y
 
 foo({
->foo({    type: 'y',    value: 'done',}) : void
+>foo({    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }}) : void
 >foo : (bar: X | Y) => void
->{    type: 'y',    value: 'done',} : { type: "y"; value: "done"; }
+>{    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }} : { type: "y"; value: "done"; method(): void; }
 
     type: 'y',
 >type : string
@@ -38,6 +44,22 @@ foo({
 >value : string
 >'done' : "done"
 
+    method() {
+>method : () => void
+
+        this;
+>this : Y
+
+        this.type;
+>this.type : "y"
+>this : Y
+>type : "y"
+
+        this.value;
+>this.value : "none" | "done"
+>this : Y
+>value : "none" | "done"
+    }
 });
 
 interface X2 {
@@ -48,6 +70,9 @@ interface X2 {
 
     value: string;
 >value : string
+
+    method(): void;
+>method : () => void
 }
 
 interface Y2 {
@@ -58,6 +83,9 @@ interface Y2 {
 
     value: 'none' | 'done';
 >value : "none" | "done"
+
+    method(): void;
+>method : () => void
 }
 
 function foo2(bar: X2 | Y2) { }
@@ -67,9 +95,9 @@ function foo2(bar: X2 | Y2) { }
 >Y2 : Y2
 
 foo2({
->foo2({    type2: 'y',    value: 'done',}) : void
+>foo2({    type2: 'y',    value: 'done',    method() {        this;        this.value;    }}) : void
 >foo2 : (bar: X2 | Y2) => void
->{    type2: 'y',    value: 'done',} : { type2: "y"; value: "done"; }
+>{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method(): void; }
 
     type2: 'y',
 >type2 : string
@@ -79,6 +107,17 @@ foo2({
 >value : string
 >'done' : "done"
 
+    method() {
+>method : () => void
+
+        this;
+>this : X2 | Y2
+
+        this.value;
+>this.value : string
+>this : X2 | Y2
+>value : string
+    }
 });
 
 interface X3 {
@@ -129,4 +168,81 @@ let xy: X3 | Y3 = {
 
 xy;
 >xy : Y3
+
+
+interface LikeA {
+>LikeA : LikeA
+
+    x: 'x';
+>x : "x"
+
+    y: 'y';
+>y : "y"
+
+    value: string;
+>value : string
+
+    method(): void;
+>method : () => void
+}
+
+interface LikeB {
+>LikeB : LikeB
+
+    x: 'xx';
+>x : "xx"
+
+    y: 'yy';
+>y : "yy"
+
+    value: number;
+>value : number
+
+    method(): void;
+>method : () => void
+}
+
+let xyz: LikeA | LikeB = {
+>xyz : LikeA | LikeB
+>LikeA : LikeA
+>LikeB : LikeB
+>{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: string; method(): void; }
+
+    x: 'x',
+>x : string
+>'x' : "x"
+
+    y: 'y',
+>y : string
+>'y' : "y"
+
+    value: "foo",
+>value : string
+>"foo" : "foo"
+
+    method() {
+>method : () => void
+
+        this;
+>this : LikeA
+
+        this.x;
+>this.x : "x"
+>this : LikeA
+>x : "x"
+
+        this.y;
+>this.y : "y"
+>this : LikeA
+>y : "y"
+
+        this.value;
+>this.value : string
+>this : LikeA
+>value : string
+    }
+};
+
+xyz;
+>xyz : LikeA
 
