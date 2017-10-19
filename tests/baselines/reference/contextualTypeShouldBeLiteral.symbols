@@ -1,0 +1,120 @@
+=== tests/cases/compiler/contextualTypeShouldBeLiteral.ts ===
+interface X {
+>X : Symbol(X, Decl(contextualTypeShouldBeLiteral.ts, 0, 0))
+
+    type: 'x';
+>type : Symbol(X.type, Decl(contextualTypeShouldBeLiteral.ts, 0, 13))
+
+    value: string;
+>value : Symbol(X.value, Decl(contextualTypeShouldBeLiteral.ts, 1, 14))
+}
+
+interface Y {
+>Y : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 3, 1))
+
+    type: 'y';
+>type : Symbol(Y.type, Decl(contextualTypeShouldBeLiteral.ts, 5, 13))
+
+    value: 'none' | 'done';
+>value : Symbol(Y.value, Decl(contextualTypeShouldBeLiteral.ts, 6, 14))
+}
+
+function foo(bar: X | Y) { }
+>foo : Symbol(foo, Decl(contextualTypeShouldBeLiteral.ts, 8, 1))
+>bar : Symbol(bar, Decl(contextualTypeShouldBeLiteral.ts, 10, 13))
+>X : Symbol(X, Decl(contextualTypeShouldBeLiteral.ts, 0, 0))
+>Y : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 3, 1))
+
+foo({
+>foo : Symbol(foo, Decl(contextualTypeShouldBeLiteral.ts, 8, 1))
+
+    type: 'y',
+>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 12, 5))
+
+    value: 'done',
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 13, 14))
+
+});
+
+interface X2 {
+>X2 : Symbol(X2, Decl(contextualTypeShouldBeLiteral.ts, 15, 3))
+
+    type1: 'x';
+>type1 : Symbol(X2.type1, Decl(contextualTypeShouldBeLiteral.ts, 17, 14))
+
+    value: string;
+>value : Symbol(X2.value, Decl(contextualTypeShouldBeLiteral.ts, 18, 15))
+}
+
+interface Y2 {
+>Y2 : Symbol(Y2, Decl(contextualTypeShouldBeLiteral.ts, 20, 1))
+
+    type2: 'y';
+>type2 : Symbol(Y2.type2, Decl(contextualTypeShouldBeLiteral.ts, 22, 14))
+
+    value: 'none' | 'done';
+>value : Symbol(Y2.value, Decl(contextualTypeShouldBeLiteral.ts, 23, 15))
+}
+
+function foo2(bar: X2 | Y2) { }
+>foo2 : Symbol(foo2, Decl(contextualTypeShouldBeLiteral.ts, 25, 1))
+>bar : Symbol(bar, Decl(contextualTypeShouldBeLiteral.ts, 27, 14))
+>X2 : Symbol(X2, Decl(contextualTypeShouldBeLiteral.ts, 15, 3))
+>Y2 : Symbol(Y2, Decl(contextualTypeShouldBeLiteral.ts, 20, 1))
+
+foo2({
+>foo2 : Symbol(foo2, Decl(contextualTypeShouldBeLiteral.ts, 25, 1))
+
+    type2: 'y',
+>type2 : Symbol(type2, Decl(contextualTypeShouldBeLiteral.ts, 29, 6))
+
+    value: 'done',
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 30, 15))
+
+});
+
+interface X3 {
+>X3 : Symbol(X3, Decl(contextualTypeShouldBeLiteral.ts, 32, 3))
+
+    type: 'x';
+>type : Symbol(X3.type, Decl(contextualTypeShouldBeLiteral.ts, 34, 14))
+
+    value: 1 | 2 | 3;
+>value : Symbol(X3.value, Decl(contextualTypeShouldBeLiteral.ts, 35, 14))
+
+    xtra: number;
+>xtra : Symbol(X3.xtra, Decl(contextualTypeShouldBeLiteral.ts, 36, 21))
+}
+
+interface Y3 {
+>Y3 : Symbol(Y3, Decl(contextualTypeShouldBeLiteral.ts, 38, 1))
+
+    type: 'y';
+>type : Symbol(Y3.type, Decl(contextualTypeShouldBeLiteral.ts, 40, 14))
+
+    value: 11 | 12 | 13;
+>value : Symbol(Y3.value, Decl(contextualTypeShouldBeLiteral.ts, 41, 14))
+
+    ytra: number;
+>ytra : Symbol(Y3.ytra, Decl(contextualTypeShouldBeLiteral.ts, 42, 24))
+}
+
+let xy: X3 | Y3 = {
+>xy : Symbol(xy, Decl(contextualTypeShouldBeLiteral.ts, 46, 3))
+>X3 : Symbol(X3, Decl(contextualTypeShouldBeLiteral.ts, 32, 3))
+>Y3 : Symbol(Y3, Decl(contextualTypeShouldBeLiteral.ts, 38, 1))
+
+    type: 'y',
+>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 46, 19))
+
+    value: 11,
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 47, 14))
+
+    ytra: 12
+>ytra : Symbol(ytra, Decl(contextualTypeShouldBeLiteral.ts, 48, 14))
+
+};
+
+xy;
+>xy : Symbol(xy, Decl(contextualTypeShouldBeLiteral.ts, 46, 3))
+
