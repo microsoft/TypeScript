@@ -13150,7 +13150,7 @@ namespace ts {
                     // that includes a ThisType<T>. If so, T is the contextual type for 'this'. We continue looking in
                     // any directly enclosing object literals.
                     let contextualType = getApparentTypeOfContextualType(containingLiteral);
-                    if (contextualType.flags & TypeFlags.Union) {
+                    if (contextualType && contextualType.flags & TypeFlags.Union) {
                         let match: Type | undefined;
                         propLoop: for (const prop of containingLiteral.properties) {
                             if (!prop.symbol) continue;
