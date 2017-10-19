@@ -661,4 +661,28 @@ namespace ts.server {
             session.consumeQueue();
         });
     });
+
+    describe("helpers", () => {
+        it(getLocationInNewDocument.name, () => {
+            const text = `// blank line\nconst x = 0;`;
+            const renameLocationInOldText = text.indexOf("0");
+            const fileName = "/a.ts";
+            const edits: ts.FileTextChanges = {
+                fileName,
+                textChanges: [
+                    {
+                        span: { start: 0, length: 0 },
+                        newText: "const newLocal = 0;\n\n",
+                    },
+                    {
+                        span: { start: renameLocationInOldText, length: 1 },
+                        newText: "newLocal",
+                    },
+                ],
+            };
+            const renameLocationInNewText = renameLocationInOldText + edits.textChanges[0].newText.length;
+            const res = getLocationInNewDocument(text, fileName, renameLocationInNewText, [edits]);
+            assert.deepEqual(res, { line: 4, offset: 11 });
+        });
+    });
 }
