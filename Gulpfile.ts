@@ -64,7 +64,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
-        light: process.env.light || false,
+        light: process.env.light === undefined ? true : (process.env.light !== "false"),
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
