@@ -21,3 +21,12 @@ y = function bar(b) {}
 >bar : Symbol(bar, Decl(0.js, 10, 3))
 >b : Symbol(b, Decl(0.js, 10, 17))
 
+/**
+ * @param {string} s
+ */
+var one = function (s) { }, two = function (untyped) { };
+>one : Symbol(one, Decl(0.js, 15, 3))
+>s : Symbol(s, Decl(0.js, 15, 20))
+>two : Symbol(two, Decl(0.js, 15, 27))
+>untyped : Symbol(untyped, Decl(0.js, 15, 44))
+

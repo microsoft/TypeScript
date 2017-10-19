@@ -24,3 +24,14 @@ y = function bar(b) {}
 >bar : (b: boolean) => void
 >b : boolean
 
+/**
+ * @param {string} s
+ */
+var one = function (s) { }, two = function (untyped) { };
+>one : (s: string) => void
+>function (s) { } : (s: string) => void
+>s : string
+>two : (untyped: any) => void
+>function (untyped) { } : (untyped: any) => void
+>untyped : any
+
