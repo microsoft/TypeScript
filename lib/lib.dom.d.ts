@@ -4253,11 +4253,7 @@ interface HTMLBodyElement extends HTMLElement {
     onafterprint: (this: HTMLBodyElement, ev: Event) => any;
     onbeforeprint: (this: HTMLBodyElement, ev: Event) => any;
     onbeforeunload: (this: HTMLBodyElement, ev: BeforeUnloadEvent) => any;
-    onblur: (this: HTMLBodyElement, ev: FocusEvent) => any;
-    onerror: (this: HTMLBodyElement, ev: ErrorEvent) => any;
-    onfocus: (this: HTMLBodyElement, ev: FocusEvent) => any;
     onhashchange: (this: HTMLBodyElement, ev: HashChangeEvent) => any;
-    onload: (this: HTMLBodyElement, ev: Event) => any;
     onmessage: (this: HTMLBodyElement, ev: MessageEvent) => any;
     onoffline: (this: HTMLBodyElement, ev: Event) => any;
     ononline: (this: HTMLBodyElement, ev: Event) => any;
@@ -4266,7 +4262,6 @@ interface HTMLBodyElement extends HTMLElement {
     onpageshow: (this: HTMLBodyElement, ev: PageTransitionEvent) => any;
     onpopstate: (this: HTMLBodyElement, ev: PopStateEvent) => any;
     onresize: (this: HTMLBodyElement, ev: UIEvent) => any;
-    onscroll: (this: HTMLBodyElement, ev: UIEvent) => any;
     onstorage: (this: HTMLBodyElement, ev: StorageEvent) => any;
     onunload: (this: HTMLBodyElement, ev: Event) => any;
     text: any;
@@ -4858,6 +4853,7 @@ interface HTMLFormElement extends HTMLElement {
      * Fires when a FORM is about to be submitted.
      */
     submit(): void;
+    reportValidity(): boolean;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFormElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
     [name: string]: any;
@@ -4921,10 +4917,6 @@ interface HTMLFrameElement extends HTMLElement, GetSVGDocument {
      * Sets or retrieves whether the user can resize the frame.
      */
     noResize: boolean;
-    /**
-     * Raised when the object has been completely received from the server.
-     */
-    onload: (this: HTMLFrameElement, ev: Event) => any;
     /**
      * Sets or retrieves whether the frame can be scrolled.
      */
@@ -4990,17 +4982,7 @@ interface HTMLFrameSetElement extends HTMLElement {
     onafterprint: (this: HTMLFrameSetElement, ev: Event) => any;
     onbeforeprint: (this: HTMLFrameSetElement, ev: Event) => any;
     onbeforeunload: (this: HTMLFrameSetElement, ev: BeforeUnloadEvent) => any;
-    /**
-     * Fires when the object loses the input focus.
-     */
-    onblur: (this: HTMLFrameSetElement, ev: FocusEvent) => any;
-    onerror: (this: HTMLFrameSetElement, ev: ErrorEvent) => any;
-    /**
-     * Fires when the object receives focus.
-     */
-    onfocus: (this: HTMLFrameSetElement, ev: FocusEvent) => any;
     onhashchange: (this: HTMLFrameSetElement, ev: HashChangeEvent) => any;
-    onload: (this: HTMLFrameSetElement, ev: Event) => any;
     onmessage: (this: HTMLFrameSetElement, ev: MessageEvent) => any;
     onoffline: (this: HTMLFrameSetElement, ev: Event) => any;
     ononline: (this: HTMLFrameSetElement, ev: Event) => any;
@@ -5009,7 +4991,6 @@ interface HTMLFrameSetElement extends HTMLElement {
     onpageshow: (this: HTMLFrameSetElement, ev: PageTransitionEvent) => any;
     onpopstate: (this: HTMLFrameSetElement, ev: PopStateEvent) => any;
     onresize: (this: HTMLFrameSetElement, ev: UIEvent) => any;
-    onscroll: (this: HTMLFrameSetElement, ev: UIEvent) => any;
     onstorage: (this: HTMLFrameSetElement, ev: StorageEvent) => any;
     onunload: (this: HTMLFrameSetElement, ev: Event) => any;
     /**
@@ -5145,10 +5126,6 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
      * Sets or retrieves whether the user can resize the frame.
      */
     noResize: boolean;
-    /**
-     * Raised when the object has been completely received from the server.
-     */
-    onload: (this: HTMLIFrameElement, ev: Event) => any;
     readonly sandbox: DOMSettableTokenList;
     /**
      * Sets or retrieves whether the frame can be scrolled.
@@ -8245,6 +8222,7 @@ interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorConte
     readonly pointerEnabled: boolean;
     readonly serviceWorker: ServiceWorkerContainer;
     readonly webdriver: boolean;
+    readonly doNotTrack: string | null;
     readonly hardwareConcurrency: number;
     readonly languages: string[];
     getGamepads(): Gamepad[];
@@ -13297,7 +13275,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     moveBy(x?: number, y?: number): void;
     moveTo(x?: number, y?: number): void;
     msWriteProfilerMark(profilerMarkName: string): void;
-    open(url?: string, target?: string, features?: string, replace?: boolean): Window;
+    open(url?: string, target?: string, features?: string, replace?: boolean): Window | null;
     postMessage(message: any, targetOrigin: string, transfer?: any[]): void;
     print(): void;
     prompt(message?: string, _default?: string): string | null;
@@ -14046,7 +14024,7 @@ interface EcKeyAlgorithm extends KeyAlgorithm {
     typedCurve: string;
 }
 
-interface EcKeyImportParams {
+interface EcKeyImportParams extends Algorithm {
     namedCurve: string;
 }
 
@@ -14697,7 +14675,7 @@ declare function matchMedia(mediaQuery: string): MediaQueryList;
 declare function moveBy(x?: number, y?: number): void;
 declare function moveTo(x?: number, y?: number): void;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
-declare function open(url?: string, target?: string, features?: string, replace?: boolean): Window;
+declare function open(url?: string, target?: string, features?: string, replace?: boolean): Window | null;
 declare function postMessage(message: any, targetOrigin: string, transfer?: any[]): void;
 declare function print(): void;
 declare function prompt(message?: string, _default?: string): string | null;

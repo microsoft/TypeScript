@@ -2220,10 +2220,6 @@
         "category": "Error",
         "code": 2714
     },
-    "Abstract property '{0}' in class '{1}' cannot be accessed in the constructor.": {
-        "category": "Error",
-        "code": 2715
-    },
     "Type parameter '{0}' has a circular default.": {
         "category": "Error",
         "code": 2716

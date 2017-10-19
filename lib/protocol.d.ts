@@ -5,6 +5,7 @@ declare namespace ts.server.protocol {
     const enum CommandTypes {
         Brace = "brace",
         BraceCompletion = "braceCompletion",
+        GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
         Completions = "completions",
@@ -46,6 +47,7 @@ declare namespace ts.server.protocol {
         DocCommentTemplate = "docCommentTemplate",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
+        ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
         GetEditsForRefactor = "getEditsForRefactor",
@@ -67,6 +69,7 @@ declare namespace ts.server.protocol {
      * Client-initiated request message
      */
     interface Request extends Message {
+        type: "request";
         /**
          * The command to execute
          */
@@ -86,6 +89,7 @@ declare namespace ts.server.protocol {
      * Server-initiated event message
      */
     interface Event extends Message {
+        type: "event";
         /**
          * Name of event
          */
@@ -99,6 +103,7 @@ declare namespace ts.server.protocol {
      * Response by server to client request message.
      */
     interface Response extends Message {
+        type: "response";
         /**
          * Sequence number of the request message.
          */
@@ -112,7 +117,8 @@ declare namespace ts.server.protocol {
          */
         command: string;
         /**
-         * Contains error message if success === false.
+         * If success === false, this should always be provided.
+         * Otherwise, may (or may not) contain a success message.
          */
         message?: string;
         /**
@@ -163,6 +169,19 @@ declare namespace ts.server.protocol {
      */
     interface TodoCommentsResponse extends Response {
         body?: TodoComment[];
+    }
+    /**
+     * A request to determine if the caret is inside a comment.
+     */
+    interface SpanOfEnclosingCommentRequest extends FileLocationRequest {
+        command: CommandTypes.GetSpanOfEnclosingComment;
+        arguments: SpanOfEnclosingCommentRequestArgs;
+    }
+    interface SpanOfEnclosingCommentRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
+         */
+        onlyMultiLine: boolean;
     }
     /**
      * A request to get indentation for a location in file
@@ -332,7 +351,7 @@ declare namespace ts.server.protocol {
      * Represents a single refactoring action - for example, the "Extract Method..." refactor might
      * offer several actions, each corresponding to a surround class or closure to extract into.
      */
-    type RefactorActionInfo = {
+    interface RefactorActionInfo {
         /**
          * The programmatic name of the refactoring action
          */
@@ -343,7 +362,7 @@ declare namespace ts.server.protocol {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
-    };
+    }
     interface GetEditsForRefactorRequest extends Request {
         command: CommandTypes.GetEditsForRefactor;
         arguments: GetEditsForRefactorRequestArgs;
@@ -359,7 +378,7 @@ declare namespace ts.server.protocol {
     interface GetEditsForRefactorResponse extends Response {
         body?: RefactorEditInfo;
     }
-    type RefactorEditInfo = {
+    interface RefactorEditInfo {
         edits: FileCodeEdits[];
         /**
          * An optional location where the editor should start a rename operation once
@@ -367,13 +386,19 @@ declare namespace ts.server.protocol {
          */
         renameLocation?: Location;
         renameFilename?: string;
-    };
+    }
     /**
      * Request for the available codefixes at a specific position.
      */
     interface CodeFixRequest extends Request {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
+    }
+    interface ApplyCodeActionCommandRequest extends Request {
+        command: CommandTypes.ApplyCodeActionCommand;
+        arguments: ApplyCodeActionCommandRequestArgs;
+    }
+    interface ApplyCodeActionCommandResponse extends Response {
     }
     interface FileRangeRequestArgs extends FileRequestArgs {
         /**
@@ -401,6 +426,9 @@ declare namespace ts.server.protocol {
          * Errorcodes we want to get the fixes for.
          */
         errorCodes?: number[];
+    }
+    interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+        command: {};
     }
     /**
      * Response for GetCodeFixes request.
@@ -714,7 +742,7 @@ declare namespace ts.server.protocol {
         /**
          * An array of span groups (one per file) that refer to the item to be renamed.
          */
-        locs: SpanGroup[];
+        locs: ReadonlyArray<SpanGroup>;
     }
     /**
      * Rename response message.
@@ -953,6 +981,12 @@ declare namespace ts.server.protocol {
          * Compiler options to be used with inferred projects.
          */
         options: ExternalProjectCompilerOptions;
+        /**
+         * Specifies the project root path used to scope compiler options.
+         * It is an error to provide this property if the server has not been started with
+         * `useInferredProjectPerProjectRoot` enabled.
+         */
+        projectRootPath?: string;
     }
     /**
      * Response to SetCompilerOptionsForInferredProjectsResponse request. This is just an acknowledgement, so
@@ -1134,6 +1168,8 @@ declare namespace ts.server.protocol {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileCodeEdits[];
+        /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
+        commands?: {}[];
     }
     /**
      * Format and format on key response message.
@@ -1240,6 +1276,11 @@ declare namespace ts.server.protocol {
          * this span should be used instead of the default one.
          */
         replacementSpan?: TextSpan;
+        /**
+         * Indicates whether commiting this completion entry will require additional code actions to be
+         * made to avoid errors. The CompletionEntryDetails will have these actions.
+         */
+        hasAction?: true;
     }
     /**
      * Additional completion entry details, available on demand
@@ -1269,6 +1310,10 @@ declare namespace ts.server.protocol {
          * JSDoc tags for the symbol.
          */
         tags: JSDocTagInfo[];
+        /**
+         * The associated code actions for this entry
+         */
+        codeActions?: CodeAction[];
     }
     interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
@@ -1562,6 +1607,17 @@ declare namespace ts.server.protocol {
          * and false otherwise.
          */
         languageServiceEnabled: boolean;
+    }
+    type ProjectsUpdatedInBackgroundEventName = "projectsUpdatedInBackground";
+    interface ProjectsUpdatedInBackgroundEvent extends Event {
+        event: ProjectsUpdatedInBackgroundEventName;
+        body: ProjectsUpdatedInBackgroundEventBody;
+    }
+    interface ProjectsUpdatedInBackgroundEventBody {
+        /**
+         * Current set of open files
+         */
+        openFiles: string[];
     }
     /**
      * Arguments for reload request.
@@ -1922,6 +1978,7 @@ declare namespace ts.server.protocol {
         paths?: MapLike<string[]>;
         plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;
@@ -1956,6 +2013,7 @@ declare namespace ts.server.protocol {
         System = "System",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ESNext = "ESNext",
     }
     const enum ModuleResolutionKind {
         Classic = "Classic",
@@ -1970,6 +2028,9 @@ declare namespace ts.server.protocol {
         ES5 = "ES5",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ES2016 = "ES2016",
+        ES2017 = "ES2017",
+        ESNext = "ESNext",
     }
 }
 declare namespace ts.server.protocol {
@@ -1991,6 +2052,81 @@ declare namespace ts.server.protocol {
         position: number;
     }
 
+    enum HighlightSpanKind {
+        none = "none",
+        definition = "definition",
+        reference = "reference",
+        writtenReference = "writtenReference",
+    }
+
+    enum ScriptElementKind {
+        unknown = "",
+        warning = "warning",
+        /** predefined type (void) or keyword (class) */
+        keyword = "keyword",
+        /** top level script node */
+        scriptElement = "script",
+        /** module foo {} */
+        moduleElement = "module",
+        /** class X {} */
+        classElement = "class",
+        /** var x = class X {} */
+        localClassElement = "local class",
+        /** interface Y {} */
+        interfaceElement = "interface",
+        /** type T = ... */
+        typeElement = "type",
+        /** enum E */
+        enumElement = "enum",
+        enumMemberElement = "enum member",
+        /**
+         * Inside module and script only
+         * const v = ..
+         */
+        variableElement = "var",
+        /** Inside function */
+        localVariableElement = "local var",
+        /**
+         * Inside module and script only
+         * function f() { }
+         */
+        functionElement = "function",
+        /** Inside function */
+        localFunctionElement = "local function",
+        /** class X { [public|private]* foo() {} } */
+        memberFunctionElement = "method",
+        /** class X { [public|private]* [get|set] foo:number; } */
+        memberGetAccessorElement = "getter",
+        memberSetAccessorElement = "setter",
+        /**
+         * class X { [public|private]* foo:number; }
+         * interface Y { foo:number; }
+         */
+        memberVariableElement = "property",
+        /** class X { constructor() { } } */
+        constructorImplementationElement = "constructor",
+        /** interface Y { ():number; } */
+        callSignatureElement = "call",
+        /** interface Y { []:number; } */
+        indexSignatureElement = "index",
+        /** interface Y { new():Y; } */
+        constructSignatureElement = "construct",
+        /** function foo(*Y*: string) */
+        parameterElement = "parameter",
+        typeParameterElement = "type parameter",
+        primitiveType = "primitive type",
+        label = "label",
+        alias = "alias",
+        constElement = "const",
+        letElement = "let",
+        directory = "directory",
+        externalModuleName = "external module name",
+        /**
+         * <JsxTagName attribute1 attribute2={0} />
+         */
+        jsxAttribute = "JSX attribute",
+    }
+
     interface TypeAcquisition {
         enableAutoDiscovery?: boolean;
         enable?: boolean;
@@ -2002,6 +2138,7 @@ declare namespace ts.server.protocol {
     interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
+        scriptKind?: ScriptKind;
     }
 
     interface JSDocTagInfo {
@@ -2022,12 +2159,10 @@ declare namespace ts.server.protocol {
         name: string;
     }
 
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[];
+    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | null | undefined;
 }
 declare namespace ts {
     // these types are empty stubs for types from services and should not be used directly
-    export type HighlightSpanKind = never;
-    export type ScriptElementKind = never;
     export type ScriptKind = never;
     export type IndentStyle = never;
     export type JsxEmit = never;
