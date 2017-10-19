@@ -3718,6 +3718,70 @@ declare namespace ts {
         writeByteOrderMark: boolean;
         text: string;
     }
+    /**
+     * State on which you can query affected files (files to save) and get semantic diagnostics(with their cache managed in the object)
+     * Note that it is only safe to pass BuilderState as old state when creating new state, when
+     * - If iterator's next method to get next affected file is never called
+     * - Iteration of single changed file and its dependencies (iteration through all of its affected files) is complete
+     */
+    interface BuilderState {
+        /**
+         * The map of file infos, where there is entry for each file in the program
+         * The entry is signature of the file (from last emit) or empty string
+         */
+        fileInfos: ReadonlyMap<Readonly<FileInfo>>;
+        /**
+         * Returns true if module gerneration is not ModuleKind.None
+         */
+        isModuleEmit: boolean;
+        /**
+         * Map of file referenced or undefined if it wasnt module emit
+         * The entry is present only if file references other files
+         * The key is path of file and value is referenced map for that file (for every file referenced, there is entry in the set)
+         */
+        referencedMap: ReadonlyMap<ReferencedSet> | undefined;
+        /**
+         * Set of source file's paths that have been changed, either in resolution or versions
+         */
+        changedFilesSet: ReadonlyMap<true>;
+        /**
+         * Set of cached semantic diagnostics per file
+         */
+        semanticDiagnosticsPerFile: ReadonlyMap<ReadonlyArray<Diagnostic>>;
+        /**
+         * Returns true if this state is safe to use as oldState
+         */
+        canCreateNewStateFrom(): boolean;
+        /**
+         * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
+         */
+        emitNextAffectedFile(programOfThisState: Program, writeFileCallback: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileEmitResult | undefined;
+        /**
+         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
+         * The semantic diagnostics are cached and managed here
+         * Note that it is assumed that the when asked about semantic diagnostics, the file has been taken out of affected files
+         */
+        getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+    }
+    /**
+     * Information about the source file: Its version and optional signature from last emit
+     */
+    interface FileInfo {
+        version: string;
+        signature: string;
+    }
+    interface AffectedFileEmitResult extends EmitResult {
+        affectedFile?: SourceFile;
+    }
+    /**
+     * Referenced files with values for the keys as referenced file's path to be true
+     */
+    type ReferencedSet = ReadonlyMap<true>;
+    interface BuilderOptions {
+        getCanonicalFileName: (fileName: string) => string;
+        computeHash: (data: string) => string;
+    }
+    function createBuilderState(newProgram: Program, options: BuilderOptions, oldState?: Readonly<BuilderState>): BuilderState;
 }
 declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;

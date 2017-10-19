@@ -139,7 +139,7 @@ namespace ts.server {
         /*@internal*/
         resolutionCache: ResolutionCache;
 
-        private builder: Builder;
+        private builderState: BuilderState;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
@@ -442,15 +442,6 @@ namespace ts.server {
             return this.languageService;
         }
 
-        private ensureBuilder() {
-            if (!this.builder) {
-                this.builder = createBuilder({
-                    getCanonicalFileName: this.projectService.toCanonicalFileName,
-                    computeHash: data => this.projectService.host.createHash(data)
-                });
-            }
-        }
-
         private shouldEmitFile(scriptInfo: ScriptInfo) {
             return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
         }
@@ -460,8 +451,11 @@ namespace ts.server {
                 return [];
             }
             this.updateGraph();
-            this.ensureBuilder();
-            return mapDefined(this.builder.getFilesAffectedBy(this.program, scriptInfo.path),
+            this.builderState = createBuilderState(this.program, {
+                getCanonicalFileName: this.projectService.toCanonicalFileName,
+                computeHash: data => this.projectService.host.createHash(data)
+            }, this.builderState);
+            return mapDefined(this.builderState.getFilesAffectedBy(this.program, scriptInfo.path),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 
@@ -497,6 +491,7 @@ namespace ts.server {
             }
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
+            this.builderState = undefined;
             this.resolutionCache.closeTypeRootsWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
@@ -537,7 +532,7 @@ namespace ts.server {
             this.rootFilesMap = undefined;
             this.externalFiles = undefined;
             this.program = undefined;
-            this.builder = undefined;
+            this.builderState = undefined;
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
@@ -787,15 +782,9 @@ namespace ts.server {
                 if (this.setTypings(cachedTypings)) {
                     hasChanges = this.updateGraphWorker() || hasChanges;
                 }
-                if (this.builder) {
-                    this.builder.updateProgram(this.program);
-                }
             }
             else {
                 this.lastCachedUnresolvedImportsList = undefined;
-                if (this.builder) {
-                    this.builder.clear();
-                }
             }
 
             if (hasChanges) {

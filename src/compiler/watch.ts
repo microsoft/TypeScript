@@ -2,7 +2,6 @@
 /// <reference path="builder.ts" />
 /// <reference path="resolutionCache.ts"/>
 
-/* @internal */
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
     export type ParseConfigFile = (configFileName: string, optionsToExtend: CompilerOptions, system: DirectoryStructureHost, reportDiagnostic: DiagnosticReporter, reportWatchDiagnostic: DiagnosticReporter) => ParsedCommandLine;
@@ -19,7 +18,7 @@ namespace ts {
 
         // Callbacks to do custom action before creating program and after creating program
         beforeCompile(compilerOptions: CompilerOptions): void;
-        afterCompile(host: DirectoryStructureHost, program: Program, builder: Builder): void;
+        afterCompile(host: DirectoryStructureHost, program: Program): void;
     }
 
     const defaultFormatDiagnosticsHost: FormatDiagnosticsHost = sys ? {
@@ -133,6 +132,11 @@ namespace ts {
         reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system, pretty ? reportDiagnosticWithColorAndContext : reportDiagnosticSimply);
         reportWatchDiagnostic = reportWatchDiagnostic || createWatchDiagnosticReporter(system);
         parseConfigFile = parseConfigFile || ts.parseConfigFile;
+        let builderState: Readonly<BuilderState> | undefined;
+        const options: BuilderOptions = {
+            getCanonicalFileName: createGetCanonicalFileName(system.useCaseSensitiveFileNames),
+            computeHash: data => system.createHash ? system.createHash(data) : data
+        };
         return {
             system,
             parseConfigFile,
@@ -142,7 +146,9 @@ namespace ts {
             afterCompile: compileWatchedProgram,
         };
 
-        function compileWatchedProgram(host: DirectoryStructureHost, program: Program, builder: Builder) {
+        function compileWatchedProgram(host: DirectoryStructureHost, program: Program) {
+            builderState = createBuilderState(program, options, builderState);
+
             // First get and report any syntactic errors.
             const diagnostics = program.getSyntacticDiagnostics().slice();
             let reportSemanticDiagnostics = false;
@@ -163,22 +169,15 @@ namespace ts {
             let sourceMaps: SourceMapData[];
             let emitSkipped: boolean;
 
-            const result = builder.emitChangedFiles(program, writeFile);
-            if (result.length === 0) {
-                emitSkipped = true;
-            }
-            else {
-                for (const emitOutput of result) {
-                    if (emitOutput.emitSkipped) {
-                        emitSkipped = true;
-                    }
-                    addRange(diagnostics, emitOutput.diagnostics);
-                    sourceMaps = concatenate(sourceMaps, emitOutput.sourceMaps);
-                }
+            let affectedEmitResult: AffectedFileEmitResult;
+            while (affectedEmitResult = builderState.emitNextAffectedFile(program, writeFile)) {
+                emitSkipped = emitSkipped || affectedEmitResult.emitSkipped;
+                addRange(diagnostics, affectedEmitResult.diagnostics);
+                sourceMaps = addRange(sourceMaps, affectedEmitResult.sourceMaps);
             }
 
             if (reportSemanticDiagnostics) {
-                addRange(diagnostics, builder.getSemanticDiagnostics(program));
+                addRange(diagnostics, builderState.getSemanticDiagnostics(program));
             }
             return handleEmitOutputAndReportErrors(host, program, emittedFiles, emitSkipped,
                 diagnostics, reportDiagnostic);
@@ -299,8 +298,6 @@ namespace ts {
             getDirectoryPath(getNormalizedAbsolutePath(configFileName, getCurrentDirectory())) :
             getCurrentDirectory()
         );
-        // There is no extra check needed since we can just rely on the program to decide emit
-        const builder = createBuilder({ getCanonicalFileName, computeHash });
 
         synchronizeProgram();
 
@@ -334,7 +331,6 @@ namespace ts {
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
             program = createProgram(rootFileNames, compilerOptions, compilerHost, program);
             resolutionCache.finishCachingPerDirectoryResolution();
-            builder.updateProgram(program);
 
             // Update watches
             updateMissingFilePathsWatch(program, missingFilesMap || (missingFilesMap = createMap()), watchMissingFilePath);
@@ -356,7 +352,7 @@ namespace ts {
                 missingFilePathsRequestedForRelease = undefined;
             }
 
-            afterCompile(directoryStructureHost, program, builder);
+            afterCompile(directoryStructureHost, program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
@@ -639,10 +635,6 @@ namespace ts {
                 },
                 flags
             );
-        }
-
-        function computeHash(data: string) {
-            return system.createHash ? system.createHash(data) : data;
         }
     }
 }

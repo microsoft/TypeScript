@@ -155,8 +155,8 @@ namespace ts {
         const watchingHost = ts.createWatchingSystemHost(/*pretty*/ undefined, sys, parseConfigFile, reportDiagnostic, reportWatchDiagnostic);
         watchingHost.beforeCompile = enableStatistics;
         const afterCompile = watchingHost.afterCompile;
-        watchingHost.afterCompile = (host, program, builder) => {
-            afterCompile(host, program, builder);
+        watchingHost.afterCompile = (host, program) => {
+            afterCompile(host, program);
             reportStatistics(program);
         };
         return watchingHost;
