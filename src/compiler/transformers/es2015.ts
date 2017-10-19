@@ -1341,7 +1341,7 @@ namespace ts {
          *                                          synthesized call to `super`
          */
         function shouldAddRestParameter(node: ParameterDeclaration, inConstructorWithSynthesizedSuper: boolean) {
-            return node && node.dotDotDotToken && node.name.kind === SyntaxKind.Identifier && !inConstructorWithSynthesizedSuper;
+            return node && node.dotDotDotToken && node.name.kind === SyntaxKind.Identifier && !inConstructorWithSynthesizedSuper && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitRestParam;
         }
 
         /**
