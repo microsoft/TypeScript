@@ -1402,6 +1402,7 @@ namespace ts.server {
             }
 
             if (totalNonTsFileSize > availableSpace) {
+                this.logger.info(`Non TS file size exceeded limit (${maxProgramSizeForNonTsFiles}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`);
                 return true;
             }
 
