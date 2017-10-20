@@ -20,7 +20,7 @@ namespace A {
         b() {}
         a() {
             let z = 1;
-            var __return: any;
+            let __return;
             ({ __return, z } = this./*RENAME*/newMethod(z));
             return __return;
         }

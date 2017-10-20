@@ -1147,7 +1147,7 @@ namespace ts {
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
-                getNewLine: () => getNewLineOrDefaultFromHost(host),
+                getNewLine: () => getNewLineCharacter(newSettings, { newLine: getNewLineOrDefaultFromHost(host) }),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
@@ -1325,17 +1325,19 @@ namespace ts {
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
-            return Completions.getCompletionsAtPosition(host, program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position);
+            return Completions.getCompletionsAtPosition(host, program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, program.getSourceFiles());
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
+        function getCompletionEntryDetails(fileName: string, position: number, entryName: string, formattingOptions?: FormatCodeSettings): CompletionEntryDetails {
             synchronizeHostData();
-            return Completions.getCompletionEntryDetails(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName);
+            const ruleProvider = formattingOptions ? getRuleProvider(formattingOptions) : undefined;
+            return Completions.getCompletionEntryDetails(
+                program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles(), host, ruleProvider);
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName);
+            return Completions.getCompletionEntrySymbol(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles());
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
@@ -1510,12 +1512,12 @@ namespace ts {
             return ts.NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
         }
 
-        function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, isDetailed?: boolean) {
+        function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean) {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
             const customTransformers = host.getCustomTransformers && host.getCustomTransformers();
-            return getFileEmitOutput(program, sourceFile, emitOnlyDtsFiles, isDetailed, cancellationToken, customTransformers);
+            return getFileEmitOutput(program, sourceFile, emitOnlyDtsFiles, cancellationToken, customTransformers);
         }
 
         // Signature help
@@ -1762,6 +1764,19 @@ namespace ts {
             });
         }
 
+        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
+            fileName = toPath(fileName, currentDirectory, getCanonicalFileName);
+            switch (action.type) {
+                case "install package":
+                    return host.installPackage
+                        ? host.installPackage({ fileName, packageName: action.packageName })
+                        : Promise.reject("Host does not implement `installPackage`");
+                default:
+                    Debug.fail();
+                    // TODO: Debug.assertNever(action); will only work if there is more than one type.
+            }
+        }
+
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
@@ -1953,7 +1968,7 @@ namespace ts {
             function isNodeModulesFile(path: string): boolean {
                 const node_modulesFolderName = "/node_modules/";
 
-                return path.indexOf(node_modulesFolderName) !== -1;
+                return stringContains(path, node_modulesFolderName);
             }
         }
 
@@ -1971,8 +1986,9 @@ namespace ts {
                 endPosition,
                 program: getProgram(),
                 newLineCharacter: formatOptions ? formatOptions.newLineCharacter : host.getNewLine(),
+                host,
                 rulesProvider: getRuleProvider(formatOptions),
-                cancellationToken
+                cancellationToken,
             };
         }
 
@@ -2034,6 +2050,7 @@ namespace ts {
             isValidBraceCompletionAtPosition,
             getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
+            applyCodeActionCommand,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

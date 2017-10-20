@@ -250,6 +250,9 @@ namespace ts.server {
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
+        private requestedRegistry: boolean;
+        private typesRegistryCache: Map<void> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
@@ -258,7 +261,7 @@ namespace ts.server {
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-
+        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: any): void };
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -276,6 +279,31 @@ namespace ts.server {
                     this.reportInstallerProcessId();
                 });
             }
+        }
+
+        isKnownTypesPackageName(name: string): boolean {
+            // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
+            const validationResult = JsTyping.validatePackageName(name);
+            if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
+                return false;
+            }
+
+            if (this.requestedRegistry) {
+                return !!this.typesRegistryCache && this.typesRegistryCache.has(name);
+            }
+
+            this.requestedRegistry = true;
+            this.send({ kind: "typesRegistry" });
+            return false;
+        }
+
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult> {
+            const rq: InstallPackageRequest = { kind: "installPackage", ...options };
+            this.send(rq);
+            Debug.assert(this.packageInstalledPromise === undefined);
+            return new Promise((resolve, reject) => {
+                this.packageInstalledPromise = { resolve, reject };
+            });
         }
 
         private reportInstallerProcessId() {
@@ -343,23 +371,27 @@ namespace ts.server {
         }
 
         onProjectClosed(p: Project): void {
-            this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
+            this.send({ projectName: p.getProjectName(), kind: "closeProject" });
+        }
+
+        private send(rq: TypingInstallerRequestUnion): void {
+            this.installer.send(rq);
         }
 
         enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void {
             const request = createInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Scheduling throttled operation: ${JSON.stringify(request)}`);
+                    this.logger.info(`Scheduling throttled operation:${stringifyIndented(request)}`);
                 }
             }
 
             const operationId = project.getProjectName();
             const operation = () => {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Sending request: ${JSON.stringify(request)}`);
+                    this.logger.info(`Sending request:${stringifyIndented(request)}`);
                 }
-                this.installer.send(request);
+                this.send(request);
             };
             const queuedRequest: QueuedOperation = { operationId, operation };
 
@@ -375,12 +407,26 @@ namespace ts.server {
             }
         }
 
-        private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Received response: ${JSON.stringify(response)}`);
+                this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
 
             switch (response.kind) {
+                case EventTypesRegistry:
+                    this.typesRegistryCache = ts.createMapFromTemplate(response.typesRegistry);
+                    break;
+                case EventPackageInstalled: {
+                    const { success, message } = response;
+                    if (success) {
+                        this.packageInstalledPromise.resolve({ successMessage: message });
+                    }
+                    else {
+                        this.packageInstalledPromise.reject(message);
+                    }
+                    this.packageInstalledPromise = undefined;
+                    break;
+                }
                 case EventInitializationFailed:
                 {
                     if (!this.eventSender) {
@@ -580,7 +626,7 @@ namespace ts.server {
     function createLogger() {
         const cmdLineLogFileName = findArgument("--logFile");
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-        const envLogOptions = parseLoggingEnvironmentString(process.env["TSS_LOG"]);
+        const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
 
         const logFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)
@@ -753,10 +799,23 @@ namespace ts.server {
     const sys = <ServerHost>ts.sys;
     // use watchGuard process on Windows when node version is 4 or later
     const useWatchGuard = process.platform === "win32" && getNodeMajorVersion() >= 4;
+    const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
+    const noopWatcher: FileWatcher = { close: noop };
+    // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
+    // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
+    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+        try {
+            return originalWatchDirectory(path, callback, recursive);
+        }
+        catch (e) {
+            logger.info(`Exception when creating directory watcher: ${e.message}`);
+            return noopWatcher;
+        }
+    }
+
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
         const statusCache = createMap<boolean>();
-        const originalWatchDirectory = sys.watchDirectory;
         sys.watchDirectory = function (path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
@@ -767,7 +826,7 @@ namespace ts.server {
                 try {
                     const args = [combinePaths(__dirname, "watchGuard.js"), path];
                     if (logger.hasLevel(LogLevel.verbose)) {
-                        logger.info(`Starting ${process.execPath} with args ${JSON.stringify(args)}`);
+                        logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
                     }
                     childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { "ELECTRON_RUN_AS_NODE": "1" } });
                     status = true;
@@ -790,13 +849,16 @@ namespace ts.server {
             }
             if (status) {
                 // this drive is safe to use - call real 'watchDirectory'
-                return originalWatchDirectory.call(sys, path, callback, recursive);
+                return watchDirectorySwallowingException(path, callback, recursive);
             }
             else {
                 // this drive is unsafe - return no-op watcher
-                return { close() { } };
+                return noopWatcher;
             }
         };
+    }
+    else {
+        sys.watchDirectory = watchDirectorySwallowingException;
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4

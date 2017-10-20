@@ -14,7 +14,7 @@ namespace ts.server {
     }
 
     /* @internal */
-    export function extractMessage(message: string) {
+    export function extractMessage(message: string): string {
         // Read the content length
         const contentLengthPrefix = "Content-Length: ";
         const lines = message.split(/\r?\n/);
@@ -198,7 +198,9 @@ namespace ts.server {
             const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
-            return response.body[0];
+
+            const convertedCodeActions = map(response.body[0].codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
+            return { ...response.body[0], codeActions: convertedCodeActions };
         }
 
         getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {
@@ -539,6 +541,8 @@ namespace ts.server {
 
             return response.body.map(entry => this.convertCodeActions(entry, file));
         }
+
+        applyCodeActionCommand = notImplemented;
 
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
             return typeof positionOrRange === "number"

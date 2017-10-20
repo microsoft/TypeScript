@@ -118,6 +118,7 @@ declare namespace FourSlashInterface {
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
         symbolsInScope(range: Range): any[];
+        setTypesRegistry(map: { [key: string]: void }): void;
     }
     class goTo {
         marker(name?: string | Marker): void;
@@ -140,7 +141,14 @@ declare namespace FourSlashInterface {
         allowedConstructorParameterKeywords: string[];
         constructor(negative?: boolean);
         completionListCount(expectedCount: number): void;
-        completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
+        completionListContains(
+            symbol: string,
+            text?: string,
+            documentation?: string,
+            kind?: string,
+            spanIndex?: number,
+            hasAction?: boolean,
+        ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListContainsClassElementKeywords(): void;
@@ -162,17 +170,36 @@ declare namespace FourSlashInterface {
             errorCode?: number,
             index?: number,
         });
-        codeFixAvailable(): void;
+        codeFixAvailable(options: Array<{ description: string, actions: Array<{ type: string, data: {} }> }>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name: string, actionName?: string);
+        refactorAvailable(name: string, actionName?: string): void;
+        refactor(options: {
+            name: string;
+            actionName: string;
+            refactors: any[];
+        }): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         completionsAt(markerName: string, completions: string[], options?: { isNewIdentifierLocation?: boolean }): void;
+        completionsAndDetailsAt(
+            markerName: string,
+            completions: {
+                excludes?: ReadonlyArray<string>,
+                //TODO: better type
+                entries: ReadonlyArray<{ entry: any, details: any }>,
+            },
+        ): void; //TODO: better type
+        applyCodeActionFromCompletion(markerName: string, options: {
+            name: string,
+            description: string,
+            newFileContent?: string,
+            newRangeContent?: string,
+        });
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
         textAtCaretIs(text: string): void;
@@ -256,6 +283,7 @@ declare namespace FourSlashInterface {
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
+        getAndApplyCodeFix(errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;

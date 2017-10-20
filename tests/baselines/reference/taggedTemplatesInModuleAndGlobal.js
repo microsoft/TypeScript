@@ -49,7 +49,7 @@ function id(x) {
     return x;
 }
 function templateObjectFactory() {
-    return id(_a || (_a = __makeTemplateObject(["hello world"], ["hello world"])));
+    return id(templateObject_1 || (templateObject_1 = __makeTemplateObject(["hello world"], ["hello world"])));
 }
 var result = templateObjectFactory() === templateObjectFactory();
-var _a;
+var templateObject_1;

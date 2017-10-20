@@ -32,7 +32,7 @@ namespace ts {
         }
 
         function assertTypeAcquisitionWithJson(json: any, configFileName: string, expectedResult: ExpectedResult) {
-            const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
+            const jsonOptions = json.typeAcquisition || json.typingOptions;
             const { options: actualTypeAcquisition, errors: actualErrors } = convertTypeAcquisitionFromJson(jsonOptions, "/apath/", configFileName);
             verifyAcquisition(actualTypeAcquisition, expectedResult);
             verifyErrors(actualErrors, expectedResult);

@@ -195,12 +195,12 @@ namespace ts {
     function G<U extends T[]>(t2: U) {
         [#|t2.toString();|]
     }
-}`);
+}`, /*includeLib*/ true);
         // Confirm that the contextual type of an extracted expression counts as a use.
         testExtractFunction("extractFunction16",
             `function F<T>() {
     const array: T[] = [#|[]|];
-}`);
+}`, /*includeLib*/ true);
         // Class type parameter
         testExtractFunction("extractFunction17",
             `class C<T1, T2> {
@@ -219,7 +219,7 @@ namespace ts {
         testExtractFunction("extractFunction19",
             `function F<T, U extends T[], V extends U[]>(v: V) {
     [#|v.toString()|];
-}`);
+}`, /*includeLib*/ true);
 
         testExtractFunction("extractFunction20",
         `const _ = class {
@@ -360,9 +360,189 @@ function parsePrimaryExpression(): any {
     export const j = 10;
     export const y = [#|j * j|];
 }`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Var", `
+[#|var x = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Let_Type", `
+[#|let x: number = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Let_NoType", `
+[#|let x = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Const_Type", `
+[#|const x: number = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Const_NoType", `
+[#|const x = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Multiple1", `
+[#|const x = 1, y: string = "a";|]
+x; y;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Multiple2", `
+[#|const x = 1, y = "a";
+const z = 3;|]
+x; y; z;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Multiple3", `
+[#|const x = 1, y: string = "a";
+let z = 3;|]
+x; y; z;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_ConsumedTwice", `
+[#|const x: number = 1;|]
+x; x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_DeclaredTwice", `
+[#|var x = 1;
+var x = 2;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Var", `
+function f() {
+    let a = 1;
+    [#|var x = 1;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_NoType", `
+function f() {
+    let a = 1;
+    [#|let x = 1;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_Type", `
+function f() {
+    let a = 1;
+    [#|let x: number = 1;
+    a++;|]
+    a; x;
+}`);
+
+        // We propagate numericLiteralFlags, but it's not consumed by the emitter,
+        // so everything comes out decimal.  It would be nice to improve this.
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_LiteralType1", `
+function f() {
+    let a = 1;
+    [#|let x: 0o10 | 10 | 0b10 = 10;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_LiteralType2", `
+function f() {
+    let a = 1;
+    [#|let x: "a" | 'b' = 'a';
+    a++;|]
+    a; x;
+}`);
+
+        // We propagate numericLiteralFlags, but it's not consumed by the emitter,
+        // so everything comes out decimal.  It would be nice to improve this.
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_LiteralType1", `
+function f() {
+    let a = 1;
+    [#|let x: 0o10 | 10 | 0b10 = 10;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_TypeWithComments", `
+function f() {
+    let a = 1;
+    [#|let x: /*A*/ "a" /*B*/ | /*C*/ 'b' /*D*/ = 'a';
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Const_NoType", `
+function f() {
+    let a = 1;
+    [#|const x = 1;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Const_Type", `
+function f() {
+    let a = 1;
+    [#|const x: number = 1;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Mixed1", `
+function f() {
+    let a = 1;
+    [#|const x = 1;
+    let y = 2;
+    a++;|]
+    a; x; y;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Mixed2", `
+function f() {
+    let a = 1;
+    [#|var x = 1;
+    let y = 2;
+    a++;|]
+    a; x; y;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Mixed3", `
+function f() {
+    let a = 1;
+    [#|let x: number = 1;
+    let y = 2;
+    a++;|]
+    a; x; y;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_UnionUndefined", `
+function f() {
+    let a = 1;
+    [#|let x: number | undefined = 1;
+    let y: undefined | number = 2;
+    let z: (undefined | number) = 3;
+    a++;|]
+    a; x; y; z;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_ShorthandProperty", `
+function f() {
+    [#|let x;|]
+    return { x };
+}`);
+
+        testExtractFunction("extractFunction_PreserveTrivia", `
+// a
+var q = /*b*/ //c
+    /*d*/ [#|1 /*e*/ //f
+    /*g*/ + /*h*/ //i
+    /*j*/ 2|] /*k*/ //l
+    /*m*/; /*n*/ //o`);
     });
 
-    function testExtractFunction(caption: string, text: string) {
-        testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function);
+    function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
+        testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function, includeLib);
     }
 }
