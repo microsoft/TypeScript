@@ -99,6 +99,7 @@
         "runner.ts",
         "collections.ts",
         "vpath.ts",
+        "events.ts",
         "vfs.ts",
         "virtualFileSystemWithWatch.ts",
         "../server/protocol.ts",

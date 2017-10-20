@@ -32,7 +32,6 @@
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
-declare var __dirname: string; // Node-specific
 var global: NodeJS.Global = <any>Function("return this").call(undefined);
 
 declare var window: {};
@@ -43,9 +42,13 @@ interface XMLHttpRequest  {
     readonly readyState: number;
     readonly responseText: string;
     readonly status: number;
+    readonly statusText: string;
     open(method: string, url: string, async?: boolean, user?: string, password?: string): void;
     send(data?: string): void;
     setRequestHeader(header: string, value: string): void;
+    getAllResponseHeaders(): string;
+    getResponseHeader(header: string): string | null;
+    overrideMimeType(mime: string): void;
 }
 /* tslint:enable:no-var-keyword */
 
@@ -489,16 +492,23 @@ namespace Harness {
         fileExists(fileName: string): boolean;
         directoryExists(path: string): boolean;
         deleteFile(fileName: string): void;
-        listFiles(path: string, filter: RegExp, options?: { recursive?: boolean }): string[];
+        listFiles(path: string, filter?: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
-        getMemoryUsage?(): number;
         args(): string[];
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
         readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        getAccessibleFileSystemEntries(dirname: string): FileSystemEntries;
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
+        getMemoryUsage?(): number;
     }
+
+    export interface FileSystemEntries {
+        files: string[];
+        directories: string[];
+    }
+
     export let IO: IO;
 
     // harness always uses one kind of new line
@@ -508,253 +518,380 @@ namespace Harness {
     // Root for file paths that are stored in a virtual file system
     export const virtualFileSystemRoot = "/";
 
-    namespace IOImpl {
-        export namespace Node {
-            declare const require: any;
-            let fs: any, pathModule: any;
-            if (require) {
-                fs = require("fs");
-                pathModule = require("path");
-            }
-            else {
-                fs = pathModule = {};
-            }
-
-            export const resolvePath = (path: string) => ts.sys.resolvePath(path);
-            export const getCurrentDirectory = () => ts.sys.getCurrentDirectory();
-            export const newLine = () => harnessNewLine;
-            export const useCaseSensitiveFileNames = () => ts.sys.useCaseSensitiveFileNames;
-            export const args = () => ts.sys.args;
-            export const getExecutingFilePath = () => ts.sys.getExecutingFilePath();
-            export const exit = (exitCode: number) => ts.sys.exit(exitCode);
-            export const getDirectories: typeof IO.getDirectories = path => ts.sys.getDirectories(path);
-
-            export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
-            export const writeFile: typeof IO.writeFile = (path, content) => ts.sys.writeFile(path, content);
-            export const fileExists: typeof IO.fileExists = fs.existsSync;
-            export const log: typeof IO.log = s => console.log(s);
-            export const getEnvironmentVariable: typeof IO.getEnvironmentVariable = name => ts.sys.getEnvironmentVariable(name);
-
-            export function tryEnableSourceMapsForHost() {
-                if (ts.sys.tryEnableSourceMapsForHost) {
-                    ts.sys.tryEnableSourceMapsForHost();
-                }
-            }
-            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include, depth) => ts.sys.readDirectory(path, extension, exclude, include, depth);
-
-            export function createDirectory(path: string) {
-                if (!directoryExists(path)) {
-                    fs.mkdirSync(path);
-                }
-            }
-
-            export function deleteFile(path: string) {
-                try {
-                    fs.unlinkSync(path);
-                }
-                catch (e) {
-                }
-            }
-
-            export function directoryExists(path: string): boolean {
-                return fs.existsSync(path) && fs.statSync(path).isDirectory();
-            }
-
-            export function directoryName(path: string) {
-                const dirPath = pathModule.dirname(path);
-                // Node will just continue to repeat the root path, rather than return null
-                return dirPath === path ? undefined : dirPath;
-            }
-
-            export let listFiles: typeof IO.listFiles = (path, spec?, options?) => {
-                options = options || {};
-
-                function filesInFolder(folder: string): string[] {
-                    let paths: string[] = [];
-
-                    const files = fs.readdirSync(folder);
-                    for (let i = 0; i < files.length; i++) {
-                        const pathToFile = pathModule.join(folder, files[i]);
-                        const stat = fs.statSync(pathToFile);
-                        if (options.recursive && stat.isDirectory()) {
-                            paths = paths.concat(filesInFolder(pathToFile));
-                        }
-                        else if (stat.isFile() && (!spec || files[i].match(spec))) {
-                            paths.push(pathToFile);
-                        }
-                    }
-
-                    return paths;
-                }
-
-                return filesInFolder(path);
-            };
-
-            export let getMemoryUsage: typeof IO.getMemoryUsage = () => {
-                if (global.gc) {
-                    global.gc();
-                }
-                return process.memoryUsage().heapUsed;
-            };
+    function createNodeIO(): IO {
+        let fs: any, pathModule: any;
+        if (require) {
+            fs = require("fs");
+            pathModule = require("path");
+        }
+        else {
+            fs = pathModule = {};
         }
 
-        export namespace Network {
-            const serverRoot = "http://localhost:8888/";
-
-            export const newLine = () => harnessNewLine;
-            export const useCaseSensitiveFileNames = () => false;
-            export const getCurrentDirectory = () => "";
-            export const args = () => <string[]>[];
-            export const getExecutingFilePath = () => "";
-            export const exit = ts.noop;
-            export const getDirectories = () => <string[]>[];
-
-            export let log = (s: string) => console.log(s);
-
-            namespace Http {
-                function waitForXHR(xhr: XMLHttpRequest) {
-                    while (xhr.readyState !== 4) { }
-                    return { status: xhr.status, responseText: xhr.responseText };
-                }
-
-                /// Ask the server to use node's path.resolve to resolve the given path
-
-                export interface XHRResponse {
-                    status: number;
-                    responseText: string;
-                }
-
-                /// Ask the server for the contents of the file at the given URL via a simple GET request
-                export function getFileFromServerSync(url: string): XHRResponse {
-                    const xhr = new XMLHttpRequest();
-                    try {
-                        xhr.open("GET", url, /*async*/ false);
-                        xhr.send();
-                    }
-                    catch (e) {
-                        return { status: 404, responseText: undefined };
-                    }
-
-                    return waitForXHR(xhr);
-                }
-
-                /// Submit a POST request to the server to do the given action (ex WRITE, DELETE) on the provided URL
-                export function writeToServerSync(url: string, action: string, contents?: string): XHRResponse {
-                    const xhr = new XMLHttpRequest();
-                    try {
-                        const actionMsg = "?action=" + action;
-                        xhr.open("POST", url + actionMsg, /*async*/ false);
-                        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-                        xhr.send(contents);
-                    }
-                    catch (e) {
-                        log(`XHR Error: ${e}`);
-                        return { status: 500, responseText: undefined };
-                    }
-
-                    return waitForXHR(xhr);
-                }
+        function deleteFile(path: string) {
+            try {
+                fs.unlinkSync(path);
             }
-
-            export function createDirectory() {
-                // Do nothing (?)
-            }
-
-            export function deleteFile(path: string) {
-                Http.writeToServerSync(serverRoot + path, "DELETE");
-            }
-
-            export function directoryExists(): boolean {
-                return false;
-            }
-
-            function directoryNameImpl(path: string) {
-                let dirPath = path;
-                // root of the server
-                if (dirPath.match(/localhost:\d+$/) || dirPath.match(/localhost:\d+\/$/)) {
-                    dirPath = undefined;
-                    // path + fileName
-                }
-                else if (dirPath.indexOf(".") === -1) {
-                    dirPath = dirPath.substring(0, dirPath.lastIndexOf("/"));
-                    // path
-                }
-                else {
-                    // strip any trailing slash
-                    if (dirPath.match(/.*\/$/)) {
-                        dirPath = dirPath.substring(0, dirPath.length - 2);
-                    }
-                    dirPath = dirPath.substring(0, dirPath.lastIndexOf("/"));
-                }
-
-                return dirPath;
-            }
-            export let directoryName: typeof IO.directoryName = Utils.memoize(directoryNameImpl, path => path);
-
-            export function resolvePath(path: string) {
-                const response = Http.getFileFromServerSync(serverRoot + path + "?resolve=true");
-                if (response.status === 200) {
-                    return response.responseText;
-                }
-                else {
-                    return undefined;
-                }
-            }
-
-            export function fileExists(path: string): boolean {
-                const response = Http.getFileFromServerSync(serverRoot + path);
-                return response.status === 200;
-            }
-
-            export const listFiles = Utils.memoize((path: string, spec?: RegExp, options?: { recursive?: boolean }): string[] => {
-                const response = Http.getFileFromServerSync(serverRoot + path);
-                if (response.status === 200) {
-                    let results = response.responseText.split(",");
-                    if (spec) {
-                        results = results.filter(file => spec.test(file));
-                    }
-                    if (options && !options.recursive) {
-                        results = results.filter(file => (ts.getDirectoryPath(ts.normalizeSlashes(file)) === path));
-                    }
-                    return results;
-                }
-                else {
-                    return [""];
-                }
-            }, (path: string, spec?: RegExp, options?: { recursive?: boolean }) => `${path}|${spec}|${options ? options.recursive : undefined}`);
-
-            export function readFile(file: string): string | undefined {
-                const response = Http.getFileFromServerSync(serverRoot + file);
-                if (response.status === 200) {
-                    return response.responseText;
-                }
-                else {
-                    return undefined;
-                }
-            }
-
-            export function writeFile(path: string, contents: string) {
-                Http.writeToServerSync(serverRoot + path, "WRITE", contents);
-            }
-
-            export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[], depth?: number) {
-                const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
-                for (const file of listFiles(path)) {
-                    fs.addFile(file);
-                }
-                return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), depth, path => {
-                    const entry = fs.getEntry(path);
-                    if (entry instanceof Utils.VirtualDirectory) {
-                        const directory = <Utils.VirtualDirectory>entry;
-                        return {
-                            files: ts.map(directory.getFiles(), f => f.name),
-                            directories: ts.map(directory.getDirectories(), d => d.name)
-                        };
-                    }
-                    return { files: [], directories: [] };
-                });
+            catch (e) {
             }
         }
+
+        function directoryName(path: string) {
+            const dirPath = pathModule.dirname(path);
+            // Node will just continue to repeat the root path, rather than return null
+            return dirPath === path ? undefined : dirPath;
+        }
+
+        function listFiles(path: string, spec: RegExp, options?: { recursive?: boolean }) {
+            options = options || {};
+
+            function filesInFolder(folder: string): string[] {
+                let paths: string[] = [];
+
+                const files = fs.readdirSync(folder);
+                for (let i = 0; i < files.length; i++) {
+                    const pathToFile = pathModule.join(folder, files[i]);
+                    const stat = fs.statSync(pathToFile);
+                    if (options.recursive && stat.isDirectory()) {
+                        paths = paths.concat(filesInFolder(pathToFile));
+                    }
+                    else if (stat.isFile() && (!spec || files[i].match(spec))) {
+                        paths.push(pathToFile);
+                    }
+                }
+
+                return paths;
+            }
+
+            return filesInFolder(path);
+        }
+
+        function getAccessibleFileSystemEntries(dirname: string): FileSystemEntries {
+            try {
+                const entries: string[] = fs.readdirSync(dirname || ".").sort(ts.sys.useCaseSensitiveFileNames ? ts.compareStrings : ts.compareStringsCaseInsensitive);
+                const files: string[] = [];
+                const directories: string[] = [];
+                for (const entry of entries) {
+                    if (entry === "." || entry === "..") continue;
+                    const name = vpath.combine(dirname, entry);
+                    try {
+                        const stat = fs.statSync(name);
+                        if (!stat) continue;
+                        if (stat.isFile()) {
+                            files.push(entry);
+                        }
+                        else if (stat.isDirectory()) {
+                            directories.push(entry);
+                        }
+                    }
+                    catch (e) { }
+                }
+                return { files, directories };
+            }
+            catch (e) {
+                return { files: [], directories: [] };
+            }
+        }
+
+        return {
+            newLine: () => harnessNewLine,
+            getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
+            useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
+            resolvePath: (path: string) => ts.sys.resolvePath(path),
+            readFile: path => ts.sys.readFile(path),
+            writeFile: (path, content) => ts.sys.writeFile(path, content),
+            directoryName,
+            getDirectories: path => ts.sys.getDirectories(path),
+            createDirectory: path => ts.sys.createDirectory(path),
+            fileExists: path => ts.sys.fileExists(path),
+            directoryExists: path => ts.sys.directoryExists(path),
+            deleteFile,
+            listFiles,
+            log: s => console.log(s),
+            args: () => ts.sys.args,
+            getExecutingFilePath: () => ts.sys.getExecutingFilePath(),
+            exit: exitCode => ts.sys.exit(exitCode),
+            readDirectory: (path, extension, exclude, include, depth) => ts.sys.readDirectory(path, extension, exclude, include, depth),
+            getAccessibleFileSystemEntries,
+            tryEnableSourceMapsForHost: () => ts.sys.tryEnableSourceMapsForHost && ts.sys.tryEnableSourceMapsForHost(),
+            getMemoryUsage: () => ts.sys.getMemoryUsage && ts.sys.getMemoryUsage(),
+            getEnvironmentVariable: name => ts.sys.getEnvironmentVariable(name),
+        };
+    }
+
+    interface URL {
+        hash: string;
+        host: string;
+        hostname: string;
+        href: string;
+        password: string;
+        pathname: string;
+        port: string;
+        protocol: string;
+        search: string;
+        username: string;
+        toString(): string;
+    }
+
+    declare var URL: {
+        prototype: URL;
+        new(url: string, base?: string | URL): URL;
+    };
+
+    function createBrowserIO(): IO {
+        const serverRoot = new URL("http://localhost:8888/");
+
+        interface HttpHeaders {
+            [key: string]: string | string[] | undefined;
+        }
+
+        const HttpHeaders = {
+            combine(left: HttpHeaders | undefined, right: HttpHeaders | undefined): HttpHeaders {
+                return left && right ? { ...left, ...right } :
+                    left ? { ...left } :
+                    right ? { ...right } :
+                    {};
+            },
+            writeRequestHeaders(xhr: XMLHttpRequest, headers: HttpHeaders) {
+                for (const key in headers) {
+                    if (!headers.hasOwnProperty(key)) continue;
+                    const keyLower = key.toLowerCase();
+
+                    if (keyLower === "access-control-allow-origin" || keyLower === "content-length") continue;
+                    const values = headers[key];
+                    const value = Array.isArray(values) ? values.join(",") : values;
+                    if (keyLower === "content-type") {
+                        xhr.overrideMimeType(value);
+                        continue;
+                    }
+
+                    xhr.setRequestHeader(key, value);
+                }
+            },
+            readResponseHeaders(xhr: XMLHttpRequest): HttpHeaders {
+                const allHeaders = xhr.getAllResponseHeaders();
+                const headers: HttpHeaders = {};
+                for (const header of allHeaders.split(/\r\n/g)) {
+                    const colonIndex = header.indexOf(":");
+                    if (colonIndex >= 0) {
+                        const key = header.slice(0, colonIndex).trim();
+                        const value = header.slice(colonIndex + 1).trim();
+                        const values = value.split(",");
+                        headers[key] = values.length > 1 ? values : value;
+                    }
+                }
+                return headers;
+            }
+        };
+
+        interface HttpContent {
+            headers: HttpHeaders;
+            content: string;
+        }
+
+        const HttpContent = {
+            create(headers: HttpHeaders, content: string): HttpContent {
+                return { headers, content };
+            },
+            fromMediaType(mediaType: string, content: string) {
+                return HttpContent.create({ "Content-Type": mediaType }, content);
+            },
+            text(content: string) {
+                return HttpContent.fromMediaType("text/plain", content);
+            },
+            json(content: object) {
+                return HttpContent.fromMediaType("application/json", JSON.stringify(content));
+            },
+            readResponseContent(xhr: XMLHttpRequest) {
+                if (typeof xhr.responseText === "string") {
+                    return HttpContent.create({
+                        "Content-Type": xhr.getResponseHeader("Content-Type") || undefined,
+                        "Content-Length": xhr.getResponseHeader("Content-Length") || undefined
+                    }, xhr.responseText);
+                }
+                return undefined;
+            }
+        };
+
+        interface HttpRequestMessage {
+            method: string;
+            url: URL;
+            headers: HttpHeaders;
+            content?: HttpContent;
+        }
+
+        const HttpRequestMessage = {
+            create(method: string, url: string | URL, headers: HttpHeaders = {}, content?: HttpContent): HttpRequestMessage {
+                if (typeof url === "string") url = new URL(url);
+                return { method, url, headers, content };
+            },
+            options(url: string | URL) {
+                return HttpRequestMessage.create("OPTIONS", url);
+            },
+            head(url: string | URL) {
+                return HttpRequestMessage.create("HEAD", url);
+            },
+            get(url: string | URL) {
+                return HttpRequestMessage.create("GET", url);
+            },
+            delete(url: string | URL) {
+                return HttpRequestMessage.create("DELETE", url);
+            },
+            put(url: string | URL, content: HttpContent) {
+                return HttpRequestMessage.create("PUT", url, {}, content);
+            },
+            post(url: string | URL, content: HttpContent) {
+                return HttpRequestMessage.create("POST", url, {}, content);
+            },
+        };
+
+        interface HttpResponseMessage {
+            statusCode: number;
+            statusMessage: string;
+            headers: HttpHeaders;
+            content?: HttpContent;
+        }
+
+        const HttpResponseMessage = {
+            create(statusCode: number, statusMessage: string, headers: HttpHeaders = {}, content?: HttpContent): HttpResponseMessage {
+                return { statusCode, statusMessage, headers, content };
+            },
+            notFound(): HttpResponseMessage {
+                return HttpResponseMessage.create(404, "Not Found");
+            },
+            hasSuccessStatusCode(response: HttpResponseMessage) {
+                return response.statusCode === 304 || (response.statusCode >= 200 && response.statusCode < 300);
+            },
+            readResponseMessage(xhr: XMLHttpRequest) {
+                return HttpResponseMessage.create(
+                    xhr.status,
+                    xhr.statusText,
+                    HttpHeaders.readResponseHeaders(xhr),
+                    HttpContent.readResponseContent(xhr));
+            }
+        };
+
+        function send(request: HttpRequestMessage): HttpResponseMessage {
+            const xhr = new XMLHttpRequest();
+            try {
+                HttpHeaders.writeRequestHeaders(xhr, request.headers);
+                HttpHeaders.writeRequestHeaders(xhr, request.content && request.content.headers);
+                xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+                xhr.open(request.method, request.url.toString(), /*async*/ false);
+                xhr.send(request.content && request.content.content);
+                while (xhr.readyState !== 4); // block until ready
+                return HttpResponseMessage.readResponseMessage(xhr);
+            }
+            catch (e) {
+                return HttpResponseMessage.notFound();
+            }
+        }
+
+        let caseSensitivity: "CI" | "CS" | undefined;
+
+        function useCaseSensitiveFileNames() {
+            if (!caseSensitivity) {
+                const response = send(HttpRequestMessage.options(new URL("*", serverRoot)));
+                const xCaseSensitivity = response.headers["X-Case-Sensitivity"];
+                caseSensitivity = xCaseSensitivity === "CS" ? "CS" : "CI";
+            }
+            return caseSensitivity === "CS";
+        }
+
+        function resolvePath(path: string) {
+            const response = send(HttpRequestMessage.post(new URL("/api/resolve", serverRoot), HttpContent.text(path)));
+            return HttpResponseMessage.hasSuccessStatusCode(response) && response.content ? response.content.content : undefined;
+        }
+
+        function readFile(path: string): string | undefined {
+            const response = send(HttpRequestMessage.get(new URL(path, serverRoot)));
+            return HttpResponseMessage.hasSuccessStatusCode(response) && response.content ? response.content.content : undefined;
+        }
+
+        function writeFile(path: string, contents: string) {
+            send(HttpRequestMessage.put(new URL(path, serverRoot), HttpContent.text(contents)));
+        }
+
+        function fileExists(path: string): boolean {
+            const response = send(HttpRequestMessage.head(new URL(path, serverRoot)));
+            return HttpResponseMessage.hasSuccessStatusCode(response);
+        }
+
+        function directoryExists(path: string): boolean {
+            const response = send(HttpRequestMessage.post(new URL("/api/directoryExists", serverRoot), HttpContent.text(path)));
+            return HttpResponseMessage.hasSuccessStatusCode(response)
+                && (response.content && response.content.content) === "true";
+        }
+
+        function deleteFile(path: string) {
+            send(HttpRequestMessage.delete(new URL(path, serverRoot)));
+        }
+
+        function directoryName(path: string) {
+            const url = new URL(path, serverRoot);
+            return ts.getDirectoryPath(ts.normalizeSlashes(url.pathname || "/"));
+        }
+
+        function listFiles(dirname: string, spec?: RegExp, options?: { recursive?: boolean }): string[] {
+            if (spec || (options && !options.recursive)) {
+                let results = IO.listFiles(dirname);
+                if (spec) {
+                    results = results.filter(file => spec.test(file));
+                }
+                if (options && !options.recursive) {
+                    results = results.filter(file => ts.getDirectoryPath(ts.normalizeSlashes(file)) === dirname);
+                }
+                return results;
+            }
+
+            const response = send(HttpRequestMessage.post(new URL("/api/listFiles", serverRoot), HttpContent.text(dirname)));
+            return HttpResponseMessage.hasSuccessStatusCode(response)
+                && response.content
+                && response.content.headers["Content-Type"] === "application/json"
+                    ? JSON.parse(response.content.content)
+                    : [];
+        }
+
+        function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[], depth?: number) {
+            const fs = new vfs.VirtualFileSystem(path, useCaseSensitiveFileNames());
+            fs.addFiles(IO.listFiles(path));
+            return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), /*currentDirectory*/ "", depth, path => getAccessibleVirtualFileSystemEntries(fs, path));
+        }
+
+        function getAccessibleFileSystemEntries(dirname: string): FileSystemEntries {
+            const fs = new vfs.VirtualFileSystem(dirname, useCaseSensitiveFileNames());
+            fs.addFiles(IO.listFiles(dirname));
+            return getAccessibleVirtualFileSystemEntries(fs, dirname);
+        }
+
+        function getAccessibleVirtualFileSystemEntries(fs: vfs.VirtualFileSystem, dirname: string): FileSystemEntries {
+            const directory = fs.getDirectory(dirname);
+            return directory
+                ? { files: directory.getFileNames(), directories: directory.getDirectoryNames() }
+                : { files: [], directories: [] };
+        }
+
+        return {
+            newLine: () => harnessNewLine,
+            getCurrentDirectory: () => "",
+            useCaseSensitiveFileNames,
+            resolvePath,
+            readFile,
+            writeFile,
+            directoryName: Utils.memoize(directoryName, path => path),
+            getDirectories: () => [],
+            createDirectory: () => {},
+            fileExists,
+            directoryExists,
+            deleteFile,
+            listFiles: Utils.memoize(listFiles, (path, spec, options) => `${path}|${spec}|${options ? options.recursive === true : true}`),
+            log: s => console.log(s),
+            args: () => [],
+            getExecutingFilePath: () => "",
+            exit: () => {},
+            readDirectory,
+            getAccessibleFileSystemEntries
+        };
     }
 
     export function mockHash(s: string): string {
@@ -764,10 +901,10 @@ namespace Harness {
     const environment = Utils.getExecutionEnvironment();
     switch (environment) {
         case Utils.ExecutionEnvironment.Node:
-            IO = IOImpl.Node;
+            IO = createNodeIO();
             break;
         case Utils.ExecutionEnvironment.Browser:
-            IO = IOImpl.Network;
+            IO = createBrowserIO();
             break;
         default:
             throw new Error(`Unknown value '${environment}' for ExecutionEnvironment.`);

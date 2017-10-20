@@ -95,6 +95,7 @@ var harnessCoreSources = [
     "harness.ts",
     "collections.ts",
     "vpath.ts",
+    "events.ts",
     "vfs.ts",
     "virtualFileSystemWithWatch.ts",
     "sourceMapRecorder.ts",

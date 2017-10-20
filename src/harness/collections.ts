@@ -1,13 +1,23 @@
 /// <reference path="./harness.ts" />
-namespace Collections {
-    import compareValues = ts.compareValues;
+namespace collections {
+    // NOTE: Some of the functions here duplicate functionality from compiler/core.ts. They have been added
+    //       to reduce the number of direct dependencies on compiler and services to eventually break away
+    //       from depending directly on the compiler to speed up compilation time.
+
     import binarySearch = ts.binarySearch;
     import removeAt = ts.orderedRemoveItemAt;
+
+    export function compareValues<T>(a: T, b: T): number {
+        if (a === b) return 0;
+        if (a === undefined) return -1;
+        if (b === undefined) return +1;
+        return a < b ? -1 : +1;
+    }
 
     const caseInsensitiveComparisonCollator = typeof Intl === "object" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }) : undefined;
     const caseSensitiveComparisonCollator = typeof Intl === "object" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "variant" }) : undefined;
 
-    export function compareStrings(a: string | undefined, b: string | undefined, ignoreCase?: boolean) {
+    export function compareStrings(a: string | undefined, b: string | undefined, ignoreCase: boolean) {
         if (a === b) return 0;
         if (a === undefined) return -1;
         if (b === undefined) return +1;
@@ -23,13 +33,8 @@ namespace Collections {
     }
 
     export namespace compareStrings {
-        export function caseSensitive(a: string | undefined, b: string | undefined) {
-            return compareStrings(a, b, /*ignoreCase*/ false);
-        }
-
-        export function caseInsensitive(a: string | undefined, b: string | undefined) {
-            return compareStrings(a, b, /*ignoreCase*/ true);
-        }
+        export function caseSensitive(a: string | undefined, b: string | undefined) { return compareStrings(a, b, /*ignoreCase*/ false); }
+        export function caseInsensitive(a: string | undefined, b: string | undefined) { return compareStrings(a, b, /*ignoreCase*/ true); }
     }
 
     function insertAt<T>(array: T[], index: number, value: T) {
@@ -50,7 +55,7 @@ namespace Collections {
     /**
      * A collection of key/value pairs sorted by key.
      */
-    export class KeyedCollection<K, V> {
+    export class SortedCollection<K, V> {
         private _comparer: (a: K, b: K) => number;
         private _keys: K[] = [];
         private _values: V[] = [];
@@ -145,6 +150,14 @@ namespace Collections {
 
     const undefinedSentinel = {};
 
+    function escapeKey(text: string) {
+        return (text.length >= 2 && text.charAt(0) === "_" && text.charAt(1) === "_" ? "_" + text : text);
+    }
+
+    function unescapeKey(text: string) {
+        return (text.length >= 3 && text.charAt(0) === "_" && text.charAt(1) === "_" && text.charAt(2) === "_" ? text.slice(1) : text);
+    }
+
     /**
      * A collection of metadata that supports inheritance.
      */
@@ -173,24 +186,25 @@ namespace Collections {
         }
 
         public has(key: string): boolean {
-            return this._map[key] !== undefined;
+            return this._map[escapeKey(key)] !== undefined;
         }
 
         public get(key: string): any {
-            const value = this._map[key];
+            const value = this._map[escapeKey(key)];
             return value === undefinedSentinel ? undefined : value;
         }
 
         public set(key: string, value: any): this {
-            this._map[key] = value === undefined ? undefinedSentinel : value;
+            this._map[escapeKey(key)] = value === undefined ? undefinedSentinel : value;
             this._size = -1;
             this._version++;
             return this;
         }
 
         public delete(key: string): boolean {
-            if (this._map[key] !== undefined) {
-                delete this._map[key];
+            const escapedKey = escapeKey(key);
+            if (this._map[escapedKey] !== undefined) {
+                delete this._map[escapedKey];
                 this._size = -1;
                 this._version++;
                 return true;
@@ -206,7 +220,7 @@ namespace Collections {
 
         public forEach(callback: (value: any, key: string, map: this) => void) {
             for (const key in this._map) {
-                callback(this._map[key], key, this);
+                callback(this._map[key], unescapeKey(key), this);
             }
         }
     }

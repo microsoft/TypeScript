@@ -1,5 +1,7 @@
 /// <reference path="harness.ts" />
 
+// TODO(rbuckton): Migrate this to use vfs.
+
 namespace ts.TestFSWithWatch {
     const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {

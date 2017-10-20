@@ -123,7 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
-        protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/ false);
+        protected virtualFileSystem: vfs.VirtualFileSystem = new vfs.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/ false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
             protected settings = ts.getDefaultCompilerOptions()) {
@@ -135,8 +135,8 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            for (const virtualEntry of this.virtualFileSystem.getFiles({ recursive: true })) {
-                const scriptInfo = virtualEntry.metadata.get("scriptInfo");
+            for (const virtualEntry of this.virtualFileSystem.getDirectory("/").getFiles({ recursive: true })) {
+                const scriptInfo = virtualEntry.metadata.get("scriptInfo") as ScriptInfo;
                 if (scriptInfo && scriptInfo.isRootFile) {
                     // only include root files here
                     // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
@@ -160,7 +160,7 @@ namespace Harness.LanguageService {
             const script = file && file.metadata.get("scriptInfo") as ScriptInfo;
             if (script) {
                 script.editContent(start, end, newText);
-                file.setContent(script.content);
+                file.content = script.content;
                 return;
             }
 
