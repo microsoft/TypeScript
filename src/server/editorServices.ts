@@ -1372,7 +1372,7 @@ namespace ts.server {
             this.projectToSizeMap.forEach(val => (availableSpace -= (val || 0)));
 
             let totalNonTsFileSize = 0;
-            let top5LargestFiles = [] as { name: string, size: number }[];
+            const files: { name: string, size: number }[] = [];
 
             for (const f of fileNames) {
                 const fileName = propertyReader.getFileName(f);
@@ -1382,32 +1382,26 @@ namespace ts.server {
 
                 const fileSize = this.host.getFileSize(fileName);
 
-                if (top5LargestFiles.length < 5) {
-                    top5LargestFiles.push({ name: fileName, size: fileSize });
-                    top5LargestFiles.sort((a, b) => b.size - a.size);
-                }
-                else {
-                    let smallerFileIndex: number;
-                    const found = top5LargestFiles.some((file, index) => { smallerFileIndex = index; return file.size < fileSize; });
-                    if (found) {
-                        top5LargestFiles = [...top5LargestFiles.slice(0, smallerFileIndex!), { name: fileName, size: fileSize }, ...top5LargestFiles.slice(smallerFileIndex!, 4)];
-                    }
-                }
+                files.push({ name: fileName, size: fileSize });
                 totalNonTsFileSize += fileSize;
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
-                    this.logger.info(`Non TS file size exceeded limit (${maxProgramSizeForNonTsFiles}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`);
+                    this.logger.info(`Non TS file size exceeded limit (${maxProgramSizeForNonTsFiles}). Largest files: ${getTop5LargestFiles(files).map(file => `${file.name}:${file.size}`).join(", ")}`);
                     // Keep the size as zero since it's disabled
                     return true;
                 }
             }
 
             if (totalNonTsFileSize > availableSpace) {
-                this.logger.info(`Non TS file size exceeded limit (${maxProgramSizeForNonTsFiles}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`);
+                this.logger.info(`Non TS file size exceeded limit (${maxProgramSizeForNonTsFiles}). Largest files: ${getTop5LargestFiles(files).map(file => `${file.name}:${file.size}`).join(", ")}`);
                 return true;
             }
 
             this.projectToSizeMap.set(name, totalNonTsFileSize);
             return false;
+
+            function getTop5LargestFiles(files: { name: string, size: number }[]) {
+                return files.sort((a, b) => b.size - a.size).slice(0, 5);
+            }
         }
 
         private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition) {
