@@ -871,7 +871,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     var inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     var testTimeout = process.env.timeout || defaultTestTimeout;
     var tests = process.env.test || process.env.tests || process.env.t;
-    var light = process.env.light === undefined ? true : (process.env.light !== "false");
+    var light = process.env.light === undefined || process.env.light !== "false";
     var stackTraceLimit = process.env.stackTraceLimit;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
