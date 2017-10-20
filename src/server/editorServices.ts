@@ -1385,19 +1385,23 @@ namespace ts.server {
                 files.push({ name: fileName, size: fileSize });
                 totalNonTsFileSize += fileSize;
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
-                    this.logger.info(`Non TS file size exceeded limit (${maxProgramSizeForNonTsFiles}). Largest files: ${getTop5LargestFiles(files).map(file => `${file.name}:${file.size}`).join(", ")}`);
+                    logExceedLimit(this.logger, maxProgramSizeForNonTsFiles, files);
                     // Keep the size as zero since it's disabled
                     return true;
                 }
             }
 
             if (totalNonTsFileSize > availableSpace) {
-                this.logger.info(`Non TS file size exceeded limit (${maxProgramSizeForNonTsFiles}). Largest files: ${getTop5LargestFiles(files).map(file => `${file.name}:${file.size}`).join(", ")}`);
+                logExceedLimit(this.logger, maxProgramSizeForNonTsFiles, files);
                 return true;
             }
 
             this.projectToSizeMap.set(name, totalNonTsFileSize);
             return false;
+
+            function logExceedLimit(logger: Logger, maxProgramSizeForNonTsFiles: number, files: { name: string, size: number }[]) {
+                logger.info(`Non TS file size exceeded limit (${maxProgramSizeForNonTsFiles}). Largest files: ${getTop5LargestFiles(files).map(file => `${file.name}:${file.size}`).join(", ")}`);
+            }
 
             function getTop5LargestFiles(files: { name: string, size: number }[]) {
                 return files.sort((a, b) => b.size - a.size).slice(0, 5);
