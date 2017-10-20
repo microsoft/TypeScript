@@ -7566,8 +7566,8 @@ namespace ts {
         function getUnionTypePredicate(signatures: ReadonlyArray<Signature>): TypePredicate {
             let first: TypePredicate | undefined;
             const types: Type[] = [];
-            for (let i = 0; i < signatures.length; i++) {
-                const pred = getTypePredicateOfSignature(signatures[i]);
+            for (const sig of signatures) {
+                const pred = getTypePredicateOfSignature(sig);
                 if (!pred) {
                     continue;
                 }

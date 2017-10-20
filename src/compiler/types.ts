@@ -3536,7 +3536,6 @@ namespace ts {
         // Lazily set by `getTypePredicateOfSignature`.
         // `undefined` indicates a type predicate that has not yet been computed.
         // Uses a special `noTypePredicate` sentinel value to indicate that there is no type predicate. This looks like a TypePredicate at runtime to avoid polymorphism.
-        // (See https://github.com/Microsoft/TypeScript/pull/17600#discussion_r132059173)
         resolvedTypePredicate: TypePredicate | undefined;
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
