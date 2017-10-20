@@ -1996,11 +1996,11 @@ namespace ts {
         }
 
         function getSymbolOfNode(node: Node): Symbol {
-            return getMergedSymbol(getLateBoundSymbol(node.symbol));
+            return getMergedSymbol(node.symbol && getLateBoundSymbol(node.symbol));
         }
 
         function getParentOfSymbol(symbol: Symbol): Symbol {
-            return getMergedSymbol(getLateBoundSymbol(symbol.parent));
+            return getMergedSymbol(symbol.parent && getLateBoundSymbol(symbol.parent));
         }
 
         function getExportSymbolOfValueSymbolIfExported(symbol: Symbol): Symbol {
@@ -5512,6 +5512,15 @@ namespace ts {
         }
 
         /**
+         * Indicates whether a symbol has a late-bindable name.
+         */
+        function symbolHasLateBindableName(symbol: Symbol) {
+            return symbol.flags & SymbolFlags.ClassMember
+                && symbol.escapedName === InternalSymbolName.Computed
+                && some(symbol.declarations, hasLateBindableName);
+        }
+
+        /**
          * Gets the symbolic name for a late-bound member from its type.
          */
         function getLateBoundNameFromType(type: LiteralType | UniqueESSymbolType) {
@@ -5671,42 +5680,26 @@ namespace ts {
         }
 
         /**
-         * If a symbol is the dynamic name of the member of an object type, get its late-bound member.
+         * If a symbol is the dynamic name of the member of an object type, get the late-bound
+         * symbol of the member.
          *
          * For a description of late-binding, see `lateBindMember`.
          */
-        function getLateBoundSymbol(symbol: Symbol) {
-            if (symbol && (symbol.flags & SymbolFlags.ClassMember) && symbol.escapedName === InternalSymbolName.Computed) {
-                const isStaticMember = some(symbol.declarations, declaration => hasModifier(declaration, ModifierFlags.Static));
+        function getLateBoundSymbol(symbol: Symbol): Symbol {
+            const links = getSymbolLinks(symbol);
+            if (!links.lateSymbol) {
                 const parent = symbol.parent;
-                if (parent && (parent.flags & (isStaticMember ? SymbolFlags.Class : SymbolFlags.LateBindableContainer))) {
-                    const links = getSymbolLinks(symbol);
-                    if (!links.lateSymbol) {
-                        // Get (or create) the SymbolTable from the parent used to store late-
-                        // bound symbols. We get a shared table so that we can correctly merge
-                        // late-bound symbols across accessor pairs.
-                        //
-                        // We do not eagerly resolve all of the members of the parent here as
-                        // that results in an eager type-check of the expression of every member
-                        // with a computed property name.
-                        const lateSymbols = isStaticMember ? getLateBoundExportsOfSymbol(parent) : getLateBoundMembersOfSymbol(parent);
-                        const earlySymbols = isStaticMember ? parent.exports : parent.members;
-
-                        // In the event we attempt to get the late-bound symbol for a symbol recursively,
-                        // fall back to the early-bound symbol.
-                        links.lateSymbol = symbol;
-
-                        // Fill in the late-bound symbol for each declaration of this symbol.
-                        for (const decl of symbol.declarations) {
-                            if (hasLateBindableName(decl)) {
-                                lateBindMember(parent, earlySymbols, lateSymbols, decl);
-                            }
-                        }
+                if (symbolHasLateBindableName(symbol) && parent && parent.flags & SymbolFlags.LateBindableContainer) {
+                    // force late binding of members/exports. This will set the late-bound symbol
+                    if (some(symbol.declarations, hasStaticModifier)) {
+                        getExportsOfSymbol(parent);
                     }
-                    return links.lateSymbol;
+                    else {
+                        getMembersOfSymbol(parent);
+                    }
                 }
             }
-            return symbol;
+            return links.lateSymbol || (links.lateSymbol = symbol);
         }
 
         function getTypeWithThisArgument(type: Type, thisArgument?: Type): Type {

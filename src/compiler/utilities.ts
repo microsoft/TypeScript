@@ -3005,6 +3005,10 @@ namespace ts {
         return !!getSelectedModifierFlags(node, flags);
     }
 
+    export function hasStaticModifier(node: Node): boolean {
+        return hasModifier(node, ModifierFlags.Static);
+    }
+
     export function getSelectedModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
         return getModifierFlags(node) & flags;
     }
