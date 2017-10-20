@@ -5,7 +5,7 @@
 /// <reference path="../compiler/commandLineParser.ts"/>
 namespace vfs {
     import compareStrings = collections.compareStrings;
-    import KeyedCollection = collections.SortedCollection;
+    import SortedCollection = collections.SortedCollection;
     import Metadata = collections.Metadata;
     import EventEmitter = events.EventEmitter;
     import IO = Harness.IO;
@@ -123,8 +123,8 @@ namespace vfs {
         private _currentDirectory: string;
         private _currentDirectoryStack: string[] | undefined;
         private _shadowRoot: VirtualFileSystem | undefined;
-        private _watchedFiles: KeyedCollection<string, FileWatcherEntry[]> | undefined;
-        private _watchedDirectories: KeyedCollection<string, DirectoryWatcherEntryArray> | undefined;
+        private _watchedFiles: SortedCollection<string, FileWatcherEntry[]> | undefined;
+        private _watchedDirectories: SortedCollection<string, DirectoryWatcherEntryArray> | undefined;
         private _onRootFileSystemChange: (path: string, change: FileSystemChange) => void;
 
         constructor(currentDirectory: string, useCaseSensitiveFileNames: boolean) {
@@ -132,6 +132,18 @@ namespace vfs {
             this._currentDirectory = currentDirectory.replace(/\\/g, "/");
             this._useCaseSensitiveFileNames = useCaseSensitiveFileNames;
             this._onRootFileSystemChange = (path, change) => this.onRootFileSystemChange(path, change);
+        }
+
+        public get stringComparer() {
+            return this.useCaseSensitiveFileNames
+                ? compareStrings.caseSensitive
+                : compareStrings.caseInsensitive;
+        }
+
+        public get pathComparer() {
+            return this.useCaseSensitiveFileNames
+                ? vpath.compare.caseSensitive
+                : vpath.compare.caseInsensitive;
         }
 
         /**
@@ -205,13 +217,6 @@ namespace vfs {
                     : this._builtLocalCI = vfs;
             }
             return vfs;
-        }
-
-        /**
-         * Gets a value indicating whether to file names are equivalent for the file system's case sensitivity.
-         */
-        public sameName(a: string, b: string) {
-            return compareStrings(a, b, !this.useCaseSensitiveFileNames) === 0;
         }
 
         /**
@@ -405,7 +410,7 @@ namespace vfs {
         public watchFile(path: string, watcher: (path: string, change: FileSystemChange) => void): ts.FileWatcher {
             if (!this._watchedFiles) {
                 const pathComparer = this.useCaseSensitiveFileNames ? vpath.compare.caseSensitive : vpath.compare.caseInsensitive;
-                this._watchedFiles = new KeyedCollection<string, FileWatcherEntry[]>(pathComparer);
+                this._watchedFiles = new SortedCollection<string, FileWatcherEntry[]>(pathComparer);
             }
 
             path = vpath.resolve(this.currentDirectory, path);
@@ -434,7 +439,7 @@ namespace vfs {
         public watchDirectory(path: string, watcher: (path: string) => void, recursive?: boolean) {
             if (!this._watchedDirectories) {
                 const pathComparer = this.useCaseSensitiveFileNames ? vpath.compare.caseSensitive : vpath.compare.caseInsensitive;
-                this._watchedDirectories = new KeyedCollection<string, DirectoryWatcherEntryArray>(pathComparer);
+                this._watchedDirectories = new SortedCollection<string, DirectoryWatcherEntryArray>(pathComparer);
             }
 
             path = vpath.resolve(this.currentDirectory, path);
@@ -636,7 +641,7 @@ namespace vfs {
     export class VirtualDirectory extends VirtualFileSystemEntry {
         protected _shadowRoot: VirtualDirectory | undefined;
         private _parent: VirtualDirectory;
-        private _entries: KeyedCollection<string, VirtualEntry> | undefined;
+        private _entries: SortedCollection<string, VirtualEntry> | undefined;
         private _resolver: FileSystemResolver | undefined;
         private _onChildFileSystemChange: (path: string, change: FileSystemChange) => void;
 
@@ -902,7 +907,7 @@ namespace vfs {
 
         protected getOwnEntries() {
             if (!this._entries) {
-                const entries = new KeyedCollection<string, VirtualEntry>(this.fileSystem.useCaseSensitiveFileNames ? compareStrings.caseSensitive : compareStrings.caseInsensitive);
+                const entries = new SortedCollection<string, VirtualEntry>(this.fileSystem.stringComparer);
                 const resolver = this._resolver;
                 const shadowRoot = this._shadowRoot;
                 if (resolver) {
@@ -1048,8 +1053,8 @@ namespace vfs {
     export class VirtualDirectorySymlink extends VirtualDirectory {
         private _targetPath: string;
         private _target: VirtualDirectory | undefined;
-        private _pullEntries: KeyedCollection<string, VirtualEntryView> | undefined;
-        private _allEntries: KeyedCollection<string, VirtualEntryView> | undefined;
+        private _views: SortedCollection<string, VirtualEntryView> | undefined;
+        private _allViews: SortedCollection<string, VirtualEntryView> | undefined;
         private _onTargetParentChildRemoved: (entry: VirtualEntry) => void;
         private _onTargetChildRemoved: (entry: VirtualEntry) => void;
         private _onTargetChildAdded: (entry: VirtualEntry) => void;
@@ -1057,7 +1062,7 @@ namespace vfs {
 
         constructor(parent: VirtualDirectory, name: string, target: string) {
             super(parent, name);
-            this._pullEntries = new KeyedCollection<string, VirtualEntryView>(this.fileSystem.useCaseSensitiveFileNames ? compareStrings.caseSensitive : compareStrings.caseInsensitive);
+            this._views = new SortedCollection<string, VirtualEntryView>(this.fileSystem.stringComparer);
             this._targetPath = target;
             this._onTargetParentChildRemoved = entry => this.onTargetParentChildRemoved(entry);
             this._onTargetChildAdded = entry => this.onTargetChildAdded(entry);
@@ -1110,66 +1115,66 @@ namespace vfs {
         }
 
         protected addOwnDirectory(name: string, resolver?: FileSystemResolver): VirtualDirectory | undefined {
-            const realTarget = this.target;
-            const child = realTarget && realTarget.addDirectory(name, resolver);
+            const target = this.target;
+            const child = target && target.addDirectory(name, resolver);
             return child && this.getView(child);
         }
 
         protected addOwnFile(name: string, content?: FileSystemResolver | ContentResolver | string): VirtualFile | undefined {
-            const realTarget = this.target;
-            const child = realTarget && realTarget.addFile(name, content);
+            const target = this.target;
+            const child = target && target.addFile(name, content);
             return child && this.getView(child);
         }
 
-        protected addOwnSymlink(name: string, target: VirtualEntry): VirtualSymlink | undefined {
-            const realTarget = this.target;
-            const child = realTarget && realTarget.addSymlink(name, target);
+        protected addOwnSymlink(name: string, linkTarget: VirtualEntry): VirtualSymlink | undefined {
+            const target = this.target;
+            const child = target && target.addSymlink(name, linkTarget);
             return child && this.getView(child);
         }
 
         protected removeOwnDirectory(name: string): boolean {
-            const realTarget = this.target;
-            return realTarget && realTarget.removeDirectory(name) || false;
+            const target = this.target;
+            return target && target.removeDirectory(name) || false;
         }
 
         protected removeOwnFile(name: string): boolean {
-            const realTarget = this.target;
-            return realTarget && realTarget.removeFile(name) || false;
+            const target = this.target;
+            return target && target.removeFile(name) || false;
         }
 
-        protected getOwnEntries(): KeyedCollection<string, VirtualEntryView> {
-            if (!this._allEntries) {
-                const realTarget = this.target;
-                this._allEntries = new KeyedCollection<string, VirtualEntryView>(this.fileSystem.useCaseSensitiveFileNames ? compareStrings.caseSensitive : compareStrings.caseInsensitive);
-                if (realTarget) {
-                    for (const entry of realTarget.getEntries()) {
-                        this._allEntries.set(entry.name, this.getView(entry));
+        protected getOwnEntries(): SortedCollection<string, VirtualEntryView> {
+            if (!this._allViews) {
+                this._allViews = new SortedCollection<string, VirtualEntryView>(this.fileSystem.stringComparer);
+                const target = this.target;
+                if (target) {
+                    for (const entry of target.getEntries()) {
+                        this._allViews.set(entry.name, this.getView(entry));
                     }
                 }
             }
-            return this._allEntries;
+            return this._allViews;
         }
 
         private getView(entry: VirtualFile): VirtualFileView;
         private getView(entry: VirtualDirectory): VirtualDirectoryView;
         private getView(entry: VirtualEntry): VirtualEntryView;
         private getView(entry: VirtualEntry) {
-            let symlink = this._pullEntries.get(entry.name);
+            let view = this._views.get(entry.name);
             if (entry instanceof VirtualFile) {
-                if (symlink instanceof VirtualFileView) {
-                    return symlink;
+                if (view instanceof VirtualFileView) {
+                    return view;
                 }
-                symlink = new VirtualFileView(this, entry.name, entry.path);
-                this._pullEntries.set(entry.name, symlink);
+                view = new VirtualFileView(this, entry.name, entry.path);
+                this._views.set(entry.name, view);
             }
             else {
-                if (symlink instanceof VirtualDirectoryView) {
-                    return symlink;
+                if (view instanceof VirtualDirectoryView) {
+                    return view;
                 }
-                symlink = new VirtualDirectoryView(this, entry.name, entry.path);
-                this._pullEntries.set(entry.name, symlink);
+                view = new VirtualDirectoryView(this, entry.name, entry.path);
+                this._views.set(entry.name, view);
             }
-            return symlink;
+            return view;
         }
 
         private resolveTarget(): void {
@@ -1192,8 +1197,8 @@ namespace vfs {
             this._target.removeListener("childRemoved", this._onTargetChildRemoved);
             this._target.removeListener("fileSystemChange", this._onTargetFileSystemChange);
             this._target = undefined;
-            this._pullEntries.clear();
-            this._allEntries = undefined;
+            this._views.clear();
+            this._allViews = undefined;
         }
 
         private onTargetParentChildRemoved(entry: VirtualEntry) {
@@ -1211,7 +1216,7 @@ namespace vfs {
         private onTargetChildRemoved(entry: VirtualEntry) {
             const symlink = this.getView(entry);
             this.getOwnEntries().delete(entry.name);
-            this._pullEntries.delete(entry.name);
+            this._views.delete(entry.name);
             this.emit("childRemoved", symlink);
         }
 
@@ -1411,16 +1416,16 @@ namespace vfs {
          * Gets the text content of this file.
          */
         public get content(): string | undefined {
-            const realTarget = this.target;
-            return realTarget && realTarget.content;
+            const target = this.target;
+            return target && target.content;
         }
 
         /**
          * Sets the text content of this file.
          */
         public set content(value: string | undefined) {
-            const realTarget = this.target;
-            if (realTarget) realTarget.content = value;
+            const target = this.target;
+            if (target) target.content = value;
         }
 
         /**
