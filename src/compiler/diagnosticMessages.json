@@ -1316,7 +1316,7 @@
         "category": "Error",
         "code": 2402
     },
-    "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.": {
+    "Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.": {
         "category": "Error",
         "code": 2403
     },
