@@ -1,7 +1,13 @@
 /// <reference path="project.ts"/>
 
 namespace ts.server {
+    export interface InstallPackageOptionsWithProjectRootPath extends InstallPackageOptions {
+        projectRootPath: Path;
+    }
+
     export interface ITypingsInstaller {
+        isKnownTypesPackageName(name: string): boolean;
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -9,6 +15,9 @@ namespace ts.server {
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
+        isKnownTypesPackageName: returnFalse,
+        // Should never be called because we never provide a types registry.
+        installPackage: notImplemented,
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
@@ -77,6 +86,14 @@ namespace ts.server {
         constructor(private readonly installer: ITypingsInstaller) {
         }
 
+        isKnownTypesPackageName(name: string): boolean {
+            return this.installer.isKnownTypesPackageName(name);
+        }
+
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult> {
+            return this.installer.installPackage(options);
+        }
+
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {
             const typeAcquisition = project.getTypeAcquisition();
 
@@ -89,12 +106,12 @@ namespace ts.server {
             if (forceRefresh ||
                 !entry ||
                 typeAcquisitionChanged(typeAcquisition, entry.typeAcquisition) ||
-                compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions) ||
+                compilerOptionsChanged(project.getCompilationSettings(), entry.compilerOptions) ||
                 unresolvedImportsChanged(unresolvedImports, entry.unresolvedImports)) {
                 // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
                 // instead it acts as a placeholder to prevent issuing multiple requests
                 this.perProjectCache.set(project.getProjectName(), {
-                    compilerOptions: project.getCompilerOptions(),
+                    compilerOptions: project.getCompilationSettings(),
                     typeAcquisition,
                     typings: result,
                     unresolvedImports,

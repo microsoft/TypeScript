@@ -97,7 +97,16 @@ namespace ts {
         return rulesProvider;
     }
 
-    export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage) {
+    const notImplementedHost: LanguageServiceHost = {
+        getCompilationSettings: notImplemented,
+        getScriptFileNames: notImplemented,
+        getScriptVersion: notImplemented,
+        getScriptSnapshot: notImplemented,
+        getDefaultLibFileName: notImplemented,
+        getCurrentDirectory: notImplemented,
+    };
+
+    export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection");
         if (!selectionRange) {
@@ -109,11 +118,11 @@ namespace ts {
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const program = makeProgram({ path, content: t.source });
+            const program = makeProgram({ path, content: t.source }, includeLib);
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
-                assert.equal(Extension.Js, extension);
+                assert.equal(Extension.Js, extension, "Syntactic diagnostics found in non-JS file");
                 return;
             }
 
@@ -125,6 +134,7 @@ namespace ts {
                 file: sourceFile,
                 startPosition: selectionRange.start,
                 endPosition: selectionRange.end,
+                host: notImplementedHost,
                 rulesProvider: getRuleProvider()
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
@@ -135,7 +145,7 @@ namespace ts {
             Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
                 const data: string[] = [];
                 data.push(`// ==ORIGINAL==`);
-                data.push(sourceFile.text);
+                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
                 for (const action of actions) {
                     const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name);
                     assert.lengthOf(edits, 1);
@@ -144,15 +154,15 @@ namespace ts {
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
 
-                    const diagProgram = makeProgram({ path, content: newText });
+                    const diagProgram = makeProgram({ path, content: newText }, includeLib);
                     assert.isFalse(hasSyntacticDiagnostics(diagProgram));
                 }
                 return data.join(newLineCharacter);
             });
         }
 
-        function makeProgram(f: {path: string, content: string }) {
-            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
+        function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
+            const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
@@ -188,6 +198,7 @@ namespace ts {
                 file: sourceFile,
                 startPosition: selectionRange.start,
                 endPosition: selectionRange.end,
+                host: notImplementedHost,
                 rulesProvider: getRuleProvider()
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));

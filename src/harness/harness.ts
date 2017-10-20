@@ -227,7 +227,7 @@ namespace Utils {
         return JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    ");
 
         function getKindName(k: number | string): string {
-            if (typeof k === "string") {
+            if (ts.isString(k)) {
                 return k;
             }
 
@@ -757,6 +757,10 @@ namespace Harness {
         }
     }
 
+    export function mockHash(s: string): string {
+        return `hash-${s}`;
+    }
+
     const environment = Utils.getExecutionEnvironment();
     switch (environment) {
         case Utils.ExecutionEnvironment.Node:
@@ -840,9 +844,7 @@ namespace Harness {
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
         // Cache of lib files from "built/local"
-        const libFileNameSourceFileMap = ts.createMapFromTemplate<ts.SourceFile>({
-            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
-        });
+        let libFileNameSourceFileMap: ts.Map<ts.SourceFile> | undefined;
 
         // Cache of lib files from  "tests/lib/"
         const testLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
@@ -851,6 +853,12 @@ namespace Harness {
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
                 return undefined;
+            }
+
+            if (!libFileNameSourceFileMap) {
+                libFileNameSourceFileMap = ts.createMapFromTemplate({
+                    [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
+                });
             }
 
             let sourceFile = libFileNameSourceFileMap.get(fileName);
@@ -908,8 +916,8 @@ namespace Harness {
                 if (file.content !== undefined) {
                     const fileName = ts.normalizePath(file.unitName);
                     const path = ts.toPath(file.unitName, currentDirectory, getCanonicalFileName);
-                    if (file.fileOptions && file.fileOptions["symlink"]) {
-                        const links = file.fileOptions["symlink"].split(",");
+                    if (file.fileOptions && file.fileOptions.symlink) {
+                        const links = file.fileOptions.symlink.split(",");
                         for (const link of links) {
                             const linkPath = ts.toPath(link, currentDirectory, getCanonicalFileName);
                             realPathMap.set(linkPath, fileName);
@@ -1224,7 +1232,7 @@ namespace Harness {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings["currentDirectory"] };
+                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings.currentDirectory };
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
@@ -1668,7 +1676,7 @@ namespace Harness {
         }
 
         function fileOutput(file: GeneratedFile, harnessSettings: Harness.TestCaseParser.CompilerSettings): string {
-            const fileName = harnessSettings["fullEmitPaths"] ? file.fileName : ts.getBaseFileName(file.fileName);
+            const fileName = harnessSettings.fullEmitPaths ? file.fileName : ts.getBaseFileName(file.fileName);
             return "//// [" + fileName + "]\r\n" + getByteOrderMarkText(file) + file.code;
         }
 

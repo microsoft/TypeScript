@@ -4,7 +4,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.6";
+    export const versionMajorMinor = "2.7";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0`;
 }
@@ -33,8 +33,8 @@ namespace ts {
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
         // constantly changing shape.
-        map["__"] = undefined;
-        delete map["__"];
+        map.__ = undefined;
+        delete map.__;
 
         return map;
     }
@@ -191,6 +191,18 @@ namespace ts {
         }
         return undefined;
     }
+
+    /** Like `forEach`, but suitable for use with numbers and strings (which may be falsy). */
+    export function firstDefined<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+        for (let i = 0; i < array.length; i++) {
+            const result = callback(array[i], i);
+            if (result !== undefined) {
+                return result;
+            }
+        }
+        return undefined;
+    }
+
     /**
      * Iterates through the parent chain of a node and performs the callback on each parent until the callback
      * returns a truthy value, then returns that value.
@@ -213,11 +225,13 @@ namespace ts {
         return undefined;
     }
 
-    export function zipWith<T, U>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => void): void {
+    export function zipWith<T, U, V>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => V): V[] {
+        const result: V[] = [];
         Debug.assert(arrayA.length === arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
-            callback(arrayA[i], arrayB[i], i);
+            result.push(callback(arrayA[i], arrayB[i], i));
         }
+        return result;
     }
 
     export function zipToMap<T>(keys: ReadonlyArray<string>, values: ReadonlyArray<T>): Map<T> {
@@ -247,8 +261,20 @@ namespace ts {
     }
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
+    export function find<T, U extends T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => element is U): U | undefined;
+    export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined;
     export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = 0; i < array.length; i++) {
+            const value = array[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
+        for (let i = array.length - 1; i >= 0; i--) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -354,21 +380,6 @@ namespace ts {
         return array;
     }
 
-    export function removeWhere<T>(array: T[], f: (x: T) => boolean): boolean {
-        let outIndex = 0;
-        for (const item of array) {
-            if (!f(item)) {
-                array[outIndex] = item;
-                outIndex++;
-            }
-        }
-        if (outIndex !== array.length) {
-            array.length = outIndex;
-            return true;
-        }
-        return false;
-    }
-
     export function filterMutate<T>(array: T[], f: (x: T, i: number, array: T[]) => boolean): void {
         let outIndex = 0;
         for (let i = 0; i < array.length; i++) {
@@ -467,13 +478,20 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | undefined): U[] {
+    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U | U[] | undefined): U[] {
         const result: U[] = [];
         while (true) {
             const { value, done } = iter.next();
             if (done) break;
             const res = mapfn(value);
-            if (res) result.push(...res);
+            if (res) {
+                if (isArray(res)) {
+                    result.push(...res);
+                }
+                else {
+                    result.push(res);
+                }
+            }
         }
         return result;
     }
@@ -518,6 +536,19 @@ namespace ts {
                 if (mapped !== undefined) {
                     result.push(mapped);
                 }
+            }
+        }
+        return result;
+    }
+
+    export function mapDefinedIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): U[] {
+        const result: U[] = [];
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) break;
+            const res = mapFn(value);
+            if (res !== undefined) {
+                result.push(res);
             }
         }
         return result;
@@ -766,7 +797,7 @@ namespace ts {
      * @param end The offset in `from` at which to stop copying values (non-inclusive).
      */
     export function addRange<T>(to: T[] | undefined, from: ReadonlyArray<T> | undefined, start?: number, end?: number): T[] | undefined {
-        if (from === undefined) return to;
+        if (from === undefined || from.length === 0) return to;
         if (to === undefined) return from.slice(start, end);
         start = start === undefined ? 0 : toOffset(from, start);
         end = end === undefined ? from.length : toOffset(from, end);
@@ -846,11 +877,21 @@ namespace ts {
         return elementAt(array, 0);
     }
 
+    export function first<T>(array: ReadonlyArray<T>): T {
+        Debug.assert(array.length !== 0);
+        return array[0];
+    }
+
     /**
      * Returns the last element of an array if non-empty, `undefined` otherwise.
      */
     export function lastOrUndefined<T>(array: ReadonlyArray<T>): T | undefined {
         return elementAt(array, -1);
+    }
+
+    export function last<T>(array: ReadonlyArray<T>): T {
+        Debug.assert(array.length !== 0);
+        return array[array.length - 1];
     }
 
     /**
@@ -1128,6 +1169,14 @@ namespace ts {
         return result;
     }
 
+    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[] {
+        const result: T[] = [];
+        for (const value of array) {
+            result[makeKey(value)] = value;
+        }
+        return result;
+    }
+
     /**
      * Creates a set from the elements of an array.
      *
@@ -1222,6 +1271,13 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
+    /**
+     * Tests whether a value is string
+     */
+    export function isString(text: any): text is string {
+        return typeof text === "string";
+    }
+
     export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
         return value !== undefined && test(value) ? value : undefined;
     }
@@ -1232,7 +1288,13 @@ namespace ts {
     }
 
     /** Does nothing. */
-    export function noop(): void {}
+    export function noop(): void { }
+
+    /** Do nothing and return false */
+    export function returnFalse(): false { return false; }
+
+    /** Do nothing and return true */
+    export function returnTrue(): true { return true; }
 
     /** Returns its argument. */
     export function identity<T>(x: T) { return x; }
@@ -1476,16 +1538,16 @@ namespace ts {
     function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
         while (text1 && text2) {
             // We still have both chains.
-            const string1 = typeof text1 === "string" ? text1 : text1.messageText;
-            const string2 = typeof text2 === "string" ? text2 : text2.messageText;
+            const string1 = isString(text1) ? text1 : text1.messageText;
+            const string2 = isString(text2) ? text2 : text2.messageText;
 
             const res = compareValues(string1, string2);
             if (res) {
                 return res;
             }
 
-            text1 = typeof text1 === "string" ? undefined : text1.next;
-            text2 = typeof text2 === "string" ? undefined : text2.next;
+            text1 = isString(text1) ? undefined : text1.next;
+            text2 = isString(text2) ? undefined : text2.next;
         }
 
         if (!text1 && !text2) {
@@ -1618,7 +1680,7 @@ namespace ts {
     }
 
     export function isUrl(path: string) {
-        return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
+        return path && !isRootedDiskPath(path) && stringContains(path, "://");
     }
 
     export function pathIsRelative(path: string): boolean {
@@ -1799,7 +1861,7 @@ namespace ts {
         return i < 0 ? path : path.substring(i + 1);
     }
 
-    export function combinePaths(path1: string, path2: string) {
+    export function combinePaths(path1: string, path2: string): string {
         if (!(path1 && path1.length)) return path2;
         if (!(path2 && path2.length)) return path1;
         if (getRootLength(path2) !== 0) return path2;
@@ -1811,6 +1873,8 @@ namespace ts {
      * Removes a trailing directory separator from a path.
      * @param path The path.
      */
+    export function removeTrailingDirectorySeparator(path: Path): Path;
+    export function removeTrailingDirectorySeparator(path: string): string;
     export function removeTrailingDirectorySeparator(path: string) {
         if (path.charAt(path.length - 1) === directorySeparator) {
             return path.substr(0, path.length - 1);
@@ -1885,8 +1949,12 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function stringContains(str: string, substring: string): boolean {
+        return str.indexOf(substring) !== -1;
+    }
+
     export function hasExtension(fileName: string): boolean {
-        return getBaseFileName(fileName).indexOf(".") >= 0;
+        return stringContains(getBaseFileName(fileName), ".");
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
@@ -2073,8 +2141,8 @@ namespace ts {
     }
 
     export interface FileSystemEntries {
-        files: ReadonlyArray<string>;
-        directories: ReadonlyArray<string>;
+        readonly files: ReadonlyArray<string>;
+        readonly directories: ReadonlyArray<string>;
     }
 
     export interface FileMatcherPatterns {
@@ -2227,7 +2295,7 @@ namespace ts {
                 return ScriptKind.TS;
             case Extension.Tsx:
                 return ScriptKind.TSX;
-            case ".json":
+            case Extension.Json:
                 return ScriptKind.JSON;
             default:
                 return ScriptKind.Unknown;
@@ -2623,6 +2691,16 @@ namespace ts {
         return find<Extension>(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
     }
 
+    // Retrieves any string from the final "." onwards from a base file name.
+    // Unlike extensionFromPath, which throws an exception on unrecognized extensions.
+    export function getAnyExtensionFromPath(path: string): string | undefined {
+        const baseFileName = getBaseFileName(path);
+        const extensionIndex = baseFileName.lastIndexOf(".");
+        if (extensionIndex >= 0) {
+            return baseFileName.substring(extensionIndex);
+        }
+    }
+
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
@@ -2631,5 +2709,214 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function assertTypeIsNever(_: never): void {}
+    export function assertTypeIsNever(_: never): void { }
+
+    export interface FileAndDirectoryExistence {
+        fileExists: boolean;
+        directoryExists: boolean;
+    }
+
+    export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
+        /** Returns the queried result for the file exists and directory exists if at all it was done */
+        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): FileAndDirectoryExistence | undefined;
+        addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
+        clearCache(): void;
+    }
+
+    interface MutableFileSystemEntries {
+        readonly files: string[];
+        readonly directories: string[];
+    }
+
+    export function createCachedDirectoryStructureHost(host: DirectoryStructureHost): CachedDirectoryStructureHost {
+        const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
+        const getCurrentDirectory = memoize(() => host.getCurrentDirectory());
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        return {
+            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames,
+            newLine: host.newLine,
+            readFile: (path, encoding) => host.readFile(path, encoding),
+            write: s => host.write(s),
+            writeFile,
+            fileExists,
+            directoryExists,
+            createDirectory,
+            getCurrentDirectory,
+            getDirectories,
+            readDirectory,
+            addOrDeleteFileOrDirectory,
+            addOrDeleteFile,
+            clearCache,
+            exit: code => host.exit(code)
+        };
+
+        function toPath(fileName: string) {
+            return ts.toPath(fileName, getCurrentDirectory(), getCanonicalFileName);
+        }
+
+        function getCachedFileSystemEntries(rootDirPath: Path): MutableFileSystemEntries | undefined {
+            return cachedReadDirectoryResult.get(rootDirPath);
+        }
+
+        function getCachedFileSystemEntriesForBaseDir(path: Path): MutableFileSystemEntries | undefined {
+            return getCachedFileSystemEntries(getDirectoryPath(path));
+        }
+
+        function getBaseNameOfFileName(fileName: string) {
+            return getBaseFileName(normalizePath(fileName));
+        }
+
+        function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
+            const resultFromHost: MutableFileSystemEntries = {
+                files: map(host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
+                directories: host.getDirectories(rootDir) || []
+            };
+
+            cachedReadDirectoryResult.set(rootDirPath, resultFromHost);
+            return resultFromHost;
+        }
+
+        /**
+         * If the readDirectory result was already cached, it returns that
+         * Otherwise gets result from host and caches it.
+         * The host request is done under try catch block to avoid caching incorrect result
+         */
+        function tryReadDirectory(rootDir: string, rootDirPath: Path): MutableFileSystemEntries | undefined {
+            const cachedResult = getCachedFileSystemEntries(rootDirPath);
+            if (cachedResult) {
+                return cachedResult;
+            }
+
+            try {
+                return createCachedFileSystemEntries(rootDir, rootDirPath);
+            }
+            catch (_e) {
+                // If there is exception to read directories, dont cache the result and direct the calls to host
+                Debug.assert(!cachedReadDirectoryResult.has(rootDirPath));
+                return undefined;
+            }
+        }
+
+        function fileNameEqual(name1: string, name2: string) {
+            return getCanonicalFileName(name1) === getCanonicalFileName(name2);
+        }
+
+        function hasEntry(entries: ReadonlyArray<string>, name: string) {
+            return some(entries, file => fileNameEqual(file, name));
+        }
+
+        function updateFileSystemEntry(entries: string[], baseName: string, isValid: boolean) {
+            if (hasEntry(entries, baseName)) {
+                if (!isValid) {
+                    return filterMutate(entries, entry => !fileNameEqual(entry, baseName));
+                }
+            }
+            else if (isValid) {
+                return entries.push(baseName);
+            }
+        }
+
+        function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
+            const path = toPath(fileName);
+            const result = getCachedFileSystemEntriesForBaseDir(path);
+            if (result) {
+                updateFilesOfFileSystemEntry(result, getBaseNameOfFileName(fileName), /*fileExists*/ true);
+            }
+            return host.writeFile(fileName, data, writeByteOrderMark);
+        }
+
+        function fileExists(fileName: string): boolean {
+            const path = toPath(fileName);
+            const result = getCachedFileSystemEntriesForBaseDir(path);
+            return result && hasEntry(result.files, getBaseNameOfFileName(fileName)) ||
+                host.fileExists(fileName);
+        }
+
+        function directoryExists(dirPath: string): boolean {
+            const path = toPath(dirPath);
+            return cachedReadDirectoryResult.has(path) || host.directoryExists(dirPath);
+        }
+
+        function createDirectory(dirPath: string) {
+            const path = toPath(dirPath);
+            const result = getCachedFileSystemEntriesForBaseDir(path);
+            const baseFileName = getBaseNameOfFileName(dirPath);
+            if (result) {
+                updateFileSystemEntry(result.directories, baseFileName, /*isValid*/ true);
+            }
+            host.createDirectory(dirPath);
+        }
+
+        function getDirectories(rootDir: string): string[] {
+            const rootDirPath = toPath(rootDir);
+            const result = tryReadDirectory(rootDir, rootDirPath);
+            if (result) {
+                return result.directories.slice();
+            }
+            return host.getDirectories(rootDir);
+        }
+
+        function readDirectory(rootDir: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
+            const rootDirPath = toPath(rootDir);
+            const result = tryReadDirectory(rootDir, rootDirPath);
+            if (result) {
+                return matchFiles(rootDir, extensions, excludes, includes, host.useCaseSensitiveFileNames, getCurrentDirectory(), depth, getFileSystemEntries);
+            }
+            return host.readDirectory(rootDir, extensions, excludes, includes, depth);
+
+            function getFileSystemEntries(dir: string) {
+                const path = toPath(dir);
+                if (path === rootDirPath) {
+                    return result;
+                }
+                return getCachedFileSystemEntries(path) || createCachedFileSystemEntries(dir, path);
+            }
+        }
+
+        function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
+            const existingResult = getCachedFileSystemEntries(fileOrDirectoryPath);
+            if (existingResult) {
+                // This was a folder already present, remove it if this doesnt exist any more
+                if (!host.directoryExists(fileOrDirectory)) {
+                    cachedReadDirectoryResult.delete(fileOrDirectoryPath);
+                }
+            }
+            else {
+                // This was earlier a file (hence not in cached directory contents)
+                // or we never cached the directory containing it
+                const parentResult = getCachedFileSystemEntriesForBaseDir(fileOrDirectoryPath);
+                if (parentResult) {
+                    const baseName = getBaseNameOfFileName(fileOrDirectory);
+                    if (parentResult) {
+                        const fsQueryResult: FileAndDirectoryExistence = {
+                            fileExists: host.fileExists(fileOrDirectoryPath),
+                            directoryExists: host.directoryExists(fileOrDirectoryPath)
+                        };
+                        updateFilesOfFileSystemEntry(parentResult, baseName, fsQueryResult.fileExists);
+                        updateFileSystemEntry(parentResult.directories, baseName, fsQueryResult.directoryExists);
+                        return fsQueryResult;
+                    }
+                }
+            }
+        }
+
+        function addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind) {
+            if (eventKind === FileWatcherEventKind.Changed) {
+                return;
+            }
+
+            const parentResult = getCachedFileSystemEntriesForBaseDir(filePath);
+            if (parentResult) {
+                updateFilesOfFileSystemEntry(parentResult, getBaseNameOfFileName(fileName), eventKind === FileWatcherEventKind.Created);
+            }
+        }
+
+        function updateFilesOfFileSystemEntry(parentResult: MutableFileSystemEntries, baseName: string, fileExists: boolean) {
+            updateFileSystemEntry(parentResult.files, baseName, fileExists);
+        }
+
+        function clearCache() {
+            cachedReadDirectoryResult.clear();
+        }
+    }
 }

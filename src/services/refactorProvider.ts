@@ -14,13 +14,12 @@ namespace ts {
         getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined;
     }
 
-    export interface RefactorContext {
+    export interface RefactorContext extends textChanges.TextChangesContext {
         file: SourceFile;
         startPosition: number;
         endPosition?: number;
         program: Program;
-        newLineCharacter: string;
-        rulesProvider?: formatting.RulesProvider;
+        host: LanguageServiceHost;
         cancellationToken?: CancellationToken;
     }
 
@@ -35,7 +34,7 @@ namespace ts {
 
         export function getApplicableRefactors(context: RefactorContext): ApplicableRefactorInfo[] {
             return flatMapIter(refactors.values(), refactor =>
-                context.cancellationToken && context.cancellationToken.isCancellationRequested() ? [] : refactor.getAvailableActions(context));
+                context.cancellationToken && context.cancellationToken.isCancellationRequested() ? undefined : refactor.getAvailableActions(context));
         }
 
         export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string): RefactorEditInfo | undefined {
