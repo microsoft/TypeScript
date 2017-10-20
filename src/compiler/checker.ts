@@ -4417,7 +4417,7 @@ namespace ts {
                         jsDocType = declarationType;
                     }
                     else if (jsDocType !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(jsDocType, declarationType)) {
-                        errorSubsequentVariableDeclarationMustHaveSameType(symbol.valueDeclaration, jsDocType, declaration, declarationType);
+                        errorNextVariableDeclarationMustHaveSameType(symbol.valueDeclaration, jsDocType, declaration, declarationType);
                     }
                 }
                 else if (!jsDocType) {
@@ -20778,7 +20778,7 @@ namespace ts {
                 // initializer is consistent with type associated with the node
                 const declarationType = convertAutoToAny(getWidenedTypeForVariableLikeDeclaration(node));
                 if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
-                    errorSubsequentVariableDeclarationMustHaveSameType(symbol.valueDeclaration, type, node, declarationType);
+                    errorNextVariableDeclarationMustHaveSameType(symbol.valueDeclaration, type, node, declarationType);
                 }
                 if (node.initializer) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, /*headMessage*/ undefined);
@@ -20802,19 +20802,19 @@ namespace ts {
             }
         }
 
-        function errorSubsequentVariableDeclarationMustHaveSameType(firstDeclaration: Declaration, firstType: Type, nextDeclaration: Declaration, subsequentType: Type): void {
-            const valueDeclarationSourceFile = getSourceFileOfNode(firstDeclaration);
-            const otherSpan = getErrorSpanForNode(valueDeclarationSourceFile, getNameOfDeclaration(firstDeclaration) || firstDeclaration);
-            const otherLocation = getLineAndCharacterOfPosition(valueDeclarationSourceFile, otherSpan.start);
-            const otherLocationDescription = `${valueDeclarationSourceFile.fileName} ${otherLocation.line}:${otherLocation.character}`;
+        function errorNextVariableDeclarationMustHaveSameType(firstDeclaration: Declaration, firstType: Type, nextDeclaration: Declaration, nextType: Type): void {
+            const firstSourceFile = getSourceFileOfNode(firstDeclaration);
+            const firstSpan = getErrorSpanForNode(firstSourceFile, getNameOfDeclaration(firstDeclaration) || firstDeclaration);
+            const firstLocation = getLineAndCharacterOfPosition(firstSourceFile, firstSpan.start);
+            const firstLocationDescription = firstSourceFile.fileName + " " + firstLocation.line + ":" + firstLocation.character;
             const nextDeclarationName = getNameOfDeclaration(nextDeclaration);
             error(
                 nextDeclarationName,
                 Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_has_type_1_at_2_but_here_has_type_3,
                 declarationNameToString(nextDeclarationName),
                 typeToString(firstType),
-                otherLocationDescription,
-                typeToString(subsequentType));
+                firstLocationDescription,
+                typeToString(nextType));
         }
 
         function areDeclarationFlagsIdentical(left: Declaration, right: Declaration) {
