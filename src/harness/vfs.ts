@@ -5,7 +5,7 @@
 /// <reference path="../compiler/commandLineParser.ts"/>
 namespace vfs {
     import compareStrings = collections.compareStrings;
-    import SortedCollection = collections.SortedCollection;
+    import KeyedCollection = collections.KeyedCollection;
     import Metadata = collections.Metadata;
     import EventEmitter = events.EventEmitter;
     import IO = Harness.IO;
@@ -123,8 +123,8 @@ namespace vfs {
         private _currentDirectory: string;
         private _currentDirectoryStack: string[] | undefined;
         private _shadowRoot: VirtualFileSystem | undefined;
-        private _watchedFiles: SortedCollection<string, FileWatcherEntry[]> | undefined;
-        private _watchedDirectories: SortedCollection<string, DirectoryWatcherEntryArray> | undefined;
+        private _watchedFiles: KeyedCollection<string, FileWatcherEntry[]> | undefined;
+        private _watchedDirectories: KeyedCollection<string, DirectoryWatcherEntryArray> | undefined;
         private _onRootFileSystemChange: (path: string, change: FileSystemChange) => void;
 
         constructor(currentDirectory: string, useCaseSensitiveFileNames: boolean) {
@@ -410,7 +410,7 @@ namespace vfs {
         public watchFile(path: string, watcher: (path: string, change: FileSystemChange) => void): ts.FileWatcher {
             if (!this._watchedFiles) {
                 const pathComparer = this.useCaseSensitiveFileNames ? vpath.compare.caseSensitive : vpath.compare.caseInsensitive;
-                this._watchedFiles = new SortedCollection<string, FileWatcherEntry[]>(pathComparer);
+                this._watchedFiles = new KeyedCollection<string, FileWatcherEntry[]>(pathComparer);
             }
 
             path = vpath.resolve(this.currentDirectory, path);
@@ -439,7 +439,7 @@ namespace vfs {
         public watchDirectory(path: string, watcher: (path: string) => void, recursive?: boolean) {
             if (!this._watchedDirectories) {
                 const pathComparer = this.useCaseSensitiveFileNames ? vpath.compare.caseSensitive : vpath.compare.caseInsensitive;
-                this._watchedDirectories = new SortedCollection<string, DirectoryWatcherEntryArray>(pathComparer);
+                this._watchedDirectories = new KeyedCollection<string, DirectoryWatcherEntryArray>(pathComparer);
             }
 
             path = vpath.resolve(this.currentDirectory, path);
@@ -641,7 +641,7 @@ namespace vfs {
     export class VirtualDirectory extends VirtualFileSystemEntry {
         protected _shadowRoot: VirtualDirectory | undefined;
         private _parent: VirtualDirectory;
-        private _entries: SortedCollection<string, VirtualEntry> | undefined;
+        private _entries: KeyedCollection<string, VirtualEntry> | undefined;
         private _resolver: FileSystemResolver | undefined;
         private _onChildFileSystemChange: (path: string, change: FileSystemChange) => void;
 
@@ -907,7 +907,7 @@ namespace vfs {
 
         protected getOwnEntries() {
             if (!this._entries) {
-                const entries = new SortedCollection<string, VirtualEntry>(this.fileSystem.stringComparer);
+                const entries = new KeyedCollection<string, VirtualEntry>(this.fileSystem.stringComparer);
                 const resolver = this._resolver;
                 const shadowRoot = this._shadowRoot;
                 if (resolver) {
@@ -1053,8 +1053,8 @@ namespace vfs {
     export class VirtualDirectorySymlink extends VirtualDirectory {
         private _targetPath: string;
         private _target: VirtualDirectory | undefined;
-        private _views: SortedCollection<string, VirtualEntryView> | undefined;
-        private _allViews: SortedCollection<string, VirtualEntryView> | undefined;
+        private _views: KeyedCollection<string, VirtualEntryView> | undefined;
+        private _allViews: KeyedCollection<string, VirtualEntryView> | undefined;
         private _onTargetParentChildRemoved: (entry: VirtualEntry) => void;
         private _onTargetChildRemoved: (entry: VirtualEntry) => void;
         private _onTargetChildAdded: (entry: VirtualEntry) => void;
@@ -1062,7 +1062,7 @@ namespace vfs {
 
         constructor(parent: VirtualDirectory, name: string, target: string) {
             super(parent, name);
-            this._views = new SortedCollection<string, VirtualEntryView>(this.fileSystem.stringComparer);
+            this._views = new KeyedCollection<string, VirtualEntryView>(this.fileSystem.stringComparer);
             this._targetPath = target;
             this._onTargetParentChildRemoved = entry => this.onTargetParentChildRemoved(entry);
             this._onTargetChildAdded = entry => this.onTargetChildAdded(entry);
@@ -1142,9 +1142,9 @@ namespace vfs {
             return target && target.removeFile(name) || false;
         }
 
-        protected getOwnEntries(): SortedCollection<string, VirtualEntryView> {
+        protected getOwnEntries(): KeyedCollection<string, VirtualEntryView> {
             if (!this._allViews) {
-                this._allViews = new SortedCollection<string, VirtualEntryView>(this.fileSystem.stringComparer);
+                this._allViews = new KeyedCollection<string, VirtualEntryView>(this.fileSystem.stringComparer);
                 const target = this.target;
                 if (target) {
                     for (const entry of target.getEntries()) {

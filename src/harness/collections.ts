@@ -53,9 +53,9 @@ namespace collections {
     }
 
     /**
-     * A collection of key/value pairs sorted by key.
+     * A collection of key/value pairs internally sorted by key.
      */
-    export class SortedCollection<K, V> {
+    export class KeyedCollection<K, V> {
         private _comparer: (a: K, b: K) => number;
         private _keys: K[] = [];
         private _values: V[] = [];
