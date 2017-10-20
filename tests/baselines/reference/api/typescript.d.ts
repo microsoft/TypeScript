@@ -2307,6 +2307,7 @@ declare namespace ts {
         LineFeed = 1,
     }
     interface LineAndCharacter {
+        /** 0-based. */
         line: number;
         character: number;
     }
@@ -2671,7 +2672,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const versionMajorMinor = "2.6";
+    const versionMajorMinor = "2.7";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -3678,17 +3679,11 @@ declare namespace ts {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
     }
-    interface EmitOutputDetailed extends EmitOutput {
-        diagnostics: Diagnostic[];
-        sourceMaps: SourceMapData[];
-        emittedSourceFiles: SourceFile[];
-    }
     interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
     }
-    function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput | EmitOutputDetailed;
 }
 declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
@@ -3884,6 +3879,7 @@ declare namespace ts {
         getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): HostCancellationToken;
+        getCurrentDirectory(): string;
         getDefaultLibFileName(options: CompilerOptions): string;
         log?(s: string): void;
         trace?(s: string): void;
@@ -3901,7 +3897,7 @@ declare namespace ts {
          */
         getCustomTransformers?(): CustomTransformers | undefined;
         isKnownTypesPackageName?(name: string): boolean;
-        installPackage?(options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult>;
+        installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -3949,11 +3945,10 @@ declare namespace ts {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
-        applyCodeActionCommand(fileName: string, action: CodeActionCommand): PromiseLike<ApplyCodeActionCommandResult>;
+        applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
-        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, isDetailed?: boolean): EmitOutput | EmitOutputDetailed;
         getProgram(): Program;
         dispose(): void;
     }

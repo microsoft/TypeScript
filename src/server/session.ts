@@ -131,7 +131,7 @@ namespace ts.server {
 
         const json = JSON.stringify(msg);
         if (verboseLogging) {
-            logger.info(msg.type + ":\n" + indent(json));
+            logger.info(`${msg.type}:${indent(json)}`);
         }
 
         const len = byteLength(json, "utf8");
@@ -1514,16 +1514,18 @@ namespace ts.server {
             }
 
             if (simplifiedResult) {
-                const file = result.renameFilename;
-                let location: protocol.Location | undefined;
-                if (file !== undefined && result.renameLocation !== undefined) {
-                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(file));
-                    location = renameScriptInfo.positionToLineOffset(result.renameLocation);
+                const { renameFilename, renameLocation, edits } = result;
+                let mappedRenameLocation: protocol.Location | undefined;
+                if (renameFilename !== undefined && renameLocation !== undefined) {
+                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename));
+                    const snapshot = renameScriptInfo.getSnapshot();
+                    const oldText = snapshot.getText(0, snapshot.getLength());
+                    mappedRenameLocation = getLocationInNewDocument(oldText, renameFilename, renameLocation, edits);
                 }
                 return {
-                    renameLocation: location,
-                    renameFilename: file,
-                    edits: result.edits.map(change => this.mapTextChangesToCodeEdits(project, change))
+                    renameLocation: mappedRenameLocation,
+                    renameFilename,
+                    edits: edits.map(change => this.mapTextChangesToCodeEdits(project, change))
                 };
             }
             else {
@@ -2039,5 +2041,27 @@ namespace ts.server {
     export interface HandlerResponse {
         response?: {};
         responseRequired?: boolean;
+    }
+
+    /* @internal */ // Exported only for tests
+    export function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: ReadonlyArray<FileTextChanges>): protocol.Location {
+        const newText = applyEdits(oldText, renameFilename, edits);
+        const { line, character } = computeLineAndCharacterOfPosition(computeLineStarts(newText), renameLocation);
+        return { line: line + 1, offset: character + 1 };
+    }
+
+    function applyEdits(text: string, textFilename: string, edits: ReadonlyArray<FileTextChanges>): string {
+        for (const { fileName, textChanges } of edits) {
+            if (fileName !== textFilename) {
+                continue;
+            }
+
+            for (let i = textChanges.length - 1; i >= 0; i--) {
+                const { newText, span: { start, length } } = textChanges[i];
+                text = text.slice(0, start) + newText + text.slice(start + length);
+            }
+        }
+
+        return text;
     }
 }

@@ -560,10 +560,10 @@ namespace ts {
             return emitResolver;
         }
 
-        function error(location: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): void {
+        function error(location: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
             const diagnostic = location
-                ? createDiagnosticForNode(location, message, arg0, arg1, arg2)
-                : createCompilerDiagnostic(message, arg0, arg1, arg2);
+                ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)
+                : createCompilerDiagnostic(message, arg0, arg1, arg2, arg3);
             diagnostics.add(diagnostic);
         }
 
@@ -4417,8 +4417,7 @@ namespace ts {
                         jsDocType = declarationType;
                     }
                     else if (jsDocType !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(jsDocType, declarationType)) {
-                        const name = getNameOfDeclaration(declaration);
-                        error(name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(name), typeToString(jsDocType), typeToString(declarationType));
+                        errorNextVariableDeclarationMustHaveSameType(symbol.valueDeclaration, jsDocType, declaration, declarationType);
                     }
                 }
                 else if (!jsDocType) {
@@ -6421,11 +6420,11 @@ namespace ts {
          * @param typeParameters The requested type parameters.
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScript: boolean) {
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean) {
             const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
-                if ((isJavaScript || numTypeArguments >= minTypeArgumentCount) && numTypeArguments <= numTypeParameters) {
+                if ((isJavaScriptImplicitAny || numTypeArguments >= minTypeArgumentCount) && numTypeArguments <= numTypeParameters) {
                     if (!typeArguments) {
                         typeArguments = [];
                     }
@@ -6434,12 +6433,12 @@ namespace ts {
                     // If a type parameter does not have a default type, or if the default type
                     // is a forward reference, the empty object type is used.
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        typeArguments[i] = getDefaultTypeArgumentType(isJavaScript);
+                        typeArguments[i] = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                     }
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
                         const mapper = createTypeMapper(typeParameters, typeArguments);
                         const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
-                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScript);
+                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                     }
                 }
             }
@@ -6875,21 +6874,25 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                const isJavascript = isInJavaScriptFile(node);
-                if (!isJavascript && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
-                    error(node,
-                        minTypeArgumentCount === typeParameters.length
-                            ? Diagnostics.Generic_type_0_requires_1_type_argument_s
-                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
-                        typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType),
-                        minTypeArgumentCount,
-                        typeParameters.length);
+                const isJs = isInJavaScriptFile(node);
+                const isJsImplicitAny = !compilerOptions.noImplicitAny && isJs;
+                if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
+                    const missingAugmentsTag = isJs && node.parent.kind !== SyntaxKind.JSDocAugmentsTag;
+                    const diag = minTypeArgumentCount === typeParameters.length
+                        ? missingAugmentsTag
+                            ? Diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
+                            : Diagnostics.Generic_type_0_requires_1_type_argument_s
+                        : missingAugmentsTag
+                            ? Diagnostics.Expected_0_1_type_arguments_provide_these_with_an_extends_tag
+                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
+                    const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
+                    error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
                     return unknownType;
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJavascript));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJsImplicitAny));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {
@@ -7030,13 +7033,11 @@ namespace ts {
         function getIntendedTypeFromJSDocTypeReference(node: TypeReferenceNode): Type {
             if (isIdentifier(node.typeName)) {
                 if (node.typeName.escapedText === "Object") {
-                    if (node.typeArguments && node.typeArguments.length === 2) {
+                    if (isJSDocIndexSignature(node)) {
                         const indexed = getTypeFromTypeNode(node.typeArguments[0]);
                         const target = getTypeFromTypeNode(node.typeArguments[1]);
                         const index = createIndexInfo(target, /*isReadonly*/ false);
-                        if (indexed === stringType || indexed === numberType) {
-                            return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType && index, indexed === numberType && index);
-                        }
+                        return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType && index, indexed === numberType && index);
                     }
                     return anyType;
                 }
@@ -10667,29 +10668,27 @@ namespace ts {
             const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
             const members = createSymbolTable();
             for (const prop of properties) {
-                const inferredPropType = inferTargetType(getTypeOfSymbol(prop));
-                if (!inferredPropType) {
+                const propType = getTypeOfSymbol(prop);
+                // If any property contains context sensitive functions that have been skipped, the source type
+                // is incomplete and we can't infer a meaningful input type.
+                if (propType.flags & TypeFlags.ContainsAnyFunctionType) {
                     return undefined;
                 }
                 const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName);
                 inferredProp.checkFlags = readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0;
                 inferredProp.declarations = prop.declarations;
-                inferredProp.type = inferredPropType;
+                inferredProp.type = inferTargetType(propType);
                 members.set(prop.escapedName, inferredProp);
             }
             if (indexInfo) {
-                const inferredIndexType = inferTargetType(indexInfo.type);
-                if (!inferredIndexType) {
-                    return undefined;
-                }
-                indexInfo = createIndexInfo(inferredIndexType, readonlyMask && indexInfo.isReadonly);
+                indexInfo = createIndexInfo(inferTargetType(indexInfo.type), readonlyMask && indexInfo.isReadonly);
             }
             return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
 
             function inferTargetType(sourceType: Type): Type {
                 inference.candidates = undefined;
                 inferTypes(inferences, sourceType, templateType);
-                return inference.candidates && getUnionType(inference.candidates, /*subtypeReduction*/ true);
+                return inference.candidates ? getUnionType(inference.candidates, /*subtypeReduction*/ true) : emptyObjectType;
             }
         }
 
@@ -11378,6 +11377,16 @@ namespace ts {
         }
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
+            if (type.flags & TypeFlags.IndexedAccess) {
+                // TODO (weswig): This is a substitute for a lazy negated type to remove the types indicated by the TypeFacts from the (potential) union the IndexedAccess refers to
+                //  - See discussion in https://github.com/Microsoft/TypeScript/pull/19275 for details, and test `strictNullNotNullIndexTypeShouldWork` for current behavior
+                const baseConstraint = getBaseConstraintOfType(type) || emptyObjectType;
+                const result = filterType(baseConstraint, t => (getTypeFacts(t) & include) !== 0);
+                if (result !== baseConstraint) {
+                    return result;
+                }
+                return type;
+            }
             return filterType(type, t => (getTypeFacts(t) & include) !== 0);
         }
 
@@ -13044,12 +13053,14 @@ namespace ts {
 
             // at this point the only legal case for parent is ClassLikeDeclaration
             const classLikeDeclaration = <ClassLikeDeclaration>container.parent;
+            if (!getClassExtendsHeritageClauseElement(classLikeDeclaration)) {
+                error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
+                return unknownType;
+            }
+
             const classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(classLikeDeclaration));
             const baseClassType = classType && getBaseTypes(classType)[0];
             if (!baseClassType) {
-                if (!getClassExtendsHeritageClauseElement(classLikeDeclaration)) {
-                    error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
-                }
                 return unknownType;
             }
 
@@ -19186,7 +19197,10 @@ namespace ts {
                             // There is no resolved symbol cached if the type resolved to a builtin
                             // via JSDoc type reference resolution (eg, Boolean became boolean), none
                             // of which are generic when they have no associated symbol
-                            error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
+                            // (additionally, JSDoc's index signature syntax, Object<string, T> actually uses generic syntax without being generic)
+                            if (!isJSDocIndexSignature(node)) {
+                                error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
+                            }
                             return;
                         }
                         let typeParameters = symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters;
@@ -20775,7 +20789,7 @@ namespace ts {
                 // initializer is consistent with type associated with the node
                 const declarationType = convertAutoToAny(getWidenedTypeForVariableLikeDeclaration(node));
                 if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
-                    error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
+                    errorNextVariableDeclarationMustHaveSameType(symbol.valueDeclaration, type, node, declarationType);
                 }
                 if (node.initializer) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, /*headMessage*/ undefined);
@@ -20797,6 +20811,21 @@ namespace ts {
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
             }
+        }
+
+        function errorNextVariableDeclarationMustHaveSameType(firstDeclaration: Declaration, firstType: Type, nextDeclaration: Declaration, nextType: Type): void {
+            const firstSourceFile = getSourceFileOfNode(firstDeclaration);
+            const firstSpan = getErrorSpanForNode(firstSourceFile, getNameOfDeclaration(firstDeclaration) || firstDeclaration);
+            const firstLocation = getLineAndCharacterOfPosition(firstSourceFile, firstSpan.start);
+            const firstLocationDescription = firstSourceFile.fileName + " " + firstLocation.line + ":" + firstLocation.character;
+            const nextDeclarationName = getNameOfDeclaration(nextDeclaration);
+            error(
+                nextDeclarationName,
+                Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_has_type_1_at_2_but_here_has_type_3,
+                declarationNameToString(nextDeclarationName),
+                typeToString(firstType),
+                firstLocationDescription,
+                typeToString(nextType));
         }
 
         function areDeclarationFlagsIdentical(left: Declaration, right: Declaration) {
