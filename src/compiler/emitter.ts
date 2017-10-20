@@ -1867,11 +1867,9 @@ namespace ts {
             emitTypeParameters(node, node.typeParameters);
             emitList(node, node.heritageClauses, ListFormat.ClassHeritageClauses);
 
-            pushNameGenerationScope();
             write(" {");
             emitList(node, node.members, ListFormat.ClassMembers);
             write("}");
-            popNameGenerationScope();
 
             if (indentedFlag) {
                 decreaseIndent();
@@ -2867,8 +2865,18 @@ namespace ts {
             if (name.autoGenerateKind === GeneratedIdentifierKind.Node) {
                 // Node names generate unique names based on their original node
                 // and are cached based on that node's id.
+                let flags: TempFlags;
+                if (name.skipNameGenerationScope) {
+                    flags = tempFlags;
+                    popNameGenerationScope();
+                }
                 const node = getNodeForGeneratedName(name);
-                return generateNameCached(node);
+                const result = generateNameCached(node);
+                if (name.skipNameGenerationScope) {
+                    pushNameGenerationScope();
+                    tempFlags = flags;
+                }
+                return result;
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique

@@ -626,6 +626,7 @@ namespace ts {
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode>;        // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics.
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
+        /*@internal*/ skipNameGenerationScope?: boolean;          // Should skip a name generation scope when generating the name for this identifier
     }
 
     // Transient identifier node (marked by id === -1)

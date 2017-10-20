@@ -8,3 +8,4 @@ class C {
 //// [parserComputedPropertyName31.js]
 class C {
 }
+var _a, _b;

@@ -168,11 +168,14 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier {
+    export function getGeneratedNameForNode(node: Node): Identifier;
+    /*@internal*/ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier;
+    export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
         const name = createIdentifier("");
         name.autoGenerateKind = GeneratedIdentifierKind.Node;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
+        name.skipNameGenerationScope = !!shouldSkipNameGenerationScope;
         nextAutoGenerateId++;
         return name;
     }

@@ -9,6 +9,8 @@ class C {
 class C {
     constructor() {
         // yes ASI
-        this[e] = id++;
+        this[_a] = id++;
     }
 }
+_a = e, _b = e2;
+var _a, _b;
