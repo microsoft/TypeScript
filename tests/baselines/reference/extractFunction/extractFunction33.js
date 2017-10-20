@@ -1,6 +1,6 @@
 // ==ORIGINAL==
 function F() {
-    function G() { }
+    /*[#|*/function G() { }/*|]*/
 }
 // ==SCOPE::Extract to inner function in function 'F'==
 function F() {
@@ -14,6 +14,7 @@ function F() {
 function F() {
     /*RENAME*/newFunction();
 }
+
 function newFunction() {
     function G() { }
 }

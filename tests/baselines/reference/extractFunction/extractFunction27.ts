@@ -2,7 +2,7 @@
 class C {
     M1() { }
     M2() {
-        return 1;
+        /*[#|*/return 1;/*|]*/
     }
     constructor() { }
     M3() { }
@@ -29,6 +29,7 @@ class C {
     constructor() { }
     M3() { }
 }
+
 function newFunction() {
     return 1;
 }

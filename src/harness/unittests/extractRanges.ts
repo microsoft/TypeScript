@@ -153,15 +153,13 @@ namespace ts {
                 }
             `);
             testExtractRange(`
-                function f() {
-                    return [$|1 + [#|2 + 3|]|];
+                function f(x: number) {
+                    [#|[$|try {
+                        x++;
                     }
-                }
-            `);
-            testExtractRange(`
-                function f() {
-                    return [$|1 + 2 + [#|3 + 4|]|];
-                    }
+                    finally {
+                        return 1;
+                    }|]|]
                 }
             `);
         });
@@ -311,7 +309,35 @@ switch (x) {
         testExtractRangeFailed("extractRangeFailed9",
         `var x = ([#||]1 + 2);`,
         [
-            "Cannot extract empty range."
+            refactor.extractSymbol.Messages.CannotExtractEmpty.message
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed10",
+        `
+            function f() {
+                return 1 + [#|2 + 3|];
+                }
+            }
+        `,
+        [
+            refactor.extractSymbol.Messages.CannotExtractRange.message
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed11",
+        `
+            function f(x: number) {
+                while (true) {
+                    [#|try {
+                        x++;
+                    }
+                    finally {
+                        break;
+                    }|]
+                }
+            }
+        `,
+        [
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.CannotExtractIdentifier.message]);

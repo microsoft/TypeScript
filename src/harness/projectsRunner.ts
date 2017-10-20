@@ -254,7 +254,7 @@ class ProjectRunner extends RunnerBase {
                         if (option) {
                             const optType = option.type;
                             let value = <any>testCase[name];
-                            if (typeof optType !== "string") {
+                            if (!ts.isString(optType)) {
                                 const key = value.toLowerCase();
                                 const optTypeValue = optType.get(key);
                                 if (optTypeValue) {
@@ -443,7 +443,7 @@ class ProjectRunner extends RunnerBase {
 
         const name = "Compiling project for " + testCase.scenario + ": testcase " + testCaseFileName;
 
-        describe("Projects tests", () => {
+        describe("projects tests", () => {
             describe(name, () => {
                 function verifyCompilerResults(moduleKind: ts.ModuleKind) {
                     let compilerResult: BatchCompileProjectTestCaseResult;

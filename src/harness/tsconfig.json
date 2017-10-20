@@ -1,4 +1,4 @@
-﻿{
+{
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "removeComments": false,
@@ -45,6 +45,7 @@
         "../compiler/declarationEmitter.ts",
         "../compiler/emitter.ts",
         "../compiler/program.ts",
+        "../compiler/builder.ts",
         "../compiler/commandLineParser.ts",
         "../compiler/diagnosticInformationMap.generated.ts",
         "../services/breakpoints.ts",
@@ -96,6 +97,7 @@
         "./parallel/host.ts",
         "./parallel/worker.ts",
         "runner.ts",
+        "virtualFileSystemWithWatch.ts",
         "../server/protocol.ts",
         "../server/session.ts",
         "../server/client.ts",
@@ -112,14 +114,15 @@
         "./unittests/convertToBase64.ts",
         "./unittests/transpile.ts",
         "./unittests/reuseProgramStructure.ts",
-        "./unittests/cachingInServerLSHost.ts",
         "./unittests/moduleResolution.ts",
         "./unittests/tsconfigParsing.ts",
+        "./unittests/builder.ts",
         "./unittests/commandLineParsing.ts",
         "./unittests/configurationExtension.ts",
         "./unittests/convertCompilerOptionsFromJson.ts",
         "./unittests/convertTypeAcquisitionFromJson.ts",
         "./unittests/tsserverProjectSystem.ts",
+        "./unittests/tscWatchMode.ts",
         "./unittests/matchFiles.ts",
         "./unittests/initializeTSConfig.ts",
         "./unittests/compileOnSave.ts",
@@ -135,6 +138,8 @@
         "./unittests/textChanges.ts",
         "./unittests/telemetry.ts",
         "./unittests/languageService.ts",
-        "./unittests/programMissingFiles.ts"
+        "./unittests/programMissingFiles.ts",
+        "./unittests/publicApi.ts",
+        "./unittests/hostNewLineSupport.ts"
     ]
 }

@@ -546,6 +546,8 @@ namespace ts {
                     return emitTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.FunctionType:
                     return emitFunctionType(<FunctionTypeNode>node);
+                case SyntaxKind.JSDocFunctionType:
+                    return emitJSDocFunctionType(node as JSDocFunctionType);
                 case SyntaxKind.ConstructorType:
                     return emitConstructorType(<ConstructorTypeNode>node);
                 case SyntaxKind.TypeQuery:
@@ -574,6 +576,20 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
+                case SyntaxKind.JSDocAllType:
+                    write("*");
+                    return;
+                case SyntaxKind.JSDocUnknownType:
+                    write("?");
+                    return;
+                case SyntaxKind.JSDocNullableType:
+                    return emitJSDocNullableType(node as JSDocNullableType);
+                case SyntaxKind.JSDocNonNullableType:
+                    return emitJSDocNonNullableType(node as JSDocNonNullableType);
+                case SyntaxKind.JSDocOptionalType:
+                    return emitJSDocOptionalType(node as JSDocOptionalType);
+                case SyntaxKind.JSDocVariadicType:
+                    return emitJSDocVariadicType(node as JSDocVariadicType);
 
                 // Binding patterns
                 case SyntaxKind.ObjectBindingPattern:
@@ -914,9 +930,16 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emitIfPresent(node.dotDotDotToken);
-            emit(node.name);
+            if (node.name) {
+                emit(node.name);
+            }
             emitIfPresent(node.questionToken);
-            emitWithPrefix(": ", node.type);
+            if (node.parent && node.parent.kind === SyntaxKind.JSDocFunctionType && !node.name) {
+                emit(node.type);
+            }
+            else {
+                emitWithPrefix(": ", node.type);
+            }
             emitExpressionWithPrefix(" = ", node.initializer);
         }
 
@@ -1035,6 +1058,29 @@ namespace ts {
             emit(node.type);
         }
 
+        function emitJSDocFunctionType(node: JSDocFunctionType) {
+            write("function");
+            emitParameters(node, node.parameters);
+            write(":");
+            emit(node.type);
+        }
+
+
+        function emitJSDocNullableType(node: JSDocNullableType) {
+            write("?");
+            emit(node.type);
+        }
+
+        function emitJSDocNonNullableType(node: JSDocNonNullableType) {
+            write("!");
+            emit(node.type);
+        }
+
+        function emitJSDocOptionalType(node: JSDocOptionalType) {
+            emit(node.type);
+            write("=");
+        }
+
         function emitConstructorType(node: ConstructorTypeNode) {
             write("new ");
             emitTypeParameters(node, node.typeParameters);
@@ -1058,6 +1104,11 @@ namespace ts {
         function emitArrayType(node: ArrayTypeNode) {
             emit(node.elementType);
             write("[]");
+        }
+
+        function emitJSDocVariadicType(node: JSDocVariadicType) {
+            write("...");
+            emit(node.type);
         }
 
         function emitTupleType(node: TupleTypeNode) {
@@ -1226,7 +1277,7 @@ namespace ts {
                 // check if numeric literal is a decimal literal that was originally written with a dot
                 const text = getLiteralTextOfNode(<LiteralExpression>expression);
                 return !expression.numericLiteralFlags
-                    && text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+                    && !stringContains(text, tokenToString(SyntaxKind.DotToken));
             }
             else if (isPropertyAccessExpression(expression) || isElementAccessExpression(expression)) {
                 // check if constant enum value is integer
@@ -2766,7 +2817,7 @@ namespace ts {
                 return generateName(node);
             }
             else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
-                return unescapeLeadingUnderscores(node.escapedText);
+                return idText(node);
             }
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 return getTextOfNode((<StringLiteral>node).textSourceNode, includeTrivia);
@@ -2986,7 +3037,7 @@ namespace ts {
                 case GeneratedIdentifierKind.Loop:
                     return makeTempVariableName(TempFlags._i);
                 case GeneratedIdentifierKind.Unique:
-                    return makeUniqueName(unescapeLeadingUnderscores(name.escapedText));
+                    return makeUniqueName(idText(name));
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");

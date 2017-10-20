@@ -1,7 +1,7 @@
 // ==ORIGINAL==
 class C {
     M<T1, T2>(t1: T1, t2: T2) {
-        t1.toString();
+        /*[#|*/t1.toString()/*|]*/;
     }
 }
 // ==SCOPE::Extract to method in class 'C'==
@@ -20,6 +20,7 @@ class C {
         /*RENAME*/newFunction<T1>(t1);
     }
 }
+
 function newFunction<T1>(t1: T1) {
     t1.toString();
 }

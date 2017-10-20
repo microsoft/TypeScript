@@ -38,20 +38,45 @@ namespace Harness.Parallel.Host {
         return undefined;
     }
 
-    function hashName(runner: TestRunnerKind, test: string) {
+    function hashName(runner: TestRunnerKind | "unittest", test: string) {
         return `tsrunner-${runner}://${test}`;
     }
 
+    let tasks: { runner: TestRunnerKind | "unittest", file: string, size: number }[] = [];
+    const newTasks: { runner: TestRunnerKind | "unittest", file: string, size: number }[] = [];
+    let unknownValue: string | undefined;
     export function start() {
-        initializeProgressBarsDependencies();
-        console.log("Discovering tests...");
-        const discoverStart = +(new Date());
-        const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
-        let tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
-        const newTasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
         const perfData = readSavedPerfData(configOption);
         let totalCost = 0;
-        let unknownValue: string | undefined;
+        if (runUnitTests) {
+            (global as any).describe = (suiteName: string) => {
+                // Note, sub-suites are not indexed (we assume such granularity is not required)
+                let size = 0;
+                if (perfData) {
+                    size = perfData[hashName("unittest", suiteName)];
+                    if (size === undefined) {
+                        newTasks.push({ runner: "unittest", file: suiteName, size: 0 });
+                        unknownValue = suiteName;
+                        return;
+                    }
+                }
+                tasks.push({ runner: "unittest", file: suiteName, size });
+                totalCost += size;
+            };
+        }
+        else {
+            (global as any).describe = ts.noop;
+        }
+
+        setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
+    }
+
+    function startDelayed(perfData: {[testHash: string]: number}, totalCost: number) {
+        initializeProgressBarsDependencies();
+        console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
+        console.log("Discovering runner-based tests...");
+        const discoverStart = +(new Date());
+        const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
         for (const runner of runners) {
             const files = runner.enumerateTestFiles();
             for (const file of files) {
@@ -87,8 +112,7 @@ namespace Harness.Parallel.Host {
         }
         tasks.sort((a, b) => a.size - b.size);
         tasks = tasks.concat(newTasks);
-        // 1 fewer batches than threads to account for unittests running on the final thread
-        const batchCount = runners.length === 1 ? workerCount : workerCount - 1;
+        const batchCount = workerCount;
         const packfraction = 0.9;
         const chunkSize = 1000; // ~1KB or 1s for sending batches near the end of a test
         const batchSize = (totalCost / workerCount) * packfraction; // Keep spare tests for unittest thread in reserve
@@ -113,7 +137,7 @@ namespace Harness.Parallel.Host {
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests: runners.length === 1 ? false : i === workerCount - 1 };
+            const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
             Harness.IO.writeFile(configPath, JSON.stringify(config));
             const child = fork(__filename, [`--config="${configPath}"`]);
@@ -187,7 +211,7 @@ namespace Harness.Parallel.Host {
         // It's only really worth doing an initial batching if there are a ton of files to go through
         if (totalFiles > 1000) {
             console.log("Batching initial test lists...");
-            const batches: { runner: TestRunnerKind, file: string, size: number }[][] = new Array(batchCount);
+            const batches: { runner: TestRunnerKind | "unittest", file: string, size: number }[][] = new Array(batchCount);
             const doneBatching = new Array(batchCount);
             let scheduledTotal = 0;
             batcher: while (true) {
@@ -230,7 +254,7 @@ namespace Harness.Parallel.Host {
                 if (payload) {
                     worker.send({ type: "batch", payload });
                 }
-                else { // Unittest thread - send off just one test
+                else { // Out of batches, send off just one test
                     const payload = tasks.pop();
                     ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
                     worker.send({ type: "test", payload });
@@ -312,6 +336,9 @@ namespace Harness.Parallel.Host {
         function makeMochaTest(test: ErrorInfo) {
             return {
                 fullTitle: () => {
+                    return test.name.join(" ");
+                },
+                titlePath: () => {
                     return test.name;
                 },
                 err: {
