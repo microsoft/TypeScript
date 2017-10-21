@@ -9142,8 +9142,12 @@ namespace ts {
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            source = getRegularTypeOfLiteralType(source);
-            target = getRegularTypeOfLiteralType(target);
+            if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
+                source = (<LiteralType>source).regularType;
+            }
+            if (target.flags & TypeFlags.StringOrNumberLiteral && target.flags & TypeFlags.FreshLiteral) {
+                target = (<LiteralType>target).regularType;
+            }
             if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
             }
@@ -9274,8 +9278,12 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
-                source = getRegularTypeOfLiteralType(source);
-                target = getRegularTypeOfLiteralType(target);
+                if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
+                    source = (<LiteralType>source).regularType;
+                }
+                if (target.flags & TypeFlags.StringOrNumberLiteral && target.flags & TypeFlags.FreshLiteral) {
+                    target = (<LiteralType>target).regularType;
+                }
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
 
@@ -17205,36 +17213,6 @@ namespace ts {
             return globalESSymbol === resolveName(left, "Symbol" as __String, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
         }
 
-        function isCommonJsRequire(node: Node) {
-            if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
-                return false;
-            }
-
-            // Make sure require is not a local function
-            if (!isIdentifier(node.expression)) throw Debug.fail();
-            const resolvedRequire = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
-            if (!resolvedRequire) {
-                // project does not contain symbol named 'require' - assume commonjs require
-                return true;
-            }
-            // project includes symbol named 'require' - make sure that it it ambient and local non-alias
-            if (resolvedRequire.flags & SymbolFlags.Alias) {
-                return false;
-            }
-
-            const targetDeclarationKind = resolvedRequire.flags & SymbolFlags.Function
-                ? SyntaxKind.FunctionDeclaration
-                : resolvedRequire.flags & SymbolFlags.Variable
-                    ? SyntaxKind.VariableDeclaration
-                    : SyntaxKind.Unknown;
-            if (targetDeclarationKind !== SyntaxKind.Unknown) {
-                const decl = getDeclarationOfKind(resolvedRequire, targetDeclarationKind);
-                // function/variable declaration should be ambient
-                return isInAmbientContext(decl);
-            }
-            return false;
-        }
-
         function checkImportCallExpression(node: ImportCall): Type {
             // Check grammar of dynamic import
             checkGrammarArguments(node.arguments) || checkGrammarImportCallExpression(node);
@@ -17285,6 +17263,36 @@ namespace ts {
                 return synthType.syntheticType;
             }
             return type;
+        }
+
+        function isCommonJsRequire(node: Node) {
+            if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
+                return false;
+            }
+
+            // Make sure require is not a local function
+            if (!isIdentifier(node.expression)) throw Debug.fail();
+            const resolvedRequire = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+            if (!resolvedRequire) {
+                // project does not contain symbol named 'require' - assume commonjs require
+                return true;
+            }
+            // project includes symbol named 'require' - make sure that it it ambient and local non-alias
+            if (resolvedRequire.flags & SymbolFlags.Alias) {
+                return false;
+            }
+
+            const targetDeclarationKind = resolvedRequire.flags & SymbolFlags.Function
+                ? SyntaxKind.FunctionDeclaration
+                : resolvedRequire.flags & SymbolFlags.Variable
+                    ? SyntaxKind.VariableDeclaration
+                    : SyntaxKind.Unknown;
+            if (targetDeclarationKind !== SyntaxKind.Unknown) {
+                const decl = getDeclarationOfKind(resolvedRequire, targetDeclarationKind);
+                // function/variable declaration should be ambient
+                return isInAmbientContext(decl);
+            }
+            return false;
         }
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
@@ -24384,11 +24392,9 @@ namespace ts {
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
-            let type: Type = unknownType;
-            if (symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))) {
-                type = getTypeOfSymbol(symbol);
-                type = getWidenedLiteralType(type);
-            }
+            let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
+                ? getWidenedLiteralType(getTypeOfSymbol(symbol))
+                : unknownType;
             if (flags & TypeFormatFlags.AddUndefined) {
                 type = getNullableType(type, TypeFlags.Undefined);
             }
