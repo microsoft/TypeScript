@@ -5459,7 +5459,7 @@ namespace ts {
             if (!(<InterfaceTypeWithDeclaredMembers>type).declaredProperties) {
                 const symbol = type.symbol;
                 const members = getMembersOfSymbol(symbol);
-                (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(getMembersOfSymbol(symbol));
+                (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(members);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.Call));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.New));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
@@ -14222,17 +14222,10 @@ namespace ts {
 
                     typeFlags |= type.flags;
 
-                    let prop: TransientSymbol;
-                    if (hasLateBindableName(memberDecl)) {
-                        const nameType = checkComputedPropertyName(memberDecl.name);
-                        if (nameType && isTypeUsableAsLateBoundName(nameType)) {
-                            prop = createSymbol(SymbolFlags.Property | SymbolFlags.Late | member.flags, getLateBoundNameFromType(nameType));
-                        }
-                    }
-
-                    if (!prop) {
-                        prop = createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
-                    }
+                    const nameType = hasLateBindableName(memberDecl) ? checkComputedPropertyName(memberDecl.name) : undefined;
+                    const prop = nameType && isTypeUsableAsLateBoundName(nameType)
+                        ? createSymbol(SymbolFlags.Property | SymbolFlags.Late | member.flags, getLateBoundNameFromType(nameType))
+                        : createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
 
                     if (inDestructuringPattern) {
                         // If object literal is an assignment pattern and if the assignment pattern specifies a default value
