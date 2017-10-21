@@ -1443,6 +1443,10 @@ declare namespace ts {
     interface JSDocUnknownTag extends JSDocTag {
         kind: SyntaxKind.JSDocTag;
     }
+    /**
+     * Note that `@extends` is a synonym of `@augments`.
+     * Both tags are represented by this interface.
+     */
     interface JSDocAugmentsTag extends JSDocTag {
         kind: SyntaxKind.JSDocAugmentsTag;
         class: ExpressionWithTypeArguments & {
@@ -1474,7 +1478,7 @@ declare namespace ts {
     interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
         parent: JSDoc;
         name: EntityName;
-        typeExpression: JSDocTypeExpression;
+        typeExpression?: JSDocTypeExpression;
         /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
         isNameFirst: boolean;
         isBracketed: boolean;
@@ -1728,6 +1732,10 @@ declare namespace ts {
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
+        /**
+         * @deprecated Use the createX factory functions or XToY typechecker methods and `createPrinter` or the `xToString` methods instead
+         * This will be removed in a future version.
+         */
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
@@ -2160,6 +2168,7 @@ declare namespace ts {
     interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
+        scriptKind?: ScriptKind;
     }
     interface DiagnosticMessage {
         key: string;
@@ -2308,6 +2317,7 @@ declare namespace ts {
         LineFeed = 1,
     }
     interface LineAndCharacter {
+        /** 0-based. */
         line: number;
         character: number;
     }
@@ -2672,7 +2682,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const versionMajorMinor = "2.6";
+    const versionMajorMinor = "2.7";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -2931,6 +2941,8 @@ declare namespace ts {
     function getJSDocReturnType(node: Node): TypeNode | undefined;
     /** Get all JSDoc tags related to a node, including those on parent nodes. */
     function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined;
+    /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
+    function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> | undefined;
 }
 declare namespace ts {
     function isNumericLiteral(node: Node): node is NumericLiteral;
@@ -3123,6 +3135,8 @@ declare namespace ts {
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
     function isJSDocCommentContainingNode(node: Node): boolean;
+    function isSetAccessor(node: Node): node is SetAccessorDeclaration;
+    function isGetAccessor(node: Node): node is GetAccessorDeclaration;
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
@@ -3152,10 +3166,11 @@ declare namespace ts {
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
 }
 declare namespace ts {
-    function getEffectiveTypeRoots(options: CompilerOptions, host: {
-        directoryExists?: (directoryName: string) => boolean;
-        getCurrentDirectory?: () => string;
-    }): string[] | undefined;
+    interface GetEffectiveTypeRootsHost {
+        directoryExists?(directoryName: string): boolean;
+        getCurrentDirectory?(): string;
+    }
+    function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined;
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
@@ -3675,17 +3690,11 @@ declare namespace ts {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
     }
-    interface EmitOutputDetailed extends EmitOutput {
-        diagnostics: Diagnostic[];
-        sourceMaps: SourceMapData[];
-        emittedSourceFiles: SourceFile[];
-    }
     interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
     }
-    function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput | EmitOutputDetailed;
 }
 declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
@@ -3867,7 +3876,11 @@ declare namespace ts {
     interface HostCancellationToken {
         isCancellationRequested(): boolean;
     }
-    interface LanguageServiceHost {
+    interface InstallPackageOptions {
+        fileName: Path;
+        packageName: string;
+    }
+    interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -3889,12 +3902,13 @@ declare namespace ts {
         getTypeRootsVersion?(): number;
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-        directoryExists?(directoryName: string): boolean;
         getDirectories?(directoryName: string): string[];
         /**
          * Gets a set of custom transformers to use during emit.
          */
         getCustomTransformers?(): CustomTransformers | undefined;
+        isKnownTypesPackageName?(name: string): boolean;
+        installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -3912,7 +3926,7 @@ declare namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
         getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
@@ -3942,12 +3956,15 @@ declare namespace ts {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
-        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, isDetailed?: boolean): EmitOutput | EmitOutputDetailed;
         getProgram(): Program;
         dispose(): void;
+    }
+    interface ApplyCodeActionCommandResult {
+        successMessage: string;
     }
     interface Classifications {
         spans: number[];
@@ -4013,6 +4030,14 @@ declare namespace ts {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileTextChanges[];
+        /**
+         * If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
+         * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
+         */
+        commands?: CodeActionCommand[];
+    }
+    type CodeActionCommand = InstallPackageAction;
+    interface InstallPackageAction {
     }
     /**
      * A set of one or more available refactoring actions, grouped under a parent refactoring.
@@ -4061,6 +4086,7 @@ declare namespace ts {
         edits: FileTextChanges[];
         renameFilename: string | undefined;
         renameLocation: number | undefined;
+        commands?: CodeActionCommand[];
     }
     interface TextInsertion {
         newText: string;
@@ -4280,6 +4306,7 @@ declare namespace ts {
          * be used in that case
          */
         replacementSpan?: TextSpan;
+        hasAction?: true;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -4288,6 +4315,7 @@ declare namespace ts {
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
+        codeActions?: CodeAction[];
     }
     interface OutliningSpan {
         /** The span of the document to actually collapse. */

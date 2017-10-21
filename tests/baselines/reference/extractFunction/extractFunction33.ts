@@ -14,6 +14,7 @@ function F() {
 function F() {
     /*RENAME*/newFunction();
 }
+
 function newFunction() {
     function G() { }
 }

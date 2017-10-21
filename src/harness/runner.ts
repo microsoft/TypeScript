@@ -82,7 +82,7 @@ let testConfigContent =
 
 let taskConfigsFolder: string;
 let workerCount: number;
-let runUnitTests = true;
+let runUnitTests: boolean | undefined;
 let noColors = false;
 
 interface TestConfig {
@@ -108,9 +108,7 @@ function handleTestConfig() {
         if (testConfig.light) {
             Harness.lightMode = true;
         }
-        if (testConfig.runUnitTests !== undefined) {
-            runUnitTests = testConfig.runUnitTests;
-        }
+        runUnitTests = testConfig.runUnitTests;
         if (testConfig.workerCount) {
             workerCount = +testConfig.workerCount;
         }
@@ -198,6 +196,9 @@ function handleTestConfig() {
         runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
         runners.push(new FourSlashRunner(FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
+    }
+    if (runUnitTests === undefined) {
+        runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
     }
 }
 

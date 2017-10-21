@@ -30,6 +30,7 @@ function F<T>(t1: T) {
         /*RENAME*/newFunction<T, U>(t2);
     }
 }
+
 function newFunction<T, U extends T[]>(t2: U) {
     t2.toString();
 }

@@ -195,7 +195,7 @@ namespace ts.Completions.PathCompletions {
                 const normalizedPrefixDirectory = getDirectoryPath(normalizedPrefix);
                 const normalizedPrefixBase = getBaseFileName(normalizedPrefix);
 
-                const fragmentHasPath = fragment.indexOf(directorySeparator) !== -1;
+                const fragmentHasPath = stringContains(fragment, directorySeparator);
 
                 // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
                 const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + getDirectoryPath(fragment)) : normalizedPrefixDirectory;
@@ -235,7 +235,7 @@ namespace ts.Completions.PathCompletions {
 
     function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string, options: CompilerOptions, typeChecker: TypeChecker, host: LanguageServiceHost): string[] {
         // Check If this is a nested module
-        const isNestedModule = fragment.indexOf(directorySeparator) !== -1;
+        const isNestedModule = stringContains(fragment, directorySeparator);
         const moduleNameFragment = isNestedModule ? fragment.substr(0, fragment.lastIndexOf(directorySeparator)) : undefined;
 
         // Get modules that the type checker picked up
@@ -339,7 +339,7 @@ namespace ts.Completions.PathCompletions {
             }
         }
         else if (host.getDirectories) {
-            let typeRoots: string[];
+            let typeRoots: ReadonlyArray<string>;
             try {
                 // Wrap in try catch because getEffectiveTypeRoots touches the filesystem
                 typeRoots = getEffectiveTypeRoots(options, host);
