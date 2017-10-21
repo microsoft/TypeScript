@@ -90,8 +90,8 @@ declare function foo<T extends Bar>(x: string | T): T;
 >T : T
 
 const y = foo({
->y : Bar
->foo({    bar(x) { // Should be typed number => void    }}) : Bar
+>y : { bar(x: number): void; }
+>foo({    bar(x) { // Should be typed number => void    }}) : { bar(x: number): void; }
 >foo : <T extends Bar>(x: string | T) => T
 >{    bar(x) { // Should be typed number => void    }} : { bar(x: number): void; }
 
