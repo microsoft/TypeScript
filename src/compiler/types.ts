@@ -3244,6 +3244,7 @@ namespace ts {
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
         MarkerType              = 1 << 26,  // Marker type used for variance probing
+        /* @internal */
         ContainsTypeVariable    = 1 << 27,  // Flag indicating the type contains type variables
 
         /* @internal */
