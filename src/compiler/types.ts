@@ -3627,6 +3627,7 @@ namespace ts {
     export interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
+        scriptKind?: ScriptKind;
     }
 
     export interface DiagnosticMessage {
@@ -3811,9 +3812,10 @@ namespace ts {
     }
 
     export interface LineAndCharacter {
+        /** 0-based. */
         line: number;
         /*
-         * This value denotes the character position in line and is different from the 'column' because of tab characters.
+         * 0-based. This value denotes the character position in line and is different from the 'column' because of tab characters.
          */
         character: number;
     }
