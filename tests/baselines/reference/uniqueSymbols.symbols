@@ -396,3 +396,275 @@ const arrayOfConstCall = [constCall];
 >arrayOfConstCall : Symbol(arrayOfConstCall, Decl(uniqueSymbols.ts, 112, 5))
 >constCall : Symbol(constCall, Decl(uniqueSymbols.ts, 1, 5))
 
+// unique symbol widening in expressions
+declare const s: unique symbol;
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+declare namespace N { const s: unique symbol; }
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 116, 27))
+
+declare const o: { [s]: "a", [N.s]: "b" };
+>o : Symbol(o, Decl(uniqueSymbols.ts, 117, 13))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+declare function f<T>(x: T): T;
+>f : Symbol(f, Decl(uniqueSymbols.ts, 117, 42))
+>T : Symbol(T, Decl(uniqueSymbols.ts, 118, 19))
+>x : Symbol(x, Decl(uniqueSymbols.ts, 118, 22))
+>T : Symbol(T, Decl(uniqueSymbols.ts, 118, 19))
+>T : Symbol(T, Decl(uniqueSymbols.ts, 118, 19))
+
+declare function g(x: typeof s): void;
+>g : Symbol(g, Decl(uniqueSymbols.ts, 118, 31), Decl(uniqueSymbols.ts, 119, 38))
+>x : Symbol(x, Decl(uniqueSymbols.ts, 119, 19))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+declare function g(x: typeof N.s): void;
+>g : Symbol(g, Decl(uniqueSymbols.ts, 118, 31), Decl(uniqueSymbols.ts, 119, 38))
+>x : Symbol(x, Decl(uniqueSymbols.ts, 120, 19))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+// widening positions
+// argument inference
+f(s);
+>f : Symbol(f, Decl(uniqueSymbols.ts, 117, 42))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+f(N.s);
+>f : Symbol(f, Decl(uniqueSymbols.ts, 117, 42))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+f(N["s"]);
+>f : Symbol(f, Decl(uniqueSymbols.ts, 117, 42))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+// array literal elements
+[s];
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+[N.s];
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+[N["s"]];
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+// property assignments
+const o2 = {
+>o2 : Symbol(o2, Decl(uniqueSymbols.ts, 134, 5))
+
+    a: s,
+>a : Symbol(a, Decl(uniqueSymbols.ts, 134, 12))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    b: N.s,
+>b : Symbol(b, Decl(uniqueSymbols.ts, 135, 9))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    c: N["s"]
+>c : Symbol(c, Decl(uniqueSymbols.ts, 136, 11))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+};
+
+// property initializers
+class C0 {
+>C0 : Symbol(C0, Decl(uniqueSymbols.ts, 138, 2))
+
+    static readonly a = s;
+>a : Symbol(C0.a, Decl(uniqueSymbols.ts, 141, 10))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    static readonly b = N.s;
+>b : Symbol(C0.b, Decl(uniqueSymbols.ts, 142, 26))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    static readonly c = N["s"];
+>c : Symbol(C0.c, Decl(uniqueSymbols.ts, 143, 28))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    static d = s;
+>d : Symbol(C0.d, Decl(uniqueSymbols.ts, 144, 31))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    static e = N.s;
+>e : Symbol(C0.e, Decl(uniqueSymbols.ts, 146, 17))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    static f = N["s"];
+>f : Symbol(C0.f, Decl(uniqueSymbols.ts, 147, 19))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    readonly a = s;
+>a : Symbol(C0.a, Decl(uniqueSymbols.ts, 148, 22))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    readonly b = N.s;
+>b : Symbol(C0.b, Decl(uniqueSymbols.ts, 150, 19))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    readonly c = N["s"];
+>c : Symbol(C0.c, Decl(uniqueSymbols.ts, 151, 21))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    d = s;
+>d : Symbol(C0.d, Decl(uniqueSymbols.ts, 152, 24))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    e = N.s;
+>e : Symbol(C0.e, Decl(uniqueSymbols.ts, 154, 10))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    f = N["s"];
+>f : Symbol(C0.f, Decl(uniqueSymbols.ts, 155, 12))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+}
+
+// non-widening positions
+
+// element access
+o[s];
+>o : Symbol(o, Decl(uniqueSymbols.ts, 117, 13))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+o[N.s];
+>o : Symbol(o, Decl(uniqueSymbols.ts, 117, 13))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+o[N["s"]];
+>o : Symbol(o, Decl(uniqueSymbols.ts, 117, 13))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+// arguments (no-inference)
+f<typeof s>(s);
+>f : Symbol(f, Decl(uniqueSymbols.ts, 117, 42))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+f<typeof N.s>(N.s);
+>f : Symbol(f, Decl(uniqueSymbols.ts, 117, 42))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+f<typeof N.s>(N["s"]);
+>f : Symbol(f, Decl(uniqueSymbols.ts, 117, 42))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+g(s);
+>g : Symbol(g, Decl(uniqueSymbols.ts, 118, 31), Decl(uniqueSymbols.ts, 119, 38))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+g(N.s);
+>g : Symbol(g, Decl(uniqueSymbols.ts, 118, 31), Decl(uniqueSymbols.ts, 119, 38))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+g(N["s"]);
+>g : Symbol(g, Decl(uniqueSymbols.ts, 118, 31), Decl(uniqueSymbols.ts, 119, 38))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+// falsy expressions
+s || "";
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+N.s || "";
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+N["s"] || "";
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+// conditionals
+Math.random() * 2 ? s : "a";
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+Math.random() * 2 ? N.s : "a";
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+Math.random() * 2 ? N["s"] : "a";
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+// computed property names
+({
+    [s]: "a",
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    [N.s]: "b",
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+});
+
+class C1 {
+>C1 : Symbol(C1, Decl(uniqueSymbols.ts, 188, 3))
+
+    static [s]: "a";
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    static [N.s]: "b";
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    [s]: "a";
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    [N.s]: "b";
+>N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+>N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
+>s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+}

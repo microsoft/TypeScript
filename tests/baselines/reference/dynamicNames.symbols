@@ -442,3 +442,35 @@ export const o2: T0 = o1;
 >T0 : Symbol(T0, Decl(main.ts, 0, 20))
 >o1 : Symbol(o1, Decl(main.ts, 101, 12))
 
+// recursive declarations
+declare const rI: RI;
+>rI : Symbol(rI, Decl(main.ts, 115, 13))
+>RI : Symbol(RI, Decl(main.ts, 115, 21))
+
+interface RI {
+>RI : Symbol(RI, Decl(main.ts, 115, 21))
+
+    x: "a";
+>x : Symbol(RI.x, Decl(main.ts, 116, 14))
+
+    [rI.x]: "b";
+>rI.x : Symbol(RI.x, Decl(main.ts, 116, 14))
+>rI : Symbol(rI, Decl(main.ts, 115, 13))
+>x : Symbol(RI.x, Decl(main.ts, 116, 14))
+}
+
+declare const rC: RC;
+>rC : Symbol(rC, Decl(main.ts, 121, 13))
+>RC : Symbol(RC, Decl(main.ts, 121, 21))
+
+declare class RC {
+>RC : Symbol(RC, Decl(main.ts, 121, 21))
+
+    x: "a";
+>x : Symbol(RC.x, Decl(main.ts, 122, 18))
+
+    [rC.x]: "b";
+>rC.x : Symbol(RC.x, Decl(main.ts, 122, 18))
+>rC : Symbol(rC, Decl(main.ts, 121, 13))
+>x : Symbol(RC.x, Decl(main.ts, 122, 18))
+}

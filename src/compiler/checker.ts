@@ -5479,8 +5479,8 @@ namespace ts {
          * Indicates whether a declaration name is definitely late-bindable.
          * A declaration name is only late-bindable if:
          * - It is a `ComputedPropertyName`.
-         * - Its expression is either an `Identifier` or is a `PropertyAccessExpression` consisting only of
-         *   other `PropertyAccessExpression` or `Identifier` nodes.
+         * - Its expression is an `Identifier` or either a `PropertyAccessExpression` an
+         * `ElementAccessExpression` consisting only of these same three types of nodes.
          * - The type of its expression is a string or numeric literal type, or is a `unique symbol` type.
          */
         function isLateBindableName(node: DeclarationName): node is LateBoundName {
@@ -8299,13 +8299,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getWidenedTypeOfUniqueESSymbolType(type: Type): Type {
-            return type.flags & TypeFlags.UniqueESSymbol ? esSymbolType :
-                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedTypeOfUniqueESSymbolType)) :
-                type.flags & TypeFlags.Intersection ? getIntersectionType(sameMap((<IntersectionType>type).types, getWidenedTypeOfUniqueESSymbolType)) :
-                type;
-        }
-
         function createUniqueESSymbolType(symbol: Symbol) {
             const type = <UniqueESSymbolType>createType(TypeFlags.UniqueESSymbol);
             type.symbol = symbol;
@@ -10569,12 +10562,67 @@ namespace ts {
                 type;
         }
 
+        function getWidenedLiteralLikeMapper(wideningFlags: TypeFlags) {
+            return !(wideningFlags & TypeFlags.UniqueESSymbol) ? getWidenedLiteralType :
+                !(wideningFlags & TypeFlags.WidenableLiteral) ? getWidenedUniqueESSymbolType :
+                getWidenedLiteralLikeType;
+        }
+
+        /**
+         * Widens string literal, number literal, boolean literal, enum literal, and unique symbol
+         * types, as well as unions of the same.
+         *
+         * We don't always want to widen literals in all of the same places we widen unique symbol
+         * types, and vice versa. However, there are some cases where we do widen both sets of
+         * types at the same time.
+         *
+         * In general, this function should not be called directly. Instead it should be called
+         * through either `getWidenedLiteralType` (which does not widen unique symbol types),
+         * `getWidenedUniqueESSymbolType` (which only widenes unique symbol types), or
+         * `getWidenedLiteralLikeType` (which widens both).
+         */
+        function getWidenedLiteralLikeTypeWorker(type: Type, wideningFlags: TypeFlags): Type {
+            return type.flags & wideningFlags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
+                type.flags & wideningFlags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
+                type.flags & wideningFlags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
+                type.flags & wideningFlags & TypeFlags.BooleanLiteral ? booleanType :
+                type.flags & wideningFlags & TypeFlags.UniqueESSymbol ? esSymbolType :
+                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralLikeMapper(wideningFlags))) :
+                type;
+        }
+
+        /**
+         * Widens string literal, number literal, boolean literal, enum literal, and unique symbol
+         * types, as well as unions of the same.
+         */
+        function getWidenedLiteralLikeType(type: Type): Type {
+            return getWidenedLiteralLikeTypeWorker(type, TypeFlags.WidenableLiteralLike);
+        }
+
+        /**
+         * Widens string literal, number literal, boolean literal, and enum literal types, as well
+         * as unions of the same.
+         */
         function getWidenedLiteralType(type: Type): Type {
-            return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
-                type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
-                type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
-                type.flags & TypeFlags.BooleanLiteral ? booleanType :
-                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
+            return getWidenedLiteralLikeTypeWorker(type, TypeFlags.WidenableLiteral);
+        }
+
+        /**
+         * Widens unique symbol types and unions of unique symbol types.
+         */
+        function getWidenedUniqueESSymbolType(type: Type): Type {
+            return getWidenedLiteralLikeTypeWorker(type, TypeFlags.UniqueESSymbol);
+        }
+
+        /**
+         * Widens a literal-like type when the contextual type is not literal-like.
+         */
+        function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type) {
+            const widenLiterals = !isLiteralContextualType(contextualType);
+            const widenSymbols = !isUniqueESSymbolContextualType(contextualType);
+            return widenLiterals && widenSymbols ? getWidenedLiteralLikeType(type) :
+                widenLiterals ? getWidenedLiteralType(type) :
+                widenSymbols ? getWidenedUniqueESSymbolType(type) :
                 type;
         }
 
@@ -11341,7 +11389,8 @@ namespace ts {
                     }
                 }
             }
-            return getWidenedTypeOfUniqueESSymbolType(inferredType);
+
+            return getWidenedUniqueESSymbolType(inferredType);
         }
 
         function getDefaultTypeArgumentType(isInJavaScriptFile: boolean): Type {
@@ -13986,7 +14035,7 @@ namespace ts {
                 else {
                     const elementContextualType = getContextualTypeForElementExpression(contextualType, index);
                     const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType);
-                    elementTypes.push(getWidenedTypeOfUniqueESSymbolType(type));
+                    elementTypes.push(type);
                 }
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElement;
             }
@@ -17426,7 +17475,7 @@ namespace ts {
                 }
 
                 // widen 'unique symbol' types when we infer the return type.
-                type = getWidenedTypeOfUniqueESSymbolType(type);
+                type = getWidenedUniqueESSymbolType(type);
             }
             else {
                 let types: Type[];
@@ -17462,7 +17511,7 @@ namespace ts {
                 type = getUnionType(types, /*subtypeReduction*/ true);
 
                 // widen 'unique symbol' types when we infer the return type.
-                type = getWidenedTypeOfUniqueESSymbolType(type);
+                type = getWidenedUniqueESSymbolType(type);
 
                 if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
                     type = functionFlags & FunctionFlags.Async
@@ -18592,13 +18641,17 @@ namespace ts {
             return false;
         }
 
+        function isUniqueESSymbolContextualType(contextualType: Type) {
+            return contextualType ? maybeTypeOfKind(contextualType, TypeFlags.UniqueESSymbol) : false;
+        }
+
         function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode, contextualType?: Type): Type {
             if (arguments.length === 2) {
                 contextualType = getContextualType(node);
             }
             const type = checkExpression(node, checkMode);
-            const shouldWiden = isTypeAssertion(node) || isLiteralContextualType(contextualType);
-            return shouldWiden ? type : getWidenedLiteralType(type);
+            return isTypeAssertion(node) ? type :
+                getWidenedLiteralLikeTypeForContextualType(type, contextualType);
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
@@ -24392,8 +24445,7 @@ namespace ts {
         function isLiteralDynamicName(name: ComputedPropertyName) {
             name = getParseTreeNode(name, isComputedPropertyName);
             if (name) {
-                const nameType = checkComputedPropertyName(name);
-                return (nameType.flags & TypeFlags.StringOrNumberLiteralOrUnique) !== 0;
+                return isLateBindableName(name);
             }
             return false;
         }

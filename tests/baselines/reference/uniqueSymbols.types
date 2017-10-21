@@ -414,3 +414,329 @@ const arrayOfConstCall = [constCall];
 >[constCall] : symbol[]
 >constCall : unique symbol
 
+// unique symbol widening in expressions
+declare const s: unique symbol;
+>s : unique symbol
+
+declare namespace N { const s: unique symbol; }
+>N : typeof N
+>s : unique symbol
+
+declare const o: { [s]: "a", [N.s]: "b" };
+>o : { [s]: "a"; [N.s]: "b"; }
+>s : unique symbol
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+declare function f<T>(x: T): T;
+>f : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
+
+declare function g(x: typeof s): void;
+>g : { (x: unique symbol): void; (x: unique symbol): void; }
+>x : unique symbol
+>s : unique symbol
+
+declare function g(x: typeof N.s): void;
+>g : { (x: unique symbol): void; (x: unique symbol): void; }
+>x : unique symbol
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+// widening positions
+// argument inference
+f(s);
+>f(s) : symbol
+>f : <T>(x: T) => T
+>s : unique symbol
+
+f(N.s);
+>f(N.s) : symbol
+>f : <T>(x: T) => T
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+f(N["s"]);
+>f(N["s"]) : symbol
+>f : <T>(x: T) => T
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+
+// array literal elements
+[s];
+>[s] : symbol[]
+>s : unique symbol
+
+[N.s];
+>[N.s] : symbol[]
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+[N["s"]];
+>[N["s"]] : symbol[]
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+
+// property assignments
+const o2 = {
+>o2 : { a: symbol; b: symbol; c: symbol; }
+>{    a: s,    b: N.s,    c: N["s"]} : { a: symbol; b: symbol; c: symbol; }
+
+    a: s,
+>a : symbol
+>s : unique symbol
+
+    b: N.s,
+>b : symbol
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+    c: N["s"]
+>c : symbol
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+
+};
+
+// property initializers
+class C0 {
+>C0 : C0
+
+    static readonly a = s;
+>a : symbol
+>s : unique symbol
+
+    static readonly b = N.s;
+>b : symbol
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+    static readonly c = N["s"];
+>c : symbol
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+
+    static d = s;
+>d : symbol
+>s : unique symbol
+
+    static e = N.s;
+>e : symbol
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+    static f = N["s"];
+>f : symbol
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+
+    readonly a = s;
+>a : symbol
+>s : unique symbol
+
+    readonly b = N.s;
+>b : symbol
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+    readonly c = N["s"];
+>c : symbol
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+
+    d = s;
+>d : symbol
+>s : unique symbol
+
+    e = N.s;
+>e : symbol
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+    f = N["s"];
+>f : symbol
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+}
+
+// non-widening positions
+
+// element access
+o[s];
+>o[s] : "a"
+>o : { [s]: "a"; [N.s]: "b"; }
+>s : unique symbol
+
+o[N.s];
+>o[N.s] : "b"
+>o : { [s]: "a"; [N.s]: "b"; }
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+o[N["s"]];
+>o[N["s"]] : "b"
+>o : { [s]: "a"; [N.s]: "b"; }
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+
+// arguments (no-inference)
+f<typeof s>(s);
+>f<typeof s>(s) : unique symbol
+>f : <T>(x: T) => T
+>s : unique symbol
+>s : unique symbol
+
+f<typeof N.s>(N.s);
+>f<typeof N.s>(N.s) : unique symbol
+>f : <T>(x: T) => T
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+f<typeof N.s>(N["s"]);
+>f<typeof N.s>(N["s"]) : unique symbol
+>f : <T>(x: T) => T
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+
+g(s);
+>g(s) : void
+>g : { (x: unique symbol): void; (x: unique symbol): void; }
+>s : unique symbol
+
+g(N.s);
+>g(N.s) : void
+>g : { (x: unique symbol): void; (x: unique symbol): void; }
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+g(N["s"]);
+>g(N["s"]) : void
+>g : { (x: unique symbol): void; (x: unique symbol): void; }
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+
+// falsy expressions
+s || "";
+>s || "" : unique symbol | ""
+>s : unique symbol
+>"" : ""
+
+N.s || "";
+>N.s || "" : unique symbol | ""
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+>"" : ""
+
+N["s"] || "";
+>N["s"] || "" : unique symbol | ""
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+>"" : ""
+
+// conditionals
+Math.random() * 2 ? s : "a";
+>Math.random() * 2 ? s : "a" : unique symbol | "a"
+>Math.random() * 2 : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>2 : 2
+>s : unique symbol
+>"a" : "a"
+
+Math.random() * 2 ? N.s : "a";
+>Math.random() * 2 ? N.s : "a" : unique symbol | "a"
+>Math.random() * 2 : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>2 : 2
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+>"a" : "a"
+
+Math.random() * 2 ? N["s"] : "a";
+>Math.random() * 2 ? N["s"] : "a" : unique symbol | "a"
+>Math.random() * 2 : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>2 : 2
+>N["s"] : unique symbol
+>N : typeof N
+>"s" : "s"
+>"a" : "a"
+
+// computed property names
+({
+>({    [s]: "a",    [N.s]: "b",}) : { [s]: string; [N.s]: string; }
+>{    [s]: "a",    [N.s]: "b",} : { [s]: string; [N.s]: string; }
+
+    [s]: "a",
+>s : unique symbol
+>"a" : "a"
+
+    [N.s]: "b",
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+>"b" : "b"
+
+});
+
+class C1 {
+>C1 : C1
+
+    static [s]: "a";
+>s : unique symbol
+
+    static [N.s]: "b";
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+
+    [s]: "a";
+>s : unique symbol
+
+    [N.s]: "b";
+>N.s : unique symbol
+>N : typeof N
+>s : unique symbol
+}

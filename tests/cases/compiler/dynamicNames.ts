@@ -138,3 +138,16 @@ export const o1_c5 = o1[c5];
 export const o1_s2 = o1[s2];
 
 export const o2: T0 = o1;
+
+// recursive declarations
+declare const rI: RI;
+interface RI {
+    x: "a";
+    [rI.x]: "b";
+}
+
+declare const rC: RC;
+declare class RC {
+    x: "a";
+    [rC.x]: "b";
+}

@@ -518,3 +518,35 @@ export const o2: T0 = o1;
 >T0 : T0
 >o1 : { [c4]: number; [c5]: string; [s2]: boolean; }
 
+// recursive declarations
+declare const rI: RI;
+>rI : RI
+>RI : RI
+
+interface RI {
+>RI : RI
+
+    x: "a";
+>x : "a"
+
+    [rI.x]: "b";
+>rI.x : "a"
+>rI : RI
+>x : "a"
+}
+
+declare const rC: RC;
+>rC : RC
+>RC : RC
+
+declare class RC {
+>RC : RC
+
+    x: "a";
+>x : "a"
+
+    [rC.x]: "b";
+>rC.x : "a"
+>rC : RC
+>x : "a"
+}

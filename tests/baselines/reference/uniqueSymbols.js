@@ -113,6 +113,90 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNest
 const promiseForConstCall = Promise.resolve(constCall);
 const arrayOfConstCall = [constCall];
 
+// unique symbol widening in expressions
+declare const s: unique symbol;
+declare namespace N { const s: unique symbol; }
+declare const o: { [s]: "a", [N.s]: "b" };
+declare function f<T>(x: T): T;
+declare function g(x: typeof s): void;
+declare function g(x: typeof N.s): void;
+
+// widening positions
+// argument inference
+f(s);
+f(N.s);
+f(N["s"]);
+
+// array literal elements
+[s];
+[N.s];
+[N["s"]];
+
+// property assignments
+const o2 = {
+    a: s,
+    b: N.s,
+    c: N["s"]
+};
+
+// property initializers
+class C0 {
+    static readonly a = s;
+    static readonly b = N.s;
+    static readonly c = N["s"];
+
+    static d = s;
+    static e = N.s;
+    static f = N["s"];
+
+    readonly a = s;
+    readonly b = N.s;
+    readonly c = N["s"];
+
+    d = s;
+    e = N.s;
+    f = N["s"];
+}
+
+// non-widening positions
+
+// element access
+o[s];
+o[N.s];
+o[N["s"]];
+
+// arguments (no-inference)
+f<typeof s>(s);
+f<typeof N.s>(N.s);
+f<typeof N.s>(N["s"]);
+g(s);
+g(N.s);
+g(N["s"]);
+
+// falsy expressions
+s || "";
+N.s || "";
+N["s"] || "";
+
+// conditionals
+Math.random() * 2 ? s : "a";
+Math.random() * 2 ? N.s : "a";
+Math.random() * 2 ? N["s"] : "a";
+
+// computed property names
+({
+    [s]: "a",
+    [N.s]: "b",
+});
+
+class C1 {
+    static [s]: "a";
+    static [N.s]: "b";
+
+    [s]: "a";
+    [N.s]: "b";
+}
+
 //// [uniqueSymbols.js]
 // declarations with call initializer
 const constCall = Symbol();
@@ -192,6 +276,65 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess = l.nested.readonlyNestedT
 // type argument inference
 const promiseForConstCall = Promise.resolve(constCall);
 const arrayOfConstCall = [constCall];
+// widening positions
+// argument inference
+f(s);
+f(N.s);
+f(N["s"]);
+// array literal elements
+[s];
+[N.s];
+[N["s"]];
+// property assignments
+const o2 = {
+    a: s,
+    b: N.s,
+    c: N["s"]
+};
+// property initializers
+class C0 {
+    constructor() {
+        this.a = s;
+        this.b = N.s;
+        this.c = N["s"];
+        this.d = s;
+        this.e = N.s;
+        this.f = N["s"];
+    }
+}
+C0.a = s;
+C0.b = N.s;
+C0.c = N["s"];
+C0.d = s;
+C0.e = N.s;
+C0.f = N["s"];
+// non-widening positions
+// element access
+o[s];
+o[N.s];
+o[N["s"]];
+// arguments (no-inference)
+f(s);
+f(N.s);
+f(N["s"]);
+g(s);
+g(N.s);
+g(N["s"]);
+// falsy expressions
+s || "";
+N.s || "";
+N["s"] || "";
+// conditionals
+Math.random() * 2 ? s : "a";
+Math.random() * 2 ? N.s : "a";
+Math.random() * 2 ? N["s"] : "a";
+// computed property names
+({
+    [s]: "a",
+    [N.s]: "b",
+});
+class C1 {
+}
 
 
 //// [uniqueSymbols.d.ts]
@@ -273,3 +416,39 @@ declare const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"];
 declare const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"];
 declare const promiseForConstCall: Promise<symbol>;
 declare const arrayOfConstCall: symbol[];
+declare const s: unique symbol;
+declare namespace N {
+    const s: unique symbol;
+}
+declare const o: {
+    [s]: "a";
+    [N.s]: "b";
+};
+declare function f<T>(x: T): T;
+declare function g(x: typeof s): void;
+declare function g(x: typeof N.s): void;
+declare const o2: {
+    a: symbol;
+    b: symbol;
+    c: symbol;
+};
+declare class C0 {
+    static readonly a: symbol;
+    static readonly b: symbol;
+    static readonly c: symbol;
+    static d: symbol;
+    static e: symbol;
+    static f: symbol;
+    readonly a: symbol;
+    readonly b: symbol;
+    readonly c: symbol;
+    d: symbol;
+    e: symbol;
+    f: symbol;
+}
+declare class C1 {
+    static [s]: "a";
+    static [N.s]: "b";
+    [s]: "a";
+    [N.s]: "b";
+}
