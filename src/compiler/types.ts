@@ -1046,6 +1046,11 @@ namespace ts {
         type: TypeNode;
     }
 
+    /* @internal */
+    export interface UniqueTypeOperatorNode extends TypeOperatorNode {
+        operator: SyntaxKind.UniqueKeyword;
+    }
+
     export interface IndexedAccessTypeNode extends TypeNode {
         kind: SyntaxKind.IndexedAccessType;
         objectType: TypeNode;

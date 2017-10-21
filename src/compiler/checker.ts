@@ -7924,14 +7924,7 @@ namespace ts {
                         links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
                         break;
                     case SyntaxKind.UniqueKeyword:
-                        if (node.type.kind === SyntaxKind.SymbolKeyword) {
-                            const parent = skipParentheses(node).parent;
-                            const symbol = getSymbolOfNode(parent);
-                            links.resolvedType = symbol ? getUniqueESSymbolTypeForSymbol(symbol) : esSymbolType;
-                        }
-                        else {
-                            links.resolvedType = unknownType;
-                        }
+                        links.resolvedType = getUniqueType(<UniqueTypeOperatorNode>node);
                         break;
                 }
             }
@@ -8299,35 +8292,33 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function nodeCanHaveUniqueESSymbolType(node: Node) {
+            return isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+                isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
+                isPropertySignature(node) ? hasReadonlyModifier(node) :
+                false;
+        }
+
         function createUniqueESSymbolType(symbol: Symbol) {
             const type = <UniqueESSymbolType>createType(TypeFlags.UniqueESSymbol);
             type.symbol = symbol;
             return type;
         }
 
-        function isReferenceToValidDeclarationForUniqueESSymbol(symbol: Symbol) {
-            if (symbol.valueDeclaration) {
-                switch (symbol.valueDeclaration.kind) {
-                    case SyntaxKind.VariableDeclaration:
-                        return getNameOfDeclaration(symbol.valueDeclaration).kind === SyntaxKind.Identifier
-                            && isVariableDeclarationInVariableStatement(<VariableDeclaration>symbol.valueDeclaration)
-                            && !!(symbol.valueDeclaration.parent.flags & NodeFlags.Const);
-                    case SyntaxKind.PropertySignature:
-                        return hasModifier(symbol.valueDeclaration, ModifierFlags.Readonly);
-                    case SyntaxKind.PropertyDeclaration:
-                        return hasModifier(symbol.valueDeclaration, ModifierFlags.Readonly)
-                            && hasModifier(symbol.valueDeclaration, ModifierFlags.Static);
-                }
-            }
-            return false;
-        }
-
-        function getUniqueESSymbolTypeForSymbol(symbol: Symbol) {
-            if (isReferenceToValidDeclarationForUniqueESSymbol(symbol)) {
+        function getUniqueESSymbolTypeForNode(node: Node) {
+            const parent = walkUpParentheses(node);
+            if (nodeCanHaveUniqueESSymbolType(parent)) {
+                const symbol = getSymbolOfNode(parent);
                 const links = getSymbolLinks(symbol);
                 return links.type || (links.type = createUniqueESSymbolType(symbol));
             }
             return esSymbolType;
+        }
+
+        function getUniqueType(node: UniqueTypeOperatorNode) {
+            return node.type.kind === SyntaxKind.SymbolKeyword
+                ? getUniqueESSymbolTypeForNode(node.parent)
+                : unknownType;
         }
 
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
@@ -17180,9 +17171,7 @@ namespace ts {
             // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
             // as a fresh unique symbol literal type.
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
-                const parent = skipParentheses(node).parent;
-                const symbol = getSymbolOfNode(parent);
-                if (symbol) return getUniqueESSymbolTypeForSymbol(symbol);
+                return getUniqueESSymbolTypeForNode(node.parent);
             }
             return returnType;
         }
@@ -25542,19 +25531,6 @@ namespace ts {
                         }
                         break;
 
-                    // report specific errors for cases where a `unique symbol` type is disallowed even when it is in a `const` or `readonly` declaration.
-                    case SyntaxKind.UnionType:
-                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_a_union_type);
-                    case SyntaxKind.IntersectionType:
-                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_an_intersection_type);
-                    case SyntaxKind.ArrayType:
-                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_an_array_type);
-                    case SyntaxKind.TupleType:
-                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_a_tuple_type);
-                    case SyntaxKind.MappedType:
-                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_a_mapped_type);
-
-                    // report a general error for any other invalid use site.
                     default:
                         return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_here);
                 }

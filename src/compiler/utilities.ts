@@ -1695,12 +1695,27 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
+    export function walkUpParentheses(node: Node) {
+        while (node && (node.kind === SyntaxKind.ParenthesizedType ||
+            node.kind === SyntaxKind.ParenthesizedExpression)) {
+            node = node.parent;
+        }
+        return node;
+    }
+
+    export function walkUpParenthesizedExpressions(node: Node) {
+        while (node && node.kind === SyntaxKind.ParenthesizedExpression) {
+            node = node.parent;
+        }
+        return node;
+    }
+
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
     export function isDeleteTarget(node: Node): boolean {
         if (node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
             return false;
         }
-        node = node.parent;
+        node = walkUpParenthesizedExpressions(node.parent);
         while (node && node.kind === SyntaxKind.ParenthesizedExpression) {
             node = node.parent;
         }
@@ -3007,6 +3022,10 @@ namespace ts {
 
     export function hasStaticModifier(node: Node): boolean {
         return hasModifier(node, ModifierFlags.Static);
+    }
+
+    export function hasReadonlyModifier(node: Node): boolean {
+        return hasModifier(node, ModifierFlags.Readonly);
     }
 
     export function getSelectedModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {

@@ -1989,7 +1989,7 @@ declare namespace ts {
         IndexedAccess = 1048576,
         NonPrimitive = 33554432,
         MarkerType = 134217728,
-        Literal = 1248,
+        Literal = 224,
         Unit = 13536,
         StringOrNumberLiteral = 96,
         PossiblyFalsy = 14574,
@@ -2004,6 +2004,8 @@ declare namespace ts {
         TypeVariable = 1081344,
         Narrowable = 35620607,
         NotUnionOrUnit = 33620481,
+        WidenableLiteral = 480,
+        WidenableLiteralLike = 1504,
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {
