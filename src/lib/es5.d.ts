@@ -1292,6 +1292,18 @@ interface ArrayLike<T> {
 }
 
 /**
+ * Define non-homomorphic keys
+ */
+type NHKeys<T> = ({ [P in keyof T]: P } & { [x: string]: any })[keyof T];
+
+/**
+  * Make all properties in T required
+ */
+type Required<T> = {
+  [K in NHKeys<T>]: T[K];
+};
+
+/**
  * Make all properties in T optional
  */
 type Partial<T> = {
