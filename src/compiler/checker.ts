@@ -16272,23 +16272,28 @@ namespace ts {
                 diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length));
             }
             else if (args) {
-                let min = Number.POSITIVE_INFINITY;
-                let max = Number.NEGATIVE_INFINITY;
-                for (const sig of signatures) {
-                    min = Math.min(min, sig.minArgumentCount);
-                    max = Math.max(max, sig.parameters.length);
-                }
-                const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
                 const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
-                const paramCount = hasRestParameter ? min :
-                    min < max ? min + "-" + max :
-                    min;
                 const argCount = args.length - (hasSpreadArgument ? 1 : 0);
-                const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_a_minimum_of_1 :
-                    hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
-                    hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_a_minimum_of_1 :
-                    Diagnostics.Expected_0_arguments_but_got_1;
-                diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
+                if (hasSpreadArgument) {
+                    const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
+                    const error = hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_a_minimum_of_1 : Diagnostics.Expected_0_arguments_but_got_1;
+                    const paramCount = reduceLeft(signatures, (min, sig) => Math.min(min, sig.minArgumentCount), Number.POSITIVE_INFINITY);
+                    diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
+                } else {
+                    let min = Number.POSITIVE_INFINITY;
+                    let max = Number.NEGATIVE_INFINITY;
+                    for (const sig of signatures) {
+                        const minParam = sig.minArgumentCount;
+                        const maxParam = sig.parameters.length;
+                        min = minParam > argCount ? Math.min(min, minParam) : min;
+                        max = maxParam < argCount ? Math.max(max, maxParam) : max;
+                    }
+                    const needMultipleCount = min !== Number.POSITIVE_INFINITY && max !== Number.NEGATIVE_INFINITY && min !== max;
+                    const paramCount = min !== Number.POSITIVE_INFINITY ? min : max;
+                    diagnostics.add(needMultipleCount ?
+                        createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_matching_overloads_expect_either_1_or_2_arguments, argCount, max, min) :
+                        createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramCount, argCount));
+                }
             }
             else if (fallbackError) {
                 diagnostics.add(createDiagnosticForNode(node, fallbackError));
