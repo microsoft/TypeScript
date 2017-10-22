@@ -167,15 +167,17 @@ namespace ts.Completions {
         const uniqueNames = createMap<true>();
         if (symbols) {
             for (const symbol of symbols) {
-                const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target, allowStringLiteral);
-                if (entry) {
-                    const id = entry.name;
-                    if (!uniqueNames.has(id)) {
-                        if (symbolToOriginInfoMap && symbolToOriginInfoMap[getUniqueSymbolId(symbol, typeChecker)]) {
-                            entry.hasAction = true;
+                if (!isEscapedNameOfWellKnownSymbol(symbol.escapedName)) {
+                    const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target, allowStringLiteral);
+                    if (entry) {
+                        const id = entry.name;
+                        if (!uniqueNames.has(id)) {
+                            if (symbolToOriginInfoMap && symbolToOriginInfoMap[getUniqueSymbolId(symbol, typeChecker)]) {
+                                entry.hasAction = true;
+                            }
+                            entries.push(entry);
+                            uniqueNames.set(id, true);
                         }
-                        entries.push(entry);
-                        uniqueNames.set(id, true);
                     }
                 }
             }
