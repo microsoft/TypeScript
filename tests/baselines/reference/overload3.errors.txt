@@ -1,0 +1,11 @@
+tests/cases/compiler/overload3.ts(4,1): error TS2717: No overload expects 2 arguments. The most matching overloads expect either 1 or 3 arguments.
+
+
+==== tests/cases/compiler/overload3.ts (1 errors) ====
+    declare function foo(x: number): void;
+    declare function foo(x: number, y: number, z: number): void;
+    
+    foo(1, 2);
+    ~~~~~~~~~
+!!! error TS2717: No overload expects 2 arguments. The most matching overloads expect either 1 or 3 arguments.
+    

@@ -16285,11 +16285,10 @@ namespace ts {
                         upper = minParam > argCount ? Math.min(upper, minParam) : upper;
                         lower = maxParam < argCount ? Math.max(lower, maxParam) : lower;
                     }
-                    const needMultipleCount = upper !== Number.POSITIVE_INFINITY && lower !== Number.NEGATIVE_INFINITY && upper !== lower;
-                    const paramCount = upper !== Number.POSITIVE_INFINITY ? upper : lower;
-                    diagnostics.add(needMultipleCount ?
-                        createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_matching_overloads_expect_either_1_or_2_arguments, argCount, lower, upper) :
-                        createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramCount, argCount));
+                    const paramText = upper !== Number.POSITIVE_INFINITY && lower !== Number.NEGATIVE_INFINITY && upper !== lower ? `either ${lower} or ${upper}` :
+                        upper !== Number.POSITIVE_INFINITY ? upper : lower;
+                    diagnostics.add(
+                        createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_matching_overloads_expect_1_arguments, argCount, paramText));
                 } else {
                     let min = Number.POSITIVE_INFINITY;
                     let max = Number.NEGATIVE_INFINITY;
@@ -16298,7 +16297,10 @@ namespace ts {
                         max = Math.max(max, sig.parameters.length);
                     }
                     const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
-                    const error = hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_a_minimum_of_1 : Diagnostics.Expected_0_arguments_but_got_1;
+                    const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_a_minimum_of_1 :
+                        hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                        hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_a_minimum_of_1 :
+                        Diagnostics.Expected_0_arguments_but_got_1;
                     const paramCount = (hasRestParameter || min >= max) ? min : min + "-" + max;
                     diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
                 }

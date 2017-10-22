@@ -2232,7 +2232,7 @@
         "category": "Error",
         "code": 2716
     },
-    "No overload expects {0} arguments. The most matching overloads expect either {1} or {2} arguments.": {
+    "No overload expects {0} arguments. The most matching overloads expect {1} arguments.": {
         "category": "Error",
         "code": 2717
     },

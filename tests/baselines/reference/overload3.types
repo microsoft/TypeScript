@@ -1,0 +1,17 @@
+=== tests/cases/compiler/overload3.ts ===
+declare function foo(x: number): void;
+>foo : { (x: number): void; (x: number, y: number, z: number): void; }
+>x : number
+
+declare function foo(x: number, y: number, z: number): void;
+>foo : { (x: number): void; (x: number, y: number, z: number): void; }
+>x : number
+>y : number
+>z : number
+
+foo(1, 2);
+>foo(1, 2) : any
+>foo : { (x: number): void; (x: number, y: number, z: number): void; }
+>1 : 1
+>2 : 2
+
