@@ -1642,7 +1642,7 @@ interface EcKeyAlgorithm extends KeyAlgorithm {
     typedCurve: string;
 }
 
-interface EcKeyImportParams {
+interface EcKeyImportParams extends Algorithm {
     namedCurve: string;
 }
 

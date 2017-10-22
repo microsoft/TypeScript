@@ -37,6 +37,7 @@ namespace N {
         f = /*RENAME*/newFunction(f);
     }
 }
+
 function newFunction(f: () => number) {
     f = function(): number {
         return N.value;

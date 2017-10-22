@@ -20,6 +20,7 @@ class C<T1, T2> {
         /*RENAME*/newFunction<T1>(t1);
     }
 }
+
 function newFunction<T1>(t1: T1) {
     t1.toString();
 }

@@ -37,6 +37,7 @@ namespace N {
         /*RENAME*/newFunction();
     }
 }
+
 function newFunction() {
     var c = class {
         M() {

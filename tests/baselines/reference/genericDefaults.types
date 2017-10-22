@@ -2643,3 +2643,9 @@ const t03c04 = (<t03<number, 1>>x).a;
 >x : any
 >a : [number, 1]
 
+// https://github.com/Microsoft/TypeScript/issues/16221
+interface SelfReference<T = SelfReference<string>> {}
+>SelfReference : SelfReference<T>
+>T : T
+>SelfReference : SelfReference<T>
+

@@ -131,7 +131,7 @@ namespace ts {
             const _os = require("os");
             const _crypto = require("crypto");
 
-            const useNonPollingWatchers = process.env["TSC_NONPOLLING_WATCHER"];
+            const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
 
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
@@ -573,7 +573,7 @@ namespace ts {
 
         function recursiveCreateDirectory(directoryPath: string, sys: System) {
             const basePath = getDirectoryPath(directoryPath);
-            const shouldCreateParent = directoryPath !== basePath && !sys.directoryExists(basePath);
+            const shouldCreateParent = basePath !== "" && directoryPath !== basePath && !sys.directoryExists(basePath);
             if (shouldCreateParent) {
                 recursiveCreateDirectory(basePath, sys);
             }

@@ -29,6 +29,7 @@ class C {
     constructor() { }
     M3() { }
 }
+
 function newFunction() {
     return 1;
 }

@@ -1793,8 +1793,8 @@ declare function on<T>(handlerHash: Handlers<T>): T
 >T : T
 
 var hashOfEmpty1 = on({ test: () => {} });  // {}
->hashOfEmpty1 : {}
->on({ test: () => {} }) : {}
+>hashOfEmpty1 : { test: {}; }
+>on({ test: () => {} }) : { test: {}; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: () => {} } : { test: () => void; }
 >test : () => void

@@ -6373,6 +6373,7 @@ namespace ts {
                     if (tagName) {
                         switch (tagName.escapedText) {
                             case "augments":
+                            case "extends":
                                 tag = parseAugmentsTag(atToken, tagName);
                                 break;
                             case "class":
@@ -6699,7 +6700,7 @@ namespace ts {
                             if (typeExpression && typeExpression.type.kind === SyntaxKind.ArrayType) {
                                 jsdocTypeLiteral.isArrayType = true;
                             }
-                            typedefTag.typeExpression = childTypeTag && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
+                            typedefTag.typeExpression = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
                                 childTypeTag.typeExpression :
                                 finishNode(jsdocTypeLiteral);
                         }
