@@ -16289,7 +16289,8 @@ namespace ts {
                         upper !== Number.POSITIVE_INFINITY ? upper : lower;
                     diagnostics.add(
                         createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_matching_overloads_expect_1_arguments, argCount, paramText));
-                } else {
+                }
+                else {
                     let min = Number.POSITIVE_INFINITY;
                     let max = Number.NEGATIVE_INFINITY;
                     for (const sig of signatures) {
