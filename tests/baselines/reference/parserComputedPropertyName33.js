@@ -6,10 +6,11 @@ class C {
 }
 
 //// [parserComputedPropertyName33.js]
+var _a = e;
 class C {
     constructor() {
         // No ASI
-        this[e] = 0[e2]();
+        this[_a] = 0[e2]();
     }
 }
 { }

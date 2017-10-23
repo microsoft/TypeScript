@@ -12548,7 +12548,7 @@ namespace ts {
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
                 if (declaration.kind === SyntaxKind.ClassDeclaration
-                    && nodeIsDecorated(declaration)) {
+                    && nodeIsDecorated(declaration as ClassDeclaration)) {
                     let container = getContainingClass(node);
                     while (container !== undefined) {
                         if (container === declaration && container.name !== node) {
@@ -20051,7 +20051,7 @@ namespace ts {
 
             // skip this check for nodes that cannot have decorators. These should have already had an error reported by
             // checkGrammarDecorators.
-            if (!nodeCanBeDecorated(node)) {
+            if (!nodeCanBeDecorated(node, node.parent, node.parent.parent)) {
                 return;
             }
 
@@ -24430,7 +24430,7 @@ namespace ts {
             if (!node.decorators) {
                 return false;
             }
-            if (!nodeCanBeDecorated(node)) {
+            if (!nodeCanBeDecorated(node, node.parent, node.parent.parent)) {
                 if (node.kind === SyntaxKind.MethodDeclaration && !ts.nodeIsPresent((<MethodDeclaration>node).body)) {
                     return grammarErrorOnFirstToken(node, Diagnostics.A_decorator_can_only_decorate_a_method_implementation_not_an_overload);
                 }

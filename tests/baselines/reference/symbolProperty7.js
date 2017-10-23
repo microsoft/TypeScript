@@ -9,9 +9,10 @@ class C {
 }
 
 //// [symbolProperty7.js]
+var _a = Symbol(), _b = Symbol();
 class C {
     constructor() {
-        this[Symbol()] = 0;
+        this[_a] = 0;
     }
     [Symbol()]() { }
     get [Symbol()]() {

@@ -20,10 +20,11 @@ class C {
 var s;
 var n;
 var a;
+var _a = s, _b = n, _c = s + n, _d = +s, _e = a;
 class C {
     constructor() {
-        this[n] = n;
-        this[s + n] = 2;
+        this[_b] = n;
+        this[_c] = 2;
         this[`hello bye`] = 0;
     }
 }
