@@ -22,6 +22,7 @@ edit.applyRefactor({
     ({ __return, i } = /*RENAME*/newFunction(i));
     return __return;
 }
+
 function newFunction(i) {
     return { __return: i++, i };
 }

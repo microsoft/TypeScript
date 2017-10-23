@@ -470,40 +470,40 @@ namespace ts.refactor.extractSymbol {
      * you may be able to extract into a class method *or* local closure *or* namespace function,
      * depending on what's in the extracted body.
      */
-    function collectEnclosingScopes(range: TargetRange): Scope[] | undefined {
+    function collectEnclosingScopes(range: TargetRange): Scope[] {
         let current: Node = isReadonlyArray(range.range) ? first(range.range) : range.range;
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
             if (containingClass) {
-                return [containingClass];
+                const containingFunction = findAncestor(current, isFunctionLikeDeclaration);
+                return containingFunction
+                    ? [containingFunction, containingClass]
+                    : [containingClass];
             }
         }
 
-        const start = current;
+        const scopes: Scope[] = [];
+        while (true) {
+            current = current.parent;
+            // A function parameter's initializer is actually in the outer scope, not the function declaration
+            if (current.kind === SyntaxKind.Parameter) {
+                // Skip all the way to the outer scope of the function that declared this parameter
+                current = findAncestor(current, parent => isFunctionLikeDeclaration(parent)).parent;
+            }
 
-        let scopes: Scope[] | undefined = undefined;
-        while (current) {
             // We want to find the nearest parent where we can place an "equivalent" sibling to the node we're extracting out of.
             // Walk up to the closest parent of a place where we can logically put a sibling:
             //  * Function declaration
             //  * Class declaration or expression
             //  * Module/namespace or source file
-            if (current !== start && isScope(current)) {
-                (scopes = scopes || []).push(current);
+            if (isScope(current)) {
+                scopes.push(current);
+                if (current.kind === SyntaxKind.SourceFile) {
+                    return scopes;
+                }
             }
-
-            // A function parameter's initializer is actually in the outer scope, not the function declaration
-            if (current && current.parent && current.parent.kind === SyntaxKind.Parameter) {
-                // Skip all the way to the outer scope of the function that declared this parameter
-                current = findAncestor(current, parent => isFunctionLikeDeclaration(parent)).parent;
-            }
-            else {
-                current = current.parent;
-            }
-
         }
-        return scopes;
     }
 
     function getFunctionExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
@@ -589,15 +589,7 @@ namespace ts.refactor.extractSymbol {
     function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
         const { file: sourceFile } = context;
 
-        if (targetRange === undefined) {
-            return undefined;
-        }
-
         const scopes = collectEnclosingScopes(targetRange);
-        if (scopes === undefined) {
-            return undefined;
-        }
-
         const enclosingTextRange = getEnclosingTextRange(targetRange, sourceFile);
         const readsAndWrites = collectReadsAndWrites(
             targetRange,
@@ -737,6 +729,8 @@ namespace ts.refactor.extractSymbol {
         }
 
         const { body, returnValueProperty } = transformFunctionBody(node, exposedVariableDeclarations, writes, substitutions, !!(range.facts & RangeFacts.HasReturn));
+        suppressLeadingAndTrailingTrivia(body);
+
         let newFunction: MethodDeclaration | FunctionDeclaration;
 
         if (isClassLike(scope)) {
@@ -780,7 +774,10 @@ namespace ts.refactor.extractSymbol {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
         }
         else {
-            changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+            changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, {
+                prefix: isLineBreak(file.text.charCodeAt(scope.getLastToken().pos)) ? context.newLineCharacter : context.newLineCharacter + context.newLineCharacter,
+                suffix: context.newLineCharacter
+            });
         }
 
         const newNodes: Node[] = [];
@@ -923,15 +920,10 @@ namespace ts.refactor.extractSymbol {
             }
         }
 
-        if (isReadonlyArray(range.range)) {
-            changeTracker.replaceNodesWithNodes(context.file, range.range, newNodes, {
-                nodeSeparator: context.newLineCharacter,
-                suffix: context.newLineCharacter // insert newline only when replacing statements
-            });
-        }
-        else {
-            changeTracker.replaceNodeWithNodes(context.file, range.range, newNodes, { nodeSeparator: context.newLineCharacter });
-        }
+        const replacementRange = isReadonlyArray(range.range)
+            ? { pos: first(range.range).getStart(), end: last(range.range).end }
+            : { pos: range.range.getStart(), end: range.range.end };
+        changeTracker.replaceRangeWithNodes(context.file, replacementRange, newNodes, { nodeSeparator: context.newLineCharacter });
 
         const edits = changeTracker.getChanges();
         const renameRange = isReadonlyArray(range.range) ? first(range.range) : range.range;
@@ -979,6 +971,7 @@ namespace ts.refactor.extractSymbol {
             : checker.typeToTypeNode(checker.getContextualType(node), scope, NodeBuilderFlags.NoTruncation);
 
         const initializer = transformConstantInitializer(node, substitutions);
+        suppressLeadingAndTrailingTrivia(initializer);
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
@@ -1011,7 +1004,7 @@ namespace ts.refactor.extractSymbol {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, { suffix: context.newLineCharacter + context.newLineCharacter });
 
             // Consume
-            changeTracker.replaceNodeWithNodes(context.file, node, [localReference], { nodeSeparator: context.newLineCharacter });
+            changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
         }
         else {
             const newVariableDeclaration = createVariableDeclaration(localNameText, variableType, initializer);

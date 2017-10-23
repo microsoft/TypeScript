@@ -14,6 +14,7 @@ edit.applyRefactor({
     newContent:
 `function fn(x = /*RENAME*/newFunction()) {
 }
+
 function newFunction() {
     return 3;
 }

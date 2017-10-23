@@ -351,7 +351,7 @@ namespace ts {
     /**
      * We assume the first line starts at position 0 and 'position' is non-negative.
      */
-    export function computeLineAndCharacterOfPosition(lineStarts: ReadonlyArray<number>, position: number) {
+    export function computeLineAndCharacterOfPosition(lineStarts: ReadonlyArray<number>, position: number): LineAndCharacter {
         let lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
             // If the actual position was not found,

@@ -2617,6 +2617,16 @@ namespace ts {
     }
 
     /**
+     * Sets flags that control emit behavior of a node.
+     */
+    /* @internal */
+    export function addEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.flags = emitNode.flags | emitFlags;
+        return node;
+    }
+
+    /**
      * Gets a custom text range to use when emitting source maps.
      */
     export function getSourceMapRange(node: Node) {

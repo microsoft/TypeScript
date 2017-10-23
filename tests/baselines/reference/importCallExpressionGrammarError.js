@@ -16,4 +16,4 @@ Promise.resolve().then(() => require(...["PathModule"]));
 var p1 = Promise.resolve().then(() => require(...a));
 const p2 = Promise.resolve().then(() => require());
 const p3 = Promise.resolve().then(() => require());
-const p4 = Promise.resolve().then(() => require("pathToModule", "secondModule"));
+const p4 = Promise.resolve().then(() => require("pathToModule"));

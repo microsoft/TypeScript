@@ -242,8 +242,24 @@ namespace ts.server {
             this.markAsDirty();
         }
 
+        isKnownTypesPackageName(name: string): boolean {
+            return this.typingsCache.isKnownTypesPackageName(name);
+        }
+        installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
+            return this.typingsCache.installPackage({ ...options, projectRootPath: this.toPath(this.currentDirectory) });
+        }
+        private get typingsCache(): TypingsCache {
+            return this.projectService.typingsCache;
+        }
+
+        // Method of LanguageServiceHost
         getCompilationSettings() {
             return this.compilerOptions;
+        }
+
+        // Method to support public API
+        getCompilerOptions() {
+            return this.getCompilationSettings();
         }
 
         getNewLine() {
@@ -427,14 +443,13 @@ namespace ts.server {
             if (!this.builder) {
                 this.builder = createBuilder({
                     getCanonicalFileName: this.projectService.toCanonicalFileName,
-                    getEmitOutput: (_program, sourceFile, emitOnlyDts, isDetailed) =>
-                        this.getFileEmitOutput(sourceFile, emitOnlyDts, isDetailed),
-                    computeHash: data =>
-                        this.projectService.host.createHash(data),
-                    shouldEmitFile: sourceFile =>
-                        !this.projectService.getScriptInfoForPath(sourceFile.path).isDynamicOrHasMixedContent()
+                    computeHash: data => this.projectService.host.createHash(data)
                 });
             }
+        }
+
+        private shouldEmitFile(scriptInfo: ScriptInfo) {
+            return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
         }
 
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
@@ -443,15 +458,18 @@ namespace ts.server {
             }
             this.updateGraph();
             this.ensureBuilder();
-            return this.builder.getFilesAffectedBy(this.program, scriptInfo.path);
+            return mapDefined(this.builder.getFilesAffectedBy(this.program, scriptInfo.path),
+                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 
         /**
          * Returns true if emit was conducted
          */
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
-            this.ensureBuilder();
-            const { emitSkipped, outputFiles } = this.builder.emitFile(this.program, scriptInfo.path);
+            if (!this.languageServiceEnabled || !this.shouldEmitFile(scriptInfo)) {
+                return false;
+            }
+            const { emitSkipped, outputFiles } = this.getLanguageService(/*ensureSynchronized*/ false).getEmitOutput(scriptInfo.fileName);
             if (!emitSkipped) {
                 for (const outputFile of outputFiles) {
                     const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, this.currentDirectory);
@@ -575,13 +593,6 @@ namespace ts.server {
                 }
                 return scriptInfo;
             });
-        }
-
-        private getFileEmitOutput(sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) {
-            if (!this.languageServiceEnabled) {
-                return undefined;
-            }
-            return this.getLanguageService(/*ensureSynchronized*/ false).getEmitOutput(sourceFile.fileName, emitOnlyDtsFiles, isDetailed);
         }
 
         getExcludedFiles(): ReadonlyArray<NormalizedPath> {
@@ -892,9 +903,7 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
-                fileName, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.directoryStructureHost
-            );
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
             }
@@ -902,7 +911,7 @@ namespace ts.server {
         }
 
         getScriptInfo(uncheckedFileName: string) {
-            return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
+            return this.projectService.getScriptInfo(uncheckedFileName);
         }
 
         filesToString(writeProjectFileNames: boolean) {
@@ -1047,12 +1056,15 @@ namespace ts.server {
             super.setCompilerOptions(newOptions);
         }
 
+        /** this is canonical project root path */
+        readonly projectRootPath: string | undefined;
+
         /*@internal*/
         constructor(
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
-            readonly projectRootPath: string | undefined,
+            projectRootPath: string | undefined,
             currentDirectory: string | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
@@ -1064,6 +1076,7 @@ namespace ts.server {
                 /*compileOnSaveEnabled*/ false,
                 projectService.host,
                 currentDirectory);
+            this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
         }
 
         addRoot(info: ScriptInfo) {
@@ -1126,8 +1139,8 @@ namespace ts.server {
 
         private plugins: PluginModule[] = [];
 
-        /** Used for configured projects which may have multiple open roots */
-        openRefCount = 0;
+        /** Ref count to the project when opened from external project */
+        private externalProjectRefCount = 0;
 
         private projectErrors: Diagnostic[];
 
@@ -1338,17 +1351,43 @@ namespace ts.server {
             super.close();
         }
 
-        addOpenRef() {
-            this.openRefCount++;
+        /* @internal */
+        addExternalProjectReference() {
+            this.externalProjectRefCount++;
         }
 
-        deleteOpenRef() {
-            this.openRefCount--;
-            return this.openRefCount;
+        /* @internal */
+        deleteExternalProjectReference() {
+            this.externalProjectRefCount--;
         }
 
+        /** Returns true if the project is needed by any of the open script info/external project */
+        /* @internal */
         hasOpenRef() {
-            return !!this.openRefCount;
+            if (!!this.externalProjectRefCount) {
+                return true;
+            }
+
+            // Closed project doesnt have any reference
+            if (this.isClosed()) {
+                return false;
+            }
+
+            const configFileExistenceInfo = this.projectService.getConfigFileExistenceInfo(this);
+            if (this.projectService.hasPendingProjectUpdate(this)) {
+                // If there is pending update for this project,
+                // we dont know if this project would be needed by any of the open files impacted by this config file
+                // In that case keep the project alive if there are open files impacted by this project
+                return !!configFileExistenceInfo.openFilesImpactedByConfigFile.size;
+            }
+
+            // If there is no pending update for this project,
+            // We know exact set of open files that get impacted by this configured project as the files in the project
+            // The project is referenced only if open files impacted by this project are present in this project
+            return forEachEntry(
+                configFileExistenceInfo.openFilesImpactedByConfigFile,
+                (_value, infoPath) => this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path))
+            ) || false;
         }
 
         getEffectiveTypeRoots() {

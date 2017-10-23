@@ -530,7 +530,7 @@ namespace ts.codefix {
             if (!usageContext.properties) {
                 usageContext.properties = createUnderscoreEscapedMap<UsageContext>();
             }
-            const propertyUsageContext = {};
+            const propertyUsageContext = usageContext.properties.get(name) || { };
             inferTypeFromContext(parent, checker, propertyUsageContext);
             usageContext.properties.set(name, propertyUsageContext);
         }
@@ -584,7 +584,7 @@ namespace ts.codefix {
                 if (usageContext.properties) {
                     usageContext.properties.forEach((context, name) => {
                         const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                        symbol.type = getTypeFromUsageContext(context, checker);
+                        symbol.type = getTypeFromUsageContext(context, checker) || checker.getAnyType();
                         members.set(name, symbol);
                     });
                 }
@@ -645,7 +645,7 @@ namespace ts.codefix {
                 symbol.type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                 parameters.push(symbol);
             }
-            const returnType = getTypeFromUsageContext(callContext.returnType, checker);
+            const returnType = getTypeFromUsageContext(callContext.returnType, checker) || checker.getVoidType();
             return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }
 

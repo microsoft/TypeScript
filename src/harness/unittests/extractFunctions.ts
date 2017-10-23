@@ -195,12 +195,12 @@ namespace ts {
     function G<U extends T[]>(t2: U) {
         [#|t2.toString();|]
     }
-}`);
+}`, /*includeLib*/ true);
         // Confirm that the contextual type of an extracted expression counts as a use.
         testExtractFunction("extractFunction16",
             `function F<T>() {
     const array: T[] = [#|[]|];
-}`);
+}`, /*includeLib*/ true);
         // Class type parameter
         testExtractFunction("extractFunction17",
             `class C<T1, T2> {
@@ -219,7 +219,7 @@ namespace ts {
         testExtractFunction("extractFunction19",
             `function F<T, U extends T[], V extends U[]>(v: V) {
     [#|v.toString()|];
-}`);
+}`, /*includeLib*/ true);
 
         testExtractFunction("extractFunction20",
         `const _ = class {
@@ -532,9 +532,17 @@ function f() {
     [#|let x;|]
     return { x };
 }`);
+
+        testExtractFunction("extractFunction_PreserveTrivia", `
+// a
+var q = /*b*/ //c
+    /*d*/ [#|1 /*e*/ //f
+    /*g*/ + /*h*/ //i
+    /*j*/ 2|] /*k*/ //l
+    /*m*/; /*n*/ //o`);
     });
 
-    function testExtractFunction(caption: string, text: string) {
-        testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function);
+    function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
+        testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function, includeLib);
     }
 }
