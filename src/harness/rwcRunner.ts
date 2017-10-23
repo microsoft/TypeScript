@@ -39,8 +39,8 @@ namespace RWC {
             const baseName = ts.getBaseFileName(jsonPath);
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
-            let skipTypeAndSymbolbaselines = false;
-            const typeAndSymbolSizeLimit = 10000000;
+            let skipTypeBaselines = false;
+            const typeSizeLimit = 10000000;
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
@@ -54,7 +54,7 @@ namespace RWC {
                 // or to use lib.d.ts inside the json object. If the flag is true, use the lib.d.ts inside json file
                 // otherwise use the lib.d.ts from built/local
                 useCustomLibraryFile = undefined;
-                skipTypeAndSymbolbaselines = false;
+                skipTypeBaselines = false;
             });
 
             it("can compile", function(this: Mocha.ITestCallbackContext) {
@@ -64,7 +64,7 @@ namespace RWC {
                 const ioLog: IOLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = ioLog.useCustomLibraryFile;
-                skipTypeAndSymbolbaselines = ioLog.filesRead.reduce((acc, elem) => (elem && elem.result && elem.result.contents) ? acc + elem.result.contents.length : acc, 0) > typeAndSymbolSizeLimit;
+                skipTypeBaselines = ioLog.filesRead.reduce((acc, elem) => (elem && elem.result && elem.result.contents) ? acc + elem.result.contents.length : acc, 0) > typeSizeLimit;
                 runWithIOLog(ioLog, () => {
                     opts = ts.parseCommandLine(ioLog.arguments, fileName => Harness.IO.readFile(fileName));
                     assert.equal(opts.errors.length, 0);
@@ -224,7 +224,7 @@ namespace RWC {
                 Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult.program, inputFiles
                     .concat(otherFiles)
                     .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
-                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts, /*multifile*/ true, skipTypeAndSymbolbaselines);
+                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts, /*multifile*/ true, skipTypeBaselines, /*skipSymbolbaselines*/ true);
             });
 
             // Ideally, a generated declaration file will have no errors. But we allow generated
