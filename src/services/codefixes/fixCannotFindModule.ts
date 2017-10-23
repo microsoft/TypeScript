@@ -2,7 +2,6 @@
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
-            Diagnostics.Cannot_find_module_0.code,
             Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type.code,
         ],
         getCodeActions: context => {
