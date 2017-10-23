@@ -13,7 +13,8 @@ namespace ts.refactor.installTypesForPackage {
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const options = context.program.getCompilerOptions();
-        if (options.noImplicitAny || options.strict) {
+        const noImplicitAny = options.noImplicitAny === undefined ? options.strict : options.noImplicitAny;
+        if (noImplicitAny) {
             // Then it will be available via `fixCannotFindModule`.
             return undefined;
         }
