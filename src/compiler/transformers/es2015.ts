@@ -788,7 +788,10 @@ namespace ts {
             // the body of the function here if it was requested in an earlier
             // transformation.
             if (getEmitFlags(node) & EmitFlags.Indented) {
-                setEmitFlags(classFunction, EmitFlags.Indented);
+                setEmitFlags(classFunction, EmitFlags.Indented | EmitFlags.NoNameGenerationScope);
+            }
+            else {
+                setEmitFlags(classFunction, EmitFlags.NoNameGenerationScope);
             }
 
             // "inner" and "outer" below are added purely to preserve source map locations from
