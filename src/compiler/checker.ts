@@ -13440,7 +13440,7 @@ namespace ts {
         // exists. Otherwise, it is the type of the string index signature in T, if one exists.
         function getContextualTypeForObjectLiteralMethod(node: MethodDeclaration): Type {
             Debug.assert(isObjectLiteralMethod(node));
-            if (isInsideWithStatementBody(node)) {
+            if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
             }
@@ -13559,7 +13559,7 @@ namespace ts {
          * @returns the contextual type of an expression.
          */
         function getContextualType(node: Expression): Type | undefined {
-            if (isInsideWithStatementBody(node)) {
+            if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
             }
@@ -23124,21 +23124,8 @@ namespace ts {
 
         // Language service support
 
-        function isInsideWithStatementBody(node: Node): boolean {
-            if (node) {
-                while (node.parent) {
-                    if (node.parent.kind === SyntaxKind.WithStatement && (<WithStatement>node.parent).statement === node) {
-                        return true;
-                    }
-                    node = node.parent;
-                }
-            }
-
-            return false;
-        }
-
         function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
-            if (isInsideWithStatementBody(location)) {
+            if (location.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return [];
             }
@@ -23438,7 +23425,7 @@ namespace ts {
                 return isExternalModule(<SourceFile>node) ? getMergedSymbol(node.symbol) : undefined;
             }
 
-            if (isInsideWithStatementBody(node)) {
+            if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
             }
@@ -23546,7 +23533,7 @@ namespace ts {
         }
 
         function getTypeOfNode(node: Node): Type {
-            if (isInsideWithStatementBody(node)) {
+            if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return unknownType;
             }
