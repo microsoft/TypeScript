@@ -408,7 +408,7 @@ declare namespace ts {
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
         ReachabilityAndEmitFlags = 1408,
-        ContextFlags = 96256,
+        ContextFlags = 2193408,
         TypeExcludesFlags = 20480,
     }
     enum ModifierFlags {
