@@ -385,12 +385,6 @@ namespace ts {
         return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as __String;
     }
 
-    export function isEscapedNameOfWellKnownSymbol(escapedName: __String) {
-        return (escapedName as string).charCodeAt(0) === CharacterCodes._ &&
-            (escapedName as string).charCodeAt(1) === CharacterCodes._ &&
-            (escapedName as string).charCodeAt(2) === CharacterCodes.at;
-    }
-
     /**
      * @deprecated Use `id.escapedText` to get the escaped text of an Identifier.
      * @param identifier The identifier to escape

@@ -167,17 +167,15 @@ namespace ts.Completions {
         const uniqueNames = createMap<true>();
         if (symbols) {
             for (const symbol of symbols) {
-                if (!isEscapedNameOfWellKnownSymbol(symbol.escapedName)) {
-                    const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target, allowStringLiteral);
-                    if (entry) {
-                        const id = entry.name;
-                        if (!uniqueNames.has(id)) {
-                            if (symbolToOriginInfoMap && symbolToOriginInfoMap[getUniqueSymbolId(symbol, typeChecker)]) {
-                                entry.hasAction = true;
-                            }
-                            entries.push(entry);
-                            uniqueNames.set(id, true);
+                const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target, allowStringLiteral);
+                if (entry) {
+                    const id = entry.name;
+                    if (!uniqueNames.has(id)) {
+                        if (symbolToOriginInfoMap && symbolToOriginInfoMap[getUniqueSymbolId(symbol, typeChecker)]) {
+                            entry.hasAction = true;
                         }
+                        entries.push(entry);
+                        uniqueNames.set(id, true);
                     }
                 }
             }
@@ -1774,6 +1772,18 @@ namespace ts.Completions {
             if (isSingleOrDoubleQuote(firstCharCode)) {
                 // If the symbol is external module, don't show it in the completion list
                 // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
+                return undefined;
+            }
+        }
+
+        // If the symbol is for a member of an object type and is the internal name of an ES
+        // symbol, it is not a valid entry. Internal names for ES symbols start with "__@"
+        if (symbol.flags & SymbolFlags.ClassMember) {
+            const escapedName = symbol.escapedName as string;
+            if (escapedName.length >= 3 &&
+                escapedName.charCodeAt(0) === CharacterCodes._ &&
+                escapedName.charCodeAt(1) === CharacterCodes._ &&
+                escapedName.charCodeAt(2) === CharacterCodes.at) {
                 return undefined;
             }
         }
