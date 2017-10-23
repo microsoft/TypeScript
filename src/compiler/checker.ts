@@ -17283,7 +17283,12 @@ namespace ts {
             else {
                 let types: Type[];
                 if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
-                    types = concatenate(checkAndAggregateYieldOperandTypes(func, checkMode), checkAndAggregateReturnExpressionTypes(func, checkMode));
+                    const aggregatedYield = checkAndAggregateYieldOperandTypes(func, checkMode);
+                    const aggregatedReturn = checkAndAggregateReturnExpressionTypes(func, checkMode)
+                    if (aggregatedReturn.length && aggregatedYield.length === 0) {
+                        error(func, Diagnostics.A_generator_cannot_have_a_return_statement_and_no_yield_statements);
+                    }
+                    types = concatenate(aggregatedYield, aggregatedReturn);
                     if (!types || types.length === 0) {
                         const iterableIteratorAny = functionFlags & FunctionFlags.Async
                             ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
@@ -25071,7 +25076,7 @@ namespace ts {
                 if (isInAmbientContext(node)) {
                     return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_not_allowed_in_an_ambient_context);
                 }
-                if (!node.body) {
+                else {
                     return grammarErrorOnNode(node.asteriskToken, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
                 }
             }

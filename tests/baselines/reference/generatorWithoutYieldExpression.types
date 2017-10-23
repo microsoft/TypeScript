@@ -1,0 +1,38 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorWithoutYieldExpression.ts ===
+// function* g0 () { }
+
+// function* g1() {
+//     return 42;
+// }
+
+// function* g2() {
+//     yield 42;
+//     return 42;
+// }
+
+// function* g3() {
+//     function* g4 () {
+//         yield 42;
+//         return 42;
+//     }
+//     return 42;
+// }
+
+class A {
+>A : A
+
+  * g5 () {
+>g5 : () => IterableIterator<42>
+
+    return 42;
+>42 : 42
+  }
+
+  g6 = function* () {
+>g6 : () => IterableIterator<42>
+>function* () {    return 42;  } : () => IterableIterator<42>
+
+    return 42;
+>42 : 42
+  }
+}

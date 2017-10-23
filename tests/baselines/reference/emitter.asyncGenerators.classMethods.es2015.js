@@ -38,7 +38,6 @@ class C6 {
 //// [C7.ts]
 class C7 {
     async * f() {
-        return 1;
     }
 }
 //// [C8.ts]
@@ -215,7 +214,6 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 class C7 {
     f() {
         return __asyncGenerator(this, arguments, function* f_1() {
-            return 1;
         });
     }
 }

@@ -3,5 +3,6 @@ function* g(): IterableIterator<number> {
 >g : Symbol(g, Decl(generatorTypeCheck11.ts, 0, 0))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
+    yield 0;
     return 0;
 }

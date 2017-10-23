@@ -38,6 +38,5 @@ const o6 = {
 // @filename: O7.ts
 const o7 = {
     async * f() {
-        return 1;
     }
 }

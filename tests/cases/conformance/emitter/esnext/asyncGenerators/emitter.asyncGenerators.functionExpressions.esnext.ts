@@ -25,5 +25,4 @@ const f6 = async function * () {
 }
 // @filename: F7.ts
 const f7 = async function * () {
-    return 1;
 }

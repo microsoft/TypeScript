@@ -38,7 +38,6 @@ class C6 {
 //// [C7.ts]
 class C7 {
     async * f() {
-        return 1;
     }
 }
 //// [C8.ts]
@@ -497,7 +496,7 @@ var C7 = /** @class */ (function () {
     C7.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
-                return [2 /*return*/, 1];
+                return [2 /*return*/];
             });
         });
     };

@@ -67,8 +67,6 @@ class C7 {
 
     async * f() {
 >f : Symbol(C7.f, Decl(C7.ts, 0, 10))
-
-        return 1;
     }
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/C8.ts ===

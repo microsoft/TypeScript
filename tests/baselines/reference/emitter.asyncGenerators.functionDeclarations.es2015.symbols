@@ -40,7 +40,5 @@ async function * f6() {
 === tests/cases/conformance/emitter/es2015/asyncGenerators/F7.ts ===
 async function * f7() {
 >f7 : Symbol(f7, Decl(F7.ts, 0, 0))
-
-    return 1;
 }
 

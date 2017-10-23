@@ -23,6 +23,7 @@ export interface State extends StrategicState {
 }
 
 export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: State) {
+    yield ;
     return state;
 });
 
@@ -51,6 +52,7 @@ function strategy(stratName, gen) {
 }
 exports.strategy = strategy;
 exports.Nothing1 = strategy("Nothing", function* (state) {
+    yield;
     return state;
 });
 exports.Nothing2 = strategy("Nothing", function* (state) {

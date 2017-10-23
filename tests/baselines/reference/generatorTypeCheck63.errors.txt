@@ -3,6 +3,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): err
     Type 'State | 1' is not assignable to type 'StrategicState'.
       Type '1' has no properties in common with type 'StrategicState'.
 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(29,70): error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(32,62): message TS1330: generator with 'return statement' must not have zero 'yield return' statements.
 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(32,62): error TS2345: Argument of type '(state: State) => IterableIterator<1>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
   Type 'IterableIterator<1>' is not assignable to type 'IterableIterator<State>'.
     Type '1' is not assignable to type 'State'.
@@ -10,7 +11,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): err
   Type 'IterableIterator<State | 1>' is not assignable to type 'IterableIterator<StrategicState>'.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts (4 errors) ====
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts (5 errors) ====
     export interface StrategicState {
         lastStrategyApplied?: string;
     }
@@ -50,6 +51,8 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): err
     });
     
     export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: State) {
+                                                                 ~~~~~~~~
+!!! message TS1330: generator with 'return statement' must not have zero 'yield return' statements.
                                                                  ~~~~~~~~
 !!! error TS2345: Argument of type '(state: State) => IterableIterator<1>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
 !!! error TS2345:   Type 'IterableIterator<1>' is not assignable to type 'IterableIterator<State>'.

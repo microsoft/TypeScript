@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck12.ts(1,11): message TS1330: generator with 'return statement' must not have zero 'yield return' statements.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck12.ts (1 errors) ====
+    function* g(): IterableIterator<number> {
+              ~
+!!! message TS1330: generator with 'return statement' must not have zero 'yield return' statements.
+        return "";
+    }

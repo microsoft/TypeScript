@@ -25,7 +25,6 @@ async function * f6() {
 }
 //// [F7.ts]
 async function * f7() {
-    return 1;
 }
 
 
@@ -54,5 +53,4 @@ async function* f6() {
 }
 //// [F7.js]
 async function* f7() {
-    return 1;
 }

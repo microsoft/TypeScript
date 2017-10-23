@@ -1,0 +1,37 @@
+tests/cases/conformance/es6/yieldExpressions/generatorWithoutYieldExpression.ts(21,5): message TS1330: generator with 'return statement' must not have zero 'yield return' statements.
+tests/cases/conformance/es6/yieldExpressions/generatorWithoutYieldExpression.ts(25,8): message TS1330: generator with 'return statement' must not have zero 'yield return' statements.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorWithoutYieldExpression.ts (2 errors) ====
+    // function* g0 () { }
+    
+    // function* g1() {
+    //     return 42;
+    // }
+    
+    // function* g2() {
+    //     yield 42;
+    //     return 42;
+    // }
+    
+    // function* g3() {
+    //     function* g4 () {
+    //         yield 42;
+    //         return 42;
+    //     }
+    //     return 42;
+    // }
+    
+    class A {
+      * g5 () {
+        ~~
+!!! message TS1330: generator with 'return statement' must not have zero 'yield return' statements.
+        return 42;
+      }
+    
+      g6 = function* () {
+           ~~~~~~~~
+!!! message TS1330: generator with 'return statement' must not have zero 'yield return' statements.
+        return 42;
+      }
+    }

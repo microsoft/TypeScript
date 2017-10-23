@@ -911,6 +911,10 @@
         "category": "Error",
         "code": 1329
     },
+    "A generator cannot have a return statement and no yield statements.": {
+        "category": "Error",
+        "code": 1330
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

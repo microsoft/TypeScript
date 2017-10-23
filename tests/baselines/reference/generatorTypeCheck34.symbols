@@ -6,6 +6,7 @@ function* g() {
     function* g2() {
 >g2 : Symbol(g2, Decl(generatorTypeCheck34.ts, 1, 12))
 
+        yield "";
         return "";
     }
 }

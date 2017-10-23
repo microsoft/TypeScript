@@ -71,35 +71,36 @@ export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: St
 >state : Symbol(state, Decl(generatorTypeCheck62.ts, 23, 71))
 >State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
 
+    yield ;
     return state;
 >state : Symbol(state, Decl(generatorTypeCheck62.ts, 23, 71))
 
 });
 
 export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: State) {
->Nothing2 : Symbol(Nothing2, Decl(generatorTypeCheck62.ts, 27, 12))
+>Nothing2 : Symbol(Nothing2, Decl(generatorTypeCheck62.ts, 28, 12))
 >Strategy : Symbol(Strategy, Decl(generatorTypeCheck62.ts, 13, 1))
 >State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
 >strategy : Symbol(strategy, Decl(generatorTypeCheck62.ts, 2, 1))
->state : Symbol(state, Decl(generatorTypeCheck62.ts, 27, 71))
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 28, 71))
 >State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
 
     yield state;
->state : Symbol(state, Decl(generatorTypeCheck62.ts, 27, 71))
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 28, 71))
 
 });
 
 export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
->Nothing3 : Symbol(Nothing3, Decl(generatorTypeCheck62.ts, 31, 12))
+>Nothing3 : Symbol(Nothing3, Decl(generatorTypeCheck62.ts, 32, 12))
 >Strategy : Symbol(Strategy, Decl(generatorTypeCheck62.ts, 13, 1))
 >State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
 >strategy : Symbol(strategy, Decl(generatorTypeCheck62.ts, 2, 1))
->state : Symbol(state, Decl(generatorTypeCheck62.ts, 31, 72))
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 32, 72))
 >State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
 
     yield ;
     return state;
->state : Symbol(state, Decl(generatorTypeCheck62.ts, 31, 72))
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 32, 72))
 
 });
  
