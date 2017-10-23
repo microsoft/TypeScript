@@ -641,15 +641,16 @@ namespace FourSlash {
             const defs = getDefs();
             let definitions: ts.DefinitionInfo[] | ReadonlyArray<ts.DefinitionInfo>;
             let testName: string;
-            if (this.isDefinitionInfoAndBoundSpan(defs)) {
+
+            if (!defs || Array.isArray(defs)) {
+                definitions = defs as ts.DefinitionInfo[] || [];
+                testName = "goToDefinitions";
+            }
+            else {
                 this.verifyDefinitionTextSpan(defs, startMarkerName);
 
                 definitions = defs.definitions;
                 testName = "goToDefinitionsAndBoundSpan";
-            }
-            else {
-                definitions = defs || [];
-                testName = "goToDefinitions";
             }
 
             if (endMarkers.length !== definitions.length) {
@@ -680,10 +681,6 @@ namespace FourSlash {
                 };
                 this.raiseError(`goToDefinitionsAndBoundSpan failed - expected to find TextSpan ${JSON.stringify(expected)} but got ${JSON.stringify(defs.textSpan)}`);
             }
-        }
-
-        private isDefinitionInfoAndBoundSpan(definition: ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined): definition is ts.DefinitionInfoAndBoundSpan {
-            return definition && (<ts.DefinitionInfoAndBoundSpan>definition).definitions !== undefined;
         }
 
         public verifyGetEmitOutputForCurrentFile(expected: string): void {
