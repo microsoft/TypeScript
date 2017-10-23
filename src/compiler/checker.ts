@@ -6726,6 +6726,16 @@ namespace ts {
                 isInJavaScriptFile(signature.declaration));
         }
 
+        function getBaseSignature(signature: Signature) {
+            const typeParameters = signature.typeParameters;
+            if (typeParameters) {
+                const typeEraser = createTypeEraser(typeParameters);
+                const baseConstraints = map(typeParameters, tp => instantiateType(getBaseConstraintOfType(tp), typeEraser) || emptyObjectType);
+                return instantiateSignature(signature, createTypeMapper(typeParameters, baseConstraints), /*eraseTypeParameters*/ true);
+            }
+            return signature;
+        }
+
         function getOrCreateTypeFromSignature(signature: Signature): ObjectType {
             // There are two ways to declare a construct signature, one is by declaring a class constructor
             // using the constructor keyword, and the other is declaring a bare construct signature in an
@@ -10955,7 +10965,7 @@ namespace ts {
                 const targetLen = targetSignatures.length;
                 const len = sourceLen < targetLen ? sourceLen : targetLen;
                 for (let i = 0; i < len; i++) {
-                    inferFromSignature(getErasedSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]));
+                    inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getBaseSignature(targetSignatures[targetLen - len + i]));
                 }
             }
 
