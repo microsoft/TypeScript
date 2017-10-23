@@ -1710,6 +1710,10 @@ namespace ts {
         return moduleResolution;
     }
 
+    export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict"): boolean {
+        return compilerOptions[flag] === undefined ? compilerOptions.strict : compilerOptions[flag];
+    }
+
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
