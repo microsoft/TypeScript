@@ -451,7 +451,7 @@ namespace ts {
         /* @internal */
         PossiblyContainsDynamicImport = 1 << 19,
         JSDoc =              1 << 20, // If node was parsed inside jsdoc
-        InWithStatement =    1 << 21, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        /* @internal */ InWithStatement =    1 << 21, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
 
         BlockScoped = Let | Const,
 
