@@ -1625,7 +1625,12 @@ namespace ts.server.protocol {
         /**
          * Names of one or more entries for which to obtain details.
          */
-        entryNames: string[];
+        entryNames: (string | CompletionEntryIdentifier)[];
+    }
+
+    export interface CompletionEntryIdentifier {
+        name: string;
+        source: string;
     }
 
     /**
@@ -1685,6 +1690,10 @@ namespace ts.server.protocol {
          * made to avoid errors. The CompletionEntryDetails will have these actions.
          */
         hasAction?: true;
+        /**
+         * Identifier (not necessarily human-readable) identifying where this completion came from.
+         */
+        source?: string;
     }
 
     /**
@@ -1722,6 +1731,11 @@ namespace ts.server.protocol {
          * The associated code actions for this entry
          */
         codeActions?: CodeAction[];
+
+        /**
+         * Human-readable description of the `source` from the CompletionEntry.
+         */
+        source?: SymbolDisplayPart[] | undefined;
     }
 
     export interface CompletionsResponse extends Response {

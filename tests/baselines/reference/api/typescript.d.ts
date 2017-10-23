@@ -3915,8 +3915,8 @@ declare namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
+        getCompletionEntryDetails(fileName: string, position: number, id: string | CompletionEntryIdentifier, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
+        getCompletionEntrySymbol(fileName: string, position: number, id: string | CompletionEntryIdentifier): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan;
@@ -4296,6 +4296,11 @@ declare namespace ts {
          */
         replacementSpan?: TextSpan;
         hasAction?: true;
+        source?: string;
+    }
+    interface CompletionEntryIdentifier {
+        name: string;
+        source?: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -4305,6 +4310,7 @@ declare namespace ts {
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        source?: SymbolDisplayPart[];
     }
     interface OutliningSpan {
         /** The span of the document to actually collapse. */
