@@ -6,7 +6,7 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(88,9): error TS2344: Type 'boolean' does not satisfy the constraint 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(91,9): error TS2345: Argument of type 'true' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(92,15): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(100,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(100,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' has type 'number' at tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts 57:4, but here has type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(100,26): error TS2339: Property 'toFixed' does not exist on type 'string'.
 
 
@@ -128,7 +128,7 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors
     var fn5: fn5;
     var n = new fn5((n) => n.toFixed());
         ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' has type 'number' at tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts 57:4, but here has type 'string'.
                              ~~~~~~~
 !!! error TS2339: Property 'toFixed' does not exist on type 'string'.
     var s = new fn5((n) => n.substr(0));

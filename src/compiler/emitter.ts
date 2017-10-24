@@ -546,6 +546,8 @@ namespace ts {
                     return emitTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.FunctionType:
                     return emitFunctionType(<FunctionTypeNode>node);
+                case SyntaxKind.JSDocFunctionType:
+                    return emitJSDocFunctionType(node as JSDocFunctionType);
                 case SyntaxKind.ConstructorType:
                     return emitConstructorType(<ConstructorTypeNode>node);
                 case SyntaxKind.TypeQuery:
@@ -574,6 +576,20 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
+                case SyntaxKind.JSDocAllType:
+                    write("*");
+                    return;
+                case SyntaxKind.JSDocUnknownType:
+                    write("?");
+                    return;
+                case SyntaxKind.JSDocNullableType:
+                    return emitJSDocNullableType(node as JSDocNullableType);
+                case SyntaxKind.JSDocNonNullableType:
+                    return emitJSDocNonNullableType(node as JSDocNonNullableType);
+                case SyntaxKind.JSDocOptionalType:
+                    return emitJSDocOptionalType(node as JSDocOptionalType);
+                case SyntaxKind.JSDocVariadicType:
+                    return emitJSDocVariadicType(node as JSDocVariadicType);
 
                 // Binding patterns
                 case SyntaxKind.ObjectBindingPattern:
@@ -914,9 +930,16 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emitIfPresent(node.dotDotDotToken);
-            emit(node.name);
+            if (node.name) {
+                emit(node.name);
+            }
             emitIfPresent(node.questionToken);
-            emitWithPrefix(": ", node.type);
+            if (node.parent && node.parent.kind === SyntaxKind.JSDocFunctionType && !node.name) {
+                emit(node.type);
+            }
+            else {
+                emitWithPrefix(": ", node.type);
+            }
             emitExpressionWithPrefix(" = ", node.initializer);
         }
 
@@ -1035,6 +1058,29 @@ namespace ts {
             emit(node.type);
         }
 
+        function emitJSDocFunctionType(node: JSDocFunctionType) {
+            write("function");
+            emitParameters(node, node.parameters);
+            write(":");
+            emit(node.type);
+        }
+
+
+        function emitJSDocNullableType(node: JSDocNullableType) {
+            write("?");
+            emit(node.type);
+        }
+
+        function emitJSDocNonNullableType(node: JSDocNonNullableType) {
+            write("!");
+            emit(node.type);
+        }
+
+        function emitJSDocOptionalType(node: JSDocOptionalType) {
+            emit(node.type);
+            write("=");
+        }
+
         function emitConstructorType(node: ConstructorTypeNode) {
             write("new ");
             emitTypeParameters(node, node.typeParameters);
@@ -1058,6 +1104,11 @@ namespace ts {
         function emitArrayType(node: ArrayTypeNode) {
             emit(node.elementType);
             write("[]");
+        }
+
+        function emitJSDocVariadicType(node: JSDocVariadicType) {
+            write("...");
+            emit(node.type);
         }
 
         function emitTupleType(node: TupleTypeNode) {
