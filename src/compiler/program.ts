@@ -1102,11 +1102,11 @@ namespace ts {
             // If '--lib' is not specified, include default library file according to '--target'
             // otherwise, using options specified in '--lib' instead of '--target' default library file
             if (!options.lib) {
-               return compareStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+               return equateStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames());
             }
             else {
-                const stringComparer = host.useCaseSensitiveFileNames() ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
-                return forEach(options.lib, libFileName => stringComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)) === Comparison.EqualTo);
+                const stringEqualityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
+                return forEach(options.lib, libFileName => stringEqualityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
             }
         }
 
