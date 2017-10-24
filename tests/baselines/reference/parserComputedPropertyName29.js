@@ -12,5 +12,5 @@ class C {
         this[_a] = id++;
     }
 }
-_a = e, e2;
+_a = e;
 var _a;

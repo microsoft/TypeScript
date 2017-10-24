@@ -10,5 +10,5 @@ class C {
         this[_a] = 0;
     }
 }
-_a = e, e2;
+_a = e;
 var _a;

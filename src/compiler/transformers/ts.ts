@@ -2094,7 +2094,7 @@ namespace ts {
                     hoistVariableDeclaration(generatedName);
                     return createAssignment(generatedName, expression);
                 }
-                return (inlinable && omitSimple) ? undefined : expression;
+                return ((inlinable || isIdentifier(expression)) && omitSimple) ? undefined : expression;
             }
         }
 
