@@ -9604,6 +9604,15 @@ namespace ts {
                     }
                     return Ternary.False;
                 }
+                if (relation === subtypeRelation && target.flags & TypeFlags.FreshLiteral) {
+                    const excessProperty = getUnmatchedProperty(target, source, /*requireOptionalProperties*/ true);
+                    if (excessProperty) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(excessProperty), typeToString(target));
+                        }
+                        return Ternary.False;
+                    }
+                }
                 let result = Ternary.True;
                 const properties = getPropertiesOfObjectType(target);
                 for (const targetProp of properties) {
