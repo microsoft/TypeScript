@@ -4213,7 +4213,7 @@ namespace ts {
             parseExpected(SyntaxKind.LessThanSlashToken);
             if (tokenIsIdentifierOrKeyword(token())) {
                 const unexpectedTagName = parseJsxElementName();
-                parseErrorAtPosition(unexpectedTagName.pos, unexpectedTagName.end - unexpectedTagName.pos, Diagnostics.Expected_corresponding_JSX_fragment_closing_tag);
+                parseErrorAtPosition(unexpectedTagName.pos, unexpectedTagName.end - unexpectedTagName.pos, Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment);
             }
             if (inExpressionContext) {
                 parseExpected(SyntaxKind.GreaterThanToken);
