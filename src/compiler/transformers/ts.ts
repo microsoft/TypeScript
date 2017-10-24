@@ -2088,13 +2088,14 @@ namespace ts {
         function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean, omitSimple: boolean): Expression {
             if (isComputedPropertyName(name)) {
                 const expression = visitNode(name.expression, visitor, isExpression);
-                const inlinable = isSimpleInlineableExpression(expression);
+                const innerExpression = skipPartiallyEmittedExpressions(expression);
+                const inlinable = isSimpleInlineableExpression(innerExpression);
                 if (!inlinable && shouldHoist) {
                     const generatedName = getGeneratedNameForNode(name);
                     hoistVariableDeclaration(generatedName);
                     return createAssignment(generatedName, expression);
                 }
-                return ((inlinable || isIdentifier(expression)) && omitSimple) ? undefined : expression;
+                return (omitSimple && (inlinable || isIdentifier(innerExpression))) ? undefined : expression;
             }
         }
 
