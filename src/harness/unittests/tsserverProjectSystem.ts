@@ -4293,6 +4293,40 @@ namespace ts.projectSystem {
             checkNumberOfConfiguredProjects(service, 1);
             checkNumberOfInferredProjects(service, 0);
         });
+
+        it("should use projectRootPath when searching for inferred project again", () => {
+            const projectDir = "/a/b/projects/project";
+            const configFileLocation = `${projectDir}/src`;
+            const f1 = {
+                path: `${configFileLocation}/file1.ts`,
+                content: ""
+            };
+            const configFile = {
+                path: `${configFileLocation}/tsconfig.json`,
+                content: "{}"
+            };
+            const configFile2 = {
+                path: "/a/b/projects/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, libFile, configFile, configFile2]);
+            const service = createProjectService(host);
+            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            assert.isDefined(service.configuredProjects.get(configFile.path));
+            checkWatchedFiles(host, [libFile.path, configFile.path]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            const typeRootLocations = getTypeRootsFromLocation(configFileLocation);
+            checkWatchedDirectories(host, typeRootLocations.concat(configFileLocation), /*recursive*/ true);
+
+            // Delete config file - should create inferred project and not configured project
+            host.reloadFS([f1, libFile, configFile2]);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            checkWatchedFiles(host, [libFile.path, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, typeRootLocations, /*recursive*/ true);
+        });
     });
 
     describe("cancellationToken", () => {
