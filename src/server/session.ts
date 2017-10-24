@@ -609,7 +609,7 @@ namespace ts.server {
             }
 
             if (simplifiedResult) {
-                return this.mapFileSpan(definitions, project);
+                return this.mapDefinitionInfo(definitions, project);
             }
             else {
                 return definitions;
@@ -632,7 +632,7 @@ namespace ts.server {
 
             if (simplifiedResult) {
                 return {
-                    definitions: this.mapFileSpan(definitionAndBoundSpan.definitions, project),
+                    definitions: this.mapDefinitionInfo(definitionAndBoundSpan.definitions, project),
                     textSpan: this.toLocationTextSpan(definitionAndBoundSpan.textSpan, scriptInfo)
                 };
             }
@@ -640,16 +640,17 @@ namespace ts.server {
             return definitionAndBoundSpan;
         }
 
-        private mapFileSpan(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpan> {
-            return definitions.map(def => this.getFileSpan(def.fileName, def.textSpan, project));
+        private mapDefinitionInfo(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpan> {
+            return definitions.map(def => this.toFileSpan(def.fileName, def.textSpan, project));
         }
 
-        private getFileSpan(fileName: string, textSpan: TextSpan, project: Project): protocol.FileSpan {
+        private toFileSpan(fileName: string, textSpan: TextSpan, project: Project): protocol.FileSpan {
             const scriptInfo = project.getScriptInfo(fileName);
 
             return {
                 file: fileName,
-                ...this.toLocationTextSpan(textSpan, scriptInfo)
+                start: scriptInfo.positionToLineOffset(textSpan.start),
+                end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
             };
         }
 
@@ -662,7 +663,7 @@ namespace ts.server {
                 return emptyArray;
             }
 
-            return this.mapFileSpan(definitions, project);
+            return this.mapDefinitionInfo(definitions, project);
         }
 
         private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpan> | ReadonlyArray<ImplementationLocation> {
@@ -673,7 +674,7 @@ namespace ts.server {
                 return emptyArray;
             }
             if (simplifiedResult) {
-                return implementations.map(({ fileName, textSpan }) => this.getFileSpan(fileName, textSpan, project));
+                return implementations.map(({ fileName, textSpan }) => this.toFileSpan(fileName, textSpan, project));
             }
             else {
                 return implementations;
@@ -682,6 +683,7 @@ namespace ts.server {
 
         private getOccurrences(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.OccurrencesResponseItem> {
             const { file, project } = this.getFileAndProject(args);
+
             const position = this.getPositionInFile(args, file);
 
             const occurrences = project.getLanguageService().getOccurrencesAtPosition(file, position);
@@ -694,9 +696,10 @@ namespace ts.server {
                 const { fileName, isWriteAccess, textSpan, isInString } = occurrence;
                 const scriptInfo = project.getScriptInfo(fileName);
                 const result: protocol.OccurrencesResponseItem = {
+                    start: scriptInfo.positionToLineOffset(textSpan.start),
+                    end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)),
                     file: fileName,
                     isWriteAccess,
-                    ...this.toLocationTextSpan(textSpan, scriptInfo)
                 };
                 // no need to serialize the property if it is not true
                 if (isInString) {
@@ -734,13 +737,13 @@ namespace ts.server {
             }
 
             if (simplifiedResult) {
-                return documentHighlights.map(x => convertToDocumentHighlightsItem(x, this.toLocationTextSpan));
+                return documentHighlights.map(convertToDocumentHighlightsItem);
             }
             else {
                 return documentHighlights;
             }
 
-            function convertToDocumentHighlightsItem(documentHighlights: DocumentHighlights, toLocationSpan: (textSpan: TextSpan, scriptInfo: ScriptInfo) => protocol.TextSpan): protocol.DocumentHighlightsItem {
+            function convertToDocumentHighlightsItem(documentHighlights: DocumentHighlights): protocol.DocumentHighlightsItem {
                 const { fileName, highlightSpans } = documentHighlights;
 
                 const scriptInfo = project.getScriptInfo(fileName);
@@ -749,10 +752,11 @@ namespace ts.server {
                     highlightSpans: highlightSpans.map(convertHighlightSpan)
                 };
 
-                function convertHighlightSpan(this: Session, highlightSpan: HighlightSpan): protocol.HighlightSpan {
+                function convertHighlightSpan(highlightSpan: HighlightSpan): protocol.HighlightSpan {
                     const { textSpan, kind } = highlightSpan;
-
-                    return { kind, ...toLocationSpan(textSpan, scriptInfo) };
+                    const start = scriptInfo.positionToLineOffset(textSpan.start);
+                    const end = scriptInfo.positionToLineOffset(textSpanEnd(textSpan));
+                    return { start, end, kind };
                 }
             }
         }
@@ -845,7 +849,8 @@ namespace ts.server {
                             const locationScriptInfo = project.getScriptInfo(location.fileName);
                             return {
                                 file: location.fileName,
-                                ...this.toLocationTextSpan(location.textSpan, locationScriptInfo)
+                                start: locationScriptInfo.positionToLineOffset(location.textSpan.start),
+                                end: locationScriptInfo.positionToLineOffset(textSpanEnd(location.textSpan)),
                             };
                         });
                     },
@@ -940,15 +945,16 @@ namespace ts.server {
 
                         return references.map(ref => {
                             const refScriptInfo = project.getScriptInfo(ref.fileName);
-                            const textSpan = this.toLocationTextSpan(ref.textSpan, refScriptInfo);
-                            const refLineSpan = refScriptInfo.lineToTextSpan(textSpan.start.line - 1);
+                            const start = refScriptInfo.positionToLineOffset(ref.textSpan.start);
+                            const refLineSpan = refScriptInfo.lineToTextSpan(start.line - 1);
                             const lineText = refScriptInfo.getSnapshot().getText(refLineSpan.start, textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
                             return {
                                 file: ref.fileName,
+                                start,
                                 lineText,
+                                end: refScriptInfo.positionToLineOffset(textSpanEnd(ref.textSpan)),
                                 isWriteAccess: ref.isWriteAccess,
-                                isDefinition: ref.isDefinition,
-                                ...textSpan
+                                isDefinition: ref.isDefinition
                             };
                         });
                     },
@@ -1087,10 +1093,11 @@ namespace ts.server {
                 return {
                     kind: quickInfo.kind,
                     kindModifiers: quickInfo.kindModifiers,
+                    start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
+                    end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
                     displayString,
                     documentation: docString,
-                    tags: quickInfo.tags || [],
-                    ...this.toLocationTextSpan(quickInfo.textSpan, scriptInfo)
+                    tags: quickInfo.tags || []
                 };
             }
             else {
@@ -1180,8 +1187,9 @@ namespace ts.server {
 
             return edits.map((edit) => {
                 return {
-                    newText: edit.newText ? edit.newText : "",
-                    ...this.toLocationTextSpan(edit.span, scriptInfo)
+                    start: scriptInfo.positionToLineOffset(edit.span.start),
+                    end: scriptInfo.positionToLineOffset(textSpanEnd(edit.span)),
+                    newText: edit.newText ? edit.newText : ""
                 };
             });
         }
@@ -1409,7 +1417,8 @@ namespace ts.server {
                                 name: navItem.name,
                                 kind: navItem.kind,
                                 file: navItem.fileName,
-                                ...this.toLocationTextSpan(navItem.textSpan, scriptInfo)
+                                start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
+                                end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan))
                             };
                             if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
                                 bakedItem.kindModifiers = navItem.kindModifiers;
@@ -1596,7 +1605,7 @@ namespace ts.server {
                 fileName: change.fileName,
                 textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
             }));
-            return { description,  changes, commands };
+            return { description, changes, commands };
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: FileTextChanges): protocol.FileCodeEdits {
