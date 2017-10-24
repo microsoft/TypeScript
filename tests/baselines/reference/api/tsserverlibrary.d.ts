@@ -6922,8 +6922,8 @@ declare namespace ts.server {
         private getDiagnosticsWorker(args, isSemantic, selector, includeLinePosition);
         private getDefinition(args, simplifiedResult);
         private getDefinitionAndBoundSpan(args, simplifiedResult);
-        private mapFileSpan(definitions, project);
-        private getFileSpan(fileName, textSpan, project);
+        private mapDefinitionInfo(definitions, project);
+        private toFileSpan(fileName, textSpan, project);
         private getTypeDefinition(args);
         private getImplementation(args, simplifiedResult);
         private getOccurrences(args);
