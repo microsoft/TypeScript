@@ -12,6 +12,7 @@ namespace ts.formatting {
         private contextNodeAllOnSameLine: boolean;
         private nextNodeAllOnSameLine: boolean;
         private tokensAreOnSameLine: boolean;
+        private spanBetweenTokensIsOnSingleLine: boolean;
         private contextNodeBlockIsOnOneLine: boolean;
         private nextNodeBlockIsOnOneLine: boolean;
 
@@ -35,6 +36,7 @@ namespace ts.formatting {
             this.contextNodeAllOnSameLine = undefined;
             this.nextNodeAllOnSameLine = undefined;
             this.tokensAreOnSameLine = undefined;
+            this.spanBetweenTokensIsOnSingleLine = undefined;
             this.contextNodeBlockIsOnOneLine = undefined;
             this.nextNodeBlockIsOnOneLine = undefined;
         }
@@ -63,6 +65,16 @@ namespace ts.formatting {
             }
 
             return this.tokensAreOnSameLine;
+        }
+
+        public SpanBetweenTokensIsOnSingleLine(): boolean {
+            if (this.spanBetweenTokensIsOnSingleLine === undefined) {
+                const startLine = this.sourceFile.getLineAndCharacterOfPosition(this.currentTokenSpan.end).line;
+                const endLine = this.sourceFile.getLineAndCharacterOfPosition(this.nextTokenSpan.pos).line;
+                this.spanBetweenTokensIsOnSingleLine = (startLine === endLine);
+            }
+
+            return this.spanBetweenTokensIsOnSingleLine;
         }
 
         public ContextNodeBlockIsOnOneLine() {
