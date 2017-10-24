@@ -2085,15 +2085,16 @@ namespace ts {
             }
         }
 
-        function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean): Expression {
+        function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean, omitSimple: boolean): Expression {
             if (isComputedPropertyName(name)) {
                 const expression = visitNode(name.expression, visitor, isExpression);
-                if (!isSimpleInlineableExpression(expression) && shouldHoist) {
+                const inlinable = isSimpleInlineableExpression(expression);
+                if (!inlinable && shouldHoist) {
                     const generatedName = getGeneratedNameForNode(name);
                     hoistVariableDeclaration(generatedName);
                     return createAssignment(generatedName, expression);
                 }
-                return expression;
+                return (inlinable && omitSimple) ? undefined : expression;
             }
         }
 
@@ -2106,7 +2107,7 @@ namespace ts {
          */
         function visitPropertyNameOfClassElement(member: ClassElement): PropertyName {
             const name = member.name;
-            let expr = getPropertyNameExpressionIfNeeded(name, member.decorators && !!member.decorators.length);
+            let expr = getPropertyNameExpressionIfNeeded(name, some(member.decorators), /*omitSimple*/ false);
             if (expr) { // expr only exists if `name` is a computed property name
                 if (some(pendingExpressions)) {
                     expr = inlineExpressions([...pendingExpressions, expr]);
@@ -2170,7 +2171,7 @@ namespace ts {
         }
 
         function visitPropertyDeclaration(node: PropertyDeclaration): undefined {
-            const expr = getPropertyNameExpressionIfNeeded(node.name, /*shouldHoist*/ true);
+            const expr = getPropertyNameExpressionIfNeeded(node.name, some(node.decorators) || !!node.initializer, /*omitSimple*/ true);
             if (expr && !isSimpleInlineableExpression(expr)) {
                 (pendingExpressions || (pendingExpressions = [])).push(expr);
             }

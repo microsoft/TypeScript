@@ -27,6 +27,6 @@ class C {
         this[`hello bye`] = 0;
     }
 }
-_c = s, _a = n, _d = s + s, _b = s + n, _e = +s, _f = a, _g = true, _h = `hello ${a} bye`;
-C[_h] = 0;
-var _c, _a, _d, _b, _e, _f, _g, _h;
+s, _a = n, s + s, _b = s + n, +s, a, true, _c = `hello ${a} bye`;
+C[_c] = 0;
+var _a, _b, _c;

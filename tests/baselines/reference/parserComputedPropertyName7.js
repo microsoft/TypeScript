@@ -6,4 +6,3 @@ class C {
 //// [parserComputedPropertyName7.js]
 class C {
 }
-var _a;
