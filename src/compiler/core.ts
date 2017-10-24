@@ -1483,101 +1483,58 @@ namespace ts {
         return headChain;
     }
 
-    function toComparison(value: number) {
-        return value < 0 ? Comparison.LessThan : value > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
-    }
-
-    function compareNonNullValues<T>(a: T, b: T): Comparison {
-        return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
-    }
-
-    function compareValuesWithCallback<T>(a: T | undefined, b: T | undefined, comparer: (a: T, b: T) => number) {
+    export function compareValues<T>(a: T | undefined, b: T | undefined) {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
-        return toComparison(comparer(a, b));
-    }
-
-    export function compareValues<T>(a: T | undefined, b: T | undefined): Comparison {
-        return compareValuesWithCallback(a, b, compareNonNullValues);
-    }
-
-    interface StringComparers {
-        caseSensitive(a: string, b: string): number;
-        caseInsensitive(a: string, b: string): number;
+        return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
     // Gets string comparers compatible with the current host
-    function createStringComparers() {
-        function createIntlComparers(): StringComparers {
-            // Strings that differ in base, accents/diacritic marks, or case compare as unequal.
-            // An `undefined` locale uses the default locale of the host.
-            const caseSensitiveCollator = new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "variant" });
-
+    function createCaseInsensitiveStringComparer(): (a: string, b: string) => number {
+        // If the host supports Intl (ECMA-402), we use Intl for comparisons using the default
+        // locale:
+        if (typeof Intl === "object" && typeof Intl.Collator === "function") {
             // Strings that differ in base or accents/diacritic marks compare as unequal.
             // An `undefined` locale uses the default locale of the host.
-            const caseInsensitiveCollator = new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
-
-            return {
-                caseSensitive: (a, b) => caseSensitiveCollator.compare(a, b),
-                caseInsensitive: (a, b) => caseInsensitiveCollator.compare(a, b)
-            };
-        }
-
-        function createStringLocaleComparers(): StringComparers {
-            // for case-insensitive comparisons we always map both strings to their
-            // upper-case form as some unicode characters do not properly round-trip to
-            // lowercase (such as ẞ).
-            return {
-                caseSensitive: (a, b) => a.localeCompare(b),
-                caseInsensitive: (a, b) => a.toLocaleUpperCase().localeCompare(b.toLocaleUpperCase())
-            };
-        }
-
-        function createOrdinalComparers(): StringComparers {
-            // for case-insensitive comparisons we always map both strings to their
-            // upper-case form as some unicode characters do not properly round-trip to
-            // lowercase (such as ẞ).
             //
-            // The ordinal comparison cannot properly handle comparison of the Turkish
-            // (dotted) i and (dotless) ı to the uppercase forms of (dotted) İ and (dotless) I.
-            // This is best handled by Intl and not supported in the fallback case.
-            return {
-                caseSensitive: compareNonNullValues,
-                caseInsensitive: (a, b) => compareNonNullValues(a.toUpperCase(), b.toUpperCase())
-            };
+            // Intl.Collator.prototype.compare is bound to the collator. See NOTE in
+            // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
+            return new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }).compare;
         }
 
-        // If the host supports Intl (ECMA-402), we use Intl for comparisons using the default
-        // locale.
-        if (typeof Intl === "object" && typeof Intl.Collator === "function") {
-            return createIntlComparers();
-        }
-
-        // If the host does not support Intl (Safari, Node v0.10), we fall back to localeCompare.
+        // If the host does not support Intl, we fall back to localeCompare:
+        //
         // Node v0.10 provides incorrect results for comparisons using localeCompare, so we must
         // verify the implementation.
         if (typeof String.prototype.localeCompare === "function" &&
             typeof String.prototype.toLocaleUpperCase === "function" &&
             "a".localeCompare("B") < 0) {
-            return createStringLocaleComparers();
+            // for case-insensitive comparisons we always map both strings to their
+            // upper-case form as some unicode characters do not properly round-trip to
+            // lowercase (such as ẞ).
+            return (a, b) => a.toLocaleUpperCase().localeCompare(b.toLocaleUpperCase());
         }
 
-        // fall back to ordinal comparison
-        return createOrdinalComparers();
+        // Otherwise, fall back to ordinal comparison:
+        //
+        // for case-insensitive comparisons we always map both strings to their
+        // upper-case form as some unicode characters do not properly round-trip to
+        // lowercase (such as ẞ).
+        //
+        // The ordinal comparison cannot properly handle comparison of the Turkish
+        // (dotted) i and (dotless) ı to the uppercase forms of (dotted) İ and (dotless) I.
+        // This is best handled by Intl and not supported in the fallback case.
+        return (a, b) => {
+            const upperA = a.toUpperCase();
+            const upperB = b.toUpperCase();
+            return upperA < upperB ? Comparison.LessThan :
+                upperA > upperB ? Comparison.GreaterThan :
+                Comparison.EqualTo;
+        };
     }
 
-    const stringComparers = createStringComparers();
-
-    /**
-     * Performs a case-sensitive comparison between two strings.
-     *
-     * If supported by the host, the default locale is used for comparisons. Otherwise, an ordinal
-     * comparison is used.
-     */
-    export function compareStringsCaseSensitive(a: string | undefined, b: string | undefined) {
-        return compareValuesWithCallback(a, b, stringComparers.caseSensitive);
-    }
+    const caseInsensitiveComparer = createCaseInsensitiveStringComparer();
 
     /**
      * Performs a case-insensitive comparison between two strings.
@@ -1586,7 +1543,18 @@ namespace ts {
      * comparison is used.
      */
     export function compareStringsCaseInsensitive(a: string | undefined, b: string | undefined) {
-        return compareValuesWithCallback(a, b, stringComparers.caseInsensitive);
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        const result = caseInsensitiveComparer(a, b);
+        return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
+    }
+
+    /**
+     * Performs a case-sensitive comparison between two strings.
+     */
+    export function compareStringsCaseSensitive(a: string | undefined, b: string | undefined) {
+        return compareValues(a, b);
     }
 
     export function compareStrings(a: string | undefined, b: string | undefined, ignoreCase?: boolean): Comparison {
