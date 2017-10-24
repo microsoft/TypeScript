@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(9,7): error TS17015: Expected corresponding JSX fragment closing tag.
+tests/cases/conformance/jsx/file.tsx(9,7): error TS17015: Expected corresponding closing tag for JSX fragment.
 tests/cases/conformance/jsx/file.tsx(9,11): error TS17014: JSX fragment has no corresponding closing tag.
 tests/cases/conformance/jsx/file.tsx(11,17): error TS1005: '</' expected.
 
@@ -14,7 +14,7 @@ tests/cases/conformance/jsx/file.tsx(11,17): error TS1005: '</' expected.
     
     <>hi</div> // Error
           ~~~
-!!! error TS17015: Expected corresponding JSX fragment closing tag.
+!!! error TS17015: Expected corresponding closing tag for JSX fragment.
               ~~~~~~~~~
     
     

@@ -2090,9 +2090,9 @@ namespace ts {
 
             if (isJsxOpeningElement(node)) {
                 emitJsxTagName(node.tagName);
-                writeIfAny(node.attributes.properties, " ");
                 // We are checking here so we won't re-enter the emitting pipeline and emit extra sourcemap
                 if (node.attributes.properties && node.attributes.properties.length > 0) {
+                    write(" ");
                     emit(node.attributes);
                 }
             }
@@ -2625,12 +2625,6 @@ namespace ts {
 
         function decreaseIndent() {
             writer.decreaseIndent();
-        }
-
-        function writeIfAny(nodes: NodeArray<Node>, text: string) {
-            if (some(nodes)) {
-                write(text);
-            }
         }
 
         function writeToken(token: SyntaxKind, pos: number, contextNode?: Node) {

@@ -3607,7 +3607,7 @@
         "category": "Error",
         "code": 17014
     },
-    "Expected corresponding JSX fragment closing tag.": {
+    "Expected corresponding closing tag for JSX fragment.": {
         "category": "Error",
         "code": 17015
     },
