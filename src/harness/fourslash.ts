@@ -583,7 +583,6 @@ namespace FourSlash {
         }
 
         public verifyGoToDefinition(arg0: any, endMarkerNames?: string | string[]) {
-            this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinition());
             this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
         }
 
