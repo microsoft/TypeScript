@@ -1975,8 +1975,9 @@ namespace ts {
         const aComponents = getNormalizedPathComponents(a, currentDirectory);
         const bComponents = getNormalizedPathComponents(b, currentDirectory);
         const sharedLength = Math.min(aComponents.length, bComponents.length);
+        const stringComparer = ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
         for (let i = 0; i < sharedLength; i++) {
-            const result = compareStrings(aComponents[i], bComponents[i], ignoreCase);
+            const result = stringComparer(aComponents[i], bComponents[i]);
             if (result !== Comparison.EqualTo) {
                 return result;
             }
@@ -1997,8 +1998,9 @@ namespace ts {
             return false;
         }
 
+        const stringComparer = ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
         for (let i = 0; i < parentComponents.length; i++) {
-            const result = compareStrings(parentComponents[i], childComponents[i], ignoreCase);
+            const result = stringComparer(parentComponents[i], childComponents[i]);
             if (result !== Comparison.EqualTo) {
                 return false;
             }
@@ -2255,7 +2257,7 @@ namespace ts {
         // If there are no "includes", then just put everything in results[0].
         const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
 
-        const comparer = useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive;
+        const comparer = useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
         for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
         }
@@ -2320,7 +2322,7 @@ namespace ts {
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
-            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
+            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive);
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path

@@ -1105,7 +1105,8 @@ namespace ts {
                return compareStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
             }
             else {
-                return forEach(options.lib, libFileName => compareStrings(file.fileName, combinePaths(defaultLibraryPath, libFileName), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo);
+                const stringComparer = host.useCaseSensitiveFileNames() ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
+                return forEach(options.lib, libFileName => stringComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)) === Comparison.EqualTo);
             }
         }
 
