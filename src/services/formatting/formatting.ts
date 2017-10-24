@@ -1132,7 +1132,7 @@ namespace ts.formatting {
                     // exit early if we on different lines and rule cannot change number of newlines
                     // if line1 and line2 are on subsequent lines then no edits are required - ok to exit
                     // if line1 and line2 are separated with more than one newline - ok to exit since we cannot delete extra new lines
-                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
+                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousEndLine !== currentStartLine) {
                         return;
                     }
 
