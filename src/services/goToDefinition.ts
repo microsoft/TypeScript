@@ -156,11 +156,8 @@ namespace ts.GoToDefinition {
             return undefined;
         }
 
-        let comment = findReferenceInPosition(sourceFile.referencedFiles, position);
-        if (!comment || !tryResolveScriptReference(program, sourceFile, comment)) {
-            comment = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
-        }
-
+        // Check if position is on triple slash reference.
+        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (comment) {
             return {
                 definitions,
