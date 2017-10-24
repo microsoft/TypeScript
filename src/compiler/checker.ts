@@ -14088,6 +14088,11 @@ namespace ts {
 
         function checkJsxFragment(node: JsxFragment): Type {
             checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment);
+
+            if (compilerOptions.jsx === JsxEmit.React && compilerOptions.jsxFactory) {
+                error(node, Diagnostics.JSX_fragment_is_not_supported_when_using_jsxFactory);
+            }
+
             return getJsxGlobalElementType() || anyType;
         }
 

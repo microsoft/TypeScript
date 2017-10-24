@@ -3611,6 +3611,10 @@
         "category": "Error",
         "code": 17015
     },
+    "JSX fragment is not supported when using --jsxFactory": {
+        "category": "Error",
+        "code":17016
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
