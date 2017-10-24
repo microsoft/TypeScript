@@ -4,6 +4,8 @@
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
+    import validatePackageName = JsTyping.validatePackageName;
+    import PackageNameValidationResult = JsTyping.PackageNameValidationResult;
 
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
@@ -266,7 +268,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1]);
             let enqueueIsCalled = false;
-            const installer = new (class extends Installer {
+            const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
@@ -983,21 +985,21 @@ namespace ts.projectSystem {
             for (let i = 0; i < 8; i++) {
                 packageName += packageName;
             }
-            assert.equal(TI.validatePackageName(packageName), TI.PackageNameValidationResult.NameTooLong);
+            assert.equal(validatePackageName(packageName), PackageNameValidationResult.NameTooLong);
         });
         it("name cannot start with dot", () => {
-            assert.equal(TI.validatePackageName(".foo"), TI.PackageNameValidationResult.NameStartsWithDot);
+            assert.equal(validatePackageName(".foo"), PackageNameValidationResult.NameStartsWithDot);
         });
         it("name cannot start with underscore", () => {
-            assert.equal(TI.validatePackageName("_foo"), TI.PackageNameValidationResult.NameStartsWithUnderscore);
+            assert.equal(validatePackageName("_foo"), PackageNameValidationResult.NameStartsWithUnderscore);
         });
         it("scoped packages not supported", () => {
-            assert.equal(TI.validatePackageName("@scope/bar"), TI.PackageNameValidationResult.ScopedPackagesNotSupported);
+            assert.equal(validatePackageName("@scope/bar"), PackageNameValidationResult.ScopedPackagesNotSupported);
         });
         it("non URI safe characters are not supported", () => {
-            assert.equal(TI.validatePackageName("  scope  "), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
-            assert.equal(TI.validatePackageName("; say ‘Hello from TypeScript!’ #"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
-            assert.equal(TI.validatePackageName("a/b/c"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("  scope  "), PackageNameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), PackageNameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("a/b/c"), PackageNameValidationResult.NameContainsNonURISafeCharacters);
         });
     });
 
@@ -1250,7 +1252,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, packageFile]);
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
-            const installer = new (class extends Installer {
+            const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }

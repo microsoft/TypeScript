@@ -844,9 +844,7 @@ namespace Harness {
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
         // Cache of lib files from "built/local"
-        const libFileNameSourceFileMap = ts.createMapFromTemplate<ts.SourceFile>({
-            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
-        });
+        let libFileNameSourceFileMap: ts.Map<ts.SourceFile> | undefined;
 
         // Cache of lib files from  "tests/lib/"
         const testLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
@@ -855,6 +853,12 @@ namespace Harness {
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
                 return undefined;
+            }
+
+            if (!libFileNameSourceFileMap) {
+                libFileNameSourceFileMap = ts.createMapFromTemplate({
+                    [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
+                });
             }
 
             let sourceFile = libFileNameSourceFileMap.get(fileName);
@@ -912,8 +916,8 @@ namespace Harness {
                 if (file.content !== undefined) {
                     const fileName = ts.normalizePath(file.unitName);
                     const path = ts.toPath(file.unitName, currentDirectory, getCanonicalFileName);
-                    if (file.fileOptions && file.fileOptions["symlink"]) {
-                        const links = file.fileOptions["symlink"].split(",");
+                    if (file.fileOptions && file.fileOptions.symlink) {
+                        const links = file.fileOptions.symlink.split(",");
                         for (const link of links) {
                             const linkPath = ts.toPath(link, currentDirectory, getCanonicalFileName);
                             realPathMap.set(linkPath, fileName);
@@ -1228,7 +1232,7 @@ namespace Harness {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings["currentDirectory"] };
+                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings.currentDirectory };
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
@@ -1452,7 +1456,7 @@ namespace Harness {
             });
         }
 
-        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions, multifile?: boolean, skipTypeAndSymbolbaselines?: boolean) {
+        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean) {
             // The full walker simulates the types that you would get from doing a full
             // compile.  The pull walker simulates the types you get when you just do
             // a type query for a random node (like how the LS would do it).  Most of the
@@ -1510,19 +1514,19 @@ namespace Harness {
                     baselinePath.replace(/\.tsx?/, "") : baselinePath;
 
                 if (!multifile) {
-                    const fullBaseLine = generateBaseLine(isSymbolBaseLine, skipTypeAndSymbolbaselines);
+                    const fullBaseLine = generateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
                     Harness.Baseline.runBaseline(outputFileName + fullExtension, () => fullBaseLine, opts);
                 }
                 else {
                     Harness.Baseline.runMultifileBaseline(outputFileName, fullExtension, () => {
-                        return iterateBaseLine(isSymbolBaseLine, skipTypeAndSymbolbaselines);
+                        return iterateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
                     }, opts);
                 }
             }
 
-            function generateBaseLine(isSymbolBaseline: boolean, skipTypeAndSymbolbaselines?: boolean): string {
+            function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string {
                 let result = "";
-                const gen = iterateBaseLine(isSymbolBaseline, skipTypeAndSymbolbaselines);
+                const gen = iterateBaseLine(isSymbolBaseline, skipBaseline);
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [, content] = value;
                     result += content;
@@ -1532,8 +1536,8 @@ namespace Harness {
                 /* tslint:enable:no-null-keyword */
             }
 
-            function *iterateBaseLine(isSymbolBaseline: boolean, skipTypeAndSymbolbaselines?: boolean): IterableIterator<[string, string]> {
-                if (skipTypeAndSymbolbaselines) {
+            function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
+                if (skipBaseline) {
                     return;
                 }
                 const dupeCase = ts.createMap<number>();
@@ -1672,7 +1676,7 @@ namespace Harness {
         }
 
         function fileOutput(file: GeneratedFile, harnessSettings: Harness.TestCaseParser.CompilerSettings): string {
-            const fileName = harnessSettings["fullEmitPaths"] ? file.fileName : ts.getBaseFileName(file.fileName);
+            const fileName = harnessSettings.fullEmitPaths ? file.fileName : ts.getBaseFileName(file.fileName);
             return "//// [" + fileName + "]\r\n" + getByteOrderMarkText(file) + file.code;
         }
 

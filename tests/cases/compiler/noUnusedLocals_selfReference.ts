@@ -13,10 +13,9 @@ class C {
 }
 enum E { A = 0, B = E.A }
 
+class P { private m() { this.m; } }
+P;
+
 // Does not detect mutual recursion.
 function g() { D; }
 class D { m() { g; } }
-
-// Does not work on private methods.
-class P { private m() { this.m; } }
-P;
