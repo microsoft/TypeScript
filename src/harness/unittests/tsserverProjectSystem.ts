@@ -356,7 +356,7 @@ namespace ts.projectSystem {
     }
 
     function checkOpenFiles(projectService: server.ProjectService, expectedFiles: FileOrFolder[]) {
-        checkFileNames("Open files", projectService.openFiles.map(info => info.fileName), expectedFiles.map(file => file.path));
+        checkFileNames("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path).fileName), expectedFiles.map(file => file.path));
     }
 
     /**
@@ -4326,6 +4326,40 @@ namespace ts.projectSystem {
             checkWatchedFiles(host, [libFile.path, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
             checkWatchedDirectories(host, typeRootLocations, /*recursive*/ true);
+        });
+
+        it("should use projectRootPath when searching for inferred project again 2", () => {
+            const projectDir = "/a/b/projects/project";
+            const configFileLocation = `${projectDir}/src`;
+            const f1 = {
+                path: `${configFileLocation}/file1.ts`,
+                content: ""
+            };
+            const configFile = {
+                path: `${configFileLocation}/tsconfig.json`,
+                content: "{}"
+            };
+            const configFile2 = {
+                path: "/a/b/projects/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, libFile, configFile, configFile2]);
+            const service = createProjectService(host, { useSingleInferredProject: true }, { useInferredProjectPerProjectRoot: true });
+            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            assert.isDefined(service.configuredProjects.get(configFile.path));
+            checkWatchedFiles(host, [libFile.path, configFile.path]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, getTypeRootsFromLocation(configFileLocation).concat(configFileLocation), /*recursive*/ true);
+
+            // Delete config file - should create inferred project with project root path set
+            host.reloadFS([f1, libFile, configFile2]);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            assert.equal(service.inferredProjects[0].projectRootPath, projectDir);
+            checkWatchedFiles(host, [libFile.path, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, getTypeRootsFromLocation(projectDir), /*recursive*/ true);
         });
     });
 

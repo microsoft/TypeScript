@@ -7435,9 +7435,9 @@ declare namespace ts.server {
          */
         readonly configuredProjects: Map<ConfiguredProject>;
         /**
-         * list of open files
+         * Open files: with value being project root path, and key being Path of the file that is open
          */
-        readonly openFiles: ScriptInfo[];
+        readonly openFiles: Map<NormalizedPath>;
         private compilerOptionsForInferredProjects;
         private compilerOptionsForInferredProjectsPerProjectRoot;
         /**
@@ -7556,7 +7556,7 @@ declare namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private getConfigFileNameForFile(info, projectRootPath?);
+        private getConfigFileNameForFile(info, projectRootPath);
         private printProjects();
         private findConfiguredProjectByProjectName(configFileName);
         private getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath);
@@ -7592,8 +7592,9 @@ declare namespace ts.server {
          * If the config file is found and it refers to existing project, it reloads it either immediately
          * or schedules it for reload depending on delayReload option
          * If the there is no existing project it just opens the configured project for the config file
+         * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles(openFiles, delayReload);
+        private reloadConfiguredProjectForFiles<T>(openFiles, delayReload, shouldReloadProjectFor);
         /**
          * Remove the root of inferred project if script info is part of another project
          */
