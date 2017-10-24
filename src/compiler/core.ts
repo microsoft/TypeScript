@@ -1506,7 +1506,7 @@ namespace ts {
     }
 
     // Gets string comparers compatible with the current host
-    function createCaseInsensitiveStringComparers() {
+    function createCaseInsensitiveStringCollator() {
         function createIntlStringCollator(): StringCollator {
             // Strings that differ in base or accents/diacritic marks compare as unequal.
             // An `undefined` locale uses the default locale of the host.
@@ -1570,7 +1570,7 @@ namespace ts {
         return createOrdinalStringCollator();
     }
 
-    const caseInsensitiveCollator = createCaseInsensitiveStringComparers();
+    const caseInsensitiveCollator = createCaseInsensitiveStringCollator();
 
     /**
      * Performs a case-insensitive comparison between two strings.
