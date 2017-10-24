@@ -1105,8 +1105,8 @@ namespace ts {
                return equateStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames());
             }
             else {
-                const stringEqualityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
-                return forEach(options.lib, libFileName => stringEqualityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
+                const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
+                return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
             }
         }
 
