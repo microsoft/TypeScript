@@ -4330,7 +4330,6 @@ namespace ts {
         Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
         NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
         /*@internal*/ TypeScriptClassWrapper = 1 << 25, // The node is an IIFE class wrapper created by the ts transform.
-        /*@internal*/ NoNameGenerationScope = 1 << 26, // Used to indicate when a function or other wrapper shouldn't be considered a name generation scope because its generated locals are merged with a higher scope
     }
 
     export interface EmitHelper {

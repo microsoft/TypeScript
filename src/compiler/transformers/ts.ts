@@ -398,11 +398,7 @@ namespace ts {
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided. However their names are still visited, and can potentially be retained if they could have sideeffects
-                    const expr = getPropertyNameExpressionIfNeeded((node as PropertyDeclaration).name, /*shouldHoist*/ true);
-                    if (expr && !isSimpleComputedPropertyName(expr)) {
-                        (pendingExpressions || (pendingExpressions = [])).push(expr);
-                    }
-                    return undefined;
+                    return visitPropertyDeclaration(node as PropertyDeclaration);
 
                 case SyntaxKind.NamespaceExportDeclaration:
                     // TypeScript namespace export declarations are elided.
@@ -607,7 +603,7 @@ namespace ts {
             let statements: Statement[] = [classStatement];
 
             // Write any pending expressions
-            if (pendingExpressions && pendingExpressions.length) {
+            if (some(pendingExpressions)) {
                 statements.push(createStatement(inlineExpressions(pendingExpressions)));
             }
             pendingExpressions = savedPendingExpressions;
@@ -888,9 +884,7 @@ namespace ts {
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, node);
 
-            const hasPendingExpressions = pendingExpressions && pendingExpressions.length;
-
-            if (staticProperties.length > 0 || hasPendingExpressions) {
+            if (some(staticProperties) || some(pendingExpressions)) {
                 const expressions: Expression[] = [];
                 const temp = createTempVariable(hoistVariableDeclaration);
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
@@ -910,6 +904,7 @@ namespace ts {
                 return inlineExpressions(expressions);
             }
 
+            pendingExpressions = savedPendingExpressions;
             return classExpression;
         }
 
@@ -1239,7 +1234,7 @@ namespace ts {
          * @param receiver The object receiving the property assignment.
          */
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
-            const propertyName = isComputedPropertyName(property.name) && !isSimpleComputedPropertyName(property.name.expression)
+            const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
                 ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name, !hasModifier(property, ModifierFlags.Static)))
                 : property.name;
             const initializer = visitNode(property.initializer, visitor, isExpression);
@@ -2064,7 +2059,7 @@ namespace ts {
             );
         }
 
-        function isSimpleComputedPropertyName(expression: Expression) {
+        function isSimpleInlineableExpression(expression: Expression) {
             return !isIdentifier(expression) && isSimpleCopiableExpression(expression) ||
                 isWellKnownSymbolSyntactically(expression);
         }
@@ -2078,7 +2073,7 @@ namespace ts {
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name;
             if (isComputedPropertyName(name)) {
-                return generateNameForComputedPropertyName && !isSimpleComputedPropertyName((<ComputedPropertyName>name).expression)
+                return generateNameForComputedPropertyName && !isSimpleInlineableExpression((<ComputedPropertyName>name).expression)
                     ? getGeneratedNameForNode(name)
                     : (<ComputedPropertyName>name).expression;
             }
@@ -2093,7 +2088,7 @@ namespace ts {
         function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean): Expression {
             if (isComputedPropertyName(name)) {
                 const expression = visitNode(name.expression, visitor, isExpression);
-                if (!isSimpleComputedPropertyName(expression) && shouldHoist) {
+                if (!isSimpleInlineableExpression(expression) && shouldHoist) {
                     const generatedName = getGeneratedNameForNode(name);
                     hoistVariableDeclaration(generatedName);
                     return createAssignment(generatedName, expression);
@@ -2113,7 +2108,7 @@ namespace ts {
             const name = member.name;
             let expr = getPropertyNameExpressionIfNeeded(name, member.decorators && !!member.decorators.length);
             if (expr) { // expr only exists if `name` is a computed property name
-                if (pendingExpressions && pendingExpressions.length) {
+                if (some(pendingExpressions)) {
                     expr = inlineExpressions([...pendingExpressions, expr]);
                     pendingExpressions.length = 0;
                 }
@@ -2172,6 +2167,14 @@ namespace ts {
          */
         function shouldEmitFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
             return !nodeIsMissing(node.body);
+        }
+
+        function visitPropertyDeclaration(node: PropertyDeclaration): undefined {
+            const expr = getPropertyNameExpressionIfNeeded(node.name, /*shouldHoist*/ true);
+            if (expr && !isSimpleInlineableExpression(expr)) {
+                (pendingExpressions || (pendingExpressions = [])).push(expr);
+            }
+            return undefined;
         }
 
         function visitConstructor(node: ConstructorDeclaration) {

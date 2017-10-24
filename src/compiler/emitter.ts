@@ -1729,26 +1729,15 @@ namespace ts {
                         increaseIndent();
                     }
 
-                    if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
-                        emitSignatureHead(node);
-                        if (onEmitNode) {
-                            onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
-                        }
-                        else {
-                            emitBlockFunctionBody(body);
-                        }
+                    pushNameGenerationScope(node);
+                    emitSignatureHead(node);
+                    if (onEmitNode) {
+                        onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
                     }
                     else {
-                        pushNameGenerationScope(node);
-                        emitSignatureHead(node);
-                        if (onEmitNode) {
-                            onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
-                        }
-                        else {
-                            emitBlockFunctionBody(body);
-                        }
-                        popNameGenerationScope(node);
+                        emitBlockFunctionBody(body);
                     }
+                    popNameGenerationScope(node);
 
                     if (indentedFlag) {
                         decreaseIndent();
@@ -1903,11 +1892,9 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             write("enum ");
             emit(node.name);
-            pushNameGenerationScope(node);
             write(" {");
             emitList(node, node.members, ListFormat.EnumMembers);
             write("}");
-            popNameGenerationScope(node);
         }
 
         function emitModuleDeclaration(node: ModuleDeclaration) {
@@ -2847,7 +2834,7 @@ namespace ts {
          * Push a new name generation scope.
          */
         function pushNameGenerationScope(node: Node | undefined) {
-            if (node && getEmitFlags(node) & EmitFlags.NoNameGenerationScope) {
+            if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                 return;
             }
             tempFlagsStack.push(tempFlags);
@@ -2858,7 +2845,7 @@ namespace ts {
          * Pop the current name generation scope.
          */
         function popNameGenerationScope(node: Node | undefined) {
-            if (node && getEmitFlags(node) & EmitFlags.NoNameGenerationScope) {
+            if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                 return;
             }
             tempFlags = tempFlagsStack.pop();
@@ -2871,18 +2858,17 @@ namespace ts {
             if (name.autoGenerateKind === GeneratedIdentifierKind.Node) {
                 // Node names generate unique names based on their original node
                 // and are cached based on that node's id.
-                let flags: TempFlags;
                 if (name.skipNameGenerationScope) {
-                    flags = tempFlags;
+                    const savedTempFlags = tempFlags;
                     popNameGenerationScope(/*node*/ undefined);
-                }
-                const node = getNodeForGeneratedName(name);
-                const result = generateNameCached(node);
-                if (name.skipNameGenerationScope) {
+                    const result = generateNameCached(getNodeForGeneratedName(name));
                     pushNameGenerationScope(/*node*/ undefined);
-                    tempFlags = flags;
-                }
-                return result;
+                    tempFlags = savedTempFlags;
+                    return result;
+                  }
+                  else {
+                    return generateNameCached(getNodeForGeneratedName(name));
+                  }
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique
