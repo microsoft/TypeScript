@@ -650,13 +650,13 @@ namespace ts {
     }
 
     // TODO: fixme (N^2) - add optional comparer so collection can be sorted before deduplication.
-    export function deduplicate<T>(array: ReadonlyArray<T>, areEqual?: (a: T, b: T) => boolean): T[] {
+    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: (a: T, b: T) => boolean = equateValues): T[] {
         let result: T[];
         if (array) {
             result = [];
             loop: for (const item of array) {
                 for (const res of result) {
-                    if (areEqual ? areEqual(res, item) : res === item) {
+                    if (equalityComparer(res, item)) {
                         continue loop;
                     }
                 }
@@ -666,7 +666,7 @@ namespace ts {
         return result;
     }
 
-    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equaler?: (a: T, b: T) => boolean): boolean {
+    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equalityComparer: (a: T, b: T) => boolean = equateValues): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
         }
@@ -676,8 +676,7 @@ namespace ts {
         }
 
         for (let i = 0; i < array1.length; i++) {
-            const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
-            if (!equals) {
+            if (!equalityComparer(array1[i], array2[i])) {
                 return false;
             }
         }
@@ -916,6 +915,7 @@ namespace ts {
     }
 
     export type Comparer<T> = (a: T, b: T) => Comparison;
+    export type EqualityComparer<T> = (a: T, b: T) => boolean;
 
     /**
      * Performs a binary search, finding the index at which 'value' occurs in 'array'.
@@ -1124,13 +1124,13 @@ namespace ts {
      * @param left A map-like whose properties should be compared.
      * @param right A map-like whose properties should be compared.
      */
-    export function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>, equalityComparer?: (left: T, right: T) => boolean) {
+    export function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>, equalityComparer: EqualityComparer<T> = equateValues) {
         if (left === right) return true;
         if (!left || !right) return false;
         for (const key in left) {
             if (hasOwnProperty.call(left, key)) {
                 if (!hasOwnProperty.call(right, key) === undefined) return false;
-                if (equalityComparer ? !equalityComparer(left[key], right[key]) : left[key] !== right[key]) return false;
+                if (!equalityComparer(left[key], right[key])) return false;
             }
         }
 
@@ -1483,6 +1483,9 @@ namespace ts {
         return headChain;
     }
 
+    /**
+     * Compare two values for their order relative to each other.
+     */
     export function compareValues<T>(a: T | undefined, b: T | undefined) {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
@@ -1490,9 +1493,16 @@ namespace ts {
         return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
+    /**
+     * Compare two values for their equality.
+     */
+    export function equateValues<T>(a: T | undefined, b: T | undefined) {
+        return a === b;
+    }
+
     interface StringCollator {
         compare(a: string, b: string): number;
-        equals(a: string, b: string): boolean;
+        equate(a: string, b: string): boolean;
     }
 
     // Gets string comparers compatible with the current host
@@ -1506,7 +1516,7 @@ namespace ts {
                 // Intl.Collator.prototype.compare is bound to the collator. See NOTE in
                 // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
                 compare: sortCollator.compare,
-                equals: (a, b) => searchCollator.compare(a, b) === 0
+                equate: (a, b) => searchCollator.compare(a, b) === 0
             };
         }
 
@@ -1516,7 +1526,7 @@ namespace ts {
             // lowercase (such as ẞ).
             return {
                 compare: (a, b) => a.toLocaleUpperCase().localeCompare(b.toLocaleUpperCase()),
-                equals: (a, b) => a.toLocaleUpperCase() === b.toLocaleUpperCase()
+                equate: (a, b) => a.toLocaleUpperCase() === b.toLocaleUpperCase()
             };
         }
 
@@ -1536,7 +1546,7 @@ namespace ts {
                         upperA > upperB ? Comparison.GreaterThan :
                         Comparison.EqualTo;
                 },
-                equals: (a, b) => a.toUpperCase() === b.toUpperCase()
+                equate: (a, b) => a.toUpperCase() === b.toUpperCase()
             };
         }
 
@@ -1597,14 +1607,14 @@ namespace ts {
         return a === b
             || a !== undefined
             && b !== undefined
-            && caseInsensitiveCollator.equals(a, b);
+            && caseInsensitiveCollator.equate(a, b);
     }
 
     /**
      * Performs a case-sensitive equality comparison between two strings.
      */
     export function equateStringsCaseSensitive(a: string | undefined, b: string | undefined) {
-        return a === b;
+        return equateValues(a, b);
     }
 
     export function equateStrings(a: string | undefined, b: string | undefined, ignoreCase?: boolean) {
@@ -1993,9 +2003,9 @@ namespace ts {
         const aComponents = getNormalizedPathComponents(a, currentDirectory);
         const bComponents = getNormalizedPathComponents(b, currentDirectory);
         const sharedLength = Math.min(aComponents.length, bComponents.length);
-        const stringComparer = ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
+        const comparer = ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
         for (let i = 0; i < sharedLength; i++) {
-            const result = stringComparer(aComponents[i], bComponents[i]);
+            const result = comparer(aComponents[i], bComponents[i]);
             if (result !== Comparison.EqualTo) {
                 return result;
             }
@@ -2016,9 +2026,9 @@ namespace ts {
             return false;
         }
 
-        const stringEqualityComparer = ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive;
+        const equalityComparer = ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive;
         for (let i = 0; i < parentComponents.length; i++) {
-            if (!stringEqualityComparer(parentComponents[i], childComponents[i])) {
+            if (!equalityComparer(parentComponents[i], childComponents[i])) {
                 return false;
             }
         }
