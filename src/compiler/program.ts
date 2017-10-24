@@ -1049,6 +1049,10 @@ namespace ts {
             // update fileName -> file mapping
             for (let i = 0; i < newSourceFiles.length; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
+                // Set the file as found during node modules search if it was found that way in old progra,
+                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePaths[i]))) {
+                    sourceFilesFoundSearchingNodeModules.set(filePaths[i], true);
+                }
             }
 
             files = newSourceFiles;

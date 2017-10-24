@@ -1927,6 +1927,7 @@ declare module "fs" {
             expectedFiles[1].isExpectedToEmit = false;
             host.reloadFS(programFiles.concat(configFile));
             host.runQueuedTimeoutCallbacks();
+            checkProgramActualFiles(watch(), programFiles.map(f => f.path));
             checkOutputErrors(host, emptyArray);
             verifyExpectedFiles(expectedFiles);
 
