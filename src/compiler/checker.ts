@@ -7984,7 +7984,7 @@ namespace ts {
             const spread = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             spread.flags |= propagatedFlags;
             spread.flags |= TypeFlags.FreshLiteral | TypeFlags.ContainsObjectLiteral;
-            (spread as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
+            (spread as ObjectType).objectFlags |= (ObjectFlags.ObjectLiteral | ObjectFlags.ContainsSpread);
             spread.symbol = symbol;
             return spread;
         }
@@ -9604,13 +9604,17 @@ namespace ts {
                     }
                     return Ternary.False;
                 }
-                if (relation === subtypeRelation && target.flags & TypeFlags.FreshLiteral) {
-                    const excessProperty = getUnmatchedProperty(target, source, /*requireOptionalProperties*/ true);
-                    if (excessProperty) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(excessProperty), typeToString(target));
+                if (getObjectFlags(target) & ObjectFlags.ObjectLiteral) {
+                    for (const sourceProp of getPropertiesOfType(source)) {
+                        if (!getPropertyOfObjectType(target, sourceProp.escapedName)) {
+                            const sourceType = getTypeOfSymbol(sourceProp);
+                            if (!(sourceType === undefinedType || sourceType === undefinedWideningType)) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(sourceProp), typeToString(target));
+                                }
+                                return Ternary.False;
+                            }
                         }
-                        return Ternary.False;
                     }
                 }
                 let result = Ternary.True;
@@ -10462,12 +10466,25 @@ namespace ts {
             return widened === original ? prop : createSymbolWithType(prop, widened);
         }
 
-        function getWidenedTypeOfObjectLiteral(type: Type): Type {
+        function getUndefinedProperty(name: __String) {
+            const result = createSymbol(SymbolFlags.Property | SymbolFlags.Optional, name);
+            result.type = undefinedType;
+            return result;
+        }
+
+        function getWidenedTypeOfObjectLiteral(type: Type, requiredNames?: __String[]): Type {
             const members = createSymbolTable();
             for (const prop of getPropertiesOfObjectType(type)) {
                 // Since get accessors already widen their return value there is no need to
                 // widen accessor based properties here.
                 members.set(prop.escapedName, prop.flags & SymbolFlags.Property ? getWidenedProperty(prop) : prop);
+            }
+            if (requiredNames && !(getObjectFlags(type) & ObjectFlags.ContainsSpread)) {
+                for (const name of requiredNames) {
+                    if (!members.has(name)) {
+                        members.set(name, getUndefinedProperty(name));
+                    }
+                }
             }
             const stringIndexInfo = getIndexInfoOfType(type, IndexKind.String);
             const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
@@ -10476,20 +10493,35 @@ namespace ts {
                 numberIndexInfo && createIndexInfo(getWidenedType(numberIndexInfo.type), numberIndexInfo.isReadonly));
         }
 
-        function getWidenedConstituentType(type: Type): Type {
-            return type.flags & TypeFlags.Nullable ? type : getWidenedType(type);
+        function getWidenedTypeOfUnion(type: UnionType) {
+            const types = type.types;
+            const names = createMap<boolean>() as UnderscoreEscapedMap<boolean>;
+            for (const t of types) {
+                const objectFlags = getObjectFlags(t);
+                if (objectFlags & ObjectFlags.ObjectLiteral && !(objectFlags & ObjectFlags.ContainsSpread)) {
+                    for (const prop of getPropertiesOfType(t)) {
+                        names.set(prop.escapedName, true);
+                    }
+                }
+            }
+            const requiredNames = arrayFrom(names.keys());
+            return getUnionType(sameMap(types, t => t.flags & TypeFlags.Nullable ? t : getWidenedTypeWithRequiredNames(t, requiredNames)));
         }
 
-        function getWidenedType(type: Type): Type {
+        function getWidenedType(type: Type) {
+            return getWidenedTypeWithRequiredNames(type, /*requiredNames*/ undefined);
+        }
+
+        function getWidenedTypeWithRequiredNames(type: Type, requiredNames: __String[]): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
                 if (type.flags & TypeFlags.Nullable) {
                     return anyType;
                 }
                 if (getObjectFlags(type) & ObjectFlags.ObjectLiteral) {
-                    return getWidenedTypeOfObjectLiteral(type);
+                    return getWidenedTypeOfObjectLiteral(type, requiredNames);
                 }
                 if (type.flags & TypeFlags.Union) {
-                    return getUnionType(sameMap((<UnionType>type).types, getWidenedConstituentType));
+                    return getWidenedTypeOfUnion(<UnionType>type);
                 }
                 if (isArrayType(type) || isTupleType(type)) {
                     return createTypeReference((<TypeReference>type).target, sameMap((<TypeReference>type).typeArguments, getWidenedType));
