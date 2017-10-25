@@ -7227,7 +7227,6 @@ declare namespace ts.server {
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
-        reloadScript(filename: NormalizedPath, tempFileName?: NormalizedPath): boolean;
         protected removeRoot(info: ScriptInfo): void;
     }
     /**
