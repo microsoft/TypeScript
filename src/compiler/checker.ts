@@ -3174,7 +3174,7 @@ namespace ts {
              * ensuring that any names written with literals use element accesses.
              */
             function appendPropertyOrElementAccessForSymbol(symbol: Symbol, writer: SymbolWriter): void {
-                const symbolName = getNameOfSymbol(symbol);
+                const symbolName = symbol.escapedName === "default" ? "default" : getNameOfSymbol(symbol);
                 const firstChar = symbolName.charCodeAt(0);
                 const needsElementAccess = !isIdentifierStart(firstChar, languageVersion);
 
