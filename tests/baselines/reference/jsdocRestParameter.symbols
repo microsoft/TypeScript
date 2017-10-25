@@ -1,0 +1,19 @@
+=== /a.js ===
+/** @param {...number} a */
+function f(a) {
+>f : Symbol(f, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 1, 11))
+
+    // Ideally this would be a number. But currently checker.ts has only one `argumentsSymbol`.
+    arguments[0];
+>arguments : Symbol(arguments)
+}
+f([1, 2]); // Error
+>f : Symbol(f, Decl(a.js, 0, 0))
+
+f(1, "2"); // Error
+>f : Symbol(f, Decl(a.js, 0, 0))
+
+f(1, 2);
+>f : Symbol(f, Decl(a.js, 0, 0))
+

@@ -2924,32 +2924,24 @@ namespace ts {
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext): ParameterDeclaration {
                 const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
-                if (isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) {
-                    // special-case synthetic rest parameters in JS files
-                    return createParameter(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        parameterSymbol.isRestParameter ? createToken(SyntaxKind.DotDotDotToken) : undefined,
-                        "args",
-                        /*questionToken*/ undefined,
-                        typeToTypeNodeHelper(anyArrayType, context),
-                        /*initializer*/ undefined);
-                }
-                const modifiers = parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
-                const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
-                const name = parameterDeclaration.name ?
-                    parameterDeclaration.name.kind === SyntaxKind.Identifier ?
-                        setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
-                        cloneBindingName(parameterDeclaration.name) :
-                    symbolName(parameterSymbol);
-                const questionToken = isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
+                Debug.assert(!!parameterDeclaration || isTransientSymbol(parameterSymbol) && !!parameterSymbol.isRestParameter);
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
-                if (isRequiredInitializedParameter(parameterDeclaration)) {
+                if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
                     parameterType = getNullableType(parameterType, TypeFlags.Undefined);
                 }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
 
+                const modifiers = parameterDeclaration && parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
+                const dotDotDotToken = !parameterDeclaration || isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
+                const name = parameterDeclaration
+                    ? parameterDeclaration.name ?
+                        parameterDeclaration.name.kind === SyntaxKind.Identifier ?
+                            setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                            cloneBindingName(parameterDeclaration.name) :
+                        symbolName(parameterSymbol)
+                    : symbolName(parameterSymbol);
+                const questionToken = parameterDeclaration && isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
                 const parameterNode = createParameter(
                     /*decorators*/ undefined,
                     modifiers,
@@ -6510,14 +6502,21 @@ namespace ts {
                 const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
                     undefined;
-                // JS functions get a free rest parameter if they reference `arguments`
+                // JS functions get a free rest parameter if:
+                // a) The last parameter has `...` preceding its type
+                // b) It references `arguments` somewhere
                 let hasRestLikeParameter = hasRestParameter(declaration);
-                if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && containsArgumentsReference(declaration)) {
-                    hasRestLikeParameter = true;
-                    const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
-                    syntheticArgsSymbol.type = anyArrayType;
-                    syntheticArgsSymbol.isRestParameter = true;
-                    parameters.push(syntheticArgsSymbol);
+                if (!hasRestLikeParameter && isInJavaScriptFile(declaration)) {
+                    const lastParam = lastOrUndefined(declaration.parameters);
+                    const lastParamIsDocumentedAsRest = !!lastParam && some(getJSDocParameterTags(lastParam), p =>
+                        p.typeExpression && p.typeExpression.type.kind === SyntaxKind.JSDocVariadicType);
+                    if (lastParamIsDocumentedAsRest || containsArgumentsReference(declaration)) {
+                        hasRestLikeParameter = true;
+                        const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
+                        syntheticArgsSymbol.type = lastParamIsDocumentedAsRest ? createArrayType(getTypeOfParameter(lastParam.symbol)) : anyArrayType;
+                        syntheticArgsSymbol.isRestParameter = true;
+                        parameters.push(syntheticArgsSymbol);
+                    }
                 }
 
                 links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
@@ -8051,15 +8050,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                const type = getTypeFromTypeNode(node.type);
-                links.resolvedType = type ? createArrayType(type) : unknownType;
-            }
-            return links.resolvedType;
-        }
-
         function getThisType(node: Node): Type {
             const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             const parent = container && container.parent;
@@ -8133,6 +8123,8 @@ namespace ts {
                 case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocTypeExpression:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
+                case SyntaxKind.JSDocVariadicType:
+                    return getTypeFromJSDocVariadicType(node as JSDocVariadicType);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
@@ -8151,8 +8143,6 @@ namespace ts {
                 case SyntaxKind.QualifiedName:
                     const symbol = getSymbolAtLocation(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
-                case SyntaxKind.JSDocVariadicType:
-                    return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
                 default:
                     return unknownType;
             }
@@ -22884,14 +22874,15 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                     checkSignatureDeclaration(node as JSDocFunctionType);
                     // falls through
-                case SyntaxKind.JSDocVariadicType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocAllType:
                 case SyntaxKind.JSDocUnknownType:
-                    if (!isInJavaScriptFile(node) && !isInJSDoc(node)) {
-                        grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
-                    }
+                    checkJSDocTypeIsInJsFile(node);
+                    forEachChild(node, checkSourceElement);
+                    return;
+                case SyntaxKind.JSDocVariadicType:
+                    checkJSDocVariadicType(node as JSDocVariadicType);
                     return;
                 case SyntaxKind.JSDocTypeExpression:
                     return checkSourceElement((node as JSDocTypeExpression).type);
@@ -22966,6 +22957,65 @@ namespace ts {
                 case SyntaxKind.MissingDeclaration:
                     return checkMissingDeclaration(node);
             }
+        }
+
+        function checkJSDocTypeIsInJsFile(node: Node): void {
+            if (!isInJavaScriptFile(node)) {
+                grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+            }
+        }
+
+        function checkJSDocVariadicType(node: JSDocVariadicType): void {
+            checkJSDocTypeIsInJsFile(node);
+            checkSourceElement(node.type);
+
+            // Only legal location is in the *last* parameter tag.
+            const { parent } = node;
+            if (!isJSDocTypeExpression(parent)) {
+                error(node, Diagnostics.JSDoc_may_only_appear_in_the_last_parameter_of_a_signature);
+            }
+
+            const paramTag = parent.parent;
+            if (!isJSDocParameterTag(paramTag)) {
+                error(node, Diagnostics.JSDoc_may_only_appear_in_the_last_parameter_of_a_signature);
+                return;
+            }
+
+            const param = getParameterSymbolFromJSDoc(paramTag);
+            if (!param) {
+                // We will error in `checkJSDocParameterTag`.
+                return;
+            }
+
+            const host = getHostSignatureFromJSDoc(paramTag);
+            if (!host || last(host.parameters).symbol !== param) {
+                error(node, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
+            }
+        }
+
+        function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
+            const type = getTypeFromTypeNode(node.type);
+            const { parent } = node;
+            const paramTag = parent.parent;
+            if (isJSDocTypeExpression(parent) && isJSDocParameterTag(paramTag)) {
+                // Else we will add a diagnostic, see `checkJSDocVariadicType`.
+                const param = getParameterSymbolFromJSDoc(paramTag);
+                if (param) {
+                    const host = getHostSignatureFromJSDoc(paramTag);
+                    /*
+                    Only return an array type if the corresponding parameter is marked as a rest parameter.
+                    So in the following situation we will not create an array type:
+                        /** @param a {...number} * /
+                        function f(a) {}
+                    Because `a` will just be of type `number`. A synthetic `...args` will also be added, which *will* get an array type.
+                    */
+                    const lastParamDeclaration = host && last(host.parameters);
+                    if (lastParamDeclaration.symbol === param && isRestParameter(lastParamDeclaration)) {
+                        return createArrayType(type);
+                    }
+                }
+            }
+            return type;
         }
 
         // Function and class expression bodies are checked after all statements in the enclosing body. This is
