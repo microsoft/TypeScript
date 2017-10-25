@@ -1154,7 +1154,9 @@ namespace ts.refactor.extractSymbol {
 
         const name1 = type1.symbol ? type1.symbol.getName() : "";
         const name2 = type2.symbol ? type2.symbol.getName() : "";
-        const nameDiff = compareStrings(name1, name2);
+
+        // This is for code generation, use a predictable comparer.
+        const nameDiff = StringCollator.invariantCaseSensitive.compare(name1, name2);
         if (nameDiff !== 0) {
             return nameDiff;
         }

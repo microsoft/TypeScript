@@ -1101,12 +1101,14 @@ namespace ts {
 
             // If '--lib' is not specified, include default library file according to '--target'
             // otherwise, using options specified in '--lib' instead of '--target' default library file
+
+            // File-system ordering should use a predictable order
+            const collator = StringCollator.getPathCollator(!host.useCaseSensitiveFileNames());
             if (!options.lib) {
-               return equateStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames());
+               return collator.equate(file.fileName, getDefaultLibraryFileName());
             }
             else {
-                const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
-                return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
+                return forEach(options.lib, libFileName => collator.equate(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
             }
         }
 
