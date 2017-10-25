@@ -144,11 +144,18 @@ namespace ts.Completions {
 
         // Use a 'sortText' of 0' so that all symbol completion entries come before any other
         // entries (like JavaScript identifier entries).
+
+        let sortText = "0";
+
+        if (symbol.parent && symbol.parent.mergeId) {
+            sortText = `0-${symbol.parent.mergeId}`;
+        }
+
         return {
             name: displayName,
             kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
-            sortText: "0",
+            sortText,
         };
     }
 
