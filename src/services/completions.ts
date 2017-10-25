@@ -176,10 +176,13 @@ namespace ts.Completions {
         log: Log,
         allowStringLiteral: boolean,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
-    ): Map<{}> {
+    ): Map<true> {
         const start = timestamp();
-        // Name -> map from module symbol id (or -1 for not from a module) to name
-        const uniques = createMap<true[]>();
+        // Tracks unique names.
+        // We don't set this for global variables or completions from external module exports, because we can have multiple of those.
+        // Based on the order we add things we will always see locals first, then globals, then module exports.
+        // So adding a completion for a local will prevent us from adding completions for external module exports sharing the same name.
+        const uniques = createMap<true>();
         if (symbols) {
             for (const symbol of symbols) {
                 const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
@@ -189,27 +192,14 @@ namespace ts.Completions {
                 }
 
                 const { name } = entry;
-                let uniquesForName = uniques.get(name);
-                if (!uniquesForName) {
-                    uniques.set(name, uniquesForName = []);
-                }
-
-                // If we've added a local completion, don't add a completion from an import.
-                if (uniquesForName[-1]) {
+                if (uniques.has(name)) {
                     continue;
                 }
 
-                const key = origin
-                    ? getSymbolId(origin.moduleSymbol)
-                    // -2 for globals
-                    : symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile())
-                        ? -2
-                        : -1;
-                if (uniquesForName[key]) {
-                    continue;
+                // Latter case tests whether this is a global variable.
+                if (!origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()))) {
+                    uniques.set(name, true);
                 }
-
-                uniquesForName[key] = true;
 
                 entries.push(entry);
             }
