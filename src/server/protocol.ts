@@ -1735,7 +1735,7 @@ namespace ts.server.protocol {
         /**
          * Human-readable description of the `source` from the CompletionEntry.
          */
-        source?: SymbolDisplayPart[] | undefined;
+        source?: SymbolDisplayPart[];
     }
 
     export interface CompletionsResponse extends Response {

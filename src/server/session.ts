@@ -1207,7 +1207,8 @@ namespace ts.server {
             const formattingOptions = project.projectService.getFormatCodeOptions(file);
 
             return mapDefined<string | protocol.CompletionEntryIdentifier, protocol.CompletionEntryDetails>(args.entryNames, entryName => {
-                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName, formattingOptions);
+                const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source);
                 if (details) {
                     const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
                     return { ...details, codeActions: mappedCodeActions };

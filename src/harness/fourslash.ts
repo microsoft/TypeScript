@@ -783,7 +783,7 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListContains(entryId: ts.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
+        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
             const completions = this.getCompletionListAtCaret();
             if (completions) {
                 this.assertItemInCompletionList(completions.entries, entryId, text, documentation, kind, spanIndex, hasAction);
@@ -804,7 +804,7 @@ namespace FourSlash {
          * @param expectedKind the kind of symbol (see ScriptElementKind)
          * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
-        public verifyCompletionListDoesNotContain(entryId: ts.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number) {
+        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number) {
             const that = this;
             let replacementSpan: ts.TextSpan;
             if (spanIndex !== undefined) {
@@ -1131,8 +1131,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private getCompletionEntryDetails(entryName: string, source?: string) {
-            const id = source === undefined ? entryName : { name: entryName, source };
-            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, id, this.formatCodeSettings);
+            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source);
         }
 
         private getReferencesAtCaret() {
@@ -2985,7 +2984,7 @@ Actual: ${stringify(fullActual)}`);
 
         private assertItemInCompletionList(
             items: ts.CompletionEntry[],
-            entryId: ts.CompletionEntryIdentifier,
+            entryId: ts.Completions.CompletionEntryIdentifier,
             text: string | undefined,
             documentation: string | undefined,
             kind: string | undefined,
@@ -3735,7 +3734,7 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(entryId: string | ts.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
+        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
             if (typeof entryId === "string") {
                 entryId = { name: entryId, source: undefined };
             }

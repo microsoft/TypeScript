@@ -1327,7 +1327,7 @@ namespace ts {
             return Completions.getCompletionsAtPosition(host, program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, program.getSourceFiles());
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, entryId: string | CompletionEntryIdentifier, formattingOptions?: FormatCodeSettings): CompletionEntryDetails {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
             synchronizeHostData();
             const ruleProvider = formattingOptions ? getRuleProvider(formattingOptions) : undefined;
             return Completions.getCompletionEntryDetails(
@@ -1336,13 +1336,13 @@ namespace ts {
                 program.getCompilerOptions(),
                 getValidSourceFile(fileName),
                 position,
-                typeof entryId === "string" ? { name: entryId, source: undefined } : entryId,
+                { name, source },
                 program.getSourceFiles(),
                 host,
                 ruleProvider);
         }
 
-        function getCompletionEntrySymbol(fileName: string, position: number, entryId: string | CompletionEntryIdentifier): Symbol {
+        function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
             synchronizeHostData();
             return Completions.getCompletionEntrySymbol(
                 program.getTypeChecker(),
@@ -1350,7 +1350,7 @@ namespace ts {
                 program.getCompilerOptions(),
                 getValidSourceFile(fileName),
                 position,
-                typeof entryId === "string" ? { name: entryId, source: undefined } : entryId,
+                { name, source },
                 program.getSourceFiles());
         }
 

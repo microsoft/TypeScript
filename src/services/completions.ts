@@ -388,6 +388,11 @@ namespace ts.Completions {
         return symbol && { symbol, location, symbolToOriginInfoMap };
     }
 
+    export interface CompletionEntryIdentifier {
+        name: string;
+        source?: string;
+    }
+
     export function getCompletionEntryDetails(
         typeChecker: TypeChecker,
         log: (message: string) => void,
