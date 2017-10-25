@@ -13479,7 +13479,7 @@ namespace ts {
 
         function getContextualTypeForJsxExpression(node: JsxExpression): Type {
             // JSX expression can appear in two position : JSX Element's children or JSX attribute
-            const jsxAttributes: JsxAttributes = isJsxAttributeLike(node.parent) ?
+            const jsxAttributes = isJsxAttributeLike(node.parent) ?
                 node.parent.parent :
                     isJsxElement(node.parent) ?
                         node.parent.openingElement.attributes :
