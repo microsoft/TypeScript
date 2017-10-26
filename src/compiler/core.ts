@@ -1613,21 +1613,17 @@ namespace ts {
      * Creates a string comparer for use with string collation in the UI.
      */
     const createStringComparer = (function () {
-        // If the host supports Intl, we use it for comparisons using the default locale.
-        if (typeof Intl === "object" && typeof Intl.Collator === "function") {
-            return createIntlCollatorStringComparer;
+        type CachedLocale = "en-US" | undefined;
+
+        interface StringComparerCache {
+            default?: Comparer<string>;
+            "en-US"?: Comparer<string>;
         }
 
-        // If the host does not support Intl, we fall back to localeCompare.
-        // localeCompare in Node v0.10 is just an ordinal comparison, so don't use it.
-        if (typeof String.prototype.localeCompare === "function" &&
-            typeof String.prototype.toLocaleUpperCase === "function" &&
-            "a".localeCompare("B") < 0) {
-            return createLocaleCompareStringComparer;
-        }
-
-        // Otherwise, fall back to ordinal comparison:
-        return createFallbackStringComparer;
+        let caseInsensitiveCache: StringComparerCache | undefined;
+        let caseSensitiveCache: StringComparerCache | undefined;
+        const createStringComparerNoCache = getStringComparerFactory();
+        return createStringComparer;
 
         function compareWithCallback(a: string | undefined, b: string | undefined, comparer: (a: string, b: string) => number) {
             if (a === b) return Comparison.EqualTo;
@@ -1687,6 +1683,47 @@ namespace ts {
                 // Then we sort case sensitively, so "aaa" will come before "Aaa".
                 return compareCaseInsensitive(a, b) || compareCaseSensitive(a, b);
             }
+        }
+
+        function getStringComparerFactory() {
+            // If the host supports Intl, we use it for comparisons using the default locale.
+            if (typeof Intl === "object" && typeof Intl.Collator === "function") {
+                return createIntlCollatorStringComparer;
+            }
+
+            // If the host does not support Intl, we fall back to localeCompare.
+            // localeCompare in Node v0.10 is just an ordinal comparison, so don't use it.
+            if (typeof String.prototype.localeCompare === "function" &&
+                typeof String.prototype.toLocaleUpperCase === "function" &&
+                "a".localeCompare("B") < 0) {
+                return createLocaleCompareStringComparer;
+            }
+
+            // Otherwise, fall back to ordinal comparison:
+            return createFallbackStringComparer;
+        }
+
+        // Hold onto common string comparers. This avoids constantly reallocating comparers during
+        // tests.
+        function createStringComparerCached(locale: CachedLocale, caseInsensitive: boolean) {
+            const cacheKey = locale || "default";
+            const cache = caseInsensitive
+                ? caseInsensitiveCache || (caseInsensitiveCache = {})
+                : caseSensitiveCache || (caseSensitiveCache = {});
+
+            let comparer = cache[cacheKey];
+            if (!comparer) {
+                comparer = createStringComparerNoCache(locale, caseInsensitive);
+                cache[cacheKey] = comparer;
+            }
+
+            return comparer;
+        }
+
+        function createStringComparer(locale: string | undefined, caseInsensitive: boolean) {
+            return locale === undefined || locale === "en-US"
+                ? createStringComparerCached(locale as CachedLocale, caseInsensitive)
+                : createStringComparerNoCache(locale, caseInsensitive);
         }
     })();
 
