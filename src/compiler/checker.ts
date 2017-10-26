@@ -10647,61 +10647,31 @@ namespace ts {
                 type;
         }
 
-        function getWidenedLiteralLikeMapper(wideningFlags: TypeFlags) {
-            return !(wideningFlags & TypeFlags.UniqueESSymbol) ? getWidenedLiteralType :
-                !(wideningFlags & TypeFlags.WidenableLiteral) ? getWidenedUniqueESSymbolType :
-                getWidenedLiteralLikeType;
-        }
-
-        /**
-         * Widens string literal, number literal, boolean literal, enum literal, and unique symbol
-         * types, as well as unions of the same.
-         *
-         * We don't always want to widen literals in all of the same places we widen unique symbol
-         * types, and vice versa. However, there are some cases where we do widen both sets of
-         * types at the same time.
-         *
-         * In general, this function should not be called directly. Instead it should be called
-         * through either `getWidenedLiteralType` (which does not widen unique symbol types),
-         * `getWidenedUniqueESSymbolType` (which only widenes unique symbol types), or
-         * `getWidenedLiteralLikeType` (which widens both).
-         */
-        function getWidenedLiteralLikeTypeWorker(type: Type, wideningFlags: TypeFlags): Type {
-            return type.flags & wideningFlags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
-                type.flags & wideningFlags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
-                type.flags & wideningFlags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
-                type.flags & wideningFlags & TypeFlags.BooleanLiteral ? booleanType :
-                type.flags & wideningFlags & TypeFlags.UniqueESSymbol ? esSymbolType :
-                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralLikeMapper(wideningFlags))) :
+        function getWidenedLiteralLikeType(type: Type): Type {
+            return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
+                type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
+                type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
+                type.flags & TypeFlags.BooleanLiteral ? booleanType :
+                type.flags & TypeFlags.UniqueESSymbol ? esSymbolType :
+                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralLikeType)) :
                 type;
         }
 
-        /**
-         * Widens string literal, number literal, boolean literal, enum literal, and unique symbol
-         * types, as well as unions of the same.
-         */
-        function getWidenedLiteralLikeType(type: Type): Type {
-            return getWidenedLiteralLikeTypeWorker(type, TypeFlags.WidenableLiteralLike);
-        }
-
-        /**
-         * Widens string literal, number literal, boolean literal, and enum literal types, as well
-         * as unions of the same.
-         */
         function getWidenedLiteralType(type: Type): Type {
-            return getWidenedLiteralLikeTypeWorker(type, TypeFlags.WidenableLiteral);
+            return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
+                type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
+                type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
+                type.flags & TypeFlags.BooleanLiteral ? booleanType :
+                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
+                type;
         }
 
-        /**
-         * Widens unique symbol types and unions of unique symbol types.
-         */
         function getWidenedUniqueESSymbolType(type: Type): Type {
-            return getWidenedLiteralLikeTypeWorker(type, TypeFlags.UniqueESSymbol);
+            return type.flags & TypeFlags.UniqueESSymbol ? esSymbolType :
+                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedUniqueESSymbolType)) :
+                type;
         }
 
-        /**
-         * Widens a literal-like type when the contextual type is not literal-like.
-         */
         function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type) {
             const widenLiterals = !isLiteralContextualType(contextualType);
             const widenSymbols = !isUniqueESSymbolContextualType(contextualType);

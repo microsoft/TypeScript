@@ -2012,8 +2012,6 @@ declare namespace ts {
         TypeVariable = 1081344,
         Narrowable = 35620607,
         NotUnionOrUnit = 33620481,
-        WidenableLiteral = 480,
-        WidenableLiteralLike = 1504,
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {

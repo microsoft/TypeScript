@@ -3306,9 +3306,6 @@ namespace ts {
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType,
-
-        WidenableLiteral = Literal | EnumLiteral,
-        WidenableLiteralLike = WidenableLiteral | UniqueESSymbol,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
