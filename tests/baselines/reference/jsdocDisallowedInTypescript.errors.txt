@@ -7,7 +7,8 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(11,12): error TS255
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(13,14): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(14,11): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,5): error TS2322: Type 'boolean[]' is not assignable to type 'boolean'.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,5): error TS2322: Type 'boolean[]' is not assignable to type 'boolean | undefined'.
+  Type 'boolean[]' is not assignable to type 'false'.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,15): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,15): error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(17,11): error TS8020: JSDoc types can only be used inside documentation comments.
@@ -57,7 +58,8 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(24,17): error TS802
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
     var variadic: ...boolean = [true, false, true];
         ~~~~~~~~
-!!! error TS2322: Type 'boolean[]' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'boolean[]' is not assignable to type 'boolean | undefined'.
+!!! error TS2322:   Type 'boolean[]' is not assignable to type 'false'.
                   ~~~~~~~~~~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
                   ~~~~~~~~~~

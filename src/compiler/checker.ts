@@ -2928,7 +2928,7 @@ namespace ts {
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
                 if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
-                    parameterType = getNullableType(parameterType, TypeFlags.Undefined);
+                    parameterType = getUndefinedableType(parameterType);
                 }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
 
@@ -3703,7 +3703,7 @@ namespace ts {
 
                 let type = getTypeOfSymbol(p);
                 if (parameterNode && isRequiredInitializedParameter(parameterNode)) {
-                    type = getNullableType(type, TypeFlags.Undefined);
+                    type = getUndefinedableType(type);
                 }
                 buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
             }
@@ -4274,8 +4274,8 @@ namespace ts {
             return expr.kind === SyntaxKind.ArrayLiteralExpression && (<ArrayLiteralExpression>expr).elements.length === 0;
         }
 
-        function addOptionality(type: Type, optional: boolean): Type {
-            return strictNullChecks && optional ? getNullableType(type, TypeFlags.Undefined) : type;
+        function addOptionality(type: Type, optional = true): Type {
+            return strictNullChecks && optional ? getUndefinedableType(type) : type;
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
@@ -4304,7 +4304,7 @@ namespace ts {
             const typeNode = getEffectiveTypeAnnotationNode(declaration);
             if (typeNode) {
                 const declaredType = getTypeFromTypeNode(typeNode);
-                return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
+                return addOptionality(declaredType, /*optional*/ !!declaration.questionToken && includeOptionality);
             }
 
             if ((noImplicitAny || isInJavaScriptFile(declaration)) &&
@@ -4348,14 +4348,14 @@ namespace ts {
                     type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 }
                 if (type) {
-                    return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+                    return addOptionality(type, /*optional*/ !!declaration.questionToken && includeOptionality);
                 }
             }
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 const type = checkDeclarationInitializer(declaration);
-                return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+                return addOptionality(type, /*optional*/ !!declaration.questionToken && includeOptionality);
             }
 
             if (isJsxAttribute(declaration)) {
@@ -4693,7 +4693,7 @@ namespace ts {
                         links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
                     }
                     else {
-                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getNullableType(type, TypeFlags.Undefined) : type;
+                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getUndefinedableType(type) : type;
                     }
                 }
             }
@@ -6508,13 +6508,18 @@ namespace ts {
                 let hasRestLikeParameter = hasRestParameter(declaration);
                 if (!hasRestLikeParameter && isInJavaScriptFile(declaration)) {
                     const lastParam = lastOrUndefined(declaration.parameters);
-                    const lastParamIsDocumentedAsRest = !!lastParam && some(getJSDocParameterTags(lastParam), p =>
-                        p.typeExpression && p.typeExpression.type.kind === SyntaxKind.JSDocVariadicType);
-                    if (lastParamIsDocumentedAsRest || containsArgumentsReference(declaration)) {
+                    const lastParamTags = lastParam && getJSDocParameterTags(lastParam);
+                    const lastParamVariadicType = lastParamTags && firstDefined(lastParamTags, p =>
+                        p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
+                    if (lastParamVariadicType || containsArgumentsReference(declaration)) {
                         hasRestLikeParameter = true;
                         const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
-                        syntheticArgsSymbol.type = lastParamIsDocumentedAsRest ? createArrayType(getTypeOfParameter(lastParam.symbol)) : anyArrayType;
+                        syntheticArgsSymbol.type = lastParamVariadicType ? createArrayType(getTypeFromTypeNode(lastParamVariadicType.type)) : anyArrayType;
                         syntheticArgsSymbol.isRestParameter = true;
+                        if (lastParamVariadicType) {
+                            // Replace the last parameter with a rest parameter.
+                            parameters.pop();
+                        }
                         parameters.push(syntheticArgsSymbol);
                     }
                 }
@@ -7078,7 +7083,7 @@ namespace ts {
 
         function getTypeFromJSDocNullableTypeNode(node: JSDocNullableType) {
             const type = getTypeFromTypeNode(node.type);
-            return strictNullChecks ? getUnionType([type, nullType]) : type;
+            return strictNullChecks ? getNullableType(type, TypeFlags.Null) : type;
         }
 
         function getTypeFromTypeReference(node: TypeReferenceType): Type {
@@ -10373,6 +10378,11 @@ namespace ts {
                 getUnionType([type, undefinedType, nullType]);
         }
 
+        function getUndefinedableType(type: Type): Type {
+            Debug.assert(strictNullChecks);
+            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, undefinedType]);
+        }
+
         function getNonNullableType(type: Type): Type {
             return strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
         }
@@ -12632,7 +12642,7 @@ namespace ts {
                 isInAmbientContext(declaration);
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
-                    getNullableType(type, TypeFlags.Undefined);
+                    getUndefinedableType(type);
             const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
@@ -17029,7 +17039,7 @@ namespace ts {
             if (strictNullChecks) {
                 const declaration = symbol.valueDeclaration;
                 if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
-                    return getNullableType(type, TypeFlags.Undefined);
+                    return getUndefinedableType(type);
                 }
             }
             return type;
@@ -23005,9 +23015,9 @@ namespace ts {
                     /*
                     Only return an array type if the corresponding parameter is marked as a rest parameter.
                     So in the following situation we will not create an array type:
-                        /** @param a {...number} * /
+                        /** @param {...number} a * /
                         function f(a) {}
-                    Because `a` will just be of type `number`. A synthetic `...args` will also be added, which *will* get an array type.
+                    Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
                     */
                     const lastParamDeclaration = host && last(host.parameters);
                     if (lastParamDeclaration.symbol === param && isRestParameter(lastParamDeclaration)) {
@@ -23015,7 +23025,7 @@ namespace ts {
                     }
                 }
             }
-            return type;
+            return addOptionality(type);
         }
 
         // Function and class expression bodies are checked after all statements in the enclosing body. This is
@@ -24144,7 +24154,7 @@ namespace ts {
                 ? getWidenedLiteralType(getTypeOfSymbol(symbol))
                 : unknownType;
             if (flags & TypeFormatFlags.AddUndefined) {
-                type = getNullableType(type, TypeFlags.Undefined);
+                type = getUndefinedableType(type);
             }
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
