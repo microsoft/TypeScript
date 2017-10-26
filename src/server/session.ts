@@ -1188,10 +1188,10 @@ namespace ts.server {
             if (simplifiedResult) {
                 return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source } = entry;
                         const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
                         // Use `hasAction || undefined` to avoid serializing `false`.
-                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined };
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source };
                     }
                 }).sort((a, b) => compareStrings(a.name, b.name));
             }
@@ -1206,8 +1206,9 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
             const formattingOptions = project.projectService.getFormatCodeOptions(file);
 
-            return mapDefined(args.entryNames, entryName => {
-                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName, formattingOptions);
+            return mapDefined<string | protocol.CompletionEntryIdentifier, protocol.CompletionEntryDetails>(args.entryNames, entryName => {
+                const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source);
                 if (details) {
                     const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
                     return { ...details, codeActions: mappedCodeActions };

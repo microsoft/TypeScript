@@ -3915,8 +3915,8 @@ declare namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
+        getCompletionEntryDetails(fileName: string, position: number, name: string, options?: FormatCodeOptions | FormatCodeSettings, source?: string): CompletionEntryDetails;
+        getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan;
@@ -4296,6 +4296,7 @@ declare namespace ts {
          */
         replacementSpan?: TextSpan;
         hasAction?: true;
+        source?: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -4305,6 +4306,7 @@ declare namespace ts {
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        source?: SymbolDisplayPart[];
     }
     interface OutliningSpan {
         /** The span of the document to actually collapse. */
@@ -6031,7 +6033,11 @@ declare namespace ts.server.protocol {
         /**
          * Names of one or more entries for which to obtain details.
          */
-        entryNames: string[];
+        entryNames: (string | CompletionEntryIdentifier)[];
+    }
+    interface CompletionEntryIdentifier {
+        name: string;
+        source: string;
     }
     /**
      * Completion entry details request; value of command field is
@@ -6087,6 +6093,10 @@ declare namespace ts.server.protocol {
          * made to avoid errors. The CompletionEntryDetails will have these actions.
          */
         hasAction?: true;
+        /**
+         * Identifier (not necessarily human-readable) identifying where this completion came from.
+         */
+        source?: string;
     }
     /**
      * Additional completion entry details, available on demand
@@ -6120,6 +6130,10 @@ declare namespace ts.server.protocol {
          * The associated code actions for this entry
          */
         codeActions?: CodeAction[];
+        /**
+         * Human-readable description of the `source` from the CompletionEntry.
+         */
+        source?: SymbolDisplayPart[];
     }
     interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
