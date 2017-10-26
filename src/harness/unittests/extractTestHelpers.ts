@@ -67,7 +67,8 @@ namespace ts {
     }
 
     export const newLineCharacter = "\n";
-    export function getRuleProvider(action?: (opts: FormatCodeSettings) => void) {
+    export const getRuleProvider = memoize(getRuleProviderInternal);
+    function getRuleProviderInternal() {
         const options = {
             indentSize: 4,
             tabSize: 4,
@@ -89,9 +90,6 @@ namespace ts {
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
         };
-        if (action) {
-            action(options);
-        }
         const rulesProvider = new formatting.RulesProvider();
         rulesProvider.ensureUpToDate(options);
         return rulesProvider;
