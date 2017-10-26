@@ -238,8 +238,14 @@ namespace ts {
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         // "options" and "source" are optional only for backwards-compatibility
-        getCompletionEntryDetails(fileName: string, position: number, name: string, options?: FormatCodeOptions | FormatCodeSettings, source?: string): CompletionEntryDetails;
-        getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol;
+        getCompletionEntryDetails(
+            fileName: string,
+            position: number,
+            name: string,
+            options: FormatCodeOptions | FormatCodeSettings | undefined,
+            source: string | undefined,
+        ): CompletionEntryDetails;
+        getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
