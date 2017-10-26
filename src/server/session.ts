@@ -1186,7 +1186,6 @@ namespace ts.server {
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position);
             if (simplifiedResult) {
-                const comparer = StringCollator.uiCaseSensitive.compare;
                 return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
                         const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
@@ -1194,7 +1193,7 @@ namespace ts.server {
                         // Use `hasAction || undefined` to avoid serializing `false`.
                         return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined };
                     }
-                }).sort((a, b) => comparer(a.name, b.name));
+                }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
             }
             else {
                 return completions;

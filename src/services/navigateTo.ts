@@ -176,7 +176,7 @@ namespace ts.NavigateTo {
     function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem): number {
         // TODO(cyrusn): get the gamut of comparisons that VS already uses here.
         return i1.matchKind - i2.matchKind ||
-            StringCollator.uiCaseSensitive.compare(i1.name, i2.name);
+            compareStringsCaseSensitiveUI(i1.name, i2.name);
     }
 
     function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {

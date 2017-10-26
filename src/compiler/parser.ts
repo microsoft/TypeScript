@@ -6069,7 +6069,7 @@ namespace ts {
                     const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
                     if (checkJsDirectiveMatchResult) {
                         checkJsDirective = {
-                            enabled: StringCollator.ordinalCaseInsensitive.equate(checkJsDirectiveMatchResult[1], "@ts-check"),
+                            enabled: equateStringsCaseInsensitive(checkJsDirectiveMatchResult[1], "@ts-check"),
                             end: range.end,
                             pos: range.pos
                         };

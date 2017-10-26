@@ -3950,7 +3950,7 @@ namespace ts {
         }
 
         // Set the locale for UI collation
-        StringCollator.uiLocale = locale;
+        setUILocale(locale);
 
         function trySetLanguageAndTerritory(language: string, territory: string, errors?: Push<Diagnostic>): boolean {
             const compilerFilePath = normalizePath(sys.getExecutingFilePath());

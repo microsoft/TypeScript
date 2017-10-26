@@ -1484,6 +1484,38 @@ namespace ts {
     }
 
     /**
+     * Compare two values for their equality.
+     */
+    export function equateValues<T>(a: T, b: T) {
+        return a === b;
+    }
+
+    export function equateStringsCaseInsensitive(a: string, b: string) {
+        return a === b
+            || a !== undefined
+            && b !== undefined
+            && a.toUpperCase() === b.toUpperCase();
+    }
+
+    export function equateStringsCaseSensitive(a: string, b: string) {
+        return equateValues(a, b);
+    }
+
+    /**
+     * Compare equality between two strings using an ordinal comparison.
+     *
+     * Case-insensitive comparisons compare both strings after applying `toUpperCase` to
+     * each string.
+     */
+    export function equateStrings(a: string, b: string, ignoreCase: boolean) {
+        return ignoreCase ? equateStringsCaseInsensitive(a, b) : equateStringsCaseSensitive(a, b);
+    }
+
+    export function getStringEqualityComparer(ignoreCase: boolean) {
+        return ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive;
+    }
+
+    /**
      * Compare two values for their order relative to each other.
      */
     export function compareValues<T>(a: T, b: T) {
@@ -1495,279 +1527,156 @@ namespace ts {
     }
 
     /**
-     * Compare two values for their equality.
+     * Compare two strings using an ordinal comparison.
+     *
+     * Ordinal comparisons are based on the difference between the unicode code points of
+     * both strings. Characters with multiple unicode representations are considered
+     * unequal. Ordinal comparisons provide predictable ordering, but place "a" after "B".
+     *
+     * Case-insensitive comparisons compare both strings after applying `toUpperCase` to
+     * each string.
      */
-    export function equateValues<T>(a: T, b: T) {
-        return a === b;
+    export function compareStrings(a: string, b: string, ignoreCase: boolean) {
+        return ignoreCase ? compareStringsCaseInsensitive(a, b) : compareStringsCaseSensitive(a, b);
     }
 
-    export interface StringCollator {
-        compare(a: string | undefined, b: string | undefined): number;
-        equate(a: string | undefined, b: string | undefined): boolean;
+    export function compareStringsCaseInsensitive(a: string, b: string) {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        a = a.toUpperCase();
+        b = b.toUpperCase();
+        return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
     }
 
-    export interface StringCollators {
-        /**
-         * Gets a string collator for case-insensitive ordinal comparisons of strings.
-         *
-         * Ordinal comparisons are based on the difference between the unicode code points of
-         * both strings. Characters with multiple unicode representations are considered
-         * unequal.
-         *
-         * Case-insensitive comparisons compare both strings after applying `toUpperCase` to
-         * each string.
-         */
-        readonly ordinalCaseInsensitive: StringCollator;
-
-        /**
-         * Gets a string collator for case-sensitive ordinal comparisons of strings.
-         *
-         * Ordinal comparisons are based on the difference between the unicode code points of
-         * both strings. Characters with multiple unicode representations are considered
-         * unequal. They provide predictable ordering, but place "a" after "B".
-         */
-        readonly ordinalCaseSensitive: StringCollator;
-
-        /**
-         * Gets or sets a string collator for case-insensitive comparisons of strings in the host default locale.
-         *
-         * UI comparisons are based on the sort order of the host default locale. Ordering is not
-         * predictable between different host locales, but is best for displaying ordered data
-         * for UI presentation. Characters with multiple unicode representations may be considered
-         * equal.
-         *
-         * Case-insensitive comparisons compare strings that differ in only base characters or
-         * accents/diacritic marks as unequal.
-         */
-        readonly uiCaseInsensitive: StringCollator;
-
-        /**
-         * Gets a string collator for case-sensitive comparisons of strings in the host default locale.
-         *
-         * UI comparisons are based on the sort order of the host default locale. Ordering is not
-         * predictable between different host locales, but is best for displaying ordered data
-         * for UI presentation. Characters with multiple unicode representations may be considered
-         * equal.
-         */
-        readonly uiCaseSensitive: StringCollator;
-
-        /**
-         * Gets a string collator for case-insensitive comparisons of strings in an invariant locale.
-         *
-         * Invariant comparisons are based on the sort order of an invariant locale ('en-US').
-         * They provide predictable ordering, placing "a" before "B". Characters with multiple
-         * unicode representations may be considered equal. Invariant comparisons are best used
-         * when interacting with the file system.
-         *
-         * Case-insensitive comparisons compare strings that differ in only base characters or
-         * accents/diacritic marks as unequal.
-         */
-        readonly invariantCaseInsensitive: StringCollator;
-
-        /**
-         * Gets a string collator for case-sensitive comparisons of strings in an invariant locale.
-         *
-         * Invariant comparisons are based on the sort order of an invariant locale ('en-US').
-         * They provide predictable ordering, placing "a" before "B". Characters with multiple
-         * unicode representations may be considered equal. Invariant comparisons are best used
-         * when interacting with the file system.
-         */
-        readonly invariantCaseSensitive: StringCollator;
-
-        /**
-         * Gets or sets the locale for UI collators
-         */
-        uiLocale: string | undefined;
-
-        /**
-         * Creates a `StringCollator` for a specific locale and case sensitivity.
-         */
-        create(locale: string | undefined, caseSensitive: boolean): StringCollator;
-
-        /**
-         * Gets the ordinal `StringCollator` for the provided case sensitivity.
-         */
-        getOrdinalCollator(caseSensitive: boolean): StringCollator;
-
-        /**
-         * Gets the UI `StringCollator` for the provided case sensitivity.
-         */
-        getUICollator(caseSensitive: boolean): StringCollator;
-
-        /**
-         * Gets the invariant `StringCollator` for the provided case sensitivity.
-         */
-        getInvariantCollator(caseSensitive: boolean): StringCollator;
-
-        /**
-         * Gets a `StringCollator` for comparing code fragments for code generation.
-         */
-        getCodeCollator(caseSensitive: boolean): StringCollator;
-
-        /**
-         * Gets a `StringCollator` for comparing paths.
-         */
-        getPathCollator(caseSensitive: boolean): StringCollator;
+    export function compareStringsCaseSensitive(a: string, b: string) {
+        return compareValues(a, b);
     }
 
-    export const StringCollator: StringCollators = (function () {
-        const invariantLocaleName = "en-US"; // we use en-US for the invariant locale
-        const create = getStringCollatorFactory();
-        const ordinalCS: StringCollator = {
-            compare: compareValues,
-            equate: equateValues
-        };
-        const ordinalCI: StringCollator = {
-            compare: (a, b) => compareValues(toUpperCase(a), toUpperCase(b)),
-            equate: (a, b) => toUpperCase(a) === toUpperCase(b)
-        };
-        let invariantCI: StringCollator | undefined;
-        let invariantCS: StringCollator | undefined;
-        let uiCI: StringCollator | undefined;
-        let uiCS: StringCollator | undefined;
-        let uiLocale: string | undefined;
+    export function getStringComparer(ignoreCase: boolean) {
+        return ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
+    }
 
-        return {
-            get ordinalCaseInsensitive() { return ordinalCI; },
-            get ordinalCaseSensitive() { return ordinalCS; },
-            get uiCaseInsensitive() { return uiCI || (uiCI = create(uiLocale, /*caseInsensitive*/ true)); },
-            get uiCaseSensitive() { return uiCS || (uiCS = create(uiLocale, /*caseInsensitive*/ false)); },
-            get invariantCaseInsensitive() { return invariantCI || (invariantCI = create(invariantLocaleName, /*caseInsensitive*/ true)); },
-            get invariantCaseSensitive() { return invariantCS || (invariantCS = create(invariantLocaleName, /*caseInsensitive*/ false)); },
-            get uiLocale() { return uiLocale; },
-            set uiLocale(value) {
-                if (uiLocale !== value) {
-                    uiLocale = value;
-                    uiCI = undefined;
-                    uiCS = undefined;
-                }
-            },
-            create,
-            getOrdinalCollator,
-            getUICollator,
-            getInvariantCollator,
-            getCodeCollator: getInvariantCollator,
-            getPathCollator: getInvariantCollator
-        };
-
-        function getOrdinalCollator(caseInsensitive: boolean) {
-            return caseInsensitive ? StringCollator.ordinalCaseInsensitive : StringCollator.ordinalCaseSensitive;
+    /**
+     * Creates a string comparer for use with string collation in the UI.
+     */
+    const createStringComparer = (function () {
+        // If the host supports Intl, we use it for comparisons using the default locale.
+        if (typeof Intl === "object" && typeof Intl.Collator === "function") {
+            return createIntlCollatorStringComparer;
         }
 
-        function getUICollator(caseInsensitive: boolean) {
-            return caseInsensitive ? StringCollator.uiCaseInsensitive : StringCollator.uiCaseSensitive;
+        // If the host does not support Intl, we fall back to localeCompare.
+        // localeCompare in Node v0.10 is just an ordinal comparison, so don't use it.
+        if (typeof String.prototype.localeCompare === "function" &&
+            typeof String.prototype.toLocaleUpperCase === "function" &&
+            "a".localeCompare("B") < 0) {
+            return createLocaleCompareStringComparer;
         }
 
-        function getInvariantCollator(caseInsensitive: boolean) {
-            return caseInsensitive ? StringCollator.invariantCaseInsensitive : StringCollator.invariantCaseSensitive;
-        }
-
-        function toUpperCase(value: string | undefined): string | undefined {
-            return value === undefined ? undefined : value.toUpperCase();
-        }
-
-        function compareDefined(a: string, b: string) {
-            return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
-        }
+        // Otherwise, fall back to ordinal comparison:
+        return createFallbackStringComparer;
 
         function compareWithCallback(a: string | undefined, b: string | undefined, comparer: (a: string, b: string) => number) {
-            return a === b ? Comparison.EqualTo :
-                a === undefined ? Comparison.LessThan :
-                b === undefined ? Comparison.GreaterThan :
-                toComparison(comparer(a, b));
-        }
-
-        function toComparison(value: number) {
+            if (a === b) return Comparison.EqualTo;
+            if (a === undefined) return Comparison.LessThan;
+            if (b === undefined) return Comparison.GreaterThan;
+            const value = comparer(a, b);
             return value < 0 ? Comparison.LessThan : value > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
         }
 
-        function createIntlStringCollator(locale: string | undefined, caseInsensitive: boolean): StringCollator {
+        function createIntlCollatorStringComparer(locale: string | undefined, caseInsensitive: boolean): Comparer<string> {
             // Initialize the sort collator on first use
-            let sortComparer: Comparer<string> = (a, b) => {
+            let comparer: Comparer<string> = (a, b) => {
                 // Intl.Collator.prototype.compare is bound to the collator. See NOTE in
                 // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
-                sortComparer = new Intl.Collator(locale, { usage: "sort", sensitivity: caseInsensitive ? "accent" : "variant" }).compare;
-                return sortComparer(a, b);
+                comparer = new Intl.Collator(locale, { usage: "sort", sensitivity: caseInsensitive ? "accent" : "variant" }).compare;
+                return comparer(a, b);
             };
-
-            // Initialize the search collator on first use
-            let searchComparer: Comparer<string> = (a, b) => {
-                // Intl.Collator.prototype.compare is bound to the collator. See NOTE in
-                // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
-                searchComparer = new Intl.Collator(locale, { usage: "search", sensitivity: caseInsensitive ? "accent" : "variant" }).compare;
-                return searchComparer(a, b);
-            };
-
-            return {
-                compare: (a, b) => compareWithCallback(a, b, sortComparer),
-                equate: (a, b) => compareWithCallback(a, b, searchComparer) === 0
-            };
+            return (a, b) => compareWithCallback(a, b, comparer);
         }
 
-        function createLocaleCompareStringCollator(locale: string | undefined, caseInsensitive: boolean): StringCollator {
-            if (locale !== undefined) return getFallbackStringCollator(/*locale*/ undefined, caseInsensitive);
-            if (caseInsensitive) {
+        function createLocaleCompareStringComparer(locale: string | undefined, caseInsensitive: boolean): Comparer<string> {
+            // if the locale is not the default locale (`undefined`), use the fallback comparer.
+            return locale !== undefined ? createFallbackStringComparer(locale, caseInsensitive) :
+                caseInsensitive ? (a, b) => compareWithCallback(a, b, compareCaseInsensitive) :
+                (a, b) => compareWithCallback(a, b, compareCaseSensitive);
+
+            function compareCaseInsensitive(a: string, b: string) {
                 // for case-insensitive comparisons we always map both strings to their
                 // upper-case form as some unicode characters do not properly round-trip to
                 // lowercase (such as `ẞ` (German sharp capital s)).
-                return {
-                    compare: (a, b) => compareWithCallback(a, b, localeCompareCaseInsensitive),
-                    equate: (a, b) => compareWithCallback(a, b, localeCompareCaseInsensitive) === 0
-                };
-            }
-            else {
-                return {
-                    compare: (a, b) => compareWithCallback(a, b, localeCompare),
-                    equate: (a, b) => compareWithCallback(a, b, localeCompare) === 0
-                };
+                return compareCaseSensitive(a.toLocaleUpperCase(), b.toLocaleUpperCase());
             }
 
-            function localeCompareCaseInsensitive(a: string, b: string) {
-                return a.toLocaleUpperCase().localeCompare(b.toLocaleUpperCase());
-            }
-
-            function localeCompare(a: string, b: string) {
+            function compareCaseSensitive(a: string, b: string) {
                 return a.localeCompare(b);
             }
         }
 
-        function getFallbackStringCollator(_locale: string | undefined, caseInsensitive: boolean): StringCollator {
-            if (caseInsensitive) return ordinalCI;
+        function createFallbackStringComparer(_locale: string | undefined, caseInsensitive: boolean): Comparer<string> {
+            return caseInsensitive ? (a, b) => compareWithCallback(a, b, compareCaseInsensitive) :
+                (a, b) => compareWithCallback(a, b, compareCaseSensitiveDictionaryOrder);
 
-            function compareLowerCaseFirst(a: string, b: string) {
+            function compareCaseInsensitive(a: string, b: string) {
+                // for case-insensitive comparisons we always map both strings to their
+                // upper-case form as some unicode characters do not properly round-trip to
+                // lowercase (such as `ẞ` (German sharp capital s)).
+                return compareCaseSensitive(a.toUpperCase(), b.toUpperCase());
+            }
+
+            function compareCaseSensitive(a: string, b: string) {
+                return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
+            }
+
+            function compareCaseSensitiveDictionaryOrder(a: string, b: string) {
                 // An ordinal comparison puts "A" after "b", but for the UI we want "A" before "b".
                 // We first sort case insensitively.  So "Aaa" will come before "baa".
                 // Then we sort case sensitively, so "aaa" will come before "Aaa".
-                return compareDefined(a.toUpperCase(), b.toUpperCase()) || compareDefined(a, b);
+                return compareCaseInsensitive(a, b) || compareCaseSensitive(a, b);
             }
-
-            return {
-                compare: (a, b) => compareWithCallback(a, b, compareLowerCaseFirst),
-                equate: ordinalCS.equate
-            };
-        }
-
-        function getStringCollatorFactory() {
-            // If the host supports Intl (ECMA-402), we use Intl for comparisons using the default
-            // locale:
-            if (typeof Intl === "object" && typeof Intl.Collator === "function") {
-                return createIntlStringCollator;
-            }
-
-            // If the host does not support Intl, we fall back to localeCompare:
-            //
-            // Node v0.10 provides incorrect results for comparisons using localeCompare, so we must
-            // verify the implementation.
-            if (typeof String.prototype.localeCompare === "function" &&
-                typeof String.prototype.toLocaleUpperCase === "function" &&
-                "a".localeCompare("B") < 0) {
-                return createLocaleCompareStringCollator;
-            }
-
-            // Otherwise, fall back to ordinal comparison:
-            return getFallbackStringCollator;
         }
     })();
+
+    let uiCS: Comparer<string> | undefined;
+    let uiCI: Comparer<string> | undefined;
+    let uiLocale: string | undefined;
+
+    export function setUILocale(value: string) {
+        if (uiLocale !== value) {
+            uiLocale = value;
+            uiCS = undefined;
+            uiCI = undefined;
+        }
+    }
+
+    export function compareStringsCaseInsensitiveUI(a: string, b: string) {
+        const comparer = uiCS || (uiCS = createStringComparer(uiLocale, /*caseInsensitive*/ false));
+        return comparer(a, b);
+    }
+
+    export function compareStringsCaseSensitiveUI(a: string, b: string) {
+        const comparer = uiCI || (uiCI = createStringComparer(uiLocale, /*caseInsensitive*/ true));
+        return comparer(a, b);
+    }
+
+    /**
+     * Compare two strings using the sort behavior of the UI locale.
+     *
+     * Ordering is not predictable between different host locales, but is best for displaying
+     * ordered data for UI presentation. Characters with multiple unicode representations may
+     * be considered equal.
+     *
+     * Case-insensitive comparisons compare strings that differ in only base characters or
+     * accents/diacritic marks as unequal.
+     */
+    export function compareStringsUI(a: string, b: string, ignoreCase: boolean) {
+        return ignoreCase ? compareStringsCaseInsensitiveUI(a, b) : compareStringsCaseSensitiveUI(a, b);
+    }
+
+    export function getStringComparerUI(ignoreCase: boolean) {
+        return ignoreCase ? compareStringsCaseInsensitiveUI : compareStringsCaseSensitiveUI;
+    }
 
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
         return diagnostic.file ? diagnostic.file.fileName : undefined;
@@ -2151,9 +2060,9 @@ namespace ts {
         const aComponents = getNormalizedPathComponents(a, currentDirectory);
         const bComponents = getNormalizedPathComponents(b, currentDirectory);
         const sharedLength = Math.min(aComponents.length, bComponents.length);
-        const collator = StringCollator.getPathCollator(ignoreCase);
+        const comparer = getStringComparer(ignoreCase);
         for (let i = 0; i < sharedLength; i++) {
-            const result = collator.compare(aComponents[i], bComponents[i]);
+            const result = comparer(aComponents[i], bComponents[i]);
             if (result !== Comparison.EqualTo) {
                 return result;
             }
@@ -2175,9 +2084,9 @@ namespace ts {
         }
 
         // File-system comparisons should use predictable ordering
-        const collator = StringCollator.getPathCollator(ignoreCase);
+        const equalityComparer = getStringEqualityComparer(ignoreCase);
         for (let i = 0; i < parentComponents.length; i++) {
-            if (!collator.equate(parentComponents[i], childComponents[i])) {
+            if (!equalityComparer(parentComponents[i], childComponents[i])) {
                 return false;
             }
         }
@@ -2433,7 +2342,7 @@ namespace ts {
         // If there are no "includes", then just put everything in results[0].
         const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
 
-        const collator = StringCollator.getPathCollator(!useCaseSensitiveFileNames);
+        const comparer = getStringComparer(!useCaseSensitiveFileNames);
         for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
         }
@@ -2442,7 +2351,7 @@ namespace ts {
 
         function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
             let { files, directories } = getFileSystemEntries(path);
-            files = files.slice().sort(collator.compare);
+            files = files.slice().sort(comparer);
 
             for (const current of files) {
                 const name = combinePaths(path, current);
@@ -2467,7 +2376,7 @@ namespace ts {
                 }
             }
 
-            directories = directories.slice().sort(collator.compare);
+            directories = directories.slice().sort(comparer);
             for (const current of directories) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
@@ -2498,8 +2407,7 @@ namespace ts {
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
-            const collator = StringCollator.getPathCollator(!useCaseSensitiveFileNames);
-            includeBasePaths.sort(collator.compare);
+            includeBasePaths.sort(getStringComparer(!useCaseSensitiveFileNames));
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path

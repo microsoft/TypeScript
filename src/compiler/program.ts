@@ -1103,12 +1103,12 @@ namespace ts {
             // otherwise, using options specified in '--lib' instead of '--target' default library file
 
             // File-system ordering should use a predictable order
-            const collator = StringCollator.getPathCollator(!host.useCaseSensitiveFileNames());
+            const equalityComparer = getStringEqualityComparer(!host.useCaseSensitiveFileNames());
             if (!options.lib) {
-               return collator.equate(file.fileName, getDefaultLibraryFileName());
+               return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
-                return forEach(options.lib, libFileName => collator.equate(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
+                return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
             }
         }
 
