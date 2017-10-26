@@ -2651,8 +2651,6 @@ namespace ts {
                     return parseJSDocUnknownOrNullableType();
                 case SyntaxKind.FunctionKeyword:
                     return parseJSDocFunctionType();
-                case SyntaxKind.DotDotDotToken:
-                    return parseJSDocNodeWithType(SyntaxKind.JSDocVariadicType);
                 case SyntaxKind.ExclamationToken:
                     return parseJSDocNodeWithType(SyntaxKind.JSDocNonNullableType);
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -2792,6 +2790,12 @@ namespace ts {
             switch (token()) {
                 case SyntaxKind.KeyOfKeyword:
                     return parseTypeOperator(SyntaxKind.KeyOfKeyword);
+                case SyntaxKind.DotDotDotToken: {
+                    const result = createNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
+                    nextToken();
+                    result.type = parsePostfixTypeOrHigher();
+                    return finishNode(result);
+                }
             }
             return parsePostfixTypeOrHigher();
         }
