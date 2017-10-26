@@ -9027,7 +9027,7 @@ namespace ts {
 
                 if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
-                if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && source.flags & TypeFlags.FreshLiteral) {
+                if (isObjectLiteralType(source) && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
@@ -9597,7 +9597,7 @@ namespace ts {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target);
                 }
-                const requireOptionalProperties = relation === subtypeRelation && !(getObjectFlags(source) & ObjectFlags.ObjectLiteral);
+                const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source);
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
                 if (unmatchedProperty) {
                     if (reportErrors) {
@@ -9605,7 +9605,7 @@ namespace ts {
                     }
                     return Ternary.False;
                 }
-                if (getObjectFlags(target) & ObjectFlags.ObjectLiteral) {
+                if (isObjectLiteralType(target)) {
                     for (const sourceProp of getPropertiesOfType(source)) {
                         if (!getPropertyOfObjectType(target, sourceProp.escapedName)) {
                             const sourceType = getTypeOfSymbol(sourceProp);
@@ -10439,7 +10439,7 @@ namespace ts {
          * Leave signatures alone since they are not subject to the check.
          */
         function getRegularTypeOfObjectLiteral(type: Type): Type {
-            if (!(getObjectFlags(type) & ObjectFlags.ObjectLiteral && type.flags & TypeFlags.FreshLiteral)) {
+            if (!(isObjectLiteralType(type) && type.flags & TypeFlags.FreshLiteral)) {
                 return type;
             }
             const regularType = (<FreshObjectLiteralType>type).regularType;
@@ -10469,7 +10469,7 @@ namespace ts {
             if (!context.siblings) {
                 const siblings: Type[] = [];
                 for (const type of getSiblingsOfContext(context.parent)) {
-                    if (getObjectFlags(type) & ObjectFlags.ObjectLiteral) {
+                    if (isObjectLiteralType(type)) {
                         const prop = getPropertyOfObjectType(type, context.propertyName);
                         if (prop) {
                             forEachType(getTypeOfSymbol(prop), t => siblings.push(t));
@@ -10485,8 +10485,7 @@ namespace ts {
             if (!context.resolvedPropertyNames) {
                 const names = createMap<boolean>() as UnderscoreEscapedMap<boolean>;
                 for (const t of getSiblingsOfContext(context)) {
-                    const objectFlags = getObjectFlags(t);
-                    if (objectFlags & ObjectFlags.ObjectLiteral && !(objectFlags & ObjectFlags.ContainsSpread)) {
+                    if (isObjectLiteralType(t) && !(getObjectFlags(t) & ObjectFlags.ContainsSpread)) {
                         for (const prop of getPropertiesOfType(t)) {
                             names.set(prop.escapedName, true);
                         }
@@ -10545,7 +10544,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Nullable) {
                     return anyType;
                 }
-                if (getObjectFlags(type) & ObjectFlags.ObjectLiteral) {
+                if (isObjectLiteralType(type)) {
                     return getWidenedTypeOfObjectLiteral(type, context);
                 }
                 if (type.flags & TypeFlags.Union) {
@@ -10586,7 +10585,7 @@ namespace ts {
                     }
                 }
             }
-            if (getObjectFlags(type) & ObjectFlags.ObjectLiteral) {
+            if (isObjectLiteralType(type)) {
                 for (const p of getPropertiesOfObjectType(type)) {
                     const t = getTypeOfSymbol(p);
                     if (t.flags & TypeFlags.ContainsWideningType) {
@@ -11099,11 +11098,28 @@ namespace ts {
             return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
+        function isObjectLiteralType(type: Type) {
+            return !!(getObjectFlags(type) & ObjectFlags.ObjectLiteral);
+        }
+
+        function widenObjectLiteralCandidates(candidates: Type[]): Type[] {
+            if (candidates.length > 1) {
+                const objectLiterals = filter(candidates, isObjectLiteralType);
+                if (objectLiterals.length) {
+                    const objectLiteralsType = getWidenedType(getUnionType(objectLiterals, /*subtypeReduction*/ true));
+                    return concatenate(filter(candidates, t => !isObjectLiteralType(t)), [objectLiteralsType]);
+                }
+            }
+            return candidates;
+        }
+
         function getInferredType(context: InferenceContext, index: number): Type {
             const inference = context.inferences[index];
             let inferredType = inference.inferredType;
             if (!inferredType) {
                 if (inference.candidates) {
+                    // Extract all object literal types and replace them with a single widened and normalized type.
+                    const candidates = widenObjectLiteralCandidates(inference.candidates);
                     // We widen inferred literal types if
                     // all inferences were made to top-level ocurrences of the type parameter, and
                     // the type parameter has no constraint or its constraint includes no primitive or literal types, and
@@ -11112,7 +11128,7 @@ namespace ts {
                     const widenLiteralTypes = inference.topLevel &&
                         !hasPrimitiveConstraint(inference.typeParameter) &&
                         (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
-                    const baseCandidates = widenLiteralTypes ? sameMap(inference.candidates, getWidenedLiteralType) : inference.candidates;
+                    const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
                     // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
                     // union types were requested or if all inferences were made from the return type position, infer a
                     // union type. Otherwise, infer a common supertype.
