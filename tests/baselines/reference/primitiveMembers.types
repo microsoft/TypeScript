@@ -77,8 +77,8 @@ var b: Boolean = true;
 >true : true
 
 var n3 = 5 || {};
->n3 : {}
->5 || {} : {}
+>n3 : number | {}
+>5 || {} : 5 | {}
 >5 : 5
 >{} : {}
 
