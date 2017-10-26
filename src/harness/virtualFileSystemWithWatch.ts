@@ -1,10 +1,17 @@
 /// <reference path="harness.ts" />
 
 namespace ts.TestFSWithWatch {
-    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
-        content: libFileContent
+        content: `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> {}`
     };
 
     export const safeList = {
