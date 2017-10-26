@@ -21,7 +21,9 @@
 ////interface Baz {
 ////    /** Baz#property1 documentation */
 ////    property1: string;
-////    /** Baz#property2 documentation */
+////    /**
+////     * Baz#property2 documentation
+////     */
 ////    property2: object;
 ////}
 ////class Bar extends Foo implements Baz {
@@ -33,11 +35,9 @@
 ////    }
 ////    /** @inheritDoc */
 ////    static method1() {}
-////    /** @inheritDoc */
 ////    method2() {}
 ////    /** @inheritDoc */
 ////    property1: string;
-////    /** @inheritDoc */
 ////    property2: object;
 ////}
 ////const b = new Bar/*1*/(5);
@@ -46,4 +46,8 @@
 ////const p1 = b.property1/*4*/;
 ////const p2 = b.property2/*5*/;
 
-verify.baselineQuickInfo();
+verify.quickInfoAt("1", "constructor Bar(value: number): Bar", undefined); // constructors aren't actually inherited
+verify.quickInfoAt("2", "(method) Bar.method2(): void", "Foo#method2 documentation");
+verify.quickInfoAt("3", "(method) Bar.method1(): void", undefined); // statics aren't actually inherited
+verify.quickInfoAt("4", "(property) Bar.property1: string", "Foo#property1 documentation");
+verify.quickInfoAt("5", "(property) Bar.property2: object", "Baz#property2 documentation");
