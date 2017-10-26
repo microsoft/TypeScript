@@ -5517,6 +5517,10 @@ interface HTMLLabelElement extends HTMLElement {
      */
     readonly form: HTMLFormElement | null;
     /**
+     * Retrieves a reference to the input representing the control with which the label is associated.
+     */
+    readonly control: HTMLInputElement | null;
+    /**
      * Sets or retrieves the object to which the given label object is assigned.
      */
     htmlFor: string;
