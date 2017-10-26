@@ -3611,6 +3611,14 @@ namespace ts {
     }
 
     /* @internal */
+    export interface WideningContext {
+        parent?: WideningContext;            // Parent context
+        propertyName?: __String;             // Name of property in parent
+        siblings?: Type[];                   // Types of siblings
+        resolvedPropertyNames?: __String[];  // Property names occurring in sibling object literals
+    }
+
+    /* @internal */
     export const enum SpecialPropertyAssignmentKind {
         None,
         /// exports.name = expr

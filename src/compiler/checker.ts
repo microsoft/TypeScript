@@ -260,6 +260,7 @@ namespace ts {
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
+        const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
         const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
@@ -10460,27 +10461,69 @@ namespace ts {
             return regularNew;
         }
 
-        function getWidenedProperty(prop: Symbol): Symbol {
+        function createWideningContext(parent: WideningContext, propertyName: __String, siblings: Type[]): WideningContext {
+            return { parent, propertyName, siblings, resolvedPropertyNames: undefined }
+        }
+
+        function getSiblingsOfContext(context: WideningContext): Type[] {
+            if (!context.siblings) {
+                const siblings: Type[] = [];
+                for (const type of getSiblingsOfContext(context.parent)) {
+                    if (getObjectFlags(type) & ObjectFlags.ObjectLiteral) {
+                        const prop = getPropertyOfObjectType(type, context.propertyName);
+                        if (prop) {
+                            forEachType(getTypeOfSymbol(prop), t => siblings.push(t));
+                        }
+                    }
+                }
+                context.siblings = siblings;
+            }
+            return context.siblings;
+        }
+
+        function getPropertyNamesOfContext(context: WideningContext): __String[] {
+            if (!context.resolvedPropertyNames) {
+                const names = createMap<boolean>() as UnderscoreEscapedMap<boolean>;
+                for (const t of getSiblingsOfContext(context)) {
+                    const objectFlags = getObjectFlags(t);
+                    if (objectFlags & ObjectFlags.ObjectLiteral && !(objectFlags & ObjectFlags.ContainsSpread)) {
+                        for (const prop of getPropertiesOfType(t)) {
+                            names.set(prop.escapedName, true);
+                        }
+                    }
+                }
+                context.resolvedPropertyNames = arrayFrom(names.keys());
+            }
+            return context.resolvedPropertyNames;
+        }
+
+        function getWidenedProperty(prop: Symbol, context: WideningContext): Symbol {
             const original = getTypeOfSymbol(prop);
-            const widened = getWidenedType(original);
+            const propContext = context && createWideningContext(context, prop.escapedName, /*siblings*/ undefined);
+            const widened = getWidenedTypeWithContext(original, propContext);
             return widened === original ? prop : createSymbolWithType(prop, widened);
         }
 
         function getUndefinedProperty(name: __String) {
+            const cached = undefinedProperties.get(name);
+            if (cached) {
+                return cached;
+            }
             const result = createSymbol(SymbolFlags.Property | SymbolFlags.Optional, name);
             result.type = undefinedType;
+            undefinedProperties.set(name, result);
             return result;
         }
 
-        function getWidenedTypeOfObjectLiteral(type: Type, requiredNames?: __String[]): Type {
+        function getWidenedTypeOfObjectLiteral(type: Type, context: WideningContext): Type {
             const members = createSymbolTable();
             for (const prop of getPropertiesOfObjectType(type)) {
                 // Since get accessors already widen their return value there is no need to
                 // widen accessor based properties here.
-                members.set(prop.escapedName, prop.flags & SymbolFlags.Property ? getWidenedProperty(prop) : prop);
+                members.set(prop.escapedName, prop.flags & SymbolFlags.Property ? getWidenedProperty(prop, context) : prop);
             }
-            if (requiredNames && !(getObjectFlags(type) & ObjectFlags.ContainsSpread)) {
-                for (const name of requiredNames) {
+            if (context) {
+                for (const name of getPropertyNamesOfContext(context)) {
                     if (!members.has(name)) {
                         members.set(name, getUndefinedProperty(name));
                     }
@@ -10493,35 +10536,21 @@ namespace ts {
                 numberIndexInfo && createIndexInfo(getWidenedType(numberIndexInfo.type), numberIndexInfo.isReadonly));
         }
 
-        function getWidenedTypeOfUnion(type: UnionType) {
-            const types = type.types;
-            const names = createMap<boolean>() as UnderscoreEscapedMap<boolean>;
-            for (const t of types) {
-                const objectFlags = getObjectFlags(t);
-                if (objectFlags & ObjectFlags.ObjectLiteral && !(objectFlags & ObjectFlags.ContainsSpread)) {
-                    for (const prop of getPropertiesOfType(t)) {
-                        names.set(prop.escapedName, true);
-                    }
-                }
-            }
-            const requiredNames = arrayFrom(names.keys());
-            return getUnionType(sameMap(types, t => t.flags & TypeFlags.Nullable ? t : getWidenedTypeWithRequiredNames(t, requiredNames)));
-        }
-
         function getWidenedType(type: Type) {
-            return getWidenedTypeWithRequiredNames(type, /*requiredNames*/ undefined);
+            return getWidenedTypeWithContext(type, /*context*/ undefined);
         }
 
-        function getWidenedTypeWithRequiredNames(type: Type, requiredNames: __String[]): Type {
+        function getWidenedTypeWithContext(type: Type, context: WideningContext): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
                 if (type.flags & TypeFlags.Nullable) {
                     return anyType;
                 }
                 if (getObjectFlags(type) & ObjectFlags.ObjectLiteral) {
-                    return getWidenedTypeOfObjectLiteral(type, requiredNames);
+                    return getWidenedTypeOfObjectLiteral(type, context);
                 }
                 if (type.flags & TypeFlags.Union) {
-                    return getWidenedTypeOfUnion(<UnionType>type);
+                    const unionContext = context || createWideningContext(/*parent*/ undefined, /*propertyName*/ undefined, (<UnionType>type).types);
+                    return getUnionType(sameMap((<UnionType>type).types, t => t.flags & TypeFlags.Nullable ? t : getWidenedTypeWithContext(t, unionContext)));
                 }
                 if (isArrayType(type) || isTupleType(type)) {
                     return createTypeReference((<TypeReference>type).target, sameMap((<TypeReference>type).typeArguments, getWidenedType));
