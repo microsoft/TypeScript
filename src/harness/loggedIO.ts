@@ -159,7 +159,7 @@ namespace Playback {
     }
 
     const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
-    function sanitizeTestFilePath(name: string) {
+    export function sanitizeTestFilePath(name: string) {
         const path = ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", canonicalizeForHarness);
         if (ts.startsWith(path, "/")) {
             return path.substring(1);

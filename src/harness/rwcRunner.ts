@@ -70,10 +70,11 @@ namespace RWC {
                     opts.options.noEmitOnError = false;
                 });
 
+                let tsconfigFile: IOLogFile;
                 runWithIOLog(ioLog, oldIO => {
                     let fileNames = opts.fileNames;
 
-                    const tsconfigFile = ts.forEach(ioLog.filesRead, f => isTsConfigFile(f) ? f : undefined);
+                    tsconfigFile = ts.forEach(ioLog.filesRead, f => isTsConfigFile(f) ? f : undefined);
                     if (tsconfigFile) {
                         const tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
                         tsconfigFiles.push({ unitName: tsconfigFile.path, content: tsconfigFileContents.content });
@@ -154,6 +155,11 @@ namespace RWC {
                     compilerOptions = output.options;
                     compilerResult = output.result;
                 });
+
+                if (!tsconfigFile) {
+                    const files = inputFiles.map(f => Playback.sanitizeTestFilePath(f.unitName));
+                    Harness.IO.writeFile(`internal/cases/rwc/${baseName}/read/tsconfig.json`, JSON.stringify({ compilerOptions, files }));
+                }
 
                 function getHarnessCompilerInputUnit(fileName: string): Harness.Compiler.TestFile {
                     const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
