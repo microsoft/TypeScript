@@ -38,6 +38,10 @@
 ////    method2() {}
 ////    /** @inheritDoc */
 ////    property1: string;
+////    /**
+////     * Bar#property2
+////     * @inheritDoc
+////     */
 ////    property2: object;
 ////}
 ////const b = new Bar/*1*/(5);
@@ -47,7 +51,7 @@
 ////const p2 = b.property2/*5*/;
 
 verify.quickInfoAt("1", "constructor Bar(value: number): Bar", undefined); // constructors aren't actually inherited
-verify.quickInfoAt("2", "(method) Bar.method2(): void", "Foo#method2 documentation");
+verify.quickInfoAt("2", "(method) Bar.method2(): void", "Foo#method2 documentation"); // use inherited docs only
 verify.quickInfoAt("3", "(method) Bar.method1(): void", undefined); // statics aren't actually inherited
-verify.quickInfoAt("4", "(property) Bar.property1: string", "Foo#property1 documentation");
-verify.quickInfoAt("5", "(property) Bar.property2: object", "Baz#property2 documentation");
+verify.quickInfoAt("4", "(property) Bar.property1: string", "Foo#property1 documentation"); // use inherited docs only
+verify.quickInfoAt("5", "(property) Bar.property2: object", "Baz#property2 documentation\nBar#property2"); // include local and inherited docs

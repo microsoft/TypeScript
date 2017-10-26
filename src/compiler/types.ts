@@ -375,7 +375,6 @@ namespace ts {
         JSDocTemplateTag,
         JSDocTypedefTag,
         JSDocPropertyTag,
-        JSDocInheritDocTag,
 
         // Synthesized list
         SyntaxList,
@@ -417,9 +416,9 @@ namespace ts {
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocInheritDocTag,
+        LastJSDocNode = JSDocPropertyTag,
         FirstJSDocTagNode = JSDocTag,
-        LastJSDocTagNode = JSDocInheritDocTag
+        LastJSDocTagNode = JSDocPropertyTag
     }
 
     export const enum NodeFlags {
@@ -2196,10 +2195,6 @@ namespace ts {
 
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
-    }
-
-    export interface JSDocInheritDocTag extends JSDocTag {
-        kind: SyntaxKind.JSDocInheritDocTag;
     }
 
     export interface JSDocTemplateTag extends JSDocTag {

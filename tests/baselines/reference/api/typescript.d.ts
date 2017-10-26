@@ -349,14 +349,13 @@ declare namespace ts {
         JSDocTemplateTag = 286,
         JSDocTypedefTag = 287,
         JSDocPropertyTag = 288,
-        JSDocInheritDocTag = 289,
-        SyntaxList = 290,
-        NotEmittedStatement = 291,
-        PartiallyEmittedExpression = 292,
-        CommaListExpression = 293,
-        MergeDeclarationMarker = 294,
-        EndOfDeclarationMarker = 295,
-        Count = 296,
+        SyntaxList = 289,
+        NotEmittedStatement = 290,
+        PartiallyEmittedExpression = 291,
+        CommaListExpression = 292,
+        MergeDeclarationMarker = 293,
+        EndOfDeclarationMarker = 294,
+        Count = 295,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -383,9 +382,9 @@ declare namespace ts {
         LastBinaryOperator = 70,
         FirstNode = 143,
         FirstJSDocNode = 270,
-        LastJSDocNode = 289,
+        LastJSDocNode = 288,
         FirstJSDocTagNode = 280,
-        LastJSDocTagNode = 289,
+        LastJSDocTagNode = 288,
     }
     enum NodeFlags {
         None = 0,
@@ -1472,9 +1471,6 @@ declare namespace ts {
     }
     interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
-    }
-    interface JSDocInheritDocTag extends JSDocTag {
-        kind: SyntaxKind.JSDocInheritDocTag;
     }
     interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
