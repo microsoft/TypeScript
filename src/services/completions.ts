@@ -361,13 +361,17 @@ namespace ts.Completions {
         position: number,
         { name, source }: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
-    ): { symbol: Symbol, location: Node, symbolToOriginInfoMap: SymbolOriginInfoMap } | undefined {
+    ): { type: "symbol", symbol: Symbol, location: Node, symbolToOriginInfoMap: SymbolOriginInfoMap } | { type: "request", request: Request } | { type: "none" } {
         const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (!completionData) {
-            return undefined;
+            return { type: "none" };
         }
 
-        const { symbols, location, allowStringLiteral, symbolToOriginInfoMap } = completionData;
+        const { symbols, location, allowStringLiteral, symbolToOriginInfoMap, request } = completionData;
+        if (request) {
+            return { type: "request", request };
+        }
+
         // Find the symbol with the matching entry name.
         // We don't need to perform character checks here because we're only comparing the
         // name against 'entryName' (which is known to be good), not building a new
@@ -375,7 +379,7 @@ namespace ts.Completions {
         const symbol = find(symbols, s =>
             getCompletionEntryDisplayNameForSymbol(s, compilerOptions.target, /*performCharacterChecks*/ false, allowStringLiteral) === name
             && getSourceFromOrigin(symbolToOriginInfoMap[getSymbolId(s)]) === source);
-        return symbol && { symbol, location, symbolToOriginInfoMap };
+        return symbol ? { type: "symbol", symbol, location, symbolToOriginInfoMap } : { type: "none" };
     }
 
     export interface CompletionEntryIdentifier {
@@ -397,29 +401,44 @@ namespace ts.Completions {
         const { name, source } = entryId;
         // Compute all the completion symbols again.
         const symbolCompletion = getSymbolCompletionFromEntryId(typeChecker, log, compilerOptions, sourceFile, position, entryId, allSourceFiles);
-        if (symbolCompletion) {
-            const { symbol, location, symbolToOriginInfoMap } = symbolCompletion;
-            const codeActions = getCompletionEntryCodeActions(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, rulesProvider);
-            const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
-            const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
-            return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: source === undefined ? undefined : [textPart(source)] };
+        switch (symbolCompletion.type) {
+            case "request": {
+                const { request } = symbolCompletion;
+                switch (request.kind) {
+                    case "JsDocTagName":
+                        return JsDoc.getJSDocTagNameCompletionDetails(name);
+                    case "JsDocTag":
+                        return JsDoc.getJSDocTagCompletionDetails(name);
+                    case "JsDocParameterName":
+                        return JsDoc.getJSDocParameterNameCompletionDetails(name);
+                    default:
+                        return Debug.assertNever(request);
+                }
+            }
+            case "symbol": {
+                const { symbol, location, symbolToOriginInfoMap } = symbolCompletion;
+                const codeActions = getCompletionEntryCodeActions(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, rulesProvider);
+                const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
+                const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
+                return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: source === undefined ? undefined : [textPart(source)] };
+            }
+            case "none": {
+                // Didn't find a symbol with this name.  See if we can find a keyword instead.
+                if (some(getKeywordCompletions(KeywordCompletionFilters.None), c => c.name === name)) {
+                    return {
+                        name,
+                        kind: ScriptElementKind.keyword,
+                        kindModifiers: ScriptElementKindModifier.none,
+                        displayParts: [displayPart(name, SymbolDisplayPartKind.keyword)],
+                        documentation: undefined,
+                        tags: undefined,
+                        codeActions: undefined,
+                        source: undefined,
+                    };
+                }
+                return undefined;
+            }
         }
-
-        // Didn't find a symbol with this name.  See if we can find a keyword instead.
-        if (source === undefined && some(getKeywordCompletions(KeywordCompletionFilters.None), c => c.name === name)) {
-            return {
-                name,
-                kind: ScriptElementKind.keyword,
-                kindModifiers: ScriptElementKindModifier.none,
-                displayParts: [displayPart(name, SymbolDisplayPartKind.keyword)],
-                documentation: undefined,
-                tags: undefined,
-                codeActions: undefined,
-                source: undefined,
-            };
-        }
-
-        return undefined;
     }
 
     function  getCompletionEntryCodeActions(
@@ -461,16 +480,16 @@ namespace ts.Completions {
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): Symbol | undefined {
         const completion = getSymbolCompletionFromEntryId(typeChecker, log, compilerOptions, sourceFile, position, entryId, allSourceFiles);
-        return completion && completion.symbol;
+        return completion.type === "symbol" ? completion.symbol : undefined;
     }
 
     interface CompletionData {
-        symbols: Symbol[];
+        symbols: ReadonlyArray<Symbol>;
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         allowStringLiteral: boolean;
         isNewIdentifierLocation: boolean;
-        location: Node;
+        location: Node | undefined;
         isRightOfDot: boolean;
         request?: Request;
         keywordFilters: KeywordCompletionFilters;
@@ -557,7 +576,7 @@ namespace ts.Completions {
 
             if (request) {
                 return {
-                    symbols: undefined,
+                    symbols: emptyArray,
                     isGlobalCompletion: false,
                     isMemberCompletion: false,
                     allowStringLiteral: false,
