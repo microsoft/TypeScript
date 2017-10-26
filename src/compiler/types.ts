@@ -36,6 +36,22 @@ namespace ts {
         push(...values: T[]): void;
     }
 
+    /* @internal */
+    export type EqualityComparer<T> = (a: T, b: T) => boolean;
+
+    /* @internal */
+    export type Comparer<T> = (a: T, b: T) => Comparison;
+
+    /* @internal */
+    export const enum Comparison {
+        LessThan    = -1,
+        EqualTo     = 0,
+        GreaterThan = 1
+    }
+
+    /* @internal */
+    export type Selector<T, U> = (v: T) => U;
+
     // branded string type used to store absolute, normalized and canonicalized paths
     // arbitrary file name can be converted to Path via toPath function
     export type Path = string & { __pathBrand: any };

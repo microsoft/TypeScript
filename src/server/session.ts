@@ -958,7 +958,7 @@ namespace ts.server {
                     projects,
                     project => project.getLanguageService().findReferences(file, position),
                     /*comparer*/ undefined,
-                    /*areEqual (TODO: fixme)*/ undefined
+                    equateValues
                 );
             }
 

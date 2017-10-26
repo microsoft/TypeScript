@@ -159,12 +159,6 @@ namespace ts {
         return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
-    export const enum Comparison {
-        LessThan    = -1,
-        EqualTo     = 0,
-        GreaterThan = 1
-    }
-
     export function length(array: ReadonlyArray<any>) {
         return array ? array.length : 0;
     }
@@ -301,13 +295,29 @@ namespace ts {
         Debug.fail();
     }
 
-    export function contains<T>(array: ReadonlyArray<T>, value: T): boolean {
-        if (array) {
-            for (const v of array) {
-                if (v === value) {
-                    return true;
-                }
+    function containsWithoutEqualityComparer<T>(array: ReadonlyArray<T>, value: T) {
+        for (const v of array) {
+            if (v === value) {
+                return true;
             }
+        }
+        return false;
+    }
+
+    function containsWithEqualityComparer<T>(array: ReadonlyArray<T>, value: T, equalityComparer: EqualityComparer<T>) {
+        for (const v of array) {
+            if (equalityComparer(v, value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    export function contains<T>(array: ReadonlyArray<T>, value: T, equalityComparer?: EqualityComparer<T>): boolean {
+        if (array) {
+            return equalityComparer
+                ? containsWithEqualityComparer(array, value, equalityComparer)
+                : containsWithoutEqualityComparer(array, value);
         }
         return false;
     }
@@ -649,21 +659,36 @@ namespace ts {
         return [...array1, ...array2];
     }
 
-    // TODO: fixme (N^2) - add optional comparer so collection can be sorted before deduplication.
-    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: (a: T, b: T) => boolean = equateValues): T[] {
-        let result: T[];
-        if (array) {
-            result = [];
-            loop: for (const item of array) {
-                for (const res of result) {
-                    if (equalityComparer(res, item)) {
-                        continue loop;
-                    }
+    /**
+     * Creates a new array with duplicate entries removed.
+     * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
+     * @param comparer An optional `Comparer` used to sort entries before comparison. If supplied,
+     * results are returned in the original order found in `array`.
+     */
+    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer?: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
+        if (!array) return undefined;
+        if (!comparer) return addRangeIfUnique([], array, equalityComparer);
+        return deduplicateWorker(array, equalityComparer, comparer);
+    }
+
+    function deduplicateWorker<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T> = equateValues, comparer: Comparer<T>) {
+        // Perform a stable sort of the array. This ensures the first entry in a list of
+        // duplicates remains the first entry in the result.
+        const indices = sequence(0, array.length);
+        stableSortIndices(array, indices, comparer);
+
+        const deduplicated: number[] = [];
+        loop: for (const sourceIndex of indices) {
+            for (const targetIndex of deduplicated) {
+                if (equalityComparer(array[sourceIndex], array[targetIndex])) {
+                    continue loop;
                 }
-                result.push(item);
             }
+            deduplicated.push(sourceIndex);
         }
-        return result;
+
+        // return deduplicated items in original order
+        return deduplicated.sort().map(i => array[i]);
     }
 
     export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equalityComparer: (a: T, b: T) => boolean = equateValues): boolean {
@@ -731,7 +756,7 @@ namespace ts {
      * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
      * based on the provided comparer.
      */
-    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T> = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T>, offsetA = 0, offsetB = 0): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
         outer: for (; offsetB < arrayB.length; offsetB++) {
@@ -795,9 +820,17 @@ namespace ts {
         start = start === undefined ? 0 : toOffset(from, start);
         end = end === undefined ? from.length : toOffset(from, end);
         for (let i = start; i < end && i < from.length; i++) {
-            const v = from[i];
-            if (v !== undefined) {
+            if (from[i] !== undefined) {
                 to.push(from[i]);
+            }
+        }
+        return to;
+    }
+
+    function addRangeIfUnique<T>(to: T[], from: ReadonlyArray<T>, equalityComparer?: EqualityComparer<T>): T[] | undefined {
+        for (let i = 0; i < from.length; i++) {
+            if (from[i] !== undefined) {
+                pushIfUnique(to, from[i], equalityComparer);
             }
         }
         return to;
@@ -806,8 +839,8 @@ namespace ts {
     /**
      * @return Whether the value was added.
      */
-    export function pushIfUnique<T>(array: T[], toAdd: T): boolean {
-        if (contains(array, toAdd)) {
+    export function pushIfUnique<T>(array: T[], toAdd: T, equalityComparer?: EqualityComparer<T>): boolean {
+        if (contains(array, toAdd, equalityComparer)) {
             return false;
         }
         else {
@@ -819,9 +852,9 @@ namespace ts {
     /**
      * Unlike `pushIfUnique`, this can take `undefined` as an input, and returns a new array.
      */
-    export function appendIfUnique<T>(array: T[] | undefined, toAdd: T): T[] {
+    export function appendIfUnique<T>(array: T[] | undefined, toAdd: T, equalityComparer?: EqualityComparer<T>): T[] {
         if (array) {
-            pushIfUnique(array, toAdd);
+            pushIfUnique(array, toAdd, equalityComparer);
             return array;
         }
         else {
@@ -830,13 +863,28 @@ namespace ts {
     }
 
     /**
+     * Creates an array of integers starting at `from` (inclusive) and ending at `to` (exclusive).
+     */
+    function sequence(from: number, to: number) {
+        const numbers: number[] = [];
+        for (let i = from; i < to; i++) {
+            numbers.push(i);
+        }
+        return numbers;
+    }
+
+    function stableSortIndices<T>(array: ReadonlyArray<T>, indices: number[], comparer: Comparer<T>) {
+        // sort indices by value then position
+        indices.sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y));
+    }
+
+    /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
-    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T> = compareValues) {
-        return array
-            .map((_, i) => i) // create array of indices
-            .sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y)) // sort indices by value then position
-            .map(i => array[i]); // get sorted array
+    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
+        const indices = sequence(0, array.length);
+        stableSortIndices(array, indices, comparer);
+        return indices.map(i => array[i]);
     }
 
     export function rangeEquals<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, pos: number, end: number) {
@@ -913,9 +961,6 @@ namespace ts {
         result[index] = value;
         return result;
     }
-
-    export type Comparer<T> = (a: T, b: T) => Comparison;
-    export type EqualityComparer<T> = (a: T, b: T) => boolean;
 
     /**
      * Performs a binary search, finding the index at which 'value' occurs in 'array'.
@@ -1483,7 +1528,7 @@ namespace ts {
         return headChain;
     }
 
-    function equateValues<T>(a: T, b: T) {
+    export function equateValues<T>(a: T, b: T) {
         return a === b;
     }
 
@@ -1512,15 +1557,21 @@ namespace ts {
         return equateValues(a, b);
     }
 
-    /**
-     * Compare two values for their order relative to each other.
-     */
-    export function compareValues<T>(a: T, b: T) {
+    function compareComparableValues(a: string, b: string): Comparison;
+    function compareComparableValues(a: number, b: number): Comparison;
+    function compareComparableValues(a: string | number, b: string | number) {
         return a === b ? Comparison.EqualTo :
             a === undefined ? Comparison.LessThan :
             b === undefined ? Comparison.GreaterThan :
             a < b ? Comparison.LessThan :
             Comparison.GreaterThan;
+    }
+
+    /**
+     * Compare two values for their order relative to each other.
+     */
+    export function compareValues(a: number, b: number) {
+        return compareComparableValues(a, b);
     }
 
     /**
@@ -1555,7 +1606,7 @@ namespace ts {
      * value of each code-point.
      */
     export function compareStringsCaseSensitive(a: string, b: string) {
-        return compareValues(a, b);
+        return compareComparableValues(a, b);
     }
 
     /**
@@ -2488,7 +2539,11 @@ namespace ts {
         if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
             return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        return deduplicate([...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)]);
+        return deduplicate(
+            [...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)],
+            equateStringsCaseSensitive,
+            compareStringsCaseSensitive
+        );
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {

@@ -288,8 +288,7 @@ namespace ts.server {
         return index === 0 || value !== array[index - 1];
     }
 
-    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
-        compare = compare || compareValues;
+    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, comparer: Comparer<T>) {
         let newIndex = 0;
         let oldIndex = 0;
         const newLen = newItems.length;
@@ -297,7 +296,7 @@ namespace ts.server {
         while (newIndex < newLen && oldIndex < oldLen) {
             const newItem = newItems[newIndex];
             const oldItem = oldItems[oldIndex];
-            const compareResult = compare(newItem, oldItem);
+            const compareResult = comparer(newItem, oldItem);
             if (compareResult === Comparison.LessThan) {
                 inserted(newItem);
                 newIndex++;
