@@ -1196,6 +1196,9 @@ namespace Harness {
                 traceResults = [];
                 compilerHost.trace = text => traceResults.push(text);
             }
+            else {
+                compilerHost.directoryExists = () => true; // This only visibly affects resolution traces, so to save time we always return true where possible
+            }
             const program = ts.createProgram(programFileNames, options, compilerHost);
 
             const emitResult = program.emit();
