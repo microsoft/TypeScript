@@ -3813,6 +3813,72 @@ declare namespace ts {
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;
 }
 declare namespace ts {
+    type DiagnosticReporter = (diagnostic: Diagnostic) => void;
+    /**
+     * Creates the function that compiles the program by maintaining the builder state and also return diagnostic reporter
+     */
+    function createProgramCompilerWithBuilderState(system?: System, reportDiagnostic?: DiagnosticReporter): (host: DirectoryStructureHost, program: Program) => void;
+    interface WatchHost {
+        /** FS system to use */
+        system: System;
+        /** Custom action before creating the program */
+        beforeProgramCreate(compilerOptions: CompilerOptions): void;
+        /** Custom action after new program creation is successful */
+        afterProgramCreate(host: DirectoryStructureHost, program: Program): void;
+    }
+    /**
+     * Host to create watch with root files and options
+     */
+    interface WatchOfFilesAndCompilerOptionsHost extends WatchHost {
+        /** root files to use to generate program */
+        rootFiles: string[];
+        /** Compiler options */
+        options: CompilerOptions;
+    }
+    /**
+     * Host to create watch with config file
+     */
+    interface WatchOfConfigFileHost extends WatchHost {
+        /** Name of the config file to compile */
+        configFileName: string;
+        /** Options to extend */
+        optionsToExtend?: CompilerOptions;
+        onConfigFileDiagnostic(diagnostic: Diagnostic): void;
+    }
+    interface Watch {
+        /** Synchronize the program with the changes */
+        synchronizeProgram(): void;
+    }
+    /**
+     * Creates the watch what generates program using the config file
+     */
+    interface WatchOfConfigFile extends Watch {
+    }
+    /**
+     * Creates the watch that generates program using the root files and compiler options
+     */
+    interface WatchOfFilesAndCompilerOptions extends Watch {
+        /** Updates the root files in the program, only if this is not config file compilation */
+        updateRootFileNames(fileNames: string[]): void;
+    }
+    /**
+     * Create the watched program for config file
+     */
+    function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system?: System, reportDiagnostic?: DiagnosticReporter): WatchOfConfigFile;
+    /**
+     * Create the watched program for root files and compiler options
+     */
+    function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system?: System, reportDiagnostic?: DiagnosticReporter): WatchOfFilesAndCompilerOptions;
+    /**
+     * Creates the watch from the host for root files and compiler options
+     */
+    function createWatch(host: WatchOfFilesAndCompilerOptionsHost): WatchOfFilesAndCompilerOptions;
+    /**
+     * Creates the watch from the host for config file
+     */
+    function createWatch(host: WatchOfConfigFileHost): WatchOfConfigFile;
+}
+declare namespace ts {
     function parseCommandLine(commandLine: ReadonlyArray<string>, readFile?: (path: string) => string | undefined): ParsedCommandLine;
     /**
      * Read tsconfig.json file
