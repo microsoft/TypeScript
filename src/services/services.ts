@@ -345,18 +345,23 @@ namespace ts {
             return this.declarations;
         }
 
-        getDocumentationComment(typeChecker?: TypeChecker): SymbolDisplayPart[] {
+        getDocumentationComment(checker: TypeChecker): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations(this.declarations);
+                if (this.declarations) {
+                    this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations(this.declarations);
 
-                if (this.documentationComment.length === 0 && hasJSDocInheritDocTag(this) && typeChecker) {
-                    for (const declaration of this.getDeclarations()) {
-                        const inheritedDocs = findInheritedJSDocComments(declaration, this.getName(), typeChecker);
-                        if (inheritedDocs.length > 0) {
-                            this.documentationComment = inheritedDocs;
-                            break;
+                    if (this.documentationComment.length === 0 || this.declarations.some(dec => hasJSDocInheritDocTag(dec))) {
+                        for (const declaration of this.declarations) {
+                            const inheritedDocs = findInheritedJSDocComments(declaration, this.getName(), checker);
+                            if (inheritedDocs.length > 0) {
+                                this.documentationComment = inheritedDocs;
+                                break;
+                            }
                         }
                     }
+                }
+                else {
+                    this.documentationComment = [];
                 }
             }
 
@@ -484,12 +489,17 @@ namespace ts {
             return this.checker.getReturnTypeOfSignature(this);
         }
 
-        getDocumentationComment(typeChecker?: TypeChecker): SymbolDisplayPart[] {
+        getDocumentationComment(): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                this.documentationComment = this.declaration ? JsDoc.getJsDocCommentsFromDeclarations([this.declaration]) : [];
+                if (this.declaration) {
+                    this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations([this.declaration]);
 
-                if (this.declaration && this.documentationComment.length === 0 && hasJSDocInheritDocTag(this) && typeChecker) {
-                    this.documentationComment = findInheritedJSDocComments(this.declaration, this.declaration.symbol.getName(), typeChecker);
+                    if (this.documentationComment.length === 0) {
+                        this.documentationComment = findInheritedJSDocComments(this.declaration, this.declaration.symbol.getName(), this.checker);
+                    }
+                }
+                else {
+                    this.documentationComment = [];
                 }
             }
 
@@ -506,12 +516,12 @@ namespace ts {
     }
 
     /**
-     * Returns whether or not the given symbol or signature has a JSDoc "inheritDoc" tag on it.
-     * @param symbol the Symbol or Signature in question.
-     * @returns `true` if `symbol` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
+     * Returns whether or not the given node has a JSDoc "inheritDoc" tag on it.
+     * @param node the Node in question.
+     * @returns `true` if `node` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
      */
-    function hasJSDocInheritDocTag(symbol: Signature | Symbol) {
-        return !!find(symbol.getJsDocTags(), tag => tag.name === "inheritDoc");
+    function hasJSDocInheritDocTag(node: Node) {
+        return ts.getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
     /**
@@ -525,41 +535,49 @@ namespace ts {
     function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): SymbolDisplayPart[] {
         let documentationComment: SymbolDisplayPart[] = [];
 
-        if (isClassDeclaration(declaration.parent) || isInterfaceDeclaration(declaration.parent)) {
-            const container: ClassDeclaration | InterfaceDeclaration = declaration.parent;
+        const container = declaration.parent;
+
+        if (!container || (!isClassDeclaration(container) && !isInterfaceDeclaration(container))) {
+            return documentationComment;
+        }
+        else {
             const baseTypeNode = getClassExtendsHeritageClauseElement(container);
+            if (!baseTypeNode) {
+                return documentationComment;
+            }
 
-            if (baseTypeNode) {
-                const baseType = typeChecker.getTypeAtLocation(baseTypeNode);
+            const baseType = typeChecker.getTypeAtLocation(baseTypeNode);
+            if (!baseType) {
+                return documentationComment;
+            }
 
-                // First check superclasses for a property of the same name
-                let baseProperty = typeChecker.getPropertyOfType(baseType, propertyName);
-                let baseDocs = baseProperty ? baseProperty.getDocumentationComment(typeChecker) : [];
-                if (baseDocs.length > 0) {
-                    documentationComment = baseDocs;
-                }
+            // First check superclasses for a property of the same name
+            let baseProperty = typeChecker.getPropertyOfType(baseType, propertyName);
+            let baseDocs = baseProperty ? baseProperty.getDocumentationComment(typeChecker) : [];
+            if (baseDocs.length > 0) {
+                documentationComment = baseDocs;
+            }
 
-                // If there's nothing in the superclass, walk through implemented interfaces left-to-right
-                if (documentationComment.length === 0) {
-                    const implementedInterfaces = map(
-                        getClassImplementsHeritageClauseElements(container as ClassLikeDeclaration),
-                        interfaceNode => typeChecker.getTypeAtLocation(interfaceNode)
-                    );
+            // If there's nothing in the superclass, walk through implemented interfaces left-to-right
+            if (documentationComment.length === 0) {
+                const implementedInterfaces = map(
+                    getClassImplementsHeritageClauseElements(container as ClassLikeDeclaration),
+                    interfaceNode => typeChecker.getTypeAtLocation(interfaceNode)
+                ) || [];
 
-                    for (const implementedInterface of implementedInterfaces) {
-                        // Use the docs from the first implemented interface to have this property and documentation
-                        baseProperty = typeChecker.getPropertyOfType(implementedInterface, propertyName);
-                        baseDocs = baseProperty ? baseProperty.getDocumentationComment(typeChecker) : [];
-                        if (baseDocs.length > 0) {
-                            documentationComment = baseDocs;
-                            break;
-                        }
+                for (const implementedInterface of implementedInterfaces) {
+                    // Use the docs from the first implemented interface to have this property and documentation
+                    baseProperty = typeChecker.getPropertyOfType(implementedInterface, propertyName);
+                    baseDocs = baseProperty ? baseProperty.getDocumentationComment(typeChecker) : [];
+                    if (baseDocs.length > 0) {
+                        documentationComment = baseDocs;
+                        break;
                     }
                 }
             }
-        }
 
-        return documentationComment;
+            return documentationComment;
+        }
     }
 
     class SourceFileObject extends NodeObject implements SourceFile {
