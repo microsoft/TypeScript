@@ -1698,7 +1698,6 @@ namespace Harness {
 
         export function *iterateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): IterableIterator<[string, string]> {
             // Collect, test, and sort the fileNames
-            // As this uses the file system, use a predictable order
             const comparer = ts.getStringComparer(/*ignoreCase*/ false);
             outputFiles.sort((a, b) => comparer(cleanName(a.fileName), cleanName(b.fileName)));
             const dupeCase = ts.createMap<number>();
