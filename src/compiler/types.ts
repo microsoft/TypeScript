@@ -663,8 +663,13 @@ namespace ts {
     }
 
     /* @internal */
+    export interface DynamicNamedDeclaration extends NamedDeclaration {
+        name: ComputedPropertyName;
+    }
+
+    /* @internal */
     // A declaration that supports late-binding (used in checker)
-    export interface LateBoundDeclaration extends NamedDeclaration {
+    export interface LateBoundDeclaration extends DynamicNamedDeclaration {
         name: LateBoundName;
     }
 
@@ -2945,7 +2950,7 @@ namespace ts {
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
-        isLiteralDynamicName(node: ComputedPropertyName): boolean;
+        isLateBound(node: Declaration): node is LateBoundDeclaration;
         collectLinkedAliases(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;

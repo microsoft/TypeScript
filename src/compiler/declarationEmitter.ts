@@ -1227,7 +1227,7 @@ namespace ts {
         }
 
         function emitPropertyDeclaration(node: Declaration) {
-            if (hasDynamicName(node) && !resolver.isLiteralDynamicName(<ComputedPropertyName>getNameOfDeclaration(node))) {
+            if (hasDynamicName(node) && !resolver.isLateBound(node)) {
                 return;
             }
 
@@ -1246,17 +1246,8 @@ namespace ts {
                     emitBindingPattern(<BindingPattern>node.name);
                 }
                 else {
-                    if (isDynamicName(node.name)) {
-                        // If this node has a dynamic name, it can only be an identifier or property access because
-                        // we've already skipped it otherwise.
-                        emitDynamicName(<EntityNameExpression>(<ComputedPropertyName>node.name).expression);
-                    }
-                    else {
-                        // If this node is a computed name, it can only be a symbol, because we've already skipped
-                        // it if it's not a well known symbol. In that case, the text of the name will be exactly
-                        // what we want, namely the name expression enclosed in brackets.
-                        writeTextOfNode(currentText, node.name);
-                    }
+                    writeNameOfDeclaration(node, getVariableDeclarationTypeOrNameVisibilityError);
+
                     // If optional property emit ? but in the case of parameterProperty declaration with "?" indicating optional parameter for the constructor
                     // we don't want to emit property declaration with "?"
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
@@ -1271,12 +1262,12 @@ namespace ts {
                         resolver.writeLiteralConstValue(node, writer);
                     }
                     else if (!hasModifier(node, ModifierFlags.Private)) {
-                        writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
+                        writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeOrNameVisibilityError);
                     }
                 }
             }
 
-            function getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
+            function getVariableDeclarationTypeOrNameVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
                 if (node.kind === SyntaxKind.VariableDeclaration) {
                     return symbolAccessibilityResult.errorModuleName ?
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
@@ -1312,21 +1303,13 @@ namespace ts {
                 }
             }
 
-            function getVariableDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
-                const diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult);
+            function getVariableDeclarationTypeOrNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+                const diagnosticMessage = getVariableDeclarationTypeOrNameVisibilityDiagnosticMessage(symbolAccessibilityResult);
                 return diagnosticMessage !== undefined ? {
                     diagnosticMessage,
                     errorNode: node,
                     typeName: node.name
                 } : undefined;
-            }
-
-            function emitDynamicName(entityName: EntityNameExpression) {
-                writer.getSymbolAccessibilityDiagnostic = getVariableDeclarationTypeVisibilityError;
-                const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
-                handleSymbolAccessibilityError(visibilityResult);
-                recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
-                writeTextOfNode(currentText, node.name);
             }
 
             function emitBindingPattern(bindingPattern: BindingPattern) {
@@ -1346,7 +1329,7 @@ namespace ts {
 
             function emitBindingElement(bindingElement: BindingElement) {
                 function getBindingElementTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
-                    const diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult);
+                    const diagnosticMessage = getVariableDeclarationTypeOrNameVisibilityDiagnosticMessage(symbolAccessibilityResult);
                     return diagnosticMessage !== undefined ? {
                         diagnosticMessage,
                         errorNode: bindingElement,
@@ -1402,7 +1385,7 @@ namespace ts {
         }
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
-            if (hasDynamicName(node)) {
+            if (hasDynamicName(node) && !resolver.isLateBound(node)) {
                 return;
             }
 
@@ -1413,7 +1396,7 @@ namespace ts {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
                 emitClassMemberDeclarationFlags(getModifierFlags(node) | (accessors.setAccessor ? 0 : ModifierFlags.Readonly));
-                writeTextOfNode(currentText, node.name);
+                writeNameOfDeclaration(node, getAccessorNameVisibilityError);
                 if (!hasModifier(node, ModifierFlags.Private)) {
                     accessorWithTypeAnnotation = node;
                     let type = getTypeAnnotationFromAccessor(node);
@@ -1440,6 +1423,37 @@ namespace ts {
                             : undefined;
                 }
             }
+
+            function getAccessorNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
+                const diagnosticMessage = getAccessorNameVisibilityDiagnosticMessage(symbolAccessibilityResult);
+                return diagnosticMessage !== undefined ? {
+                    diagnosticMessage,
+                    errorNode: node,
+                    typeName: node.name
+                } : undefined;
+            }
+
+            function getAccessorNameVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
+                if (hasModifier(node, ModifierFlags.Static)) {
+                    return symbolAccessibilityResult.errorModuleName ?
+                        symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
+                }
+                else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                    return symbolAccessibilityResult.errorModuleName ?
+                        symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1;
+                }
+                else {
+                    return symbolAccessibilityResult.errorModuleName ?
+                        Diagnostics.Property_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1;
+                }
+        }
 
             function getAccessorDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
                 let diagnosticMessage: DiagnosticMessage;
@@ -1487,7 +1501,7 @@ namespace ts {
         }
 
         function writeFunctionDeclaration(node: FunctionLikeDeclaration) {
-            if (hasDynamicName(node)) {
+            if (hasDynamicName(node) && !resolver.isLateBound(node)) {
                 return;
             }
 
@@ -1509,13 +1523,69 @@ namespace ts {
                     write("constructor");
                 }
                 else {
-                    writeTextOfNode(currentText, node.name);
+                    writeNameOfDeclaration(node, getMethodNameVisibilityError);
                     if (hasQuestionToken(node)) {
                         write("?");
                     }
                 }
                 emitSignatureDeclaration(node);
             }
+
+            function getMethodNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+                const diagnosticMessage = getMethodNameVisibilityDiagnosticMessage(symbolAccessibilityResult);
+                return diagnosticMessage !== undefined ? {
+                    diagnosticMessage,
+                    errorNode: node,
+                    typeName: node.name
+                } : undefined;
+            }
+
+            function getMethodNameVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
+                if (hasModifier(node, ModifierFlags.Static)) {
+                    return symbolAccessibilityResult.errorModuleName ?
+                        symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Public_static_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Public_static_method_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Public_static_method_0_of_exported_class_has_or_is_using_private_name_1;
+                }
+                else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                    return symbolAccessibilityResult.errorModuleName ?
+                        symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Public_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Public_method_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Public_method_0_of_exported_class_has_or_is_using_private_name_1;
+                }
+                else {
+                    return symbolAccessibilityResult.errorModuleName ?
+                        Diagnostics.Method_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Method_0_of_exported_interface_has_or_is_using_private_name_1;
+                }
+            }
+        }
+
+        function writeNameOfDeclaration(node: NamedDeclaration, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+            if (hasDynamicName(node)) {
+                // If this node has a dynamic name, it can only be an identifier or property access because
+                // we've already skipped it otherwise.
+                Debug.assert(resolver.isLateBound(node));
+
+                writeLateBoundNameOfDeclaration(node as LateBoundDeclaration, getSymbolAccessibilityDiagnostic);
+            }
+            else {
+                // If this node is a computed name, it can only be a symbol, because we've already skipped
+                // it if it's not a well known symbol. In that case, the text of the name will be exactly
+                // what we want, namely the name expression enclosed in brackets.
+                writeTextOfNode(currentText, node.name);
+            }
+        }
+
+        function writeLateBoundNameOfDeclaration(node: LateBoundDeclaration, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+            writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
+            const entityName = node.name.expression;
+            const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
+            handleSymbolAccessibilityError(visibilityResult);
+            recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
+            writeTextOfNode(currentText, node.name);
         }
 
         function emitSignatureDeclarationWithJsDocComments(node: SignatureDeclaration) {

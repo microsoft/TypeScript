@@ -24569,14 +24569,6 @@ namespace ts {
             return undefined;
         }
 
-        function isLiteralDynamicName(name: ComputedPropertyName) {
-            name = getParseTreeNode(name, isComputedPropertyName);
-            if (name) {
-                return isLateBindableName(name);
-            }
-            return false;
-        }
-
         function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
             if (isConst(node)) {
                 const type = getTypeOfSymbol(getSymbolOfNode(node));
@@ -24650,7 +24642,11 @@ namespace ts {
                 getTypeReferenceDirectivesForEntityName,
                 getTypeReferenceDirectivesForSymbol,
                 isLiteralConstDeclaration,
-                isLiteralDynamicName,
+                isLateBound: (node: Declaration): node is LateBoundDeclaration => {
+                    node = getParseTreeNode(node, isDeclaration);
+                    const symbol = node && getSymbolOfNode(node);
+                    return !!(symbol && symbol.flags & SymbolFlags.Late);
+                },
                 writeLiteralConstValue,
                 getJsxFactoryEntity: () => _jsxFactoryEntity
             };

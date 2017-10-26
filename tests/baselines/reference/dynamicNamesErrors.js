@@ -25,9 +25,39 @@ let t2: T2;
 t1 = t2;
 t2 = t1;
 
-export interface T4 {
-    [c0]: number;
+const x = Symbol();
+const y = Symbol();
+const z = Symbol();
+const w = Symbol();
+
+export interface InterfaceMemberVisibility {
+    [x]: number;
+    [y](): number;
 }
+
+export class ClassMemberVisibility {
+    static [x]: number;
+    static [y](): number { return 0; }
+    static get [z](): number { return 0; }
+    static set [w](value: number) { }
+
+    [x]: number;
+    [y](): number { return 0; }
+    get [z](): number { return 0; }
+    set [w](value: number) { }
+}
+
+export type ObjectTypeVisibility = {
+    [x]: number;
+    [y](): number;
+};
+
+export const ObjectLiteralVisibility = {
+    [x]: 0,
+    [y](): number { return 0; },
+    get [z](): number { return 0; },
+    set [w](value: number) { },
+};
 
 //// [dynamicNamesErrors.js]
 "use strict";
@@ -38,3 +68,22 @@ let t1;
 let t2;
 t1 = t2;
 t2 = t1;
+const x = Symbol();
+const y = Symbol();
+const z = Symbol();
+const w = Symbol();
+class ClassMemberVisibility {
+    static [y]() { return 0; }
+    static get [z]() { return 0; }
+    static set [w](value) { }
+    [y]() { return 0; }
+    get [z]() { return 0; }
+    set [w](value) { }
+}
+exports.ClassMemberVisibility = ClassMemberVisibility;
+exports.ObjectLiteralVisibility = {
+    [x]: 0,
+    [y]() { return 0; },
+    get [z]() { return 0; },
+    set [w](value) { },
+};

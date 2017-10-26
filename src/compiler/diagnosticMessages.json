@@ -2562,6 +2562,39 @@
         "code": 4094
     },
 
+    "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4095
+    },
+    "Public static method '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4096
+    },
+    "Public static method '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4097
+    },
+    "Public method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4098
+    },
+    "Public method '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4099
+    },
+    "Public method '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4100
+    },
+    "Method '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4101
+    },
+    "Method '{0}' of exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4102
+    },
+    
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
