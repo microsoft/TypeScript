@@ -1101,7 +1101,7 @@ namespace ts {
 
             // If '--lib' is not specified, include default library file according to '--target'
             // otherwise, using options specified in '--lib' instead of '--target' default library file
-            const equalityComparer = getStringEqualityComparer(!host.useCaseSensitiveFileNames());
+            const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
             if (!options.lib) {
                return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }

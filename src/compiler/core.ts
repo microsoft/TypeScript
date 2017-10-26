@@ -1483,23 +1483,18 @@ namespace ts {
         return headChain;
     }
 
-    /**
-     * Compare two values for their equality.
-     */
-    export function equateValues<T>(a: T, b: T) {
+    function equateValues<T>(a: T, b: T) {
         return a === b;
     }
 
     /**
-     * Compare equality between two strings using an ordinal comparison.
+     * Compare the equality of two strings using a case-sensitive ordinal comparison.
      *
-     * Case-insensitive comparisons compare both strings after applying `toUpperCase` to
-     * each string.
+     * Case-sensitive comparisons compare both strings one code-point at a time using the integer
+     * value of each code-point after applying `toUpperCase` to each string. We always map both
+     * strings to their upper-case form as some unicode characters do not properly round-trip to
+     * lowercase (such as `ẞ` (German sharp capital s)).
      */
-    export function equateStrings(a: string, b: string, ignoreCase: boolean) {
-        return ignoreCase ? equateStringsCaseInsensitive(a, b) : equateStringsCaseSensitive(a, b);
-    }
-
     export function equateStringsCaseInsensitive(a: string, b: string) {
         return a === b
             || a !== undefined
@@ -1507,12 +1502,14 @@ namespace ts {
             && a.toUpperCase() === b.toUpperCase();
     }
 
+    /**
+     * Compare the equality of two strings using a case-sensitive ordinal comparison.
+     *
+     * Case-sensitive comparisons compare both strings one code-point at a time using the
+     * integer value of each code-point.
+     */
     export function equateStringsCaseSensitive(a: string, b: string) {
         return equateValues(a, b);
-    }
-
-    export function getStringEqualityComparer(ignoreCase: boolean) {
-        return ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive;
     }
 
     /**
@@ -1527,19 +1524,17 @@ namespace ts {
     }
 
     /**
-     * Compare two strings using an ordinal comparison.
+     * Compare two strings using a case-insensitive ordinal comparison.
      *
-     * Ordinal comparisons are based on the difference between the unicode code points of
-     * both strings. Characters with multiple unicode representations are considered
-     * unequal. Ordinal comparisons provide predictable ordering, but place "a" after "B".
+     * Ordinal comparisons are based on the difference between the unicode code points of both
+     * strings. Characters with multiple unicode representations are considered unequal. Ordinal
+     * comparisons provide predictable ordering, but place "a" after "B".
      *
-     * Case-insensitive comparisons compare both strings after applying `toUpperCase` to
-     * each string.
+     * Case-insensitive comparisons compare both strings one code-point at a time using the integer
+     * value of each code-point after applying `toUpperCase` to each string. We always map both
+     * strings to their upper-case form as some unicode characters do not properly round-trip to
+     * lowercase (such as `ẞ` (German sharp capital s)).
      */
-    export function compareStrings(a: string, b: string, ignoreCase: boolean) {
-        return ignoreCase ? compareStringsCaseInsensitive(a, b) : compareStringsCaseSensitive(a, b);
-    }
-
     export function compareStringsCaseInsensitive(a: string, b: string) {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
@@ -1549,26 +1544,18 @@ namespace ts {
         return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
     }
 
+    /**
+     * Compare two strings using a case-sensitive ordinal comparison.
+     *
+     * Ordinal comparisons are based on the difference between the unicode code points of both
+     * strings. Characters with multiple unicode representations are considered unequal. Ordinal
+     * comparisons provide predictable ordering, but place "a" after "B".
+     *
+     * Case-sensitive comparisons compare both strings one code-point at a time using the integer
+     * value of each code-point.
+     */
     export function compareStringsCaseSensitive(a: string, b: string) {
         return compareValues(a, b);
-    }
-
-    export function getStringComparer(ignoreCase: boolean) {
-        return ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
-    }
-
-    /**
-     * Compare two strings using the sort behavior of the UI locale.
-     *
-     * Ordering is not predictable between different host locales, but is best for displaying
-     * ordered data for UI presentation. Characters with multiple unicode representations may
-     * be considered equal.
-     *
-     * Case-insensitive comparisons compare strings that differ in only base characters or
-     * accents/diacritic marks as unequal.
-     */
-    export function compareStringsUI(a: string, b: string, ignoreCase: boolean) {
-        return ignoreCase ? compareStringsCaseInsensitiveUI(a, b) : compareStringsCaseSensitiveUI(a, b);
     }
 
     /**
@@ -1656,6 +1643,10 @@ namespace ts {
     let uiCI: Comparer<string> | undefined;
     let uiLocale: string | undefined;
 
+    export function getUILocale() {
+        return uiLocale;
+    }
+
     export function setUILocale(value: string) {
         if (uiLocale !== value) {
             uiLocale = value;
@@ -1664,25 +1655,41 @@ namespace ts {
         }
     }
 
+    /**
+     * Compare two strings using the case-insensitive sort behavior of the UI locale.
+     *
+     * Ordering is not predictable between different host locales, but is best for displaying
+     * ordered data for UI presentation. Characters with multiple unicode representations may
+     * be considered equal.
+     *
+     * Case-insensitive comparisons compare strings that differ in only base characters or
+     * accents/diacritic marks as unequal.
+     */
     export function compareStringsCaseInsensitiveUI(a: string, b: string) {
-        const comparer = uiCS || (uiCS = createStringComparer(uiLocale, /*caseInsensitive*/ false));
-        return comparer(a, b);
-    }
-
-    export function compareStringsCaseSensitiveUI(a: string, b: string) {
         const comparer = uiCI || (uiCI = createStringComparer(uiLocale, /*caseInsensitive*/ true));
         return comparer(a, b);
     }
 
-    export function getStringComparerUI(ignoreCase: boolean) {
-        return ignoreCase ? compareStringsCaseInsensitiveUI : compareStringsCaseSensitiveUI;
+    /**
+     * Compare two strings in a using the case-sensitive sort behavior of the UI locale.
+     *
+     * Ordering is not predictable between different host locales, but is best for displaying
+     * ordered data for UI presentation. Characters with multiple unicode representations may
+     * be considered equal.
+     *
+     * Case-sensitive comparisons compare strings that differ in base characters, or
+     * accents/diacritic marks, or case as unequal.
+     */
+    export function compareStringsCaseSensitiveUI(a: string, b: string) {
+        const comparer = uiCS || (uiCS = createStringComparer(uiLocale, /*caseInsensitive*/ false));
+        return comparer(a, b);
     }
 
-    export function compareProperties<T>(a: T, b: T, key: keyof T) {
+    export function compareProperties<T, K extends keyof T>(a: T, b: T, key: K, comparer: Comparer<T[K]>) {
         return a === b ? Comparison.EqualTo :
             a === undefined ? Comparison.LessThan :
             b === undefined ? Comparison.GreaterThan :
-            compareValues(a[key], b[key]);
+            comparer(a[key], b[key]);
     }
 
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
@@ -1690,7 +1697,7 @@ namespace ts {
     }
 
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
-        return compareValues(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) ||
+        return compareStringsCaseSensitive(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) ||
             compareValues(d1.start, d2.start) ||
             compareValues(d1.length, d2.length) ||
             compareValues(d1.code, d2.code) ||
@@ -1704,7 +1711,7 @@ namespace ts {
             const string1 = isString(text1) ? text1 : text1.messageText;
             const string2 = isString(text2) ? text2 : text2.messageText;
 
-            const res = compareValues(string1, string2);
+            const res = compareStringsCaseSensitive(string1, string2);
             if (res) {
                 return res;
             }
@@ -2067,7 +2074,7 @@ namespace ts {
         const aComponents = getNormalizedPathComponents(a, currentDirectory);
         const bComponents = getNormalizedPathComponents(b, currentDirectory);
         const sharedLength = Math.min(aComponents.length, bComponents.length);
-        const comparer = getStringComparer(ignoreCase);
+        const comparer = ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
         for (let i = 0; i < sharedLength; i++) {
             const result = comparer(aComponents[i], bComponents[i]);
             if (result !== Comparison.EqualTo) {
@@ -2091,7 +2098,7 @@ namespace ts {
         }
 
         // File-system comparisons should use predictable ordering
-        const equalityComparer = getStringEqualityComparer(ignoreCase);
+        const equalityComparer = ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive;
         for (let i = 0; i < parentComponents.length; i++) {
             if (!equalityComparer(parentComponents[i], childComponents[i])) {
                 return false;
@@ -2338,6 +2345,7 @@ namespace ts {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
+        const comparer = useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
         const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
         const regexFlag = useCaseSensitiveFileNames ? "" : "i";
@@ -2349,7 +2357,6 @@ namespace ts {
         // If there are no "includes", then just put everything in results[0].
         const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
 
-        const comparer = getStringComparer(!useCaseSensitiveFileNames);
         for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
         }
@@ -2414,7 +2421,7 @@ namespace ts {
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
-            includeBasePaths.sort(getStringComparer(!useCaseSensitiveFileNames));
+            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive);
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path

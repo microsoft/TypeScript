@@ -1137,7 +1137,7 @@ namespace ts.refactor.extractSymbol {
         {type: type1, declaration: declaration1}: {type: Type, declaration?: Declaration},
         {type: type2, declaration: declaration2}: {type: Type, declaration?: Declaration}) {
 
-        return compareProperties(declaration1, declaration2, "pos")
+        return compareProperties(declaration1, declaration2, "pos", compareValues)
             || compareStringsCaseSensitive(
                 type1.symbol ? type1.symbol.getName() : "",
                 type2.symbol ? type2.symbol.getName() : "")

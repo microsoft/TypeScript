@@ -306,7 +306,7 @@ namespace ts {
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         const optsList = showAllOptions ?
-            optionDeclarations.slice().sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase())) :
+            optionDeclarations.slice().sort((a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
             filter(optionDeclarations.slice(), v => v.showInSimplifiedHelpView);
 
         // We want our descriptions to align at the same column in our output,

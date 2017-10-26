@@ -3128,7 +3128,10 @@ Actual: ${stringify(fullActual)}`);
             `(function(test, goTo, verify, edit, debug, format, cancellation, classification, verifyOperationIsCancelled) {
 ${code}
 })`;
+        const savedUILocale = ts.getUILocale();
+        ts.setUILocale("en-US"); // run tests in en-US by default.
         try {
+
             const test = new FourSlashInterface.Test(state);
             const goTo = new FourSlashInterface.GoTo(state);
             const verify = new FourSlashInterface.Verify(state);
@@ -3141,6 +3144,9 @@ ${code}
         }
         catch (err) {
             throw err;
+        }
+        finally {
+            ts.setUILocale(savedUILocale);
         }
     }
 
