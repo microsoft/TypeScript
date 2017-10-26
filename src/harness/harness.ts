@@ -32,6 +32,9 @@
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
+// chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
+// so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
+assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
 declare var __dirname: string; // Node-specific
 var global: NodeJS.Global = <any>Function("return this").call(undefined);
 
