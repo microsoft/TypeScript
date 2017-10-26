@@ -108,6 +108,8 @@ namespace ts.JsDoc {
         }));
     }
 
+    export const getJSDocTagNameCompletionDetails = getJSDocTagCompletionDetails;
+
     export function getJSDocTagCompletions(): CompletionEntry[] {
         return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = ts.map(jsDocTagNames, tagName => {
             return {
@@ -117,6 +119,18 @@ namespace ts.JsDoc {
                 sortText: "0"
             };
         }));
+    }
+
+    export function getJSDocTagCompletionDetails(name: string): CompletionEntryDetails {
+        return {
+            name,
+            kind: ScriptElementKind.unknown, // TODO: should have its own kind?
+            kindModifiers: "",
+            displayParts: [textPart(name)],
+            documentation: emptyArray,
+            tags: emptyArray,
+            codeActions: undefined,
+        };
     }
 
     export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
@@ -139,6 +153,18 @@ namespace ts.JsDoc {
 
             return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
         });
+    }
+
+    export function getJSDocParameterNameCompletionDetails(name: string): CompletionEntryDetails {
+        return {
+            name,
+            kind: ScriptElementKind.parameterElement,
+            kindModifiers: "",
+            displayParts: [textPart(name)],
+            documentation: emptyArray,
+            tags: emptyArray,
+            codeActions: undefined,
+        };
     }
 
     /**
