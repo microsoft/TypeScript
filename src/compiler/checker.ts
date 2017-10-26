@@ -10462,7 +10462,7 @@ namespace ts {
         }
 
         function createWideningContext(parent: WideningContext, propertyName: __String, siblings: Type[]): WideningContext {
-            return { parent, propertyName, siblings, resolvedPropertyNames: undefined }
+            return { parent, propertyName, siblings, resolvedPropertyNames: undefined };
         }
 
         function getSiblingsOfContext(context: WideningContext): Type[] {
