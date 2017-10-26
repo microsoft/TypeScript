@@ -142,7 +142,7 @@ declare namespace FourSlashInterface {
         constructor(negative?: boolean);
         completionListCount(expectedCount: number): void;
         completionListContains(
-            symbol: string,
+            entryId: string | { name: string, source?: string },
             text?: string,
             documentation?: string,
             kind?: string,
@@ -196,6 +196,7 @@ declare namespace FourSlashInterface {
         ): void; //TODO: better type
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
+            source?: string,
             description: string,
             newFileContent?: string,
             newRangeContent?: string,

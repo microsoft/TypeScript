@@ -9,11 +9,13 @@
 ////t/**/
 
 goTo.marker("");
-verify.completionListContains("Test1", "function Test1(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
+verify.completionListContains({ name: "Test1", source: "/a" }, "function Test1(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
 verify.completionListContains("Test2", "import Test2", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ undefined);
+verify.not.completionListContains({ name: "Test2", source: "/a" });
 
 verify.applyCodeActionFromCompletion("", {
     name: "Test1",
+    source: "/a",
     description: `Add 'Test1' to existing import declaration from "./a".`,
     newFileContent: `import { Test2, Test1 } from "./a";
 t`,
