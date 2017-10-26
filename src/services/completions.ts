@@ -981,7 +981,7 @@ namespace ts.Completions {
                         }
                     }
 
-                    if (symbol.declarations.some(d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
+                    if (symbol.declarations && symbol.declarations.some(d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
                         // Don't add a completion for a re-export, only for the original.
                         continue;
                     }
