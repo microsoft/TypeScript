@@ -10472,7 +10472,9 @@ namespace ts {
                     if (isObjectLiteralType(type)) {
                         const prop = getPropertyOfObjectType(type, context.propertyName);
                         if (prop) {
-                            forEachType(getTypeOfSymbol(prop), t => siblings.push(t));
+                            forEachType(getTypeOfSymbol(prop), t => {
+                                siblings.push(t);
+                            });
                         }
                     }
                 }
