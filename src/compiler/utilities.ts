@@ -3949,7 +3949,7 @@ namespace ts {
             trySetLanguageAndTerritory(language, /*territory*/ undefined, errors);
         }
 
-        // Set the locale for UI collation
+        // Set the UI locale for string collation
         setUILocale(locale);
 
         function trySetLanguageAndTerritory(language: string, territory: string, errors?: Push<Diagnostic>): boolean {

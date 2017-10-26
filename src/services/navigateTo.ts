@@ -173,10 +173,10 @@ namespace ts.NavigateTo {
         return bestMatchKind;
     }
 
-    function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem): number {
+    function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {
         // TODO(cyrusn): get the gamut of comparisons that VS already uses here.
-        return i1.matchKind - i2.matchKind ||
-            compareStringsCaseSensitiveUI(i1.name, i2.name);
+        return compareValues(i1.matchKind, i2.matchKind)
+            || compareStringsCaseSensitiveUI(i1.name, i2.name);
     }
 
     function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {

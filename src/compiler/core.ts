@@ -1490,6 +1490,16 @@ namespace ts {
         return a === b;
     }
 
+    /**
+     * Compare equality between two strings using an ordinal comparison.
+     *
+     * Case-insensitive comparisons compare both strings after applying `toUpperCase` to
+     * each string.
+     */
+    export function equateStrings(a: string, b: string, ignoreCase: boolean) {
+        return ignoreCase ? equateStringsCaseInsensitive(a, b) : equateStringsCaseSensitive(a, b);
+    }
+
     export function equateStringsCaseInsensitive(a: string, b: string) {
         return a === b
             || a !== undefined
@@ -1499,16 +1509,6 @@ namespace ts {
 
     export function equateStringsCaseSensitive(a: string, b: string) {
         return equateValues(a, b);
-    }
-
-    /**
-     * Compare equality between two strings using an ordinal comparison.
-     *
-     * Case-insensitive comparisons compare both strings after applying `toUpperCase` to
-     * each string.
-     */
-    export function equateStrings(a: string, b: string, ignoreCase: boolean) {
-        return ignoreCase ? equateStringsCaseInsensitive(a, b) : equateStringsCaseSensitive(a, b);
     }
 
     export function getStringEqualityComparer(ignoreCase: boolean) {
@@ -1555,6 +1555,20 @@ namespace ts {
 
     export function getStringComparer(ignoreCase: boolean) {
         return ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
+    }
+
+    /**
+     * Compare two strings using the sort behavior of the UI locale.
+     *
+     * Ordering is not predictable between different host locales, but is best for displaying
+     * ordered data for UI presentation. Characters with multiple unicode representations may
+     * be considered equal.
+     *
+     * Case-insensitive comparisons compare strings that differ in only base characters or
+     * accents/diacritic marks as unequal.
+     */
+    export function compareStringsUI(a: string, b: string, ignoreCase: boolean) {
+        return ignoreCase ? compareStringsCaseInsensitiveUI(a, b) : compareStringsCaseSensitiveUI(a, b);
     }
 
     /**
@@ -1660,22 +1674,15 @@ namespace ts {
         return comparer(a, b);
     }
 
-    /**
-     * Compare two strings using the sort behavior of the UI locale.
-     *
-     * Ordering is not predictable between different host locales, but is best for displaying
-     * ordered data for UI presentation. Characters with multiple unicode representations may
-     * be considered equal.
-     *
-     * Case-insensitive comparisons compare strings that differ in only base characters or
-     * accents/diacritic marks as unequal.
-     */
-    export function compareStringsUI(a: string, b: string, ignoreCase: boolean) {
-        return ignoreCase ? compareStringsCaseInsensitiveUI(a, b) : compareStringsCaseSensitiveUI(a, b);
-    }
-
     export function getStringComparerUI(ignoreCase: boolean) {
         return ignoreCase ? compareStringsCaseInsensitiveUI : compareStringsCaseSensitiveUI;
+    }
+
+    export function compareProperties<T>(a: T, b: T, key: keyof T) {
+        return a === b ? Comparison.EqualTo :
+            a === undefined ? Comparison.LessThan :
+            b === undefined ? Comparison.GreaterThan :
+            compareValues(a[key], b[key]);
     }
 
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
