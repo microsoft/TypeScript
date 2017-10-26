@@ -89,6 +89,7 @@ interface PlaybackControl {
 namespace Playback {
     let recordLog: IOLog = undefined;
     let replayLog: IOLog = undefined;
+    let replayFilesRead: ts.Map<IOLogFile> | undefined = undefined;
     let recordLogFileNameBase = "";
 
     interface Memoized<T> {
@@ -222,10 +223,15 @@ namespace Playback {
             replayLog = log;
             // Remove non-found files from the log (shouldn't really need them, but we still record them for diagnostic purposes)
             replayLog.filesRead = replayLog.filesRead.filter(f => f.result.contents !== undefined);
+            replayFilesRead = ts.createMap();
+            for (const file of replayLog.filesRead) {
+                replayFilesRead.set(ts.normalizeSlashes(file.path).toLowerCase(), file);
+            }
         };
 
         wrapper.endReplay = () => {
             replayLog = undefined;
+            replayFilesRead = undefined;
         };
 
         wrapper.startRecord = (fileNameBase) => {
@@ -254,7 +260,7 @@ namespace Playback {
             path => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path }),
             memoize(path => {
                 // If we read from the file, it must exist
-                if (findFileByPath(replayLog.filesRead, path, /*throwFileNotFoundError*/ false)) {
+                if (findFileByPath(path, /*throwFileNotFoundError*/ false)) {
                     return true;
                 }
                 else {
@@ -298,7 +304,7 @@ namespace Playback {
                 recordLog.filesRead.push(logEntry);
                 return result;
             },
-            memoize(path => findFileByPath(replayLog.filesRead, path, /*throwFileNotFoundError*/ true).contents));
+            memoize(path => findFileByPath(path, /*throwFileNotFoundError*/ true).contents));
 
         wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
             (path, extensions, exclude, include, depth) => {
@@ -379,14 +385,12 @@ namespace Playback {
         return results[0].result;
     }
 
-    function findFileByPath(logArray: IOLogFile[],
-        expectedPath: string, throwFileNotFoundError: boolean): FileInformation {
+    function findFileByPath(expectedPath: string, throwFileNotFoundError: boolean): FileInformation {
         const normalizedName = ts.normalizePath(expectedPath).toLowerCase();
         // Try to find the result through normal fileName
-        for (const log of logArray) {
-            if (ts.normalizeSlashes(log.path).toLowerCase() === normalizedName) {
-                return log.result;
-            }
+        const result = replayFilesRead.get(normalizedName);
+        if (result) {
+            return result.result;
         }
 
         // If we got here, we didn't find a match
