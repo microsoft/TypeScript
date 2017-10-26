@@ -4454,6 +4454,17 @@ namespace ts.projectSystem {
     });
 
     describe("cancellationToken", () => {
+        // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
+        let oldPrepare: Function;
+        before(() => {
+            oldPrepare = (Error as any).prepareStackTrace;
+            delete (Error as any).prepareStackTrace;
+        });
+
+        after(() => {
+            (Error as any).prepareStackTrace = oldPrepare;
+        });
+
         it("is attached to request", () => {
             const f1 = {
                 path: "/a/b/app.ts",
