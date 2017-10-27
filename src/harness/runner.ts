@@ -18,6 +18,7 @@
 /// <reference path="fourslashRunner.ts" />
 /// <reference path="projectsRunner.ts" />
 /// <reference path="rwcRunner.ts" />
+/// <reference path="realworldRunner.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="./parallel/shared.ts" />
 
@@ -59,6 +60,8 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
             return new RWCRunner();
         case "test262":
             return new Test262BaselineRunner();
+        case "realworld":
+            return new RealworldRunner();
     }
     ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -175,6 +178,9 @@ function handleTestConfig() {
                     case "test262":
                         runners.push(new Test262BaselineRunner());
                         break;
+                    case "realworld":
+                        runners.push(new RealworldRunner());
+                        break;
                 }
             }
         }
@@ -215,8 +221,9 @@ function beginTests() {
     }
 }
 
+let isWorker: boolean;
 function startTestEnvironment() {
-    const isWorker = handleTestConfig();
+    isWorker = handleTestConfig();
     if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
         if (isWorker) {
             return Harness.Parallel.Worker.start();

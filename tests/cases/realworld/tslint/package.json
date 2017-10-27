@@ -1,0 +1,27 @@
+{
+  "name": "tslint-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "tslint": "^5.8.0",
+    "typescript": "^2.5.3"
+  },
+  "devDependencies": {
+    "@types/babel-code-frame": "^6.20.0",
+    "@types/chai": "^3.5.0",
+    "@types/chalk": "^0.4.31",
+    "@types/commander": "^2.9.0",
+    "@types/diff": "^3.2.0",
+    "@types/glob": "^5.0.30",
+    "@types/js-yaml": "^3.5.31",
+    "@types/minimatch": "^2.0.29",
+    "@types/mocha": "^2.2.35",
+    "@types/node": "^7.0.29",
+    "@types/resolve": "^0.0.4",
+    "@types/rimraf": "^2.0.2",
+    "@types/semver": "^5.3.30"
+  }
+}
