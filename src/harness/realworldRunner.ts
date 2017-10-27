@@ -35,8 +35,16 @@ class RealworldRunner extends RunnerBase {
                 const stdio = isWorker ? "pipe" : "inherit";
                 const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout, shell: true, stdio });
                 if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed!`);
-                const result = cp.spawnSync(`node`, ["../../../../built/local/tsc.js"], { cwd, timeout, shell: true, stdio });
-                if (result.status !== 0) throw new Error(`${directoryName} did not build successfully!`);
+                Harness.Baseline.runBaseline(`realworld/${directoryName}.log`, () => {
+                    const result = cp.spawnSync(`node`, ["../../../../built/local/tsc.js"], { cwd, timeout, shell: true });
+                    return `Exit Code: ${result.status}
+Standard output:
+${result.stdout.toString()}
+
+
+Standard error:
+${result.stderr.toString()}`;
+                });
             });
         });
     }
