@@ -345,20 +345,22 @@ namespace ts {
             return this.declarations;
         }
 
-        getDocumentationComment(checker: TypeChecker): SymbolDisplayPart[] {
+        getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
                 if (this.declarations) {
                     this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations(this.declarations);
 
                     if (this.documentationComment.length === 0 || this.declarations.some(hasJSDocInheritDocTag)) {
-                        for (const declaration of this.declarations) {
-                            const inheritedDocs = findInheritedJSDocComments(declaration, this.getName(), checker);
-                            if (inheritedDocs.length > 0) {
-                                if (this.documentationComment.length > 0) {
-                                    inheritedDocs.push(ts.lineBreakPart());
+                        if (checker) {
+                            for (const declaration of this.declarations) {
+                                const inheritedDocs = findInheritedJSDocComments(declaration, this.getName(), checker);
+                                if (inheritedDocs.length > 0) {
+                                    if (this.documentationComment.length > 0) {
+                                        inheritedDocs.push(ts.lineBreakPart());
+                                    }
+                                    this.documentationComment = concatenate(inheritedDocs, this.documentationComment);
+                                    break;
                                 }
-                                this.documentationComment = concatenate(inheritedDocs, this.documentationComment);
-                                break;
                             }
                         }
                     }
