@@ -321,16 +321,16 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
+    function getPos(range: Node) {
+        return range.pos;
+    }
+
     /**
      * Note: it is expected that the `nodeArray` and the `node` are within the same file.
      * For example, searching for a `SourceFile` in a `SourceFile[]` wouldn't work.
      */
     export function indexOfNode(nodeArray: ReadonlyArray<Node>, node: Node) {
-        return binarySearch(nodeArray, node, compareNodePos);
-    }
-
-    function compareNodePos({ pos: aPos }: Node, { pos: bPos}: Node) {
-        return aPos < bPos ? Comparison.LessThan : bPos < aPos ? Comparison.GreaterThan : Comparison.EqualTo;
+        return binarySearch(nodeArray, node, getPos, compareValues);
     }
 
     /**

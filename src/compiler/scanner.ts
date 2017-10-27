@@ -352,7 +352,7 @@ namespace ts {
      * We assume the first line starts at position 0 and 'position' is non-negative.
      */
     export function computeLineAndCharacterOfPosition(lineStarts: ReadonlyArray<number>, position: number): LineAndCharacter {
-        let lineNumber = binarySearch(lineStarts, position);
+        let lineNumber = binarySearch(lineStarts, position, identity, compareValues);
         if (lineNumber < 0) {
             // If the actual position was not found,
             // the binary search returns the 2's-complement of the next line start

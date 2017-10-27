@@ -7341,24 +7341,12 @@ namespace ts {
             unionIndex?: number;
         }
 
+        function getTypeId(type: Type) {
+            return type.id;
+        }
+
         function binarySearchTypes(types: Type[], type: Type): number {
-            let low = 0;
-            let high = types.length - 1;
-            const typeId = type.id;
-            while (low <= high) {
-                const middle = low + ((high - low) >> 1);
-                const id = types[middle].id;
-                if (id === typeId) {
-                    return middle;
-                }
-                else if (id > typeId) {
-                    high = middle - 1;
-                }
-                else {
-                    low = middle + 1;
-                }
-            }
-            return ~low;
+            return binarySearch(types, type, getTypeId, compareValues);
         }
 
         function containsType(types: Type[], type: Type): boolean {

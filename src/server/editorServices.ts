@@ -203,8 +203,10 @@ namespace ts.server {
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
     export function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
-        const result = flatMap(projects, action).sort(comparer);
-        return projects.length > 1 ? deduplicate(result, areEqual) : result;
+        const outputs = flatMap(projects, action);
+        return comparer
+            ? sortAndDeduplicate(outputs, comparer, areEqual)
+            : deduplicate(outputs, areEqual);
     }
 
     export interface HostConfiguration {

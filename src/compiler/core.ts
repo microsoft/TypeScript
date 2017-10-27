@@ -660,35 +660,77 @@ namespace ts {
     }
 
     /**
-     * Creates a new array with duplicate entries removed.
+     * Deduplicates an array that has already been sorted.
+     */
+    export function deduplicateSorted<T>(array: SortedReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>) {
+        if (!array) return undefined;
+        if (array.length === 0) return [];
+
+        let last = array[0];
+        const deduplicated: T[] = [last];
+        for (let i = 1; i < array.length; i++) {
+            switch (comparer(last, array[i])) {
+                // equality comparison
+                case true:
+
+                // relational comparison
+                case Comparison.LessThan:
+                case Comparison.EqualTo:
+                    continue;
+            }
+
+            deduplicated.push(last = array[i]);
+        }
+
+        return deduplicated;
+    }
+
+    /**
+     * Deduplicates an unsorted array.
      * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
      * @param comparer An optional `Comparer` used to sort entries before comparison. If supplied,
      * results are returned in the original order found in `array`.
      */
-    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer?: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
-        if (!array) return undefined;
-        if (!comparer) return addRangeIfUnique([], array, equalityComparer);
-        return deduplicateWorker(array, equalityComparer, comparer);
+    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
+        return !array ? undefined :
+            array.length === 0 ? [] :
+            array.length === 1 ? array.slice() :
+            comparer ? deduplicateRelational(array, equalityComparer, comparer) :
+            deduplicateEquality(array, equalityComparer);
     }
 
-    function deduplicateWorker<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T> = equateValues, comparer: Comparer<T>) {
+    function deduplicateRelational<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer: Comparer<T>) {
         // Perform a stable sort of the array. This ensures the first entry in a list of
         // duplicates remains the first entry in the result.
         const indices = sequence(0, array.length);
         stableSortIndices(array, indices, comparer);
 
-        const deduplicated: number[] = [];
-        loop: for (const sourceIndex of indices) {
-            for (const targetIndex of deduplicated) {
-                if (equalityComparer(array[sourceIndex], array[targetIndex])) {
-                    continue loop;
-                }
+        let last = array[indices[0]];
+        const deduplicated: number[] = [indices[0]];
+        for (let i = 1; i < indices.length; i++) {
+            const index = indices[i];
+            const item = array[index];
+            if (!equalityComparer(last, item)) {
+                deduplicated.push(index);
+                last = item;
             }
-            deduplicated.push(sourceIndex);
         }
 
-        // return deduplicated items in original order
-        return deduplicated.sort().map(i => array[i]);
+        // restore original order
+        deduplicated.sort();
+        return deduplicated.map(i => array[i]);
+    }
+
+    function deduplicateEquality<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>) {
+        const result: T[] = [];
+        for (const item of array) {
+            pushIfUnique(result, item, equalityComparer);
+        }
+        return result;
+    }
+
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>) {
+        return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
     }
 
     export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equalityComparer: (a: T, b: T) => boolean = equateValues): boolean {
@@ -827,15 +869,6 @@ namespace ts {
         return to;
     }
 
-    function addRangeIfUnique<T>(to: T[], from: ReadonlyArray<T>, equalityComparer?: EqualityComparer<T>): T[] | undefined {
-        for (let i = 0; i < from.length; i++) {
-            if (from[i] !== undefined) {
-                pushIfUnique(to, from[i], equalityComparer);
-            }
-        }
-        return to;
-    }
-
     /**
      * @return Whether the value was added.
      */
@@ -879,12 +912,19 @@ namespace ts {
     }
 
     /**
+     * Returns a new sorted array.
+     */
+    export function sort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
+        return array.slice().sort(comparer) as ReadonlyArray<T> as SortedReadonlyArray<T>;
+    }
+
+    /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
     export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
         const indices = sequence(0, array.length);
         stableSortIndices(array, indices, comparer);
-        return indices.map(i => array[i]);
+        return indices.map(i => array[i]) as ReadonlyArray<T> as SortedReadonlyArray<T>;
     }
 
     export function rangeEquals<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, pos: number, end: number) {
@@ -969,25 +1009,22 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch<T>(array: ReadonlyArray<T>, value: T, comparer?: Comparer<T>, offset?: number): number {
+    export function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: Selector<T, U>, keyComparer: Comparer<U>, offset?: number): number {
         if (!array || array.length === 0) {
             return -1;
         }
 
         let low = offset || 0;
         let high = array.length - 1;
-        comparer = comparer !== undefined
-            ? comparer
-            : (v1, v2) => (v1 < v2 ? -1 : (v1 > v2 ? 1 : 0));
-
+        const key = keySelector(value);
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
-            const midValue = array[middle];
+            const midKey = keySelector(array[middle]);
 
-            if (comparer(midValue, value) === 0) {
+            if (keyComparer(midKey, key) === 0) {
                 return middle;
             }
-            else if (comparer(midValue, value) > 0) {
+            else if (keyComparer(midKey, key) > 0) {
                 high = middle - 1;
             }
             else {
@@ -2452,8 +2489,8 @@ namespace ts {
         return flatten<string>(results);
 
         function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
-            let { files, directories } = getFileSystemEntries(path);
-            files = files.slice().sort(comparer);
+            const entries = getFileSystemEntries(path);
+            const files = sort(entries.files, comparer);
 
             for (const current of files) {
                 const name = combinePaths(path, current);
@@ -2478,7 +2515,7 @@ namespace ts {
                 }
             }
 
-            directories = directories.slice().sort(comparer);
+            const directories = sort(entries.directories, comparer);
             for (const current of directories) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);

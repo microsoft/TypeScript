@@ -250,7 +250,7 @@ namespace ts.server {
             return;
         }
 
-        const insertIndex = binarySearch(array, insert, compare);
+        const insertIndex = binarySearch(array, insert, identity, compare);
         if (insertIndex < 0) {
             array.splice(~insertIndex, 0, insert);
         }
@@ -266,7 +266,7 @@ namespace ts.server {
             return;
         }
 
-        const removeIndex = binarySearch(array, remove, compare);
+        const removeIndex = binarySearch(array, remove, identity, compare);
         if (removeIndex >= 0) {
             array.splice(removeIndex, 1);
         }
