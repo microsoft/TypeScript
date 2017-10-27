@@ -177,6 +177,8 @@ namespace ts.JsDoc {
      *          - class declarations
      *          - variable statements
      *          - namespace declarations
+     *          - interface declarations
+     *          - method signatures
      *
      * Hosts should ideally check that:
      * - The line is all whitespace up to 'position' before performing the insertion.
@@ -258,7 +260,6 @@ namespace ts.JsDoc {
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
         // TODO: add support for:
         // - enums/enum members
-        // - interfaces
         // - property declarations
         // - potentially property assignments
         for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
