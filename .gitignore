@@ -64,3 +64,4 @@ tests/cases/realworld/*/node_modules/
 tests/cases/realworld/*/**/*.js
 tests/cases/realworld/*/**/*.js.map
 tests/cases/realworld/*/**/*.d.ts
+!tests/cases/realworld/zone.js/
