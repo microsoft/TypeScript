@@ -202,6 +202,11 @@ function handleTestConfig() {
         runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
         runners.push(new FourSlashRunner(FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
+
+        // CRON-only tests
+        if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser && process.env.TRAVIS_EVENT_TYPE === "cron") {
+            runners.push(new UserCodeRunner());
+        }
     }
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
