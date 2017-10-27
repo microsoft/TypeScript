@@ -266,10 +266,12 @@ namespace ts.JsDoc {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.Constructor:
-                    const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration;
+                case SyntaxKind.MethodSignature:
+                    const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
                     return { commentOwner, parameters };
 
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
                     return { commentOwner };
 
                 case SyntaxKind.VariableStatement: {
