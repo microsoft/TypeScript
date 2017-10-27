@@ -1,7 +1,7 @@
 /// <reference path="harness.ts" />
 
 
-type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "realworld";
+type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "user";
 type CompilerTestKind = "conformance" | "compiler";
 type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
 

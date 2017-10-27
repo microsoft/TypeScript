@@ -18,7 +18,7 @@
 /// <reference path="fourslashRunner.ts" />
 /// <reference path="projectsRunner.ts" />
 /// <reference path="rwcRunner.ts" />
-/// <reference path="realworldRunner.ts" />
+/// <reference path="userRunner.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="./parallel/shared.ts" />
 
@@ -60,8 +60,8 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
             return new RWCRunner();
         case "test262":
             return new Test262BaselineRunner();
-        case "realworld":
-            return new RealworldRunner();
+        case "user":
+            return new UserCodeRunner();
     }
     ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -178,8 +178,8 @@ function handleTestConfig() {
                     case "test262":
                         runners.push(new Test262BaselineRunner());
                         break;
-                    case "realworld":
-                        runners.push(new RealworldRunner());
+                    case "user":
+                        runners.push(new UserCodeRunner());
                         break;
                 }
             }
