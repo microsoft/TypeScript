@@ -4050,9 +4050,9 @@ namespace FourSlashInterface {
             this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset });
         }
 
-        public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {
+        public emptyDocCommentTemplateAt(marker: string | FourSlash.Marker) {
             this.state.goToMarker(marker);
-            this.state.verifyDocCommentTemplate(/*expected*/ undefined);
+            this.state.verifyDocCommentTemplate({ newText: "", caretOffset: 0 });
         }
 
         public rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void {

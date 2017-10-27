@@ -9,5 +9,5 @@
 //// // /*2*/
 
 for (const marker of test.markers()) {
-    verify.noDocCommentTemplateAt(marker);
+    verify.emptyDocCommentTemplateAt(marker);
 }
