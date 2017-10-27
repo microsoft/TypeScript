@@ -46,7 +46,7 @@ var r = true ? 1 : 2;
 >2 : 2
 
 var r3 = true ? 1 : {};
->r3 : number | {}
+>r3 : {}
 >true ? 1 : {} : 1 | {}
 >true : true
 >1 : 1
