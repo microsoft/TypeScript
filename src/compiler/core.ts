@@ -2413,6 +2413,13 @@ namespace ts {
         return <T>(removeFileExtension(path) + newExtension);
     }
 
+    /**
+     * Takes a string like "jquery-min.4.2.3" and returns "jquery"
+     */
+    export function removeMinAndVersionNumbers(fileName: string) {
+        return fileName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
+    }
+
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
