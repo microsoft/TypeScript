@@ -1710,7 +1710,7 @@ namespace ts {
         return moduleResolution;
     }
 
-    export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict"): boolean {
+    export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? compilerOptions.strict : compilerOptions[flag];
     }
 

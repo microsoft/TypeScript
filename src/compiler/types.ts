@@ -3676,6 +3676,8 @@ namespace ts {
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | null | undefined;
 
+    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict";
+
     export interface CompilerOptions {
         /*@internal*/ all?: boolean;
         allowJs?: boolean;
