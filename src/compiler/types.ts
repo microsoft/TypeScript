@@ -2784,7 +2784,6 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 20,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
-        IsDeclarationOfUniqueESSymbolType       = 1 << 24,
     }
 
     /* @internal */
@@ -3057,7 +3056,7 @@ namespace ts {
         Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module,
 
         /* @internal */
-        LateBindableContainer = Class | Interface | TypeLiteral | ObjectLiteral,
+        LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral,
     }
 
     export interface Symbol {
@@ -3099,13 +3098,11 @@ namespace ts {
         resolvedMembers?: SymbolTable;      // Combined early- and late-bound members of a symbol
         exportsChecked?: boolean;           // True if exports of external module have been checked
         typeParametersChecked?: boolean;    // True if type parameters of merged class and interface declarations have been checked.
-        isDeclarationWithCollidingName?: boolean; // True if symbol is block scoped redeclaration
+        isDeclarationWithCollidingName?: boolean;   // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
         enumKind?: EnumKind;                // Enum declaration classification
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
-        lateMembers?: SymbolTable;          // Late-bound members resolved during check
-        lateExports?: SymbolTable;          // Late-bound exports resolved during check
     }
 
     /* @internal */

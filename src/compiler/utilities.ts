@@ -1715,19 +1715,19 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
-    export function walkUpParentheses(node: Node) {
-        while (node && (node.kind === SyntaxKind.ParenthesizedType ||
-            node.kind === SyntaxKind.ParenthesizedExpression)) {
+    function walkUp(node: Node, kind: SyntaxKind) {
+        while (node && node.kind === kind) {
             node = node.parent;
         }
         return node;
     }
 
+    export function walkUpParenthesizedTypes(node: Node) {
+        return walkUp(node, SyntaxKind.ParenthesizedType);
+    }
+
     export function walkUpParenthesizedExpressions(node: Node) {
-        while (node && node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = node.parent;
-        }
-        return node;
+        return walkUp(node, SyntaxKind.ParenthesizedExpression);
     }
 
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
@@ -1736,9 +1736,6 @@ namespace ts {
             return false;
         }
         node = walkUpParenthesizedExpressions(node.parent);
-        while (node && node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = node.parent;
-        }
         return node && node.kind === SyntaxKind.DeleteExpression;
     }
 

@@ -1910,13 +1910,13 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.resolvedExports) {
                 const earlySymbols = symbol.flags & SymbolFlags.Module ? getExportsOfModuleWorker(symbol) : symbol.exports;
-                const lateSymbols = getLateBoundExportsOfSymbol(symbol);
 
                 // In the event we recursively resolve the members of the symbol, we
                 // should only see the early-bound members of the symbol here.
                 links.resolvedExports = earlySymbols || emptySymbols;
 
                 // fill in any as-yet-unresolved late-bound members.
+                const lateSymbols = createSymbolTable();
                 for (const decl of symbol.declarations) {
                     const members = getMembersOfDeclaration(decl);
                     if (members) {
@@ -5562,26 +5562,6 @@ namespace ts {
         }
 
         /**
-         * Gets the symbol table used to store members added during late-binding.
-         * This table is filled in as the late-bound names for dynamic members are resolved.
-         */
-        function getLateBoundMembersOfSymbol(symbol: Symbol): SymbolTable {
-            Debug.assert(!!(symbol.flags & SymbolFlags.LateBindableContainer), "Expected a container that supports late-binding.");
-            const links = getSymbolLinks(symbol);
-            return links.lateMembers || (links.lateMembers = createSymbolTable());
-        }
-
-        /**
-         * Gets the symbol table used to store exports added during late-binding.
-         * This table is filled in as the late-bound names for dynamic members are resolved.
-         */
-        function getLateBoundExportsOfSymbol(symbol: Symbol): SymbolTable {
-            Debug.assert(!!(symbol.flags & SymbolFlags.Class), "Expected a container that supports late-binding of exports.");
-            const links = getSymbolLinks(symbol);
-            return links.lateExports || (links.lateExports = createSymbolTable());
-        }
-
-        /**
          * Adds a declaration to a late-bound dynamic member. This performs the same function for
          * late-bound members that `addDeclarationToSymbol` in binder.ts performs for early-bound
          * members.
@@ -5675,13 +5655,9 @@ namespace ts {
          * For a description of late-binding, see `lateBindMember`.
          */
         function getMembersOfSymbol(symbol: Symbol) {
-            if (symbol.flags & SymbolFlags.LateBindableContainer) {
+            if (symbol.flags & SymbolFlags.LateBindingContainer) {
                 const links = getSymbolLinks(symbol);
                 if (!links.resolvedMembers) {
-                    // Get (or create) the SymbolTable from the parent used to store late-
-                    // bound symbols. We get a shared table so that we can correctly merge
-                    // late-bound symbols across accessor pairs.
-                    const lateMembers = getLateBoundMembersOfSymbol(symbol);
                     const earlyMembers = symbol.members;
 
                     // In the event we recursively resolve the members of the symbol, we
@@ -5690,6 +5666,7 @@ namespace ts {
                     links.resolvedMembers = earlyMembers || emptySymbols;
 
                     // fill in any as-yet-unresolved late-bound members.
+                    const lateMembers = createSymbolTable();
                     for (const decl of symbol.declarations) {
                         const members = getMembersOfDeclaration(decl);
                         if (members) {
@@ -5718,7 +5695,7 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.lateSymbol) {
                 const parent = symbol.parent;
-                if (symbolHasLateBindableName(symbol) && parent && parent.flags & SymbolFlags.LateBindableContainer) {
+                if (symbolHasLateBindableName(symbol) && parent && parent.flags & SymbolFlags.LateBindingContainer) {
                     // force late binding of members/exports. This will set the late-bound symbol
                     if (some(symbol.declarations, hasStaticModifier)) {
                         getExportsOfSymbol(parent);
@@ -7979,7 +7956,9 @@ namespace ts {
                         links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
                         break;
                     case SyntaxKind.UniqueKeyword:
-                        links.resolvedType = getUniqueType(<UniqueTypeOperatorNode>node);
+                        links.resolvedType = node.type.kind === SyntaxKind.SymbolKeyword
+                            ? getUniqueESSymbolTypeForNode(walkUpParenthesizedTypes(node.parent))
+                            : unknownType
                         break;
                 }
             }
@@ -8353,13 +8332,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function nodeCanHaveUniqueESSymbolType(node: Node) {
-            return isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
-                isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
-                isPropertySignature(node) ? hasReadonlyModifier(node) :
-                false;
-        }
-
         function createUniqueESSymbolType(symbol: Symbol) {
             const type = <UniqueESSymbolType>createType(TypeFlags.UniqueESSymbol);
             type.symbol = symbol;
@@ -8367,19 +8339,14 @@ namespace ts {
         }
 
         function getUniqueESSymbolTypeForNode(node: Node) {
-            const parent = walkUpParentheses(node);
-            if (nodeCanHaveUniqueESSymbolType(parent)) {
-                const symbol = getSymbolOfNode(parent);
+            if (isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+                isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
+                isPropertySignature(node) && hasReadonlyModifier(node)) {
+                const symbol = getSymbolOfNode(node);
                 const links = getSymbolLinks(symbol);
                 return links.type || (links.type = createUniqueESSymbolType(symbol));
             }
             return esSymbolType;
-        }
-
-        function getUniqueType(node: UniqueTypeOperatorNode) {
-            return node.type.kind === SyntaxKind.SymbolKeyword
-                ? getUniqueESSymbolTypeForNode(node.parent)
-                : unknownType;
         }
 
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
@@ -17271,7 +17238,7 @@ namespace ts {
             // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
             // as a fresh unique symbol literal type.
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
-                return getUniqueESSymbolTypeForNode(node.parent);
+                return getUniqueESSymbolTypeForNode(walkUpParenthesizedExpressions(node.parent));
             }
             return returnType;
         }

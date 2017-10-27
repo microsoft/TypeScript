@@ -460,6 +460,19 @@ namespace ts {
                     return emitTypePredicate(<TypePredicateNode>type);
             }
 
+            function writeEntityName(entityName: EntityName | Expression) {
+                if (entityName.kind === SyntaxKind.Identifier) {
+                    writeTextOfNode(currentText, entityName);
+                }
+                else {
+                    const left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
+                    const right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
+                    writeEntityName(left);
+                    write(".");
+                    writeTextOfNode(currentText, right);
+                }
+            }
+
             function emitEntityName(entityName: EntityNameOrEntityNameExpression) {
                 const visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
@@ -576,19 +589,6 @@ namespace ts {
                     decreaseIndent();
                 }
                 write("}");
-            }
-        }
-
-        function writeEntityName(entityName: EntityName | Expression) {
-            if (entityName.kind === SyntaxKind.Identifier) {
-                writeTextOfNode(currentText, entityName);
-            }
-            else {
-                const left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
-                const right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
-                writeEntityName(left);
-                write(".");
-                writeTextOfNode(currentText, right);
             }
         }
 
@@ -1246,7 +1246,7 @@ namespace ts {
                     emitBindingPattern(<BindingPattern>node.name);
                 }
                 else {
-                    writeNameOfDeclaration(node, getVariableDeclarationTypeOrNameVisibilityError);
+                    writeNameOfDeclaration(node, getVariableDeclarationTypeVisibilityError);
 
                     // If optional property emit ? but in the case of parameterProperty declaration with "?" indicating optional parameter for the constructor
                     // we don't want to emit property declaration with "?"
@@ -1262,12 +1262,12 @@ namespace ts {
                         resolver.writeLiteralConstValue(node, writer);
                     }
                     else if (!hasModifier(node, ModifierFlags.Private)) {
-                        writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeOrNameVisibilityError);
+                        writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
                     }
                 }
             }
 
-            function getVariableDeclarationTypeOrNameVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
+            function getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
                 if (node.kind === SyntaxKind.VariableDeclaration) {
                     return symbolAccessibilityResult.errorModuleName ?
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
@@ -1303,8 +1303,8 @@ namespace ts {
                 }
             }
 
-            function getVariableDeclarationTypeOrNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
-                const diagnosticMessage = getVariableDeclarationTypeOrNameVisibilityDiagnosticMessage(symbolAccessibilityResult);
+            function getVariableDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+                const diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult);
                 return diagnosticMessage !== undefined ? {
                     diagnosticMessage,
                     errorNode: node,
@@ -1329,7 +1329,7 @@ namespace ts {
 
             function emitBindingElement(bindingElement: BindingElement) {
                 function getBindingElementTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
-                    const diagnosticMessage = getVariableDeclarationTypeOrNameVisibilityDiagnosticMessage(symbolAccessibilityResult);
+                    const diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult);
                     return diagnosticMessage !== undefined ? {
                         diagnosticMessage,
                         errorNode: bindingElement,

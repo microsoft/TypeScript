@@ -2638,12 +2638,12 @@ namespace ts {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
+                case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
-                case SyntaxKind.SymbolKeyword:
-                // If these are followed by a dot, then parse these out as a dotted type reference instead.
+                    // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     return tryParse(parseKeywordAndNoDot) || parseTypeReference();
                 case SyntaxKind.AsteriskToken:
                     return parseJSDocAllType();

@@ -1781,7 +1781,6 @@ declare namespace ts {
         IgnoreErrors = 60416,
         InObjectTypeLiteral = 1048576,
         InTypeAlias = 8388608,
-        IsDeclarationOfUniqueESSymbolType = 16777216,
     }
     interface SymbolDisplayBuilder {
         buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
