@@ -262,7 +262,7 @@ namespace Playback {
         };
 
         function generateTsconfig(newLog: IOLog): undefined | { compilerOptions: ts.CompilerOptions, files: string[] } {
-            if (newLog.filesRead.some(file => /tsconfig.json$/.test(file.path))) {
+            if (newLog.filesRead.some(file => /tsconfig.+json$/.test(file.path))) {
                 return;
             }
             const files = [];
