@@ -1896,7 +1896,7 @@ namespace ts {
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
-            return symbol.flags & SymbolFlags.Class ? getExportsOfClass(symbol) :
+            return symbol.flags & SymbolFlags.Class ? getResolvedMembersOrExportsOfSymbol(symbol, "resolvedExports") :
                 symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) :
                 symbol.exports || emptySymbols;
         }
@@ -1904,33 +1904,6 @@ namespace ts {
         function getExportsOfModule(moduleSymbol: Symbol): SymbolTable {
             const links = getSymbolLinks(moduleSymbol);
             return links.resolvedExports || (links.resolvedExports = getExportsOfModuleWorker(moduleSymbol));
-        }
-
-        function getExportsOfClass(symbol: Symbol) {
-            const links = getSymbolLinks(symbol);
-            if (!links.resolvedExports) {
-                const earlySymbols = symbol.flags & SymbolFlags.Module ? getExportsOfModuleWorker(symbol) : symbol.exports;
-
-                // In the event we recursively resolve the members of the symbol, we
-                // should only see the early-bound members of the symbol here.
-                links.resolvedExports = earlySymbols || emptySymbols;
-
-                // fill in any as-yet-unresolved late-bound members.
-                const lateSymbols = createSymbolTable();
-                for (const decl of symbol.declarations) {
-                    const members = getMembersOfDeclaration(decl);
-                    if (members) {
-                        for (const member of members) {
-                            if (hasModifier(member, ModifierFlags.Static) && hasLateBindableName(member)) {
-                                lateBindMember(decl.symbol, earlySymbols, lateSymbols, member);
-                            }
-                        }
-                    }
-                }
-
-                links.resolvedExports = combineSymbolTables(earlySymbols, lateSymbols) || emptySymbols;
-            }
-            return links.resolvedExports;
         }
 
         interface ExportCollisionTracker {
@@ -5649,40 +5622,47 @@ namespace ts {
             return links.resolvedSymbol;
         }
 
+        function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: "resolvedExports" | "resolvedMembers") {
+            const links = getSymbolLinks(symbol);
+            if (!links[resolutionKind]) {
+                const isStatic = resolutionKind === "resolvedExports";
+                const earlySymbols = !isStatic ? symbol.members :
+                    symbol.flags & SymbolFlags.Module ? getExportsOfModuleWorker(symbol) :
+                    symbol.exports;
+
+                // In the event we recursively resolve the members/exports of the symbol, we
+                // set the initial value of resolvedMembers/resolvedExports to the early-bound
+                // members/exports of the symbol.
+                links[resolutionKind] = earlySymbols || emptySymbols;
+
+                // fill in any as-yet-unresolved late-bound members.
+                const lateSymbols = createSymbolTable();
+                for (const decl of symbol.declarations) {
+                    const members = getMembersOfDeclaration(decl);
+                    if (members) {
+                        for (const member of members) {
+                            if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
+                                lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                            }
+                        }
+                    }
+                }
+
+                links[resolutionKind] = combineSymbolTables(earlySymbols, lateSymbols) || emptySymbols;
+            }
+
+            return links[resolutionKind];
+        }
+
         /**
          * Gets a SymbolTable containing both the early- and late-bound members of a symbol.
          *
          * For a description of late-binding, see `lateBindMember`.
          */
         function getMembersOfSymbol(symbol: Symbol) {
-            if (symbol.flags & SymbolFlags.LateBindingContainer) {
-                const links = getSymbolLinks(symbol);
-                if (!links.resolvedMembers) {
-                    const earlyMembers = symbol.members;
-
-                    // In the event we recursively resolve the members of the symbol, we
-                    // set the initial value of resolvedMembers to the early-bound members
-                    // of the symbol.
-                    links.resolvedMembers = earlyMembers || emptySymbols;
-
-                    // fill in any as-yet-unresolved late-bound members.
-                    const lateMembers = createSymbolTable();
-                    for (const decl of symbol.declarations) {
-                        const members = getMembersOfDeclaration(decl);
-                        if (members) {
-                            for (const member of members) {
-                                if (!hasModifier(member, ModifierFlags.Static) && hasLateBindableName(member)) {
-                                    lateBindMember(symbol, earlyMembers, lateMembers, member);
-                                }
-                            }
-                        }
-                    }
-
-                    links.resolvedMembers = combineSymbolTables(earlyMembers, lateMembers) || emptySymbols;
-                }
-                return links.resolvedMembers;
-            }
-            return symbol.members || emptySymbols;
+            return symbol.flags & SymbolFlags.LateBindingContainer
+                ? getResolvedMembersOrExportsOfSymbol(symbol, "resolvedMembers")
+                : symbol.members || emptySymbols;
         }
 
         /**
@@ -7958,7 +7938,7 @@ namespace ts {
                     case SyntaxKind.UniqueKeyword:
                         links.resolvedType = node.type.kind === SyntaxKind.SymbolKeyword
                             ? getUniqueESSymbolTypeForNode(walkUpParenthesizedTypes(node.parent))
-                            : unknownType
+                            : unknownType;
                         break;
                 }
             }
