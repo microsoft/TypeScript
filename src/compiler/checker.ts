@@ -7477,7 +7477,7 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[], retainRedundantTypes?: boolean): Type {
+        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -7492,7 +7492,7 @@ namespace ts {
             if (subtypeReduction) {
                 removeSubtypes(typeSet);
             }
-            else if (typeSet.containsStringOrNumberLiteral && !retainRedundantTypes) {
+            else if (typeSet.containsStringOrNumberLiteral) {
                 removeRedundantLiteralTypes(typeSet);
             }
             if (typeSet.length === 0) {
@@ -8998,6 +8998,17 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
+                if (relation !== comparableRelation) {
+                    return isRelatedToInternal(source, target, reportErrors, headMessage);
+                }
+                const first = isRelatedToInternal(target, source, /*reportErrors*/ false, headMessage);
+                if (first === Ternary.True) {
+                    return first;
+                }
+                return isRelatedToInternal(source, target, reportErrors, headMessage);
+            }
+
+            function isRelatedToInternal(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
                     source = (<LiteralType>source).regularType;
                 }
@@ -11606,7 +11617,7 @@ namespace ts {
         // Apply a mapping function to a type and return the resulting type. If the source type
         // is a union type, the mapping function is applied to each constituent type and a union
         // of the resulting types is returned.
-        function mapType(type: Type, mapper: (t: Type) => Type, retainRedundantTypes?: boolean): Type {
+        function mapType(type: Type, mapper: (t: Type) => Type): Type {
             if (!(type.flags & TypeFlags.Union)) {
                 return mapper(type);
             }
@@ -11627,7 +11638,7 @@ namespace ts {
                     }
                 }
             }
-            return mappedTypes ? getUnionType(mappedTypes, /*subtypeReduction*/ undefined, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, retainRedundantTypes) : mappedType;
+            return mappedTypes ? getUnionType(mappedTypes, /*subtypeReduction*/ undefined, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined) : mappedType;
         }
 
         function extractTypesOfKind(type: Type, kind: TypeFlags) {
@@ -13434,7 +13445,7 @@ namespace ts {
             return mapType(type, t => {
                 const prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
                 return prop ? getTypeOfSymbol(prop) : undefined;
-            }, /*retainRedundantTypes*/ true);
+            });
         }
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
@@ -17232,7 +17243,7 @@ namespace ts {
             if (isUnitType(type) &&
                 !(contextualSignature &&
                     isLiteralContextualType(
-                        contextualSignature === getSignatureFromDeclaration(func) ? type : getReturnTypeOfSignature(contextualSignature)))) {
+                        contextualSignature === getSignatureFromDeclaration(func) ? type : getReturnTypeOfSignature(contextualSignature), type))) {
                 type = getWidenedLiteralType(type);
             }
 
@@ -18329,19 +18340,15 @@ namespace ts {
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
         }
 
-        function isLiteralContextualType(contextualType: Type) {
-            if (contextualType) {
+        function isLiteralContextualType(contextualType: Type, candidateLiteral: Type): boolean {
+            if (contextualType && candidateLiteral) {
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-                    // If the type parameter is constrained to the base primitive type we're checking for,
-                    // consider this a literal context. For example, given a type parameter 'T extends string',
-                    // this causes us to infer string literal types for T.
-                    if (constraint.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum)) {
-                        return true;
-                    }
-                    contextualType = constraint;
+                    return isLiteralContextualType(constraint, candidateLiteral);
                 }
-                return maybeTypeOfKind(contextualType, (TypeFlags.Literal | TypeFlags.Index));
+                return !!((maybeTypeOfKind(contextualType, TypeFlags.StringLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
+                    (maybeTypeOfKind(contextualType, TypeFlags.NumberLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
+                    (maybeTypeOfKind(contextualType, TypeFlags.BooleanLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)));
             }
             return false;
         }
@@ -18351,7 +18358,7 @@ namespace ts {
                 contextualType = getContextualType(node);
             }
             const type = checkExpression(node, checkMode);
-            const shouldWiden = isTypeAssertion(node) || isLiteralContextualType(contextualType);
+            const shouldWiden = isTypeAssertion(node) || isLiteralContextualType(contextualType, type);
             return shouldWiden ? type : getWidenedLiteralType(type);
         }
 
