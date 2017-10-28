@@ -10551,7 +10551,11 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Union) {
                     const unionContext = context || createWideningContext(/*parent*/ undefined, /*propertyName*/ undefined, (<UnionType>type).types);
-                    return getUnionType(sameMap((<UnionType>type).types, t => t.flags & TypeFlags.Nullable ? t : getWidenedTypeWithContext(t, unionContext)));
+                    const widenedTypes = sameMap((<UnionType>type).types, t => t.flags & TypeFlags.Nullable ? t : getWidenedTypeWithContext(t, unionContext));
+                    // Widening an empty object literal transitions from a highly restrictive type to
+                    // a highly inclusive one. For that reason we perform subtype reduction here if the
+                    // union includes empty object types (e.g. reducing {} | string to just {}).
+                    return getUnionType(widenedTypes, some(widenedTypes, isEmptyObjectType));
                 }
                 if (isArrayType(type) || isTupleType(type)) {
                     return createTypeReference((<TypeReference>type).target, sameMap((<TypeReference>type).typeArguments, getWidenedType));
@@ -10573,28 +10577,35 @@ namespace ts {
          */
         function reportWideningErrorsInType(type: Type): boolean {
             let errorReported = false;
-            if (type.flags & TypeFlags.Union) {
-                for (const t of (<UnionType>type).types) {
-                    if (reportWideningErrorsInType(t)) {
+            if (type.flags & TypeFlags.ContainsWideningType) {
+                if (type.flags & TypeFlags.Union) {
+                    if (some((<UnionType>type).types, isEmptyObjectType)) {
                         errorReported = true;
                     }
-                }
-            }
-            if (isArrayType(type) || isTupleType(type)) {
-                for (const t of (<TypeReference>type).typeArguments) {
-                    if (reportWideningErrorsInType(t)) {
-                        errorReported = true;
-                    }
-                }
-            }
-            if (isObjectLiteralType(type)) {
-                for (const p of getPropertiesOfObjectType(type)) {
-                    const t = getTypeOfSymbol(p);
-                    if (t.flags & TypeFlags.ContainsWideningType) {
-                        if (!reportWideningErrorsInType(t)) {
-                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, symbolName(p), typeToString(getWidenedType(t)));
+                    else {
+                        for (const t of (<UnionType>type).types) {
+                            if (reportWideningErrorsInType(t)) {
+                                errorReported = true;
+                            }
                         }
-                        errorReported = true;
+                    }
+                }
+                if (isArrayType(type) || isTupleType(type)) {
+                    for (const t of (<TypeReference>type).typeArguments) {
+                        if (reportWideningErrorsInType(t)) {
+                            errorReported = true;
+                        }
+                    }
+                }
+                if (isObjectLiteralType(type)) {
+                    for (const p of getPropertiesOfObjectType(type)) {
+                        const t = getTypeOfSymbol(p);
+                        if (t.flags & TypeFlags.ContainsWideningType) {
+                            if (!reportWideningErrorsInType(t)) {
+                                error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, symbolName(p), typeToString(getWidenedType(t)));
+                            }
+                            errorReported = true;
+                        }
                     }
                 }
             }
