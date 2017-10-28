@@ -1273,7 +1273,7 @@ namespace ts {
             return result;
         }
 
-        function getDefaultValueForOption(option: CommandLineOption): {} {
+        function getDefaultValueForOption(option: CommandLineOption) {
             switch (option.type) {
                 case "number":
                     return 1;
