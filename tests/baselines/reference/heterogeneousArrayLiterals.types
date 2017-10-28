@@ -21,13 +21,13 @@ var c = [1, '', null]; // {}[]
 >null : null
 
 var d = [{}, 1]; // {}[]
->d : (number | {})[]
+>d : {}[]
 >[{}, 1] : (number | {})[]
 >{} : {}
 >1 : 1
 
 var e = [{}, Object]; // {}[]
->e : (ObjectConstructor | {})[]
+>e : {}[]
 >[{}, Object] : (ObjectConstructor | {})[]
 >{} : {}
 >Object : ObjectConstructor
