@@ -2152,7 +2152,7 @@ namespace ts.server {
                 const rule = this.safelist[name];
                 for (const root of normalizedNames) {
                     if (rule.match.test(root)) {
-                        this.logger.info(`Excluding files based on rule ${name}`);
+                        this.logger.info(`Excluding files based on rule ${name} matching file '${root}'`);
 
                         // If the file matches, collect its types packages and exclude rules
                         if (rule.types) {
@@ -2218,7 +2218,7 @@ namespace ts.server {
                             const inferredTypingName = removeFileExtension(baseName);
                             const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
                             if (this.legacySafelist[cleanedTypingName]) {
-                                this.logger.info(`Excluded '${normalizedNames[i]}'`);
+                                this.logger.info(`Excluded '${normalizedNames[i]}' because it matched ${cleanedTypingName} from the legacy safelist`);
                                 excludedFiles.push(normalizedNames[i]);
                                 exclude = true;
                             }
