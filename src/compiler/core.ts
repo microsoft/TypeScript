@@ -1602,7 +1602,8 @@ namespace ts {
     }
 
     /**
-     * Compare two values for their order relative to each other.
+     * Compare two numeric values for their order relative to each other.
+     * To compare strings, use any of the `compareStrings` functions.
      */
     export function compareValues(a: number, b: number) {
         return compareComparableValues(a, b);
