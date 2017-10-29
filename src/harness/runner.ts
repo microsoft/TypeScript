@@ -208,8 +208,11 @@ function beginTests() {
     }
 
     // run tests in en-US by default.
-    const savedUILocale = ts.getUILocale();
-    beforeEach(() => ts.setUILocale("en-US"));
+    let savedUILocale: string | undefined;
+    beforeEach(() => {
+        savedUILocale = ts.getUILocale();
+        ts.setUILocale("en-US");
+    });
     afterEach(() => ts.setUILocale(savedUILocale));
 
     runTests(runners);

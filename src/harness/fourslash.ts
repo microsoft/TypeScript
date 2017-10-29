@@ -3129,7 +3129,6 @@ Actual: ${stringify(fullActual)}`);
 ${code}
 })`;
         try {
-
             const test = new FourSlashInterface.Test(state);
             const goTo = new FourSlashInterface.GoTo(state);
             const verify = new FourSlashInterface.Verify(state);

@@ -702,7 +702,7 @@ namespace ts {
     function deduplicateRelational<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer: Comparer<T>) {
         // Perform a stable sort of the array. This ensures the first entry in a list of
         // duplicates remains the first entry in the result.
-        const indices = sequence(0, array.length);
+        const indices = array.map((_, i) => i);
         stableSortIndices(array, indices, comparer);
 
         let last = array[indices[0]];
@@ -895,17 +895,6 @@ namespace ts {
         }
     }
 
-    /**
-     * Creates an array of integers starting at `from` (inclusive) and ending at `to` (exclusive).
-     */
-    function sequence(from: number, to: number) {
-        const numbers: number[] = [];
-        for (let i = from; i < to; i++) {
-            numbers.push(i);
-        }
-        return numbers;
-    }
-
     function stableSortIndices<T>(array: ReadonlyArray<T>, indices: number[], comparer: Comparer<T>) {
         // sort indices by value then position
         indices.sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y));
@@ -922,7 +911,7 @@ namespace ts {
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
     export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
-        const indices = sequence(0, array.length);
+        const indices = array.map((_, i) => i);
         stableSortIndices(array, indices, comparer);
         return indices.map(i => array[i]) as ReadonlyArray<T> as SortedReadonlyArray<T>;
     }
@@ -1009,7 +998,7 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: Selector<T, U>, keyComparer: Comparer<U>, offset?: number): number {
+    export function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
         if (!array || array.length === 0) {
             return -1;
         }
@@ -1764,8 +1753,8 @@ namespace ts {
         }
     })();
 
-    let uiCS: Comparer<string> | undefined;
-    let uiCI: Comparer<string> | undefined;
+    let uiComparerCaseSensitive: Comparer<string> | undefined;
+    let uiComparerCaseInsensitive: Comparer<string> | undefined;
     let uiLocale: string | undefined;
 
     export function getUILocale() {
@@ -1775,8 +1764,8 @@ namespace ts {
     export function setUILocale(value: string) {
         if (uiLocale !== value) {
             uiLocale = value;
-            uiCS = undefined;
-            uiCI = undefined;
+            uiComparerCaseSensitive = undefined;
+            uiComparerCaseInsensitive = undefined;
         }
     }
 
@@ -1791,7 +1780,7 @@ namespace ts {
      * accents/diacritic marks as unequal.
      */
     export function compareStringsCaseInsensitiveUI(a: string, b: string) {
-        const comparer = uiCI || (uiCI = createStringComparer(uiLocale, /*caseInsensitive*/ true));
+        const comparer = uiComparerCaseInsensitive || (uiComparerCaseInsensitive = createStringComparer(uiLocale, /*caseInsensitive*/ true));
         return comparer(a, b);
     }
 
@@ -1806,7 +1795,7 @@ namespace ts {
      * accents/diacritic marks, or case as unequal.
      */
     export function compareStringsCaseSensitiveUI(a: string, b: string) {
-        const comparer = uiCS || (uiCS = createStringComparer(uiLocale, /*caseInsensitive*/ false));
+        const comparer = uiComparerCaseSensitive || (uiComparerCaseSensitive = createStringComparer(uiLocale, /*caseInsensitive*/ false));
         return comparer(a, b);
     }
 
