@@ -37,11 +37,6 @@ namespace ts {
     }
 
     /* @internal */
-    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedArrayBrand": any;
-    }
-
-    /* @internal */
     export type EqualityComparer<T> = (a: T, b: T) => boolean;
 
     /* @internal */

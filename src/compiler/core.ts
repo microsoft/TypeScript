@@ -659,46 +659,6 @@ namespace ts {
         return [...array1, ...array2];
     }
 
-    /**
-     * Deduplicates an array that has already been sorted.
-     */
-    export function deduplicateSorted<T>(array: SortedReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>) {
-        if (!array) return undefined;
-        if (array.length === 0) return [];
-
-        let last = array[0];
-        const deduplicated: T[] = [last];
-        for (let i = 1; i < array.length; i++) {
-            switch (comparer(last, array[i])) {
-                // equality comparison
-                case true:
-
-                // relational comparison
-                case Comparison.LessThan:
-                case Comparison.EqualTo:
-                    continue;
-            }
-
-            deduplicated.push(last = array[i]);
-        }
-
-        return deduplicated;
-    }
-
-    /**
-     * Deduplicates an unsorted array.
-     * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
-     * @param comparer An optional `Comparer` used to sort entries before comparison. If supplied,
-     * results are returned in the original order found in `array`.
-     */
-    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
-        return !array ? undefined :
-            array.length === 0 ? [] :
-            array.length === 1 ? array.slice() :
-            comparer ? deduplicateRelational(array, equalityComparer, comparer) :
-            deduplicateEquality(array, equalityComparer);
-    }
-
     function deduplicateRelational<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer: Comparer<T>) {
         // Perform a stable sort of the array. This ensures the first entry in a list of
         // duplicates remains the first entry in the result.
@@ -727,6 +687,50 @@ namespace ts {
             pushIfUnique(result, item, equalityComparer);
         }
         return result;
+    }
+
+    /**
+     * Deduplicates an unsorted array.
+     * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
+     * @param comparer An optional `Comparer` used to sort entries before comparison. If supplied,
+     * results are returned in the original order found in `array`.
+     */
+    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
+        return !array ? undefined :
+            array.length === 0 ? [] :
+            array.length === 1 ? array.slice() :
+            comparer ? deduplicateRelational(array, equalityComparer, comparer) :
+            deduplicateEquality(array, equalityComparer);
+    }
+
+    /**
+     * Deduplicates an array that has already been sorted.
+     */
+    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>) {
+        if (!array) return undefined;
+        if (array.length === 0) return [];
+
+        let last = array[0];
+        const deduplicated: T[] = [last];
+        for (let i = 1; i < array.length; i++) {
+            const next = array[i];
+            switch (comparer(next, last)) {
+                // equality comparison
+                case true:
+
+                // relational comparison
+                case Comparison.EqualTo:
+                    continue;
+
+                case Comparison.LessThan:
+                    // If `array` is sorted, `next` should **never** be less than `last`.
+                    return Debug.fail("Array is unsorted.");
+            }
+
+            deduplicated.push(last = next);
+        }
+
+        return deduplicated;
     }
 
     export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>) {
@@ -904,7 +908,7 @@ namespace ts {
      * Returns a new sorted array.
      */
     export function sort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
-        return array.slice().sort(comparer) as ReadonlyArray<T> as SortedReadonlyArray<T>;
+        return array.slice().sort(comparer);
     }
 
     /**
@@ -913,7 +917,7 @@ namespace ts {
     export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
         const indices = array.map((_, i) => i);
         stableSortIndices(array, indices, comparer);
-        return indices.map(i => array[i]) as ReadonlyArray<T> as SortedReadonlyArray<T>;
+        return indices.map(i => array[i]);
     }
 
     export function rangeEquals<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, pos: number, end: number) {
@@ -2215,7 +2219,6 @@ namespace ts {
             return false;
         }
 
-        // File-system comparisons should use predictable ordering
         const equalityComparer = ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive;
         for (let i = 0; i < parentComponents.length; i++) {
             if (!equalityComparer(parentComponents[i], childComponents[i])) {
