@@ -2496,7 +2496,7 @@ namespace ts {
                 if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
                     const parentSymbol = getParentOfSymbol(type.symbol);
                     const parentName = symbolToName(parentSymbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
-                    const enumLiteralName = getDeclaredTypeOfSymbol(parentSymbol) === type ? parentName : createQualifiedName(parentName, getNameOfSymbol(type.symbol, context));
+                    const enumLiteralName = getDeclaredTypeOfSymbol(parentSymbol) === type ? parentName : createQualifiedName(parentName, symbolName(type.symbol));
                     return createTypeReferenceNode(enumLiteralName, /*typeArguments*/ undefined);
                 }
                 if (type.flags & TypeFlags.EnumLike) {
@@ -3016,8 +3016,7 @@ namespace ts {
                         typeParameterNodes = mapToTypeNodes(typeParameters, context);
                     }
 
-                    const symbolName = getNameOfSymbol(symbol, context);
-                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    const identifier = setEmitFlags(createIdentifier(getNameOfSymbolAsWritten(symbol, context), typeParameterNodes), EmitFlags.NoAsciiEscaping);
 
                     return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
                 }
@@ -3129,7 +3128,14 @@ namespace ts {
             symbolStack: Symbol[] | undefined;
         }
 
-        function getNameOfSymbol(symbol: Symbol, context?: NodeBuilderContext): string {
+        /**
+         * Gets a human-readable name for a symbol.
+         * Should *not* be used for the right-hand side of a `.` -- use `symbolName(symbol)` for that instead.
+         *
+         * Unlike `symbolName(symbol)`, this will include quotes if the name is from a string literal.
+         * It will also use a representation of a number as written instead of a decimal form, e.g. `0o11` instead of `9`.
+         */
+        function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): string {
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
@@ -3166,7 +3172,7 @@ namespace ts {
              * for the name of the symbol if it is available to match how the user wrote the name.
              */
             function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter): void {
-                writer.writeSymbol(getNameOfSymbol(symbol), symbol);
+                writer.writeSymbol(getNameOfSymbolAsWritten(symbol), symbol);
             }
 
             /**
@@ -3175,7 +3181,7 @@ namespace ts {
              * ensuring that any names written with literals use element accesses.
              */
             function appendPropertyOrElementAccessForSymbol(symbol: Symbol, writer: SymbolWriter): void {
-                const symbolName = getNameOfSymbol(symbol);
+                const symbolName = symbol.escapedName === "default" ? "default" : getNameOfSymbolAsWritten(symbol);
                 const firstChar = symbolName.charCodeAt(0);
                 const needsElementAccess = !isIdentifierStart(firstChar, languageVersion);
 
@@ -18999,7 +19005,7 @@ namespace ts {
                         case "arguments":
                         case "prototype":
                             const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
-                            const className = getNameOfSymbol(getSymbolOfNode(node));
+                            const className = getNameOfSymbolAsWritten(getSymbolOfNode(node));
                             error(memberNameNode, message, memberName, className);
                             break;
                     }
