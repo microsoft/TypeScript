@@ -27,6 +27,7 @@ function f() {
     ({ x, a } = /*RENAME*/newFunction(a));
     a; x;
 }
+
 function newFunction(a: number) {
     let x: 0o10 | 10 | 0b10 = 10;
     a++;

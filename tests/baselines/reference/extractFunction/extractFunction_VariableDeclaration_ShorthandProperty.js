@@ -21,6 +21,7 @@ function f() {
     let x = /*RENAME*/newFunction();
     return { x };
 }
+
 function newFunction() {
     let x;
     return x;

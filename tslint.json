@@ -68,6 +68,7 @@
             "check-module",
             "check-separator",
             "check-type"
-        ]
+        ],
+        "no-string-literal": true
 	}
 }

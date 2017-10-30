@@ -9,7 +9,7 @@ namespace ts {
         }
 
         function assertCompilerOptionsWithJson(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
-            const { options: actualCompilerOptions, errors: actualErrors} = convertCompilerOptionsFromJson(json["compilerOptions"], "/apath/", configFileName);
+            const { options: actualCompilerOptions, errors: actualErrors} = convertCompilerOptionsFromJson(json.compilerOptions, "/apath/", configFileName);
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
             const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);
@@ -33,7 +33,7 @@ namespace ts {
             assert(!!result.endOfFileToken);
             const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
             const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
-            expectedResult.compilerOptions["configFilePath"] = configFileName;
+            expectedResult.compilerOptions.configFilePath = configFileName;
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
             const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);
@@ -416,6 +416,24 @@ namespace ts {
             assertCompilerOptions({}, "tsconfig.json",
                 {
                     compilerOptions: {},
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert negative numbers in tsconfig.json ", () => {
+            assertCompilerOptions(
+                {
+                    "compilerOptions": {
+                        "allowJs": true,
+                        "maxNodeModuleJsDepth": -1
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        allowJs: true,
+                        maxNodeModuleJsDepth: -1
+                    },
                     errors: []
                 }
             );

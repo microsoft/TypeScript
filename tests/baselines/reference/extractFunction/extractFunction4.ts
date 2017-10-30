@@ -81,6 +81,7 @@ namespace A {
         }
     }
 }
+
 async function newFunction(z: number, z1: any, foo: () => void) {
     let y = 5;
     if (z) {

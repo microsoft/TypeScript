@@ -377,19 +377,26 @@ namespace ts.FindAllReferences.Core {
 
         const result: SymbolAndEntries[] = [];
         const state = new State(sourceFiles, /*isForConstructor*/ node.kind === SyntaxKind.ConstructorKeyword, checker, cancellationToken, searchMeaning, options, result);
-        const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
 
-        // Try to get the smallest valid scope that we can limit our search to;
-        // otherwise we'll need to search globally (i.e. include each file).
-        const scope = getSymbolScope(symbol);
-        if (scope) {
-            getReferencesInContainer(scope, scope.getSourceFile(), search, state);
+        if (node.kind === SyntaxKind.DefaultKeyword) {
+            addReference(node, symbol, node, state);
+            searchForImportsOfExport(node, symbol, { exportingModuleSymbol: symbol.parent, exportKind: ExportKind.Default }, state);
         }
         else {
-            // Global search
-            for (const sourceFile of state.sourceFiles) {
-                state.cancellationToken.throwIfCancellationRequested();
-                searchForName(sourceFile, search, state);
+            const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
+
+            // Try to get the smallest valid scope that we can limit our search to;
+            // otherwise we'll need to search globally (i.e. include each file).
+            const scope = getSymbolScope(symbol);
+            if (scope) {
+                getReferencesInContainer(scope, scope.getSourceFile(), search, state);
+            }
+            else {
+                // Global search
+                for (const sourceFile of state.sourceFiles) {
+                    state.cancellationToken.throwIfCancellationRequested();
+                    searchForName(sourceFile, search, state);
+                }
             }
         }
 
