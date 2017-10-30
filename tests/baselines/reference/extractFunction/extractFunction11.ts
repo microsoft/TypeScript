@@ -4,10 +4,10 @@ namespace A {
     class C {
         a() {
             let z = 1;
-            let a1 = { x: 1 };
+            /*[#|*/let a1 = { x: 1 };
             y = 10;
             z = 42;
-            return a1.x + 10;
+            return a1.x + 10;/*|]*/
         }
     }
 }
@@ -17,7 +17,7 @@ namespace A {
     class C {
         a() {
             let z = 1;
-            var __return: any;
+            let __return;
             ({ __return, z } = this./*RENAME*/newMethod(z));
             return __return;
         }
@@ -36,7 +36,7 @@ namespace A {
     class C {
         a() {
             let z = 1;
-            var __return: any;
+            let __return;
             ({ __return, z } = /*RENAME*/newFunction(z));
             return __return;
         }
@@ -55,12 +55,13 @@ namespace A {
     class C {
         a() {
             let z = 1;
-            var __return: any;
+            let __return;
             ({ __return, y, z } = /*RENAME*/newFunction(y, z));
             return __return;
         }
     }
 }
+
 function newFunction(y: number, z: number) {
     let a1 = { x: 1 };
     y = 10;

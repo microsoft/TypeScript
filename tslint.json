@@ -42,6 +42,7 @@
             "avoid-escape"
         ],
         "semicolon": [true, "always", "ignore-bound-class-methods"],
+        "space-within-parens": true,
         "triple-equals": true,
         "type-operator-spacing": true,
         "typedef-whitespace": [
@@ -68,6 +69,7 @@
             "check-module",
             "check-separator",
             "check-type"
-        ]
+        ],
+        "no-string-literal": true
 	}
 }

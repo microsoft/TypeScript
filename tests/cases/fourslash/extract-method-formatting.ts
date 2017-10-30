@@ -13,6 +13,7 @@ edit.applyRefactor({
     newContent: `function f(x: number): number {
     return /*RENAME*/newFunction(x);
 }
+
 function newFunction(x: number) {
     switch (x) {
         case 0:

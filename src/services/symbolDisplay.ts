@@ -90,9 +90,16 @@ namespace ts.SymbolDisplay {
             : ScriptElementKindModifier.none;
     }
 
+    interface SymbolDisplayPartsDocumentationAndSymbolKind {
+        displayParts: SymbolDisplayPart[];
+        documentation: SymbolDisplayPart[];
+        symbolKind: ScriptElementKind;
+        tags: JSDocTagInfo[];
+    }
+
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
     export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
-        location: Node, semanticMeaning = getMeaningFromLocation(location)) {
+        location: Node, semanticMeaning = getMeaningFromLocation(location)): SymbolDisplayPartsDocumentationAndSymbolKind {
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[];
@@ -136,10 +143,6 @@ namespace ts.SymbolDisplay {
             if (callExpressionLike) {
                 const candidateSignatures: Signature[] = [];
                 signature = typeChecker.getResolvedSignature(callExpressionLike, candidateSignatures);
-                if (!signature && candidateSignatures.length) {
-                    // Use the first candidate:
-                    signature = candidateSignatures[0];
-                }
 
                 const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
@@ -345,13 +348,19 @@ namespace ts.SymbolDisplay {
         }
         if (symbolFlags & SymbolFlags.Alias) {
             addNewLineIfDisplayPartsExist();
-            if (symbol.declarations[0].kind === SyntaxKind.NamespaceExportDeclaration) {
-                displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
-                displayParts.push(spacePart());
-                displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
-            }
-            else {
-                displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+            switch (symbol.declarations[0].kind) {
+                case SyntaxKind.NamespaceExportDeclaration:
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    displayParts.push(spacePart());
+                    displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
+                    break;
+                case SyntaxKind.ExportAssignment:
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    displayParts.push(spacePart());
+                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                    break;
+                default:
+                    displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
             }
             displayParts.push(spacePart());
             addFullSymbolName(symbol);

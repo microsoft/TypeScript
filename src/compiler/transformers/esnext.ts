@@ -378,7 +378,7 @@ namespace ts {
             const catchVariable = getGeneratedNameForNode(errorRecord);
             const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
             const callValues = createAsyncValuesHelper(context, expression, /*location*/ node.expression);
-            const callNext = createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, []);
+            const callNext = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
             const getDone = createPropertyAccess(result, "done");
             const getValue = createPropertyAccess(result, "value");
             const callReturn = createFunctionCall(returnMethod, iterator, []);

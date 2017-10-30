@@ -1349,8 +1349,8 @@ var r12 = testFunction12(x => x);
 >x : any
 
 var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok
->r12a : IPromise<any>
->r12.then(testFunction12, testFunction12, testFunction12) : IPromise<any>
+>r12a : IPromise<{}>
+>r12.then(testFunction12, testFunction12, testFunction12) : IPromise<{}>
 >r12.then : { <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
 >r12 : IPromise<(x: any) => any>
 >then : { <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
@@ -1367,8 +1367,8 @@ var s12 = testFunction12(x => x);
 >x : any
 
 var s12a = s12.then(testFunction12, testFunction12, testFunction12); // ok
->s12a : IPromise<any>
->s12.then(testFunction12, testFunction12, testFunction12) : IPromise<any>
+>s12a : IPromise<{}>
+>s12.then(testFunction12, testFunction12, testFunction12) : IPromise<{}>
 >s12.then : { <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
 >s12 : IPromise<(x: any) => any>
 >then : { <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
@@ -1377,8 +1377,8 @@ var s12a = s12.then(testFunction12, testFunction12, testFunction12); // ok
 >testFunction12 : { <T>(x: T): IPromise<T>; <T>(x: T, y: T): IPromise<T>; }
 
 var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
->s12b : IPromise<any>
->s12.then(testFunction12P, testFunction12P, testFunction12P) : IPromise<any>
+>s12b : IPromise<{}>
+>s12.then(testFunction12P, testFunction12P, testFunction12P) : IPromise<{}>
 >s12.then : { <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
 >s12 : IPromise<(x: any) => any>
 >then : { <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
@@ -1387,8 +1387,8 @@ var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
 >testFunction12P : { <T>(x: T): IPromise<T>; <T>(x: T, y: T): Promise<T>; }
 
 var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok
->s12c : IPromise<any>
->s12.then(testFunction12P, testFunction12, testFunction12) : IPromise<any>
+>s12c : IPromise<{}>
+>s12.then(testFunction12P, testFunction12, testFunction12) : IPromise<{}>
 >s12.then : { <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
 >s12 : IPromise<(x: any) => any>
 >then : { <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: (x: any) => any) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }

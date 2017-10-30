@@ -377,7 +377,7 @@ namespace ts {
     }
 
     export function getTextOfConstantValue(value: string | number) {
-        return typeof value === "string" ? '"' + escapeNonAsciiString(value) + '"' : "" + value;
+        return isString(value) ? '"' + escapeNonAsciiString(value) + '"' : "" + value;
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
@@ -414,7 +414,10 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
-    /* @internal */
+    export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
+        return isModuleDeclaration(node) && node.name.kind === SyntaxKind.StringLiteral;
+    }
+
     export function isNonGlobalAmbientModule(node: Node): node is ModuleDeclaration & { name: StringLiteral } {
         return isModuleDeclaration(node) && isStringLiteral(node.name);
     }
@@ -517,6 +520,17 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function isAnyImportSyntax(node: Node): node is AnyImportSyntax {
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ImportEqualsDeclaration:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
@@ -568,14 +582,14 @@ namespace ts {
         }
     }
 
-    export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
+    export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
-        return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
+        return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
+    export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
         const span = getErrorSpanForNode(sourceFile, node);
-        return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
+        return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
     }
 
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
@@ -1346,6 +1360,14 @@ namespace ts {
         return node && !!(node.flags & NodeFlags.JSDoc);
     }
 
+    export function isJSDocIndexSignature(node: TypeReferenceNode | ExpressionWithTypeArguments) {
+        return isTypeReferenceNode(node) &&
+            isIdentifier(node.typeName) &&
+            node.typeName.escapedText === "Object" &&
+            node.typeArguments && node.typeArguments.length === 2 &&
+            (node.typeArguments[0].kind === SyntaxKind.StringKeyword || node.typeArguments[0].kind === SyntaxKind.NumberKeyword);
+    }
+
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
      * exactly one argument (of the form 'require("name")').
@@ -1370,6 +1392,10 @@ namespace ts {
 
     export function isSingleOrDoubleQuote(charCode: number) {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
+    }
+
+    export function isStringDoubleQuoted(string: StringLiteral, sourceFile: SourceFile): boolean {
+        return getSourceTextOfNodeFromSourceFile(sourceFile, string).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
     /**
@@ -1459,8 +1485,8 @@ namespace ts {
         if (node.kind === SyntaxKind.ExportDeclaration) {
             return (<ExportDeclaration>node).moduleSpecifier;
         }
-        if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-            return (<ModuleDeclaration>node).name;
+        if (isModuleWithStringLiteralName(node)) {
+            return node.name;
         }
     }
 
@@ -1512,6 +1538,34 @@ namespace ts {
         return getJSDocCommentsAndTags(node);
     }
 
+    export function getSourceOfAssignment(node: Node): Node {
+        return isExpressionStatement(node) &&
+            node.expression && isBinaryExpression(node.expression) &&
+            node.expression.operatorToken.kind === SyntaxKind.EqualsToken &&
+            node.expression.right;
+    }
+
+    export function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
+        return isVariableStatement(node) &&
+            node.declarationList.declarations.length > 0 &&
+            (!child || node.declarationList.declarations[0].initializer === child) &&
+            node.declarationList.declarations[0].initializer;
+    }
+
+    export function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node {
+        return isVariableStatement(node) &&
+            node.declarationList.declarations.length > 0 &&
+            (!child || node.declarationList.declarations[0] === child) &&
+            node.declarationList.declarations[0];
+    }
+
+    export function getNestedModuleDeclaration(node: Node): Node {
+        return node.kind === SyntaxKind.ModuleDeclaration &&
+            (node as ModuleDeclaration).body &&
+            (node as ModuleDeclaration).body.kind === SyntaxKind.ModuleDeclaration &&
+            (node as ModuleDeclaration).body;
+    }
+
     export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
         let result: (JSDoc | JSDocTag)[] | undefined;
         getJSDocCommentsAndTagsWorker(node);
@@ -1525,35 +1579,15 @@ namespace ts {
             //   * @returns {number}
             //   */
             // var x = function(name) { return name.length; }
-            const isInitializerOfVariableDeclarationInStatement =
-                isVariableLike(parent) &&
-                parent.initializer === node &&
-                parent.parent.parent.kind === SyntaxKind.VariableStatement;
-            const isVariableOfVariableDeclarationStatement = isVariableLike(node) &&
-                parent.parent.kind === SyntaxKind.VariableStatement;
-            const variableStatementNode =
-                isInitializerOfVariableDeclarationInStatement ? parent.parent.parent :
-                    isVariableOfVariableDeclarationStatement ? parent.parent :
-                        undefined;
-            if (variableStatementNode) {
-                getJSDocCommentsAndTagsWorker(variableStatementNode);
+            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || getNestedModuleDeclaration(parent))) {
+                getJSDocCommentsAndTagsWorker(parent);
             }
-
-            // Also recognize when the node is the RHS of an assignment expression
-            const isSourceOfAssignmentExpressionStatement =
-                parent && parent.parent &&
-                parent.kind === SyntaxKind.BinaryExpression &&
-                (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
-                parent.parent.kind === SyntaxKind.ExpressionStatement;
-            if (isSourceOfAssignmentExpressionStatement) {
+            if (parent && parent.parent &&
+                (getSingleVariableOfVariableStatement(parent.parent, node) || getSourceOfAssignment(parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
-
-            const isModuleDeclaration = node.kind === SyntaxKind.ModuleDeclaration &&
-                parent && parent.kind === SyntaxKind.ModuleDeclaration;
-            const isPropertyAssignmentExpression = parent && parent.kind === SyntaxKind.PropertyAssignment;
-            if (isModuleDeclaration || isPropertyAssignmentExpression) {
-                getJSDocCommentsAndTagsWorker(parent);
+            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatement(parent.parent.parent, node)) {
+                getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
 
             // Pull parameter comments from declaring function as well
@@ -1580,13 +1614,16 @@ namespace ts {
             return undefined;
         }
         const name = node.name.escapedText;
-        const func = getJSDocHost(node);
-        if (!isFunctionLike(func)) {
-            return undefined;
+        const host = getJSDocHost(node);
+        const decl = getSourceOfAssignment(host) ||
+            getSingleInitializerOfVariableStatement(host) ||
+            getSingleVariableOfVariableStatement(host) ||
+            getNestedModuleDeclaration(host) ||
+            host;
+        if (decl && isFunctionLike(decl)) {
+            const parameter = find(decl.parameters, p => p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
+            return parameter && parameter.symbol;
         }
-        const parameter = find(func.parameters, p =>
-            p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
-        return parameter && parameter.symbol;
     }
 
     export function getJSDocHost(node: JSDocTag): HasJSDoc {
@@ -1601,26 +1638,12 @@ namespace ts {
     }
 
     export function hasRestParameter(s: SignatureDeclaration): boolean {
-        return isRestParameter(lastOrUndefined(s.parameters));
+        const last = lastOrUndefined(s.parameters);
+        return last && isRestParameter(last);
     }
 
-    export function hasDeclaredRestParameter(s: SignatureDeclaration): boolean {
-        return isDeclaredRestParam(lastOrUndefined(s.parameters));
-    }
-
-    export function isRestParameter(node: ParameterDeclaration) {
-        if (isInJavaScriptFile(node)) {
-            if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType ||
-                forEach(getJSDocParameterTags(node),
-                    t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
-                return true;
-            }
-        }
-        return isDeclaredRestParam(node);
-    }
-
-    export function isDeclaredRestParam(node: ParameterDeclaration) {
-        return node && node.dotDotDotToken !== undefined;
+    export function isRestParameter(node: ParameterDeclaration): boolean {
+        return node.dotDotDotToken !== undefined;
     }
 
     export const enum AssignmentKind {
@@ -2711,11 +2734,11 @@ namespace ts {
      * Gets the effective type annotation of a variable, parameter, or property. If the node was
      * parsed in a JavaScript file, gets the type annotation from JSDoc.
      */
-    export function getEffectiveTypeAnnotationNode(node: VariableLikeDeclaration): TypeNode | undefined {
+    export function getEffectiveTypeAnnotationNode(node: VariableLikeDeclaration, checkJSDoc?: boolean): TypeNode | undefined {
         if (node.type) {
             return node.type;
         }
-        if (isInJavaScriptFile(node)) {
+        if (checkJSDoc || isInJavaScriptFile(node)) {
             return getJSDocType(node);
         }
     }
@@ -2724,11 +2747,11 @@ namespace ts {
      * Gets the effective return type annotation of a signature. If the node was parsed in a
      * JavaScript file, gets the return type annotation from JSDoc.
      */
-    export function getEffectiveReturnTypeNode(node: SignatureDeclaration): TypeNode | undefined {
+    export function getEffectiveReturnTypeNode(node: SignatureDeclaration, checkJSDoc?: boolean): TypeNode | undefined {
         if (node.type) {
             return node.type;
         }
-        if (isInJavaScriptFile(node)) {
+        if (checkJSDoc || isInJavaScriptFile(node)) {
             return getJSDocReturnType(node);
         }
     }
@@ -2737,11 +2760,11 @@ namespace ts {
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters, checkJSDoc?: boolean): ReadonlyArray<TypeParameterDeclaration> {
         if (node.typeParameters) {
             return node.typeParameters;
         }
-        if (isInJavaScriptFile(node)) {
+        if (checkJSDoc || isInJavaScriptFile(node)) {
             const templateTag = getJSDocTemplateTag(node);
             return templateTag && templateTag.typeParameters;
         }
@@ -2751,9 +2774,9 @@ namespace ts {
      * Gets the effective type annotation of the value parameter of a set accessor. If the node
      * was parsed in a JavaScript file, gets the type annotation from JSDoc.
      */
-    export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDeclaration): TypeNode {
+    export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDeclaration, checkJSDoc?: boolean): TypeNode {
         const parameter = getSetAccessorValueParameter(node);
-        return parameter && getEffectiveTypeAnnotationNode(parameter);
+        return parameter && getEffectiveTypeAnnotationNode(parameter, checkJSDoc);
     }
 
     export function emitNewLineBeforeLeadingComments(lineMap: ReadonlyArray<number>, writer: EmitTextWriter, node: TextRange, leadingComments: ReadonlyArray<CommentRange>) {
@@ -3195,17 +3218,14 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: { newLine: string }): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
             case NewLineKind.LineFeed:
                 return lineFeed;
         }
-        if (sys) {
-            return sys.newLine;
-        }
-        return carriageReturnLineFeed;
+        return system ? system.newLine : sys ? sys.newLine : carriageReturnLineFeed;
     }
 
     /**
@@ -3497,6 +3517,93 @@ namespace ts {
         function writeOrReadWrite(): AccessKind {
             // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
             return parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
+        }
+    }
+
+    export function compareDataObjects(dst: any, src: any): boolean {
+        if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
+            return false;
+        }
+
+        for (const e in dst) {
+            if (typeof dst[e] === "object") {
+                if (!compareDataObjects(dst[e], src[e])) {
+                    return false;
+                }
+            }
+            else if (typeof dst[e] !== "function") {
+                if (dst[e] !== src[e]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
+     */
+    export function clearMap<T>(map: Map<T>, onDeleteValue: (valueInMap: T, key: string) => void) {
+        // Remove all
+        map.forEach(onDeleteValue);
+        map.clear();
+    }
+
+    export interface MutateMapOptions<T, U> {
+        createNewValue(key: string, valueInNewMap: U): T;
+        onDeleteValue(existingValue: T, key: string): void;
+
+        /**
+         * If present this is called with the key when there is value for that key both in new map as well as existing map provided
+         * Caller can then decide to update or remove this key.
+         * If the key is removed, caller will get callback of createNewValue for that key.
+         * If this callback is not provided, the value of such keys is not updated.
+         */
+        onExistingValue?(existingValue: T, valueInNewMap: U, key: string): void;
+    }
+
+    /**
+     * Mutates the map with newMap such that keys in map will be same as newMap.
+     */
+    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
+        const { createNewValue, onDeleteValue, onExistingValue } = options;
+        // Needs update
+        map.forEach((existingValue, key) => {
+            const valueInNewMap = newMap.get(key);
+            // Not present any more in new map, remove it
+            if (valueInNewMap === undefined) {
+                map.delete(key);
+                onDeleteValue(existingValue, key);
+            }
+            // If present notify about existing values
+            else if (onExistingValue) {
+                onExistingValue(existingValue, valueInNewMap, key);
+            }
+        });
+
+        // Add new values that are not already present
+        newMap.forEach((valueInNewMap, key) => {
+            if (!map.has(key)) {
+                // New values
+                map.set(key, createNewValue(key, valueInNewMap));
+            }
+        });
+    }
+
+    /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */
+    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T): T {
+        while (true) {
+            const result = callback(directory);
+            if (result !== undefined) {
+                return result;
+            }
+
+            const parentPath = getDirectoryPath(directory);
+            if (parentPath === directory) {
+                return undefined;
+            }
+
+            directory = parentPath;
         }
     }
 }
@@ -4025,27 +4132,35 @@ namespace ts {
         if (!declaration) {
             return undefined;
         }
-        if (isJSDocPropertyLikeTag(declaration) && declaration.name.kind === SyntaxKind.QualifiedName) {
-            return declaration.name.right;
-        }
-        if (declaration.kind === SyntaxKind.BinaryExpression) {
-            const expr = declaration as BinaryExpression;
-            switch (getSpecialPropertyAssignmentKind(expr)) {
-                case SpecialPropertyAssignmentKind.ExportsProperty:
-                case SpecialPropertyAssignmentKind.ThisProperty:
-                case SpecialPropertyAssignmentKind.Property:
-                case SpecialPropertyAssignmentKind.PrototypeProperty:
-                    return (expr.left as PropertyAccessExpression).name;
-                default:
-                    return undefined;
+        switch (declaration.kind) {
+            case SyntaxKind.JSDocPropertyTag:
+            case SyntaxKind.JSDocParameterTag: {
+                const { name } = declaration as JSDocPropertyLikeTag;
+                if (name.kind === SyntaxKind.QualifiedName) {
+                    return name.right;
+                }
+                break;
+            }
+            case SyntaxKind.BinaryExpression: {
+                const expr = declaration as BinaryExpression;
+                switch (getSpecialPropertyAssignmentKind(expr)) {
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case SpecialPropertyAssignmentKind.Property:
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        return (expr.left as PropertyAccessExpression).name;
+                    default:
+                        return undefined;
+                }
+            }
+            case SyntaxKind.JSDocTypedefTag:
+                return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
+            case SyntaxKind.ExportAssignment: {
+                const { expression } = declaration as ExportAssignment;
+                return isIdentifier(expression) ? expression : undefined;
             }
         }
-        else if (declaration.kind === SyntaxKind.JSDocTypedefTag) {
-            return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
-        }
-        else {
-            return (declaration as NamedDeclaration).name;
-        }
+        return (declaration as NamedDeclaration).name;
     }
 
     /**
@@ -4158,6 +4273,12 @@ namespace ts {
     function getFirstJSDocTag(node: Node, kind: SyntaxKind): JSDocTag | undefined {
         const tags = getJSDocTags(node);
         return find(tags, doc => doc.kind === kind);
+    }
+
+    /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
+    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> | undefined {
+        const tags = getJSDocTags(node);
+        return filter(tags, doc => doc.kind === kind);
     }
 
 }
@@ -5043,7 +5164,14 @@ namespace ts {
             || kind === SyntaxKind.UndefinedKeyword
             || kind === SyntaxKind.NullKeyword
             || kind === SyntaxKind.NeverKeyword
-            || kind === SyntaxKind.ExpressionWithTypeArguments;
+            || kind === SyntaxKind.ExpressionWithTypeArguments
+            || kind === SyntaxKind.JSDocAllType
+            || kind === SyntaxKind.JSDocUnknownType
+            || kind === SyntaxKind.JSDocNullableType
+            || kind === SyntaxKind.JSDocNonNullableType
+            || kind === SyntaxKind.JSDocOptionalType
+            || kind === SyntaxKind.JSDocFunctionType
+            || kind === SyntaxKind.JSDocVariadicType;
     }
 
     /**
@@ -5560,6 +5688,14 @@ namespace ts {
     /* @internal */
     export function isJSDocTag(node: Node): boolean {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
+    }
+
+    export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor;
+    }
+
+    export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
+        return node.kind === SyntaxKind.GetAccessor;
     }
 
     /** True if has jsdoc nodes attached to it. */
