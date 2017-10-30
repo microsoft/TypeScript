@@ -2,7 +2,9 @@ namespace Harness.Parallel.Worker {
     let errors: ErrorInfo[] = [];
     let passing = 0;
 
-    type Executor = {name: string, callback: Function, kind: "suite" | "test"} | never;
+    type MochaCallback = (this: Mocha.ITestCallbackContext, done: MochaDone) => void;
+
+    type Executor = {name: string, callback: MochaCallback, kind: "suite" | "test"} | never;
 
     function resetShimHarnessAndExecute(runner: RunnerBase) {
         errors = [];
@@ -15,7 +17,7 @@ namespace Harness.Parallel.Worker {
     }
 
 
-    let beforeEachFunc: Function;
+    let beforeEachFunc: () => void;
     const namestack: string[] = [];
     let testList: Executor[] = [];
     function shimMochaHarness() {
@@ -33,19 +35,19 @@ namespace Harness.Parallel.Worker {
         }) as Mocha.ITestDefinition;
     }
 
-    function executeSuiteCallback(name: string, callback: Function) {
+    function executeSuiteCallback(name: string, callback: MochaCallback) {
         const fakeContext: Mocha.ISuiteCallbackContext = {
             retries() { return this; },
             slow() { return this; },
             timeout() { return this; },
         };
         namestack.push(name);
-        let beforeFunc: Function;
-        (before as any) = (cb: Function) => beforeFunc = cb;
-        let afterFunc: Function;
-        (after as any) = (cb: Function) => afterFunc = cb;
+        let beforeFunc: () => void;
+        (before as any) = (cb: () => void) => beforeFunc = cb;
+        let afterFunc: () => void;
+        (after as any) = (cb: () => void) => afterFunc = cb;
         const savedBeforeEach = beforeEachFunc;
-        (beforeEach as any) = (cb: Function) => beforeEachFunc = cb;
+        (beforeEach as any) = (cb: () => void) => beforeEachFunc = cb;
         const savedTestList = testList;
 
         testList = [];
@@ -86,7 +88,7 @@ namespace Harness.Parallel.Worker {
         }
     }
 
-    function executeCallback(name: string, callback: Function, kind: "suite" | "test") {
+    function executeCallback(name: string, callback: MochaCallback, kind: "suite" | "test") {
         if (kind === "suite") {
             executeSuiteCallback(name, callback);
         }
@@ -95,6 +97,7 @@ namespace Harness.Parallel.Worker {
         }
     }
 
+    // tslint:disable-next-line ban-types (TODO: What is callback?)
     function executeTestCallback(name: string, callback: Function) {
         const fakeContext: Mocha.ITestCallbackContext = {
             skip() { return this; },
@@ -234,7 +237,7 @@ namespace Harness.Parallel.Worker {
     }
 
     const unittest: "unittest" = "unittest";
-    let unitTests: {[name: string]: Function};
+    let unitTests: {[name: string]: MochaCallback};
     function collectUnitTestsIfNeeded() {
         if (!unitTests && testList.length) {
             unitTests = {};

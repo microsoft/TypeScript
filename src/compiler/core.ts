@@ -2490,7 +2490,7 @@ namespace ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: Function): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: FunctionForStackTrace): void {
             if (!expression) {
                 if (verboseDebugInfo) {
                     message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
@@ -2524,7 +2524,9 @@ namespace ts {
             }
         }
 
-        export function fail(message?: string, stackCrawlMark?: Function): never {
+        type FunctionForStackTrace = (...args: never[]) => {} | null | undefined | void;
+
+        export function fail(message?: string, stackCrawlMark?: FunctionForStackTrace): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
@@ -2533,11 +2535,11 @@ namespace ts {
             throw e;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: Function): never {
+        export function assertNever(member: never, message?: string, stackCrawlMark?: FunctionForStackTrace): never {
             return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
 
-        export function getFunctionName(func: Function) {
+        export function getFunctionName(func: FunctionForStackTrace) {
             if (typeof func !== "function") {
                 return "";
             }

@@ -135,6 +135,7 @@ namespace Utils {
         return content;
     }
 
+    // tslint:disable-next-line ban-types
     export function memoize<T extends Function>(f: T, memoKey: (...anything: any[]) => string): T {
         const cache = ts.createMap<any>();
 
