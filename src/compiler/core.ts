@@ -738,7 +738,7 @@ namespace ts {
      * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
      * based on the provided comparer.
      */
-    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T> = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T>, offsetA = 0, offsetB = 0): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
         outer: for (; offsetB < arrayB.length; offsetB++) {
@@ -839,7 +839,7 @@ namespace ts {
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
-    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T> = compareValues) {
+    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
         return array
             .map((_, i) => i) // create array of indices
             .sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y)) // sort indices by value then position
@@ -1489,7 +1489,12 @@ namespace ts {
         return headChain;
     }
 
-    export function compareValues<T>(a: T, b: T): Comparison {
+    /**
+     * Compare two values for their order relative to each other.
+     */
+    export function compareValues(a: number, b: number): Comparison;
+    export function compareValues(a: string, b: string): Comparison;
+    export function compareValues(a: number | string, b: number | string): Comparison {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
