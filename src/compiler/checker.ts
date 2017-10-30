@@ -7497,7 +7497,7 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[], retainRedundantTypes?: boolean): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -7512,7 +7512,7 @@ namespace ts {
             if (subtypeReduction) {
                 removeSubtypes(typeSet);
             }
-            else if (typeSet.containsStringOrNumberLiteral) {
+            else if (typeSet.containsStringOrNumberLiteral && !retainRedundantTypes) {
                 removeRedundantLiteralTypes(typeSet);
             }
             if (typeSet.length === 0) {
@@ -11720,7 +11720,7 @@ namespace ts {
         // Apply a mapping function to a type and return the resulting type. If the source type
         // is a union type, the mapping function is applied to each constituent type and a union
         // of the resulting types is returned.
-        function mapType(type: Type, mapper: (t: Type) => Type): Type {
+        function mapType(type: Type, mapper: (t: Type) => Type, retainRedundantTypes?: boolean): Type {
             if (!(type.flags & TypeFlags.Union)) {
                 return mapper(type);
             }
@@ -11741,7 +11741,7 @@ namespace ts {
                     }
                 }
             }
-            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
+            return mappedTypes ? getUnionType(mappedTypes, /*subtypeReduction*/ undefined, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, retainRedundantTypes) : mappedType;
         }
 
         function extractTypesOfKind(type: Type, kind: TypeFlags) {
@@ -13265,7 +13265,31 @@ namespace ts {
                     // We have an object literal method. Check if the containing object literal has a contextual type
                     // that includes a ThisType<T>. If so, T is the contextual type for 'this'. We continue looking in
                     // any directly enclosing object literals.
-                    const contextualType = getApparentTypeOfContextualType(containingLiteral);
+                    let contextualType = getApparentTypeOfContextualType(containingLiteral);
+                    if (contextualType && contextualType.flags & TypeFlags.Union) {
+                        let match: Type | undefined;
+                        propLoop: for (const prop of containingLiteral.properties) {
+                            if (!prop.symbol) continue;
+                            if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
+                            if (isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
+                                const discriminatingType = getTypeOfNode((prop as PropertyAssignment).initializer);
+                                for (const type of (contextualType as UnionType).types) {
+                                    const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
+                                    if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {
+                                        if (match) {
+                                            if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
+                                            match = undefined;
+                                            break propLoop;
+                                        }
+                                        match = type;
+                                    }
+                                }
+                            }
+                        }
+                        if (match) {
+                            contextualType = match;
+                        }
+                    }
                     let literal = containingLiteral;
                     let type = contextualType;
                     while (type) {
@@ -13526,7 +13550,7 @@ namespace ts {
             return mapType(type, t => {
                 const prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
                 return prop ? getTypeOfSymbol(prop) : undefined;
-            });
+            }, /*retainRedundantTypes*/ true);
         }
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
