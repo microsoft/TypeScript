@@ -268,7 +268,7 @@ namespace Playback {
             const files = [];
             for (const file of newLog.filesRead) {
                 if (file.result.contentsPath &&
-                    !/lib\.d\.ts$/.test(file.result.contentsPath) &&
+                    Harness.isDefaultLibraryFile(file.result.contentsPath) &&
                     /\.[tj]s$/.test(file.result.contentsPath)) {
                     files.push(file.result.contentsPath);
                 }
