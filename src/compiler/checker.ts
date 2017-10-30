@@ -65,10 +65,10 @@ namespace ts {
         const modulekind = getEmitModuleKind(compilerOptions);
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
-        const strictNullChecks = compilerOptions.strictNullChecks === undefined ? compilerOptions.strict : compilerOptions.strictNullChecks;
-        const strictFunctionTypes = compilerOptions.strictFunctionTypes === undefined ? compilerOptions.strict : compilerOptions.strictFunctionTypes;
-        const noImplicitAny = compilerOptions.noImplicitAny === undefined ? compilerOptions.strict : compilerOptions.noImplicitAny;
-        const noImplicitThis = compilerOptions.noImplicitThis === undefined ? compilerOptions.strict : compilerOptions.noImplicitThis;
+        const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
+        const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
+        const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
+        const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
 
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
@@ -6892,7 +6892,7 @@ namespace ts {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
                 const isJs = isInJavaScriptFile(node);
-                const isJsImplicitAny = !compilerOptions.noImplicitAny && isJs;
+                const isJsImplicitAny = !noImplicitAny && isJs;
                 if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                     const missingAugmentsTag = isJs && node.parent.kind !== SyntaxKind.JSDocAugmentsTag;
                     const diag = minTypeArgumentCount === typeParameters.length
