@@ -730,7 +730,7 @@ namespace ts.refactor.extractSymbol {
                 let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
                 // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
                 type = checker.getBaseTypeOfLiteralType(type);
-                typeNode = checker.typeToTypeNode(type, node, NodeBuilderFlags.NoTruncation);
+                typeNode = checker.typeToTypeNode(type, scope, NodeBuilderFlags.NoTruncation);
             }
 
             const paramDecl = createParameter(
