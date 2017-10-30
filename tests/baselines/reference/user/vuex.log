@@ -1,0 +1,7 @@
+Exit Code: 2
+Standard output:
+node_modules/vuex/types/index.d.ts(124,16): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
+
+
+
+Standard error:
