@@ -1368,7 +1368,7 @@ namespace ts {
                 }
             }
             else if (meaning & (SymbolFlags.Type & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Value)) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
+                const symbol = resolveSymbol(resolveName(errorLocation, name, (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) & ~SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
                     error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_type, unescapeLeadingUnderscores(name));
                     return true;
