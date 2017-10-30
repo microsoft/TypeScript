@@ -106,7 +106,7 @@ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
 
     sourceObj.length;
 >sourceObj.length : number
->sourceObj : NodeList
+>sourceObj : NodeList | HTMLCollection
 >length : number
 }
 
