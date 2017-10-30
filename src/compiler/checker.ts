@@ -8556,11 +8556,14 @@ namespace ts {
             return isTypeRelatedTo(source, target, assignableRelation);
         }
 
-        // A type S is considered to be an instance of a type T if S and T are the same type or if S is a
-        // subtype of T but not structurally identical to T. This specifically means that two distinct but
-        // structurally identical types (such as two classes) are not considered instances of each other.
+        // An object type S is considered to be an instance of an object type T if
+        // S is a union type and every constituent of S is an instance of T,
+        // T is a union type and S is an instance of at least one constituent of T, or
+        // T occurs directly or indirectly in an 'extends' clause of S.
         function isTypeInstanceOf(source: Type, target: Type): boolean {
-            return getTargetType(source) === getTargetType(target) || isTypeSubtypeOf(source, target) && !isTypeIdenticalTo(source, target);
+            return source.flags & TypeFlags.Union ? every((<UnionType>source).types, t => isTypeInstanceOf(t, target)) :
+                target.flags & TypeFlags.Union ? some((<UnionType>target).types, t => isTypeInstanceOf(source, t)) :
+                hasBaseType(source, getTargetType(target));
         }
 
         /**
