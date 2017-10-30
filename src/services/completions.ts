@@ -1839,6 +1839,18 @@ namespace ts.Completions {
             }
         }
 
+        // If the symbol is for a member of an object type and is the internal name of an ES
+        // symbol, it is not a valid entry. Internal names for ES symbols start with "__@"
+        if (symbol.flags & SymbolFlags.ClassMember) {
+            const escapedName = symbol.escapedName as string;
+            if (escapedName.length >= 3 &&
+                escapedName.charCodeAt(0) === CharacterCodes._ &&
+                escapedName.charCodeAt(1) === CharacterCodes._ &&
+                escapedName.charCodeAt(2) === CharacterCodes.at) {
+                return undefined;
+            }
+        }
+
         return getCompletionEntryDisplayName(name, target, performCharacterChecks, allowStringLiteral);
     }
 
