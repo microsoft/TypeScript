@@ -1,8 +1,8 @@
 === tests/cases/compiler/concatTuples.ts ===
 let ijs: [number, number][] = [[1, 2]];
 >ijs : [number, number][]
->[[1, 2]] : [number, number][]
->[1, 2] : [number, number]
+>[[1, 2]] : [1, 2][]
+>[1, 2] : [1, 2]
 >1 : 1
 >2 : 2
 
@@ -13,11 +13,11 @@ ijs = ijs.concat([[3, 4], [5, 6]]);
 >ijs.concat : { (...items: ReadonlyArray<[number, number]>[]): [number, number][]; (...items: ([number, number] | ReadonlyArray<[number, number]>)[]): [number, number][]; }
 >ijs : [number, number][]
 >concat : { (...items: ReadonlyArray<[number, number]>[]): [number, number][]; (...items: ([number, number] | ReadonlyArray<[number, number]>)[]): [number, number][]; }
->[[3, 4], [5, 6]] : [number, number][]
->[3, 4] : [number, number]
+>[[3, 4], [5, 6]] : ([3, 4] | [5, 6])[]
+>[3, 4] : [3, 4]
 >3 : 3
 >4 : 4
->[5, 6] : [number, number]
+>[5, 6] : [5, 6]
 >5 : 5
 >6 : 6
 

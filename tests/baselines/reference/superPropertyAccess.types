@@ -91,11 +91,11 @@ class MyDerived extends MyBase {
 >d2 : number
 
         super.m1 = function (a: string) { return ""; };     // Should be allowed, we will not restrict assignment
->super.m1 = function (a: string) { return ""; } : (a: string) => string
+>super.m1 = function (a: string) { return ""; } : (a: string) => ""
 >super.m1 : (a: string) => string
 >super : MyBase
 >m1 : (a: string) => string
->function (a: string) { return ""; } : (a: string) => string
+>function (a: string) { return ""; } : (a: string) => ""
 >a : string
 >"" : ""
 

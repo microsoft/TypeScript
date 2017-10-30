@@ -4,7 +4,7 @@ var a = () => <Error>{ name: "foo", message: "bar" };
 >() => <Error>{ name: "foo", message: "bar" } : () => Error
 ><Error>{ name: "foo", message: "bar" } : Error
 >Error : Error
->{ name: "foo", message: "bar" } : { name: string; message: string; }
+>{ name: "foo", message: "bar" } : { name: "foo"; message: "bar"; }
 >name : string
 >"foo" : "foo"
 >message : string
@@ -16,7 +16,7 @@ var b = () => (<Error>{ name: "foo", message: "bar" });
 >(<Error>{ name: "foo", message: "bar" }) : Error
 ><Error>{ name: "foo", message: "bar" } : Error
 >Error : Error
->{ name: "foo", message: "bar" } : { name: string; message: string; }
+>{ name: "foo", message: "bar" } : { name: "foo"; message: "bar"; }
 >name : string
 >"foo" : "foo"
 >message : string
@@ -39,8 +39,8 @@ var d = () => ((<Error>({ name: "foo", message: "bar" })));
 >(<Error>({ name: "foo", message: "bar" })) : Error
 ><Error>({ name: "foo", message: "bar" }) : Error
 >Error : Error
->({ name: "foo", message: "bar" }) : { name: string; message: string; }
->{ name: "foo", message: "bar" } : { name: string; message: string; }
+>({ name: "foo", message: "bar" }) : { name: "foo"; message: "bar"; }
+>{ name: "foo", message: "bar" } : { name: "foo"; message: "bar"; }
 >name : string
 >"foo" : "foo"
 >message : string

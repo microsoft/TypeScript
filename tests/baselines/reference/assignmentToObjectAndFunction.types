@@ -9,10 +9,10 @@ var errObj: Object = { toString: 0 }; // Error, incompatible toString
 var goodObj: Object = {
 >goodObj : Object
 >Object : Object
->{    toString(x?) {        return "";    }} : { toString(x?: any): string; }
+>{    toString(x?) {        return "";    }} : { toString(x?: any): ""; }
 
     toString(x?) {
->toString : (x?: any) => string
+>toString : (x?: any) => ""
 >x : any
 
         return "";

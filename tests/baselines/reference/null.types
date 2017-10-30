@@ -49,7 +49,7 @@ interface I {
 var w:I={x:null,y:3};
 >w : I
 >I : I
->{x:null,y:3} : { x: null; y: number; }
+>{x:null,y:3} : { x: null; y: 3; }
 >x : null
 >null : null
 >y : number

@@ -6,7 +6,7 @@ var {a1, a2}: { a1: number, a2: string } = { a1: 10, a2: "world" }
 >a2 : string
 >a1 : number
 >a2 : string
->{ a1: 10, a2: "world" } : { a1: number; a2: string; }
+>{ a1: 10, a2: "world" } : { a1: 10; a2: "world"; }
 >a1 : number
 >10 : 10
 >a2 : string
@@ -16,10 +16,10 @@ var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [["hello"]], true];
 >a3 : number
 >a4 : string
 >a5 : boolean
->[1, [["hello"]], true] : [number, [[string]], true]
+>[1, [["hello"]], true] : [1, [["hello"]], true]
 >1 : 1
->[["hello"]] : [[string]]
->["hello"] : [string]
+>[["hello"]] : [["hello"]]
+>["hello"] : ["hello"]
 >"hello" : "hello"
 >true : true
 
@@ -31,9 +31,9 @@ var { b1: { b11 } = { b11: "string" }  } = { b1: { b11: "world" } };
 >{ b11: "string" } : { b11: string; }
 >b11 : string
 >"string" : "string"
->{ b1: { b11: "world" } } : { b1?: { b11: string; }; }
->b1 : { b11: string; }
->{ b11: "world" } : { b11: string; }
+>{ b1: { b11: "world" } } : { b1?: { b11: "world"; }; }
+>b1 : { b11: "world"; }
+>{ b11: "world" } : { b11: "world"; }
 >b11 : string
 >"world" : "world"
 
@@ -46,16 +46,16 @@ var temp = { t1: true, t2: "false" };
 >"false" : "false"
 
 var [b2 = 3, b3 = true, b4 = temp] = [3, false, { t1: false, t2: "hello" }];
->b2 : number
+>b2 : 3
 >3 : 3
 >b3 : boolean
 >true : true
 >b4 : { t1: boolean; t2: string; }
 >temp : { t1: boolean; t2: string; }
->[3, false, { t1: false, t2: "hello" }] : [number, false, { t1: false; t2: string; }]
+>[3, false, { t1: false, t2: "hello" }] : [3, false, { t1: false; t2: "hello"; }]
 >3 : 3
 >false : false
->{ t1: false, t2: "hello" } : { t1: false; t2: string; }
+>{ t1: false, t2: "hello" } : { t1: false; t2: "hello"; }
 >t1 : boolean
 >false : false
 >t2 : string
@@ -132,12 +132,12 @@ var {e: [e1, e2, e3 = { b1: 1000, b4: 200 }]} = { e: [1, 2, { b1: 4, b4: 0 }] };
 >1000 : 1000
 >b4 : number
 >200 : 200
->{ e: [1, 2, { b1: 4, b4: 0 }] } : { e: [number, number, { b1: number; b4: number; }]; }
->e : [number, number, { b1: number; b4: number; }]
->[1, 2, { b1: 4, b4: 0 }] : [number, number, { b1: number; b4: number; }]
+>{ e: [1, 2, { b1: 4, b4: 0 }] } : { e: [number, number, { b1: 4; b4: 0; }]; }
+>e : [number, number, { b1: 4; b4: 0; }]
+>[1, 2, { b1: 4, b4: 0 }] : [number, number, { b1: 4; b4: 0; }]
 >1 : 1
 >2 : 2
->{ b1: 4, b4: 0 } : { b1: number; b4: number; }
+>{ b1: 4, b4: 0 } : { b1: 4; b4: 0; }
 >b1 : number
 >4 : 4
 >b4 : number
@@ -189,11 +189,11 @@ var {h: {h1 = [undefined, null]}}: { h: { h1: number[] } } = { h: { h1: [1, 2] }
 >null : null
 >h : { h1: number[]; }
 >h1 : number[]
->{ h: { h1: [1, 2] } } : { h: { h1: number[]; }; }
->h : { h1: number[]; }
->{ h1: [1, 2] } : { h1: number[]; }
->h1 : number[]
->[1, 2] : number[]
+>{ h: { h1: [1, 2] } } : { h: { h1: (1 | 2)[]; }; }
+>h : { h1: (1 | 2)[]; }
+>{ h1: [1, 2] } : { h1: (1 | 2)[]; }
+>h1 : (1 | 2)[]
+>[1, 2] : (1 | 2)[]
 >1 : 1
 >2 : 2
 

@@ -36,18 +36,18 @@ var z3 = foo({ name: null });         // { name: any }
 >null : null
 
 var z4 = foo({ name: "abc" });        // { name: string }
->z4 : { name: string; }
->foo({ name: "abc" }) : { name: string; }
+>z4 : { name: "abc"; }
+>foo({ name: "abc" }) : { name: "abc"; }
 >foo : <T extends Item>(x?: T, y?: T) => T
->{ name: "abc" } : { name: string; }
+>{ name: "abc" } : { name: "abc"; }
 >name : string
 >"abc" : "abc"
 
 var z5 = foo({ name: "abc", a: 5 });  // { name: string; a: number }
->z5 : { name: string; a: number; }
->foo({ name: "abc", a: 5 }) : { name: string; a: number; }
+>z5 : { name: "abc"; a: number; }
+>foo({ name: "abc", a: 5 }) : { name: "abc"; a: number; }
 >foo : <T extends Item>(x?: T, y?: T) => T
->{ name: "abc", a: 5 } : { name: string; a: number; }
+>{ name: "abc", a: 5 } : { name: "abc"; a: 5; }
 >name : string
 >"abc" : "abc"
 >a : number

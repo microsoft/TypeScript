@@ -32,7 +32,7 @@ let fooBar: FooBar = mixBar({
 >FooBar : FooBar
 >mixBar({    fooProp: "frizzlebizzle"}) : { fooProp: string; } & Bar
 >mixBar : <T>(obj: T) => T & Bar
->{    fooProp: "frizzlebizzle"} : { fooProp: string; }
+>{    fooProp: "frizzlebizzle"} : { fooProp: "frizzlebizzle"; }
 
     fooProp: "frizzlebizzle"
 >fooProp : string

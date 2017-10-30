@@ -572,7 +572,7 @@ function f31<K extends keyof Shape>(key: K) {
     const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
 >shape : Shape
 >Shape : Shape
->{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: true; }
+>{ name: "foo", width: 5, height: 10, visible: true } : { name: "foo"; width: 5; height: 10; visible: true; }
 >name : string
 >"foo" : "foo"
 >width : number
@@ -597,7 +597,7 @@ function f32<K extends "width" | "height">(key: K) {
     const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
 >shape : Shape
 >Shape : Shape
->{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: true; }
+>{ name: "foo", width: 5, height: 10, visible: true } : { name: "foo"; width: 5; height: 10; visible: true; }
 >name : string
 >"foo" : "foo"
 >width : number
@@ -947,7 +947,7 @@ function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 >x : Partial<{ a: number; b: string; } & { c: boolean; }>
 >func({ a: 1, b: "hello" }, { c: true }) : Partial<{ a: number; b: string; } & { c: boolean; }>
 >func : <T, U>(x: T, y: U) => Partial<T & U>
->{ a: 1, b: "hello" } : { a: number; b: string; }
+>{ a: 1, b: "hello" } : { a: 1; b: "hello"; }
 >a : number
 >1 : 1
 >b : string
@@ -994,7 +994,7 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >a : number
 >func({ a: 1, b: "hello" }, { c: true }, 'a') : number
 >func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
->{ a: 1, b: "hello" } : { a: number; b: string; }
+>{ a: 1, b: "hello" } : { a: 1; b: "hello"; }
 >a : number
 >1 : 1
 >b : string
@@ -1008,7 +1008,7 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >b : string
 >func({ a: 1, b: "hello" }, { c: true }, 'b') : string
 >func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
->{ a: 1, b: "hello" } : { a: number; b: string; }
+>{ a: 1, b: "hello" } : { a: 1; b: "hello"; }
 >a : number
 >1 : 1
 >b : string
@@ -1022,7 +1022,7 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >c : boolean
 >func({ a: 1, b: "hello" }, { c: true }, 'c') : boolean
 >func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
->{ a: 1, b: "hello" } : { a: number; b: string; }
+>{ a: 1, b: "hello" } : { a: 1; b: "hello"; }
 >a : number
 >1 : 1
 >b : string
@@ -1055,7 +1055,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >a : number
 >func({ a: 1, b: "hello" }, { c: true }, 'a') : number
 >func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
->{ a: 1, b: "hello" } : { a: number; b: string; }
+>{ a: 1, b: "hello" } : { a: 1; b: "hello"; }
 >a : number
 >1 : 1
 >b : string
@@ -1069,7 +1069,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >b : string
 >func({ a: 1, b: "hello" }, { c: true }, 'b') : string
 >func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
->{ a: 1, b: "hello" } : { a: number; b: string; }
+>{ a: 1, b: "hello" } : { a: 1; b: "hello"; }
 >a : number
 >1 : 1
 >b : string
@@ -1083,7 +1083,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >c : boolean
 >func({ a: 1, b: "hello" }, { c: true }, 'c') : boolean
 >func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
->{ a: 1, b: "hello" } : { a: number; b: string; }
+>{ a: 1, b: "hello" } : { a: 1; b: "hello"; }
 >a : number
 >1 : 1
 >b : string
@@ -1116,12 +1116,12 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >a : number
 >func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a') : number
 >func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
->{ a: 1, b: "hello" } : { a: number; b: string; }
+>{ a: 1, b: "hello" } : { a: 1; b: "hello"; }
 >a : number
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ a: 2, b: true } : { a: number; b: true; }
+>{ a: 2, b: true } : { a: 2; b: true; }
 >a : number
 >2 : 2
 >b : boolean
@@ -1132,12 +1132,12 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >b : string | boolean
 >func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b') : string | boolean
 >func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
->{ a: 1, b: "hello" } : { a: number; b: string; }
+>{ a: 1, b: "hello" } : { a: 1; b: "hello"; }
 >a : number
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ a: 2, b: true } : { a: number; b: true; }
+>{ a: 2, b: true } : { a: 2; b: true; }
 >a : number
 >2 : 2
 >b : boolean
@@ -1225,9 +1225,9 @@ function f82() {
 >x1 : string
 >f81({ a: { x: "hello" } }) : string
 >f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
->{ a: { x: "hello" } } : { a: { x: string; }; }
->a : { x: string; }
->{ x: "hello" } : { x: string; }
+>{ a: { x: "hello" } } : { a: { x: "hello"; }; }
+>a : { x: "hello"; }
+>{ x: "hello" } : { x: "hello"; }
 >x : string
 >"hello" : "hello"
 
@@ -1235,9 +1235,9 @@ function f82() {
 >x2 : number
 >f81({ a: { x: 42 } }) : number
 >f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
->{ a: { x: 42 } } : { a: { x: number; }; }
->a : { x: number; }
->{ x: 42 } : { x: number; }
+>{ a: { x: 42 } } : { a: { x: 42; }; }
+>a : { x: 42; }
+>{ x: 42 } : { x: 42; }
 >x : number
 >42 : 42
 }
@@ -1272,9 +1272,9 @@ function f84() {
 >x1 : string
 >f83({ foo: { x: "hello" } }, "foo") : string
 >f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
->{ foo: { x: "hello" } } : { foo: { x: string; }; }
->foo : { x: string; }
->{ x: "hello" } : { x: string; }
+>{ foo: { x: "hello" } } : { foo: { x: "hello"; }; }
+>foo : { x: "hello"; }
+>{ x: "hello" } : { x: "hello"; }
 >x : string
 >"hello" : "hello"
 >"foo" : "foo"
@@ -1283,9 +1283,9 @@ function f84() {
 >x2 : number
 >f83({ bar: { x: 42 } }, "bar") : number
 >f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
->{ bar: { x: 42 } } : { bar: { x: number; }; }
->bar : { x: number; }
->{ x: 42 } : { x: number; }
+>{ bar: { x: 42 } } : { bar: { x: 42; }; }
+>bar : { x: 42; }
+>{ x: 42 } : { x: 42; }
 >x : number
 >42 : 42
 >"bar" : "bar"
@@ -1852,11 +1852,11 @@ let c1 = new Component1({
 >c1 : Component1<{ hello: string; }, {}>
 >new Component1({    data: {        hello: ""    }}) : Component1<{ hello: string; }, {}>
 >Component1 : typeof Component1
->{    data: {        hello: ""    }} : { data: { hello: string; }; }
+>{    data: {        hello: ""    }} : { data: { hello: ""; }; }
 
     data: {
->data : { hello: string; }
->{        hello: ""    } : { hello: string; }
+>data : { hello: ""; }
+>{        hello: ""    } : { hello: ""; }
 
         hello: ""
 >hello : string
@@ -1981,7 +1981,7 @@ let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
 >dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M["returnValue"]
 >SomeMethodDescriptor : SomeMethodDescriptor
 >"someMethod" : "someMethod"
->["hello", 35] : [string, number]
+>["hello", 35] : ["hello", 35]
 >"hello" : "hello"
 >35 : 35
 
@@ -2263,7 +2263,7 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
         const foo: Foo = { foo: "bar" };
 >foo : Foo
 >Foo : Foo
->{ foo: "bar" } : { foo: string; }
+>{ foo: "bar" } : { foo: "bar"; }
 >foo : string
 >"bar" : "bar"
 

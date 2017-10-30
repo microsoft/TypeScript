@@ -1,8 +1,8 @@
 === tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts ===
 var [x = 20] = [1, 2];
->x : number
+>x : 20 | 1
 >20 : 20
->[1, 2] : [number, number]
+>[1, 2] : [1, 2]
 >1 : 1
 >2 : 2
 

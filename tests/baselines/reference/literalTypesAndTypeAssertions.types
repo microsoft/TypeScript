@@ -29,9 +29,9 @@ let x2 = 1;
 >1 : 1
 
 let { a = "foo" } = { a: "foo" };
->a : string
+>a : "foo"
 >"foo" : "foo"
->{ a: "foo" } : { a?: string; }
+>{ a: "foo" } : { a?: "foo"; }
 >a : string
 >"foo" : "foo"
 

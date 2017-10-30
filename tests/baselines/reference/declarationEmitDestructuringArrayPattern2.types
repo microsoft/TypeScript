@@ -11,11 +11,11 @@ var [x10, [y10, [z10]]] = [1, ["hello", [true]]];
 >true : true
 
 var [x11 = 0, y11 = ""] = [1, "hello"];
->x11 : number
+>x11 : 1 | 0
 >0 : 0
->y11 : string
+>y11 : "hello" | ""
 >"" : ""
->[1, "hello"] : [number, string]
+>[1, "hello"] : [1, "hello"]
 >1 : 1
 >"hello" : "hello"
 
@@ -38,11 +38,11 @@ var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello"
 >10 : 10
 >y12 : boolean
 >false : false
->[1, ["hello", { x12: 5, y12: true }]] : [number, [string, { x12: number; y12: true; }]]
+>[1, ["hello", { x12: 5, y12: true }]] : [number, ["hello", { x12: 5; y12: true; }]]
 >1 : 1
->["hello", { x12: 5, y12: true }] : [string, { x12: number; y12: true; }]
+>["hello", { x12: 5, y12: true }] : ["hello", { x12: 5; y12: true; }]
 >"hello" : "hello"
->{ x12: 5, y12: true } : { x12: number; y12: true; }
+>{ x12: 5, y12: true } : { x12: 5; y12: true; }
 >x12 : number
 >5 : 5
 >y12 : boolean

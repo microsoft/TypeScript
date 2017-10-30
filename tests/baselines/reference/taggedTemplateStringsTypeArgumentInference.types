@@ -421,13 +421,13 @@ var a9d = someGenerics9 `${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }`;
 >someGenerics9 `${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }` : { x: number; }
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >`${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }` : string
->{ x: 3 } : { x: number; }
+>{ x: 3 } : { x: 3; }
 >x : number
 >3 : 3
->{ x: 6 } : { x: number; }
+>{ x: 6 } : { x: 6; }
 >x : number
 >6 : 6
->{ x: 6 } : { x: number; }
+>{ x: 6 } : { x: 6; }
 >x : number
 >6 : 6
 

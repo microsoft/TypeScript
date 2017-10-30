@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts(5,13): error TS2345: Argument of type '{ bar: number; baz: string; }' is not assignable to parameter of type '{ bar: number; baz: number; }'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts(5,13): error TS2345: Argument of type '{ bar: 1; baz: string; }' is not assignable to parameter of type '{ bar: number; baz: number; }'.
   Types of property 'baz' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
@@ -10,7 +10,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     
     var r = foo({ bar: 1, baz: '' }); // error
                 ~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ bar: number; baz: string; }' is not assignable to parameter of type '{ bar: number; baz: number; }'.
+!!! error TS2345: Argument of type '{ bar: 1; baz: string; }' is not assignable to parameter of type '{ bar: number; baz: number; }'.
 !!! error TS2345:   Types of property 'baz' are incompatible.
 !!! error TS2345:     Type 'string' is not assignable to type 'number'.
     var r2 = foo({ bar: 1, baz: 1 }); // T = number

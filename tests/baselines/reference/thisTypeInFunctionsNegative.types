@@ -130,7 +130,7 @@ interface I {
 let impl: I = {
 >impl : I
 >I : I
->{    a: 12,    explicitVoid1() {        return this.a; // error, no 'a' in 'void'    },    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object    explicitStructural: () => 12,    explicitInterface: () => 12,    explicitThis() {        return this.a;    },} : { a: number; explicitVoid1(this: void): any; explicitVoid2: () => any; explicitStructural: () => number; explicitInterface: () => number; explicitThis(this: I): number; }
+>{    a: 12,    explicitVoid1() {        return this.a; // error, no 'a' in 'void'    },    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object    explicitStructural: () => 12,    explicitInterface: () => 12,    explicitThis() {        return this.a;    },} : { a: 12; explicitVoid1(this: void): any; explicitVoid2: () => any; explicitStructural: () => 12; explicitInterface: () => 12; explicitThis(this: I): number; }
 
     a: 12,
 >a : number
@@ -153,13 +153,13 @@ let impl: I = {
 >a : any
 
     explicitStructural: () => 12,
->explicitStructural : () => number
->() => 12 : () => number
+>explicitStructural : () => 12
+>() => 12 : () => 12
 >12 : 12
 
     explicitInterface: () => 12,
->explicitInterface : () => number
->() => 12 : () => number
+>explicitInterface : () => 12
+>() => 12 : () => 12
 >12 : 12
 
     explicitThis() {
@@ -237,7 +237,7 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, ex
 >this : { y: number; }
 >y : number
 >x : number
->{ y: 12, explicitStructural } : { y: number; explicitStructural: (this: { y: number; }, x: number) => number; }
+>{ y: 12, explicitStructural } : { y: 12; explicitStructural: (this: { y: number; }, x: number) => number; }
 >y : number
 >12 : 12
 >explicitStructural : (this: { y: number; }, x: number) => number
@@ -249,7 +249,7 @@ let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number
 >this : { y: number; }
 >y : number
 >x : number
->{ y: 'foo', explicitStructural } : { y: string; explicitStructural: (this: { y: number; }, x: number) => number; }
+>{ y: 'foo', explicitStructural } : { y: "foo"; explicitStructural: (this: { y: number; }, x: number) => number; }
 >y : string
 >'foo' : "foo"
 >explicitStructural : (this: { y: number; }, x: number) => number
@@ -261,7 +261,7 @@ let wrongPropertyName: {wrongName: number, f: (this: { y: number }, x: number) =
 >this : { y: number; }
 >y : number
 >x : number
->{ wrongName: 12, explicitStructural } : { wrongName: number; explicitStructural: (this: { y: number; }, x: number) => number; }
+>{ wrongName: 12, explicitStructural } : { wrongName: 12; explicitStructural: (this: { y: number; }, x: number) => number; }
 >wrongName : number
 >12 : 12
 >explicitStructural : (this: { y: number; }, x: number) => number
@@ -427,7 +427,7 @@ let reconstructed: {
 >m : number
 
 } = { 
->{     n: 12,    explicitThis: c.explicitThis,    explicitC: c.explicitC,    explicitProperty: c.explicitProperty,    explicitVoid: c.explicitVoid} : { n: number; explicitThis: (this: C, m: number) => number; explicitC: (this: C, m: number) => number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid: (this: void, m: number) => number; }
+>{     n: 12,    explicitThis: c.explicitThis,    explicitC: c.explicitC,    explicitProperty: c.explicitProperty,    explicitVoid: c.explicitVoid} : { n: 12; explicitThis: (this: C, m: number) => number; explicitC: (this: C, m: number) => number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid: (this: void, m: number) => number; }
 
     n: 12,
 >n : number

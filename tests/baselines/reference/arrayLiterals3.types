@@ -14,7 +14,7 @@ var a0: [any, any, any] = [];                             // Error
 
 var a1: [boolean, string, number] = ["string", 1, true];  // Error
 >a1 : [boolean, string, number]
->["string", 1, true] : ["string", number, boolean]
+>["string", 1, true] : [string, number, boolean]
 >"string" : "string"
 >1 : 1
 >true : true
@@ -26,7 +26,7 @@ var a1: [boolean, string, number] = ["string", 1, true];  // Error
 var [b1, b2]: [number, number] = [1, 2, "string", true];
 >b1 : number
 >b2 : number
->[1, 2, "string", true] : [number, number, string, boolean]
+>[1, 2, "string", true] : [1, 2, string, boolean]
 >1 : 1
 >2 : 2
 >"string" : "string"
@@ -51,12 +51,12 @@ var temp1 = [1, 2, 3];
 
 var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >temp2 : [number[], string[]]
->[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
->[1, 2, 3] : number[]
+>[[1, 2, 3], ["hello", "string"]] : [(1 | 2 | 3)[], ("string" | "hello")[]]
+>[1, 2, 3] : (1 | 2 | 3)[]
 >1 : 1
 >2 : 2
 >3 : 3
->["hello", "string"] : string[]
+>["hello", "string"] : ("string" | "hello")[]
 >"hello" : "hello"
 >"string" : "string"
 

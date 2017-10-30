@@ -54,15 +54,15 @@ foo(1, 2, '');
 foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true });
 >foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true }) : { x: number; y: number; z: boolean; }
 >foo : <T, U, V>(x: T, y: U, z: V) => V
->{ x: 1 } : { x: number; }
+>{ x: 1 } : { x: 1; }
 >x : number
 >1 : 1
->{ x: 1, y: '' } : { x: number; y: string; }
+>{ x: 1, y: '' } : { x: 1; y: ""; }
 >x : number
 >1 : 1
 >y : string
 >'' : ""
->{ x: 2, y: 2, z: true } : { x: number; y: number; z: true; }
+>{ x: 2, y: 2, z: true } : { x: 2; y: 2; z: true; }
 >x : number
 >2 : 2
 >y : number
@@ -81,7 +81,7 @@ foo(a, { foo: 1, bar: '', hm: true }, b);
 >foo(a, { foo: 1, bar: '', hm: true }, b) : B
 >foo : <T, U, V>(x: T, y: U, z: V) => V
 >a : A
->{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: true; }
+>{ foo: 1, bar: '', hm: true } : { foo: 1; bar: ""; hm: true; }
 >foo : number
 >1 : 1
 >bar : string

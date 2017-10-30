@@ -168,14 +168,14 @@
 >y : any
 
 	({ y:y = 5 } = { y: 1 })
->({ y:y = 5 } = { y: 1 }) : { y?: number; }
->{ y:y = 5 } = { y: 1 } : { y?: number; }
+>({ y:y = 5 } = { y: 1 }) : { y?: 1; }
+>{ y:y = 5 } = { y: 1 } : { y?: 1; }
 >{ y:y = 5 } : { y?: number; }
 >y : number
 >y = 5 : 5
 >y : any
 >5 : 5
->{ y: 1 } : { y?: number; }
+>{ y: 1 } : { y?: 1; }
 >y : number
 >1 : 1
 
@@ -189,11 +189,11 @@
 >y0 : number
 
 	({ y0 = 5 } = { y0: 1 })
->({ y0 = 5 } = { y0: 1 }) : { y0?: number; }
->{ y0 = 5 } = { y0: 1 } : { y0?: number; }
+>({ y0 = 5 } = { y0: 1 }) : { y0?: 1; }
+>{ y0 = 5 } = { y0: 1 } : { y0?: 1; }
 >{ y0 = 5 } : { y0?: number; }
 >y0 : number
->{ y0: 1 } : { y0?: number; }
+>{ y0: 1 } : { y0?: 1; }
 >y0 : number
 >1 : 1
 
@@ -207,14 +207,14 @@
 >y0 : number
 
 	({ y0:y0 = 5 } = { y0: 1 })
->({ y0:y0 = 5 } = { y0: 1 }) : { y0?: number; }
->{ y0:y0 = 5 } = { y0: 1 } : { y0?: number; }
+>({ y0:y0 = 5 } = { y0: 1 }) : { y0?: 1; }
+>{ y0:y0 = 5 } = { y0: 1 } : { y0?: 1; }
 >{ y0:y0 = 5 } : { y0?: number; }
 >y0 : number
 >y0 = 5 : 5
 >y0 : number
 >5 : 5
->{ y0: 1 } : { y0?: number; }
+>{ y0: 1 } : { y0?: 1; }
 >y0 : number
 >1 : 1
 
@@ -336,20 +336,20 @@
 >x : number
 
 	({ y4:y4 = 5, y5:y5 = { x: 1 } } = {})
->({ y4:y4 = 5, y5:y5 = { x: 1 } } = {}) : { y4?: number; y5?: { x: number; }; }
->{ y4:y4 = 5, y5:y5 = { x: 1 } } = {} : { y4?: number; y5?: { x: number; }; }
->{ y4:y4 = 5, y5:y5 = { x: 1 } } : { y4?: number; y5?: { x: number; }; }
+>({ y4:y4 = 5, y5:y5 = { x: 1 } } = {}) : { y4?: number; y5?: { x: 1; }; }
+>{ y4:y4 = 5, y5:y5 = { x: 1 } } = {} : { y4?: number; y5?: { x: 1; }; }
+>{ y4:y4 = 5, y5:y5 = { x: 1 } } : { y4?: number; y5?: { x: 1; }; }
 >y4 : number
 >y4 = 5 : 5
 >y4 : number
 >5 : 5
+>y5 : { x: 1; }
+>y5 = { x: 1 } : { x: 1; }
 >y5 : { x: number; }
->y5 = { x: 1 } : { x: number; }
->y5 : { x: number; }
->{ x: 1 } : { x: number; }
+>{ x: 1 } : { x: 1; }
 >x : number
 >1 : 1
->{} : { y4?: number; y5?: { x: number; }; }
+>{} : { y4?: number; y5?: { x: 1; }; }
 
 });
 
@@ -386,8 +386,8 @@
 >z : any
 
 	({ z:z = { x: 5 } } = { z: { x: 1 } });
->({ z:z = { x: 5 } } = { z: { x: 1 } }) : { z?: { x: number; }; }
->{ z:z = { x: 5 } } = { z: { x: 1 } } : { z?: { x: number; }; }
+>({ z:z = { x: 5 } } = { z: { x: 1 } }) : { z?: { x: 1; }; }
+>{ z:z = { x: 5 } } = { z: { x: 1 } } : { z?: { x: 1; }; }
 >{ z:z = { x: 5 } } : { z?: { x: number; }; }
 >z : { x: number; }
 >z = { x: 5 } : { x: number; }
@@ -395,9 +395,9 @@
 >{ x: 5 } : { x: number; }
 >x : number
 >5 : 5
->{ z: { x: 1 } } : { z?: { x: number; }; }
->z : { x: number; }
->{ x: 1 } : { x: number; }
+>{ z: { x: 1 } } : { z?: { x: 1; }; }
+>z : { x: 1; }
+>{ x: 1 } : { x: 1; }
 >x : number
 >1 : 1
 

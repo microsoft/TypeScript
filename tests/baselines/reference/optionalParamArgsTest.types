@@ -509,10 +509,10 @@ fnOpt1(1, [2, 3], [1], true);
 >fnOpt1(1, [2, 3], [1], true) : void
 >fnOpt1 : (id: number, children?: number[], expectedPath?: number[], isRoot?: boolean) => void
 >1 : 1
->[2, 3] : number[]
+>[2, 3] : (2 | 3)[]
 >2 : 2
 >3 : 3
->[1] : number[]
+>[1] : 1[]
 >1 : 1
 >true : true
 
@@ -520,10 +520,10 @@ fnOpt2(1, [2, 3], [1], true);
 >fnOpt2(1, [2, 3], [1], true) : void
 >fnOpt2 : (id: number, children?: number[], expectedPath?: number[], isRoot?: boolean) => void
 >1 : 1
->[2, 3] : number[]
+>[2, 3] : (2 | 3)[]
 >2 : 2
 >3 : 3
->[1] : number[]
+>[1] : 1[]
 >1 : 1
 >true : true
 

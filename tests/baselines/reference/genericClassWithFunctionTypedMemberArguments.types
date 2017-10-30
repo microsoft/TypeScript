@@ -47,7 +47,7 @@ module ImmediatelyFix {
 >c.foo : <T>(x: (a: T) => T) => T
 >c : C<number>
 >foo : <T>(x: (a: T) => T) => T
-><U>(x: U) => '' : <U>(x: U) => string
+><U>(x: U) => '' : <U>(x: U) => ""
 >U : U
 >x : U
 >U : U
@@ -92,7 +92,7 @@ module ImmediatelyFix {
 >c2.foo : (x: (a: number) => number) => number
 >c2 : C2<number>
 >foo : (x: (a: number) => number) => number
-><U>(x: U) => 1 : <U>(x: U) => number
+><U>(x: U) => 1 : <U>(x: U) => 1
 >U : U
 >x : U
 >U : U
@@ -104,7 +104,7 @@ module ImmediatelyFix {
 >c2.foo : (x: (a: number) => number) => number
 >c2 : C2<number>
 >foo : (x: (a: number) => number) => number
->x => 1 : (x: number) => number
+>x => 1 : (x: number) => 1
 >x : number
 >1 : 1
 }
@@ -169,7 +169,7 @@ module WithCandidates {
 >c : C<number>
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >'' : ""
-><Z>(a: Z) => 1 : <Z>(a: Z) => number
+><Z>(a: Z) => 1 : <Z>(a: Z) => 1
 >Z : Z
 >a : Z
 >Z : Z
@@ -209,7 +209,7 @@ module WithCandidates {
 >c2 : C2<number, string>
 >foo3 : (x: number, cb: (a: number) => string, y: string) => string
 >1 : 1
-><Z>(a: Z) => '' : <Z>(a: Z) => string
+><Z>(a: Z) => '' : <Z>(a: Z) => ""
 >Z : Z
 >a : Z
 >Z : Z
@@ -223,7 +223,7 @@ module WithCandidates {
 >c2 : C2<number, string>
 >foo3 : (x: number, cb: (a: number) => string, y: string) => string
 >1 : 1
->function (a) { return '' } : (a: number) => string
+>function (a) { return '' } : (a: number) => ""
 >a : number
 >'' : ""
 >'' : ""

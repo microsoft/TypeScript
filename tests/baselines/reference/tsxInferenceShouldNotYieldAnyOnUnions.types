@@ -52,27 +52,27 @@ function ShouldInferFromData<T>(props: Props<T>): JSX.Element {
 ShouldInferFromData({ data: "1" });
 >ShouldInferFromData({ data: "1" }) : JSX.Element
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
->{ data: "1" } : { data: string; }
+>{ data: "1" } : { data: "1"; }
 >data : string
 >"1" : "1"
 
 ShouldInferFromData({ data: "1", convert: n => "" + n });
 >ShouldInferFromData({ data: "1", convert: n => "" + n }) : JSX.Element
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
->{ data: "1", convert: n => "" + n } : { data: string; convert: (n: string) => string; }
+>{ data: "1", convert: n => "" + n } : { data: "1"; convert: (n: "1") => string; }
 >data : string
 >"1" : "1"
->convert : (n: string) => string
->n => "" + n : (n: string) => string
->n : string
+>convert : (n: "1") => string
+>n => "" + n : (n: "1") => string
+>n : "1"
 >"" + n : string
 >"" : ""
->n : string
+>n : "1"
 
 ShouldInferFromData({ data: 2, convert: n => "" + n });
 >ShouldInferFromData({ data: 2, convert: n => "" + n }) : JSX.Element
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
->{ data: 2, convert: n => "" + n } : { data: number; convert: (n: number) => string; }
+>{ data: 2, convert: n => "" + n } : { data: 2; convert: (n: number) => string; }
 >data : number
 >2 : 2
 >convert : (n: number) => string

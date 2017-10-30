@@ -196,7 +196,7 @@ new someGenerics3<Window>(() => undefined);
 new someGenerics3<number>(() => 3);
 >new someGenerics3<number>(() => 3) : any
 >someGenerics3 : someGenerics3
->() => 3 : () => number
+>() => 3 : () => 3
 >3 : 3
 
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
@@ -490,10 +490,10 @@ var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, nu
 >someGenerics9 : someGenerics9
 >a : number
 >b : string
->{ a: 0 } : { a: number; }
+>{ a: 0 } : { a: 0; }
 >a : number
 >0 : 0
->{ b: '' } : { b: string; }
+>{ b: '' } : { b: ""; }
 >b : string
 >'' : ""
 >null : null
@@ -568,13 +568,13 @@ var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >a9d : { x: number; }
 >new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 }) : { x: number; }
 >someGenerics9 : someGenerics9
->{ x: 3 } : { x: number; }
+>{ x: 3 } : { x: 3; }
 >x : number
 >3 : 3
->{ x: 6 } : { x: number; }
+>{ x: 6 } : { x: 6; }
 >x : number
 >6 : 6
->{ x: 6 } : { x: number; }
+>{ x: 6 } : { x: 6; }
 >x : number
 >6 : 6
 

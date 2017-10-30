@@ -14,14 +14,14 @@ class C {
 >value : number
 
         return {
->{            cProp: value,            foo() {                return "well this looks kinda C-ish.";            }        } : { cProp: number; foo(): string; }
+>{            cProp: value,            foo() {                return "well this looks kinda C-ish.";            }        } : { cProp: number; foo(): "well this looks kinda C-ish."; }
 
             cProp: value,
 >cProp : number
 >value : number
 
             foo() {
->foo : () => string
+>foo : () => "well this looks kinda C-ish."
 
                 return "well this looks kinda C-ish.";
 >"well this looks kinda C-ish." : "well this looks kinda C-ish."
@@ -60,7 +60,7 @@ class D extends C {
 >"You win!" : "You win!"
 
             return {
->{                cProp: 1,                dProp: () => this,                foo() { return "You win!!!!!" }            } : { cProp: number; dProp: () => this; foo(): string; }
+>{                cProp: 1,                dProp: () => this,                foo() { return "You win!!!!!" }            } : { cProp: 1; dProp: () => this; foo(): "You win!!!!!"; }
 
                 cProp: 1,
 >cProp : number
@@ -72,7 +72,7 @@ class D extends C {
 >this : this
 
                 foo() { return "You win!!!!!" }
->foo : () => string
+>foo : () => "You win!!!!!"
 >"You win!!!!!" : "You win!!!!!"
 
             };

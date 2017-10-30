@@ -24,13 +24,13 @@ type foo = {
 const aFoo: foo = { bar: 3, baz: "b", nested: { a: 1, b: "y" } };
 >aFoo : foo
 >foo : foo
->{ bar: 3, baz: "b", nested: { a: 1, b: "y" } } : { bar: number; baz: string; nested: { a: number; b: string; }; }
+>{ bar: 3, baz: "b", nested: { a: 1, b: "y" } } : { bar: 3; baz: "b"; nested: { a: 1; b: "y"; }; }
 >bar : number
 >3 : 3
 >baz : string
 >"b" : "b"
->nested : { a: number; b: string; }
->{ a: 1, b: "y" } : { a: number; b: string; }
+>nested : { a: 1; b: "y"; }
+>{ a: 1, b: "y" } : { a: 1; b: "y"; }
 >a : number
 >1 : 1
 >b : string

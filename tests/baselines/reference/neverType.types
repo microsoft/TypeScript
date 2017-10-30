@@ -213,7 +213,7 @@ let errorCallback = () => error("Error callback");
 test(() => "hello");
 >test(() => "hello") : string
 >test : (cb: () => string) => string
->() => "hello" : () => string
+>() => "hello" : () => "hello"
 >"hello" : "hello"
 
 test(() => fail());

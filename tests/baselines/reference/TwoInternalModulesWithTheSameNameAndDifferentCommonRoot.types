@@ -53,7 +53,7 @@ module otherRoot {
 >Root : any
 >A : any
 >Point : Root.A.Point
->{ x: 0, y: 0 } : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: 0; y: 0; }
 >x : number
 >0 : 0
 >y : number

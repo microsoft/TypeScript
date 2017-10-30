@@ -35,7 +35,7 @@ export const Form3 = brokenFunction(parameterFn)({store: "hello"})
 >brokenFunction(parameterFn) : (o: { store: string; }) => { store: string; }
 >brokenFunction : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
 >parameterFn : (props: { store: string; }) => void
->{store: "hello"} : { store: string; }
+>{store: "hello"} : { store: "hello"; }
 >store : string
 >"hello" : "hello"
 

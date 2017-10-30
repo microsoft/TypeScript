@@ -21,9 +21,9 @@ f({ x: [null] }, { x: [1] }).x[0] = "" // ok
 >x : null[]
 >[null] : null[]
 >null : null
->{ x: [1] } : { x: number[]; }
->x : number[]
->[1] : number[]
+>{ x: [1] } : { x: 1[]; }
+>x : 1[]
+>[1] : 1[]
 >1 : 1
 >x : number[]
 >0 : 0
@@ -35,9 +35,9 @@ f({ x: [1] }, { x: [null] }).x[0] = "" // was error TS2011: Cannot convert 'stri
 >f({ x: [1] }, { x: [null] }).x : number[]
 >f({ x: [1] }, { x: [null] }) : { x: number[]; }
 >f : <T>(x: T, y: T) => T
->{ x: [1] } : { x: number[]; }
->x : number[]
->[1] : number[]
+>{ x: [1] } : { x: 1[]; }
+>x : 1[]
+>[1] : 1[]
 >1 : 1
 >{ x: [null] } : { x: null[]; }
 >x : null[]

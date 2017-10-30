@@ -8,8 +8,8 @@ tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '{ func: (a: num
   Type '{ func: (a: number, b: string) => void; }' is not assignable to type '{ func: (arg: number) => void; }'.
     Types of property 'func' are incompatible.
       Type '(a: number, b: string) => void' is not assignable to type '(arg: number) => void'.
-tests/cases/conformance/jsx/file.tsx(31,30): error TS2322: Type '{ values: number[]; selectHandler: (val: string) => void; }' is not assignable to type 'IntrinsicAttributes & InferParamProp<number>'.
-  Type '{ values: number[]; selectHandler: (val: string) => void; }' is not assignable to type 'InferParamProp<number>'.
+tests/cases/conformance/jsx/file.tsx(31,30): error TS2322: Type '{ values: (1 | 2 | 3 | 4)[]; selectHandler: (val: string) => void; }' is not assignable to type 'IntrinsicAttributes & InferParamProp<number>'.
+  Type '{ values: (1 | 2 | 3 | 4)[]; selectHandler: (val: string) => void; }' is not assignable to type 'InferParamProp<number>'.
     Types of property 'selectHandler' are incompatible.
       Type '(val: string) => void' is not assignable to type '(selectedVal: number) => void'.
         Types of parameters 'val' and 'selectedVal' are incompatible.
@@ -62,8 +62,8 @@ tests/cases/conformance/jsx/file.tsx(31,30): error TS2322: Type '{ values: numbe
     // Error
     let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ values: number[]; selectHandler: (val: string) => void; }' is not assignable to type 'IntrinsicAttributes & InferParamProp<number>'.
-!!! error TS2322:   Type '{ values: number[]; selectHandler: (val: string) => void; }' is not assignable to type 'InferParamProp<number>'.
+!!! error TS2322: Type '{ values: (1 | 2 | 3 | 4)[]; selectHandler: (val: string) => void; }' is not assignable to type 'IntrinsicAttributes & InferParamProp<number>'.
+!!! error TS2322:   Type '{ values: (1 | 2 | 3 | 4)[]; selectHandler: (val: string) => void; }' is not assignable to type 'InferParamProp<number>'.
 !!! error TS2322:     Types of property 'selectHandler' are incompatible.
 !!! error TS2322:       Type '(val: string) => void' is not assignable to type '(selectedVal: number) => void'.
 !!! error TS2322:         Types of parameters 'val' and 'selectedVal' are incompatible.
