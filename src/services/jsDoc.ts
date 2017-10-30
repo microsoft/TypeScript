@@ -259,8 +259,6 @@ namespace ts.JsDoc {
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
         // TODO: add support for:
-        // - enums/enum members
-        // - property declarations
         // - potentially property assignments
         for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
             switch (commentOwner.kind) {
@@ -273,6 +271,9 @@ namespace ts.JsDoc {
 
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.EnumMember:
                     return { commentOwner };
 
                 case SyntaxKind.VariableStatement: {
