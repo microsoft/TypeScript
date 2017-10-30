@@ -3,7 +3,7 @@
 <!-- SUGGESTIONS: See https://github.com/Microsoft/TypeScript-wiki/blob/master/Writing-Good-Design-Proposals.md -->
 
 <!-- Please try to reproduce the issue with `typescript@next`. It may have already been fixed. -->
-**TypeScript Version:**  2.6.0-dev.201xxxxx
+**TypeScript Version:**  2.7.0-dev.201xxxxx
 
 **Code**
 

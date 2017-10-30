@@ -408,7 +408,7 @@ declare namespace ts {
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
         ReachabilityAndEmitFlags = 1408,
-        ContextFlags = 96256,
+        ContextFlags = 2193408,
         TypeExcludesFlags = 20480,
     }
     enum ModifierFlags {
@@ -2040,6 +2040,7 @@ declare namespace ts {
         ObjectLiteral = 128,
         EvolvingArray = 256,
         ObjectLiteralPatternWithComputedProperties = 512,
+        ContainsSpread = 1024,
         ClassOrInterface = 3,
     }
     interface ObjectType extends Type {
@@ -3915,8 +3916,8 @@ declare namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
+        getCompletionEntryDetails(fileName: string, position: number, name: string, options?: FormatCodeOptions | FormatCodeSettings, source?: string): CompletionEntryDetails;
+        getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan;
@@ -4296,6 +4297,7 @@ declare namespace ts {
          */
         replacementSpan?: TextSpan;
         hasAction?: true;
+        source?: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -4305,6 +4307,7 @@ declare namespace ts {
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        source?: SymbolDisplayPart[];
     }
     interface OutliningSpan {
         /** The span of the document to actually collapse. */

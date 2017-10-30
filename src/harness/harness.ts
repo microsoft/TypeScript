@@ -32,6 +32,9 @@
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
+// chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
+// so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
+assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
 declare var __dirname: string; // Node-specific
 var global: NodeJS.Global = <any>Function("return this").call(undefined);
 
@@ -1196,6 +1199,9 @@ namespace Harness {
                 traceResults = [];
                 compilerHost.trace = text => traceResults.push(text);
             }
+            else {
+                compilerHost.directoryExists = () => true; // This only visibly affects resolution traces, so to save time we always return true where possible
+            }
             const program = ts.createProgram(programFileNames, options, compilerHost);
 
             const emitResult = program.emit();
@@ -1456,7 +1462,7 @@ namespace Harness {
             });
         }
 
-        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions, multifile?: boolean, skipTypeAndSymbolbaselines?: boolean) {
+        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean) {
             // The full walker simulates the types that you would get from doing a full
             // compile.  The pull walker simulates the types you get when you just do
             // a type query for a random node (like how the LS would do it).  Most of the
@@ -1514,19 +1520,19 @@ namespace Harness {
                     baselinePath.replace(/\.tsx?/, "") : baselinePath;
 
                 if (!multifile) {
-                    const fullBaseLine = generateBaseLine(isSymbolBaseLine, skipTypeAndSymbolbaselines);
+                    const fullBaseLine = generateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
                     Harness.Baseline.runBaseline(outputFileName + fullExtension, () => fullBaseLine, opts);
                 }
                 else {
                     Harness.Baseline.runMultifileBaseline(outputFileName, fullExtension, () => {
-                        return iterateBaseLine(isSymbolBaseLine, skipTypeAndSymbolbaselines);
+                        return iterateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
                     }, opts);
                 }
             }
 
-            function generateBaseLine(isSymbolBaseline: boolean, skipTypeAndSymbolbaselines?: boolean): string {
+            function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string {
                 let result = "";
-                const gen = iterateBaseLine(isSymbolBaseline, skipTypeAndSymbolbaselines);
+                const gen = iterateBaseLine(isSymbolBaseline, skipBaseline);
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [, content] = value;
                     result += content;
@@ -1536,8 +1542,8 @@ namespace Harness {
                 /* tslint:enable:no-null-keyword */
             }
 
-            function *iterateBaseLine(isSymbolBaseline: boolean, skipTypeAndSymbolbaselines?: boolean): IterableIterator<[string, string]> {
-                if (skipTypeAndSymbolbaselines) {
+            function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
+                if (skipBaseline) {
                     return;
                 }
                 const dupeCase = ts.createMap<number>();

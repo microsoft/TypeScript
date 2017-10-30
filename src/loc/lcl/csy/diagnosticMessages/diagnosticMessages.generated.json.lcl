@@ -839,12 +839,12 @@
       </Item>
       <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přidat {0} k existující deklaraci importu z {1}]]></Val>
+            <Val><![CDATA[Přidá {0} k existující deklaraci importu z {1}.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Add {0} to existing import declaration from {1}]]></Val>
+            <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -2907,6 +2907,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Expected_0_1_type_arguments_provide_these_with_an_extends_tag_8027" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0}-{1} type arguments; provide these with an '@extends' tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Očekávané argumenty typu {0}–{1}; zadejte je se značkou @extends.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Expected_0_arguments_but_got_1_2554" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} arguments, but got {1}.]]></Val>
@@ -2930,6 +2939,15 @@
           <Val><![CDATA[Expected {0} type arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Očekávaly se argumenty typu {0}, ale předaly se argumenty typu {1}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_0_type_arguments_provide_these_with_an_extends_tag_8026" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Očekávané argumenty typu {0}; zadejte je se značkou @extends.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3689,12 +3707,12 @@
       </Item>
       <Item ItemId=";Import_0_from_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import {0} from {1}.]]></Val>
+          <Val><![CDATA[Import '{0}' from "{1}".]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importovat {0} z {1}]]></Val>
+            <Val><![CDATA[Importujte {0} z: {1}.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Import {0} from {1}]]></Val>
+            <Val><![CDATA[Import {0} from {1}.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -6375,11 +6393,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_t_2403" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_has_type_1_at_2_but_here_has_typ_2403" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
+          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace následných proměnných musí obsahovat stejný typ. Proměnná {0} musí být typu {1}, ale tady je typu {2}.]]></Val>
+            <Val><![CDATA[Deklarace následných proměnných musí obsahovat stejný typ. Proměnná {0} musí být typu {1} v {2}, ale tady je typu {3}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
