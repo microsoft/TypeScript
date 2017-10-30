@@ -1,0 +1,10 @@
+/a.js(3,17): error TS2304: Cannot find name 'err'.
+
+
+==== /a.js (1 errors) ====
+    class A {}
+    /** @augments A */
+    class B extends err() {}
+                    ~~~
+!!! error TS2304: Cannot find name 'err'.
+    

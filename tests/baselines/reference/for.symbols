@@ -1,0 +1,57 @@
+=== tests/cases/compiler/for.ts ===
+for (var i = 0; i < 10; i++) { // ok
+>i : Symbol(i, Decl(for.ts, 0, 8))
+>i : Symbol(i, Decl(for.ts, 0, 8))
+>i : Symbol(i, Decl(for.ts, 0, 8))
+
+    var x1 = i;
+>x1 : Symbol(x1, Decl(for.ts, 1, 7))
+>i : Symbol(i, Decl(for.ts, 0, 8))
+}
+
+for (var j: number = 0; j < 10; j++) { // ok
+>j : Symbol(j, Decl(for.ts, 4, 8))
+>j : Symbol(j, Decl(for.ts, 4, 8))
+>j : Symbol(j, Decl(for.ts, 4, 8))
+
+    var x2 = j;
+>x2 : Symbol(x2, Decl(for.ts, 5, 7))
+>j : Symbol(j, Decl(for.ts, 4, 8))
+}
+
+for (var k = 0; k < 10;) { // ok
+>k : Symbol(k, Decl(for.ts, 8, 8))
+>k : Symbol(k, Decl(for.ts, 8, 8))
+
+    k++;
+>k : Symbol(k, Decl(for.ts, 8, 8))
+}
+
+for (; i < 10;) { // ok
+>i : Symbol(i, Decl(for.ts, 0, 8))
+
+    i++;
+>i : Symbol(i, Decl(for.ts, 0, 8))
+}
+
+for (; i > 1; i--) { // ok
+>i : Symbol(i, Decl(for.ts, 0, 8))
+>i : Symbol(i, Decl(for.ts, 0, 8))
+}
+
+for (var l = 0; ; l++) { // ok
+>l : Symbol(l, Decl(for.ts, 19, 8))
+>l : Symbol(l, Decl(for.ts, 19, 8))
+
+    if (l > 10) {
+>l : Symbol(l, Decl(for.ts, 19, 8))
+
+        break;
+    }
+}
+
+for (; ;) { // ok
+}
+
+for () { // error
+}

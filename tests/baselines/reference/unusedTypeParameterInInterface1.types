@@ -1,0 +1,6 @@
+=== tests/cases/compiler/unusedTypeParameterInInterface1.ts ===
+interface int<T> {
+>int : int<T>
+>T : T
+
+}

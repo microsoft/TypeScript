@@ -6,25 +6,25 @@ namespace ts.textChanges {
      * It can be changed to side-table later if we decide that current design is too invasive.
      */
     function getPos(n: TextRange): number {
-        const result = (<any>n)["__pos"];
+        const result = (<any>n).__pos;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setPos(n: TextRange, pos: number): void {
         Debug.assert(typeof pos === "number");
-        (<any>n)["__pos"] = pos;
+        (<any>n).__pos = pos;
     }
 
     function getEnd(n: TextRange): number {
-        const result = (<any>n)["__end"];
+        const result = (<any>n).__end;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setEnd(n: TextRange, end: number): void {
         Debug.assert(typeof end === "number");
-        (<any>n)["__end"] = end;
+        (<any>n).__end = end;
     }
 
     export interface ConfigurableStart {
@@ -152,7 +152,9 @@ namespace ts.textChanges {
             return position === Position.Start ? start : fullStart;
         }
         // get start position of the line following the line that contains fullstart position
-        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + 1, sourceFile);
+        // (but only if the fullstart isn't the very beginning of the file)
+        const nextLineStart = fullStart > 0 ? 1 : 0;
+        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + nextLineStart, sourceFile);
         // skip whitespaces/newlines
         adjustedStartPosition = skipWhitespacesAndLineBreaks(sourceFile.text, adjustedStartPosition);
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
@@ -184,16 +186,23 @@ namespace ts.textChanges {
         return s;
     }
 
-    function getNewlineKind(context: { newLineCharacter: string }) {
-        return context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
+    export interface TextChangesContext {
+        newLineCharacter: string;
+        rulesProvider: formatting.RulesProvider;
     }
 
     export class ChangeTracker {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
 
-        public static fromContext(context: RefactorContext | CodeFixContext) {
-            return new ChangeTracker(getNewlineKind(context), context.rulesProvider);
+        public static fromContext(context: TextChangesContext): ChangeTracker {
+            return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.rulesProvider);
+        }
+
+        public static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[] {
+            const tracker = ChangeTracker.fromContext(context);
+            cb(tracker);
+            return tracker.getChanges();
         }
 
         constructor(
@@ -228,7 +237,7 @@ namespace ts.textChanges {
                 Debug.fail("node is not a list element");
                 return this;
             }
-            const index = containingList.indexOf(node);
+            const index = indexOfNode(containingList, node);
             if (index < 0) {
                 return this;
             }
@@ -360,7 +369,7 @@ namespace ts.textChanges {
                 Debug.fail("node is not a list element");
                 return this;
             }
-            const index = containingList.indexOf(after);
+            const index = indexOfNode(containingList, after);
             if (index < 0) {
                 return this;
             }

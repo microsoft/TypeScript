@@ -1,0 +1,21 @@
+=== tests/cases/compiler/detachedCommentAtStartOfFunctionBody2.ts ===
+class TestFile {
+>TestFile : TestFile
+
+    foo(message: string): () => string {
+>foo : (message: string) => () => string
+>message : string
+
+        /// <summary>Test summary</summary>
+        /// <param name="message" type="String" />
+        /// <returns type="Function" />
+
+        return () => message + this.name;
+>() => message + this.name : () => string
+>message + this.name : string
+>message : string
+>this.name : any
+>this : this
+>name : any
+    }
+}

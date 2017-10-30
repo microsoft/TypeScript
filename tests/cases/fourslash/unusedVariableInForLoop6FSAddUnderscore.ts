@@ -7,5 +7,9 @@
 ////     }
 //// }
 
-verify.rangeAfterCodeFix("const _elem of", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 1);
+verify.codeFix({
+    description: "Prefix 'elem' with an underscore.",
+    index: 1,
+    newRangeContent: "const _elem of"
+});
 

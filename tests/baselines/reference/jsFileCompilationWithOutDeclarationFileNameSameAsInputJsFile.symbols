@@ -1,0 +1,9 @@
+=== tests/cases/compiler/a.ts ===
+class c {
+>c : Symbol(c, Decl(a.ts, 0, 0))
+}
+
+=== tests/cases/compiler/b.d.ts ===
+declare function foo(): boolean;
+>foo : Symbol(foo, Decl(b.d.ts, 0, 0))
+

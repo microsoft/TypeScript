@@ -8,8 +8,8 @@
 
 goTo.select('a', 'b')
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_1",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_1",
     actionDescription: "Extract to function in global scope",
     newContent:
 `function M() {
@@ -17,6 +17,7 @@ edit.applyRefactor({
     let x = 0;
     console.log(/*RENAME*/newFunction(a, x));
 }
+
 function newFunction(a: number[], x: number): any {
     return a[x];
 }

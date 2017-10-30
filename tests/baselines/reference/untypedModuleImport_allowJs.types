@@ -13,9 +13,9 @@ foo.bar();
 
 exports.default = { bar() { return 0; } }
 >exports.default = { bar() { return 0; } } : { [x: string]: any; bar(): number; }
->exports.default : any
->exports : any
->default : any
+>exports.default : { [x: string]: any; bar(): number; }
+>exports : typeof "/node_modules/foo/index"
+>default : { [x: string]: any; bar(): number; }
 >{ bar() { return 0; } } : { [x: string]: any; bar(): number; }
 >bar : () => number
 >0 : 0

@@ -10,14 +10,15 @@
 
 goTo.select('a', 'b');
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_1",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_1",
     actionDescription: "Extract to function in global scope",
     newContent:
 `function foo() {
     var i = 10;
     i = /*RENAME*/newFunction(i);
 }
+
 function newFunction(i: number) {
     i++;
     return i;

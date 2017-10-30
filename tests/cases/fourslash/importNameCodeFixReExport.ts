@@ -10,7 +10,8 @@
 ////x;|]
 
 goTo.file("/b.ts");
-verify.rangeAfterCodeFix(`import { x } from "./a";
-
+// TODO:GH#18445
+verify.rangeAfterCodeFix(`import { x } from "./a";\r
+\r
 export { x } from "./a";
 x;`, /*includeWhiteSpace*/ true);

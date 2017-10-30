@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts ===
+for(d in _.jh[a]=_.jh[a]||[],b);
+No type information for this code.

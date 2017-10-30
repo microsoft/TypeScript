@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement6.ts ===
+for (var a = 1, b = 2 in X) {
+>a : string
+>1 : 1
+>b : string
+>2 : 2
+>X : any
+}

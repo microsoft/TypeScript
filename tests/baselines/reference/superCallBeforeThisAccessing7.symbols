@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing7.ts ===
+class Base {
+>Base : Symbol(Base, Decl(superCallBeforeThisAccessing7.ts, 0, 0))
+
+    constructor(c) { }
+>c : Symbol(c, Decl(superCallBeforeThisAccessing7.ts, 1, 16))
+}
+class D extends Base {
+>D : Symbol(D, Decl(superCallBeforeThisAccessing7.ts, 2, 1))
+>Base : Symbol(Base, Decl(superCallBeforeThisAccessing7.ts, 0, 0))
+
+    private _t;
+>_t : Symbol(D._t, Decl(superCallBeforeThisAccessing7.ts, 3, 22))
+
+    constructor() {
+        let x = {
+>x : Symbol(x, Decl(superCallBeforeThisAccessing7.ts, 6, 11))
+
+            j: this._t,
+>j : Symbol(j, Decl(superCallBeforeThisAccessing7.ts, 6, 17))
+>this._t : Symbol(D._t, Decl(superCallBeforeThisAccessing7.ts, 3, 22))
+>this : Symbol(D, Decl(superCallBeforeThisAccessing7.ts, 2, 1))
+>_t : Symbol(D._t, Decl(superCallBeforeThisAccessing7.ts, 3, 22))
+        }
+        super(undefined);
+>super : Symbol(Base, Decl(superCallBeforeThisAccessing7.ts, 0, 0))
+>undefined : Symbol(undefined)
+    }
+}
+

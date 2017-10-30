@@ -110,6 +110,54 @@ namespace ts {
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
 
+            printsCorrectly("newExpressionWithPropertyAccessOnCallExpression", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createNew(
+                    createPropertyAccess(
+                        createCall(
+                            createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                            "x"),
+                    /*typeArguments*/ undefined,
+                    /*argumentsArray*/ undefined
+                ),
+                createSourceFile("source.ts", "", ScriptTarget.ESNext))
+            );
+
+            printsCorrectly("newExpressionOnConditionalExpression", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createNew(
+                    createConditional(
+                        createIdentifier("x"), createToken(SyntaxKind.QuestionToken),
+                        createIdentifier("y"), createToken(SyntaxKind.ColonToken),
+                        createIdentifier("z")),
+                    /*typeArguments*/ undefined,
+                    /*argumentsArray*/ undefined
+                ),
+                createSourceFile("source.ts", "", ScriptTarget.ESNext))
+            );
+
+            printsCorrectly("emptyGlobalAugmentation", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createModuleDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ [createToken(SyntaxKind.DeclareKeyword)],
+                    createIdentifier("global"),
+                    createModuleBlock(emptyArray),
+                    NodeFlags.GlobalAugmentation),
+                createSourceFile("source.ts", "", ScriptTarget.ES2015)
+            ));
+
+            printsCorrectly("emptyGlobalAugmentationWithNoDeclareKeyword", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createModuleDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createIdentifier("global"),
+                    createModuleBlock(emptyArray),
+                    NodeFlags.GlobalAugmentation),
+                createSourceFile("source.ts", "", ScriptTarget.ES2015)
+            ));
+
             // https://github.com/Microsoft/TypeScript/issues/15971
             printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(
                 EmitHint.Unspecified,

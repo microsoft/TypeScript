@@ -1,0 +1,13 @@
+=== tests/cases/compiler/duplicateVarAndImport2.ts ===
+// error since module is instantiated
+var a;
+>a : Symbol(a, Decl(duplicateVarAndImport2.ts, 1, 3), Decl(duplicateVarAndImport2.ts, 2, 30))
+
+module M { export var x = 1; }
+>M : Symbol(M, Decl(duplicateVarAndImport2.ts, 1, 6))
+>x : Symbol(x, Decl(duplicateVarAndImport2.ts, 2, 21))
+
+import a = M;
+>a : Symbol(a, Decl(duplicateVarAndImport2.ts, 1, 3), Decl(duplicateVarAndImport2.ts, 2, 30))
+>M : Symbol(M, Decl(duplicateVarAndImport2.ts, 1, 6))
+

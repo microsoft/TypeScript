@@ -1,0 +1,48 @@
+=== tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts ===
+// these should be errors
+class GetAndSet {
+>GetAndSet : Symbol(GetAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 0, 0))
+
+    getAndSet = null;             // error at "getAndSet"
+>getAndSet : Symbol(GetAndSet.getAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 1, 17))
+
+    public get haveGetAndSet() {  // this should not be an error
+>haveGetAndSet : Symbol(GetAndSet.haveGetAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 2, 21), Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 5, 5))
+
+        return this.getAndSet;
+>this.getAndSet : Symbol(GetAndSet.getAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 1, 17))
+>this : Symbol(GetAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 0, 0))
+>getAndSet : Symbol(GetAndSet.getAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 1, 17))
+    }
+    
+    // this shouldn't be an error
+    public set haveGetAndSet(value) {  // error at "value"
+>haveGetAndSet : Symbol(GetAndSet.haveGetAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 2, 21), Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 5, 5))
+>value : Symbol(value, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 8, 29))
+
+        this.getAndSet = value;
+>this.getAndSet : Symbol(GetAndSet.getAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 1, 17))
+>this : Symbol(GetAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 0, 0))
+>getAndSet : Symbol(GetAndSet.getAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 1, 17))
+>value : Symbol(value, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 8, 29))
+    }
+}
+
+class SetterOnly {
+>SetterOnly : Symbol(SetterOnly, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 11, 1))
+
+    public set haveOnlySet(newXValue) {  // error at "haveOnlySet, newXValue"
+>haveOnlySet : Symbol(SetterOnly.haveOnlySet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 13, 18))
+>newXValue : Symbol(newXValue, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 14, 27))
+    }
+}
+
+class GetterOnly {
+>GetterOnly : Symbol(GetterOnly, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 16, 1))
+
+    public get haveOnlyGet() {  // error at "haveOnlyGet"
+>haveOnlyGet : Symbol(GetterOnly.haveOnlyGet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 18, 18))
+
+        return null;
+    }
+}

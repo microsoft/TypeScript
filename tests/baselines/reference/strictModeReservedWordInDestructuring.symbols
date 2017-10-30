@@ -1,0 +1,41 @@
+=== tests/cases/compiler/strictModeReservedWordInDestructuring.ts ===
+"use strict"
+var [public] = [1];
+>public : Symbol(public, Decl(strictModeReservedWordInDestructuring.ts, 1, 5), Decl(strictModeReservedWordInDestructuring.ts, 2, 5), Decl(strictModeReservedWordInDestructuring.ts, 5, 5))
+
+var { x: public } = { x: 1 };
+>x : Symbol(x, Decl(strictModeReservedWordInDestructuring.ts, 2, 21))
+>public : Symbol(public, Decl(strictModeReservedWordInDestructuring.ts, 1, 5), Decl(strictModeReservedWordInDestructuring.ts, 2, 5), Decl(strictModeReservedWordInDestructuring.ts, 5, 5))
+>x : Symbol(x, Decl(strictModeReservedWordInDestructuring.ts, 2, 21))
+
+var [[private]] = [["hello"]];
+>private : Symbol(private, Decl(strictModeReservedWordInDestructuring.ts, 3, 6))
+
+var { y: { s: static }, z: { o: { p: package } }} = { y: { s: 1 }, z: { o: { p: 'h' } } };
+>y : Symbol(y, Decl(strictModeReservedWordInDestructuring.ts, 4, 53))
+>s : Symbol(s, Decl(strictModeReservedWordInDestructuring.ts, 4, 58))
+>static : Symbol(static, Decl(strictModeReservedWordInDestructuring.ts, 4, 10))
+>z : Symbol(z, Decl(strictModeReservedWordInDestructuring.ts, 4, 66))
+>o : Symbol(o, Decl(strictModeReservedWordInDestructuring.ts, 4, 71))
+>p : Symbol(p, Decl(strictModeReservedWordInDestructuring.ts, 4, 76))
+>package : Symbol(package, Decl(strictModeReservedWordInDestructuring.ts, 4, 33))
+>y : Symbol(y, Decl(strictModeReservedWordInDestructuring.ts, 4, 53))
+>s : Symbol(s, Decl(strictModeReservedWordInDestructuring.ts, 4, 58))
+>z : Symbol(z, Decl(strictModeReservedWordInDestructuring.ts, 4, 66))
+>o : Symbol(o, Decl(strictModeReservedWordInDestructuring.ts, 4, 71))
+>p : Symbol(p, Decl(strictModeReservedWordInDestructuring.ts, 4, 76))
+
+var { public, protected } = { public: 1, protected: 2 };
+>public : Symbol(public, Decl(strictModeReservedWordInDestructuring.ts, 1, 5), Decl(strictModeReservedWordInDestructuring.ts, 2, 5), Decl(strictModeReservedWordInDestructuring.ts, 5, 5))
+>protected : Symbol(protected, Decl(strictModeReservedWordInDestructuring.ts, 5, 13))
+>public : Symbol(public, Decl(strictModeReservedWordInDestructuring.ts, 5, 29))
+>protected : Symbol(protected, Decl(strictModeReservedWordInDestructuring.ts, 5, 40))
+
+var { public: a, protected: b } = { public: 1, protected: 2 };
+>public : Symbol(public, Decl(strictModeReservedWordInDestructuring.ts, 6, 35))
+>a : Symbol(a, Decl(strictModeReservedWordInDestructuring.ts, 6, 5))
+>protected : Symbol(protected, Decl(strictModeReservedWordInDestructuring.ts, 6, 46))
+>b : Symbol(b, Decl(strictModeReservedWordInDestructuring.ts, 6, 16))
+>public : Symbol(public, Decl(strictModeReservedWordInDestructuring.ts, 6, 35))
+>protected : Symbol(protected, Decl(strictModeReservedWordInDestructuring.ts, 6, 46))
+
