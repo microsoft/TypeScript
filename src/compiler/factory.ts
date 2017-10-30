@@ -1982,7 +1982,7 @@ namespace ts {
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.isExportEquals = isExportEquals;
-        node.expression = expression;
+        node.expression = parenthesizeBinaryOperand(SyntaxKind.EqualsToken, expression, /*isLeftSideOfBinary*/ false, /*leftOperand*/ undefined);
         return node;
     }
 

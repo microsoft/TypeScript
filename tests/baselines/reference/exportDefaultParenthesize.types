@@ -1,0 +1,9 @@
+=== tests/cases/compiler/exportDefaultParenthesize.ts ===
+export default {
+>{    ['foo']: 42} : { ['foo']: number; }
+
+    ['foo']: 42
+>'foo' : "foo"
+>42 : 42
+
+};

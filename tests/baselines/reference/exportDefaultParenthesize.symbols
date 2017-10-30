@@ -1,0 +1,6 @@
+=== tests/cases/compiler/exportDefaultParenthesize.ts ===
+export default {
+    ['foo']: 42
+>'foo' : Symbol(['foo'], Decl(exportDefaultParenthesize.ts, 0, 16))
+
+};
