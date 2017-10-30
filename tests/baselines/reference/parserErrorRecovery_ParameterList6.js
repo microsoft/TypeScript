@@ -7,7 +7,6 @@ class Foo {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
+    Foo.prototype.banana = function (x) { };
     return Foo;
 }());
-break ;
-{ }

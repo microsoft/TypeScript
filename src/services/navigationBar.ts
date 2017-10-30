@@ -209,17 +209,24 @@ namespace ts.NavigationBar {
 
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                const decl = <VariableDeclaration>node;
-                const name = decl.name;
+                const { name, initializer } = <VariableDeclaration | BindingElement>node;
                 if (isBindingPattern(name)) {
                     addChildrenRecursively(name);
                 }
-                else if (decl.initializer && isFunctionOrClassExpression(decl.initializer)) {
-                    // For `const x = function() {}`, just use the function node, not the const.
-                    addChildrenRecursively(decl.initializer);
+                else if (initializer && isFunctionOrClassExpression(initializer)) {
+                    if (initializer.name) {
+                        // Don't add a node for the VariableDeclaration, just for the initializer.
+                        addChildrenRecursively(initializer);
+                    }
+                    else {
+                        // Add a node for the VariableDeclaration, but not for the initializer.
+                        startNode(node);
+                        forEachChild(initializer, addChildrenRecursively);
+                        endNode();
+                    }
                 }
                 else {
-                    addNodeWithRecursiveChild(decl, decl.initializer);
+                    addNodeWithRecursiveChild(node, initializer);
                 }
                 break;
 
@@ -644,7 +651,14 @@ namespace ts.NavigationBar {
         }
     }
 
-    function isFunctionOrClassExpression(node: Node): boolean {
-        return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.ClassExpression;
+    function isFunctionOrClassExpression(node: Node): node is ArrowFunction | FunctionExpression | ClassExpression {
+        switch (node.kind) {
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ClassExpression:
+                return true;
+            default:
+                return false;
+        }
     }
 }

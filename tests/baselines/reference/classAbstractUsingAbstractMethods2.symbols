@@ -1,0 +1,54 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts ===
+class A {
+>A : Symbol(A, Decl(classAbstractUsingAbstractMethods2.ts, 0, 0))
+
+    abstract foo();
+>foo : Symbol(A.foo, Decl(classAbstractUsingAbstractMethods2.ts, 0, 9))
+}
+
+class B extends A  {}
+>B : Symbol(B, Decl(classAbstractUsingAbstractMethods2.ts, 2, 1))
+>A : Symbol(A, Decl(classAbstractUsingAbstractMethods2.ts, 0, 0))
+
+abstract class C extends A {}
+>C : Symbol(C, Decl(classAbstractUsingAbstractMethods2.ts, 4, 21))
+>A : Symbol(A, Decl(classAbstractUsingAbstractMethods2.ts, 0, 0))
+
+class D extends A {
+>D : Symbol(D, Decl(classAbstractUsingAbstractMethods2.ts, 6, 29))
+>A : Symbol(A, Decl(classAbstractUsingAbstractMethods2.ts, 0, 0))
+
+    foo() {}
+>foo : Symbol(D.foo, Decl(classAbstractUsingAbstractMethods2.ts, 8, 19))
+}
+
+abstract class E extends A {
+>E : Symbol(E, Decl(classAbstractUsingAbstractMethods2.ts, 10, 1))
+>A : Symbol(A, Decl(classAbstractUsingAbstractMethods2.ts, 0, 0))
+
+    foo() {}
+>foo : Symbol(E.foo, Decl(classAbstractUsingAbstractMethods2.ts, 12, 28))
+}
+
+abstract class AA {
+>AA : Symbol(AA, Decl(classAbstractUsingAbstractMethods2.ts, 14, 1))
+
+    abstract foo();
+>foo : Symbol(AA.foo, Decl(classAbstractUsingAbstractMethods2.ts, 16, 19))
+}
+
+class BB extends AA  {}
+>BB : Symbol(BB, Decl(classAbstractUsingAbstractMethods2.ts, 18, 1))
+>AA : Symbol(AA, Decl(classAbstractUsingAbstractMethods2.ts, 14, 1))
+
+abstract class CC extends AA {}
+>CC : Symbol(CC, Decl(classAbstractUsingAbstractMethods2.ts, 20, 23))
+>AA : Symbol(AA, Decl(classAbstractUsingAbstractMethods2.ts, 14, 1))
+
+class DD extends AA {
+>DD : Symbol(DD, Decl(classAbstractUsingAbstractMethods2.ts, 22, 31))
+>AA : Symbol(AA, Decl(classAbstractUsingAbstractMethods2.ts, 14, 1))
+
+    foo() {}
+>foo : Symbol(DD.foo, Decl(classAbstractUsingAbstractMethods2.ts, 24, 21))
+}

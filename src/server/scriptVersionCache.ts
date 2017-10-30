@@ -2,6 +2,7 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="session.ts" />
 
+/*@internal*/
 namespace ts.server {
     const lineCollectionCapacity = 4;
 
@@ -283,24 +284,6 @@ namespace ts.server {
                 insertedText && insertedText.length > ScriptVersionCache.changeLengthThreshold) {
                 this.getSnapshot();
             }
-        }
-
-        // reload whole script, leaving no change history behind reload
-        reload(script: string) {
-            this.currentVersion++;
-            this.changes = []; // history wiped out by reload
-            const snap = new LineIndexSnapshot(this.currentVersion, this, new LineIndex());
-
-            // delete all versions
-            for (let i = 0; i < this.versions.length; i++) {
-                this.versions[i] = undefined;
-            }
-
-            this.versions[this.currentVersionToIndex()] = snap;
-            const lm = LineIndex.linesFromText(script);
-            snap.index.load(lm.lines);
-
-            this.minVersion = this.currentVersion;
         }
 
         getSnapshot(): IScriptSnapshot { return this._getSnapshot(); }

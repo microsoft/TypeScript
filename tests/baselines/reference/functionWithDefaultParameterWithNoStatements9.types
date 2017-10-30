@@ -1,0 +1,15 @@
+=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements9.ts ===
+function foo(a = console.log) { }
+>foo : (a?: any) => void
+>a : any
+>console.log : any
+>console : any
+>log : any
+
+function bar(a = console.log) {
+>bar : (a?: any) => void
+>a : any
+>console.log : any
+>console : any
+>log : any
+}

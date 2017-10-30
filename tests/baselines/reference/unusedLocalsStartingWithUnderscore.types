@@ -1,0 +1,24 @@
+=== tests/cases/compiler/unusedLocalsStartingWithUnderscore.ts ===
+for (const _ of []) { }
+>_ : any
+>[] : undefined[]
+
+for (const _ in []) { }
+>_ : string
+>[] : undefined[]
+
+namespace M {
+>M : typeof M
+
+    let _;
+>_ : any
+
+    for (const _ of []) { }
+>_ : any
+>[] : undefined[]
+
+    for (const _ in []) { }
+>_ : string
+>[] : undefined[]
+}
+    

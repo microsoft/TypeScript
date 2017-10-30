@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
 
 //// function f() {
-////     /*a*/function q() { }    
+////     /*a*/function q() { }
 ////     q();/*b*/
 ////     q();
 //// }
 
 goTo.select('a', 'b');
-verify.not.refactorAvailable("Extract Method");
+verify.not.refactorAvailable("Extract Symbol");
 

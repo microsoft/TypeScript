@@ -13,28 +13,25 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
     var union_primitive: { a: number } | number;
 
     var intersection_generic: T & { a: number };
-    var intersection_premitive: { a: number } | string;
+    var intersection_primitive: { a: number } | string;
 
     var num: number;
     var str: number;
+    var literal_string: "string";
+    var literal_number: 42;
 
     var u: undefined;
     var n: null;
-
     var a: any;
 
-    var literal_string: "string";
-    var literal_number: 42;
 
     var e: E;
 
     var o1 = { ...p1 };   // Error, generic type paramterre
     var o2 = { ...p2 };   // OK
     var o3 = { ...t };   // Error, generic type paramter
-
     var o4 = { ...i };   // Error, index access
     var o5 = { ...k };   // Error, index
-
     var o6 = { ...mapped_generic }; // Error, generic mapped object type
     var o7 = { ...mapped };  // OK, non-generic mapped type
 
@@ -42,13 +39,13 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
     var o9 = { ...union_primitive };  // Error, union with generic type parameter
 
     var o10 = { ...intersection_generic };  // Error, intersection with generic type parameter
-    var o11 = { ...intersection_premitive };  // Error, intersection with generic type parameter
+    var o11 = { ...intersection_primitive };  // Error, intersection with generic type parameter
 
     var o12 = { ...num };  // Error
     var o13 = { ...str };  // Error
 
-    var o14 = { ...u };  // OK
-    var o15 = { ...n };  // OK
+    var o14 = { ...u };  // error, undefined-only not allowed
+    var o15 = { ...n };  // error, null-only not allowed
 
     var o16 = { ...a };  // OK
 

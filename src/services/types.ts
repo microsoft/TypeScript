@@ -145,10 +145,15 @@ namespace ts {
         isCancellationRequested(): boolean;
     }
 
+    export interface InstallPackageOptions {
+        fileName: Path;
+        packageName: string;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost {
+    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -183,9 +188,10 @@ namespace ts {
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-        directoryExists?(directoryName: string): boolean;
+        /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
 
         /*
          * getDirectories is also required for full import and type reference completions. Without it defined, certain
@@ -197,6 +203,9 @@ namespace ts {
          * Gets a set of custom transformers to use during emit.
          */
         getCustomTransformers?(): CustomTransformers | undefined;
+
+        isKnownTypesPackageName?(name: string): boolean;
+        installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
 
     //
@@ -228,8 +237,9 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
+        // "options" and "source" are optional only for backwards-compatibility
+        getCompletionEntryDetails(fileName: string, position: number, name: string, options?: FormatCodeOptions | FormatCodeSettings, source?: string): CompletionEntryDetails;
+        getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
@@ -273,6 +283,7 @@ namespace ts {
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
 
@@ -289,6 +300,10 @@ namespace ts {
         getSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
+    }
+
+    export interface ApplyCodeActionCommandResult {
+        successMessage: string;
     }
 
     export interface Classifications {
@@ -363,6 +378,20 @@ namespace ts {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileTextChanges[];
+        /**
+         * If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
+         * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
+         */
+        commands?: CodeActionCommand[];
+    }
+
+    // Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
+    // See `commands?: {}[]` in protocol.ts
+    export type CodeActionCommand = InstallPackageAction;
+
+    export interface InstallPackageAction {
+        /* @internal */ type: "install package";
+        /* @internal */ packageName: string;
     }
 
     /**
@@ -416,6 +445,7 @@ namespace ts {
         edits: FileTextChanges[];
         renameFilename: string | undefined;
         renameLocation: number | undefined;
+        commands?: CodeActionCommand[];
     }
 
     export interface TextInsertion {
@@ -665,6 +695,8 @@ namespace ts {
          * be used in that case
          */
         replacementSpan?: TextSpan;
+        hasAction?: true;
+        source?: string;
     }
 
     export interface CompletionEntryDetails {
@@ -674,6 +706,8 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
+        codeActions?: CodeAction[];
+        source?: SymbolDisplayPart[];
     }
 
     export interface OutliningSpan {
@@ -693,21 +727,10 @@ namespace ts {
         autoCollapse: boolean;
     }
 
-    export interface EmitOutput {
-        outputFiles: OutputFile[];
-        emitSkipped: boolean;
-    }
-
     export const enum OutputFileType {
         JavaScript,
         SourceMap,
         Declaration
-    }
-
-    export interface OutputFile {
-        name: string;
-        writeByteOrderMark: boolean;
-        text: string;
     }
 
     export const enum EndOfLineState {

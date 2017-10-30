@@ -139,18 +139,22 @@ namespace ts {
                         `/**
   * @param
   */`);
+
+                parsesIncorrectly("noType",
+`/**
+* @type
+*/`);
+
+                parsesIncorrectly("@augments with no type",
+`/**
+ * @augments
+ */`);
             });
 
             describe("parsesCorrectly", () => {
                 parsesCorrectly("noLeadingAsterisk",
 `/**
     @type {number}
-  */`);
-
-
-                parsesCorrectly("noType",
-`/**
-  * @type
   */`);
 
 
@@ -296,6 +300,11 @@ namespace ts {
   * @property {number} age
   * @property {string} name
   */`);
+                parsesCorrectly("less-than and greater-than characters",
+`/**
+ * @param x hi
+< > still part of the previous comment
+ */`);
             });
         });
         describe("getFirstToken", () => {

@@ -77,16 +77,20 @@ namespace ts {
         traceEnabled: boolean;
     }
 
-    interface PackageJson {
-        name?: string;
-        version?: string;
+    /** Just the fields that we use for module resolution. */
+    interface PackageJsonPathFields {
         typings?: string;
         types?: string;
         main?: string;
     }
 
+    interface PackageJson extends PackageJsonPathFields {
+        name?: string;
+        version?: string;
+    }
+
     /** Reads from "main" or "types"/"typings" depending on `extensions`. */
-    function tryReadPackageJsonFields(readTypes: boolean, jsonContent: PackageJson, baseDirectory: string, state: ModuleResolutionState): string | undefined {
+    function tryReadPackageJsonFields(readTypes: boolean, jsonContent: PackageJsonPathFields, baseDirectory: string, state: ModuleResolutionState): string | undefined {
         return readTypes ? tryReadFromField("typings") || tryReadFromField("types") : tryReadFromField("main");
 
         function tryReadFromField(fieldName: "typings" | "types" | "main"): string | undefined {
@@ -98,7 +102,7 @@ namespace ts {
             }
 
             const fileName = jsonContent[fieldName];
-            if (typeof fileName !== "string") {
+            if (!isString(fileName)) {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, fieldName, typeof fileName);
                 }
@@ -124,7 +128,11 @@ namespace ts {
         }
     }
 
-    export function getEffectiveTypeRoots(options: CompilerOptions, host: { directoryExists?: (directoryName: string) => boolean, getCurrentDirectory?: () => string }): string[] | undefined {
+    export interface GetEffectiveTypeRootsHost {
+        directoryExists?(directoryName: string): boolean;
+        getCurrentDirectory?(): string;
+    }
+    export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined {
         if (options.typeRoots) {
             return options.typeRoots;
         }
@@ -663,8 +671,8 @@ namespace ts {
         }
 
         if (matchedPattern) {
-            const matchedStar = typeof matchedPattern === "string" ? undefined : matchedText(matchedPattern, moduleName);
-            const matchedPatternText = typeof matchedPattern === "string" ? matchedPattern : patternText(matchedPattern);
+            const matchedStar = isString(matchedPattern) ? undefined : matchedText(matchedPattern, moduleName);
+            const matchedPatternText = isString(matchedPattern) ? matchedPattern : patternText(matchedPattern);
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Module_name_0_matched_pattern_1, moduleName, matchedPatternText);
             }
@@ -886,7 +894,7 @@ namespace ts {
         return withPackageId(packageId, loadNodeModuleFromDirectoryWorker(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, packageJsonContent));
     }
 
-    function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, onlyRecordFailures: boolean, state: ModuleResolutionState, packageJsonContent: PackageJson | undefined): PathAndExtension | undefined {
+    function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, onlyRecordFailures: boolean, state: ModuleResolutionState, packageJsonContent: PackageJsonPathFields | undefined): PathAndExtension | undefined {
         const fromPackageJson = packageJsonContent && loadModuleFromPackageJson(packageJsonContent, extensions, candidate, failedLookupLocations, state);
         if (fromPackageJson) {
             return fromPackageJson;
@@ -901,7 +909,7 @@ namespace ts {
         failedLookupLocations: Push<string>,
         onlyRecordFailures: boolean,
         { host, traceEnabled }: ModuleResolutionState,
-    ): { packageJsonContent: PackageJson | undefined, packageId: PackageId | undefined } {
+    ): { found: boolean, packageJsonContent: PackageJsonPathFields | undefined, packageId: PackageId | undefined } {
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(nodeModuleDirectory, host);
         const packageJsonPath = pathToPackageJson(nodeModuleDirectory);
         if (directoryExists && host.fileExists(packageJsonPath)) {
@@ -912,7 +920,7 @@ namespace ts {
             const packageId: PackageId = typeof packageJsonContent.name === "string" && typeof packageJsonContent.version === "string"
                 ? { name: packageJsonContent.name, subModuleName, version: packageJsonContent.version }
                 : undefined;
-            return { packageJsonContent, packageId };
+            return { found: true, packageJsonContent, packageId };
         }
         else {
             if (directoryExists && traceEnabled) {
@@ -920,11 +928,11 @@ namespace ts {
             }
             // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
             failedLookupLocations.push(packageJsonPath);
-            return { packageJsonContent: undefined, packageId: undefined };
+            return { found: false, packageJsonContent: undefined, packageId: undefined };
         }
     }
 
-    function loadModuleFromPackageJson(jsonContent: PackageJson, extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, state: ModuleResolutionState): PathAndExtension | undefined {
+    function loadModuleFromPackageJson(jsonContent: PackageJsonPathFields, extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, state: ModuleResolutionState): PathAndExtension | undefined {
         const file = tryReadPackageJsonFields(extensions !== Extensions.JavaScript, jsonContent, candidate, state);
         if (!file) {
             return undefined;
@@ -976,18 +984,34 @@ namespace ts {
     }
 
     function loadModuleFromNodeModulesFolder(extensions: Extensions, moduleName: string, nodeModulesFolder: string, nodeModulesFolderExists: boolean, failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
-        const { top, rest } = getNameOfTopDirectory(moduleName);
-        const packageRootPath = combinePaths(nodeModulesFolder, top);
-        const { packageJsonContent, packageId } = getPackageJsonInfo(packageRootPath, rest, failedLookupLocations, !nodeModulesFolderExists, state);
         const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
+        // First look for a nested package.json, as in `node_modules/foo/bar/package.json`.
+        let packageJsonContent: PackageJsonPathFields | undefined;
+        let packageId: PackageId | undefined;
+        const packageInfo = getPackageJsonInfo(candidate, "", failedLookupLocations, /*onlyRecordFailures*/ !nodeModulesFolderExists, state);
+        if (packageInfo.found) {
+            ({ packageJsonContent, packageId } = packageInfo);
+        }
+        else {
+            const { packageName, rest } = getPackageName(moduleName);
+            if (rest !== "") { // If "rest" is empty, we just did this search above.
+                const packageRootPath = combinePaths(nodeModulesFolder, packageName);
+                // Don't use a "types" or "main" from here because we're not loading the root, but a subdirectory -- just here for the packageId.
+                packageId = getPackageJsonInfo(packageRootPath, rest, failedLookupLocations, !nodeModulesFolderExists, state).packageId;
+            }
+        }
         const pathAndExtension = loadModuleFromFile(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state) ||
             loadNodeModuleFromDirectoryWorker(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state, packageJsonContent);
         return withPackageId(packageId, pathAndExtension);
     }
 
-    function getNameOfTopDirectory(name: string): { top: string, rest: string } {
-        const idx = name.indexOf(directorySeparator);
-        return idx === -1 ? { top: name, rest: "" } : { top: name.slice(0, idx), rest: name.slice(idx + 1) };
+    /* @internal */
+    export function getPackageName(moduleName: string): { packageName: string, rest: string } {
+        let idx = moduleName.indexOf(directorySeparator);
+        if (moduleName[0] === "@") {
+            idx = moduleName.indexOf(directorySeparator, idx + 1);
+        }
+        return idx === -1 ? { packageName: moduleName, rest: "" } : { packageName: moduleName.slice(0, idx), rest: moduleName.slice(idx + 1) };
     }
 
     function loadModuleFromNodeModules(extensions: Extensions, moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState, cache: NonRelativeModuleNameResolutionCache): SearchResult<Resolved> {
@@ -1040,25 +1064,34 @@ namespace ts {
     const mangledScopedPackageSeparator = "__";
 
     /** For a scoped package, we must look in `@types/foo__bar` instead of `@types/@foo/bar`. */
-    function mangleScopedPackage(moduleName: string, state: ModuleResolutionState): string {
-        if (startsWith(moduleName, "@")) {
-            const replaceSlash = moduleName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
-            if (replaceSlash !== moduleName) {
-                const mangled = replaceSlash.slice(1); // Take off the "@"
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Scoped_package_detected_looking_in_0, mangled);
-                }
-                return mangled;
+    function mangleScopedPackage(packageName: string, state: ModuleResolutionState): string {
+        const mangled = getMangledNameForScopedPackage(packageName);
+        if (state.traceEnabled && mangled !== packageName) {
+            trace(state.host, Diagnostics.Scoped_package_detected_looking_in_0, mangled);
+        }
+        return mangled;
+    }
+
+    /* @internal */
+    export function getTypesPackageName(packageName: string): string {
+        return `@types/${getMangledNameForScopedPackage(packageName)}`;
+    }
+
+    function getMangledNameForScopedPackage(packageName: string): string {
+        if (startsWith(packageName, "@")) {
+            const replaceSlash = packageName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
+            if (replaceSlash !== packageName) {
+                return replaceSlash.slice(1); // Take off the "@"
             }
         }
-        return moduleName;
+        return packageName;
     }
 
     /* @internal */
     export function getPackageNameFromAtTypesDirectory(mangledName: string): string {
         const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
         if (withoutAtTypePrefix !== mangledName) {
-            return withoutAtTypePrefix.indexOf(mangledScopedPackageSeparator) !== -1 ?
+            return stringContains(withoutAtTypePrefix, mangledScopedPackageSeparator) ?
                 "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
                 withoutAtTypePrefix;
         }
@@ -1149,22 +1182,5 @@ namespace ts {
      */
     function toSearchResult<T>(value: T | undefined): SearchResult<T> {
         return value !== undefined ? { value } : undefined;
-    }
-
-    /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */
-    function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => SearchResult<T>): SearchResult<T> {
-        while (true) {
-            const result = callback(directory);
-            if (result !== undefined) {
-                return result;
-            }
-
-            const parentPath = getDirectoryPath(directory);
-            if (parentPath === directory) {
-                return undefined;
-            }
-
-            directory = parentPath;
-        }
     }
 }

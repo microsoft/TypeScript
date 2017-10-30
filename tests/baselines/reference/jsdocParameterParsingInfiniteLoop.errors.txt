@@ -1,4 +1,4 @@
-tests/cases/compiler/example.js(3,20): error TS1003: Identifier expected.
+tests/cases/compiler/example.js(3,20): error TS1110: Type expected.
 
 
 ==== tests/cases/compiler/example.js (1 errors) ====
@@ -6,6 +6,6 @@ tests/cases/compiler/example.js(3,20): error TS1003: Identifier expected.
     /**
      * @type {function(@foo)}
                        ~
-!!! error TS1003: Identifier expected.
+!!! error TS1110: Type expected.
      */
     let x;

@@ -1,0 +1,1967 @@
+=== tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts ===
+class privateClass {
+>privateClass : privateClass
+}
+
+export class publicClass {
+>publicClass : publicClass
+}
+
+export interface publicInterfaceWithPrivateParmeterTypes {
+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
+
+    new (param: privateClass): publicClass; // Error
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+    (param: privateClass): publicClass; // Error
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+    myMethod(param: privateClass): void; // Error
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+}
+
+export interface publicInterfaceWithPublicParmeterTypes {
+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
+
+    new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+    (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+    myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+}
+
+interface privateInterfaceWithPrivateParmeterTypes {
+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
+
+    new (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+    (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+    myMethod(param: privateClass): void;
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+}
+
+interface privateInterfaceWithPublicParmeterTypes {
+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
+
+    new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+    (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+    myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+}
+
+export class publicClassWithWithPrivateParmeterTypes {
+>publicClassWithWithPrivateParmeterTypes : publicClassWithWithPrivateParmeterTypes
+
+    static myPublicStaticMethod(param: privateClass) { // Error
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    myPublicMethod(param: privateClass) { // Error
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    constructor(param: privateClass, private param1: privateClass, public param2: privateClass) { // Error
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+    }
+}
+
+export class publicClassWithWithPublicParmeterTypes {
+>publicClassWithWithPublicParmeterTypes : publicClassWithWithPublicParmeterTypes
+
+    static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+    }
+}
+
+class privateClassWithWithPrivateParmeterTypes {
+>privateClassWithWithPrivateParmeterTypes : privateClassWithWithPrivateParmeterTypes
+
+    static myPublicStaticMethod(param: privateClass) {
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    myPublicMethod(param: privateClass) { 
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+    }
+}
+
+class privateClassWithWithPublicParmeterTypes {
+>privateClassWithWithPublicParmeterTypes : privateClassWithWithPublicParmeterTypes
+
+    static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+    }
+}
+
+export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
+>publicFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+}
+export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+>publicFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+}
+function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+>privateFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+}
+function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+>privateFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+}
+
+export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
+>publicAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>publicAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+>privateAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>privateAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+export interface publicInterfaceWithPrivateModuleParameterTypes {
+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
+
+    new (param: privateModule.publicClass): publicClass; // Error
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+    (param: privateModule.publicClass): publicClass; // Error
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+    myMethod(param: privateModule.publicClass): void; // Error
+>myMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+}
+export class publicClassWithPrivateModuleParameterTypes {
+>publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
+
+    static myPublicStaticMethod(param: privateModule.publicClass) { // Error
+>myPublicStaticMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    myPublicMethod(param: privateModule.publicClass) { // Error
+>myPublicMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) { // Error
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param1 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param2 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+}
+export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) { // Error
+>publicFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+}
+export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void; // Error
+>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+
+interface privateInterfaceWithPrivateModuleParameterTypes {
+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
+
+    new (param: privateModule.publicClass): publicClass;
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+    (param: privateModule.publicClass): publicClass;
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+    myMethod(param: privateModule.publicClass): void;
+>myMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+}
+class privateClassWithPrivateModuleParameterTypes {
+>privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
+
+    static myPublicStaticMethod(param: privateModule.publicClass) {
+>myPublicStaticMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    myPublicMethod(param: privateModule.publicClass) {
+>myPublicMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param1 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param2 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+}
+function privateFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) {
+>privateFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+}
+declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+>privateAmbientFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+
+export module publicModule {
+>publicModule : typeof publicModule
+
+    class privateClass {
+>privateClass : privateClass
+    }
+
+    export class publicClass {
+>publicClass : publicClass
+    }
+
+
+    export interface publicInterfaceWithPrivateParmeterTypes {
+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
+
+        new (param: privateClass): publicClass; // Error
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+        (param: privateClass): publicClass; // Error
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+        myMethod(param: privateClass): void; // Error
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+
+    export interface publicInterfaceWithPublicParmeterTypes {
+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
+
+        new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+
+    interface privateInterfaceWithPrivateParmeterTypes {
+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
+
+        new (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+        (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+        myMethod(param: privateClass): void;
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+
+    interface privateInterfaceWithPublicParmeterTypes {
+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
+
+        new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+
+    export class publicClassWithWithPrivateParmeterTypes {
+>publicClassWithWithPrivateParmeterTypes : publicClassWithWithPrivateParmeterTypes
+
+        static myPublicStaticMethod(param: privateClass) { // Error
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        myPublicMethod(param: privateClass) { // Error
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        constructor(param: privateClass, private param1: privateClass, public param2: privateClass) { // Error
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+        }
+    }
+
+    export class publicClassWithWithPublicParmeterTypes {
+>publicClassWithWithPublicParmeterTypes : publicClassWithWithPublicParmeterTypes
+
+        static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+        }
+    }
+
+    class privateClassWithWithPrivateParmeterTypes {
+>privateClassWithWithPrivateParmeterTypes : privateClassWithWithPrivateParmeterTypes
+
+        static myPublicStaticMethod(param: privateClass) {
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        myPublicMethod(param: privateClass) {
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+        }
+    }
+
+    class privateClassWithWithPublicParmeterTypes {
+>privateClassWithWithPublicParmeterTypes : privateClassWithWithPublicParmeterTypes
+
+        static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+        }
+    }
+
+    export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
+>publicFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+>publicFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+>privateFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+>privateFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+
+    export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
+>publicAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+    export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>publicAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+    declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+>privateAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+    declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>privateAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+    export interface publicInterfaceWithPrivateModuleParameterTypes {
+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
+
+        new (param: privateModule.publicClass): publicClass; // Error
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+        (param: privateModule.publicClass): publicClass; // Error
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+        myMethod(param: privateModule.publicClass): void; // Error
+>myMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    export class publicClassWithPrivateModuleParameterTypes {
+>publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
+
+        static myPublicStaticMethod(param: privateModule.publicClass) { // Error
+>myPublicStaticMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+        myPublicMethod(param: privateModule.publicClass) { // Error
+>myPublicMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+        constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) { // Error
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param1 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param2 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+    }
+    export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) { // Error
+>publicFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void; // Error
+>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+
+    interface privateInterfaceWithPrivateModuleParameterTypes {
+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
+
+        new (param: privateModule.publicClass): publicClass;
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+        (param: privateModule.publicClass): publicClass;
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+        myMethod(param: privateModule.publicClass): void;
+>myMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    class privateClassWithPrivateModuleParameterTypes {
+>privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
+
+        static myPublicStaticMethod(param: privateModule.publicClass) {
+>myPublicStaticMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+        myPublicMethod(param: privateModule.publicClass) {
+>myPublicMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+        constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param1 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param2 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+    }
+    function privateFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) {
+>privateFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+>privateAmbientFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+
+}
+
+module privateModule {
+>privateModule : typeof privateModule
+
+    class privateClass {
+>privateClass : privateClass
+    }
+
+    export class publicClass {
+>publicClass : publicClass
+    }
+
+    export interface publicInterfaceWithPrivateParmeterTypes {
+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
+
+        new (param: privateClass): publicClass;
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+        (param: privateClass): publicClass;
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+        myMethod(param: privateClass): void;
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+
+    export interface publicInterfaceWithPublicParmeterTypes {
+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
+
+        new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+
+    interface privateInterfaceWithPrivateParmeterTypes {
+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
+
+        new (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+        (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+        myMethod(param: privateClass): void;
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+
+    interface privateInterfaceWithPublicParmeterTypes {
+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
+
+        new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+
+    export class publicClassWithWithPrivateParmeterTypes {
+>publicClassWithWithPrivateParmeterTypes : publicClassWithWithPrivateParmeterTypes
+
+        static myPublicStaticMethod(param: privateClass) {
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        myPublicMethod(param: privateClass) {
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+        }
+    }
+
+    export class publicClassWithWithPublicParmeterTypes {
+>publicClassWithWithPublicParmeterTypes : publicClassWithWithPublicParmeterTypes
+
+        static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+        }
+    }
+
+    class privateClassWithWithPrivateParmeterTypes {
+>privateClassWithWithPrivateParmeterTypes : privateClassWithWithPrivateParmeterTypes
+
+        static myPublicStaticMethod(param: privateClass) {
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        myPublicMethod(param: privateClass) {
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+        }
+    }
+
+    class privateClassWithWithPublicParmeterTypes {
+>privateClassWithWithPublicParmeterTypes : privateClassWithWithPublicParmeterTypes
+
+        static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+        }
+    }
+
+    export function publicFunctionWithPrivateParmeterTypes(param: privateClass) {
+>publicFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+>publicFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+>privateFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+>privateFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+
+    export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+>publicAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+    export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>publicAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+    declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+>privateAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+    declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>privateAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+    export interface publicInterfaceWithPrivateModuleParameterTypes {
+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
+
+        new (param: privateModule.publicClass): publicClass;
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>publicClass : publicClass
+
+        (param: privateModule.publicClass): publicClass;
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>publicClass : publicClass
+
+        myMethod(param: privateModule.publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+    }
+    export class publicClassWithPrivateModuleParameterTypes {
+>publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
+
+        static myPublicStaticMethod(param: privateModule.publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+        myPublicMethod(param: privateModule.publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+        constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>param1 : publicClass
+>privateModule : any
+>publicClass : publicClass
+>param2 : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+    }
+    export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) {
+>publicFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+    }
+    export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+
+    interface privateInterfaceWithPrivateModuleParameterTypes {
+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
+
+        new (param: privateModule.publicClass): publicClass;
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>publicClass : publicClass
+
+        (param: privateModule.publicClass): publicClass;
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>publicClass : publicClass
+
+        myMethod(param: privateModule.publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+    }
+    class privateClassWithPrivateModuleParameterTypes {
+>privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
+
+        static myPublicStaticMethod(param: privateModule.publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+        myPublicMethod(param: privateModule.publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+        constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>param1 : publicClass
+>privateModule : any
+>publicClass : publicClass
+>param2 : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+    }
+    function privateFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) {
+>privateFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+    }
+    declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+>privateAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+}
+
+=== tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts ===
+class publicClassInGlobal {
+>publicClassInGlobal : publicClassInGlobal
+}
+interface publicInterfaceWithPublicParmeterTypesInGlobal {
+>publicInterfaceWithPublicParmeterTypesInGlobal : publicInterfaceWithPublicParmeterTypesInGlobal
+
+    new (param: publicClassInGlobal): publicClassInGlobal;
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+
+    (param: publicClassInGlobal): publicClassInGlobal;
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+
+    myMethod(param: publicClassInGlobal): void;
+>myMethod : (param: publicClassInGlobal) => void
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+}
+class publicClassWithWithPublicParmeterTypesInGlobal {
+>publicClassWithWithPublicParmeterTypesInGlobal : publicClassWithWithPublicParmeterTypesInGlobal
+
+    static myPublicStaticMethod(param: publicClassInGlobal) {
+>myPublicStaticMethod : (param: publicClassInGlobal) => void
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+    }
+    private static myPrivateStaticMethod(param: publicClassInGlobal) {
+>myPrivateStaticMethod : (param: publicClassInGlobal) => void
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+    }
+    myPublicMethod(param: publicClassInGlobal) {
+>myPublicMethod : (param: publicClassInGlobal) => void
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+    }
+    private myPrivateMethod(param: publicClassInGlobal) {
+>myPrivateMethod : (param: publicClassInGlobal) => void
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+    }
+    constructor(param: publicClassInGlobal, private param1: publicClassInGlobal, public param2: publicClassInGlobal) {
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+>param1 : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+>param2 : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+    }
+}
+function publicFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGlobal) {
+>publicFunctionWithPublicParmeterTypesInGlobal : (param: publicClassInGlobal) => void
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+}
+declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGlobal): void;
+>publicAmbientFunctionWithPublicParmeterTypesInGlobal : (param: publicClassInGlobal) => void
+>param : publicClassInGlobal
+>publicClassInGlobal : publicClassInGlobal
+
+module publicModuleInGlobal {
+>publicModuleInGlobal : typeof publicModuleInGlobal
+
+    class privateClass {
+>privateClass : privateClass
+    }
+
+    export class publicClass {
+>publicClass : publicClass
+    }
+
+    module privateModule {
+>privateModule : typeof privateModule
+
+        class privateClass {
+>privateClass : privateClass
+        }
+
+        export class publicClass {
+>publicClass : publicClass
+        }
+
+        export interface publicInterfaceWithPrivateParmeterTypes {
+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
+
+            new (param: privateClass): publicClass;
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+            (param: privateClass): publicClass;
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+            myMethod(param: privateClass): void;
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+
+        export interface publicInterfaceWithPublicParmeterTypes {
+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
+
+            new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+            (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+            myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+
+        interface privateInterfaceWithPrivateParmeterTypes {
+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
+
+            new (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+            (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+            myMethod(param: privateClass): void;
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+
+        interface privateInterfaceWithPublicParmeterTypes {
+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
+
+            new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+            (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+            myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+
+        export class publicClassWithWithPrivateParmeterTypes {
+>publicClassWithWithPrivateParmeterTypes : publicClassWithWithPrivateParmeterTypes
+
+            static myPublicStaticMethod(param: privateClass) {
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+            }
+            private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+            }
+            myPublicMethod(param: privateClass) {
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+            }
+            private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+            }
+            constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+            }
+        }
+
+        export class publicClassWithWithPublicParmeterTypes {
+>publicClassWithWithPublicParmeterTypes : publicClassWithWithPublicParmeterTypes
+
+            static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+            }
+            private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+            }
+            myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+            }
+            private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+            }
+            constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+            }
+        }
+
+        class privateClassWithWithPrivateParmeterTypes {
+>privateClassWithWithPrivateParmeterTypes : privateClassWithWithPrivateParmeterTypes
+
+            static myPublicStaticMethod(param: privateClass) {
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+            }
+            private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+            }
+            myPublicMethod(param: privateClass) {
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+            }
+            private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+            }
+            constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+            }
+        }
+
+        class privateClassWithWithPublicParmeterTypes {
+>privateClassWithWithPublicParmeterTypes : privateClassWithWithPublicParmeterTypes
+
+            static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+            }
+            private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+            }
+            myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+            }
+            private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+            }
+            constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+            }
+        }
+
+        export function publicFunctionWithPrivateParmeterTypes(param: privateClass) {
+>publicFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+>publicFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+>privateFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+>privateFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+
+        export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+>publicAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+        export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>publicAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+        declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+>privateAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+        declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>privateAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+        export interface publicInterfaceWithPrivateModuleParameterTypes {
+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
+
+            new (param: privateModule.publicClass): publicClass;
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>publicClass : publicClass
+
+            (param: privateModule.publicClass): publicClass;
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>publicClass : publicClass
+
+            myMethod(param: privateModule.publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+        export class publicClassWithPrivateModuleParameterTypes {
+>publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
+
+            static myPublicStaticMethod(param: privateModule.publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+            }
+            myPublicMethod(param: privateModule.publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+            }
+            constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>param1 : publicClass
+>privateModule : any
+>publicClass : publicClass
+>param2 : publicClass
+>privateModule : any
+>publicClass : publicClass
+            }
+        }
+        export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) {
+>publicFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+        export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+
+        interface privateInterfaceWithPrivateModuleParameterTypes {
+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
+
+            new (param: privateModule.publicClass): publicClass;
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>publicClass : publicClass
+
+            (param: privateModule.publicClass): publicClass;
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>publicClass : publicClass
+
+            myMethod(param: privateModule.publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+        class privateClassWithPrivateModuleParameterTypes {
+>privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
+
+            static myPublicStaticMethod(param: privateModule.publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+            }
+            myPublicMethod(param: privateModule.publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+            }
+            constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+>param1 : publicClass
+>privateModule : any
+>publicClass : publicClass
+>param2 : publicClass
+>privateModule : any
+>publicClass : publicClass
+            }
+        }
+        function privateFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) {
+>privateFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+        }
+        declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+>privateAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
+>param : publicClass
+>privateModule : any
+>publicClass : publicClass
+    }
+
+    export interface publicInterfaceWithPrivateParmeterTypes {
+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
+
+        new (param: privateClass): publicClass; // Error
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+        (param: privateClass): publicClass; // Error
+>param : privateClass
+>privateClass : privateClass
+>publicClass : publicClass
+
+        myMethod(param: privateClass): void; // Error
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+
+    export interface publicInterfaceWithPublicParmeterTypes {
+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
+
+        new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+
+    interface privateInterfaceWithPrivateParmeterTypes {
+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
+
+        new (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+        (param: privateClass): privateClass;
+>param : privateClass
+>privateClass : privateClass
+>privateClass : privateClass
+
+        myMethod(param: privateClass): void;
+>myMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+
+    interface privateInterfaceWithPublicParmeterTypes {
+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
+
+        new (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        (param: publicClass): publicClass;
+>param : publicClass
+>publicClass : publicClass
+>publicClass : publicClass
+
+        myMethod(param: publicClass): void;
+>myMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+
+    export class publicClassWithWithPrivateParmeterTypes {
+>publicClassWithWithPrivateParmeterTypes : publicClassWithWithPrivateParmeterTypes
+
+        static myPublicStaticMethod(param: privateClass) { // Error
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        myPublicMethod(param: privateClass) { // Error
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        constructor(param: privateClass, private param1: privateClass, public param2: privateClass) { // Error
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+        }
+    }
+
+    export class publicClassWithWithPublicParmeterTypes {
+>publicClassWithWithPublicParmeterTypes : publicClassWithWithPublicParmeterTypes
+
+        static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+        }
+    }
+
+    class privateClassWithWithPrivateParmeterTypes {
+>privateClassWithWithPrivateParmeterTypes : privateClassWithWithPrivateParmeterTypes
+
+        static myPublicStaticMethod(param: privateClass) {
+>myPublicStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private static myPrivateStaticMethod(param: privateClass) {
+>myPrivateStaticMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        myPublicMethod(param: privateClass) {
+>myPublicMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        private myPrivateMethod(param: privateClass) {
+>myPrivateMethod : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+        }
+        constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
+>param : privateClass
+>privateClass : privateClass
+>param1 : privateClass
+>privateClass : privateClass
+>param2 : privateClass
+>privateClass : privateClass
+        }
+    }
+
+    class privateClassWithWithPublicParmeterTypes {
+>privateClassWithWithPublicParmeterTypes : privateClassWithWithPublicParmeterTypes
+
+        static myPublicStaticMethod(param: publicClass) {
+>myPublicStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private static myPrivateStaticMethod(param: publicClass) {
+>myPrivateStaticMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        myPublicMethod(param: publicClass) {
+>myPublicMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        private myPrivateMethod(param: publicClass) {
+>myPrivateMethod : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+        }
+        constructor(param: publicClass, private param1: publicClass, public param2: publicClass) {
+>param : publicClass
+>publicClass : publicClass
+>param1 : publicClass
+>publicClass : publicClass
+>param2 : publicClass
+>publicClass : publicClass
+        }
+    }
+
+    export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
+>publicFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+>publicFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+    function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+>privateFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+    }
+    function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+>privateFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+    }
+
+    export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
+>publicAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+    export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>publicAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+    declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+>privateAmbientFunctionWithPrivateParmeterTypes : (param: privateClass) => void
+>param : privateClass
+>privateClass : privateClass
+
+    declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+>privateAmbientFunctionWithPublicParmeterTypes : (param: publicClass) => void
+>param : publicClass
+>publicClass : publicClass
+
+    export interface publicInterfaceWithPrivateModuleParameterTypes {
+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
+
+        new (param: privateModule.publicClass): publicClass; // Error
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+        (param: privateModule.publicClass): publicClass; // Error
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+        myMethod(param: privateModule.publicClass): void; // Error
+>myMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    export class publicClassWithPrivateModuleParameterTypes {
+>publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
+
+        static myPublicStaticMethod(param: privateModule.publicClass) { // Error
+>myPublicStaticMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+        myPublicMethod(param: privateModule.publicClass) { // Error
+>myPublicMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+        constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) { // Error
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param1 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param2 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+    }
+    export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) { // Error
+>publicFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void; // Error
+>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+
+    interface privateInterfaceWithPrivateModuleParameterTypes {
+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
+
+        new (param: privateModule.publicClass): publicClass;
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+        (param: privateModule.publicClass): publicClass;
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>publicClass : publicClass
+
+        myMethod(param: privateModule.publicClass): void;
+>myMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    class privateClassWithPrivateModuleParameterTypes {
+>privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
+
+        static myPublicStaticMethod(param: privateModule.publicClass) {
+>myPublicStaticMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+        myPublicMethod(param: privateModule.publicClass) {
+>myPublicMethod : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+        constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param1 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+>param2 : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+        }
+    }
+    function privateFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) {
+>privateFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+    }
+    declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+>privateAmbientFunctionWithPrivateModuleParameterTypes : (param: privateModule.publicClass) => void
+>param : privateModule.publicClass
+>privateModule : any
+>publicClass : privateModule.publicClass
+}

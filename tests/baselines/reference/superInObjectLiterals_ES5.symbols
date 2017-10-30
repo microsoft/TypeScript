@@ -1,0 +1,109 @@
+=== tests/cases/compiler/superInObjectLiterals_ES5.ts ===
+var obj = {
+>obj : Symbol(obj, Decl(superInObjectLiterals_ES5.ts, 0, 3))
+
+    __proto__: {
+>__proto__ : Symbol(__proto__, Decl(superInObjectLiterals_ES5.ts, 0, 11))
+
+        method() {
+>method : Symbol(method, Decl(superInObjectLiterals_ES5.ts, 1, 16))
+        }
+    },
+    method() {
+>method : Symbol(method, Decl(superInObjectLiterals_ES5.ts, 4, 6))
+
+        super.method();
+    },
+    get prop() {
+>prop : Symbol(prop, Decl(superInObjectLiterals_ES5.ts, 7, 6), Decl(superInObjectLiterals_ES5.ts, 11, 6))
+
+        super.method();
+        return 10;
+    },
+    set prop(value) {
+>prop : Symbol(prop, Decl(superInObjectLiterals_ES5.ts, 7, 6), Decl(superInObjectLiterals_ES5.ts, 11, 6))
+>value : Symbol(value, Decl(superInObjectLiterals_ES5.ts, 12, 13))
+
+        super.method();
+    },
+    p1: function () {
+>p1 : Symbol(p1, Decl(superInObjectLiterals_ES5.ts, 14, 6))
+
+        super.method();
+    },
+    p2: function f() {
+>p2 : Symbol(p2, Decl(superInObjectLiterals_ES5.ts, 17, 6))
+>f : Symbol(f, Decl(superInObjectLiterals_ES5.ts, 18, 7))
+
+        super.method();
+    },
+    p3: () => {
+>p3 : Symbol(p3, Decl(superInObjectLiterals_ES5.ts, 20, 6))
+
+        super.method();
+    }
+};
+
+class A {
+>A : Symbol(A, Decl(superInObjectLiterals_ES5.ts, 24, 2))
+
+    method() { }
+>method : Symbol(A.method, Decl(superInObjectLiterals_ES5.ts, 26, 9))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(superInObjectLiterals_ES5.ts, 28, 1))
+>A : Symbol(A, Decl(superInObjectLiterals_ES5.ts, 24, 2))
+
+    f() {
+>f : Symbol(B.f, Decl(superInObjectLiterals_ES5.ts, 30, 19))
+
+        var obj = {
+>obj : Symbol(obj, Decl(superInObjectLiterals_ES5.ts, 32, 11))
+
+            __proto__: {
+>__proto__ : Symbol(__proto__, Decl(superInObjectLiterals_ES5.ts, 32, 19))
+
+                method() {
+>method : Symbol(method, Decl(superInObjectLiterals_ES5.ts, 33, 24))
+                }
+            },
+            method() {
+>method : Symbol(method, Decl(superInObjectLiterals_ES5.ts, 36, 14))
+
+                super.method();
+            },
+            get prop() {
+>prop : Symbol(prop, Decl(superInObjectLiterals_ES5.ts, 39, 14), Decl(superInObjectLiterals_ES5.ts, 43, 14))
+
+                super.method();
+                return 10;
+            },
+            set prop(value) {
+>prop : Symbol(prop, Decl(superInObjectLiterals_ES5.ts, 39, 14), Decl(superInObjectLiterals_ES5.ts, 43, 14))
+>value : Symbol(value, Decl(superInObjectLiterals_ES5.ts, 44, 21))
+
+                super.method();
+            },
+            p1: function () {
+>p1 : Symbol(p1, Decl(superInObjectLiterals_ES5.ts, 46, 14))
+
+                super.method();
+            },
+            p2: function f() {
+>p2 : Symbol(p2, Decl(superInObjectLiterals_ES5.ts, 49, 14))
+>f : Symbol(f, Decl(superInObjectLiterals_ES5.ts, 50, 15))
+
+                super.method();
+            },
+            p3: () => {
+>p3 : Symbol(p3, Decl(superInObjectLiterals_ES5.ts, 52, 14))
+
+                super.method();
+>super.method : Symbol(A.method, Decl(superInObjectLiterals_ES5.ts, 26, 9))
+>super : Symbol(A, Decl(superInObjectLiterals_ES5.ts, 24, 2))
+>method : Symbol(A.method, Decl(superInObjectLiterals_ES5.ts, 26, 9))
+            }
+        };
+    }
+}

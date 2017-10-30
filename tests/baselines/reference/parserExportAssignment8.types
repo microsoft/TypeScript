@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment8.ts ===
+export = B;
+>B : No type information available!
+
+export class C {
+>C : C
+}

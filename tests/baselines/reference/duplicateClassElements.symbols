@@ -1,0 +1,78 @@
+=== tests/cases/compiler/duplicateClassElements.ts ===
+class a {
+>a : Symbol(a, Decl(duplicateClassElements.ts, 0, 0))
+
+    public a;
+>a : Symbol(a.a, Decl(duplicateClassElements.ts, 0, 9), Decl(duplicateClassElements.ts, 1, 13))
+
+    public a;
+>a : Symbol(a.a, Decl(duplicateClassElements.ts, 0, 9), Decl(duplicateClassElements.ts, 1, 13))
+
+    public b() {
+>b : Symbol(a.b, Decl(duplicateClassElements.ts, 2, 13), Decl(duplicateClassElements.ts, 4, 5))
+    }
+    public b() {
+>b : Symbol(a.b, Decl(duplicateClassElements.ts, 2, 13), Decl(duplicateClassElements.ts, 4, 5))
+    }
+    public x;
+>x : Symbol(a.x, Decl(duplicateClassElements.ts, 6, 5))
+
+    get x() {
+>x : Symbol(a.x, Decl(duplicateClassElements.ts, 7, 13))
+
+        return 10;
+    }
+    set x(_x: number) {
+>x : Symbol(a.x, Decl(duplicateClassElements.ts, 10, 5))
+>_x : Symbol(_x, Decl(duplicateClassElements.ts, 11, 10))
+    }
+
+    get y() {
+>y : Symbol(a.y, Decl(duplicateClassElements.ts, 12, 5), Decl(duplicateClassElements.ts, 16, 5))
+
+        return "Hello";
+    }
+    set y(_y: string) {
+>y : Symbol(a.y, Decl(duplicateClassElements.ts, 12, 5), Decl(duplicateClassElements.ts, 16, 5))
+>_y : Symbol(_y, Decl(duplicateClassElements.ts, 17, 10))
+    }
+
+    public z() {
+>z : Symbol(a.z, Decl(duplicateClassElements.ts, 18, 5))
+    }
+    get z() {
+>z : Symbol(a.z, Decl(duplicateClassElements.ts, 21, 5))
+
+        return "Hello";
+    }
+    set z(_y: string) {
+>z : Symbol(a.z, Decl(duplicateClassElements.ts, 24, 5))
+>_y : Symbol(_y, Decl(duplicateClassElements.ts, 25, 10))
+    }
+
+    get x2() {
+>x2 : Symbol(a.x2, Decl(duplicateClassElements.ts, 26, 5), Decl(duplicateClassElements.ts, 30, 5), Decl(duplicateClassElements.ts, 32, 5))
+
+        return 10;
+    }
+    set x2(_x: number) {
+>x2 : Symbol(a.x2, Decl(duplicateClassElements.ts, 26, 5), Decl(duplicateClassElements.ts, 30, 5), Decl(duplicateClassElements.ts, 32, 5))
+>_x : Symbol(_x, Decl(duplicateClassElements.ts, 31, 11))
+    }
+    public x2;
+>x2 : Symbol(a.x2, Decl(duplicateClassElements.ts, 26, 5), Decl(duplicateClassElements.ts, 30, 5), Decl(duplicateClassElements.ts, 32, 5))
+
+    get z2() {
+>z2 : Symbol(a.z2, Decl(duplicateClassElements.ts, 33, 14), Decl(duplicateClassElements.ts, 37, 5))
+
+        return "Hello";
+    }
+    set z2(_y: string) {
+>z2 : Symbol(a.z2, Decl(duplicateClassElements.ts, 33, 14), Decl(duplicateClassElements.ts, 37, 5))
+>_y : Symbol(_y, Decl(duplicateClassElements.ts, 38, 11))
+    }
+    public z2() {
+>z2 : Symbol(a.z2, Decl(duplicateClassElements.ts, 39, 5))
+    }
+
+}

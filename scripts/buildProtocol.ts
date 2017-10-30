@@ -51,22 +51,25 @@ class DeclarationsWalker {
             return this.processType((<any>type).typeArguments[0]);
         }
         else {
-            for (const decl of s.getDeclarations()) {
-                const sourceFile = decl.getSourceFile();
-                if (sourceFile === this.protocolFile || path.basename(sourceFile.fileName) === "lib.d.ts") {
-                    return;
-                }
-                if (decl.kind === ts.SyntaxKind.EnumDeclaration && !isStringEnum(decl as ts.EnumDeclaration)) {
-                    this.removedTypes.push(type);
-                    return;
-                }
-                else {
-                    // splice declaration in final d.ts file
-                    let text = decl.getFullText();
-                    this.text += `${text}\n`;
-                    // recursively pull all dependencies into result dts file
+            const declarations = s.getDeclarations();
+            if (declarations) {
+                for (const decl of declarations) {
+                    const sourceFile = decl.getSourceFile();
+                    if (sourceFile === this.protocolFile || path.basename(sourceFile.fileName) === "lib.d.ts") {
+                        return;
+                    }
+                    if (decl.kind === ts.SyntaxKind.EnumDeclaration && !isStringEnum(decl as ts.EnumDeclaration)) {
+                        this.removedTypes.push(type);
+                        return;
+                    }
+                    else {
+                        // splice declaration in final d.ts file
+                        let text = decl.getFullText();
+                        this.text += `${text}\n`;
+                        // recursively pull all dependencies into result dts file
 
-                    this.visitTypeNodes(decl);
+                        this.visitTypeNodes(decl);
+                    }
                 }
             }
         }
