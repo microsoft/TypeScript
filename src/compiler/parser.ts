@@ -5104,7 +5104,7 @@ namespace ts {
             const fullStart = getNodePos();
             const decorators = parseDecorators();
             const modifiers = parseModifiers();
-            if (modifiers && modifiers.some(m => m.kind === SyntaxKind.DeclareKeyword)) {
+            if (some(modifiers, m => m.kind === SyntaxKind.DeclareKeyword)) {
                 for (const m of modifiers) {
                     m.flags |= NodeFlags.Ambient;
                 }

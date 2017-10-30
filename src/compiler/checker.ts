@@ -17057,7 +17057,7 @@ namespace ts {
             return type;
         }
 
-        function isCommonJsRequire(node: Node) {
+        function isCommonJsRequire(node: Node): boolean {
             if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                 return false;
             }
@@ -17081,7 +17081,7 @@ namespace ts {
             if (targetDeclarationKind !== SyntaxKind.Unknown) {
                 const decl = getDeclarationOfKind(resolvedRequire, targetDeclarationKind);
                 // function/variable declaration should be ambient
-                return decl.flags & NodeFlags.Ambient;
+                return !!(decl.flags & NodeFlags.Ambient);
             }
             return false;
         }
@@ -22724,7 +22724,7 @@ namespace ts {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     markExportAsReferenced(node);
                 }
-                if (isInternalModuleImportEqualsDeclaration(node)) {
+                if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
                     const target = resolveAlias(getSymbolOfNode(node));
                     if (target !== unknownSymbol) {
                         if (target.flags & SymbolFlags.Value) {
@@ -22740,7 +22740,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (modulekind >= ModuleKind.ES2015 && !((node as ImportEqualsDeclaration).flags & NodeFlags.Ambient)) {
+                    if (modulekind >= ModuleKind.ES2015 && !(node.flags & NodeFlags.Ambient)) {
                         // Import equals declaration is deprecated in es6 or above
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
