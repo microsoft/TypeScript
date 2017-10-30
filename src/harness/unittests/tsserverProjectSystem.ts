@@ -1496,6 +1496,26 @@ namespace ts.projectSystem {
             }
         });
 
+        it("ignores files excluded by a legacy safe type list", () => {
+            const file1 = {
+                path: "/a/b/bliss.js",
+                content: "let x = 5"
+            };
+            const file2 = {
+                path: "/a/b/foo.js",
+                content: ""
+            };
+            const host = createServerHost([file1, file2, customTypesMap]);
+            const projectService = createProjectService(host);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]), typeAcquisition: { enable: true } });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(), [file2.path]);
+            } finally {
+                projectService.resetSafeList();
+            }
+        });
+
         it("open file become a part of configured project if it is referenced from root file", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
