@@ -8999,16 +8999,16 @@ namespace ts {
              */
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 if (relation !== comparableRelation) {
-                    return isRelatedToInternal(source, target, reportErrors, headMessage);
+                    return isRelatedToMonodirectional(source, target, reportErrors, headMessage);
                 }
-                const first = isRelatedToInternal(target, source, /*reportErrors*/ false, headMessage);
+                const first = isRelatedToMonodirectional(target, source, /*reportErrors*/ false, headMessage);
                 if (first === Ternary.True) {
                     return first;
                 }
-                return isRelatedToInternal(source, target, reportErrors, headMessage);
+                return isRelatedToMonodirectional(source, target, reportErrors, headMessage);
             }
 
-            function isRelatedToInternal(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
+            function isRelatedToMonodirectional(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
                     source = (<LiteralType>source).regularType;
                 }
@@ -9215,14 +9215,14 @@ namespace ts {
                     return Ternary.True;
                 }
                 for (const type of targetTypes) {
-                    const related = isRelatedTo(source, type, /*reportErrors*/ false);
+                    const related = isRelatedToMonodirectional(source, type, /*reportErrors*/ false);
                     if (related) {
                         return related;
                     }
                 }
                 if (reportErrors) {
                     const discriminantType = findMatchingDiscriminantType(source, target);
-                    isRelatedTo(source, discriminantType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
+                    isRelatedToMonodirectional(source, discriminantType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
                 }
                 return Ternary.False;
             }
@@ -9252,7 +9252,7 @@ namespace ts {
                 let result = Ternary.True;
                 const targetTypes = target.types;
                 for (const targetType of targetTypes) {
-                    const related = isRelatedTo(source, targetType, reportErrors);
+                    const related = isRelatedToMonodirectional(source, targetType, reportErrors);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -9268,7 +9268,7 @@ namespace ts {
                 }
                 const len = sourceTypes.length;
                 for (let i = 0; i < len; i++) {
-                    const related = isRelatedTo(sourceTypes[i], target, reportErrors && i === len - 1);
+                    const related = isRelatedToMonodirectional(sourceTypes[i], target, reportErrors && i === len - 1);
                     if (related) {
                         return related;
                     }
@@ -9280,7 +9280,7 @@ namespace ts {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
                 for (const sourceType of sourceTypes) {
-                    const related = isRelatedTo(sourceType, target, reportErrors);
+                    const related = isRelatedToMonodirectional(sourceType, target, reportErrors);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -9471,7 +9471,7 @@ namespace ts {
                             }
                             // Report constraint errors only if the constraint is not the empty object type
                             const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
-                            if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
+                            if (result = isRelatedToMonodirectional(constraint, target, reportConstraintErrors)) {
                                 errorInfo = saveErrorInfo;
                                 return result;
                             }
