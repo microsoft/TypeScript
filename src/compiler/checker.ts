@@ -7431,9 +7431,12 @@ namespace ts {
             return false;
         }
 
-        function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
-            for (const type of types) {
-                if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
+        function isSubtypeOfAny(source: Type, targets: Type[]): boolean {
+            for (const target of targets) {
+                if (source !== target && isTypeSubtypeOf(source, target) && (
+                    !(getObjectFlags(source) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) ||
+                    !(getObjectFlags(target) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) ||
+                    isTypeDerivedFrom(source, target))) {
                     return true;
                 }
             }
@@ -8556,13 +8559,15 @@ namespace ts {
             return isTypeRelatedTo(source, target, assignableRelation);
         }
 
-        // An object type S is considered to be an instance of an object type T if
-        // S is a union type and every constituent of S is an instance of T,
-        // T is a union type and S is an instance of at least one constituent of T, or
+        // An object type S is considered to be derived from an object type T if
+        // S is a union type and every constituent of S is derived from T,
+        // T is a union type and S is derived from at least one constituent of T, or
         // T occurs directly or indirectly in an 'extends' clause of S.
-        function isTypeInstanceOf(source: Type, target: Type): boolean {
-            return source.flags & TypeFlags.Union ? every((<UnionType>source).types, t => isTypeInstanceOf(t, target)) :
-                target.flags & TypeFlags.Union ? some((<UnionType>target).types, t => isTypeInstanceOf(source, t)) :
+        // Note that this check ignores type parameters and only considers the
+        // inheritance hierarchy.
+        function isTypeDerivedFrom(source: Type, target: Type): boolean {
+            return source.flags & TypeFlags.Union ? every((<UnionType>source).types, t => isTypeDerivedFrom(t, target)) :
+                target.flags & TypeFlags.Union ? some((<UnionType>target).types, t => isTypeDerivedFrom(source, t)) :
                 hasBaseType(source, getTargetType(target));
         }
 
@@ -12411,7 +12416,7 @@ namespace ts {
                 }
 
                 if (targetType) {
-                    return getNarrowedType(type, targetType, assumeTrue, isTypeInstanceOf);
+                    return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
                 }
 
                 return type;
