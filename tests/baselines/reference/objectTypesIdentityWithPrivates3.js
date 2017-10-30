@@ -1,5 +1,5 @@
 //// [objectTypesIdentityWithPrivates3.ts]
-interface T1 { }
+interface T1 { y }
 interface T2 { z }
 
 class C1<T> {
