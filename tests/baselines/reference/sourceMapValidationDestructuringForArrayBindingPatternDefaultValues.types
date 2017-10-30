@@ -95,7 +95,7 @@ for (let [, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
 }
 for (let [, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 > : undefined
->nameA : "trimmer" | "name"
+>nameA : string
 >"name" : "name"
 >[2, "trimmer", "trimming"] : [number, "trimmer", string]
 >2 : 2
@@ -114,7 +114,7 @@ for (let [, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA : "trimmer" | "name"
+>nameA : string
 }
 for (let [, [
 > : undefined
@@ -183,11 +183,11 @@ for (let [, [
 > : undefined
 
     primarySkillA = "primary",
->primarySkillA : "trimming" | "primary" | "none"
+>primarySkillA : string
 >"primary" : "primary"
 
     secondarySkillA = "secondary"
->secondarySkillA : "edging" | "secondary" | "none"
+>secondarySkillA : string
 >"secondary" : "secondary"
 
 ] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
@@ -212,7 +212,7 @@ for (let [, [
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->primarySkillA : "trimming" | "primary" | "none"
+>primarySkillA : string
 }
 
 for (let [numberB = -1] = robotA, i = 0; i < 1; i++) {
@@ -257,7 +257,7 @@ for (let [numberB = -1] = getRobot(), i = 0; i < 1; i++) {
 >numberB : number
 }
 for (let [numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->numberB : 2 | -1
+>numberB : number
 >-1 : -1
 >1 : 1
 >[2, "trimmer", "trimming"] : [2, string, string]
@@ -277,7 +277,7 @@ for (let [numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberB : 2 | -1
+>numberB : number
 }
 for (let [nameB = "name"] = multiRobotA, i = 0; i < 1; i++) {
 >nameB : string
@@ -319,7 +319,7 @@ for (let [nameB = "name"] = getMultiRobot(), i = 0; i < 1; i++) {
 >nameB : string
 }
 for (let [nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
->nameB : "trimmer" | "name"
+>nameB : string
 >"name" : "name"
 >["trimmer", ["trimming", "edging"]] : ["trimmer", ("trimming" | "edging")[]]
 >"trimmer" : "trimmer"
@@ -339,7 +339,7 @@ for (let [nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameB : "trimmer" | "name"
+>nameB : string
 }
 
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i < 1; i++) {
@@ -392,12 +392,12 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0
 >nameA2 : string
 }
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->numberA2 : 2 | -1
+>numberA2 : number
 >-1 : -1
 >1 : 1
->nameA2 : "trimmer" | "name"
+>nameA2 : string
 >"name" : "name"
->skillA2 : "trimming" | "skill"
+>skillA2 : string
 >"skill" : "skill"
 >[2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
 >2 : 2
@@ -416,7 +416,7 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "t
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA2 : "trimmer" | "name"
+>nameA2 : string
 }
 for (let
     [nameMA = "noName",
@@ -491,16 +491,16 @@ for (let [nameMA = "noName",
 >nameMA : string
 }
 for (let [nameMA = "noName",
->nameMA : "trimmer" | "noName"
+>nameMA : string
 >"noName" : "noName"
 
     [
         primarySkillA = "primary",
->primarySkillA : "trimming" | "primary" | "none"
+>primarySkillA : string
 >"primary" : "primary"
 
         secondarySkillA = "secondary"
->secondarySkillA : "edging" | "secondary" | "none"
+>secondarySkillA : string
 >"secondary" : "secondary"
 
     ] = ["none", "none"]
@@ -527,7 +527,7 @@ for (let [nameMA = "noName",
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameMA : "trimmer" | "noName"
+>nameMA : string
 }
 
 for (let [numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {

@@ -497,9 +497,9 @@ function f6() {
     let { x1 = true, x2 = 0, x3 = "foo" } = { x1: false, x2: 1, x3: "bar" };
 >x1 : boolean
 >true : true
->x2 : 1 | 0
+>x2 : number
 >0 : 0
->x3 : "foo" | "bar"
+>x3 : string
 >"foo" : "foo"
 >{ x1: false, x2: 1, x3: "bar" } : { x1?: false; x2?: 1; x3?: "bar"; }
 >x1 : boolean

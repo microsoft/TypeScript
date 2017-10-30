@@ -1,7 +1,7 @@
 === tests/cases/compiler/declarationEmitDestructuring2.ts ===
 function f({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]} = { x: 10, y: [2, 4, 6, 8] }) { }
 >f : ({ x, y: [a, b, c, d] }?: { x?: 10; y?: [2, 4, 6, 8]; }) => void
->x : 10
+>x : number
 >10 : 10
 >y : any
 >a : number

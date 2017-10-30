@@ -4259,9 +4259,10 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return declaration.initializer ?
+            type = declaration.initializer ?
                 getUnionType([type, checkExpressionCached(declaration.initializer)], /*subtypeReduction*/ true) :
                 type;
+            return shouldUseLiteralType(declaration) ? type : getWidenedLiteralType(type);
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -18335,9 +18336,13 @@ namespace ts {
 
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
             const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
+            return shouldUseLiteralType(declaration) ? type : getWidenedLiteralType(type);
+        }
+
+        function shouldUseLiteralType(declaration: VariableLikeDeclaration) {
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
-                isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
+                (declaration.initializer && isTypeAssertion(declaration.initializer));
         }
 
         function isLiteralContextualType(contextualType: Type, candidateLiteral: Type): boolean {

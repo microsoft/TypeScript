@@ -94,7 +94,7 @@ interface StringUnion {
 }
 function h({ prop = "baz" }: StringUnion) {}
 >h : ({ prop }: StringUnion) => void
->prop : "foo" | "bar" | "baz"
+>prop : string
 >"baz" : "baz"
 >StringUnion : StringUnion
 

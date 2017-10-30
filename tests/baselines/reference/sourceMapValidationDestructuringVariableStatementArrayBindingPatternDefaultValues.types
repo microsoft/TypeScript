@@ -48,7 +48,7 @@ let [numberA2 = -1, nameA2 = "noName", skillA2 = "noSkill"] = robotA;
 >robotA : [number, string, string]
 
 let [numberC2 = -1] = [3, "edging", "Trimming edges"];
->numberC2 : -1 | 3
+>numberC2 : number
 >-1 : -1
 >1 : 1
 >[3, "edging", "Trimming edges"] : [3, string, string]
@@ -57,12 +57,12 @@ let [numberC2 = -1] = [3, "edging", "Trimming edges"];
 >"Trimming edges" : "Trimming edges"
 
 let [numberC = -1, nameC = "noName", skillC = "noSkill"] = [3, "edging", "Trimming edges"];
->numberC : -1 | 3
+>numberC : number
 >-1 : -1
 >1 : 1
->nameC : "noName" | "edging"
+>nameC : string
 >"noName" : "noName"
->skillC : "noSkill" | "Trimming edges"
+>skillC : string
 >"noSkill" : "noSkill"
 >[3, "edging", "Trimming edges"] : [3, "edging", "Trimming edges"]
 >3 : 3

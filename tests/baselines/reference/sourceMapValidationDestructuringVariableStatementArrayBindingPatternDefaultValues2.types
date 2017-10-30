@@ -53,7 +53,7 @@ let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"]
 >multiRobotA : [string, string[]]
 
 let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
->nameMC : "noName" | "roomba"
+>nameMC : string
 >"noName" : "noName"
 >["roomba", ["vaccum", "mopping"]] : ["roomba", ("vaccum" | "mopping")[]]
 >"roomba" : "roomba"
@@ -62,11 +62,11 @@ let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
 >"mopping" : "mopping"
 
 let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
->nameMC2 : "noName" | "roomba"
+>nameMC2 : string
 >"noName" : "noName"
->primarySkillC : "noSkill" | "vaccum"
+>primarySkillC : string
 >"noSkill" : "noSkill"
->secondarySkillC : "noSkill" | "mopping"
+>secondarySkillC : string
 >"noSkill" : "noSkill"
 >["noSkill", "noSkill"] : ["noSkill", "noSkill"]
 >"noSkill" : "noSkill"

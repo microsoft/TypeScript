@@ -34,7 +34,7 @@ var temp = { t1: true, t2: "false" };
 >"false" : "false"
 
 var [b0 = 3, b1 = true, b2 = temp] = [3, false, { t1: false, t2: 5}];  // Error
->b0 : 3
+>b0 : number
 >3 : 3
 >b1 : boolean
 >true : true
