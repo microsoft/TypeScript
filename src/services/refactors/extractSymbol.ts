@@ -244,12 +244,52 @@ namespace ts.refactor.extractSymbol {
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
 
+        if (isReturnStatement(start) && !start.expression) {
+            // Makes no sense to extract an expression-less return statement.
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.CannotExtractRange)] };
+        }
+
         // We have a single node (start)
-        const errors = checkRootNode(start) || checkNode(start);
+        const node = refineNode(start);
+
+        const errors = checkRootNode(node) || checkNode(node);
         if (errors) {
             return { errors };
         }
-        return { targetRange: { range: getStatementOrExpressionRange(start), facts: rangeFacts, declarations } };
+        return { targetRange: { range: getStatementOrExpressionRange(node), facts: rangeFacts, declarations } };
+
+        /**
+         * Attempt to refine the extraction node (generally, by shrinking it) to produce better results.
+         * @param node The unrefined extraction node.
+         */
+        function refineNode(node: Node) {
+            if (isReturnStatement(node)) {
+                if (node.expression) {
+                    return node.expression;
+                }
+            }
+            else if (isVariableStatement(node)) {
+                let numInitializers = 0;
+                let lastInitializer: Expression | undefined = undefined;
+                for (const declaration of node.declarationList.declarations) {
+                    if (declaration.initializer) {
+                        numInitializers++;
+                        lastInitializer = declaration.initializer;
+                    }
+                }
+                if (numInitializers === 1) {
+                    return lastInitializer;
+                }
+                // No special handling if there are multiple initializers.
+            }
+            else if (isVariableDeclaration(node)) {
+                if (node.initializer) {
+                    return node.initializer;
+                }
+            }
+
+            return node;
+        }
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
             if (isIdentifier(isExpressionStatement(node) ? node.expression : node)) {
@@ -470,7 +510,7 @@ namespace ts.refactor.extractSymbol {
      * you may be able to extract into a class method *or* local closure *or* namespace function,
      * depending on what's in the extracted body.
      */
-    function collectEnclosingScopes(range: TargetRange): Scope[] | undefined {
+    function collectEnclosingScopes(range: TargetRange): Scope[] {
         let current: Node = isReadonlyArray(range.range) ? first(range.range) : range.range;
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
@@ -483,30 +523,27 @@ namespace ts.refactor.extractSymbol {
             }
         }
 
-        const start = current;
+        const scopes: Scope[] = [];
+        while (true) {
+            current = current.parent;
+            // A function parameter's initializer is actually in the outer scope, not the function declaration
+            if (current.kind === SyntaxKind.Parameter) {
+                // Skip all the way to the outer scope of the function that declared this parameter
+                current = findAncestor(current, parent => isFunctionLikeDeclaration(parent)).parent;
+            }
 
-        let scopes: Scope[] | undefined = undefined;
-        while (current) {
             // We want to find the nearest parent where we can place an "equivalent" sibling to the node we're extracting out of.
             // Walk up to the closest parent of a place where we can logically put a sibling:
             //  * Function declaration
             //  * Class declaration or expression
             //  * Module/namespace or source file
-            if (current !== start && isScope(current)) {
-                (scopes = scopes || []).push(current);
+            if (isScope(current)) {
+                scopes.push(current);
+                if (current.kind === SyntaxKind.SourceFile) {
+                    return scopes;
+                }
             }
-
-            // A function parameter's initializer is actually in the outer scope, not the function declaration
-            if (current && current.parent && current.parent.kind === SyntaxKind.Parameter) {
-                // Skip all the way to the outer scope of the function that declared this parameter
-                current = findAncestor(current, parent => isFunctionLikeDeclaration(parent)).parent;
-            }
-            else {
-                current = current.parent;
-            }
-
         }
-        return scopes;
     }
 
     function getFunctionExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
@@ -592,15 +629,7 @@ namespace ts.refactor.extractSymbol {
     function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
         const { file: sourceFile } = context;
 
-        if (targetRange === undefined) {
-            return undefined;
-        }
-
         const scopes = collectEnclosingScopes(targetRange);
-        if (scopes === undefined) {
-            return undefined;
-        }
-
         const enclosingTextRange = getEnclosingTextRange(targetRange, sourceFile);
         const readsAndWrites = collectReadsAndWrites(
             targetRange,

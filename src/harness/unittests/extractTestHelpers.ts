@@ -67,7 +67,8 @@ namespace ts {
     }
 
     export const newLineCharacter = "\n";
-    export function getRuleProvider(action?: (opts: FormatCodeSettings) => void) {
+    export const getRuleProvider = memoize(getRuleProviderInternal);
+    function getRuleProviderInternal() {
         const options = {
             indentSize: 4,
             tabSize: 4,
@@ -89,9 +90,6 @@ namespace ts {
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
         };
-        if (action) {
-            action(options);
-        }
         const rulesProvider = new formatting.RulesProvider();
         rulesProvider.ensureUpToDate(options);
         return rulesProvider;
@@ -106,7 +104,7 @@ namespace ts {
         getCurrentDirectory: notImplemented,
     };
 
-    export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage) {
+    export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection");
         if (!selectionRange) {
@@ -118,7 +116,7 @@ namespace ts {
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const program = makeProgram({ path, content: t.source });
+            const program = makeProgram({ path, content: t.source }, includeLib);
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -154,15 +152,15 @@ namespace ts {
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
 
-                    const diagProgram = makeProgram({ path, content: newText });
+                    const diagProgram = makeProgram({ path, content: newText }, includeLib);
                     assert.isFalse(hasSyntacticDiagnostics(diagProgram));
                 }
                 return data.join(newLineCharacter);
             });
         }
 
-        function makeProgram(f: {path: string, content: string }) {
-            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
+        function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
+            const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();

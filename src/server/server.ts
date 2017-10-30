@@ -349,13 +349,13 @@ namespace ts.server {
 
             const execArgv: string[] = [];
             for (const arg of process.execArgv) {
-                const match = /^--(debug|inspect)(=(\d+))?$/.exec(arg);
+                const match = /^--((?:debug|inspect)(?:-brk)?)(?:=(\d+))?$/.exec(arg);
                 if (match) {
                     // if port is specified - use port + 1
                     // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
-                    const currentPort = match[3] !== undefined
-                        ? +match[3]
-                        : match[1] === "debug" ? 5858 : 9229;
+                    const currentPort = match[2] !== undefined
+                        ? +match[2]
+                        : match[1].charAt(0) === "d" ? 5858 : 9229;
                     execArgv.push(`--${match[1]}=${currentPort + 1}`);
                     break;
                 }
@@ -626,7 +626,7 @@ namespace ts.server {
     function createLogger() {
         const cmdLineLogFileName = findArgument("--logFile");
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-        const envLogOptions = parseLoggingEnvironmentString(process.env["TSS_LOG"]);
+        const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
 
         const logFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)

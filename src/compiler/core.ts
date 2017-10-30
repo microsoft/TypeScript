@@ -4,7 +4,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.6";
+    export const versionMajorMinor = "2.7";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0`;
 }
@@ -33,8 +33,8 @@ namespace ts {
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
         // constantly changing shape.
-        map["__"] = undefined;
-        delete map["__"];
+        map.__ = undefined;
+        delete map.__;
 
         return map;
     }
@@ -1708,6 +1708,12 @@ namespace ts {
             moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
         }
         return moduleResolution;
+    }
+
+    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict";
+
+    export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
+        return compilerOptions[flag] === undefined ? compilerOptions.strict : compilerOptions[flag];
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {

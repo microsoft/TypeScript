@@ -91,7 +91,7 @@ namespace ts {
             startLexicalEnvironment();
 
             const statements: Statement[] = [];
-            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
             const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {

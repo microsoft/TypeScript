@@ -54,15 +54,15 @@ var z5 = foo({ name: "abc", a: 5 });  // { name: string; a: number }
 >5 : 5
 
 var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // error
->z6 : any
->foo({ name: "abc", a: 5 }, { name: "def", b: 5 }) : any
+>z6 : { name: "abc"; a: number; b?: undefined; } | { name: "def"; b: number; a?: undefined; }
+>foo({ name: "abc", a: 5 }, { name: "def", b: 5 }) : { name: "abc"; a: number; b?: undefined; } | { name: "def"; b: number; a?: undefined; }
 >foo : <T extends Item>(x?: T, y?: T) => T
->{ name: "abc", a: 5 } : { name: string; a: number; }
+>{ name: "abc", a: 5 } : { name: "abc"; a: 5; }
 >name : string
 >"abc" : "abc"
 >a : number
 >5 : 5
->{ name: "def", b: 5 } : { name: string; b: number; }
+>{ name: "def", b: 5 } : { name: "def"; b: 5; }
 >name : string
 >"def" : "def"
 >b : number

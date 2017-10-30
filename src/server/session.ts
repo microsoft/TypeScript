@@ -1188,10 +1188,10 @@ namespace ts.server {
             if (simplifiedResult) {
                 return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source } = entry;
                         const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
                         // Use `hasAction || undefined` to avoid serializing `false`.
-                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined };
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source };
                     }
                 }).sort((a, b) => compareStrings(a.name, b.name));
             }
@@ -1206,8 +1206,9 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
             const formattingOptions = project.projectService.getFormatCodeOptions(file);
 
-            return mapDefined(args.entryNames, entryName => {
-                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName, formattingOptions);
+            return mapDefined<string | protocol.CompletionEntryIdentifier, protocol.CompletionEntryDetails>(args.entryNames, entryName => {
+                const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source);
                 if (details) {
                     const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
                     return { ...details, codeActions: mappedCodeActions };
@@ -1311,11 +1312,13 @@ namespace ts.server {
         private reload(args: protocol.ReloadRequestArgs, reqSeq: number) {
             const file = toNormalizedPath(args.file);
             const tempFileName = args.tmpfile && toNormalizedPath(args.tmpfile);
-            const project = this.projectService.getDefaultProjectForFile(file, /*ensureProject*/ true);
-            this.changeSeq++;
-            // make sure no changes happen before this one is finished
-            if (project.reloadScript(file, tempFileName)) {
-                this.doOutput(/*info*/ undefined, CommandNames.Reload, reqSeq, /*success*/ true);
+            const info = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (info) {
+                this.changeSeq++;
+                // make sure no changes happen before this one is finished
+                if (info.reloadFromFile(tempFileName)) {
+                    this.doOutput(/*info*/ undefined, CommandNames.Reload, reqSeq, /*success*/ true);
+                }
             }
         }
 
@@ -1514,16 +1517,18 @@ namespace ts.server {
             }
 
             if (simplifiedResult) {
-                const file = result.renameFilename;
-                let location: protocol.Location | undefined;
-                if (file !== undefined && result.renameLocation !== undefined) {
-                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(file));
-                    location = renameScriptInfo.positionToLineOffset(result.renameLocation);
+                const { renameFilename, renameLocation, edits } = result;
+                let mappedRenameLocation: protocol.Location | undefined;
+                if (renameFilename !== undefined && renameLocation !== undefined) {
+                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename));
+                    const snapshot = renameScriptInfo.getSnapshot();
+                    const oldText = snapshot.getText(0, snapshot.getLength());
+                    mappedRenameLocation = getLocationInNewDocument(oldText, renameFilename, renameLocation, edits);
                 }
                 return {
-                    renameLocation: location,
-                    renameFilename: file,
-                    edits: result.edits.map(change => this.mapTextChangesToCodeEdits(project, change))
+                    renameLocation: mappedRenameLocation,
+                    renameFilename,
+                    edits: edits.map(change => this.mapTextChangesToCodeEdits(project, change))
                 };
             }
             else {
@@ -2039,5 +2044,27 @@ namespace ts.server {
     export interface HandlerResponse {
         response?: {};
         responseRequired?: boolean;
+    }
+
+    /* @internal */ // Exported only for tests
+    export function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: ReadonlyArray<FileTextChanges>): protocol.Location {
+        const newText = applyEdits(oldText, renameFilename, edits);
+        const { line, character } = computeLineAndCharacterOfPosition(computeLineStarts(newText), renameLocation);
+        return { line: line + 1, offset: character + 1 };
+    }
+
+    function applyEdits(text: string, textFilename: string, edits: ReadonlyArray<FileTextChanges>): string {
+        for (const { fileName, textChanges } of edits) {
+            if (fileName !== textFilename) {
+                continue;
+            }
+
+            for (let i = textChanges.length - 1; i >= 0; i--) {
+                const { newText, span: { start, length } } = textChanges[i];
+                text = text.slice(0, start) + newText + text.slice(start + length);
+            }
+        }
+
+        return text;
     }
 }

@@ -53,6 +53,17 @@ namespace ts.server {
             return new TestSession(opts);
         }
 
+        // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
+        let oldPrepare: Function;
+        before(() => {
+            oldPrepare = (Error as any).prepareStackTrace;
+            delete (Error as any).prepareStackTrace;
+        });
+
+        after(() => {
+            (Error as any).prepareStackTrace = oldPrepare;
+        });
+
         beforeEach(() => {
             session = createSession();
             session.send = (msg: protocol.Message) => {
@@ -387,6 +398,18 @@ namespace ts.server {
     });
 
     describe("exceptions", () => {
+
+        // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
+        let oldPrepare: Function;
+        before(() => {
+            oldPrepare = (Error as any).prepareStackTrace;
+            delete (Error as any).prepareStackTrace;
+        });
+
+        after(() => {
+            (Error as any).prepareStackTrace = oldPrepare;
+        });
+
         const command = "testhandler";
         class TestSession extends Session {
             lastSent: protocol.Message;
@@ -659,6 +682,30 @@ namespace ts.server {
 
             // Consume the queue and trigger the callbacks
             session.consumeQueue();
+        });
+    });
+
+    describe("helpers", () => {
+        it(getLocationInNewDocument.name, () => {
+            const text = `// blank line\nconst x = 0;`;
+            const renameLocationInOldText = text.indexOf("0");
+            const fileName = "/a.ts";
+            const edits: ts.FileTextChanges = {
+                fileName,
+                textChanges: [
+                    {
+                        span: { start: 0, length: 0 },
+                        newText: "const newLocal = 0;\n\n",
+                    },
+                    {
+                        span: { start: renameLocationInOldText, length: 1 },
+                        newText: "newLocal",
+                    },
+                ],
+            };
+            const renameLocationInNewText = renameLocationInOldText + edits.textChanges[0].newText.length;
+            const res = getLocationInNewDocument(text, fileName, renameLocationInNewText, [edits]);
+            assert.deepEqual(res, { line: 4, offset: 11 });
         });
     });
 }

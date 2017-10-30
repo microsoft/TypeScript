@@ -84,9 +84,9 @@ function main(): void {
 
     function xmlObjectToString(o: any) {
         const out: any = {};
-        for (const item of o["LCX"]["Item"][0]["Item"][0]["Item"]) {
-            let ItemId = item["$"]["ItemId"];
-            let Val = item["Str"][0]["Tgt"] ? item["Str"][0]["Tgt"][0]["Val"][0] : item["Str"][0]["Val"][0];
+        for (const item of o.LCX.Item[0].Item[0].Item) {
+            let ItemId = item.$.ItemId;
+            let Val = item.Str[0].Tgt ? item.Str[0].Tgt[0].Val[0] : item.Str[0].Val[0];
 
             if (typeof ItemId !== "string" || typeof Val !== "string") {
                 console.error("Unexpected XML file structure");

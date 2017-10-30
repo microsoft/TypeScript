@@ -1138,6 +1138,13 @@ namespace ts {
                     reportInvalidOptionValue(option && option.type !== "number");
                     return Number((<NumericLiteral>valueExpression).text);
 
+                case SyntaxKind.PrefixUnaryExpression:
+                    if ((<PrefixUnaryExpression>valueExpression).operator !== SyntaxKind.MinusToken || (<PrefixUnaryExpression>valueExpression).operand.kind !== SyntaxKind.NumericLiteral) {
+                        break; // not valid JSON syntax
+                    }
+                    reportInvalidOptionValue(option && option.type !== "number");
+                    return -Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text);
+
                 case SyntaxKind.ObjectLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "object");
                     const objectLiteralExpression = <ObjectLiteralExpression>valueExpression;
@@ -1440,9 +1447,9 @@ namespace ts {
 
         function getFileNames(): ExpandResult {
             let filesSpecs: ReadonlyArray<string>;
-            if (hasProperty(raw, "files") && !isNullOrUndefined(raw["files"])) {
-                if (isArray(raw["files"])) {
-                    filesSpecs = <ReadonlyArray<string>>raw["files"];
+            if (hasProperty(raw, "files") && !isNullOrUndefined(raw.files)) {
+                if (isArray(raw.files)) {
+                    filesSpecs = <ReadonlyArray<string>>raw.files;
                     if (filesSpecs.length === 0) {
                         createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
                     }
@@ -1453,9 +1460,9 @@ namespace ts {
             }
 
             let includeSpecs: ReadonlyArray<string>;
-            if (hasProperty(raw, "include") && !isNullOrUndefined(raw["include"])) {
-                if (isArray(raw["include"])) {
-                    includeSpecs = <ReadonlyArray<string>>raw["include"];
+            if (hasProperty(raw, "include") && !isNullOrUndefined(raw.include)) {
+                if (isArray(raw.include)) {
+                    includeSpecs = <ReadonlyArray<string>>raw.include;
                 }
                 else {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "include", "Array");
@@ -1463,16 +1470,16 @@ namespace ts {
             }
 
             let excludeSpecs: ReadonlyArray<string>;
-            if (hasProperty(raw, "exclude") && !isNullOrUndefined(raw["exclude"])) {
-                if (isArray(raw["exclude"])) {
-                    excludeSpecs = <ReadonlyArray<string>>raw["exclude"];
+            if (hasProperty(raw, "exclude") && !isNullOrUndefined(raw.exclude)) {
+                if (isArray(raw.exclude)) {
+                    excludeSpecs = <ReadonlyArray<string>>raw.exclude;
                 }
                 else {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array");
                 }
             }
             else {
-                const outDir = raw["compilerOptions"] && raw["compilerOptions"]["outDir"];
+                const outDir = raw.compilerOptions && raw.compilerOptions.outDir;
                 if (outDir) {
                     excludeSpecs = [outDir];
                 }
@@ -1591,7 +1598,7 @@ namespace ts {
         const options = convertCompilerOptionsFromJsonWorker(json.compilerOptions, basePath, errors, configFileName);
         // typingOptions has been deprecated and is only supported for backward compatibility purposes.
         // It should be removed in future releases - use typeAcquisition instead.
-        const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json["typeAcquisition"] || json["typingOptions"], basePath, errors, configFileName);
+        const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition || json.typingOptions, basePath, errors, configFileName);
         json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
         let extendedConfigPath: Path;
 
@@ -1748,7 +1755,7 @@ namespace ts {
         if (!hasProperty(jsonOption, compileOnSaveCommandLineOption.name)) {
             return undefined;
         }
-        const result = convertJsonOption(compileOnSaveCommandLineOption, jsonOption["compileOnSave"], basePath, errors);
+        const result = convertJsonOption(compileOnSaveCommandLineOption, jsonOption.compileOnSave, basePath, errors);
         if (typeof result === "boolean" && result) {
             return result;
         }

@@ -131,7 +131,7 @@ namespace ts {
             const _os = require("os");
             const _crypto = require("crypto");
 
-            const useNonPollingWatchers = process.env["TSC_NONPOLLING_WATCHER"];
+            const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
 
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();

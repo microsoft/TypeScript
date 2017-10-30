@@ -783,13 +783,13 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
+        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
             const completions = this.getCompletionListAtCaret();
             if (completions) {
-                this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind, spanIndex, hasAction);
+                this.assertItemInCompletionList(completions.entries, entryId, text, documentation, kind, spanIndex, hasAction);
             }
             else {
-                this.raiseError(`No completions at position '${this.currentCaretPosition}' when looking for '${symbol}'.`);
+                this.raiseError(`No completions at position '${this.currentCaretPosition}' when looking for '${JSON.stringify(entryId)}'.`);
             }
         }
 
@@ -804,7 +804,7 @@ namespace FourSlash {
          * @param expectedKind the kind of symbol (see ScriptElementKind)
          * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
-        public verifyCompletionListDoesNotContain(symbol: string, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number) {
+        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number) {
             const that = this;
             let replacementSpan: ts.TextSpan;
             if (spanIndex !== undefined) {
@@ -833,14 +833,14 @@ namespace FourSlash {
 
             const completions = this.getCompletionListAtCaret();
             if (completions) {
-                let filterCompletions = completions.entries.filter(e => e.name === symbol);
+                let filterCompletions = completions.entries.filter(e => e.name === entryId.name && e.source === entryId.source);
                 filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind) : filterCompletions;
                 filterCompletions = filterCompletions.filter(filterByTextOrDocumentation);
                 if (filterCompletions.length !== 0) {
                     // After filtered using all present criterion, if there are still symbol left in the list
                     // then these symbols must meet the criterion for Not supposed to be in the list. So we
                     // raise an error
-                    let error = "Completion list did contain \'" + symbol + "\'.";
+                    let error = `Completion list did contain '${JSON.stringify(entryId)}\'.`;
                     const details = this.getCompletionEntryDetails(filterCompletions[0].name);
                     if (expectedText) {
                         error += "Expected text: " + expectedText + " to equal: " + ts.displayPartsToString(details.displayParts) + ".";
@@ -1130,8 +1130,8 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        private getCompletionEntryDetails(entryName: string) {
-            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings);
+        private getCompletionEntryDetails(entryName: string, source?: string) {
+            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source);
         }
 
         private getReferencesAtCaret() {
@@ -1640,7 +1640,7 @@ Actual: ${stringify(fullActual)}`);
             const longestNameLength = max(entries, m => m.name.length);
             const longestKindLength = max(entries, m => m.kind.length);
             entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
-            const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers}`).join("\n");
+            const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.source === undefined ? "" : m.source}`).join("\n");
             Harness.IO.log(membersString);
         }
 
@@ -2296,13 +2296,13 @@ Actual: ${stringify(fullActual)}`);
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const actualCompletion = this.getCompletionListAtCaret().entries.find(e => e.name === options.name);
+            const actualCompletion = this.getCompletionListAtCaret().entries.find(e => e.name === options.name && e.source === options.source);
 
             if (!actualCompletion.hasAction) {
                 this.raiseError(`Completion for ${options.name} does not have an associated action.`);
             }
 
-            const details = this.getCompletionEntryDetails(options.name);
+            const details = this.getCompletionEntryDetails(options.name, actualCompletion.source);
             if (details.codeActions.length !== 1) {
                 this.raiseError(`Expected one code action, got ${details.codeActions.length}`);
             }
@@ -2984,7 +2984,7 @@ Actual: ${stringify(fullActual)}`);
 
         private assertItemInCompletionList(
             items: ts.CompletionEntry[],
-            name: string,
+            entryId: ts.Completions.CompletionEntryIdentifier,
             text: string | undefined,
             documentation: string | undefined,
             kind: string | undefined,
@@ -2992,25 +2992,27 @@ Actual: ${stringify(fullActual)}`);
             hasAction: boolean | undefined,
         ) {
             for (const item of items) {
-                if (item.name === name) {
-                    if (documentation !== undefined || text !== undefined) {
-                        const details = this.getCompletionEntryDetails(item.name);
+                if (item.name === entryId.name && item.source === entryId.source) {
+                    if (documentation !== undefined || text !== undefined || entryId.source !== undefined) {
+                        const details = this.getCompletionEntryDetails(item.name, item.source);
 
                         if (documentation !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.documentation), documentation, this.assertionMessageAtLastKnownMarker("completion item documentation for " + name));
+                            assert.equal(ts.displayPartsToString(details.documentation), documentation, this.assertionMessageAtLastKnownMarker("completion item documentation for " + entryId));
                         }
                         if (text !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.displayParts), text, this.assertionMessageAtLastKnownMarker("completion item detail text for " + name));
+                            assert.equal(ts.displayPartsToString(details.displayParts), text, this.assertionMessageAtLastKnownMarker("completion item detail text for " + entryId));
                         }
+
+                        assert.deepEqual(details.source, entryId.source === undefined ? undefined : [ts.textPart(entryId.source)]);
                     }
 
                     if (kind !== undefined) {
-                        assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + name));
+                        assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
                     }
 
                     if (spanIndex !== undefined) {
                         const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                        assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + name));
+                        assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
                     }
 
                     assert.equal(item.hasAction, hasAction);
@@ -3021,7 +3023,7 @@ Actual: ${stringify(fullActual)}`);
 
             const itemsString = items.map(item => stringify({ name: item.name, kind: item.kind })).join(",\n");
 
-            this.raiseError(`Expected "${stringify({ name, text, documentation, kind })}" to be in list [${itemsString}]`);
+            this.raiseError(`Expected "${stringify({ entryId, text, documentation, kind })}" to be in list [${itemsString}]`);
         }
 
         private findFile(indexOrName: any) {
@@ -3281,7 +3283,7 @@ ${code}
     }
 
     function containTSConfigJson(files: FourSlashFile[]): boolean {
-        return ts.forEach(files, f => f.fileOptions["Filename"] === "tsconfig.json");
+        return ts.forEach(files, f => f.fileOptions.Filename === "tsconfig.json");
     }
 
     function getNonFileNameOptionInFileList(files: FourSlashFile[]): string {
@@ -3732,12 +3734,15 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
+        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
+            if (typeof entryId === "string") {
+                entryId = { name: entryId, source: undefined };
+            }
             if (this.negative) {
-                this.state.verifyCompletionListDoesNotContain(symbol, text, documentation, kind, spanIndex);
+                this.state.verifyCompletionListDoesNotContain(entryId, text, documentation, kind, spanIndex);
             }
             else {
-                this.state.verifyCompletionListContains(symbol, text, documentation, kind, spanIndex, hasAction);
+                this.state.verifyCompletionListContains(entryId, text, documentation, kind, spanIndex, hasAction);
             }
         }
 
@@ -4492,6 +4497,7 @@ namespace FourSlashInterface {
 
     export interface VerifyCompletionActionOptions extends NewContentOptions {
         name: string;
+        source?: string;
         description: string;
     }
 }

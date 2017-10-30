@@ -122,7 +122,7 @@ namespace ts {
                 }
                 forEach(signature.typeParameters, visitType);
 
-                for (const parameter of signature.parameters){
+                for (const parameter of signature.parameters) {
                     visitSymbol(parameter);
                 }
                 visitType(getRestTypeOfSignature(signature));
