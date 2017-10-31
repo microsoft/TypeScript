@@ -366,29 +366,29 @@ module EmptyTypes {
 >base2 : typeof base2
 
             var b1 = [baseObj, base2Obj, ifaceObj];
->b1 : (iface | base | base2)[]
->[baseObj, base2Obj, ifaceObj] : (iface | base | base2)[]
+>b1 : iface[]
+>[baseObj, base2Obj, ifaceObj] : iface[]
 >baseObj : base
 >base2Obj : base2
 >ifaceObj : iface
 
             var b2 = [base2Obj, baseObj, ifaceObj];
->b2 : (iface | base | base2)[]
->[base2Obj, baseObj, ifaceObj] : (iface | base | base2)[]
+>b2 : iface[]
+>[base2Obj, baseObj, ifaceObj] : iface[]
 >base2Obj : base2
 >baseObj : base
 >ifaceObj : iface
 
             var b3 = [baseObj, ifaceObj, base2Obj];
->b3 : (iface | base | base2)[]
->[baseObj, ifaceObj, base2Obj] : (iface | base | base2)[]
+>b3 : iface[]
+>[baseObj, ifaceObj, base2Obj] : iface[]
 >baseObj : base
 >ifaceObj : iface
 >base2Obj : base2
 
             var b4 = [ifaceObj, baseObj, base2Obj];
->b4 : (iface | base | base2)[]
->[ifaceObj, baseObj, base2Obj] : (iface | base | base2)[]
+>b4 : iface[]
+>[ifaceObj, baseObj, base2Obj] : iface[]
 >ifaceObj : iface
 >baseObj : base
 >base2Obj : base2
@@ -769,29 +769,29 @@ module NonEmptyTypes {
 >base2 : typeof base2
 
             var b1 = [baseObj, base2Obj, ifaceObj];
->b1 : (iface | base | base2)[]
->[baseObj, base2Obj, ifaceObj] : (iface | base | base2)[]
+>b1 : iface[]
+>[baseObj, base2Obj, ifaceObj] : iface[]
 >baseObj : base
 >base2Obj : base2
 >ifaceObj : iface
 
             var b2 = [base2Obj, baseObj, ifaceObj];
->b2 : (iface | base | base2)[]
->[base2Obj, baseObj, ifaceObj] : (iface | base | base2)[]
+>b2 : iface[]
+>[base2Obj, baseObj, ifaceObj] : iface[]
 >base2Obj : base2
 >baseObj : base
 >ifaceObj : iface
 
             var b3 = [baseObj, ifaceObj, base2Obj];
->b3 : (iface | base | base2)[]
->[baseObj, ifaceObj, base2Obj] : (iface | base | base2)[]
+>b3 : iface[]
+>[baseObj, ifaceObj, base2Obj] : iface[]
 >baseObj : base
 >ifaceObj : iface
 >base2Obj : base2
 
             var b4 = [ifaceObj, baseObj, base2Obj];
->b4 : (iface | base | base2)[]
->[ifaceObj, baseObj, base2Obj] : (iface | base | base2)[]
+>b4 : iface[]
+>[ifaceObj, baseObj, base2Obj] : iface[]
 >ifaceObj : iface
 >baseObj : base
 >base2Obj : base2
