@@ -1382,39 +1382,28 @@ namespace ts.server {
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
-                    logExceedLimit.call(this);
+                    logExceedLimit.call(this, totalNonTsFileSize);
                     // Keep the size as zero since it's disabled
                     return true;
                 }
             }
 
             if (totalNonTsFileSize > availableSpace) {
-                logExceedLimit.call(this);
+                logExceedLimit.call(this, totalNonTsFileSize);
                 return true;
             }
 
             this.projectToSizeMap.set(name, totalNonTsFileSize);
             return false;
 
-            function logExceedLimit(this: ProjectService) {
-                const files: { name: string, size: number }[] = [];
-                let totalNonTsFileSize = 0;
-                for (const f of fileNames) {
-                    const name = propertyReader.getFileName(f);
-                    if (hasTypeScriptFileExtension(name)) {
-                        continue;
-                    }
+            function logExceedLimit(this: ProjectService, totalNonTsFileSize: number) {
+                const files = fileNames.map(f => propertyReader.getFileName(f))
+                    .filter(name => hasTypeScriptFileExtension(name))
+                    .map(name => ({ name, size: this.host.getFileSize(name) }))
+                    .sort((a, b) => b.size - a.size)
+                    .slice(0, 5);
 
-                    const size = this.host.getFileSize(name);
-                    totalNonTsFileSize += size;
-                    files.push({ name, size });
-                }
-
-                this.logger.info(`Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${getTop5LargestFiles(files).map(file => `${file.name}:${file.size}`).join(", ")}`);
-            }
-
-            function getTop5LargestFiles(files: { name: string, size: number }[]) {
-                return files.sort((a, b) => b.size - a.size).slice(0, 5);
+                this.logger.info(`Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${files.map(file => `${file.name}:${file.size}`).join(", ")}`);
             }
         }
 
