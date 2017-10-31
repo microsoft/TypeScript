@@ -4,8 +4,8 @@
 ////function foo() {
 ////   return (
 ////        <div>
-/////*0*/hello
-/////*1*/goodbye
+////hello
+////goodbye
 ////        </div>
 ////    )
 ////}
