@@ -3033,7 +3033,7 @@ namespace ts {
 
             if (children.length > 1) {
                 for (const child of children) {
-                    setStartsOnNewLine(child, /*newLine*/ true);
+                    startOnNewLine(child);
                     argumentsList.push(child);
                 }
             }
@@ -3064,7 +3064,7 @@ namespace ts {
         if (children && children.length > 0) {
             if (children.length > 1) {
                 for (const child of children) {
-                    child.startsOnNewLine = true;
+                    startOnNewLine(child);
                     argumentsList.push(child);
                 }
             }
