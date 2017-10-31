@@ -421,6 +421,24 @@ namespace ts {
             );
         });
 
+        it("Convert negative numbers in tsconfig.json ", () => {
+            assertCompilerOptions(
+                {
+                    "compilerOptions": {
+                        "allowJs": true,
+                        "maxNodeModuleJsDepth": -1
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        allowJs: true,
+                        maxNodeModuleJsDepth: -1
+                    },
+                    errors: []
+                }
+            );
+        });
+
         // jsconfig.json
         it("Convert correctly format jsconfig.json to compiler-options ", () => {
             assertCompilerOptions(

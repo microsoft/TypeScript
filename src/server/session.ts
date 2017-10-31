@@ -1204,10 +1204,10 @@ namespace ts.server {
             if (simplifiedResult) {
                 return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source } = entry;
                         const convertedSpan = replacementSpan ? this.toLocationTextSpan(replacementSpan, scriptInfo) : undefined;
                         // Use `hasAction || undefined` to avoid serializing `false`.
-                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined };
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source };
                     }
                 }).sort((a, b) => compareStrings(a.name, b.name));
             }
@@ -1222,8 +1222,9 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
             const formattingOptions = project.projectService.getFormatCodeOptions(file);
 
-            return mapDefined(args.entryNames, entryName => {
-                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName, formattingOptions);
+            return mapDefined<string | protocol.CompletionEntryIdentifier, protocol.CompletionEntryDetails>(args.entryNames, entryName => {
+                const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source);
                 if (details) {
                     const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
                     return { ...details, codeActions: mappedCodeActions };
@@ -1327,11 +1328,13 @@ namespace ts.server {
         private reload(args: protocol.ReloadRequestArgs, reqSeq: number) {
             const file = toNormalizedPath(args.file);
             const tempFileName = args.tmpfile && toNormalizedPath(args.tmpfile);
-            const project = this.projectService.getDefaultProjectForFile(file, /*ensureProject*/ true);
-            this.changeSeq++;
-            // make sure no changes happen before this one is finished
-            if (project.reloadScript(file, tempFileName)) {
-                this.doOutput(/*info*/ undefined, CommandNames.Reload, reqSeq, /*success*/ true);
+            const info = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (info) {
+                this.changeSeq++;
+                // make sure no changes happen before this one is finished
+                if (info.reloadFromFile(tempFileName)) {
+                    this.doOutput(/*info*/ undefined, CommandNames.Reload, reqSeq, /*success*/ true);
+                }
             }
         }
 
