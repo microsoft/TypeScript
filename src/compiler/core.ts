@@ -1653,17 +1653,11 @@ namespace ts {
     /**
      * Creates a string comparer for use with string collation in the UI.
      */
-    const createStringComparer = (function () {
-        type CachedLocale = "en-US" | undefined;
+    const createUIStringComparer = (function () {
+        let defaultComparer: Comparer<string> | undefined;
+        let enUSComparer: Comparer<string> | undefined;
 
-        interface StringComparerCache {
-            default?: Comparer<string>;
-            "en-US"?: Comparer<string>;
-        }
-
-        let caseInsensitiveCache: StringComparerCache | undefined;
-        let caseSensitiveCache: StringComparerCache | undefined;
-        const createStringComparerNoCache = getStringComparerFactory();
+        const stringComparerFactory = getStringComparerFactory();
         return createStringComparer;
 
         function compareWithCallback(a: string | undefined, b: string | undefined, comparer: (a: string, b: string) => number) {
@@ -1674,55 +1668,40 @@ namespace ts {
             return value < 0 ? Comparison.LessThan : value > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
         }
 
-        function createIntlCollatorStringComparer(locale: string | undefined, caseInsensitive: boolean): Comparer<string> {
-            // Initialize the sort collator on first use
-            let comparer: Comparer<string> = (a, b) => {
-                // Intl.Collator.prototype.compare is bound to the collator. See NOTE in
-                // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
-                comparer = new Intl.Collator(locale, { usage: "sort", sensitivity: caseInsensitive ? "accent" : "variant" }).compare;
-                return comparer(a, b);
-            };
+        function createIntlCollatorStringComparer(locale: string | undefined): Comparer<string> {
+            // Intl.Collator.prototype.compare is bound to the collator. See NOTE in
+            // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
+            const comparer = new Intl.Collator(locale, { usage: "sort", sensitivity: "variant" }).compare;
             return (a, b) => compareWithCallback(a, b, comparer);
         }
 
-        function createLocaleCompareStringComparer(locale: string | undefined, caseInsensitive: boolean): Comparer<string> {
+        function createLocaleCompareStringComparer(locale: string | undefined): Comparer<string> {
             // if the locale is not the default locale (`undefined`), use the fallback comparer.
-            return locale !== undefined ? createFallbackStringComparer(locale, caseInsensitive) :
-                caseInsensitive ? (a, b) => compareWithCallback(a, b, compareCaseInsensitive) :
-                (a, b) => compareWithCallback(a, b, compareCaseSensitive);
+            if (locale !== undefined) return createFallbackStringComparer();
 
-            function compareCaseInsensitive(a: string, b: string) {
-                // for case-insensitive comparisons we always map both strings to their
-                // upper-case form as some unicode characters do not properly round-trip to
-                // lowercase (such as `ẞ` (German sharp capital s)).
-                return compareCaseSensitive(a.toLocaleUpperCase(), b.toLocaleUpperCase());
-            }
+            return (a, b) => compareWithCallback(a, b, compareStrings);
 
-            function compareCaseSensitive(a: string, b: string) {
+            function compareStrings(a: string, b: string) {
                 return a.localeCompare(b);
             }
         }
 
-        function createFallbackStringComparer(_locale: string | undefined, caseInsensitive: boolean): Comparer<string> {
-            return caseInsensitive ? (a, b) => compareWithCallback(a, b, compareCaseInsensitive) :
-                (a, b) => compareWithCallback(a, b, compareCaseSensitiveDictionaryOrder);
+        function createFallbackStringComparer(): Comparer<string> {
+            // An ordinal comparison puts "A" after "b", but for the UI we want "A" before "b".
+            // We first sort case insensitively.  So "Aaa" will come before "baa".
+            // Then we sort case sensitively, so "aaa" will come before "Aaa".
+            //
+            // For case insensitive comparisons we always map both strings to their
+            // upper-case form as some unicode characters do not properly round-trip to
+            // lowercase (such as `ẞ` (German sharp capital s)).
+            return (a, b) => compareWithCallback(a, b, compareDictionaryOrder);
 
-            function compareCaseInsensitive(a: string, b: string) {
-                // for case-insensitive comparisons we always map both strings to their
-                // upper-case form as some unicode characters do not properly round-trip to
-                // lowercase (such as `ẞ` (German sharp capital s)).
-                return compareCaseSensitive(a.toUpperCase(), b.toUpperCase());
+            function compareDictionaryOrder(a: string, b: string) {
+                return compareStrings(a.toUpperCase(), b.toUpperCase()) || compareStrings(a, b);
             }
 
-            function compareCaseSensitive(a: string, b: string) {
+            function compareStrings(a: string, b: string) {
                 return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
-            }
-
-            function compareCaseSensitiveDictionaryOrder(a: string, b: string) {
-                // An ordinal comparison puts "A" after "b", but for the UI we want "A" before "b".
-                // We first sort case insensitively.  So "Aaa" will come before "baa".
-                // Then we sort case sensitively, so "aaa" will come before "Aaa".
-                return compareCaseInsensitive(a, b) || compareCaseSensitive(a, b);
             }
         }
 
@@ -1744,32 +1723,22 @@ namespace ts {
             return createFallbackStringComparer;
         }
 
-        // Hold onto common string comparers. This avoids constantly reallocating comparers during
-        // tests.
-        function createStringComparerCached(locale: CachedLocale, caseInsensitive: boolean) {
-            const cacheKey = locale || "default";
-            const cache = caseInsensitive
-                ? caseInsensitiveCache || (caseInsensitiveCache = {})
-                : caseSensitiveCache || (caseSensitiveCache = {});
-
-            let comparer = cache[cacheKey];
-            if (!comparer) {
-                comparer = createStringComparerNoCache(locale, caseInsensitive);
-                cache[cacheKey] = comparer;
+        function createStringComparer(locale: string | undefined) {
+            // Hold onto common string comparers. This avoids constantly reallocating comparers during
+            // tests.
+            if (locale === undefined) {
+                return defaultComparer || (defaultComparer = stringComparerFactory(locale));
             }
-
-            return comparer;
-        }
-
-        function createStringComparer(locale: string | undefined, caseInsensitive: boolean) {
-            return locale === undefined || locale === "en-US"
-                ? createStringComparerCached(locale as CachedLocale, caseInsensitive)
-                : createStringComparerNoCache(locale, caseInsensitive);
+            else if (locale === "en-US") {
+                return enUSComparer || (enUSComparer = stringComparerFactory(locale));
+            }
+            else {
+                return stringComparerFactory(locale);
+            }
         }
     })();
 
     let uiComparerCaseSensitive: Comparer<string> | undefined;
-    let uiComparerCaseInsensitive: Comparer<string> | undefined;
     let uiLocale: string | undefined;
 
     export function getUILocale() {
@@ -1780,23 +1749,7 @@ namespace ts {
         if (uiLocale !== value) {
             uiLocale = value;
             uiComparerCaseSensitive = undefined;
-            uiComparerCaseInsensitive = undefined;
         }
-    }
-
-    /**
-     * Compare two strings using the case-insensitive sort behavior of the UI locale.
-     *
-     * Ordering is not predictable between different host locales, but is best for displaying
-     * ordered data for UI presentation. Characters with multiple unicode representations may
-     * be considered equal.
-     *
-     * Case-insensitive comparisons compare strings that differ in only base characters or
-     * accents/diacritic marks as unequal.
-     */
-    export function compareStringsCaseInsensitiveUI(a: string, b: string) {
-        const comparer = uiComparerCaseInsensitive || (uiComparerCaseInsensitive = createStringComparer(uiLocale, /*caseInsensitive*/ true));
-        return comparer(a, b);
     }
 
     /**
@@ -1810,7 +1763,7 @@ namespace ts {
      * accents/diacritic marks, or case as unequal.
      */
     export function compareStringsCaseSensitiveUI(a: string, b: string) {
-        const comparer = uiComparerCaseSensitive || (uiComparerCaseSensitive = createStringComparer(uiLocale, /*caseInsensitive*/ false));
+        const comparer = uiComparerCaseSensitive || (uiComparerCaseSensitive = createUIStringComparer(uiLocale));
         return comparer(a, b);
     }
 

@@ -367,7 +367,7 @@ namespace ts.NavigationBar {
     }
 
     function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode) {
-        return compareStringsCaseInsensitiveUI(tryGetName(child1.node), tryGetName(child2.node))
+        return compareStringsCaseSensitiveUI(tryGetName(child1.node), tryGetName(child2.node))
             || compareValues(navigationBarNodeKind(child1), navigationBarNodeKind(child2));
     }
 
