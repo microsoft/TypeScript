@@ -13597,7 +13597,13 @@ namespace ts {
             // JSX expression can appear in two position : JSX Element's children or JSX attribute
             const jsxAttributes = isJsxAttributeLike(node.parent) ?
                 node.parent.parent :
-                node.parent.openingElement.attributes; // node.parent is JsxElement
+                    isJsxElement(node.parent) ?
+                        node.parent.openingElement.attributes :
+                        undefined; // node.parent is JsxFragment with no attributes
+
+            if (!jsxAttributes) {
+                return undefined; // don't check children of a fragment
+            }
 
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
@@ -14177,13 +14183,13 @@ namespace ts {
         }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement): Type {
-            checkJsxOpeningLikeElement(node);
+            checkJsxOpeningLikeElementOrOpeningFragment(node);
             return getJsxGlobalElementType() || anyType;
         }
 
         function checkJsxElement(node: JsxElement): Type {
             // Check attributes
-            checkJsxOpeningLikeElement(node.openingElement);
+            checkJsxOpeningLikeElementOrOpeningFragment(node.openingElement);
 
             // Perform resolution on the closing tag so that rename/go to definition/etc work
             if (isJsxIntrinsicIdentifier(node.closingElement.tagName)) {
@@ -14191,6 +14197,16 @@ namespace ts {
             }
             else {
                 checkExpression(node.closingElement.tagName);
+            }
+
+            return getJsxGlobalElementType() || anyType;
+        }
+
+        function checkJsxFragment(node: JsxFragment): Type {
+            checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment);
+
+            if (compilerOptions.jsx === JsxEmit.React && compilerOptions.jsxFactory) {
+                error(node, Diagnostics.JSX_fragment_is_not_supported_when_using_jsxFactory);
             }
 
             return getJsxGlobalElementType() || anyType;
@@ -14859,14 +14875,19 @@ namespace ts {
             }
         }
 
-        function checkJsxOpeningLikeElement(node: JsxOpeningLikeElement) {
-            checkGrammarJsxElement(node);
+        function checkJsxOpeningLikeElementOrOpeningFragment(node: JsxOpeningLikeElement | JsxOpeningFragment) {
+            const isNodeOpeningLikeElement = isJsxOpeningLikeElement(node);
+
+            if (isNodeOpeningLikeElement) {
+                checkGrammarJsxElement(<JsxOpeningLikeElement>node);
+            }
             checkJsxPreconditions(node);
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
             const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
             const reactNamespace = getJsxNamespace();
-            const reactSym = resolveName(node.tagName, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
+            const reactLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
+            const reactSym = resolveName(reactLocation, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
             if (reactSym) {
                 // Mark local symbol as referenced here because it might not have been marked
                 // if jsx emit was not react as there wont be error being emitted
@@ -14878,7 +14899,9 @@ namespace ts {
                 }
             }
 
-            checkJsxAttributesAssignableToTagNameAttributes(node);
+            if (isNodeOpeningLikeElement) {
+                checkJsxAttributesAssignableToTagNameAttributes(<JsxOpeningLikeElement>node);
+            }
         }
 
         /**
@@ -15034,12 +15057,11 @@ namespace ts {
                 }
             }
 
-            // Referencing Abstract Properties within Constructors is not allowed
-            if ((flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop)) {
+            // Referencing abstract properties within their own constructors is not allowed
+            if ((flags & ModifierFlags.Abstract) && isThisProperty(node) && symbolHasNonMethodDeclaration(prop)) {
                 const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
-
-                if (declaringClassDeclaration && isNodeWithinConstructor(node, declaringClassDeclaration)) {
-                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), typeToString(getDeclaringClass(prop)));
+                if (declaringClassDeclaration && isNodeWithinConstructorOfClass(node, declaringClassDeclaration)) {
+                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name));
                     return false;
                 }
             }
@@ -18655,6 +18677,8 @@ namespace ts {
                     return checkJsxElement(<JsxElement>node);
                 case SyntaxKind.JsxSelfClosingElement:
                     return checkJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                case SyntaxKind.JsxFragment:
+                    return checkJsxFragment(<JsxFragment>node);
                 case SyntaxKind.JsxAttributes:
                     return checkJsxAttributes(<JsxAttributes>node, checkMode);
                 case SyntaxKind.JsxOpeningElement:
@@ -23369,9 +23393,9 @@ namespace ts {
             return result;
         }
 
-        function isNodeWithinConstructor(node: Node, classDeclaration: ClassLikeDeclaration) {
+        function isNodeWithinConstructorOfClass(node: Node, classDeclaration: ClassLikeDeclaration) {
             return findAncestor(node, element => {
-                if (isConstructorDeclaration(element) && nodeIsPresent(element.body)) {
+                if (isConstructorDeclaration(element) && nodeIsPresent(element.body) && element.parent === classDeclaration) {
                     return true;
                 }
                 else if (element === classDeclaration || isFunctionLikeDeclaration(element)) {
