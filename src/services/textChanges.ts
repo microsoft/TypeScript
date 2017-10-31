@@ -581,7 +581,7 @@ namespace ts.textChanges {
             return applyFormatting(nonformattedText, sourceFile, initialIndentation, delta, this.rulesProvider);
         }
 
-        private static normalize(changes: Change[]) {
+        private static normalize(changes: Change[]): Change[] {
             // order changes by start position
             const normalized = stableSort(changes, (a, b) => a.range.pos - b.range.pos);
             // verify that change intervals do not overlap, except possibly at end points.

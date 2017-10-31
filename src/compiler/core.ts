@@ -295,29 +295,13 @@ namespace ts {
         Debug.fail();
     }
 
-    function containsWithoutEqualityComparer<T>(array: ReadonlyArray<T>, value: T) {
-        for (const v of array) {
-            if (v === value) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function containsWithEqualityComparer<T>(array: ReadonlyArray<T>, value: T, equalityComparer: EqualityComparer<T>) {
-        for (const v of array) {
-            if (equalityComparer(v, value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    export function contains<T>(array: ReadonlyArray<T>, value: T, equalityComparer?: EqualityComparer<T>): boolean {
+    export function contains<T>(array: ReadonlyArray<T>, value: T, equalityComparer: EqualityComparer<T> = equateValues): boolean {
         if (array) {
-            return equalityComparer
-                ? containsWithEqualityComparer(array, value, equalityComparer)
-                : containsWithoutEqualityComparer(array, value);
+            for (const v of array) {
+                if (equalityComparer(v, value)) {
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -692,8 +676,8 @@ namespace ts {
     /**
      * Deduplicates an unsorted array.
      * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
-     * @param comparer An optional `Comparer` used to sort entries before comparison. If supplied,
-     * results are returned in the original order found in `array`.
+     * @param comparer An optional `Comparer` used to sort entries before comparison, though the
+     * result will remain in the original order in `array`.
      */
     export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
         return !array ? undefined :
@@ -798,14 +782,14 @@ namespace ts {
     }
 
     /**
-     * Gets the relative complement of `arrayA` with respect to `b`, returning the elements that
+     * Gets the relative complement of `arrayA` with respect to `arrayB`, returning the elements that
      * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
      * based on the provided comparer.
      */
-    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T>, offsetA = 0, offsetB = 0): T[] | undefined {
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T>): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
-        outer: for (; offsetB < arrayB.length; offsetB++) {
+        outer: for (let offsetA = 0, offsetB = 0; offsetB < arrayB.length; offsetB++) {
             inner: for (; offsetA < arrayA.length; offsetA++) {
                 switch (comparer(arrayB[offsetB], arrayA[offsetA])) {
                     case Comparison.LessThan: break inner;
@@ -2467,10 +2451,9 @@ namespace ts {
         return flatten<string>(results);
 
         function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
-            const entries = getFileSystemEntries(path);
-            const files = sort(entries.files, comparer);
+            const { files, directories } = getFileSystemEntries(path);
 
-            for (const current of files) {
+            for (const current of sort(files, comparer)) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
                 if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
@@ -2493,8 +2476,7 @@ namespace ts {
                 }
             }
 
-            const directories = sort(entries.directories, comparer);
-            for (const current of directories) {
+            for (const current of sort(directories, comparer)) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
                 if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
