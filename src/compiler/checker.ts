@@ -23141,7 +23141,7 @@ namespace ts {
 
                 checkDeferredNodes();
 
-                if (isExternalModule(node)) {
+                if (isExternalOrCommonJsModule(node)) {
                     registerForUnusedIdentifiersCheck(node);
                 }
 
