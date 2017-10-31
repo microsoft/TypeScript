@@ -179,6 +179,7 @@ namespace ts {
                 compilerOptions: {
                     target: ts.ScriptTarget.ES5,
                     module: ts.ModuleKind.System,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
 
