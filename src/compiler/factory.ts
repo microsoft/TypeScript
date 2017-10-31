@@ -2625,7 +2625,7 @@ namespace ts {
     /**
      * Gets a custom text range to use when emitting source maps.
      */
-    export function getSourceMapRange(node: Node) {
+    export function getSourceMapRange(node: Node): SourceMapRange {
         const emitNode = node.emitNode;
         return (emitNode && emitNode.sourceMapRange) || node;
     }
