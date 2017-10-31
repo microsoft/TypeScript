@@ -16492,10 +16492,15 @@ namespace ts {
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             candidateForArgumentError = candidate;
-                            break;
+                            if (candidates.length > 1) {
+                                break;
+                            }
                         }
                         if (excludeCount === 0) {
                             candidates[candidateIndex] = candidate;
+                            if (candidate === candidateForArgumentError) {
+                                break;
+                            }
                             return candidate;
                         }
                         excludeCount--;

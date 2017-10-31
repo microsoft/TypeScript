@@ -28,12 +28,12 @@ var r9 = f10('', () => (a => a.foo), 1); // error
 >f10('', () => (a => a.foo), 1) : any
 >f10 : <T>(x: T, b: () => (a: T) => void, y: T) => T
 >'' : ""
->() => (a => a.foo) : () => (a: "") => any
->(a => a.foo) : (a: "") => any
->a => a.foo : (a: "") => any
->a : ""
+>() => (a => a.foo) : () => (a: string) => any
+>(a => a.foo) : (a: string) => any
+>a => a.foo : (a: string) => any
+>a : string
 >a.foo : any
->a : ""
+>a : string
 >foo : any
 >1 : 1
 

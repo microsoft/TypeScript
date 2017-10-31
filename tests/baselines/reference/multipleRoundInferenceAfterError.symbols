@@ -1,0 +1,19 @@
+=== tests/cases/compiler/multipleRoundInferenceAfterError.ts ===
+// Fixes #18715
+declare function inference<T>(target: T, name: keyof T): void;
+>inference : Symbol(inference, Decl(multipleRoundInferenceAfterError.ts, 0, 0))
+>T : Symbol(T, Decl(multipleRoundInferenceAfterError.ts, 1, 27))
+>target : Symbol(target, Decl(multipleRoundInferenceAfterError.ts, 1, 30))
+>T : Symbol(T, Decl(multipleRoundInferenceAfterError.ts, 1, 27))
+>name : Symbol(name, Decl(multipleRoundInferenceAfterError.ts, 1, 40))
+>T : Symbol(T, Decl(multipleRoundInferenceAfterError.ts, 1, 27))
+
+inference({ a: 1, b: 2, c: 3, d(n) { return n } }, "d");
+>inference : Symbol(inference, Decl(multipleRoundInferenceAfterError.ts, 0, 0))
+>a : Symbol(a, Decl(multipleRoundInferenceAfterError.ts, 2, 11))
+>b : Symbol(b, Decl(multipleRoundInferenceAfterError.ts, 2, 17))
+>c : Symbol(c, Decl(multipleRoundInferenceAfterError.ts, 2, 23))
+>d : Symbol(d, Decl(multipleRoundInferenceAfterError.ts, 2, 29))
+>n : Symbol(n, Decl(multipleRoundInferenceAfterError.ts, 2, 32))
+>n : Symbol(n, Decl(multipleRoundInferenceAfterError.ts, 2, 32))
+
