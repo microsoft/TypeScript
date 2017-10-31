@@ -1325,7 +1325,8 @@ namespace ts {
                     EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps
                 )
             );
-            statement.startsOnNewLine = true;
+
+            startOnNewLine(statement);
             setTextRange(statement, parameter);
             setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue);
             statements.push(statement);
@@ -1681,7 +1682,7 @@ namespace ts {
                 ]
             );
             if (startsOnNewLine) {
-                call.startsOnNewLine = true;
+                startOnNewLine(call);
             }
 
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
@@ -2600,7 +2601,7 @@ namespace ts {
                 );
 
                 if (node.multiLine) {
-                    assignment.startsOnNewLine = true;
+                    startOnNewLine(assignment);
                 }
 
                 expressions.push(assignment);
@@ -3081,7 +3082,7 @@ namespace ts {
             );
             setTextRange(expression, property);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             return expression;
         }
@@ -3103,7 +3104,7 @@ namespace ts {
             );
             setTextRange(expression, property);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             return expression;
         }
@@ -3126,7 +3127,7 @@ namespace ts {
             );
             setTextRange(expression, method);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return expression;

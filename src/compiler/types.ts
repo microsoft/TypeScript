@@ -516,7 +516,6 @@ namespace ts {
         /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
         parent?: Node;                                        // Parent node (initialized by binding)
         /* @internal */ original?: Node;                      // The original node if this is an updated node.
-        /* @internal */ startsOnNewLine?: boolean;            // Whether a synthesized node should start on a new line (used by transforms).
         /* @internal */ symbol?: Symbol;                      // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
@@ -4298,6 +4297,7 @@ namespace ts {
         constantValue?: string | number;         // The constant value of an expression
         externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
         helpers?: EmitHelper[];                  // Emit helpers for the node
+        startsOnNewLine?: boolean;               // If the ndoe should begin on a new line
     }
 
     export const enum EmitFlags {

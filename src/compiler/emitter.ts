@@ -2726,7 +2726,7 @@ namespace ts {
                 }
             }
             else {
-                return nextNode.startsOnNewLine;
+                return getStartsOnNewLine(nextNode);
             }
         }
 
@@ -2757,7 +2757,7 @@ namespace ts {
 
         function synthesizedNodeStartsOnNewLine(node: Node, format?: ListFormat) {
             if (nodeIsSynthesized(node)) {
-                const startsOnNewLine = node.startsOnNewLine;
+                const startsOnNewLine = getStartsOnNewLine(node);
                 if (startsOnNewLine === undefined) {
                     return (format & ListFormat.PreferNewLine) !== 0;
                 }
@@ -2774,7 +2774,7 @@ namespace ts {
             node2 = skipSynthesizedParentheses(node2);
 
             // Always use a newline for synthesized code if the synthesizer desires it.
-            if (node2.startsOnNewLine) {
+            if (getStartsOnNewLine(node2)) {
                 return true;
             }
 

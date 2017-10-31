@@ -602,7 +602,7 @@ namespace ts {
 
             let statements: Statement[] = [classStatement];
 
-            // Write any pending expressions
+            // Write any pending expressions from elided or moved computed property names
             if (some(pendingExpressions)) {
                 statements.push(createStatement(inlineExpressions(pendingExpressions)));
             }
@@ -897,6 +897,7 @@ namespace ts {
                 // the body of a class with static initializers.
                 setEmitFlags(classExpression, EmitFlags.Indented | getEmitFlags(classExpression));
                 expressions.push(startOnNewLine(createAssignment(temp, classExpression)));
+                // Add any pending expressions leftover from elided or relocated computed property names
                 addRange(expressions, pendingExpressions);
                 pendingExpressions = savedPendingExpressions;
                 addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
@@ -1218,7 +1219,7 @@ namespace ts {
             const expressions: Expression[] = [];
             for (const property of properties) {
                 const expression = transformInitializedProperty(property, receiver);
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
                 setSourceMapRange(expression, moveRangePastModifiers(property));
                 setCommentRange(expression, property);
                 expressions.push(expression);
@@ -1234,6 +1235,7 @@ namespace ts {
          * @param receiver The object receiving the property assignment.
          */
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
+            // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
                 ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name, !hasModifier(property, ModifierFlags.Static)))
                 : property.name;
@@ -2059,6 +2061,11 @@ namespace ts {
             );
         }
 
+        /**
+         * A simple inlinable expression is an expression which can be copied into multiple locations
+         * without risk of repeating any sideeffects and whose value could not possibly change between
+         * any such locations
+         */
         function isSimpleInlineableExpression(expression: Expression) {
             return !isIdentifier(expression) && isSimpleCopiableExpression(expression) ||
                 isWellKnownSymbolSyntactically(expression);
@@ -2085,6 +2092,12 @@ namespace ts {
             }
         }
 
+        /**
+         * If the name is a computed property, this function transforms it, then either returns an expression which caches the
+         * value of the result or the expression itself if the value is either unused or safe to inline into multiple locations
+         * @param shouldHoist Does the expression need to be reused? (ie, for an initializer or a decorator)
+         * @param omitSimple Should expressions with no observable side-effects be elided? (ie, the expression is not hoisted for a decorator or initializer and is a literal)
+         */
         function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean, omitSimple: boolean): Expression {
             if (isComputedPropertyName(name)) {
                 const expression = visitNode(name.expression, visitor, isExpression);
@@ -2110,6 +2123,7 @@ namespace ts {
             const name = member.name;
             let expr = getPropertyNameExpressionIfNeeded(name, some(member.decorators), /*omitSimple*/ false);
             if (expr) { // expr only exists if `name` is a computed property name
+                // Inline any pending expressions from previous elided or relocated computed property name expressions in order to preserve execution order
                 if (some(pendingExpressions)) {
                     expr = inlineExpressions([...pendingExpressions, expr]);
                     pendingExpressions.length = 0;
