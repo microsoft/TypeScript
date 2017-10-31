@@ -5,11 +5,11 @@
 //// }
 //// function foo(arg: PropsBag) {}
 //// foo({
-////    pr/*p1*/opx: 10
+////    [|pr/*p1*/opx|]: 10
 //// })
 //// function bar(firstarg: boolean, secondarg: PropsBag) {}
 //// bar(true, {
-////    pr/*p2*/opx: 10
+////    [|pr/*p2*/opx|]: 10
 //// })
 
 

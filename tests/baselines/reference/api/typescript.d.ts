@@ -3947,6 +3947,7 @@ declare namespace ts {
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan;
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -4209,6 +4210,10 @@ declare namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+    }
+    interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<DefinitionInfo>;
+        textSpan: TextSpan;
     }
     interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
         displayParts: SymbolDisplayPart[];

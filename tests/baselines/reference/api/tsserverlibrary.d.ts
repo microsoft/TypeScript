@@ -3947,6 +3947,7 @@ declare namespace ts {
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan;
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -4209,6 +4210,10 @@ declare namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+    }
+    interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<DefinitionInfo>;
+        textSpan: TextSpan;
     }
     interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
         displayParts: SymbolDisplayPart[];
@@ -4845,6 +4850,7 @@ declare namespace ts.server.protocol {
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
         Definition = "definition",
+        DefinitionAndBoundSpan = "definitionAndBoundSpan",
         Implementation = "implementation",
         Exit = "exit",
         Format = "format",
@@ -5364,11 +5370,18 @@ declare namespace ts.server.protocol {
          */
         file: string;
     }
+    interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<FileSpan>;
+        textSpan: TextSpan;
+    }
     /**
      * Definition response message.  Gives text range for definition.
      */
     interface DefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+    interface DefinitionInfoAndBoundSpanReponse extends Response {
+        body?: DefinitionInfoAndBoundSpan;
     }
     /**
      * Definition response message.  Gives text range for definition.
@@ -6945,6 +6958,9 @@ declare namespace ts.server {
         private convertToDiagnosticsWithLinePosition(diagnostics, scriptInfo);
         private getDiagnosticsWorker(args, isSemantic, selector, includeLinePosition);
         private getDefinition(args, simplifiedResult);
+        private getDefinitionAndBoundSpan(args, simplifiedResult);
+        private mapDefinitionInfo(definitions, project);
+        private toFileSpan(fileName, textSpan, project);
         private getTypeDefinition(args);
         private getImplementation(args, simplifiedResult);
         private getOccurrences(args);
@@ -6994,10 +7010,10 @@ declare namespace ts.server {
         private reload(args, reqSeq);
         private saveToTmp(fileName, tempFileName);
         private closeClientFile(fileName);
-        private decorateNavigationBarItems(items, scriptInfo);
+        private mapLocationNavigationBarItems(items, scriptInfo);
         private getNavigationBarItems(args, simplifiedResult);
-        private decorateNavigationTree(tree, scriptInfo);
-        private decorateSpan(span, scriptInfo);
+        private toLocationNavigationTree(tree, scriptInfo);
+        private toLocationTextSpan(span, scriptInfo);
         private getNavigationTree(args, simplifiedResult);
         private getNavigateToItems(args, simplifiedResult);
         private getSupportedCodeFixes();
