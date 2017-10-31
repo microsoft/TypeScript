@@ -1,0 +1,7 @@
+=== tests/cases/compiler/classexpr.ts ===
+export default (class Foo {} as any);
+>(class Foo {} as any) : any
+>class Foo {} as any : any
+>class Foo {} : typeof Foo
+>Foo : typeof Foo
+

@@ -128,7 +128,11 @@ namespace ts {
         }
     }
 
-    export function getEffectiveTypeRoots(options: CompilerOptions, host: { directoryExists?: (directoryName: string) => boolean, getCurrentDirectory?: () => string }): string[] | undefined {
+    export interface GetEffectiveTypeRootsHost {
+        directoryExists?(directoryName: string): boolean;
+        getCurrentDirectory?(): string;
+    }
+    export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined {
         if (options.typeRoots) {
             return options.typeRoots;
         }
@@ -1001,7 +1005,8 @@ namespace ts {
         return withPackageId(packageId, pathAndExtension);
     }
 
-    function getPackageName(moduleName: string): { packageName: string, rest: string } {
+    /* @internal */
+    export function getPackageName(moduleName: string): { packageName: string, rest: string } {
         let idx = moduleName.indexOf(directorySeparator);
         if (moduleName[0] === "@") {
             idx = moduleName.indexOf(directorySeparator, idx + 1);
@@ -1059,18 +1064,27 @@ namespace ts {
     const mangledScopedPackageSeparator = "__";
 
     /** For a scoped package, we must look in `@types/foo__bar` instead of `@types/@foo/bar`. */
-    function mangleScopedPackage(moduleName: string, state: ModuleResolutionState): string {
-        if (startsWith(moduleName, "@")) {
-            const replaceSlash = moduleName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
-            if (replaceSlash !== moduleName) {
-                const mangled = replaceSlash.slice(1); // Take off the "@"
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Scoped_package_detected_looking_in_0, mangled);
-                }
-                return mangled;
+    function mangleScopedPackage(packageName: string, state: ModuleResolutionState): string {
+        const mangled = getMangledNameForScopedPackage(packageName);
+        if (state.traceEnabled && mangled !== packageName) {
+            trace(state.host, Diagnostics.Scoped_package_detected_looking_in_0, mangled);
+        }
+        return mangled;
+    }
+
+    /* @internal */
+    export function getTypesPackageName(packageName: string): string {
+        return `@types/${getMangledNameForScopedPackage(packageName)}`;
+    }
+
+    function getMangledNameForScopedPackage(packageName: string): string {
+        if (startsWith(packageName, "@")) {
+            const replaceSlash = packageName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
+            if (replaceSlash !== packageName) {
+                return replaceSlash.slice(1); // Take off the "@"
             }
         }
-        return moduleName;
+        return packageName;
     }
 
     /* @internal */

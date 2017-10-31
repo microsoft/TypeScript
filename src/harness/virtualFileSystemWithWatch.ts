@@ -1,10 +1,17 @@
 /// <reference path="harness.ts" />
 
 namespace ts.TestFSWithWatch {
-    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
-        content: libFileContent
+        content: `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> {}`
     };
 
     export const safeList = {
@@ -28,6 +35,7 @@ namespace ts.TestFSWithWatch {
         executingFilePath?: string;
         currentDirectory?: string;
         newLine?: string;
+        useWindowsStylePaths?: boolean;
     }
 
     export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolder>, params?: TestServerHostCreationParameters): TestServerHost {
@@ -39,7 +47,8 @@ namespace ts.TestFSWithWatch {
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList,
-            params.newLine);
+            params.newLine,
+            params.useWindowsStylePaths);
         return host;
     }
 
@@ -52,7 +61,8 @@ namespace ts.TestFSWithWatch {
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList,
-            params.newLine);
+            params.newLine,
+            params.useWindowsStylePaths);
         return host;
     }
 
@@ -230,11 +240,14 @@ namespace ts.TestFSWithWatch {
         readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
+        private readonly executingFilePath: string;
+        private readonly currentDirectory: string;
 
-        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n") {
+        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
-
+            this.executingFilePath = this.getHostSpecificPath(executingFilePath);
+            this.currentDirectory = this.getHostSpecificPath(currentDirectory);
             this.reloadFS(fileOrFolderList);
         }
 
@@ -250,11 +263,24 @@ namespace ts.TestFSWithWatch {
             return this.toPath(this.toNormalizedAbsolutePath(s));
         }
 
-        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>) {
+        getHostSpecificPath(s: string) {
+            if (this.useWindowsStylePath && s.startsWith(directorySeparator)) {
+                return "c:/" + s.substring(1);
+            }
+            return s;
+        }
+
+        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, invokeDirectoryWatcherInsteadOfFileChanged?: boolean) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
-            // always inject safelist file in the list of files
-            for (const fileOrDirectory of fileOrFolderList.concat(this.withSafeList ? safeList : [])) {
+            fileOrFolderList = fileOrFolderList.concat(this.withSafeList ? safeList : []);
+            const filesOrFoldersToLoad: ReadonlyArray<FileOrFolder> = !this.useWindowsStylePath ? fileOrFolderList :
+                fileOrFolderList.map<FileOrFolder>(f => {
+                    const result = clone(f);
+                    result.path = this.getHostSpecificPath(f.path);
+                    return result;
+                });
+            for (const fileOrDirectory of filesOrFoldersToLoad) {
                 const path = this.toFullPath(fileOrDirectory.path);
                 mapNewLeaves.set(path, true);
                 // If its a change
@@ -265,7 +291,12 @@ namespace ts.TestFSWithWatch {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
                                 currentEntry.content = fileOrDirectory.content;
-                                this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                if (invokeDirectoryWatcherInsteadOfFileChanged) {
+                                    this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                }
+                                else {
+                                    this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                }
                             }
                         }
                         else {

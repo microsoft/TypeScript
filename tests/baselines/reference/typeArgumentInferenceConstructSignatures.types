@@ -524,8 +524,8 @@ interface A92 {
 >Window : No type information available!
 }
 var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9e : any
->new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : any
+>a9e : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 : someGenerics9
 >undefined : undefined
 >{ x: 6, z: window } : { x: number; z: any; }
@@ -540,7 +540,7 @@ var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >'' : ""
 
 var a9e: {};
->a9e : any
+>a9e : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9f : any

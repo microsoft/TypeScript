@@ -131,7 +131,7 @@ namespace ts.server {
 
         const json = JSON.stringify(msg);
         if (verboseLogging) {
-            logger.info(msg.type + ": " + json);
+            logger.info(`${msg.type}:${indent(json)}`);
         }
 
         const len = byteLength(json, "utf8");
@@ -383,9 +383,9 @@ namespace ts.server {
         public logError(err: Error, cmd: string) {
             let msg = "Exception on executing command " + cmd;
             if (err.message) {
-                msg += ":\n" + err.message;
+                msg += ":\n" + indent(err.message);
                 if ((<StackTraceError>err).stack) {
-                    msg += "\n" + (<StackTraceError>err).stack;
+                    msg += "\n" + indent((<StackTraceError>err).stack);
                 }
             }
             this.logger.msg(msg, Msg.Err);
@@ -411,19 +411,27 @@ namespace ts.server {
             this.send(ev);
         }
 
-        public output(info: any, cmdName: string, reqSeq = 0, errorMsg?: string) {
+        // For backwards-compatibility only.
+        public output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void {
+            this.doOutput(info, cmdName, reqSeq, /*success*/ !errorMsg, errorMsg);
+        }
+
+        private doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
             const res: protocol.Response = {
                 seq: 0,
                 type: "response",
                 command: cmdName,
                 request_seq: reqSeq,
-                success: !errorMsg,
+                success,
             };
-            if (!errorMsg) {
+            if (success) {
                 res.body = info;
             }
             else {
-                res.message = errorMsg;
+                Debug.assert(info === undefined);
+            }
+            if (message) {
+                res.message = message;
             }
             this.send(res);
         }
@@ -1178,11 +1186,12 @@ namespace ts.server {
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position);
             if (simplifiedResult) {
-                return mapDefined(completions && completions.entries, entry => {
+                return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source } = entry;
                         const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
-                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                        // Use `hasAction || undefined` to avoid serializing `false`.
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source };
                     }
                 }).sort((a, b) => compareStrings(a.name, b.name));
             }
@@ -1193,10 +1202,21 @@ namespace ts.server {
 
         private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs): ReadonlyArray<protocol.CompletionEntryDetails> {
             const { file, project } = this.getFileAndProject(args);
-            const position = this.getPositionInFile(args, file);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+            const position = this.getPosition(args, scriptInfo);
+            const formattingOptions = project.projectService.getFormatCodeOptions(file);
 
-            return mapDefined(args.entryNames, entryName =>
-                project.getLanguageService().getCompletionEntryDetails(file, position, entryName));
+            return mapDefined<string | protocol.CompletionEntryIdentifier, protocol.CompletionEntryDetails>(args.entryNames, entryName => {
+                const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source);
+                if (details) {
+                    const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
+                    return { ...details, codeActions: mappedCodeActions };
+                }
+                else {
+                    return undefined;
+                }
+            });
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): ReadonlyArray<protocol.CompileOnSaveAffectedFileListSingleProject> {
@@ -1292,11 +1312,13 @@ namespace ts.server {
         private reload(args: protocol.ReloadRequestArgs, reqSeq: number) {
             const file = toNormalizedPath(args.file);
             const tempFileName = args.tmpfile && toNormalizedPath(args.tmpfile);
-            const project = this.projectService.getDefaultProjectForFile(file, /*ensureProject*/ true);
-            this.changeSeq++;
-            // make sure no changes happen before this one is finished
-            if (project.reloadScript(file, tempFileName)) {
-                this.output(undefined, CommandNames.Reload, reqSeq);
+            const info = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (info) {
+                this.changeSeq++;
+                // make sure no changes happen before this one is finished
+                if (info.reloadFromFile(tempFileName)) {
+                    this.doOutput(/*info*/ undefined, CommandNames.Reload, reqSeq, /*success*/ true);
+                }
             }
         }
 
@@ -1495,16 +1517,18 @@ namespace ts.server {
             }
 
             if (simplifiedResult) {
-                const file = result.renameFilename;
-                let location: protocol.Location | undefined;
-                if (file !== undefined && result.renameLocation !== undefined) {
-                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(file));
-                    location = renameScriptInfo.positionToLineOffset(result.renameLocation);
+                const { renameFilename, renameLocation, edits } = result;
+                let mappedRenameLocation: protocol.Location | undefined;
+                if (renameFilename !== undefined && renameLocation !== undefined) {
+                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename));
+                    const snapshot = renameScriptInfo.getSnapshot();
+                    const oldText = snapshot.getText(0, snapshot.getLength());
+                    mappedRenameLocation = getLocationInNewDocument(oldText, renameFilename, renameLocation, edits);
                 }
                 return {
-                    renameLocation: location,
-                    renameFilename: file,
-                    edits: result.edits.map(change => this.mapTextChangesToCodeEdits(project, change))
+                    renameLocation: mappedRenameLocation,
+                    renameFilename,
+                    edits: edits.map(change => this.mapTextChangesToCodeEdits(project, change))
                 };
             }
             else {
@@ -1534,6 +1558,15 @@ namespace ts.server {
             }
         }
 
+        private applyCodeActionCommand(commandName: string, requestSeq: number, args: protocol.ApplyCodeActionCommandRequestArgs): void {
+            const { file, project } = this.getFileAndProject(args);
+            const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
+            const command = args.command as CodeActionCommand; // They should be sending back the command we sent them.
+            project.getLanguageService().applyCodeActionCommand(file, command).then(
+                ({ successMessage }) => { output(/*success*/ true, successMessage); },
+                error => { output(/*success*/ false, error); });
+        }
+
         private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {
             let startPosition: number = undefined, endPosition: number = undefined;
             if (args.startPosition !== undefined) {
@@ -1556,14 +1589,12 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction(codeAction: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
-            return {
-                description: codeAction.description,
-                changes: codeAction.changes.map(change => ({
-                    fileName: change.fileName,
-                    textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
-                }))
-            };
+        private mapCodeAction({ description, changes: unmappedChanges, commands }: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
+            const changes = unmappedChanges.map(change => ({
+                fileName: change.fileName,
+                textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
+            }));
+            return { description,  changes, commands };
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: FileTextChanges): protocol.FileCodeEdits {
@@ -1649,15 +1680,15 @@ namespace ts.server {
         exit() {
         }
 
-        private notRequired() {
+        private notRequired(): HandlerResponse {
             return { responseRequired: false };
         }
 
-        private requiredResponse(response: any) {
+        private requiredResponse(response: {}): HandlerResponse {
             return { response, responseRequired: true };
         }
 
-        private handlers = createMapFromTemplate<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
+        private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
                 // TODO: report errors
@@ -1835,7 +1866,7 @@ namespace ts.server {
             },
             [CommandNames.Configure]: (request: protocol.ConfigureRequest) => {
                 this.projectService.setHostConfiguration(request.arguments);
-                this.output(undefined, CommandNames.Configure, request.seq);
+                this.doOutput(/*info*/ undefined, CommandNames.Configure, request.seq, /*success*/ true);
                 return this.notRequired();
             },
             [CommandNames.Reload]: (request: protocol.ReloadRequest) => {
@@ -1902,6 +1933,10 @@ namespace ts.server {
             [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
             },
+            [CommandNames.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
+                this.applyCodeActionCommand(request.command, request.seq, request.arguments);
+                return this.notRequired(); // Response will come asynchronously.
+            },
             [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());
             },
@@ -1916,7 +1951,7 @@ namespace ts.server {
             }
         });
 
-        public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
+        public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
             if (this.handlers.has(command)) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
@@ -1945,14 +1980,14 @@ namespace ts.server {
             }
         }
 
-        public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
+        public executeCommand(request: protocol.Request): HandlerResponse {
             const handler = this.handlers.get(request.command);
             if (handler) {
                 return this.executeWithRequestId(request.seq, () => handler(request));
             }
             else {
-                this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);
-                this.output(undefined, CommandNames.Unknown, request.seq, `Unrecognized JSON command: ${request.command}`);
+                this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
+                this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }
         }
@@ -1963,7 +1998,7 @@ namespace ts.server {
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
                 if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`request: ${message}`);
+                    this.logger.info(`request:${indent(message)}`);
                 }
             }
 
@@ -1983,25 +2018,53 @@ namespace ts.server {
                 }
 
                 if (response) {
-                    this.output(response, request.command, request.seq);
+                    this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
                 else if (responseRequired) {
-                    this.output(undefined, request.command, request.seq, "No content available.");
+                    this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
                 }
             }
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
-                    this.output({ canceled: true }, request.command, request.seq);
+                    this.doOutput({ canceled: true }, request.command, request.seq, /*success*/ true);
                     return;
                 }
                 this.logError(err, message);
-                this.output(
-                    undefined,
+                this.doOutput(
+                    /*info*/ undefined,
                     request ? request.command : CommandNames.Unknown,
                     request ? request.seq : 0,
+                    /*success*/ false,
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
         }
+    }
+
+    export interface HandlerResponse {
+        response?: {};
+        responseRequired?: boolean;
+    }
+
+    /* @internal */ // Exported only for tests
+    export function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: ReadonlyArray<FileTextChanges>): protocol.Location {
+        const newText = applyEdits(oldText, renameFilename, edits);
+        const { line, character } = computeLineAndCharacterOfPosition(computeLineStarts(newText), renameLocation);
+        return { line: line + 1, offset: character + 1 };
+    }
+
+    function applyEdits(text: string, textFilename: string, edits: ReadonlyArray<FileTextChanges>): string {
+        for (const { fileName, textChanges } of edits) {
+            if (fileName !== textFilename) {
+                continue;
+            }
+
+            for (let i = textChanges.length - 1; i >= 0; i--) {
+                const { newText, span: { start, length } } = textChanges[i];
+                text = text.slice(0, start) + newText + text.slice(start + length);
+            }
+        }
+
+        return text;
     }
 }

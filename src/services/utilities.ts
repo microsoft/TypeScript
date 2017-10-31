@@ -1,3 +1,12 @@
+/* @internal */ // Don't expose that we use this
+// Based on lib.es6.d.ts
+interface PromiseConstructor {
+    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    reject(reason: any): Promise<never>;
+}
+/* @internal */
+declare var Promise: PromiseConstructor;
+
 // These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
@@ -169,7 +178,7 @@ namespace ts {
 
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
-                return !isPartOfExpression(node);
+                return !isExpressionNode(node);
             case SyntaxKind.ThisType:
                 return true;
         }
@@ -1281,9 +1290,7 @@ namespace ts {
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 &&
-            name.charCodeAt(0) === name.charCodeAt(length - 1) &&
-            (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isSingleOrDoubleQuote(name.charCodeAt(0))) {
             return name.substring(1, length - 1);
         }
         return name;
@@ -1298,6 +1305,10 @@ namespace ts {
         // First check to see if the script kind was specified by the host. Chances are the host
         // may override the default script kind for the file extension.
         return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
+    }
+
+    export function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker) {
+        return getSymbolId(skipAlias(symbol, checker));
     }
 
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {

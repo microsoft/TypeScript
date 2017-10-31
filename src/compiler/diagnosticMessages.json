@@ -1316,7 +1316,7 @@
         "category": "Error",
         "code": 2402
     },
-    "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.": {
+    "Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.": {
         "category": "Error",
         "code": 2403
     },
@@ -3539,6 +3539,14 @@
         "category": "Error",
         "code": 8025
     },
+    "Expected {0} type arguments; provide these with an '@extends' tag.": {
+        "category": "Error",
+        "code": 8026
+    },
+    "Expected {0}-{1} type arguments; provide these with an '@extends' tag.": {
+        "category": "Error",
+        "code": 8027
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -3673,7 +3681,7 @@
         "category": "Error",
         "code": 90010
     },
-    "Import {0} from {1}.": {
+    "Import '{0}' from \"{1}\".": {
         "category": "Message",
         "code": 90013
     },
@@ -3681,7 +3689,7 @@
         "category": "Message",
         "code": 90014
     },
-    "Add {0} to existing import declaration from {1}.": {
+    "Add '{0}' to existing import declaration from \"{1}\".": {
         "category": "Message",
         "code": 90015
     },

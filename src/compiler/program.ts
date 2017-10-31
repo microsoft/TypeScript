@@ -1049,6 +1049,10 @@ namespace ts {
             // update fileName -> file mapping
             for (let i = 0; i < newSourceFiles.length; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
+                // Set the file as found during node modules search if it was found that way in old progra,
+                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePaths[i]))) {
+                    sourceFilesFoundSearchingNodeModules.set(filePaths[i], true);
+                }
             }
 
             files = newSourceFiles;
@@ -1278,8 +1282,10 @@ namespace ts {
                 const typeChecker = getDiagnosticsProducingTypeChecker();
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
-                // For JavaScript files, we don't want to report semantic errors unless explicitly requested.
-                const includeBindAndCheckDiagnostics = !isSourceFileJavaScript(sourceFile) || isCheckJsEnabledForFile(sourceFile, options);
+
+                // By default, only type-check .ts, .tsx, and 'External' files (external files are added by plugins)
+                const includeBindAndCheckDiagnostics = sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
+                    sourceFile.scriptKind === ScriptKind.External || isCheckJsEnabledForFile(sourceFile, options);
                 const bindDiagnostics = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
@@ -2125,7 +2131,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib");
             }
 
-            if (options.noImplicitUseStrict && (options.alwaysStrict === undefined ? options.strict : options.alwaysStrict)) {
+            if (options.noImplicitUseStrict && getStrictOptionValue(options, "alwaysStrict")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
             }
 
@@ -2354,7 +2360,7 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return options.allowJs || !options.noImplicitAny ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+            return options.allowJs || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
     }
 
