@@ -546,9 +546,30 @@ var q = /*b*/ //c
     /*g*/ + /*h*/ //i
     /*j*/ 2|] /*k*/ //l
     /*m*/; /*n*/ //o`);
+
+        // https://github.com/Microsoft/TypeScript/issues/19328
+        testExtractFunction("extractFunction_importedGenericType", {
+            "someTypes": `
+export type Dictionary<T> = {
+    [key: string]: T;
+    };
+
+export type A = string | string[];
+
+export type B = Dictionary<A>;`,
+            "index": `
+import { A, B, Dictionary} from './someTypes';
+
+function doThing(): void {
+    const aBunchOfA: Dictionary<B> = {};
+    
+    [#|aBunchOfA['key'] = { a: 'thing' };|]
+}`
+        });
     });
 
-    function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
-        testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function, includeLib);
+    function testExtractFunction(caption: string, text: string | { [index: string]: string }, includeLib?: boolean) {
+        if (typeof text === "string") text = { "a": text };
+        testExtractSymbol(caption, createMapFromTemplate(text), "extractFunction", Diagnostics.Extract_function, includeLib);
     }
 }
