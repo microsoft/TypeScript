@@ -4,28 +4,20 @@
 ////function foo () {
 ////   return (
 ////        <div>
-////hello
-////goodbye
+/////*0*/hello
+/////*1*/goodbye
 ////        </div>
 ////    )
 ////}
 
-goTo.position(21);
-verify.textAtCaretIs("return");
-goTo.position(38);
-verify.textAtCaretIs("<div>");
-goTo.position(44);
-verify.textAtCaretIs("hello");
-goTo.position(50);
-verify.textAtCaretIs("goodbye");
+goTo.marker('0');
+verify.currentLineContentIs("hello");
+goTo.marker('1');
+verify.currentLineContentIs("goodbye");
 
 format.document();
 
-goTo.position(21);
-verify.textAtCaretIs("return");
-goTo.position(38);
-verify.textAtCaretIs("<div>");
-goTo.position(56);
-verify.textAtCaretIs("hello");
-goTo.position(74);
-verify.textAtCaretIs("goodbye");
+goTo.marker('0');
+verify.currentLineContentIs("            hello");
+goTo.marker('1');
+verify.currentLineContentIs("            goodbye");

@@ -715,7 +715,7 @@ namespace ts.formatting {
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
 
                 if (child.kind === SyntaxKind.JsxText) {
-                    const range = { pos: child.getStart(), end: child.getEnd() };
+                    const range: TextRange = { pos: child.getStart(), end: child.getEnd() };
                     indentMultilineCommentOrJsxText(range, childIndentation.indentation, /*firstLineIsIndented*/ true, /*indentFinalLine*/ false);
                 }
 
