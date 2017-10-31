@@ -7345,12 +7345,8 @@ namespace ts {
             return type.id;
         }
 
-        function binarySearchTypes(types: Type[], type: Type): number {
-            return binarySearch(types, type, getTypeId, compareValues);
-        }
-
         function containsType(types: Type[], type: Type): boolean {
-            return binarySearchTypes(types, type) >= 0;
+            return binarySearch(types, type, getTypeId, compareValues) >= 0;
         }
 
         // Return true if the given intersection type contains (a) more than one unit type or (b) an object
@@ -7391,7 +7387,7 @@ namespace ts {
                 if (flags & TypeFlags.Number) typeSet.containsNumber = true;
                 if (flags & TypeFlags.StringOrNumberLiteral) typeSet.containsStringOrNumberLiteral = true;
                 const len = typeSet.length;
-                const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearchTypes(typeSet, type);
+                const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
                 if (index < 0) {
                     if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
                         type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {

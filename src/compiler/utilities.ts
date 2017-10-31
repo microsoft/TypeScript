@@ -2291,6 +2291,7 @@ namespace ts {
         let nonFileDiagnostics: Diagnostic[] = [];
         const fileDiagnostics = createMap<Diagnostic[]>();
 
+        let hasReadNonFileDiagnostics = false;
         let diagnosticsModified = false;
         let modificationCount = 0;
 
@@ -2320,6 +2321,12 @@ namespace ts {
                 }
             }
             else {
+                // If we've already read the non-file diagnostics, do not modify the existing array.
+                if (hasReadNonFileDiagnostics) {
+                    hasReadNonFileDiagnostics = false;
+                    nonFileDiagnostics = nonFileDiagnostics.slice();
+                }
+
                 diagnostics = nonFileDiagnostics;
             }
 
@@ -2330,6 +2337,7 @@ namespace ts {
 
         function getGlobalDiagnostics(): Diagnostic[] {
             sortAndDeduplicate();
+            hasReadNonFileDiagnostics = true;
             return nonFileDiagnostics;
         }
 

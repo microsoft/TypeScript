@@ -1017,15 +1017,15 @@ namespace ts {
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
             const midKey = keySelector(array[middle]);
-
-            if (keyComparer(midKey, key) === 0) {
-                return middle;
-            }
-            else if (keyComparer(midKey, key) > 0) {
-                high = middle - 1;
-            }
-            else {
-                low = middle + 1;
+            switch (keyComparer(midKey, key)) {
+                case Comparison.LessThan:
+                    low = middle + 1;
+                    break;
+                case Comparison.EqualTo:
+                    return middle;
+                case Comparison.GreaterThan:
+                    high = middle - 1;
+                    break;
             }
         }
 
@@ -1852,27 +1852,8 @@ namespace ts {
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
     }
 
-    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
-        return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics));
-    }
-
-    export function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
-        if (diagnostics.length < 2) {
-            return diagnostics;
-        }
-
-        const newDiagnostics = [diagnostics[0]];
-        let previousDiagnostic = diagnostics[0];
-        for (let i = 1; i < diagnostics.length; i++) {
-            const currentDiagnostic = diagnostics[i];
-            const isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === Comparison.EqualTo;
-            if (!isDupe) {
-                newDiagnostics.push(currentDiagnostic);
-                previousDiagnostic = currentDiagnostic;
-            }
-        }
-
-        return newDiagnostics;
+    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
+        return sortAndDeduplicate(diagnostics, compareDiagnostics);
     }
 
     export function normalizeSlashes(path: string): string {
