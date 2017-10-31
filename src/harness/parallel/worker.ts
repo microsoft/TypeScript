@@ -2,7 +2,8 @@ namespace Harness.Parallel.Worker {
     let errors: ErrorInfo[] = [];
     let passing = 0;
 
-    type MochaCallback = (this: Mocha.ITestCallbackContext, done: MochaDone) => void;
+    type MochaCallback = (this: Mocha.ISuiteCallbackContext, done: MochaDone) => void;
+    type Callable = () => void;
 
     type Executor = {name: string, callback: MochaCallback, kind: "suite" | "test"} | never;
 
@@ -17,7 +18,7 @@ namespace Harness.Parallel.Worker {
     }
 
 
-    let beforeEachFunc: () => void;
+    let beforeEachFunc: Callable;
     const namestack: string[] = [];
     let testList: Executor[] = [];
     function shimMochaHarness() {
@@ -42,12 +43,12 @@ namespace Harness.Parallel.Worker {
             timeout() { return this; },
         };
         namestack.push(name);
-        let beforeFunc: () => void;
-        (before as any) = (cb: () => void) => beforeFunc = cb;
-        let afterFunc: () => void;
-        (after as any) = (cb: () => void) => afterFunc = cb;
+        let beforeFunc: Callable;
+        (before as any) = (cb: Callable) => beforeFunc = cb;
+        let afterFunc: Callable;
+        (after as any) = (cb: Callable) => afterFunc = cb;
         const savedBeforeEach = beforeEachFunc;
-        (beforeEach as any) = (cb: () => void) => beforeEachFunc = cb;
+        (beforeEach as any) = (cb: Callable) => beforeEachFunc = cb;
         const savedTestList = testList;
 
         testList = [];
@@ -97,8 +98,7 @@ namespace Harness.Parallel.Worker {
         }
     }
 
-    // tslint:disable-next-line ban-types (TODO: What is callback?)
-    function executeTestCallback(name: string, callback: Function) {
+    function executeTestCallback(name: string, callback: MochaCallback) {
         const fakeContext: Mocha.ITestCallbackContext = {
             skip() { return this; },
             timeout() { return this; },

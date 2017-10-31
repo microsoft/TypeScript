@@ -364,8 +364,7 @@ namespace Playback {
         };
     }
 
-    // tslint:disable-next-line ban-types
-    function recordReplay<T extends Function>(original: T, underlying: any) {
+    function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
             return <any>(function () {
                 if (replayLog !== undefined) {
