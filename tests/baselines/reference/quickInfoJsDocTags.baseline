@@ -1,0 +1,102 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags.ts",
+      "position": 258
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 258,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Doc{T} A template",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "author",
+          "text": "Me"
+        },
+        {
+          "name": "augments",
+          "text": "C<T> Augments it"
+        },
+        {
+          "name": "type",
+          "text": "{number | string} A type"
+        },
+        {
+          "name": "typedef",
+          "text": "NumOrStr "
+        },
+        {
+          "name": "property",
+          "text": "{number} x The prop"
+        },
+        {
+          "name": "param",
+          "text": "x The param"
+        },
+        {
+          "name": "returns",
+          "text": "The result"
+        }
+      ]
+    }
+  }
+]

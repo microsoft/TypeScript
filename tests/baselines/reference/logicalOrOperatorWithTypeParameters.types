@@ -107,8 +107,8 @@ function fn3<T extends { a: string; b: string }, U extends { a: string; b: numbe
 >u : U
 
     var r3 = t || { a: '' };
->r3 : { a: string; }
->t || { a: '' } : { a: string; }
+>r3 : T | { a: string; }
+>t || { a: '' } : T | { a: string; }
 >t : T
 >{ a: '' } : { a: string; }
 >a : string

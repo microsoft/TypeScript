@@ -237,9 +237,15 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        // "options" is optional only for backwards-compatibility
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
+        // "options" and "source" are optional only for backwards-compatibility
+        getCompletionEntryDetails(
+            fileName: string,
+            position: number,
+            name: string,
+            options: FormatCodeOptions | FormatCodeSettings | undefined,
+            source: string | undefined,
+        ): CompletionEntryDetails;
+        getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
@@ -696,6 +702,7 @@ namespace ts {
          */
         replacementSpan?: TextSpan;
         hasAction?: true;
+        source?: string;
     }
 
     export interface CompletionEntryDetails {
@@ -706,6 +713,7 @@ namespace ts {
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        source?: SymbolDisplayPart[];
     }
 
     export interface OutliningSpan {

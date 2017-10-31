@@ -244,12 +244,52 @@ namespace ts.refactor.extractSymbol {
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
 
+        if (isReturnStatement(start) && !start.expression) {
+            // Makes no sense to extract an expression-less return statement.
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.CannotExtractRange)] };
+        }
+
         // We have a single node (start)
-        const errors = checkRootNode(start) || checkNode(start);
+        const node = refineNode(start);
+
+        const errors = checkRootNode(node) || checkNode(node);
         if (errors) {
             return { errors };
         }
-        return { targetRange: { range: getStatementOrExpressionRange(start), facts: rangeFacts, declarations } };
+        return { targetRange: { range: getStatementOrExpressionRange(node), facts: rangeFacts, declarations } };
+
+        /**
+         * Attempt to refine the extraction node (generally, by shrinking it) to produce better results.
+         * @param node The unrefined extraction node.
+         */
+        function refineNode(node: Node) {
+            if (isReturnStatement(node)) {
+                if (node.expression) {
+                    return node.expression;
+                }
+            }
+            else if (isVariableStatement(node)) {
+                let numInitializers = 0;
+                let lastInitializer: Expression | undefined = undefined;
+                for (const declaration of node.declarationList.declarations) {
+                    if (declaration.initializer) {
+                        numInitializers++;
+                        lastInitializer = declaration.initializer;
+                    }
+                }
+                if (numInitializers === 1) {
+                    return lastInitializer;
+                }
+                // No special handling if there are multiple initializers.
+            }
+            else if (isVariableDeclaration(node)) {
+                if (node.initializer) {
+                    return node.initializer;
+                }
+            }
+
+            return node;
+        }
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
             if (isIdentifier(isExpressionStatement(node) ? node.expression : node)) {
@@ -291,7 +331,7 @@ namespace ts.refactor.extractSymbol {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
-            if (!isStatement(nodeToCheck) && !(isPartOfExpression(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
+            if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
 
@@ -451,7 +491,7 @@ namespace ts.refactor.extractSymbol {
         if (isStatement(node)) {
             return [node];
         }
-        else if (isPartOfExpression(node)) {
+        else if (isExpressionNode(node)) {
             // If our selection is the expression in an ExpressionStatement, expand
             // the selection to include the enclosing Statement (this stops us
             // from trying to care about the return value of the extracted function
@@ -690,7 +730,7 @@ namespace ts.refactor.extractSymbol {
                 let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
                 // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
                 type = checker.getBaseTypeOfLiteralType(type);
-                typeNode = checker.typeToTypeNode(type, node, NodeBuilderFlags.NoTruncation);
+                typeNode = checker.typeToTypeNode(type, scope, NodeBuilderFlags.NoTruncation);
             }
 
             const paramDecl = createParameter(

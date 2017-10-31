@@ -38,7 +38,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{String} "
+        }
+      ]
     }
   },
   {
@@ -80,7 +85,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{Number} "
+        }
+      ]
     }
   },
   {
@@ -122,7 +132,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{Boolean} "
+        }
+      ]
     }
   },
   {
@@ -164,7 +179,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{Void} "
+        }
+      ]
     }
   },
   {
@@ -206,7 +226,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{Undefined} "
+        }
+      ]
     }
   },
   {
@@ -248,7 +273,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{Null} "
+        }
+      ]
     }
   },
   {
@@ -298,7 +328,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{Array} "
+        }
+      ]
     }
   },
   {
@@ -352,7 +387,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{Promise} "
+        }
+      ]
     }
   },
   {
@@ -394,7 +434,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{Object} "
+        }
+      ]
     }
   },
   {
@@ -436,7 +481,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{Function} "
+        }
+      ]
     }
   },
   {
@@ -478,7 +528,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{*} "
+        }
+      ]
     }
   },
   {
@@ -520,7 +575,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{?} "
+        }
+      ]
     }
   },
   {
@@ -578,7 +638,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{String|Number} "
+        }
+      ]
     }
   }
 ]

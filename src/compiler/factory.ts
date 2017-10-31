@@ -1982,7 +1982,7 @@ namespace ts {
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.isExportEquals = isExportEquals;
-        node.expression = expression;
+        node.expression = isExportEquals ? parenthesizeBinaryOperand(SyntaxKind.EqualsToken, expression, /*isLeftSideOfBinary*/ false, /*leftOperand*/ undefined) : parenthesizeDefaultExpression(expression);
         return node;
     }
 
@@ -3901,6 +3901,27 @@ namespace ts {
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
         return e.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>e).operatorToken.kind === SyntaxKind.CommaToken
+            ? createParen(e)
+            : e;
+    }
+
+    /**
+     *  [Per the spec](https://tc39.github.io/ecma262/#prod-ExportDeclaration), `export default` accepts _AssigmentExpression_ but
+     *  has a lookahead restriction for `function`, `async function`, and `class`.
+     *
+     * Basically, that means we need to parenthesize in the following cases:
+     *
+     * - BinaryExpression of CommaToken
+     * - CommaList (synthetic list of multiple comma expressions)
+     * - FunctionExpression
+     * - ClassExpression
+     */
+    export function parenthesizeDefaultExpression(e: Expression) {
+        const check = skipPartiallyEmittedExpressions(e);
+        return (check.kind === SyntaxKind.ClassExpression ||
+            check.kind === SyntaxKind.FunctionExpression ||
+            check.kind === SyntaxKind.CommaListExpression ||
+            isBinaryExpression(check) && check.operatorToken.kind === SyntaxKind.CommaToken)
             ? createParen(e)
             : e;
     }
