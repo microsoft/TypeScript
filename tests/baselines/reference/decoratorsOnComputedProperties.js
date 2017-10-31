@@ -246,7 +246,12 @@ void (_e = class B {
             this[_f] = null;
             this[_g] = null;
         }
-    }, foo(), _h = foo(), _f = foo(), _j = fieldNameB, _g = fieldNameC,
+    },
+    foo(),
+    _h = foo(),
+    _f = foo(),
+    _j = fieldNameB,
+    _g = fieldNameC,
     _e);
 class C {
     constructor() {
@@ -340,7 +345,9 @@ void (_x = class F {
             this[_z] = null;
         }
         [foo(), _0 = foo(), _y = foo(), "some" + "method"]() { }
-    }, _1 = fieldNameB, _z = fieldNameC,
+    },
+    _1 = fieldNameB,
+    _z = fieldNameC,
     _x);
 class G {
     constructor() {
@@ -390,7 +397,8 @@ void (_6 = class H {
         }
         [foo(), _9 = foo(), _7 = foo(), "some" + "method"]() { }
         [_10 = fieldNameB, "some" + "method2"]() { }
-    }, _8 = fieldNameC,
+    },
+    _8 = fieldNameC,
     _6);
 class I {
     constructor() {
@@ -443,6 +451,7 @@ void (_16 = class J {
         }
         [foo(), _19 = foo(), _17 = foo(), _20 = "some" + "method"]() { }
         [_21 = fieldNameB, "some" + "method2"]() { }
-    }, _18 = fieldNameC,
+    },
+    _18 = fieldNameC,
     _16);
 var _c, _a, _d, _b, _h, _f, _j, _g, _e, _m, _k, _o, _l, _r, _p, _s, _q, _v, _t, _w, _u, _0, _y, _1, _z, _x, _4, _2, _5, _3, _9, _7, _10, _8, _6, _13, _11, _14, _15, _12, _19, _17, _20, _21, _18, _16;

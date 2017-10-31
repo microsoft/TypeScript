@@ -898,7 +898,7 @@ namespace ts {
                 setEmitFlags(classExpression, EmitFlags.Indented | getEmitFlags(classExpression));
                 expressions.push(startOnNewLine(createAssignment(temp, classExpression)));
                 // Add any pending expressions leftover from elided or relocated computed property names
-                addRange(expressions, pendingExpressions);
+                addRange(expressions, map(pendingExpressions, startOnNewLine));
                 pendingExpressions = savedPendingExpressions;
                 addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
                 expressions.push(startOnNewLine(temp));

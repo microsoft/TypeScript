@@ -24,7 +24,8 @@ function foo2(y, x) {
                 this[_b] = x;
             }
             return class_2;
-        }()), _b = x,
+        }()),
+        _b = x,
         _a); }
     if (x === void 0) { x = 1; }
     var _b, _a;
