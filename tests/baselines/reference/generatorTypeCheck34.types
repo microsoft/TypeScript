@@ -9,6 +9,10 @@ function* g() {
     function* g2() {
 >g2 : () => IterableIterator<"">
 
+        yield "";
+>yield "" : any
+>"" : ""
+
         return "";
 >"" : ""
     }

@@ -38,7 +38,6 @@ class C6 {
 //// [C7.ts]
 class C7 {
     async * f() {
-        return 1;
     }
 }
 //// [C8.ts]
@@ -98,7 +97,6 @@ class C6 {
 //// [C7.js]
 class C7 {
     async *f() {
-        return 1;
     }
 }
 //// [C8.js]

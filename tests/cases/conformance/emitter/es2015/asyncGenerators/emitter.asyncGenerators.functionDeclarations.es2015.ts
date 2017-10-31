@@ -25,5 +25,4 @@ async function * f6() {
 }
 // @filename: F7.ts
 async function * f7() {
-    return 1;
 }

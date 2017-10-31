@@ -38,7 +38,6 @@ const o6 = {
 //// [O7.ts]
 const o7 = {
     async * f() {
-        return 1;
     }
 }
 
@@ -81,6 +80,5 @@ const o6 = {
 //// [O7.js]
 const o7 = {
     async *f() {
-        return 1;
     }
 };

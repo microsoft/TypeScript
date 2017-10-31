@@ -38,7 +38,6 @@ const o6 = {
 //// [O7.ts]
 const o7 = {
     async * f() {
-        return 1;
     }
 }
 
@@ -460,7 +459,7 @@ var o7 = {
     f: function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
-                return [2 /*return*/, 1];
+                return [2 /*return*/];
             });
         });
     }

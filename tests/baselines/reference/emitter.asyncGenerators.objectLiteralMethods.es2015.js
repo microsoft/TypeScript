@@ -38,7 +38,6 @@ const o6 = {
 //// [O7.ts]
 const o7 = {
     async * f() {
-        return 1;
     }
 }
 
@@ -198,7 +197,6 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 const o7 = {
     f() {
         return __asyncGenerator(this, arguments, function* f_1() {
-            return 1;
         });
     }
 };

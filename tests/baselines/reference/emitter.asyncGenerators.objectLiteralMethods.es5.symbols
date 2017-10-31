@@ -67,8 +67,6 @@ const o7 = {
 
     async * f() {
 >f : Symbol(f, Decl(O7.ts, 0, 12))
-
-        return 1;
     }
 }
 

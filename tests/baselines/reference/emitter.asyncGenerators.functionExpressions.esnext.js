@@ -25,7 +25,6 @@ const f6 = async function * () {
 }
 //// [F7.ts]
 const f7 = async function * () {
-    return 1;
 }
 
 
@@ -54,5 +53,4 @@ const f6 = async function* () {
 };
 //// [F7.js]
 const f7 = async function* () {
-    return 1;
 };

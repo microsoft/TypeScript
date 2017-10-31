@@ -38,7 +38,6 @@ class C6 {
 // @filename: C7.ts
 class C7 {
     async * f() {
-        return 1;
     }
 }
 // @filename: C8.ts

@@ -25,7 +25,6 @@ const f6 = async function * () {
 }
 //// [F7.ts]
 const f7 = async function * () {
-    return 1;
 }
 
 
@@ -433,7 +432,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var f7 = function () {
     return __asyncGenerator(this, arguments, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/, 1];
+            return [2 /*return*/];
         });
     });
 };

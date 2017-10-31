@@ -53,9 +53,6 @@ async function * f6() {
 }
 === tests/cases/conformance/emitter/es5/asyncGenerators/F7.ts ===
 async function * f7() {
->f7 : () => AsyncIterableIterator<1>
-
-    return 1;
->1 : 1
+>f7 : () => AsyncIterableIterator<any>
 }
 
