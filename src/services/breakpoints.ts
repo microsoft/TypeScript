@@ -297,7 +297,7 @@ namespace ts.BreakpointResolver {
                             }
                         }
 
-                        if (isPartOfExpression(node)) {
+                        if (isExpressionNode(node)) {
                             switch (node.parent.kind) {
                                 case SyntaxKind.DoStatement:
                                     // Set span as if on while keyword

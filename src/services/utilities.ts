@@ -178,7 +178,7 @@ namespace ts {
 
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
-                return !isPartOfExpression(node);
+                return !isExpressionNode(node);
             case SyntaxKind.ThisType:
                 return true;
         }
