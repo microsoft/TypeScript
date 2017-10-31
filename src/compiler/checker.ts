@@ -15057,12 +15057,11 @@ namespace ts {
                 }
             }
 
-            // Referencing Abstract Properties within Constructors is not allowed
-            if ((flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop)) {
+            // Referencing abstract properties within their own constructors is not allowed
+            if ((flags & ModifierFlags.Abstract) && isThisProperty(node) && symbolHasNonMethodDeclaration(prop)) {
                 const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
-
-                if (declaringClassDeclaration && isNodeWithinConstructor(node, declaringClassDeclaration)) {
-                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), typeToString(getDeclaringClass(prop)));
+                if (declaringClassDeclaration && isNodeWithinConstructorOfClass(node, declaringClassDeclaration)) {
+                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name));
                     return false;
                 }
             }
@@ -23394,9 +23393,9 @@ namespace ts {
             return result;
         }
 
-        function isNodeWithinConstructor(node: Node, classDeclaration: ClassLikeDeclaration) {
+        function isNodeWithinConstructorOfClass(node: Node, classDeclaration: ClassLikeDeclaration) {
             return findAncestor(node, element => {
-                if (isConstructorDeclaration(element) && nodeIsPresent(element.body)) {
+                if (isConstructorDeclaration(element) && nodeIsPresent(element.body) && element.parent === classDeclaration) {
                     return true;
                 }
                 else if (element === classDeclaration || isFunctionLikeDeclaration(element)) {
