@@ -259,6 +259,7 @@ namespace ts {
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan;
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[];
 
@@ -579,6 +580,11 @@ namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+    }
+
+    export interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<DefinitionInfo>;
+        textSpan: TextSpan;
     }
 
     export interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {

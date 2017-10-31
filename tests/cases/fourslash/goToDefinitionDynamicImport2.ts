@@ -5,7 +5,7 @@
 
 //// var x = import("./foo");
 //// x.then(foo => {
-////     foo.b/*1*/ar(); 
+////     foo.[|b/*1*/ar|](); 
 //// })
 
 verify.goToDefinition("1", "Destination");
