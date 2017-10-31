@@ -1,10 +1,17 @@
 /// <reference path="harness.ts" />
 
 namespace ts.TestFSWithWatch {
-    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
-        content: libFileContent
+        content: `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> {}`
     };
 
     export const safeList = {
@@ -263,7 +270,7 @@ namespace ts.TestFSWithWatch {
             return s;
         }
 
-        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>) {
+        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, invokeDirectoryWatcherInsteadOfFileChanged?: boolean) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             fileOrFolderList = fileOrFolderList.concat(this.withSafeList ? safeList : []);
@@ -284,7 +291,12 @@ namespace ts.TestFSWithWatch {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
                                 currentEntry.content = fileOrDirectory.content;
-                                this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                if (invokeDirectoryWatcherInsteadOfFileChanged) {
+                                    this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                }
+                                else {
+                                    this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                }
                             }
                         }
                         else {

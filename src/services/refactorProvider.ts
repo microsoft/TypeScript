@@ -19,6 +19,7 @@ namespace ts {
         startPosition: number;
         endPosition?: number;
         program: Program;
+        host: LanguageServiceHost;
         cancellationToken?: CancellationToken;
     }
 

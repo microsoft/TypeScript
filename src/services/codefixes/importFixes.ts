@@ -249,7 +249,11 @@ namespace ts.codefix {
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
-        const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClauseOfKind(kind, symbolName), createStringLiteralWithQuoteStyle(sourceFile, moduleSpecifierWithoutQuotes));
+        const importDecl = createImportDeclaration(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            createImportClauseOfKind(kind, symbolName),
+            createStringLiteralWithQuoteStyle(sourceFile, moduleSpecifierWithoutQuotes));
         const changes = ChangeTracker.with(context, changeTracker => {
             if (lastImportDeclaration) {
                 changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: newLineCharacter });
@@ -279,13 +283,14 @@ namespace ts.codefix {
     }
 
     function createImportClauseOfKind(kind: ImportKind, symbolName: string) {
+        const id = createIdentifier(symbolName);
         switch (kind) {
             case ImportKind.Default:
-                return createImportClause(createIdentifier(symbolName), /*namedBindings*/ undefined);
+                return createImportClause(id, /*namedBindings*/ undefined);
             case ImportKind.Namespace:
-                return createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(symbolName)));
+                return createImportClause(/*name*/ undefined, createNamespaceImport(id));
             case ImportKind.Named:
-                return createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName))]));
+                return createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, id)]));
             default:
                 Debug.assertNever(kind);
         }
@@ -367,7 +372,8 @@ namespace ts.codefix {
         getCanonicalFileName: (file: string) => string,
         moduleFileName: string,
     ): string | undefined {
-        return firstDefined(getEffectiveTypeRoots(options, host), unNormalizedTypeRoot => {
+        const roots = getEffectiveTypeRoots(options, host);
+        return roots && firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
                 return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1));
@@ -528,7 +534,7 @@ namespace ts.codefix {
         declarations: ReadonlyArray<AnyImportSyntax>): ImportCodeAction {
         const fromExistingImport = firstDefined(declarations, declaration => {
             if (declaration.kind === SyntaxKind.ImportDeclaration && declaration.importClause) {
-                const changes = tryUpdateExistingImport(ctx, ctx.kind, declaration.importClause);
+                const changes = tryUpdateExistingImport(ctx, declaration.importClause);
                 if (changes) {
                     const moduleSpecifierWithoutQuotes = stripQuotes(declaration.moduleSpecifier.getText());
                     return createCodeAction(
@@ -558,8 +564,8 @@ namespace ts.codefix {
         return expression && isStringLiteral(expression) ? expression.text : undefined;
     }
 
-    function tryUpdateExistingImport(context: SymbolContext, kind: ImportKind, importClause: ImportClause): FileTextChanges[] | undefined {
-        const { symbolName, sourceFile } = context;
+    function tryUpdateExistingImport(context: SymbolContext & { kind: ImportKind }, importClause: ImportClause): FileTextChanges[] | undefined {
+        const { symbolName, sourceFile, kind } = context;
         const { name, namedBindings } = importClause;
         switch (kind) {
             case ImportKind.Default:

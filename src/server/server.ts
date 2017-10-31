@@ -250,6 +250,9 @@ namespace ts.server {
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
+        private requestedRegistry: boolean;
+        private typesRegistryCache: Map<void> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
@@ -258,7 +261,7 @@ namespace ts.server {
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-
+        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: any): void };
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -276,6 +279,31 @@ namespace ts.server {
                     this.reportInstallerProcessId();
                 });
             }
+        }
+
+        isKnownTypesPackageName(name: string): boolean {
+            // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
+            const validationResult = JsTyping.validatePackageName(name);
+            if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
+                return false;
+            }
+
+            if (this.requestedRegistry) {
+                return !!this.typesRegistryCache && this.typesRegistryCache.has(name);
+            }
+
+            this.requestedRegistry = true;
+            this.send({ kind: "typesRegistry" });
+            return false;
+        }
+
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult> {
+            const rq: InstallPackageRequest = { kind: "installPackage", ...options };
+            this.send(rq);
+            Debug.assert(this.packageInstalledPromise === undefined);
+            return new Promise((resolve, reject) => {
+                this.packageInstalledPromise = { resolve, reject };
+            });
         }
 
         private reportInstallerProcessId() {
@@ -321,13 +349,13 @@ namespace ts.server {
 
             const execArgv: string[] = [];
             for (const arg of process.execArgv) {
-                const match = /^--(debug|inspect)(=(\d+))?$/.exec(arg);
+                const match = /^--((?:debug|inspect)(?:-brk)?)(?:=(\d+))?$/.exec(arg);
                 if (match) {
                     // if port is specified - use port + 1
                     // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
-                    const currentPort = match[3] !== undefined
-                        ? +match[3]
-                        : match[1] === "debug" ? 5858 : 9229;
+                    const currentPort = match[2] !== undefined
+                        ? +match[2]
+                        : match[1].charAt(0) === "d" ? 5858 : 9229;
                     execArgv.push(`--${match[1]}=${currentPort + 1}`);
                     break;
                 }
@@ -343,7 +371,11 @@ namespace ts.server {
         }
 
         onProjectClosed(p: Project): void {
-            this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
+            this.send({ projectName: p.getProjectName(), kind: "closeProject" });
+        }
+
+        private send(rq: TypingInstallerRequestUnion): void {
+            this.installer.send(rq);
         }
 
         enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void {
@@ -359,7 +391,7 @@ namespace ts.server {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
                     this.logger.info(`Sending request:${stringifyIndented(request)}`);
                 }
-                this.installer.send(request);
+                this.send(request);
             };
             const queuedRequest: QueuedOperation = { operationId, operation };
 
@@ -375,12 +407,26 @@ namespace ts.server {
             }
         }
 
-        private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
 
             switch (response.kind) {
+                case EventTypesRegistry:
+                    this.typesRegistryCache = ts.createMapFromTemplate(response.typesRegistry);
+                    break;
+                case EventPackageInstalled: {
+                    const { success, message } = response;
+                    if (success) {
+                        this.packageInstalledPromise.resolve({ successMessage: message });
+                    }
+                    else {
+                        this.packageInstalledPromise.reject(message);
+                    }
+                    this.packageInstalledPromise = undefined;
+                    break;
+                }
                 case EventInitializationFailed:
                 {
                     if (!this.eventSender) {
@@ -580,7 +626,7 @@ namespace ts.server {
     function createLogger() {
         const cmdLineLogFileName = findArgument("--logFile");
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-        const envLogOptions = parseLoggingEnvironmentString(process.env["TSS_LOG"]);
+        const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
 
         const logFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)

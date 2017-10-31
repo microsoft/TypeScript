@@ -17,11 +17,11 @@ namespace N {
     export const value = 1;
 
     () => {
-        /*RENAME*/newFunction();
+        var c = /*RENAME*/newFunction()
     }
 
     function newFunction() {
-        var c = class {
+        return class {
             M() {
                 return value;
             }
@@ -34,12 +34,12 @@ namespace N {
     export const value = 1;
 
     () => {
-        /*RENAME*/newFunction();
+        var c = /*RENAME*/newFunction()
     }
 }
 
 function newFunction() {
-    var c = class {
+    return class {
         M() {
             return N.value;
         }

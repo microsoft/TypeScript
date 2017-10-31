@@ -1,5 +1,6 @@
 /// <reference path="core.ts" />
 
+/* @internal */
 namespace ts {
     /**
      * Updates the existing missing file watches with the new set of missing files after new program is created
@@ -72,10 +73,7 @@ namespace ts {
             existingWatchedForWildcards.set(directory, createWildcardDirectoryWatcher(directory, flags));
         }
     }
-}
 
-/* @internal */
-namespace ts {
     export function addFileWatcher(host: System, file: string, cb: FileWatcherCallback): FileWatcher {
         return host.watchFile(file, cb);
     }
