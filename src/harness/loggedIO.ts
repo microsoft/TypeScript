@@ -249,12 +249,32 @@ namespace Playback {
         wrapper.endRecord = () => {
             if (recordLog !== undefined) {
                 let i = 0;
-                const fn = () => recordLogFileNameBase + i;
-                while (underlying.fileExists(ts.combinePaths(fn(), "test.json"))) i++;
-                underlying.writeFile(ts.combinePaths(fn(), "test.json"), JSON.stringify(oldStyleLogIntoNewStyleLog(recordLog, (path, string) => underlying.writeFile(path, string), fn()), null, 4)); // tslint:disable-line:no-null-keyword
+                const getBase = () => recordLogFileNameBase + i;
+                while (underlying.fileExists(ts.combinePaths(getBase(), "test.json"))) i++;
+                const newLog = oldStyleLogIntoNewStyleLog(recordLog, (path, string) => underlying.writeFile(path, string), getBase());
+                underlying.writeFile(ts.combinePaths(getBase(), "test.json"), JSON.stringify(newLog, null, 4)); // tslint:disable-line:no-null-keyword
+                const syntheticTsconfig = generateTsconfig(newLog);
+                if (syntheticTsconfig) {
+                    underlying.writeFile(ts.combinePaths(getBase(), "tsconfig.json"), JSON.stringify(syntheticTsconfig, null, 4)); // tslint:disable-line:no-null-keyword
+                }
                 recordLog = undefined;
             }
         };
+
+        function generateTsconfig(newLog: IOLog): undefined | { compilerOptions: ts.CompilerOptions, files: string[] } {
+            if (newLog.filesRead.some(file => /tsconfig.+json$/.test(file.path))) {
+                return;
+            }
+            const files = [];
+            for (const file of newLog.filesRead) {
+                if (file.result.contentsPath &&
+                    Harness.isDefaultLibraryFile(file.result.contentsPath) &&
+                    /\.[tj]s$/.test(file.result.contentsPath)) {
+                    files.push(file.result.contentsPath);
+                }
+            }
+            return { compilerOptions: ts.parseCommandLine(newLog.arguments).options, files };
+        }
 
         wrapper.fileExists = recordReplay(wrapper.fileExists, underlying)(
             path => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path }),

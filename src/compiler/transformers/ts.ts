@@ -45,7 +45,7 @@ namespace ts {
 
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
-        const strictNullChecks = typeof compilerOptions.strictNullChecks === "undefined" ? compilerOptions.strict : compilerOptions.strictNullChecks;
+        const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
 
@@ -521,7 +521,7 @@ namespace ts {
         }
 
         function visitSourceFile(node: SourceFile) {
-            const alwaysStrict = (compilerOptions.alwaysStrict === undefined ? compilerOptions.strict : compilerOptions.alwaysStrict) &&
+            const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") &&
                 !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015);
             return updateSourceFileNode(
                 node,

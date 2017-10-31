@@ -172,13 +172,13 @@ enum X {
 
 let a = X["foo"];
 >a : X
->X["foo"] : X."foo"
+>X["foo"] : X.foo
 >X : typeof X
 >"foo" : "foo"
 
 let a0 = X["bar"];
 >a0 : X
->X["bar"] : X.["bar"]
+>X["bar"] : X.bar
 >X : typeof X
 >"bar" : "bar"
 
