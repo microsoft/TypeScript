@@ -3,9 +3,10 @@
 namespace ts {
     function testExtractRangeFailed(caption: string, s: string, expectedErrors: string[]) {
         return it(caption, () => {
-            const t = extractTest(s);
-            const file = createSourceFile("a.ts", t.source, ScriptTarget.Latest, /*setParentNodes*/ true);
-            const selectionRange = t.ranges.get("selection");
+            const t = extractTest(createMapFromTemplate({ "a": s }));
+            const files = arrayFrom(t.files.values());
+            const file = createSourceFile("a.ts", files[0].source, ScriptTarget.Latest, /*setParentNodes*/ true);
+            const selectionRange = files[0].ranges.get("selection");
             if (!selectionRange) {
                 throw new Error(`Test ${s} does not specify selection range`);
             }
@@ -17,14 +18,15 @@ namespace ts {
     }
 
     function testExtractRange(s: string): void {
-        const t = extractTest(s);
-        const f = createSourceFile("a.ts", t.source, ScriptTarget.Latest, /*setParentNodes*/ true);
-        const selectionRange = t.ranges.get("selection");
+        const t = extractTest(createMapFromTemplate({ "a": s }));
+        const files = arrayFrom(t.files.values());
+        const f = createSourceFile("a.ts", files[0].source, ScriptTarget.Latest, /*setParentNodes*/ true);
+        const selectionRange = files[0].ranges.get("selection");
         if (!selectionRange) {
             throw new Error(`Test ${s} does not specify selection range`);
         }
         const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
-        const expectedRange = t.ranges.get("extracted");
+        const expectedRange = files[0].ranges.get("extracted");
         if (expectedRange) {
             let start: number, end: number;
             if (ts.isArray(result.targetRange.range)) {

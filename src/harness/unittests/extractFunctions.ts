@@ -548,7 +548,8 @@ var q = /*b*/ //c
     /*m*/; /*n*/ //o`);
     });
 
-    function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
-        testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function, includeLib);
+    function testExtractFunction(caption: string, text: string | { [index: string]: string }, includeLib?: boolean) {
+        if (typeof text === "string") text = { "a": text };
+        testExtractSymbol(caption, createMapFromTemplate(text), "extractFunction", Diagnostics.Extract_function, includeLib);
     }
 }

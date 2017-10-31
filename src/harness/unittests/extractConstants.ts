@@ -264,11 +264,13 @@ namespace N { // Force this test to be TS-only
 }`);
     });
 
-    function testExtractConstant(caption: string, text: string) {
-        testExtractSymbol(caption, text, "extractConstant", Diagnostics.Extract_constant);
+    function testExtractConstant(caption: string, text: string | { [index: string]: string }) {
+        if (typeof text === "string") text = { "a": text };
+        testExtractSymbol(caption, createMapFromTemplate(text), "extractConstant", Diagnostics.Extract_constant);
     }
 
-    function testExtractConstantFailed(caption: string, text: string) {
-        testExtractSymbolFailed(caption, text, Diagnostics.Extract_constant);
+    function testExtractConstantFailed(caption: string, text: string | { [index: string]: string }) {
+        if (typeof text === "string") text = { "a": text };
+        testExtractSymbolFailed(caption, createMapFromTemplate(text), Diagnostics.Extract_constant);
     }
 }

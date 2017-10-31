@@ -9,61 +9,68 @@ namespace ts {
     }
 
     export interface Test {
-        source: string;
-        ranges: Map<Range>;
+        files: Map<{
+            source: string;
+            ranges: Map<Range>;
+        }>;
     }
 
-    export function extractTest(source: string): Test {
-        const activeRanges: Range[] = [];
-        let text = "";
-        let lastPos = 0;
-        let pos = 0;
-        const ranges = createMap<Range>();
-
-        while (pos < source.length) {
-            if (source.charCodeAt(pos) === CharacterCodes.openBracket &&
-                (source.charCodeAt(pos + 1) === CharacterCodes.hash || source.charCodeAt(pos + 1) === CharacterCodes.$)) {
-                const saved = pos;
-                pos += 2;
-                const s = pos;
-                consumeIdentifier();
-                const e = pos;
-                if (source.charCodeAt(pos) === CharacterCodes.bar) {
+    export function extractTest(sources: Map<string>): Test {
+        const files: Test["files"] = createMap();
+        const entries = sources.entries();
+        for (let {done, value} = entries.next(); !done; { done, value } = entries.next()) {
+            const [ filename, source ] = value;
+            const activeRanges: Range[] = [];
+            let text = "";
+            let lastPos = 0;
+            let pos = 0;
+            const ranges = createMap<Range>();
+            const consumeIdentifier = () => {
+                while (isIdentifierPart(source.charCodeAt(pos), ScriptTarget.Latest)) {
                     pos++;
-                    text += source.substring(lastPos, saved);
-                    const name = s === e
-                        ? source.charCodeAt(saved + 1) === CharacterCodes.hash ? "selection" : "extracted"
-                        : source.substring(s, e);
-                    activeRanges.push({ name, start: text.length, end: undefined });
+                }
+            };
+
+            while (pos < source.length) {
+                if (source.charCodeAt(pos) === CharacterCodes.openBracket &&
+                    (source.charCodeAt(pos + 1) === CharacterCodes.hash || source.charCodeAt(pos + 1) === CharacterCodes.$)) {
+                    const saved = pos;
+                    pos += 2;
+                    const s = pos;
+                    consumeIdentifier();
+                    const e = pos;
+                    if (source.charCodeAt(pos) === CharacterCodes.bar) {
+                        pos++;
+                        text += source.substring(lastPos, saved);
+                        const name = s === e
+                            ? source.charCodeAt(saved + 1) === CharacterCodes.hash ? "selection" : "extracted"
+                            : source.substring(s, e);
+                        activeRanges.push({ name, start: text.length, end: undefined });
+                        lastPos = pos;
+                        continue;
+                    }
+                    else {
+                        pos = saved;
+                    }
+                }
+                else if (source.charCodeAt(pos) === CharacterCodes.bar && source.charCodeAt(pos + 1) === CharacterCodes.closeBracket) {
+                    text += source.substring(lastPos, pos);
+                    activeRanges[activeRanges.length - 1].end = text.length;
+                    const range = activeRanges.pop();
+                    if (range.name in ranges) {
+                        throw new Error(`Duplicate name of range ${range.name}`);
+                    }
+                    ranges.set(range.name, range);
+                    pos += 2;
                     lastPos = pos;
                     continue;
                 }
-                else {
-                    pos = saved;
-                }
-            }
-            else if (source.charCodeAt(pos) === CharacterCodes.bar && source.charCodeAt(pos + 1) === CharacterCodes.closeBracket) {
-                text += source.substring(lastPos, pos);
-                activeRanges[activeRanges.length - 1].end = text.length;
-                const range = activeRanges.pop();
-                if (range.name in ranges) {
-                    throw new Error(`Duplicate name of range ${range.name}`);
-                }
-                ranges.set(range.name, range);
-                pos += 2;
-                lastPos = pos;
-                continue;
-            }
-            pos++;
-        }
-        text += source.substring(lastPos, pos);
-
-        function consumeIdentifier() {
-            while (isIdentifierPart(source.charCodeAt(pos), ScriptTarget.Latest)) {
                 pos++;
             }
+            text += source.substring(lastPos, pos);
+            files.set(filename, { source: text, ranges });
         }
-        return { source: text, ranges };
+        return { files };
     }
 
     export const newLineCharacter = "\n";
@@ -104,19 +111,22 @@ namespace ts {
         getCurrentDirectory: notImplemented,
     };
 
-    export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
-        const t = extractTest(text);
-        const selectionRange = t.ranges.get("selection");
-        if (!selectionRange) {
+    export function testExtractSymbol(caption: string, files: Map<string>, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
+        const t = extractTest(files);
+        const fsentries = arrayFrom(t.files.entries());
+        const selectionRangeCandidates = filter(fsentries, t => !!t[1].ranges.get("selection"));
+        if (!selectionRangeCandidates || !selectionRangeCandidates.length) {
             throw new Error(`Test ${caption} does not specify selection range`);
         }
+        const selectionRange = selectionRangeCandidates[0][1].ranges.get("selection");
 
         [Extension.Ts, Extension.Js].forEach(extension =>
             it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
         function runBaseline(extension: Extension) {
-            const path = "/a" + extension;
-            const program = makeProgram({ path, content: t.source }, includeLib);
+            const path = `/${selectionRangeCandidates[0][0]}${extension}`;
+            const text = files.get(selectionRangeCandidates[0][0]);
+            const program = makeProgram(map(fsentries, ([name, t]) => ({ path: `/${name}${extension}`, content: t.source })), includeLib);
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -152,17 +162,17 @@ namespace ts {
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
 
-                    const diagProgram = makeProgram({ path, content: newText }, includeLib);
+                    const diagProgram = makeProgram(map(fsentries, ([name, t]) => (`/${name}${extension}` === path ? { path, content: newText } : { path: `/${name}${extension}`, content: t.source })), includeLib);
                     assert.isFalse(hasSyntacticDiagnostics(diagProgram));
                 }
                 return data.join(newLineCharacter);
             });
         }
 
-        function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
-            const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
+        function makeProgram(f: {path: string, content: string }[], includeLib?: boolean) {
+            const host = projectSystem.createServerHost(includeLib ? [...f, projectSystem.libFile] : f); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(f.path);
+            projectService.openClientFile(f[f.length - 1].path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
             return program;
         }
@@ -173,22 +183,22 @@ namespace ts {
         }
     }
 
-    export function testExtractSymbolFailed(caption: string, text: string, description: DiagnosticMessage) {
+    export function testExtractSymbolFailed(caption: string, files: Map<string>, description: DiagnosticMessage) {
         it(caption, () => {
-            const t = extractTest(text);
-            const selectionRange = t.ranges.get("selection");
-            if (!selectionRange) {
+            const t = extractTest(files);
+            const fsentries = arrayFrom(t.files.entries());
+            const selectionRangeCandidates = filter(fsentries, t => !!t[1].ranges.get("selection"));
+            if (!selectionRangeCandidates || !selectionRangeCandidates.length) {
                 throw new Error(`Test ${caption} does not specify selection range`);
             }
-            const f = {
-                path: "/a.ts",
-                content: t.source
-            };
-            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
+            const selectionRange = selectionRangeCandidates[0][1].ranges.get("selection");
+            const testPath = `/${selectionRangeCandidates[0][0]}.ts`;
+
+            const host = projectSystem.createServerHost([...map(fsentries, ([name, t]) => ({ path: `/${name}.ts`, content: t.source })), projectSystem.libFile]);
             const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(f.path);
+            projectService.openClientFile(testPath);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
-            const sourceFile = program.getSourceFile(f.path);
+            const sourceFile = program.getSourceFile(testPath);
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
                 newLineCharacter,
