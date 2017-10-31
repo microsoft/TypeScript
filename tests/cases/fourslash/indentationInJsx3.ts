@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //@Filename: file.tsx
-////function foo () {
+////function foo() {
 ////   return (
 ////        <div>
 /////*0*/hello
@@ -10,14 +10,26 @@
 ////    )
 ////}
 
-goTo.marker('0');
-verify.currentLineContentIs("hello");
-goTo.marker('1');
-verify.currentLineContentIs("goodbye");
+verify.currentFileContentIs(
+`function foo() {
+   return (
+        <div>
+hello
+goodbye
+        </div>
+    )
+}`
+);
 
 format.document();
 
-goTo.marker('0');
-verify.currentLineContentIs("            hello");
-goTo.marker('1');
-verify.currentLineContentIs("            goodbye");
+verify.currentFileContentIs(
+`function foo() {
+    return (
+        <div>
+            hello
+            goodbye
+        </div>
+    )
+}`
+);
