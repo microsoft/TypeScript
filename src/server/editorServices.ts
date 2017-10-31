@@ -1373,24 +1373,42 @@ namespace ts.server {
             this.projectToSizeMap.forEach(val => (availableSpace -= (val || 0)));
 
             let totalNonTsFileSize = 0;
+
             for (const f of fileNames) {
                 const fileName = propertyReader.getFileName(f);
                 if (hasTypeScriptFileExtension(fileName)) {
                     continue;
                 }
+
                 totalNonTsFileSize += this.host.getFileSize(fileName);
+
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
+                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTypeScriptFileExtension, host: this.host }, totalNonTsFileSize));
                     // Keep the size as zero since it's disabled
                     return true;
                 }
             }
 
             if (totalNonTsFileSize > availableSpace) {
+                this.logger.info(getExceedLimitMessage({ propertyReader, hasTypeScriptFileExtension, host: this.host }, totalNonTsFileSize));
                 return true;
             }
 
             this.projectToSizeMap.set(name, totalNonTsFileSize);
             return false;
+
+            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
+                const files = getTop5LargestFiles(context);
+
+                return `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${files.map(file => `${file.name}:${file.size}`).join(", ")}`;
+            }
+            function getTop5LargestFiles({ propertyReader, hasTypeScriptFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }) {
+                return fileNames.map(f => propertyReader.getFileName(f))
+                    .filter(name => hasTypeScriptFileExtension(name))
+                    .map(name => ({ name, size: host.getFileSize(name) }))
+                    .sort((a, b) => b.size - a.size)
+                    .slice(0, 5);
+            }
         }
 
         private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition) {
