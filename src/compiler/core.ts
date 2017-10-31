@@ -789,15 +789,37 @@ namespace ts {
     export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T>): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
-        outer: for (let offsetA = 0, offsetB = 0; offsetB < arrayB.length; offsetB++) {
-            inner: for (; offsetA < arrayA.length; offsetA++) {
+        loopB: for (let offsetA = 0, offsetB = 0; offsetB < arrayB.length; offsetB++) {
+            if (offsetB > 0) {
+                // Ensure `arrayB` is properly sorted.
+                Debug.assertGreaterThanOrEqual(comparer(arrayB[offsetB], arrayB[offsetB - 1]), Comparison.EqualTo);
+            }
+
+            loopA: for (const startA = offsetA; offsetA < arrayA.length; offsetA++) {
+                if (offsetA > startA) {
+                    // Ensure `arrayA` is properly sorted. We only need to perform this check if
+                    // `offsetA` has changed since we entered the loop.
+                    Debug.assertGreaterThanOrEqual(comparer(arrayA[offsetA], arrayA[offsetA - 1]), Comparison.EqualTo);
+                }
+
                 switch (comparer(arrayB[offsetB], arrayA[offsetA])) {
-                    case Comparison.LessThan: break inner;
-                    case Comparison.EqualTo: continue outer;
-                    case Comparison.GreaterThan: continue inner;
+                    case Comparison.LessThan:
+                        // If B is less than A, B does not exist in arrayA. Add B to the result and
+                        // move to the next element in arrayB without changing the current position
+                        // in arrayA.
+                        result.push(arrayB[offsetB]);
+                        continue loopB;
+                    case Comparison.EqualTo:
+                        // If B is equal to A, B exists in arrayA. Move to the next element in
+                        // arrayB without adding B to the result or changing the current position
+                        // in arrayA.
+                        continue loopB;
+                    case Comparison.GreaterThan:
+                        // If B is greater than A, we need to keep looking for B in arrayA. Move to
+                        // the next element in arrayA and recheck.
+                        continue loopA;
                 }
             }
-            result.push(arrayB[offsetB]);
         }
         return result;
     }
