@@ -421,8 +421,8 @@ interface A92 {
 >Date : Date
 }
 var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
->a9e : any
->someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : any
+>a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
 >undefined : undefined
 >{ x: 6, z: new Date() } : { x: number; z: Date; }
@@ -438,7 +438,7 @@ var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >'' : ""
 
 var a9e: {};
->a9e : any
+>a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >a9f : any

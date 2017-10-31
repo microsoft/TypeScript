@@ -4727,7 +4727,7 @@ namespace ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
-            node.statement = parseStatement();
+            node.statement = doInsideOfContext(NodeFlags.InWithStatement, parseStatement);
             return finishNode(node);
         }
 

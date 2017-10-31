@@ -337,16 +337,16 @@ declare namespace ts {
         JSDocFunctionType = 274,
         JSDocVariadicType = 275,
         JSDocComment = 276,
-        JSDocTag = 277,
-        JSDocAugmentsTag = 278,
-        JSDocClassTag = 279,
-        JSDocParameterTag = 280,
-        JSDocReturnTag = 281,
-        JSDocTypeTag = 282,
-        JSDocTemplateTag = 283,
-        JSDocTypedefTag = 284,
-        JSDocPropertyTag = 285,
-        JSDocTypeLiteral = 286,
+        JSDocTypeLiteral = 277,
+        JSDocTag = 278,
+        JSDocAugmentsTag = 279,
+        JSDocClassTag = 280,
+        JSDocParameterTag = 281,
+        JSDocReturnTag = 282,
+        JSDocTypeTag = 283,
+        JSDocTemplateTag = 284,
+        JSDocTypedefTag = 285,
+        JSDocPropertyTag = 286,
         SyntaxList = 287,
         NotEmittedStatement = 288,
         PartiallyEmittedExpression = 289,
@@ -381,7 +381,7 @@ declare namespace ts {
         FirstNode = 144,
         FirstJSDocNode = 268,
         LastJSDocNode = 286,
-        FirstJSDocTagNode = 277,
+        FirstJSDocTagNode = 278,
         LastJSDocTagNode = 286,
     }
     enum NodeFlags {
@@ -409,7 +409,7 @@ declare namespace ts {
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
         ReachabilityAndEmitFlags = 1408,
-        ContextFlags = 96256,
+        ContextFlags = 2193408,
         TypeExcludesFlags = 20480,
     }
     enum ModifierFlags {
@@ -2047,6 +2047,7 @@ declare namespace ts {
         ObjectLiteral = 128,
         EvolvingArray = 256,
         ObjectLiteralPatternWithComputedProperties = 512,
+        ContainsSpread = 1024,
         ClassOrInterface = 3,
     }
     interface ObjectType extends Type {
@@ -3923,8 +3924,8 @@ declare namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
+        getCompletionEntryDetails(fileName: string, position: number, name: string, options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails;
+        getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan;
@@ -4304,6 +4305,7 @@ declare namespace ts {
          */
         replacementSpan?: TextSpan;
         hasAction?: true;
+        source?: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -4313,6 +4315,7 @@ declare namespace ts {
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        source?: SymbolDisplayPart[];
     }
     interface OutliningSpan {
         /** The span of the document to actually collapse. */
@@ -4604,7 +4607,7 @@ declare namespace ts {
 }
 declare namespace ts {
     /** The version of the language service API */
-    const servicesVersion = "0.5";
+    const servicesVersion = "0.6";
     interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
     }
