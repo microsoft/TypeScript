@@ -7434,8 +7434,8 @@ namespace ts {
         function isSubtypeOfAny(source: Type, targets: Type[]): boolean {
             for (const target of targets) {
                 if (source !== target && isTypeSubtypeOf(source, target) && (
-                    !(getObjectFlags(source) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) ||
-                    !(getObjectFlags(target) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) ||
+                    !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
+                    !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
                     isTypeDerivedFrom(source, target))) {
                     return true;
                 }
@@ -9605,7 +9605,7 @@ namespace ts {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target);
                 }
-                const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source);
+                const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source);
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
                 if (unmatchedProperty) {
                     if (reportErrors) {
@@ -10311,6 +10311,11 @@ namespace ts {
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
             return getObjectFlags(type) & ObjectFlags.Reference && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType) ||
                 !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
+        }
+
+        function isEmptyArrayLiteralType(type: Type): boolean {
+            const elementType = isArrayType(type) ? (<TypeReference>type).typeArguments[0] : undefined;
+            return elementType === undefinedWideningType || elementType === neverType;
         }
 
         function isTupleLikeType(type: Type): boolean {
@@ -13878,7 +13883,6 @@ namespace ts {
                     type.pattern = node;
                     return type;
                 }
-                const contextualType = getApparentTypeOfContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
                     const pattern = contextualType.pattern;
                     // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
@@ -18066,14 +18070,6 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
-        function getBestChoiceType(type1: Type, type2: Type): Type {
-            const firstAssignableToSecond = isTypeAssignableTo(type1, type2);
-            const secondAssignableToFirst = isTypeAssignableTo(type2, type1);
-            return secondAssignableToFirst && !firstAssignableToSecond ? type1 :
-                firstAssignableToSecond && !secondAssignableToFirst ? type2 :
-                getUnionType([type1, type2], /*subtypeReduction*/ true);
-        }
-
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
         }
@@ -18210,7 +18206,7 @@ namespace ts {
                         leftType;
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
-                        getBestChoiceType(removeDefinitelyFalsyTypes(leftType), rightType) :
+                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], /*subtypeReduction*/ true) :
                         leftType;
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
@@ -18370,7 +18366,7 @@ namespace ts {
             checkExpression(node.condition);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
-            return getBestChoiceType(type1, type2);
+            return getUnionType([type1, type2], /*subtypeReduction*/ true);
         }
 
         function checkTemplateExpression(node: TemplateExpression): Type {
