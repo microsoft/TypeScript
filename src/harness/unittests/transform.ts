@@ -170,6 +170,7 @@ namespace ts {
             }
         });
 
+        // https://github.com/Microsoft/TypeScript/issues/19618
         testBaseline("transformAddImportStar", () => {
             return ts.transpileModule("", {
                 transformers: {
