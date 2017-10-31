@@ -20386,21 +20386,20 @@ namespace ts {
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.CallSignature:
                         case SyntaxKind.ConstructSignature:
-                        case SyntaxKind.IndexSignature:
                         case SyntaxKind.FunctionType:
                         case SyntaxKind.ConstructorType:
-                            checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
-                            break;
                         case SyntaxKind.TypeAliasDeclaration:
-                            checkUnusedTypeParameters(<TypeAliasDeclaration>node);
+                            checkUnusedTypeParameters(<MethodSignature | CallSignatureDeclaration | ConstructSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | TypeAliasDeclaration>node);
                             break;
+                        default:
+                            Debug.fail("Node should not have been registered for unused identifiers check");
                     }
                 }
             }
         }
 
         function checkUnusedLocalsAndParameters(node: Node): void {
-            if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && noUnusedIdentifiers && !isInAmbientContext(node)) {
+            if (noUnusedIdentifiers && !isInAmbientContext(node)) {
                 node.locals.forEach(local => {
                     if (!local.isReferenced) {
                         if (local.valueDeclaration && getRootDeclaration(local.valueDeclaration).kind === SyntaxKind.Parameter) {
