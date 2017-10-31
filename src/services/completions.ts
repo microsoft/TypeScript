@@ -241,11 +241,15 @@ namespace ts.Completions {
             // a['/*completion position*/']
             return getStringLiteralCompletionEntriesFromElementAccess(node.parent, typeChecker, compilerOptions.target, log);
         }
-        else if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node) || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) {
+        else if (node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration
+            || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) || isImportCall(node.parent)
+            || isExpressionOfExternalModuleImportEqualsDeclaration(node)) {
             // Get all known external module names or complete a path to a module
             // i.e. import * as ns from "/*completion position*/";
+            //      var y = import("/*completion position*/");
             //      import x = require("/*completion position*/");
             //      var y = require("/*completion position*/");
+            //      export * from "/*completion position*/";
             return PathCompletions.getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node, compilerOptions, host, typeChecker);
         }
         else if (isEqualityExpression(node.parent)) {

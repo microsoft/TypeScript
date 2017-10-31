@@ -314,7 +314,7 @@ namespace FourSlash {
 
             const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
             this.languageServiceAdapterHost = languageServiceAdapter.getHost();
-            this.languageService = languageServiceAdapter.getLanguageService();
+            this.languageService = memoWrap(languageServiceAdapter.getLanguageService(), this); // Wrap the LS to cache some expensive operations certain tests call repeatedly
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost
@@ -381,6 +381,39 @@ namespace FourSlash {
 
             // Open the first file by default
             this.openFile(0);
+
+            function memoWrap(ls: ts.LanguageService, target: TestState): ts.LanguageService {
+                const cacheableMembers: (keyof typeof ls)[] = [
+                    "getCompletionsAtPosition",
+                    "getCompletionEntryDetails",
+                    "getCompletionEntrySymbol",
+                    "getQuickInfoAtPosition",
+                    "getSignatureHelpItems",
+                    "getReferencesAtPosition",
+                    "getDocumentHighlights",
+                ];
+                const proxy = {} as ts.LanguageService;
+                for (const k in ls) {
+                    const key = k as keyof typeof ls;
+                    if (cacheableMembers.indexOf(key) === -1) {
+                        proxy[key] = (...args: any[]) => (ls[key] as Function)(...args);
+                        continue;
+                    }
+                    const memo = Utils.memoize(
+                        (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string, ...args: any[]) => (ls[key] as Function)(...args),
+                        (...args) => args.join("|,|")
+                    );
+                    proxy[key] = (...args: any[]) => memo(
+                        target.languageServiceAdapterHost.getScriptInfo(target.activeFile.fileName).version,
+                        target.activeFile.fileName,
+                        target.currentCaretPosition,
+                        target.selectionEnd,
+                        target.lastKnownMarker,
+                        ...args
+                    );
+                }
+                return proxy;
+            }
         }
 
         private getFileContent(fileName: string): string {
