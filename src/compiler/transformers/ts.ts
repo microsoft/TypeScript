@@ -225,7 +225,14 @@ namespace ts {
             if (parsed !== node) {
                 // If the node has been transformed by a `before` transformer, perform no ellision on it
                 // As the type information we would attempt to lookup to perform ellision is potentially unavailable for the synthesized nodes
-                return visitorWorker(node);
+                // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by the switch-case in `visitTypeScript`,
+                // and will trigger debug failures when debug verbosity is turned up
+                if (node.transformFlags & TransformFlags.ContainsTypeScript) {
+                    // This node contains TypeScript, so we should visit its children.
+                    return visitEachChild(node, visitor, context);
+                }
+                // Otherwise, we can just return the node
+                return node;
             }
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
