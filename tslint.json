@@ -76,7 +76,6 @@
         "arrow-return-shorthand": false,
         "ban-comma-operator": false,
         "ban-types": false,
-        "callable-types": false,
         "forin": false,
         "member-access": false, // [true, "no-public"]
         "no-conditional-assignment": false,

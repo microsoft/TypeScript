@@ -784,9 +784,15 @@ namespace Harness {
         ? IO.newLine() + `//# sourceURL=${IO.resolvePath(tcServicesFileName)}`
         : "");
 
-    export interface SourceMapEmitterCallback {
-        (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
-    }
+    export type SourceMapEmitterCallback = (
+        emittedFile: string,
+        emittedLine: number,
+        emittedColumn: number,
+        sourceFile: string,
+        sourceLine: number,
+        sourceColumn: number,
+        sourceName: string,
+    ) => void;
 
     // Settings
     export let userSpecifiedRoot = "";

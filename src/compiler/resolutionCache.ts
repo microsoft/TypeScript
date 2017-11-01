@@ -69,9 +69,8 @@ namespace ts {
 
     export const maxNumberOfFilesToIterateForInvalidation = 256;
 
-    interface GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> {
-        (resolution: T): R;
-    }
+    type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
+        (resolution: T) => R;
 
     export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
