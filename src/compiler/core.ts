@@ -1683,6 +1683,13 @@ namespace ts {
         return moduleResolution;
     }
 
+    export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
+        const moduleKind = getEmitModuleKind(compilerOptions);
+        return compilerOptions.allowSyntheticDefaultImports !== undefined
+            ? compilerOptions.allowSyntheticDefaultImports
+            : moduleKind === ModuleKind.System;
+    }
+
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict";
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {

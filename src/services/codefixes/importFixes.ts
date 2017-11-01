@@ -648,7 +648,7 @@ namespace ts.codefix {
     }
 
     function getActionsForUMDImport(context: ImportCodeFixContext): ImportCodeAction[] {
-        const { checker, symbolToken } = context;
+        const { checker, symbolToken, compilerOptions } = context;
         const umdSymbol = checker.getSymbolAtLocation(symbolToken);
         let symbol: ts.Symbol;
         let symbolName: string;
@@ -665,15 +665,16 @@ namespace ts.codefix {
             Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
         }
 
-        const { module, allowSyntheticDefaultImports } = context.compilerOptions;
+        const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
 
         // Prefer to import as a synthetic `default` if available.
-        if (allowSyntheticDefaultImports || module === ModuleKind.System && allowSyntheticDefaultImports !== false) {
+        if (allowSyntheticDefaultImports) {
             return getCodeActionForImport(symbol, { ...context, symbolName, kind: ImportKind.Default });
         }
+        const moduleKind = getEmitModuleKind(compilerOptions);
 
         // When a synthetic `default` is unavailable, use `import..require` if the module kind supports it.
-        if (module === ModuleKind.AMD || module === ModuleKind.CommonJS || module === ModuleKind.UMD) {
+        if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.CommonJS || moduleKind === ModuleKind.UMD) {
             return getCodeActionForImport(symbol, { ...context, symbolName, kind: ImportKind.Equals });
         }
 
