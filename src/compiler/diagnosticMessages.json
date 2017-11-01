@@ -3793,5 +3793,9 @@
     "Infer parameter types from usage.": {
         "category": "Message",
         "code": 95012
+    },
+    "Install '{0}'": {
+        "category": "Message",
+        "code": 95013
     }
 }
