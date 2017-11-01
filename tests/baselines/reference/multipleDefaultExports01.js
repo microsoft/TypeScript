@@ -33,6 +33,9 @@ var x = 10;
 exports.default = x;
 //// [m2.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-var m1_1 = require("./m1");
+var m1_1 = __importDefault(require("./m1"));
 m1_1.default();

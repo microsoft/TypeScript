@@ -27,8 +27,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-const a_1 = require("./a");
+const a_1 = __importDefault(require("./a"));
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         const value = yield a_1.default;

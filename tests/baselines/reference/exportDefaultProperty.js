@@ -63,14 +63,17 @@ exports.__esModule = true;
 exports["default"] = "foo".length;
 //// [index.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 exports.__esModule = true;
 /// <reference path="declarations.d.ts" />
-var foobar_1 = require("foobar");
+var foobar_1 = __importDefault(require("foobar"));
 var X = foobar_1["default"].X;
-var foobarx_1 = require("foobarx");
+var foobarx_1 = __importDefault(require("foobarx"));
 var x = X;
 var x2 = foobarx_1["default"];
-var a_1 = require("./a");
+var a_1 = __importDefault(require("./a"));
 var b = new a_1["default"](a_1["default"].b);
-var b_1 = require("./b");
+var b_1 = __importDefault(require("./b"));
 b_1["default"] + 1;

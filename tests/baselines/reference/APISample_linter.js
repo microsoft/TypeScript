@@ -70,8 +70,15 @@ fileNames.forEach(fileName => {
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 exports.__esModule = true;
-var ts = require("typescript");
+var ts = __importStar(require("typescript"));
 function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {

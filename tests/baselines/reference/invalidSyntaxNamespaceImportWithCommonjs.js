@@ -17,7 +17,14 @@ var C = /** @class */ (function () {
 exports.C = C;
 //// [1.js]
 "use strict";
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 exports.__esModule = true;
-var from = require();
+var from = __importStar(require());
 from;
 "./0";

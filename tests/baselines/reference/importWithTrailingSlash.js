@@ -29,15 +29,21 @@ exports.__esModule = true;
 exports["default"] = { aIndex: 0 };
 //// [test.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 exports.__esModule = true;
-var _1 = require(".");
-var _2 = require("./");
+var _1 = __importDefault(require("."));
+var _2 = __importDefault(require("./"));
 _1["default"].a;
 _2["default"].aIndex;
 //// [test.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 exports.__esModule = true;
-var __1 = require("..");
-var _1 = require("../");
+var __1 = __importDefault(require(".."));
+var _1 = __importDefault(require("../"));
 __1["default"].a;
 _1["default"].aIndex;

@@ -21,6 +21,9 @@ var Foo = /** @class */ (function () {
 exports.Foo = Foo;
 //// [a.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 exports.__esModule = true;
-var b_1 = require("./b");
+var b_1 = __importDefault(require("./b"));
 exports.x = new b_1["default"].Foo();

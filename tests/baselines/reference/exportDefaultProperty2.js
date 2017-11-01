@@ -29,6 +29,9 @@ var C = /** @class */ (function () {
 exports["default"] = C.B;
 //// [b.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 exports.__esModule = true;
-var a_1 = require("./a");
+var a_1 = __importDefault(require("./a"));
 var x = { c: a_1["default"] };

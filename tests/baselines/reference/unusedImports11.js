@@ -29,10 +29,20 @@ exports.Member = Member;
 exports["default"] = Member;
 //// [a.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 exports.__esModule = true;
 var b_1 = require("./b");
-var b_2 = require("./b");
-var ns = require("./b");
+var b_2 = __importDefault(require("./b"));
+var ns = __importStar(require("./b"));
 var r = require("./b");
 new b_1.Member();
 new b_2["default"]();

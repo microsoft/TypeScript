@@ -26,8 +26,11 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 exports.__esModule = true;
-var mod_1 = require("mod");
+var mod_1 = __importDefault(require("mod"));
 // Should see mod_1['default'] in emit here
 React.createElement(Foo, { handler: mod_1["default"] });
 // Should see mod_1['default'] in emit here

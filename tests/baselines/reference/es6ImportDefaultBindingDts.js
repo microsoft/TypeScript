@@ -21,8 +21,11 @@ var c = /** @class */ (function () {
 exports.default = c;
 //// [client.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-var server_1 = require("./server");
+var server_1 = __importDefault(require("./server"));
 exports.x = new server_1.default();
 
 

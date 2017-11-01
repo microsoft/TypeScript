@@ -12,6 +12,9 @@ foo.bar();
 
 //// [a.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 exports.__esModule = true;
-var foo_1 = require("foo");
+var foo_1 = __importDefault(require("foo"));
 foo_1["default"].bar();

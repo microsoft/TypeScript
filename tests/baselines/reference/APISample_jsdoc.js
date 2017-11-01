@@ -121,8 +121,15 @@ function getSomeOtherTags(node: ts.Node) {
  *           https://github.com/vega/ts-json-schema-generator
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 exports.__esModule = true;
-var ts = require("typescript");
+var ts = __importStar(require("typescript"));
 // excerpted from https://github.com/YousefED/typescript-json-schema
 // (converted from a method and modified; for example, `this: any` to compensate, among other changes)
 function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {

@@ -58,10 +58,17 @@ var C = /** @class */ (function () {
 exports.C = C;
 //// [user.js]
 "use strict";
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 exports.__esModule = true;
 // OK, has a value side
 var exportValue_1 = require("./exportValue");
 exports.C = exportValue_1.C;
 // OK, even though the namespace it exports is only types.
-var NS = require("./exportT");
+var NS = __importStar(require("./exportT"));
 exports.NS = NS;

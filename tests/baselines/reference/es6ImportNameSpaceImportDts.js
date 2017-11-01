@@ -20,8 +20,15 @@ exports.c = c;
 ;
 //// [client.js]
 "use strict";
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 exports.__esModule = true;
-var nameSpaceBinding = require("./server");
+var nameSpaceBinding = __importStar(require("./server"));
 exports.x = new nameSpaceBinding.c();
 
 

@@ -19,8 +19,11 @@ function f1() {
 exports["default"] = f1;
 //// [m2.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 exports.__esModule = true;
-var m1_1 = require("./m1");
+var m1_1 = __importDefault(require("./m1"));
 function f2() {
     m1_1["default"]();
 }

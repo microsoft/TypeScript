@@ -59,8 +59,11 @@ __export(require("./t2"));
 __export(require("./t3"));
 //// [main.js]
 "use strict";
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-var t4_1 = require("./t4");
+var t4_1 = __importDefault(require("./t4"));
 t4_1.default;
 t4_1.x;
 t4_1.y;

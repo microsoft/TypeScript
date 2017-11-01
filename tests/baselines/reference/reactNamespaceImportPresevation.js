@@ -15,6 +15,13 @@ declare var foo: any;
 
 //// [test.jsx]
 "use strict";
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 exports.__esModule = true;
-var myReactLib = require("my-React-Lib"); // should not be elided
+var myReactLib = __importStar(require("my-React-Lib")); // should not be elided
 <foo data/>;
