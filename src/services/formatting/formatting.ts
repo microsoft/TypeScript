@@ -714,6 +714,11 @@ namespace ts.formatting {
 
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
 
+                if (child.kind === SyntaxKind.JsxText) {
+                    const range: TextRange = { pos: child.getStart(), end: child.getEnd() };
+                    indentMultilineCommentOrJsxText(range, childIndentation.indentation, /*firstLineIsIndented*/ true, /*indentFinalLine*/ false);
+                }
+
                 childContextNode = node;
 
                 if (isFirstListItem && parent.kind === SyntaxKind.ArrayLiteralExpression && inheritedIndentation === Constants.Unknown) {
@@ -833,7 +838,7 @@ namespace ts.formatting {
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
                                     if (triviaInRange) {
-                                        indentMultilineComment(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                                        indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
                                     }
                                     indentNextTokenOrTrivia = false;
                                     break;
@@ -985,7 +990,7 @@ namespace ts.formatting {
             return indentationString !== sourceFile.text.substr(startLinePosition, indentationString.length);
         }
 
-        function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean) {
+        function indentMultilineCommentOrJsxText(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean, indentFinalLine = true) {
             // split comment in lines
             let startLine = sourceFile.getLineAndCharacterOfPosition(commentRange.pos).line;
             const endLine = sourceFile.getLineAndCharacterOfPosition(commentRange.end).line;
@@ -1006,7 +1011,9 @@ namespace ts.formatting {
                     startPos = getStartPositionOfLine(line + 1, sourceFile);
                 }
 
-                parts.push({ pos: startPos, end: commentRange.end });
+                if (indentFinalLine) {
+                    parts.push({ pos: startPos, end: commentRange.end });
+                }
             }
 
             const startLinePos = getStartPositionOfLine(startLine, sourceFile);
