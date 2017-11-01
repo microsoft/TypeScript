@@ -148,7 +148,7 @@ namespace ts {
             // Create an updated SourceFile:
             //
             //     define(moduleName?, ["module1", "module2"], function ...
-            return updateSourceFileNode(node,
+            const updated = updateSourceFileNode(node,
                 setTextRange(
                     createNodeArray([
                         createStatement(
@@ -192,6 +192,9 @@ namespace ts {
                     /*location*/ node.statements
                 )
             );
+
+            addEmitHelpers(updated, context.readEmitHelpers());
+            return updated;
         }
 
         /**
@@ -296,7 +299,7 @@ namespace ts {
             //      }
             //  })(function ...)
 
-            return updateSourceFileNode(
+            const updated = updateSourceFileNode(
                 node,
                 setTextRange(
                     createNodeArray([
@@ -328,6 +331,9 @@ namespace ts {
                     /*location*/ node.statements
                 )
             );
+
+            addEmitHelpers(updated, context.readEmitHelpers());
+            return updated;
         }
 
         /**
@@ -627,7 +633,8 @@ namespace ts {
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
-            const requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+            context.requestEmitHelper(commonjsImportStarHelper);
+            const requireCall = createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : [])]);
 
             let func: FunctionExpression | ArrowFunction;
             if (languageVersion >= ScriptTarget.ES2015) {
