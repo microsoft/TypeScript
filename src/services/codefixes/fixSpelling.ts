@@ -23,7 +23,7 @@ namespace ts.codefix {
         else {
             const meaning = getMeaningFromLocation(node);
             const name = getTextOfNode(node);
-            Debug.assert(!!name, "name should be defined");
+            Debug.assert(name !== undefined, "name should be defined");
             suggestion = checker.getSuggestionForNonexistentSymbol(node, name, convertSemanticMeaningToSymbolFlags(meaning));
         }
         if (suggestion) {
