@@ -4266,6 +4266,7 @@ namespace ts {
         ContainsYield = 1 << 24,
         ContainsHoistedDeclarationOrCompletion = 1 << 25,
         ContainsDynamicImport = 1 << 26,
+        NeverApplyImportHelper = 1 << 27, // Indicates the node should never be wrapped with an import star helper (because, for example, it import tslib itself)
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -4305,6 +4306,7 @@ namespace ts {
         // - Additional bitmasks
         TypeScriptClassSyntaxMask = ContainsParameterPropertyAssignments | ContainsPropertyInitializer | ContainsDecorators,
         ES2015FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
+        StickyFlags = NeverApplyImportHelper, // Flags which once set are retained by `aggregateTransformFlags` instead of overwritten
     }
 
     export interface SourceMapRange extends TextRange {

@@ -143,6 +143,7 @@ namespace ts {
             createLiteral(externalHelpersModuleNameText));
 
         if (externalHelpersImportDeclaration) {
+            externalHelpersImportDeclaration.transformFlags |= TransformFlags.NeverApplyImportHelper;
             externalImports.unshift(externalHelpersImportDeclaration);
         }
 

@@ -660,6 +660,22 @@ namespace ts {
             return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
+
+        function getCommonjsImportExpressionForImport(node: ImportDeclaration) {
+            if (node.transformFlags & TransformFlags.NeverApplyImportHelper) {
+                return createRequireCall(node);
+            }
+            if (getNamespaceDeclarationNode(node)) {
+                context.requestEmitHelper(commonjsImportStarHelper);
+                return createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [createRequireCall(node)]);
+            }
+            if (isDefaultImport(node)) {
+                context.requestEmitHelper(commonjsImportDefaultHelper);
+                return createCall(getHelperName("__importDefault"), /*typeArguments*/ undefined, [createRequireCall(node)]);
+            }
+            return createRequireCall(node);
+        }
+
         /**
          * Visits an ImportDeclaration node.
          *
@@ -681,7 +697,7 @@ namespace ts {
                             createVariableDeclaration(
                                 getSynthesizedClone(namespaceDeclaration.name),
                                 /*type*/ undefined,
-                                createRequireCall(node)
+                                getCommonjsImportExpressionForImport(node)
                             )
                         );
                     }
@@ -694,7 +710,7 @@ namespace ts {
                             createVariableDeclaration(
                                 getGeneratedNameForNode(node),
                                 /*type*/ undefined,
-                                createRequireCall(node)
+                                getCommonjsImportExpressionForImport(node)
                             )
                         );
 
@@ -1670,5 +1686,28 @@ namespace ts {
         scoped: true,
         text: `
             var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
+    };
+
+    // emit helper for import star
+    const commonjsImportStarHelper: EmitHelper = {
+        name: "typescript:commonjsimportstar",
+        scoped: false,
+        text: `
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}`
+    };
+
+    const commonjsImportDefaultHelper: EmitHelper = {
+        name: "typescript:commonjsimportdefault",
+        scoped: false,
+        text: `
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}`
     };
 }
