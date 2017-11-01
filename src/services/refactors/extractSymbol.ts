@@ -331,7 +331,7 @@ namespace ts.refactor.extractSymbol {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
-            if (!isStatement(nodeToCheck) && !(isPartOfExpression(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
+            if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
 
@@ -491,7 +491,7 @@ namespace ts.refactor.extractSymbol {
         if (isStatement(node)) {
             return [node];
         }
-        else if (isPartOfExpression(node)) {
+        else if (isExpressionNode(node)) {
             // If our selection is the expression in an ExpressionStatement, expand
             // the selection to include the enclosing Statement (this stops us
             // from trying to care about the return value of the extracted function
@@ -730,7 +730,7 @@ namespace ts.refactor.extractSymbol {
                 let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
                 // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
                 type = checker.getBaseTypeOfLiteralType(type);
-                typeNode = checker.typeToTypeNode(type, node, NodeBuilderFlags.NoTruncation);
+                typeNode = checker.typeToTypeNode(type, scope, NodeBuilderFlags.NoTruncation);
             }
 
             const paramDecl = createParameter(

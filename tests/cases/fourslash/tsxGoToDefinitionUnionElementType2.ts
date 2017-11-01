@@ -19,7 +19,7 @@
 
 //// var /*pt1*/RCComp = RC1 || RC2;
 
-//// <RC/*one*/Comp />
+//// <[|RC/*one*/Comp|] />
 
 verify.goToDefinition({
     "one": "pt1"

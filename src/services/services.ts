@@ -31,7 +31,7 @@
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.5";
+    export const servicesVersion = "0.6";
 
     /* @internal */
     let ruleProvider: formatting.RulesProvider;
@@ -725,9 +725,9 @@ namespace ts {
 
                     case SyntaxKind.BinaryExpression:
                         if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
-                           addDeclaration(node as BinaryExpression);
+                            addDeclaration(node as BinaryExpression);
                         }
-                        // falls through
+                    // falls through
 
                     default:
                         forEachChild(node, visit);
@@ -1429,6 +1429,11 @@ namespace ts {
             return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
         }
 
+        function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+            synchronizeHostData();
+            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+        }
+
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
             return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
@@ -2041,6 +2046,7 @@ namespace ts {
             getSignatureHelpItems,
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
+            getDefinitionAndBoundSpan,
             getImplementationAtPosition,
             getTypeDefinitionAtPosition,
             getReferencesAtPosition,

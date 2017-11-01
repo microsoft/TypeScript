@@ -12,10 +12,10 @@
 ////import f, { x } from "./a";
 ////import * as /*aDef*/a from "./a";
 ////import b = require("./b");
-/////*fUse*/f;
-/////*xUse*/x;
-/////*aUse*/a;
-/////*bUse*/b;
+////[|/*fUse*/f|];
+////[|/*xUse*/x|];
+////[|/*aUse*/a|];
+////[|/*bUse*/b|];
 
 verify.goToDefinition({
     aUse: "aDef", // Namespace import isn't "skipped"

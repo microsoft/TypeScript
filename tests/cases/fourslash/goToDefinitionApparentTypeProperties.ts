@@ -5,7 +5,7 @@
 ////}
 ////
 ////var o = 0;
-////o./*reference1*/myObjectMethod();
-////o["/*reference2*/myObjectMethod"]();
+////o.[|/*reference1*/myObjectMethod|]();
+////o[[|"/*reference2*/myObjectMethod"|]]();
 
 verify.goToDefinition(["reference1", "reference2"], "definition");
