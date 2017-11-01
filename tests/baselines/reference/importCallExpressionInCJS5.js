@@ -56,33 +56,40 @@ function backup() { return "backup"; }
 exports.backup = backup;
 //// [2.js]
 "use strict";
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 class C {
     constructor() {
-        this.myModule = Promise.resolve().then(() => require("./0"));
+        this.myModule = Promise.resolve().then(() => __importStar(require("./0")));
     }
     method() {
-        const loadAsync = Promise.resolve().then(() => require("./0"));
+        const loadAsync = Promise.resolve().then(() => __importStar(require("./0")));
         this.myModule.then(Zero => {
             console.log(Zero.foo());
         }, async (err) => {
             console.log(err);
-            let one = await Promise.resolve().then(() => require("./1"));
+            let one = await Promise.resolve().then(() => __importStar(require("./1")));
             console.log(one.backup());
         });
     }
 }
 class D {
     constructor() {
-        this.myModule = Promise.resolve().then(() => require("./0"));
+        this.myModule = Promise.resolve().then(() => __importStar(require("./0")));
     }
     method() {
-        const loadAsync = Promise.resolve().then(() => require("./0"));
+        const loadAsync = Promise.resolve().then(() => __importStar(require("./0")));
         this.myModule.then(Zero => {
             console.log(Zero.foo());
         }, async (err) => {
             console.log(err);
-            let one = await Promise.resolve().then(() => require("./1"));
+            let one = await Promise.resolve().then(() => __importStar(require("./1")));
             console.log(one.backup());
         });
     }

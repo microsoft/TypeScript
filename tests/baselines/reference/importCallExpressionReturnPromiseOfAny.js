@@ -41,21 +41,28 @@ class C {
 exports.C = C;
 //// [1.js]
 "use strict";
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-Promise.resolve().then(() => require(`${directory}\${moduleFile}`));
-Promise.resolve().then(() => require(getSpecifier()));
-var p1 = Promise.resolve().then(() => require(ValidSomeCondition() ? "./0" : "externalModule"));
-var p1 = Promise.resolve().then(() => require(getSpecifier()));
-var p11 = Promise.resolve().then(() => require(getSpecifier()));
-const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "defaulPath"));
+Promise.resolve().then(() => __importStar(require(`${directory}\${moduleFile}`)));
+Promise.resolve().then(() => __importStar(require(getSpecifier())));
+var p1 = Promise.resolve().then(() => __importStar(require(ValidSomeCondition() ? "./0" : "externalModule")));
+var p1 = Promise.resolve().then(() => __importStar(require(getSpecifier())));
+var p11 = Promise.resolve().then(() => __importStar(require(getSpecifier())));
+const p2 = Promise.resolve().then(() => __importStar(require(whatToLoad ? getSpecifier() : "defaulPath")));
 p1.then(zero => {
     return zero.foo(); // ok, zero is any
 });
 let j;
-var p3 = Promise.resolve().then(() => require(j = getSpecifier()));
+var p3 = Promise.resolve().then(() => __importStar(require(j = getSpecifier())));
 function* loadModule(directories) {
     for (const directory of directories) {
         const path = `${directory}\moduleFile`;
-        Promise.resolve().then(() => require(yield path));
+        Promise.resolve().then(() => __importStar(require(yield path)));
     }
 }

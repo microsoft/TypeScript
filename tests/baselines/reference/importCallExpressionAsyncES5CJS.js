@@ -65,6 +65,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 function fn() {
@@ -72,7 +79,7 @@ function fn() {
         var req;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // ONE
+                case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('./test')); })]; // ONE
                 case 1:
                     req = _a.sent() // ONE
                     ;
@@ -90,7 +97,7 @@ var cl1 = /** @class */ (function () {
             var req;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // TWO
+                    case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('./test')); })]; // TWO
                     case 1:
                         req = _a.sent() // TWO
                         ;
@@ -107,7 +114,7 @@ exports.obj = {
         var req;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // THREE
+                case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('./test')); })]; // THREE
                 case 1:
                     req = _a.sent() // THREE
                     ;
@@ -124,7 +131,7 @@ var cl2 = /** @class */ (function () {
                 var req;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // FOUR
+                        case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('./test')); })]; // FOUR
                         case 1:
                             req = _a.sent() // FOUR
                             ;
@@ -141,7 +148,7 @@ exports.l = function () { return __awaiter(_this, void 0, void 0, function () {
     var req;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // FIVE
+            case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('./test')); })]; // FIVE
             case 1:
                 req = _a.sent() // FIVE
                 ;

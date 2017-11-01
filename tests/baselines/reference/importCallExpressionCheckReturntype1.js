@@ -29,7 +29,14 @@ class C {
 exports.C = C;
 //// [1.js]
 "use strict";
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-let p1 = Promise.resolve().then(() => require("./defaultPath"));
-let p2 = Promise.resolve().then(() => require("./defaultPath"));
-let p3 = Promise.resolve().then(() => require("./defaultPath"));
+let p1 = Promise.resolve().then(() => __importStar(require("./defaultPath")));
+let p2 = Promise.resolve().then(() => __importStar(require("./defaultPath")));
+let p3 = Promise.resolve().then(() => __importStar(require("./defaultPath")));

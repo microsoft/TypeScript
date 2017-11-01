@@ -35,21 +35,28 @@ function foo() { return "foo"; }
 exports.foo = foo;
 //// [1.js]
 "use strict";
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-Promise.resolve().then(function () { return require("./0"); });
-var p1 = Promise.resolve().then(function () { return require("./0"); });
+Promise.resolve().then(function () { return __importStar(require("./0")); });
+var p1 = Promise.resolve().then(function () { return __importStar(require("./0")); });
 p1.then(function (zero) {
     return zero.foo();
 });
-exports.p2 = Promise.resolve().then(function () { return require("./0"); });
+exports.p2 = Promise.resolve().then(function () { return __importStar(require("./0")); });
 function foo() {
-    var p2 = Promise.resolve().then(function () { return require("./0"); });
+    var p2 = Promise.resolve().then(function () { return __importStar(require("./0")); });
 }
 var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function () {
-        var loadAsync = Promise.resolve().then(function () { return require("./0"); });
+        var loadAsync = Promise.resolve().then(function () { return __importStar(require("./0")); });
     };
     return C;
 }());
@@ -57,7 +64,7 @@ var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.method = function () {
-        var loadAsync = Promise.resolve().then(function () { return require("./0"); });
+        var loadAsync = Promise.resolve().then(function () { return __importStar(require("./0")); });
     };
     return D;
 }());
