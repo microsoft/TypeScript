@@ -225,7 +225,7 @@ namespace ts {
             if (parsed !== node) {
                 // If the node has been transformed by a `before` transformer, perform no ellision on it
                 // As the type information we would attempt to lookup to perform ellision is potentially unavailable for the synthesized nodes
-                return node;
+                return visitorWorker(node);
             }
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
