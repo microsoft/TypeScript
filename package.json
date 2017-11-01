@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "2.6.1",
+    "version": "2.6.2",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -79,7 +79,7 @@
         "ts-node": "latest",
         "tslint": "latest",
         "colors": "latest",
-        "typescript": "next"
+        "typescript": "^2.6.1"
     },
     "scripts": {
         "pretest": "jake tests",
