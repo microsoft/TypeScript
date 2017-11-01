@@ -4,7 +4,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.6";
+    export const versionMajorMinor = "2.7";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0`;
 }
@@ -33,8 +33,8 @@ namespace ts {
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
         // constantly changing shape.
-        map["__"] = undefined;
-        delete map["__"];
+        map.__ = undefined;
+        delete map.__;
 
         return map;
     }
@@ -191,6 +191,18 @@ namespace ts {
         }
         return undefined;
     }
+
+    /** Like `forEach`, but suitable for use with numbers and strings (which may be falsy). */
+    export function firstDefined<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+        for (let i = 0; i < array.length; i++) {
+            const result = callback(array[i], i);
+            if (result !== undefined) {
+                return result;
+            }
+        }
+        return undefined;
+    }
+
     /**
      * Iterates through the parent chain of a node and performs the callback on each parent until the callback
      * returns a truthy value, then returns that value.
@@ -213,11 +225,13 @@ namespace ts {
         return undefined;
     }
 
-    export function zipWith<T, U>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => void): void {
+    export function zipWith<T, U, V>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => V): V[] {
+        const result: V[] = [];
         Debug.assert(arrayA.length === arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
-            callback(arrayA[i], arrayB[i], i);
+            result.push(callback(arrayA[i], arrayB[i], i));
         }
+        return result;
     }
 
     export function zipToMap<T>(keys: ReadonlyArray<string>, values: ReadonlyArray<T>): Map<T> {
@@ -251,6 +265,16 @@ namespace ts {
     export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined;
     export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = 0; i < array.length; i++) {
+            const value = array[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
+        for (let i = array.length - 1; i >= 0; i--) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -354,21 +378,6 @@ namespace ts {
             }
         }
         return array;
-    }
-
-    export function removeWhere<T>(array: T[], f: (x: T) => boolean): boolean {
-        let outIndex = 0;
-        for (const item of array) {
-            if (!f(item)) {
-                array[outIndex] = item;
-                outIndex++;
-            }
-        }
-        if (outIndex !== array.length) {
-            array.length = outIndex;
-            return true;
-        }
-        return false;
     }
 
     export function filterMutate<T>(array: T[], f: (x: T, i: number, array: T[]) => boolean): void {
@@ -976,32 +985,6 @@ namespace ts {
         return initial;
     }
 
-    export function reduceRight<T, U>(array: ReadonlyArray<T>, f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
-    export function reduceRight<T>(array: ReadonlyArray<T>, f: (memo: T, value: T, i: number) => T): T;
-    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T {
-        if (array) {
-            const size = array.length;
-            if (size > 0) {
-                let pos = start === undefined || start > size - 1 ? size - 1 : start;
-                const end = count === undefined || pos - count < 0 ? 0 : pos - count;
-                let result: T;
-                if (arguments.length <= 2) {
-                    result = array[pos];
-                    pos--;
-                }
-                else {
-                    result = initial;
-                }
-                while (pos >= end) {
-                    result = f(result, array[pos], pos);
-                    pos--;
-                }
-                return result;
-            }
-        }
-        return initial;
-    }
-
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
     /**
@@ -1156,6 +1139,14 @@ namespace ts {
         const result = createMap<T | U>();
         for (const value of array) {
             result.set(makeKey(value), makeValue ? makeValue(value) : value);
+        }
+        return result;
+    }
+
+    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[] {
+        const result: T[] = [];
+        for (const value of array) {
+            result[makeKey(value)] = value;
         }
         return result;
     }
@@ -1663,7 +1654,7 @@ namespace ts {
     }
 
     export function isUrl(path: string) {
-        return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
+        return path && !isRootedDiskPath(path) && stringContains(path, "://");
     }
 
     export function pathIsRelative(path: string): boolean {
@@ -1691,6 +1682,12 @@ namespace ts {
             moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
         }
         return moduleResolution;
+    }
+
+    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict";
+
+    export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
+        return compilerOptions[flag] === undefined ? compilerOptions.strict : compilerOptions[flag];
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -1844,7 +1841,7 @@ namespace ts {
         return i < 0 ? path : path.substring(i + 1);
     }
 
-    export function combinePaths(path1: string, path2: string) {
+    export function combinePaths(path1: string, path2: string): string {
         if (!(path1 && path1.length)) return path2;
         if (!(path2 && path2.length)) return path1;
         if (getRootLength(path2) !== 0) return path2;
@@ -1932,8 +1929,12 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function stringContains(str: string, substring: string): boolean {
+        return str.indexOf(substring) !== -1;
+    }
+
     export function hasExtension(fileName: string): boolean {
-        return getBaseFileName(fileName).indexOf(".") >= 0;
+        return stringContains(getBaseFileName(fileName), ".");
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
@@ -2670,6 +2671,16 @@ namespace ts {
         return find<Extension>(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
     }
 
+    // Retrieves any string from the final "." onwards from a base file name.
+    // Unlike extensionFromPath, which throws an exception on unrecognized extensions.
+    export function getAnyExtensionFromPath(path: string): string | undefined {
+        const baseFileName = getBaseFileName(path);
+        const extensionIndex = baseFileName.lastIndexOf(".");
+        if (extensionIndex >= 0) {
+            return baseFileName.substring(extensionIndex);
+        }
+    }
+
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
@@ -2680,8 +2691,14 @@ namespace ts {
 
     export function assertTypeIsNever(_: never): void { }
 
+    export interface FileAndDirectoryExistence {
+        fileExists: boolean;
+        directoryExists: boolean;
+    }
+
     export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
-        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): void;
+        /** Returns the queried result for the file exists and directory exists if at all it was done */
+        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): FileAndDirectoryExistence | undefined;
         addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
         clearCache(): void;
     }
@@ -2851,8 +2868,13 @@ namespace ts {
                 if (parentResult) {
                     const baseName = getBaseNameOfFileName(fileOrDirectory);
                     if (parentResult) {
-                        updateFilesOfFileSystemEntry(parentResult, baseName, host.fileExists(fileOrDirectoryPath));
-                        updateFileSystemEntry(parentResult.directories, baseName, host.directoryExists(fileOrDirectoryPath));
+                        const fsQueryResult: FileAndDirectoryExistence = {
+                            fileExists: host.fileExists(fileOrDirectoryPath),
+                            directoryExists: host.directoryExists(fileOrDirectoryPath)
+                        };
+                        updateFilesOfFileSystemEntry(parentResult, baseName, fsQueryResult.fileExists);
+                        updateFileSystemEntry(parentResult.directories, baseName, fsQueryResult.directoryExists);
+                        return fsQueryResult;
                     }
                 }
             }

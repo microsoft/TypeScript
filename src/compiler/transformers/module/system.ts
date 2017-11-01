@@ -225,7 +225,7 @@ namespace ts {
             startLexicalEnvironment();
 
             // Add any prologue directives.
-            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
             const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
@@ -826,7 +826,7 @@ namespace ts {
                     /*needsValue*/ false,
                     createAssignment
                 )
-                : createAssignment(node.name, visitNode(node.initializer, destructuringAndImportCallVisitor, isExpression));
+                : node.initializer ? createAssignment(node.name, visitNode(node.initializer, destructuringAndImportCallVisitor, isExpression)) : node.name;
         }
 
         /**
@@ -1296,6 +1296,9 @@ namespace ts {
                 let expressions: Expression[];
                 for (const variable of node.declarations) {
                     expressions = append(expressions, transformInitializedVariable(variable, /*isExportedDeclaration*/ false));
+                    if (!variable.initializer) {
+                        hoistBindingElement(variable);
+                    }
                 }
 
                 return expressions ? inlineExpressions(expressions) : createOmittedExpression();
@@ -1495,7 +1498,7 @@ namespace ts {
                     createIdentifier("import")
                 ),
                 /*typeArguments*/ undefined,
-                node.arguments
+                some(node.arguments) ? [visitNode(node.arguments[0], destructuringAndImportCallVisitor)] : []
             );
         }
 

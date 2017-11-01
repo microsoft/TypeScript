@@ -145,3 +145,9 @@ interface i10<T = number> {}
 >i10 : i10<T>
 >T : T
 
+// https://github.com/Microsoft/TypeScript/issues/16221
+interface SelfReference<T = SelfReference> {}
+>SelfReference : SelfReference<T>
+>T : T
+>SelfReference : SelfReference<T>
+

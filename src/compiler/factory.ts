@@ -47,10 +47,15 @@ namespace ts {
      * Creates a shallow, memberwise clone of a node with no source map location.
      */
     /* @internal */
-    export function getSynthesizedClone<T extends Node>(node: T | undefined): T {
+    export function getSynthesizedClone<T extends Node>(node: T | undefined): T | undefined {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
+
+        if (node === undefined) {
+            return undefined;
+        }
+
         const clone = <T>createSynthesizedNode(node.kind);
         clone.flags |= node.flags;
         setOriginalNode(clone, node);
@@ -1977,7 +1982,7 @@ namespace ts {
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.isExportEquals = isExportEquals;
-        node.expression = expression;
+        node.expression = isExportEquals ? parenthesizeBinaryOperand(SyntaxKind.EqualsToken, expression, /*isLeftSideOfBinary*/ false, /*leftOperand*/ undefined) : parenthesizeDefaultExpression(expression);
         return node;
     }
 
@@ -2107,6 +2112,22 @@ namespace ts {
     export function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression) {
         return node.tagName !== tagName
             ? updateNode(createJsxClosingElement(tagName), node)
+            : node;
+    }
+
+    export function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
+        const node = <JsxFragment>createSynthesizedNode(SyntaxKind.JsxFragment);
+        node.openingFragment = openingFragment;
+        node.children = createNodeArray(children);
+        node.closingFragment = closingFragment;
+        return node;
+    }
+
+    export function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
+        return node.openingFragment !== openingFragment
+            || node.children !== children
+            || node.closingFragment !== closingFragment
+            ? updateNode(createJsxFragment(openingFragment, children, closingFragment), node)
             : node;
     }
 
@@ -2608,6 +2629,16 @@ namespace ts {
     }
 
     /**
+     * Sets flags that control emit behavior of a node.
+     */
+    /* @internal */
+    export function addEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.flags = emitNode.flags | emitFlags;
+        return node;
+    }
+
+    /**
      * Gets a custom text range to use when emitting source maps.
      */
     export function getSourceMapRange(node: Node) {
@@ -2936,7 +2967,7 @@ namespace ts {
         );
     }
 
-    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement) {
+    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment) {
         // To ensure the emit resolver can properly resolve the namespace, we need to
         // treat this identifier as if it were a source tree node by clearing the `Synthesized`
         // flag and setting a parent node.
@@ -2948,7 +2979,7 @@ namespace ts {
         return react;
     }
 
-    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
+    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
             const right = createIdentifier(idText(jsxFactory.right));
@@ -2960,7 +2991,7 @@ namespace ts {
         }
     }
 
-    function createJsxFactoryExpression(jsxFactoryEntity: EntityName, reactNamespace: string, parent: JsxOpeningLikeElement): Expression {
+    function createJsxFactoryExpression(jsxFactoryEntity: EntityName, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         return jsxFactoryEntity ?
             createJsxFactoryExpressionFromEntityName(jsxFactoryEntity, parent) :
             createPropertyAccess(
@@ -2980,6 +3011,37 @@ namespace ts {
                 argumentsList.push(createNull());
             }
 
+            if (children.length > 1) {
+                for (const child of children) {
+                    child.startsOnNewLine = true;
+                    argumentsList.push(child);
+                }
+            }
+            else {
+                argumentsList.push(children[0]);
+            }
+        }
+
+        return setTextRange(
+            createCall(
+                createJsxFactoryExpression(jsxFactoryEntity, reactNamespace, parentElement),
+                /*typeArguments*/ undefined,
+                argumentsList
+            ),
+            location
+        );
+    }
+
+    export function createExpressionForJsxFragment(jsxFactoryEntity: EntityName, reactNamespace: string, children: Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
+        const tagName = createPropertyAccess(
+            createReactNamespace(reactNamespace, parentElement),
+            "Fragment"
+        );
+
+        const argumentsList = [<Expression>tagName];
+        argumentsList.push(createNull());
+
+        if (children && children.length > 0) {
             if (children.length > 1) {
                 for (const child of children) {
                     child.startsOnNewLine = true;
@@ -3866,6 +3928,27 @@ namespace ts {
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
         return e.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>e).operatorToken.kind === SyntaxKind.CommaToken
+            ? createParen(e)
+            : e;
+    }
+
+    /**
+     *  [Per the spec](https://tc39.github.io/ecma262/#prod-ExportDeclaration), `export default` accepts _AssigmentExpression_ but
+     *  has a lookahead restriction for `function`, `async function`, and `class`.
+     *
+     * Basically, that means we need to parenthesize in the following cases:
+     *
+     * - BinaryExpression of CommaToken
+     * - CommaList (synthetic list of multiple comma expressions)
+     * - FunctionExpression
+     * - ClassExpression
+     */
+    export function parenthesizeDefaultExpression(e: Expression) {
+        const check = skipPartiallyEmittedExpressions(e);
+        return (check.kind === SyntaxKind.ClassExpression ||
+            check.kind === SyntaxKind.FunctionExpression ||
+            check.kind === SyntaxKind.CommaListExpression ||
+            isBinaryExpression(check) && check.operatorToken.kind === SyntaxKind.CommaToken)
             ? createParen(e)
             : e;
     }

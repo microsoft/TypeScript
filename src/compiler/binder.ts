@@ -143,6 +143,15 @@ namespace ts {
         let subtreeTransformFlags: TransformFlags = TransformFlags.None;
         let skipTransformFlagAggregation: boolean;
 
+        /**
+         * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
+         * If so, the node _must_ be in the current file (as that's the only way anything could have traversed to it to yield it as the error node)
+         * This version of `createDiagnosticForNode` uses the binder's context to account for this, and always yields correct diagnostics even in these situations.
+         */
+        function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
+            return createDiagnosticForNodeInSourceFile(getSourceFileOfNode(node) || file, node, message, arg0, arg1, arg2);
+        }
+
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
             options = opts;
@@ -183,7 +192,7 @@ namespace ts {
         return bindSourceFile;
 
         function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-            if ((opts.alwaysStrict === undefined ? opts.strict : opts.alwaysStrict) && !file.isDeclarationFile) {
+            if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
                 // bind in strict mode source files with alwaysStrict option
                 return true;
             }
@@ -2271,16 +2280,13 @@ namespace ts {
         function isExportsOrModuleExportsOrAlias(node: Node): boolean {
             return isExportsIdentifier(node) ||
                 isModuleExportsPropertyAccessExpression(node) ||
-                isNameOfExportsOrModuleExportsAliasDeclaration(node);
+                isIdentifier(node) && isNameOfExportsOrModuleExportsAliasDeclaration(node);
         }
 
-        function isNameOfExportsOrModuleExportsAliasDeclaration(node: Node) {
-            if (isIdentifier(node)) {
-                const symbol = lookupSymbolForName(node.escapedText);
-                return symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
-                    symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(symbol.valueDeclaration.initializer);
-            }
-            return false;
+        function isNameOfExportsOrModuleExportsAliasDeclaration(node: Identifier): boolean {
+            const symbol = lookupSymbolForName(node.escapedText);
+            return symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
+                symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(symbol.valueDeclaration.initializer);
         }
 
         function isExportsOrModuleExportsOrAliasOrAssignment(node: Node): boolean {
@@ -2354,20 +2360,22 @@ namespace ts {
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
             const leftSideOfAssignment = node.left as PropertyAccessExpression;
-            const target = leftSideOfAssignment.expression as Identifier;
+            const target = leftSideOfAssignment.expression;
 
-            // Fix up parent pointers since we're going to use these nodes before we bind into them
-            leftSideOfAssignment.parent = node;
-            target.parent = leftSideOfAssignment;
+            if (isIdentifier(target)) {
+                // Fix up parent pointers since we're going to use these nodes before we bind into them
+                leftSideOfAssignment.parent = node;
+                target.parent = leftSideOfAssignment;
 
-            if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
-                // This can be an alias for the 'exports' or 'module.exports' names, e.g.
-                //    var util = module.exports;
-                //    util.property = function ...
-                bindExportsPropertyAssignment(node);
-            }
-            else {
-                bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+                if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
+                    // This can be an alias for the 'exports' or 'module.exports' names, e.g.
+                    //    var util = module.exports;
+                    //    util.property = function ...
+                    bindExportsPropertyAssignment(node);
+                }
+                else {
+                    bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+                }
             }
         }
 
@@ -2699,6 +2707,12 @@ namespace ts {
 
         if (expression.kind === SyntaxKind.ImportKeyword) {
             transformFlags |= TransformFlags.ContainsDynamicImport;
+
+            // A dynamic 'import()' call that contains a lexical 'this' will
+            // require a captured 'this' when emitting down-level.
+            if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
+                transformFlags |= TransformFlags.ContainsCapturedLexicalThis;
+            }
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3282,6 +3296,9 @@ namespace ts {
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxText:
             case SyntaxKind.JsxClosingElement:
+            case SyntaxKind.JsxFragment:
+            case SyntaxKind.JsxOpeningFragment:
+            case SyntaxKind.JsxClosingFragment:
             case SyntaxKind.JsxAttribute:
             case SyntaxKind.JsxAttributes:
             case SyntaxKind.JsxSpreadAttribute:

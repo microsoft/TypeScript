@@ -676,14 +676,14 @@ function f21<T extends Number>(x: T) {
 
     var r20 = true ? {} : x; // ok
 >r20 : {}
->true ? {} : x : {}
+>true ? {} : x : T | {}
 >true : true
 >{} : {}
 >x : T
 
     var r20 = true ? x : {}; // ok
 >r20 : {}
->true ? x : {} : {}
+>true ? x : {} : T | {}
 >true : true
 >x : T
 >{} : {}

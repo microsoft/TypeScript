@@ -1,3 +1,4 @@
+// @strict: true
 type ADT = {
     tag: "A",
     a1: string
@@ -48,3 +49,9 @@ let over: Overlapping
 // these two are not reported because there are two discriminant properties
 over = { a: 1, b: 1, first: "ok", second: "error" }
 over = { a: 1, b: 1, first: "ok", third: "error" }
+
+// Freshness disappears after spreading a union
+declare let t0: { a: any, b: any } | { d: any, e: any }
+declare let t1: { a: any, b: any, c: any } | { c: any, d: any, e: any }
+let t2 = { ...t1 }
+t0 = t2

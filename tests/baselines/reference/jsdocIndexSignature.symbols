@@ -11,3 +11,15 @@ var o2;
 var o3;
 >o3 : Symbol(o3, Decl(indices.js, 5, 3))
 
+/** @param {Object.<string, boolean>} o */
+function f(o) {
+>f : Symbol(f, Decl(indices.js, 5, 7))
+>o : Symbol(o, Decl(indices.js, 7, 11))
+
+    o.foo = 1; // error
+>o : Symbol(o, Decl(indices.js, 7, 11))
+
+    o.bar = false; // ok
+>o : Symbol(o, Decl(indices.js, 7, 11))
+}
+
