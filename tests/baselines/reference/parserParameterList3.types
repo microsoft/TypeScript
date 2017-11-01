@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList3.ts ===
+class C {
+>C : C
+
+  F(A?, B) { }
+>F : (A?: any, B: any) => void
+>A : any
+>B : any
+}

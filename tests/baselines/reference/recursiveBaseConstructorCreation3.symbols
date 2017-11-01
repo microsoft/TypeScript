@@ -1,0 +1,29 @@
+=== tests/cases/compiler/recursiveBaseConstructorCreation3.ts ===
+declare class base<T> {
+>base : Symbol(base, Decl(recursiveBaseConstructorCreation3.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveBaseConstructorCreation3.ts, 0, 19))
+}
+declare class abc<T> extends base<T> {
+>abc : Symbol(abc, Decl(recursiveBaseConstructorCreation3.ts, 1, 1))
+>T : Symbol(T, Decl(recursiveBaseConstructorCreation3.ts, 2, 18))
+>base : Symbol(base, Decl(recursiveBaseConstructorCreation3.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveBaseConstructorCreation3.ts, 2, 18))
+
+    foo: xyz;
+>foo : Symbol(abc.foo, Decl(recursiveBaseConstructorCreation3.ts, 2, 38))
+>xyz : Symbol(xyz, Decl(recursiveBaseConstructorCreation3.ts, 4, 1))
+}
+declare class xyz extends abc {
+>xyz : Symbol(xyz, Decl(recursiveBaseConstructorCreation3.ts, 4, 1))
+>abc : Symbol(abc, Decl(recursiveBaseConstructorCreation3.ts, 1, 1))
+}
+
+var bar = new xyz(); // Error: Invalid 'new' expression.
+>bar : Symbol(bar, Decl(recursiveBaseConstructorCreation3.ts, 8, 3))
+>xyz : Symbol(xyz, Decl(recursiveBaseConstructorCreation3.ts, 4, 1))
+
+var r: xyz = bar.foo;
+>r : Symbol(r, Decl(recursiveBaseConstructorCreation3.ts, 9, 3))
+>xyz : Symbol(xyz, Decl(recursiveBaseConstructorCreation3.ts, 4, 1))
+>bar : Symbol(bar, Decl(recursiveBaseConstructorCreation3.ts, 8, 3))
+

@@ -1,0 +1,4 @@
+=== tests/cases/compiler/noEmitOnError.ts ===
+var x: number = "";
+>x : Symbol(x, Decl(noEmitOnError.ts, 0, 3))
+

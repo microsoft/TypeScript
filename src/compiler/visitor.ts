@@ -488,6 +488,7 @@ namespace ts {
                     nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
+                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, isToken),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
@@ -523,7 +524,9 @@ namespace ts {
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,
                     visitNode((<ConditionalExpression>node).condition, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).questionToken, visitor, isToken),
                     visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).colonToken, visitor, isToken),
                     visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression));
 
             case SyntaxKind.TemplateExpression:
@@ -815,6 +818,12 @@ namespace ts {
             case SyntaxKind.JsxClosingElement:
                 return updateJsxClosingElement(<JsxClosingElement>node,
                     visitNode((<JsxClosingElement>node).tagName, visitor, isJsxTagNameExpression));
+
+            case SyntaxKind.JsxFragment:
+                return updateJsxFragment(<JsxFragment>node,
+                    visitNode((<JsxFragment>node).openingFragment, visitor, isJsxOpeningFragment),
+                    nodesVisitor((<JsxFragment>node).children, visitor, isJsxChild),
+                    visitNode((<JsxFragment>node).closingFragment, visitor, isJsxClosingFragment));
 
             case SyntaxKind.JsxAttribute:
                 return updateJsxAttribute(<JsxAttribute>node,
@@ -1329,6 +1338,12 @@ namespace ts {
                 result = reduceNode((<JsxElement>node).openingElement, cbNode, result);
                 result = reduceLeft((<JsxElement>node).children, cbNode, result);
                 result = reduceNode((<JsxElement>node).closingElement, cbNode, result);
+                break;
+
+            case SyntaxKind.JsxFragment:
+                result = reduceNode((<JsxFragment>node).openingFragment, cbNode, result);
+                result = reduceLeft((<JsxFragment>node).children, cbNode, result);
+                result = reduceNode((<JsxFragment>node).closingFragment, cbNode, result);
                 break;
 
             case SyntaxKind.JsxSelfClosingElement:

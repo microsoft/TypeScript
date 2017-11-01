@@ -7,12 +7,12 @@
 ////}
 ////
 ////// Type position
-////var t1: /*alias1Type*/alias1.IFoo;
-////var t2: Module./*alias2Type*/alias2.IFoo;
+////var t1: [|/*alias1Type*/alias1|].IFoo;
+////var t2: Module.[|/*alias2Type*/alias2|].IFoo;
 ////
 ////// Value posistion
-////var v1 = new /*alias1Value*/alias1.Foo();
-////var v2 = new Module./*alias2Value*/alias2.Foo();
+////var v1 = new [|/*alias1Value*/alias1|].Foo();
+////var v2 = new Module.[|/*alias2Value*/alias2|].Foo();
 
 
 // @Filename: a.ts

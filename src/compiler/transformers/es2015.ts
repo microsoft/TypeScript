@@ -279,6 +279,13 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let currentText: string;
         let hierarchyFacts: HierarchyFacts;
+        let taggedTemplateStringDeclarations: VariableDeclaration[];
+
+        function recordTaggedTemplateString(temp: Identifier) {
+            taggedTemplateStringDeclarations = append(
+                taggedTemplateStringDeclarations,
+                createVariableDeclaration(temp));
+        }
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -307,6 +314,7 @@ namespace ts {
 
             currentSourceFile = undefined;
             currentText = undefined;
+            taggedTemplateStringDeclarations = undefined;
             hierarchyFacts = HierarchyFacts.None;
             return visited;
         }
@@ -339,64 +347,12 @@ namespace ts {
                 && !(<ReturnStatement>node).expression;
         }
 
-        function isClassLikeVariableStatement(node: Node) {
-            if (!isVariableStatement(node)) return false;
-            const variable = singleOrUndefined((<VariableStatement>node).declarationList.declarations);
-            return variable
-                && variable.initializer
-                && isIdentifier(variable.name)
-                && (isClassLike(variable.initializer)
-                    || (isAssignmentExpression(variable.initializer)
-                        && isIdentifier(variable.initializer.left)
-                        && isClassLike(variable.initializer.right)));
-        }
-
-        function isTypeScriptClassWrapper(node: Node) {
-            const call = tryCast(node, isCallExpression);
-            if (!call || isParseTreeNode(call) ||
-                some(call.typeArguments) ||
-                some(call.arguments)) {
-                return false;
-            }
-
-            const func = tryCast(skipOuterExpressions(call.expression), isFunctionExpression);
-            if (!func || isParseTreeNode(func) ||
-                some(func.typeParameters) ||
-                some(func.parameters) ||
-                func.type ||
-                !func.body) {
-                return false;
-            }
-
-            const statements = func.body.statements;
-            if (statements.length < 2) {
-                return false;
-            }
-
-            const firstStatement = statements[0];
-            if (isParseTreeNode(firstStatement) ||
-                !isClassLike(firstStatement) &&
-                !isClassLikeVariableStatement(firstStatement)) {
-                return false;
-            }
-
-            const lastStatement = elementAt(statements, -1);
-            const returnStatement = tryCast(isVariableStatement(lastStatement) ? elementAt(statements, -2) : lastStatement, isReturnStatement);
-            if (!returnStatement ||
-                !returnStatement.expression ||
-                !isIdentifier(skipOuterExpressions(returnStatement.expression))) {
-                return false;
-            }
-
-            return true;
-        }
-
         function shouldVisitNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
                 || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && (isStatement(node) || (node.kind === SyntaxKind.Block)))
                 || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node))
-                || isTypeScriptClassWrapper(node);
+                || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -572,6 +528,11 @@ namespace ts {
             addCaptureThisForNodeIfNeeded(statements, node);
             statementOffset = addCustomPrologue(statements, node.statements, statementOffset, visitor);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+            if (taggedTemplateStringDeclarations) {
+                statements.push(
+                    createVariableStatement(/*modifiers*/ undefined,
+                        createVariableDeclarationList(taggedTemplateStringDeclarations)));
+            }
             addRange(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
@@ -661,7 +622,7 @@ namespace ts {
                 //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
-                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(unescapeLeadingUnderscores(node.label.escapedText))) ||
+                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(idText(node.label))) ||
                     (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
 
                 if (!canUseBreakOrContinue) {
@@ -680,11 +641,11 @@ namespace ts {
                     else {
                         if (node.kind === SyntaxKind.BreakStatement) {
                             labelMarker = `break-${node.label.escapedText}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ true, unescapeLeadingUnderscores(node.label.escapedText), labelMarker);
+                            setLabeledJump(convertedLoopState, /*isBreak*/ true, idText(node.label), labelMarker);
                         }
                         else {
                             labelMarker = `continue-${node.label.escapedText}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ false, unescapeLeadingUnderscores(node.label.escapedText), labelMarker);
+                            setLabeledJump(convertedLoopState, /*isBreak*/ false, idText(node.label), labelMarker);
                         }
                     }
                     let returnExpression: Expression = createLiteral(labelMarker);
@@ -2239,11 +2200,11 @@ namespace ts {
         }
 
         function recordLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.escapedText), true);
+            convertedLoopState.labels.set(idText(node.label), true);
         }
 
         function resetLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.escapedText), false);
+            convertedLoopState.labels.set(idText(node.label), false);
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
@@ -3056,7 +3017,7 @@ namespace ts {
             else {
                 loopParameters.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
-                    const outParamName = createUniqueName("out_" + unescapeLeadingUnderscores(name.escapedText));
+                    const outParamName = createUniqueName("out_" + idText(name));
                     loopOutParameters.push({ originalName: name, outParamName });
                 }
             }
@@ -3308,13 +3269,14 @@ namespace ts {
          * @param node a CallExpression.
          */
         function visitCallExpression(node: CallExpression) {
-            if (isTypeScriptClassWrapper(node)) {
+            if (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) {
                 return visitTypeScriptClassWrapper(node);
             }
 
             if (node.transformFlags & TransformFlags.ES2015) {
                 return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
             }
+
             return updateCall(
                 node,
                 visitNode(node.expression, callExpressionVisitor, isExpression),
@@ -3357,7 +3319,7 @@ namespace ts {
 
             // We skip any outer expressions in a number of places to get to the innermost
             // expression, but we will restore them later to preserve comments and source maps.
-            const body = cast(skipOuterExpressions(node.expression), isFunctionExpression).body;
+            const body = cast(cast(skipOuterExpressions(node.expression), isArrowFunction).body, isBlock);
 
             // The class statements are the statements generated by visiting the first statement of the
             // body (1), while all other statements are added to remainingStatements (2)
@@ -3687,11 +3649,10 @@ namespace ts {
             // Visit the tag expression
             const tag = visitNode(node.tag, visitor, isExpression);
 
-            // Allocate storage for the template site object
-            const temp = createTempVariable(hoistVariableDeclaration);
-
             // Build up the template arguments and the raw and cooked strings for the template.
-            const templateArguments: Expression[] = [temp];
+            // We start out with 'undefined' for the first argument and revisit later
+            // to avoid walking over the template string twice and shifting all our arguments over after the fact.
+            const templateArguments: Expression[] = [undefined];
             const cookedStrings: Expression[] = [];
             const rawStrings: Expression[] = [];
             const template = node.template;
@@ -3709,16 +3670,26 @@ namespace ts {
                 }
             }
 
-            // NOTE: The parentheses here is entirely optional as we are now able to auto-
-            //       parenthesize when rebuilding the tree. This should be removed in a
-            //       future version. It is here for now to match our existing emit.
-            return createParen(
-                inlineExpressions([
-                    createAssignment(temp, createArrayLiteral(cookedStrings)),
-                    createAssignment(createPropertyAccess(temp, "raw"), createArrayLiteral(rawStrings)),
-                    createCall(tag, /*typeArguments*/ undefined, templateArguments)
-                ])
-            );
+            const helperCall = createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings));
+
+            // Create a variable to cache the template object if we're in a module.
+            // Do not do this in the global scope, as any variable we currently generate could conflict with
+            // variables from outside of the current compilation. In the future, we can revisit this behavior.
+            if (isExternalModule(currentSourceFile)) {
+                const tempVar = createUniqueName("templateObject");
+                recordTaggedTemplateString(tempVar);
+                templateArguments[0] = createLogicalOr(
+                    tempVar,
+                    createAssignment(
+                        tempVar,
+                        helperCall)
+                );
+            }
+            else {
+                templateArguments[0] = helperCall;
+            }
+
+            return createCall(tag, /*typeArguments*/ undefined, templateArguments);
         }
 
         /**
@@ -4087,6 +4058,18 @@ namespace ts {
         );
     }
 
+    function createTemplateObjectHelper(context: TransformationContext, cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression) {
+        context.requestEmitHelper(templateObjectHelper);
+        return createCall(
+            getHelperName("__makeTemplateObject"),
+            /*typeArguments*/ undefined,
+            [
+                cooked,
+                raw
+            ]
+        );
+    }
+
     const extendsHelper: EmitHelper = {
         name: "typescript:extends",
         scoped: false,
@@ -4103,4 +4086,16 @@ namespace ts {
                 };
             })();`
     };
+
+    const templateObjectHelper: EmitHelper = {
+        name: "typescript:makeTemplateObject",
+        scoped: false,
+        priority: 0,
+        text: `
+            var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+                if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+                return cooked;
+            };`
+    };
+
 }

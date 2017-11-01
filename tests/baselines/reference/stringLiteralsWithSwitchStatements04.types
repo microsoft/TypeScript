@@ -13,50 +13,50 @@ switch (y) {
 
     case "foo", x:
 >"foo", x : "foo"
->"foo" : string
+>"foo" : "foo"
 >x : "foo"
 
         break;
     case x, "foo":
->x, "foo" : string
+>x, "foo" : "foo"
 >x : "foo"
->"foo" : string
+>"foo" : "foo"
 
         break;
     case x, "baz":
->x, "baz" : string
+>x, "baz" : "baz"
 >x : "foo"
->"baz" : string
+>"baz" : "baz"
 
         break;
     case "baz", x:
 >"baz", x : "foo"
->"baz" : string
+>"baz" : "baz"
 >x : "foo"
 
         break;
     case "baz" && "bar":
->"baz" && "bar" : string
->"baz" : string
->"bar" : string
+>"baz" && "bar" : "" | "bar"
+>"baz" : "baz"
+>"bar" : "bar"
 
         break;
     case "baz" && ("foo" || "bar"):
->"baz" && ("foo" || "bar") : string
->"baz" : string
->("foo" || "bar") : string
->"foo" || "bar" : string
->"foo" : string
->"bar" : string
+>"baz" && ("foo" || "bar") : "" | "foo" | "bar"
+>"baz" : "baz"
+>("foo" || "bar") : "foo" | "bar"
+>"foo" || "bar" : "foo" | "bar"
+>"foo" : "foo"
+>"bar" : "bar"
 
         break;
     case "bar" && ("baz" || "bar"):
->"bar" && ("baz" || "bar") : string
->"bar" : string
->("baz" || "bar") : string
->"baz" || "bar" : string
->"baz" : string
->"bar" : string
+>"bar" && ("baz" || "bar") : "" | "bar" | "baz"
+>"bar" : "bar"
+>("baz" || "bar") : "bar" | "baz"
+>"baz" || "bar" : "bar" | "baz"
+>"baz" : "baz"
+>"bar" : "bar"
 
         break;
 }

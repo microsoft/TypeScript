@@ -627,11 +627,11 @@
         "category": "Error",
         "code": 1200
     },
-    "Import assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
+    "Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 1202
     },
-    "Export assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'export default' or another module format instead.": {
+    "Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 1203
     },
@@ -906,6 +906,10 @@
     "Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.": {
         "category": "Error",
         "code": 1328
+    },
+    "'{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?": {
+        "category": "Error",
+        "code": 1329
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1312,7 +1316,7 @@
         "category": "Error",
         "code": 2402
     },
-    "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.": {
+    "Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.": {
         "category": "Error",
         "code": 2403
     },
@@ -1920,6 +1924,10 @@
         "category": "Error",
         "code": 2562
     },
+    "The containing function or module body is too large for control flow analysis.": {
+        "category": "Error",
+        "code": 2563
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2207,6 +2215,18 @@
     "Cannot access '{0}.{1}' because '{0}' is a type, but not a namespace. Did you mean to retrieve the type of the property '{1}' in '{0}' with '{0}[\"{1}\"]'?": {
         "category": "Error",
         "code": 2713
+    },
+    "The expression of an export assignment must be an identifier or qualified name in an ambient context.": {
+        "category": "Error",
+        "code": 2714
+    },
+    "Abstract property '{0}' in class '{1}' cannot be accessed in the constructor.": {
+        "category": "Error",
+        "code": 2715
+    },
+    "Type parameter '{0}' has a circular default.": {
+        "category": "Error",
+        "code": 2716
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2678,7 +2698,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'none', commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
+    "Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
         "category": "Message",
         "code": 6016
     },
@@ -3082,10 +3102,6 @@
         "category": "Message",
         "code": 6128
     },
-    "The config file '{0}' found doesn't contain any source files.": {
-        "category": "Error",
-        "code": 6129
-    },
     "Resolving real path for '{0}', result '{1}'.": {
         "category": "Message",
         "code": 6130
@@ -3098,7 +3114,7 @@
         "category": "Message",
         "code": 6132
     },
-    "'{0}' is declared but never used.": {
+    "'{0}' is declared but its value is never read.": {
         "category": "Error",
         "code": 6133
     },
@@ -3118,7 +3134,7 @@
         "category": "Error",
         "code": 6137
     },
-    "Property '{0}' is declared but never used.": {
+    "Property '{0}' is declared but its value is never read.": {
         "category": "Error",
         "code": 6138
     },
@@ -3137,10 +3153,6 @@
     "Module '{0}' was resolved to '{1}', but '--jsx' is not set.": {
         "category": "Error",
         "code": 6142
-    },
-    "Module '{0}' was resolved to '{1}', but '--allowJs' is not set.": {
-        "category": "Error",
-        "code": 6143
     },
     "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
         "category": "Message",
@@ -3309,6 +3321,10 @@
     "Disable strict checking of generic signatures in function types.": {
         "category": "Message",
         "code": 6185
+    },
+    "Enable strict checking of function types.": {
+        "category": "Message",
+        "code": 6186
     },
     "Enable strict tuple checks.": {
         "category": "Message",
@@ -3507,6 +3523,34 @@
         "category": "Error",
         "code": 8020
     },
+    "JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.": {
+        "category": "Error",
+        "code": 8021
+    },
+    "JSDoc '@{0}' is not attached to a class.": {
+        "category": "Error",
+        "code": 8022
+    },
+    "JSDoc '@{0} {1}' does not match the 'extends {2}' clause.": {
+        "category": "Error",
+        "code": 8023
+    },
+    "JSDoc '@param' tag has name '{0}', but there is no parameter with that name.": {
+        "category": "Error",
+        "code": 8024
+    },
+    "Class declarations cannot have more than one `@augments` or `@extends` tag.": {
+        "category": "Error",
+        "code": 8025
+    },
+    "Expected {0} type arguments; provide these with an '@extends' tag.": {
+        "category": "Error",
+        "code": 8026
+    },
+    "Expected {0}-{1} type arguments; provide these with an '@extends' tag.": {
+        "category": "Error",
+        "code": 8027
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -3575,6 +3619,18 @@
         "category": "Error",
         "code": 17013
     },
+    "JSX fragment has no corresponding closing tag.": {
+        "category": "Error",
+        "code": 17014
+    },
+    "Expected corresponding closing tag for JSX fragment.": {
+        "category": "Error",
+        "code": 17015
+    },
+    "JSX fragment is not supported when using --jsxFactory": {
+        "category": "Error",
+        "code":17016
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
@@ -3629,15 +3685,15 @@
         "category": "Error",
         "code": 90010
     },
-    "Import {0} from {1}.": {
+    "Import '{0}' from \"{1}\".": {
         "category": "Message",
         "code": 90013
     },
-    "Change {0} to {1}.": {
+    "Change '{0}' to '{1}'.": {
         "category": "Message",
         "code": 90014
     },
-    "Add {0} to existing import declaration from {1}.": {
+    "Add '{0}' to existing import declaration from \"{1}\".": {
         "category": "Message",
         "code": 90015
     },
@@ -3649,6 +3705,7 @@
         "category": "Message",
         "code": 90017
     },
+
     "Disable checking for this file.": {
         "category": "Message",
         "code": 90018
@@ -3685,7 +3742,14 @@
         "category": "Message",
         "code": 90026
     },
-
+    "Declare static property '{0}'.": {
+        "category": "Message",
+        "code": 90027
+    },
+    "Call decorator expression.": {
+        "category": "Message",
+        "code": 90028
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -3694,14 +3758,44 @@
         "category": "Message",
         "code": 95002
     },
-
-    "Extract function": {
+    "Extract symbol": {
         "category": "Message",
         "code": 95003
     },
-
-    "Extract function into '{0}'": {
+    "Extract to {0} in {1}": {
         "category": "Message",
         "code": 95004
+    },
+    "Extract function": {
+        "category": "Message",
+        "code": 95005
+    },
+    "Extract constant": {
+        "category": "Message",
+        "code": 95006
+    },
+    "Extract to {0} in enclosing scope": {
+        "category": "Message",
+        "code": 95007
+    },
+    "Extract to {0} in {1} scope": {
+        "category": "Message",
+        "code": 95008
+    },
+    "Annotate with type from JSDoc": {
+        "category": "Message",
+        "code": 95009
+    },
+    "Annotate with types from JSDoc": {
+        "category": "Message",
+        "code": 95010
+    },
+    "Infer type of '{0}' from usage.": {
+        "category": "Message",
+        "code": 95011
+    },
+    "Infer parameter types from usage.": {
+        "category": "Message",
+        "code": 95012
     }
 }

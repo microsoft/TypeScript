@@ -1,0 +1,10 @@
+=== tests/cases/compiler/exportAssignmentWithExports.ts ===
+export class C { }
+>C : Symbol(C, Decl(exportAssignmentWithExports.ts, 0, 0))
+
+class D { }
+>D : Symbol(D, Decl(exportAssignmentWithExports.ts, 0, 18))
+
+export = D;
+>D : Symbol(D, Decl(exportAssignmentWithExports.ts, 0, 18))
+

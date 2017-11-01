@@ -6,38 +6,20 @@ namespace ts.formatting {
         public map: RulesBucket[];
         public mapRowLength: number;
 
-        constructor() {
-            this.map = [];
-            this.mapRowLength = 0;
-        }
-
-        static create(rules: Rule[]): RulesMap {
-            const result = new RulesMap();
-            result.Initialize(rules);
-            return result;
-        }
-
-        public Initialize(rules: Rule[]) {
+        constructor(rules: ReadonlyArray<Rule>) {
             this.mapRowLength = SyntaxKind.LastToken + 1;
-            this.map = <any>new Array(this.mapRowLength * this.mapRowLength); // new Array<RulesBucket>(this.mapRowLength * this.mapRowLength);
+            this.map = new Array<RulesBucket>(this.mapRowLength * this.mapRowLength);
 
             // This array is used only during construction of the rulesbucket in the map
-            const rulesBucketConstructionStateList: RulesBucketConstructionState[] = <any>new Array(this.map.length); // new Array<RulesBucketConstructionState>(this.map.length);
-
-            this.FillRules(rules, rulesBucketConstructionStateList);
-            return this.map;
-        }
-
-        public FillRules(rules: Rule[], rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
-            rules.forEach((rule) => {
+            const rulesBucketConstructionStateList: RulesBucketConstructionState[] = new Array<RulesBucketConstructionState>(this.map.length);
+            for (const rule of rules) {
                 this.FillRule(rule, rulesBucketConstructionStateList);
-            });
+            }
         }
 
         private GetRuleBucketIndex(row: number, column: number): number {
             Debug.assert(row <= SyntaxKind.LastKeyword && column <= SyntaxKind.LastKeyword, "Must compute formatting context from tokens");
-            const rulesBucketIndex = (row * this.mapRowLength) + column;
-            return rulesBucketIndex;
+            return (row * this.mapRowLength) + column;
         }
 
         private FillRule(rule: Rule, rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
@@ -57,7 +39,7 @@ namespace ts.formatting {
             });
         }
 
-        public GetRule(context: FormattingContext): Rule {
+        public GetRule(context: FormattingContext): Rule | undefined {
             const bucketIndex = this.GetRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind);
             const bucket = this.map[bucketIndex];
             if (bucket) {
@@ -74,7 +56,7 @@ namespace ts.formatting {
     const MaskBitSize = 5;
     const Mask = 0x1f;
 
-    export enum RulesPosition {
+    enum RulesPosition {
         IgnoreRulesSpecific = 0,
         IgnoreRulesAny = MaskBitSize * 1,
         ContextRulesSpecific = MaskBitSize * 2,

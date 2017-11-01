@@ -31,10 +31,16 @@ import merge2 = require("merge2");
 import * as os from "os";
 import fold = require("travis-fold");
 const gulp = helpMaker(originalGulp);
-const mochaParallel = require("./scripts/mocha-parallel.js");
-const {runTestsInParallel} = mochaParallel;
 
 Error.stackTraceLimit = 1000;
+
+/**
+ * This regexp exists to capture our const enums and replace them with normal enums in our public API
+ *   - this is fine since we compile with preserveConstEnums, and ensures our consumers are not locked
+ *     to the TS version they compile with.
+ */
+const constEnumCaptureRegexp = /^(\s*)(export )?const enum (\S+) {(\s*)$/gm;
+const constEnumReplacement = "$1$2enum $3 {$4";
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
@@ -58,7 +64,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
-        light: process.env.light || false,
+        light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
@@ -81,7 +87,7 @@ function possiblyQuote(cmd: string) {
 }
 
 let useDebugMode = true;
-let host = cmdLineOptions["host"];
+let host = cmdLineOptions.host;
 
 // Constants
 const compilerDirectory = "src/compiler/";
@@ -89,6 +95,7 @@ const harnessDirectory = "src/harness/";
 const libraryDirectory = "src/lib/";
 const scriptsDirectory = "scripts/";
 const docDirectory = "doc/";
+const lclDirectory = "src/loc/lcl";
 
 const builtDirectory = "built/";
 const builtLocalDirectory = "built/local/";
@@ -164,14 +171,31 @@ const librarySourceMap = [
     // JavaScript + all host library
     { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
     { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
 ].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
 
 const libraryTargets = librarySourceMap.map(function(f) {
     return path.join(builtLocalDirectory, f.target);
 });
+
+/**
+ * .lcg file is what localization team uses to know what messages to localize.
+ * The file is always generated in 'enu\diagnosticMessages.generated.json.lcg'
+ */
+const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
+
+/**
+ * The localization target produces the two following transformations:
+ *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
+ *       convert localized resources into a .json file the compiler can understand
+ *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
+ *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
+ */
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
+    return path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json");
+}).concat(generatedLCGFile);
 
 for (const i in libraryTargets) {
     const entry = librarySourceMap[i];
@@ -262,8 +286,8 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     }
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
-        copy.newLine = "lf";
     }
+    copy.newLine = "lf";
     if (useBuiltCompiler === true) {
         copy.typescript = require("./built/local/typescript.js");
     }
@@ -369,6 +393,35 @@ gulp.task(builtGeneratedDiagnosticMessagesJSON, [diagnosticInfoMapTs], (done) =>
 
 gulp.task("generate-diagnostics", "Generates a diagnostic file in TypeScript based on an input JSON file", [diagnosticInfoMapTs]);
 
+//  Localize diagnostics script
+const generateLocalizedDiagnosticMessagesJs = path.join(scriptsDirectory, "generateLocalizedDiagnosticMessages.js");
+const generateLocalizedDiagnosticMessagesTs = path.join(scriptsDirectory, "generateLocalizedDiagnosticMessages.ts");
+
+gulp.task(generateLocalizedDiagnosticMessagesJs, /*help*/ false, [], () => {
+    const settings: tsc.Settings = getCompilerSettings({
+        target: "es5",
+        declaration: false,
+        removeComments: true,
+        noResolve: false,
+        stripInternal: false,
+        types: ["node", "xml2js"]
+    }, /*useBuiltCompiler*/ false);
+    return gulp.src(generateLocalizedDiagnosticMessagesTs)
+        .pipe(newer(generateLocalizedDiagnosticMessagesJs))
+        .pipe(sourcemaps.init())
+        .pipe(tsc(settings))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(scriptsDirectory));
+});
+
+// Localize diagnostics
+gulp.task(generatedLCGFile, [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs], (done) => {
+    if (fs.existsSync(builtLocalDirectory) && needsUpdate(generatedDiagnosticMessagesJSON, generatedLCGFile)) {
+        exec(host, [generateLocalizedDiagnosticMessagesJs, lclDirectory, builtLocalDirectory, generatedDiagnosticMessagesJSON], done, done);
+    }
+});
+
+gulp.task("localize", [generatedLCGFile]);
 
 const servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 const standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -403,7 +456,7 @@ gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
     const completedDts = dts.pipe(prependCopyright(/*outputCopyright*/ true))
         .pipe(insert.transform((contents, file) => {
             file.path = standaloneDefinitionsFile;
-            return contents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4");
+            return contents.replace(constEnumCaptureRegexp, constEnumReplacement);
         }));
     return merge2([
         completedJs,
@@ -413,7 +466,7 @@ gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {
                 file.path = nodeDefinitionsFile;
-                return content + "\r\nexport = ts;";
+                return content + "\nexport = ts;";
             }))
             .pipe(gulp.dest("src/services")),
         completedDts.pipe(clone())
@@ -468,7 +521,7 @@ const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js")
 const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 
 gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (done) => {
-    const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
+    const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ true));
     const {js, dts}: { js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream } = serverLibraryProject.src()
         .pipe(sourcemaps.init())
         .pipe(newer(tsserverLibraryFile))
@@ -480,7 +533,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (do
             .pipe(gulp.dest("src/server")),
         dts.pipe(prependCopyright(/*outputCopyright*/ true))
             .pipe(insert.transform((content) => {
-                return content + "\r\nexport = ts;\r\nexport as namespace ts;";
+                return content.replace(constEnumCaptureRegexp, constEnumReplacement) + "\nexport = ts;\nexport as namespace ts;";
             }))
             .pipe(gulp.dest("src/server"))
     ]);
@@ -496,7 +549,7 @@ gulp.task(typesMapJson, /*help*/ false, [], () => {
 });
 
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
-gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile]);
+gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile, "localize"]);
 gulp.task("tsc", "Builds only the compiler", [builtLocalCompiler]);
 
 // Generate Markdown spec
@@ -538,15 +591,15 @@ gulp.task("dontUseDebugMode", /*help*/ false, [], (done) => { useDebugMode = fal
 
 gulp.task("VerifyLKG", /*help*/ false, [], () => {
     const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, typingsInstallerJs, cancellationTokenJs].concat(libraryTargets);
-    const missingFiles = expectedFiles.filter(function(f) {
-        return !fs.existsSync(f);
-    });
+    const missingFiles = expectedFiles.
+        concat(localizationTargets).
+        filter(f => !fs.existsSync(f));
     if (missingFiles.length > 0) {
         throw new Error("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
             ". The following files are missing:\n" + missingFiles.join("\n"));
     }
     // Copy all the targets into the LKG directory
-    return gulp.src(expectedFiles).pipe(gulp.dest(LKGDirectory));
+    return gulp.src([...expectedFiles, path.join(builtLocalDirectory, "**"), `!${path.join(builtLocalDirectory, "tslint")}`, `!${path.join(builtLocalDirectory, "*.*")}`]).pipe(gulp.dest(LKGDirectory));
 });
 
 gulp.task("LKGInternal", /*help*/ false, ["lib", "local"]);
@@ -558,7 +611,7 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
-gulp.task(run, /*help*/ false, [servicesFile], () => {
+gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile], () => {
     const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return testProject.src()
         .pipe(newer(run))
@@ -598,15 +651,15 @@ function restoreSavedNodeEnv() {
 }
 
 function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void) {
-    const lintFlag = cmdLineOptions["lint"];
+    const lintFlag = cmdLineOptions.lint;
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
-        let testTimeout = cmdLineOptions["timeout"];
-        const debug = cmdLineOptions["debug"];
-        const inspect = cmdLineOptions["inspect"];
-        const tests = cmdLineOptions["tests"];
-        const light = cmdLineOptions["light"];
-        const stackTraceLimit = cmdLineOptions["stackTraceLimit"];
+        let testTimeout = cmdLineOptions.timeout;
+        const debug = cmdLineOptions.debug;
+        const inspect = cmdLineOptions.inspect;
+        const tests = cmdLineOptions.tests;
+        const light = cmdLineOptions.light;
+        const stackTraceLimit = cmdLineOptions.stackTraceLimit;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
@@ -622,7 +675,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             } while (fs.existsSync(taskConfigsFolder));
             fs.mkdirSync(taskConfigsFolder);
 
-            workerCount = cmdLineOptions["workers"];
+            workerCount = cmdLineOptions.workers;
         }
 
         if (tests || light || taskConfigsFolder) {
@@ -633,8 +686,8 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             testTimeout = 400000;
         }
 
-        const colors = cmdLineOptions["colors"];
-        const reporter = cmdLineOptions["reporter"] || defaultReporter;
+        const colors = cmdLineOptions.colors;
+        const reporter = cmdLineOptions.reporter || defaultReporter;
 
         // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
@@ -668,36 +721,18 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         }
         else {
             // run task to load all tests and partition them between workers
-            const args = [];
-            args.push("-R", "min");
-            if (colors) {
-                args.push("--colors");
-            }
-            else {
-                args.push("--no-colors");
-            }
-            args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout, noColors: colors === " --no-colors " }, function(err) {
-                // last worker clean everything and runs linter in case if there were no errors
-                del(taskConfigsFolder).then(() => {
-                    if (!err) {
-                        lintThenFinish();
-                    }
-                    else {
-                        finish(err);
-                    }
-                });
+            exec(host, [run], lintThenFinish, function(e, status) {
+                finish(e, status);
             });
         }
     });
 
     function failWithStatus(err?: any, status?: number) {
-        if (err) {
-            console.log(err);
+        if (err || status) {
+            process.exit(typeof status === "number" ? status : 2);
         }
-        done(err || status);
-        process.exit(status);
+        done();
     }
 
     function lintThenFinish() {
@@ -711,7 +746,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
 
     function finish(error?: any, errorStatus?: number) {
         restoreSavedNodeEnv();
-        deleteTemporaryProjectOutput().then(() => {
+        deleteTestConfig().then(deleteTemporaryProjectOutput).then(() => {
             if (error !== undefined || errorStatus !== undefined) {
                 failWithStatus(error, errorStatus);
             }
@@ -719,6 +754,10 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
                 done();
             }
         });
+    }
+
+    function deleteTestConfig() {
+        return del("test.config");
     }
 }
 
@@ -786,7 +825,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
             const file = new Vinyl({ contents, path: bundlePath });
             console.log(`Fixing sourcemaps for ${file.path}`);
             // assumes contents is a Buffer, since that's what browserify yields
-            const maps = convertMap.fromSource(stringContent, /*largeSource*/ true).toObject();
+            const maps = convertMap.fromSource(stringContent).toObject();
             delete maps.sourceRoot;
             maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
             // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
@@ -836,7 +875,7 @@ function cleanTestDirs(done: (e?: any) => void) {
 
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder });
+    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
@@ -846,8 +885,8 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
     cleanTestDirs((err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
-        const tests = cmdLineOptions["tests"];
-        const light = cmdLineOptions["light"];
+        const tests = cmdLineOptions.tests;
+        const light = cmdLineOptions.light;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
@@ -857,8 +896,8 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         }
 
         const args = [nodeServerOutFile];
-        if (cmdLineOptions["browser"]) {
-            args.push(cmdLineOptions["browser"]);
+        if (cmdLineOptions.browser) {
+            args.push(cmdLineOptions.browser);
         }
         if (tests) {
             args.push(JSON.stringify(tests));
@@ -868,13 +907,13 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
 });
 
 gulp.task("generate-code-coverage", "Generates code coverage data via istanbul", ["tests"], (done) => {
-    const testTimeout = cmdLineOptions["timeout"];
+    const testTimeout = cmdLineOptions.timeout;
     exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", testTimeout.toString(), run], done, done);
 });
 
 
 function getDiffTool() {
-    const program = process.env["DIFF"];
+    const program = process.env.DIFF;
     if (!program) {
         console.error("Add the 'DIFF' environment variable to the path of the program you want to use.");
         process.exit(1);
@@ -994,8 +1033,9 @@ gulp.task(instrumenterJsPath, /*help*/ false, [servicesFile], () => {
         .pipe(gulp.dest(builtLocalDirectory));
 });
 
-gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
-    exec(host, [instrumenterJsPath, "record", "iocapture", builtLocalCompiler], done, done);
+gulp.task("tsc-instrumented", "Builds an instrumented tsc.js - run with --test=[testname]", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
+    const test = cmdLineOptions.tests || "iocapture";
+    exec(host, [instrumenterJsPath, "record", test, builtLocalCompiler], done, done);
 });
 
 gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", serverFile], () => {
@@ -1063,13 +1103,14 @@ function spawnLintWorker(files: {path: string}[], callback: (failures: number) =
 
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-    const fileMatcher = cmdLineOptions["files"];
+    const fileMatcher = cmdLineOptions.files;
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
+        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
     child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    if (fold.isTravis()) console.log(fold.end("lint"));
 });
 
 gulp.task("default", "Runs 'local'", ["local"]);

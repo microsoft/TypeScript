@@ -60,7 +60,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
-        let currentLineMap: number[];
+        let currentLineMap: ReadonlyArray<number>;
         let currentIdentifiers: Map<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
@@ -172,7 +172,7 @@ namespace ts {
 
         function hasInternalAnnotation(range: CommentRange) {
             const comment = currentText.substring(range.pos, range.end);
-            return comment.indexOf("@internal") >= 0;
+            return stringContains(comment, "@internal");
         }
 
         function stripInternal(node: Node) {

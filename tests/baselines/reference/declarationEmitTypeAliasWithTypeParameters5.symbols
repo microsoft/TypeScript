@@ -1,0 +1,28 @@
+=== tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters5.ts ===
+type Foo<T, Y> = {
+>Foo : Symbol(Foo, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 0, 9))
+>Y : Symbol(Y, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 0, 11))
+
+    foo<U, J>(): Foo<U, J>
+>foo : Symbol(foo, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 0, 18))
+>U : Symbol(U, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 1, 8))
+>J : Symbol(J, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 1, 10))
+>Foo : Symbol(Foo, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 0, 0))
+>U : Symbol(U, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 1, 8))
+>J : Symbol(J, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 1, 10))
+
+};
+export type SubFoo<R> = Foo<string, R>;
+>SubFoo : Symbol(SubFoo, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 2, 2))
+>R : Symbol(R, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 3, 19))
+>Foo : Symbol(Foo, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 0, 0))
+>R : Symbol(R, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 3, 19))
+
+function foo() {
+>foo : Symbol(foo, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 3, 39))
+
+    return {} as SubFoo<number>;
+>SubFoo : Symbol(SubFoo, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 2, 2))
+}
+

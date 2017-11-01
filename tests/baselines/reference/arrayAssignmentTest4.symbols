@@ -1,0 +1,39 @@
+=== tests/cases/compiler/arrayAssignmentTest4.ts ===
+class C3 {
+>C3 : Symbol(C3, Decl(arrayAssignmentTest4.ts, 0, 0))
+
+    CM3M1() { return 3;}
+>CM3M1 : Symbol(C3.CM3M1, Decl(arrayAssignmentTest4.ts, 0, 10))
+}
+
+
+/*
+
+This behaves unexpectedly with teh following types:
+
+Type 1 of any[]:
+
+* Type 2 of the following throws an error but shouldn't: () => void[], SomeClass[], and {one: 1}[].
+
+* Type 2 of the following doesn't throw an error but should: {one: 1}, new() => SomeClass, SomeClass.
+
+*/
+var c3 : C3 = new C3();
+>c3 : Symbol(c3, Decl(arrayAssignmentTest4.ts, 16, 3))
+>C3 : Symbol(C3, Decl(arrayAssignmentTest4.ts, 0, 0))
+>C3 : Symbol(C3, Decl(arrayAssignmentTest4.ts, 0, 0))
+
+var o1 = {one : 1};
+>o1 : Symbol(o1, Decl(arrayAssignmentTest4.ts, 17, 3))
+>one : Symbol(one, Decl(arrayAssignmentTest4.ts, 17, 10))
+
+var arr_any: any[] = [];
+>arr_any : Symbol(arr_any, Decl(arrayAssignmentTest4.ts, 19, 3))
+
+arr_any = function () { return null;} // should be an error - is
+>arr_any : Symbol(arr_any, Decl(arrayAssignmentTest4.ts, 19, 3))
+
+arr_any = c3; // should be an error - is
+>arr_any : Symbol(arr_any, Decl(arrayAssignmentTest4.ts, 19, 3))
+>c3 : Symbol(c3, Decl(arrayAssignmentTest4.ts, 16, 3))
+

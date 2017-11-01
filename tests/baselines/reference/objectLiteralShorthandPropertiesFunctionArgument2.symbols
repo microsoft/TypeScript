@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts ===
+var id: number = 10000;
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 0, 3))
+
+var name: string = "my name";
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 1, 3))
+
+var person = { name, id };
+>person : Symbol(person, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 3, 3))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 3, 14))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 3, 20))
+
+function foo(p: { a: string; id: number }) { }
+>foo : Symbol(foo, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 3, 26))
+>p : Symbol(p, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 5, 13))
+>a : Symbol(a, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 5, 17))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 5, 28))
+
+foo(person);  // error
+>foo : Symbol(foo, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 3, 26))
+>person : Symbol(person, Decl(objectLiteralShorthandPropertiesFunctionArgument2.ts, 3, 3))
+

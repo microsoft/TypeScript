@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-////import {/*classAliasDefinition*/Class} from "./a";
+////import {[|/*classAliasDefinition*/Class|]} from "./a";
 
 
 // @Filename: a.ts

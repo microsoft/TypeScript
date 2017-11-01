@@ -1,0 +1,30 @@
+=== tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts ===
+class C {
+>C : Symbol(C, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 0, 0))
+
+    private x = 1;
+>x : Symbol(C.x, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 0, 9))
+}
+class D extends C { }
+>D : Symbol(D, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 2, 1))
+>C : Symbol(C, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 0, 0))
+
+function foo(x: "hi", items: string[]): typeof foo;
+>foo : Symbol(foo, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 3, 21), Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 4, 51))
+>x : Symbol(x, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 4, 13))
+>items : Symbol(items, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 4, 21))
+>foo : Symbol(foo, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 3, 21), Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 4, 51))
+
+function foo(x: string, items: string[]): typeof foo {
+>foo : Symbol(foo, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 3, 21), Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 4, 51))
+>x : Symbol(x, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 5, 13))
+>items : Symbol(items, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 5, 23))
+>foo : Symbol(foo, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 3, 21), Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 4, 51))
+
+    return null;
+}
+var a: D = foo("hi", []);
+>a : Symbol(a, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 8, 3))
+>D : Symbol(D, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 2, 1))
+>foo : Symbol(foo, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 3, 21), Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 4, 51))
+

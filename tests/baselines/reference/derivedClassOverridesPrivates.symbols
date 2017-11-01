@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts ===
+class Base {
+>Base : Symbol(Base, Decl(derivedClassOverridesPrivates.ts, 0, 0))
+
+    private x: { foo: string };
+>x : Symbol(Base.x, Decl(derivedClassOverridesPrivates.ts, 0, 12))
+>foo : Symbol(foo, Decl(derivedClassOverridesPrivates.ts, 1, 16))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassOverridesPrivates.ts, 2, 1))
+>Base : Symbol(Base, Decl(derivedClassOverridesPrivates.ts, 0, 0))
+
+    private x: { foo: string; bar: string; }; // error
+>x : Symbol(Derived.x, Decl(derivedClassOverridesPrivates.ts, 4, 28))
+>foo : Symbol(foo, Decl(derivedClassOverridesPrivates.ts, 5, 16))
+>bar : Symbol(bar, Decl(derivedClassOverridesPrivates.ts, 5, 29))
+}
+
+class Base2 {
+>Base2 : Symbol(Base2, Decl(derivedClassOverridesPrivates.ts, 6, 1))
+
+    private static y: { foo: string };
+>y : Symbol(Base2.y, Decl(derivedClassOverridesPrivates.ts, 8, 13))
+>foo : Symbol(foo, Decl(derivedClassOverridesPrivates.ts, 9, 23))
+}
+
+class Derived2 extends Base2 {
+>Derived2 : Symbol(Derived2, Decl(derivedClassOverridesPrivates.ts, 10, 1))
+>Base2 : Symbol(Base2, Decl(derivedClassOverridesPrivates.ts, 6, 1))
+
+    private static y: { foo: string; bar: string; }; // error
+>y : Symbol(Derived2.y, Decl(derivedClassOverridesPrivates.ts, 12, 30))
+>foo : Symbol(foo, Decl(derivedClassOverridesPrivates.ts, 13, 23))
+>bar : Symbol(bar, Decl(derivedClassOverridesPrivates.ts, 13, 36))
+}

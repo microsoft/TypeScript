@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing4.ts ===
+class D extends null {
+>D : Symbol(D, Decl(superCallBeforeThisAccessing4.ts, 0, 0))
+
+    private _t;
+>_t : Symbol(D._t, Decl(superCallBeforeThisAccessing4.ts, 0, 22))
+
+    constructor() {
+        this._t;
+>this._t : Symbol(D._t, Decl(superCallBeforeThisAccessing4.ts, 0, 22))
+>this : Symbol(D, Decl(superCallBeforeThisAccessing4.ts, 0, 0))
+>_t : Symbol(D._t, Decl(superCallBeforeThisAccessing4.ts, 0, 22))
+
+        super();
+    }
+}
+
+class E extends null {
+>E : Symbol(E, Decl(superCallBeforeThisAccessing4.ts, 6, 1))
+
+    private _t;
+>_t : Symbol(E._t, Decl(superCallBeforeThisAccessing4.ts, 8, 22))
+
+    constructor() {
+        super();
+        this._t;
+>this._t : Symbol(E._t, Decl(superCallBeforeThisAccessing4.ts, 8, 22))
+>this : Symbol(E, Decl(superCallBeforeThisAccessing4.ts, 6, 1))
+>_t : Symbol(E._t, Decl(superCallBeforeThisAccessing4.ts, 8, 22))
+    }
+}

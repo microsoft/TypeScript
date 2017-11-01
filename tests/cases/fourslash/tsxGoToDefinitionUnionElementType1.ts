@@ -19,7 +19,7 @@
 //// }
 
 //// var SFCComp = SFC1 || SFC2;
-//// <SFC/*one*/Comp x />
+//// <[|SFC/*one*/Comp|] x />
 
 verify.goToDefinition({
     "one": "pt1"
