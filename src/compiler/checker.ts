@@ -15062,12 +15062,9 @@ namespace ts {
             return suggestion && symbolName(suggestion);
         }
 
-        function getSuggestionForNonexistentSymbol(location: Node, name: __String, meaning: SymbolFlags): string {
-            const result = resolveNameHelper(location, name, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ false, (symbols, name, meaning) => {
-                // NOTE: `name` from the callback is supposed to  === the outer `name`, but is undefined in some cases
-                if (name === undefined) {
-                    return undefined;
-                }
+        function getSuggestionForNonexistentSymbol(location: Node, outerName: __String, meaning: SymbolFlags): string {
+            const result = resolveNameHelper(location, outerName, meaning, /*nameNotFoundMessage*/ undefined, outerName, /*isUse*/ false, (symbols, name, meaning) => {
+                Debug.assert(name !== undefined, "name should always be defined, and equal to " + outerName);
                 const symbol = getSymbol(symbols, name, meaning);
                 // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
                 // So the table *contains* `x` but `x` isn't actually in scope.
