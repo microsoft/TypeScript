@@ -1496,6 +1496,28 @@ namespace ts.projectSystem {
             }
         });
 
+        it("removes version numbers correctly", () => {
+            const testData: [string, string][] = [
+                ["jquery-max", "jquery-max"],
+                ["jquery.min", "jquery"],
+                ["jquery-min.4.2.3", "jquery"],
+                ["jquery.4.2-test.js", "jquery"],
+                ["jquery.min.4.2.1", "jquery"],
+                ["jquery.7.min.js", "jquery"],
+                ["jquery.7.min-beta", "jquery"],
+                ["minimum", "minimum"],
+                ["min", "min"],
+                ["min.3.2", "min"],
+                ["jquery", "jquery"]
+            ];
+            const suffixes = [".js", ".jsx", ""];
+            for (const t of testData) {
+                for (const suf of suffixes) {
+                    assert.equal(removeMinAndVersionNumbers(t[0] + suf), t[1]);
+                }
+            }
+        });
+
         it("ignores files excluded by a legacy safe type list", () => {
             const file1 = {
                 path: "/a/b/bliss.js",

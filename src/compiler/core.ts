@@ -2417,7 +2417,13 @@ namespace ts {
      * Takes a string like "jquery-min.4.2.3" and returns "jquery"
      */
     export function removeMinAndVersionNumbers(fileName: string) {
-        return fileName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
+        const match = /((\w|(-(?!min)))+)(\.|-)?.*/.exec(fileName);
+        if (match) {
+            return match[1];
+        }
+        else {
+            return fileName;
+        }
     }
 
     export interface ObjectAllocator {
