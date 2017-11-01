@@ -1601,10 +1601,11 @@ namespace ts.server {
                 return;
             }
 
-            this.eventHandler<ConfigFileDiagEvent>({
+            const event: ConfigFileDiagEvent = {
                 eventName: ConfigFileDiagEvent,
-                data: { configFileName: project.getConfigFilePath(), diagnostics: project.getAllProjectErrors(), triggerFile }
-            });
+                data: { configFileName: project.getConfigFilePath(), diagnostics: project.getAllProjectErrors(), triggerFile },
+            };
+            this.eventHandler(event);
         }
 
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {
