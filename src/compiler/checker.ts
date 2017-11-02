@@ -23638,6 +23638,8 @@ namespace ts {
                     return objectType && getPropertyOfType(objectType, escapeLeadingUnderscores((node as StringLiteral | NumericLiteral).text));
 
                 case SyntaxKind.DefaultKeyword:
+                case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.EqualsGreaterThanToken:
                     return getSymbolOfNode(node.parent);
 
                 default:
