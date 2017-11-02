@@ -6,7 +6,7 @@
 /* tslint:disable:no-null-keyword */
 
 namespace RWC {
-    function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
+    function runWithIOLog(ioLog: IoLog, fn: (oldIO: Harness.Io) => void) {
         const oldIO = Harness.IO;
 
         const wrappedIO = Playback.wrapIO(oldIO);
@@ -58,7 +58,7 @@ namespace RWC {
                 this.timeout(800000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
-                const ioLog: IOLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
+                const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
