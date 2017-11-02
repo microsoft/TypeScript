@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 const enum Indentation {
+    Standard = 3,
     Indented = 12,
 }
 
@@ -13,10 +14,8 @@ const enum Indentation {
 ////    [1 + 2 + 3 + Math.rand()](x: number, y: string, z = true) { }
 ////}
 
-verify.docCommentTemplateAt("0", Indentation.Indented,
-   `/**
-     * 
-     */`);
+verify.docCommentTemplateAt("0", Indentation.Standard,
+"/** */");
 
 verify.docCommentTemplateAt("1", Indentation.Indented,
    `/**

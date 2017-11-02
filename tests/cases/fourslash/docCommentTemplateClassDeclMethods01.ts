@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 const enum Indentation {
-    Standard = 8,
+    Standard = 3,
     Indented = 12,
 }
 
@@ -17,15 +17,11 @@ const enum Indentation {
 ////}
 
 verify.docCommentTemplateAt("0", Indentation.Standard,
-`/**
- * 
- */`);
+"/** */");
 
 
-verify.docCommentTemplateAt("1", Indentation.Indented,
-   `/**
-     * 
-     */`);
+verify.docCommentTemplateAt("1", Indentation.Standard,
+"/** */");
 
 
 verify.docCommentTemplateAt("2", Indentation.Indented,
@@ -51,7 +47,7 @@ verify.docCommentTemplateAt("4", Indentation.Indented,
      * @param param2
      */`);
 
-verify.docCommentTemplateAt("5", Indentation.Indented, 
+verify.docCommentTemplateAt("5", Indentation.Indented,
     `/**
      * 
      * @param a
