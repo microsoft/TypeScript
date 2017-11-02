@@ -9,6 +9,6 @@
 verify.docCommentTemplateAt("top", /*indentation*/ 3,
 "/** */");
 
-verify.emptyDocCommentTemplateAt("n2");
+verify.noDocCommentTemplateAt("n2");
 
-verify.emptyDocCommentTemplateAt("n3");
+verify.noDocCommentTemplateAt("n3");
