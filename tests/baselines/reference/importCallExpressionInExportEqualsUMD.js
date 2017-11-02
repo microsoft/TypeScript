@@ -22,7 +22,7 @@ export = async function() {
     return 42;
 });
 //// [index.js]
-function __importStar(mod) {
+var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
     if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
@@ -41,6 +41,6 @@ function __importStar(mod) {
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     return async function () {
-        const something = await (__syncRequire ? Promise.resolve().then(() => __importStar(require("./something"))) : new Promise((resolve_1, reject_1) => { require(["./something"], resolve_1, reject_1); }));
+        const something = await (__syncRequire ? Promise.resolve().then(() => __importStar(require("./something"))) : new Promise((resolve_1, reject_1) => { require(["./something"], resolve_1, reject_1); }).then(__importStar));
     };
 });

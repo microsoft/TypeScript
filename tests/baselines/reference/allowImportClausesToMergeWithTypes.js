@@ -34,7 +34,7 @@ exports.zzz = 123;
 exports["default"] = exports.zzz;
 //// [a.js]
 "use strict";
-function __importDefault(mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 }
 exports.__esModule = true;
@@ -44,7 +44,7 @@ var x = { x: "" };
 b_1["default"];
 //// [index.js]
 "use strict";
-function __importDefault(mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 }
 exports.__esModule = true;

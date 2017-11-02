@@ -50,14 +50,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 define(["require", "exports"], function (require, exports) {
     "use strict";
     function foo() {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, new Promise(function (resolve_1, reject_1) { require(["./foo"], resolve_1, reject_1); })];
-                    case 1: return [4 /*yield*/, new Promise(function (resolve_2, reject_2) { require([(_a.sent()).default], resolve_2, reject_2); })];
+                    case 0: return [4 /*yield*/, new Promise(function (resolve_1, reject_1) { require(["./foo"], resolve_1, reject_1); }).then(__importStar)];
+                    case 1: return [4 /*yield*/, new Promise(function (resolve_2, reject_2) { require([(_a.sent()).default], resolve_2, reject_2); }).then(__importStar)];
                     case 2: return [2 /*return*/, _a.sent()];
                 }
             });

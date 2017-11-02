@@ -22,7 +22,7 @@ console.log(JSON.stringify(result));
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-function __importStar(mod) {
+var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
     if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];

@@ -37,7 +37,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-function __importStar(mod) {
+var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
     if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
@@ -58,34 +58,34 @@ function __importStar(mod) {
     Object.defineProperty(exports, "__esModule", { value: true });
     function fn() {
         return __awaiter(this, void 0, void 0, function* () {
-            const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_1, reject_1) => { require(['./test'], resolve_1, reject_1); }); // ONE
+            const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_1, reject_1) => { require(['./test'], resolve_1, reject_1); }).then(__importStar); // ONE
         });
     }
     exports.fn = fn;
     class cl1 {
         m() {
             return __awaiter(this, void 0, void 0, function* () {
-                const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_2, reject_2) => { require(['./test'], resolve_2, reject_2); }); // TWO
+                const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_2, reject_2) => { require(['./test'], resolve_2, reject_2); }).then(__importStar); // TWO
             });
         }
     }
     exports.cl1 = cl1;
     exports.obj = {
         m: () => __awaiter(this, void 0, void 0, function* () {
-            const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_3, reject_3) => { require(['./test'], resolve_3, reject_3); }); // THREE
+            const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_3, reject_3) => { require(['./test'], resolve_3, reject_3); }).then(__importStar); // THREE
         })
     };
     class cl2 {
         constructor() {
             this.p = {
                 m: () => __awaiter(this, void 0, void 0, function* () {
-                    const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_4, reject_4) => { require(['./test'], resolve_4, reject_4); }); // FOUR
+                    const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_4, reject_4) => { require(['./test'], resolve_4, reject_4); }).then(__importStar); // FOUR
                 })
             };
         }
     }
     exports.cl2 = cl2;
     exports.l = () => __awaiter(this, void 0, void 0, function* () {
-        const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_5, reject_5) => { require(['./test'], resolve_5, reject_5); }); // FIVE
+        const req = yield __syncRequire ? Promise.resolve().then(() => __importStar(require('./test'))) : new Promise((resolve_5, reject_5) => { require(['./test'], resolve_5, reject_5); }).then(__importStar); // FIVE
     });
 });

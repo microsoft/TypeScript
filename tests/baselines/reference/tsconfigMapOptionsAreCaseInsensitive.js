@@ -17,9 +17,13 @@ define(["require", "exports"], function (require, exports) {
     exports["default"] = 42;
 });
 //// [index.js]
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 define(["require", "exports", "./other.js"], function (require, exports, other_js_1) {
     "use strict";
     exports.__esModule = true;
+    other_js_1 = __importDefault(other_js_1);
     var x = 10 + other_js_1["default"];
     exports.x = x;
 });

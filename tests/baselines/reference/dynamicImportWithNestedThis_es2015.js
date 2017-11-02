@@ -12,7 +12,7 @@ const c = new C();
 c.dynamic();
 
 //// [dynamicImportWithNestedThis_es2015.js]
-function __importStar(mod) {
+var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
     if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
@@ -36,7 +36,7 @@ function __importStar(mod) {
             this._path = './other';
         }
         dynamic() {
-            return _a = this._path, __syncRequire ? Promise.resolve().then(() => __importStar(require(_a))) : new Promise((resolve_1, reject_1) => { require([_a], resolve_1, reject_1); });
+            return _a = this._path, __syncRequire ? Promise.resolve().then(() => __importStar(require(_a))) : new Promise((resolve_1, reject_1) => { require([_a], resolve_1, reject_1); }).then(__importStar);
             var _a;
         }
     }

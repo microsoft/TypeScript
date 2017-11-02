@@ -12,7 +12,7 @@ foo.bar();
 
 //// [a.js]
 "use strict";
-function __importDefault(mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 }
 exports.__esModule = true;

@@ -34,7 +34,7 @@ foo(import("./0"));
     exports.B = B;
 });
 //// [2.js]
-function __importStar(mod) {
+var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
     if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
@@ -59,5 +59,5 @@ function __importStar(mod) {
             b.print();
         });
     }
-    foo(__syncRequire ? Promise.resolve().then(() => __importStar(require("./0"))) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }));
+    foo(__syncRequire ? Promise.resolve().then(() => __importStar(require("./0"))) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }).then(__importStar));
 });

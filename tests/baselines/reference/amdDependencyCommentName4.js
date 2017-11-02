@@ -25,9 +25,21 @@ import "unaliasedModule2";
 ///<amd-dependency path='unaliasedModule3'/>
 ///<amd-dependency path='aliasedModule6' name='n2'/>
 ///<amd-dependency path='unaliasedModule4'/>
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 define(["require", "exports", "aliasedModule5", "aliasedModule6", "aliasedModule1", "aliasedModule2", "aliasedModule3", "aliasedModule4", "unaliasedModule3", "unaliasedModule4", "unaliasedModule1", "unaliasedModule2"], function (require, exports, n1, n2, r1, aliasedModule2_1, aliasedModule3_1, ns) {
     "use strict";
     exports.__esModule = true;
+    aliasedModule3_1 = __importDefault(aliasedModule3_1);
+    ns = __importStar(ns);
     r1;
     aliasedModule2_1.p1;
     aliasedModule3_1["default"];

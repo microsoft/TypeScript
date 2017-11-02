@@ -66,9 +66,13 @@ define(["require", "exports", "./t1", "./t2", "./t3"], function (require, export
     __export(t3_1);
 });
 //// [main.js]
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 define(["require", "exports", "./t4"], function (require, exports, t4_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    t4_1 = __importDefault(t4_1);
     t4_1.default;
     t4_1.x;
     t4_1.y;

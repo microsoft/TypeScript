@@ -15,7 +15,7 @@ let x = Test; // emit test_1.default
 
 //// [consumer.jsx]
 "use strict";
-function __importDefault(mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 }
 exports.__esModule = true;

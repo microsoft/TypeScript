@@ -31,7 +31,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-function __importStar(mod) {
+var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
     if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
@@ -51,7 +51,7 @@ function __importStar(mod) {
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     function foo() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield _a = (yield __syncRequire ? Promise.resolve().then(() => __importStar(require("./foo"))) : new Promise((resolve_1, reject_1) => { require(["./foo"], resolve_1, reject_1); })).default, __syncRequire ? Promise.resolve().then(() => __importStar(require(_a))) : new Promise((resolve_2, reject_2) => { require([_a], resolve_2, reject_2); });
+            return yield _a = (yield __syncRequire ? Promise.resolve().then(() => __importStar(require("./foo"))) : new Promise((resolve_1, reject_1) => { require(["./foo"], resolve_1, reject_1); }).then(__importStar)).default, __syncRequire ? Promise.resolve().then(() => __importStar(require(_a))) : new Promise((resolve_2, reject_2) => { require([_a], resolve_2, reject_2); }).then(__importStar);
             var _a;
         });
     }

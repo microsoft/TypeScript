@@ -31,8 +31,16 @@ define(["require", "exports"], function (require, exports) {
     exports.MyClass = MyClass;
 });
 //// [file2.js]
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 define(["require", "exports", "react", "./file1"], function (require, exports, React, file1_1) {
     "use strict";
     exports.__esModule = true;
+    React = __importStar(React);
     React.createElement(file1_1.MyClass, null);
 });
