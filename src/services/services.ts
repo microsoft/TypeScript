@@ -1791,7 +1791,7 @@ namespace ts {
             }
         }
 
-        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
+        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
 
