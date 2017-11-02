@@ -31,7 +31,7 @@
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.6";
+    export const servicesVersion = "0.7";
 
     /* @internal */
     let ruleProvider: formatting.RulesProvider;
