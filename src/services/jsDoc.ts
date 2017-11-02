@@ -190,26 +190,24 @@ namespace ts.JsDoc {
      * be performed.
      */
     export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number): TextInsertion {
-        const emptyDocComment = { newText: "", caretOffset: 0 };
-
         // Check if in a context where we don't want to perform any insertion
         if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
-            return emptyDocComment;
+            return undefined;
         }
 
         const tokenAtPos = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         const tokenStart = tokenAtPos.getStart();
         if (!tokenAtPos || tokenStart < position) {
-            return emptyDocComment;
+            return undefined;
         }
 
         const commentOwnerInfo = getCommentOwnerInfo(tokenAtPos);
         if (!commentOwnerInfo) {
-            return emptyDocComment;
+            return undefined;
         }
         const { commentOwner, parameters } = commentOwnerInfo;
         if (commentOwner.getStart() < position) {
-            return emptyDocComment;
+            return undefined;
         }
 
         if (!parameters || parameters.length === 0) {
