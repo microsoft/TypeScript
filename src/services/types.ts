@@ -310,7 +310,7 @@ namespace ts {
     }
 
     export interface GetCompletionsAtPositionOptions {
-        includeCompletionsWithActions: boolean;
+        includeExternalModuleExports: boolean;
     }
 
     export interface ApplyCodeActionCommandResult {

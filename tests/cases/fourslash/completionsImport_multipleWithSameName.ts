@@ -14,7 +14,7 @@
 ////fo/**/
 
 goTo.marker("");
-const options = { includeCompletionsWithActions: true };
+const options = { includeExternalModuleExports: true };
 verify.completionListContains("foo", "var foo: number", "", "var", undefined, undefined, options);
 verify.completionListContains({ name: "foo", source: "/a" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, options);
 verify.completionListContains({ name: "foo", source: "/b" }, "const foo: 1", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, options);

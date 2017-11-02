@@ -15,7 +15,7 @@
 ////fo/**/
 
 goTo.marker("");
-const options = { includeCompletionsWithActions: true };
+const options = { includeExternalModuleExports: true };
 // TODO: https://github.com/Microsoft/TypeScript/issues/14003
 verify.completionListContains({ name: "foo", source: "/a" }, "import foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true, options);
 verify.not.completionListContains({ name: "foo", source: "/a_reexport" }, undefined, undefined, undefined, undefined, undefined, options);

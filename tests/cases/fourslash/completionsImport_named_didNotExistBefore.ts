@@ -9,7 +9,7 @@
 ////t/**/
 
 goTo.marker("");
-const options = { includeCompletionsWithActions: true };
+const options = { includeExternalModuleExports: true };
 verify.completionListContains({ name: "Test1", source: "/a" }, "function Test1(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, options);
 verify.completionListContains("Test2", "import Test2", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ undefined, options);
 verify.not.completionListContains({ name: "Test2", source: "/a" }, undefined, undefined, undefined, undefined, undefined, options);

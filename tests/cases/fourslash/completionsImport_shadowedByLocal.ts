@@ -8,6 +8,6 @@
 ////fo/**/
 
 goTo.marker("");
-const options = { includeCompletionsWithActions: true };
+const options = { includeExternalModuleExports: true };
 verify.completionListContains("foo", "const foo: 1", "", "const", undefined, undefined, options);
 verify.not.completionListContains({ name: "foo", source: "/a" }, undefined, undefined, undefined, undefined, undefined, options);
