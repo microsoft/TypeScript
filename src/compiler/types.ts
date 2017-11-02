@@ -3785,7 +3785,6 @@ namespace ts {
         strict?: boolean;
         strictFunctionTypes?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
-        strictTuples?: boolean;
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
