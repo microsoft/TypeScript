@@ -70,14 +70,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // https://github.com/Microsoft/TypeScript/issues/11177
 var Bluebird = __importStar(require("bluebird"));
 function a() {
-    return __awaiter(this, void 0, Bluebird, function () {
+    return __awaiter(this, void 0, void 0, function () {
         var b, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     b = function b() {
-                        return __awaiter(this, void 0, Bluebird, function () {
+                        return __awaiter(this, void 0, void 0, function () {
                             var error_2;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {

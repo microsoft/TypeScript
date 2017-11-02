@@ -3102,6 +3102,7 @@ namespace ts {
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
         enumKind?: EnumKind;                // Enum declaration classification
+        originatingImport?: ImportDeclaration; // Import declaration which produced the symbol, present if the symbol is poisoned
     }
 
     /* @internal */

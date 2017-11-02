@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @allowSyntheticDefaultimports: true
 // @Filename: /node_modules/a/index.d.ts
 ////declare function [|{| "isWriteAccess": true, "isDefinition": true |}a|](): void;
 ////declare namespace [|{| "isWriteAccess": true, "isDefinition": true |}a|] {
@@ -9,13 +10,13 @@
 
 // Import with different name and we find local refs
 // @Filename: /b.ts
-////import * as [|{| "isWriteAccess": true, "isDefinition": true |}b|] from "a";
+////import [|{| "isWriteAccess": true, "isDefinition": true |}b|] from "a";
 ////[|b|]();
 ////[|b|].x;
 
 // Import with same name and we find all refs
 // @Filename: /c.ts
-////import * as [|{| "isWriteAccess": true, "isDefinition": true |}a|] from "a";
+////import [|{| "isWriteAccess": true, "isDefinition": true |}a|] from "a";
 ////[|a|]();
 ////[|a|].x;
 

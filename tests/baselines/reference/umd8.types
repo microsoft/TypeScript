@@ -4,13 +4,13 @@ import * as ff from './foo';
 >ff : typeof ff
 
 let y: Foo; // OK in type position
->y : ff
->Foo : ff
+>y : Thing
+>Foo : Thing
 
 y.foo();
 >y.foo() : number
 >y.foo : () => number
->y : ff
+>y : Thing
 >foo : () => number
 
 let z: Foo.SubThing; // OK in ns position
@@ -20,7 +20,7 @@ let z: Foo.SubThing; // OK in ns position
 
 let x: any = Foo; // Not OK in value position
 >x : any
->Foo : typeof ff
+>Foo : typeof Thing
 
 === tests/cases/conformance/externalModules/foo.d.ts ===
 declare class Thing {

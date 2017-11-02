@@ -3326,6 +3326,10 @@
         "category": "Message",
         "code": 6186
     },
+    "Import is called or constructed, which is not valid ES2015 module usage, and will fail at runtime.": {
+        "category": "Error",
+        "code": 7004
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3797,5 +3801,9 @@
     "Convert to default import": {
         "category": "Message",
         "code": 95013
+    },
+    "Replace import with '{0}'.": {
+        "category": "Message",
+        "code": 95014
     }
 }

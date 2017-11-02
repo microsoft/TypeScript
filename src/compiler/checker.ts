@@ -1846,8 +1846,34 @@ namespace ts {
         // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
         function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression, dontResolveAlias: boolean): Symbol {
             const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
-            if (!dontResolveAlias && symbol && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
-                error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
+            if (!dontResolveAlias && symbol) {
+                if (!(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
+                    error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
+                    return symbol;
+                }
+                const referenaceParent = moduleReferenceExpression.parent;
+                if (referenaceParent.kind === SyntaxKind.ImportDeclaration && getNamespaceDeclarationNode(referenaceParent as ImportDeclaration)) {
+                    const type = getTypeOfSymbol(symbol);
+                    let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
+                    if (!sigs || !sigs.length) {
+                        sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
+                    }
+                    if (sigs && sigs.length) {
+                        // Create a new symbol which has the module's type less the call and construct signatures
+                        const result = createSymbol(symbol.flags, symbol.escapedName);
+                        result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
+                        result.parent = symbol.parent;
+                        result.target = symbol;
+                        result.originatingImport = referenaceParent as ImportDeclaration;
+                        if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
+                        if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
+                        if (symbol.members) result.members = cloneMap(symbol.members);
+                        if (symbol.exports) result.exports = cloneMap(symbol.exports);
+                        const moduleType = resolveStructuredTypeMembers(type as StructuredType); // Should already be resolved from the signature checks above
+                        result.type = createAnonymousType(result, moduleType.members, emptyArray, emptyArray, moduleType.stringIndexInfo, moduleType.numberIndexInfo);
+                        return result;
+                    }
+                }
             }
             return symbol;
         }
@@ -8963,7 +8989,19 @@ namespace ts {
 
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
             }
-            return result !== Ternary.False;
+            const answer = result !== Ternary.False;
+            // Check if we should issue an extra diagnostic to produce a quickfix for a slightly incorrect import statement
+            if (headMessage && errorNode && !answer && source.symbol) {
+                const links = getSymbolLinks(source.symbol);
+                if (links.originatingImport) {
+                    const helpfulRetry = checkTypeRelatedTo(getTypeOfSymbol(links.target), target, relation, /*errorNode*/ undefined);
+                    if (helpfulRetry) {
+                        // Likely an incorrect import. Issue a helpful diagnostic to produce a quickfix to change the import
+                        diagnostics.add(createDiagnosticForNode(links.originatingImport, Diagnostics.Import_is_called_or_constructed_which_is_not_valid_ES2015_module_usage_and_will_fail_at_runtime));
+                    }
+                }
+            }
+            return answer;
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 Debug.assert(!!errorNode);
@@ -16618,7 +16656,7 @@ namespace ts {
                     error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 }
                 else {
-                    error(node, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
+                    invocationError(node, apparentType, SignatureKind.Call);
                 }
                 return resolveErrorCall(node);
             }
@@ -16720,7 +16758,7 @@ namespace ts {
                 return signature;
             }
 
-            error(node, Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature);
+            invocationError(node, expressionType, SignatureKind.Construct);
             return resolveErrorCall(node);
         }
 
@@ -16767,6 +16805,22 @@ namespace ts {
             return true;
         }
 
+        function invocationError(node: Node, apparentType: Type, kind: SignatureKind) {
+            error(node, kind === SignatureKind.Call
+                ? Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures
+                : Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature
+            , typeToString(apparentType));
+            invocationErrorRecovery(apparentType, kind);
+        }
+
+        function invocationErrorRecovery(apparentType: Type, kind: SignatureKind) {
+            if (apparentType.symbol && getSymbolLinks(apparentType.symbol).originatingImport) {
+                const sigs = getSignaturesOfType(getTypeOfSymbol(getSymbolLinks(apparentType.symbol).target), kind);
+                if (!sigs || !sigs.length) return;
+                error(getSymbolLinks(apparentType.symbol).originatingImport, Diagnostics.Import_is_called_or_constructed_which_is_not_valid_ES2015_module_usage_and_will_fail_at_runtime);
+            }
+        }
+
         function resolveTaggedTemplateExpression(node: TaggedTemplateExpression, candidatesOutArray: Signature[]): Signature {
             const tagType = checkExpression(node.tag);
             const apparentType = getApparentType(tagType);
@@ -16784,7 +16838,7 @@ namespace ts {
             }
 
             if (!callSignatures.length) {
-                error(node, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
+                invocationError(node, apparentType, SignatureKind.Call);
                 return resolveErrorCall(node);
             }
 
@@ -16841,6 +16895,7 @@ namespace ts {
                 errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
                 errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
+                invocationErrorRecovery(apparentType, SignatureKind.Call);
                 return resolveErrorCall(node);
             }
 
