@@ -873,37 +873,34 @@ namespace FourSlash {
          * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
         public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number) {
-            const that = this;
             let replacementSpan: ts.TextSpan;
             if (spanIndex !== undefined) {
                 replacementSpan = this.getTextSpanForRangeAtIndex(spanIndex);
-            }
-
-            function filterByTextOrDocumentation(entry: ts.CompletionEntry) {
-                const details = that.getCompletionEntryDetails(entry.name);
-                const documentation = details && ts.displayPartsToString(details.documentation);
-                const text = details && ts.displayPartsToString(details.displayParts);
-
-                // If any of the expected values are undefined, assume that users don't
-                // care about them.
-                if (replacementSpan && !TestState.textSpansEqual(replacementSpan, entry.replacementSpan)) {
-                    return false;
-                }
-                else if (expectedText && text !== expectedText) {
-                    return false;
-                }
-                else if (expectedDocumentation && documentation !== expectedDocumentation) {
-                    return false;
-                }
-
-                return true;
             }
 
             const completions = this.getCompletionListAtCaret();
             if (completions) {
                 let filterCompletions = completions.entries.filter(e => e.name === entryId.name && e.source === entryId.source);
                 filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind) : filterCompletions;
-                filterCompletions = filterCompletions.filter(filterByTextOrDocumentation);
+                filterCompletions = filterCompletions.filter(entry => {
+                    const details = this.getCompletionEntryDetails(entry.name);
+                    const documentation = details && ts.displayPartsToString(details.documentation);
+                    const text = details && ts.displayPartsToString(details.displayParts);
+
+                    // If any of the expected values are undefined, assume that users don't
+                    // care about them.
+                    if (replacementSpan && !TestState.textSpansEqual(replacementSpan, entry.replacementSpan)) {
+                        return false;
+                    }
+                    else if (expectedText && text !== expectedText) {
+                        return false;
+                    }
+                    else if (expectedDocumentation && documentation !== expectedDocumentation) {
+                        return false;
+                    }
+
+                    return true;
+                });
                 if (filterCompletions.length !== 0) {
                     // After filtered using all present criterion, if there are still symbol left in the list
                     // then these symbols must meet the criterion for Not supposed to be in the list. So we
