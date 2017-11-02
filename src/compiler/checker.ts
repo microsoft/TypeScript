@@ -18458,7 +18458,17 @@ namespace ts {
                     }
                     contextualType = constraint;
                 }
-                return maybeTypeOfKind(contextualType, (TypeFlags.Literal | TypeFlags.Index));
+                if (contextualType.flags & (TypeFlags.Literal | TypeFlags.Index)) {
+                    return true;
+                }
+                if (contextualType.flags & TypeFlags.UnionOrIntersection) {
+                    const types = (<UnionOrIntersectionType>contextualType).types;
+                    for (const t of types) {
+                        if (isLiteralContextualType(t)) {
+                            return true;
+                        }
+                    }
+                }
             }
             return false;
         }

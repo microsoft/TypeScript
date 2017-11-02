@@ -1,0 +1,20 @@
+=== tests/cases/compiler/genericCallStringLiteralUnionNested.ts ===
+declare function nestedUnion<A extends string>(a: { fields: A | A[] }): Record<A, string>;
+>nestedUnion : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
+>A : A
+>a : { fields: A | A[]; }
+>fields : A | A[]
+>A : A
+>A : A
+>Record : Record<K, T>
+>A : A
+
+const result: {z: string} = nestedUnion({ fields: "z" });
+>result : { z: string; }
+>z : string
+>nestedUnion({ fields: "z" }) : Record<"z", string>
+>nestedUnion : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
+>{ fields: "z" } : { fields: "z"; }
+>fields : string
+>"z" : "z"
+

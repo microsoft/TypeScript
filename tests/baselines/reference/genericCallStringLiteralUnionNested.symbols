@@ -1,0 +1,17 @@
+=== tests/cases/compiler/genericCallStringLiteralUnionNested.ts ===
+declare function nestedUnion<A extends string>(a: { fields: A | A[] }): Record<A, string>;
+>nestedUnion : Symbol(nestedUnion, Decl(genericCallStringLiteralUnionNested.ts, 0, 0))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 29))
+>a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 0, 47))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 0, 51))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 29))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 29))
+>Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 29))
+
+const result: {z: string} = nestedUnion({ fields: "z" });
+>result : Symbol(result, Decl(genericCallStringLiteralUnionNested.ts, 1, 5))
+>z : Symbol(z, Decl(genericCallStringLiteralUnionNested.ts, 1, 15))
+>nestedUnion : Symbol(nestedUnion, Decl(genericCallStringLiteralUnionNested.ts, 0, 0))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 1, 41))
+
