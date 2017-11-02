@@ -1988,7 +1988,7 @@ declare module "fs" {
 
             checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
             file1.content = "var zz30 = 100;";
-            host.reloadFS(files, /*invokeDirectoryWatcherInsteadOfFileChanged*/ true);
+            host.reloadFS(files, { invokeDirectoryWatcherInsteadOfFileChanged: true });
             host.runQueuedTimeoutCallbacks();
 
             checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
