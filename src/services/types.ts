@@ -236,7 +236,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
-        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo;
         // "options" and "source" are optional only for backwards-compatibility
         getCompletionEntryDetails(
             fileName: string,
@@ -307,6 +307,10 @@ namespace ts {
         getSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
+    }
+
+    export interface GetCompletionsAtPositionOptions {
+        includeCompletionsWithActions: boolean;
     }
 
     export interface ApplyCodeActionCommandResult {

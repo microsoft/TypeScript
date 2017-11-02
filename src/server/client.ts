@@ -170,8 +170,8 @@ namespace ts.server {
             };
         }
 
-        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
-            const args: protocol.CompletionsRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo {
+            const args: protocol.CompletionsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), ...options };
 
             const request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
             const response = this.processResponse<protocol.CompletionsResponse>(request);

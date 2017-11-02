@@ -1200,10 +1200,10 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
 
-            const completions = project.getLanguageService().getCompletionsAtPosition(file, position);
+            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, args);
             if (simplifiedResult) {
                 return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
-                    if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
+                    if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
                         const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source } = entry;
                         const convertedSpan = replacementSpan ? this.toLocationTextSpan(replacementSpan, scriptInfo) : undefined;
                         // Use `hasAction || undefined` to avoid serializing `false`.
@@ -1835,10 +1835,10 @@ namespace ts.server {
             [CommandNames.FormatRangeFull]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForRangeFull(request.arguments));
             },
-            [CommandNames.Completions]: (request: protocol.CompletionDetailsRequest) => {
+            [CommandNames.Completions]: (request: protocol.CompletionsRequest) => {
                 return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.CompletionsFull]: (request: protocol.CompletionDetailsRequest) => {
+            [CommandNames.CompletionsFull]: (request: protocol.CompletionsRequest) => {
                 return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {

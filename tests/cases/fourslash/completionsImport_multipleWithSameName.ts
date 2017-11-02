@@ -14,9 +14,10 @@
 ////fo/**/
 
 goTo.marker("");
-verify.completionListContains("foo", "var foo: number", "", "var");
-verify.completionListContains({ name: "foo", source: "/a" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true);
-verify.completionListContains({ name: "foo", source: "/b" }, "const foo: 1", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true);
+const options = { includeCompletionsWithActions: true };
+verify.completionListContains("foo", "var foo: number", "", "var", undefined, undefined, options);
+verify.completionListContains({ name: "foo", source: "/a" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, options);
+verify.completionListContains({ name: "foo", source: "/b" }, "const foo: 1", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, options);
 
 verify.applyCodeActionFromCompletion("", {
     name: "foo",

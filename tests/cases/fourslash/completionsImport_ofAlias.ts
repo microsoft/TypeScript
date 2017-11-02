@@ -15,9 +15,10 @@
 ////fo/**/
 
 goTo.marker("");
-// https://github.com/Microsoft/TypeScript/issues/14003
-verify.completionListContains({ name: "foo", source: "/a" }, "import foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true);
-verify.not.completionListContains({ name: "foo", source: "/a_reexport" });
+const options = { includeCompletionsWithActions: true };
+// TODO: https://github.com/Microsoft/TypeScript/issues/14003
+verify.completionListContains({ name: "foo", source: "/a" }, "import foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true, options);
+verify.not.completionListContains({ name: "foo", source: "/a_reexport" }, undefined, undefined, undefined, undefined, undefined, options);
 
 verify.applyCodeActionFromCompletion("", {
     name: "foo",

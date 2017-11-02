@@ -1325,9 +1325,17 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeCompletionsWithActions: false }): CompletionInfo {
             synchronizeHostData();
-            return Completions.getCompletionsAtPosition(host, program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, program.getSourceFiles());
+            return Completions.getCompletionsAtPosition(
+                host,
+                program.getTypeChecker(),
+                log,
+                program.getCompilerOptions(),
+                getValidSourceFile(fileName),
+                position,
+                program.getSourceFiles(),
+                options);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
