@@ -28,6 +28,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
+        options: GetCompletionsAtPositionOptions,
     ): CompletionInfo | undefined {
         if (isInReferenceComment(sourceFile, position)) {
             return PathCompletions.getTripleSlashReferenceCompletion(sourceFile, position, compilerOptions, host);
@@ -37,7 +38,7 @@ namespace ts.Completions {
             return getStringLiteralCompletionEntries(sourceFile, position, typeChecker, compilerOptions, host, log);
         }
 
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, options);
         if (!completionData) {
             return undefined;
         }
@@ -362,7 +363,7 @@ namespace ts.Completions {
         { name, source }: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): { type: "symbol", symbol: Symbol, location: Node, symbolToOriginInfoMap: SymbolOriginInfoMap } | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExports: true });
         if (!completionData) {
             return { type: "none" };
         }
@@ -503,6 +504,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
+        options: GetCompletionsAtPositionOptions,
     ): CompletionData | undefined {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
@@ -900,7 +902,9 @@ namespace ts.Completions {
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
             symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
-            getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "");
+            if (options.includeExternalModuleExports) {
+                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "");
+            }
             filterGlobalCompletion(symbols);
 
             return true;

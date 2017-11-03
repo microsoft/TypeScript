@@ -140,7 +140,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
-        getCompletionsAtPosition(fileName: string, position: number): string;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/, source: string | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
@@ -885,10 +885,10 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number) {
+        public getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined) {
             return this.forwardJSONCall(
-                `getCompletionsAtPosition('${fileName}', ${position})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position)
+                `getCompletionsAtPosition('${fileName}', ${position}, ${options})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position, options)
             );
         }
 

@@ -148,6 +148,7 @@ declare namespace FourSlashInterface {
             kind?: string,
             spanIndex?: number,
             hasAction?: boolean,
+            options?: { includeExternalModuleExports: boolean },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
