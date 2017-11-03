@@ -67,7 +67,6 @@ namespace ts {
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
-        const strictTuples = getStrictOptionValue(compilerOptions, "strictTuples");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
 
@@ -7303,12 +7302,9 @@ namespace ts {
                 property.type = typeParameter;
                 properties.push(property);
             }
-            if (strictTuples) {
-                const lengthSymbol = createSymbol(SymbolFlags.Property, "length" as __String);
-                lengthSymbol.type = getLiteralType(arity);
-                lengthSymbol.checkFlags = CheckFlags.Readonly;
-                properties.push(lengthSymbol);
-            }
+            const lengthSymbol = createSymbol(SymbolFlags.Property, "length" as __String);
+            lengthSymbol.type = getLiteralType(arity);
+            properties.push(lengthSymbol);
             const type = <GenericType & InterfaceTypeWithDeclaredMembers>createObjectType(ObjectFlags.Tuple | ObjectFlags.Reference);
             type.typeParameters = typeParameters;
             type.outerTypeParameters = undefined;
