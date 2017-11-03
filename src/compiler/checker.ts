@@ -7592,11 +7592,11 @@ namespace ts {
             }
         }
 
-        // Add the given types to the given type set. Order is preserved, duplicates are removed,
-        // and nested types of the given kind are flattened into the set.
+        // Add the given types to the given type set. Order is preserved, freshness is removed from literal
+        // types, duplicates are removed, and nested types of the given kind are flattened into the set.
         function addTypesToIntersection(typeSet: TypeSet, types: Type[]) {
             for (const type of types) {
-                addTypeToIntersection(typeSet, type);
+                addTypeToIntersection(typeSet, getRegularTypeOfLiteralType(type));
             }
         }
 
