@@ -816,7 +816,7 @@ namespace ts.server {
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
         const statusCache = createMap<boolean>();
-        sys.watchDirectory = function (path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+        sys.watchDirectory = (path, callback, recursive) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
             if (status === undefined) {
@@ -953,7 +953,7 @@ namespace ts.server {
     };
 
     const ioSession = new IOSession(options);
-    process.on("uncaughtException", function (err: Error) {
+    process.on("uncaughtException", err => {
         ioSession.logError(err, "unknown");
     });
     // See https://github.com/Microsoft/TypeScript/issues/11348

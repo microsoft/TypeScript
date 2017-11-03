@@ -757,6 +757,7 @@ namespace Harness.LanguageService {
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
                                 const langSvc: any = info.languageService;
+                                // tslint:disable-next-line only-arrow-functions
                                 proxy.getQuickInfoAtPosition = function () {
                                     const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                     if (parts.displayParts.length > 0) {
@@ -789,7 +790,7 @@ namespace Harness.LanguageService {
                         module: () => ({
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
-                                proxy.getSemanticDiagnostics = function (filename: string) {
+                                proxy.getSemanticDiagnostics = filename => {
                                     const prev = info.languageService.getSemanticDiagnostics(filename);
                                     const sourceFile: ts.SourceFile = info.languageService.getSourceFile(filename);
                                     prev.push({
@@ -815,11 +816,12 @@ namespace Harness.LanguageService {
                     };
             }
 
-            function makeDefaultProxy(info: ts.server.PluginCreateInfo) {
+            function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
                 // tslint:disable-next-line:no-null-keyword
                 const proxy = Object.create(/*prototype*/ null);
                 const langSvc: any = info.languageService;
                 for (const k of Object.keys(langSvc)) {
+                    // tslint:disable-next-line only-arrow-functions
                     proxy[k] = function () {
                         return langSvc[k].apply(langSvc, arguments);
                     };
