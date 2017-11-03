@@ -9031,14 +9031,8 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
-                if (relation !== comparableRelation) {
-                    return isRelatedToMonodirectional(source, target, reportErrors, headMessage);
-                }
-                const first = isRelatedToMonodirectional(target, source, /*reportErrors*/ false, headMessage);
-                if (first === Ternary.True) {
-                    return first;
-                }
-                return isRelatedToMonodirectional(source, target, reportErrors, headMessage);
+                return (relation === comparableRelation && isRelatedToMonodirectional(target, source, /*reportErrors*/ false, headMessage))
+                    || isRelatedToMonodirectional(source, target, reportErrors, headMessage);
             }
 
             function isRelatedToMonodirectional(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
