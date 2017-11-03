@@ -3,7 +3,7 @@
 /// <reference path="session.ts" />
 
 namespace ts.server {
-    interface IOSessionOptions {
+    interface IoSessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
         canUseEvents: boolean;
@@ -529,7 +529,7 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        constructor(options: IOSessionOptions) {
+        constructor(options: IoSessionOptions) {
             const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
@@ -933,7 +933,7 @@ namespace ts.server {
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
-    const options: IOSessionOptions = {
+    const options: IoSessionOptions = {
         host: sys,
         cancellationToken,
         installerEventPort: eventPort,

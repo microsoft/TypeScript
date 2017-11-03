@@ -20,6 +20,15 @@ namespace ts {
             };
             return (file: ts.SourceFile) => file;
         }
+        function replaceNumberWith2(context: ts.TransformationContext) {
+            function visitor(node: Node): Node {
+                if (isNumericLiteral(node)) {
+                    return createNumericLiteral("2");
+                }
+                return visitEachChild(node, visitor, context);
+            }
+            return (file: ts.SourceFile) => visitNode(file, visitor);
+        }
 
         function replaceIdentifiersNamedOldNameWithNewName(context: ts.TransformationContext) {
             const previousOnSubstituteNode = context.onSubstituteNode;
@@ -93,6 +102,20 @@ namespace ts {
             `, {
                     transformers: {
                         before: [forceNamespaceRewrite],
+                    },
+                    compilerOptions: {
+                        target: ts.ScriptTarget.ESNext,
+                        newLine: NewLineKind.CarriageReturnLineFeed,
+                    }
+                }).outputText;
+        });
+
+        testBaseline("transformTypesInExportDefault", () => {
+            return ts.transpileModule(`
+            export default (foo: string) => { return 1; }
+            `, {
+                    transformers: {
+                        before: [replaceNumberWith2],
                     },
                     compilerOptions: {
                         target: ts.ScriptTarget.ESNext,

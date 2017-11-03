@@ -2471,9 +2471,13 @@ namespace ts {
         readFile(path: string): string | undefined;
     }
 
-    export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles: ReadonlyArray<SourceFile>): void;
-    }
+    export type WriteFileCallback = (
+        fileName: string,
+        data: string,
+        writeByteOrderMark: boolean,
+        onError: ((message: string) => void) | undefined,
+        sourceFiles: ReadonlyArray<SourceFile>,
+    ) => void;
 
     export class OperationCanceledException { }
 
@@ -3582,9 +3586,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface TypeMapper {
-        (t: TypeParameter): Type;
-    }
+    export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
         Contravariant     = 1 << 0,  // Inference from contravariant position
@@ -4192,9 +4194,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface HasInvalidatedResolution {
-        (sourceFile: Path): boolean;
-    }
+    export type HasInvalidatedResolution = (sourceFile: Path) => boolean;
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
