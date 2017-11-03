@@ -124,7 +124,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
-    export let sys: System = (function() {
+    export let sys: System = (() => {
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
@@ -594,7 +594,7 @@ namespace ts {
         if (sys) {
             // patch writefile to create folder before writing the file
             const originalWriteFile = sys.writeFile;
-            sys.writeFile = function(path, data, writeBom) {
+            sys.writeFile = (path, data, writeBom) => {
                 const directoryPath = getDirectoryPath(normalizeSlashes(path));
                 if (directoryPath && !sys.directoryExists(directoryPath)) {
                     recursiveCreateDirectory(directoryPath, sys);

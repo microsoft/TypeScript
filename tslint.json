@@ -94,7 +94,6 @@
         "no-unnecessary-initializer": false,
         "no-var-requires": false,
         "object-literal-key-quotes": false,
-        "only-arrow-functions": false,
         "ordered-imports": false,
         "prefer-conditional-expression": false,
         "prefer-for-of": false,
