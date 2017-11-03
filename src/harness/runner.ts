@@ -18,6 +18,7 @@
 /// <reference path="fourslashRunner.ts" />
 /// <reference path="projectsRunner.ts" />
 /// <reference path="rwcRunner.ts" />
+/// <reference path="userRunner.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="./parallel/shared.ts" />
 
@@ -59,6 +60,8 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
             return new RWCRunner();
         case "test262":
             return new Test262BaselineRunner();
+        case "user":
+            return new UserCodeRunner();
     }
     ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -175,6 +178,9 @@ function handleTestConfig() {
                     case "test262":
                         runners.push(new Test262BaselineRunner());
                         break;
+                    case "user":
+                        runners.push(new UserCodeRunner());
+                        break;
                 }
             }
         }
@@ -196,6 +202,11 @@ function handleTestConfig() {
         runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
         runners.push(new FourSlashRunner(FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
+
+        // CRON-only tests
+        if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser && process.env.TRAVIS_EVENT_TYPE === "cron") {
+            runners.push(new UserCodeRunner());
+        }
     }
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
@@ -215,8 +226,9 @@ function beginTests() {
     }
 }
 
+let isWorker: boolean;
 function startTestEnvironment() {
-    const isWorker = handleTestConfig();
+    isWorker = handleTestConfig();
     if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
         if (isWorker) {
             return Harness.Parallel.Worker.start();

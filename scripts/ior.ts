@@ -64,7 +64,6 @@ module Commands {
             }
             if (path.charAt(1) === ":") {
                 if (path.charAt(2) === directorySeparator) return 3;
-                return 2;
             }
             return 0;
         }

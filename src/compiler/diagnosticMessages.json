@@ -3797,5 +3797,9 @@
     "Infer parameter types from usage.": {
         "category": "Message",
         "code": 95012
+    },
+    "Convert to default import": {
+        "category": "Message",
+        "code": 95013
     }
 }
