@@ -8,9 +8,12 @@
 // @Filename: /node_modules/x/bar.d.ts
 ////not read
 
-// @Filename: /a.ts
+// @Filename: /src/node_modules/y/index.d.ts
+////not read
+
+// @Filename: /src/a.ts
 ////import {} from "/*1*/";
 ////import {} from "x//*2*/";
 
-verify.completionsAt("1", ["x"]);
+verify.completionsAt("1", ["y", "x"]);
 verify.completionsAt("2", ["bar", "foo"]);

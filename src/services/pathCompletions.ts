@@ -177,7 +177,7 @@ namespace ts.Completions.PathCompletions {
         }
 
         if (compilerOptions.moduleResolution === ts.ModuleResolutionKind.NodeJs) {
-            forEachAncestorDirectory(getDirectoryPath(scriptPath), ancestor => {
+            forEachAncestorDirectory(scriptPath, ancestor => {
                 const nodeModules = combinePaths(ancestor, "node_modules");
                 if (host.directoryExists(nodeModules)) {
                     getCompletionEntriesForDirectoryFragment(fragment, nodeModules, fileExtensions, /*includeExtensions*/ false, span, host, /*exclude*/ undefined, result);
