@@ -470,6 +470,10 @@ namespace FourSlash {
 
         public select(startMarker: string, endMarker: string) {
             const start = this.getMarkerByName(startMarker), end = this.getMarkerByName(endMarker);
+            ts.Debug.assert(start.fileName === end.fileName);
+            if (this.activeFile.fileName !== start.fileName) {
+                this.openFile(start.fileName);
+            }
             this.goToPosition(start.position);
             this.selectionEnd = end.position;
         }
