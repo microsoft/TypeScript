@@ -7440,9 +7440,12 @@ namespace ts {
             return false;
         }
 
-        function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
-            for (const type of types) {
-                if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
+        function isSubtypeOfAny(source: Type, targets: Type[]): boolean {
+            for (const target of targets) {
+                if (source !== target && isTypeSubtypeOf(source, target) && (
+                    !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
+                    !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
+                    isTypeDerivedFrom(source, target))) {
                     return true;
                 }
             }
@@ -8565,12 +8568,19 @@ namespace ts {
             return isTypeRelatedTo(source, target, assignableRelation);
         }
 
-        // A type S is considered to be an instance of a type T if S and T are the same type or if S is a
-        // subtype of T but not structurally identical to T. This specifically means that two distinct but
-        // structurally identical types (such as two classes) are not considered instances of each other.
-        function isTypeInstanceOf(source: Type, target: Type): boolean {
-            return getTargetType(source) === getTargetType(target) || isTypeSubtypeOf(source, target) && !isTypeIdenticalTo(source, target);
-        }
+        // An object type S is considered to be derived from an object type T if
+        // S is a union type and every constituent of S is derived from T,
+        // T is a union type and S is derived from at least one constituent of T, or
+        // T is one of the global types Object and Function and S is a subtype of T, or
+        // T occurs directly or indirectly in an 'extends' clause of S.
+        // Note that this check ignores type parameters and only considers the
+        // inheritance hierarchy.
+        function isTypeDerivedFrom(source: Type, target: Type): boolean {
+            return source.flags & TypeFlags.Union ? every((<UnionType>source).types, t => isTypeDerivedFrom(t, target)) :
+                target.flags & TypeFlags.Union ? some((<UnionType>target).types, t => isTypeDerivedFrom(source, t)) :
+                target === globalObjectType || target === globalFunctionType ? isTypeSubtypeOf(source, target) :
+                hasBaseType(source, getTargetType(target));
+            }
 
         /**
          * This is *not* a bi-directional relationship.
@@ -9604,7 +9614,7 @@ namespace ts {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target);
                 }
-                const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source);
+                const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source);
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
                 if (unmatchedProperty) {
                     if (reportErrors) {
@@ -10310,6 +10320,11 @@ namespace ts {
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
             return getObjectFlags(type) & ObjectFlags.Reference && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType) ||
                 !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
+        }
+
+        function isEmptyArrayLiteralType(type: Type): boolean {
+            const elementType = isArrayType(type) ? (<TypeReference>type).typeArguments[0] : undefined;
+            return elementType === undefinedWideningType || elementType === neverType;
         }
 
         function isTupleLikeType(type: Type): boolean {
@@ -12415,7 +12430,7 @@ namespace ts {
                 }
 
                 if (targetType) {
-                    return getNarrowedType(type, targetType, assumeTrue, isTypeInstanceOf);
+                    return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
                 }
 
                 return type;
@@ -13883,7 +13898,6 @@ namespace ts {
                     type.pattern = node;
                     return type;
                 }
-                const contextualType = getApparentTypeOfContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
                     const pattern = contextualType.pattern;
                     // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
@@ -18087,14 +18101,6 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
-        function getBestChoiceType(type1: Type, type2: Type): Type {
-            const firstAssignableToSecond = isTypeAssignableTo(type1, type2);
-            const secondAssignableToFirst = isTypeAssignableTo(type2, type1);
-            return secondAssignableToFirst && !firstAssignableToSecond ? type1 :
-                firstAssignableToSecond && !secondAssignableToFirst ? type2 :
-                getUnionType([type1, type2], /*subtypeReduction*/ true);
-        }
-
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
         }
@@ -18231,7 +18237,7 @@ namespace ts {
                         leftType;
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
-                        getBestChoiceType(removeDefinitelyFalsyTypes(leftType), rightType) :
+                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], /*subtypeReduction*/ true) :
                         leftType;
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
@@ -18391,7 +18397,7 @@ namespace ts {
             checkExpression(node.condition);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
-            return getBestChoiceType(type1, type2);
+            return getUnionType([type1, type2], /*subtypeReduction*/ true);
         }
 
         function checkTemplateExpression(node: TemplateExpression): Type {
