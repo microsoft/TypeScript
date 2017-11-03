@@ -18446,7 +18446,7 @@ namespace ts {
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
         }
 
-        function isLiteralContextualType(contextualType: Type) {
+        function isLiteralContextualType(contextualType: Type): boolean {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
@@ -18458,17 +18458,9 @@ namespace ts {
                     }
                     contextualType = constraint;
                 }
-                if (contextualType.flags & (TypeFlags.Literal | TypeFlags.Index)) {
-                    return true;
-                }
-                if (contextualType.flags & TypeFlags.UnionOrIntersection) {
-                    const types = (<UnionOrIntersectionType>contextualType).types;
-                    for (const t of types) {
-                        if (isLiteralContextualType(t)) {
-                            return true;
-                        }
-                    }
-                }
+                return !!(contextualType.flags & (TypeFlags.Literal | TypeFlags.Index) ||
+                    contextualType.flags & TypeFlags.UnionOrIntersection
+                        && forEach((<UnionOrIntersectionType>contextualType).types, isLiteralContextualType));
             }
             return false;
         }
