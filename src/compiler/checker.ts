@@ -16630,21 +16630,9 @@ namespace ts {
          * but is a subtype of the Function interface, the call is an untyped function call.
          */
         function isUntypedFunctionCall(funcType: Type, apparentFuncType: Type, numCallSignatures: number, numConstructSignatures: number) {
-            if (isTypeAny(funcType)) {
-                return true;
-            }
-            if (isTypeAny(apparentFuncType) && funcType.flags & TypeFlags.TypeParameter) {
-                return true;
-            }
-            if (!numCallSignatures && !numConstructSignatures) {
-                // We exclude union types because we may have a union of function types that happen to have
-                // no common signatures.
-                if (funcType.flags & TypeFlags.Union) {
-                    return false;
-                }
-                return isTypeAssignableTo(funcType, globalFunctionType);
-            }
-            return false;
+            // We exclude union types because we may have a union of function types that happen to have no common signatures.
+            return isTypeAny(funcType) || isTypeAny(apparentFuncType) && funcType.flags & TypeFlags.TypeParameter ||
+                !numCallSignatures && !numConstructSignatures && !(funcType.flags & (TypeFlags.Union | TypeFlags.Never)) && isTypeAssignableTo(funcType, globalFunctionType);
         }
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
