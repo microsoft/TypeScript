@@ -7,18 +7,10 @@ namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
-        while (true) {
-            const fileName = combinePaths(searchPath, configName);
-            if (fileExists(fileName)) {
-                return fileName;
-            }
-            const parentPath = getDirectoryPath(searchPath);
-            if (parentPath === searchPath) {
-                break;
-            }
-            searchPath = parentPath;
-        }
-        return undefined;
+        return forEachAncestorDirectory(searchPath, ancestor => {
+            const fileName = combinePaths(ancestor, configName);
+            return fileExists(fileName) ? fileName : undefined;
+        });
     }
 
     export function resolveTripleslashReference(moduleName: string, containingFile: string): string {
