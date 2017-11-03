@@ -6050,6 +6050,10 @@ declare namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
         includeExternalModuleExports: boolean;
     }
     /**
