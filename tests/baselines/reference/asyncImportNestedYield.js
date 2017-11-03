@@ -43,21 +43,14 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 function foo() {
     return __asyncGenerator(this, arguments, function foo_1() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, "foo"];
-                case 1: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve().then(function () { return __importStar(require(_a.sent())); })])];
+                case 1: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve().then(function () { return require(_a.sent()); })])];
                 case 2:
-                    Promise.resolve().then(function () { return __importStar(require((_a.sent())["default"])); });
+                    Promise.resolve().then(function () { return require((_a.sent())["default"]); });
                     return [2 /*return*/];
             }
         });

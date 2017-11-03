@@ -38,43 +38,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 Object.defineProperty(exports, "__esModule", { value: true });
 function fn() {
     return __awaiter(this, void 0, void 0, function* () {
-        const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // ONE
+        const req = yield Promise.resolve().then(() => require('./test')); // ONE
     });
 }
 exports.fn = fn;
 class cl1 {
     m() {
         return __awaiter(this, void 0, void 0, function* () {
-            const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // TWO
+            const req = yield Promise.resolve().then(() => require('./test')); // TWO
         });
     }
 }
 exports.cl1 = cl1;
 exports.obj = {
     m: () => __awaiter(this, void 0, void 0, function* () {
-        const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // THREE
+        const req = yield Promise.resolve().then(() => require('./test')); // THREE
     })
 };
 class cl2 {
     constructor() {
         this.p = {
             m: () => __awaiter(this, void 0, void 0, function* () {
-                const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // FOUR
+                const req = yield Promise.resolve().then(() => require('./test')); // FOUR
             })
         };
     }
 }
 exports.cl2 = cl2;
 exports.l = () => __awaiter(this, void 0, void 0, function* () {
-    const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // FIVE
+    const req = yield Promise.resolve().then(() => require('./test')); // FIVE
 });

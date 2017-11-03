@@ -3442,6 +3442,10 @@
         "category": "Error",
         "code": 7036
     },
+    "Create namespace objects for ECMAScript imports which are neither callable nor constructable, implies `allowSyntheticDefaultImports`.": {
+        "category": "Message",
+        "code": 7037
+    },
 
     "You cannot rename this element.": {
         "category": "Error",

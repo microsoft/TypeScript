@@ -44,35 +44,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = "hello";
 //// [t3.js]
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 Object.defineProperty(exports, "__esModule", { value: true });
 const a = require("./t1");
 exports.a = a;
 a.default;
-const t1_1 = __importDefault(require("./t1"));
+const t1_1 = require("./t1");
 exports.b = t1_1.default;
 t1_1.default;
-const c = __importStar(require("./t1"));
+const c = require("./t1");
 exports.c = c;
 c.default;
 const t1_2 = require("./t1");
 exports.d = t1_2.default;
 t1_2.default;
-const t1_3 = __importStar(require("./t1")), e2 = t1_3;
+const t1_3 = require("./t1"), e2 = t1_3;
 exports.e1 = t1_3.default;
 exports.e2 = e2;
 t1_3.default;
 e2.default;
-const t1_4 = __importDefault(require("./t1"));
+const t1_4 = require("./t1");
 exports.f1 = t1_4.default;
 exports.f2 = t1_4.default;
 t1_4.default;

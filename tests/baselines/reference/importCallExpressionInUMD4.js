@@ -75,13 +75,6 @@ export class D {
     exports.backup = backup;
 });
 //// [2.js]
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 (function (factory) {
     if (typeof module === "object" && typeof module.exports === "object") {
         var v = factory(require, exports);
@@ -96,30 +89,30 @@ var __importStar = (this && this.__importStar) || function (mod) {
     Object.defineProperty(exports, "__esModule", { value: true });
     class C {
         constructor() {
-            this.myModule = __syncRequire ? Promise.resolve().then(() => __importStar(require("./0"))) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }).then(__importStar);
+            this.myModule = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); });
         }
         method() {
-            const loadAsync = __syncRequire ? Promise.resolve().then(() => __importStar(require("./0"))) : new Promise((resolve_2, reject_2) => { require(["./0"], resolve_2, reject_2); }).then(__importStar);
+            const loadAsync = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_2, reject_2) => { require(["./0"], resolve_2, reject_2); });
             this.myModule.then(Zero => {
                 console.log(Zero.foo());
             }, async (err) => {
                 console.log(err);
-                let one = await (__syncRequire ? Promise.resolve().then(() => __importStar(require("./1"))) : new Promise((resolve_3, reject_3) => { require(["./1"], resolve_3, reject_3); }).then(__importStar));
+                let one = await (__syncRequire ? Promise.resolve().then(() => require("./1")) : new Promise((resolve_3, reject_3) => { require(["./1"], resolve_3, reject_3); }));
                 console.log(one.backup());
             });
         }
     }
     class D {
         constructor() {
-            this.myModule = __syncRequire ? Promise.resolve().then(() => __importStar(require("./0"))) : new Promise((resolve_4, reject_4) => { require(["./0"], resolve_4, reject_4); }).then(__importStar);
+            this.myModule = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_4, reject_4) => { require(["./0"], resolve_4, reject_4); });
         }
         method() {
-            const loadAsync = __syncRequire ? Promise.resolve().then(() => __importStar(require("./0"))) : new Promise((resolve_5, reject_5) => { require(["./0"], resolve_5, reject_5); }).then(__importStar);
+            const loadAsync = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_5, reject_5) => { require(["./0"], resolve_5, reject_5); });
             this.myModule.then(Zero => {
                 console.log(Zero.foo());
             }, async (err) => {
                 console.log(err);
-                let one = await (__syncRequire ? Promise.resolve().then(() => __importStar(require("./1"))) : new Promise((resolve_6, reject_6) => { require(["./1"], resolve_6, reject_6); }).then(__importStar));
+                let one = await (__syncRequire ? Promise.resolve().then(() => require("./1")) : new Promise((resolve_6, reject_6) => { require(["./1"], resolve_6, reject_6); }));
                 console.log(one.backup());
             });
         }

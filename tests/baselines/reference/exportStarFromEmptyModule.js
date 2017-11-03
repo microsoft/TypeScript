@@ -49,15 +49,8 @@ var A = /** @class */ (function () {
 exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]
 "use strict";
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 Object.defineProperty(exports, "__esModule", { value: true });
-var X = __importStar(require("./exportStarFromEmptyModule_module3"));
+var X = require("./exportStarFromEmptyModule_module3");
 var s;
 X.A.q;
 X.A.r; // Error

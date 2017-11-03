@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-
+// @strictESM: true
 // @Filename: foo.d.ts
 ////declare class foo(): void;
 ////declare namespace foo {}

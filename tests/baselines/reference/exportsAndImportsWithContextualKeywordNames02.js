@@ -24,15 +24,8 @@ exports.return = as;
 exports.as = as;
 //// [t2.js]
 "use strict";
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 Object.defineProperty(exports, "__esModule", { value: true });
-var as = __importStar(require("./t1"));
+var as = require("./t1");
 var x = as.as;
 var y = as.return;
 //// [t3.js]

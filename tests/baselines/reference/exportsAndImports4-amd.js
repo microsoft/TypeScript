@@ -45,23 +45,9 @@ define(["require", "exports"], function (require, exports) {
     exports.default = "hello";
 });
 //// [t3.js]
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], function (require, exports, a, t1_1, c, t1_2, t1_3, t1_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    t1_1 = __importDefault(t1_1);
-    c = __importStar(c);
-    t1_3 = __importStar(t1_3);
-    t1_4 = __importDefault(t1_4);
     exports.a = a;
     a.default;
     exports.b = t1_1.default;

@@ -3800,6 +3800,7 @@ namespace ts {
         typeRoots?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
+        strictESM?: boolean;
 
         [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
     }

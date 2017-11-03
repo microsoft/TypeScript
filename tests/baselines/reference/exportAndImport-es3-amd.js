@@ -20,13 +20,9 @@ define(["require", "exports"], function (require, exports) {
     exports["default"] = f1;
 });
 //// [m2.js]
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
 define(["require", "exports", "./m1"], function (require, exports, m1_1) {
     "use strict";
     exports.__esModule = true;
-    m1_1 = __importDefault(m1_1);
     function f2() {
         m1_1["default"]();
     }

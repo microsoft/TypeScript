@@ -64,7 +64,7 @@ namespace ts {
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const modulekind = getEmitModuleKind(compilerOptions);
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
-        const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : (modulekind && modulekind < ModuleKind.ES2015);
+        const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : compilerOptions.strictESM ? (modulekind && modulekind < ModuleKind.ES2015) : modulekind === ModuleKind.System;
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
@@ -1892,30 +1892,32 @@ namespace ts {
                     error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
                     return symbol;
                 }
-                const referenceParent = moduleReferenceExpression.parent;
-                if (
-                    (referenceParent.kind === SyntaxKind.ImportDeclaration && getNamespaceDeclarationNode(referenceParent as ImportDeclaration)) ||
-                    isImportCall(referenceParent)
-                ) {
-                    const type = getTypeOfSymbol(symbol);
-                    let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
-                    if (!sigs || !sigs.length) {
-                        sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
-                    }
-                    if (sigs && sigs.length) {
-                        // Create a new symbol which has the module's type less the call and construct signatures
-                        const result = createSymbol(symbol.flags, symbol.escapedName);
-                        result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
-                        result.parent = symbol.parent;
-                        result.target = symbol;
-                        result.originatingImport = referenceParent as ImportDeclaration | ImportCall;
-                        if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
-                        if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
-                        if (symbol.members) result.members = cloneMap(symbol.members);
-                        if (symbol.exports) result.exports = cloneMap(symbol.exports);
-                        const moduleType = resolveStructuredTypeMembers(type as StructuredType); // Should already be resolved from the signature checks above
-                        result.type = createAnonymousType(result, moduleType.members, emptyArray, emptyArray, moduleType.stringIndexInfo, moduleType.numberIndexInfo);
-                        return result;
+                if (compilerOptions.strictESM) {
+                    const referenceParent = moduleReferenceExpression.parent;
+                    if (
+                        (referenceParent.kind === SyntaxKind.ImportDeclaration && getNamespaceDeclarationNode(referenceParent as ImportDeclaration)) ||
+                        isImportCall(referenceParent)
+                    ) {
+                        const type = getTypeOfSymbol(symbol);
+                        let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
+                        if (!sigs || !sigs.length) {
+                            sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
+                        }
+                        if (sigs && sigs.length) {
+                            // Create a new symbol which has the module's type less the call and construct signatures
+                            const result = createSymbol(symbol.flags, symbol.escapedName);
+                            result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
+                            result.parent = symbol.parent;
+                            result.target = symbol;
+                            result.originatingImport = referenceParent as ImportDeclaration | ImportCall;
+                            if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
+                            if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
+                            if (symbol.members) result.members = cloneMap(symbol.members);
+                            if (symbol.exports) result.exports = cloneMap(symbol.exports);
+                            const moduleType = resolveStructuredTypeMembers(type as StructuredType); // Should already be resolved from the signature checks above
+                            result.type = createAnonymousType(result, moduleType.members, emptyArray, emptyArray, moduleType.stringIndexInfo, moduleType.numberIndexInfo);
+                            return result;
+                        }
                     }
                 }
             }

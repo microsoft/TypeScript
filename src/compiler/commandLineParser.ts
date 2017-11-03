@@ -391,6 +391,12 @@ namespace ts {
             description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
         },
         {
+            name: "strictESM",
+            type: "boolean",
+            category: Diagnostics.Module_Resolution_Options,
+            description: Diagnostics.Create_namespace_objects_for_ECMAScript_imports_which_are_neither_callable_nor_constructable_implies_allowSyntheticDefaultImports
+        },
+        {
             name: "preserveSymlinks",
             type: "boolean",
             category: Diagnostics.Module_Resolution_Options,

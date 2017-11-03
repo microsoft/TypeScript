@@ -16,13 +16,9 @@ define(["require", "exports"], function (require, exports) {
     exports.default = a;
 });
 //// [client.js]
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
 define(["require", "exports", "server"], function (require, exports, server_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    server_1 = __importDefault(server_1);
     exports.x = server_1.default;
 });
 

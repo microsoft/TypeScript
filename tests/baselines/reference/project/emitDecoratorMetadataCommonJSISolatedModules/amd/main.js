@@ -7,17 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 define(["require", "exports", "angular2/core"], function (require, exports, ng) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    ng = __importStar(ng);
     var MyClass1 = /** @class */ (function () {
         function MyClass1(_elementRef) {
             this._elementRef = _elementRef;

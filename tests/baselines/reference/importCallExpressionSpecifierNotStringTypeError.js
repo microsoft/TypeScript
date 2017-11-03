@@ -14,19 +14,12 @@ var p3 = import(["path1", "path2"]);
 var p4 = import(()=>"PathToModule");
 
 //// [importCallExpressionSpecifierNotStringTypeError.js]
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 // Error specifier is not assignable to string
-Promise.resolve().then(() => __importStar(require(getSpecifier())));
-var p1 = Promise.resolve().then(() => __importStar(require(getSpecifier())));
-const p2 = Promise.resolve().then(() => __importStar(require(whatToLoad ? getSpecifier() : "defaulPath")));
+Promise.resolve().then(() => require(getSpecifier()));
+var p1 = Promise.resolve().then(() => require(getSpecifier()));
+const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "defaulPath"));
 p1.then(zero => {
     return zero.foo(); // ok, zero is any
 });
-var p3 = Promise.resolve().then(() => __importStar(require(["path1", "path2"])));
-var p4 = Promise.resolve().then(() => __importStar(require(() => "PathToModule")));
+var p3 = Promise.resolve().then(() => require(["path1", "path2"]));
+var p4 = Promise.resolve().then(() => require(() => "PathToModule"));

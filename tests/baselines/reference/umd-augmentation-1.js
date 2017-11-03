@@ -40,16 +40,9 @@ var t = p.x;
 
 //// [b.js]
 "use strict";
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 exports.__esModule = true;
 /// <reference path="math2d-augment.d.ts" />
-var m = __importStar(require("math2d"));
+var m = require("math2d");
 var v = new m.Vector(3, 2);
 var magnitude = m.getLength(v);
 var p = v.translate(5, 5);

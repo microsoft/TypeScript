@@ -22,9 +22,6 @@ var x = {
 module.exports = x;
 //// [imp.js]
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
 exports.__esModule = true;
-var exp_1 = __importDefault(require("./exp"));
+var exp_1 = require("./exp");
 exp_1["default"].toExponential(2);

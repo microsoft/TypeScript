@@ -16,6 +16,6 @@ goTo.marker('1');
 
 /**** BUG: Should be an error to invoke a call signature on a namespace import ****/
 //verify.errorExistsBeforeMarker('1');
-verify.quickInfoIs("import foo");
+verify.quickInfoIs("(alias) foo(): number\nimport foo");
 goTo.marker('2');
 verify.signatureHelpArgumentCountIs(1);

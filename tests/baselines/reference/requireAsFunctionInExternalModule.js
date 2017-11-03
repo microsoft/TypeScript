@@ -25,11 +25,8 @@ function has(a) { return true; }
 exports.has = has;
 //// [m.js]
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
 exports.__esModule = true;
-var c_1 = __importDefault(require("./c"));
+var c_1 = require("./c");
 function hello() { }
 exports.hello = hello;
 if (c_1.has('ember-debug')) {

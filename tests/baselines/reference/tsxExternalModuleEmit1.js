@@ -42,15 +42,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 exports.__esModule = true;
-var React = __importStar(require("react"));
+var React = require("react");
 var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
     function Button() {
@@ -74,15 +67,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 exports.__esModule = true;
-var React = __importStar(require("react"));
+var React = require("react");
 // Should see var button_1 = require('./button') here
 var button_1 = require("./button");
 var App = /** @class */ (function (_super) {

@@ -34,22 +34,16 @@ exports.zzz = 123;
 exports["default"] = exports.zzz;
 //// [a.js]
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
 exports.__esModule = true;
-var b_1 = __importDefault(require("./b"));
+var b_1 = require("./b");
 exports["default"] = b_1["default"];
 var x = { x: "" };
 b_1["default"];
 //// [index.js]
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
 exports.__esModule = true;
 var x = { x: "" };
 zzz;
-var b_1 = __importDefault(require("./b"));
+var b_1 = require("./b");
 b_1["default"];
 var y = x;

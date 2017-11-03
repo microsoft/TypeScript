@@ -37,7 +37,7 @@ exports.db = db;
 //// [service.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var db_1 = __importDefault(require("./db")); // error no default export
+var db_1 = require("./db"); // error no default export
 function someDecorator(target) {
     return target;
 }

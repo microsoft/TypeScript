@@ -13,9 +13,6 @@ export var x = new Foo();
 
 //// [a.js]
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
 exports.__esModule = true;
-var b_1 = __importDefault(require("./b"));
+var b_1 = require("./b");
 exports.x = new b_1["default"]();

@@ -212,13 +212,6 @@ export * from "class-module";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 exports.__esModule = true;
 var z2 = require("variable");
 var z3 = require("interface-variable");
@@ -239,15 +232,15 @@ z7.a;
 z8.a;
 z9.a;
 z0.a;
-var y2 = __importStar(require("variable"));
-var y3 = __importStar(require("interface-variable"));
-var y4 = __importStar(require("module"));
-var y5 = __importStar(require("interface-module"));
-var y6 = __importStar(require("variable-module"));
-var y7 = __importStar(require("function"));
-var y8 = __importStar(require("function-module"));
-var y9 = __importStar(require("class"));
-var y0 = __importStar(require("class-module"));
+var y2 = require("variable");
+var y3 = require("interface-variable");
+var y4 = require("module");
+var y5 = require("interface-module");
+var y6 = require("variable-module");
+var y7 = require("function");
+var y8 = require("function-module");
+var y9 = require("class");
+var y0 = require("class-module");
 y1.a;
 y2.a;
 y3.a;

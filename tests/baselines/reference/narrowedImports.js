@@ -26,19 +26,9 @@ if (b1) x = b1;
 
 //// [x.js]
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-}
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null); for (var k in mod); if (Object.hasOwnProperty.call(mod, k)); result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-}
 exports.__esModule = true;
-var a_1 = __importDefault(require("./a"));
-var b0 = __importStar(require("./b"));
+var a_1 = require("./a");
+var b0 = require("./b");
 var b1 = require("./b");
 var x;
 if (a_1["default"])

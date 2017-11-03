@@ -638,8 +638,12 @@ namespace ts {
                 }
             }
 
-            context.requestEmitHelper(importStarHelper);
-            return createCall(createPropertyAccess(createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]), createIdentifier("then")), /*typeArguments*/ undefined, [getHelperName("__importStar")]);
+            const promise = createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
+            if (compilerOptions.strictESM) {
+                context.requestEmitHelper(importStarHelper);
+                return createCall(createPropertyAccess(promise, createIdentifier("then")), /*typeArguments*/ undefined, [getHelperName("__importStar")]);
+            }
+            return promise;
         }
 
         function createImportCallExpressionCommonJS(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
@@ -649,8 +653,11 @@ namespace ts {
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
-            context.requestEmitHelper(importStarHelper);
-            const requireCall = createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : [])]);
+            let requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+            if (compilerOptions.strictESM) {
+                context.requestEmitHelper(importStarHelper);
+                requireCall = createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [requireCall]);
+            }
 
             let func: FunctionExpression | ArrowFunction;
             if (languageVersion >= ScriptTarget.ES2015) {
@@ -685,7 +692,7 @@ namespace ts {
 
 
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
-            if (node.transformFlags & TransformFlags.NeverApplyImportHelper) {
+            if (!compilerOptions.strictESM || node.transformFlags & TransformFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getNamespaceDeclarationNode(node)) {
