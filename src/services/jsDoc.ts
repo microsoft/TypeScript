@@ -1,5 +1,6 @@
 /* @internal */
 namespace ts.JsDoc {
+    const singleLineTemplate = { newText: "/** */", caretOffset: 3 };
     const jsDocTagNames = [
         "augments",
         "author",
@@ -170,15 +171,9 @@ namespace ts.JsDoc {
     /**
      * Checks if position points to a valid position to add JSDoc comments, and if so,
      * returns the appropriate template. Otherwise returns an empty string.
-     * Valid positions are
-     *      - outside of comments, statements, and expressions, and
-     *      - preceding a:
-     *          - function/constructor/method declaration
-     *          - class declarations
-     *          - variable statements
-     *          - namespace declarations
-     *          - interface declarations
-     *          - method signatures
+     * Invalid positions are
+     *      - within comments, strings (including template literals and regex), and JSXText
+     *      - within a token
      *
      * Hosts should ideally check that:
      * - The line is all whitespace up to 'position' before performing the insertion.
@@ -204,17 +199,23 @@ namespace ts.JsDoc {
 
         const commentOwnerInfo = getCommentOwnerInfo(tokenAtPos);
         if (!commentOwnerInfo) {
-            return undefined;
+            // if climbing the tree did not find a declaration with parameters, complete to a single line comment
+            return singleLineTemplate;
         }
         const { commentOwner, parameters } = commentOwnerInfo;
-        if (commentOwner.getStart() < position) {
+
+        if (commentOwner.kind === SyntaxKind.JsxText) {
             return undefined;
         }
 
-        if (!parameters || parameters.length === 0) {
-            // if there are no parameters, just complete to a single line JSDoc comment
-            const singleLineResult = "/** */";
-            return { newText: singleLineResult, caretOffset: 3 };
+        if (commentOwner.getStart() < position) {
+            // if climbing the tree found a declaration with parameters but the request was made inside it, complete to a single line comment
+            return singleLineTemplate;
+        }
+
+        if (parameters.length === 0) {
+            // if there are no parameters, complete to a single line comment
+            return singleLineTemplate;
         }
 
         const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
@@ -258,7 +259,7 @@ namespace ts.JsDoc {
 
     interface CommentOwnerInfo {
         readonly commentOwner: Node;
-        readonly parameters?: ReadonlyArray<ParameterDeclaration>;
+        readonly parameters: ReadonlyArray<ParameterDeclaration>;
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
         for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
@@ -270,31 +271,17 @@ namespace ts.JsDoc {
                     const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
                     return { commentOwner, parameters };
 
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.TypeAliasDeclaration:
-                    return { commentOwner };
-
                 case SyntaxKind.VariableStatement: {
                     const varStatement = <VariableStatement>commentOwner;
                     const varDeclarations = varStatement.declarationList.declarations;
                     const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
                         ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer)
                         : undefined;
-                    return { commentOwner, parameters };
+                    return parameters ? { commentOwner, parameters } : undefined;
                 }
 
                 case SyntaxKind.SourceFile:
                     return undefined;
-
-                case SyntaxKind.ModuleDeclaration:
-                    // If in walking up the tree, we hit a a nested namespace declaration,
-                    // then we must be somewhere within a dotted namespace name; however we don't
-                    // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
-                    return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
 
                 case SyntaxKind.BinaryExpression: {
                     const be = commentOwner as BinaryExpression;
@@ -302,6 +289,11 @@ namespace ts.JsDoc {
                         return undefined;
                     }
                     const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
+                    return { commentOwner, parameters };
+                }
+
+                case SyntaxKind.JsxText: {
+                    const parameters: ReadonlyArray<ParameterDeclaration> = emptyArray;
                     return { commentOwner, parameters };
                 }
             }
