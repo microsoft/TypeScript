@@ -97,7 +97,6 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterTypeAssertion: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string | undefined;
     }
     interface Range {
         fileName: string;
@@ -375,7 +374,7 @@ declare namespace FourSlashInterface {
         setFormatOptions(options: FormatCodeOptions): any;
         selection(startMarker: string, endMarker: string): void;
         onType(posMarker: string, key: string): void;
-        setOption(name: keyof FormatCodeOptions, value: number | string | boolean): void;
+        setOption<K extends keyof FormatCodeOptions>(name: K, value: FormatCodeOptions[K]): void;
     }
     class cancellation {
         resetCancelled(): void;
