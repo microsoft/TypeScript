@@ -74,10 +74,12 @@
         "q": "latest",
         "run-sequence": "latest",
         "sorcery": "latest",
+        "source-map-support": "latest",
         "through2": "latest",
         "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "latest",
+        "vinyl": "latest",
         "colors": "latest",
         "typescript": "next"
     },
