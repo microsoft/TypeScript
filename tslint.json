@@ -98,7 +98,6 @@
         "object-literal-key-quotes": false,
         "ordered-imports": false,
         "prefer-conditional-expression": false,
-        "prefer-for-of": false,
         "radix": false,
         "space-before-function-paren": false,
         "trailing-comma": false,

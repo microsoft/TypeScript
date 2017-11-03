@@ -575,14 +575,13 @@ namespace Harness {
                 function filesInFolder(folder: string): string[] {
                     let paths: string[] = [];
 
-                    const files = fs.readdirSync(folder);
-                    for (let i = 0; i < files.length; i++) {
-                        const pathToFile = pathModule.join(folder, files[i]);
+                    for (const file of fs.readdirSync(folder)) {
+                        const pathToFile = pathModule.join(folder, file);
                         const stat = fs.statSync(pathToFile);
                         if (options.recursive && stat.isDirectory()) {
                             paths = paths.concat(filesInFolder(pathToFile));
                         }
-                        else if (stat.isFile() && (!spec || files[i].match(spec))) {
+                        else if (stat.isFile() && (!spec || file.match(spec))) {
                             paths.push(pathToFile);
                         }
                     }
@@ -1581,10 +1580,8 @@ namespace Harness {
 
                     // Preserve legacy behavior
                     if (lastIndexWritten === undefined) {
-                        for (let i = 0; i < codeLines.length; i++) {
-                            const currentCodeLine = codeLines[i];
-                            typeLines += currentCodeLine + "\r\n";
-                            typeLines += "No type information for this code.";
+                        for (const codeLine of codeLines) {
+                            typeLines += codeLine + "\r\nNo type information for this code.";
                         }
                     }
                     else {
@@ -1870,8 +1867,7 @@ namespace Harness {
             let currentFileName: any = undefined;
             let refs: string[] = [];
 
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
+            for (const line of lines) {
                 const testMetaData = optionRegex.exec(line);
                 if (testMetaData) {
                     // Comment line, check for global/file @options and record them

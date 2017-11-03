@@ -2854,8 +2854,7 @@ namespace ts {
             function mapToTypeNodes(types: Type[], context: NodeBuilderContext): TypeNode[] {
                 if (some(types)) {
                     const result = [];
-                    for (let i = 0; i < types.length; ++i) {
-                        const type = types[i];
+                    for (const type of types) {
                         const typeNode = typeToTypeNodeHelper(type, context);
                         if (typeNode) {
                             result.push(typeNode);
