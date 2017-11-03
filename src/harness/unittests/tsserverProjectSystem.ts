@@ -2837,8 +2837,9 @@ namespace ts.projectSystem {
 
             // Run the last one = get error request
             host.runQueuedTimeoutCallbacks(newTimeoutId);
-            host.checkTimeoutQueueLength(2);
 
+            assert.isFalse(hasError);
+            host.checkTimeoutQueueLength(2);
             checkErrorMessage(host, "syntaxDiag", { file: untitledFile, diagnostics: [] });
             host.clearOutput();
 
