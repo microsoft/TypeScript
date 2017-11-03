@@ -13,6 +13,8 @@
 
 // @Filename: /src/a.ts
 ////import {} from "/*1*/";
+
+// @Filename: /src/folder/b.ts
 ////import {} from "x//*2*/";
 
 verify.completionsAt("1", ["y", "x"]);
