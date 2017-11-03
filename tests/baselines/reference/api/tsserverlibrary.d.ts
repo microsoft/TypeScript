@@ -7000,7 +7000,7 @@ declare namespace ts.server {
         private setCurrentRequest(requestId);
         private resetCurrentRequest(requestId);
         executeWithRequestId<T>(requestId: number, f: () => T): T;
-        executeCommand(request: protocol.Request): HandlerResponse;
+        executeCommand<T extends protocol.Request>(request: T): HandlerResponse;
         onMessage(message: string): void;
     }
     interface HandlerResponse {
