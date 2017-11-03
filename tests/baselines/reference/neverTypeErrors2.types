@@ -34,6 +34,10 @@ function f1() {
 >x = {} : {}
 >x : never
 >{} : {}
+
+    x();
+>x() : any
+>x : never
 }
 
 function f2(): never {

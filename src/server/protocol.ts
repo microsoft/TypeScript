@@ -15,12 +15,17 @@ namespace ts.server.protocol {
         /* @internal */
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
+        /* @internal */
+        CompletionDetailsFull = "completionEntryDetailsFull",
         CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
         Definition = "definition",
         /* @internal */
         DefinitionFull = "definition-full",
+        DefinitionAndBoundSpan = "definitionAndBoundSpan",
+        /* @internal */
+        DefinitionAndBoundSpanFull = "definitionAndBoundSpan-full",
         Implementation = "implementation",
         /* @internal */
         ImplementationFull = "implementation-full",
@@ -708,11 +713,20 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    export interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<FileSpan>;
+        textSpan: TextSpan;
+    }
+
     /**
      * Definition response message.  Gives text range for definition.
      */
     export interface DefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+
+    export interface DefinitionInfoAndBoundSpanReponse extends Response {
+        body?: DefinitionInfoAndBoundSpan;
     }
 
     /**

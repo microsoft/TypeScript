@@ -106,7 +106,7 @@ namespace ts {
     ///
     // Note: This is being using by the host (VS) and is marshaled back and forth.
     // When changing this make sure the changes are reflected in the managed side as well
-    export interface IFileReference {
+    export interface ShimsFileReference {
         path: string;
         position: number;
         length: number;
@@ -169,6 +169,8 @@ namespace ts {
          * Or undefined value if no definition can be found.
          */
         getDefinitionAtPosition(fileName: string, position: number): string;
+
+        getDefinitionAndBoundSpan(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -772,6 +774,17 @@ namespace ts {
             );
         }
 
+        /**
+         * Computes the definition location and file for the symbol
+         * at the requested position.
+         */
+        public getDefinitionAndBoundSpan(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getDefinitionAndBoundSpan('${fileName}', ${position})`,
+                () => this.languageService.getDefinitionAndBoundSpan(fileName, position)
+            );
+        }
+
         /// GOTO Type
 
         /**
@@ -1091,11 +1104,11 @@ namespace ts {
             );
         }
 
-        private convertFileReferences(refs: FileReference[]): IFileReference[] {
+        private convertFileReferences(refs: FileReference[]): ShimsFileReference[] {
             if (!refs) {
                 return undefined;
             }
-            const result: IFileReference[] = [];
+            const result: ShimsFileReference[] = [];
             for (const ref of refs) {
                 result.push({
                     path: normalizeSlashes(ref.fileName),

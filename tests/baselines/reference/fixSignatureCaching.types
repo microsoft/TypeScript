@@ -866,9 +866,9 @@ define(function () {
 >'UnknownMobile' : "UnknownMobile"
 
     isArray = ('isArray' in Array) ?
->isArray = ('isArray' in Array) ?        Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; } : (value: any) => boolean
+>isArray = ('isArray' in Array) ?        Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; } : (arg: any) => arg is any[]
 >isArray : any
->('isArray' in Array) ?        Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; } : (value: any) => boolean
+>('isArray' in Array) ?        Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; } : (arg: any) => arg is any[]
 >('isArray' in Array) : boolean
 >'isArray' in Array : boolean
 >'isArray' : "isArray"

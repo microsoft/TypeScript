@@ -5,6 +5,7 @@ namespace ts.server {
         projectRootPath: Path;
     }
 
+    // tslint:disable-next-line interface-name (for backwards-compatibility)
     export interface ITypingsInstaller {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult>;

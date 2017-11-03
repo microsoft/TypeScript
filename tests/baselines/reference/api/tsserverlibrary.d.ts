@@ -411,7 +411,7 @@ declare namespace ts {
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
         ReachabilityAndEmitFlags = 1408,
-        ContextFlags = 2193408,
+        ContextFlags = 6387712,
         TypeExcludesFlags = 20480,
     }
     enum ModifierFlags {
@@ -1623,9 +1623,7 @@ declare namespace ts {
         fileExists(path: string): boolean;
         readFile(path: string): string | undefined;
     }
-    interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles: ReadonlyArray<SourceFile>): void;
-    }
+    type WriteFileCallback = (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles: ReadonlyArray<SourceFile>) => void;
     class OperationCanceledException {
     }
     interface CancellationToken {
@@ -3095,9 +3093,7 @@ declare namespace ts {
     function isGetAccessor(node: Node): node is GetAccessorDeclaration;
 }
 declare namespace ts {
-    interface ErrorCallback {
-        (message: DiagnosticMessage, length: number): void;
-    }
+    type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
     interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
@@ -3947,6 +3943,7 @@ declare namespace ts {
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan;
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -4209,6 +4206,10 @@ declare namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+    }
+    interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<DefinitionInfo>;
+        textSpan: TextSpan;
     }
     interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
         displayParts: SymbolDisplayPart[];
@@ -4845,6 +4846,7 @@ declare namespace ts.server.protocol {
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
         Definition = "definition",
+        DefinitionAndBoundSpan = "definitionAndBoundSpan",
         Implementation = "implementation",
         Exit = "exit",
         Format = "format",
@@ -5364,11 +5366,18 @@ declare namespace ts.server.protocol {
          */
         file: string;
     }
+    interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<FileSpan>;
+        textSpan: TextSpan;
+    }
     /**
      * Definition response message.  Gives text range for definition.
      */
     interface DefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+    interface DefinitionInfoAndBoundSpanReponse extends Response {
+        body?: DefinitionInfoAndBoundSpan;
     }
     /**
      * Definition response message.  Gives text range for definition.
@@ -6945,6 +6954,9 @@ declare namespace ts.server {
         private convertToDiagnosticsWithLinePosition(diagnostics, scriptInfo);
         private getDiagnosticsWorker(args, isSemantic, selector, includeLinePosition);
         private getDefinition(args, simplifiedResult);
+        private getDefinitionAndBoundSpan(args, simplifiedResult);
+        private mapDefinitionInfo(definitions, project);
+        private toFileSpan(fileName, textSpan, project);
         private getTypeDefinition(args);
         private getImplementation(args, simplifiedResult);
         private getOccurrences(args);
@@ -6984,7 +6996,7 @@ declare namespace ts.server {
         private getFormattingEditsAfterKeystrokeFull(args);
         private getFormattingEditsAfterKeystroke(args);
         private getCompletions(args, simplifiedResult);
-        private getCompletionEntryDetails(args);
+        private getCompletionEntryDetails(args, simplifiedResult);
         private getCompileOnSaveAffectedFileList(args);
         private emitFile(args);
         private getSignatureHelpItems(args, simplifiedResult);
@@ -6994,10 +7006,10 @@ declare namespace ts.server {
         private reload(args, reqSeq);
         private saveToTmp(fileName, tempFileName);
         private closeClientFile(fileName);
-        private decorateNavigationBarItems(items, scriptInfo);
+        private mapLocationNavigationBarItems(items, scriptInfo);
         private getNavigationBarItems(args, simplifiedResult);
-        private decorateNavigationTree(tree, scriptInfo);
-        private decorateSpan(span, scriptInfo);
+        private toLocationNavigationTree(tree, scriptInfo);
+        private toLocationTextSpan(span, scriptInfo);
         private getNavigationTree(args, simplifiedResult);
         private getNavigateToItems(args, simplifiedResult);
         private getSupportedCodeFixes();
@@ -7128,11 +7140,9 @@ declare namespace ts.server {
         create(createInfo: PluginCreateInfo): LanguageService;
         getExternalFiles?(proj: Project): string[];
     }
-    interface PluginModuleFactory {
-        (mod: {
-            typescript: typeof ts;
-        }): PluginModule;
-    }
+    type PluginModuleFactory = (mod: {
+        typescript: typeof ts;
+    }) => PluginModule;
     /**
      * The project root can be script info - if root is present,
      * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
@@ -7402,9 +7412,7 @@ declare namespace ts.server {
         readonly dts: number;
     }
     type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
-    interface ProjectServiceEventHandler {
-        (event: ProjectServiceEvent): void;
-    }
+    type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {
             match: RegExp;

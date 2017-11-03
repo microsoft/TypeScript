@@ -192,8 +192,8 @@ namespace ts.server {
             };
         }
 
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
-            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [entryName] };
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, _options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails {
+            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [{ name: entryName, source }] };
 
             const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
@@ -270,6 +270,25 @@ namespace ts.server {
             }));
         }
 
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+            const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+
+            const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
+            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
+
+            return {
+                definitions: response.body.definitions.map(entry => ({
+                    containerKind: ScriptElementKind.unknown,
+                    containerName: "",
+                    fileName: entry.file,
+                    textSpan: this.decodeSpan(entry),
+                    kind: ScriptElementKind.unknown,
+                    name: ""
+                })),
+                textSpan: this.decodeSpan(response.body.textSpan, request.arguments.file)
+            };
+        }
+
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
@@ -324,7 +343,7 @@ namespace ts.server {
         }
 
         getSyntacticDiagnostics(file: string): Diagnostic[] {
-            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file,  includeLinePosition: true };
+            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file, includeLinePosition: true };
 
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest>(CommandNames.SyntacticDiagnosticsSync, args);
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse>(request);
