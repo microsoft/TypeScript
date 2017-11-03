@@ -335,7 +335,7 @@ namespace ts.refactor.extractSymbol {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
 
-            if (isInAmbientContext(nodeToCheck)) {
+            if (nodeToCheck.flags & NodeFlags.Ambient) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.CannotExtractAmbientBlock)];
             }
 
