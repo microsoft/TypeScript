@@ -1,9 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-const enum Indentation {
-    Standard = 3,
-    Indented = 12,
-}
+const singleLineOffset = 3;
+const multiLineOffset = 12;
 
 
 ////class C {
@@ -16,22 +14,22 @@ const enum Indentation {
 ////    }
 ////}
 
-verify.docCommentTemplateAt("0", Indentation.Standard,
+verify.docCommentTemplateAt("0", singleLineOffset,
 "/** */");
 
 
-verify.docCommentTemplateAt("1", Indentation.Standard,
+verify.docCommentTemplateAt("1", singleLineOffset,
 "/** */");
 
 
-verify.docCommentTemplateAt("2", Indentation.Indented,
+verify.docCommentTemplateAt("2", multiLineOffset,
    `/**
      * 
      * @param a
      */
     `);
 
-verify.docCommentTemplateAt("3", Indentation.Indented,
+verify.docCommentTemplateAt("3", multiLineOffset,
    `/**
      * 
      * @param a
@@ -39,7 +37,7 @@ verify.docCommentTemplateAt("3", Indentation.Indented,
      */
     `);
 
-verify.docCommentTemplateAt("4", Indentation.Indented,
+verify.docCommentTemplateAt("4", multiLineOffset,
    `/**
      * 
      * @param a
@@ -47,7 +45,7 @@ verify.docCommentTemplateAt("4", Indentation.Indented,
      * @param param2
      */`);
 
-verify.docCommentTemplateAt("5", Indentation.Indented,
+verify.docCommentTemplateAt("5", multiLineOffset,
     `/**
      * 
      * @param a
