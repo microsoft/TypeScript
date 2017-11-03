@@ -4846,7 +4846,6 @@ declare namespace ts.server.protocol {
         Close = "close",
         Completions = "completions",
         CompletionDetails = "completionEntryDetails",
-        CompletionDetailsFull = "completionEntryDetailsFull",
         CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
