@@ -101,7 +101,7 @@ namespace ts {
         return node;
     }
 
-    function createLiteralFromNode(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral {
+    function createLiteralFromNode(sourceNode: StringLiteralLike | NumericLiteral | Identifier): StringLiteral {
         const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
         node.textSourceNode = sourceNode;
         return node;
@@ -3624,7 +3624,7 @@ namespace ts {
         return qualifiedName;
     }
 
-    export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean) {
+    export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean): Block {
         return isBlock(node) ? node : setTextRange(createBlock([setTextRange(createReturn(node), node)], multiLine), node);
     }
 

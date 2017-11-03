@@ -3809,5 +3809,9 @@
     "Import * as '{0}' from \"{1}\".": {
         "category": "Message",
         "code": 95016
+    },
+    "Convert to ES6 module": {
+        "category": "Message",
+        "code": 95017
     }
 }

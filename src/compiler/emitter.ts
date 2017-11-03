@@ -1194,27 +1194,15 @@ namespace ts {
         //
 
         function emitObjectBindingPattern(node: ObjectBindingPattern) {
-            const elements = node.elements;
-            if (elements.length === 0) {
-                write("{}");
-            }
-            else {
-                write("{");
-                emitList(node, elements, ListFormat.ObjectBindingPatternElements);
-                write("}");
-            }
+            write("{");
+            emitList(node, node.elements, ListFormat.ObjectBindingPatternElements);
+            write("}");
         }
 
         function emitArrayBindingPattern(node: ArrayBindingPattern) {
-            const elements = node.elements;
-            if (elements.length === 0) {
-                write("[]");
-            }
-            else {
-                write("[");
-                emitList(node, node.elements, ListFormat.ArrayBindingPatternElements);
-                write("]");
-            }
+            write("[");
+            emitList(node, node.elements, ListFormat.ArrayBindingPatternElements);
+            write("]");
         }
 
         function emitBindingElement(node: BindingElement) {
@@ -3167,8 +3155,8 @@ namespace ts {
         TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
-        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
-        ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
+        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
+        ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
         ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
         ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
         CommaListElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
