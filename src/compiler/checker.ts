@@ -18450,7 +18450,7 @@ namespace ts {
         }
 
         function isLiteralContextualType(contextualType: Type, candidateLiteral: Type): boolean {
-            if (contextualType && candidateLiteral) {
+            if (contextualType) {
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
                     return isLiteralContextualType(constraint, candidateLiteral);
