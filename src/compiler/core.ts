@@ -1574,7 +1574,6 @@ namespace ts {
         }
         if (path.charCodeAt(1) === CharacterCodes.colon) {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
-            return 2;
         }
         // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
         // if <host> is omitted then it is assumed that host value is 'localhost',
