@@ -95,6 +95,7 @@ interface TestConfig {
     workerCount?: number;
     stackTraceLimit?: number | "full";
     test?: string[];
+    runners?: string[];
     runUnitTests?: boolean;
     noColors?: boolean;
 }
@@ -132,8 +133,8 @@ function handleTestConfig() {
             return true;
         }
 
-        if (testConfig.test && testConfig.test.length > 0) {
-            for (const option of testConfig.test) {
+        if (testConfig.runners && testConfig.runners.length > 0) {
+            for (const option of testConfig.runners) {
                 if (!option) {
                     continue;
                 }

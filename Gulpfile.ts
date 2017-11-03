@@ -50,6 +50,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         d: "debug", "debug-brk": "debug",
         i: "inspect", "inspect-brk": "inspect",
         t: "tests", test: "tests",
+        ru: "runners", runner: "runners",
         r: "reporter",
         c: "colors", color: "colors",
         f: "files", file: "files",
@@ -64,6 +65,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
+        runners: process.env.runners || process.env.runner || process.env.ru,
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
@@ -658,6 +660,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         const debug = cmdLineOptions.debug;
         const inspect = cmdLineOptions.inspect;
         const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const stackTraceLimit = cmdLineOptions.stackTraceLimit;
         const testConfigFile = "test.config";
@@ -678,8 +681,8 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             workerCount = cmdLineOptions.workers;
         }
 
-        if (tests || light || taskConfigsFolder) {
-            writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
+        if (tests || runners || light || taskConfigsFolder) {
+            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit);
         }
 
         if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -874,8 +877,8 @@ function cleanTestDirs(done: (e?: any) => void) {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
+function writeTestConfigFile(tests: string, runners: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
+    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, runner: runners ? runners.split(",") : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
@@ -886,13 +889,14 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
         const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
         }
-        if (tests || light) {
-            writeTestConfigFile(tests, light);
+        if (tests || runners || light) {
+            writeTestConfigFile(tests, runners, light);
         }
 
         const args = [nodeServerOutFile];
