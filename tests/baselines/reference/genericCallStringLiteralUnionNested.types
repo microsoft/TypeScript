@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericCallStringLiteralUnionNested.ts ===
-declare function nestedUnion<A extends string>(a: { fields: A | A[] }): Record<A, string>;
->nestedUnion : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
+declare function nestedUnionExtendsString<A extends string>(a: { fields: A | A[] }): Record<A, string>;
+>nestedUnionExtendsString : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
 >A : A
 >a : { fields: A | A[]; }
 >fields : A | A[]
@@ -9,12 +9,198 @@ declare function nestedUnion<A extends string>(a: { fields: A | A[] }): Record<A
 >Record : Record<K, T>
 >A : A
 
-const result: {z: string} = nestedUnion({ fields: "z" });
->result : { z: string; }
+const t1: {z: string} = nestedUnionExtendsString({ fields: "z" });
+>t1 : { z: string; }
 >z : string
->nestedUnion({ fields: "z" }) : Record<"z", string>
->nestedUnion : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
+>nestedUnionExtendsString({ fields: "z" }) : Record<"z", string>
+>nestedUnionExtendsString : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
 >{ fields: "z" } : { fields: "z"; }
 >fields : string
 >"z" : "z"
+
+declare function nestedUnionExtendsLiterals<A extends "z" | "y">(a: { fields: A | A[] }): A[];
+>nestedUnionExtendsLiterals : <A extends "z" | "y">(a: { fields: A | A[]; }) => A[]
+>A : A
+>a : { fields: A | A[]; }
+>fields : A | A[]
+>A : A
+>A : A
+>A : A
+
+const t2: "z"[] = nestedUnionExtendsLiterals({ fields: "z" });
+>t2 : "z"[]
+>nestedUnionExtendsLiterals({ fields: "z" }) : "z"[]
+>nestedUnionExtendsLiterals : <A extends "z" | "y">(a: { fields: A | A[]; }) => A[]
+>{ fields: "z" } : { fields: "z"; }
+>fields : string
+>"z" : "z"
+
+declare function nestedGenericIntersection<A extends B & C, B extends string, C extends string>(a: { fields: A | A[] }, b: B[], c: C[]): A[];
+>nestedGenericIntersection : <A extends B & C, B extends string, C extends string>(a: { fields: A | A[]; }, b: B[], c: C[]) => A[]
+>A : A
+>B : B
+>C : C
+>B : B
+>C : C
+>a : { fields: A | A[]; }
+>fields : A | A[]
+>A : A
+>A : A
+>b : B[]
+>B : B
+>c : C[]
+>C : C
+>A : A
+
+const t3: "z"[] = nestedGenericIntersection({ fields: "z" }, ["z", "y"], ["z", "y"]);
+>t3 : "z"[]
+>nestedGenericIntersection({ fields: "z" }, ["z", "y"], ["z", "y"]) : "z"[]
+>nestedGenericIntersection : <A extends B & C, B extends string, C extends string>(a: { fields: A | A[]; }, b: B[], c: C[]) => A[]
+>{ fields: "z" } : { fields: "z"; }
+>fields : string
+>"z" : "z"
+>["z", "y"] : ("z" | "y")[]
+>"z" : "z"
+>"y" : "y"
+>["z", "y"] : ("z" | "y")[]
+>"z" : "z"
+>"y" : "y"
+
+declare function nestedUnionExtendsNumber<A extends number>(a: { fields: A | A[] }): A[];
+>nestedUnionExtendsNumber : <A extends number>(a: { fields: A | A[]; }) => A[]
+>A : A
+>a : { fields: A | A[]; }
+>fields : A | A[]
+>A : A
+>A : A
+>A : A
+
+const t4: 1[] = nestedUnionExtendsNumber({ fields: 1 });
+>t4 : 1[]
+>nestedUnionExtendsNumber({ fields: 1 }) : 1[]
+>nestedUnionExtendsNumber : <A extends number>(a: { fields: A | A[]; }) => A[]
+>{ fields: 1 } : { fields: 1; }
+>fields : number
+>1 : 1
+
+declare function nestedUnionExtendsLiteralsNumber<A extends 1 | 2>(a: { fields: A | A[] }): A[];
+>nestedUnionExtendsLiteralsNumber : <A extends 1 | 2>(a: { fields: A | A[]; }) => A[]
+>A : A
+>a : { fields: A | A[]; }
+>fields : A | A[]
+>A : A
+>A : A
+>A : A
+
+const t5: 2[] = nestedUnionExtendsLiteralsNumber({ fields: 2 });
+>t5 : 2[]
+>nestedUnionExtendsLiteralsNumber({ fields: 2 }) : 2[]
+>nestedUnionExtendsLiteralsNumber : <A extends 1 | 2>(a: { fields: A | A[]; }) => A[]
+>{ fields: 2 } : { fields: 2; }
+>fields : number
+>2 : 2
+
+declare function nestedUnionIntersectionGenericNumber<A extends B & C, B extends number, C extends number>(a: { fields: A | A[] }, b: B[], c: C[]): A[];
+>nestedUnionIntersectionGenericNumber : <A extends B & C, B extends number, C extends number>(a: { fields: A | A[]; }, b: B[], c: C[]) => A[]
+>A : A
+>B : B
+>C : C
+>B : B
+>C : C
+>a : { fields: A | A[]; }
+>fields : A | A[]
+>A : A
+>A : A
+>b : B[]
+>B : B
+>c : C[]
+>C : C
+>A : A
+
+const t6: 3[] = nestedUnionIntersectionGenericNumber({ fields: 3 }, [1, 3], [1, 3]);
+>t6 : 3[]
+>nestedUnionIntersectionGenericNumber({ fields: 3 }, [1, 3], [1, 3]) : 3[]
+>nestedUnionIntersectionGenericNumber : <A extends B & C, B extends number, C extends number>(a: { fields: A | A[]; }, b: B[], c: C[]) => A[]
+>{ fields: 3 } : { fields: 3; }
+>fields : number
+>3 : 3
+>[1, 3] : (1 | 3)[]
+>1 : 1
+>3 : 3
+>[1, 3] : (1 | 3)[]
+>1 : 1
+>3 : 3
+
+
+// The following are expected to fail because they don't have an extend string or extend number generic constraint.
+
+declare function nestedUnionPlain<A>(a: { fields: A | A[] }): A[];
+>nestedUnionPlain : <A>(a: { fields: A | A[]; }) => A[]
+>A : A
+>a : { fields: A | A[]; }
+>fields : A | A[]
+>A : A
+>A : A
+>A : A
+
+const expectedFail1: "z"[] = nestedUnionPlain({ fields: "z" });
+>expectedFail1 : "z"[]
+>nestedUnionPlain({ fields: "z" }) : string[]
+>nestedUnionPlain : <A>(a: { fields: A | A[]; }) => A[]
+>{ fields: "z" } : { fields: string; }
+>fields : string
+>"z" : "z"
+
+const expectedFail2: 1[] = nestedUnionPlain({ fields: 1 });
+>expectedFail2 : 1[]
+>nestedUnionPlain({ fields: 1 }) : number[]
+>nestedUnionPlain : <A>(a: { fields: A | A[]; }) => A[]
+>{ fields: 1 } : { fields: number; }
+>fields : number
+>1 : 1
+
+declare function nestedUnionIntersectionPlainGenerics<A extends B & C, B, C>(a: { fields: A | A[] }, b: B[], c: C[]): A[];
+>nestedUnionIntersectionPlainGenerics : <A extends B & C, B, C>(a: { fields: A | A[]; }, b: B[], c: C[]) => A[]
+>A : A
+>B : B
+>C : C
+>B : B
+>C : C
+>a : { fields: A | A[]; }
+>fields : A | A[]
+>A : A
+>A : A
+>b : B[]
+>B : B
+>c : C[]
+>C : C
+>A : A
+
+const expectedFail3: "z"[] = nestedUnionIntersectionPlainGenerics({ fields: "z" }, ["z", "y"], ["z", "y"]);
+>expectedFail3 : "z"[]
+>nestedUnionIntersectionPlainGenerics({ fields: "z" }, ["z", "y"], ["z", "y"]) : string[]
+>nestedUnionIntersectionPlainGenerics : <A extends B & C, B, C>(a: { fields: A | A[]; }, b: B[], c: C[]) => A[]
+>{ fields: "z" } : { fields: string; }
+>fields : string
+>"z" : "z"
+>["z", "y"] : string[]
+>"z" : "z"
+>"y" : "y"
+>["z", "y"] : string[]
+>"z" : "z"
+>"y" : "y"
+
+const expectedFail4: 3[] = nestedUnionIntersectionPlainGenerics({ fields: 3 }, [1, 3], [1, 3]);
+>expectedFail4 : 3[]
+>nestedUnionIntersectionPlainGenerics({ fields: 3 }, [1, 3], [1, 3]) : number[]
+>nestedUnionIntersectionPlainGenerics : <A extends B & C, B, C>(a: { fields: A | A[]; }, b: B[], c: C[]) => A[]
+>{ fields: 3 } : { fields: number; }
+>fields : number
+>3 : 3
+>[1, 3] : number[]
+>1 : 1
+>3 : 3
+>[1, 3] : number[]
+>1 : 1
+>3 : 3
 

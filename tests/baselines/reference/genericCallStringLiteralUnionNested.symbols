@@ -1,17 +1,152 @@
 === tests/cases/compiler/genericCallStringLiteralUnionNested.ts ===
-declare function nestedUnion<A extends string>(a: { fields: A | A[] }): Record<A, string>;
->nestedUnion : Symbol(nestedUnion, Decl(genericCallStringLiteralUnionNested.ts, 0, 0))
->A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 29))
->a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 0, 47))
->fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 0, 51))
->A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 29))
->A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 29))
+declare function nestedUnionExtendsString<A extends string>(a: { fields: A | A[] }): Record<A, string>;
+>nestedUnionExtendsString : Symbol(nestedUnionExtendsString, Decl(genericCallStringLiteralUnionNested.ts, 0, 0))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 42))
+>a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 0, 60))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 0, 64))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 42))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 42))
 >Record : Symbol(Record, Decl(lib.d.ts, --, --))
->A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 29))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 0, 42))
 
-const result: {z: string} = nestedUnion({ fields: "z" });
->result : Symbol(result, Decl(genericCallStringLiteralUnionNested.ts, 1, 5))
->z : Symbol(z, Decl(genericCallStringLiteralUnionNested.ts, 1, 15))
->nestedUnion : Symbol(nestedUnion, Decl(genericCallStringLiteralUnionNested.ts, 0, 0))
->fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 1, 41))
+const t1: {z: string} = nestedUnionExtendsString({ fields: "z" });
+>t1 : Symbol(t1, Decl(genericCallStringLiteralUnionNested.ts, 1, 5))
+>z : Symbol(z, Decl(genericCallStringLiteralUnionNested.ts, 1, 11))
+>nestedUnionExtendsString : Symbol(nestedUnionExtendsString, Decl(genericCallStringLiteralUnionNested.ts, 0, 0))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 1, 50))
+
+declare function nestedUnionExtendsLiterals<A extends "z" | "y">(a: { fields: A | A[] }): A[];
+>nestedUnionExtendsLiterals : Symbol(nestedUnionExtendsLiterals, Decl(genericCallStringLiteralUnionNested.ts, 1, 66))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 3, 44))
+>a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 3, 65))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 3, 69))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 3, 44))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 3, 44))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 3, 44))
+
+const t2: "z"[] = nestedUnionExtendsLiterals({ fields: "z" });
+>t2 : Symbol(t2, Decl(genericCallStringLiteralUnionNested.ts, 4, 5))
+>nestedUnionExtendsLiterals : Symbol(nestedUnionExtendsLiterals, Decl(genericCallStringLiteralUnionNested.ts, 1, 66))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 4, 46))
+
+declare function nestedGenericIntersection<A extends B & C, B extends string, C extends string>(a: { fields: A | A[] }, b: B[], c: C[]): A[];
+>nestedGenericIntersection : Symbol(nestedGenericIntersection, Decl(genericCallStringLiteralUnionNested.ts, 4, 62))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 6, 43))
+>B : Symbol(B, Decl(genericCallStringLiteralUnionNested.ts, 6, 59))
+>C : Symbol(C, Decl(genericCallStringLiteralUnionNested.ts, 6, 77))
+>B : Symbol(B, Decl(genericCallStringLiteralUnionNested.ts, 6, 59))
+>C : Symbol(C, Decl(genericCallStringLiteralUnionNested.ts, 6, 77))
+>a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 6, 96))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 6, 100))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 6, 43))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 6, 43))
+>b : Symbol(b, Decl(genericCallStringLiteralUnionNested.ts, 6, 119))
+>B : Symbol(B, Decl(genericCallStringLiteralUnionNested.ts, 6, 59))
+>c : Symbol(c, Decl(genericCallStringLiteralUnionNested.ts, 6, 127))
+>C : Symbol(C, Decl(genericCallStringLiteralUnionNested.ts, 6, 77))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 6, 43))
+
+const t3: "z"[] = nestedGenericIntersection({ fields: "z" }, ["z", "y"], ["z", "y"]);
+>t3 : Symbol(t3, Decl(genericCallStringLiteralUnionNested.ts, 7, 5))
+>nestedGenericIntersection : Symbol(nestedGenericIntersection, Decl(genericCallStringLiteralUnionNested.ts, 4, 62))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 7, 45))
+
+declare function nestedUnionExtendsNumber<A extends number>(a: { fields: A | A[] }): A[];
+>nestedUnionExtendsNumber : Symbol(nestedUnionExtendsNumber, Decl(genericCallStringLiteralUnionNested.ts, 7, 85))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 9, 42))
+>a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 9, 60))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 9, 64))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 9, 42))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 9, 42))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 9, 42))
+
+const t4: 1[] = nestedUnionExtendsNumber({ fields: 1 });
+>t4 : Symbol(t4, Decl(genericCallStringLiteralUnionNested.ts, 10, 5))
+>nestedUnionExtendsNumber : Symbol(nestedUnionExtendsNumber, Decl(genericCallStringLiteralUnionNested.ts, 7, 85))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 10, 42))
+
+declare function nestedUnionExtendsLiteralsNumber<A extends 1 | 2>(a: { fields: A | A[] }): A[];
+>nestedUnionExtendsLiteralsNumber : Symbol(nestedUnionExtendsLiteralsNumber, Decl(genericCallStringLiteralUnionNested.ts, 10, 56))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 12, 50))
+>a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 12, 67))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 12, 71))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 12, 50))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 12, 50))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 12, 50))
+
+const t5: 2[] = nestedUnionExtendsLiteralsNumber({ fields: 2 });
+>t5 : Symbol(t5, Decl(genericCallStringLiteralUnionNested.ts, 13, 5))
+>nestedUnionExtendsLiteralsNumber : Symbol(nestedUnionExtendsLiteralsNumber, Decl(genericCallStringLiteralUnionNested.ts, 10, 56))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 13, 50))
+
+declare function nestedUnionIntersectionGenericNumber<A extends B & C, B extends number, C extends number>(a: { fields: A | A[] }, b: B[], c: C[]): A[];
+>nestedUnionIntersectionGenericNumber : Symbol(nestedUnionIntersectionGenericNumber, Decl(genericCallStringLiteralUnionNested.ts, 13, 64))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 15, 54))
+>B : Symbol(B, Decl(genericCallStringLiteralUnionNested.ts, 15, 70))
+>C : Symbol(C, Decl(genericCallStringLiteralUnionNested.ts, 15, 88))
+>B : Symbol(B, Decl(genericCallStringLiteralUnionNested.ts, 15, 70))
+>C : Symbol(C, Decl(genericCallStringLiteralUnionNested.ts, 15, 88))
+>a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 15, 107))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 15, 111))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 15, 54))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 15, 54))
+>b : Symbol(b, Decl(genericCallStringLiteralUnionNested.ts, 15, 130))
+>B : Symbol(B, Decl(genericCallStringLiteralUnionNested.ts, 15, 70))
+>c : Symbol(c, Decl(genericCallStringLiteralUnionNested.ts, 15, 138))
+>C : Symbol(C, Decl(genericCallStringLiteralUnionNested.ts, 15, 88))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 15, 54))
+
+const t6: 3[] = nestedUnionIntersectionGenericNumber({ fields: 3 }, [1, 3], [1, 3]);
+>t6 : Symbol(t6, Decl(genericCallStringLiteralUnionNested.ts, 16, 5))
+>nestedUnionIntersectionGenericNumber : Symbol(nestedUnionIntersectionGenericNumber, Decl(genericCallStringLiteralUnionNested.ts, 13, 64))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 16, 54))
+
+
+// The following are expected to fail because they don't have an extend string or extend number generic constraint.
+
+declare function nestedUnionPlain<A>(a: { fields: A | A[] }): A[];
+>nestedUnionPlain : Symbol(nestedUnionPlain, Decl(genericCallStringLiteralUnionNested.ts, 16, 84))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 21, 34))
+>a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 21, 37))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 21, 41))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 21, 34))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 21, 34))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 21, 34))
+
+const expectedFail1: "z"[] = nestedUnionPlain({ fields: "z" });
+>expectedFail1 : Symbol(expectedFail1, Decl(genericCallStringLiteralUnionNested.ts, 22, 5))
+>nestedUnionPlain : Symbol(nestedUnionPlain, Decl(genericCallStringLiteralUnionNested.ts, 16, 84))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 22, 47))
+
+const expectedFail2: 1[] = nestedUnionPlain({ fields: 1 });
+>expectedFail2 : Symbol(expectedFail2, Decl(genericCallStringLiteralUnionNested.ts, 23, 5))
+>nestedUnionPlain : Symbol(nestedUnionPlain, Decl(genericCallStringLiteralUnionNested.ts, 16, 84))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 23, 45))
+
+declare function nestedUnionIntersectionPlainGenerics<A extends B & C, B, C>(a: { fields: A | A[] }, b: B[], c: C[]): A[];
+>nestedUnionIntersectionPlainGenerics : Symbol(nestedUnionIntersectionPlainGenerics, Decl(genericCallStringLiteralUnionNested.ts, 23, 59))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 25, 54))
+>B : Symbol(B, Decl(genericCallStringLiteralUnionNested.ts, 25, 70))
+>C : Symbol(C, Decl(genericCallStringLiteralUnionNested.ts, 25, 73))
+>B : Symbol(B, Decl(genericCallStringLiteralUnionNested.ts, 25, 70))
+>C : Symbol(C, Decl(genericCallStringLiteralUnionNested.ts, 25, 73))
+>a : Symbol(a, Decl(genericCallStringLiteralUnionNested.ts, 25, 77))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 25, 81))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 25, 54))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 25, 54))
+>b : Symbol(b, Decl(genericCallStringLiteralUnionNested.ts, 25, 100))
+>B : Symbol(B, Decl(genericCallStringLiteralUnionNested.ts, 25, 70))
+>c : Symbol(c, Decl(genericCallStringLiteralUnionNested.ts, 25, 108))
+>C : Symbol(C, Decl(genericCallStringLiteralUnionNested.ts, 25, 73))
+>A : Symbol(A, Decl(genericCallStringLiteralUnionNested.ts, 25, 54))
+
+const expectedFail3: "z"[] = nestedUnionIntersectionPlainGenerics({ fields: "z" }, ["z", "y"], ["z", "y"]);
+>expectedFail3 : Symbol(expectedFail3, Decl(genericCallStringLiteralUnionNested.ts, 26, 5))
+>nestedUnionIntersectionPlainGenerics : Symbol(nestedUnionIntersectionPlainGenerics, Decl(genericCallStringLiteralUnionNested.ts, 23, 59))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 26, 67))
+
+const expectedFail4: 3[] = nestedUnionIntersectionPlainGenerics({ fields: 3 }, [1, 3], [1, 3]);
+>expectedFail4 : Symbol(expectedFail4, Decl(genericCallStringLiteralUnionNested.ts, 27, 5))
+>nestedUnionIntersectionPlainGenerics : Symbol(nestedUnionIntersectionPlainGenerics, Decl(genericCallStringLiteralUnionNested.ts, 23, 59))
+>fields : Symbol(fields, Decl(genericCallStringLiteralUnionNested.ts, 27, 65))
 
