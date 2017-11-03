@@ -208,13 +208,9 @@ namespace ts.JsDoc {
             return undefined;
         }
 
-        if (commentOwner.getStart() < position) {
-            // if climbing the tree found a declaration with parameters but the request was made inside it, complete to a single line comment
-            return singleLineTemplate;
-        }
-
-        if (parameters.length === 0) {
-            // if there are no parameters, complete to a single line comment
+        if (commentOwner.getStart() < position || parameters.length === 0) {
+            // if climbing the tree found a declaration with parameters but the request was made inside it
+            // or if there are no parameters, complete to a single line comment
             return singleLineTemplate;
         }
 
@@ -225,19 +221,11 @@ namespace ts.JsDoc {
         const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).replace(/\S/i, () => " ");
         const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
 
-        let docParams = "";
-        for (let i = 0; i < parameters.length; i++) {
-            const currentName = parameters[i].name;
-            const paramName = currentName.kind === SyntaxKind.Identifier ?
-                (<Identifier>currentName).escapedText :
-                "param" + i;
-            if (isJavaScriptFile) {
-                docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
-            }
-            else {
-                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
-            }
-        }
+        const docParams = parameters.map(({name}, i) => {
+            const nameText = isIdentifier(name) ? name.text : `param${i}`;
+            const type = isJavaScriptFile ? "{any} " : "";
+            return `${indentationStr} * @param ${type}${nameText}${newLine}`;
+        }).join("");
 
         // A doc comment consists of the following
         // * The opening comment line
