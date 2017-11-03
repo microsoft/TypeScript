@@ -44,17 +44,13 @@ foo({
 >method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 16, 18))
 
         this;
->this : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
-
         this.type;
->this.type : Symbol(Y.type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
->this : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
->type : Symbol(Y.type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
+>this.type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 0, 13), Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
+>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 0, 13), Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
 
         this.value;
->this.value : Symbol(Y.value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
->this : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
->value : Symbol(Y.value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
+>this.value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 1, 14), Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 1, 14), Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
     }
 });
 
@@ -205,22 +201,17 @@ let xyz: LikeA | LikeB = {
 >method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 85, 17))
 
         this;
->this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
-
         this.x;
->this.x : Symbol(LikeA.x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
->this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
->x : Symbol(LikeA.x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
+>this.x : Symbol(x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17), Decl(contextualTypeShouldBeLiteral.ts, 75, 17))
+>x : Symbol(x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17), Decl(contextualTypeShouldBeLiteral.ts, 75, 17))
 
         this.y;
->this.y : Symbol(LikeA.y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
->this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
->y : Symbol(LikeA.y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
+>this.y : Symbol(y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11), Decl(contextualTypeShouldBeLiteral.ts, 76, 12))
+>y : Symbol(y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11), Decl(contextualTypeShouldBeLiteral.ts, 76, 12))
 
         this.value;
->this.value : Symbol(LikeA.value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
->this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
->value : Symbol(LikeA.value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
+>this.value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11), Decl(contextualTypeShouldBeLiteral.ts, 77, 12))
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11), Decl(contextualTypeShouldBeLiteral.ts, 77, 12))
     }
 };
 

@@ -48,17 +48,17 @@ foo({
 >method : () => void
 
         this;
->this : Y
+>this : X | Y
 
         this.type;
->this.type : "y"
->this : Y
->type : "y"
+>this.type : "x" | "y"
+>this : X | Y
+>type : "x" | "y"
 
         this.value;
->this.value : "none" | "done"
->this : Y
->value : "none" | "done"
+>this.value : string
+>this : X | Y
+>value : string
     }
 });
 
@@ -224,22 +224,22 @@ let xyz: LikeA | LikeB = {
 >method : () => void
 
         this;
->this : LikeA
+>this : LikeA | LikeB
 
         this.x;
->this.x : "x"
->this : LikeA
->x : "x"
+>this.x : "x" | "xx"
+>this : LikeA | LikeB
+>x : "x" | "xx"
 
         this.y;
->this.y : "y"
->this : LikeA
->y : "y"
+>this.y : "y" | "yy"
+>this : LikeA | LikeB
+>y : "y" | "yy"
 
         this.value;
->this.value : string
->this : LikeA
->value : string
+>this.value : string | number
+>this : LikeA | LikeB
+>value : string | number
     }
 };
 
