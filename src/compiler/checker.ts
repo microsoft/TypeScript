@@ -2457,7 +2457,7 @@ namespace ts {
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 },
-                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
+                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration | undefined => {
                     Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
                     const context = createNodeBuilderContext(enclosingDeclaration, flags);
                     const resultingNode = signatureToSignatureDeclarationHelper(signature, kind, context);

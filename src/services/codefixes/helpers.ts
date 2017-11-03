@@ -93,7 +93,7 @@ namespace ts.codefix {
                 // (eg: an abstract method or interface declaration), there is a 1-1
                 // correspondence of declarations and signatures.
                 const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-                const needsImplementation = !isInAmbientContext(enclosingDeclaration);
+                const needsImplementation = !(enclosingDeclaration.flags & NodeFlags.Ambient);
                 if (!some(signatures)) {
                     return undefined;
                 }
