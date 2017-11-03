@@ -328,6 +328,9 @@ namespace ts {
         JsxSelfClosingElement,
         JsxOpeningElement,
         JsxClosingElement,
+        JsxFragment,
+        JsxOpeningFragment,
+        JsxClosingFragment,
         JsxAttribute,
         JsxAttributes,
         JsxSpreadAttribute,
@@ -362,6 +365,7 @@ namespace ts {
         JSDocFunctionType,
         JSDocVariadicType,
         JSDocComment,
+        JSDocTypeLiteral,
         JSDocTag,
         JSDocAugmentsTag,
         JSDocClassTag,
@@ -371,7 +375,6 @@ namespace ts {
         JSDocTemplateTag,
         JSDocTypedefTag,
         JSDocPropertyTag,
-        JSDocTypeLiteral,
 
         // Synthesized list
         SyntaxList,
@@ -413,9 +416,9 @@ namespace ts {
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocTypeLiteral,
+        LastJSDocNode = JSDocPropertyTag,
         FirstJSDocTagNode = JSDocTag,
-        LastJSDocTagNode = JSDocTypeLiteral
+        LastJSDocTagNode = JSDocPropertyTag
     }
 
     export const enum NodeFlags {
@@ -451,7 +454,8 @@ namespace ts {
         /* @internal */
         PossiblyContainsDynamicImport = 1 << 19,
         JSDoc =              1 << 20, // If node was parsed inside jsdoc
-        /* @internal */ InWithStatement =    1 << 21, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        /* @internal */ Ambient =         1 << 21, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement = 1 << 22, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
 
         BlockScoped = Let | Const,
 
@@ -459,7 +463,7 @@ namespace ts {
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement,
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement | Ambient,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
@@ -1620,7 +1624,7 @@ namespace ts {
         closingElement: JsxClosingElement;
     }
 
-    /// Either the opening tag in a <Tag>...</Tag> pair, or the lone <Tag /> in a self-closing form
+    /// Either the opening tag in a <Tag>...</Tag> pair or the lone <Tag /> in a self-closing form
     export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
 
     export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
@@ -1644,6 +1648,26 @@ namespace ts {
         kind: SyntaxKind.JsxSelfClosingElement;
         tagName: JsxTagNameExpression;
         attributes: JsxAttributes;
+    }
+
+    /// A JSX expression of the form <>...</>
+    export interface JsxFragment extends PrimaryExpression {
+        kind: SyntaxKind.JsxFragment;
+        openingFragment: JsxOpeningFragment;
+        children: NodeArray<JsxChild>;
+        closingFragment: JsxClosingFragment;
+    }
+
+    /// The opening element of a <>...</> JsxFragment
+    export interface JsxOpeningFragment extends Expression {
+        kind: SyntaxKind.JsxOpeningFragment;
+        parent?: JsxFragment;
+    }
+
+    /// The closing element of a <>...</> JsxFragment
+    export interface JsxClosingFragment extends Expression {
+        kind: SyntaxKind.JsxClosingFragment;
+        parent?: JsxFragment;
     }
 
     export interface JsxAttribute extends ObjectLiteralElement {
@@ -1679,7 +1703,7 @@ namespace ts {
         parent?: JsxElement;
     }
 
-    export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
+    export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
 
     export interface Statement extends Node {
         _statementBrand: any;
@@ -2448,9 +2472,13 @@ namespace ts {
         readFile(path: string): string | undefined;
     }
 
-    export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles: ReadonlyArray<SourceFile>): void;
-    }
+    export type WriteFileCallback = (
+        fileName: string,
+        data: string,
+        writeByteOrderMark: boolean,
+        onError: ((message: string) => void) | undefined,
+        sourceFiles: ReadonlyArray<SourceFile>,
+    ) => void;
 
     export class OperationCanceledException { }
 
@@ -3559,9 +3587,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface TypeMapper {
-        (t: TypeParameter): Type;
-    }
+    export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
         Contravariant     = 1 << 0,  // Inference from contravariant position
@@ -4169,9 +4195,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface HasInvalidatedResolution {
-        (sourceFile: Path): boolean;
-    }
+    export type HasInvalidatedResolution = (sourceFile: Path) => boolean;
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;

@@ -3445,6 +3445,117 @@ namespace ts.projectSystem {
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
         });
+
+        function assertEvent(actualOutput: string, expectedEvent: protocol.Event, host: TestServerHost) {
+            assert.equal(actualOutput, server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, host.newLine));
+        }
+
+        function checkErrorMessage(host: TestServerHost, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
+            const outputs = host.getOutput();
+            assert.isTrue(outputs.length >= 1, outputs.toString());
+            const event: protocol.Event = {
+                seq: 0,
+                type: "event",
+                event: eventName,
+                body: diagnostics
+            };
+            assertEvent(outputs[0], event, host);
+        }
+
+        function checkCompleteEvent(host: TestServerHost, numberOfCurrentEvents: number, expectedSequenceId: number) {
+            const outputs = host.getOutput();
+            assert.equal(outputs.length, numberOfCurrentEvents, outputs.toString());
+            const event: protocol.RequestCompletedEvent = {
+                seq: 0,
+                type: "event",
+                event: "requestCompleted",
+                body: {
+                    request_seq: expectedSequenceId
+                }
+            };
+            assertEvent(outputs[numberOfCurrentEvents - 1], event, host);
+        }
+
+        function checkProjectUpdatedInBackgroundEvent(host: TestServerHost, openFiles: string[]) {
+            const outputs = host.getOutput();
+            assert.equal(outputs.length, 1, outputs.toString());
+            const event: protocol.ProjectsUpdatedInBackgroundEvent = {
+                seq: 0,
+                type: "event",
+                event: "projectsUpdatedInBackground",
+                body: {
+                    openFiles
+                }
+            };
+            assertEvent(outputs[0], event, host);
+        }
+
+        it("npm install @types works", () => {
+            const folderPath = "/a/b/projects/temp";
+            const file1: FileOrFolder = {
+                path: `${folderPath}/a.ts`,
+                content: 'import f = require("pad")'
+            };
+            const files = [file1, libFile];
+            const host = createServerHost(files);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: {
+                    file: file1.path,
+                    fileContent: file1.content,
+                    scriptKindName: "TS",
+                    projectRootPath: folderPath
+                }
+            });
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            host.clearOutput();
+            const expectedSequenceId = session.getNextSeq();
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file1.path]
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+            checkErrorMessage(host, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            host.clearOutput();
+
+            host.runQueuedImmediateCallbacks();
+            const moduleNotFound = Diagnostics.Cannot_find_module_0;
+            const startOffset = file1.content.indexOf('"') + 1;
+            checkErrorMessage(host, "semanticDiag", {
+                file: file1.path, diagnostics: [{
+                    start: { line: 1, offset: startOffset },
+                    end: { line: 1, offset: startOffset + '"pad"'.length },
+                    text: formatStringFromArgs(moduleNotFound.message, ["pad"]),
+                    code: moduleNotFound.code,
+                    category: DiagnosticCategory[moduleNotFound.category].toLowerCase()
+                }]
+            });
+            checkCompleteEvent(host, 2, expectedSequenceId);
+            host.clearOutput();
+
+            const padIndex: FileOrFolder = {
+                path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
+                content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
+            };
+            files.push(padIndex);
+            host.reloadFS(files, { ignoreWatchInvokedWithTriggerAsFileCreate: true });
+            host.runQueuedTimeoutCallbacks();
+            checkProjectUpdatedInBackgroundEvent(host, [file1.path]);
+            host.clearOutput();
+
+            host.runQueuedTimeoutCallbacks();
+            checkErrorMessage(host, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            host.clearOutput();
+
+            host.runQueuedImmediateCallbacks();
+            checkErrorMessage(host, "semanticDiag", { file: file1.path, diagnostics: [] });
+        });
     });
 
     describe("Configure file diagnostics events", () => {

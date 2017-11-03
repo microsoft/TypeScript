@@ -43,20 +43,12 @@ namespace ts {
         return s;
     }
 
-    function isJSONSupported() {
-        return typeof JSON === "object" && typeof JSON.parse === "function";
-    }
-
     export function executeCommandLine(args: string[]): void {
         const commandLine = parseCommandLine(args);
 
         // Configuration file name (if any)
         let configFileName: string;
         if (commandLine.options.locale) {
-            if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
             validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
         }
 
@@ -84,10 +76,6 @@ namespace ts {
         }
 
         if (commandLine.options.project) {
-            if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
             if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -109,7 +97,7 @@ namespace ts {
                 }
             }
         }
-        else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
+        else if (commandLine.fileNames.length === 0) {
             const searchPath = normalizePath(sys.getCurrentDirectory());
             configFileName = findConfigFile(searchPath, sys.fileExists);
         }

@@ -2,13 +2,16 @@
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 
 namespace ts {
-    export interface ErrorCallback {
-        (message: DiagnosticMessage, length: number): void;
-    }
+    export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
     /* @internal */
     export function tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
         return token >= SyntaxKind.Identifier;
+    }
+
+    /* @internal */
+    export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): boolean {
+        return token === SyntaxKind.GreaterThanToken || tokenIsIdentifierOrKeyword(token);
     }
 
     export interface Scanner {
