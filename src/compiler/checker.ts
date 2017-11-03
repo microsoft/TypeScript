@@ -18451,13 +18451,17 @@ namespace ts {
 
         function isLiteralContextualType(contextualType: Type, candidateLiteral: Type): boolean {
             if (contextualType) {
+                if (contextualType.flags & TypeFlags.UnionOrIntersection) {
+                    return some((contextualType as UnionOrIntersectionType).types, t => isLiteralContextualType(t, candidateLiteral));
+                }
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
                     return isLiteralContextualType(constraint, candidateLiteral);
                 }
-                return !!((maybeTypeOfKind(contextualType, TypeFlags.StringLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
-                    (maybeTypeOfKind(contextualType, TypeFlags.NumberLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
-                    (maybeTypeOfKind(contextualType, TypeFlags.BooleanLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)));
+                // No need to `maybeTypeOfKind` on the contextual type, as it can't be a union, _however_, `candidateLiteral` might still be one!
+                return !!(((contextualType.flags & TypeFlags.StringLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
+                    ((contextualType.flags & TypeFlags.NumberLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
+                    ((contextualType.flags & TypeFlags.BooleanLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)));
             }
             return false;
         }
@@ -18467,8 +18471,8 @@ namespace ts {
                 contextualType = getContextualType(node);
             }
             const type = checkExpression(node, checkMode);
-            const shouldWiden = isTypeAssertion(node) || isLiteralContextualType(contextualType, type);
-            return shouldWiden ? type : getWidenedLiteralType(type);
+            const shouldNotWiden = isTypeAssertion(node) || isLiteralContextualType(contextualType, type);
+            return shouldNotWiden ? type : getWidenedLiteralType(type);
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
