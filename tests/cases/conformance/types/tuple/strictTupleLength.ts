@@ -1,5 +1,3 @@
-// @strictTuples: true
-
 var t0: [];
 var t1: [number];
 var t2: [number, number];
