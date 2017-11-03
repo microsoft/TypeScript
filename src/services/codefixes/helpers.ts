@@ -93,6 +93,7 @@ namespace ts.codefix {
                 // (eg: an abstract method or interface declaration), there is a 1-1
                 // correspondence of declarations and signatures.
                 const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
+                const needsImplementation = !isInAmbientContext(enclosingDeclaration);
                 if (!some(signatures)) {
                     return undefined;
                 }
@@ -100,7 +101,8 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    return signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
+                    const body = needsImplementation ? createStubbedMethodBody() : undefined;
+                    return signatureToMethodDeclaration(signature, enclosingDeclaration, body);
                 }
 
                 const signatureDeclarations: MethodDeclaration[] = [];
@@ -119,7 +121,7 @@ namespace ts.codefix {
                         signatureDeclarations.push(methodDeclaration);
                     }
                 }
-                else {
+                else if (needsImplementation) {
                     Debug.assert(declarations.length === signatures.length);
                     const methodImplementingSignatures = createMethodImplementingSignatures(signatures, name, optional, modifiers);
                     signatureDeclarations.push(methodImplementingSignatures);
@@ -222,32 +224,17 @@ namespace ts.codefix {
             parameters.push(restParameter);
         }
 
-        return createStubbedMethod(
-            modifiers,
-            name,
-            optional,
-            /*typeParameters*/ undefined,
-            parameters,
-            /*returnType*/ undefined);
-    }
-
-    export function createStubbedMethod(
-        modifiers: ReadonlyArray<Modifier>,
-        name: PropertyName,
-        optional: boolean,
-        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        parameters: ReadonlyArray<ParameterDeclaration>,
-        returnType: TypeNode | undefined) {
         return createMethod(
             /*decorators*/ undefined,
             modifiers,
             /*asteriskToken*/ undefined,
             name,
             optional ? createToken(SyntaxKind.QuestionToken) : undefined,
-            typeParameters,
+            /*typeParameters*/ undefined,
             parameters,
-            returnType,
-            createStubbedMethodBody());
+            /*returnType*/ undefined,
+            createStubbedMethodBody(),
+        );
     }
 
     function createStubbedMethodBody() {
