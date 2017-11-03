@@ -78,9 +78,7 @@ namespace ts.server {
 
     export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
 
-    export interface ProjectServiceEventHandler {
-        (event: ProjectServiceEvent): void;
-    }
+    export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
     export interface SafeList {
         [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };

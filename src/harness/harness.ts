@@ -479,7 +479,7 @@ namespace Utils {
 }
 
 namespace Harness {
-    export interface IO {
+    export interface Io {
         newLine(): string;
         getCurrentDirectory(): string;
         useCaseSensitiveFileNames(): boolean;
@@ -502,7 +502,7 @@ namespace Harness {
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
     }
-    export let IO: IO;
+    export let IO: Io;
 
     // harness always uses one kind of new line
     // But note that `parseTestData` in `fourslash.ts` uses "\n"
@@ -784,9 +784,15 @@ namespace Harness {
         ? IO.newLine() + `//# sourceURL=${IO.resolvePath(tcServicesFileName)}`
         : "");
 
-    export interface SourceMapEmitterCallback {
-        (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
-    }
+    export type SourceMapEmitterCallback = (
+        emittedFile: string,
+        emittedLine: number,
+        emittedColumn: number,
+        sourceFile: string,
+        sourceLine: number,
+        sourceColumn: number,
+        sourceName: string,
+    ) => void;
 
     // Settings
     export let userSpecifiedRoot = "";
@@ -2145,7 +2151,7 @@ namespace Harness {
         return filePath.indexOf(Harness.libFolder) === 0;
     }
 
-    export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
+    export function getDefaultLibraryFile(io: Harness.Io): Harness.Compiler.TestFile {
         const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
         return { unitName: libFile, content: io.readFile(libFile) };
     }

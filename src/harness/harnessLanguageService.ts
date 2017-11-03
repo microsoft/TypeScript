@@ -544,9 +544,9 @@ namespace Harness.LanguageService {
         getClassifier(): ts.Classifier { return new ClassifierShimProxy(this.factory.createClassifierShim(this.host)); }
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
             let shimResult: {
-                referencedFiles: ts.IFileReference[];
-                typeReferenceDirectives: ts.IFileReference[];
-                importedFiles: ts.IFileReference[];
+                referencedFiles: ts.ShimsFileReference[];
+                typeReferenceDirectives: ts.ShimsFileReference[];
+                importedFiles: ts.ShimsFileReference[];
                 isLibFile: boolean;
             };
 
