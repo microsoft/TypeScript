@@ -145,9 +145,8 @@ namespace ts.Completions.PathCompletions {
         let result: CompletionEntry[];
 
         const fileExtensions = getSupportedExtensions(compilerOptions);
-        const currentDirectory = host.getCurrentDirectory();
         if (baseUrl) {
-            const projectDir = compilerOptions.project || currentDirectory;
+            const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
             result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, span, host);
 
@@ -178,7 +177,7 @@ namespace ts.Completions.PathCompletions {
         }
 
         if (compilerOptions.moduleResolution === ts.ModuleResolutionKind.NodeJs) {
-            forEachAncestorDirectory(currentDirectory, ancestor => {
+            forEachAncestorDirectory(getDirectoryPath(scriptPath), ancestor => {
                 const nodeModules = combinePaths(ancestor, "node_modules");
                 if (host.directoryExists(nodeModules)) {
                     getCompletionEntriesForDirectoryFragment(fragment, nodeModules, fileExtensions, /*includeExtensions*/ false, span, host, /*exclude*/ undefined, result);
