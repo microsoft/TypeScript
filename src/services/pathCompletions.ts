@@ -144,8 +144,8 @@ namespace ts.Completions.PathCompletions {
 
         let result: CompletionEntry[];
 
+        const fileExtensions = getSupportedExtensions(compilerOptions);
         if (baseUrl) {
-            const fileExtensions = getSupportedExtensions(compilerOptions);
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
             result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, span, host);
@@ -174,6 +174,15 @@ namespace ts.Completions.PathCompletions {
         }
         else {
             result = [];
+        }
+
+        if (compilerOptions.moduleResolution === ts.ModuleResolutionKind.NodeJs) {
+            forEachAncestorDirectory(scriptPath, ancestor => {
+                const nodeModules = combinePaths(ancestor, "node_modules");
+                if (host.directoryExists(nodeModules)) {
+                    getCompletionEntriesForDirectoryFragment(fragment, nodeModules, fileExtensions, /*includeExtensions*/ false, span, host, /*exclude*/ undefined, result);
+                }
+            });
         }
 
         getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, span, result);
