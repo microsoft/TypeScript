@@ -13,6 +13,7 @@
         "indent": [true,
             "spaces"
         ],
+        "interface-name": [true, "never-prefix"],
         "interface-over-type-literal": true,
         "jsdoc-format": true,
         "linebreak-style": [true, "CRLF"],
@@ -110,7 +111,6 @@
         "no-consecutive-blank-lines": false,
 
         // Not doing
-        "interface-name": false,
         "max-classes-per-file": false,
         "member-ordering": false,
         "no-angle-bracket-type-assertion": false,
