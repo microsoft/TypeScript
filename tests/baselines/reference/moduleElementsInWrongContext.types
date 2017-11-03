@@ -55,7 +55,7 @@
 >Foo : typeof Foo
 
     import bar from "ambient";
->bar : any
+>bar : typeof Foo
 
     import { baz } from "ambient";
 >baz : any

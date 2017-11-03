@@ -4,28 +4,11 @@
 import Namespace from "./b";
 export var x = new Namespace.Foo();
 
-//// [b.ts]
+//// [b.d.ts]
 export class Foo {
 	member: string;
 }
 
-//// [b.js]
-System.register([], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
-    var Foo;
-    return {
-        setters: [],
-        execute: function () {
-            Foo = /** @class */ (function () {
-                function Foo() {
-                }
-                return Foo;
-            }());
-            exports_1("Foo", Foo);
-        }
-    };
-});
 //// [a.js]
 System.register(["./b"], function (exports_1, context_1) {
     "use strict";

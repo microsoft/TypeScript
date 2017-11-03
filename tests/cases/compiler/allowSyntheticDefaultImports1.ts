@@ -4,7 +4,7 @@
 import Namespace from "./b";
 export var x = new Namespace.Foo();
 
-// @Filename: b.ts
+// @Filename: b.d.ts
 export class Foo {
 	member: string;
 }
