@@ -4,7 +4,7 @@ namespace ts.refactor.installTypesForPackage {
 
     const useDefaultImport: Refactor = {
         name: actionName,
-        description: actionName,
+        description: getLocaleSpecificMessage(Diagnostics.Convert_to_default_import),
         getEditsForAction,
         getAvailableActions,
     };
