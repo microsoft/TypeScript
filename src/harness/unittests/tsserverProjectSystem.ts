@@ -437,6 +437,50 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
+    function assertEvent(actualOutput: string, expectedEvent: protocol.Event, host: TestServerHost) {
+        assert.equal(actualOutput, server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, host.newLine));
+    }
+
+    function checkErrorMessage(host: TestServerHost, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
+        const outputs = host.getOutput();
+        assert.isTrue(outputs.length >= 1, outputs.toString());
+        const event: protocol.Event = {
+            seq: 0,
+            type: "event",
+            event: eventName,
+            body: diagnostics
+        };
+        assertEvent(outputs[0], event, host);
+    }
+
+    function checkCompleteEvent(host: TestServerHost, numberOfCurrentEvents: number, expectedSequenceId: number) {
+        const outputs = host.getOutput();
+        assert.equal(outputs.length, numberOfCurrentEvents, outputs.toString());
+        const event: protocol.RequestCompletedEvent = {
+            seq: 0,
+            type: "event",
+            event: "requestCompleted",
+            body: {
+                request_seq: expectedSequenceId
+            }
+        };
+        assertEvent(outputs[numberOfCurrentEvents - 1], event, host);
+    }
+
+    function checkProjectUpdatedInBackgroundEvent(host: TestServerHost, openFiles: string[]) {
+        const outputs = host.getOutput();
+        assert.equal(outputs.length, 1, outputs.toString());
+        const event: protocol.ProjectsUpdatedInBackgroundEvent = {
+            seq: 0,
+            type: "event",
+            event: "projectsUpdatedInBackground",
+            body: {
+                openFiles
+            }
+        };
+        assertEvent(outputs[0], event, host);
+    }
+
     describe("tsserverProjectSystem", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
@@ -2744,6 +2788,66 @@ namespace ts.projectSystem {
             const project = projectService.findProject(corruptedConfig.path);
             checkProjectRootFiles(project, [file1.path]);
         });
+
+        it("when opening new file that doesnt exist on disk yet", () => {
+            const host = createServerHost([libFile]);
+            let hasError = false;
+            const errLogger: server.Logger = {
+                close: noop,
+                hasLevel: () => true,
+                loggingEnabled: () => true,
+                perftrc: noop,
+                info: noop,
+                msg: (_s, type) => {
+                    if (type === server.Msg.Err) {
+                        hasError = true;
+                    }
+                },
+                startGroup: noop,
+                endGroup: noop,
+                getLogFileName: (): string => undefined
+            };
+            const session = createSession(host, { canUseEvents: true, logger: errLogger, useInferredProjectPerProjectRoot: true });
+
+            const folderPath = "/user/someuser/projects/someFolder";
+            const projectService = session.getProjectService();
+            const untitledFile = "untitled:Untitled-1";
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: {
+                    file: untitledFile,
+                    fileContent: "",
+                    scriptKindName: "JS",
+                    projectRootPath: folderPath
+                }
+            });
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            host.checkTimeoutQueueLength(2);
+
+            const newTimeoutId = host.getNextTimeoutId();
+            const expectedSequenceId = session.getNextSeq();
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [untitledFile]
+                }
+            });
+            host.checkTimeoutQueueLength(3);
+
+            // Run the last one = get error request
+            host.runQueuedTimeoutCallbacks(newTimeoutId);
+            host.checkTimeoutQueueLength(2);
+
+            checkErrorMessage(host, "syntaxDiag", { file: untitledFile, diagnostics: [] });
+            host.clearOutput();
+
+            host.runQueuedImmediateCallbacks();
+            assert.isFalse(hasError);
+            checkErrorMessage(host, "semanticDiag", { file: untitledFile, diagnostics: [] });
+
+            checkCompleteEvent(host, 2, expectedSequenceId);
+        });
     });
 
     describe("autoDiscovery", () => {
@@ -3445,50 +3549,6 @@ namespace ts.projectSystem {
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
         });
-
-        function assertEvent(actualOutput: string, expectedEvent: protocol.Event, host: TestServerHost) {
-            assert.equal(actualOutput, server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, host.newLine));
-        }
-
-        function checkErrorMessage(host: TestServerHost, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
-            const outputs = host.getOutput();
-            assert.isTrue(outputs.length >= 1, outputs.toString());
-            const event: protocol.Event = {
-                seq: 0,
-                type: "event",
-                event: eventName,
-                body: diagnostics
-            };
-            assertEvent(outputs[0], event, host);
-        }
-
-        function checkCompleteEvent(host: TestServerHost, numberOfCurrentEvents: number, expectedSequenceId: number) {
-            const outputs = host.getOutput();
-            assert.equal(outputs.length, numberOfCurrentEvents, outputs.toString());
-            const event: protocol.RequestCompletedEvent = {
-                seq: 0,
-                type: "event",
-                event: "requestCompleted",
-                body: {
-                    request_seq: expectedSequenceId
-                }
-            };
-            assertEvent(outputs[numberOfCurrentEvents - 1], event, host);
-        }
-
-        function checkProjectUpdatedInBackgroundEvent(host: TestServerHost, openFiles: string[]) {
-            const outputs = host.getOutput();
-            assert.equal(outputs.length, 1, outputs.toString());
-            const event: protocol.ProjectsUpdatedInBackgroundEvent = {
-                seq: 0,
-                type: "event",
-                event: "projectsUpdatedInBackground",
-                body: {
-                    openFiles
-                }
-            };
-            assertEvent(outputs[0], event, host);
-        }
 
         it("npm install @types works", () => {
             const folderPath = "/a/b/projects/temp";
