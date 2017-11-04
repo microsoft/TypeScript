@@ -699,9 +699,11 @@ namespace ts {
                 case SyntaxKind.JsxText:
                     return emitJsxText(<JsxText>node);
                 case SyntaxKind.JsxOpeningElement:
-                    return emitJsxOpeningElement(<JsxOpeningElement>node);
+                case SyntaxKind.JsxOpeningFragment:
+                    return emitJsxOpeningElementOrFragment(<JsxOpeningElement>node);
                 case SyntaxKind.JsxClosingElement:
-                    return emitJsxClosingElement(<JsxClosingElement>node);
+                case SyntaxKind.JsxClosingFragment:
+                    return emitJsxClosingElementOrFragment(<JsxClosingElement>node);
                 case SyntaxKind.JsxAttribute:
                     return emitJsxAttribute(<JsxAttribute>node);
                 case SyntaxKind.JsxAttributes:
@@ -836,6 +838,8 @@ namespace ts {
                     return emitJsxElement(<JsxElement>node);
                 case SyntaxKind.JsxSelfClosingElement:
                     return emitJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                case SyntaxKind.JsxFragment:
+                    return emitJsxFragment(<JsxFragment>node);
 
                 // Transformation nodes
                 case SyntaxKind.PartiallyEmittedExpression:
@@ -2060,7 +2064,7 @@ namespace ts {
 
         function emitJsxElement(node: JsxElement) {
             emit(node.openingElement);
-            emitList(node, node.children, ListFormat.JsxElementChildren);
+            emitList(node, node.children, ListFormat.JsxElementOrFragmentChildren);
             emit(node.closingElement);
         }
 
@@ -2075,14 +2079,24 @@ namespace ts {
             write("/>");
         }
 
-        function emitJsxOpeningElement(node: JsxOpeningElement) {
+        function emitJsxFragment(node: JsxFragment) {
+            emit(node.openingFragment);
+            emitList(node, node.children, ListFormat.JsxElementOrFragmentChildren);
+            emit(node.closingFragment);
+        }
+
+        function emitJsxOpeningElementOrFragment(node: JsxOpeningElement | JsxOpeningFragment) {
             write("<");
-            emitJsxTagName(node.tagName);
-            writeIfAny(node.attributes.properties, " ");
-            // We are checking here so we won't re-enter the emitting pipeline and emit extra sourcemap
-            if (node.attributes.properties && node.attributes.properties.length > 0) {
-                emit(node.attributes);
+
+            if (isJsxOpeningElement(node)) {
+                emitJsxTagName(node.tagName);
+                // We are checking here so we won't re-enter the emitting pipeline and emit extra sourcemap
+                if (node.attributes.properties && node.attributes.properties.length > 0) {
+                    write(" ");
+                    emit(node.attributes);
+                }
             }
+
             write(">");
         }
 
@@ -2090,9 +2104,11 @@ namespace ts {
             writer.writeLiteral(getTextOfNode(node, /*includeTrivia*/ true));
         }
 
-        function emitJsxClosingElement(node: JsxClosingElement) {
+        function emitJsxClosingElementOrFragment(node: JsxClosingElement | JsxClosingFragment) {
             write("</");
-            emitJsxTagName(node.tagName);
+            if (isJsxClosingElement(node)) {
+                emitJsxTagName(node.tagName);
+            }
             write(">");
         }
 
@@ -2611,12 +2627,6 @@ namespace ts {
             writer.decreaseIndent();
         }
 
-        function writeIfAny(nodes: NodeArray<Node>, text: string) {
-            if (some(nodes)) {
-                write(text);
-            }
-        }
-
         function writeToken(token: SyntaxKind, pos: number, contextNode?: Node) {
             return onEmitSourceMapOfToken
                 ? onEmitSourceMapOfToken(contextNode, token, pos, writeTokenText)
@@ -2651,8 +2661,8 @@ namespace ts {
         function writeLines(text: string): void {
             const lines = text.split(/\r\n?|\n/g);
             const indentation = guessIndentation(lines);
-            for (let i = 0; i < lines.length; i++) {
-                const line = indentation ? lines[i].slice(indentation) : lines[i];
+            for (const lineText of lines) {
+                const line = indentation ? lineText.slice(indentation) : lineText;
                 if (line.length) {
                     writeLine();
                     write(line);
@@ -3176,7 +3186,7 @@ namespace ts {
         EnumMembers = CommaDelimited | Indented | MultiLine,
         CaseBlockClauses = Indented | MultiLine,
         NamedImportsOrExportsElements = CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | SingleLine | SpaceBetweenBraces,
-        JsxElementChildren = SingleLine | NoInterveningComments,
+        JsxElementOrFragmentChildren = SingleLine | NoInterveningComments,
         JsxElementAttributes = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
         CaseOrDefaultClauseStatements = Indented | MultiLine | NoTrailingNewLine | OptionalIfEmpty,
         HeritageClauseTypes = CommaDelimited | SpaceBetweenSiblings | SingleLine,

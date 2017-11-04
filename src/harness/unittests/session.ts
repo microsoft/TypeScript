@@ -53,6 +53,17 @@ namespace ts.server {
             return new TestSession(opts);
         }
 
+        // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
+        let oldPrepare: Function;
+        before(() => {
+            oldPrepare = (Error as any).prepareStackTrace;
+            delete (Error as any).prepareStackTrace;
+        });
+
+        after(() => {
+            (Error as any).prepareStackTrace = oldPrepare;
+        });
+
         beforeEach(() => {
             session = createSession();
             session.send = (msg: protocol.Message) => {
@@ -117,7 +128,7 @@ namespace ts.server {
                     body: undefined
                 });
             });
-            it ("should handle literal types in request", () => {
+            it("should handle literal types in request", () => {
                 const configureRequest: protocol.ConfigureRequest = {
                     command: CommandNames.Configure,
                     seq: 0,
@@ -175,6 +186,8 @@ namespace ts.server {
                 CommandNames.Configure,
                 CommandNames.Definition,
                 CommandNames.DefinitionFull,
+                CommandNames.DefinitionAndBoundSpan,
+                CommandNames.DefinitionAndBoundSpanFull,
                 CommandNames.Implementation,
                 CommandNames.ImplementationFull,
                 CommandNames.Exit,
@@ -341,7 +354,7 @@ namespace ts.server {
                 session.addProtocolHandler(command, () => resp);
 
                 expect(() => session.addProtocolHandler(command, () => resp))
-                .to.throw(`Protocol handler already exists for command "${command}"`);
+                    .to.throw(`Protocol handler already exists for command "${command}"`);
             });
         });
 
@@ -387,6 +400,18 @@ namespace ts.server {
     });
 
     describe("exceptions", () => {
+
+        // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
+        let oldPrepare: Function;
+        before(() => {
+            oldPrepare = (Error as any).prepareStackTrace;
+            delete (Error as any).prepareStackTrace;
+        });
+
+        after(() => {
+            (Error as any).prepareStackTrace = oldPrepare;
+        });
+
         const command = "testhandler";
         class TestSession extends Session {
             lastSent: protocol.Message;

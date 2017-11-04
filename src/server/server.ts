@@ -3,7 +3,7 @@
 /// <reference path="session.ts" />
 
 namespace ts.server {
-    interface IOSessionOptions {
+    interface IoSessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
         canUseEvents: boolean;
@@ -349,13 +349,13 @@ namespace ts.server {
 
             const execArgv: string[] = [];
             for (const arg of process.execArgv) {
-                const match = /^--(debug|inspect)(=(\d+))?$/.exec(arg);
+                const match = /^--((?:debug|inspect)(?:-brk)?)(?:=(\d+))?$/.exec(arg);
                 if (match) {
                     // if port is specified - use port + 1
                     // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
-                    const currentPort = match[3] !== undefined
-                        ? +match[3]
-                        : match[1] === "debug" ? 5858 : 9229;
+                    const currentPort = match[2] !== undefined
+                        ? +match[2]
+                        : match[1].charAt(0) === "d" ? 5858 : 9229;
                     execArgv.push(`--${match[1]}=${currentPort + 1}`);
                     break;
                 }
@@ -529,7 +529,7 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        constructor(options: IOSessionOptions) {
+        constructor(options: IoSessionOptions) {
             const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
@@ -816,7 +816,7 @@ namespace ts.server {
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
         const statusCache = createMap<boolean>();
-        sys.watchDirectory = function (path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+        sys.watchDirectory = (path, callback, recursive) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
             if (status === undefined) {
@@ -933,7 +933,7 @@ namespace ts.server {
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
-    const options: IOSessionOptions = {
+    const options: IoSessionOptions = {
         host: sys,
         cancellationToken,
         installerEventPort: eventPort,
@@ -953,7 +953,7 @@ namespace ts.server {
     };
 
     const ioSession = new IOSession(options);
-    process.on("uncaughtException", function (err: Error) {
+    process.on("uncaughtException", err => {
         ioSession.logError(err, "unknown");
     });
     // See https://github.com/Microsoft/TypeScript/issues/11348

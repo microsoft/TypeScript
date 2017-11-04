@@ -98,9 +98,7 @@ namespace ts.server {
         getExternalFiles?(proj: Project): string[];
     }
 
-    export interface PluginModuleFactory {
-        (mod: { typescript: typeof ts }): PluginModule;
-    }
+    export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
 
     /**
      * The project root can be script info - if root is present,
@@ -947,16 +945,6 @@ namespace ts.server {
             }
         }
 
-        reloadScript(filename: NormalizedPath, tempFileName?: NormalizedPath): boolean {
-            const script = this.projectService.getScriptInfoForNormalizedPath(filename);
-            if (script) {
-                Debug.assert(script.isAttached(this));
-                script.reloadFromFile(tempFileName);
-                return true;
-            }
-            return false;
-        }
-
         /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
             this.updateGraph();
@@ -1065,7 +1053,7 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
-            projectRootPath: string | undefined,
+            projectRootPath: NormalizedPath | undefined,
             currentDirectory: string | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
@@ -1081,7 +1069,8 @@ namespace ts.server {
         }
 
         addRoot(info: ScriptInfo) {
-            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info);
+            Debug.assert(info.isScriptOpen());
+            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info, this.projectService.openFiles.get(info.path));
             if (!this._isJsInferredProject && info.isJavaScript()) {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ true);
             }

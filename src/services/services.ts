@@ -31,7 +31,7 @@
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.5";
+    export const servicesVersion = "0.7";
 
     /* @internal */
     let ruleProvider: formatting.RulesProvider;
@@ -41,6 +41,7 @@ namespace ts {
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
                 new TokenObject(kind, pos, end);
         node.parent = parent;
+        node.flags = parent.flags & NodeFlags.ContextFlags;
         return node;
     }
 
@@ -276,7 +277,10 @@ namespace ts {
         }
 
         public getText(sourceFile?: SourceFile): string {
-            return (sourceFile || this.getSourceFile()).text.substring(this.getStart(), this.getEnd());
+            if (!sourceFile) {
+                sourceFile = this.getSourceFile();
+            }
+            return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
         }
 
         public getChildCount(): number {
@@ -724,9 +728,9 @@ namespace ts {
 
                     case SyntaxKind.BinaryExpression:
                         if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
-                           addDeclaration(node as BinaryExpression);
+                            addDeclaration(node as BinaryExpression);
                         }
-                        // falls through
+                    // falls through
 
                     default:
                         forEachChild(node, visit);
@@ -1322,21 +1326,44 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false }): CompletionInfo {
             synchronizeHostData();
-            return Completions.getCompletionsAtPosition(host, program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, program.getSourceFiles());
+            return Completions.getCompletionsAtPosition(
+                host,
+                program.getTypeChecker(),
+                log,
+                program.getCompilerOptions(),
+                getValidSourceFile(fileName),
+                position,
+                program.getSourceFiles(),
+                options);
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, entryName: string, formattingOptions?: FormatCodeSettings): CompletionEntryDetails {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
             synchronizeHostData();
             const ruleProvider = formattingOptions ? getRuleProvider(formattingOptions) : undefined;
             return Completions.getCompletionEntryDetails(
-                program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles(), host, ruleProvider);
+                program.getTypeChecker(),
+                log,
+                program.getCompilerOptions(),
+                getValidSourceFile(fileName),
+                position,
+                { name, source },
+                program.getSourceFiles(),
+                host,
+                ruleProvider);
         }
 
-        function getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
+        function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles());
+            return Completions.getCompletionEntrySymbol(
+                program.getTypeChecker(),
+                log,
+                program.getCompilerOptions(),
+                getValidSourceFile(fileName),
+                position,
+                { name, source },
+                program.getSourceFiles());
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
@@ -1411,6 +1438,11 @@ namespace ts {
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
             return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
+        }
+
+        function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+            synchronizeHostData();
+            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
         }
 
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
@@ -2025,6 +2057,7 @@ namespace ts {
             getSignatureHelpItems,
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
+            getDefinitionAndBoundSpan,
             getImplementationAtPosition,
             getTypeDefinitionAtPosition,
             getReferencesAtPosition,

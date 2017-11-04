@@ -90,9 +90,16 @@ namespace ts.SymbolDisplay {
             : ScriptElementKindModifier.none;
     }
 
+    interface SymbolDisplayPartsDocumentationAndSymbolKind {
+        displayParts: SymbolDisplayPart[];
+        documentation: SymbolDisplayPart[];
+        symbolKind: ScriptElementKind;
+        tags: JSDocTagInfo[];
+    }
+
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
     export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
-        location: Node, semanticMeaning = getMeaningFromLocation(location)) {
+        location: Node, semanticMeaning = getMeaningFromLocation(location)): SymbolDisplayPartsDocumentationAndSymbolKind {
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[];
@@ -482,8 +489,10 @@ namespace ts.SymbolDisplay {
             addNewLineIfDisplayPartsExist();
             if (symbolKind) {
                 pushTypePart(symbolKind);
-                displayParts.push(spacePart());
-                addFullSymbolName(symbol);
+                if (!some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
+                    displayParts.push(spacePart());
+                    addFullSymbolName(symbol);
+                }
             }
         }
 

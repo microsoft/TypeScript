@@ -362,27 +362,32 @@ function parsePrimaryExpression(): any {
 }`);
 
         testExtractFunction("extractFunction_VariableDeclaration_Var", `
-[#|var x = 1;|]
+[#|var x = 1;
+"hello"|]
 x;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_Let_Type", `
-[#|let x: number = 1;|]
+[#|let x: number = 1;
+"hello";|]
 x;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_Let_NoType", `
-[#|let x = 1;|]
+[#|let x = 1;
+"hello";|]
 x;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_Const_Type", `
-[#|const x: number = 1;|]
+[#|const x: number = 1;
+"hello";|]
 x;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_Const_NoType", `
-[#|const x = 1;|]
+[#|const x = 1;
+"hello";|]
 x;
 `);
 
@@ -404,7 +409,8 @@ x; y; z;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_ConsumedTwice", `
-[#|const x: number = 1;|]
+[#|const x: number = 1;
+"hello";|]
 x; x;
 `);
 
