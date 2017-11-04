@@ -529,6 +529,13 @@ namespace ts {
             Strict,
         }
 
+        const enum ExpandingFlags {
+            None = 0,
+            Source = 1,
+            Target = 1 << 1,
+            Both = Source | Target,
+        }
+
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
 
@@ -9229,12 +9236,6 @@ namespace ts {
             let targetStack: Type[];
             let maybeCount = 0;
             let depth = 0;
-            const enum ExpandingFlags {
-                None = 0,
-                Source = 1,
-                Target = 1 << 1,
-                Both = Source | Target,
-            }
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
             let isIntersectionConstituent = false;
