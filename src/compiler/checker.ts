@@ -529,6 +529,11 @@ namespace ts {
             Strict,
         }
 
+        const enum MappedTypeModifiers {
+            Readonly = 1 << 0,
+            Optional = 1 << 1,
+        }
+
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
 
@@ -5875,6 +5880,17 @@ namespace ts {
             return type.modifiersType;
         }
 
+        function getMappedTypeModifiers(type: MappedType): MappedTypeModifiers {
+            return (type.declaration.readonlyToken ? MappedTypeModifiers.Readonly : 0) |
+                (type.declaration.questionToken ? MappedTypeModifiers.Optional : 0);
+        }
+
+        function getCombinedMappedTypeModifiers(type: MappedType): MappedTypeModifiers {
+            const modifiersType = getModifiersTypeFromMappedType(type);
+            return getMappedTypeModifiers(type) |
+                (isGenericMappedType(modifiersType) ? getMappedTypeModifiers(<MappedType>modifiersType) : 0);
+        }
+
         function isPartialMappedType(type: Type) {
             return getObjectFlags(type) & ObjectFlags.Mapped && !!(<MappedType>type).declaration.questionToken;
         }
@@ -9592,13 +9608,10 @@ namespace ts {
             // related to Y, where X' is an instantiation of X in which P is replaced with Q. Notice
             // that S and T are contra-variant whereas X and Y are co-variant.
             function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean): Ternary {
-                const sourceReadonly = !!source.declaration.readonlyToken;
-                const sourceOptional = !!source.declaration.questionToken;
-                const targetReadonly = !!target.declaration.readonlyToken;
-                const targetOptional = !!target.declaration.questionToken;
-                const modifiersRelated = relation === identityRelation ?
-                    sourceReadonly === targetReadonly && sourceOptional === targetOptional :
-                    relation === comparableRelation || !sourceOptional || targetOptional;
+                const modifiersRelated = relation === comparableRelation || (
+                    relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
+                        !(getCombinedMappedTypeModifiers(source) & MappedTypeModifiers.Optional) ||
+                        getCombinedMappedTypeModifiers(target) & MappedTypeModifiers.Optional);
                 if (modifiersRelated) {
                     let result: Ternary;
                     if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
