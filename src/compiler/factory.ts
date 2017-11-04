@@ -73,11 +73,10 @@ namespace ts {
 
     // Literals
 
-    export function createLiteral(value: string): StringLiteral;
+    /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
+    export function createLiteral(value: string | StringLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: number): NumericLiteral;
     export function createLiteral(value: boolean): BooleanLiteral;
-    /** Create a string literal whose source text is read from a source node during emit. */
-    export function createLiteral(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: string | number | boolean): PrimaryExpression;
     export function createLiteral(value: string | number | boolean | StringLiteral | NumericLiteral | Identifier): PrimaryExpression {
         if (typeof value === "number") {
@@ -116,6 +115,7 @@ namespace ts {
 
     export function createIdentifier(text: string): Identifier;
     /* @internal */
+    // tslint:disable-next-line unified-signatures
     export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode>): Identifier;
     export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode>): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
