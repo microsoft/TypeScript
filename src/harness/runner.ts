@@ -133,8 +133,9 @@ function handleTestConfig() {
             return true;
         }
 
-        if (testConfig.runners && testConfig.runners.length > 0) {
-            for (const option of testConfig.runners) {
+        const runnerConfig = testConfig.runners || testConfig.test;
+        if (runnerConfig && runnerConfig.length > 0) {
+            for (const option of runnerConfig) {
                 if (!option) {
                     continue;
                 }
