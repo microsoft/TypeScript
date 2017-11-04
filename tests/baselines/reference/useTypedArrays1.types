@@ -1,0 +1,46 @@
+=== tests/cases/conformance/es2017/useTypedArrays1.ts ===
+var int8Array = new Int8Array();
+>int8Array : Int8Array
+>new Int8Array() : Int8Array
+>Int8Array : Int8ArrayConstructor
+
+var uint8Array = new Uint8Array();
+>uint8Array : Uint8Array
+>new Uint8Array() : Uint8Array
+>Uint8Array : Uint8ArrayConstructor
+
+var uint8ClampedArray = new Uint8ClampedArray();
+>uint8ClampedArray : Uint8ClampedArray
+>new Uint8ClampedArray() : Uint8ClampedArray
+>Uint8ClampedArray : Uint8ClampedArrayConstructor
+
+var int16Array = new Int16Array();
+>int16Array : Int16Array
+>new Int16Array() : Int16Array
+>Int16Array : Int16ArrayConstructor
+
+var uint16Array = new Uint16Array();
+>uint16Array : Uint16Array
+>new Uint16Array() : Uint16Array
+>Uint16Array : Uint16ArrayConstructor
+
+var int32Array = new Int32Array();
+>int32Array : Int32Array
+>new Int32Array() : Int32Array
+>Int32Array : Int32ArrayConstructor
+
+var uint32Array = new Uint32Array();
+>uint32Array : Uint32Array
+>new Uint32Array() : Uint32Array
+>Uint32Array : Uint32ArrayConstructor
+
+var float32Array = new Float32Array();
+>float32Array : Float32Array
+>new Float32Array() : Float32Array
+>Float32Array : Float32ArrayConstructor
+
+var float64Array = new Float64Array();
+>float64Array : Float64Array
+>new Float64Array() : Float64Array
+>Float64Array : Float64ArrayConstructor
+
