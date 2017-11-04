@@ -1826,7 +1826,7 @@ namespace ts.projectSystem {
             // Specify .html extension as mixed content
             const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
             const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             // The configured project should now be updated to include html file
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1885,7 +1885,7 @@ namespace ts.projectSystem {
             // Specify .html extension as mixed content in a configure host request
             const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
             const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             let projectService = session.getProjectService();
@@ -1904,7 +1904,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config2, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -1923,7 +1923,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config3, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -1942,7 +1942,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config4, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -1961,7 +1961,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config5, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();

@@ -1907,8 +1907,9 @@ namespace ts {
          * Extends one symbol table with another while collecting information on name collisions for error message generation into the `lookupTable` argument
          * Not passing `lookupTable` and `exportNode` disables this collection, and just extends the tables
          */
-        function extendExportSymbols(target: SymbolTable, source: SymbolTable, lookupTable?: ExportCollisionTrackerTable, exportNode?: ExportDeclaration) {
-            source && source.forEach((sourceSymbol, id) => {
+        function extendExportSymbols(target: SymbolTable, source: SymbolTable | undefined, lookupTable?: ExportCollisionTrackerTable, exportNode?: ExportDeclaration) {
+            if (!source) return;
+            source.forEach((sourceSymbol, id) => {
                 if (id === "default") return;
 
                 const targetSymbol = target.get(id);
@@ -16989,8 +16990,7 @@ namespace ts {
          * @returns On success, the expression's signature's return type. On failure, anyType.
          */
         function checkCallExpression(node: CallExpression | NewExpression): Type {
-            // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
-            checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node.arguments);
+            if (!checkGrammarTypeArguments(node, node.typeArguments)) checkGrammarArguments(node.arguments);
 
             const signature = getResolvedSignature(node);
 
@@ -17037,7 +17037,7 @@ namespace ts {
 
         function checkImportCallExpression(node: ImportCall): Type {
             // Check grammar of dynamic import
-            checkGrammarArguments(node.arguments) || checkGrammarImportCallExpression(node);
+            if (!checkGrammarArguments(node.arguments)) checkGrammarImportCallExpression(node);
 
             if (node.arguments.length === 0) {
                 return createPromiseReturnType(node, anyType);
@@ -18712,9 +18712,7 @@ namespace ts {
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
             // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code
             // or if its FunctionBody is strict code(11.1.5).
-
-            // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node);
+            checkGrammarDecoratorsAndModifiers(node);
 
             checkVariableLikeDeclaration(node);
             const func = getContainingFunction(node);
@@ -19104,14 +19102,13 @@ namespace ts {
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
-
+            if (!checkGrammarDecoratorsAndModifiers(node) && !checkGrammarProperty(node)) checkGrammarComputedPropertyName(node.name);
             checkVariableLikeDeclaration(node);
         }
 
         function checkMethodDeclaration(node: MethodDeclaration) {
             // Grammar checking
-            checkGrammarMethod(node) || checkGrammarComputedPropertyName(node.name);
+            if (!checkGrammarMethod(node)) checkGrammarComputedPropertyName(node.name);
 
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkFunctionOrMethodDeclaration(node);
@@ -19127,7 +19124,7 @@ namespace ts {
             // Grammar check on signature of constructor and modifier of the constructor is done in checkSignatureDeclaration function.
             checkSignatureDeclaration(node);
             // Grammar check for checking only related to constructorDeclaration
-            checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node);
+            if (!checkGrammarConstructorTypeParameters(node)) checkGrammarConstructorTypeAnnotation(node);
 
             checkSourceElement(node.body);
             registerForUnusedIdentifiersCheck(node);
@@ -19224,7 +19221,7 @@ namespace ts {
         function checkAccessorDeclaration(node: AccessorDeclaration) {
             if (produceDiagnostics) {
                 // Grammar checking accessors
-                checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
+                if (!checkGrammarFunctionLikeDeclaration(node) && !checkGrammarAccessor(node)) checkGrammarComputedPropertyName(node.name);
 
                 checkDecorators(node);
                 checkSignatureDeclaration(node);
@@ -20987,8 +20984,7 @@ namespace ts {
 
         function checkVariableStatement(node: VariableStatement) {
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarVariableDeclarationList(node.declarationList) || checkGrammarForDisallowedLetOrConstStatement(node);
-
+            if (!checkGrammarDecoratorsAndModifiers(node) && !checkGrammarVariableDeclarationList(node.declarationList)) checkGrammarForDisallowedLetOrConstStatement(node);
             forEach(node.declarationList.declarations, checkSourceElement);
         }
 
@@ -21496,7 +21492,7 @@ namespace ts {
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
             // Grammar checking
-            checkGrammarStatementInAmbientContext(node) || checkGrammarBreakOrContinueStatement(node);
+            if (!checkGrammarStatementInAmbientContext(node)) checkGrammarBreakOrContinueStatement(node);
 
             // TODO: Check that target label is valid
         }
@@ -22177,7 +22173,7 @@ namespace ts {
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
+            if (!checkGrammarDecoratorsAndModifiers(node)) checkGrammarInterfaceDeclaration(node);
 
             checkTypeParameters(node.typeParameters);
             if (produceDiagnostics) {
@@ -22219,7 +22215,7 @@ namespace ts {
 
         function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node);
+            checkGrammarDecoratorsAndModifiers(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
@@ -22389,7 +22385,7 @@ namespace ts {
             }
 
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node);
+            checkGrammarDecoratorsAndModifiers(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
@@ -22492,7 +22488,7 @@ namespace ts {
                     return;
                 }
 
-                if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node)) {
+                if (!checkGrammarDecoratorsAndModifiers(node)) {
                     if (!inAmbientContext && node.name.kind === SyntaxKind.StringLiteral) {
                         grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
                     }
@@ -22715,7 +22711,7 @@ namespace ts {
                 // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
-            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && hasModifiers(node)) {
+            if (!checkGrammarDecoratorsAndModifiers(node) && hasModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
             if (checkExternalImportOrExportDeclaration(node)) {
@@ -22742,7 +22738,7 @@ namespace ts {
                 return;
             }
 
-            checkGrammarDecorators(node) || checkGrammarModifiers(node);
+            checkGrammarDecoratorsAndModifiers(node);
             if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
                 checkImportBinding(node);
                 if (hasModifier(node, ModifierFlags.Export)) {
@@ -22778,7 +22774,7 @@ namespace ts {
                 return;
             }
 
-            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && hasModifiers(node)) {
+            if (!checkGrammarDecoratorsAndModifiers(node) && hasModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
             }
 
@@ -22851,7 +22847,7 @@ namespace ts {
                 return;
             }
             // Grammar checking
-            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && hasModifiers(node)) {
+            if (!checkGrammarDecoratorsAndModifiers(node) && hasModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
             if (node.expression.kind === SyntaxKind.Identifier) {
@@ -22896,29 +22892,31 @@ namespace ts {
                 }
                 // Checks for export * conflicts
                 const exports = getExportsOfModule(moduleSymbol);
-                exports && exports.forEach(({ declarations, flags }, id) => {
-                    if (id === "__export") {
-                        return;
-                    }
-                    // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries.
-                    // (TS Exceptions: namespaces, function overloads, enums, and interfaces)
-                    if (flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) {
-                        return;
-                    }
-                    const exportedDeclarationsCount = countWhere(declarations, isNotOverloadAndNotAccessor);
-                    if (flags & SymbolFlags.TypeAlias && exportedDeclarationsCount <= 2) {
-                        // it is legal to merge type alias with other values
-                        // so count should be either 1 (just type alias) or 2 (type alias + merged value)
-                        return;
-                    }
-                    if (exportedDeclarationsCount > 1) {
-                        for (const declaration of declarations) {
-                            if (isNotOverload(declaration)) {
-                                diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                if (exports) {
+                    exports.forEach(({ declarations, flags }, id) => {
+                        if (id === "__export") {
+                            return;
+                        }
+                        // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries.
+                        // (TS Exceptions: namespaces, function overloads, enums, and interfaces)
+                        if (flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) {
+                            return;
+                        }
+                        const exportedDeclarationsCount = countWhere(declarations, isNotOverloadAndNotAccessor);
+                        if (flags & SymbolFlags.TypeAlias && exportedDeclarationsCount <= 2) {
+                            // it is legal to merge type alias with other values
+                            // so count should be either 1 (just type alias) or 2 (type alias + merged value)
+                            return;
+                        }
+                        if (exportedDeclarationsCount > 1) {
+                            for (const declaration of declarations) {
+                                if (isNotOverload(declaration)) {
+                                    diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
                 links.exportsChecked = true;
             }
         }
@@ -24551,12 +24549,16 @@ namespace ts {
         }
 
         // GRAMMAR CHECKING
+        function checkGrammarDecoratorsAndModifiers(node: Node): boolean {
+            return checkGrammarDecorators(node) || checkGrammarModifiers(node);
+        }
+
         function checkGrammarDecorators(node: Node): boolean {
             if (!node.decorators) {
                 return false;
             }
             if (!nodeCanBeDecorated(node)) {
-                if (node.kind === SyntaxKind.MethodDeclaration && !ts.nodeIsPresent((<MethodDeclaration>node).body)) {
+                if (node.kind === SyntaxKind.MethodDeclaration && !nodeIsPresent((<MethodDeclaration>node).body)) {
                     return grammarErrorOnFirstToken(node, Diagnostics.A_decorator_can_only_decorate_a_method_implementation_not_an_overload);
                 }
                 else {
@@ -24906,7 +24908,7 @@ namespace ts {
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             // Prevent cascading error by short-circuit
             const file = getSourceFileOfNode(node);
-            return checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarTypeParameterList(node.typeParameters, file) ||
+            return checkGrammarDecoratorsAndModifiers(node) || checkGrammarTypeParameterList(node.typeParameters, file) ||
                 checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file);
         }
 
@@ -24962,7 +24964,7 @@ namespace ts {
 
         function checkGrammarIndexSignature(node: SignatureDeclaration) {
             // Prevent cascading error by short-circuit
-            return checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarIndexSignatureParameters(node);
+            return checkGrammarDecoratorsAndModifiers(node) || checkGrammarIndexSignatureParameters(node);
         }
 
         function checkGrammarForAtLeastOneTypeArgument(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
@@ -25013,7 +25015,7 @@ namespace ts {
             let seenExtendsClause = false;
             let seenImplementsClause = false;
 
-            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && node.heritageClauses) {
+            if (!checkGrammarDecoratorsAndModifiers(node) && node.heritageClauses) {
                 for (const heritageClause of node.heritageClauses) {
                     if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
                         if (seenExtendsClause) {

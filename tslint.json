@@ -92,7 +92,6 @@
         "no-object-literal-type-assertion": false,
         "no-shadowed-variable": false,
         "no-submodule-imports": false,
-        "no-unused-expression": false,
         "no-unnecessary-initializer": false,
         "no-var-requires": false,
         "object-literal-key-quotes": false,
