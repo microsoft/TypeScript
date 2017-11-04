@@ -2,7 +2,7 @@
 
 /* @internal */
 namespace ts.formatting {
-    export class Rules {
+    class Rules {
         public IgnoreBeforeComment: Rule;
         public IgnoreAfterLineComment: Rule;
 
@@ -970,4 +970,11 @@ namespace ts.formatting {
             return context.contextNode.kind === SyntaxKind.NonNullExpression;
         }
     }
+
+    const rules = new Rules();
+    export const allRules = [
+        ...rules.HighPriorityCommonRules,
+        ...rules.UserConfigurableRules,
+        ...rules.LowPriorityCommonRules,
+    ];
 }

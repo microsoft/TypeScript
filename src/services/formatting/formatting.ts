@@ -1,6 +1,5 @@
 ///<reference path='..\services.ts' />
 ///<reference path='formattingScanner.ts' />
-///<reference path='rulesProvider.ts' />
 ///<reference path='references.ts' />
 
 /* @internal */
@@ -67,7 +66,7 @@ namespace ts.formatting {
         delta: number;
     }
 
-    export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
+    export function formatOnEnter(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
         const line = sourceFile.getLineAndCharacterOfPosition(position).line;
         if (line === 0) {
             return [];
@@ -93,15 +92,15 @@ namespace ts.formatting {
             // end value is exclusive so add 1 to the result
             end: endOfFormatSpan + 1
         };
-        return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnEnter);
+        return formatSpan(span, sourceFile, formatContext, FormattingRequestKind.FormatOnEnter);
     }
 
-    export function formatOnSemicolon(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
+    export function formatOnSemicolon(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
         const semicolon = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.SemicolonToken, sourceFile);
-        return formatNodeLines(findOutermostNodeWithinListLevel(semicolon), sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnSemicolon);
+        return formatNodeLines(findOutermostNodeWithinListLevel(semicolon), sourceFile, formatContext, FormattingRequestKind.FormatOnSemicolon);
     }
 
-    export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
+    export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
         const openingCurly = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.OpenBraceToken, sourceFile);
         if (!openingCurly) {
             return [];
@@ -126,29 +125,29 @@ namespace ts.formatting {
             end: position
         };
 
-        return formatSpan(textRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace);
+        return formatSpan(textRange, sourceFile, formatContext, FormattingRequestKind.FormatOnOpeningCurlyBrace);
     }
 
-    export function formatOnClosingCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
+    export function formatOnClosingCurly(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
         const precedingToken = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.CloseBraceToken, sourceFile);
-        return formatNodeLines(findOutermostNodeWithinListLevel(precedingToken), sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnClosingCurlyBrace);
+        return formatNodeLines(findOutermostNodeWithinListLevel(precedingToken), sourceFile, formatContext, FormattingRequestKind.FormatOnClosingCurlyBrace);
     }
 
-    export function formatDocument(sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
+    export function formatDocument(sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
         const span = {
             pos: 0,
             end: sourceFile.text.length
         };
-        return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatDocument);
+        return formatSpan(span, sourceFile, formatContext, FormattingRequestKind.FormatDocument);
     }
 
-    export function formatSelection(start: number, end: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
+    export function formatSelection(start: number, end: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
         // format from the beginning of the line
         const span = {
             pos: getLineStartPositionForPosition(start, sourceFile),
             end,
         };
-        return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatSelection);
+        return formatSpan(span, sourceFile, formatContext, FormattingRequestKind.FormatSelection);
     }
 
     /**
@@ -337,7 +336,7 @@ namespace ts.formatting {
     }
 
     /* @internal */
-    export function formatNodeGivenIndentation(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number,  rulesProvider: RulesProvider): TextChange[] {
+    export function formatNodeGivenIndentation(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number, formatContext: FormatContext): TextChange[] {
         const range = { pos: 0, end: sourceFileLike.text.length };
         return getFormattingScanner(sourceFileLike.text, languageVariant, range.pos, range.end, scanner => formatSpanWorker(
             range,
@@ -345,14 +344,13 @@ namespace ts.formatting {
             initialIndentation,
             delta,
             scanner,
-            rulesProvider.getFormatOptions(),
-            rulesProvider,
+            formatContext,
             FormattingRequestKind.FormatSelection,
             _ => false, // assume that node does not have any errors
             sourceFileLike));
     }
 
-    function formatNodeLines(node: Node, sourceFile: SourceFile, options: FormatCodeSettings, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[] {
+    function formatNodeLines(node: Node, sourceFile: SourceFile, formatContext: FormatContext, requestKind: FormattingRequestKind): TextChange[] {
         if (!node) {
             return [];
         }
@@ -362,24 +360,19 @@ namespace ts.formatting {
             end: node.end
         };
 
-        return formatSpan(span, sourceFile, options, rulesProvider, requestKind);
+        return formatSpan(span, sourceFile, formatContext, requestKind);
     }
 
-    function formatSpan(originalRange: TextRange,
-        sourceFile: SourceFile,
-        options: FormatCodeSettings,
-        rulesProvider: RulesProvider,
-        requestKind: FormattingRequestKind): TextChange[] {
+    function formatSpan(originalRange: TextRange, sourceFile: SourceFile, formatContext: FormatContext, requestKind: FormattingRequestKind): TextChange[] {
         // find the smallest node that fully wraps the range and compute the initial indentation for the node
         const enclosingNode = findEnclosingNode(originalRange, sourceFile);
         return getFormattingScanner(sourceFile.text, sourceFile.languageVariant, getScanStartPosition(enclosingNode, originalRange, sourceFile), originalRange.end, scanner => formatSpanWorker(
             originalRange,
             enclosingNode,
-            SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options),
-            getOwnOrInheritedDelta(enclosingNode, options, sourceFile),
+            SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, formatContext.options),
+            getOwnOrInheritedDelta(enclosingNode, formatContext.options, sourceFile),
             scanner,
-            options,
-            rulesProvider,
+            formatContext,
             requestKind,
             prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalRange),
             sourceFile));
@@ -390,8 +383,7 @@ namespace ts.formatting {
         initialIndentation: number,
         delta: number,
         formattingScanner: FormattingScanner,
-        options: FormatCodeSettings,
-        rulesProvider: RulesProvider,
+        { options, getRule }: FormatContext,
         requestKind: FormattingRequestKind,
         rangeContainsError: (r: TextRange) => boolean,
         sourceFile: SourceFileLike): TextChange[] {
@@ -917,7 +909,7 @@ namespace ts.formatting {
 
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
-            const rule = rulesProvider.getRule(formattingContext);
+            const rule = getRule(formattingContext);
 
             let trimTrailingWhitespaces: boolean;
             let lineAdded: boolean;

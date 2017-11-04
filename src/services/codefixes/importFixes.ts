@@ -166,7 +166,7 @@ namespace ts.codefix {
         return {
             host: context.host,
             newLineCharacter: context.newLineCharacter,
-            rulesProvider: context.rulesProvider,
+            formatContext: context.formatContext,
             sourceFile: context.sourceFile,
             checker,
             compilerOptions: context.program.getCompilerOptions(),

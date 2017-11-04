@@ -2,8 +2,26 @@
 
 /* @internal */
 namespace ts.formatting {
+    export interface FormatContext {
+        readonly options: ts.FormatCodeSettings;
+        readonly getRule: ts.formatting.RulesMap;
+    }
+
+    export function getFormatContext(options: FormatCodeSettings): formatting.FormatContext {
+        return { options, getRule: getRulesMap() };
+    }
+
+    let rulesMapCache: RulesMap | undefined;
+
+    function getRulesMap(): RulesMap {
+        if (rulesMapCache === undefined) {
+            rulesMapCache = createRulesMap(allRules);
+        }
+        return rulesMapCache;
+    }
+
     export type RulesMap = (context: FormattingContext) => Rule | undefined;
-    export function createRulesMap(rules: ReadonlyArray<Rule>): RulesMap {
+    function createRulesMap(rules: ReadonlyArray<Rule>): RulesMap {
         const map = buildMap(rules);
         return context => {
             const bucket = map[getRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind)];

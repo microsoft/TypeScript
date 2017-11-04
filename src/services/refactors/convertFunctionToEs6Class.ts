@@ -50,7 +50,7 @@ namespace ts.refactor.convertFunctionToES6Class {
 
         const { file: sourceFile } = context;
         const ctorSymbol = getConstructorSymbol(context);
-        const newLine = context.rulesProvider.getFormatOptions().newLineCharacter;
+        const newLine = context.formatContext.options.newLineCharacter;
 
         const deletedNodes: Node[] = [];
         const deletes: (() => any)[] = [];
