@@ -2654,6 +2654,7 @@ namespace ts {
         return node;
     }
 
+    // tslint:disable-next-line variable-name
     let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 
     /**
