@@ -1627,7 +1627,7 @@ namespace ts {
     /**
      * Creates a string comparer for use with string collation in the UI.
      */
-    const createUIStringComparer = (function () {
+    const createUIStringComparer = (() => {
         let defaultComparer: Comparer<string> | undefined;
         let enUSComparer: Comparer<string> | undefined;
 
