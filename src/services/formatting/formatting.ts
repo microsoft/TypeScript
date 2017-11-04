@@ -917,14 +917,14 @@ namespace ts.formatting {
 
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
-            const rule = rulesProvider.getRulesMap().GetRule(formattingContext);
+            const rule = rulesProvider.getRule(formattingContext);
 
             let trimTrailingWhitespaces: boolean;
             let lineAdded: boolean;
             if (rule) {
                 applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
 
-                if (rule.Operation.Action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
+                if (rule.action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
                     lineAdded = false;
                     // Handle the case where the next line is moved to be the end of this line.
                     // In this case we don't indent the next line in the next pass.
@@ -932,7 +932,7 @@ namespace ts.formatting {
                         dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
                     }
                 }
-                else if (rule.Operation.Action & RuleAction.NewLine && currentStartLine === previousStartLine) {
+                else if (rule.action & RuleAction.NewLine && currentStartLine === previousStartLine) {
                     lineAdded = true;
                     // Handle the case where token2 is moved to the new line.
                     // In this case we indent token2 in the next pass but we set
@@ -943,7 +943,7 @@ namespace ts.formatting {
                 }
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                trimTrailingWhitespaces = !(rule.Operation.Action & RuleAction.Delete) && rule.Flag !== RuleFlags.CanDeleteNewLines;
+                trimTrailingWhitespaces = !(rule.action & RuleAction.Delete) && rule.flags !== RuleFlags.CanDeleteNewLines;
             }
             else {
                 trimTrailingWhitespaces = true;
@@ -1118,7 +1118,7 @@ namespace ts.formatting {
             currentRange: TextRangeWithKind,
             currentStartLine: number): void {
 
-            switch (rule.Operation.Action) {
+            switch (rule.action) {
                 case RuleAction.Ignore:
                     // no action required
                     return;
@@ -1132,7 +1132,7 @@ namespace ts.formatting {
                     // exit early if we on different lines and rule cannot change number of newlines
                     // if line1 and line2 are on subsequent lines then no edits are required - ok to exit
                     // if line1 and line2 are separated with more than one newline - ok to exit since we cannot delete extra new lines
-                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
+                    if (rule.flags !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
                         return;
                     }
 
@@ -1144,7 +1144,7 @@ namespace ts.formatting {
                     break;
                 case RuleAction.Space:
                     // exit early if we on different lines and rule cannot change number of newlines
-                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
+                    if (rule.flags !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
                         return;
                     }
 
