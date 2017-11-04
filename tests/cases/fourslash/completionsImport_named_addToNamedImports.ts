@@ -9,7 +9,7 @@
 ////f/**/;
 
 goTo.marker("");
-verify.completionListContains({ name: "foo", source: "/a" }, "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
+verify.completionListContains({ name: "foo", source: "/a" }, "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, { includeExternalModuleExports: true });
 
 verify.applyCodeActionFromCompletion("", {
     name: "foo",

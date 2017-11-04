@@ -985,32 +985,6 @@ namespace ts {
         return initial;
     }
 
-    export function reduceRight<T, U>(array: ReadonlyArray<T>, f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
-    export function reduceRight<T>(array: ReadonlyArray<T>, f: (memo: T, value: T, i: number) => T): T;
-    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T {
-        if (array) {
-            const size = array.length;
-            if (size > 0) {
-                let pos = start === undefined || start > size - 1 ? size - 1 : start;
-                const end = count === undefined || pos - count < 0 ? 0 : pos - count;
-                let result: T;
-                if (arguments.length <= 2) {
-                    result = array[pos];
-                    pos--;
-                }
-                else {
-                    result = initial;
-                }
-                while (pos >= end) {
-                    result = f(result, array[pos], pos);
-                    pos--;
-                }
-                return result;
-            }
-        }
-        return initial;
-    }
-
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
     /**
@@ -1600,7 +1574,6 @@ namespace ts {
         }
         if (path.charCodeAt(1) === CharacterCodes.colon) {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
-            return 2;
         }
         // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
         // if <host> is omitted then it is assumed that host value is 'localhost',

@@ -10,7 +10,7 @@
 //// */
 
 /////**
-//// * @type {/*use*/[|Product|]}
+//// * @type {[|/*use*/Product|]}
 //// */
 ////const product = null;
 

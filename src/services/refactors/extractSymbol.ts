@@ -331,11 +331,11 @@ namespace ts.refactor.extractSymbol {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
-            if (!isStatement(nodeToCheck) && !(isPartOfExpression(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
+            if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
 
-            if (isInAmbientContext(nodeToCheck)) {
+            if (nodeToCheck.flags & NodeFlags.Ambient) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.CannotExtractAmbientBlock)];
             }
 
@@ -491,7 +491,7 @@ namespace ts.refactor.extractSymbol {
         if (isStatement(node)) {
             return [node];
         }
-        else if (isPartOfExpression(node)) {
+        else if (isExpressionNode(node)) {
             // If our selection is the expression in an ExpressionStatement, expand
             // the selection to include the enclosing Statement (this stops us
             // from trying to care about the return value of the extracted function
