@@ -76,13 +76,13 @@ namespace ts {
             name: "target",
             shortName: "t",
             type: createMapFromTemplate({
-                "es3": ScriptTarget.ES3,
-                "es5": ScriptTarget.ES5,
-                "es6": ScriptTarget.ES2015,
-                "es2015": ScriptTarget.ES2015,
-                "es2016": ScriptTarget.ES2016,
-                "es2017": ScriptTarget.ES2017,
-                "esnext": ScriptTarget.ESNext,
+                es3: ScriptTarget.ES3,
+                es5: ScriptTarget.ES5,
+                es6: ScriptTarget.ES2015,
+                es2015: ScriptTarget.ES2015,
+                es2016: ScriptTarget.ES2016,
+                es2017: ScriptTarget.ES2017,
+                esnext: ScriptTarget.ESNext,
             }),
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
@@ -93,14 +93,14 @@ namespace ts {
             name: "module",
             shortName: "m",
             type: createMapFromTemplate({
-                "none": ModuleKind.None,
-                "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD,
-                "system": ModuleKind.System,
-                "umd": ModuleKind.UMD,
-                "es6": ModuleKind.ES2015,
-                "es2015": ModuleKind.ES2015,
-                "esnext": ModuleKind.ESNext
+                none: ModuleKind.None,
+                commonjs: ModuleKind.CommonJS,
+                amd: ModuleKind.AMD,
+                system: ModuleKind.System,
+                umd: ModuleKind.UMD,
+                es6: ModuleKind.ES2015,
+                es2015: ModuleKind.ES2015,
+                esnext: ModuleKind.ESNext
             }),
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
@@ -114,18 +114,18 @@ namespace ts {
                 name: "lib",
                 type: createMapFromTemplate({
                     // JavaScript only
-                    "es5": "lib.es5.d.ts",
-                    "es6": "lib.es2015.d.ts",
-                    "es2015": "lib.es2015.d.ts",
-                    "es7": "lib.es2016.d.ts",
-                    "es2016": "lib.es2016.d.ts",
-                    "es2017": "lib.es2017.d.ts",
-                    "esnext": "lib.esnext.d.ts",
+                    es5: "lib.es5.d.ts",
+                    es6: "lib.es2015.d.ts",
+                    es2015: "lib.es2015.d.ts",
+                    es7: "lib.es2016.d.ts",
+                    es2016: "lib.es2016.d.ts",
+                    es2017: "lib.es2017.d.ts",
+                    esnext: "lib.esnext.d.ts",
                     // Host only
-                    "dom": "lib.dom.d.ts",
+                    dom: "lib.dom.d.ts",
                     "dom.iterable": "lib.dom.iterable.d.ts",
-                    "webworker": "lib.webworker.d.ts",
-                    "scripthost": "lib.scripthost.d.ts",
+                    webworker: "lib.webworker.d.ts",
+                    scripthost: "lib.scripthost.d.ts",
                     // ES2015 Or ESNext By-feature options
                     "es2015.core": "lib.es2015.core.d.ts",
                     "es2015.collection": "lib.es2015.collection.d.ts",
@@ -164,9 +164,9 @@ namespace ts {
         {
             name: "jsx",
             type: createMapFromTemplate({
-                "preserve": JsxEmit.Preserve,
+                preserve: JsxEmit.Preserve,
                 "react-native": JsxEmit.ReactNative,
-                "react": JsxEmit.React
+                react: JsxEmit.React
             }),
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
@@ -325,8 +325,8 @@ namespace ts {
         {
             name: "moduleResolution",
             type: createMapFromTemplate({
-                "node": ModuleResolutionKind.NodeJs,
-                "classic": ModuleResolutionKind.Classic,
+                node: ModuleResolutionKind.NodeJs,
+                classic: ModuleResolutionKind.Classic,
             }),
             paramType: Diagnostics.STRATEGY,
             category: Diagnostics.Module_Resolution_Options,
@@ -521,8 +521,8 @@ namespace ts {
         {
             name: "newLine",
             type: createMapFromTemplate({
-                "crlf": NewLineKind.CarriageReturnLineFeed,
-                "lf": NewLineKind.LineFeed
+                crlf: NewLineKind.CarriageReturnLineFeed,
+                lf: NewLineKind.LineFeed
             }),
             paramType: Diagnostics.NEWLINE,
             category: Diagnostics.Advanced_Options,

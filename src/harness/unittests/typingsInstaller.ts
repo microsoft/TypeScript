@@ -776,8 +776,8 @@ namespace ts.projectSystem {
             const bowerJson = {
                 path: "/bower.json",
                 content: JSON.stringify({
-                    "dependencies": {
-                        "jquery": "^3.1.0"
+                    dependencies: {
+                        jquery: "^3.1.0"
                     }
                 })
             };
@@ -1012,7 +1012,7 @@ namespace ts.projectSystem {
             const packageJson = {
                 path: "/a/b/package.json",
                 content: JSON.stringify({
-                    "dependencies": {
+                    dependencies: {
                         "; say ‘Hello from TypeScript!’ #": "0.0.x"
                     }
                 })
@@ -1094,7 +1094,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<string>({ "node": node.path });
+            const cache = createMapFromTemplate<string>({ node: node.path });
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"]);
             assert.deepEqual(logger.finish(), [
@@ -1144,7 +1144,7 @@ namespace ts.projectSystem {
             };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
             const cachePath = "/a/cache/";
             const commander = {
@@ -1194,7 +1194,7 @@ namespace ts.projectSystem {
             };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
             const cachePath = "/a/cache/";
             const commander = {
@@ -1246,7 +1246,7 @@ namespace ts.projectSystem {
             };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
             const cachePath = "/a/cache/";
             const host = createServerHost([f1, packageFile]);

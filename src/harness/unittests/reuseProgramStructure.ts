@@ -360,7 +360,7 @@ namespace ts {
             const options: CompilerOptions = { target };
 
             const program_1 = newProgram(files, ["a.ts"], options);
-            checkResolvedModulesCache(program_1, "a.ts", createMapFromTemplate({ "b": createResolvedModule("b.ts") }));
+            checkResolvedModulesCache(program_1, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts") }));
             checkResolvedModulesCache(program_1, "b.ts", /*expectedContent*/ undefined);
 
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
@@ -369,7 +369,7 @@ namespace ts {
             assert.equal(program_1.structureIsReused, StructureIsReused.Completely);
 
             // content of resolution cache should not change
-            checkResolvedModulesCache(program_1, "a.ts", createMapFromTemplate({ "b": createResolvedModule("b.ts") }));
+            checkResolvedModulesCache(program_1, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts") }));
             checkResolvedModulesCache(program_1, "b.ts", /*expectedContent*/ undefined);
 
             // imports has changed - program is not reused
@@ -386,7 +386,7 @@ namespace ts {
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
             assert.equal(program_3.structureIsReused, StructureIsReused.SafeModules);
-            checkResolvedModulesCache(program_4, "a.ts", createMapFromTemplate({ "b": createResolvedModule("b.ts"), "c": undefined }));
+            checkResolvedModulesCache(program_4, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts"), c: undefined }));
         });
 
         it("resolved type directives cache follows type directives", () => {
@@ -397,7 +397,7 @@ namespace ts {
             const options: CompilerOptions = { target, typeRoots: ["/types"] };
 
             const program_1 = newProgram(files, ["/a.ts"], options);
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
             checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
             const program_2 = updateProgram(program_1, ["/a.ts"], options, files => {
@@ -406,7 +406,7 @@ namespace ts {
             assert.equal(program_1.structureIsReused, StructureIsReused.Completely);
 
             // content of resolution cache should not change
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
             checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
             // type reference directives has changed - program is not reused
@@ -424,7 +424,7 @@ namespace ts {
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
             assert.equal(program_3.structureIsReused, StructureIsReused.SafeModules);
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
         });
 
         it("fetches imports after npm install", () => {
