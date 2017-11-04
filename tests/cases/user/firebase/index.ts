@@ -1,0 +1,1 @@
+import firebase = require("firebase");

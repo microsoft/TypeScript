@@ -20,8 +20,8 @@ namespace ts.codefix {
             // i.e. super(this.a), since in that case we won't suggest a fix
             if (superCall.expression && superCall.expression.kind === SyntaxKind.CallExpression) {
                 const expressionArguments = (<CallExpression>superCall.expression).arguments;
-                for (let i = 0; i < expressionArguments.length; i++) {
-                    if ((<PropertyAccessExpression>expressionArguments[i]).expression === token) {
+                for (const arg of expressionArguments) {
+                    if ((<PropertyAccessExpression>arg).expression === token) {
                         return undefined;
                     }
                 }

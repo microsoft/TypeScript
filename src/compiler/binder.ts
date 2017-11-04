@@ -1550,7 +1550,7 @@ namespace ts {
         function setExportContextFlag(node: ModuleDeclaration | SourceFile) {
             // A declaration source file or ambient module declaration that contains no export declarations (but possibly regular
             // declarations with export modifiers) is an export context in which declarations are implicitly exported.
-            if (isInAmbientContext(node) && !hasExportDeclarations(node)) {
+            if (node.flags & NodeFlags.Ambient && !hasExportDeclarations(node)) {
                 node.flags |= NodeFlags.ExportContext;
             }
             else {
@@ -1726,7 +1726,7 @@ namespace ts {
                 node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
                 node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord &&
                 !isIdentifierName(node) &&
-                !isInAmbientContext(node)) {
+                !(node.flags & NodeFlags.Ambient)) {
 
                 // Report error only if there are no parse errors in file
                 if (!file.parseDiagnostics.length) {
@@ -2481,7 +2481,7 @@ namespace ts {
         }
 
         function bindParameter(node: ParameterDeclaration) {
-            if (inStrictMode && !isInAmbientContext(node)) {
+            if (inStrictMode && !(node.flags & NodeFlags.Ambient)) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
                 checkStrictModeEvalOrArguments(node, node.name);
@@ -2503,7 +2503,7 @@ namespace ts {
         }
 
         function bindFunctionDeclaration(node: FunctionDeclaration) {
-            if (!file.isDeclarationFile && !isInAmbientContext(node)) {
+            if (!file.isDeclarationFile && !(node.flags & NodeFlags.Ambient)) {
                 if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
@@ -2520,7 +2520,7 @@ namespace ts {
         }
 
         function bindFunctionExpression(node: FunctionExpression) {
-            if (!file.isDeclarationFile && !isInAmbientContext(node)) {
+            if (!file.isDeclarationFile && !(node.flags & NodeFlags.Ambient)) {
                 if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
@@ -2534,7 +2534,7 @@ namespace ts {
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            if (!file.isDeclarationFile && !isInAmbientContext(node) && isAsyncFunction(node)) {
+            if (!file.isDeclarationFile && !(node.flags & NodeFlags.Ambient) && isAsyncFunction(node)) {
                 emitFlags |= NodeFlags.HasAsyncFunctions;
             }
 
@@ -2583,7 +2583,7 @@ namespace ts {
                     //   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
                     const reportUnreachableCode =
                         !options.allowUnreachableCode &&
-                        !isInAmbientContext(node) &&
+                        !(node.flags & NodeFlags.Ambient) &&
                         (
                             node.kind !== SyntaxKind.VariableStatement ||
                             getCombinedNodeFlags((<VariableStatement>node).declarationList) & NodeFlags.BlockScoped ||
@@ -3296,6 +3296,9 @@ namespace ts {
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxText:
             case SyntaxKind.JsxClosingElement:
+            case SyntaxKind.JsxFragment:
+            case SyntaxKind.JsxOpeningFragment:
+            case SyntaxKind.JsxClosingFragment:
             case SyntaxKind.JsxAttribute:
             case SyntaxKind.JsxAttributes:
             case SyntaxKind.JsxSpreadAttribute:

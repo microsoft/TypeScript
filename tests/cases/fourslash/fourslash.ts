@@ -148,6 +148,7 @@ declare namespace FourSlashInterface {
             kind?: string,
             spanIndex?: number,
             hasAction?: boolean,
+            options?: { includeExternalModuleExports: boolean },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
@@ -221,6 +222,7 @@ declare namespace FourSlashInterface {
          * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
          */
         goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
+        goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[], range: Range): void;
         /** Performs `goToDefinition` for each pair. */
         goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
         /** Performs `goToDefinition` on each key and value. */

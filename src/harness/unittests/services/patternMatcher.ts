@@ -1,7 +1,7 @@
 /// <reference path="..\..\..\services\patternMatcher.ts" />
 
-describe("PatternMatcher", function () {
-    describe("BreakIntoCharacterSpans", function () {
+describe("PatternMatcher", () => {
+    describe("BreakIntoCharacterSpans", () => {
         it("EmptyIdentifier", () => {
             verifyBreakIntoCharacterSpans("");
         });
@@ -55,7 +55,7 @@ describe("PatternMatcher", function () {
         });
     });
 
-    describe("BreakIntoWordSpans", function () {
+    describe("BreakIntoWordSpans", () => {
         it("VarbatimIdentifier", () => {
             verifyBreakIntoWordSpans("@int:", "int");
         });
