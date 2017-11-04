@@ -1407,13 +1407,12 @@ namespace ts {
             let lastChild: Node = undefined;
             forEachChild(
                 node,
-                child => (lastChild = child, undefined),
+                child => { lastChild = child; },
                 children => {
                     // As an optimization, jump straight to the end of the list.
                     if (children.length) {
                         lastChild = last(children);
                     }
-                    return undefined;
                 });
             lastChild && suppressTrailing(lastChild);
         }

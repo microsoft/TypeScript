@@ -168,6 +168,7 @@ namespace ts {
 
             for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
                  i >= 0;
+                 // tslint:disable-next-line ban-comma-operator
                  i -= 1, j -= 1) {
 
                 const segment = dotSeparatedSegments[i];
