@@ -178,7 +178,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "param",
+          "text": "opts "
+        }
+      ]
     }
   },
   {

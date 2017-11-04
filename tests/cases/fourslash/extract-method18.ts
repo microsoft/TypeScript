@@ -18,6 +18,7 @@ edit.applyRefactor({
     const x = { m: 1 };
     /*RENAME*/newFunction(x);
 }
+
 function newFunction(x: { m: number; }) {
     x.m = 3;
 }

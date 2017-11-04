@@ -152,6 +152,29 @@ namespace ts {
                     }
                 }
             `);
+            testExtractRange(`
+                function f(x: number) {
+                    [#|[$|try {
+                        x++;
+                    }
+                    finally {
+                        return 1;
+                    }|]|]
+                }
+            `);
+
+            // Variable statements
+            testExtractRange(`[#|let x = [$|1|];|]`);
+            testExtractRange(`[#|let x = [$|1|], y;|]`);
+            testExtractRange(`[#|[$|let x = 1, y = 1;|]|]`);
+
+            // Variable declarations
+            testExtractRange(`let [#|x = [$|1|]|];`);
+            testExtractRange(`let [#|x = [$|1|]|], y = 2;`);
+            testExtractRange(`let x = 1, [#|y = [$|2|]|];`);
+
+            // Return statements
+            testExtractRange(`[#|return [$|1|];|]`);
         });
 
         testExtractRangeFailed("extractRangeFailed1",
@@ -309,6 +332,35 @@ switch (x) {
                 }
             }
         `,
+        [
+            refactor.extractSymbol.Messages.CannotExtractRange.message
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed11",
+        `
+            function f(x: number) {
+                while (true) {
+                    [#|try {
+                        x++;
+                    }
+                    finally {
+                        break;
+                    }|]
+                }
+            }
+        `,
+        [
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed12",
+        `let [#|x|];`,
+        [
+            refactor.extractSymbol.Messages.StatementOrExpressionExpected.message
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed13",
+        `[#|return;|]`,
         [
             refactor.extractSymbol.Messages.CannotExtractRange.message
         ]);

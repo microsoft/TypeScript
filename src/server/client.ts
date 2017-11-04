@@ -14,7 +14,7 @@ namespace ts.server {
     }
 
     /* @internal */
-    export function extractMessage(message: string) {
+    export function extractMessage(message: string): string {
         // Read the content length
         const contentLengthPrefix = "Content-Length: ";
         const lines = message.split(/\r?\n/);
@@ -170,8 +170,8 @@ namespace ts.server {
             };
         }
 
-        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
-            const args: protocol.CompletionsRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo {
+            const args: protocol.CompletionsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), ...options };
 
             const request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
             const response = this.processResponse<protocol.CompletionsResponse>(request);
@@ -192,13 +192,15 @@ namespace ts.server {
             };
         }
 
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
-            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [entryName] };
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, _options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails {
+            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [{ name: entryName, source }] };
 
             const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
-            return response.body[0];
+
+            const convertedCodeActions = map(response.body[0].codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
+            return { ...response.body[0], codeActions: convertedCodeActions };
         }
 
         getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {
@@ -268,6 +270,25 @@ namespace ts.server {
             }));
         }
 
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+            const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+
+            const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
+            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
+
+            return {
+                definitions: response.body.definitions.map(entry => ({
+                    containerKind: ScriptElementKind.unknown,
+                    containerName: "",
+                    fileName: entry.file,
+                    textSpan: this.decodeSpan(entry),
+                    kind: ScriptElementKind.unknown,
+                    name: ""
+                })),
+                textSpan: this.decodeSpan(response.body.textSpan, request.arguments.file)
+            };
+        }
+
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
@@ -322,7 +343,7 @@ namespace ts.server {
         }
 
         getSyntacticDiagnostics(file: string): Diagnostic[] {
-            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file,  includeLinePosition: true };
+            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file, includeLinePosition: true };
 
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest>(CommandNames.SyntacticDiagnosticsSync, args);
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse>(request);
@@ -342,7 +363,7 @@ namespace ts.server {
         convertDiagnostic(entry: protocol.DiagnosticWithLinePosition, _fileName: string): Diagnostic {
             let category: DiagnosticCategory;
             for (const id in DiagnosticCategory) {
-                if (typeof id === "string" && entry.category === id.toLowerCase()) {
+                if (isString(id) && entry.category === id.toLowerCase()) {
                     category = (<any>DiagnosticCategory)[id];
                 }
             }
@@ -540,6 +561,8 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, file));
         }
 
+        applyCodeActionCommand = notImplemented;
+
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
             return typeof positionOrRange === "number"
                 ? this.createFileLocationRequestArgs(fileName, positionOrRange)
@@ -573,7 +596,7 @@ namespace ts.server {
 
         getEditsForRefactor(
             fileName: string,
-            formatOptions: FormatCodeSettings,
+            _formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
             refactorName: string,
             actionName: string): RefactorEditInfo {
@@ -581,7 +604,6 @@ namespace ts.server {
             const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
             args.refactor = refactorName;
             args.action = actionName;
-            args.formatOptions = formatOptions;
 
             const request = this.processRequest<protocol.GetEditsForRefactorRequest>(CommandNames.GetEditsForRefactor, args);
             const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);

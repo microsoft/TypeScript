@@ -5,9 +5,9 @@ namespace N {
 
     () => {
         var f: () => number;
-        f = function (): number {
+        /*[#|*/f = function (): number {
             return value;
-        }
+        }/*|]*/
     }
 }
 // ==SCOPE::Extract to function in namespace 'N'==
@@ -37,6 +37,7 @@ namespace N {
         f = /*RENAME*/newFunction(f);
     }
 }
+
 function newFunction(f: () => number) {
     f = function(): number {
         return N.value;

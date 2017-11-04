@@ -32,9 +32,9 @@ exports.backup = backup;
 async function compute(promise) {
     let j = await promise;
     if (!j) {
-        j = await Promise.resolve().then(function () { return require("./1"); });
+        j = await Promise.resolve().then(() => require("./1"));
         return j.backup();
     }
     return j.foo();
 }
-compute(Promise.resolve().then(function () { return require("./0"); }));
+compute(Promise.resolve().then(() => require("./0")));

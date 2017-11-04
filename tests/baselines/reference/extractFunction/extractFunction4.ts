@@ -4,12 +4,12 @@ namespace A {
     }
     namespace B {
         async function a(z: number, z1: any) {
-        
+        /*[#|*/
             let y = 5;
             if (z) {
                 await z1;
             }
-            return foo();
+            return foo();/*|]*/
         }
     }
 }
@@ -81,6 +81,7 @@ namespace A {
         }
     }
 }
+
 async function newFunction(z: number, z1: any, foo: () => void) {
     let y = 5;
     if (z) {

@@ -1,8 +1,8 @@
 // ==ORIGINAL==
 function foo() {
     let x = 10;
-    x++;
-    return;
+    /*[#|*/x++;
+    return;/*|]*/
 }
 // ==SCOPE::Extract to inner function in function 'foo'==
 function foo() {
@@ -20,6 +20,7 @@ function foo() {
     x = /*RENAME*/newFunction(x);
     return;
 }
+
 function newFunction(x) {
     x++;
     return x;

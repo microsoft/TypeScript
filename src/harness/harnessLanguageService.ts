@@ -123,6 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
+        public typesRegistry: ts.Map<void> | undefined;
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
@@ -182,6 +183,11 @@ namespace Harness.LanguageService {
 
     /// Native adapter
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
+        isKnownTypesPackageName(name: string): boolean {
+            return this.typesRegistry && this.typesRegistry.has(name);
+        }
+        installPackage = ts.notImplemented;
+
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
         getDirectories(path: string): string[] {
@@ -204,6 +210,11 @@ namespace Harness.LanguageService {
         getScriptVersion(fileName: string): string {
             const script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
+        }
+
+        directoryExists(dirName: string): boolean {
+            const fileEntry = this.virtualFileSystem.traversePath(dirName);
+            return fileEntry && fileEntry.isDirectory();
         }
 
         fileExists(fileName: string): boolean {
@@ -402,11 +413,11 @@ namespace Harness.LanguageService {
         getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
             return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length));
         }
-        getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
-            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
+        getCompletionsAtPosition(fileName: string, position: number, options: ts.GetCompletionsAtPositionOptions | undefined): ts.CompletionInfo {
+            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position, options));
         }
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): ts.CompletionEntryDetails {
-            return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName));
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: ts.FormatCodeOptions | undefined, source: string | undefined): ts.CompletionEntryDetails {
+            return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName, JSON.stringify(options), source));
         }
         getCompletionEntrySymbol(): ts.Symbol {
             throw new Error("getCompletionEntrySymbol not implemented across the shim layer.");
@@ -431,6 +442,9 @@ namespace Harness.LanguageService {
         }
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
+        }
+        getDefinitionAndBoundSpan(fileName: string, position: number): ts.DefinitionInfoAndBoundSpan {
+            return unwrapJSONCallResult(this.shim.getDefinitionAndBoundSpan(fileName, position));
         }
         getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getTypeDefinitionAtPosition(fileName, position));
@@ -493,6 +507,7 @@ namespace Harness.LanguageService {
         getCodeFixesAtPosition(): ts.CodeAction[] {
             throw new Error("Not supported on the shim.");
         }
+        applyCodeActionCommand = ts.notImplemented;
         getCodeFixDiagnostics(): ts.Diagnostic[] {
             throw new Error("Not supported on the shim.");
         }
@@ -529,9 +544,9 @@ namespace Harness.LanguageService {
         getClassifier(): ts.Classifier { return new ClassifierShimProxy(this.factory.createClassifierShim(this.host)); }
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
             let shimResult: {
-                referencedFiles: ts.IFileReference[];
-                typeReferenceDirectives: ts.IFileReference[];
-                importedFiles: ts.IFileReference[];
+                referencedFiles: ts.ShimsFileReference[];
+                typeReferenceDirectives: ts.ShimsFileReference[];
+                importedFiles: ts.ShimsFileReference[];
                 isLibFile: boolean;
             };
 
@@ -742,6 +757,7 @@ namespace Harness.LanguageService {
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
                                 const langSvc: any = info.languageService;
+                                // tslint:disable-next-line only-arrow-functions
                                 proxy.getQuickInfoAtPosition = function () {
                                     const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                     if (parts.displayParts.length > 0) {
@@ -774,7 +790,7 @@ namespace Harness.LanguageService {
                         module: () => ({
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
-                                proxy.getSemanticDiagnostics = function (filename: string) {
+                                proxy.getSemanticDiagnostics = filename => {
                                     const prev = info.languageService.getSemanticDiagnostics(filename);
                                     const sourceFile: ts.SourceFile = info.languageService.getSourceFile(filename);
                                     prev.push({
@@ -800,11 +816,12 @@ namespace Harness.LanguageService {
                     };
             }
 
-            function makeDefaultProxy(info: ts.server.PluginCreateInfo) {
+            function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
                 // tslint:disable-next-line:no-null-keyword
                 const proxy = Object.create(/*prototype*/ null);
                 const langSvc: any = info.languageService;
                 for (const k of Object.keys(langSvc)) {
+                    // tslint:disable-next-line only-arrow-functions
                     proxy[k] = function () {
                         return langSvc[k].apply(langSvc, arguments);
                     };
@@ -854,9 +871,5 @@ namespace Harness.LanguageService {
         getLanguageService(): ts.LanguageService { return this.client; }
         getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
         getPreProcessedFileInfo(): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
-    }
-
-    export function mockHash(s: string): string {
-        return `hash-${s}`;
     }
 }

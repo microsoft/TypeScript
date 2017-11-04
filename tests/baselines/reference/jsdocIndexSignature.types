@@ -11,3 +11,23 @@ var o2;
 var o3;
 >o3 : any
 
+/** @param {Object.<string, boolean>} o */
+function f(o) {
+>f : (o: { [x: string]: boolean; }) => void
+>o : { [x: string]: boolean; }
+
+    o.foo = 1; // error
+>o.foo = 1 : 1
+>o.foo : boolean
+>o : { [x: string]: boolean; }
+>foo : boolean
+>1 : 1
+
+    o.bar = false; // ok
+>o.bar = false : false
+>o.bar : boolean
+>o : { [x: string]: boolean; }
+>bar : boolean
+>false : false
+}
+
