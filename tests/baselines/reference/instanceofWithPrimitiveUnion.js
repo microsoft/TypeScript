@@ -1,5 +1,11 @@
 //// [instanceofWithPrimitiveUnion.ts]
-function foo(x: number | string) {
+function test1(x: number | string) {
+    if (x instanceof Object) {
+        x;
+    }
+}
+
+function test2(x: (number | string) | number) {
     if (x instanceof Object) {
         x;
     }
@@ -7,7 +13,12 @@ function foo(x: number | string) {
 
 
 //// [instanceofWithPrimitiveUnion.js]
-function foo(x) {
+function test1(x) {
+    if (x instanceof Object) {
+        x;
+    }
+}
+function test2(x) {
     if (x instanceof Object) {
         x;
     }
