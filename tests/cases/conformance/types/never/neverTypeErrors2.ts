@@ -8,6 +8,7 @@ function f1() {
     x = undefined;
     x = null;
     x = {};
+    x();
 }
 
 function f2(): never {

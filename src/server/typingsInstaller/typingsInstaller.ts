@@ -248,7 +248,7 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`Npm config file: '${npmConfigPath}' is missing, creating new one...`);
                 }
                 this.ensureDirectoryExists(directory, this.installTypingHost);
-                this.installTypingHost.writeFile(npmConfigPath, "{}");
+                this.installTypingHost.writeFile(npmConfigPath, '{ "description": "", "repository": "", "license": "" }');
             }
         }
 
