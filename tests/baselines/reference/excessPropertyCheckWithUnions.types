@@ -29,9 +29,9 @@ let wrong: ADT = { tag: "T", a1: "extra" }
 >"extra" : "extra"
 
 wrong = { tag: "A", d20: 12 }
->wrong = { tag: "A", d20: 12 } : { tag: "A"; d20: 12; }
+>wrong = { tag: "A", d20: 12 } : { tag: "A"; d20: number; }
 >wrong : ADT
->{ tag: "A", d20: 12 } : { tag: "A"; d20: 12; }
+>{ tag: "A", d20: 12 } : { tag: "A"; d20: number; }
 >tag : string
 >"A" : "A"
 >d20 : number

@@ -13663,8 +13663,33 @@ namespace ts {
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
         function getApparentTypeOfContextualType(node: Expression): Type {
-            const type = getContextualType(node);
-            return type && getApparentType(type);
+            let contextualType = getContextualType(node);
+            contextualType = contextualType && getApparentType(contextualType);
+            if (contextualType && contextualType.flags & TypeFlags.Union && isObjectLiteralExpression(node)) {
+                let match: Type | undefined;
+                propLoop: for (const prop of node.properties) {
+                    if (!prop.symbol) continue;
+                    if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
+                    if (isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
+                        const discriminatingType = getTypeOfNode(prop.initializer);
+                        for (const type of (contextualType as UnionType).types) {
+                            const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
+                            if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {
+                                if (match) {
+                                    if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
+                                    match = undefined;
+                                    break propLoop;
+                                }
+                                match = type;
+                            }
+                        }
+                    }
+                }
+                if (match) {
+                    contextualType = match;
+                }
+            }
+            return contextualType;
         }
 
         /**
