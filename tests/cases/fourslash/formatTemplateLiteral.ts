@@ -11,6 +11,8 @@
 ////String.raw`foo`;/*6*/
 ////String.raw  `bar${3}`;/*7*/
 ////`Write ${   JSON.stringify("")   } and ${    (765)   } and ${   346  }`;/*spaceInside*/
+////`
+////  ${   JSON.stringify("")   } and ${    (765)   } and ${   346  }`;/*spaceInsideNewline*/
 /////*formatEnd*/
 
 
@@ -38,3 +40,16 @@ verify.currentLineContentIs("String.raw`bar${3}`;");
 
 goTo.marker("spaceInside");
 verify.currentLineContentIs('`Write ${JSON.stringify("")} and ${(765)} and ${346}`;');
+goTo.marker("spaceInsideNewline");
+verify.currentLineContentIs('  ${JSON.stringify("")} and ${(765)} and ${346}`;');
+
+format.setOption('InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces', true);
+
+format.selection("formatStart", "formatEnd");
+
+goTo.marker("spaceInside");
+verify.currentLineContentIs('`Write ${ JSON.stringify("") } and ${ (765) } and ${ 346 }`;');
+goTo.marker("spaceInsideNewline");
+verify.currentLineContentIs('  ${ JSON.stringify("") } and ${ (765) } and ${ 346 }`;');
+
+format.setOption('InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces', false);

@@ -401,6 +401,7 @@ namespace ts.formatting {
         let previousRange: TextRangeWithKind;
         let previousParent: Node;
         let previousRangeStartLine: number;
+        let previousRangeEndLine: number;
 
         let lastIndentedLine: number;
         let indentationOnLastIndentedLine: number;
@@ -799,11 +800,12 @@ namespace ts.formatting {
                 const isTokenInRange = rangeContainsRange(originalRange, currentTokenInfo.token);
 
                 const tokenStart = sourceFile.getLineAndCharacterOfPosition(currentTokenInfo.token.pos);
+                const tokenEnd = sourceFile.getLineAndCharacterOfPosition(currentTokenInfo.token.end);
                 if (isTokenInRange) {
                     const rangeHasError = rangeContainsError(currentTokenInfo.token);
                     // save previousRange since processRange will overwrite this value with current one
                     const savePreviousRange = previousRange;
-                    lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, dynamicIndentation);
+                    lineAdded = processRange(currentTokenInfo.token, tokenStart, tokenEnd, parent, childContextNode, dynamicIndentation);
                     if (rangeHasError) {
                         // do not indent comments\token if token range overlaps with some error
                         indentToken = false;
@@ -874,13 +876,15 @@ namespace ts.formatting {
             for (const triviaItem of trivia) {
                 if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
                     const triviaItemStart = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos);
-                    processRange(triviaItem, triviaItemStart, parent, contextNode, dynamicIndentation);
+                    const triviaItemEnd = sourceFile.getLineAndCharacterOfPosition(triviaItem.end);
+                    processRange(triviaItem, triviaItemStart, triviaItemEnd, parent, contextNode, dynamicIndentation);
                 }
             }
         }
 
         function processRange(range: TextRangeWithKind,
             rangeStart: LineAndCharacter,
+            rangeEnd: LineAndCharacter,
             parent: Node,
             contextNode: Node,
             dynamicIndentation: DynamicIndentation): boolean {
@@ -895,13 +899,14 @@ namespace ts.formatting {
                 }
                 else {
                     lineAdded =
-                        processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, dynamicIndentation);
+                        processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousRangeEndLine, previousParent, contextNode, dynamicIndentation);
                 }
             }
 
             previousRange = range;
             previousParent = parent;
             previousRangeStartLine = rangeStart.line;
+            previousRangeEndLine = rangeEnd.line;
 
             return lineAdded;
         }
@@ -911,6 +916,7 @@ namespace ts.formatting {
             currentParent: Node,
             previousItem: TextRangeWithKind,
             previousStartLine: number,
+            previousEndLine: number,
             previousParent: Node,
             contextNode: Node,
             dynamicIndentation: DynamicIndentation): boolean {
@@ -922,7 +928,7 @@ namespace ts.formatting {
             let trimTrailingWhitespaces: boolean;
             let lineAdded: boolean;
             if (rule) {
-                applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
+                applyRuleEdits(rule, previousItem, previousStartLine, previousEndLine, currentItem, currentStartLine);
 
                 if (rule.Operation.Action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
                     lineAdded = false;
@@ -1115,6 +1121,7 @@ namespace ts.formatting {
         function applyRuleEdits(rule: Rule,
             previousRange: TextRangeWithKind,
             previousStartLine: number,
+            previousEndLine: number,
             currentRange: TextRangeWithKind,
             currentStartLine: number): void {
 
@@ -1132,7 +1139,7 @@ namespace ts.formatting {
                     // exit early if we on different lines and rule cannot change number of newlines
                     // if line1 and line2 are on subsequent lines then no edits are required - ok to exit
                     // if line1 and line2 are separated with more than one newline - ok to exit since we cannot delete extra new lines
-                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
+                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousEndLine !== currentStartLine) {
                         return;
                     }
 
@@ -1144,7 +1151,7 @@ namespace ts.formatting {
                     break;
                 case RuleAction.Space:
                     // exit early if we on different lines and rule cannot change number of newlines
-                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
+                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousEndLine !== currentStartLine) {
                         return;
                     }
 

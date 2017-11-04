@@ -459,10 +459,10 @@ namespace ts.formatting {
             this.NoSpaceBeforeCloseBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
 
             // Insert space after opening and before closing template string braces
-            this.NoSpaceAfterTemplateHeadAndMiddle = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
-            this.SpaceAfterTemplateHeadAndMiddle = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
-            this.NoSpaceBeforeTemplateMiddleAndTail = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail])), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
-            this.SpaceBeforeTemplateMiddleAndTail = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail])), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceAfterTemplateHeadAndMiddle = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), Rules.IsNonJsxAndSpanBetweenIsSingleLineTokenContext), RuleAction.Delete));
+            this.SpaceAfterTemplateHeadAndMiddle = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), Rules.IsNonJsxAndSpanBetweenIsSingleLineTokenContext), RuleAction.Space));
+            this.NoSpaceBeforeTemplateMiddleAndTail = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail])), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), Rules.IsNonJsxAndSpanBetweenIsSingleLineTokenContext), RuleAction.Delete));
+            this.SpaceBeforeTemplateMiddleAndTail = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail])), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), Rules.IsNonJsxAndSpanBetweenIsSingleLineTokenContext), RuleAction.Space));
 
             // No space after { and before } in JSX expression
             this.NoSpaceAfterOpenBraceInJsxExpression = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBraceToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces"), Rules.IsNonJsxSameLineTokenContext, Rules.IsJsxExpressionContext), RuleAction.Delete));
@@ -815,6 +815,10 @@ namespace ts.formatting {
 
         static IsNonJsxSameLineTokenContext(context: FormattingContext): boolean {
             return context.TokensAreOnSameLine() && context.contextNode.kind !== SyntaxKind.JsxText;
+        }
+
+        static IsNonJsxAndSpanBetweenIsSingleLineTokenContext(context: FormattingContext): boolean {
+            return context.SpanBetweenTokensIsOnSingleLine() && context.contextNode.kind !== SyntaxKind.JsxText;
         }
 
         static IsNonJsxElementContext(context: FormattingContext): boolean {
