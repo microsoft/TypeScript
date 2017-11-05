@@ -5,8 +5,6 @@ namespace ts.formatting {
     export interface Rule {
         // Used for debugging to identify each rule based on the property name it's assigned to.
         readonly debugName: string;
-        readonly leftTokenRange: TokenRange;
-        readonly rightTokenRange: TokenRange;
         readonly context: ReadonlyArray<ContextPredicate>;
         readonly action: RuleAction;
         readonly flags: RuleFlags;

@@ -2,7 +2,13 @@
 
 /* @internal */
 namespace ts.formatting {
-    export function getAllRules(): Rule[] {
+    export interface RuleSpec {
+        readonly leftTokenRange: TokenRange;
+        readonly rightTokenRange: TokenRange;
+        readonly rule: Rule;
+    }
+
+    export function getAllRules(): RuleSpec[] {
         const allTokens: SyntaxKind[] = [];
         for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
             allTokens.push(token);
@@ -338,9 +344,9 @@ namespace ts.formatting {
         right: SyntaxKind | ReadonlyArray<SyntaxKind> | TokenRange,
         context: ReadonlyArray<ContextPredicate>,
         action: RuleAction,
-        flags: RuleFlags = RuleFlags.None
-    ): Rule {
-        return { debugName, leftTokenRange: toTokenRange(left), rightTokenRange: toTokenRange(right), context, action, flags };
+        flags: RuleFlags = RuleFlags.None,
+    ): RuleSpec {
+        return { leftTokenRange: toTokenRange(left), rightTokenRange: toTokenRange(right), rule: { debugName, context, action, flags } };
     }
 
     function tokenRangeFrom(tokens: ReadonlyArray<SyntaxKind>): TokenRange {
