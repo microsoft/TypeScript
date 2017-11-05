@@ -3,11 +3,11 @@
 /* @internal */
 namespace ts.formatting {
     export class Rule {
-        // Used for debugging to identify each rule based on the property name it's assigned to.
-        public debugName?: string;
         readonly leftTokenRange: Shared.TokenRange;
         readonly rightTokenRange: Shared.TokenRange;
         constructor(
+            // Used for debugging to identify each rule based on the property name it's assigned to.
+            readonly debugName: string,
             left: SyntaxKind | Shared.TokenRange,
             right: SyntaxKind | Shared.TokenRange,
             readonly context: ReadonlyArray<ContextPredicate>,
