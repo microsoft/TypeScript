@@ -1,12 +1,7 @@
-///<reference path='references.ts' />
+/// <reference path="rules.ts" />
 
 /* @internal */
 namespace ts.formatting {
-    export interface FormatContext {
-        readonly options: ts.FormatCodeSettings;
-        readonly getRule: ts.formatting.RulesMap;
-    }
-
     export function getFormatContext(options: FormatCodeSettings): formatting.FormatContext {
         return { options, getRule: getRulesMap() };
     }
