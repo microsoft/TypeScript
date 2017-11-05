@@ -3,18 +3,18 @@
 /* @internal */
 namespace ts.formatting {
     export class Rule {
-        readonly leftTokenRange: Shared.TokenRange;
-        readonly rightTokenRange: Shared.TokenRange;
+        readonly leftTokenRange: TokenRange;
+        readonly rightTokenRange: TokenRange;
         constructor(
             // Used for debugging to identify each rule based on the property name it's assigned to.
             readonly debugName: string,
-            left: SyntaxKind | Shared.TokenRange,
-            right: SyntaxKind | Shared.TokenRange,
+            left: SyntaxKind | TokenRange,
+            right: SyntaxKind | TokenRange,
             readonly context: ReadonlyArray<ContextPredicate>,
             readonly action: RuleAction,
             readonly flags: RuleFlags = RuleFlags.None) {
-            this.leftTokenRange = typeof left === "number" ? Shared.TokenRange.FromToken(left) : left;
-            this.rightTokenRange = typeof right === "number" ? Shared.TokenRange.FromToken(right) : right;
+            this.leftTokenRange = typeof left === "number" ? TokenRange.FromToken(left) : left;
+            this.rightTokenRange = typeof right === "number" ? TokenRange.FromToken(right) : right;
         }
     }
 
