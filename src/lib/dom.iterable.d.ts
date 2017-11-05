@@ -87,6 +87,14 @@ interface NodeListOf<TNode extends Node> {
     [Symbol.iterator](): IterableIterator<TNode>;
 }
 
+interface HTMLCollectionBase {
+    [Symbol.iterator](): IterableIterator<Element>;
+}
+
+interface HTMLCollectionOf<T extends Element> {
+    [Symbol.iterator](): IterableIterator<T>;
+}
+
 interface URLSearchParams {
     /**
      * Returns an array of key, value pairs for every entry in the search params
