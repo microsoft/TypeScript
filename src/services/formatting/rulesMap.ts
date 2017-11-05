@@ -15,7 +15,7 @@ namespace ts.formatting {
 
     function getRulesMap(): RulesMap {
         if (rulesMapCache === undefined) {
-            rulesMapCache = createRulesMap(allRules);
+            rulesMapCache = createRulesMap(getAllRules());
         }
         return rulesMapCache;
     }
@@ -35,18 +35,18 @@ namespace ts.formatting {
         // This array is used only during construction of the rulesbucket in the map
         const rulesBucketConstructionStateList = new Array<number>(map.length);
         for (const rule of rules) {
-            const specificRule = rule.leftTokenRange.isSpecific() && rule.rightTokenRange.isSpecific();
+            const specificRule = rule.leftTokenRange.isSpecific && rule.rightTokenRange.isSpecific;
 
-            rule.leftTokenRange.GetTokens().forEach((left) => {
-                rule.rightTokenRange.GetTokens().forEach((right) => {
+            for (const left of rule.leftTokenRange.tokens) {
+                for (const right of rule.rightTokenRange.tokens) {
                     const index = getRuleBucketIndex(left, right);
                     let rulesBucket = map[index];
                     if (rulesBucket === undefined) {
                         rulesBucket = map[index] = [];
                     }
                     addRule(rulesBucket, rule, specificRule, rulesBucketConstructionStateList, index);
-                });
-            });
+                }
+            }
         }
         return map;
     }

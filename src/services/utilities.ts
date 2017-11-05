@@ -1068,20 +1068,19 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export const typeKeywords: ReadonlyArray<SyntaxKind> = [
+        SyntaxKind.AnyKeyword,
+        SyntaxKind.BooleanKeyword,
+        SyntaxKind.NeverKeyword,
+        SyntaxKind.NumberKeyword,
+        SyntaxKind.ObjectKeyword,
+        SyntaxKind.StringKeyword,
+        SyntaxKind.SymbolKeyword,
+        SyntaxKind.VoidKeyword,
+    ];
+
     export function isTypeKeyword(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.NeverKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.ObjectKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.SymbolKeyword:
-            case SyntaxKind.VoidKeyword:
-                return true;
-            default:
-                return false;
-        }
+        return contains(typeKeywords, kind);
     }
 
     /** True if the symbol is for an external module, as opposed to a namespace. */

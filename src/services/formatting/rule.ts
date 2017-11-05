@@ -2,20 +2,14 @@
 
 /* @internal */
 namespace ts.formatting {
-    export class Rule {
+    export interface Rule {
+        // Used for debugging to identify each rule based on the property name it's assigned to.
+        readonly debugName: string;
         readonly leftTokenRange: TokenRange;
         readonly rightTokenRange: TokenRange;
-        constructor(
-            // Used for debugging to identify each rule based on the property name it's assigned to.
-            readonly debugName: string,
-            left: SyntaxKind | TokenRange,
-            right: SyntaxKind | TokenRange,
-            readonly context: ReadonlyArray<ContextPredicate>,
-            readonly action: RuleAction,
-            readonly flags: RuleFlags = RuleFlags.None) {
-            this.leftTokenRange = typeof left === "number" ? TokenRange.FromToken(left) : left;
-            this.rightTokenRange = typeof right === "number" ? TokenRange.FromToken(right) : right;
-        }
+        readonly context: ReadonlyArray<ContextPredicate>;
+        readonly action: RuleAction;
+        readonly flags: RuleFlags;
     }
 
     export type ContextPredicate = (context: FormattingContext) => boolean;
@@ -31,5 +25,10 @@ namespace ts.formatting {
     export const enum RuleFlags {
         None,
         CanDeleteNewLines,
+    }
+
+    export interface TokenRange {
+        readonly tokens: ReadonlyArray<SyntaxKind>;
+        readonly isSpecific: boolean;
     }
 }
