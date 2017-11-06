@@ -555,8 +555,7 @@ namespace Harness {
                 try {
                     fs.unlinkSync(path);
                 }
-                catch (e) {
-                }
+                catch { /*ignore*/ }
             }
 
             export function directoryExists(path: string): boolean {
@@ -615,7 +614,7 @@ namespace Harness {
 
             namespace Http {
                 function waitForXHR(xhr: XMLHttpRequest) {
-                    while (xhr.readyState !== 4) { }
+                    while (xhr.readyState !== 4) { } // tslint:disable-line no-empty
                     return { status: xhr.status, responseText: xhr.responseText };
                 }
 

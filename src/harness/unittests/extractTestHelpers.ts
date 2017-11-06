@@ -126,7 +126,7 @@ namespace ts {
 
             const sourceFile = program.getSourceFile(path);
             const context: RefactorContext = {
-                cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
+                cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 newLineCharacter,
                 program,
                 file: sourceFile,
@@ -190,7 +190,7 @@ namespace ts {
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
             const sourceFile = program.getSourceFile(f.path);
             const context: RefactorContext = {
-                cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
+                cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 newLineCharacter,
                 program,
                 file: sourceFile,

@@ -511,7 +511,7 @@ namespace ts {
                             return stat.size;
                         }
                     }
-                    catch (e) { }
+                    catch { /*ignore*/ }
                     return 0;
                 },
                 exit(exitCode?: number): void {
@@ -525,7 +525,7 @@ namespace ts {
                     try {
                         require("source-map-support").install();
                     }
-                    catch (e) {
+                    catch {
                         // Could not enable source maps.
                     }
                 },

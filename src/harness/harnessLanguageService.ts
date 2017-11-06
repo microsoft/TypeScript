@@ -166,8 +166,7 @@ namespace Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public openFile(_fileName: string, _content?: string, _scriptKindName?: string): void {
-        }
+        public openFile(_fileName: string, _content?: string, _scriptKindName?: string): void { /*overridden*/ }
 
         /**
          * @param line 0 based index
@@ -237,9 +236,9 @@ namespace Harness.LanguageService {
         }
 
 
-        log(_: string): void { }
-        trace(_: string): void { }
-        error(_: string): void { }
+        log = ts.noop;
+        trace = ts.noop;
+        error = ts.noop;
     }
 
     export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
@@ -596,20 +595,14 @@ namespace Harness.LanguageService {
             super(cancellationToken, settings);
         }
 
-        onMessage(): void {
-
-        }
-
-        writeMessage(): void {
-
-        }
+        onMessage = ts.noop;
+        writeMessage = ts.noop;
 
         setClient(client: ts.server.SessionClient) {
             this.client = client;
         }
 
         openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
-            super.openFile(fileName, content, scriptKindName);
             this.client.openFile(fileName, content, scriptKindName);
         }
 
@@ -628,16 +621,9 @@ namespace Harness.LanguageService {
             this.newLine = this.host.getNewLine();
         }
 
-        onMessage(): void {
-
-        }
-
-        writeMessage(_message: string): void {
-        }
-
-        write(message: string): void {
-            this.writeMessage(message);
-        }
+        onMessage = ts.noop;
+        writeMessage = ts.noop;
+        write = ts.noop;
 
         readFile(fileName: string): string | undefined {
             if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
@@ -648,8 +634,7 @@ namespace Harness.LanguageService {
             return snapshot && snapshot.getText(0, snapshot.getLength());
         }
 
-        writeFile(): void {
-        }
+        writeFile = ts.noop;
 
         resolvePath(path: string): string {
             return path;
@@ -668,8 +653,7 @@ namespace Harness.LanguageService {
             return "";
         }
 
-        exit(): void {
-        }
+        exit = ts.noop;
 
         createDirectory(_directoryName: string): void {
             return ts.notImplemented();
@@ -697,8 +681,7 @@ namespace Harness.LanguageService {
             return { close: ts.noop };
         }
 
-        close(): void {
-        }
+        close = ts.noop;
 
         info(message: string): void {
             this.host.log(message);

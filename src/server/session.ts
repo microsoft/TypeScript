@@ -1687,8 +1687,7 @@ namespace ts.server {
             return normalizePath(name);
         }
 
-        exit() {
-        }
+        exit() { /*overridden*/ }
 
         private notRequired(): HandlerResponse {
             return { responseRequired: false };
