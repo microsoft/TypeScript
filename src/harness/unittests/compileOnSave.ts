@@ -627,8 +627,8 @@ namespace ts.projectSystem {
             const mapFileContent = host.readFile(expectedMapFileName);
             verifyContentHasString(mapFileContent, `"sources":["${inputFileName}"]`);
 
-            function verifyContentHasString(content: string, string: string) {
-                assert.isTrue(content.indexOf(string) !== -1, `Expected "${content}" to have "${string}"`);
+            function verifyContentHasString(content: string, str: string) {
+                assert.isTrue(stringContains(content, str), `Expected "${content}" to have "${str}"`);
             }
         });
     });
