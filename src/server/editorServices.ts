@@ -130,18 +130,18 @@ namespace ts.server {
      *   if you are changing this so that you can be sure your regexp works!
      */
     const defaultTypeSafeList: SafeList = {
-        jquery: {
+        "jquery": {
             // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
             match: /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
             types: ["jquery"]
         },
-        WinJS: {
+        "WinJS": {
             // e.g. c:/temp/UWApp1/lib/winjs-4.0.1/js/base.js
             match: /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
             exclude: [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
             types: ["winjs"]                           // And fetch the @types package for WinJS
         },
-        Kendo: {
+        "Kendo": {
             // e.g. /Kendo3/wwwroot/lib/kendo/kendo.all.min.js
             match: /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
             exclude: [["^", 1, "/.*"]],
