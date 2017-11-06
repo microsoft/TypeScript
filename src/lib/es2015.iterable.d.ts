@@ -19,11 +19,11 @@ interface NonIterableIterator<T> {
     throw?(e?: any): IteratorResult<T>;
 }
 
-interface Iterator<T> extends NonIterableIterator<T> {
-    [Symbol.iterator](): Iterator<T>;
-}
-interface IterableIterator<T> extends Iterable<T> {
-}
+interface Iterator<T> extends NonIterableIterator<T>, Iterable<T> { }
+/**
+ * WARNING: IterableIterator is deprecated!
+ */
+interface IterableIterator<T> extends Iterable<T> { }
 
 interface Iterable<T> {
     [Symbol.iterator](): Iterator<T>;
@@ -120,8 +120,6 @@ interface MapConstructor {
     new <K, V>(iterable: Iterable<[K, V]>): Map<K, V>;
 }
 
-interface WeakMap<K extends object, V> { }
-
 interface WeakMapConstructor {
     new <K extends object, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
 }
@@ -163,13 +161,9 @@ interface SetConstructor {
     new <T>(iterable: Iterable<T>): Set<T>;
 }
 
-interface WeakSet<T> { }
-
 interface WeakSetConstructor {
     new <T extends object>(iterable: Iterable<T>): WeakSet<T>;
 }
-
-interface Promise<T> { }
 
 interface PromiseConstructor {
     /**
