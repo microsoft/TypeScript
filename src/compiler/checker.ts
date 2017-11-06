@@ -327,6 +327,7 @@ namespace ts {
         let globalFunctionType: ObjectType;
         let globalArrayType: GenericType;
         let globalReadonlyArrayType: GenericType;
+        let globalTupleBaseType: GenericType;
         let globalStringType: ObjectType;
         let globalNumberType: ObjectType;
         let globalBooleanType: ObjectType;
@@ -775,7 +776,7 @@ namespace ts {
          * @param parameterName a name of the parameter to get the symbols for.
          * @return a tuple of two symbols
          */
-        function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: __String): [Symbol, Symbol] {
+        function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: __String): Symbol[] {
             const constructorDeclaration = parameter.parent;
             const classDeclaration = parameter.parent.parent;
 
@@ -4996,7 +4997,7 @@ namespace ts {
         function getBaseTypes(type: InterfaceType): BaseType[] {
             if (!type.resolvedBaseTypes) {
                 if (type.objectFlags & ObjectFlags.Tuple) {
-                    type.resolvedBaseTypes = [createArrayType(getUnionType(type.typeParameters))];
+                    type.resolvedBaseTypes = [createTypeFromGenericGlobalType(globalTupleBaseType, [getUnionType(type.typeParameters)])];
                 }
                 else if (type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     if (type.symbol.flags & SymbolFlags.Class) {
@@ -9992,7 +9993,7 @@ namespace ts {
             const typeParameters = type.typeParameters || emptyArray;
             let variances = type.variances;
             if (!variances) {
-                if (type === globalArrayType || type === globalReadonlyArrayType) {
+                if (type === globalArrayType || type === globalReadonlyArrayType || type === globalTupleBaseType) {
                     // Arrays are known to be covariant, no need to spend time computing this
                     variances = [Variance.Covariant];
                 }
@@ -10321,7 +10322,7 @@ namespace ts {
         function isArrayLikeType(type: Type): boolean {
             // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
-            return getObjectFlags(type) & ObjectFlags.Reference && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType) ||
+            return getObjectFlags(type) & ObjectFlags.Reference && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType || (type as TypeReference).target === globalTupleBaseType) ||
                 !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
@@ -24509,7 +24510,9 @@ namespace ts {
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
-            globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as __String, /*arity*/ 1);
+            // TODO: ReadonlyArray and TupleBase should always be available, but haven't been required previously
+            globalReadonlyArrayType = <GenericType>getGlobalType("ReadonlyArray" as __String, /*arity*/ 1, /*reportErrors*/ true);
+            globalTupleBaseType = <GenericType>getGlobalType("TupleBase" as __String, /*arity*/ 1, /*reportErrors*/ true);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
             globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as __String, /*arity*/ 1);
         }

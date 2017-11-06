@@ -1240,6 +1240,18 @@ interface ArrayConstructor {
 
 declare const Array: ArrayConstructor;
 
+interface TupleBase<T> extends Array<T> {
+    // TODO: Add jsdoc here warning not to call this
+    push(...items: never[]): never;
+    pop(): never | undefined;
+    reverse(): never[];
+    sort(compareFn?: (a: never, b: never) => number): never;
+    shift(): never | undefined;
+    unshift(...items: never[]): never;
+    splice(start: number, deleteCount?: number): never[];
+    splice(start: number, deleteCount: number, ...items: never[]): never[];
+}
+
 interface TypedPropertyDescriptor<T> {
     enumerable?: boolean;
     configurable?: boolean;
