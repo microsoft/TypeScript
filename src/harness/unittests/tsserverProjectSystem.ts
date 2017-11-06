@@ -2767,6 +2767,7 @@ namespace ts.projectSystem {
             watchedRecursiveDirectories.push(`${root}/a/b/src`, `${root}/a/b/node_modules`);
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
         });
+
     });
 
     describe("Proper errors", () => {
@@ -2868,6 +2869,58 @@ namespace ts.projectSystem {
             it("does not have projectRoot", () => {
                 verifyNonExistentFile(/*useProjectRoot*/ false);
             });
+        });
+
+        it("folder rename updates project structure and reports no errors", () => {
+            const projectDir = "/a/b/projects/myproject";
+            const app: FileOrFolder = {
+                path: `${projectDir}/bar/app.ts`,
+                content: "class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }"
+            };
+            const foo: FileOrFolder = {
+                path: `${projectDir}/foo/foo.ts`,
+                content: "declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }"
+            };
+            const configFile: FileOrFolder = {
+                path: `${projectDir}/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] })
+            };
+            const host = createServerHost([app, foo, configFile]);
+            const session = createSession(host, { canUseEvents: true, });
+            const projectService = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: app.path, }
+            });
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.isDefined(projectService.configuredProjects.get(configFile.path));
+            verifyErrorsInApp();
+
+            host.renameFolder(`${projectDir}/foo`, `${projectDir}/foo2`);
+            host.runQueuedTimeoutCallbacks();
+            host.runQueuedTimeoutCallbacks();
+            verifyErrorsInApp();
+
+            function verifyErrorsInApp() {
+                host.clearOutput();
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: server.CommandNames.Geterr,
+                    arguments: {
+                        delay: 0,
+                        files: [app.path]
+                    }
+                });
+                host.checkTimeoutQueueLengthAndRun(1);
+                checkErrorMessage(host, "syntaxDiag", { file: app.path, diagnostics: [] });
+                host.clearOutput();
+
+                host.runQueuedImmediateCallbacks();
+                checkErrorMessage(host, "semanticDiag", { file: app.path, diagnostics: [] });
+                checkCompleteEvent(host, 2, expectedSequenceId);
+                host.clearOutput();
+            }
         });
     });
 
