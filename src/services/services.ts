@@ -1808,7 +1808,7 @@ namespace ts {
             }
         }
 
-        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
+        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
 
@@ -1997,9 +1997,7 @@ namespace ts {
             }
 
             function isNodeModulesFile(path: string): boolean {
-                const node_modulesFolderName = "/node_modules/";
-
-                return stringContains(path, node_modulesFolderName);
+                return stringContains(path, "/node_modules/");
             }
         }
 

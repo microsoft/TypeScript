@@ -50,6 +50,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         d: "debug", "debug-brk": "debug",
         i: "inspect", "inspect-brk": "inspect",
         t: "tests", test: "tests",
+        ru: "runners", runner: "runners",
         r: "reporter",
         c: "colors", color: "colors",
         f: "files", file: "files",
@@ -64,6 +65,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
+        runners: process.env.runners || process.env.runner || process.env.ru,
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
@@ -99,12 +101,12 @@ const lclDirectory = "src/loc/lcl";
 
 const builtDirectory = "built/";
 const builtLocalDirectory = "built/local/";
-const LKGDirectory = "lib/";
+const lkgDirectory = "lib/";
 
 const copyright = "CopyrightNotice.txt";
 
 const compilerFilename = "tsc.js";
-const LKGCompiler = path.join(LKGDirectory, compilerFilename);
+const lkgCompiler = path.join(lkgDirectory, compilerFilename);
 const builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 
 const nodeModulesPathPrefix = path.resolve("./node_modules/.bin/");
@@ -136,6 +138,7 @@ const es2017LibrarySource = [
     "es2017.sharedmemory.d.ts",
     "es2017.string.d.ts",
     "es2017.intl.d.ts",
+    "es2017.typedarrays.d.ts",
 ];
 
 const es2017LibrarySourceMap = es2017LibrarySource.map(source =>
@@ -589,7 +592,7 @@ gulp.task("VerifyLKG", /*help*/ false, [], () => {
             ". The following files are missing:\n" + missingFiles.join("\n"));
     }
     // Copy all the targets into the LKG directory
-    return gulp.src([...expectedFiles, path.join(builtLocalDirectory, "**"), `!${path.join(builtLocalDirectory, "tslint")}`, `!${path.join(builtLocalDirectory, "*.*")}`]).pipe(gulp.dest(LKGDirectory));
+    return gulp.src([...expectedFiles, path.join(builtLocalDirectory, "**"), `!${path.join(builtLocalDirectory, "tslint")}`, `!${path.join(builtLocalDirectory, "*.*")}`]).pipe(gulp.dest(lkgDirectory));
 });
 
 gulp.task("LKGInternal", /*help*/ false, ["lib", "local"]);
@@ -648,6 +651,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         const debug = cmdLineOptions.debug;
         const inspect = cmdLineOptions.inspect;
         const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const stackTraceLimit = cmdLineOptions.stackTraceLimit;
         const testConfigFile = "test.config";
@@ -668,8 +672,8 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             workerCount = cmdLineOptions.workers;
         }
 
-        if (tests || light || taskConfigsFolder) {
-            writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
+        if (tests || runners || light || taskConfigsFolder) {
+            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit);
         }
 
         if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -860,8 +864,8 @@ function cleanTestDirs(done: (e?: any) => void) {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
+function writeTestConfigFile(tests: string, runners: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
+    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, runner: runners ? runners.split(",") : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
@@ -872,13 +876,14 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
         const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
         }
-        if (tests || light) {
-            writeTestConfigFile(tests, light);
+        if (tests || runners || light) {
+            writeTestConfigFile(tests, runners, light);
         }
 
         const args = [nodeServerOutFile];
@@ -992,7 +997,7 @@ gulp.task(loggedIOJsPath, /*help*/ false, [], (done) => {
     const temp = path.join(builtLocalDirectory, "temp");
     mkdirP(temp, (err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
-        exec(host, [LKGCompiler, "--types", "--target es5", "--lib es5", "--outdir", temp, loggedIOpath], () => {
+        exec(host, [lkgCompiler, "--types", "--target es5", "--lib es5", "--outdir", temp, loggedIOpath], () => {
             fs.renameSync(path.join(temp, "/harness/loggedIO.js"), loggedIOJsPath);
             del(temp).then(() => done(), done);
         }, done);
