@@ -3797,5 +3797,9 @@
     "Convert to default import": {
         "category": "Message",
         "code": 95013
+    },
+    "Install '{0}'": {
+        "category": "Message",
+        "code": 95014
     }
 }
