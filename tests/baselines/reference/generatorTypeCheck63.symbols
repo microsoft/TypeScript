@@ -16,7 +16,7 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 >T : Symbol(T, Decl(generatorTypeCheck63.ts, 4, 25))
 >Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(generatorTypeCheck63.ts, 4, 25))
->a : Symbol(a, Decl(generatorTypeCheck63.ts, 4, 120))
+>a : Symbol(a, Decl(generatorTypeCheck63.ts, 4, 112))
 >T : Symbol(T, Decl(generatorTypeCheck63.ts, 4, 25))
 >Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(generatorTypeCheck63.ts, 4, 25))

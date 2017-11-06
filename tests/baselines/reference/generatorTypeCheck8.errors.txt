@@ -1,16 +1,10 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts(2,17): error TS2322: Type 'Iterator<string>' is not assignable to type 'BadGenerator'.
-  Types of property 'next' are incompatible.
-    Type '(value?: any) => IteratorResult<string>' is not assignable to type '(value?: any) => IteratorResult<number>'.
-      Type 'IteratorResult<string>' is not assignable to type 'IteratorResult<number>'.
-        Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts(1,11): error TS2320: Interface 'BadGenerator' cannot simultaneously extend types 'Iterator<number>' and 'Iterable<string>'.
+  Named property '[Symbol.iterator]' of types 'Iterator<number>' and 'Iterable<string>' are not identical.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts (1 errors) ====
     interface BadGenerator extends Iterator<number>, Iterable<string> { }
+              ~~~~~~~~~~~~
+!!! error TS2320: Interface 'BadGenerator' cannot simultaneously extend types 'Iterator<number>' and 'Iterable<string>'.
+!!! error TS2320:   Named property '[Symbol.iterator]' of types 'Iterator<number>' and 'Iterable<string>' are not identical.
     function* g3(): BadGenerator { }
-                    ~~~~~~~~~~~~
-!!! error TS2322: Type 'Iterator<string>' is not assignable to type 'BadGenerator'.
-!!! error TS2322:   Types of property 'next' are incompatible.
-!!! error TS2322:     Type '(value?: any) => IteratorResult<string>' is not assignable to type '(value?: any) => IteratorResult<number>'.
-!!! error TS2322:       Type 'IteratorResult<string>' is not assignable to type 'IteratorResult<number>'.
-!!! error TS2322:         Type 'string' is not assignable to type 'number'.

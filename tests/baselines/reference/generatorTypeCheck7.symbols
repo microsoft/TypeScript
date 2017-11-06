@@ -4,7 +4,7 @@ interface WeirdIter extends Iterator<number> {
 >Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     hello: string;
->hello : Symbol(WeirdIter.hello, Decl(generatorTypeCheck7.ts, 0, 54))
+>hello : Symbol(WeirdIter.hello, Decl(generatorTypeCheck7.ts, 0, 46))
 }
 function* g1(): WeirdIter { }
 >g1 : Symbol(g1, Decl(generatorTypeCheck7.ts, 2, 1))

@@ -241,7 +241,7 @@ declare module Immutable {
       (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
       new (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
     }
-    export interface Instance<T extends Object> {
+    export interface Instance<T extends Object> extends Iterable<[keyof T, T[keyof T]]> {
       readonly size: number;
       // Reading values
       has(key: string): boolean;
@@ -279,7 +279,6 @@ declare module Immutable {
       asImmutable(): this;
       // Sequence algorithms
       toSeq(): Seq.Keyed<keyof T, T[keyof T]>;
-      [Symbol.iterator](): Iterator<[keyof T, T[keyof T]]>;
     }
   }
   export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
@@ -362,7 +361,7 @@ declare module Immutable {
     export module Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
     export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
-    export interface Keyed<K, V> extends Collection<K, V> {
+    export interface Keyed<K, V> extends Collection<K, V>, Iterable<[K, V]> {
       toJS(): Object;
       toJSON(): { [key: string]: V };
       toSeq(): Seq.Keyed<K, V>;
@@ -376,11 +375,10 @@ declare module Immutable {
       flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Collection.Keyed<any, any>;
       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>;
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
-      [Symbol.iterator](): Iterator<[K, V]>;
     }
     export module Indexed {}
     export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
-    export interface Indexed<T> extends Collection<number, T> {
+    export interface Indexed<T> extends Collection<number, T>, Iterable<T> {
       toJS(): Array<any>;
       toJSON(): Array<T>;
       // Reading values
@@ -408,11 +406,10 @@ declare module Immutable {
       flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): Collection.Indexed<M>;
       filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>;
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
-      [Symbol.iterator](): Iterator<T>;
     }
     export module Set {}
     export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
-    export interface Set<T> extends Collection<never, T> {
+    export interface Set<T> extends Collection<never, T>, Iterable<T> {
       toJS(): Array<any>;
       toJSON(): Array<T>;
       toSeq(): Seq.Set<T>;
@@ -422,7 +419,6 @@ declare module Immutable {
       flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any):  Collection.Set<M>;
       filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>;
       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
-      [Symbol.iterator](): Iterator<T>;
     }
   }
   export function Collection<I extends Collection<any, any>>(collection: I): I;
