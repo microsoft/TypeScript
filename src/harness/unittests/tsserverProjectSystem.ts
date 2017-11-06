@@ -2789,65 +2789,85 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [file1.path]);
         });
 
-        it("when opening new file that doesnt exist on disk yet", () => {
-            const host = createServerHost([libFile]);
-            let hasError = false;
-            const errLogger: server.Logger = {
-                close: noop,
-                hasLevel: () => true,
-                loggingEnabled: () => true,
-                perftrc: noop,
-                info: noop,
-                msg: (_s, type) => {
-                    if (type === server.Msg.Err) {
-                        hasError = true;
+        describe("when opening new file that doesnt exist on disk yet", () => {
+            function verifyNonExistentFile(useProjectRoot: boolean) {
+                const host = createServerHost([libFile]);
+                let hasError = false;
+                const errLogger: server.Logger = {
+                    close: noop,
+                    hasLevel: () => true,
+                    loggingEnabled: () => true,
+                    perftrc: noop,
+                    info: noop,
+                    msg: (_s, type) => {
+                        if (type === server.Msg.Err) {
+                            hasError = true;
+                        }
+                    },
+                    startGroup: noop,
+                    endGroup: noop,
+                    getLogFileName: (): string => undefined
+                };
+                const session = createSession(host, { canUseEvents: true, logger: errLogger, useInferredProjectPerProjectRoot: true });
+
+                const folderPath = "/user/someuser/projects/someFolder";
+                const projectService = session.getProjectService();
+                const untitledFile = "untitled:Untitled-1";
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: server.CommandNames.Open,
+                    arguments: {
+                        file: untitledFile,
+                        fileContent: "",
+                        scriptKindName: "JS",
+                        projectRootPath: useProjectRoot ? folderPath : undefined
                     }
-                },
-                startGroup: noop,
-                endGroup: noop,
-                getLogFileName: (): string => undefined
-            };
-            const session = createSession(host, { canUseEvents: true, logger: errLogger, useInferredProjectPerProjectRoot: true });
-
-            const folderPath = "/user/someuser/projects/someFolder";
-            const projectService = session.getProjectService();
-            const untitledFile = "untitled:Untitled-1";
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: server.CommandNames.Open,
-                arguments: {
-                    file: untitledFile,
-                    fileContent: "",
-                    scriptKindName: "JS",
-                    projectRootPath: folderPath
+                });
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                const infoForUntitledAtProjectRoot = projectService.getScriptInfoForPath(`${folderPath.toLowerCase()}/${untitledFile.toLowerCase()}` as Path);
+                const infoForUnitiledAtRoot = projectService.getScriptInfoForPath(`/${untitledFile.toLowerCase()}` as Path);
+                if (useProjectRoot) {
+                    assert.isDefined(infoForUntitledAtProjectRoot);
+                    assert.isUndefined(infoForUnitiledAtRoot);
                 }
-            });
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            host.checkTimeoutQueueLength(2);
-
-            const newTimeoutId = host.getNextTimeoutId();
-            const expectedSequenceId = session.getNextSeq();
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: server.CommandNames.Geterr,
-                arguments: {
-                    delay: 0,
-                    files: [untitledFile]
+                else {
+                    assert.isDefined(infoForUnitiledAtRoot);
+                    assert.isUndefined(infoForUntitledAtProjectRoot);
                 }
+                host.checkTimeoutQueueLength(2);
+
+                const newTimeoutId = host.getNextTimeoutId();
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: server.CommandNames.Geterr,
+                    arguments: {
+                        delay: 0,
+                        files: [untitledFile]
+                    }
+                });
+                host.checkTimeoutQueueLength(3);
+
+                // Run the last one = get error request
+                host.runQueuedTimeoutCallbacks(newTimeoutId);
+
+                assert.isFalse(hasError);
+                host.checkTimeoutQueueLength(2);
+                checkErrorMessage(host, "syntaxDiag", { file: untitledFile, diagnostics: [] });
+                host.clearOutput();
+
+                host.runQueuedImmediateCallbacks();
+                assert.isFalse(hasError);
+                checkErrorMessage(host, "semanticDiag", { file: untitledFile, diagnostics: [] });
+
+                checkCompleteEvent(host, 2, expectedSequenceId);
+            }
+
+            it("has projectRoot", () => {
+                verifyNonExistentFile(/*useProjectRoot*/ true);
             });
-            host.checkTimeoutQueueLength(3);
 
-            // Run the last one = get error request
-            host.runQueuedTimeoutCallbacks(newTimeoutId);
-
-            assert.isFalse(hasError);
-            host.checkTimeoutQueueLength(2);
-            checkErrorMessage(host, "syntaxDiag", { file: untitledFile, diagnostics: [] });
-            host.clearOutput();
-
-            host.runQueuedImmediateCallbacks();
-            assert.isFalse(hasError);
-            checkErrorMessage(host, "semanticDiag", { file: untitledFile, diagnostics: [] });
-
-            checkCompleteEvent(host, 2, expectedSequenceId);
+            it("does not have projectRoot", () => {
+                verifyNonExistentFile(/*useProjectRoot*/ false);
+            });
         });
     });
 
