@@ -1,6 +1,5 @@
 /// <reference path="fourslash.ts" />
-// @Module: es2015
-// @AllowSyntheticDefaultImports: false
+// @Module: system
 
 // @Filename: a/f1.ts
 //// [|export var x = 0;
@@ -12,7 +11,7 @@
 //// export as namespace bar;
 
 verify.importFixAtPosition([
-`import * as bar from "./foo";
+`import bar from "./foo";
 
 export var x = 0;
 bar();`

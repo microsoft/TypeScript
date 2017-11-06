@@ -1,5 +1,4 @@
 /// <reference path="fourslash.ts" />
-// @Module: commonjs
 // @AllowSyntheticDefaultImports: false
 
 // @Filename: a/f1.ts
@@ -12,7 +11,7 @@
 //// export as namespace bar;
 
 verify.importFixAtPosition([
-`import bar = require("./foo");
+`import * as bar from "./foo";
 
 export var x = 0;
 bar();`
