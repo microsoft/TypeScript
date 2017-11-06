@@ -2827,6 +2827,15 @@ namespace ts {
         if (original) {
             const emitNode = original.emitNode;
             if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
+
+            if (!node.parent) {
+                while(!original.parent && original.original) {
+                    original = original.original;
+                }
+                if (original.parent) {
+                    node.parent = original.parent;
+                };
+            }
         }
         return node;
     }
