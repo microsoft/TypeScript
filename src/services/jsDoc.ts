@@ -20,6 +20,7 @@ namespace ts.JsDoc {
         "fileOverview",
         "function",
         "ignore",
+        "inheritDoc",
         "inner",
         "lends",
         "link",
