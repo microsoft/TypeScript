@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck56.ts ===
 function* g() {
->g : () => IterableIterator<any>
+>g : () => Iterator<any>
 
     var x = class C {
 >x : typeof C

@@ -3,7 +3,7 @@ class C {
 >C : C
 
     public * foo() {
->foo : () => IterableIterator<1>
+>foo : () => Iterator<1>
 
         yield 1
 >yield 1 : any

@@ -25,19 +25,19 @@ async function * inferReturnType7() {
 async function * inferReturnType8() {
     yield* (async function * () { yield 1; })();
 }
-const assignability1: () => AsyncIterableIterator<number> = async function * () {
+const assignability1: () => AsyncIterator<number> = async function * () {
     yield 1;
 };
-const assignability2: () => AsyncIterableIterator<number> = async function * () {
+const assignability2: () => AsyncIterator<number> = async function * () {
     yield Promise.resolve(1);
 };
-const assignability3: () => AsyncIterableIterator<number> = async function * () {
+const assignability3: () => AsyncIterator<number> = async function * () {
     yield* [1, 2];
 };
-const assignability4: () => AsyncIterableIterator<number> = async function * () {
+const assignability4: () => AsyncIterator<number> = async function * () {
     yield* [Promise.resolve(1)];
 };
-const assignability5: () => AsyncIterableIterator<number> = async function * () {
+const assignability5: () => AsyncIterator<number> = async function * () {
     yield* (async function * () { yield 1; })();
 };
 const assignability6: () => AsyncIterable<number> = async function * () {
@@ -70,19 +70,19 @@ const assignability14: () => AsyncIterator<number> = async function * () {
 const assignability15: () => AsyncIterator<number> = async function * () {
     yield* (async function * () { yield 1; })();
 };
-async function * explicitReturnType1(): AsyncIterableIterator<number> {
+async function * explicitReturnType1(): AsyncIterator<number> {
     yield 1;
 }
-async function * explicitReturnType2(): AsyncIterableIterator<number> {
+async function * explicitReturnType2(): AsyncIterator<number> {
     yield Promise.resolve(1);
 }
-async function * explicitReturnType3(): AsyncIterableIterator<number> {
+async function * explicitReturnType3(): AsyncIterator<number> {
     yield* [1, 2];
 }
-async function * explicitReturnType4(): AsyncIterableIterator<number> {
+async function * explicitReturnType4(): AsyncIterator<number> {
     yield* [Promise.resolve(1)];
 }
-async function * explicitReturnType5(): AsyncIterableIterator<number> {
+async function * explicitReturnType5(): AsyncIterator<number> {
     yield* (async function * () { yield 1; })();
 }
 async function * explicitReturnType6(): AsyncIterable<number> {

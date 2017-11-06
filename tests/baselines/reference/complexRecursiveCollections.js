@@ -279,7 +279,7 @@ declare module Immutable {
       asImmutable(): this;
       // Sequence algorithms
       toSeq(): Seq.Keyed<keyof T, T[keyof T]>;
-      [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
+      [Symbol.iterator](): Iterator<[keyof T, T[keyof T]]>;
     }
   }
   export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
@@ -376,7 +376,7 @@ declare module Immutable {
       flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Collection.Keyed<any, any>;
       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>;
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
-      [Symbol.iterator](): IterableIterator<[K, V]>;
+      [Symbol.iterator](): Iterator<[K, V]>;
     }
     export module Indexed {}
     export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
@@ -408,7 +408,7 @@ declare module Immutable {
       flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): Collection.Indexed<M>;
       filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>;
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
-      [Symbol.iterator](): IterableIterator<T>;
+      [Symbol.iterator](): Iterator<T>;
     }
     export module Set {}
     export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
@@ -422,7 +422,7 @@ declare module Immutable {
       flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any):  Collection.Set<M>;
       filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>;
       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
-      [Symbol.iterator](): IterableIterator<T>;
+      [Symbol.iterator](): Iterator<T>;
     }
   }
   export function Collection<I extends Collection<any, any>>(collection: I): I;
@@ -463,9 +463,9 @@ declare module Immutable {
     toIndexedSeq(): Seq.Indexed<V>;
     toSetSeq(): Seq.Set<V>;
     // Iterators
-    keys(): IterableIterator<K>;
-    values(): IterableIterator<V>;
-    entries(): IterableIterator<[K, V]>;
+    keys(): Iterator<K>;
+    values(): Iterator<V>;
+    entries(): Iterator<[K, V]>;
     // Collections (Seq)
     keySeq(): Seq.Indexed<K>;
     valueSeq(): Seq.Indexed<V>;

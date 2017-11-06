@@ -6,7 +6,7 @@ export interface StrategicState {
     lastStrategyApplied?: string;
 }
 
-export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
+export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => Iterator<T | undefined>): (a: T) => Iterator<T | undefined> {
     return function*(state) {
         for (const next of gen(state)) {
             if (next) {
@@ -18,7 +18,7 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 }
 
 export interface Strategy<T> {
-    (a: T): IterableIterator<T | undefined>;
+    (a: T): Iterator<T | undefined>;
 }
 
 export interface State extends StrategicState {

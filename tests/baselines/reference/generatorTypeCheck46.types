@@ -20,11 +20,11 @@ foo("", function* () {
 >foo("", function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }}, p => undefined) : string
 >foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T) => T
 >"" : ""
->function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }} : () => IterableIterator<(x: string) => number>
+>function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }} : () => Iterator<(x: string) => number>
 
     yield* {
 >yield* {        *[Symbol.iterator]() {            yield x => x.length        }    } : any
->{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator](): IterableIterator<(x: string) => number>; }
+>{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator](): Iterator<(x: string) => number>; }
 
         *[Symbol.iterator]() {
 >Symbol.iterator : symbol

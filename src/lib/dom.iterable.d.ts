@@ -1,10 +1,9 @@
 /// <reference path="lib.dom.d.ts" />
 
-interface DOMTokenList {
-    [Symbol.iterator](): IterableIterator<string>;
+interface DOMTokenList extends Iterable<string> {
 }
 
-interface FormData {
+interface FormData extends Iterable<string | File> {
     /**
      * Returns an array of key, value pairs for every entry in the list
      */
@@ -17,12 +16,9 @@ interface FormData {
      * Returns a list of values in the list
      */
     values(): IterableIterator<string | File>;
-
-    [Symbol.iterator](): IterableIterator<string | File>;
 }
 
-interface Headers {
-    [Symbol.iterator](): IterableIterator<[string, string]>;
+interface Headers extends Iterable<[string, string]> {
     /**
      * Returns an iterator allowing to go through all key/value pairs contained in this object.
      */
@@ -37,7 +33,7 @@ interface Headers {
     values(): IterableIterator<string>;
 }
 
-interface NodeList {
+interface NodeList extends Iterable<Node> {
     /**
      * Returns an array of key, value pairs for every entry in the list
      */
@@ -52,23 +48,17 @@ interface NodeList {
      * Returns an list of keys in the list
      */
     keys(): IterableIterator<number>;
-
     /**
      * Returns an list of values in the list
      */
     values(): IterableIterator<Node>;
-
-
-    [Symbol.iterator](): IterableIterator<Node>;
 }
 
-interface NodeListOf<TNode extends Node> {
-
+interface NodeListOf<TNode extends Node> extends Iterable<TNode> {
     /**
      * Returns an array of key, value pairs for every entry in the list
      */
     entries(): IterableIterator<[number, TNode]>;
-
     /**
      * Performs the specified action for each node in an list.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
@@ -83,11 +73,9 @@ interface NodeListOf<TNode extends Node> {
      * Returns an list of values in the list
      */
     values(): IterableIterator<TNode>;
-
-    [Symbol.iterator](): IterableIterator<TNode>;
 }
 
-interface URLSearchParams {
+interface URLSearchParams extends Iterable<[string, string]> {
     /**
      * Returns an array of key, value pairs for every entry in the search params
      */
@@ -100,8 +88,4 @@ interface URLSearchParams {
      * Returns a list of values in the search params
      */
     values(): IterableIterator<string>;
-    /**
-     * iterate over key/value pairs
-     */
-    [Symbol.iterator](): IterableIterator<[string, string]>;
 }

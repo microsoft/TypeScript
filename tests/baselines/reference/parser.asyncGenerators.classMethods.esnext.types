@@ -3,7 +3,7 @@ class C1 {
 >C1 : C1
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitMethodNameIsOk.ts ===
@@ -11,7 +11,7 @@ class C2 {
 >C2 : C2
 
     async * await() {
->await : () => AsyncIterableIterator<any>
+>await : () => AsyncIterator<any>
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldMethodNameIsOk.ts ===
@@ -19,7 +19,7 @@ class C3 {
 >C3 : C3
 
     async * yield() {
->yield : () => AsyncIterableIterator<any>
+>yield : () => AsyncIterator<any>
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts ===
@@ -45,7 +45,7 @@ class C6 {
 >C6 : C6
 
     async * f(a = await 1) {
->f : (a?: number) => AsyncIterableIterator<any>
+>f : (a?: number) => AsyncIterator<any>
 >a : number
 >await 1 : 1
 >1 : 1
@@ -56,7 +56,7 @@ class C7 {
 >C7 : C7
 
     async * f(a = yield) {
->f : (a?: any) => AsyncIterableIterator<any>
+>f : (a?: any) => AsyncIterator<any>
 >a : any
 >yield : any
     }
@@ -66,10 +66,10 @@ class C8 {
 >C8 : C8
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         async function * g() {
->g : () => AsyncIterableIterator<any>
+>g : () => AsyncIterator<any>
         }
     }
 }
@@ -78,7 +78,7 @@ class C9 {
 >C9 : C9
 
     async * f() {
->f : () => AsyncIterableIterator<() => void>
+>f : () => AsyncIterator<() => void>
 
         function yield() {
 > : () => any
@@ -92,7 +92,7 @@ class C10 {
 >C10 : C10
 
     async * f() {
->f : () => AsyncIterableIterator<() => void>
+>f : () => AsyncIterator<() => void>
 
         const x = function yield() {
 >x : () => any
@@ -108,7 +108,7 @@ class C11 {
 >C11 : C11
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         function await() {
 > : () => any
@@ -123,7 +123,7 @@ class C12 {
 >C12 : C12
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         const x = function await() {
 >x : () => any
@@ -140,7 +140,7 @@ class C13 {
 >C13 : C13
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         yield;
 >yield : any
@@ -151,7 +151,7 @@ class C14 {
 >C14 : C14
 
     async * f() {
->f : () => AsyncIterableIterator<1>
+>f : () => AsyncIterator<1>
 
         yield 1;
 >yield 1 : any
@@ -163,7 +163,7 @@ class C15 {
 >C15 : C15
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         yield *;
 >yield * : any
@@ -175,7 +175,7 @@ class C16 {
 >C16 : C16
 
     async * f() {
->f : () => AsyncIterableIterator<undefined>
+>f : () => AsyncIterator<undefined>
 
         yield * [];
 >yield * [] : any
@@ -187,7 +187,7 @@ class C17 {
 >C17 : C17
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         await 1;
 >await 1 : 1
@@ -199,7 +199,7 @@ class C18 {
 >C18 : C18
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         await;
 >await : any
@@ -214,7 +214,7 @@ class C19 {
 >C19 : C19
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         let x: await;
 >x : await
@@ -229,7 +229,7 @@ class C20 {
 >C20 : C20
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         let x: yield;
 >x : yield
@@ -249,7 +249,7 @@ class C22 {
 >C22 : C22
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterator<any>
 
         const x = { [yield]: 1 };
 >x : { [x: number]: number; }

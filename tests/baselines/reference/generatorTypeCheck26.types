@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck26.ts ===
-function* g(): IterableIterator<(x: string) => number> {
->g : () => IterableIterator<(x: string) => number>
->IterableIterator : IterableIterator<T>
+function* g(): Iterator<(x: string) => number> {
+>g : () => Iterator<(x: string) => number>
+>Iterator : Iterator<T>
 >x : string
 
     yield x => x.length;

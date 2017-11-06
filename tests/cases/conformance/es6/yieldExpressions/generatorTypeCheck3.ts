@@ -1,2 +1,2 @@
 //@target: ES6
-function* g1(): IterableIterator<string> { }
+function* g1(): Iterator<string> { }

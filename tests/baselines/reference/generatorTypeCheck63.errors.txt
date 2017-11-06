@@ -1,13 +1,13 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => IterableIterator<State | 1>' is not assignable to parameter of type '(a: StrategicState) => IterableIterator<StrategicState>'.
-  Type 'IterableIterator<State | 1>' is not assignable to type 'IterableIterator<StrategicState>'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => Iterator<State | 1>' is not assignable to parameter of type '(a: StrategicState) => Iterator<StrategicState>'.
+  Type 'Iterator<State | 1>' is not assignable to type 'Iterator<StrategicState>'.
     Type 'State | 1' is not assignable to type 'StrategicState'.
       Type '1' has no properties in common with type 'StrategicState'.
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(29,70): error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(32,62): error TS2345: Argument of type '(state: State) => IterableIterator<1>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
-  Type 'IterableIterator<1>' is not assignable to type 'IterableIterator<State>'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(29,70): error TS7025: Generator implicitly has type 'Iterator<any>' because it does not yield any values. Consider supplying a return type.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(32,62): error TS2345: Argument of type '(state: State) => Iterator<1>' is not assignable to parameter of type '(a: State) => Iterator<State>'.
+  Type 'Iterator<1>' is not assignable to type 'Iterator<State>'.
     Type '1' is not assignable to type 'State'.
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): error TS2345: Argument of type '(state: State) => IterableIterator<State | 1>' is not assignable to parameter of type '(a: StrategicState) => IterableIterator<StrategicState>'.
-  Type 'IterableIterator<State | 1>' is not assignable to type 'IterableIterator<StrategicState>'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): error TS2345: Argument of type '(state: State) => Iterator<State | 1>' is not assignable to parameter of type '(a: StrategicState) => Iterator<StrategicState>'.
+  Type 'Iterator<State | 1>' is not assignable to type 'Iterator<StrategicState>'.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts (4 errors) ====
@@ -15,7 +15,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): err
         lastStrategyApplied?: string;
     }
     
-    export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
+    export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => Iterator<T | undefined>): (a: T) => Iterator<T | undefined> {
         return function*(state) {
             for (const next of gen(state)) {
                 if (next) {
@@ -27,7 +27,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): err
     }
     
     export interface Strategy<T> {
-        (a: T): IterableIterator<T | undefined>;
+        (a: T): Iterator<T | undefined>;
     }
     
     export interface State extends StrategicState {
@@ -36,8 +36,8 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): err
     
     export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
                                                                 ~~~~~~~~
-!!! error TS2345: Argument of type '(state: State) => IterableIterator<State | 1>' is not assignable to parameter of type '(a: StrategicState) => IterableIterator<StrategicState>'.
-!!! error TS2345:   Type 'IterableIterator<State | 1>' is not assignable to type 'IterableIterator<StrategicState>'.
+!!! error TS2345: Argument of type '(state: State) => Iterator<State | 1>' is not assignable to parameter of type '(a: StrategicState) => Iterator<StrategicState>'.
+!!! error TS2345:   Type 'Iterator<State | 1>' is not assignable to type 'Iterator<StrategicState>'.
 !!! error TS2345:     Type 'State | 1' is not assignable to type 'StrategicState'.
 !!! error TS2345:       Type '1' has no properties in common with type 'StrategicState'.
         yield 1;
@@ -46,21 +46,21 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): err
     
     export const Nothing1: Strategy<State> = strategy("Nothing", function* (state: State) {
                                                                          ~
-!!! error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
+!!! error TS7025: Generator implicitly has type 'Iterator<any>' because it does not yield any values. Consider supplying a return type.
     });
     
     export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: State) {
                                                                  ~~~~~~~~
-!!! error TS2345: Argument of type '(state: State) => IterableIterator<1>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
-!!! error TS2345:   Type 'IterableIterator<1>' is not assignable to type 'IterableIterator<State>'.
+!!! error TS2345: Argument of type '(state: State) => Iterator<1>' is not assignable to parameter of type '(a: State) => Iterator<State>'.
+!!! error TS2345:   Type 'Iterator<1>' is not assignable to type 'Iterator<State>'.
 !!! error TS2345:     Type '1' is not assignable to type 'State'.
         return 1;
     });
     
     export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
                                                                  ~~~~~~~~
-!!! error TS2345: Argument of type '(state: State) => IterableIterator<State | 1>' is not assignable to parameter of type '(a: StrategicState) => IterableIterator<StrategicState>'.
-!!! error TS2345:   Type 'IterableIterator<State | 1>' is not assignable to type 'IterableIterator<StrategicState>'.
+!!! error TS2345: Argument of type '(state: State) => Iterator<State | 1>' is not assignable to parameter of type '(a: StrategicState) => Iterator<StrategicState>'.
+!!! error TS2345:   Type 'Iterator<State | 1>' is not assignable to type 'Iterator<StrategicState>'.
         yield state;
         return 1;
     });

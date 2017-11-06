@@ -1907,11 +1907,11 @@ declare module Immutable {
 >T : T
 >T : T
 
-      [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
+      [Symbol.iterator](): Iterator<[keyof T, T[keyof T]]>;
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->IterableIterator : IterableIterator<T>
+>Iterator : Iterator<T>
 >T : T
 >T : T
 >T : T
@@ -2733,11 +2733,11 @@ declare module Immutable {
 >iter : this
 >context : any
 
-      [Symbol.iterator](): IterableIterator<[K, V]>;
+      [Symbol.iterator](): Iterator<[K, V]>;
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->IterableIterator : IterableIterator<T>
+>Iterator : Iterator<T>
 >K : K
 >V : V
     }
@@ -2976,11 +2976,11 @@ declare module Immutable {
 >iter : this
 >context : any
 
-      [Symbol.iterator](): IterableIterator<T>;
+      [Symbol.iterator](): Iterator<T>;
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->IterableIterator : IterableIterator<T>
+>Iterator : Iterator<T>
 >T : T
     }
     export module Set {}
@@ -3085,11 +3085,11 @@ declare module Immutable {
 >iter : this
 >context : any
 
-      [Symbol.iterator](): IterableIterator<T>;
+      [Symbol.iterator](): Iterator<T>;
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->IterableIterator : IterableIterator<T>
+>Iterator : Iterator<T>
 >T : T
     }
   }
@@ -3276,19 +3276,19 @@ declare module Immutable {
 >V : V
 
     // Iterators
-    keys(): IterableIterator<K>;
->keys : () => IterableIterator<K>
->IterableIterator : IterableIterator<T>
+    keys(): Iterator<K>;
+>keys : () => Iterator<K>
+>Iterator : Iterator<T>
 >K : K
 
-    values(): IterableIterator<V>;
->values : () => IterableIterator<V>
->IterableIterator : IterableIterator<T>
+    values(): Iterator<V>;
+>values : () => Iterator<V>
+>Iterator : Iterator<T>
 >V : V
 
-    entries(): IterableIterator<[K, V]>;
->entries : () => IterableIterator<[K, V]>
->IterableIterator : IterableIterator<T>
+    entries(): Iterator<[K, V]>;
+>entries : () => Iterator<[K, V]>
+>Iterator : Iterator<T>
 >K : K
 >V : V
 

@@ -1,6 +1,6 @@
 === tests/cases/compiler/generatorES6InAMDModule.ts ===
 export function* foo() {
->foo : () => IterableIterator<any>
+>foo : () => Iterator<any>
 
     yield
 >yield : any

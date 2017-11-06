@@ -33,7 +33,7 @@ class TypeWriterWalker {
             : program.getTypeChecker();
     }
 
-    public *getSymbols(fileName: string): IterableIterator<TypeWriterSymbolResult> {
+    public *getSymbols(fileName: string): Iterator<TypeWriterSymbolResult> {
         const sourceFile = this.program.getSourceFile(fileName);
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ true);
@@ -42,7 +42,7 @@ class TypeWriterWalker {
         }
     }
 
-    public *getTypes(fileName: string): IterableIterator<TypeWriterTypeResult> {
+    public *getTypes(fileName: string): Iterator<TypeWriterTypeResult> {
         const sourceFile = this.program.getSourceFile(fileName);
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ false);
@@ -51,7 +51,7 @@ class TypeWriterWalker {
         }
     }
 
-    private *visitNode(node: ts.Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
+    private *visitNode(node: ts.Node, isSymbolWalk: boolean): Iterator<TypeWriterResult> {
         if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier) {
             const result = this.writeTypeOrSymbol(node, isSymbolWalk);
             if (result) {
