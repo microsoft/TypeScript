@@ -9268,20 +9268,24 @@ namespace ts {
                 return Ternary.False;
             }
 
+            // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
             function findMatchingDiscriminantType(source: Type, target: UnionOrIntersectionType) {
                 let match: Type;
                 const sourceProperties = getPropertiesOfObjectType(source);
                 if (sourceProperties) {
-                    const sourceProperty = findSingleDiscriminantProperty(sourceProperties, target);
-                    if (sourceProperty) {
-                        const sourceType = getTypeOfSymbol(sourceProperty);
-                        for (const type of target.types) {
-                            const targetType = getTypeOfPropertyOfType(type, sourceProperty.escapedName);
-                            if (targetType && isRelatedTo(sourceType, targetType)) {
-                                if (match) {
-                                    return undefined;
+                    const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
+                    if (sourcePropertiesFiltered) {
+                        for (const sourceProperty of sourcePropertiesFiltered) {
+                            const sourceType = getTypeOfSymbol(sourceProperty);
+                            for (const type of target.types) {
+                                const targetType = getTypeOfPropertyOfType(type, sourceProperty.escapedName);
+                                if (targetType && isRelatedTo(sourceType, targetType)) {
+                                    if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
+                                    if (match) {
+                                        return undefined;
+                                    }
+                                    match = type;
                                 }
-                                match = type;
                             }
                         }
                     }
@@ -11395,14 +11399,15 @@ namespace ts {
             return false;
         }
 
-        function findSingleDiscriminantProperty(sourceProperties: Symbol[], target: Type): Symbol | undefined {
-            let result: Symbol;
+        function findDiscriminantProperties(sourceProperties: Symbol[], target: Type): Symbol[] | undefined {
+            let result: Symbol[];
             for (const sourceProperty of sourceProperties) {
                 if (isDiscriminantProperty(target, sourceProperty.escapedName)) {
                     if (result) {
-                        return undefined;
+                        result.push(sourceProperty);
+                        continue;
                     }
-                    result = sourceProperty;
+                    result = [sourceProperty];
                 }
             }
             return result;
@@ -13695,6 +13700,7 @@ namespace ts {
             if (!(contextualType && contextualType.flags & TypeFlags.Union && isObjectLiteralExpression(node))) {
                 return contextualType;
             }
+            // Keep the below up-to-date with the work done within `isRelatedTo` by `findMatchingDiscriminantType`
             let match: Type | undefined;
             propLoop: for (const prop of node.properties) {
                 if (!prop.symbol) continue;

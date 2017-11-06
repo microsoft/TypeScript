@@ -167,7 +167,7 @@ let over: Overlapping
 >over : Overlapping
 >Overlapping : Overlapping
 
-// these two are not reported because there are two discriminant properties
+// these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" }
 >over = { a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: string; second: string; }
 >over : Overlapping
