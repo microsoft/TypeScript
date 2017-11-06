@@ -75,7 +75,8 @@ namespace ts.SymbolDisplay {
                 }
                 return unionPropertyKind;
             }
-            switch (location.parent.kind) {
+            // If we requested completions after `x.` at the top-level, we may be at a source file location.
+            switch (location.parent && location.parent.kind) {
                 // If we've typed a character of the attribute name, will be 'JsxAttribute', else will be 'JsxOpeningElement'.
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxAttribute:

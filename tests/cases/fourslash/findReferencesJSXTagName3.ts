@@ -26,7 +26,7 @@ const [d0, c0, d1, d2, d3, d4, c1, c2] = test.ranges();
 const allD = [d0, d1, d2, d3, d4];
 const allC = [c0, c1, c2];
 
-verify.singleReferenceGroup("(property) JSX.IntrinsicElements.div: any", allD);
+verify.singleReferenceGroup("(JSX attribute) JSX.IntrinsicElements.div: any", allD);
 verify.singleReferenceGroup("const Comp: () => JSX.Element", allC);
 
 // For document highlights, we will just do tag matching if on a tag. Otherwise we find-all-references.
