@@ -1398,7 +1398,9 @@ namespace ts {
             addEmitFlags(node, EmitFlags.NoLeadingComments);
 
             const firstChild = forEachChild(node, child => child);
-            firstChild && suppressLeading(firstChild);
+            if (firstChild) {
+                suppressLeading(firstChild);
+            }
         }
 
         function suppressTrailing(node: Node) {
@@ -1415,7 +1417,9 @@ namespace ts {
                     }
                     return undefined;
                 });
-            lastChild && suppressTrailing(lastChild);
+            if (lastChild) {
+                suppressTrailing(lastChild);
+            }
         }
     }
 }
