@@ -9451,6 +9451,7 @@ namespace ts {
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
                 let result: Ternary;
+                let originalErrorInfo: DiagnosticMessageChain;
                 const saveErrorInfo = errorInfo;
                 if (target.flags & TypeFlags.TypeParameter) {
                     // A source type { [P in keyof T]: X } is related to a target type T if X is related to T[P].
@@ -9530,6 +9531,7 @@ namespace ts {
                         // if we have indexed access types with identical index types, see if relationship holds for
                         // the two object types.
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
+                            errorInfo = saveErrorInfo;
                             return result;
                         }
                     }
@@ -9561,6 +9563,10 @@ namespace ts {
                             if (!(reportErrors && some(variances, v => v === Variance.Invariant))) {
                                 return Ternary.False;
                             }
+                            // We remember the original error information so we can restore it in case the structural
+                            // comparison unexpectedly succeeds. This can happen when the structural comparison result
+                            // is a Ternary.Maybe for example caused by the recursion depth limiter.
+                            originalErrorInfo = errorInfo;
                             errorInfo = saveErrorInfo;
                         }
                     }
@@ -9599,8 +9605,11 @@ namespace ts {
                             }
                         }
                         if (result) {
-                            errorInfo = saveErrorInfo;
-                            return result;
+                            if (!originalErrorInfo) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                            errorInfo = originalErrorInfo;
                         }
                     }
                 }
