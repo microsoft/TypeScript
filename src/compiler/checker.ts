@@ -7993,11 +7993,16 @@ namespace ts {
                 }
             }
 
-            const spread = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            const spread = createAnonymousType(
+                symbol,
+                members,
+                emptyArray,
+                emptyArray,
+                getNonReadonlyIndexSignature(stringIndexInfo),
+                getNonReadonlyIndexSignature(numberIndexInfo));
             spread.flags |= propagatedFlags;
             spread.flags |= TypeFlags.FreshLiteral | TypeFlags.ContainsObjectLiteral;
             (spread as ObjectType).objectFlags |= (ObjectFlags.ObjectLiteral | ObjectFlags.ContainsSpread);
-            spread.symbol = symbol;
             return spread;
         }
 
@@ -8011,6 +8016,13 @@ namespace ts {
             result.declarations = prop.declarations;
             result.syntheticOrigin = prop;
             return result;
+        }
+
+        function getNonReadonlyIndexSignature(index: IndexInfo) {
+            if (index && index.isReadonly) {
+                return createIndexInfo(index.type, /*isReadonly*/ false, index.declaration);
+            }
+            return index;
         }
 
         function isClassMethod(prop: Symbol) {
