@@ -1241,15 +1241,20 @@ interface ArrayConstructor {
 declare const Array: ArrayConstructor;
 
 interface TupleBase<T> extends Array<T> {
-    // TODO: Add jsdoc here warning not to call this
-    push(...items: never[]): never;
-    pop(): never | undefined;
-    reverse(): never[];
-    sort(compareFn?: (a: never, b: never) => number): never;
-    shift(): never | undefined;
-    unshift(...items: never[]): never;
-    splice(start: number, deleteCount?: number): never[];
-    splice(start: number, deleteCount: number, ...items: never[]): never[];
+    /** Mutation is not allowed on tuples. Do not use this method. */
+    push: never;
+    /** Mutation is not allowed on tuples. Do not use this method. */
+    pop: never;
+    /** Mutation is not allowed on tuples. Do not use this method. */
+    reverse: never;
+    /** Mutation is not allowed on tuples. Do not use this method. */
+    sort: never;
+    /** Mutation is not allowed on tuples. Do not use this method. */
+    shift: never;
+    /** Mutation is not allowed on tuples. Do not use this method. */
+    unshift: never;
+    /** Mutation is not allowed on tuples. Do not use this method. */
+    splice: never;
 }
 
 interface TypedPropertyDescriptor<T> {

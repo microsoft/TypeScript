@@ -4997,7 +4997,7 @@ namespace ts {
         function getBaseTypes(type: InterfaceType): BaseType[] {
             if (!type.resolvedBaseTypes) {
                 if (type.objectFlags & ObjectFlags.Tuple) {
-                    type.resolvedBaseTypes = [createTypeFromGenericGlobalType(globalTupleBaseType, [getUnionType(type.typeParameters)])];
+                    type.resolvedBaseTypes = [createTypeFromGenericGlobalType(globalTupleBaseType || globalArrayType, [getUnionType(type.typeParameters)])];
                 }
                 else if (type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     if (type.symbol.flags & SymbolFlags.Class) {
@@ -24511,8 +24511,8 @@ namespace ts {
             autoArrayType = createArrayType(autoType);
 
             // TODO: ReadonlyArray and TupleBase should always be available, but haven't been required previously
-            globalReadonlyArrayType = <GenericType>getGlobalType("ReadonlyArray" as __String, /*arity*/ 1, /*reportErrors*/ true);
-            globalTupleBaseType = <GenericType>getGlobalType("TupleBase" as __String, /*arity*/ 1, /*reportErrors*/ true);
+            globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as __String, /*arity*/ 1);
+            globalTupleBaseType = <GenericType>getGlobalTypeOrUndefined("TupleBase" as __String, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
             globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as __String, /*arity*/ 1);
         }
