@@ -42,10 +42,10 @@ namespace ts.formatting {
         const controlOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.CloseParenToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.DoKeyword, SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword, SyntaxKind.ElseKeyword]);
 
         // These rules are higher in priority than user-configurable
-        const HighPriorityCommonRules = [
+        const highPriorityCommonRules = [
             // Leave comments alone
-            rule("IgnoreBeforeComment", anyToken, comments, AnyContext, RuleAction.Ignore),
-            rule("IgnoreAfterLineComment", SyntaxKind.SingleLineCommentTrivia, anyToken, AnyContext, RuleAction.Ignore),
+            rule("IgnoreBeforeComment", anyToken, comments, anyContext, RuleAction.Ignore),
+            rule("IgnoreAfterLineComment", SyntaxKind.SingleLineCommentTrivia, anyToken, anyContext, RuleAction.Ignore),
 
             rule("NoSpaceBeforeColon", anyToken, SyntaxKind.ColonToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.Delete),
             rule("SpaceAfterColon", SyntaxKind.ColonToken, anyToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.Space),
@@ -226,7 +226,7 @@ namespace ts.formatting {
         ];
 
         // These rules are applied after high priority
-        const UserConfigurableRules = [
+        const userConfigurableRules = [
             // Treat constructor as an identifier in a function declaration, and remove spaces between constructor and following left parentheses
             rule("SpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("NoSpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionDisabledOrUndefined("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.Delete),
@@ -303,7 +303,7 @@ namespace ts.formatting {
         ];
 
         // These rules are lower in priority than user-configurable
-        const LowPriorityCommonRules = [
+        const lowPriorityCommonRules = [
             // Space after keyword but not before ; or : or ?
             rule("NoSpaceBeforeSemicolon", anyToken, SyntaxKind.SemicolonToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
@@ -330,9 +330,9 @@ namespace ts.formatting {
         ];
 
         return [
-            ...HighPriorityCommonRules,
-            ...UserConfigurableRules,
-            ...LowPriorityCommonRules,
+            ...highPriorityCommonRules,
+            ...userConfigurableRules,
+            ...lowPriorityCommonRules,
         ];
     }
 

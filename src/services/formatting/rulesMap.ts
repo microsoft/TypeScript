@@ -82,7 +82,7 @@ namespace ts.formatting {
     function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructionState: number[], rulesBucketIndex: number): void {
         const position = rule.action === RuleAction.Ignore
             ? specificTokens ? RulesPosition.IgnoreRulesSpecific : RulesPosition.IgnoreRulesAny
-            : rule.context !== AnyContext
+            : rule.context !== anyContext
             ? specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny
             : specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
         const state = constructionState[rulesBucketIndex] || 0;
