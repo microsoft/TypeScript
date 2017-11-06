@@ -456,7 +456,10 @@ gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
     return merge2([
         completedJs,
         completedJs.pipe(clone())
-            .pipe(insert.transform((content, file) => (file.path = nodePackageFile, content))),
+            .pipe(insert.transform((content, file) => {
+                file.path = nodePackageFile;
+                return content;
+            })),
         completedDts,
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {

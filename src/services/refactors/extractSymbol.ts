@@ -1606,7 +1606,10 @@ namespace ts.refactor.extractSymbol {
             // PERF: This is potentially very expensive.  `type` could be a library type with
             // a lot of properties, each of which the walker will visit.  Unfortunately, the
             // solution isn't as trivial as filtering to user types because of (e.g.) Array.
-            const symbolWalker = checker.getSymbolWalker(() => (cancellationToken.throwIfCancellationRequested(), true));
+            const symbolWalker = checker.getSymbolWalker(() => {
+                cancellationToken.throwIfCancellationRequested();
+                return true;
+            });
             const {visitedTypes} = symbolWalker.walkType(type);
 
             for (const visitedType of visitedTypes) {

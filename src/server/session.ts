@@ -1158,8 +1158,8 @@ namespace ts.server {
                 if (lineText && lineText.search("\\S") < 0) {
                     const preferredIndent = languageService.getIndentationAtPosition(file, position, formatOptions);
                     let hasIndent = 0;
-                    let i: number, len: number;
-                    for (i = 0, len = lineText.length; i < len; i++) {
+                    let i = 0;
+                    for (; i < lineText.length; i++) {
                         if (lineText.charAt(i) === " ") {
                             hasIndent++;
                         }
