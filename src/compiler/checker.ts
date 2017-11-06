@@ -283,6 +283,7 @@ namespace ts {
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
+        const implicitNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -7691,7 +7692,7 @@ namespace ts {
 
         function getIndexTypeOrString(type: Type): Type {
             const indexType = getIndexType(type);
-            return indexType !== neverType ? indexType : stringType;
+            return indexType.flags & TypeFlags.Never ? stringType : indexType;
         }
 
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
@@ -8880,8 +8881,8 @@ namespace ts {
         function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorReporter?: ErrorReporter) {
             const s = source.flags;
             const t = target.flags;
-            if (t & TypeFlags.Never) return false;
             if (t & TypeFlags.Any || s & TypeFlags.Never) return true;
+            if (t & TypeFlags.Never) return false;
             if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
             if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
                 t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
@@ -10348,7 +10349,7 @@ namespace ts {
 
         function isEmptyArrayLiteralType(type: Type): boolean {
             const elementType = isArrayType(type) ? (<TypeReference>type).typeArguments[0] : undefined;
-            return elementType === undefinedWideningType || elementType === neverType;
+            return elementType === undefinedWideningType || elementType === implicitNeverType;
         }
 
         function isTupleLikeType(type: Type): boolean {
@@ -10905,9 +10906,10 @@ namespace ts {
                     // Because the anyFunctionType is internal, it should not be exposed to the user by adding
                     // it as an inference candidate. Hopefully, a better candidate will come along that does
                     // not contain anyFunctionType when we come back to this argument for its second round
-                    // of inference. Also, we exclude inferences for silentNeverType which is used as a wildcard
-                    // when constructing types from type parameters that had no inference candidates.
-                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType) {
+                    // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
+                    // when constructing types from type parameters that had no inference candidates) and
+                    // implicitNeverType (which is used as the element type for empty array literals).
+                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType || source === implicitNeverType) {
                         return;
                     }
                     const inference = getInferenceInfoForType(target);
@@ -13948,7 +13950,7 @@ namespace ts {
             }
             return createArrayType(elementTypes.length ?
                 getUnionType(elementTypes, /*subtypeReduction*/ true) :
-                strictNullChecks ? neverType : undefinedWideningType);
+                strictNullChecks ? implicitNeverType : undefinedWideningType);
         }
 
         function isNumericName(name: DeclarationName): boolean {
