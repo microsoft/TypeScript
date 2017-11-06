@@ -603,6 +603,7 @@ namespace Harness.LanguageService {
         }
 
         openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
+            super.openFile(fileName, content, scriptKindName);
             this.client.openFile(fileName, content, scriptKindName);
         }
 
@@ -622,8 +623,10 @@ namespace Harness.LanguageService {
         }
 
         onMessage = ts.noop;
-        writeMessage = ts.noop;
-        write = ts.noop;
+        writeMessage = ts.noop; // overridden
+        write(message: string): void {
+            this.writeMessage(message);
+        }
 
         readFile(fileName: string): string | undefined {
             if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
