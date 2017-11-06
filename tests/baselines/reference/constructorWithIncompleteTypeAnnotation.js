@@ -299,10 +299,6 @@ var TypeScriptAllInOne;
             this["case"] = bfs.STATEMENTS(4);
         }
         Program.Main = function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
             try {
                 var bfs = new BasicFeatures();
                 var retValue = 0;

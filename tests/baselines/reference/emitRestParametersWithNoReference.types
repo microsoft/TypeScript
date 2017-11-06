@@ -1,0 +1,13 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersWithNoReference.ts ===
+function foo (b: boolean, ...rest: any[]) {
+>foo : (b: boolean, ...rest: any[]) => void
+>b : boolean
+>rest : any[]
+
+    if (!b) return
+>!b : boolean
+>b : boolean
+
+    return;
+}
+

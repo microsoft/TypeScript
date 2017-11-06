@@ -1359,6 +1359,17 @@ namespace ts {
                 return;
             }
 
+            const references: Node[] = [];
+            forEachIdentifier(node.body, (id: Identifier) => {
+                if (id.escapedText === (<Identifier>parameter.name).escapedText) {
+                    references.push(id);
+                }
+            });
+
+            if (!references.length) {
+                return;
+            }
+
             // `declarationName` is the name of the local declaration for the parameter.
             const declarationName = getMutableClone(<Identifier>parameter.name);
             setEmitFlags(declarationName, EmitFlags.NoSourceMap);

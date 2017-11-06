@@ -20,11 +20,6 @@ interface Base2 {
 var Derived2 = /** @class */ (function () {
     function Derived2() {
     }
-    Derived2.prototype.method = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    };
+    Derived2.prototype.method = function () { };
     return Derived2;
 }());

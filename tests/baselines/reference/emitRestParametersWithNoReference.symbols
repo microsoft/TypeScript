@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersWithNoReference.ts ===
+function foo (b: boolean, ...rest: any[]) {
+>foo : Symbol(foo, Decl(emitRestParametersWithNoReference.ts, 0, 0))
+>b : Symbol(b, Decl(emitRestParametersWithNoReference.ts, 0, 14))
+>rest : Symbol(rest, Decl(emitRestParametersWithNoReference.ts, 0, 25))
+
+    if (!b) return
+>b : Symbol(b, Decl(emitRestParametersWithNoReference.ts, 0, 14))
+
+    return;
+}
+
