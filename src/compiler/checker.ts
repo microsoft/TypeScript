@@ -13691,7 +13691,7 @@ namespace ts {
         // be "pushed" onto a node using the contextualType property.
         function getApparentTypeOfContextualType(node: Expression): Type {
             const type = getContextualType(node);
-            return type && getApparentType(type);
+            return type && mapType(type, getApparentType);
         }
 
         /**
