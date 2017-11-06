@@ -1,0 +1,9 @@
+/a.js(1,7): error TS6133: 'x' is declared but its value is never read.
+
+
+==== /a.js (1 errors) ====
+    const x = 0;
+          ~
+!!! error TS6133: 'x' is declared but its value is never read.
+    exports.y = 1;
+    

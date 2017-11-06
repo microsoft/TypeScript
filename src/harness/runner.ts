@@ -27,8 +27,8 @@ let iterations = 1;
 
 function runTests(runners: RunnerBase[]) {
     for (let i = iterations; i > 0; i--) {
-        for (let j = 0; j < runners.length; j++) {
-            runners[j].initializeTests();
+        for (const runner of runners) {
+            runner.initializeTests();
         }
     }
 }

@@ -1404,8 +1404,8 @@ namespace ts {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
     }
 
-    export function isStringDoubleQuoted(string: StringLiteral, sourceFile: SourceFile): boolean {
-        return getSourceTextOfNodeFromSourceFile(sourceFile, string).charCodeAt(0) === CharacterCodes.doubleQuote;
+    export function isStringDoubleQuoted(str: StringLiteral, sourceFile: SourceFile): boolean {
+        return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
     /**
@@ -3592,7 +3592,7 @@ namespace ts {
     }
 
     /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */
-    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T): T {
+    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T | undefined): T | undefined {
         while (true) {
             const result = callback(directory);
             if (result !== undefined) {

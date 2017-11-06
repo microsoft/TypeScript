@@ -18,8 +18,8 @@ class UserCodeRunner extends RunnerBase {
         const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
 
         describe(`${this.kind()} code samples`, () => {
-            for (let i = 0; i < testList.length; i++) {
-                this.runTest(testList[i]);
+            for (const test of testList) {
+                this.runTest(test);
             }
         });
     }

@@ -274,15 +274,15 @@ namespace Harness.Parallel.Host {
         function completeBar() {
             const isPartitionFail = failingFiles !== 0;
             const summaryColor = isPartitionFail ? "fail" : "green";
-            const summarySymbol = isPartitionFail ? Base.symbols.err : Base.symbols.ok;
+            const summarySymbol = isPartitionFail ? base.symbols.err : base.symbols.ok;
 
             const summaryTests = (isPartitionFail ? totalPassing + "/" + (errorResults.length + totalPassing) : totalPassing) + " passing";
             const summaryDuration = "(" + ms(duration) + ")";
-            const savedUseColors = Base.useColors;
-            Base.useColors = !noColors;
+            const savedUseColors = base.useColors;
+            base.useColors = !noColors;
 
             const summary = color(summaryColor, summarySymbol + " " + summaryTests) + " " + color("light", summaryDuration);
-            Base.useColors = savedUseColors;
+            base.useColors = savedUseColors;
 
             updateProgress(1, summary);
         }
@@ -307,22 +307,21 @@ namespace Harness.Parallel.Host {
             completeBar();
             progressBars.disable();
 
-            const reporter = new Base();
+            const reporter = new base();
             const stats = reporter.stats;
             const failures = reporter.failures;
             stats.passes = totalPassing;
             stats.failures = errorResults.length;
             stats.tests = totalPassing + errorResults.length;
             stats.duration = duration;
-            for (let j = 0; j < errorResults.length; j++) {
-                const failure = errorResults[j];
+            for (const failure of errorResults) {
                 failures.push(makeMochaTest(failure));
             }
             if (noColors) {
-                const savedUseColors = Base.useColors;
-                Base.useColors = false;
+                const savedUseColors = base.useColors;
+                base.useColors = false;
                 reporter.epilogue();
-                Base.useColors = savedUseColors;
+                base.useColors = savedUseColors;
             }
             else {
                 reporter.epilogue();
@@ -353,8 +352,8 @@ namespace Harness.Parallel.Host {
         return;
     }
 
-    let Mocha: any;
-    let Base: any;
+    let mocha: any;
+    let base: any;
     let color: any;
     let cursor: any;
     let readline: any;
@@ -395,10 +394,10 @@ namespace Harness.Parallel.Host {
     }
 
     function initializeProgressBarsDependencies() {
-        Mocha = require("mocha");
-        Base = Mocha.reporters.Base;
-        color = Base.color;
-        cursor = Base.cursor;
+        mocha = require("mocha");
+        base = mocha.reporters.Base;
+        color = base.color;
+        cursor = base.cursor;
         readline = require("readline");
         os = require("os");
         tty = require("tty");
@@ -415,8 +414,8 @@ namespace Harness.Parallel.Host {
             const open = options.open || "[";
             const close = options.close || "]";
             const complete = options.complete || "▬";
-            const incomplete = options.incomplete || Base.symbols.dot;
-            const maxWidth = Base.window.width - open.length - close.length - 34;
+            const incomplete = options.incomplete || base.symbols.dot;
+            const maxWidth = base.window.width - open.length - close.length - 34;
             const width = minMax(options.width || maxWidth, 10, maxWidth);
             this._options = {
                 open,

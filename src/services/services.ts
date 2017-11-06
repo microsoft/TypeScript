@@ -31,7 +31,7 @@
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.6";
+    export const servicesVersion = "0.7";
 
     /* @internal */
     let ruleProvider: formatting.RulesProvider;
@@ -1326,9 +1326,17 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false }): CompletionInfo {
             synchronizeHostData();
-            return Completions.getCompletionsAtPosition(host, program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, program.getSourceFiles());
+            return Completions.getCompletionsAtPosition(
+                host,
+                program.getTypeChecker(),
+                log,
+                program.getCompilerOptions(),
+                getValidSourceFile(fileName),
+                position,
+                program.getSourceFiles(),
+                options);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
@@ -1800,7 +1808,7 @@ namespace ts {
             }
         }
 
-        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
+        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
 
@@ -1989,9 +1997,7 @@ namespace ts {
             }
 
             function isNodeModulesFile(path: string): boolean {
-                const node_modulesFolderName = "/node_modules/";
-
-                return stringContains(path, node_modulesFolderName);
+                return stringContains(path, "/node_modules/");
             }
         }
 

@@ -2661,8 +2661,8 @@ namespace ts {
         function writeLines(text: string): void {
             const lines = text.split(/\r\n?|\n/g);
             const indentation = guessIndentation(lines);
-            for (let i = 0; i < lines.length; i++) {
-                const line = indentation ? lines[i].slice(indentation) : lines[i];
+            for (const lineText of lines) {
+                const line = indentation ? lineText.slice(indentation) : lineText;
                 if (line.length) {
                     writeLine();
                     write(line);
