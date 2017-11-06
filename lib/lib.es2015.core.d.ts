@@ -30,9 +30,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): T | undefined;
-    find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): T | undefined;
-    find<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): T | undefined;
+    find(predicate: (value: T, index: number, obj: T[]) => boolean, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -43,9 +41,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number;
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): number;
-    findIndex<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): number;
+    findIndex(predicate: (value: T, index: number, obj: T[]) => boolean, thisArg?: any): number;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -76,22 +72,13 @@ interface ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U): Array<U>;
-    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U, thisArg: undefined): Array<U>;
-    from<Z, T, U>(arrayLike: ArrayLike<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): Array<U>;
-
-
-    /**
-     * Creates an array from an array-like object.
-     * @param arrayLike An array-like object to convert to an array.
-     */
-    from<T>(arrayLike: ArrayLike<T>): Array<T>;
+    from<T, U = T>(arrayLike: ArrayLike<T>, mapfn?: (v: T, k: number) => U, thisArg?: any): U[];
 
     /**
      * Returns a new array from a set of elements.
      * @param items A set of elements to include in the new array object.
      */
-    of<T>(...items: T[]): Array<T>;
+    of<T>(...items: T[]): T[];
 }
 
 interface DateConstructor {
@@ -360,7 +347,7 @@ interface ObjectConstructor {
      * @param o Object that contains the property.
      * @param p Name of the property.
      */
-    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor;
+    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor | undefined;
 
     /**
      * Adds a property to an object, or modifies attributes of an existing property.
@@ -383,9 +370,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean): T | undefined;
-    find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: undefined): T | undefined;
-    find<Z>(predicate: (this: Z, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: Z): T | undefined;
+    find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -396,9 +381,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number;
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): number;
-    findIndex<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): number;
+    findIndex(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): number;
 }
 
 interface RegExp {

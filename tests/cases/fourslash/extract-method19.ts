@@ -10,16 +10,17 @@
 
 goTo.select('a', 'b')
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
     actionDescription: "Extract to inner function in function 'fn'",
-});
-verify.currentFileContentIs(`function fn() {
-    newFunction_1();
+    newContent:
+`function fn() {
+    /*RENAME*/newFunction_1();
 
     function newFunction_1() {
         console.log("hi");
     }
 }
 
-function newFunction() { }`);
+function newFunction() { }`
+});

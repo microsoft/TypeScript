@@ -5,34 +5,54 @@
 
 //// class C {
 ////     static j = /*c*/1 + 1/*d*/;
-////     constructor(q: string = /*a*/"a" + "b"/*b*/) {
+////     constructor(q: string = /*a*/"hello"/*b*/) {
 ////     }
 //// }
 
 goTo.select('a', 'b');
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
     actionDescription: "Extract to method in class 'C'",
-});
+    newContent:
+`class C {
+    static j = 1 + 1;
+    constructor(q: string = C./*RENAME*/newMethod()) {
+    }
 
-goTo.select('c', 'd');
-edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
-    actionDescription: "Extract to method in class 'C'",
+    private static newMethod(): string {
+        return "hello";
+    }
+}`
 });
 
 verify.currentFileContentIs(`class C {
-    static j = C.newFunction_1();
-    constructor(q: string = C.newFunction()) {
+    static j = 1 + 1;
+    constructor(q: string = C.newMethod()) {
     }
 
-    private static newFunction(): string {
-        return "a" + "b";
-    }
-
-    private static newFunction_1() {
-        return 1 + 1;
+    private static newMethod(): string {
+        return "hello";
     }
 }`);
+
+goTo.select('c', 'd');
+edit.applyRefactor({
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
+    actionDescription: "Extract to method in class 'C'",
+    newContent:
+`class C {
+    static j = C./*RENAME*/newMethod_1();
+    constructor(q: string = C.newMethod()) {
+    }
+
+    private static newMethod_1() {
+        return 1 + 1;
+    }
+
+    private static newMethod(): string {
+        return "hello";
+    }
+}`
+});

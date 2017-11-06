@@ -16,6 +16,6 @@
 ////var magnitude: Magnitude;
 ////var snapcrackle: SnapCrackle;
 ////
-////var x = (snapcrackle || magnitude || art)./*usage*/pop;
+////var x = (snapcrackle || magnitude || art).[|/*usage*/pop|];
 
 verify.goToDefinition("usage", ["def1", "def2", "def3"]);

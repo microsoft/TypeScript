@@ -1,0 +1,16 @@
+=== /a.d.ts ===
+declare class A<T> { x: T; }
+>A : A<T>
+>T : T
+>x : T
+>T : T
+
+=== /b.js ===
+class B extends A {}
+>B : B
+>A : typeof A
+
+/** @augments A */
+class C { }
+>C : C
+

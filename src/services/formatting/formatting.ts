@@ -663,9 +663,10 @@ namespace ts.formatting {
                     undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
                 }
 
-                // if child is a list item - try to get its indentation
+                // if child is a list item - try to get its indentation, only if parent is within the original range.
                 let childIndentationAmount = Constants.Unknown;
-                if (isListItem) {
+
+                if (isListItem && rangeContainsRange(originalRange, parent)) {
                     childIndentationAmount = tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation);
                     if (childIndentationAmount !== Constants.Unknown) {
                         inheritedIndentation = childIndentationAmount;
@@ -712,6 +713,11 @@ namespace ts.formatting {
                 const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
+
+                if (child.kind === SyntaxKind.JsxText) {
+                    const range: TextRange = { pos: child.getStart(), end: child.getEnd() };
+                    indentMultilineCommentOrJsxText(range, childIndentation.indentation, /*firstLineIsIndented*/ true, /*indentFinalLine*/ false);
+                }
 
                 childContextNode = node;
 
@@ -832,7 +838,7 @@ namespace ts.formatting {
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
                                     if (triviaInRange) {
-                                        indentMultilineComment(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                                        indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
                                     }
                                     indentNextTokenOrTrivia = false;
                                     break;
@@ -918,7 +924,7 @@ namespace ts.formatting {
             if (rule) {
                 applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
 
-                if (rule.Operation.Action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
+                if (rule.operation.action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
                     lineAdded = false;
                     // Handle the case where the next line is moved to be the end of this line.
                     // In this case we don't indent the next line in the next pass.
@@ -926,7 +932,7 @@ namespace ts.formatting {
                         dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
                     }
                 }
-                else if (rule.Operation.Action & RuleAction.NewLine && currentStartLine === previousStartLine) {
+                else if (rule.operation.action & RuleAction.NewLine && currentStartLine === previousStartLine) {
                     lineAdded = true;
                     // Handle the case where token2 is moved to the new line.
                     // In this case we indent token2 in the next pass but we set
@@ -937,7 +943,7 @@ namespace ts.formatting {
                 }
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                trimTrailingWhitespaces = !(rule.Operation.Action & RuleAction.Delete) && rule.Flag !== RuleFlags.CanDeleteNewLines;
+                trimTrailingWhitespaces = !(rule.operation.action & RuleAction.Delete) && rule.flag !== RuleFlags.CanDeleteNewLines;
             }
             else {
                 trimTrailingWhitespaces = true;
@@ -984,7 +990,7 @@ namespace ts.formatting {
             return indentationString !== sourceFile.text.substr(startLinePosition, indentationString.length);
         }
 
-        function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean) {
+        function indentMultilineCommentOrJsxText(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean, indentFinalLine = true) {
             // split comment in lines
             let startLine = sourceFile.getLineAndCharacterOfPosition(commentRange.pos).line;
             const endLine = sourceFile.getLineAndCharacterOfPosition(commentRange.end).line;
@@ -1005,7 +1011,9 @@ namespace ts.formatting {
                     startPos = getStartPositionOfLine(line + 1, sourceFile);
                 }
 
-                parts.push({ pos: startPos, end: commentRange.end });
+                if (indentFinalLine) {
+                    parts.push({ pos: startPos, end: commentRange.end });
+                }
             }
 
             const startLinePos = getStartPositionOfLine(startLine, sourceFile);
@@ -1110,7 +1118,7 @@ namespace ts.formatting {
             currentRange: TextRangeWithKind,
             currentStartLine: number): void {
 
-            switch (rule.Operation.Action) {
+            switch (rule.operation.action) {
                 case RuleAction.Ignore:
                     // no action required
                     return;
@@ -1124,7 +1132,7 @@ namespace ts.formatting {
                     // exit early if we on different lines and rule cannot change number of newlines
                     // if line1 and line2 are on subsequent lines then no edits are required - ok to exit
                     // if line1 and line2 are separated with more than one newline - ok to exit since we cannot delete extra new lines
-                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
+                    if (rule.flag !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
                         return;
                     }
 
@@ -1136,7 +1144,7 @@ namespace ts.formatting {
                     break;
                 case RuleAction.Space:
                     // exit early if we on different lines and rule cannot change number of newlines
-                    if (rule.Flag !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
+                    if (rule.flag !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
                         return;
                     }
 

@@ -2,13 +2,16 @@
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 
 namespace ts {
-    export interface ErrorCallback {
-        (message: DiagnosticMessage, length: number): void;
-    }
+    export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
     /* @internal */
     export function tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
         return token >= SyntaxKind.Identifier;
+    }
+
+    /* @internal */
+    export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): boolean {
+        return token === SyntaxKind.GreaterThanToken || tokenIsIdentifierOrKeyword(token);
     }
 
     export interface Scanner {
@@ -351,7 +354,7 @@ namespace ts {
     /**
      * We assume the first line starts at position 0 and 'position' is non-negative.
      */
-    export function computeLineAndCharacterOfPosition(lineStarts: ReadonlyArray<number>, position: number) {
+    export function computeLineAndCharacterOfPosition(lineStarts: ReadonlyArray<number>, position: number): LineAndCharacter {
         let lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
             // If the actual position was not found,
@@ -1856,6 +1859,12 @@ namespace ts {
                 case CharacterCodes.closeBracket:
                     pos++;
                     return token = SyntaxKind.CloseBracketToken;
+                case CharacterCodes.lessThan:
+                    pos++;
+                    return token = SyntaxKind.LessThanToken;
+                case CharacterCodes.greaterThan:
+                    pos++;
+                    return token = SyntaxKind.GreaterThanToken;
                 case CharacterCodes.equals:
                     pos++;
                     return token = SyntaxKind.EqualsToken;

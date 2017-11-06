@@ -61,7 +61,8 @@ namespace ts.SymbolDisplay {
                     if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                         return ScriptElementKind.memberVariableElement;
                     }
-                    Debug.assert(!!(rootSymbolFlags & SymbolFlags.Method));
+                    // May be a Function if this was from `typeof N` with `namespace N { function f();. }`.
+                    Debug.assert(!!(rootSymbolFlags & (SymbolFlags.Method | SymbolFlags.Function)));
                 });
                 if (!unionPropertyKind) {
                     // If this was union of all methods,
@@ -89,9 +90,16 @@ namespace ts.SymbolDisplay {
             : ScriptElementKindModifier.none;
     }
 
+    interface SymbolDisplayPartsDocumentationAndSymbolKind {
+        displayParts: SymbolDisplayPart[];
+        documentation: SymbolDisplayPart[];
+        symbolKind: ScriptElementKind;
+        tags: JSDocTagInfo[];
+    }
+
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
     export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
-        location: Node, semanticMeaning = getMeaningFromLocation(location)) {
+        location: Node, semanticMeaning = getMeaningFromLocation(location)): SymbolDisplayPartsDocumentationAndSymbolKind {
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[];
@@ -135,10 +143,6 @@ namespace ts.SymbolDisplay {
             if (callExpressionLike) {
                 const candidateSignatures: Signature[] = [];
                 signature = typeChecker.getResolvedSignature(callExpressionLike, candidateSignatures);
-                if (!signature && candidateSignatures.length) {
-                    // Use the first candidate:
-                    signature = candidateSignatures[0];
-                }
 
                 const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
@@ -344,13 +348,19 @@ namespace ts.SymbolDisplay {
         }
         if (symbolFlags & SymbolFlags.Alias) {
             addNewLineIfDisplayPartsExist();
-            if (symbol.declarations[0].kind === SyntaxKind.NamespaceExportDeclaration) {
-                displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
-                displayParts.push(spacePart());
-                displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
-            }
-            else {
-                displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+            switch (symbol.declarations[0].kind) {
+                case SyntaxKind.NamespaceExportDeclaration:
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    displayParts.push(spacePart());
+                    displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
+                    break;
+                case SyntaxKind.ExportAssignment:
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    displayParts.push(spacePart());
+                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                    break;
+                default:
+                    displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
             }
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
@@ -428,7 +438,7 @@ namespace ts.SymbolDisplay {
         }
 
         if (!documentation) {
-            documentation = symbol.getDocumentationComment();
+            documentation = symbol.getDocumentationComment(typeChecker);
             tags = symbol.getJsDocTags();
             if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {
                 // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
@@ -445,7 +455,7 @@ namespace ts.SymbolDisplay {
                             continue;
                         }
 
-                        documentation = rhsSymbol.getDocumentationComment();
+                        documentation = rhsSymbol.getDocumentationComment(typeChecker);
                         tags = rhsSymbol.getJsDocTags();
                         if (documentation.length > 0) {
                             break;
@@ -479,8 +489,10 @@ namespace ts.SymbolDisplay {
             addNewLineIfDisplayPartsExist();
             if (symbolKind) {
                 pushTypePart(symbolKind);
-                displayParts.push(spacePart());
-                addFullSymbolName(symbol);
+                if (!some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
+                    displayParts.push(spacePart());
+                    addFullSymbolName(symbol);
+                }
             }
         }
 
@@ -512,7 +524,7 @@ namespace ts.SymbolDisplay {
                 displayParts.push(textPart(allSignatures.length === 2 ? "overload" : "overloads"));
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
-            documentation = signature.getDocumentationComment();
+            documentation = signature.getDocumentationComment(typeChecker);
             tags = signature.getJsDocTags();
         }
 

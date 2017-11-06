@@ -140,12 +140,12 @@ class ProjectRunner extends RunnerBase {
 
             // Clean up source map data that will be used in baselining
             if (sourceMapData) {
-                for (let i = 0; i < sourceMapData.length; i++) {
-                    for (let j = 0; j < sourceMapData[i].sourceMapSources.length; j++) {
-                        sourceMapData[i].sourceMapSources[j] = cleanProjectUrl(sourceMapData[i].sourceMapSources[j]);
+                for (const data of sourceMapData) {
+                    for (let j = 0; j < data.sourceMapSources.length; j++) {
+                        data.sourceMapSources[j] = cleanProjectUrl(data.sourceMapSources[j]);
                     }
-                    sourceMapData[i].jsSourceMappingURL = cleanProjectUrl(sourceMapData[i].jsSourceMappingURL);
-                    sourceMapData[i].sourceMapSourceRoot = cleanProjectUrl(sourceMapData[i].sourceMapSourceRoot);
+                    data.jsSourceMappingURL = cleanProjectUrl(data.jsSourceMappingURL);
+                    data.sourceMapSourceRoot = cleanProjectUrl(data.sourceMapSourceRoot);
                 }
             }
 
@@ -254,7 +254,7 @@ class ProjectRunner extends RunnerBase {
                         if (option) {
                             const optType = option.type;
                             let value = <any>testCase[name];
-                            if (typeof optType !== "string") {
+                            if (!ts.isString(optType)) {
                                 const key = value.toLowerCase();
                                 const optTypeValue = optType.get(key);
                                 if (optTypeValue) {
@@ -443,7 +443,7 @@ class ProjectRunner extends RunnerBase {
 
         const name = "Compiling project for " + testCase.scenario + ": testcase " + testCaseFileName;
 
-        describe("Projects tests", () => {
+        describe("projects tests", () => {
             describe(name, () => {
                 function verifyCompilerResults(moduleKind: ts.ModuleKind) {
                     let compilerResult: BatchCompileProjectTestCaseResult;

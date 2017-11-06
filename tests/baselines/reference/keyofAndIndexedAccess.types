@@ -205,7 +205,7 @@ type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 >Options : Options
 
 type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
->Q41 : (true & "yes") | (true & "no") | (false & "yes") | (false & "no")
+>Q41 : never
 >Shape : Shape
 >Options : Options
 
@@ -1793,8 +1793,8 @@ declare function on<T>(handlerHash: Handlers<T>): T
 >T : T
 
 var hashOfEmpty1 = on({ test: () => {} });  // {}
->hashOfEmpty1 : {}
->on({ test: () => {} }) : {}
+>hashOfEmpty1 : { test: {}; }
+>on({ test: () => {} }) : { test: {}; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: () => {} } : { test: () => void; }
 >test : () => void

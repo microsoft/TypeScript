@@ -14,6 +14,6 @@
 ////
 ////var x : One | Two;
 ////
-////x.common./*propertyReference*/a;
+////x.common.[|/*propertyReference*/a|];
 
 verify.goToDefinition("propertyReference", ["propertyDefinition2", "propertyDefinition1"]);

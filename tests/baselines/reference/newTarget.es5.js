@@ -69,11 +69,11 @@ function f1() {
     var g = _newTarget;
     var h = function () { return _newTarget; };
 }
-var f2 = function _a() {
-    var _newTarget = this && this instanceof _a ? this.constructor : void 0;
+var f2 = function _b() {
+    var _newTarget = this && this instanceof _b ? this.constructor : void 0;
     var i = _newTarget;
     var j = function () { return _newTarget; };
 };
 var O = {
-    k: function _b() { var _newTarget = this && this instanceof _b ? this.constructor : void 0; return _newTarget; }
+    k: function _c() { var _newTarget = this && this instanceof _c ? this.constructor : void 0; return _newTarget; }
 };

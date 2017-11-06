@@ -1,0 +1,4 @@
+=== tests/cases/compiler/a.js ===
+module M { }
+>M : Symbol(M, Decl(a.js, 0, 0))
+

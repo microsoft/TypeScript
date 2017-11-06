@@ -175,7 +175,7 @@ namespace ts.FindAllReferences {
         return {
             fileName: node.getSourceFile().fileName,
             textSpan: getTextSpan(node),
-            isWriteAccess: isWriteAccess(node),
+            isWriteAccess: isWriteAccessForReference(node),
             isDefinition: node.kind === SyntaxKind.DefaultKeyword
                 || isAnyDeclarationName(node)
                 || isLiteralComputedPropertyDeclarationName(node),
@@ -224,7 +224,7 @@ namespace ts.FindAllReferences {
 
         const { node, isInString } = entry;
         const fileName = entry.node.getSourceFile().fileName;
-        const writeAccess = isWriteAccess(node);
+        const writeAccess = isWriteAccessForReference(node);
         const span: HighlightSpan = {
             textSpan: getTextSpan(node),
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
@@ -244,21 +244,8 @@ namespace ts.FindAllReferences {
     }
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
-    function isWriteAccess(node: Node): boolean {
-        if (node.kind === SyntaxKind.DefaultKeyword || isAnyDeclarationName(node)) {
-            return true;
-        }
-
-        const { parent } = node;
-        switch (parent && parent.kind) {
-            case SyntaxKind.PostfixUnaryExpression:
-            case SyntaxKind.PrefixUnaryExpression:
-                return true;
-            case SyntaxKind.BinaryExpression:
-                return (<BinaryExpression>parent).left === node && isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
-            default:
-                return false;
-        }
+    function isWriteAccessForReference(node: Node): boolean {
+        return node.kind === SyntaxKind.DefaultKeyword || isAnyDeclarationName(node) || isWriteAccess(node);
     }
 }
 
@@ -390,19 +377,26 @@ namespace ts.FindAllReferences.Core {
 
         const result: SymbolAndEntries[] = [];
         const state = new State(sourceFiles, /*isForConstructor*/ node.kind === SyntaxKind.ConstructorKeyword, checker, cancellationToken, searchMeaning, options, result);
-        const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
 
-        // Try to get the smallest valid scope that we can limit our search to;
-        // otherwise we'll need to search globally (i.e. include each file).
-        const scope = getSymbolScope(symbol);
-        if (scope) {
-            getReferencesInContainer(scope, scope.getSourceFile(), search, state);
+        if (node.kind === SyntaxKind.DefaultKeyword) {
+            addReference(node, symbol, node, state);
+            searchForImportsOfExport(node, symbol, { exportingModuleSymbol: symbol.parent, exportKind: ExportKind.Default }, state);
         }
         else {
-            // Global search
-            for (const sourceFile of state.sourceFiles) {
-                state.cancellationToken.throwIfCancellationRequested();
-                searchForName(sourceFile, search, state);
+            const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
+
+            // Try to get the smallest valid scope that we can limit our search to;
+            // otherwise we'll need to search globally (i.e. include each file).
+            const scope = getSymbolScope(symbol);
+            if (scope) {
+                getReferencesInContainer(scope, scope.getSourceFile(), search, state);
+            }
+            else {
+                // Global search
+                for (const sourceFile of state.sourceFiles) {
+                    state.cancellationToken.throwIfCancellationRequested();
+                    searchForName(sourceFile, search, state);
+                }
             }
         }
 
@@ -495,7 +489,10 @@ namespace ts.FindAllReferences.Core {
         /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
         createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
-            const { text = stripQuotes(getDeclaredName(this.checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
+            const {
+                text = stripQuotes(unescapeLeadingUnderscores((getLocalSymbolForExportDefault(symbol) || symbol).escapedName)),
+                allSearchSymbols = undefined,
+            } = searchOptions;
             const escapedText = escapeLeadingUnderscores(text);
             const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
             return {
@@ -528,7 +525,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
-        private readonly sourceFileToSeenSymbols: Array<Array<true>> = [];
+        private readonly sourceFileToSeenSymbols: true[][] = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
         markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
             const sourceId = getNodeId(sourceFile);

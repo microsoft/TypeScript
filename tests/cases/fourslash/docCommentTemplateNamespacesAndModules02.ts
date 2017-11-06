@@ -6,11 +6,9 @@
 ////    /*n3*/ n3 {
 ////}
 
-verify.docCommentTemplateAt("top", /*indentation*/ 8,
-`/**
- * 
- */`);
+verify.docCommentTemplateAt("top", /*indentation*/ 3,
+"/** */");
 
-verify.noDocCommentTemplateAt("n2");
+verify.docCommentTemplateAt("n2", 3, "/** */");
 
-verify.noDocCommentTemplateAt("n3");
+verify.docCommentTemplateAt("n3", 3, "/** */");

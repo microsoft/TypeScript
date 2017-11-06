@@ -21,9 +21,9 @@ var a = 10;
 === tests/cases/compiler/node_modules/c.js ===
 exports.a = 10;
 >exports.a = 10 : 10
->exports.a : any
->exports : any
->a : any
+>exports.a : number
+>exports : typeof "tests/cases/compiler/node_modules/c"
+>a : number
 >10 : 10
 
 c = 10;

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType6_moduleA.ts ===
+import moduleC = require("recursiveExportAssignmentAndFindAliasedType6_moduleC");
+>moduleC : Symbol(moduleC, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleA.ts, 0, 0))
+
+import ClassB = require("recursiveExportAssignmentAndFindAliasedType6_moduleB");
+>ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleA.ts, 0, 81))
+
+export var b: ClassB; // This should result in type ClassB
+>b : Symbol(b, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleA.ts, 2, 10))
+>ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleA.ts, 0, 81))
+
+=== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType6_moduleC.ts ===
+import self = require("recursiveExportAssignmentAndFindAliasedType6_moduleD");
+>self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleC.ts, 0, 0))
+
+export = self;
+>self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleC.ts, 0, 0))
+
+=== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType6_moduleD.ts ===
+import self = require("recursiveExportAssignmentAndFindAliasedType6_moduleE");
+>self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleD.ts, 0, 0))
+
+export = self;
+>self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleD.ts, 0, 0))
+
+=== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType6_moduleE.ts ===
+import self = require("recursiveExportAssignmentAndFindAliasedType6_moduleC");
+>self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleE.ts, 0, 0))
+
+export = self;
+>self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleE.ts, 0, 0))
+
+=== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType6_moduleB.ts ===
+class ClassB { }
+>ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleB.ts, 0, 0))
+
+export = ClassB;
+>ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleB.ts, 0, 0))
+
