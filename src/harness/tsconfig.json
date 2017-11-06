@@ -93,6 +93,7 @@
         "loggedIO.ts",
         "rwcRunner.ts",
         "userRunner.ts",
+        "definitelyRunner.ts",
         "test262Runner.ts",
         "./parallel/shared.ts",
         "./parallel/host.ts",
