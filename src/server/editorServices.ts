@@ -799,17 +799,14 @@ namespace ts.server {
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrDirectoryPath !== directory && !isSupportedSourceFileName(fileOrDirectory, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {
+                    if (fileOrDirectoryPath !== directory && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {
                         this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
                         return;
                     }
 
                     // Reload is pending, do the reload
-                    if (!project.pendingReload) {
-                        const configFileSpecs = project.configFileSpecs;
-                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
-                        project.updateErrorOnNoInputFiles(result.fileNames.length !== 0);
-                        this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader);
+                    if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
+                        project.pendingReload = ConfigFileProgramReloadLevel.Partial;
                         this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
                     }
                 },
@@ -842,7 +839,7 @@ namespace ts.server {
             }
             else {
                 this.logConfigFileWatchUpdate(project.getConfigFilePath(), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingInferredRootFiles);
-                project.pendingReload = true;
+                project.pendingReload = ConfigFileProgramReloadLevel.Full;
                 this.delayUpdateProjectGraph(project);
                 // As we scheduled the update on configured project graph,
                 // we would need to schedule the project reload for only the root of inferred projects
@@ -1591,6 +1588,19 @@ namespace ts.server {
         }
 
         /**
+         * Reload the file names from config file specs and update the project graph
+         */
+        /*@internal*/
+        reloadFileNamesOfConfiguredProject(project: ConfiguredProject): boolean {
+            const configFileSpecs = project.configFileSpecs;
+            const configFileName = project.getConfigFilePath();
+            const fileNamesResult = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
+            project.updateErrorOnNoInputFiles(fileNamesResult.fileNames.length !== 0);
+            this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames, fileNamePropertyReader);
+            return project.updateGraph();
+        }
+
+        /**
          * Read the config file of the project again and update the project
          */
         /* @internal */
@@ -1884,7 +1894,7 @@ namespace ts.server {
                     }
                     else if (!updatedProjects.has(configFileName)) {
                         if (delayReload) {
-                            project.pendingReload = true;
+                            project.pendingReload = ConfigFileProgramReloadLevel.Full;
                             this.delayUpdateProjectGraph(project);
                         }
                         else {
