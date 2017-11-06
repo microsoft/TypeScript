@@ -48,9 +48,11 @@ namespace ts {
         let requestedExternalEmitHelpers: ExternalEmitHelpers;
         let externalHelpersModule: Symbol;
 
+        // tslint:disable variable-name
         const Symbol = objectAllocator.getSymbolConstructor();
         const Type = objectAllocator.getTypeConstructor();
         const Signature = objectAllocator.getSignatureConstructor();
+        // tslint:enable variable-name
 
         let typeCount = 0;
         let symbolCount = 0;
@@ -487,17 +489,6 @@ namespace ts {
 
         /** Things we lazy load from the JSX namespace */
         const jsxTypes = createUnderscoreEscapedMap<Type>();
-
-        const JsxNames = {
-            JSX: "JSX" as __String,
-            IntrinsicElements: "IntrinsicElements" as __String,
-            ElementClass: "ElementClass" as __String,
-            ElementAttributesPropertyNameContainer: "ElementAttributesProperty" as __String,
-            ElementChildrenAttributeNameContainer: "ElementChildrenAttribute" as __String,
-            Element: "Element" as __String,
-            IntrinsicAttributes: "IntrinsicAttributes" as __String,
-            IntrinsicClassAttributes: "IntrinsicClassAttributes" as __String
-        };
 
         const subtypeRelation = createMap<RelationComparisonResult>();
         const assignableRelation = createMap<RelationComparisonResult>();
@@ -25103,11 +25094,13 @@ namespace ts {
         }
 
         function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression, inDestructuring: boolean) {
-            const seen = createUnderscoreEscapedMap<SymbolFlags>();
-            const Property = 1;
-            const GetAccessor = 2;
-            const SetAccessor = 4;
-            const GetOrSetAccessor = GetAccessor | SetAccessor;
+            const enum Flags {
+                Property = 1,
+                GetAccessor = 2,
+                SetAccessor = 4,
+                GetOrSetAccessor = GetAccessor | SetAccessor,
+            }
+            const seen = createUnderscoreEscapedMap<Flags>();
 
             for (const prop of node.properties) {
                 if (prop.kind === SyntaxKind.SpreadAssignment) {
@@ -25142,26 +25135,27 @@ namespace ts {
                 //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
                 //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
-                let currentKind: number;
-                if (prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                    // Grammar checking for computedPropertyName and shorthandPropertyAssignment
-                    checkGrammarForInvalidQuestionMark((<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
-                    if (name.kind === SyntaxKind.NumericLiteral) {
-                        checkGrammarNumericLiteral(<NumericLiteral>name);
-                    }
-                    currentKind = Property;
-                }
-                else if (prop.kind === SyntaxKind.MethodDeclaration) {
-                    currentKind = Property;
-                }
-                else if (prop.kind === SyntaxKind.GetAccessor) {
-                    currentKind = GetAccessor;
-                }
-                else if (prop.kind === SyntaxKind.SetAccessor) {
-                    currentKind = SetAccessor;
-                }
-                else {
-                    Debug.assertNever(prop, "Unexpected syntax kind:" + (<Node>prop).kind);
+                let currentKind: Flags;
+                switch (prop.kind) {
+                    case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                        // Grammar checking for computedPropertyName and shorthandPropertyAssignment
+                        checkGrammarForInvalidQuestionMark((<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
+                        if (name.kind === SyntaxKind.NumericLiteral) {
+                            checkGrammarNumericLiteral(<NumericLiteral>name);
+                        }
+                        // falls through
+                    case SyntaxKind.MethodDeclaration:
+                        currentKind = Flags.Property;
+                        break;
+                    case SyntaxKind.GetAccessor:
+                        currentKind = Flags.GetAccessor;
+                        break;
+                    case SyntaxKind.SetAccessor:
+                        currentKind = Flags.SetAccessor;
+                        break;
+                    default:
+                        Debug.assertNever(prop, "Unexpected syntax kind:" + (<Node>prop).kind);
                 }
 
                 const effectiveName = getPropertyNameForPropertyNameNode(name);
@@ -25174,11 +25168,11 @@ namespace ts {
                     seen.set(effectiveName, currentKind);
                 }
                 else {
-                    if (currentKind === Property && existingKind === Property) {
+                    if (currentKind === Flags.Property && existingKind === Flags.Property) {
                         grammarErrorOnNode(name, Diagnostics.Duplicate_identifier_0, getTextOfNode(name));
                     }
-                    else if ((currentKind & GetOrSetAccessor) && (existingKind & GetOrSetAccessor)) {
-                        if (existingKind !== GetOrSetAccessor && currentKind !== existingKind) {
+                    else if ((currentKind & Flags.GetOrSetAccessor) && (existingKind & Flags.GetOrSetAccessor)) {
+                        if (existingKind !== Flags.GetOrSetAccessor && currentKind !== existingKind) {
                             seen.set(effectiveName, currentKind | existingKind);
                         }
                         else {
@@ -25805,5 +25799,18 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    namespace JsxNames {
+        // tslint:disable variable-name
+        export const JSX = "JSX" as __String;
+        export const IntrinsicElements = "IntrinsicElements" as __String;
+        export const ElementClass = "ElementClass" as __String;
+        export const ElementAttributesPropertyNameContainer = "ElementAttributesProperty" as __String;
+        export const ElementChildrenAttributeNameContainer = "ElementChildrenAttribute" as __String;
+        export const Element = "Element" as __String;
+        export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
+        export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
+        // tslint:enable variable-name
     }
 }

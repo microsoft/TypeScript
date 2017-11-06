@@ -1997,9 +1997,7 @@ namespace ts {
             }
 
             function isNodeModulesFile(path: string): boolean {
-                const node_modulesFolderName = "/node_modules/";
-
-                return stringContains(path, node_modulesFolderName);
+                return stringContains(path, "/node_modules/");
             }
         }
 

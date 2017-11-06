@@ -74,6 +74,7 @@
 
         // Config different from tslint:latest
         "no-implicit-dependencies": [true, "dev"],
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
 
         // TODO
         "arrow-parens": false, // [true, "ban-single-arg-parens"]
@@ -102,7 +103,6 @@
         "space-before-function-paren": false,
         "trailing-comma": false,
         "unified-signatures": false,
-        "variable-name": false,
 
         // These should be done automatically by a formatter. https://github.com/Microsoft/TypeScript/issues/18340
         "align": false,

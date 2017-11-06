@@ -108,7 +108,7 @@ namespace Harness.LanguageService {
     }
 
     class DefaultHostCancellationToken implements ts.HostCancellationToken {
-        public static readonly Instance = new DefaultHostCancellationToken();
+        public static readonly instance = new DefaultHostCancellationToken();
 
         public isCancellationRequested() {
             return false;
@@ -126,7 +126,7 @@ namespace Harness.LanguageService {
         public typesRegistry: ts.Map<void> | undefined;
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
-        constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
+        constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
             protected settings = ts.getDefaultCompilerOptions()) {
         }
 
