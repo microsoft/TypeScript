@@ -3,15 +3,15 @@
 /* @internal */
 namespace ts.formatting {
     export class RuleOperation {
-        constructor(public Context: RuleOperationContext, public Action: RuleAction) {}
+        constructor(readonly context: RuleOperationContext, readonly action: RuleAction) {}
 
         public toString(): string {
-            return "[context=" + this.Context + "," +
-                "action=" + this.Action + "]";
+            return "[context=" + this.context + "," +
+                "action=" + this.action + "]";
         }
 
         static create1(action: RuleAction) {
-            return RuleOperation.create2(RuleOperationContext.Any, action);
+            return RuleOperation.create2(RuleOperationContext.any, action);
         }
 
         static create2(context: RuleOperationContext, action: RuleAction) {

@@ -2,6 +2,7 @@
 
 /* @internal */
 namespace ts.formatting {
+    // tslint:disable variable-name (TODO)
     export class Rules {
         public IgnoreBeforeComment: Rule;
         public IgnoreAfterLineComment: Rule;

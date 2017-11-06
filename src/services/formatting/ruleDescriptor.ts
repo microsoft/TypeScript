@@ -3,12 +3,12 @@
 /* @internal */
 namespace ts.formatting {
     export class RuleDescriptor {
-        constructor(public LeftTokenRange: Shared.TokenRange, public RightTokenRange: Shared.TokenRange) {
+        constructor(public leftTokenRange: Shared.TokenRange, public rightTokenRange: Shared.TokenRange) {
         }
 
         public toString(): string {
-            return "[leftRange=" + this.LeftTokenRange + "," +
-                "rightRange=" + this.RightTokenRange + "]";
+            return "[leftRange=" + this.leftTokenRange + "," +
+                "rightRange=" + this.rightTokenRange + "]";
         }
 
         static create1(left: SyntaxKind, right: SyntaxKind): RuleDescriptor {
