@@ -13692,31 +13692,29 @@ namespace ts {
         function getApparentTypeOfContextualType(node: Expression): Type {
             let contextualType = getContextualType(node);
             contextualType = contextualType && mapType(contextualType, getApparentType);
-            if (contextualType && contextualType.flags & TypeFlags.Union && isObjectLiteralExpression(node)) {
-                let match: Type | undefined;
-                propLoop: for (const prop of node.properties) {
-                    if (!prop.symbol) continue;
-                    if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
-                    if (isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
-                        const discriminatingType = getTypeOfNode(prop.initializer);
-                        for (const type of (contextualType as UnionType).types) {
-                            const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
-                            if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {
-                                if (match) {
-                                    if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
-                                    match = undefined;
-                                    break propLoop;
-                                }
-                                match = type;
+            if (!(contextualType && contextualType.flags & TypeFlags.Union && isObjectLiteralExpression(node))) {
+                return contextualType;
+            }
+            let match: Type | undefined;
+            propLoop: for (const prop of node.properties) {
+                if (!prop.symbol) continue;
+                if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
+                if (isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
+                    const discriminatingType = getTypeOfNode(prop.initializer);
+                    for (const type of (contextualType as UnionType).types) {
+                        const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
+                        if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {
+                            if (match) {
+                                if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
+                                match = undefined;
+                                break propLoop;
                             }
+                            match = type;
                         }
                     }
                 }
-                if (match) {
-                    contextualType = match;
-                }
             }
-            return contextualType;
+            return match || contextualType;
         }
 
         /**
