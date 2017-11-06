@@ -4329,7 +4329,7 @@ namespace ts {
         constantValue?: string | number;         // The constant value of an expression
         externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
         helpers?: EmitHelper[];                  // Emit helpers for the node
-        startsOnNewLine?: boolean;               // If the ndoe should begin on a new line
+        startsOnNewLine?: boolean;               // If the node should begin on a new line
     }
 
     export const enum EmitFlags {
