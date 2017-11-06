@@ -11,8 +11,5 @@
 ////    }
 ////}
 
-verify.docCommentTemplateAt("decl", /*newTextOffset*/ 8,
-`/**
- * 
- */
-`);
+verify.docCommentTemplateAt("decl", /*newTextOffset*/ 3,
+"/** */");

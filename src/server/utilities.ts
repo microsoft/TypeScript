@@ -24,6 +24,7 @@ namespace ts.server {
     }
 
     export namespace Msg {
+        // tslint:disable variable-name
         export type Err = "Err";
         export const Err: Err = "Err";
         export type Info = "Info";
@@ -31,6 +32,7 @@ namespace ts.server {
         export type Perf = "Perf";
         export const Perf: Perf = "Perf";
         export type Types = Err | Info | Perf;
+        // tslint:enable variable-name
     }
 
     function getProjectRootPath(project: Project): Path {
@@ -320,8 +322,8 @@ namespace ts.server {
     }
 
     /* @internal */
-    export function indent(string: string): string {
-        return "\n    " + string;
+    export function indent(str: string): string {
+        return "\n    " + str;
     }
 
     /** Put stringified JSON on the next line, indented. */

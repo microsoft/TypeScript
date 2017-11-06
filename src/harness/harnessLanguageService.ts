@@ -108,7 +108,7 @@ namespace Harness.LanguageService {
     }
 
     class DefaultHostCancellationToken implements ts.HostCancellationToken {
-        public static readonly Instance = new DefaultHostCancellationToken();
+        public static readonly instance = new DefaultHostCancellationToken();
 
         public isCancellationRequested() {
             return false;
@@ -126,7 +126,7 @@ namespace Harness.LanguageService {
         public typesRegistry: ts.Map<void> | undefined;
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
-        constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
+        constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
             protected settings = ts.getDefaultCompilerOptions()) {
         }
 
@@ -495,7 +495,7 @@ namespace Harness.LanguageService {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
-        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
+        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion | undefined {
             return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {

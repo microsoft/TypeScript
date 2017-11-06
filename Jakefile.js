@@ -844,8 +844,9 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
     var testConfigContents = JSON.stringify({
+        runners: runners ? runners.split(",") : undefined,
         test: tests ? [tests] : undefined,
         light: light,
         workerCount: workerCount,
@@ -871,6 +872,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     var debug = process.env.debug || process.env["debug-brk"] || process.env.d;
     var inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     var testTimeout = process.env.timeout || defaultTestTimeout;
+    var runners = process.env.runners || process.env.runner || process.env.ru;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light === undefined || process.env.light !== "false";
     var stackTraceLimit = process.env.stackTraceLimit;
@@ -892,8 +894,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
         workerCount = process.env.workerCount || process.env.p || os.cpus().length;
     }
 
-    if (tests || light || taskConfigsFolder) {
-        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
+    if (tests || runners || light || taskConfigsFolder) {
+        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -1028,14 +1030,15 @@ task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
     var browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
+    var runners = process.env.runners || process.env.runner || process.env.ru;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
-    if (tests || light) {
-        writeTestConfigFile(tests, light);
+    if (tests || runners || light) {
+        writeTestConfigFile(tests, runners, light);
     }
 
     tests = tests ? tests : '';
