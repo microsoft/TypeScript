@@ -75,10 +75,14 @@ namespace ts.SymbolDisplay {
                 }
                 return unionPropertyKind;
             }
-            if (location.parent && isJsxAttribute(location.parent)) {
-                return ScriptElementKind.jsxAttribute;
+            switch (location.parent.kind) {
+                // If we've typed a character of the attribute name, will be 'JsxAttribute', else will be 'JsxOpeningElement'.
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxAttribute:
+                    return ScriptElementKind.jsxAttribute;
+                default:
+                    return ScriptElementKind.memberVariableElement;
             }
-            return ScriptElementKind.memberVariableElement;
         }
 
         return ScriptElementKind.unknown;
