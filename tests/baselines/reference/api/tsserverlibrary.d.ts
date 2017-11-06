@@ -4779,17 +4779,17 @@ declare namespace ts.server {
         info(s: string): void;
         startGroup(): void;
         endGroup(): void;
-        msg(s: string, type?: Msg.Types): void;
+        msg(s: string, type?: Msg): void;
         getLogFileName(): string;
     }
+    enum Msg {
+        Err = "Err",
+        Info = "Info",
+        Perf = "Perf",
+    }
     namespace Msg {
-        type Err = "Err";
-        const Err: Err;
-        type Info = "Info";
-        const Info: Info;
-        type Perf = "Perf";
-        const Perf: Perf;
-        type Types = Err | Info | Perf;
+        /** @deprecated Only here for backwards-compatibility. Prefer just `Msg`. */
+        type Types = Msg;
     }
     function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings;
     namespace Errors {
