@@ -1,4 +1,4 @@
-interface StrNum extends Array<string|number> {
+interface StrNum extends TupleBase<string|number> {
     0: string;
     1: number;
     length: 2;
