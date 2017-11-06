@@ -26,7 +26,7 @@ namespace ts.codefix {
 
         const typesPackageName = getTypesPackageName(packageName);
         return {
-            description: `Install '${typesPackageName}'`,
+            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Install_0), [typesPackageName]),
             changes: [],
             commands: [{ type: "install package", packageName: typesPackageName }],
         };

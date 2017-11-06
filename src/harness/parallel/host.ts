@@ -314,8 +314,7 @@ namespace Harness.Parallel.Host {
             stats.failures = errorResults.length;
             stats.tests = totalPassing + errorResults.length;
             stats.duration = duration;
-            for (let j = 0; j < errorResults.length; j++) {
-                const failure = errorResults[j];
+            for (const failure of errorResults) {
                 failures.push(makeMochaTest(failure));
             }
             if (noColors) {

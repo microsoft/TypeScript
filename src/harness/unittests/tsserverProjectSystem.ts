@@ -1248,13 +1248,13 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2);
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false });
             // should contain completions for string
             assert.isTrue(completions1.entries.some(e => e.name === "charAt"), "should contain 'charAt'");
             assert.isFalse(completions1.entries.some(e => e.name === "toExponential"), "should not contain 'toExponential'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2);
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false });
             // should contain completions for string
             assert.isFalse(completions2.entries.some(e => e.name === "charAt"), "should not contain 'charAt'");
             assert.isTrue(completions2.entries.some(e => e.name === "toExponential"), "should contain 'toExponential'");
@@ -1280,11 +1280,11 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0);
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false });
             assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0);
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false });
             assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
             const sf2 = service.externalProjects[0].getLanguageService().getProgram().getSourceFile(f2.path);
             assert.equal(sf2.text, "");
@@ -1845,7 +1845,7 @@ namespace ts.projectSystem {
 
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
-            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1);
+            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, { includeExternalModuleExports: false });
             assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
 
             // Close HTML file
@@ -1859,7 +1859,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
-            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5);
+            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, { includeExternalModuleExports: false });
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
         });
 
@@ -3444,6 +3444,117 @@ namespace ts.projectSystem {
             // Recheck
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
+        });
+
+        function assertEvent(actualOutput: string, expectedEvent: protocol.Event, host: TestServerHost) {
+            assert.equal(actualOutput, server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, host.newLine));
+        }
+
+        function checkErrorMessage(host: TestServerHost, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
+            const outputs = host.getOutput();
+            assert.isTrue(outputs.length >= 1, outputs.toString());
+            const event: protocol.Event = {
+                seq: 0,
+                type: "event",
+                event: eventName,
+                body: diagnostics
+            };
+            assertEvent(outputs[0], event, host);
+        }
+
+        function checkCompleteEvent(host: TestServerHost, numberOfCurrentEvents: number, expectedSequenceId: number) {
+            const outputs = host.getOutput();
+            assert.equal(outputs.length, numberOfCurrentEvents, outputs.toString());
+            const event: protocol.RequestCompletedEvent = {
+                seq: 0,
+                type: "event",
+                event: "requestCompleted",
+                body: {
+                    request_seq: expectedSequenceId
+                }
+            };
+            assertEvent(outputs[numberOfCurrentEvents - 1], event, host);
+        }
+
+        function checkProjectUpdatedInBackgroundEvent(host: TestServerHost, openFiles: string[]) {
+            const outputs = host.getOutput();
+            assert.equal(outputs.length, 1, outputs.toString());
+            const event: protocol.ProjectsUpdatedInBackgroundEvent = {
+                seq: 0,
+                type: "event",
+                event: "projectsUpdatedInBackground",
+                body: {
+                    openFiles
+                }
+            };
+            assertEvent(outputs[0], event, host);
+        }
+
+        it("npm install @types works", () => {
+            const folderPath = "/a/b/projects/temp";
+            const file1: FileOrFolder = {
+                path: `${folderPath}/a.ts`,
+                content: 'import f = require("pad")'
+            };
+            const files = [file1, libFile];
+            const host = createServerHost(files);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: {
+                    file: file1.path,
+                    fileContent: file1.content,
+                    scriptKindName: "TS",
+                    projectRootPath: folderPath
+                }
+            });
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            host.clearOutput();
+            const expectedSequenceId = session.getNextSeq();
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file1.path]
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+            checkErrorMessage(host, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            host.clearOutput();
+
+            host.runQueuedImmediateCallbacks();
+            const moduleNotFound = Diagnostics.Cannot_find_module_0;
+            const startOffset = file1.content.indexOf('"') + 1;
+            checkErrorMessage(host, "semanticDiag", {
+                file: file1.path, diagnostics: [{
+                    start: { line: 1, offset: startOffset },
+                    end: { line: 1, offset: startOffset + '"pad"'.length },
+                    text: formatStringFromArgs(moduleNotFound.message, ["pad"]),
+                    code: moduleNotFound.code,
+                    category: DiagnosticCategory[moduleNotFound.category].toLowerCase()
+                }]
+            });
+            checkCompleteEvent(host, 2, expectedSequenceId);
+            host.clearOutput();
+
+            const padIndex: FileOrFolder = {
+                path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
+                content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
+            };
+            files.push(padIndex);
+            host.reloadFS(files, { ignoreWatchInvokedWithTriggerAsFileCreate: true });
+            host.runQueuedTimeoutCallbacks();
+            checkProjectUpdatedInBackgroundEvent(host, [file1.path]);
+            host.clearOutput();
+
+            host.runQueuedTimeoutCallbacks();
+            checkErrorMessage(host, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            host.clearOutput();
+
+            host.runQueuedImmediateCallbacks();
+            checkErrorMessage(host, "semanticDiag", { file: file1.path, diagnostics: [] });
         });
     });
 

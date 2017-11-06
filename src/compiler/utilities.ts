@@ -1728,16 +1728,6 @@ namespace ts {
         return false;
     }
 
-    export function isInAmbientContext(node: Node): boolean {
-        while (node) {
-            if (hasModifier(node, ModifierFlags.Ambient) || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
-                return true;
-            }
-            node = node.parent;
-        }
-        return false;
-    }
-
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
         switch (name.kind) {
@@ -3602,7 +3592,7 @@ namespace ts {
     }
 
     /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */
-    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T): T {
+    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T | undefined): T | undefined {
         while (true) {
             const result = callback(directory);
             if (result !== undefined) {
