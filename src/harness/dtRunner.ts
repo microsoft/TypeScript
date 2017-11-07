@@ -37,6 +37,9 @@ class DefinitelyTypedRunner extends RunnerBase {
                 const cwd = path.join(__dirname, "../../", DefinitelyTypedRunner.testDir, directoryName);
                 const timeout = 600000; // 600s = 10 minutes
                 if (fs.existsSync(path.join(cwd, "package.json"))) {
+                    if (fs.existsSync(path.join(cwd, "package-lock.json"))) {
+                        fs.unlinkSync(path.join(cwd, "package-lock.json"));
+                    }
                     const stdio = isWorker ? "pipe" : "inherit";
                     const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout, shell: true, stdio });
                     if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed!`);
