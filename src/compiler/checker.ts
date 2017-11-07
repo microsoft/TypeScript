@@ -18236,7 +18236,7 @@ namespace ts {
                     if (checkForDisallowedESSymbolOperand(operator)) {
                         leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
                         rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
-                        if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
+                        if (!checkTypeComparableWithLessOrGreaterThanOperator(leftType) || !checkTypeComparableWithLessOrGreaterThanOperator(rightType) || (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType))) {
                             reportOperatorError();
                         }
                     }
@@ -18324,6 +18324,10 @@ namespace ts {
                         checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
                     }
                 }
+            }
+
+            function checkTypeComparableWithLessOrGreaterThanOperator(valueType: Type): boolean {
+                return !(valueType.flags & TypeFlags.BooleanLike) && !(valueType.flags & TypeFlags.DefinitelyFalsy);
             }
 
             function reportOperatorError() {

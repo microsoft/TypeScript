@@ -10,6 +10,7 @@ tests/cases/compiler/intTypeCheck.ts(101,5): error TS2322: Type 'Base' is not as
 tests/cases/compiler/intTypeCheck.ts(103,5): error TS2322: Type '() => void' is not assignable to type 'i1'.
   Property 'p' is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(106,5): error TS2322: Type 'boolean' is not assignable to type 'i1'.
+tests/cases/compiler/intTypeCheck.ts(106,16): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/compiler/intTypeCheck.ts(106,20): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(106,21): error TS2693: 'i1' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(107,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -22,6 +23,7 @@ tests/cases/compiler/intTypeCheck.ts(114,17): error TS2350: Only a void function
 tests/cases/compiler/intTypeCheck.ts(115,5): error TS2322: Type 'Base' is not assignable to type 'i2'.
   Type 'Base' provides no match for the signature '(): any'.
 tests/cases/compiler/intTypeCheck.ts(120,5): error TS2322: Type 'boolean' is not assignable to type 'i2'.
+tests/cases/compiler/intTypeCheck.ts(120,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/compiler/intTypeCheck.ts(120,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(120,22): error TS2693: 'i2' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(121,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -35,11 +37,13 @@ tests/cases/compiler/intTypeCheck.ts(129,5): error TS2322: Type 'Base' is not as
 tests/cases/compiler/intTypeCheck.ts(131,5): error TS2322: Type '() => void' is not assignable to type 'i3'.
   Type '() => void' provides no match for the signature 'new (): any'.
 tests/cases/compiler/intTypeCheck.ts(134,5): error TS2322: Type 'boolean' is not assignable to type 'i3'.
+tests/cases/compiler/intTypeCheck.ts(134,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(134,22): error TS2693: 'i3' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(135,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(142,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
+tests/cases/compiler/intTypeCheck.ts(148,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(149,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -54,6 +58,7 @@ tests/cases/compiler/intTypeCheck.ts(157,5): error TS2322: Type 'Base' is not as
 tests/cases/compiler/intTypeCheck.ts(159,5): error TS2322: Type '() => void' is not assignable to type 'i5'.
   Property 'p' is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(162,5): error TS2322: Type 'boolean' is not assignable to type 'i5'.
+tests/cases/compiler/intTypeCheck.ts(162,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/compiler/intTypeCheck.ts(162,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(162,22): error TS2693: 'i5' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(163,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -68,6 +73,7 @@ tests/cases/compiler/intTypeCheck.ts(171,5): error TS2322: Type 'Base' is not as
 tests/cases/compiler/intTypeCheck.ts(173,5): error TS2322: Type '() => void' is not assignable to type 'i6'.
   Type 'void' is not assignable to type 'number'.
 tests/cases/compiler/intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
+tests/cases/compiler/intTypeCheck.ts(176,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/compiler/intTypeCheck.ts(176,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(176,22): error TS2693: 'i6' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(177,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -81,17 +87,19 @@ tests/cases/compiler/intTypeCheck.ts(185,17): error TS2352: Type 'Base' cannot b
 tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is not assignable to type 'i7'.
   Type '() => void' provides no match for the signature 'new (): any'.
 tests/cases/compiler/intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
+tests/cases/compiler/intTypeCheck.ts(190,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(190,22): error TS2693: 'i7' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(191,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(198,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
+tests/cases/compiler/intTypeCheck.ts(204,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(204,22): error TS2693: 'i8' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
-==== tests/cases/compiler/intTypeCheck.ts (63 errors) ====
+==== tests/cases/compiler/intTypeCheck.ts (71 errors) ====
     interface i1 {
         //Property Signatures
         p;
@@ -218,6 +226,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj9: i1 = new <i1> anyVar;
         ~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i1'.
+                   ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                        ~
 !!! error TS1109: Expression expected.
                         ~~
@@ -252,6 +262,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj20: i2 = new <i2> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i2'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -287,6 +299,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj31: i3 = new <i3> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i3'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -311,6 +325,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj42: i4 = new <i4> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i4'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -348,6 +364,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj53: i5 = new <i5> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i5'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -385,6 +403,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj64: i6 = new <i6> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i6'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -420,6 +440,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj75: i7 = new <i7> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i7'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -444,6 +466,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj86: i8 = new <i8> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i8'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~

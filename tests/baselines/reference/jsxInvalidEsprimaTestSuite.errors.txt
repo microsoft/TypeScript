@@ -32,6 +32,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,16): error TS1109:
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(13,2): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(13,8): error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,1): error TS1109: Expression expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,2): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,5): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,7): error TS1128: Declaration or statement expected.
@@ -70,7 +71,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,4): error TS1003: 
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005: '</' expected.
 
 
-==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (70 errors) ====
+==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (71 errors) ====
     declare var React: any;
     
     </>;
@@ -153,6 +154,8 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
     <.a></.a>;
     ~
 !!! error TS1109: Expression expected.
+    ~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
      ~
 !!! error TS1109: Expression expected.
         ~~

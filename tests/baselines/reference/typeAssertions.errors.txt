@@ -12,6 +12,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): err
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): error TS2304: Cannot find name 'is'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): error TS1005: ')' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): error TS2365: Operator '>' cannot be applied to types 'any' and 'boolean'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,48): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(45,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
@@ -23,7 +24,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): err
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (18 errors) ====
+==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (19 errors) ====
     // Function call whose argument is a 1 arg generic function call with explicit type arguments
     function fn1<T>(t: T) { }
     function fn2(t: any) { }
@@ -92,6 +93,8 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
 !!! error TS1005: ')' expected.
                     ~~~~~~
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any' and 'boolean'.
                                                    ~
 !!! error TS1005: ';' expected.
     	str = numOrStr; // Error, no narrowing occurred
