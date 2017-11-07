@@ -13,13 +13,7 @@ var x3 = (a:number) {};
 var x4= (...a: any[]) { };
 
 //// [fatarrowfunctionsErrors.js]
-foo(function () {
-    var Far = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        Far[_i] = arguments[_i];
-    }
-    return 0;
-});
+foo(function () { return 0; });
 foo((1), { "return": 0 });
 foo(function (x) { return x; });
 foo(function (x) {
@@ -33,9 +27,4 @@ false ? (function () { return null; }) : null;
 var x1 = function () { };
 var x2 = function (a) { };
 var x3 = function (a) { };
-var x4 = function () {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-};
+var x4 = function () { };

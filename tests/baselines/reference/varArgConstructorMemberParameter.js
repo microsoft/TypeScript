@@ -15,10 +15,6 @@ class Foo3 {
 //// [varArgConstructorMemberParameter.js]
 var Foo1 = /** @class */ (function () {
     function Foo1() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
     return Foo1;
 }());

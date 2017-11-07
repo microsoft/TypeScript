@@ -57,10 +57,6 @@ var M;
             return result;
         };
         C.prototype.fnope = function (x) {
-            var rest = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                rest[_i - 1] = arguments[_i];
-            }
         };
         C.prototype.fonly = function () {
             var rest = [];

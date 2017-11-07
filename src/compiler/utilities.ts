@@ -851,6 +851,24 @@ namespace ts {
         }
     }
 
+    export function forEachIdentifier (container: Node, visitor: (id: Identifier) => void): void {
+
+        traverse(container);
+
+        function traverse(node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.InterfaceDeclaration:
+                    return;
+                case SyntaxKind.Identifier:
+                    visitor(<Identifier>node);
+                    return;
+                default:
+                    forEachChild(node, traverse);
+
+            }
+        }
+    }
+
     export function forEachYieldExpression(body: Block, visitor: (expr: YieldExpression) => void): void {
 
         return traverse(body);

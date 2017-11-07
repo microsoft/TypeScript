@@ -70,10 +70,6 @@ declare class c6NoError {
 // Constructors
 var c1 = /** @class */ (function () {
     function c1(_i) {
-        var restParameters = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            restParameters[_a - 1] = arguments[_a];
-        }
         var _i = 10; // no error
     }
     return c1;
@@ -86,10 +82,6 @@ var c1NoError = /** @class */ (function () {
 }());
 var c2 = /** @class */ (function () {
     function c2() {
-        var restParameters = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            restParameters[_a] = arguments[_a];
-        }
         var _i = 10; // no error
     }
     return c2;
@@ -102,10 +94,6 @@ var c2NoError = /** @class */ (function () {
 }());
 var c3 = /** @class */ (function () {
     function c3(_i) {
-        var restParameters = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            restParameters[_a - 1] = arguments[_a];
-        }
         this._i = _i;
         var _i = 10; // no error
     }
@@ -120,10 +108,6 @@ var c3NoError = /** @class */ (function () {
 }());
 var c5 = /** @class */ (function () {
     function c5(_i) {
-        var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
-        }
         var _i; // no error
     }
     return c5;

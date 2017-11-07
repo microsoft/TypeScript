@@ -19,12 +19,7 @@ function bar(x, y) { }
 ; // error at "y"; no error at "x"
 function func2(a, b, c) { }
 ; // error at "a,b,c"
-function func3() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-}
+function func3() { }
 ; // error at "args" 
 function func4(z, w) {
     if (z === void 0) { z = null; }
