@@ -166,6 +166,7 @@ namespace ts {
 
     /** Create a unique name generated for a node. */
     export function getGeneratedNameForNode(node: Node): Identifier;
+    // tslint:disable-next-line unified-signatures
     /*@internal*/ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier;
     export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
         const name = createIdentifier("");
