@@ -1716,7 +1716,7 @@
         "category": "Error",
         "code": 2510
     },
-    "Cannot create an instance of the abstract class '{0}'.": {
+    "Cannot create an instance of an abstract class.": {
         "category": "Error",
         "code": 2511
     },
@@ -2227,10 +2227,6 @@
     "Type parameter '{0}' has a circular default.": {
         "category": "Error",
         "code": 2716
-    },
-    "Cannot create an instance of an abstract class.": {
-        "category": "Error",
-        "code": 2717
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

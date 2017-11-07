@@ -1,4 +1,4 @@
-/b.ts(2,1): error TS2717: Cannot create an instance of an abstract class.
+/b.ts(2,1): error TS2511: Cannot create an instance of an abstract class.
 
 
 ==== /a.ts (0 errors) ====
@@ -8,5 +8,5 @@
     import A from "./a";
     new A();
     ~~~~~~~
-!!! error TS2717: Cannot create an instance of an abstract class.
+!!! error TS2511: Cannot create an instance of an abstract class.
     

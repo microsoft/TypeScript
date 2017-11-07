@@ -16725,13 +16725,7 @@ namespace ts {
                 // only the class declaration node will have the Abstract flag set.
                 const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
                 if (valueDecl && hasModifier(valueDecl, ModifierFlags.Abstract)) {
-                    const name = getNameOfDeclaration(valueDecl);
-                    if (name) {
-                        error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(name));
-                    }
-                    else {
-                        error(node, Diagnostics.Cannot_create_an_instance_of_an_abstract_class);
-                    }
+                    error(node, Diagnostics.Cannot_create_an_instance_of_an_abstract_class);
                     return resolveErrorCall(node);
                 }
 
