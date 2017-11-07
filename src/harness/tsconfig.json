@@ -92,6 +92,7 @@
         "projectsRunner.ts",
         "loggedIO.ts",
         "rwcRunner.ts",
+        "userRunner.ts",
         "test262Runner.ts",
         "./parallel/shared.ts",
         "./parallel/host.ts",
@@ -143,6 +144,7 @@
         "./unittests/telemetry.ts",
         "./unittests/languageService.ts",
         "./unittests/programMissingFiles.ts",
-        "./unittests/publicApi.ts"
+        "./unittests/publicApi.ts",
+        "./unittests/hostNewLineSupport.ts"
     ]
 }

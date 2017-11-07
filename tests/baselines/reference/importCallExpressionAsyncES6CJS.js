@@ -41,33 +41,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 function fn() {
     return __awaiter(this, void 0, void 0, function* () {
-        const req = yield Promise.resolve().then(function () { return require('./test'); }); // ONE
+        const req = yield Promise.resolve().then(() => require('./test')); // ONE
     });
 }
 exports.fn = fn;
 class cl1 {
     m() {
         return __awaiter(this, void 0, void 0, function* () {
-            const req = yield Promise.resolve().then(function () { return require('./test'); }); // TWO
+            const req = yield Promise.resolve().then(() => require('./test')); // TWO
         });
     }
 }
 exports.cl1 = cl1;
 exports.obj = {
     m: () => __awaiter(this, void 0, void 0, function* () {
-        const req = yield Promise.resolve().then(function () { return require('./test'); }); // THREE
+        const req = yield Promise.resolve().then(() => require('./test')); // THREE
     })
 };
 class cl2 {
     constructor() {
         this.p = {
             m: () => __awaiter(this, void 0, void 0, function* () {
-                const req = yield Promise.resolve().then(function () { return require('./test'); }); // FOUR
+                const req = yield Promise.resolve().then(() => require('./test')); // FOUR
             })
         };
     }
 }
 exports.cl2 = cl2;
 exports.l = () => __awaiter(this, void 0, void 0, function* () {
-    const req = yield Promise.resolve().then(function () { return require('./test'); }); // FIVE
+    const req = yield Promise.resolve().then(() => require('./test')); // FIVE
 });

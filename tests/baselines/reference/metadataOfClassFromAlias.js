@@ -43,7 +43,7 @@ var ClassA = /** @class */ (function () {
     }
     __decorate([
         annotation(),
-        __metadata("design:type", Object)
+        __metadata("design:type", auxiliry_1.SomeClass)
     ], ClassA.prototype, "array", void 0);
     return ClassA;
 }());

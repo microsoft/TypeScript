@@ -1077,7 +1077,7 @@ namespace ts {
                 const visited = visitNode(expression, visitor, isExpression);
                 if (visited) {
                     if (multiLine) {
-                        visited.startsOnNewLine = true;
+                        startOnNewLine(visited);
                     }
                     expressions.push(visited);
                 }
@@ -1112,7 +1112,7 @@ namespace ts {
         }
 
         function visitCallExpression(node: CallExpression) {
-            if (forEach(node.arguments, containsYield)) {
+            if (!isImportCall(node) && forEach(node.arguments, containsYield)) {
                 // [source]
                 //      a.b(1, yield, 2);
                 //
@@ -1123,7 +1123,6 @@ namespace ts {
                 //  .yield resumeLabel
                 //  .mark resumeLabel
                 //      _b.apply(_a, _c.concat([%sent%, 2]));
-
                 const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
                 return setOriginalNode(
                     createFunctionApply(
@@ -2684,8 +2683,7 @@ namespace ts {
             if (clauses) {
                 const labelExpression = createPropertyAccess(state, "label");
                 const switchStatement = createSwitch(labelExpression, createCaseBlock(clauses));
-                switchStatement.startsOnNewLine = true;
-                return [switchStatement];
+                return [startOnNewLine(switchStatement)];
             }
 
             if (statements) {

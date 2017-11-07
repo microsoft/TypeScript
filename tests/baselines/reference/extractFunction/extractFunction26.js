@@ -26,6 +26,7 @@ class C {
     }
     M3() { }
 }
+
 function newFunction() {
     return 1;
 }

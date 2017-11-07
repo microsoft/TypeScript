@@ -22,6 +22,7 @@ const _ = class {
         return /*RENAME*/newFunction();
     }
 }
+
 function newFunction() {
     let a1 = { x: 1 };
     return a1.x + 10;

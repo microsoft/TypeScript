@@ -76,13 +76,13 @@ namespace ts {
             name: "target",
             shortName: "t",
             type: createMapFromTemplate({
-                "es3": ScriptTarget.ES3,
-                "es5": ScriptTarget.ES5,
-                "es6": ScriptTarget.ES2015,
-                "es2015": ScriptTarget.ES2015,
-                "es2016": ScriptTarget.ES2016,
-                "es2017": ScriptTarget.ES2017,
-                "esnext": ScriptTarget.ESNext,
+                es3: ScriptTarget.ES3,
+                es5: ScriptTarget.ES5,
+                es6: ScriptTarget.ES2015,
+                es2015: ScriptTarget.ES2015,
+                es2016: ScriptTarget.ES2016,
+                es2017: ScriptTarget.ES2017,
+                esnext: ScriptTarget.ESNext,
             }),
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
@@ -93,14 +93,14 @@ namespace ts {
             name: "module",
             shortName: "m",
             type: createMapFromTemplate({
-                "none": ModuleKind.None,
-                "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD,
-                "system": ModuleKind.System,
-                "umd": ModuleKind.UMD,
-                "es6": ModuleKind.ES2015,
-                "es2015": ModuleKind.ES2015,
-                "esnext": ModuleKind.ESNext
+                none: ModuleKind.None,
+                commonjs: ModuleKind.CommonJS,
+                amd: ModuleKind.AMD,
+                system: ModuleKind.System,
+                umd: ModuleKind.UMD,
+                es6: ModuleKind.ES2015,
+                es2015: ModuleKind.ES2015,
+                esnext: ModuleKind.ESNext
             }),
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
@@ -141,6 +141,7 @@ namespace ts {
                     "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts",
                     "es2017.string": "lib.es2017.string.d.ts",
                     "es2017.intl": "lib.es2017.intl.d.ts",
+                    "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
                     "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
                 }),
             },
@@ -325,8 +326,8 @@ namespace ts {
         {
             name: "moduleResolution",
             type: createMapFromTemplate({
-                "node": ModuleResolutionKind.NodeJs,
-                "classic": ModuleResolutionKind.Classic,
+                node: ModuleResolutionKind.NodeJs,
+                classic: ModuleResolutionKind.Classic,
             }),
             paramType: Diagnostics.STRATEGY,
             category: Diagnostics.Module_Resolution_Options,
@@ -521,8 +522,8 @@ namespace ts {
         {
             name: "newLine",
             type: createMapFromTemplate({
-                "crlf": NewLineKind.CarriageReturnLineFeed,
-                "lf": NewLineKind.LineFeed
+                crlf: NewLineKind.CarriageReturnLineFeed,
+                lf: NewLineKind.LineFeed
             }),
             paramType: Diagnostics.NEWLINE,
             category: Diagnostics.Advanced_Options,
@@ -1138,6 +1139,13 @@ namespace ts {
                     reportInvalidOptionValue(option && option.type !== "number");
                     return Number((<NumericLiteral>valueExpression).text);
 
+                case SyntaxKind.PrefixUnaryExpression:
+                    if ((<PrefixUnaryExpression>valueExpression).operator !== SyntaxKind.MinusToken || (<PrefixUnaryExpression>valueExpression).operand.kind !== SyntaxKind.NumericLiteral) {
+                        break; // not valid JSON syntax
+                    }
+                    reportInvalidOptionValue(option && option.type !== "number");
+                    return -Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text);
+
                 case SyntaxKind.ObjectLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "object");
                     const objectLiteralExpression = <ObjectLiteralExpression>valueExpression;
@@ -1183,8 +1191,8 @@ namespace ts {
             }
         }
 
-        function isDoubleQuotedString(node: Node) {
-            return node.kind === SyntaxKind.StringLiteral && getSourceTextOfNodeFromSourceFile(sourceFile, node).charCodeAt(0) === CharacterCodes.doubleQuote;
+        function isDoubleQuotedString(node: Node): boolean {
+            return isStringLiteral(node) && isStringDoubleQuoted(node, sourceFile);
         }
     }
 
@@ -1440,9 +1448,9 @@ namespace ts {
 
         function getFileNames(): ExpandResult {
             let filesSpecs: ReadonlyArray<string>;
-            if (hasProperty(raw, "files") && !isNullOrUndefined(raw["files"])) {
-                if (isArray(raw["files"])) {
-                    filesSpecs = <ReadonlyArray<string>>raw["files"];
+            if (hasProperty(raw, "files") && !isNullOrUndefined(raw.files)) {
+                if (isArray(raw.files)) {
+                    filesSpecs = <ReadonlyArray<string>>raw.files;
                     if (filesSpecs.length === 0) {
                         createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
                     }
@@ -1453,9 +1461,9 @@ namespace ts {
             }
 
             let includeSpecs: ReadonlyArray<string>;
-            if (hasProperty(raw, "include") && !isNullOrUndefined(raw["include"])) {
-                if (isArray(raw["include"])) {
-                    includeSpecs = <ReadonlyArray<string>>raw["include"];
+            if (hasProperty(raw, "include") && !isNullOrUndefined(raw.include)) {
+                if (isArray(raw.include)) {
+                    includeSpecs = <ReadonlyArray<string>>raw.include;
                 }
                 else {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "include", "Array");
@@ -1463,16 +1471,16 @@ namespace ts {
             }
 
             let excludeSpecs: ReadonlyArray<string>;
-            if (hasProperty(raw, "exclude") && !isNullOrUndefined(raw["exclude"])) {
-                if (isArray(raw["exclude"])) {
-                    excludeSpecs = <ReadonlyArray<string>>raw["exclude"];
+            if (hasProperty(raw, "exclude") && !isNullOrUndefined(raw.exclude)) {
+                if (isArray(raw.exclude)) {
+                    excludeSpecs = <ReadonlyArray<string>>raw.exclude;
                 }
                 else {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array");
                 }
             }
             else {
-                const outDir = raw["compilerOptions"] && raw["compilerOptions"]["outDir"];
+                const outDir = raw.compilerOptions && raw.compilerOptions.outDir;
                 if (outDir) {
                     excludeSpecs = [outDir];
                 }
@@ -1591,7 +1599,7 @@ namespace ts {
         const options = convertCompilerOptionsFromJsonWorker(json.compilerOptions, basePath, errors, configFileName);
         // typingOptions has been deprecated and is only supported for backward compatibility purposes.
         // It should be removed in future releases - use typeAcquisition instead.
-        const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json["typeAcquisition"] || json["typingOptions"], basePath, errors, configFileName);
+        const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition || json.typingOptions, basePath, errors, configFileName);
         json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
         let extendedConfigPath: Path;
 
@@ -1748,7 +1756,7 @@ namespace ts {
         if (!hasProperty(jsonOption, compileOnSaveCommandLineOption.name)) {
             return undefined;
         }
-        const result = convertJsonOption(compileOnSaveCommandLineOption, jsonOption["compileOnSave"], basePath, errors);
+        const result = convertJsonOption(compileOnSaveCommandLineOption, jsonOption.compileOnSave, basePath, errors);
         if (typeof result === "boolean" && result) {
             return result;
         }

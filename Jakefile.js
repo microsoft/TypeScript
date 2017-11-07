@@ -108,6 +108,7 @@ var harnessCoreSources = [
     "projectsRunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
+    "userRunner.ts",
     "test262Runner.ts",
     "./parallel/shared.ts",
     "./parallel/host.ts",
@@ -157,6 +158,7 @@ var harnessSources = harnessCoreSources.concat([
     "symbolWalker.ts",
     "languageService.ts",
     "publicApi.ts",
+    "hostNewLineSupport.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -198,7 +200,8 @@ var es2017LibrarySource = [
     "es2017.object.d.ts",
     "es2017.sharedmemory.d.ts",
     "es2017.string.d.ts",
-    "es2017.intl.d.ts"
+    "es2017.intl.d.ts",
+    "es2017.typedarrays.d.ts",
 ];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
@@ -240,6 +243,23 @@ var librarySourceMap = [
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
 });
+
+/**
+ * .lcg file is what localization team uses to know what messages to localize.
+ * The file is always generated in 'enu\diagnosticMessages.generated.json.lcg'
+ */
+var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
+
+/**
+ * The localization target produces the two following transformations:
+ *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
+ *       convert localized resources into a .json file the compiler can understand
+ *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
+ *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
+ */
+var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
+    return path.join(builtLocalDirectory, f);
+}).concat(path.dirname(generatedLCGFile));
 
 // Prepends the contents of prefixFile to destinationFile
 function prependFile(prefixFile, destinationFile) {
@@ -446,7 +466,6 @@ compileFile(generateLocalizedDiagnosticMessagesJs,
     /*useBuiltCompiler*/ false, { noOutFile: true, types: ["node", "xml2js"] });
 
 // Localize diagnostics
-var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
 file(generatedLCGFile, [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs, generatedDiagnosticMessagesJSON], function () {
     var cmd = host + " " + generateLocalizedDiagnosticMessagesJs + " " + lclDirectory + " " + builtLocalDirectory + " " + generatedDiagnosticMessagesJSON;
     console.log(cmd);
@@ -738,8 +757,7 @@ desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].
         concat(libraryTargets).
-        concat(fs.readdirSync(lclDirectory).map(function (d) { return path.join(builtLocalDirectory, d) })).
-        concat(path.dirname(generatedLCGFile));
+        concat(localizationTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -830,8 +848,9 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
     var testConfigContents = JSON.stringify({
+        runners: runners ? runners.split(",") : undefined,
         test: tests ? [tests] : undefined,
         light: light,
         workerCount: workerCount,
@@ -857,8 +876,9 @@ function runConsoleTests(defaultReporter, runInParallel) {
     var debug = process.env.debug || process.env["debug-brk"] || process.env.d;
     var inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     var testTimeout = process.env.timeout || defaultTestTimeout;
+    var runners = process.env.runners || process.env.runner || process.env.ru;
     var tests = process.env.test || process.env.tests || process.env.t;
-    var light = process.env.light || false;
+    var light = process.env.light === undefined || process.env.light !== "false";
     var stackTraceLimit = process.env.stackTraceLimit;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
@@ -878,8 +898,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
         workerCount = process.env.workerCount || process.env.p || os.cpus().length;
     }
 
-    if (tests || light || taskConfigsFolder) {
-        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
+    if (tests || runners || light || taskConfigsFolder) {
+        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -1014,14 +1034,15 @@ task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
     var browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
+    var runners = process.env.runners || process.env.runner || process.env.ru;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
-    if (tests || light) {
-        writeTestConfigFile(tests, light);
+    if (tests || runners || light) {
+        writeTestConfigFile(tests, runners, light);
     }
 
     tests = tests ? tests : '';
@@ -1269,7 +1290,7 @@ task("lint", ["build-rules"], () => {
     const fileMatcher = process.env.f || process.env.file || process.env.files;
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude 'src/lib/*.d.ts'";
     const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
     jake.exec([cmd], { interactive: true }, () => {
