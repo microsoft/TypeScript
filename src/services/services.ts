@@ -1877,7 +1877,7 @@ namespace ts {
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
             const rulesProvider = getRuleProvider(formatOptions);
 
-            return flatMap(deduplicate(errorCodes), errorCode => {
+            return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
                 return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
             });

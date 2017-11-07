@@ -220,6 +220,14 @@ function beginTests() {
         ts.Debug.enableDebugInfo();
     }
 
+    // run tests in en-US by default.
+    let savedUILocale: string | undefined;
+    beforeEach(() => {
+        savedUILocale = ts.getUILocale();
+        ts.setUILocale("en-US");
+    });
+    afterEach(() => ts.setUILocale(savedUILocale));
+
     runTests(runners);
 
     if (!runUnitTests) {

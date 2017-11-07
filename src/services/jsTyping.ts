@@ -115,7 +115,10 @@ namespace ts.JsTyping {
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            const module = deduplicate(unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId));
+            const module = deduplicate(
+                unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
+                equateStringsCaseSensitive,
+                compareStringsCaseSensitive);
             addInferredTypings(module, "Inferred typings from unresolved imports");
         }
         // Add the cached typing locations for inferred typings that are already installed

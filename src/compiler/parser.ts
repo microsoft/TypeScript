@@ -6146,7 +6146,7 @@ namespace ts {
                     const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
                     if (checkJsDirectiveMatchResult) {
                         checkJsDirective = {
-                            enabled: compareStrings(checkJsDirectiveMatchResult[1], "@ts-check", /*ignoreCase*/ true) === Comparison.EqualTo,
+                            enabled: equateStringsCaseInsensitive(checkJsDirectiveMatchResult[1], "@ts-check"),
                             end: range.end,
                             pos: range.pos
                         };

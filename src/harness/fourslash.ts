@@ -564,15 +564,31 @@ namespace FourSlash {
             }
 
             for (const { start, length, messageText, file } of errors) {
-                Harness.IO.log("  from: " + showPosition(file, start) +
-                    ", to: " + showPosition(file, start + length) +
+                Harness.IO.log("  " + this.formatRange(file, start, length) +
                     ", message: " + ts.flattenDiagnosticMessageText(messageText, Harness.IO.newLine()) + "\n");
             }
+        }
 
-            function showPosition(file: ts.SourceFile, pos: number) {
+        private formatRange(file: ts.SourceFile, start: number, length: number) {
+            if (file) {
+                return `from: ${this.formatLineAndCharacterOfPosition(file, start)}, to: ${this.formatLineAndCharacterOfPosition(file, start + length)}`;
+            }
+            return "global";
+        }
+
+        private formatLineAndCharacterOfPosition(file: ts.SourceFile, pos: number) {
+            if (file) {
                 const { line, character } = ts.getLineAndCharacterOfPosition(file, pos);
                 return `${line}:${character}`;
             }
+            return "global";
+        }
+
+        private formatPosition(file: ts.SourceFile, pos: number) {
+            if (file) {
+                return file.fileName + "@" + pos;
+            }
+            return "global";
         }
 
         public verifyNoErrors() {
@@ -582,7 +598,7 @@ namespace FourSlash {
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
                     const error = errors[0];
-                    this.raiseError(`Found an error: ${error.file.fileName}@${error.start}: ${error.messageText}`);
+                    this.raiseError(`Found an error: ${this.formatPosition(error.file, error.start)}: ${error.messageText}`);
                 }
             });
         }
