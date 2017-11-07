@@ -1330,6 +1330,7 @@ namespace ts {
     export function getSourceFileImportLocation(node: SourceFile) {
         // For a source file, it is possible there are detached comments we should not skip
         const text = node.text;
+        const textLength = text.length;
         let ranges = getLeadingCommentRanges(text, 0);
         if (!ranges) return 0;
         let position = 0;
@@ -1351,12 +1352,15 @@ namespace ts {
         return position;
 
         function AdvancePastLineBreak() {
-            if (text.charCodeAt(position) === CharacterCodes.carriageReturn) {
-                position++;
-            }
+            if (position < textLength) {
+                const charCode = text.charCodeAt(position);
+                if (isLineBreak(charCode)) {
+                    position++;
 
-            if (text.charCodeAt(position) === CharacterCodes.lineFeed) {
-                position++;
+                    if (position < textLength && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
+                        position++;
+                    }
+                }
             }
         }
     }
