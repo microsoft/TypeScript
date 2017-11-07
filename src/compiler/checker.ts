@@ -17588,13 +17588,9 @@ namespace ts {
         }
 
         function allTypesAssignableToKind(source: Type, kind: TypeFlags, strict?: boolean): boolean {
-            if (source.flags & TypeFlags.Union) {
-                const unionTypes = (source as UnionType).types;
-
-                return every(unionTypes, subType => allTypesAssignableToKind(subType, kind, strict));
-            }
-
-            return isTypeAssignableToKind(source, kind, strict);
+            return source.flags & TypeFlags.Union ?
+                every((source as UnionType).types, subType => allTypesAssignableToKind(subType, kind, strict)) :
+                isTypeAssignableToKind(source, kind, strict);
         }
 
         function isConstEnumObjectType(type: Type): boolean {
