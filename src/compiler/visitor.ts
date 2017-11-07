@@ -819,6 +819,12 @@ namespace ts {
                 return updateJsxClosingElement(<JsxClosingElement>node,
                     visitNode((<JsxClosingElement>node).tagName, visitor, isJsxTagNameExpression));
 
+            case SyntaxKind.JsxFragment:
+                return updateJsxFragment(<JsxFragment>node,
+                    visitNode((<JsxFragment>node).openingFragment, visitor, isJsxOpeningFragment),
+                    nodesVisitor((<JsxFragment>node).children, visitor, isJsxChild),
+                    visitNode((<JsxFragment>node).closingFragment, visitor, isJsxClosingFragment));
+
             case SyntaxKind.JsxAttribute:
                 return updateJsxAttribute(<JsxAttribute>node,
                     visitNode((<JsxAttribute>node).name, visitor, isIdentifier),
@@ -1332,6 +1338,12 @@ namespace ts {
                 result = reduceNode((<JsxElement>node).openingElement, cbNode, result);
                 result = reduceLeft((<JsxElement>node).children, cbNode, result);
                 result = reduceNode((<JsxElement>node).closingElement, cbNode, result);
+                break;
+
+            case SyntaxKind.JsxFragment:
+                result = reduceNode((<JsxFragment>node).openingFragment, cbNode, result);
+                result = reduceLeft((<JsxFragment>node).children, cbNode, result);
+                result = reduceNode((<JsxFragment>node).closingFragment, cbNode, result);
                 break;
 
             case SyntaxKind.JsxSelfClosingElement:

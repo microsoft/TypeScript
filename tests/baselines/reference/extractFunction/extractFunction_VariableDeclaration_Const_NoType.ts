@@ -1,6 +1,7 @@
 // ==ORIGINAL==
 
-/*[#|*/const x = 1;/*|]*/
+/*[#|*/const x = 1;
+"hello";/*|]*/
 x;
 
 // ==SCOPE::Extract to function in global scope==
@@ -10,5 +11,6 @@ x;
 
 function newFunction() {
     const x = 1;
+    "hello";
     return x;
 }

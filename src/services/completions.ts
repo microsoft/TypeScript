@@ -12,7 +12,7 @@ namespace ts.Completions {
      * Map from symbol id -> SymbolOriginInfo.
      * Only populated for symbols that come from other modules.
      */
-    type SymbolOriginInfoMap = SymbolOriginInfo[];
+    type SymbolOriginInfoMap = (SymbolOriginInfo | undefined)[];
 
     const enum KeywordCompletionFilters {
         None,
@@ -28,16 +28,18 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
+        options: GetCompletionsAtPositionOptions,
     ): CompletionInfo | undefined {
         if (isInReferenceComment(sourceFile, position)) {
-            return PathCompletions.getTripleSlashReferenceCompletion(sourceFile, position, compilerOptions, host);
+            const entries = PathCompletions.getTripleSlashReferenceCompletion(sourceFile, position, compilerOptions, host);
+            return entries && pathCompletionsInfo(entries);
         }
 
         if (isInString(sourceFile, position)) {
             return getStringLiteralCompletionEntries(sourceFile, position, typeChecker, compilerOptions, host, log);
         }
 
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, options);
         if (!completionData) {
             return undefined;
         }
@@ -100,7 +102,7 @@ namespace ts.Completions {
     function getJavaScriptCompletionEntries(
         sourceFile: SourceFile,
         position: number,
-        uniqueNames: Map<true>,
+        uniqueNames: Map<{}>,
         target: ScriptTarget,
         entries: Push<CompletionEntry>): void {
         getNameTable(sourceFile).forEach((pos, name) => {
@@ -127,7 +129,15 @@ namespace ts.Completions {
         });
     }
 
-    function createCompletionEntry(symbol: Symbol, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, allowStringLiteral: boolean): CompletionEntry {
+    function createCompletionEntry(
+        symbol: Symbol,
+        location: Node,
+        performCharacterChecks: boolean,
+        typeChecker: TypeChecker,
+        target: ScriptTarget,
+        allowStringLiteral: boolean,
+        origin: SymbolOriginInfo,
+    ): CompletionEntry | undefined {
         // Try to get a valid display name for this symbol, if we could not find one, then ignore it.
         // We would like to only show things that can be added after a dot, so for instance numeric properties can
         // not be accessed with a dot (a.1 <- invalid)
@@ -149,7 +159,13 @@ namespace ts.Completions {
             kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText: "0",
+            source: getSourceFromOrigin(origin),
+            hasAction: origin === undefined ? undefined : true,
         };
+    }
+
+    function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
+        return origin && stripQuotes(origin.moduleSymbol.name);
     }
 
     function getCompletionEntriesFromSymbols(
@@ -164,25 +180,35 @@ namespace ts.Completions {
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
     ): Map<true> {
         const start = timestamp();
-        const uniqueNames = createMap<true>();
+        // Tracks unique names.
+        // We don't set this for global variables or completions from external module exports, because we can have multiple of those.
+        // Based on the order we add things we will always see locals first, then globals, then module exports.
+        // So adding a completion for a local will prevent us from adding completions for external module exports sharing the same name.
+        const uniques = createMap<true>();
         if (symbols) {
             for (const symbol of symbols) {
-                const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target, allowStringLiteral);
-                if (entry) {
-                    const id = entry.name;
-                    if (!uniqueNames.has(id)) {
-                        if (symbolToOriginInfoMap && symbolToOriginInfoMap[getUniqueSymbolId(symbol, typeChecker)]) {
-                            entry.hasAction = true;
-                        }
-                        entries.push(entry);
-                        uniqueNames.set(id, true);
-                    }
+                const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
+                const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target, allowStringLiteral, origin);
+                if (!entry) {
+                    continue;
                 }
+
+                const { name } = entry;
+                if (uniques.has(name)) {
+                    continue;
+                }
+
+                // Latter case tests whether this is a global variable.
+                if (!origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()))) {
+                    uniques.set(name, true);
+                }
+
+                entries.push(entry);
             }
         }
 
         log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));
-        return uniqueNames;
+        return uniques;
     }
 
     function getStringLiteralCompletionEntries(sourceFile: SourceFile, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, log: Log): CompletionInfo | undefined {
@@ -217,12 +243,17 @@ namespace ts.Completions {
             // a['/*completion position*/']
             return getStringLiteralCompletionEntriesFromElementAccess(node.parent, typeChecker, compilerOptions.target, log);
         }
-        else if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node) || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) {
+        else if (node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration
+            || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) || isImportCall(node.parent)
+            || isExpressionOfExternalModuleImportEqualsDeclaration(node)) {
             // Get all known external module names or complete a path to a module
             // i.e. import * as ns from "/*completion position*/";
+            //      var y = import("/*completion position*/");
             //      import x = require("/*completion position*/");
             //      var y = require("/*completion position*/");
-            return PathCompletions.getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node, compilerOptions, host, typeChecker);
+            //      export * from "/*completion position*/";
+            const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(<StringLiteral>node, compilerOptions, host, typeChecker);
+            return pathCompletionsInfo(entries);
         }
         else if (isEqualityExpression(node.parent)) {
             // Get completions from the type of the other operand
@@ -249,6 +280,18 @@ namespace ts.Completions {
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
             return getStringLiteralCompletionEntriesFromType(typeChecker.getContextualType(<StringLiteral>node), typeChecker);
         }
+    }
+
+    function pathCompletionsInfo(entries: CompletionEntry[]): CompletionInfo {
+        return {
+            // We don't want the editor to offer any other completions, such as snippets, inside a comment.
+            isGlobalCompletion: false,
+            isMemberCompletion: false,
+            // The user may type in a path that doesn't yet exist, creating a "new identifier"
+            // with respect to the collection of identifiers the server is aware of.
+            isNewIdentifierLocation: true,
+            entries,
+        };
     }
 
     function getStringLiteralCompletionEntriesFromPropertyAssignment(element: ObjectLiteralElement, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
@@ -329,59 +372,104 @@ namespace ts.Completions {
         }
     }
 
+    function getSymbolCompletionFromEntryId(
+        typeChecker: TypeChecker,
+        log: (message: string) => void,
+        compilerOptions: CompilerOptions,
+        sourceFile: SourceFile,
+        position: number,
+        { name, source }: CompletionEntryIdentifier,
+        allSourceFiles: ReadonlyArray<SourceFile>,
+    ): { type: "symbol", symbol: Symbol, location: Node, symbolToOriginInfoMap: SymbolOriginInfoMap } | { type: "request", request: Request } | { type: "none" } {
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExports: true });
+        if (!completionData) {
+            return { type: "none" };
+        }
+
+        const { symbols, location, allowStringLiteral, symbolToOriginInfoMap, request } = completionData;
+        if (request) {
+            return { type: "request", request };
+        }
+
+        // Find the symbol with the matching entry name.
+        // We don't need to perform character checks here because we're only comparing the
+        // name against 'entryName' (which is known to be good), not building a new
+        // completion entry.
+        const symbol = find(symbols, s =>
+            getCompletionEntryDisplayNameForSymbol(s, compilerOptions.target, /*performCharacterChecks*/ false, allowStringLiteral) === name
+            && getSourceFromOrigin(symbolToOriginInfoMap[getSymbolId(s)]) === source);
+        return symbol ? { type: "symbol", symbol, location, symbolToOriginInfoMap } : { type: "none" };
+    }
+
+    export interface CompletionEntryIdentifier {
+        name: string;
+        source?: string;
+    }
+
     export function getCompletionEntryDetails(
         typeChecker: TypeChecker,
         log: (message: string) => void,
         compilerOptions: CompilerOptions,
         sourceFile: SourceFile,
         position: number,
-        name: string,
+        entryId: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
         host: LanguageServiceHost,
         rulesProvider: formatting.RulesProvider,
     ): CompletionEntryDetails {
-
+        const { name, source } = entryId;
         // Compute all the completion symbols again.
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
-        if (completionData) {
-            const { symbols, location, allowStringLiteral, symbolToOriginInfoMap } = completionData;
-
-            // Find the symbol with the matching entry name.
-            // We don't need to perform character checks here because we're only comparing the
-            // name against 'entryName' (which is known to be good), not building a new
-            // completion entry.
-            const symbol = find(symbols, s => getCompletionEntryDisplayNameForSymbol(s, compilerOptions.target, /*performCharacterChecks*/ false, allowStringLiteral) === name);
-
-            if (symbol) {
+        const symbolCompletion = getSymbolCompletionFromEntryId(typeChecker, log, compilerOptions, sourceFile, position, entryId, allSourceFiles);
+        switch (symbolCompletion.type) {
+            case "request": {
+                const { request } = symbolCompletion;
+                switch (request.kind) {
+                    case "JsDocTagName":
+                        return JsDoc.getJSDocTagNameCompletionDetails(name);
+                    case "JsDocTag":
+                        return JsDoc.getJSDocTagCompletionDetails(name);
+                    case "JsDocParameterName":
+                        return JsDoc.getJSDocParameterNameCompletionDetails(name);
+                    default:
+                        return Debug.assertNever(request);
+                }
+            }
+            case "symbol": {
+                const { symbol, location, symbolToOriginInfoMap } = symbolCompletion;
                 const codeActions = getCompletionEntryCodeActions(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, rulesProvider);
                 const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
-                return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions };
+                return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: source === undefined ? undefined : [textPart(source)] };
+            }
+            case "none": {
+                // Didn't find a symbol with this name.  See if we can find a keyword instead.
+                if (some(getKeywordCompletions(KeywordCompletionFilters.None), c => c.name === name)) {
+                    return {
+                        name,
+                        kind: ScriptElementKind.keyword,
+                        kindModifiers: ScriptElementKindModifier.none,
+                        displayParts: [displayPart(name, SymbolDisplayPartKind.keyword)],
+                        documentation: undefined,
+                        tags: undefined,
+                        codeActions: undefined,
+                        source: undefined,
+                    };
+                }
+                return undefined;
             }
         }
-
-        // Didn't find a symbol with this name.  See if we can find a keyword instead.
-        const keywordCompletion = forEach(
-            getKeywordCompletions(KeywordCompletionFilters.None),
-            c => c.name === name
-        );
-        if (keywordCompletion) {
-            return {
-                name,
-                kind: ScriptElementKind.keyword,
-                kindModifiers: ScriptElementKindModifier.none,
-                displayParts: [displayPart(name, SymbolDisplayPartKind.keyword)],
-                documentation: undefined,
-                tags: undefined,
-                codeActions: undefined,
-            };
-        }
-
-        return undefined;
     }
 
-    function getCompletionEntryCodeActions(symbolToOriginInfoMap: SymbolOriginInfoMap, symbol: Symbol, checker: TypeChecker, host: LanguageServiceHost, compilerOptions: CompilerOptions, sourceFile: SourceFile, rulesProvider: formatting.RulesProvider): CodeAction[] | undefined {
-        const symbolOriginInfo = symbolToOriginInfoMap[getUniqueSymbolId(symbol, checker)];
+    function  getCompletionEntryCodeActions(
+        symbolToOriginInfoMap: SymbolOriginInfoMap,
+        symbol: Symbol,
+        checker: TypeChecker,
+        host: LanguageServiceHost,
+        compilerOptions: CompilerOptions,
+        sourceFile: SourceFile,
+        rulesProvider: formatting.RulesProvider,
+    ): CodeAction[] | undefined {
+        const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
         if (!symbolOriginInfo) {
             return undefined;
         }
@@ -407,29 +495,20 @@ namespace ts.Completions {
         compilerOptions: CompilerOptions,
         sourceFile: SourceFile,
         position: number,
-        entryName: string,
+        entryId: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): Symbol | undefined {
-        // Compute all the completion symbols again.
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
-        if (!completionData) {
-            return undefined;
-        }
-        const { symbols, allowStringLiteral } = completionData;
-        // Find the symbol with the matching entry name.
-        // We don't need to perform character checks here because we're only comparing the
-        // name against 'entryName' (which is known to be good), not building a new
-        // completion entry.
-        return find(symbols, s => getCompletionEntryDisplayNameForSymbol(s, compilerOptions.target, /*performCharacterChecks*/ false, allowStringLiteral) === entryName);
+        const completion = getSymbolCompletionFromEntryId(typeChecker, log, compilerOptions, sourceFile, position, entryId, allSourceFiles);
+        return completion.type === "symbol" ? completion.symbol : undefined;
     }
 
     interface CompletionData {
-        symbols: Symbol[];
+        symbols: ReadonlyArray<Symbol>;
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         allowStringLiteral: boolean;
         isNewIdentifierLocation: boolean;
-        location: Node;
+        location: Node | undefined;
         isRightOfDot: boolean;
         request?: Request;
         keywordFilters: KeywordCompletionFilters;
@@ -443,6 +522,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
+        options: GetCompletionsAtPositionOptions,
     ): CompletionData | undefined {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
@@ -516,7 +596,7 @@ namespace ts.Completions {
 
             if (request) {
                 return {
-                    symbols: undefined,
+                    symbols: emptyArray,
                     isGlobalCompletion: false,
                     isMemberCompletion: false,
                     allowStringLiteral: false,
@@ -840,7 +920,9 @@ namespace ts.Completions {
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
             symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
-            getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "");
+            if (options.includeExternalModuleExports) {
+                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "");
+            }
             filterGlobalCompletion(symbols);
 
             return true;
@@ -923,7 +1005,6 @@ namespace ts.Completions {
 
         function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
-            const symbolIdMap = arrayToNumericMap(symbols, s => getUniqueSymbolId(s, typeChecker));
 
             codefix.forEachExternalModule(typeChecker, allSourceFiles, moduleSymbol => {
                 if (moduleSymbol === sourceFile.symbol) {
@@ -941,10 +1022,14 @@ namespace ts.Completions {
                         }
                     }
 
-                    const id = getUniqueSymbolId(symbol, typeChecker);
-                    if (!symbolIdMap[id] && stringContainsCharactersInOrder(name.toLowerCase(), tokenTextLowerCase)) {
+                    if (symbol.declarations && symbol.declarations.some(d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
+                        // Don't add a completion for a re-export, only for the original.
+                        continue;
+                    }
+
+                    if (stringContainsCharactersInOrder(name.toLowerCase(), tokenTextLowerCase)) {
                         symbols.push(symbol);
-                        symbolToOriginInfoMap[id] = { moduleSymbol, isDefaultExport };
+                        symbolToOriginInfoMap[getSymbolId(symbol)] = { moduleSymbol, isDefaultExport };
                     }
                 }
             });
@@ -1772,6 +1857,18 @@ namespace ts.Completions {
             if (isSingleOrDoubleQuote(firstCharCode)) {
                 // If the symbol is external module, don't show it in the completion list
                 // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
+                return undefined;
+            }
+        }
+
+        // If the symbol is for a member of an object type and is the internal name of an ES
+        // symbol, it is not a valid entry. Internal names for ES symbols start with "__@"
+        if (symbol.flags & SymbolFlags.ClassMember) {
+            const escapedName = symbol.escapedName as string;
+            if (escapedName.length >= 3 &&
+                escapedName.charCodeAt(0) === CharacterCodes._ &&
+                escapedName.charCodeAt(1) === CharacterCodes._ &&
+                escapedName.charCodeAt(2) === CharacterCodes.at) {
                 return undefined;
             }
         }

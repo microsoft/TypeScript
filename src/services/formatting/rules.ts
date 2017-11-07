@@ -2,6 +2,7 @@
 
 /* @internal */
 namespace ts.formatting {
+    // tslint:disable variable-name (TODO)
     export class Rules {
         public IgnoreBeforeComment: Rule;
         public IgnoreAfterLineComment: Rule;
@@ -849,7 +850,7 @@ namespace ts.formatting {
         }
 
         static NodeIsInDecoratorContext(node: Node): boolean {
-            while (isPartOfExpression(node)) {
+            while (isExpressionNode(node)) {
                 node = node.parent;
             }
             return node.kind === SyntaxKind.Decorator;

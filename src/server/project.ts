@@ -98,9 +98,7 @@ namespace ts.server {
         getExternalFiles?(proj: Project): string[];
     }
 
-    export interface PluginModuleFactory {
-        (mod: { typescript: typeof ts }): PluginModule;
-    }
+    export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
 
     /**
      * The project root can be script info - if root is present,
@@ -287,7 +285,7 @@ namespace ts.server {
         }
 
         private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.directoryStructureHost);
+            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
                 if (existingValue !== scriptInfo && existingValue !== undefined) {
@@ -367,7 +365,7 @@ namespace ts.server {
 
         /*@internal*/
         toPath(fileName: string) {
-            return this.projectService.toPath(fileName);
+            return toPath(fileName, this.currentDirectory, this.projectService.toCanonicalFileName);
         }
 
         /*@internal*/
@@ -660,7 +658,7 @@ namespace ts.server {
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean) {
-            const info = this.projectService.getScriptInfoForNormalizedPath(filename);
+            const info = this.projectService.getScriptInfoForPath(this.toPath(filename));
             if (info && (info.isScriptOpen() || !requireOpen)) {
                 return this.containsScriptInfo(info);
             }
@@ -857,7 +855,7 @@ namespace ts.server {
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.directoryStructureHost);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
                     scriptInfo.attachToProject(this);
                 },
                 removed => this.detachScriptInfoFromProject(removed)
@@ -903,7 +901,7 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
+            const scriptInfo = this.projectService.getScriptInfoForPath(this.toPath(fileName));
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
             }
@@ -944,16 +942,6 @@ namespace ts.server {
                 }
                 this.markAsDirty();
             }
-        }
-
-        reloadScript(filename: NormalizedPath, tempFileName?: NormalizedPath): boolean {
-            const script = this.projectService.getScriptInfoForNormalizedPath(filename);
-            if (script) {
-                Debug.assert(script.isAttached(this));
-                script.reloadFromFile(tempFileName);
-                return true;
-            }
-            return false;
         }
 
         /* @internal */
@@ -1064,7 +1052,7 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
-            projectRootPath: string | undefined,
+            projectRootPath: NormalizedPath | undefined,
             currentDirectory: string | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
@@ -1080,7 +1068,8 @@ namespace ts.server {
         }
 
         addRoot(info: ScriptInfo) {
-            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info);
+            Debug.assert(info.isScriptOpen());
+            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info, this.projectService.openFiles.get(info.path));
             if (!this._isJsInferredProject && info.isJavaScript()) {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ true);
             }

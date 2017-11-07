@@ -95,6 +95,7 @@ namespace ts.formatting {
                 return new TokenAllExceptAccess(token);
             }
 
+            // tslint:disable variable-name (TODO)
             export const Any: TokenRange = new TokenAllAccess();
             export const AnyIncludingMultilineComments = TokenRange.FromTokens([...allTokens, SyntaxKind.MultiLineCommentTrivia]);
             export const Keywords = TokenRange.FromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);

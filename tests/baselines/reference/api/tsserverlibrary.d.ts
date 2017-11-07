@@ -313,46 +313,49 @@ declare namespace ts {
         JsxSelfClosingElement = 250,
         JsxOpeningElement = 251,
         JsxClosingElement = 252,
-        JsxAttribute = 253,
-        JsxAttributes = 254,
-        JsxSpreadAttribute = 255,
-        JsxExpression = 256,
-        CaseClause = 257,
-        DefaultClause = 258,
-        HeritageClause = 259,
-        CatchClause = 260,
-        PropertyAssignment = 261,
-        ShorthandPropertyAssignment = 262,
-        SpreadAssignment = 263,
-        EnumMember = 264,
-        SourceFile = 265,
-        Bundle = 266,
-        JSDocTypeExpression = 267,
-        JSDocAllType = 268,
-        JSDocUnknownType = 269,
-        JSDocNullableType = 270,
-        JSDocNonNullableType = 271,
-        JSDocOptionalType = 272,
-        JSDocFunctionType = 273,
-        JSDocVariadicType = 274,
-        JSDocComment = 275,
-        JSDocTag = 276,
-        JSDocAugmentsTag = 277,
-        JSDocClassTag = 278,
-        JSDocParameterTag = 279,
-        JSDocReturnTag = 280,
-        JSDocTypeTag = 281,
-        JSDocTemplateTag = 282,
-        JSDocTypedefTag = 283,
-        JSDocPropertyTag = 284,
-        JSDocTypeLiteral = 285,
-        SyntaxList = 286,
-        NotEmittedStatement = 287,
-        PartiallyEmittedExpression = 288,
-        CommaListExpression = 289,
-        MergeDeclarationMarker = 290,
-        EndOfDeclarationMarker = 291,
-        Count = 292,
+        JsxFragment = 253,
+        JsxOpeningFragment = 254,
+        JsxClosingFragment = 255,
+        JsxAttribute = 256,
+        JsxAttributes = 257,
+        JsxSpreadAttribute = 258,
+        JsxExpression = 259,
+        CaseClause = 260,
+        DefaultClause = 261,
+        HeritageClause = 262,
+        CatchClause = 263,
+        PropertyAssignment = 264,
+        ShorthandPropertyAssignment = 265,
+        SpreadAssignment = 266,
+        EnumMember = 267,
+        SourceFile = 268,
+        Bundle = 269,
+        JSDocTypeExpression = 270,
+        JSDocAllType = 271,
+        JSDocUnknownType = 272,
+        JSDocNullableType = 273,
+        JSDocNonNullableType = 274,
+        JSDocOptionalType = 275,
+        JSDocFunctionType = 276,
+        JSDocVariadicType = 277,
+        JSDocComment = 278,
+        JSDocTypeLiteral = 279,
+        JSDocTag = 280,
+        JSDocAugmentsTag = 281,
+        JSDocClassTag = 282,
+        JSDocParameterTag = 283,
+        JSDocReturnTag = 284,
+        JSDocTypeTag = 285,
+        JSDocTemplateTag = 286,
+        JSDocTypedefTag = 287,
+        JSDocPropertyTag = 288,
+        SyntaxList = 289,
+        NotEmittedStatement = 290,
+        PartiallyEmittedExpression = 291,
+        CommaListExpression = 292,
+        MergeDeclarationMarker = 293,
+        EndOfDeclarationMarker = 294,
+        Count = 295,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -378,10 +381,10 @@ declare namespace ts {
         FirstBinaryOperator = 27,
         LastBinaryOperator = 70,
         FirstNode = 143,
-        FirstJSDocNode = 267,
-        LastJSDocNode = 285,
-        FirstJSDocTagNode = 276,
-        LastJSDocTagNode = 285,
+        FirstJSDocNode = 270,
+        LastJSDocNode = 288,
+        FirstJSDocTagNode = 280,
+        LastJSDocTagNode = 288,
     }
     enum NodeFlags {
         None = 0,
@@ -408,7 +411,7 @@ declare namespace ts {
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
         ReachabilityAndEmitFlags = 1408,
-        ContextFlags = 2193408,
+        ContextFlags = 6387712,
         TypeExcludesFlags = 20480,
     }
     enum ModifierFlags {
@@ -1061,6 +1064,20 @@ declare namespace ts {
         tagName: JsxTagNameExpression;
         attributes: JsxAttributes;
     }
+    interface JsxFragment extends PrimaryExpression {
+        kind: SyntaxKind.JsxFragment;
+        openingFragment: JsxOpeningFragment;
+        children: NodeArray<JsxChild>;
+        closingFragment: JsxClosingFragment;
+    }
+    interface JsxOpeningFragment extends Expression {
+        kind: SyntaxKind.JsxOpeningFragment;
+        parent?: JsxFragment;
+    }
+    interface JsxClosingFragment extends Expression {
+        kind: SyntaxKind.JsxClosingFragment;
+        parent?: JsxFragment;
+    }
     interface JsxAttribute extends ObjectLiteralElement {
         kind: SyntaxKind.JsxAttribute;
         parent?: JsxAttributes;
@@ -1088,7 +1105,7 @@ declare namespace ts {
         containsOnlyWhiteSpaces: boolean;
         parent?: JsxElement;
     }
-    type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
+    type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
     interface Statement extends Node {
         _statementBrand: any;
     }
@@ -1606,9 +1623,7 @@ declare namespace ts {
         fileExists(path: string): boolean;
         readFile(path: string): string | undefined;
     }
-    interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles: ReadonlyArray<SourceFile>): void;
-    }
+    type WriteFileCallback = (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles: ReadonlyArray<SourceFile>) => void;
     class OperationCanceledException {
     }
     interface CancellationToken {
@@ -2063,6 +2078,7 @@ declare namespace ts {
         ObjectLiteral = 128,
         EvolvingArray = 256,
         ObjectLiteralPatternWithComputedProperties = 512,
+        ContainsSpread = 1024,
         ClassOrInterface = 3,
     }
     interface ObjectType extends Type {
@@ -3099,6 +3115,9 @@ declare namespace ts {
     function isJsxSelfClosingElement(node: Node): node is JsxSelfClosingElement;
     function isJsxOpeningElement(node: Node): node is JsxOpeningElement;
     function isJsxClosingElement(node: Node): node is JsxClosingElement;
+    function isJsxFragment(node: Node): node is JsxFragment;
+    function isJsxOpeningFragment(node: Node): node is JsxOpeningFragment;
+    function isJsxClosingFragment(node: Node): node is JsxClosingFragment;
     function isJsxAttribute(node: Node): node is JsxAttribute;
     function isJsxAttributes(node: Node): node is JsxAttributes;
     function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute;
@@ -3172,9 +3191,7 @@ declare namespace ts {
     function isGetAccessor(node: Node): node is GetAccessorDeclaration;
 }
 declare namespace ts {
-    interface ErrorCallback {
-        (message: DiagnosticMessage, length: number): void;
-    }
+    type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
     interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
@@ -3598,6 +3615,8 @@ declare namespace ts {
     function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributes): JsxOpeningElement;
     function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
     function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
+    function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
+    function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
     function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
     function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
     function createJsxAttributes(properties: ReadonlyArray<JsxAttributeLike>): JsxAttributes;
@@ -3892,7 +3911,7 @@ declare namespace ts {
         getEscapedName(): __String;
         getName(): string;
         getDeclarations(): Declaration[] | undefined;
-        getDocumentationComment(): SymbolDisplayPart[];
+        getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
     }
     interface Type {
@@ -3913,7 +3932,7 @@ declare namespace ts {
         getTypeParameters(): TypeParameter[] | undefined;
         getParameters(): Symbol[];
         getReturnType(): Type;
-        getDocumentationComment(): SymbolDisplayPart[];
+        getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
     }
     interface SourceFile {
@@ -4012,9 +4031,9 @@ declare namespace ts {
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
-        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo;
+        getCompletionEntryDetails(fileName: string, position: number, name: string, options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails;
+        getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan;
@@ -4022,6 +4041,7 @@ declare namespace ts {
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan;
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -4049,6 +4069,9 @@ declare namespace ts {
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
+    }
+    interface GetCompletionsAtPositionOptions {
+        includeExternalModuleExports: boolean;
     }
     interface ApplyCodeActionCommandResult {
         successMessage: string;
@@ -4285,6 +4308,10 @@ declare namespace ts {
         containerKind: ScriptElementKind;
         containerName: string;
     }
+    interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<DefinitionInfo>;
+        textSpan: TextSpan;
+    }
     interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
         displayParts: SymbolDisplayPart[];
     }
@@ -4394,6 +4421,7 @@ declare namespace ts {
          */
         replacementSpan?: TextSpan;
         hasAction?: true;
+        source?: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -4403,6 +4431,7 @@ declare namespace ts {
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        source?: SymbolDisplayPart[];
     }
     interface OutliningSpan {
         /** The span of the document to actually collapse. */
@@ -4694,7 +4723,14 @@ declare namespace ts {
 }
 declare namespace ts {
     /** The version of the language service API */
+<<<<<<< HEAD
     const servicesVersion = "0.5";
+=======
+    const servicesVersion = "0.7";
+    interface DisplayPartsSymbolWriter extends SymbolWriter {
+        displayParts(): SymbolDisplayPart[];
+    }
+>>>>>>> master
     function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
     function displayPartsToString(displayParts: SymbolDisplayPart[]): string;
     function getDefaultCompilerOptions(): CompilerOptions;
@@ -4915,6 +4951,7 @@ declare namespace ts.server.protocol {
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
         Definition = "definition",
+        DefinitionAndBoundSpan = "definitionAndBoundSpan",
         Implementation = "implementation",
         Exit = "exit",
         Format = "format",
@@ -5434,11 +5471,18 @@ declare namespace ts.server.protocol {
          */
         file: string;
     }
+    interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<FileSpan>;
+        textSpan: TextSpan;
+    }
     /**
      * Definition response message.  Gives text range for definition.
      */
     interface DefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+    interface DefinitionInfoAndBoundSpanReponse extends Response {
+        body?: DefinitionInfoAndBoundSpan;
     }
     /**
      * Definition response message.  Gives text range for definition.
@@ -6108,6 +6152,11 @@ declare namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
+        includeExternalModuleExports: boolean;
     }
     /**
      * Completions request; value of command field is "completions".
@@ -6126,7 +6175,11 @@ declare namespace ts.server.protocol {
         /**
          * Names of one or more entries for which to obtain details.
          */
-        entryNames: string[];
+        entryNames: (string | CompletionEntryIdentifier)[];
+    }
+    interface CompletionEntryIdentifier {
+        name: string;
+        source: string;
     }
     /**
      * Completion entry details request; value of command field is
@@ -6182,6 +6235,10 @@ declare namespace ts.server.protocol {
          * made to avoid errors. The CompletionEntryDetails will have these actions.
          */
         hasAction?: true;
+        /**
+         * Identifier (not necessarily human-readable) identifying where this completion came from.
+         */
+        source?: string;
     }
     /**
      * Additional completion entry details, available on demand
@@ -6215,6 +6272,10 @@ declare namespace ts.server.protocol {
          * The associated code actions for this entry
          */
         codeActions?: CodeAction[];
+        /**
+         * Human-readable description of the `source` from the CompletionEntry.
+         */
+        source?: SymbolDisplayPart[];
     }
     interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
@@ -7003,6 +7064,9 @@ declare namespace ts.server {
         private convertToDiagnosticsWithLinePosition(diagnostics, scriptInfo);
         private getDiagnosticsWorker(args, isSemantic, selector, includeLinePosition);
         private getDefinition(args, simplifiedResult);
+        private getDefinitionAndBoundSpan(args, simplifiedResult);
+        private mapDefinitionInfo(definitions, project);
+        private toFileSpan(fileName, textSpan, project);
         private getTypeDefinition(args);
         private getImplementation(args, simplifiedResult);
         private getOccurrences(args);
@@ -7042,7 +7106,7 @@ declare namespace ts.server {
         private getFormattingEditsAfterKeystrokeFull(args);
         private getFormattingEditsAfterKeystroke(args);
         private getCompletions(args, simplifiedResult);
-        private getCompletionEntryDetails(args);
+        private getCompletionEntryDetails(args, simplifiedResult);
         private getCompileOnSaveAffectedFileList(args);
         private emitFile(args);
         private getSignatureHelpItems(args, simplifiedResult);
@@ -7052,10 +7116,10 @@ declare namespace ts.server {
         private reload(args, reqSeq);
         private saveToTmp(fileName, tempFileName);
         private closeClientFile(fileName);
-        private decorateNavigationBarItems(items, scriptInfo);
+        private mapLocationNavigationBarItems(items, scriptInfo);
         private getNavigationBarItems(args, simplifiedResult);
-        private decorateNavigationTree(tree, scriptInfo);
-        private decorateSpan(span, scriptInfo);
+        private toLocationNavigationTree(tree, scriptInfo);
+        private toLocationTextSpan(span, scriptInfo);
         private getNavigationTree(args, simplifiedResult);
         private getNavigateToItems(args, simplifiedResult);
         private getSupportedCodeFixes();
@@ -7104,7 +7168,7 @@ declare namespace ts.server {
         constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path);
         isScriptOpen(): boolean;
         open(newText: string): void;
-        close(): void;
+        close(fileExists?: boolean): void;
         getSnapshot(): IScriptSnapshot;
         getFormatCodeSettings(): FormatCodeSettings;
         attachToProject(project: Project): boolean;
@@ -7186,11 +7250,9 @@ declare namespace ts.server {
         create(createInfo: PluginCreateInfo): LanguageService;
         getExternalFiles?(proj: Project): string[];
     }
-    interface PluginModuleFactory {
-        (mod: {
-            typescript: typeof ts;
-        }): PluginModule;
-    }
+    type PluginModuleFactory = (mod: {
+        typescript: typeof ts;
+    }) => PluginModule;
     /**
      * The project root can be script info - if root is present,
      * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
@@ -7322,7 +7384,6 @@ declare namespace ts.server {
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
-        reloadScript(filename: NormalizedPath, tempFileName?: NormalizedPath): boolean;
         protected removeRoot(info: ScriptInfo): void;
     }
     /**
@@ -7461,9 +7522,7 @@ declare namespace ts.server {
         readonly dts: number;
     }
     type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
-    interface ProjectServiceEventHandler {
-        (event: ProjectServiceEvent): void;
-    }
+    type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {
             match: RegExp;
@@ -7530,9 +7589,13 @@ declare namespace ts.server {
          */
         readonly configuredProjects: Map<ConfiguredProject>;
         /**
-         * list of open files
+         * Open files: with value being project root path, and key being Path of the file that is open
          */
-        readonly openFiles: ScriptInfo[];
+        readonly openFiles: Map<NormalizedPath>;
+        /**
+         * Map of open files that are opened without complete path but have projectRoot as current directory
+         */
+        private readonly openFilesWithNonRootedDiskPath;
         private compilerOptionsForInferredProjects;
         private compilerOptionsForInferredProjectsPerProjectRoot;
         /**
@@ -7651,7 +7714,7 @@ declare namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private getConfigFileNameForFile(info, projectRootPath?);
+        private getConfigFileNameForFile(info, projectRootPath);
         private printProjects();
         private findConfiguredProjectByProjectName(configFileName);
         private getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath);
@@ -7672,6 +7735,10 @@ declare namespace ts.server {
         private watchClosedScriptInfo(info);
         private stopWatchingScriptInfo(info);
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost): ScriptInfo;
+        private getOrCreateScriptInfoWorker(fileName, currentDirectory, openedByClient, fileContent?, scriptKind?, hasMixedContent?, hostToQueryFileExistsOn?);
+        /**
+         * This gets the script info for the normalized path. If the path is not rooted disk path then the open script info with project root context is preferred
+         */
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo;
         getScriptInfoForPath(fileName: Path): ScriptInfo;
         setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
@@ -7687,8 +7754,9 @@ declare namespace ts.server {
          * If the config file is found and it refers to existing project, it reloads it either immediately
          * or schedules it for reload depending on delayReload option
          * If the there is no existing project it just opens the configured project for the config file
+         * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles(openFiles, delayReload);
+        private reloadConfiguredProjectForFiles<T>(openFiles, delayReload, shouldReloadProjectFor);
         /**
          * Remove the root of inferred project if script info is part of another project
          */

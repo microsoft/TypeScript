@@ -41,6 +41,9 @@ namespace ts {
                 case SyntaxKind.JsxSelfClosingElement:
                     return visitJsxSelfClosingElement(<JsxSelfClosingElement>node, /*isChild*/ false);
 
+                case SyntaxKind.JsxFragment:
+                    return visitJsxFragment(<JsxFragment>node, /*isChild*/ false);
+
                 case SyntaxKind.JsxExpression:
                     return visitJsxExpression(<JsxExpression>node);
 
@@ -63,6 +66,9 @@ namespace ts {
                 case SyntaxKind.JsxSelfClosingElement:
                     return visitJsxSelfClosingElement(<JsxSelfClosingElement>node, /*isChild*/ true);
 
+                case SyntaxKind.JsxFragment:
+                    return visitJsxFragment(<JsxFragment>node, /*isChild*/ true);
+
                 default:
                     Debug.failBadSyntaxKind(node);
                     return undefined;
@@ -75,6 +81,10 @@ namespace ts {
 
         function visitJsxSelfClosingElement(node: JsxSelfClosingElement, isChild: boolean) {
             return visitJsxOpeningLikeElement(node, /*children*/ undefined, isChild, /*location*/ node);
+        }
+
+        function visitJsxFragment(node: JsxFragment, isChild: boolean) {
+            return visitJsxOpeningFragment(node.openingFragment, node.children, isChild, /*location*/ node);
         }
 
         function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
@@ -114,6 +124,22 @@ namespace ts {
                 compilerOptions.reactNamespace,
                 tagName,
                 objectProperties,
+                mapDefined(children, transformJsxChildToExpression),
+                node,
+                location
+            );
+
+            if (isChild) {
+                startOnNewLine(element);
+            }
+
+            return element;
+        }
+
+        function visitJsxOpeningFragment(node: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
+            const element = createExpressionForJsxFragment(
+                context.getEmitResolver().getJsxFactoryEntity(),
+                compilerOptions.reactNamespace,
                 mapDefined(children, transformJsxChildToExpression),
                 node,
                 location

@@ -141,6 +141,7 @@ namespace ts {
                     "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts",
                     "es2017.string": "lib.es2017.string.d.ts",
                     "es2017.intl": "lib.es2017.intl.d.ts",
+                    "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
                     "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
                 }),
             },
@@ -1137,6 +1138,13 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                     reportInvalidOptionValue(option && option.type !== "number");
                     return Number((<NumericLiteral>valueExpression).text);
+
+                case SyntaxKind.PrefixUnaryExpression:
+                    if ((<PrefixUnaryExpression>valueExpression).operator !== SyntaxKind.MinusToken || (<PrefixUnaryExpression>valueExpression).operand.kind !== SyntaxKind.NumericLiteral) {
+                        break; // not valid JSON syntax
+                    }
+                    reportInvalidOptionValue(option && option.type !== "number");
+                    return -Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text);
 
                 case SyntaxKind.ObjectLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "object");

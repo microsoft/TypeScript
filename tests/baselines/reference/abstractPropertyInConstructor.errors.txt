@@ -5,7 +5,7 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstr
 
 ==== tests/cases/compiler/abstractPropertyInConstructor.ts (3 errors) ====
     abstract class AbstractClass {
-        constructor(str: string) {
+        constructor(str: string, other: AbstractClass) {
             this.method(parseInt(str));
             let val = this.prop.toLowerCase();
                            ~~~~
@@ -20,9 +20,13 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstr
                  ~~
 !!! error TS2715: Abstract property 'cb' in class 'AbstractClass' cannot be accessed in the constructor.
     
+            // OK, reference is inside function
             const innerFunction = () => {
                 return this.prop;
             }
+    
+            // OK, references are to another instance
+            other.cb(other.prop);
         }
     
         abstract prop: string;
@@ -32,6 +36,15 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstr
     
         method2() {
             this.prop = this.prop + "!";
+        }
+    }
+    
+    class User {
+        constructor(a: AbstractClass) {
+            a.prop;
+            a.cb("hi");
+            a.method(12);
+            a.method2();
         }
     }
     

@@ -377,7 +377,7 @@ namespace ts.codefix {
         }
 
         function inferTypeFromContextualType(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
-            if (isPartOfExpression(node)) {
+            if (isExpressionNode(node)) {
                 addCandidateType(usageContext, checker.getContextualType(node));
             }
         }

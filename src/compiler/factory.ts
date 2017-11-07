@@ -13,9 +13,6 @@ namespace ts {
         if (updated !== original) {
             setOriginalNode(updated, original);
             setTextRange(updated, original);
-            if (original.startsOnNewLine) {
-                updated.startsOnNewLine = true;
-            }
             aggregateTransformFlags(updated);
         }
         return updated;
@@ -171,11 +168,14 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier {
+    export function getGeneratedNameForNode(node: Node): Identifier;
+    /*@internal*/ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier;
+    export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
         const name = createIdentifier("");
         name.autoGenerateKind = GeneratedIdentifierKind.Node;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
+        name.skipNameGenerationScope = !!shouldSkipNameGenerationScope;
         nextAutoGenerateId++;
         return name;
     }
@@ -1986,7 +1986,7 @@ namespace ts {
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.isExportEquals = isExportEquals;
-        node.expression = expression;
+        node.expression = isExportEquals ? parenthesizeBinaryOperand(SyntaxKind.EqualsToken, expression, /*isLeftSideOfBinary*/ false, /*leftOperand*/ undefined) : parenthesizeDefaultExpression(expression);
         return node;
     }
 
@@ -2116,6 +2116,22 @@ namespace ts {
     export function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression) {
         return node.tagName !== tagName
             ? updateNode(createJsxClosingElement(tagName), node)
+            : node;
+    }
+
+    export function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
+        const node = <JsxFragment>createSynthesizedNode(SyntaxKind.JsxFragment);
+        node.openingFragment = openingFragment;
+        node.children = createNodeArray(children);
+        node.closingFragment = closingFragment;
+        return node;
+    }
+
+    export function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
+        return node.openingFragment !== openingFragment
+            || node.children !== children
+            || node.closingFragment !== closingFragment
+            ? updateNode(createJsxFragment(openingFragment, children, closingFragment), node)
             : node;
     }
 
@@ -2629,7 +2645,7 @@ namespace ts {
     /**
      * Gets a custom text range to use when emitting source maps.
      */
-    export function getSourceMapRange(node: Node) {
+    export function getSourceMapRange(node: Node): SourceMapRange {
         const emitNode = node.emitNode;
         return (emitNode && emitNode.sourceMapRange) || node;
     }
@@ -2642,6 +2658,7 @@ namespace ts {
         return node;
     }
 
+    // tslint:disable-next-line variable-name
     let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 
     /**
@@ -2667,6 +2684,24 @@ namespace ts {
         const emitNode = getOrCreateEmitNode(node);
         const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
+        return node;
+    }
+
+    /**
+     * Gets a custom text range to use when emitting comments.
+     */
+    /*@internal*/
+    export function getStartsOnNewLine(node: Node) {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.startsOnNewLine;
+    }
+
+    /**
+     * Sets a custom text range to use when emitting comments.
+     */
+    /*@internal*/
+    export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
+        getOrCreateEmitNode(node).startsOnNewLine = newLine;
         return node;
     }
 
@@ -2828,7 +2863,8 @@ namespace ts {
             sourceMapRange,
             tokenSourceMapRanges,
             constantValue,
-            helpers
+            helpers,
+            startsOnNewLine,
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
@@ -2840,6 +2876,7 @@ namespace ts {
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges);
         if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
         if (helpers) destEmitNode.helpers = addRange(destEmitNode.helpers, helpers);
+        if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;
         return destEmitNode;
     }
 
@@ -2955,7 +2992,7 @@ namespace ts {
         );
     }
 
-    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement) {
+    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment) {
         // To ensure the emit resolver can properly resolve the namespace, we need to
         // treat this identifier as if it were a source tree node by clearing the `Synthesized`
         // flag and setting a parent node.
@@ -2967,7 +3004,7 @@ namespace ts {
         return react;
     }
 
-    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
+    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
             const right = createIdentifier(idText(jsxFactory.right));
@@ -2979,7 +3016,7 @@ namespace ts {
         }
     }
 
-    function createJsxFactoryExpression(jsxFactoryEntity: EntityName, reactNamespace: string, parent: JsxOpeningLikeElement): Expression {
+    function createJsxFactoryExpression(jsxFactoryEntity: EntityName, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         return jsxFactoryEntity ?
             createJsxFactoryExpressionFromEntityName(jsxFactoryEntity, parent) :
             createPropertyAccess(
@@ -3001,7 +3038,38 @@ namespace ts {
 
             if (children.length > 1) {
                 for (const child of children) {
-                    child.startsOnNewLine = true;
+                    startOnNewLine(child);
+                    argumentsList.push(child);
+                }
+            }
+            else {
+                argumentsList.push(children[0]);
+            }
+        }
+
+        return setTextRange(
+            createCall(
+                createJsxFactoryExpression(jsxFactoryEntity, reactNamespace, parentElement),
+                /*typeArguments*/ undefined,
+                argumentsList
+            ),
+            location
+        );
+    }
+
+    export function createExpressionForJsxFragment(jsxFactoryEntity: EntityName, reactNamespace: string, children: Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
+        const tagName = createPropertyAccess(
+            createReactNamespace(reactNamespace, parentElement),
+            "Fragment"
+        );
+
+        const argumentsList = [<Expression>tagName];
+        argumentsList.push(createNull());
+
+        if (children && children.length > 0) {
+            if (children.length > 1) {
+                for (const child of children) {
+                    startOnNewLine(child);
                     argumentsList.push(child);
                 }
             }
@@ -3576,8 +3644,8 @@ namespace ts {
         );
         setOriginalNode(updated, node);
         setTextRange(updated, node);
-        if (node.startsOnNewLine) {
-            updated.startsOnNewLine = true;
+        if (getStartsOnNewLine(node)) {
+            setStartsOnNewLine(updated, /*newLine*/ true);
         }
         aggregateTransformFlags(updated);
         return updated;
@@ -3890,6 +3958,27 @@ namespace ts {
     }
 
     /**
+     *  [Per the spec](https://tc39.github.io/ecma262/#prod-ExportDeclaration), `export default` accepts _AssigmentExpression_ but
+     *  has a lookahead restriction for `function`, `async function`, and `class`.
+     *
+     * Basically, that means we need to parenthesize in the following cases:
+     *
+     * - BinaryExpression of CommaToken
+     * - CommaList (synthetic list of multiple comma expressions)
+     * - FunctionExpression
+     * - ClassExpression
+     */
+    export function parenthesizeDefaultExpression(e: Expression) {
+        const check = skipPartiallyEmittedExpressions(e);
+        return (check.kind === SyntaxKind.ClassExpression ||
+            check.kind === SyntaxKind.FunctionExpression ||
+            check.kind === SyntaxKind.CommaListExpression ||
+            isBinaryExpression(check) && check.operatorToken.kind === SyntaxKind.CommaToken)
+            ? createParen(e)
+            : e;
+    }
+
+    /**
      * Wraps an expression in parentheses if it is needed in order to use the expression
      * as the expression of a NewExpression node.
      *
@@ -4185,8 +4274,7 @@ namespace ts {
     }
 
     export function startOnNewLine<T extends Node>(node: T): T {
-        node.startsOnNewLine = true;
-        return node;
+        return setStartsOnNewLine(node, /*newLine*/ true);
     }
 
     export function getExternalHelpersModuleName(node: SourceFile) {

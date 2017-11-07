@@ -418,7 +418,7 @@ namespace ts.SignatureHelp {
                 suffixDisplayParts,
                 separatorDisplayParts: [punctuationPart(SyntaxKind.CommaToken), spacePart()],
                 parameters: signatureHelpParameters,
-                documentation: candidateSignature.getDocumentationComment(),
+                documentation: candidateSignature.getDocumentationComment(typeChecker),
                 tags: candidateSignature.getJsDocTags()
             };
         });
@@ -441,7 +441,7 @@ namespace ts.SignatureHelp {
 
             return {
                 name: parameter.name,
-                documentation: parameter.getDocumentationComment(),
+                documentation: parameter.getDocumentationComment(typeChecker),
                 displayParts,
                 isOptional: typeChecker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration)
             };

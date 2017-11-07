@@ -1,10 +1,17 @@
 /// <reference path="harness.ts" />
 
 namespace ts.TestFSWithWatch {
-    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
-        content: libFileContent
+        content: `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> {}`
     };
 
     export const safeList = {
@@ -175,6 +182,10 @@ namespace ts.TestFSWithWatch {
         private map: TimeOutCallback[] = [];
         private nextId = 1;
 
+        getNextId() {
+            return this.nextId;
+        }
+
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
             this.nextId++;
@@ -196,7 +207,13 @@ namespace ts.TestFSWithWatch {
             return n;
         }
 
-        invoke() {
+        invoke(invokeKey?: number) {
+            if (invokeKey) {
+                this.map[invokeKey]();
+                delete this.map[invokeKey];
+                return;
+            }
+
             // Note: invoking a callback may result in new callbacks been queued,
             // so do not clear the entire callback list regardless. Only remove the
             // ones we have invoked.
@@ -217,6 +234,11 @@ namespace ts.TestFSWithWatch {
     export interface TestDirectoryWatcher {
         cb: DirectoryWatcherCallback;
         directoryName: string;
+    }
+
+    export interface ReloadWatchInvokeOptions {
+        invokeDirectoryWatcherInsteadOfFileChanged: boolean;
+        ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
     }
 
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
@@ -263,7 +285,7 @@ namespace ts.TestFSWithWatch {
             return s;
         }
 
-        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, invokeDirectoryWatcherInsteadOfFileChanged?: boolean) {
+        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, options?: Partial<ReloadWatchInvokeOptions>) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             fileOrFolderList = fileOrFolderList.concat(this.withSafeList ? safeList : []);
@@ -284,7 +306,7 @@ namespace ts.TestFSWithWatch {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
                                 currentEntry.content = fileOrDirectory.content;
-                                if (invokeDirectoryWatcherInsteadOfFileChanged) {
+                                if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                                     this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
                                 }
                                 else {
@@ -307,7 +329,7 @@ namespace ts.TestFSWithWatch {
                     }
                 }
                 else {
-                    this.ensureFileOrFolder(fileOrDirectory);
+                    this.ensureFileOrFolder(fileOrDirectory, options && options.ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
             }
 
@@ -324,12 +346,12 @@ namespace ts.TestFSWithWatch {
             }
         }
 
-        ensureFileOrFolder(fileOrDirectory: FileOrFolder) {
+        ensureFileOrFolder(fileOrDirectory: FileOrFolder, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
             if (isString(fileOrDirectory.content)) {
                 const file = this.toFile(fileOrDirectory);
                 Debug.assert(!this.fs.get(file.path));
                 const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
-                this.addFileOrFolderInFolder(baseFolder, file);
+                this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
             }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
@@ -358,10 +380,13 @@ namespace ts.TestFSWithWatch {
             return folder;
         }
 
-        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder) {
+        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder, ignoreWatch?: boolean) {
             folder.entries.push(fileOrDirectory);
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
+            if (ignoreWatch) {
+                return;
+            }
             if (isFile(fileOrDirectory)) {
                 this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
             }
@@ -538,6 +563,10 @@ namespace ts.TestFSWithWatch {
             return this.timeoutCallbacks.register(callback, args);
         }
 
+        getNextTimeoutId() {
+            return this.timeoutCallbacks.getNextId();
+        }
+
         clearTimeout(timeoutId: any): void {
             this.timeoutCallbacks.unregister(timeoutId);
         }
@@ -552,9 +581,9 @@ namespace ts.TestFSWithWatch {
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
 
-        runQueuedTimeoutCallbacks() {
+        runQueuedTimeoutCallbacks(timeoutId?: number) {
             try {
-                this.timeoutCallbacks.invoke();
+                this.timeoutCallbacks.invoke(timeoutId);
             }
             catch (e) {
                 if (e.message === this.existMessage) {
