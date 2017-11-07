@@ -19,7 +19,7 @@
 /// <reference path="projectsRunner.ts" />
 /// <reference path="rwcRunner.ts" />
 /// <reference path="userRunner.ts" />
-/// <reference path="definitelyRunner.ts" />
+/// <reference path="dtRunner.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="./parallel/shared.ts" />
 
@@ -63,7 +63,7 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
             return new Test262BaselineRunner();
         case "user":
             return new UserCodeRunner();
-        case "definitely":
+        case "dt":
             return new DefinitelyTypedRunner();
     }
     ts.Debug.fail(`Unknown runner kind ${kind}`);
@@ -186,7 +186,7 @@ function handleTestConfig() {
                     case "user":
                         runners.push(new UserCodeRunner());
                         break;
-                    case "definitely":
+                    case "dt":
                         runners.push(new DefinitelyTypedRunner());
                         break;
                 }

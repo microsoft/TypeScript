@@ -10,7 +10,7 @@ class DefinitelyTypedRunner extends RunnerBase {
     }
 
     public kind(): TestRunnerKind {
-        return "definitely";
+        return "dt";
     }
 
     /** Setup the runner's tests so that they are ready to be executed by the harness

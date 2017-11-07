@@ -106,7 +106,7 @@ var harnessCoreSources = [
     "loggedIO.ts",
     "rwcRunner.ts",
     "userRunner.ts",
-    "definitelyRunner.ts",
+    "dtRunner.ts",
     "test262Runner.ts",
     "./parallel/shared.ts",
     "./parallel/host.ts",
