@@ -75,10 +75,16 @@ namespace ts.SymbolDisplay {
                 }
                 return unionPropertyKind;
             }
-            if (location.parent && isJsxAttribute(location.parent)) {
-                return ScriptElementKind.jsxAttribute;
+            // If we requested completions after `x.` at the top-level, we may be at a source file location.
+            switch (location.parent && location.parent.kind) {
+                // If we've typed a character of the attribute name, will be 'JsxAttribute', else will be 'JsxOpeningElement'.
+                case SyntaxKind.JsxOpeningElement:
+                    return location.kind === SyntaxKind.Identifier ? ScriptElementKind.memberVariableElement : ScriptElementKind.jsxAttribute;
+                case SyntaxKind.JsxAttribute:
+                    return ScriptElementKind.jsxAttribute;
+                default:
+                    return ScriptElementKind.memberVariableElement;
             }
-            return ScriptElementKind.memberVariableElement;
         }
 
         return ScriptElementKind.unknown;
@@ -438,7 +444,7 @@ namespace ts.SymbolDisplay {
         }
 
         if (!documentation) {
-            documentation = symbol.getDocumentationComment();
+            documentation = symbol.getDocumentationComment(typeChecker);
             tags = symbol.getJsDocTags();
             if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {
                 // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
@@ -455,7 +461,7 @@ namespace ts.SymbolDisplay {
                             continue;
                         }
 
-                        documentation = rhsSymbol.getDocumentationComment();
+                        documentation = rhsSymbol.getDocumentationComment(typeChecker);
                         tags = rhsSymbol.getJsDocTags();
                         if (documentation.length > 0) {
                             break;
@@ -489,8 +495,10 @@ namespace ts.SymbolDisplay {
             addNewLineIfDisplayPartsExist();
             if (symbolKind) {
                 pushTypePart(symbolKind);
-                displayParts.push(spacePart());
-                addFullSymbolName(symbol);
+                if (!some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
+                    displayParts.push(spacePart());
+                    addFullSymbolName(symbol);
+                }
             }
         }
 
@@ -522,7 +530,7 @@ namespace ts.SymbolDisplay {
                 displayParts.push(textPart(allSignatures.length === 2 ? "overload" : "overloads"));
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
-            documentation = signature.getDocumentationComment();
+            documentation = signature.getDocumentationComment(typeChecker);
             tags = signature.getJsDocTags();
         }
 

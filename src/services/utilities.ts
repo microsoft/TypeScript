@@ -947,7 +947,7 @@ namespace ts {
         if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+        if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
 
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }
@@ -1398,7 +1398,9 @@ namespace ts {
             addEmitFlags(node, EmitFlags.NoLeadingComments);
 
             const firstChild = forEachChild(node, child => child);
-            firstChild && suppressLeading(firstChild);
+            if (firstChild) {
+                suppressLeading(firstChild);
+            }
         }
 
         function suppressTrailing(node: Node) {
@@ -1415,7 +1417,9 @@ namespace ts {
                     }
                     return undefined;
                 });
-            lastChild && suppressTrailing(lastChild);
+            if (lastChild) {
+                suppressTrailing(lastChild);
+            }
         }
     }
 }

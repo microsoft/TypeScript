@@ -182,6 +182,10 @@ interface Array<T> {}`
         private map: TimeOutCallback[] = [];
         private nextId = 1;
 
+        getNextId() {
+            return this.nextId;
+        }
+
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
             this.nextId++;
@@ -203,7 +207,13 @@ interface Array<T> {}`
             return n;
         }
 
-        invoke() {
+        invoke(invokeKey?: number) {
+            if (invokeKey) {
+                this.map[invokeKey]();
+                delete this.map[invokeKey];
+                return;
+            }
+
             // Note: invoking a callback may result in new callbacks been queued,
             // so do not clear the entire callback list regardless. Only remove the
             // ones we have invoked.
@@ -224,6 +234,11 @@ interface Array<T> {}`
     export interface TestDirectoryWatcher {
         cb: DirectoryWatcherCallback;
         directoryName: string;
+    }
+
+    export interface ReloadWatchInvokeOptions {
+        invokeDirectoryWatcherInsteadOfFileChanged: boolean;
+        ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
     }
 
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
@@ -270,7 +285,7 @@ interface Array<T> {}`
             return s;
         }
 
-        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, invokeDirectoryWatcherInsteadOfFileChanged?: boolean) {
+        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, options?: Partial<ReloadWatchInvokeOptions>) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             fileOrFolderList = fileOrFolderList.concat(this.withSafeList ? safeList : []);
@@ -291,7 +306,7 @@ interface Array<T> {}`
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
                                 currentEntry.content = fileOrDirectory.content;
-                                if (invokeDirectoryWatcherInsteadOfFileChanged) {
+                                if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                                     this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
                                 }
                                 else {
@@ -314,7 +329,7 @@ interface Array<T> {}`
                     }
                 }
                 else {
-                    this.ensureFileOrFolder(fileOrDirectory);
+                    this.ensureFileOrFolder(fileOrDirectory, options && options.ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
             }
 
@@ -331,12 +346,12 @@ interface Array<T> {}`
             }
         }
 
-        ensureFileOrFolder(fileOrDirectory: FileOrFolder) {
+        ensureFileOrFolder(fileOrDirectory: FileOrFolder, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
             if (isString(fileOrDirectory.content)) {
                 const file = this.toFile(fileOrDirectory);
                 Debug.assert(!this.fs.get(file.path));
                 const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
-                this.addFileOrFolderInFolder(baseFolder, file);
+                this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
             }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
@@ -365,10 +380,13 @@ interface Array<T> {}`
             return folder;
         }
 
-        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder) {
+        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder, ignoreWatch?: boolean) {
             folder.entries.push(fileOrDirectory);
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
+            if (ignoreWatch) {
+                return;
+            }
             if (isFile(fileOrDirectory)) {
                 this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
             }
@@ -545,6 +563,10 @@ interface Array<T> {}`
             return this.timeoutCallbacks.register(callback, args);
         }
 
+        getNextTimeoutId() {
+            return this.timeoutCallbacks.getNextId();
+        }
+
         clearTimeout(timeoutId: any): void {
             this.timeoutCallbacks.unregister(timeoutId);
         }
@@ -559,9 +581,9 @@ interface Array<T> {}`
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
 
-        runQueuedTimeoutCallbacks() {
+        runQueuedTimeoutCallbacks(timeoutId?: number) {
             try {
-                this.timeoutCallbacks.invoke();
+                this.timeoutCallbacks.invoke(timeoutId);
             }
             catch (e) {
                 if (e.message === this.existMessage) {

@@ -23,10 +23,10 @@ namespace ts.formatting {
         }
 
         private FillRule(rule: Rule, rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
-            const specificRule = rule.Descriptor.LeftTokenRange.isSpecific() && rule.Descriptor.RightTokenRange.isSpecific();
+            const specificRule = rule.descriptor.leftTokenRange.isSpecific() && rule.descriptor.rightTokenRange.isSpecific();
 
-            rule.Descriptor.LeftTokenRange.GetTokens().forEach((left) => {
-                rule.Descriptor.RightTokenRange.GetTokens().forEach((right) => {
+            rule.descriptor.leftTokenRange.GetTokens().forEach((left) => {
+                rule.descriptor.rightTokenRange.GetTokens().forEach((right) => {
                     const rulesBucketIndex = this.GetRuleBucketIndex(left, right);
 
                     let rulesBucket = this.map[rulesBucketIndex];
@@ -44,7 +44,7 @@ namespace ts.formatting {
             const bucket = this.map[bucketIndex];
             if (bucket) {
                 for (const rule of bucket.Rules()) {
-                    if (rule.Operation.Context.InContext(context)) {
+                    if (rule.operation.context.InContext(context)) {
                         return rule;
                     }
                 }
@@ -53,16 +53,16 @@ namespace ts.formatting {
         }
     }
 
-    const MaskBitSize = 5;
-    const Mask = 0x1f;
+    const maskBitSize = 5;
+    const mask = 0x1f;
 
     enum RulesPosition {
         IgnoreRulesSpecific = 0,
-        IgnoreRulesAny = MaskBitSize * 1,
-        ContextRulesSpecific = MaskBitSize * 2,
-        ContextRulesAny = MaskBitSize * 3,
-        NoContextRulesSpecific = MaskBitSize * 4,
-        NoContextRulesAny = MaskBitSize * 5
+        IgnoreRulesAny = maskBitSize * 1,
+        ContextRulesSpecific = maskBitSize * 2,
+        ContextRulesAny = maskBitSize * 3,
+        NoContextRulesSpecific = maskBitSize * 4,
+        NoContextRulesAny = maskBitSize * 5
     }
 
     export class RulesBucketConstructionState {
@@ -94,20 +94,20 @@ namespace ts.formatting {
             let indexBitmap = this.rulesInsertionIndexBitmap;
 
             while (pos <= maskPosition) {
-                index += (indexBitmap & Mask);
-                indexBitmap >>= MaskBitSize;
-                pos += MaskBitSize;
+                index += (indexBitmap & mask);
+                indexBitmap >>= maskBitSize;
+                pos += maskBitSize;
             }
 
             return index;
         }
 
         public IncreaseInsertionIndex(maskPosition: RulesPosition): void {
-            let value = (this.rulesInsertionIndexBitmap >> maskPosition) & Mask;
+            let value = (this.rulesInsertionIndexBitmap >> maskPosition) & mask;
             value++;
-            Debug.assert((value & Mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
+            Debug.assert((value & mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
 
-            let temp = this.rulesInsertionIndexBitmap & ~(Mask << maskPosition);
+            let temp = this.rulesInsertionIndexBitmap & ~(mask << maskPosition);
             temp |= value << maskPosition;
 
             this.rulesInsertionIndexBitmap = temp;
@@ -128,12 +128,12 @@ namespace ts.formatting {
         public AddRule(rule: Rule, specificTokens: boolean, constructionState: RulesBucketConstructionState[], rulesBucketIndex: number): void {
             let position: RulesPosition;
 
-            if (rule.Operation.Action === RuleAction.Ignore) {
+            if (rule.operation.action === RuleAction.Ignore) {
                 position = specificTokens ?
                     RulesPosition.IgnoreRulesSpecific :
                     RulesPosition.IgnoreRulesAny;
             }
-            else if (!rule.Operation.Context.IsAny()) {
+            else if (!rule.operation.context.IsAny()) {
                 position = specificTokens ?
                     RulesPosition.ContextRulesSpecific :
                     RulesPosition.ContextRulesAny;

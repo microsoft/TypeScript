@@ -13,6 +13,7 @@
         "indent": [true,
             "spaces"
         ],
+        "interface-name": [true, "never-prefix"],
         "interface-over-type-literal": true,
         "jsdoc-format": true,
         "linebreak-style": [true, "CRLF"],
@@ -71,12 +72,15 @@
             "check-type"
         ],
 
+        // Config different from tslint:latest
+        "no-implicit-dependencies": [true, "dev"],
+        "object-literal-key-quotes": [true, "consistent-as-needed"],
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+
         // TODO
         "arrow-parens": false, // [true, "ban-single-arg-parens"]
         "arrow-return-shorthand": false,
-        "ban-comma-operator": false,
         "ban-types": false,
-        "callable-types": false,
         "forin": false,
         "member-access": false, // [true, "no-public"]
         "no-conditional-assignment": false,
@@ -85,25 +89,16 @@
         "no-empty": false,
         "no-empty-interface": false,
         "no-eval": false,
-        "no-implicit-dependencies": false,
-        "no-invalid-template-strings": false,
         "no-object-literal-type-assertion": false,
         "no-shadowed-variable": false,
         "no-submodule-imports": false,
-        "no-this-assignment": false,
-        "no-unused-expression": false,
         "no-unnecessary-initializer": false,
         "no-var-requires": false,
-        "object-literal-key-quotes": false,
-        "only-arrow-functions": false,
         "ordered-imports": false,
         "prefer-conditional-expression": false,
-        "prefer-for-of": false,
         "radix": false,
         "space-before-function-paren": false,
         "trailing-comma": false,
-        "unified-signatures": false,
-        "variable-name": false,
 
         // These should be done automatically by a formatter. https://github.com/Microsoft/TypeScript/issues/18340
         "align": false,
@@ -112,7 +107,7 @@
         "no-consecutive-blank-lines": false,
 
         // Not doing
-        "interface-name": false,
+        "ban-comma-operator": false,
         "max-classes-per-file": false,
         "member-ordering": false,
         "no-angle-bracket-type-assertion": false,

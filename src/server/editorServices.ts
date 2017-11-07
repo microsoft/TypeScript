@@ -9,10 +9,12 @@
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
+    // tslint:disable variable-name
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
+    // tslint:enable variable-name
 
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
@@ -78,9 +80,7 @@ namespace ts.server {
 
     export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
 
-    export interface ProjectServiceEventHandler {
-        (event: ProjectServiceEvent): void;
-    }
+    export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
     export interface SafeList {
         [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
@@ -103,9 +103,9 @@ namespace ts.server {
 
     const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
     const indentStyle = createMapFromTemplate({
-        "none": IndentStyle.None,
-        "block": IndentStyle.Block,
-        "smart": IndentStyle.Smart
+        none: IndentStyle.None,
+        block: IndentStyle.Block,
+        smart: IndentStyle.Smart
     });
 
     export interface TypesMapFile {
@@ -134,31 +134,31 @@ namespace ts.server {
     const defaultTypeSafeList: SafeList = {
         "jquery": {
             // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-            "match": /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
-            "types": ["jquery"]
+            match: /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
+            types: ["jquery"]
         },
         "WinJS": {
             // e.g. c:/temp/UWApp1/lib/winjs-4.0.1/js/base.js
-            "match": /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
-            "exclude": [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
-            "types": ["winjs"]                           // And fetch the @types package for WinJS
+            match: /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
+            exclude: [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
+            types: ["winjs"]                           // And fetch the @types package for WinJS
         },
         "Kendo": {
             // e.g. /Kendo3/wwwroot/lib/kendo/kendo.all.min.js
-            "match": /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
-            "exclude": [["^", 1, "/.*"]],
-            "types": ["kendo-ui"]
+            match: /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
+            exclude: [["^", 1, "/.*"]],
+            types: ["kendo-ui"]
         },
         "Office Nuget": {
             // e.g. /scripts/Office/1/excel-15.debug.js
-            "match": /^(.*\/office\/1)\/excel-\d+\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
-            "exclude": [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
-            "types": ["office"]                               // @types package to fetch instead
+            match: /^(.*\/office\/1)\/excel-\d+\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
+            exclude: [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
+            types: ["office"]                               // @types package to fetch instead
         },
         "Minified files": {
             // e.g. /whatever/blah.min.js
-            "match": /^(.+\.min\.js)$/i,
-            "exclude": [["^", 1, "$"]]
+            match: /^(.+\.min\.js)$/i,
+            exclude: [["^", 1, "$"]]
         }
     };
 
@@ -203,8 +203,10 @@ namespace ts.server {
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
     export function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
-        const result = flatMap(projects, action).sort(comparer);
-        return projects.length > 1 ? deduplicate(result, areEqual) : result;
+        const outputs = flatMap(projects, action);
+        return comparer
+            ? sortAndDeduplicate(outputs, comparer, areEqual)
+            : deduplicate(outputs, areEqual);
     }
 
     export interface HostConfiguration {
@@ -355,6 +357,10 @@ namespace ts.server {
          * Open files: with value being project root path, and key being Path of the file that is open
          */
         readonly openFiles = createMap<NormalizedPath>();
+        /**
+         * Map of open files that are opened without complete path but have projectRoot as current directory
+         */
+        private readonly openFilesWithNonRootedDiskPath = createMap<ScriptInfo>();
 
         private compilerOptionsForInferredProjects: CompilerOptions;
         private compilerOptionsForInferredProjectsPerProjectRoot = createMap<CompilerOptions>();
@@ -932,12 +938,16 @@ namespace ts.server {
             // Closing file should trigger re-reading the file content from disk. This is
             // because the user may chose to discard the buffer content before saving
             // to the disk, and the server's version of the file can be out of sync.
-            info.close();
+            const fileExists = this.host.fileExists(info.fileName);
+            info.close(fileExists);
             this.stopWatchingConfigFilesForClosedScriptInfo(info);
 
             this.openFiles.delete(info.path);
+            const canonicalFileName = this.toCanonicalFileName(info.fileName);
+            if (this.openFilesWithNonRootedDiskPath.get(canonicalFileName) === info) {
+                this.openFilesWithNonRootedDiskPath.delete(canonicalFileName);
+            }
 
-            const fileExists = this.host.fileExists(info.fileName);
 
             // collect all projects that should be removed
             let projectsToRemove: Project[];
@@ -1063,7 +1073,7 @@ namespace ts.server {
          * Returns true if the configFileExistenceInfo is needed/impacted by open files that are root of inferred project
          */
         private configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo: ConfigFileExistenceInfo) {
-            return forEachEntry(configFileExistenceInfo.openFilesImpactedByConfigFile, (isRootOfInferredProject, __key) => isRootOfInferredProject);
+            return forEachEntry(configFileExistenceInfo.openFilesImpactedByConfigFile, (isRootOfInferredProject) => isRootOfInferredProject);
         }
 
         private setConfigFileExistenceInfoByClosedConfiguredProject(closedProject: ConfiguredProject) {
@@ -1537,7 +1547,7 @@ namespace ts.server {
                 else {
                     const scriptKind = propertyReader.getScriptKind(f, this.hostConfiguration.extraFileExtensions);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    scriptInfo = this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(normalizedPath, scriptKind, hasMixedContent, project.directoryStructureHost);
+                    scriptInfo = this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(normalizedPath, project.currentDirectory, scriptKind, hasMixedContent, project.directoryStructureHost);
                     path = scriptInfo.path;
                     // If this script info is not already a root add it
                     if (!project.isRoot(scriptInfo)) {
@@ -1691,9 +1701,9 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getOrCreateScriptInfoNotOpenedByClient(uncheckedFileName: string, hostToQueryFileExistsOn: DirectoryStructureHost) {
+        getOrCreateScriptInfoNotOpenedByClient(uncheckedFileName: string, currentDirectory: string, hostToQueryFileExistsOn: DirectoryStructureHost) {
             return this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
-                toNormalizedPath(uncheckedFileName), /*scriptKind*/ undefined,
+                toNormalizedPath(uncheckedFileName), currentDirectory, /*scriptKind*/ undefined,
                 /*hasMixedContent*/ undefined, hostToQueryFileExistsOn
             );
         }
@@ -1724,20 +1734,26 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
-            return this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+        getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, hostToQueryFileExistsOn: DirectoryStructureHost | undefined) {
+            return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }
 
         /*@internal*/
-        getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
-            return this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+        getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined) {
+            return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
         }
 
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
+            return this.getOrCreateScriptInfoWorker(fileName, this.currentDirectory, openedByClient, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+        }
+
+        private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
             Debug.assert(fileContent === undefined || openedByClient, "ScriptInfo needs to be opened by client to be able to set its user defined content");
-            const path = normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName);
+            const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
+                Debug.assert(isRootedDiskPath(fileName) || openedByClient, "Script info with relative file name can only be open script info");
+                Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "Open script files with non rooted disk path opened with current directory context cannot have same canonical names");
                 const isDynamic = isDynamicFileName(fileName);
                 // If the file is not opened by client and the file doesnot exist on the disk, return
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
@@ -1747,6 +1763,10 @@ namespace ts.server {
                 this.filenameToScriptInfo.set(info.path, info);
                 if (!openedByClient) {
                     this.watchClosedScriptInfo(info);
+                }
+                else if (!isRootedDiskPath(fileName) && currentDirectory !== this.currentDirectory) {
+                    // File that is opened by user but isn't rooted disk path
+                    this.openFilesWithNonRootedDiskPath.set(this.toCanonicalFileName(fileName), info);
                 }
             }
             if (openedByClient && !info.isScriptOpen()) {
@@ -1764,8 +1784,12 @@ namespace ts.server {
             return info;
         }
 
+        /**
+         * This gets the script info for the normalized path. If the path is not rooted disk path then the open script info with project root context is preferred
+         */
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            return this.getScriptInfoForPath(normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName));
+            return !isRootedDiskPath(fileName) && this.openFilesWithNonRootedDiskPath.get(this.toCanonicalFileName(fileName)) ||
+                this.getScriptInfoForPath(normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName));
         }
 
         getScriptInfoForPath(fileName: Path) {
@@ -1950,7 +1974,7 @@ namespace ts.server {
             let sendConfigFileDiagEvent = false;
             let configFileErrors: ReadonlyArray<Diagnostic>;
 
-            const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, fileContent, scriptKind, hasMixedContent);
+            const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent);
             let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
             if (!project) {
                 configFileName = this.getConfigFileNameForFile(info, projectRootPath);

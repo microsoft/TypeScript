@@ -294,7 +294,7 @@ namespace ts {
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         const optsList = showAllOptions ?
-            optionDeclarations.slice().sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase())) :
+            sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
             filter(optionDeclarations.slice(), v => v.showInSimplifiedHelpView);
 
         // We want our descriptions to align at the same column in our output,
@@ -305,9 +305,7 @@ namespace ts {
 
         const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
-        for (let i = 0; i < optsList.length; i++) {
-            const option = optsList[i];
-
+        for (const option of optsList) {
             // If an option lacks a description,
             // it is not officially supported.
             if (!option.description) {
