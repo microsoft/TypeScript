@@ -126,8 +126,8 @@ namespace FourSlash {
         // 0 - cancelled
         // >0 - not cancelled
         // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
-        private static readonly NotCanceled: number = -1;
-        private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCanceled;
+        private static readonly notCanceled = -1;
+        private numberOfCallsBeforeCancellation = TestCancellationToken.notCanceled;
 
         public isCancellationRequested(): boolean {
             if (this.numberOfCallsBeforeCancellation < 0) {
@@ -148,7 +148,7 @@ namespace FourSlash {
         }
 
         public resetCancelled(): void {
-            this.numberOfCallsBeforeCancellation = TestCancellationToken.NotCanceled;
+            this.numberOfCallsBeforeCancellation = TestCancellationToken.notCanceled;
         }
     }
 
@@ -221,11 +221,9 @@ namespace FourSlash {
         private addMatchedInputFile(referenceFilePath: string, extensions: ReadonlyArray<string>) {
             const inputFiles = this.inputFiles;
             const languageServiceAdapterHost = this.languageServiceAdapterHost;
-            if (!extensions) {
-                tryAdd(referenceFilePath);
-            }
-            else {
-                tryAdd(referenceFilePath) || ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
+            const didAdd = tryAdd(referenceFilePath);
+            if (extensions && !didAdd) {
+                ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
             }
 
             function tryAdd(path: string) {
@@ -470,6 +468,10 @@ namespace FourSlash {
 
         public select(startMarker: string, endMarker: string) {
             const start = this.getMarkerByName(startMarker), end = this.getMarkerByName(endMarker);
+            ts.Debug.assert(start.fileName === end.fileName);
+            if (this.activeFile.fileName !== start.fileName) {
+                this.openFile(start.fileName);
+            }
             this.goToPosition(start.position);
             this.selectionEnd = end.position;
         }
@@ -851,8 +853,8 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
-            const completions = this.getCompletionListAtCaret();
+        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: ts.GetCompletionsAtPositionOptions) {
+            const completions = this.getCompletionListAtCaret(options);
             if (completions) {
                 this.assertItemInCompletionList(completions.entries, entryId, text, documentation, kind, spanIndex, hasAction);
             }
@@ -872,38 +874,35 @@ namespace FourSlash {
          * @param expectedKind the kind of symbol (see ScriptElementKind)
          * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
-        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number) {
-            const that = this;
+        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number, options?: ts.GetCompletionsAtPositionOptions) {
             let replacementSpan: ts.TextSpan;
             if (spanIndex !== undefined) {
                 replacementSpan = this.getTextSpanForRangeAtIndex(spanIndex);
             }
 
-            function filterByTextOrDocumentation(entry: ts.CompletionEntry) {
-                const details = that.getCompletionEntryDetails(entry.name);
-                const documentation = details && ts.displayPartsToString(details.documentation);
-                const text = details && ts.displayPartsToString(details.displayParts);
-
-                // If any of the expected values are undefined, assume that users don't
-                // care about them.
-                if (replacementSpan && !TestState.textSpansEqual(replacementSpan, entry.replacementSpan)) {
-                    return false;
-                }
-                else if (expectedText && text !== expectedText) {
-                    return false;
-                }
-                else if (expectedDocumentation && documentation !== expectedDocumentation) {
-                    return false;
-                }
-
-                return true;
-            }
-
-            const completions = this.getCompletionListAtCaret();
+            const completions = this.getCompletionListAtCaret(options);
             if (completions) {
                 let filterCompletions = completions.entries.filter(e => e.name === entryId.name && e.source === entryId.source);
                 filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind) : filterCompletions;
-                filterCompletions = filterCompletions.filter(filterByTextOrDocumentation);
+                filterCompletions = filterCompletions.filter(entry => {
+                    const details = this.getCompletionEntryDetails(entry.name);
+                    const documentation = details && ts.displayPartsToString(details.documentation);
+                    const text = details && ts.displayPartsToString(details.displayParts);
+
+                    // If any of the expected values are undefined, assume that users don't
+                    // care about them.
+                    if (replacementSpan && !TestState.textSpansEqual(replacementSpan, entry.replacementSpan)) {
+                        return false;
+                    }
+                    else if (expectedText && text !== expectedText) {
+                        return false;
+                    }
+                    else if (expectedDocumentation && documentation !== expectedDocumentation) {
+                        return false;
+                    }
+
+                    return true;
+                });
                 if (filterCompletions.length !== 0) {
                     // After filtered using all present criterion, if there are still symbol left in the list
                     // then these symbols must meet the criterion for Not supposed to be in the list. So we
@@ -1194,11 +1193,11 @@ Actual: ${stringify(fullActual)}`);
             this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
         }
 
-        private getCompletionListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+        private getCompletionListAtCaret(options?: ts.GetCompletionsAtPositionOptions): ts.CompletionInfo {
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
 
-        private getCompletionEntryDetails(entryName: string, source?: string) {
+        private getCompletionEntryDetails(entryName: string, source?: string): ts.CompletionEntryDetails {
             return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source);
         }
 
@@ -1789,7 +1788,7 @@ Actual: ${stringify(fullActual)}`);
                     }
                     else if (prevChar === " " && /A-Za-z_/.test(ch)) {
                         /* Completions */
-                        this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset);
+                        this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, { includeExternalModuleExports: false });
                     }
 
                     if (i % checkCadence === 0) {
@@ -2364,7 +2363,7 @@ Actual: ${stringify(fullActual)}`);
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const actualCompletion = this.getCompletionListAtCaret().entries.find(e => e.name === options.name && e.source === options.source);
+            const actualCompletion = this.getCompletionListAtCaret({ includeExternalModuleExports: true }).entries.find(e => e.name === options.name && e.source === options.source);
 
             if (!actualCompletion.hasAction) {
                 this.raiseError(`Completion for ${options.name} does not have an associated action.`);
@@ -3802,15 +3801,15 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean) {
+        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: ts.GetCompletionsAtPositionOptions) {
             if (typeof entryId === "string") {
                 entryId = { name: entryId, source: undefined };
             }
             if (this.negative) {
-                this.state.verifyCompletionListDoesNotContain(entryId, text, documentation, kind, spanIndex);
+                this.state.verifyCompletionListDoesNotContain(entryId, text, documentation, kind, spanIndex, options);
             }
             else {
-                this.state.verifyCompletionListContains(entryId, text, documentation, kind, spanIndex, hasAction);
+                this.state.verifyCompletionListContains(entryId, text, documentation, kind, spanIndex, hasAction, options);
             }
         }
 

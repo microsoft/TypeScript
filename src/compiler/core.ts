@@ -76,7 +76,7 @@ namespace ts {
     // The global Map object. This may not be available, so we must test for it.
     declare const Map: { new<T>(): Map<T> } | undefined;
     // Internet Explorer's Map doesn't support iteration, so don't use it.
-    // tslint:disable-next-line:no-in-operator
+    // tslint:disable-next-line no-in-operator variable-name
     const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
 
     // Keep the class inside a function so it doesn't get compiled if it's not used.
@@ -1574,7 +1574,6 @@ namespace ts {
         }
         if (path.charCodeAt(1) === CharacterCodes.colon) {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
-            return 2;
         }
         // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
         // if <host> is omitted then it is assumed that host value is 'localhost',

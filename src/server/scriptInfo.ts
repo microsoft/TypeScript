@@ -248,9 +248,9 @@ namespace ts.server {
             }
         }
 
-        public close() {
+        public close(fileExists = true) {
             this.textStorage.isOpen = false;
-            if (this.isDynamicOrHasMixedContent()) {
+            if (this.isDynamicOrHasMixedContent() || !fileExists) {
                 if (this.textStorage.reload("")) {
                     this.markContainingProjectsAsDirty();
                 }

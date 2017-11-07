@@ -479,7 +479,7 @@ namespace Utils {
 }
 
 namespace Harness {
-    export interface IO {
+    export interface Io {
         newLine(): string;
         getCurrentDirectory(): string;
         useCaseSensitiveFileNames(): boolean;
@@ -502,7 +502,7 @@ namespace Harness {
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
     }
-    export let IO: IO;
+    export let IO: Io;
 
     // harness always uses one kind of new line
     // But note that `parseTestData` in `fourslash.ts` uses "\n"
@@ -575,14 +575,13 @@ namespace Harness {
                 function filesInFolder(folder: string): string[] {
                     let paths: string[] = [];
 
-                    const files = fs.readdirSync(folder);
-                    for (let i = 0; i < files.length; i++) {
-                        const pathToFile = pathModule.join(folder, files[i]);
+                    for (const file of fs.readdirSync(folder)) {
+                        const pathToFile = pathModule.join(folder, file);
                         const stat = fs.statSync(pathToFile);
                         if (options.recursive && stat.isDirectory()) {
                             paths = paths.concat(filesInFolder(pathToFile));
                         }
-                        else if (stat.isFile() && (!spec || files[i].match(spec))) {
+                        else if (stat.isFile() && (!spec || file.match(spec))) {
                             paths.push(pathToFile);
                         }
                     }
@@ -784,9 +783,15 @@ namespace Harness {
         ? IO.newLine() + `//# sourceURL=${IO.resolvePath(tcServicesFileName)}`
         : "");
 
-    export interface SourceMapEmitterCallback {
-        (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
-    }
+    export type SourceMapEmitterCallback = (
+        emittedFile: string,
+        emittedLine: number,
+        emittedColumn: number,
+        sourceFile: string,
+        sourceLine: number,
+        sourceColumn: number,
+        sourceName: string,
+    ) => void;
 
     // Settings
     export let userSpecifiedRoot = "";
@@ -1108,11 +1113,11 @@ namespace Harness {
                 case "string":
                     return value;
                 case "number": {
-                    const number = parseInt(value, 10);
-                    if (isNaN(number)) {
+                    const numverValue = parseInt(value, 10);
+                    if (isNaN(numverValue)) {
                         throw new Error(`Value must be a number, got: ${JSON.stringify(value)}`);
                     }
-                    return number;
+                    return numverValue;
                 }
                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                 case "list":
@@ -1575,10 +1580,8 @@ namespace Harness {
 
                     // Preserve legacy behavior
                     if (lastIndexWritten === undefined) {
-                        for (let i = 0; i < codeLines.length; i++) {
-                            const currentCodeLine = codeLines[i];
-                            typeLines += currentCodeLine + "\r\n";
-                            typeLines += "No type information for this code.";
+                        for (const codeLine of codeLines) {
+                            typeLines += codeLine + "\r\nNo type information for this code.";
                         }
                     }
                     else {
@@ -1864,8 +1867,7 @@ namespace Harness {
             let currentFileName: any = undefined;
             let refs: string[] = [];
 
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
+            for (const line of lines) {
                 const testMetaData = optionRegex.exec(line);
                 if (testMetaData) {
                     // Comment line, check for global/file @options and record them
@@ -1962,7 +1964,7 @@ namespace Harness {
 
     /** Support class for baseline files */
     export namespace Baseline {
-        const NoContent = "<no content>";
+        const noContent = "<no content>";
 
         export interface BaselineOptions {
             Subfolder?: string;
@@ -2021,7 +2023,7 @@ namespace Harness {
             /* tslint:disable:no-null-keyword */
             if (actual === null) {
             /* tslint:enable:no-null-keyword */
-                actual = NoContent;
+                actual = noContent;
             }
 
             let expected = "<no content>";
@@ -2058,13 +2060,13 @@ namespace Harness {
                 IO.deleteFile(actualFileName);
             }
 
-            const encoded_actual = Utils.encodeString(actual);
-            if (expected !== encoded_actual) {
-                if (actual === NoContent) {
+            const encodedActual = Utils.encodeString(actual);
+            if (expected !== encodedActual) {
+                if (actual === noContent) {
                     IO.writeFile(actualFileName + ".delete", "");
                 }
                 else {
-                    IO.writeFile(actualFileName, encoded_actual);
+                    IO.writeFile(actualFileName, encodedActual);
                 }
                 throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }
@@ -2145,7 +2147,7 @@ namespace Harness {
         return filePath.indexOf(Harness.libFolder) === 0;
     }
 
-    export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
+    export function getDefaultLibraryFile(io: Harness.Io): Harness.Compiler.TestFile {
         const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
         return { unitName: libFile, content: io.readFile(libFile) };
     }

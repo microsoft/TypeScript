@@ -146,8 +146,7 @@ namespace ts {
         function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {
             const groupIndices = createMap<number>();
             const dependencyGroups: DependencyGroup[] = [];
-            for (let i = 0; i < externalImports.length; i++) {
-                const externalImport = externalImports[i];
+            for (const externalImport of externalImports) {
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
                 if (externalModuleName) {
                     const text = externalModuleName.text;
