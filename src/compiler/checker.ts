@@ -7617,7 +7617,7 @@ namespace ts {
             containsString?: boolean;
             containsNumber?: boolean;
             containsESSymbol?: boolean;
-            containsStringOrNumberLiteralOrUniqueESSymbol?: boolean;
+            containsLiteralOrUniqueESSymbol?: boolean;
             containsObjectType?: boolean;
             containsEmptyObject?: boolean;
             unionIndex?: number;
@@ -7684,7 +7684,7 @@ namespace ts {
                 if (flags & TypeFlags.String) typeSet.containsString = true;
                 if (flags & TypeFlags.Number) typeSet.containsNumber = true;
                 if (flags & TypeFlags.ESSymbol) typeSet.containsESSymbol = true;
-                if (flags & TypeFlags.StringOrNumberLiteralOrUnique) typeSet.containsStringOrNumberLiteralOrUniqueESSymbol = true;
+                if (flags & TypeFlags.StringOrNumberLiteralOrUnique) typeSet.containsLiteralOrUniqueESSymbol = true;
                 const len = typeSet.length;
                 const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearchTypes(typeSet, type);
                 if (index < 0) {
@@ -7792,7 +7792,7 @@ namespace ts {
             if (subtypeReduction) {
                 removeSubtypes(typeSet);
             }
-            else if (typeSet.containsStringOrNumberLiteralOrUniqueESSymbol) {
+            else if (typeSet.containsLiteralOrUniqueESSymbol) {
                 removeRedundantLiteralTypes(typeSet);
             }
             if (typeSet.length === 0) {
