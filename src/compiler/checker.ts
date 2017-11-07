@@ -272,24 +272,14 @@ namespace ts {
                 return symbol ? getTypeOfSymbol(symbol) : unknownType;
             },
             lookupTypeAt: (name, node) => {
-                const symbol = resolveName(node, escapeLeadingUnderscores(name), SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined);
+                const symbol = resolveName(node, escapeLeadingUnderscores(name), SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined, /*isUse*/ false);
                 return symbol ? getDeclaredTypeOfSymbol(symbol) : unknownType;
             },
             lookupValueTypeAt: (name, node) => {
-                const symbol = resolveName(node, escapeLeadingUnderscores(name), SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined);
+                const symbol = resolveName(node, escapeLeadingUnderscores(name), SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined, /*isUse*/ false);
                 return symbol ? getTypeOfSymbol(symbol) : unknownType;
             },
             getTypeOfSymbol,
-
-            getAnyType: () => anyType,
-            getStringType: () => stringType,
-            getNumberType: () => numberType,
-            getBooleanType: () => booleanType,
-            getVoidType: () => voidType,
-            getUndefinedType: () => undefinedType,
-            getNullType: () => nullType,
-            getESSymbolType: () => esSymbolType,
-            getNeverType: () => neverType,
             getUnknownType: () => unknownType,
             getStringLiteralType: (text: string) => {
                 /* tslint:disable:no-null-keyword */
@@ -298,12 +288,12 @@ namespace ts {
                 Debug.assert(typeof text === "string", "Argument to getStringLiteralType not a string");
                 return getLiteralType(text);
             },
-            getNumberLiteralType: (number: number) => {
+            getNumberLiteralType: (num: number) => {
                 /* tslint:disable:no-null-keyword */
-                Debug.assert(number !== undefined && number !== null, "Argument to getNumberLiteralType was null or undefined");
+                Debug.assert(num !== undefined && num !== null, "Argument to getNumberLiteralType was null or undefined");
                 /* tslint:enable:no-null-keyword */
-                Debug.assert(typeof number === "number", "Argument to getStringLiteralType not a number");
-                return getLiteralType(number);
+                Debug.assert(typeof num === "number", "Argument to getStringLiteralType not a number");
+                return getLiteralType(num);
             },
             getFalseType: () => falseType,
             getTrueType: () => trueType,

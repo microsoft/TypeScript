@@ -115,7 +115,6 @@
         "./unittests/convertToBase64.ts",
         "./unittests/transpile.ts",
         "./unittests/reuseProgramStructure.ts",
-        "./unittests/cachingInServerLSHost.ts",
         "./unittests/checkerPublicRelationships.ts",
         "./unittests/moduleResolution.ts",
         "./unittests/tsconfigParsing.ts",

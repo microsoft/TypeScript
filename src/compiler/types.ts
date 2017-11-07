@@ -2725,15 +2725,6 @@ namespace ts {
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
         /* @internal */ getBaseConstraintOfType(type: Type): Type | undefined;
 
-        /* @internal */ getAnyType(): Type;
-        /* @internal */ getStringType(): Type;
-        /* @internal */ getNumberType(): Type;
-        /* @internal */ getBooleanType(): Type;
-        /* @internal */ getVoidType(): Type;
-        /* @internal */ getUndefinedType(): Type;
-        /* @internal */ getNullType(): Type;
-        /* @internal */ getESSymbolType(): Type;
-        /* @internal */ getNeverType(): Type;
         /* @internal */ getUnionType(types: Type[], subtypeReduction?: boolean): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ createPromiseType(type: Type): Type;
