@@ -64,7 +64,7 @@ namespace ts {
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const modulekind = getEmitModuleKind(compilerOptions);
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
-        const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);        
+        const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
