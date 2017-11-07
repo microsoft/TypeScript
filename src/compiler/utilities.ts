@@ -363,8 +363,10 @@ namespace ts {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return "`" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.TemplateHead:
+                // tslint:disable-next-line no-invalid-template-strings
                 return "`" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateMiddle:
+                // tslint:disable-next-line no-invalid-template-strings
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateTail:
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";

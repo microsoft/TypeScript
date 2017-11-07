@@ -89,7 +89,6 @@
         "no-empty": false,
         "no-empty-interface": false,
         "no-eval": false,
-        "no-invalid-template-strings": false,
         "no-object-literal-type-assertion": false,
         "no-shadowed-variable": false,
         "no-submodule-imports": false,
