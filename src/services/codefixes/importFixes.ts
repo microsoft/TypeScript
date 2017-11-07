@@ -180,7 +180,8 @@ namespace ts.codefix {
     export const enum ImportKind {
         Named,
         Default,
-        Namespace
+        Namespace,
+        Equals
     }
 
     export function getCodeActionForImport(moduleSymbol: Symbol, context: ImportCodeFixOptions): ImportCodeAction[] {
@@ -252,11 +253,17 @@ namespace ts.codefix {
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
         const quotedModuleSpecifier = createStringLiteralWithQuoteStyle(sourceFile, moduleSpecifierWithoutQuotes);
-        const importDecl = createImportDeclaration(
+        const importDecl = kind !== ImportKind.Equals
+            ? createImportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-            createImportClauseOfKind(kind, symbolName),
-            quotedModuleSpecifier);
+                createImportClauseOfKind(kind, symbolName),
+                quotedModuleSpecifier)
+            : createImportEqualsDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                createIdentifier(symbolName),
+                createExternalModuleReference(quotedModuleSpecifier));
 
         const changes = ChangeTracker.with(context, changeTracker => {
             if (lastImportDeclaration) {
@@ -267,8 +274,10 @@ namespace ts.codefix {
             }
         });
 
-        const actionFormat = kind === ImportKind.Namespace
-            ? Diagnostics.Import_Asterisk_as_0_from_1
+        const actionFormat = kind === ImportKind.Equals
+            ? Diagnostics.Import_0_require_1
+            : kind === ImportKind.Namespace
+                ? Diagnostics.Import_Asterisk_as_0_from_1
                 : Diagnostics.Import_0_from_1;
 
         // if this file doesn't have any import statements, insert an import statement and then insert a new line
@@ -601,6 +610,9 @@ namespace ts.codefix {
                 return namedBindings ? undefined : ChangeTracker.with(context, t =>
                     t.replaceNode(sourceFile, importClause, createImportClause(name, createNamespaceImport(createIdentifier(symbolName)))));
 
+            case ImportKind.Equals:
+                return undefined;
+
             default:
                 Debug.assertNever(kind);
         }
@@ -658,6 +670,12 @@ namespace ts.codefix {
         // Import a synthetic `default` if enabled.
         if (allowSyntheticDefaultImports) {
             return getCodeActionForImport(symbol, { ...context, symbolName, kind: ImportKind.Default });
+        }
+        const moduleKind = getEmitModuleKind(compilerOptions);
+
+        // When a synthetic `default` is unavailable, use `import..require` if the module kind supports it.
+        if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.CommonJS || moduleKind === ModuleKind.UMD) {
+            return getCodeActionForImport(symbol, { ...context, symbolName, kind: ImportKind.Equals });
         }
 
         // Fall back to the `import * as ns` style import.
