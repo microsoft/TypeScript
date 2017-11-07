@@ -103,9 +103,9 @@ namespace ts.server {
 
     const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
     const indentStyle = createMapFromTemplate({
-        "none": IndentStyle.None,
-        "block": IndentStyle.Block,
-        "smart": IndentStyle.Smart
+        none: IndentStyle.None,
+        block: IndentStyle.Block,
+        smart: IndentStyle.Smart
     });
 
     export interface TypesMapFile {
@@ -134,31 +134,31 @@ namespace ts.server {
     const defaultTypeSafeList: SafeList = {
         "jquery": {
             // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-            "match": /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
-            "types": ["jquery"]
+            match: /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
+            types: ["jquery"]
         },
         "WinJS": {
             // e.g. c:/temp/UWApp1/lib/winjs-4.0.1/js/base.js
-            "match": /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
-            "exclude": [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
-            "types": ["winjs"]                           // And fetch the @types package for WinJS
+            match: /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
+            exclude: [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
+            types: ["winjs"]                           // And fetch the @types package for WinJS
         },
         "Kendo": {
             // e.g. /Kendo3/wwwroot/lib/kendo/kendo.all.min.js
-            "match": /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
-            "exclude": [["^", 1, "/.*"]],
-            "types": ["kendo-ui"]
+            match: /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
+            exclude: [["^", 1, "/.*"]],
+            types: ["kendo-ui"]
         },
         "Office Nuget": {
             // e.g. /scripts/Office/1/excel-15.debug.js
-            "match": /^(.*\/office\/1)\/excel-\d+\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
-            "exclude": [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
-            "types": ["office"]                               // @types package to fetch instead
+            match: /^(.*\/office\/1)\/excel-\d+\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
+            exclude: [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
+            types: ["office"]                               // @types package to fetch instead
         },
         "Minified files": {
             // e.g. /whatever/blah.min.js
-            "match": /^(.+\.min\.js)$/i,
-            "exclude": [["^", 1, "$"]]
+            match: /^(.+\.min\.js)$/i,
+            exclude: [["^", 1, "$"]]
         }
     };
 

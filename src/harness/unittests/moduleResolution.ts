@@ -127,7 +127,7 @@ namespace ts {
 
             function test(hasDirectoryExists: boolean) {
                 const containingFile = { name: containingFileName };
-                const packageJson = { name: packageJsonFileName, content: JSON.stringify({ "typings": fieldRef }) };
+                const packageJson = { name: packageJsonFileName, content: JSON.stringify({ typings: fieldRef }) };
                 const moduleFile = { name: moduleFileName };
                 const resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile));
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
@@ -149,7 +149,7 @@ namespace ts {
 
             function test(hasDirectoryExists: boolean) {
                 const containingFile = { name: "/a/b.ts" };
-                const packageJson = { name: "/node_modules/b/package.json", content: JSON.stringify({ "typings": typings }) };
+                const packageJson = { name: "/node_modules/b/package.json", content: JSON.stringify({ typings }) };
                 const moduleFile = { name: "/a/b.d.ts" };
 
                 const indexPath = "/node_modules/b/index.d.ts";
@@ -163,7 +163,7 @@ namespace ts {
 
         it("module name as directory - handle invalid 'typings'", () => {
             testTypingsIgnored(["a", "b"]);
-            testTypingsIgnored({ "a": "b" });
+            testTypingsIgnored({ a: "b" });
             testTypingsIgnored(/*typings*/ true);
             testTypingsIgnored(/*typings*/ null); // tslint:disable-line no-null-keyword
             testTypingsIgnored(/*typings*/ undefined);

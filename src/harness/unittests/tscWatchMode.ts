@@ -710,12 +710,12 @@ namespace ts.tscWatch {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify(
                     {
-                        "compilerOptions": {
-                            "module": "commonjs",
-                            "target": "es5",
-                            "noImplicitAny": true,
-                            "sourceMap": false,
-                            "lib": [
+                        compilerOptions: {
+                            module: "commonjs",
+                            target: "es5",
+                            noImplicitAny: true,
+                            sourceMap: false,
+                            lib: [
                                 "es5"
                             ]
                         }
@@ -725,12 +725,12 @@ namespace ts.tscWatch {
                 path: config1.path,
                 content: JSON.stringify(
                     {
-                        "compilerOptions": {
-                            "module": "commonjs",
-                            "target": "es5",
-                            "noImplicitAny": true,
-                            "sourceMap": false,
-                            "lib": [
+                        compilerOptions: {
+                            module: "commonjs",
+                            target: "es5",
+                            noImplicitAny: true,
+                            sourceMap: false,
+                            lib: [
                                 "es5",
                                 "es2015.promise"
                             ]
@@ -1963,12 +1963,12 @@ declare module "fs" {
             const configFile: FileOrFolder = {
                 path: "/a/rootFolder/project/tsconfig.json",
                 content: JSON.stringify({
-                    "compilerOptions": {
-                        "module": "none",
-                        "allowJs": true,
-                        "outDir": "Static/scripts/"
+                    compilerOptions: {
+                        module: "none",
+                        allowJs: true,
+                        outDir: "Static/scripts/"
                     },
-                    "include": [
+                    include: [
                         "Scripts/**/*"
                     ],
                 })

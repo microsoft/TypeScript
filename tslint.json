@@ -74,6 +74,7 @@
 
         // Config different from tslint:latest
         "no-implicit-dependencies": [true, "dev"],
+        "object-literal-key-quotes": [true, "consistent-as-needed"],
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
 
         // TODO
@@ -94,7 +95,6 @@
         "no-submodule-imports": false,
         "no-unnecessary-initializer": false,
         "no-var-requires": false,
-        "object-literal-key-quotes": false,
         "ordered-imports": false,
         "prefer-conditional-expression": false,
         "radix": false,

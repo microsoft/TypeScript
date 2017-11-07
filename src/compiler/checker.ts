@@ -455,29 +455,29 @@ namespace ts {
         }
 
         const typeofEQFacts = createMapFromTemplate({
-            "string": TypeFacts.TypeofEQString,
-            "number": TypeFacts.TypeofEQNumber,
-            "boolean": TypeFacts.TypeofEQBoolean,
-            "symbol": TypeFacts.TypeofEQSymbol,
-            "undefined": TypeFacts.EQUndefined,
-            "object": TypeFacts.TypeofEQObject,
-            "function": TypeFacts.TypeofEQFunction
+            string: TypeFacts.TypeofEQString,
+            number: TypeFacts.TypeofEQNumber,
+            boolean: TypeFacts.TypeofEQBoolean,
+            symbol: TypeFacts.TypeofEQSymbol,
+            undefined: TypeFacts.EQUndefined,
+            object: TypeFacts.TypeofEQObject,
+            function: TypeFacts.TypeofEQFunction
         });
         const typeofNEFacts = createMapFromTemplate({
-            "string": TypeFacts.TypeofNEString,
-            "number": TypeFacts.TypeofNENumber,
-            "boolean": TypeFacts.TypeofNEBoolean,
-            "symbol": TypeFacts.TypeofNESymbol,
-            "undefined": TypeFacts.NEUndefined,
-            "object": TypeFacts.TypeofNEObject,
-            "function": TypeFacts.TypeofNEFunction
+            string: TypeFacts.TypeofNEString,
+            number: TypeFacts.TypeofNENumber,
+            boolean: TypeFacts.TypeofNEBoolean,
+            symbol: TypeFacts.TypeofNESymbol,
+            undefined: TypeFacts.NEUndefined,
+            object: TypeFacts.TypeofNEObject,
+            function: TypeFacts.TypeofNEFunction
         });
         const typeofTypesByName = createMapFromTemplate<Type>({
-            "string": stringType,
-            "number": numberType,
-            "boolean": booleanType,
-            "symbol": esSymbolType,
-            "undefined": undefinedType
+            string: stringType,
+            number: numberType,
+            boolean: booleanType,
+            symbol: esSymbolType,
+            undefined: undefinedType
         });
         const typeofType = createTypeofType();
 

@@ -76,13 +76,13 @@ namespace ts {
             name: "target",
             shortName: "t",
             type: createMapFromTemplate({
-                "es3": ScriptTarget.ES3,
-                "es5": ScriptTarget.ES5,
-                "es6": ScriptTarget.ES2015,
-                "es2015": ScriptTarget.ES2015,
-                "es2016": ScriptTarget.ES2016,
-                "es2017": ScriptTarget.ES2017,
-                "esnext": ScriptTarget.ESNext,
+                es3: ScriptTarget.ES3,
+                es5: ScriptTarget.ES5,
+                es6: ScriptTarget.ES2015,
+                es2015: ScriptTarget.ES2015,
+                es2016: ScriptTarget.ES2016,
+                es2017: ScriptTarget.ES2017,
+                esnext: ScriptTarget.ESNext,
             }),
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
@@ -93,14 +93,14 @@ namespace ts {
             name: "module",
             shortName: "m",
             type: createMapFromTemplate({
-                "none": ModuleKind.None,
-                "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD,
-                "system": ModuleKind.System,
-                "umd": ModuleKind.UMD,
-                "es6": ModuleKind.ES2015,
-                "es2015": ModuleKind.ES2015,
-                "esnext": ModuleKind.ESNext
+                none: ModuleKind.None,
+                commonjs: ModuleKind.CommonJS,
+                amd: ModuleKind.AMD,
+                system: ModuleKind.System,
+                umd: ModuleKind.UMD,
+                es6: ModuleKind.ES2015,
+                es2015: ModuleKind.ES2015,
+                esnext: ModuleKind.ESNext
             }),
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
@@ -326,8 +326,8 @@ namespace ts {
         {
             name: "moduleResolution",
             type: createMapFromTemplate({
-                "node": ModuleResolutionKind.NodeJs,
-                "classic": ModuleResolutionKind.Classic,
+                node: ModuleResolutionKind.NodeJs,
+                classic: ModuleResolutionKind.Classic,
             }),
             paramType: Diagnostics.STRATEGY,
             category: Diagnostics.Module_Resolution_Options,
@@ -522,8 +522,8 @@ namespace ts {
         {
             name: "newLine",
             type: createMapFromTemplate({
-                "crlf": NewLineKind.CarriageReturnLineFeed,
-                "lf": NewLineKind.LineFeed
+                crlf: NewLineKind.CarriageReturnLineFeed,
+                lf: NewLineKind.LineFeed
             }),
             paramType: Diagnostics.NEWLINE,
             category: Diagnostics.Advanced_Options,
