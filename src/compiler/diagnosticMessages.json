@@ -3801,5 +3801,13 @@
     "Install '{0}'": {
         "category": "Message",
         "code": 95014
+    },
+    "Import '{0}' = require(\"{1}\").": {
+        "category": "Message",
+        "code": 95015
+    },
+    "Import * as '{0}' from \"{1}\".": {
+        "category": "Message",
+        "code": 95016
     }
 }
