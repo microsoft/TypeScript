@@ -237,10 +237,12 @@ namespace ts.codefix {
                 return parent as ImportDeclaration;
             case SyntaxKind.ExternalModuleReference:
                 return (parent as ExternalModuleReference).parent;
-            default:
-                Debug.assert(parent.kind === SyntaxKind.ExportDeclaration);
+            case SyntaxKind.ExportDeclaration:
+            case SyntaxKind.CallExpression: // For "require()" calls
                 // Ignore these, can't add imports to them.
                 return undefined;
+            default:
+                Debug.fail();
         }
     }
 
