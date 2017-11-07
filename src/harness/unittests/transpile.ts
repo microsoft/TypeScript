@@ -410,10 +410,6 @@ var x = 0;`, {
             options: { compilerOptions: { strictNullChecks: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
-        transpilesCorrectly("Supports setting 'strictTuples'", "x;", {
-            options: { compilerOptions: { strictTuples: true }, fileName: "input.js", reportDiagnostics: true }
-        });
-
         transpilesCorrectly("Supports setting 'stripInternal'", "x;", {
             options: { compilerOptions: { stripInternal: true }, fileName: "input.js", reportDiagnostics: true }
         });

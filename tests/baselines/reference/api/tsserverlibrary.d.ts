@@ -6850,7 +6850,6 @@ declare namespace ts.server.protocol {
         sourceRoot?: string;
         strict?: boolean;
         strictNullChecks?: boolean;
-        strictTuples?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget | ts.ScriptTarget;
