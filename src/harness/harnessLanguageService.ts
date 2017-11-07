@@ -744,7 +744,7 @@ namespace Harness.LanguageService {
                                 const proxy = makeDefaultProxy(info);
                                 const langSvc: any = info.languageService;
                                 // tslint:disable-next-line only-arrow-functions
-                                proxy.getQuickInfoAtPosition = function () {
+                                proxy.getQuickInfoAtPosition = function() {
                                     const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                     if (parts.displayParts.length > 0) {
                                         parts.displayParts[0].text = "Proxied";
@@ -808,7 +808,7 @@ namespace Harness.LanguageService {
                 const langSvc: any = info.languageService;
                 for (const k of Object.keys(langSvc)) {
                     // tslint:disable-next-line only-arrow-functions
-                    proxy[k] = function () {
+                    proxy[k] = function() {
                         return langSvc[k].apply(langSvc, arguments);
                     };
                 }
