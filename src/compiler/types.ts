@@ -3031,7 +3031,6 @@ namespace ts {
         ExportStar              = 1 << 23,  // Export * declaration
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
-        Late                    = 1 << 26,  // Late-bound symbol from computed property with a dynamic name (created during type check)
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -3152,6 +3151,7 @@ namespace ts {
         ContainsProtected = 1 << 7,         // Synthetic property with protected constituent(s)
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
+        Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 

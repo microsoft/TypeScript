@@ -1895,7 +1895,6 @@ declare namespace ts {
         ExportStar = 8388608,
         Optional = 16777216,
         Transient = 33554432,
-        Late = 67108864,
         Enum = 384,
         Variable = 3,
         Value = 107455,

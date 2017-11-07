@@ -533,6 +533,11 @@ namespace ts {
             Both = Source | Target,
         }
 
+        const enum MembersOrExportsResolutionKind {
+            resolvedExports = "resolvedExports",
+            resolvedMembers = "resolvedMembers"
+        }
+
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
 
@@ -572,10 +577,10 @@ namespace ts {
             diagnostics.add(diagnostic);
         }
 
-        function createSymbol(flags: SymbolFlags, name: __String) {
+        function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
             symbolCount++;
             const symbol = <TransientSymbol>(new Symbol(flags | SymbolFlags.Transient, name));
-            symbol.checkFlags = 0;
+            symbol.checkFlags = checkFlags || 0;
             return symbol;
         }
 
@@ -1901,7 +1906,7 @@ namespace ts {
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
-            return symbol.flags & SymbolFlags.Class ? getResolvedMembersOrExportsOfSymbol(symbol, "resolvedExports") :
+            return symbol.flags & SymbolFlags.Class ? getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKind.resolvedExports) :
                 symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) :
                 symbol.exports || emptySymbols;
         }
@@ -3564,7 +3569,7 @@ namespace ts {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
                         writeSpace(writer);
                     }
-                    if (prop.flags & SymbolFlags.Late) {
+                    if (getCheckFlags(prop) & CheckFlags.Late) {
                         const decl = firstOrUndefined(prop.declarations);
                         const name = hasLateBindableName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
                         if (name) {
@@ -5527,15 +5532,6 @@ namespace ts {
         }
 
         /**
-         * Indicates whether a symbol has a late-bindable name.
-         */
-        function symbolHasLateBindableName(symbol: Symbol) {
-            return symbol.flags & SymbolFlags.ClassMember
-                && symbol.escapedName === InternalSymbolName.Computed
-                && some(symbol.declarations, hasLateBindableName);
-        }
-
-        /**
          * Gets the symbolic name for a late-bound member from its type.
          */
         function getLateBoundNameFromType(type: LiteralType | UniqueESSymbolType) {
@@ -5553,7 +5549,7 @@ namespace ts {
          * members.
          */
         function addDeclarationToLateBoundSymbol(symbol: Symbol, member: LateBoundDeclaration, symbolFlags: SymbolFlags) {
-            Debug.assert(!!(symbol.flags & SymbolFlags.Late), "Expected a late-bound symbol.");
+            Debug.assert(!!(getCheckFlags(symbol) & CheckFlags.Late), "Expected a late-bound symbol.");
             symbol.flags |= symbolFlags;
             getSymbolLinks(member.symbol).lateSymbol = symbol;
             if (!symbol.declarations) {
@@ -5608,26 +5604,27 @@ namespace ts {
                 const type = checkComputedPropertyName(decl.name);
                 if (isTypeUsableAsLateBoundName(type)) {
                     const memberName = getLateBoundNameFromType(type);
+                    const symbolFlags = decl.symbol.flags;
 
                     // Get or add a late-bound symbol for the member. This allows us to merge late-bound accessor declarations.
                     let lateSymbol = lateSymbols.get(memberName);
-                    if (!lateSymbol) lateSymbols.set(memberName, lateSymbol = createSymbol(SymbolFlags.Late, memberName));
+                    if (!lateSymbol) lateSymbols.set(memberName, lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late));
 
                     // Report an error if a late-bound member has the same name as an early-bound member,
                     // or if we have another early-bound symbol declaration with the same name and
                     // conflicting flags.
                     const earlySymbol = earlySymbols && earlySymbols.get(memberName);
-                    if (lateSymbol.flags & getExcludedSymbolFlags(decl.symbol.flags) || earlySymbol) {
+                    if (lateSymbol.flags & getExcludedSymbolFlags(symbolFlags) || earlySymbol) {
                         // If we have an existing early-bound member, combine its declarations so that we can
                         // report an error at each declaration.
                         const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
                         const name = declarationNameToString(decl.name);
                         forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_declaration_0, name));
                         error(decl.name || decl, Diagnostics.Duplicate_declaration_0, name);
-                        lateSymbol = createSymbol(SymbolFlags.Late, memberName);
+                        lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late);
                     }
 
-                    addDeclarationToLateBoundSymbol(lateSymbol, decl, decl.symbol.flags);
+                    addDeclarationToLateBoundSymbol(lateSymbol, decl, symbolFlags);
                     lateSymbol.parent = parent;
                     return links.resolvedSymbol = lateSymbol;
                 }
@@ -5635,10 +5632,10 @@ namespace ts {
             return links.resolvedSymbol;
         }
 
-        function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: "resolvedExports" | "resolvedMembers") {
+        function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind) {
             const links = getSymbolLinks(symbol);
             if (!links[resolutionKind]) {
-                const isStatic = resolutionKind === "resolvedExports";
+                const isStatic = resolutionKind === MembersOrExportsResolutionKind.resolvedExports;
                 const earlySymbols = !isStatic ? symbol.members :
                     symbol.flags & SymbolFlags.Module ? getExportsOfModuleWorker(symbol) :
                     symbol.exports;
@@ -5674,7 +5671,7 @@ namespace ts {
          */
         function getMembersOfSymbol(symbol: Symbol) {
             return symbol.flags & SymbolFlags.LateBindingContainer
-                ? getResolvedMembersOrExportsOfSymbol(symbol, "resolvedMembers")
+                ? getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKind.resolvedMembers)
                 : symbol.members || emptySymbols;
         }
 
@@ -5685,20 +5682,20 @@ namespace ts {
          * For a description of late-binding, see `lateBindMember`.
          */
         function getLateBoundSymbol(symbol: Symbol): Symbol {
-            const links = getSymbolLinks(symbol);
-            if (!links.lateSymbol) {
-                const parent = symbol.parent;
-                if (symbolHasLateBindableName(symbol) && parent && parent.flags & SymbolFlags.LateBindingContainer) {
+            if (symbol.flags & SymbolFlags.ClassMember && symbol.escapedName === InternalSymbolName.Computed) {
+                const links = getSymbolLinks(symbol);
+                if (!links.lateSymbol && some(symbol.declarations, hasLateBindableName)) {
                     // force late binding of members/exports. This will set the late-bound symbol
                     if (some(symbol.declarations, hasStaticModifier)) {
-                        getExportsOfSymbol(parent);
+                        getExportsOfSymbol(symbol.parent);
                     }
                     else {
-                        getMembersOfSymbol(parent);
+                        getMembersOfSymbol(symbol.parent);
                     }
                 }
+                return links.lateSymbol || (links.lateSymbol = symbol);
             }
-            return links.lateSymbol || (links.lateSymbol = symbol);
+            return symbol;
         }
 
         function getTypeWithThisArgument(type: Type, thisArgument?: Type): Type {
@@ -6083,8 +6080,8 @@ namespace ts {
                     const propName = escapeLeadingUnderscores((<StringLiteralType>t).value);
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
                     const isOptional = templateOptional || !!(modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
-                    const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName);
-                    prop.checkFlags = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp) ? CheckFlags.Readonly : 0;
+                    const checkFlags = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp) ? CheckFlags.Readonly : 0;
+                    const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName, checkFlags);
                     prop.type = propType;
                     if (propertySymbol) {
                         prop.syntheticOrigin = propertySymbol;
@@ -6474,8 +6471,7 @@ namespace ts {
                 }
                 propTypes.push(type);
             }
-            const result = createSymbol(SymbolFlags.Property | commonFlags, name);
-            result.checkFlags = syntheticFlag | checkFlags;
+            const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             result.declarations = declarations;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -7974,7 +7970,7 @@ namespace ts {
                         break;
                     case SyntaxKind.UniqueKeyword:
                         links.resolvedType = node.type.kind === SyntaxKind.SymbolKeyword
-                            ? getUniqueESSymbolTypeForNode(walkUpParenthesizedTypes(node.parent))
+                            ? getESSymbolLikeTypeForNode(walkUpParenthesizedTypes(node.parent))
                             : unknownType;
                         break;
                 }
@@ -8367,7 +8363,7 @@ namespace ts {
             return type;
         }
 
-        function getUniqueESSymbolTypeForNode(node: Node) {
+        function getESSymbolLikeTypeForNode(node: Node) {
             if (isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
                 isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
                 isPropertySignature(node) && hasReadonlyModifier(node)) {
@@ -8622,8 +8618,7 @@ namespace ts {
             }
             // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
             // also transient so that we can just store data on it directly.
-            const result = createSymbol(symbol.flags, symbol.escapedName);
-            result.checkFlags = CheckFlags.Instantiated;
+            const result = createSymbol(symbol.flags, symbol.escapedName, CheckFlags.Instantiated);
             result.declarations = symbol.declarations;
             result.parent = symbol.parent;
             result.target = symbol;
@@ -11129,8 +11124,8 @@ namespace ts {
                 if (propType.flags & TypeFlags.ContainsAnyFunctionType) {
                     return undefined;
                 }
-                const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName);
-                inferredProp.checkFlags = readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0;
+                const checkFlags = readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0;
+                const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags);
                 inferredProp.declarations = prop.declarations;
                 inferredProp.type = inferTargetType(propType);
                 members.set(prop.escapedName, inferredProp);
@@ -11537,18 +11532,20 @@ namespace ts {
                         inferredType = getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
                     }
                 }
+
+                inferredType = getWidenedUniqueESSymbolType(inferredType);
                 inference.inferredType = inferredType;
 
                 const constraint = getConstraintOfTypeParameter(context.signature.typeParameters[index]);
                 if (constraint) {
                     const instantiatedConstraint = instantiateType(constraint, context);
                     if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                        inference.inferredType = inferredType = instantiatedConstraint;
+                        inference.inferredType = inferredType = getWidenedUniqueESSymbolType(instantiatedConstraint);
                     }
                 }
             }
 
-            return getWidenedUniqueESSymbolType(inferredType);
+            return inferredType;
         }
 
         function getDefaultTypeArgumentType(isInJavaScriptFile: boolean): Type {
@@ -14409,7 +14406,7 @@ namespace ts {
 
                     const nameType = hasLateBindableName(memberDecl) ? checkComputedPropertyName(memberDecl.name) : undefined;
                     const prop = nameType && isTypeUsableAsLateBoundName(nameType)
-                        ? createSymbol(SymbolFlags.Property | SymbolFlags.Late | member.flags, getLateBoundNameFromType(nameType))
+                        ? createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late)
                         : createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
 
                     if (inDestructuringPattern) {
@@ -17385,7 +17382,7 @@ namespace ts {
             // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
             // as a fresh unique symbol literal type.
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
-                return getUniqueESSymbolTypeForNode(walkUpParenthesizedExpressions(node.parent));
+                return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
             }
             return returnType;
         }
@@ -24741,7 +24738,7 @@ namespace ts {
                 isLateBound: (node: Declaration): node is LateBoundDeclaration => {
                     node = getParseTreeNode(node, isDeclaration);
                     const symbol = node && getSymbolOfNode(node);
-                    return !!(symbol && symbol.flags & SymbolFlags.Late);
+                    return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
                 writeLiteralConstValue,
                 getJsxFactoryEntity: () => _jsxFactoryEntity
@@ -25733,11 +25730,7 @@ namespace ts {
                     return grammarErrorOnNode(node.type, Diagnostics._0_expected, tokenToString(SyntaxKind.SymbolKeyword));
                 }
 
-                let parent = node.parent;
-                while (parent.kind === SyntaxKind.ParenthesizedType) {
-                    parent = parent.parent;
-                }
-
+                const parent = walkUpParenthesizedTypes(node.parent);
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
                         const decl = parent as VariableDeclaration;
