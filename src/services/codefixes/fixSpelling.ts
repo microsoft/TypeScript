@@ -22,7 +22,9 @@ namespace ts.codefix {
         }
         else {
             const meaning = getMeaningFromLocation(node);
-            suggestion = checker.getSuggestionForNonexistentSymbol(node, getTextOfNode(node), convertSemanticMeaningToSymbolFlags(meaning));
+            const name = getTextOfNode(node);
+            Debug.assert(name !== undefined, "name should be defined");
+            suggestion = checker.getSuggestionForNonexistentSymbol(node, name, convertSemanticMeaningToSymbolFlags(meaning));
         }
         if (suggestion) {
             return [{
