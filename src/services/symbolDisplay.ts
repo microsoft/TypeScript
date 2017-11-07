@@ -75,10 +75,16 @@ namespace ts.SymbolDisplay {
                 }
                 return unionPropertyKind;
             }
-            if (location.parent && isJsxAttribute(location.parent)) {
-                return ScriptElementKind.jsxAttribute;
+            // If we requested completions after `x.` at the top-level, we may be at a source file location.
+            switch (location.parent && location.parent.kind) {
+                // If we've typed a character of the attribute name, will be 'JsxAttribute', else will be 'JsxOpeningElement'.
+                case SyntaxKind.JsxOpeningElement:
+                    return location.kind === SyntaxKind.Identifier ? ScriptElementKind.memberVariableElement : ScriptElementKind.jsxAttribute;
+                case SyntaxKind.JsxAttribute:
+                    return ScriptElementKind.jsxAttribute;
+                default:
+                    return ScriptElementKind.memberVariableElement;
             }
-            return ScriptElementKind.memberVariableElement;
         }
 
         return ScriptElementKind.unknown;
