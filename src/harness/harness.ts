@@ -1443,14 +1443,12 @@ namespace Harness {
                 errorsReported = 0;
             }
 
-            const numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-                return diagnostic.file && (isDefaultLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
-            });
+            const numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic =>
+                diagnostic.file && (isDefaultLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName)));
 
-            const numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
+            const numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic =>
                 // Count an error generated from tests262-harness folder.This should only apply for test262
-                return diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0;
-            });
+                diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0);
 
             // Verify we didn't miss any errors in total
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
@@ -1529,9 +1527,11 @@ namespace Harness {
                     Harness.Baseline.runBaseline(outputFileName + fullExtension, () => fullBaseLine, opts);
                 }
                 else {
-                    Harness.Baseline.runMultifileBaseline(outputFileName, fullExtension, () => {
-                        return iterateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
-                    }, opts);
+                    Harness.Baseline.runMultifileBaseline(
+                        outputFileName,
+                        fullExtension,
+                        () => iterateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines),
+                        opts);
                 }
             }
 

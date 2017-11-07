@@ -450,12 +450,10 @@ class ProjectRunner extends RunnerBase {
 
                     function getCompilerResolutionInfo() {
                         const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(testCase));
-                        resolutionInfo.resolvedInputFiles = ts.map(compilerResult.program.getSourceFiles(), inputFile => {
-                            return ts.convertToRelativePath(inputFile.fileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
-                        });
-                        resolutionInfo.emittedFiles = ts.map(compilerResult.outputFiles, outputFile => {
-                            return ts.convertToRelativePath(outputFile.emittedFileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
-                        });
+                        resolutionInfo.resolvedInputFiles = ts.map(compilerResult.program.getSourceFiles(), inputFile =>
+                            ts.convertToRelativePath(inputFile.fileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path)));
+                        resolutionInfo.emittedFiles = ts.map(compilerResult.outputFiles, outputFile =>
+                            ts.convertToRelativePath(outputFile.emittedFileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path)));
                         return resolutionInfo;
                     }
 
@@ -465,17 +463,15 @@ class ProjectRunner extends RunnerBase {
                     });
 
                     it("Resolution information of (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
-                        Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".json", () => {
-                            return JSON.stringify(getCompilerResolutionInfo(), undefined, "    ");
-                        });
+                        Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".json", () =>
+                            JSON.stringify(getCompilerResolutionInfo(), undefined, "    "));
                     });
 
 
                     it("Errors for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (compilerResult.errors.length) {
-                            Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".errors.txt", () => {
-                                return getErrorsBaseline(compilerResult);
-                            });
+                            Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".errors.txt", () =>
+                                getErrorsBaseline(compilerResult));
                         }
                     });
 
@@ -519,9 +515,8 @@ class ProjectRunner extends RunnerBase {
                         if (!compilerResult.errors.length && testCase.declaration) {
                             const dTsCompileResult = compileCompileDTsFiles(compilerResult);
                             if (dTsCompileResult && dTsCompileResult.errors.length) {
-                                Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".dts.errors.txt", () => {
-                                    return getErrorsBaseline(dTsCompileResult);
-                                });
+                                Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".dts.errors.txt", () =>
+                                    getErrorsBaseline(dTsCompileResult));
                             }
                         }
                     });

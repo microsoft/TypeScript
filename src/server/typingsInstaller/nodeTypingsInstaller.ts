@@ -17,9 +17,7 @@ namespace ts.server.typingsInstaller {
         constructor(private readonly logFile?: string) {
         }
 
-        isEnabled = () => {
-            return this.logEnabled && this.logFile !== undefined;
-        }
+        isEnabled = () => this.logEnabled && this.logFile !== undefined;
         writeLine = (text: string) => {
             try {
                 fs.appendFileSync(this.logFile, text + sys.newLine);

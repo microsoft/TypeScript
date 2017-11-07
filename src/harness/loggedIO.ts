@@ -391,10 +391,7 @@ namespace Playback {
     }
 
     function findResultByFields<T>(logArray: { result?: T }[], expectedFields: {}, defaultValue?: T): T {
-        const predicate = (entry: { result?: T }) => {
-            return Object.getOwnPropertyNames(expectedFields).every((name) => (<any>entry)[name] === (<any>expectedFields)[name]);
-        };
-        const results = logArray.filter(entry => predicate(entry));
+        const results = logArray.filter(entry => Object.getOwnPropertyNames(expectedFields).every(name => (<any>entry)[name] === (<any>expectedFields)[name]));
         if (results.length === 0) {
             if (defaultValue !== undefined) {
                 return defaultValue;

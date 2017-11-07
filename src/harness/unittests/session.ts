@@ -482,9 +482,7 @@ namespace ts.server {
                     logger: projectSystem.nullLogger,
                     canUseEvents: true
                 });
-                this.addProtocolHandler(this.customHandler, () => {
-                    return { response: undefined, responseRequired: true };
-                });
+                this.addProtocolHandler(this.customHandler, () => ({ response: undefined, responseRequired: true }));
             }
             send(msg: protocol.Message) {
                 this.lastSent = msg;

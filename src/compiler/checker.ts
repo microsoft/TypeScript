@@ -154,16 +154,13 @@ namespace ts {
                 location = getParseTreeNode(location, isIdentifier);
                 return location ? getPropertySymbolOfDestructuringAssignment(location) : undefined;
             },
-            signatureToString: (signature, enclosingDeclaration?, flags?, kind?) => {
-                return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
-            },
-            typeToString: (type, enclosingDeclaration?, flags?) => {
-                return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
-            },
+            signatureToString: (signature, enclosingDeclaration?, flags?, kind?) =>
+                signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind),
+            typeToString: (type, enclosingDeclaration?, flags?) =>
+                typeToString(type, getParseTreeNode(enclosingDeclaration), flags),
             getSymbolDisplayBuilder,
-            symbolToString: (symbol, enclosingDeclaration?, meaning?) => {
-                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning);
-            },
+            symbolToString: (symbol, enclosingDeclaration?, meaning?) =>
+                symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning),
             getAugmentedPropertiesOfType,
             getRootSymbols,
             getContextualType: node => {
@@ -222,11 +219,10 @@ namespace ts {
             },
             tryGetMemberInModuleExports: (name, symbol) => tryGetMemberInModuleExports(escapeLeadingUnderscores(name), symbol),
             tryGetMemberInModuleExportsAndProperties: (name, symbol) => tryGetMemberInModuleExportsAndProperties(escapeLeadingUnderscores(name), symbol),
-            tryFindAmbientModuleWithoutAugmentations: moduleName => {
+            tryFindAmbientModuleWithoutAugmentations: moduleName =>
                 // we deliberately exclude augmentations
                 // since we are only interested in declarations of the module itself
-                return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
-            },
+                tryFindAmbientModule(moduleName, /*withAugmentations*/ false),
             getApparentType,
             getUnionType,
             createAnonymousType,
@@ -13274,9 +13270,7 @@ namespace ts {
         }
 
         function getThisTypeFromContextualType(type: Type): Type {
-            return mapType(type, t => {
-                return t.flags & TypeFlags.Intersection ? forEach((<IntersectionType>t).types, getThisTypeArgument) : getThisTypeArgument(t);
-            });
+            return mapType(type, t => t.flags & TypeFlags.Intersection ? forEach((<IntersectionType>t).types, getThisTypeArgument) : getThisTypeArgument(t));
         }
 
         function getContextualThisParameterType(func: FunctionLike): Type {
@@ -14705,9 +14699,10 @@ namespace ts {
 
             if (elementType.flags & TypeFlags.Union) {
                 const types = (elementType as UnionType).types;
-                return getUnionType(types.map(type => {
-                    return resolveCustomJsxElementAttributesType(openingLikeElement, shouldIncludeAllStatelessAttributesType, type, elementClassType);
-                }), /*subtypeReduction*/ true);
+                return getUnionType(
+                    types.map(type =>
+                        resolveCustomJsxElementAttributesType(openingLikeElement, shouldIncludeAllStatelessAttributesType, type, elementClassType)),
+                    /*subtypeReduction*/ true);
             }
 
             // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
@@ -15014,9 +15009,7 @@ namespace ts {
             // i.e <div attr1={10} attr2="string" />
             //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes".
             const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement,
-                attribute => {
-                    return isUnhyphenatedJsxName(attribute.escapedName) || !!(getPropertyOfType(targetAttributesType, attribute.escapedName));
-                });
+                attribute => isUnhyphenatedJsxName(attribute.escapedName) || !!(getPropertyOfType(targetAttributesType, attribute.escapedName)));
 
             // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
             // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.

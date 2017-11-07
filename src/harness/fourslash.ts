@@ -1569,11 +1569,7 @@ Actual: ${stringify(fullActual)}`);
                 baselineFile = baselineFile.replace(ts.Extension.Ts, ".baseline");
 
             }
-            Harness.Baseline.runBaseline(
-                baselineFile,
-                () => {
-                    return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
-                });
+            Harness.Baseline.runBaseline(baselineFile, () => this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)));
         }
 
         public baselineGetEmitOutput() {
@@ -2245,10 +2241,7 @@ Actual: ${stringify(fullActual)}`);
         public baselineCurrentFileNameOrDottedNameSpans() {
             Harness.Baseline.runBaseline(
                 this.testData.globalOptions[metadataOptionNames.baselineFile],
-                () => {
-                    return this.baselineCurrentFileLocations(pos =>
-                        this.getNameOrDottedNameSpan(pos));
-                });
+                () => this.baselineCurrentFileLocations(pos => this.getNameOrDottedNameSpan(pos)));
         }
 
         public printNameOrDottedNameSpans(pos: number) {
@@ -2311,10 +2304,7 @@ Actual: ${stringify(fullActual)}`);
                 );
                 assert.equal(
                     expected.join(","),
-                    actual.fileNames.map(file => {
-                        return file.replace(this.basePath + "/", "");
-                    }).join(",")
-                );
+                    actual.fileNames.map(file => file.replace(this.basePath + "/", "")).join(","));
             }
         }
 
@@ -2348,7 +2338,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyTodoComments(descriptors: string[], spans: TextSpan[]) {
             const actual = this.languageService.getTodoComments(this.activeFile.fileName,
-                descriptors.map(d => { return { text: d, priority: 0 }; }));
+                descriptors.map(d => ({ text: d, priority: 0 })));
 
             if (actual.length !== spans.length) {
                 this.raiseError(`verifyTodoComments failed - expected total spans to be ${spans.length}, but was ${actual.length}`);

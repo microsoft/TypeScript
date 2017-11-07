@@ -170,9 +170,7 @@ namespace RWC {
 
 
             it("has the expected emitted code", () => {
-                Harness.Baseline.runMultifileBaseline(baseName, "", () => {
-                    return Harness.Compiler.iterateOutputs(compilerResult.files);
-                }, baselineOpts, [".js", ".jsx"]);
+                Harness.Baseline.runMultifileBaseline(baseName, "", () => Harness.Compiler.iterateOutputs(compilerResult.files), baselineOpts, [".js", ".jsx"]);
             });
 
             it("has the expected declaration file content", () => {

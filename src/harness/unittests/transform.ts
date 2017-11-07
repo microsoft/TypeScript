@@ -60,20 +60,17 @@ namespace ts {
             });
         }
 
-        testBaseline("substitution", () => {
-            return transformSourceFile(`var a = undefined;`, [replaceUndefinedWithVoid0]);
-        });
+        testBaseline("substitution", () => transformSourceFile(`var a = undefined;`, [replaceUndefinedWithVoid0]));
 
-        testBaseline("types", () => {
-            return transformSourceFile(`let a: () => void`, [
+        testBaseline("types", () =>
+            transformSourceFile(`let a: () => void`, [
                 context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
                     return visitEachChild(node, visitor, context);
                 })
-            ]);
-        });
+            ]));
 
-        testBaseline("fromTranspileModule", () => {
-            return ts.transpileModule(`var oldName = undefined;`, {
+        testBaseline("fromTranspileModule", () =>
+            ts.transpileModule(`var oldName = undefined;`, {
                 transformers: {
                     before: [replaceUndefinedWithVoid0],
                     after: [replaceIdentifiersNamedOldNameWithNewName]
@@ -81,22 +78,20 @@ namespace ts {
                 compilerOptions: {
                     newLine: NewLineKind.CarriageReturnLineFeed
                 }
-            }).outputText;
-        });
+            }).outputText);
 
-        testBaseline("rewrittenNamespace", () => {
-            return ts.transpileModule(`namespace Reflect { const x = 1; }`, {
+        testBaseline("rewrittenNamespace", () =>
+            ts.transpileModule(`namespace Reflect { const x = 1; }`, {
                 transformers: {
                     before: [forceNamespaceRewrite],
                 },
                 compilerOptions: {
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
-            }).outputText;
-        });
+            }).outputText);
 
-        testBaseline("rewrittenNamespaceFollowingClass", () => {
-            return ts.transpileModule(`
+        testBaseline("rewrittenNamespaceFollowingClass", () =>
+            ts.transpileModule(`
             class C { foo = 10; static bar = 20 }
             namespace C { export let x = 10; }
             `, {
@@ -107,11 +102,10 @@ namespace ts {
                         target: ts.ScriptTarget.ESNext,
                         newLine: NewLineKind.CarriageReturnLineFeed,
                     }
-                }).outputText;
-        });
+                }).outputText);
 
-        testBaseline("transformTypesInExportDefault", () => {
-            return ts.transpileModule(`
+        testBaseline("transformTypesInExportDefault", () =>
+            ts.transpileModule(`
             export default (foo: string) => { return 1; }
             `, {
                     transformers: {
@@ -121,8 +115,7 @@ namespace ts {
                         target: ts.ScriptTarget.ESNext,
                         newLine: NewLineKind.CarriageReturnLineFeed,
                     }
-                }).outputText;
-        });
+                }).outputText);
 
         testBaseline("synthesizedClassAndNamespaceCombination", () => {
             return ts.transpileModule("", {

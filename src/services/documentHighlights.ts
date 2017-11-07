@@ -376,11 +376,9 @@ namespace ts.DocumentHighlights {
 
         const keywords: Node[] = [];
 
-        forEach(declarations, declaration => {
-            forEach(declaration.getChildren(), token => {
-                return pushKeywordIf(keywords, token, SyntaxKind.ConstructorKeyword);
-            });
-        });
+        forEach(declarations, declaration =>
+            forEach(declaration.getChildren(), token =>
+                pushKeywordIf(keywords, token, SyntaxKind.ConstructorKeyword)));
 
         return keywords;
     }

@@ -453,10 +453,10 @@ namespace ts {
                         return fsWatchFile(fileName, callback, pollingInterval);
                     }
                 },
-                watchDirectory: (directoryName, callback, recursive) => {
+                watchDirectory: (directoryName, callback, recursive) =>
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
-                    return fsWatchDirectory(directoryName, (eventName, relativeFileName) => {
+                    fsWatchDirectory(directoryName, (eventName, relativeFileName) => {
                         // In watchDirectory we only care about adding and removing files (when event name is
                         // "rename"); changes made within files are handled by corresponding fileWatchers (when
                         // event name is "change")
@@ -464,8 +464,7 @@ namespace ts {
                             // When deleting a file, the passed baseFileName is null
                             callback(!relativeFileName ? relativeFileName : normalizePath(combinePaths(directoryName, relativeFileName)));
                         }
-                    }, recursive);
-                },
+                    }, recursive),
                 resolvePath: path => _path.resolve(path),
                 fileExists,
                 directoryExists,

@@ -2200,8 +2200,8 @@ namespace ts.server {
 
                         if (rule.exclude) {
                             for (const exclude of rule.exclude) {
-                                const processedRule = root.replace(rule.match, (...groups: string[]) => {
-                                    return exclude.map(groupNumberOrString => {
+                                const processedRule = root.replace(rule.match, (...groups: string[]) =>
+                                    exclude.map(groupNumberOrString => {
                                         // RegExp group numbers are 1-based, but the first element in groups
                                         // is actually the original string, so it all works out in the end.
                                         if (typeof groupNumberOrString === "number") {
@@ -2214,8 +2214,7 @@ namespace ts.server {
                                             return ProjectService.escapeFilenameForRegex(groups[groupNumberOrString]);
                                         }
                                         return groupNumberOrString;
-                                    }).join("");
-                                });
+                                    }).join(""));
 
                                 if (excludeRules.indexOf(processedRule) === -1) {
                                     excludeRules.push(processedRule);

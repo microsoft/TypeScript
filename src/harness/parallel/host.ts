@@ -334,12 +334,8 @@ namespace Harness.Parallel.Host {
 
         function makeMochaTest(test: ErrorInfo) {
             return {
-                fullTitle: () => {
-                    return test.name.join(" ");
-                },
-                titlePath: () => {
-                    return test.name;
-                },
+                fullTitle: () => test.name.join(" "),
+                titlePath: () => test.name,
                 err: {
                     message: test.error,
                     stack: test.stack

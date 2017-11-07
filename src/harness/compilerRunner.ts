@@ -103,9 +103,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     });
                 }
                 else {
-                    toBeCompiled = units.map(unit => {
-                        return this.createHarnessTestFile(unit, rootDir);
-                    });
+                    toBeCompiled = units.map(unit => this.createHarnessTestFile(unit, rootDir));
                 }
 
                 if (tsConfigOptions && tsConfigOptions.configFilePath !== undefined) {
@@ -140,9 +138,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
                 if (options.traceResolution) {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".trace.json"), () => {
-                        return JSON.stringify(result.traceResults || [], undefined, 4);
-                    });
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".trace.json"), () =>
+                        JSON.stringify(result.traceResults || [], undefined, 4));
                 }
             });
 
