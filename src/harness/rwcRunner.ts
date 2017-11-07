@@ -6,7 +6,7 @@
 /* tslint:disable:no-null-keyword */
 
 namespace RWC {
-    function runWithIOLog(ioLog: IoLog, fn: (oldIO: Harness.Io) => void) {
+    function runWithIOLog(ioLog: IoLog, fn: (oldIO: Harness.IO) => void) {
         const oldIO = Harness.IO;
 
         const wrappedIO = Playback.wrapIO(oldIO);

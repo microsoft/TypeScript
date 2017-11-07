@@ -4,11 +4,17 @@ namespace vpath {
     //       to reduce the number of direct dependencies on compiler and services to eventually break away
     //       from depending directly on the compiler to speed up compilation time.
 
-    import compareValues = collections.compareValues;
+    import compareValues = collections.compareNumbers;
     import compareStrings = collections.compareStrings;
 
+    /**
+     * Virtual path separator.
+     */
     export const sep = "/";
 
+    /**
+     * Normalize path separators.
+     */
     export function normalizeSeparators(path: string): string {
         return path.replace(/\s*[\\/]\s*/g, sep).trim();
     }
@@ -20,20 +26,33 @@ namespace vpath {
         return match ? match[0].length : 0;
     }
 
+    /**
+     * Determines whether a path is an absolute path (e.g. starts with `/`, `\\`, or a dos path
+     * like `c:`).
+     */
     export function isAbsolute(path: string) {
         return rootRegExp.test(path);
     }
 
     const trailingSeperatorRegExp = /[\\/]$/;
 
+    /**
+     * Determines whether a path has a trailing separator (`/`).
+     */
     export function hasTrailingSeparator(path: string) {
         return trailingSeperatorRegExp.test(path);
     }
 
+    /**
+     * Adds a trailing separator (`/`) to a path if it doesn't have one.
+     */
     export function addTrailingSeparator(path: string) {
         return hasTrailingSeparator(path) ? path : path + "/";
     }
 
+    /**
+     * Removes a trailing separator (`/`) from a path if it has one.
+     */
     export function removeTrailingSeparator(path: string) {
         return hasTrailingSeparator(path) ? path.slice(0, -1) : path;
     }
@@ -53,11 +72,17 @@ namespace vpath {
         return normalized;
     }
 
+    /**
+     * Normalize a path containing path traversal components (`.` or `..`).
+     */
     export function normalize(path: string): string {
         const components = reduce(parse(path));
         return components.length > 1 && hasTrailingSeparator(path) ? format(components) + sep : format(components);
     }
 
+    /**
+     * Combines two or more paths. If a path is absolute, it replaces any previous path.
+     */
     export function combine(path: string, ...paths: string[]) {
         path = normalizeSeparators(path);
         for (let name of paths) {
@@ -69,10 +94,16 @@ namespace vpath {
         return path;
     }
 
+    /**
+     * Combines and normalizes two or more paths.
+     */
     export function resolve(path: string, ...paths: string[]) {
         return normalize(combine(path, ...paths));
     }
 
+    /**
+     * Gets a relative path that can be used to traverse between `from` and `to`.
+     */
     export function relative(from: string, to: string, ignoreCase: boolean) {
         if (!isAbsolute(from)) throw new Error("Path not absolute");
         if (!isAbsolute(to)) throw new Error("Path not absolute");
@@ -99,11 +130,9 @@ namespace vpath {
         return format(["", ...components]);
     }
 
-    export namespace relative {
-        export function caseSensitive(from: string, to: string) { return relative(from, to, /*ignoreCase*/ false); }
-        export function caseInsensitive(from: string, to: string) { return relative(from, to, /*ignoreCase*/ true); }
-    }
-
+    /**
+     * Compare two paths.
+     */
     export function compare(a: string, b: string, ignoreCase: boolean) {
         if (!isAbsolute(a)) throw new Error("Path not absolute");
         if (!isAbsolute(b)) throw new Error("Path not absolute");
@@ -121,41 +150,55 @@ namespace vpath {
         return compareValues(aComponents.length, bComponents.length);
     }
 
-    export namespace compare {
-        export function caseSensitive(a: string, b: string) { return compare(a, b, /*ignoreCase*/ false); }
-        export function caseInsensitive(a: string, b: string) { return compare(a, b, /*ignoreCase*/ true); }
-    }
+    /**
+     * Performs a case-sensitive comparison of two paths.
+     */
+    export function compareCaseSensitive(a: string, b: string) { return compare(a, b, /*ignoreCase*/ false); }
 
+    /**
+     * Performs a case-insensitive comparison of two paths.
+     */
+    export function compareCaseInsensitive(a: string, b: string) { return compare(a, b, /*ignoreCase*/ true); }
+
+    /**
+     * Determines whether two strings are equal.
+     */
     export function equals(a: string, b: string, ignoreCase: boolean) {
-        return compare(a, b, ignoreCase) === 0;
+        if (!isAbsolute(a)) throw new Error("Path not absolute");
+        if (!isAbsolute(b)) throw new Error("Path not absolute");
+        if (a === b) return true;
+        a = removeTrailingSeparator(a);
+        b = removeTrailingSeparator(b);
+        if (a === b) return true;
+        a = normalize(a);
+        b = normalize(b);
+        if (a === b) return true;
+        return ignoreCase && a.toUpperCase() === b.toUpperCase();
     }
 
-    export namespace equals {
-        export function caseSensitive(a: string, b: string) { return equals(a, b, /*ignoreCase*/ false); }
-        export function caseInsensitive(a: string, b: string) { return equals(a, b, /*ignoreCase*/ true); }
-    }
-
+    /**
+     * Determines whether the path `descendant` is beneath the path `ancestor`.
+     */
     export function beneath(ancestor: string, descendant: string, ignoreCase: boolean) {
         if (!isAbsolute(ancestor)) throw new Error("Path not absolute");
         if (!isAbsolute(descendant)) throw new Error("Path not absolute");
-
         const ancestorComponents = reduce(parse(ancestor));
         const descendantComponents = reduce(parse(descendant));
-        const len = Math.min(ancestorComponents.length, descendantComponents.length);
-        let start: number;
-        for (start = 0; start < len; start++) {
-            if (compareStrings(ancestorComponents[start], descendantComponents[start], ignoreCase)) {
-                break;
+        if (descendantComponents.length < ancestorComponents.length) return false;
+        const equalityComparer = ignoreCase ? collections.equateStringsCaseInsensitive : collections.equateStringsCaseSensitive;
+        for (let i = 0; i < ancestorComponents.length; i++) {
+            if (!equalityComparer(ancestorComponents[i], descendantComponents[i])) {
+                return false;
             }
         }
-        return start === ancestorComponents.length;
+        return true;
     }
 
-    export namespace beneath {
-        export function caseSensitive(ancestor: string, descendant: string) { return beneath(ancestor, descendant, /*ignoreCase*/ false); }
-        export function caseInsensitive(ancestor: string, descendant: string) { return beneath(ancestor, descendant, /*ignoreCase*/ true); }
-    }
-
+    /**
+     * Parse a path into a root component and zero or more path segments.
+     * If the path is relative, the root component is `""`.
+     * If the path is absolute, the root component includes the first path separator (`/`).
+     */
     export function parse(path: string) {
         path = normalizeSeparators(path);
         const rootLength = getRootLength(path);
@@ -165,37 +208,59 @@ namespace vpath {
         return [root, ...rest.map(component => component.trim())];
     }
 
+    /**
+     * Formats a parsed path consisting of a root component and zero or more path segments.
+     */
     export function format(components: string[]) {
         return components.length ? components[0] + components.slice(1).join(sep) : "";
     }
 
+    /**
+     * Gets the parent directory name of a path.
+     */
     export function dirname(path: string) {
         path = normalizeSeparators(path);
         return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(sep)));
     }
 
-    export function basename(path: string, ext?: string): string;
-    export function basename(path: string, options?: { extensions?: string[], ignoreCase?: boolean }): string;
-    export function basename(path: string, options?: { extensions?: string[], ignoreCase?: boolean } | string) {
+    /**
+     * Gets the portion of a path following the last separator (`/`).
+     */
+    export function basename(path: string): string;
+    /**
+     * Gets the portion of a path following the last separator (`/`).
+     * If the base name has any one of the provided extensions, it is removed.
+     */
+    export function basename(path: string, extensions: string | string[], ignoreCase: boolean): string;
+    export function basename(path: string, extensions?: string | string[], ignoreCase?: boolean) {
         path = normalizeSeparators(path);
         const name = path.substr(Math.max(getRootLength(path), path.lastIndexOf(sep) + 1));
-        const extension = typeof options === "string" ? options.startsWith(".") ? options : "." + options :
-            options && options.extensions ? extname(name, options) :
-            undefined;
+        const extension = extensions ? extname(path, extensions, ignoreCase) : undefined;
         return extension ? name.slice(0, name.length - extension.length) : name;
     }
 
     const extRegExp = /\.\w+$/;
 
-    export function extname(path: string, options?: { extensions?: string[], ignoreCase?: boolean }) {
-        if (options && options.extensions) {
-            for (let extension of options.extensions) {
+    /**
+     * Gets the file extension for a path.
+     */
+    export function extname(path: string): string;
+    /**
+     * Gets the file extension for a path, provided it is one of the provided extensions.
+     */
+    export function extname(path: string, extensions: string | string[], ignoreCase: boolean): string;
+    export function extname(path: string, extensions?: string | string[], ignoreCase?: boolean) {
+        if (extensions) {
+            const manyExtensions = Array.isArray(extensions) ? extensions : undefined;
+            const singleExtension = Array.isArray(extensions) ? undefined : extensions;
+            const length = manyExtensions ? manyExtensions.length : 1;
+            const comparer = ignoreCase ? collections.compareStringsCaseInsensitive : collections.compareStringsCaseSensitive;
+            for (let i = 0; i < length; i++) {
+                let extension = manyExtensions ? manyExtensions[i] : singleExtension;
                 if (!extension.startsWith(".")) extension = "." + extension;
-                if (path.length > extension.length) {
-                    const ext = path.slice(path.length - extension.length);
-                    if (compareStrings(ext, extension, options.ignoreCase) === 0) {
-                        return ext;
-                    }
+                if (path.length >= extension.length &&
+                    comparer(path.slice(path.length - extension.length), extension) === 0) {
+                    return extension;
                 }
             }
             return "";

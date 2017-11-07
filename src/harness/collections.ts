@@ -5,36 +5,53 @@ namespace collections {
     //       from depending directly on the compiler to speed up compilation time.
 
     import binarySearch = ts.binarySearch;
-    import removeAt = ts.orderedRemoveItemAt;
 
-    export function compareValues<T>(a: T, b: T): number {
+    function compareValues(a: string | number, b: string | number): number {
         if (a === b) return 0;
         if (a === undefined) return -1;
         if (b === undefined) return +1;
         return a < b ? -1 : +1;
     }
 
-    const caseInsensitiveComparisonCollator = typeof Intl === "object" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }) : undefined;
-    const caseSensitiveComparisonCollator = typeof Intl === "object" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "variant" }) : undefined;
+    export function compareNumbers(a: number, b: number): number {
+        return compareValues(a, b);
+    }
 
-    export function compareStrings(a: string | undefined, b: string | undefined, ignoreCase: boolean) {
+    export function compareStrings(a: string, b: string, ignoreCase: boolean): number {
+        return ignoreCase
+            ? compareStringsCaseInsensitive(a, b)
+            : compareStringsCaseSensitive(a, b);
+    }
+
+    export function compareStringsCaseSensitive(a: string, b: string): number {
+        return compareValues(a, b);
+    }
+
+    export function compareStringsCaseInsensitive(a: string, b: string): number {
         if (a === b) return 0;
         if (a === undefined) return -1;
         if (b === undefined) return +1;
-        const collator = ignoreCase ? caseInsensitiveComparisonCollator : caseSensitiveComparisonCollator;
-        if (collator) {
-            return collator.compare(a, b);
-        }
-        else if (ignoreCase) {
-            a = a.toUpperCase();
-            b = b.toUpperCase();
-        }
+        a = a.toUpperCase();
+        b = b.toUpperCase();
         return a < b ? -1 : a > b ? +1 : 0;
     }
 
-    export namespace compareStrings {
-        export function caseSensitive(a: string | undefined, b: string | undefined) { return compareStrings(a, b, /*ignoreCase*/ false); }
-        export function caseInsensitive(a: string | undefined, b: string | undefined) { return compareStrings(a, b, /*ignoreCase*/ true); }
+    export function equateStringsCaseSensitive(a: string, b: string): boolean {
+        return a === b;
+    }
+
+    export function equateStringsCaseInsensitive(a: string, b: string): boolean {
+        return a === b
+            || a !== undefined
+            && b !== undefined
+            && a.toUpperCase() === b.toUpperCase();
+    }
+
+    function removeAt<T>(array: T[], index: number): void {
+        for (let i = index; i < array.length - 1; i++) {
+            array[i] = array[i + 1];
+        }
+        array.pop();
     }
 
     function insertAt<T>(array: T[], index: number, value: T) {
@@ -63,7 +80,7 @@ namespace collections {
         private _version = 0;
         private _copyOnWrite = false;
 
-        constructor(comparer: (a: K, b: K) => number = compareValues) {
+        constructor(comparer: (a: K, b: K) => number) {
             this._comparer = comparer;
         }
 
@@ -72,16 +89,16 @@ namespace collections {
         }
 
         public has(key: K) {
-            return binarySearch(this._keys, key, this._comparer) >= 0;
+            return binarySearch(this._keys, key, ts.identity, this._comparer) >= 0;
         }
 
         public get(key: K) {
-            const index = binarySearch(this._keys, key, this._comparer);
+            const index = binarySearch(this._keys, key, ts.identity, this._comparer);
             return index >= 0 ? this._values[index] : undefined;
         }
 
         public set(key: K, value: V) {
-            const index = binarySearch(this._keys, key, this._comparer);
+            const index = binarySearch(this._keys, key, ts.identity, this._comparer);
             if (index >= 0) {
                 this._values[index] = value;
             }
@@ -96,7 +113,7 @@ namespace collections {
         }
 
         public delete(key: K) {
-            const index = binarySearch(this._keys, key, this._comparer);
+            const index = binarySearch(this._keys, key, ts.identity, this._comparer);
             if (index >= 0) {
                 this.writePreamble();
                 removeAt(this._keys, index);
@@ -124,8 +141,8 @@ namespace collections {
             const order = this.getInsertionOrder();
             const version = this._version;
             this._copyOnWrite = true;
-            for (let i = 0; i < order.length; i++) {
-                callback(values[order[i]], keys[order[i]], this);
+            for (const index of order) {
+                callback(values[index], keys[index], this);
             }
             if (version === this._version) {
                 this._copyOnWrite = false;
@@ -144,7 +161,7 @@ namespace collections {
         private getInsertionOrder() {
             return this._order
                 .map((_, i) => i)
-                .sort((x, y) => compareValues(this._order[x], this._order[y]));
+                .sort((x, y) => compareNumbers(this._order[x], this._order[y]));
         }
     }
 

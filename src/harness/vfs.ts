@@ -4,7 +4,6 @@
 /// <reference path="./events.ts" />
 /// <reference path="../compiler/commandLineParser.ts"/>
 namespace vfs {
-    import compareStrings = collections.compareStrings;
     import KeyedCollection = collections.KeyedCollection;
     import Metadata = collections.Metadata;
     import EventEmitter = events.EventEmitter;
@@ -27,7 +26,7 @@ namespace vfs {
         if (!map) return identityMapper;
         const roots = Object.keys(map);
         const patterns = roots.map(root => createPattern(root, ignoreCase));
-        return function (path: string) {
+        return (path: string) => {
             for (let i = 0; i < patterns.length; i++) {
                 const match = patterns[i].exec(path);
                 if (match) {
@@ -136,14 +135,14 @@ namespace vfs {
 
         public get stringComparer() {
             return this.useCaseSensitiveFileNames
-                ? compareStrings.caseSensitive
-                : compareStrings.caseInsensitive;
+                ? collections.compareStringsCaseSensitive
+                : collections.compareStringsCaseInsensitive;
         }
 
         public get pathComparer() {
             return this.useCaseSensitiveFileNames
-                ? vpath.compare.caseSensitive
-                : vpath.compare.caseInsensitive;
+                ? vpath.compareCaseSensitive
+                : vpath.compareCaseInsensitive;
         }
 
         /**
@@ -409,7 +408,7 @@ namespace vfs {
          */
         public watchFile(path: string, watcher: (path: string, change: FileSystemChange) => void): ts.FileWatcher {
             if (!this._watchedFiles) {
-                const pathComparer = this.useCaseSensitiveFileNames ? vpath.compare.caseSensitive : vpath.compare.caseInsensitive;
+                const pathComparer = this.useCaseSensitiveFileNames ? vpath.compareCaseSensitive : vpath.compareCaseInsensitive;
                 this._watchedFiles = new KeyedCollection<string, FileWatcherEntry[]>(pathComparer);
             }
 
@@ -438,7 +437,7 @@ namespace vfs {
          */
         public watchDirectory(path: string, watcher: (path: string) => void, recursive?: boolean) {
             if (!this._watchedDirectories) {
-                const pathComparer = this.useCaseSensitiveFileNames ? vpath.compare.caseSensitive : vpath.compare.caseInsensitive;
+                const pathComparer = this.useCaseSensitiveFileNames ? vpath.compareCaseSensitive : vpath.compareCaseInsensitive;
                 this._watchedDirectories = new KeyedCollection<string, DirectoryWatcherEntryArray>(pathComparer);
             }
 
@@ -631,11 +630,9 @@ namespace vfs {
 
     export interface VirtualDirectory {
         on(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
-        on(event: "childAdded", listener: (child: VirtualEntry) => void): this;
-        on(event: "childRemoved", listener: (child: VirtualEntry) => void): this;
+        on(event: "childAdded" | "childRemoved", listener: (child: VirtualEntry) => void): this;
         emit(event: "fileSystemChange", path: string, change: FileSystemChange): boolean;
-        emit(event: "childAdded", child: VirtualEntry): boolean;
-        emit(event: "childRemoved", child: VirtualEntry): boolean;
+        emit(event: "childAdded" | "childRemoved", child: VirtualEntry): boolean;
     }
 
     export class VirtualDirectory extends VirtualFileSystemEntry {
@@ -1020,7 +1017,7 @@ namespace vfs {
             if (components[1] === "..") return undefined;
 
             // walk the components
-            let directory: VirtualDirectory | undefined = this;
+            let directory: VirtualDirectory | undefined = this; // tslint:disable-line:no-this-assignment
             for (let i = this.parent ? 1 : 0; i < components.length - 1; i++) {
                 directory = create ? directory.getOrAddOwnDirectory(components[i]) : directory.getOwnDirectory(components[i]);
                 if (directory === undefined) return undefined;
@@ -1360,8 +1357,7 @@ namespace vfs {
             return shadow;
         }
 
-        protected makeReadOnlyCore(): void {
-        }
+        protected makeReadOnlyCore(): void { /*ignored*/ }
     }
 
     export class VirtualFileSymlink extends VirtualFile {

@@ -27,7 +27,7 @@
 
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
-/* tslint:disable:no-var-keyword */
+/* tslint:disable:no-var-keyword prefer-const */
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
@@ -53,7 +53,7 @@ interface XMLHttpRequest  {
     getResponseHeader(header: string): string | null;
     overrideMimeType(mime: string): void;
 }
-/* tslint:enable:no-var-keyword */
+/* tslint:enable:no-var-keyword prefer-const */
 
 namespace Utils {
     // Setup some globals based on the current environment
@@ -482,7 +482,8 @@ namespace Utils {
 }
 
 namespace Harness {
-    export interface Io {
+     // tslint:disable-next-line:interface-name
+    export interface IO {
         newLine(): string;
         getCurrentDirectory(): string;
         useCaseSensitiveFileNames(): boolean;
@@ -512,7 +513,7 @@ namespace Harness {
         directories: string[];
     }
 
-    export let IO: Io;
+    export let IO: IO;
 
     // harness always uses one kind of new line
     // But note that `parseTestData` in `fourslash.ts` uses "\n"
@@ -521,7 +522,7 @@ namespace Harness {
     // Root for file paths that are stored in a virtual file system
     export const virtualFileSystemRoot = "/";
 
-    function createNodeIO(): Io {
+    function createNodeIO(): IO {
         let fs: any, pathModule: any;
         if (require) {
             fs = require("fs");
@@ -535,8 +536,7 @@ namespace Harness {
             try {
                 fs.unlinkSync(path);
             }
-                catch { /*ignore*/ }
-            }
+            catch { /*ignore*/ }
         }
 
         function directoryName(path: string) {
@@ -570,7 +570,7 @@ namespace Harness {
 
         function getAccessibleFileSystemEntries(dirname: string): FileSystemEntries {
             try {
-                const entries: string[] = fs.readdirSync(dirname || ".").sort(ts.sys.useCaseSensitiveFileNames ? ts.compareStrings : ts.compareStringsCaseInsensitive);
+                const entries: string[] = fs.readdirSync(dirname || ".").sort(ts.sys.useCaseSensitiveFileNames ? ts.compareStringsCaseSensitive : ts.compareStringsCaseInsensitive);
                 const files: string[] = [];
                 const directories: string[] = [];
                 for (const entry of entries) {
@@ -586,7 +586,7 @@ namespace Harness {
                             directories.push(entry);
                         }
                     }
-                    catch (e) { }
+                    catch { /*ignore*/ }
                 }
                 return { files, directories };
             }
@@ -640,144 +640,188 @@ namespace Harness {
         new(url: string, base?: string | URL): URL;
     };
 
-    function createBrowserIO(): Io {
+    function createBrowserIO(): IO {
         const serverRoot = new URL("http://localhost:8888/");
 
-        interface HttpHeaders {
-            [key: string]: string | string[] | undefined;
-        }
-
-        const HttpHeaders = {
-            combine(left: HttpHeaders | undefined, right: HttpHeaders | undefined): HttpHeaders {
-                return left && right ? { ...left, ...right } :
-                    left ? { ...left } :
-                    right ? { ...right } :
-                    {};
-            },
-            writeRequestHeaders(xhr: XMLHttpRequest, headers: HttpHeaders) {
-                for (const key in headers) {
-                    if (!headers.hasOwnProperty(key)) continue;
-                    const keyLower = key.toLowerCase();
-
-                    if (keyLower === "access-control-allow-origin" || keyLower === "content-length") continue;
-                    const values = headers[key];
-                    const value = Array.isArray(values) ? values.join(",") : values;
-                    if (keyLower === "content-type") {
-                        xhr.overrideMimeType(value);
-                        continue;
+        class HttpHeaders extends Map<string, string | string[]> {
+            constructor(template?: Record<string, string | string[]>) {
+                super();
+                if (template) {
+                    for (const key in template) {
+                        if (ts.hasProperty(template, key)) {
+                            this.set(key, template[key]);
+                        }
                     }
-
-                    xhr.setRequestHeader(key, value);
                 }
-            },
-            readResponseHeaders(xhr: XMLHttpRequest): HttpHeaders {
+            }
+
+            public static combine(left: HttpHeaders | undefined, right: HttpHeaders | undefined): HttpHeaders {
+                if (!left && !right) return undefined;
+                const headers = new HttpHeaders();
+                if (left) left.forEach((value, key) => { headers.set(key, value); });
+                if (right) right.forEach((value, key) => { headers.set(key, value); });
+                return headers;
+            }
+
+            public has(key: string) {
+                return super.has(key.toLowerCase());
+            }
+
+            public get(key: string) {
+                return super.get(key.toLowerCase());
+            }
+
+            public set(key: string, value: string | string[]) {
+                return super.set(key.toLowerCase(), value);
+            }
+
+            public delete(key: string) {
+                return super.delete(key.toLowerCase());
+            }
+
+            public writeRequestHeaders(xhr: XMLHttpRequest) {
+                this.forEach((values, key) => {
+                    if (key === "access-control-allow-origin" || key === "content-length") return;
+                    const value = Array.isArray(values) ? values.join(",") : values;
+                    if (key === "content-type") {
+                        xhr.overrideMimeType(value);
+                        return;
+                    }
+                    xhr.setRequestHeader(key, value);
+                });
+            }
+
+            public static readResponseHeaders(xhr: XMLHttpRequest): HttpHeaders {
                 const allHeaders = xhr.getAllResponseHeaders();
-                const headers: HttpHeaders = {};
+                const headers = new HttpHeaders();
                 for (const header of allHeaders.split(/\r\n/g)) {
                     const colonIndex = header.indexOf(":");
                     if (colonIndex >= 0) {
                         const key = header.slice(0, colonIndex).trim();
                         const value = header.slice(colonIndex + 1).trim();
                         const values = value.split(",");
-                        headers[key] = values.length > 1 ? values : value;
+                        headers.set(key, values.length > 1 ? values : value);
                     }
                 }
                 return headers;
             }
-        };
-
-        interface HttpContent {
-            headers: HttpHeaders;
-            content: string;
         }
 
-        const HttpContent = {
-            create(headers: HttpHeaders, content: string): HttpContent {
-                return { headers, content };
-            },
-            fromMediaType(mediaType: string, content: string) {
-                return HttpContent.create({ "Content-Type": mediaType }, content);
-            },
-            text(content: string) {
+        class HttpContent {
+            public headers: HttpHeaders;
+            public content: string;
+
+            constructor(headers: HttpHeaders | Record<string, string | string[]>, content: string) {
+                this.headers = headers instanceof HttpHeaders ? headers : new HttpHeaders(headers);
+                this.content = content;
+            }
+
+            public static fromMediaType(mediaType: string, content: string) {
+                return new HttpContent({ "Content-Type": mediaType }, content);
+            }
+
+            public static text(content: string) {
                 return HttpContent.fromMediaType("text/plain", content);
-            },
-            json(content: object) {
+            }
+
+            public static json(content: object) {
                 return HttpContent.fromMediaType("application/json", JSON.stringify(content));
-            },
-            readResponseContent(xhr: XMLHttpRequest) {
+            }
+
+            public static readResponseContent(xhr: XMLHttpRequest) {
                 if (typeof xhr.responseText === "string") {
-                    return HttpContent.create({
+                    return new HttpContent({
                         "Content-Type": xhr.getResponseHeader("Content-Type") || undefined,
                         "Content-Length": xhr.getResponseHeader("Content-Length") || undefined
                     }, xhr.responseText);
                 }
                 return undefined;
             }
-        };
 
-        interface HttpRequestMessage {
-            method: string;
-            url: URL;
-            headers: HttpHeaders;
-            content?: HttpContent;
+            public writeRequestHeaders(xhr: XMLHttpRequest) {
+                this.headers.writeRequestHeaders(xhr);
+            }
         }
 
-        const HttpRequestMessage = {
-            create(method: string, url: string | URL, headers: HttpHeaders = {}, content?: HttpContent): HttpRequestMessage {
-                if (typeof url === "string") url = new URL(url);
-                return { method, url, headers, content };
-            },
-            options(url: string | URL) {
-                return HttpRequestMessage.create("OPTIONS", url);
-            },
-            head(url: string | URL) {
-                return HttpRequestMessage.create("HEAD", url);
-            },
-            get(url: string | URL) {
-                return HttpRequestMessage.create("GET", url);
-            },
-            delete(url: string | URL) {
-                return HttpRequestMessage.create("DELETE", url);
-            },
-            put(url: string | URL, content: HttpContent) {
-                return HttpRequestMessage.create("PUT", url, {}, content);
-            },
-            post(url: string | URL, content: HttpContent) {
-                return HttpRequestMessage.create("POST", url, {}, content);
-            },
-        };
+        class HttpRequestMessage {
+            public method: string;
+            public url: URL;
+            public headers: HttpHeaders;
+            public content?: HttpContent;
 
-        interface HttpResponseMessage {
-            statusCode: number;
-            statusMessage: string;
-            headers: HttpHeaders;
-            content?: HttpContent;
+            constructor(method: string, url: string | URL, headers?: HttpHeaders | Record<string, string | string[]>, content?: HttpContent) {
+                this.method = method;
+                this.url = typeof url === "string" ? new URL(url) : url;
+                this.headers = headers instanceof HttpHeaders ? headers : new HttpHeaders(headers);
+                this.content = content;
+            }
+
+            public static options(url: string | URL) {
+                return new HttpRequestMessage("OPTIONS", url);
+            }
+
+            public static head(url: string | URL) {
+                return new HttpRequestMessage("HEAD", url);
+            }
+
+            public static get(url: string | URL) {
+                return new HttpRequestMessage("GET", url);
+            }
+
+            public static delete(url: string | URL) {
+                return new HttpRequestMessage("DELETE", url);
+            }
+
+            public static put(url: string | URL, content: HttpContent) {
+                return new HttpRequestMessage("PUT", url, /*headers*/ undefined, content);
+            }
+
+            public static post(url: string | URL, content: HttpContent) {
+                return new HttpRequestMessage("POST", url, /*headers*/ undefined, content);
+            }
+
+            public writeRequestHeaders(xhr: XMLHttpRequest) {
+                this.headers.writeRequestHeaders(xhr);
+                if (this.content) {
+                    this.content.writeRequestHeaders(xhr);
+                }
+            }
         }
 
-        const HttpResponseMessage = {
-            create(statusCode: number, statusMessage: string, headers: HttpHeaders = {}, content?: HttpContent): HttpResponseMessage {
-                return { statusCode, statusMessage, headers, content };
-            },
-            notFound(): HttpResponseMessage {
-                return HttpResponseMessage.create(404, "Not Found");
-            },
-            hasSuccessStatusCode(response: HttpResponseMessage) {
+        class HttpResponseMessage {
+            public statusCode: number;
+            public statusMessage: string;
+            public headers: HttpHeaders;
+            public content?: HttpContent;
+
+            constructor(statusCode: number, statusMessage: string, headers?: HttpHeaders | Record<string, string | string[]>, content?: HttpContent) {
+                this.statusCode = statusCode;
+                this.statusMessage = statusMessage;
+                this.headers = headers instanceof HttpHeaders ? headers : new HttpHeaders(headers);
+                this.content = content;
+            }
+
+            public static notFound(): HttpResponseMessage {
+                return new HttpResponseMessage(404, "Not Found");
+            }
+
+            public static hasSuccessStatusCode(response: HttpResponseMessage) {
                 return response.statusCode === 304 || (response.statusCode >= 200 && response.statusCode < 300);
-            },
-            readResponseMessage(xhr: XMLHttpRequest) {
-                return HttpResponseMessage.create(
+            }
+
+            public static readResponseMessage(xhr: XMLHttpRequest) {
+                return new HttpResponseMessage(
                     xhr.status,
                     xhr.statusText,
                     HttpHeaders.readResponseHeaders(xhr),
                     HttpContent.readResponseContent(xhr));
             }
-        };
+        }
 
         function send(request: HttpRequestMessage): HttpResponseMessage {
             const xhr = new XMLHttpRequest();
             try {
-                HttpHeaders.writeRequestHeaders(xhr, request.headers);
-                HttpHeaders.writeRequestHeaders(xhr, request.content && request.content.headers);
+                request.writeRequestHeaders(xhr);
                 xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
                 xhr.open(request.method, request.url.toString(), /*async*/ false);
                 xhr.send(request.content && request.content.content);
@@ -794,7 +838,7 @@ namespace Harness {
         function useCaseSensitiveFileNames() {
             if (!caseSensitivity) {
                 const response = send(HttpRequestMessage.options(new URL("*", serverRoot)));
-                const xCaseSensitivity = response.headers["X-Case-Sensitivity"];
+                const xCaseSensitivity = response.headers.get("X-Case-Sensitivity");
                 caseSensitivity = xCaseSensitivity === "CS" ? "CS" : "CI";
             }
             return caseSensitivity === "CS";
@@ -849,7 +893,7 @@ namespace Harness {
             const response = send(HttpRequestMessage.post(new URL("/api/listFiles", serverRoot), HttpContent.text(dirname)));
             return HttpResponseMessage.hasSuccessStatusCode(response)
                 && response.content
-                && response.content.headers["Content-Type"] === "application/json"
+                && response.content.headers.get("Content-Type") === "application/json"
                     ? JSON.parse(response.content.content)
                     : [];
         }
@@ -882,7 +926,7 @@ namespace Harness {
             writeFile,
             directoryName: Utils.memoize(directoryName, path => path),
             getDirectories: () => [],
-            createDirectory: () => {},
+            createDirectory: () => {}, // tslint:disable-line no-empty
             fileExists,
             directoryExists,
             deleteFile,
@@ -890,7 +934,7 @@ namespace Harness {
             log: s => console.log(s),
             args: () => [],
             getExecutingFilePath: () => "",
-            exit: () => {},
+            exit: () => {}, // tslint:disable-line no-empty
             readDirectory,
             getAccessibleFileSystemEntries
         };
@@ -2284,7 +2328,7 @@ namespace Harness {
         return filePath.indexOf(Harness.libFolder) === 0;
     }
 
-    export function getDefaultLibraryFile(io: Harness.Io): Harness.Compiler.TestFile {
+    export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
         const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
         return { unitName: libFile, content: io.readFile(libFile) };
     }

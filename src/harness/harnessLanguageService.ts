@@ -214,8 +214,7 @@ namespace Harness.LanguageService {
         }
 
         directoryExists(dirName: string): boolean {
-            const fileEntry = this.virtualFileSystem.traversePath(dirName);
-            return fileEntry && fileEntry.isDirectory();
+            return this.virtualFileSystem.directoryExists(dirName);
         }
 
         fileExists(fileName: string): boolean {
