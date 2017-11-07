@@ -53,7 +53,9 @@ namespace ts {
             const program = getProgram();
             builderState = createBuilderState(program, builderOptions, builderState);
             const outputFileNames: string[] = [];
-            while (builderState.emitNextAffectedFile(program, fileName => outputFileNames.push(fileName))) { }
+            // tslint:disable-next-line no-empty
+            while (builderState.emitNextAffectedFile(program, fileName => outputFileNames.push(fileName))) {
+            }
             assert.deepEqual(outputFileNames, fileNames);
         };
     }

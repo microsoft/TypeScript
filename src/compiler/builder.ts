@@ -166,12 +166,16 @@ namespace ts {
                 semanticDiagnosticsPerFile.delete(sourceFile.path);
             }
 
-            newReferences && referencedMap.set(sourceFile.path, newReferences);
+            if (newReferences) {
+                referencedMap.set(sourceFile.path, newReferences);
+            }
             fileInfos.set(sourceFile.path, { version, signature: oldInfo && oldInfo.signature });
         }
 
         // For removed files, remove the semantic diagnostics removed files as changed
-        useOldState && oldState.fileInfos.forEach((_value, path) => !fileInfos.has(path) && semanticDiagnosticsPerFile.delete(path));
+        if (useOldState) {
+            oldState.fileInfos.forEach((_value, path) => !fileInfos.has(path) && semanticDiagnosticsPerFile.delete(path));
+        }
 
         // Set the old state and program to undefined to ensure we arent keeping them alive hence forward
         oldState = undefined;
