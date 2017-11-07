@@ -320,10 +320,9 @@ namespace ts.Completions.PathCompletions {
         else if (host.getDirectories) {
             let typeRoots: ReadonlyArray<string>;
             try {
-                // Wrap in try catch because getEffectiveTypeRoots touches the filesystem
                 typeRoots = getEffectiveTypeRoots(options, host);
             }
-            catch (e) {}
+            catch { /* Wrap in try catch because getEffectiveTypeRoots touches the filesystem */ }
 
             if (typeRoots) {
                 for (const root of typeRoots) {
@@ -484,7 +483,7 @@ namespace ts.Completions.PathCompletions {
         try {
             return directoryProbablyExists(path, host);
         }
-        catch (e) {}
+        catch { /*ignore*/ }
         return undefined;
     }
 
@@ -492,7 +491,7 @@ namespace ts.Completions.PathCompletions {
         try {
             return toApply && toApply.apply(host, args);
         }
-        catch (e) {}
+        catch { /*ignore*/ }
         return undefined;
     }
 }

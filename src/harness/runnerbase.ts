@@ -6,8 +6,6 @@ type CompilerTestKind = "conformance" | "compiler";
 type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
 
 abstract class RunnerBase {
-    constructor() { }
-
     // contains the tests to run
     public tests: string[] = [];
 

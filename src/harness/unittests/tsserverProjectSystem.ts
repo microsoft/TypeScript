@@ -85,8 +85,7 @@ namespace ts.projectSystem {
             assert.equal(this.postExecActions.length, expectedCount, `Expected ${expectedCount} post install actions`);
         }
 
-        onProjectClosed() {
-        }
+        onProjectClosed = noop;
 
         attach(projectService: server.ProjectService) {
             this.projectService = projectService;
@@ -4717,7 +4716,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, config]);
             const session = createSession(host, {
                 canUseEvents: true,
-                eventHandler: () => { },
+                eventHandler: noop,
                 cancellationToken
             });
             {
@@ -4854,7 +4853,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, config]);
             const session = createSession(host, {
                 canUseEvents: true,
-                eventHandler: () => { },
+                eventHandler: noop,
                 cancellationToken,
                 throttleWaitMilliseconds: 0
             });

@@ -74,7 +74,8 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
     }
 });
 
-function exec(cmd: string, args: string[], complete: () => void = (() => { }), error: (e: any, status: number) => void = (() => { })) {
+const noop = () => {}; // tslint:disable-line no-empty
+function exec(cmd: string, args: string[], complete: () => void = noop, error: (e: any, status: number) => void = noop) {
     console.log(`${cmd} ${args.join(" ")}`);
     // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
     const subshellFlag = isWin ? "/c" : "-c";

@@ -1341,7 +1341,7 @@ namespace ts {
     }
 
     /** Does nothing. */
-    export function noop(): void { }
+    export function noop(_?: {} | null | undefined): void { } // tslint:disable-line no-empty
 
     /** Do nothing and return false */
     export function returnFalse(): false { return false; }
@@ -2659,8 +2659,7 @@ namespace ts {
         }
     }
 
-    function Signature() {
-    }
+    function Signature() {} // tslint:disable-line no-empty
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.id = 0;
@@ -2931,7 +2930,7 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function assertTypeIsNever(_: never): void { }
+    export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
 
     export interface FileAndDirectoryExistence {
         fileExists: boolean;
