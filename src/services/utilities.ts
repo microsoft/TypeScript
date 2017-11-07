@@ -1337,21 +1337,21 @@ namespace ts {
         // However we should still skip a pinned comment at the top
         if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
             position = ranges[0].end;
-            AdvancePastLineBreak();
+            advancePastLineBreak();
             ranges = ranges.slice(1);
         }
         // As well as any triple slash references
         for (const range of ranges) {
             if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
                 position = range.end;
-                AdvancePastLineBreak();
+                advancePastLineBreak();
                 continue;
             }
             break;
         }
         return position;
 
-        function AdvancePastLineBreak() {
+        function advancePastLineBreak() {
             if (position < textLength) {
                 const charCode = text.charCodeAt(position);
                 if (isLineBreak(charCode)) {
