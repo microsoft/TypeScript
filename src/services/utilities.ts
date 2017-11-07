@@ -1351,11 +1351,11 @@ namespace ts {
         return position;
 
         function AdvancePastLineBreak() {
-            if (text.charCodeAt(position) === 0xD) {
+            if (text.charCodeAt(position) === CharacterCodes.carriageReturn) {
                 position++;
             }
 
-            if (text.charCodeAt(position) === 0xA) {
+            if (text.charCodeAt(position) === CharacterCodes.lineFeed) {
                 position++;
             }
         }
