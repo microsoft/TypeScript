@@ -1179,11 +1179,11 @@ namespace ts {
             return emitResult;
         }
 
-        function getSourceFile(fileName: string): SourceFile {
+        function getSourceFile(fileName: string): SourceFile | undefined {
             return getSourceFileByPath(toPath(fileName));
         }
 
-        function getSourceFileByPath(path: Path): SourceFile {
+        function getSourceFileByPath(path: Path): SourceFile | undefined {
             return filesByName.get(path);
         }
 
