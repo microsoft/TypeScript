@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-// @strictESM: true
+// @ESMInterop: true
 // @module: amd
 // @Filename: foo.d.ts
 ////declare class foo(): void;
