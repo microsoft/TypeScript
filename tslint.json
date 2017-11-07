@@ -97,7 +97,6 @@
         "ordered-imports": false,
         "prefer-conditional-expression": false,
         "radix": false,
-        "space-before-function-paren": false,
         "trailing-comma": false,
 
         // These should be done automatically by a formatter. https://github.com/Microsoft/TypeScript/issues/18340
@@ -105,6 +104,7 @@
         "eofline": false,
         "max-line-length": false,
         "no-consecutive-blank-lines": false,
+        "space-before-function-paren": false,
 
         // Not doing
         "ban-comma-operator": false,
