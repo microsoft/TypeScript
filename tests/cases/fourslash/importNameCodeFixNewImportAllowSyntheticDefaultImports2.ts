@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 // @AllowSyntheticDefaultImports: false
+// @Module: system
 
 // @Filename: a/f1.ts
 //// [|export var x = 0;
