@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 // @AllowSyntheticDefaultImports: false
-// @Module: system
+// @Module: amd
 
 // @Filename: a/f1.ts
 //// [|export var x = 0;
@@ -12,7 +12,7 @@
 //// export as namespace bar;
 
 verify.importFixAtPosition([
-`import * as bar from "./foo";
+`import bar = require("./foo");
 
 export var x = 0;
 bar();`
