@@ -13,9 +13,6 @@ namespace ts {
         if (updated !== original) {
             setOriginalNode(updated, original);
             setTextRange(updated, original);
-            if (original.startsOnNewLine) {
-                updated.startsOnNewLine = true;
-            }
             aggregateTransformFlags(updated);
         }
         return updated;
@@ -168,11 +165,14 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier {
+    export function getGeneratedNameForNode(node: Node): Identifier;
+    /*@internal*/ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier;
+    export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
         const name = createIdentifier("");
         name.autoGenerateKind = GeneratedIdentifierKind.Node;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
+        name.skipNameGenerationScope = !!shouldSkipNameGenerationScope;
         nextAutoGenerateId++;
         return name;
     }
@@ -2688,6 +2688,24 @@ namespace ts {
     /**
      * Gets a custom text range to use when emitting comments.
      */
+    /*@internal*/
+    export function getStartsOnNewLine(node: Node) {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.startsOnNewLine;
+    }
+
+    /**
+     * Sets a custom text range to use when emitting comments.
+     */
+    /*@internal*/
+    export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
+        getOrCreateEmitNode(node).startsOnNewLine = newLine;
+        return node;
+    }
+
+    /**
+     * Gets a custom text range to use when emitting comments.
+     */
     export function getCommentRange(node: Node) {
         const emitNode = node.emitNode;
         return (emitNode && emitNode.commentRange) || node;
@@ -2843,7 +2861,8 @@ namespace ts {
             sourceMapRange,
             tokenSourceMapRanges,
             constantValue,
-            helpers
+            helpers,
+            startsOnNewLine,
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
@@ -2855,6 +2874,7 @@ namespace ts {
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges);
         if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
         if (helpers) destEmitNode.helpers = addRange(destEmitNode.helpers, helpers);
+        if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;
         return destEmitNode;
     }
 
@@ -3016,7 +3036,7 @@ namespace ts {
 
             if (children.length > 1) {
                 for (const child of children) {
-                    child.startsOnNewLine = true;
+                    startOnNewLine(child);
                     argumentsList.push(child);
                 }
             }
@@ -3047,7 +3067,7 @@ namespace ts {
         if (children && children.length > 0) {
             if (children.length > 1) {
                 for (const child of children) {
-                    child.startsOnNewLine = true;
+                    startOnNewLine(child);
                     argumentsList.push(child);
                 }
             }
@@ -3622,8 +3642,8 @@ namespace ts {
         );
         setOriginalNode(updated, node);
         setTextRange(updated, node);
-        if (node.startsOnNewLine) {
-            updated.startsOnNewLine = true;
+        if (getStartsOnNewLine(node)) {
+            setStartsOnNewLine(updated, /*newLine*/ true);
         }
         aggregateTransformFlags(updated);
         return updated;
@@ -4252,8 +4272,7 @@ namespace ts {
     }
 
     export function startOnNewLine<T extends Node>(node: T): T {
-        node.startsOnNewLine = true;
-        return node;
+        return setStartsOnNewLine(node, /*newLine*/ true);
     }
 
     export function getExternalHelpersModuleName(node: SourceFile) {

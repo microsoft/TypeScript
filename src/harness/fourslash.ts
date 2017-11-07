@@ -221,11 +221,9 @@ namespace FourSlash {
         private addMatchedInputFile(referenceFilePath: string, extensions: ReadonlyArray<string>) {
             const inputFiles = this.inputFiles;
             const languageServiceAdapterHost = this.languageServiceAdapterHost;
-            if (!extensions) {
-                tryAdd(referenceFilePath);
-            }
-            else {
-                tryAdd(referenceFilePath) || ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
+            const didAdd = tryAdd(referenceFilePath);
+            if (extensions && !didAdd) {
+                ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
             }
 
             function tryAdd(path: string) {
