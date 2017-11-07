@@ -7,12 +7,16 @@
 
 // @Filename: /b.js
 ////const a = require("./a");
-////fo/**/
+////fo/*b*/
 
-goTo.marker("");
+// @Filename: /c.js
+////const a = import("./a");
+////fo/*c*/
+
+goTo.marker("b");
 verify.completionListContains({ name: "foo", source: "/a" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true);
 
-verify.applyCodeActionFromCompletion("", {
+verify.applyCodeActionFromCompletion("b", {
     name: "foo",
     source: "/a",
     description: `Import 'foo' from "./a".`,
@@ -20,5 +24,19 @@ verify.applyCodeActionFromCompletion("", {
     newFileContent: `import { foo } from "./a";\r
 \r
 const a = require("./a");
+fo`,
+});
+
+goTo.marker("c");
+verify.completionListContains({ name: "foo", source: "/a" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true);
+
+verify.applyCodeActionFromCompletion("c", {
+    name: "foo",
+    source: "/a",
+    description: `Import 'foo' from "./a".`,
+    // TODO: GH#18445
+    newFileContent: `import { foo } from "./a";\r
+\r
+const a = import("./a");
 fo`,
 });
