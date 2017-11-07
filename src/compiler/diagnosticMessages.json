@@ -2228,6 +2228,10 @@
         "category": "Error",
         "code": 2716
     },
+    "Cannot create an instance of an abstract class.": {
+        "category": "Error",
+        "code": 2717
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
