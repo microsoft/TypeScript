@@ -3806,8 +3806,12 @@
         "category": "Message",
         "code": 95013
     },
-    "Replace import with '{0}'.": {
+    "Install '{0}'": {
         "category": "Message",
         "code": 95014
+    },
+    "Replace import with '{0}'.": {
+        "category": "Message",
+        "code": 95015
     }
 }

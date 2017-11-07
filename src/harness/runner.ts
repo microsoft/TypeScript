@@ -27,8 +27,8 @@ let iterations = 1;
 
 function runTests(runners: RunnerBase[]) {
     for (let i = iterations; i > 0; i--) {
-        for (let j = 0; j < runners.length; j++) {
-            runners[j].initializeTests();
+        for (const runner of runners) {
+            runner.initializeTests();
         }
     }
 }
@@ -95,6 +95,7 @@ interface TestConfig {
     workerCount?: number;
     stackTraceLimit?: number | "full";
     test?: string[];
+    runners?: string[];
     runUnitTests?: boolean;
     noColors?: boolean;
 }
@@ -132,8 +133,9 @@ function handleTestConfig() {
             return true;
         }
 
-        if (testConfig.test && testConfig.test.length > 0) {
-            for (const option of testConfig.test) {
+        const runnerConfig = testConfig.runners || testConfig.test;
+        if (runnerConfig && runnerConfig.length > 0) {
+            for (const option of runnerConfig) {
                 if (!option) {
                     continue;
                 }

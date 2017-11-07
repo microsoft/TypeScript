@@ -515,10 +515,10 @@ namespace ts {
     }
 
     // Assumes 'value' is already lowercase.
-    function indexOfIgnoringCase(string: string, value: string): number {
-        const n = string.length - value.length;
+    function indexOfIgnoringCase(str: string, value: string): number {
+        const n = str.length - value.length;
         for (let i = 0; i <= n; i++) {
-            if (startsWithIgnoringCase(string, value, i)) {
+            if (startsWithIgnoringCase(str, value, i)) {
                 return i;
             }
         }
@@ -527,9 +527,9 @@ namespace ts {
     }
 
     // Assumes 'value' is already lowercase.
-    function startsWithIgnoringCase(string: string, value: string, start: number): boolean {
+    function startsWithIgnoringCase(str: string, value: string, start: number): boolean {
         for (let i = 0; i < value.length; i++) {
-            const ch1 = toLowerCase(string.charCodeAt(i + start));
+            const ch1 = toLowerCase(str.charCodeAt(i + start));
             const ch2 = value.charCodeAt(i);
 
             if (ch1 !== ch2) {

@@ -437,6 +437,50 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
+    function assertEvent(actualOutput: string, expectedEvent: protocol.Event, host: TestServerHost) {
+        assert.equal(actualOutput, server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, host.newLine));
+    }
+
+    function checkErrorMessage(host: TestServerHost, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
+        const outputs = host.getOutput();
+        assert.isTrue(outputs.length >= 1, outputs.toString());
+        const event: protocol.Event = {
+            seq: 0,
+            type: "event",
+            event: eventName,
+            body: diagnostics
+        };
+        assertEvent(outputs[0], event, host);
+    }
+
+    function checkCompleteEvent(host: TestServerHost, numberOfCurrentEvents: number, expectedSequenceId: number) {
+        const outputs = host.getOutput();
+        assert.equal(outputs.length, numberOfCurrentEvents, outputs.toString());
+        const event: protocol.RequestCompletedEvent = {
+            seq: 0,
+            type: "event",
+            event: "requestCompleted",
+            body: {
+                request_seq: expectedSequenceId
+            }
+        };
+        assertEvent(outputs[numberOfCurrentEvents - 1], event, host);
+    }
+
+    function checkProjectUpdatedInBackgroundEvent(host: TestServerHost, openFiles: string[]) {
+        const outputs = host.getOutput();
+        assert.equal(outputs.length, 1, outputs.toString());
+        const event: protocol.ProjectsUpdatedInBackgroundEvent = {
+            seq: 0,
+            type: "event",
+            event: "projectsUpdatedInBackground",
+            body: {
+                openFiles
+            }
+        };
+        assertEvent(outputs[0], event, host);
+    }
+
     describe("tsserverProjectSystem", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
@@ -1248,13 +1292,13 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2);
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false });
             // should contain completions for string
             assert.isTrue(completions1.entries.some(e => e.name === "charAt"), "should contain 'charAt'");
             assert.isFalse(completions1.entries.some(e => e.name === "toExponential"), "should not contain 'toExponential'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2);
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false });
             // should contain completions for string
             assert.isFalse(completions2.entries.some(e => e.name === "charAt"), "should not contain 'charAt'");
             assert.isTrue(completions2.entries.some(e => e.name === "toExponential"), "should contain 'toExponential'");
@@ -1280,11 +1324,11 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0);
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false });
             assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0);
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false });
             assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
             const sf2 = service.externalProjects[0].getLanguageService().getProgram().getSourceFile(f2.path);
             assert.equal(sf2.text, "");
@@ -1826,7 +1870,7 @@ namespace ts.projectSystem {
             // Specify .html extension as mixed content
             const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
             const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             // The configured project should now be updated to include html file
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1845,7 +1889,7 @@ namespace ts.projectSystem {
 
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
-            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1);
+            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, { includeExternalModuleExports: false });
             assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
 
             // Close HTML file
@@ -1859,7 +1903,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
-            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5);
+            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, { includeExternalModuleExports: false });
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
         });
 
@@ -1885,7 +1929,7 @@ namespace ts.projectSystem {
             // Specify .html extension as mixed content in a configure host request
             const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
             const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             let projectService = session.getProjectService();
@@ -1904,7 +1948,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config2, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -1923,7 +1967,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config3, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -1942,7 +1986,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config4, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -1961,7 +2005,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config5, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -2744,6 +2788,87 @@ namespace ts.projectSystem {
             const project = projectService.findProject(corruptedConfig.path);
             checkProjectRootFiles(project, [file1.path]);
         });
+
+        describe("when opening new file that doesnt exist on disk yet", () => {
+            function verifyNonExistentFile(useProjectRoot: boolean) {
+                const host = createServerHost([libFile]);
+                let hasError = false;
+                const errLogger: server.Logger = {
+                    close: noop,
+                    hasLevel: () => true,
+                    loggingEnabled: () => true,
+                    perftrc: noop,
+                    info: noop,
+                    msg: (_s, type) => {
+                        if (type === server.Msg.Err) {
+                            hasError = true;
+                        }
+                    },
+                    startGroup: noop,
+                    endGroup: noop,
+                    getLogFileName: (): string => undefined
+                };
+                const session = createSession(host, { canUseEvents: true, logger: errLogger, useInferredProjectPerProjectRoot: true });
+
+                const folderPath = "/user/someuser/projects/someFolder";
+                const projectService = session.getProjectService();
+                const untitledFile = "untitled:Untitled-1";
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: server.CommandNames.Open,
+                    arguments: {
+                        file: untitledFile,
+                        fileContent: "",
+                        scriptKindName: "JS",
+                        projectRootPath: useProjectRoot ? folderPath : undefined
+                    }
+                });
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                const infoForUntitledAtProjectRoot = projectService.getScriptInfoForPath(`${folderPath.toLowerCase()}/${untitledFile.toLowerCase()}` as Path);
+                const infoForUnitiledAtRoot = projectService.getScriptInfoForPath(`/${untitledFile.toLowerCase()}` as Path);
+                if (useProjectRoot) {
+                    assert.isDefined(infoForUntitledAtProjectRoot);
+                    assert.isUndefined(infoForUnitiledAtRoot);
+                }
+                else {
+                    assert.isDefined(infoForUnitiledAtRoot);
+                    assert.isUndefined(infoForUntitledAtProjectRoot);
+                }
+                host.checkTimeoutQueueLength(2);
+
+                const newTimeoutId = host.getNextTimeoutId();
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: server.CommandNames.Geterr,
+                    arguments: {
+                        delay: 0,
+                        files: [untitledFile]
+                    }
+                });
+                host.checkTimeoutQueueLength(3);
+
+                // Run the last one = get error request
+                host.runQueuedTimeoutCallbacks(newTimeoutId);
+
+                assert.isFalse(hasError);
+                host.checkTimeoutQueueLength(2);
+                checkErrorMessage(host, "syntaxDiag", { file: untitledFile, diagnostics: [] });
+                host.clearOutput();
+
+                host.runQueuedImmediateCallbacks();
+                assert.isFalse(hasError);
+                checkErrorMessage(host, "semanticDiag", { file: untitledFile, diagnostics: [] });
+
+                checkCompleteEvent(host, 2, expectedSequenceId);
+            }
+
+            it("has projectRoot", () => {
+                verifyNonExistentFile(/*useProjectRoot*/ true);
+            });
+
+            it("does not have projectRoot", () => {
+                verifyNonExistentFile(/*useProjectRoot*/ false);
+            });
+        });
     });
 
     describe("autoDiscovery", () => {
@@ -3445,50 +3570,6 @@ namespace ts.projectSystem {
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
         });
-
-        function assertEvent(actualOutput: string, expectedEvent: protocol.Event, host: TestServerHost) {
-            assert.equal(actualOutput, server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, host.newLine));
-        }
-
-        function checkErrorMessage(host: TestServerHost, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
-            const outputs = host.getOutput();
-            assert.isTrue(outputs.length >= 1, outputs.toString());
-            const event: protocol.Event = {
-                seq: 0,
-                type: "event",
-                event: eventName,
-                body: diagnostics
-            };
-            assertEvent(outputs[0], event, host);
-        }
-
-        function checkCompleteEvent(host: TestServerHost, numberOfCurrentEvents: number, expectedSequenceId: number) {
-            const outputs = host.getOutput();
-            assert.equal(outputs.length, numberOfCurrentEvents, outputs.toString());
-            const event: protocol.RequestCompletedEvent = {
-                seq: 0,
-                type: "event",
-                event: "requestCompleted",
-                body: {
-                    request_seq: expectedSequenceId
-                }
-            };
-            assertEvent(outputs[numberOfCurrentEvents - 1], event, host);
-        }
-
-        function checkProjectUpdatedInBackgroundEvent(host: TestServerHost, openFiles: string[]) {
-            const outputs = host.getOutput();
-            assert.equal(outputs.length, 1, outputs.toString());
-            const event: protocol.ProjectsUpdatedInBackgroundEvent = {
-                seq: 0,
-                type: "event",
-                event: "projectsUpdatedInBackground",
-                body: {
-                    openFiles
-                }
-            };
-            assertEvent(outputs[0], event, host);
-        }
 
         it("npm install @types works", () => {
             const folderPath = "/a/b/projects/temp";

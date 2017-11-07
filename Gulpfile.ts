@@ -50,6 +50,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         d: "debug", "debug-brk": "debug",
         i: "inspect", "inspect-brk": "inspect",
         t: "tests", test: "tests",
+        ru: "runners", runner: "runners",
         r: "reporter",
         c: "colors", color: "colors",
         f: "files", file: "files",
@@ -64,6 +65,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
+        runners: process.env.runners || process.env.runner || process.env.ru,
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
@@ -99,12 +101,12 @@ const lclDirectory = "src/loc/lcl";
 
 const builtDirectory = "built/";
 const builtLocalDirectory = "built/local/";
-const LKGDirectory = "lib/";
+const lkgDirectory = "lib/";
 
 const copyright = "CopyrightNotice.txt";
 
 const compilerFilename = "tsc.js";
-const LKGCompiler = path.join(LKGDirectory, compilerFilename);
+const lkgCompiler = path.join(lkgDirectory, compilerFilename);
 const builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 
 const nodeModulesPathPrefix = path.resolve("./node_modules/.bin/");
@@ -123,34 +125,31 @@ const es2015LibrarySources = [
     "es2015.symbol.wellknown.d.ts"
 ];
 
-const es2015LibrarySourceMap = es2015LibrarySources.map(function(source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
+const es2015LibrarySourceMap = es2015LibrarySources.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
 const es2016LibrarySource = ["es2016.array.include.d.ts"];
 
-const es2016LibrarySourceMap = es2016LibrarySource.map(function(source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
+const es2016LibrarySourceMap = es2016LibrarySource.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
 const es2017LibrarySource = [
     "es2017.object.d.ts",
     "es2017.sharedmemory.d.ts",
     "es2017.string.d.ts",
     "es2017.intl.d.ts",
+    "es2017.typedarrays.d.ts",
 ];
 
-const es2017LibrarySourceMap = es2017LibrarySource.map(function(source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
+const es2017LibrarySourceMap = es2017LibrarySource.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
 const esnextLibrarySource = [
     "esnext.asynciterable.d.ts"
 ];
 
-const esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
+const esnextLibrarySourceMap = esnextLibrarySource.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
 const hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
 
@@ -176,9 +175,8 @@ const librarySourceMap = [
     { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
 ].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
 
-const libraryTargets = librarySourceMap.map(function(f) {
-    return path.join(builtLocalDirectory, f.target);
-});
+const libraryTargets = librarySourceMap.map(f =>
+    path.join(builtLocalDirectory, f.target));
 
 /**
  * .lcg file is what localization team uses to know what messages to localize.
@@ -193,22 +191,19 @@ const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessag
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
-    return path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json");
-}).concat(generatedLCGFile);
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
+    .map(f => path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json"))
+    .concat(generatedLCGFile);
 
 for (const i in libraryTargets) {
     const entry = librarySourceMap[i];
     const target = libraryTargets[i];
-    const sources = [copyright].concat(entry.sources.map(function(s) {
-        return path.join(libraryDirectory, s);
-    }));
-    gulp.task(target, /*help*/ false, [], function() {
-        return gulp.src(sources)
+    const sources = [copyright].concat(entry.sources.map(s => path.join(libraryDirectory, s)));
+    gulp.task(target, /*help*/ false, [], () =>
+        gulp.src(sources)
             .pipe(newer(target))
             .pipe(concat(target, { newLine: "\n\n" }))
-            .pipe(gulp.dest("."));
-    });
+            .pipe(gulp.dest(".")));
 }
 
 const configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
@@ -575,9 +570,7 @@ gulp.task(specMd, /*help*/ false, [word2mdJs], (done) => {
     const specMDFullPath = path.resolve(specMd);
     const cmd = "cscript //nologo " + word2mdJs + " \"" + specWordFullPath + "\" " + "\"" + specMDFullPath + "\"";
     console.log(cmd);
-    cp.exec(cmd, function() {
-        done();
-    });
+    cp.exec(cmd, done);
 });
 
 gulp.task("generate-spec", "Generates a Markdown version of the Language Specification", [specMd]);
@@ -599,7 +592,7 @@ gulp.task("VerifyLKG", /*help*/ false, [], () => {
             ". The following files are missing:\n" + missingFiles.join("\n"));
     }
     // Copy all the targets into the LKG directory
-    return gulp.src([...expectedFiles, path.join(builtLocalDirectory, "**"), `!${path.join(builtLocalDirectory, "tslint")}`, `!${path.join(builtLocalDirectory, "*.*")}`]).pipe(gulp.dest(LKGDirectory));
+    return gulp.src([...expectedFiles, path.join(builtLocalDirectory, "**"), `!${path.join(builtLocalDirectory, "tslint")}`, `!${path.join(builtLocalDirectory, "*.*")}`]).pipe(gulp.dest(lkgDirectory));
 });
 
 gulp.task("LKGInternal", /*help*/ false, ["lib", "local"]);
@@ -658,6 +651,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         const debug = cmdLineOptions.debug;
         const inspect = cmdLineOptions.inspect;
         const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const stackTraceLimit = cmdLineOptions.stackTraceLimit;
         const testConfigFile = "test.config";
@@ -678,8 +672,8 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             workerCount = cmdLineOptions.workers;
         }
 
-        if (tests || light || taskConfigsFolder) {
-            writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
+        if (tests || runners || light || taskConfigsFolder) {
+            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit);
         }
 
         if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -714,17 +708,13 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             }
             args.push(run);
             setNodeEnvToDevelopment();
-            exec(mocha, args, lintThenFinish, function(e, status) {
-                finish(e, status);
-            });
+            exec(mocha, args, lintThenFinish, finish);
 
         }
         else {
             // run task to load all tests and partition them between workers
             setNodeEnvToDevelopment();
-            exec(host, [run], lintThenFinish, function(e, status) {
-                finish(e, status);
-            });
+            exec(host, [run], lintThenFinish, finish);
         }
     });
 
@@ -874,8 +864,8 @@ function cleanTestDirs(done: (e?: any) => void) {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
+function writeTestConfigFile(tests: string, runners: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
+    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, runner: runners ? runners.split(",") : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
@@ -886,13 +876,14 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
         const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
         }
-        if (tests || light) {
-            writeTestConfigFile(tests, light);
+        if (tests || runners || light) {
+            writeTestConfigFile(tests, runners, light);
         }
 
         const args = [nodeServerOutFile];
@@ -1006,7 +997,7 @@ gulp.task(loggedIOJsPath, /*help*/ false, [], (done) => {
     const temp = path.join(builtLocalDirectory, "temp");
     mkdirP(temp, (err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
-        exec(host, [LKGCompiler, "--types", "--target es5", "--lib es5", "--outdir", temp, loggedIOpath], () => {
+        exec(host, [lkgCompiler, "--types", "--target es5", "--lib es5", "--outdir", temp, loggedIOpath], () => {
             fs.renameSync(path.join(temp, "/harness/loggedIO.js"), loggedIOJsPath);
             del(temp).then(() => done(), done);
         }, done);
@@ -1082,7 +1073,7 @@ function sendNextFile(files: {path: string}[], child: cp.ChildProcess, callback:
 function spawnLintWorker(files: {path: string}[], callback: (failures: number) => void) {
     const child = cp.fork("./scripts/parallel-lint");
     let failures = 0;
-    child.on("message", function(data) {
+    child.on("message", data => {
         switch (data.kind) {
             case "result":
                 if (data.failures > 0) {

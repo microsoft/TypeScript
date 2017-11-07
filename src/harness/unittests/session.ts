@@ -317,7 +317,7 @@ namespace ts.server {
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg)).to.not.exist;
+                expect(session.send(msg)).to.not.exist; // tslint:disable-line no-unused-expression
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
@@ -524,14 +524,14 @@ namespace ts.server {
             });
         });
         it("has access to the project service", () => {
-            class ServiceSession extends TestSession {
+            // tslint:disable-next-line no-unused-expression
+            new class extends TestSession {
                 constructor() {
                     super();
                     assert(this.projectService);
                     expect(this.projectService).to.be.instanceOf(ProjectService);
                 }
-            }
-            new ServiceSession();
+            }();
         });
     });
 

@@ -108,7 +108,7 @@ namespace Harness.LanguageService {
     }
 
     class DefaultHostCancellationToken implements ts.HostCancellationToken {
-        public static readonly Instance = new DefaultHostCancellationToken();
+        public static readonly instance = new DefaultHostCancellationToken();
 
         public isCancellationRequested() {
             return false;
@@ -126,7 +126,7 @@ namespace Harness.LanguageService {
         public typesRegistry: ts.Map<void> | undefined;
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
-        constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
+        constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
             protected settings = ts.getDefaultCompilerOptions()) {
         }
 
@@ -413,8 +413,8 @@ namespace Harness.LanguageService {
         getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
             return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length));
         }
-        getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
-            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
+        getCompletionsAtPosition(fileName: string, position: number, options: ts.GetCompletionsAtPositionOptions | undefined): ts.CompletionInfo {
+            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position, options));
         }
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: ts.FormatCodeOptions | undefined, source: string | undefined): ts.CompletionEntryDetails {
             return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName, JSON.stringify(options), source));
@@ -495,7 +495,7 @@ namespace Harness.LanguageService {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
-        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
+        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion | undefined {
             return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -757,6 +757,7 @@ namespace Harness.LanguageService {
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
                                 const langSvc: any = info.languageService;
+                                // tslint:disable-next-line only-arrow-functions
                                 proxy.getQuickInfoAtPosition = function () {
                                     const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                     if (parts.displayParts.length > 0) {
@@ -789,7 +790,7 @@ namespace Harness.LanguageService {
                         module: () => ({
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
-                                proxy.getSemanticDiagnostics = function (filename: string) {
+                                proxy.getSemanticDiagnostics = filename => {
                                     const prev = info.languageService.getSemanticDiagnostics(filename);
                                     const sourceFile: ts.SourceFile = info.languageService.getSourceFile(filename);
                                     prev.push({
@@ -815,11 +816,12 @@ namespace Harness.LanguageService {
                     };
             }
 
-            function makeDefaultProxy(info: ts.server.PluginCreateInfo) {
+            function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
                 // tslint:disable-next-line:no-null-keyword
                 const proxy = Object.create(/*prototype*/ null);
                 const langSvc: any = info.languageService;
                 for (const k of Object.keys(langSvc)) {
+                    // tslint:disable-next-line only-arrow-functions
                     proxy[k] = function () {
                         return langSvc[k].apply(langSvc, arguments);
                     };
