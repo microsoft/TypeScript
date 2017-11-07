@@ -3825,6 +3825,8 @@ declare namespace ts {
         beforeProgramCreate(compilerOptions: CompilerOptions): void;
         /** Custom action after new program creation is successful */
         afterProgramCreate(host: DirectoryStructureHost, program: Program): void;
+        /** Optional module name resolver */
+        moduleNameResolver?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
     }
     /**
      * Host to create watch with root files and options

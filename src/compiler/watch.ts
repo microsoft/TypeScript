@@ -170,6 +170,9 @@ namespace ts {
         beforeProgramCreate(compilerOptions: CompilerOptions): void;
         /** Custom action after new program creation is successful */
         afterProgramCreate(host: DirectoryStructureHost, program: Program): void;
+
+        /** Optional module name resolver */
+        moduleNameResolver?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
     }
 
     /**
@@ -308,6 +311,9 @@ namespace ts {
         const getCachedDirectoryStructureHost = configFileName && (() => directoryStructureHost as CachedDirectoryStructureHost);
         const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
         let newLine = getNewLineCharacter(compilerOptions, system);
+        const resolveModuleNames: (moduleNames: string[], containingFile: string, reusedNames?: string[]) => ResolvedModule[] = host.moduleNameResolver ?
+            (moduleNames, containingFile, reusedNames) => host.moduleNameResolver(moduleNames, containingFile, reusedNames) :
+            (moduleNames, containingFile, reusedNames?) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, /*logChanges*/ false);
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
             // Members for CompilerHost
@@ -328,7 +334,7 @@ namespace ts {
             getDirectories: path => directoryStructureHost.getDirectories(path),
             realpath,
             resolveTypeReferenceDirectives: (typeDirectiveNames, containingFile) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile),
-            resolveModuleNames: (moduleNames, containingFile, reusedNames?) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, /*logChanges*/ false),
+            resolveModuleNames,
             onReleaseOldSourceFile,
             // Members for ResolutionCacheHost
             toPath,
@@ -341,7 +347,7 @@ namespace ts {
                 hasChangedAutomaticTypeDirectiveNames = true;
                 scheduleProgramUpdate();
             },
-            writeLog
+            writeLog,
         };
         // Cache for the module resolution
         const resolutionCache = createResolutionCache(compilerHost, configFileName ?
