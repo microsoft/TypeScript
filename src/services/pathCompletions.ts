@@ -37,7 +37,10 @@ namespace ts.Completions.PathCompletions {
             containsPath(rootDirectory, scriptPath, basePath, ignoreCase) ? scriptPath.substr(rootDirectory.length) : undefined);
 
         // Now find a path for each potential directory that is to be merged with the one containing the script
-        return deduplicate(rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)));
+        return deduplicate(
+            rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)),
+            equateStringsCaseSensitive,
+            compareStringsCaseSensitive);
     }
 
     function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: ReadonlyArray<string>, includeExtensions: boolean, span: TextSpan, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude?: string): CompletionEntry[] {
@@ -273,7 +276,7 @@ namespace ts.Completions.PathCompletions {
             }
         }
 
-        return deduplicate(nonRelativeModuleNames);
+        return deduplicate(nonRelativeModuleNames, equateStringsCaseSensitive, compareStringsCaseSensitive);
     }
 
     export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): CompletionEntry[] | undefined {

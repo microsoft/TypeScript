@@ -251,7 +251,7 @@ namespace ts.server {
             return;
         }
 
-        const insertIndex = binarySearch(array, insert, compare);
+        const insertIndex = binarySearch(array, insert, identity, compare);
         if (insertIndex < 0) {
             array.splice(~insertIndex, 0, insert);
         }
@@ -267,7 +267,7 @@ namespace ts.server {
             return;
         }
 
-        const removeIndex = binarySearch(array, remove, compare);
+        const removeIndex = binarySearch(array, remove, identity, compare);
         if (removeIndex >= 0) {
             array.splice(removeIndex, 1);
         }
@@ -289,8 +289,7 @@ namespace ts.server {
         return index === 0 || value !== array[index - 1];
     }
 
-    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
-        compare = compare || compareValues;
+    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, comparer: Comparer<T>) {
         let newIndex = 0;
         let oldIndex = 0;
         const newLen = newItems.length;
@@ -298,7 +297,7 @@ namespace ts.server {
         while (newIndex < newLen && oldIndex < oldLen) {
             const newItem = newItems[newIndex];
             const oldItem = oldItems[oldIndex];
-            const compareResult = compare(newItem, oldItem);
+            const compareResult = comparer(newItem, oldItem);
             if (compareResult === Comparison.LessThan) {
                 inserted(newItem);
                 newIndex++;

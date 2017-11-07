@@ -974,7 +974,7 @@ namespace ts.server {
                     projects,
                     project => project.getLanguageService().findReferences(file, position),
                     /*comparer*/ undefined,
-                    /*areEqual (TODO: fixme)*/ undefined
+                    equateValues
                 );
             }
 
@@ -1209,7 +1209,7 @@ namespace ts.server {
                         // Use `hasAction || undefined` to avoid serializing `false`.
                         return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source };
                     }
-                }).sort((a, b) => compareStrings(a.name, b.name));
+                }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
             }
             else {
                 return completions;
