@@ -3097,10 +3097,9 @@ namespace ts {
         function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
             const existingResult = getCachedFileSystemEntries(fileOrDirectoryPath);
             if (existingResult) {
-                // This was a folder already present, remove it if this doesnt exist any more
-                if (!host.directoryExists(fileOrDirectory)) {
-                    cachedReadDirectoryResult.delete(fileOrDirectoryPath);
-                }
+                // Just clear the cache for now
+                // For now just clear the cache, since this could mean that multiple level entries might need to be re-evaluated
+                clearCache();
             }
             else {
                 // This was earlier a file (hence not in cached directory contents)
@@ -3113,8 +3112,14 @@ namespace ts {
                             fileExists: host.fileExists(fileOrDirectoryPath),
                             directoryExists: host.directoryExists(fileOrDirectoryPath)
                         };
-                        updateFilesOfFileSystemEntry(parentResult, baseName, fsQueryResult.fileExists);
-                        updateFileSystemEntry(parentResult.directories, baseName, fsQueryResult.directoryExists);
+                        if (fsQueryResult.directoryExists || hasEntry(parentResult.directories, baseName)) {
+                            // Folder added or removed, clear the cache instead of updating the folder and its structure
+                            clearCache();
+                        }
+                        else {
+                            // No need to update the directory structure, just files
+                            updateFilesOfFileSystemEntry(parentResult, baseName, fsQueryResult.fileExists);
+                        }
                         return fsQueryResult;
                     }
                 }

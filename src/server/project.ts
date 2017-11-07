@@ -1122,7 +1122,7 @@ namespace ts.server {
         readonly canonicalConfigFilePath: NormalizedPath;
 
         /* @internal */
-        pendingReload: boolean;
+        pendingReload: ConfigFileProgramReloadLevel;
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs;
@@ -1162,12 +1162,17 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
-            if (this.pendingReload) {
-                this.pendingReload = false;
-                this.projectService.reloadConfiguredProject(this);
-                return true;
+            const reloadLevel = this.pendingReload;
+            this.pendingReload = ConfigFileProgramReloadLevel.None;
+            switch (reloadLevel) {
+                case ConfigFileProgramReloadLevel.Partial:
+                    return this.projectService.reloadFileNamesOfConfiguredProject(this);
+                case ConfigFileProgramReloadLevel.Full:
+                    this.projectService.reloadConfiguredProject(this);
+                    return true;
+                default:
+                    return super.updateGraph();
             }
-            return super.updateGraph();
         }
 
         /*@internal*/
