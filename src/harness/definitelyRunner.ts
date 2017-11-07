@@ -36,13 +36,14 @@ class DefinitelyTypedRunner extends RunnerBase {
             it("should build successfully", () => {
                 const cwd = path.join(__dirname, "../../", DefinitelyTypedRunner.testDir, directoryName);
                 const timeout = 600000; // 600s = 10 minutes
-                if (fs.existsSync(path.join(cwd, 'package.json'))) {
+                if (fs.existsSync(path.join(cwd, "package.json"))) {
                     const stdio = isWorker ? "pipe" : "inherit";
                     const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout, shell: true, stdio });
                     if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed!`);
                 }
                 Harness.Baseline.runBaseline(`${this.kind()}/${directoryName}.log`, () => {
                     const result = cp.spawnSync(`node`, [path.join(__dirname, "tsc.js")], { cwd, timeout, shell: true });
+ // tslint:disable:no-null-keyword
                     return result.status === 0 ? null : `Exit Code: ${result.status}
 Standard output:
 ${result.stdout.toString().replace(/\r\n/g, "\n")}
@@ -50,6 +51,7 @@ ${result.stdout.toString().replace(/\r\n/g, "\n")}
 
 Standard error:
 ${result.stderr.toString().replace(/\r\n/g, "\n")}`;
+ // tslint:enable:no-null-keyword
                 });
             });
         });
