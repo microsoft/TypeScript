@@ -12,8 +12,8 @@
 //// var z = <My/*3*/Element></My/*4*/Element>
 
 verify.quickInfos({
-    1: "(JSX attribute) JSX.IntrinsicElements.div: any",
-    2: "(JSX attribute) JSX.IntrinsicElements.div: any",
+    1: "(property) JSX.IntrinsicElements.div: any",
+    2: "(property) JSX.IntrinsicElements.div: any",
     3: "class MyElement",
     4: "class MyElement"
 });
