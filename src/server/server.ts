@@ -200,7 +200,7 @@ namespace ts.server {
             return this.loggingEnabled() && this.level >= level;
         }
 
-        msg(s: string, type: Msg.Types = Msg.Err) {
+        msg(s: string, type: Msg = Msg.Err) {
             if (!this.canWrite) return;
 
             s = `[${nowString()}] ${s}\n`;
@@ -828,7 +828,7 @@ namespace ts.server {
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
                     }
-                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { "ELECTRON_RUN_AS_NODE": "1" } });
+                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { ELECTRON_RUN_AS_NODE: "1" } });
                     status = true;
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`WatchGuard for path ${path} returned: OK`);

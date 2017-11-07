@@ -19,18 +19,19 @@ namespace ts.server {
         info(s: string): void;
         startGroup(): void;
         endGroup(): void;
-        msg(s: string, type?: Msg.Types): void;
+        msg(s: string, type?: Msg): void;
         getLogFileName(): string;
     }
 
+    // TODO: Use a const enum (https://github.com/Microsoft/TypeScript/issues/16804)
+    export enum Msg {
+        Err = "Err",
+        Info = "Info",
+        Perf = "Perf",
+    }
     export namespace Msg {
-        export type Err = "Err";
-        export const Err: Err = "Err";
-        export type Info = "Info";
-        export const Info: Info = "Info";
-        export type Perf = "Perf";
-        export const Perf: Perf = "Perf";
-        export type Types = Err | Info | Perf;
+        /** @deprecated Only here for backwards-compatibility. Prefer just `Msg`. */
+        export type Types = Msg;
     }
 
     function getProjectRootPath(project: Project): Path {
@@ -320,8 +321,8 @@ namespace ts.server {
     }
 
     /* @internal */
-    export function indent(string: string): string {
-        return "\n    " + string;
+    export function indent(str: string): string {
+        return "\n    " + str;
     }
 
     /** Put stringified JSON on the next line, indented. */
