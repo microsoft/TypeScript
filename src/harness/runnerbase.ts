@@ -24,6 +24,9 @@ abstract class RunnerBase {
 
     abstract enumerateTestFiles(): string[];
 
+    /** The working directory where tests are found. Needed for batch testing where the input path will differ from the output path inside baselines */
+    public workingDirectory = "";
+
     /** Setup the runner's tests so that they are ready to be executed by the harness
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
      */

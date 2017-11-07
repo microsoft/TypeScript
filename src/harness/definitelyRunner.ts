@@ -2,8 +2,11 @@
 /// <reference path="runnerbase.ts" />
 class DefinitelyTypedRunner extends RunnerBase {
     private static readonly testDir = "../DefinitelyTyped/types/";
+
+    public workingDirectory = DefinitelyTypedRunner.testDir;
+
     public enumerateTestFiles() {
-        return Harness.IO.getDirectories(DefinitelyTypedRunner.testDir).map(dir => DefinitelyTypedRunner.testDir + dir);
+        return Harness.IO.getDirectories(DefinitelyTypedRunner.testDir);
     }
 
     public kind(): TestRunnerKind {
@@ -28,16 +31,19 @@ class DefinitelyTypedRunner extends RunnerBase {
         describe(directoryName, () => {
             const cp = require("child_process");
             const path = require("path");
+            const fs = require("fs");
 
             it("should build successfully", () => {
-                const cwd = path.join(__dirname, "../../", directoryName);
+                const cwd = path.join(__dirname, "../../", DefinitelyTypedRunner.testDir, directoryName);
                 const timeout = 600000; // 600s = 10 minutes
-                const stdio = isWorker ? "pipe" : "inherit";
-                const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout, shell: true, stdio });
-                if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed!`);
+                if (fs.existsSync(path.join(cwd, 'package.json'))) {
+                    const stdio = isWorker ? "pipe" : "inherit";
+                    const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout, shell: true, stdio });
+                    if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed!`);
+                }
                 Harness.Baseline.runBaseline(`${this.kind()}/${directoryName}.log`, () => {
-                    const result = cp.spawnSync(`node`, [path.join(__dirname, "tsc.js"), "--lib dom,es6", "--strict"], { cwd, timeout, shell: true });
-                    return `Exit Code: ${result.status}
+                    const result = cp.spawnSync(`node`, [path.join(__dirname, "tsc.js")], { cwd, timeout, shell: true });
+                    return result.status === 0 ? null : `Exit Code: ${result.status}
 Standard output:
 ${result.stdout.toString().replace(/\r\n/g, "\n")}
 
