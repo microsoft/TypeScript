@@ -15221,7 +15221,7 @@ namespace ts {
                     if (indexInfo.isReadonly && (isAssignmentTarget(node) || isDeleteTarget(node))) {
                         error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
                     }
-                    return indexInfo.type;
+                    return getFlowTypeOfPropertyAccess(node, /*prop*/ undefined, indexInfo.type, getAssignmentTargetKind(node));
                 }
                 if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
                     reportNonexistentProperty(right, type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType ? apparentType : type);
@@ -15246,16 +15246,21 @@ namespace ts {
                     return unknownType;
                 }
             }
+            return getFlowTypeOfPropertyAccess(node, prop, propType, assignmentKind);
+        }
 
-            // Only compute control flow type if this is a property access expression that isn't an
-            // assignment target, and the referenced property was declared as a variable, property,
-            // accessor, or optional method.
-            if (node.kind !== SyntaxKind.PropertyAccessExpression || assignmentKind === AssignmentKind.Definite ||
-                !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) &&
-                !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
-                return propType;
+        /**
+         * Only compute control flow type if this is a property access expression that isn't an
+         * assignment target, and the referenced property was declared as a variable, property,
+         * accessor, or optional method.
+         */
+        function getFlowTypeOfPropertyAccess(node: PropertyAccessExpression | QualifiedName, prop: Symbol | undefined, type: Type, assignmentKind: AssignmentKind) {
+            if (node.kind !== SyntaxKind.PropertyAccessExpression ||
+                assignmentKind === AssignmentKind.Definite ||
+                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && type.flags & TypeFlags.Union)) {
+                return type;
             }
-            const flowType = getFlowTypeOfReference(node, propType);
+            const flowType = getFlowTypeOfReference(node, type);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
