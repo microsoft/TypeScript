@@ -138,6 +138,7 @@ namespace RWC {
                     }
 
                     // do not use lib since we already read it in above
+                    opts.options.lib = undefined;
                     opts.options.noLib = true;
 
                     // Emit the results

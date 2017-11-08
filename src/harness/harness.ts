@@ -2146,8 +2146,8 @@ namespace Harness {
         return filePath.indexOf(Harness.libFolder) === 0;
     }
 
-    export function getDefaultLibraryFile(libPath: string, io: Harness.Io): Harness.Compiler.TestFile {
-        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + libPath.slice(io.directoryName(libPath).length + 1);
+    export function getDefaultLibraryFile(filePath: string, io: Harness.Io): Harness.Compiler.TestFile {
+        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + ts.getBaseFileName(ts.normalizeSlashes(filePath));
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 
