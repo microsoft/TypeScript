@@ -1716,7 +1716,7 @@
         "category": "Error",
         "code": 2510
     },
-    "Cannot create an instance of the abstract class '{0}'.": {
+    "Cannot create an instance of an abstract class.": {
         "category": "Error",
         "code": 2511
     },
