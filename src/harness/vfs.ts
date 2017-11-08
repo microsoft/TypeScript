@@ -124,6 +124,8 @@ namespace vfs {
         private _shadowRoot: VirtualFileSystem | undefined;
         private _watchedFiles: KeyedCollection<string, FileWatcherEntry[]> | undefined;
         private _watchedDirectories: KeyedCollection<string, DirectoryWatcherEntryArray> | undefined;
+        private _stringComparer: ts.Comparer<string> | undefined;
+        private _pathComparer: ts.Comparer<string> | undefined;
         private _onRootFileSystemChange: (path: string, change: FileSystemChange) => void;
 
         constructor(currentDirectory: string, useCaseSensitiveFileNames: boolean) {
@@ -134,15 +136,15 @@ namespace vfs {
         }
 
         public get stringComparer() {
-            return this.useCaseSensitiveFileNames
+            return this._stringComparer || (this._stringComparer = this.useCaseSensitiveFileNames
                 ? collections.compareStringsCaseSensitive
-                : collections.compareStringsCaseInsensitive;
+                : collections.compareStringsCaseInsensitive);
         }
 
         public get pathComparer() {
-            return this.useCaseSensitiveFileNames
+            return this._pathComparer || (this._pathComparer = this.useCaseSensitiveFileNames
                 ? vpath.compareCaseSensitive
-                : vpath.compareCaseInsensitive;
+                : vpath.compareCaseInsensitive);
         }
 
         /**
