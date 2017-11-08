@@ -1,5 +1,3 @@
-///<reference path='..\services.ts' />
-
 /* @internal */
 namespace ts.formatting {
     export namespace SmartIndenter {

@@ -33,9 +33,6 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.7";
 
-    /* @internal */
-    let ruleProvider: formatting.RulesProvider;
-
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
@@ -1157,7 +1154,6 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        ruleProvider = ruleProvider || new formatting.RulesProvider();
         let program: Program;
         let lastProjectVersion: string;
         let lastTypesRootVersion = 0;
@@ -1185,11 +1181,6 @@ namespace ts {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
             return sourceFile;
-        }
-
-        function getRuleProvider(options: FormatCodeSettings) {
-            ruleProvider.ensureUpToDate(options);
-            return ruleProvider;
         }
 
         function synchronizeHostData(): void {
@@ -1429,7 +1420,6 @@ namespace ts {
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
             synchronizeHostData();
-            const ruleProvider = formattingOptions ? getRuleProvider(formattingOptions) : undefined;
             return Completions.getCompletionEntryDetails(
                 program.getTypeChecker(),
                 log,
@@ -1439,7 +1429,7 @@ namespace ts {
                 { name, source },
                 program.getSourceFiles(),
                 host,
-                ruleProvider);
+                formattingOptions && formatting.getFormatContext(formattingOptions));
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
@@ -1838,32 +1828,27 @@ namespace ts {
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const settings = toEditorSettings(options);
-            return formatting.formatSelection(start, end, sourceFile, getRuleProvider(settings), settings);
+            return formatting.formatSelection(start, end, sourceFile, formatting.getFormatContext(toEditorSettings(options)));
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const settings = toEditorSettings(options);
-            return formatting.formatDocument(sourceFile, getRuleProvider(settings), settings);
+            return formatting.formatDocument(syntaxTreeCache.getCurrentSourceFile(fileName), formatting.getFormatContext(toEditorSettings(options)));
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const settings = toEditorSettings(options);
+            const formatContext = formatting.getFormatContext(toEditorSettings(options));
 
             if (!isInComment(sourceFile, position)) {
-                if (key === "{") {
-                    return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
-                }
-                else if (key === "}") {
-                    return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
-                }
-                else if (key === ";") {
-                    return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
-                }
-                else if (key === "\n") {
-                    return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+                switch (key) {
+                    case "{":
+                        return formatting.formatOnOpeningCurly(position, sourceFile, formatContext);
+                    case "}":
+                        return formatting.formatOnClosingCurly(position, sourceFile, formatContext);
+                    case ";":
+                        return formatting.formatOnSemicolon(position, sourceFile, formatContext);
+                    case "\n":
+                        return formatting.formatOnEnter(position, sourceFile, formatContext);
                 }
             }
 
@@ -1875,11 +1860,11 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
-            const rulesProvider = getRuleProvider(formatOptions);
+            const formatContext = formatting.getFormatContext(formatOptions);
 
             return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
+                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, formatContext });
             });
         }
 
@@ -2104,7 +2089,7 @@ namespace ts {
                 program: getProgram(),
                 newLineCharacter: formatOptions ? formatOptions.newLineCharacter : host.getNewLine(),
                 host,
-                rulesProvider: getRuleProvider(formatOptions),
+                formatContext: formatting.getFormatContext(formatOptions),
                 cancellationToken,
             };
         }
