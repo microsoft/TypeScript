@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts ===
-interface StrNum extends TupleBase<string|number> {
+interface StrNum extends Array<string|number> {
 >StrNum : StrNum
->TupleBase : TupleBase<T>
+>Array : T[]
 
     0: string;
     1: number;

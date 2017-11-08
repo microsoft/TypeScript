@@ -1240,23 +1240,6 @@ interface ArrayConstructor {
 
 declare const Array: ArrayConstructor;
 
-interface TupleBase<T> extends Array<T> {
-    /** Mutation is not allowed on tuples. Do not use this method. */
-    push: never;
-    /** Mutation is not allowed on tuples. Do not use this method. */
-    pop: never;
-    /** Mutation is not allowed on tuples. Do not use this method. */
-    reverse: never;
-    /** Mutation is not allowed on tuples. Do not use this method. */
-    sort: never;
-    /** Mutation is not allowed on tuples. Do not use this method. */
-    shift: never;
-    /** Mutation is not allowed on tuples. Do not use this method. */
-    unshift: never;
-    /** Mutation is not allowed on tuples. Do not use this method. */
-    splice: never;
-}
-
 interface TypedPropertyDescriptor<T> {
     enumerable?: boolean;
     configurable?: boolean;
