@@ -4,7 +4,7 @@ class C {
 }
 
 //// [parserES3Accessors1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "Foo", {

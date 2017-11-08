@@ -17,32 +17,33 @@ namespace ts {
                 let oldTranspileResult: string;
                 let oldTranspileDiagnostics: Diagnostic[];
 
+                transpileOptions = testSettings.options || {};
+                if (!transpileOptions.compilerOptions) {
+                    transpileOptions.compilerOptions = {};
+                }
+
+                if (transpileOptions.compilerOptions.newLine === undefined) {
+                    // use \r\n as default new line
+                    transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+                }
+
+                transpileOptions.compilerOptions.sourceMap = true;
+
+                if (!transpileOptions.fileName) {
+                    transpileOptions.fileName = transpileOptions.compilerOptions.jsx ? "file.tsx" : "file.ts";
+                }
+
+                transpileOptions.reportDiagnostics = true;
+
+                justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? Extension.Tsx : Extension.Ts);
+                toBeCompiled = [{
+                    unitName: transpileOptions.fileName,
+                    content: input
+                }];
+
+                canUseOldTranspile = !transpileOptions.renamedDependencies;
+
                 before(() => {
-                    transpileOptions = testSettings.options || {};
-                    if (!transpileOptions.compilerOptions) {
-                        transpileOptions.compilerOptions = {};
-                    }
-
-                    if (transpileOptions.compilerOptions.newLine === undefined) {
-                        // use \r\n as default new line
-                        transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
-                    }
-
-                    transpileOptions.compilerOptions.sourceMap = true;
-
-                    if (!transpileOptions.fileName) {
-                        transpileOptions.fileName = transpileOptions.compilerOptions.jsx ? "file.tsx" : "file.ts";
-                    }
-
-                    transpileOptions.reportDiagnostics = true;
-
-                    justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? ".tsx" : ".ts");
-                    toBeCompiled = [{
-                        unitName: transpileOptions.fileName,
-                        content: input
-                    }];
-
-                    canUseOldTranspile = !transpileOptions.renamedDependencies;
                     transpileResult = transpileModule(input, transpileOptions);
 
                     if (canUseOldTranspile) {
@@ -52,10 +53,6 @@ namespace ts {
                 });
 
                 after(() => {
-                    justName = undefined;
-                    transpileOptions = undefined;
-                    canUseOldTranspile = undefined;
-                    toBeCompiled = undefined;
                     transpileResult = undefined;
                     oldTranspileResult = undefined;
                     oldTranspileDiagnostics = undefined;
@@ -88,7 +85,7 @@ namespace ts {
                 }
 
                 it("Correct output for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".js"), () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), () => {
                         if (transpileResult.outputText) {
                             return transpileResult.outputText;
                         }
@@ -152,21 +149,21 @@ var x = 0;`, {
             `import {foo} from "SomeName";\n` +
             `declare function use(a: any);\n` +
             `use(foo);`, {
-                options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }
+                options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
             });
 
         transpilesCorrectly("Rename dependencies - AMD",
             `import {foo} from "SomeName";\n` +
             `declare function use(a: any);\n` +
             `use(foo);`, {
-                options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }
+                options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
             });
 
         transpilesCorrectly("Rename dependencies - UMD",
             `import {foo} from "SomeName";\n` +
             `declare function use(a: any);\n` +
             `use(foo);`, {
-                options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }
+                options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
             });
 
         transpilesCorrectly("Transpile with emit decorators and emit metadata",

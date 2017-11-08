@@ -21,5 +21,9 @@ var a;
 a = x2(0);
 
 /** @type {function (number): number} */
-const x2 = (a) => a.concat("hi");
-x2(0);
+const x3 = (a) => a.concat("hi");
+x3(0);
+
+/** @type {function (number): string} */
+const x4 = (a) => a + 1;
+x4(0);

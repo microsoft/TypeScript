@@ -4,7 +4,7 @@ namespace ts.codefix {
     export function newNodesToChanges(newNodes: Node[], insertAfter: Node, context: CodeFixContext) {
         const sourceFile = context.sourceFile;
 
-        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         for (const newNode of newNodes) {
             changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { suffix: context.newLineCharacter });
@@ -35,7 +35,7 @@ namespace ts.codefix {
      */
     export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker): Node[] {
         const classMembers = classDeclaration.symbol.members;
-        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.getName()));
+        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.escapedName));
 
         let newNodes: Node[] = [];
         for (const symbol of missingMembers) {
@@ -104,8 +104,7 @@ namespace ts.codefix {
                 }
 
                 const signatureDeclarations: MethodDeclaration[] = [];
-                for (let i = 0; i < signatures.length; i++) {
-                    const signature = signatures[i];
+                for (const signature of signatures) {
                     const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration);
                     if (methodDeclaration) {
                         signatureDeclarations.push(methodDeclaration);
@@ -186,7 +185,7 @@ namespace ts.codefix {
         return parameters;
     }
 
-    function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, optional: boolean, modifiers: Modifier[] | undefined): MethodDeclaration {
+    function createMethodImplementingSignatures(signatures: ReadonlyArray<Signature>, name: PropertyName, optional: boolean, modifiers: ReadonlyArray<Modifier> | undefined): MethodDeclaration {
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
          * this is one of them.
@@ -194,8 +193,7 @@ namespace ts.codefix {
         let maxArgsSignature = signatures[0];
         let minArgumentCount = signatures[0].minArgumentCount;
         let someSigHasRestParameter = false;
-        for (let i = 0; i < signatures.length; i++) {
-            const sig = signatures[i];
+        for (const sig of signatures) {
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
             if (sig.hasRestParameter) {
                 someSigHasRestParameter = true;
@@ -205,7 +203,7 @@ namespace ts.codefix {
             }
         }
         const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
-        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.getName());
+        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
 
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, minArgumentCount, /*addAnyType*/ true);
 
@@ -231,7 +229,13 @@ namespace ts.codefix {
             /*returnType*/ undefined);
     }
 
-    export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
+    export function createStubbedMethod(
+        modifiers: ReadonlyArray<Modifier>,
+        name: PropertyName,
+        optional: boolean,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        returnType: TypeNode | undefined) {
         return createMethod(
             /*decorators*/ undefined,
             modifiers,

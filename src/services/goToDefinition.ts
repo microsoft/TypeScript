@@ -27,7 +27,7 @@ namespace ts.GoToDefinition {
         // Labels
         if (isJumpStatementTarget(node)) {
             const labelName = (<Identifier>node).text;
-            const label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+            const label = getTargetLabel((<BreakOrContinueStatement>node.parent), labelName);
             return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
         }
 
@@ -74,6 +74,28 @@ namespace ts.GoToDefinition {
             const shorthandContainerName = typeChecker.symbolToString(symbol.parent, node);
             return map(shorthandDeclarations,
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
+        }
+
+        // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
+        // declaration the symbol (which is itself), we should try to get to the original type of the ObjectBindingPattern
+        // and return the property declaration for the referenced property.
+        // For example:
+        //      import('./foo').then(({ b/*goto*/ar }) => undefined); => should get use to the declaration in file "./foo"
+        //
+        //      function bar<T>(onfulfilled: (value: T) => void) { //....}
+        //      interface Test {
+        //          pr/*destination*/op1: number
+        //      }
+        //      bar<Test>(({pr/*goto*/op1})=>{});
+        if (isPropertyName(node) && isBindingElement(node.parent) && isObjectBindingPattern(node.parent.parent) &&
+            (node === (node.parent.propertyName || node.parent.name))) {
+            const type = typeChecker.getTypeAtLocation(node.parent.parent);
+            if (type) {
+                const propSymbols = getPropertySymbolsFromType(type, node);
+                if (propSymbols) {
+                    return flatMap(propSymbols, propSymbol => getDefinitionFromSymbol(typeChecker, propSymbol, node));
+                }
+            }
         }
 
         // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
@@ -125,6 +147,28 @@ namespace ts.GoToDefinition {
         }
 
         return getDefinitionFromSymbol(typeChecker, type.symbol, node);
+    }
+
+    export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan {
+        const definitions = getDefinitionAtPosition(program, sourceFile, position);
+
+        if (!definitions || definitions.length === 0) {
+            return undefined;
+        }
+
+        // Check if position is on triple slash reference.
+        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
+        if (comment) {
+            return {
+                definitions,
+                textSpan: createTextSpanFromBounds(comment.pos, comment.end)
+            };
+        }
+
+        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const textSpan = createTextSpan(node.getStart(), node.getWidth());
+
+        return { definitions, textSpan };
     }
 
     // Go to the original declaration for cases:
@@ -191,7 +235,7 @@ namespace ts.GoToDefinition {
             return false;
         }
 
-        function tryAddSignature(signatureDeclarations: Declaration[] | undefined, selectConstructors: boolean, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function tryAddSignature(signatureDeclarations: ReadonlyArray<Declaration> | undefined, selectConstructors: boolean, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
             if (!signatureDeclarations) {
                 return false;
             }
@@ -257,7 +301,7 @@ namespace ts.GoToDefinition {
         return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
     }
 
-    function findReferenceInPosition(refs: FileReference[], pos: number): FileReference {
+    function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference {
         for (const ref of refs) {
             if (ref.pos <= pos && pos <= ref.end) {
                 return ref;
@@ -271,7 +315,7 @@ namespace ts.GoToDefinition {
             fileName: targetFileName,
             textSpan: createTextSpanFromBounds(0, 0),
             kind: ScriptElementKind.scriptElement,
-            name: name,
+            name,
             containerName: undefined,
             containerKind: undefined
         };

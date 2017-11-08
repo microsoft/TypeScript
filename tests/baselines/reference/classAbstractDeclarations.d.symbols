@@ -1,0 +1,49 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractDeclarations.d.ts ===
+declare abstract class A {
+>A : Symbol(A, Decl(classAbstractDeclarations.d.ts, 0, 0))
+
+    abstract constructor() {}
+}
+
+declare abstract class AA {
+>AA : Symbol(AA, Decl(classAbstractDeclarations.d.ts, 2, 1))
+
+    abstract foo();
+>foo : Symbol(AA.foo, Decl(classAbstractDeclarations.d.ts, 4, 27))
+}
+
+declare abstract class BB extends AA {}
+>BB : Symbol(BB, Decl(classAbstractDeclarations.d.ts, 6, 1))
+>AA : Symbol(AA, Decl(classAbstractDeclarations.d.ts, 2, 1))
+
+declare class CC extends AA {}
+>CC : Symbol(CC, Decl(classAbstractDeclarations.d.ts, 8, 39))
+>AA : Symbol(AA, Decl(classAbstractDeclarations.d.ts, 2, 1))
+
+declare class DD extends BB {}
+>DD : Symbol(DD, Decl(classAbstractDeclarations.d.ts, 10, 30))
+>BB : Symbol(BB, Decl(classAbstractDeclarations.d.ts, 6, 1))
+
+declare abstract class EE extends BB {}
+>EE : Symbol(EE, Decl(classAbstractDeclarations.d.ts, 12, 30))
+>BB : Symbol(BB, Decl(classAbstractDeclarations.d.ts, 6, 1))
+
+declare class FF extends CC {}
+>FF : Symbol(FF, Decl(classAbstractDeclarations.d.ts, 14, 39))
+>CC : Symbol(CC, Decl(classAbstractDeclarations.d.ts, 8, 39))
+
+declare abstract class GG extends CC {}
+>GG : Symbol(GG, Decl(classAbstractDeclarations.d.ts, 16, 30))
+>CC : Symbol(CC, Decl(classAbstractDeclarations.d.ts, 8, 39))
+
+declare abstract class AAA {}
+>AAA : Symbol(AAA, Decl(classAbstractDeclarations.d.ts, 18, 39))
+
+declare abstract class BBB extends AAA {}
+>BBB : Symbol(BBB, Decl(classAbstractDeclarations.d.ts, 20, 29))
+>AAA : Symbol(AAA, Decl(classAbstractDeclarations.d.ts, 18, 39))
+
+declare class CCC extends AAA {}
+>CCC : Symbol(CCC, Decl(classAbstractDeclarations.d.ts, 22, 41))
+>AAA : Symbol(AAA, Decl(classAbstractDeclarations.d.ts, 18, 39))
+

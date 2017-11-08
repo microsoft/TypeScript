@@ -45,7 +45,7 @@ var M;
 (function (M) {
     var N;
     (function (N) {
-        var Window = (function () {
+        var Window = /** @class */ (function () {
             function Window() {
             }
             return Window;
@@ -57,7 +57,7 @@ var M1;
 (function (M1) {
     var N;
     (function (N) {
-        var Window = (function () {
+        var Window = /** @class */ (function () {
             function Window() {
             }
             return Window;
@@ -67,19 +67,19 @@ var M1;
 })(M1 || (M1 = {}));
 var M2;
 (function (M2) {
-    var private1 = (function () {
+    var private1 = /** @class */ (function () {
         function private1() {
         }
         return private1;
     }());
-    var public1 = (function () {
+    var public1 = /** @class */ (function () {
         function public1() {
         }
         return public1;
     }());
     var m3;
     (function (m3) {
-        var public1 = (function () {
+        var public1 = /** @class */ (function () {
             function public1() {
             }
             return public1;

@@ -1,17 +1,26 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] | undefined {
         const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
-        return node && (getSemanticDocumentHighlights(node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile));
+        // Note that getTouchingWord indicates failure by returning the sourceFile node.
+        if (node === sourceFile) return undefined;
+
+        Debug.assert(node.parent !== undefined);
+
+        if (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent)) {
+            // For a JSX element, just highlight the matching tag, not all references.
+            const { openingElement, closingElement } = node.parent.parent;
+            const highlightSpans = [openingElement, closingElement].map(({ tagName }) => getHighlightSpanForNode(tagName, sourceFile));
+            return [{ fileName: sourceFile.fileName, highlightSpans }];
+        }
+
+        return getSemanticDocumentHighlights(node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile);
     }
 
     function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {
-        const start = node.getStart(sourceFile);
-        const end = node.getEnd();
-
         return {
             fileName: sourceFile.fileName,
-            textSpan: createTextSpanFromBounds(start, end),
+            textSpan: createTextSpanFromNode(node, sourceFile),
             kind: HighlightSpanKind.none
         };
     }
@@ -256,105 +265,83 @@ namespace ts.DocumentHighlights {
     }
 
     function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): Node[] {
-        const container = declaration.parent;
-
         // Make sure we only highlight the keyword when it makes sense to do so.
-        if (isAccessibilityModifier(modifier)) {
-            if (!(container.kind === SyntaxKind.ClassDeclaration ||
-                container.kind === SyntaxKind.ClassExpression ||
-                (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
-                return undefined;
-            }
-        }
-        else if (modifier === SyntaxKind.StaticKeyword) {
-            if (!(container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression)) {
-                return undefined;
-            }
-        }
-        else if (modifier === SyntaxKind.ExportKeyword || modifier === SyntaxKind.DeclareKeyword) {
-            if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
-                return undefined;
-            }
-        }
-        else if (modifier === SyntaxKind.AbstractKeyword) {
-            if (!(container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration)) {
-                return undefined;
-            }
-        }
-        else {
-            // unsupported modifier
+        if (!isLegalModifier(modifier, declaration)) {
             return undefined;
         }
 
-        const keywords: Node[] = [];
-        const modifierFlag: ModifierFlags = getFlagFromModifier(modifier);
+        const modifierFlag = modifierToFlag(modifier);
+        return mapDefined(getNodesToSearchForModifier(declaration, modifierFlag), node => {
+            if (getModifierFlags(node) & modifierFlag) {
+                const mod = find(node.modifiers, m => m.kind === modifier);
+                Debug.assert(!!mod);
+                return mod;
+            }
+        });
+    }
 
-        let nodes: Node[];
+    function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> {
+        const container = declaration.parent;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
+            case SyntaxKind.Block:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
                 // Container is either a class declaration or the declaration is a classDeclaration
                 if (modifierFlag & ModifierFlags.Abstract) {
-                    nodes = (<Node[]>(<ClassDeclaration>declaration).members).concat(declaration);
+                    return [...(<ClassDeclaration>declaration).members, declaration];
                 }
                 else {
-                    nodes = (<Block>container).statements;
+                    return (<ModuleBlock | SourceFile | Block | CaseClause | DefaultClause>container).statements;
                 }
-                break;
             case SyntaxKind.Constructor:
-                nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
-                    (<ClassDeclaration>container.parent).members);
-                break;
+                return [...(<ConstructorDeclaration>container).parameters, ...(<ClassDeclaration>container.parent).members];
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                nodes = (<ClassLikeDeclaration>container).members;
+                const nodes = (<ClassLikeDeclaration>container).members;
 
                 // If we're an accessibility modifier, we're in an instance member and should search
                 // the constructor's parameter list for instance members as well.
                 if (modifierFlag & ModifierFlags.AccessibilityModifier) {
-                    const constructor = forEach((<ClassLikeDeclaration>container).members, member => {
-                        return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
-                    });
-
+                    const constructor = find((<ClassLikeDeclaration>container).members, isConstructorDeclaration);
                     if (constructor) {
-                        nodes = nodes.concat(constructor.parameters);
+                        return [...nodes, ...constructor.parameters];
                     }
                 }
                 else if (modifierFlag & ModifierFlags.Abstract) {
-                    nodes = nodes.concat(container);
+                    return [...nodes, container];
                 }
-                break;
+                return nodes;
             default:
                 Debug.fail("Invalid container kind.");
         }
+    }
 
-        forEach(nodes, node => {
-            if (getModifierFlags(node) & modifierFlag) {
-                forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
-            }
-        });
-
-        return keywords;
-
-        function getFlagFromModifier(modifier: SyntaxKind) {
-            switch (modifier) {
-                case SyntaxKind.PublicKeyword:
-                    return ModifierFlags.Public;
-                case SyntaxKind.PrivateKeyword:
-                    return ModifierFlags.Private;
-                case SyntaxKind.ProtectedKeyword:
-                    return ModifierFlags.Protected;
-                case SyntaxKind.StaticKeyword:
-                    return ModifierFlags.Static;
-                case SyntaxKind.ExportKeyword:
-                    return ModifierFlags.Export;
-                case SyntaxKind.DeclareKeyword:
-                    return ModifierFlags.Ambient;
-                case SyntaxKind.AbstractKeyword:
-                    return ModifierFlags.Abstract;
-                default:
-                    Debug.fail();
-            }
+    function isLegalModifier(modifier: SyntaxKind, declaration: Node): boolean {
+        const container = declaration.parent;
+        switch (modifier) {
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.PublicKeyword:
+                switch (container.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
+                        return true;
+                    case SyntaxKind.Constructor:
+                        return declaration.kind === SyntaxKind.Parameter;
+                    default:
+                        return false;
+                }
+            case SyntaxKind.StaticKeyword:
+                return container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression;
+            case SyntaxKind.ExportKeyword:
+            case SyntaxKind.DeclareKeyword:
+                return container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile;
+            case SyntaxKind.AbstractKeyword:
+                return container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration;
+            default:
+                return false;
         }
     }
 
@@ -598,7 +585,7 @@ namespace ts.DocumentHighlights {
      */
     function isLabeledBy(node: Node, labelName: string) {
         for (let owner = node.parent; owner.kind === SyntaxKind.LabeledStatement; owner = owner.parent) {
-            if ((<LabeledStatement>owner).label.text === labelName) {
+            if ((<LabeledStatement>owner).label.escapedText === labelName) {
                 return true;
             }
         }

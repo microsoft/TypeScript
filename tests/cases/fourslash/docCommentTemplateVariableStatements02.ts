@@ -1,23 +1,5 @@
 /// <reference path='fourslash.ts' />
 
-const CRLF = "\r\n";
-/**
- * @returns the given value with '\n' normalized to '\r\n' and with no leading newline
- */
-function useCRLFAndStripLeadingNewline(str: string): string {
-    str = str.replace(/\r?\n/g, CRLF);
-    if (str.indexOf(CRLF) === 0) {
-        str = str.slice(CRLF.length);
-    }
-    return str;
-}
-
-function confirmNormalizedJsDoc(markerName: string, newTextOffset: number, template: string): void {
-    goTo.marker(markerName);
-    const normalized = useCRLFAndStripLeadingNewline(template);
-    verify.DocCommentTemplate(normalized, newTextOffset);
-}
-
 /////*a*/
 ////var a1 = 10, a2 = 20;
 ////
@@ -46,9 +28,7 @@ function confirmNormalizedJsDoc(markerName: string, newTextOffset: number, templ
 ////    bar: "20"
 ////}, f2 = null;
 
-for (const varName of "abcdef".split("")) {
-    confirmNormalizedJsDoc(varName, /*newTextOffset*/ 8, `
-/**
- * 
- */`);
+for (const varName of ["a", "b", "c", "d", "e", "f"]) {
+    verify.docCommentTemplateAt(varName, /*newTextOffset*/ 3,
+        "/** */");
 }

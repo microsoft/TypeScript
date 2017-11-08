@@ -3,3 +3,4 @@
 /// <reference lib="es2017.sharedmemory" />
 /// <reference lib="es2017.string" />
 /// <reference lib="es2017.intl" />
+/// <reference lib="es2017.typedarrays" />

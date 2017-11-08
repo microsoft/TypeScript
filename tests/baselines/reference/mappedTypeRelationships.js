@@ -67,14 +67,16 @@ function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) {
     y[k] = x[k];  // Error
 }
 
+type Thing = { a: string, b: string };
+
 function f30<T>(x: T, y: Partial<T>) {
     x = y;  // Error
     y = x;
 }
 
-function f31<T>(x: T, y: Partial<T>) {
-    x = y;  // Error
-    y = x;
+function f31<T extends Thing>(x: Partial<Thing>, y: Partial<T>) {
+    x = y;
+    y = x;  // Error
 }
 
 function f40<T>(x: T, y: Readonly<T>) {
@@ -82,9 +84,9 @@ function f40<T>(x: T, y: Readonly<T>) {
     y = x;
 }
 
-function f41<T>(x: T, y: Readonly<T>) {
+function f41<T extends Thing>(x: Readonly<Thing>, y: Readonly<T>) {
     x = y;
-    y = x;
+    y = x;  // Error
 }
 
 type Item = {
@@ -167,6 +169,18 @@ function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P i
     y = x;  // Error
 }
 
+function f80<T>(t: T): Partial<T> {
+    return t;
+}
+
+function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]> {
+    return t[k];
+}
+
+function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]> {
+    return t[k1][k2];
+}
+
 
 //// [mappedTypeRelationships.js]
 function f1(x, k) {
@@ -228,8 +242,8 @@ function f30(x, y) {
     y = x;
 }
 function f31(x, y) {
-    x = y; // Error
-    y = x;
+    x = y;
+    y = x; // Error
 }
 function f40(x, y) {
     x = y;
@@ -237,7 +251,7 @@ function f40(x, y) {
 }
 function f41(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f50(obj, key) {
     var item = obj[key];
@@ -287,6 +301,15 @@ function f76(x, y) {
     x = y;
     y = x; // Error
 }
+function f80(t) {
+    return t;
+}
+function f81(t, k) {
+    return t[k];
+}
+function f82(t, k1, k2) {
+    return t[k1][k2];
+}
 
 
 //// [mappedTypeRelationships.d.ts]
@@ -304,10 +327,14 @@ declare function f20<T>(x: T, y: Readonly<T>, k: keyof T): void;
 declare function f21<T, K extends keyof T>(x: T, y: Readonly<T>, k: K): void;
 declare function f22<T, U extends T>(x: T, y: Readonly<U>, k: keyof T): void;
 declare function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K): void;
+declare type Thing = {
+    a: string;
+    b: string;
+};
 declare function f30<T>(x: T, y: Partial<T>): void;
-declare function f31<T>(x: T, y: Partial<T>): void;
+declare function f31<T extends Thing>(x: Partial<Thing>, y: Partial<T>): void;
 declare function f40<T>(x: T, y: Readonly<T>): void;
-declare function f41<T>(x: T, y: Readonly<T>): void;
+declare function f41<T extends Thing>(x: Readonly<Thing>, y: Readonly<T>): void;
 declare type Item = {
     name: string;
 };
@@ -363,3 +390,6 @@ declare function f76<T, U extends T, K extends keyof T>(x: {
 }, y: {
     [P in K]: U[P];
 }): void;
+declare function f80<T>(t: T): Partial<T>;
+declare function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]>;
+declare function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]>;

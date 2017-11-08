@@ -45,25 +45,25 @@ interface Foo.I1 { }
 // import Foo = require("interfaceDeclaration5")
 var Foo;
 (function (Foo) {
-    var C1 = (function () {
+    var C1 = /** @class */ (function () {
         function C1() {
         }
         return C1;
     }());
     Foo.C1 = C1;
 })(Foo || (Foo = {}));
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;
 }());
 // Err - not implemented item
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
 }());
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;

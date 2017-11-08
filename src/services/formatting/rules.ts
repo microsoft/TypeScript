@@ -2,19 +2,8 @@
 
 /* @internal */
 namespace ts.formatting {
+    // tslint:disable variable-name (TODO)
     export class Rules {
-        public getRuleName(rule: Rule) {
-            const o: ts.MapLike<any> = <any>this;
-            for (const name in o) {
-                if (o[name] === rule) {
-                    return name;
-                }
-            }
-            throw new Error("Unknown rule");
-        }
-
-        [name: string]: any;
-
         public IgnoreBeforeComment: Rule;
         public IgnoreAfterLineComment: Rule;
 
@@ -195,6 +184,7 @@ namespace ts.formatting {
         // Insert space after opening and before closing nonempty parenthesis
         public SpaceAfterOpenParen: Rule;
         public SpaceBeforeCloseParen: Rule;
+        public SpaceBetweenOpenParens: Rule;
         public NoSpaceBetweenParens: Rule;
         public NoSpaceAfterOpenParen: Rule;
         public NoSpaceBeforeCloseParen: Rule;
@@ -290,15 +280,15 @@ namespace ts.formatting {
 
             // Place a space before open brace in a function declaration
             this.FunctionOpenBraceLeftTokenRange = Shared.TokenRange.AnyIncludingMultilineComments;
-            this.SpaceBeforeOpenBraceInFunction = new Rule(RuleDescriptor.create2(this.FunctionOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext, Rules.IsBeforeBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
+            this.SpaceBeforeOpenBraceInFunction = new Rule(RuleDescriptor.create2(this.FunctionOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.isOptionDisabledOrUndefinedOrTokensOnSameLine("placeOpenBraceOnNewLineForFunctions"), Rules.IsFunctionDeclContext, Rules.IsBeforeBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Place a space before open brace in a TypeScript declaration that has braces as children (class, module, enum, etc)
             this.TypeScriptOpenBraceLeftTokenRange = Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ClassKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ImportKeyword]);
-            this.SpaceBeforeOpenBraceInTypeScriptDeclWithBlock = new Rule(RuleDescriptor.create2(this.TypeScriptOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsTypeScriptDeclWithBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
+            this.SpaceBeforeOpenBraceInTypeScriptDeclWithBlock = new Rule(RuleDescriptor.create2(this.TypeScriptOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.isOptionDisabledOrUndefinedOrTokensOnSameLine("placeOpenBraceOnNewLineForFunctions"), Rules.IsTypeScriptDeclWithBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Place a space before open brace in a control flow construct
             this.ControlOpenBraceLeftTokenRange = Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.DoKeyword, SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword, SyntaxKind.ElseKeyword]);
-            this.SpaceBeforeOpenBraceInControl = new Rule(RuleDescriptor.create2(this.ControlOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsControlDeclContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
+            this.SpaceBeforeOpenBraceInControl = new Rule(RuleDescriptor.create2(this.ControlOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.isOptionDisabledOrUndefinedOrTokensOnSameLine("placeOpenBraceOnNewLineForControlBlocks"), Rules.IsControlDeclContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Insert a space after { and before } in single-line contexts, but remove space from empty object literals {}.
             this.SpaceAfterOpenBrace = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBraceToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), Rules.IsBraceWrappedContext), RuleAction.Space));
@@ -457,6 +447,7 @@ namespace ts.formatting {
             // Insert space after opening and before closing nonempty parenthesis
             this.SpaceAfterOpenParen = new Rule(RuleDescriptor.create3(SyntaxKind.OpenParenToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
             this.SpaceBeforeCloseParen = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
+            this.SpaceBetweenOpenParens = new Rule(RuleDescriptor.create1(SyntaxKind.OpenParenToken, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
             this.NoSpaceBetweenParens = new Rule(RuleDescriptor.create1(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterOpenParen = new Rule(RuleDescriptor.create3(SyntaxKind.OpenParenToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceBeforeCloseParen = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
@@ -544,7 +535,7 @@ namespace ts.formatting {
                 this.SpaceAfterComma, this.NoSpaceAfterComma,
                 this.SpaceAfterAnonymousFunctionKeyword, this.NoSpaceAfterAnonymousFunctionKeyword,
                 this.SpaceAfterKeywordInControl, this.NoSpaceAfterKeywordInControl,
-                this.SpaceAfterOpenParen, this.SpaceBeforeCloseParen, this.NoSpaceBetweenParens, this.NoSpaceAfterOpenParen, this.NoSpaceBeforeCloseParen,
+                this.SpaceAfterOpenParen, this.SpaceBeforeCloseParen, this.SpaceBetweenOpenParens, this.NoSpaceBetweenParens, this.NoSpaceAfterOpenParen, this.NoSpaceBeforeCloseParen,
                 this.SpaceAfterOpenBracket, this.SpaceBeforeCloseBracket, this.NoSpaceBetweenBrackets, this.NoSpaceAfterOpenBracket, this.NoSpaceBeforeCloseBracket,
                 this.SpaceAfterOpenBrace, this.SpaceBeforeCloseBrace, this.NoSpaceBetweenEmptyBraceBrackets, this.NoSpaceAfterOpenBrace, this.NoSpaceBeforeCloseBrace,
                 this.SpaceAfterTemplateHeadAndMiddle, this.SpaceBeforeTemplateMiddleAndTail, this.NoSpaceAfterTemplateHeadAndMiddle, this.NoSpaceBeforeTemplateMiddleAndTail,
@@ -567,6 +558,16 @@ namespace ts.formatting {
                 this.SpaceAfterSemicolon,
                 this.SpaceBetweenStatements, this.SpaceAfterTryFinally
             ];
+
+            if (Debug.isDebugging) {
+                const o: ts.MapLike<any> = <any>this;
+                for (const name in o) {
+                    const rule = o[name];
+                    if (rule instanceof Rule) {
+                        rule.debugName = name;
+                    }
+                }
+            }
         }
 
         ///
@@ -583,6 +584,10 @@ namespace ts.formatting {
 
         static IsOptionDisabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
             return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName];
+        }
+
+        static isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
+            return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
         }
 
         static IsOptionEnabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
@@ -644,25 +649,8 @@ namespace ts.formatting {
             return context.contextNode.kind === SyntaxKind.ConditionalExpression;
         }
 
-        static IsSameLineTokenOrBeforeMultilineBlockContext(context: FormattingContext): boolean {
-            //// This check is mainly used inside SpaceBeforeOpenBraceInControl and SpaceBeforeOpenBraceInFunction.
-            ////
-            //// Ex:
-            //// if (1)     { ....
-            ////      * ) and { are on the same line so apply the rule. Here we don't care whether it's same or multi block context
-            ////
-            //// Ex:
-            //// if (1)
-            //// { ... }
-            ////      * ) and { are on different lines. We only need to format if the block is multiline context. So in this case we don't format.
-            ////
-            //// Ex:
-            //// if (1)
-            //// { ...
-            //// }
-            ////      * ) and { are on different lines. We only need to format if the block is multiline context. So in this case we format.
-
-            return context.TokensAreOnSameLine() || Rules.IsBeforeMultilineBlockContext(context);
+        static IsSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolean {
+            return context.TokensAreOnSameLine() || Rules.IsBeforeBlockContext(context);
         }
 
         static IsBraceWrappedContext(context: FormattingContext): boolean {
@@ -768,9 +756,8 @@ namespace ts.formatting {
                     return true;
                 case SyntaxKind.Block: {
                     const blockParent = context.currentTokenParent.parent;
-                    if (blockParent.kind !== SyntaxKind.ArrowFunction &&
-                        blockParent.kind !== SyntaxKind.FunctionExpression
-                    ) {
+                    // In a codefix scenario, we can't rely on parents being set. So just always return true.
+                    if (!blockParent || blockParent.kind !== SyntaxKind.ArrowFunction && blockParent.kind !== SyntaxKind.FunctionExpression) {
                         return true;
                     }
                 }
@@ -863,7 +850,7 @@ namespace ts.formatting {
         }
 
         static NodeIsInDecoratorContext(node: Node): boolean {
-            while (isPartOfExpression(node)) {
+            while (isExpressionNode(node)) {
                 node = node.parent;
             }
             return node.kind === SyntaxKind.Decorator;

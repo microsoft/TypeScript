@@ -7,7 +7,7 @@ var b: C<Y>;
 
 
 //// [generics4NoError.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

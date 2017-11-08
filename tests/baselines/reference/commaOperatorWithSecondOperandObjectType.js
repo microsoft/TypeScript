@@ -45,7 +45,7 @@ var BOOLEAN;
 var NUMBER;
 var STRING;
 var OBJECT;
-var CLASS = (function () {
+var CLASS = /** @class */ (function () {
     function CLASS() {
     }
     return CLASS;

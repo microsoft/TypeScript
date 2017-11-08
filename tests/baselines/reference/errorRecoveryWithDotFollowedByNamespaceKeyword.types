@@ -1,0 +1,22 @@
+=== tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts ===
+namespace A {
+>A : typeof A
+
+    function foo() {
+>foo : () => void
+
+        if (true) {
+>true : true
+
+            B.
+>B. : any
+>B : typeof B
+            
+
+        namespace B {
+> : any
+>B : typeof B
+
+            export function baz() { }
+>baz : () => void
+}

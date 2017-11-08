@@ -1,0 +1,102 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts ===
+class C<T extends number> {
+>C : Symbol(C, Decl(derivedGenericClassWithAny.ts, 0, 0))
+>T : Symbol(T, Decl(derivedGenericClassWithAny.ts, 0, 8))
+
+    x: T;
+>x : Symbol(C.x, Decl(derivedGenericClassWithAny.ts, 0, 27))
+>T : Symbol(T, Decl(derivedGenericClassWithAny.ts, 0, 8))
+
+    get X(): T { return null; }
+>X : Symbol(C.X, Decl(derivedGenericClassWithAny.ts, 1, 9))
+>T : Symbol(T, Decl(derivedGenericClassWithAny.ts, 0, 8))
+
+    foo(): T {
+>foo : Symbol(C.foo, Decl(derivedGenericClassWithAny.ts, 2, 31))
+>T : Symbol(T, Decl(derivedGenericClassWithAny.ts, 0, 8))
+
+        return null;
+    }
+}
+
+class D extends C<number> {
+>D : Symbol(D, Decl(derivedGenericClassWithAny.ts, 6, 1))
+>C : Symbol(C, Decl(derivedGenericClassWithAny.ts, 0, 0))
+
+    x: any;
+>x : Symbol(D.x, Decl(derivedGenericClassWithAny.ts, 8, 27))
+
+    get X(): any {
+>X : Symbol(D.X, Decl(derivedGenericClassWithAny.ts, 9, 11))
+
+        return null;
+    }
+    foo(): any {
+>foo : Symbol(D.foo, Decl(derivedGenericClassWithAny.ts, 12, 5))
+
+        return 1;
+    }
+
+    static y: any;
+>y : Symbol(D.y, Decl(derivedGenericClassWithAny.ts, 15, 5))
+
+    static get Y(): any {
+>Y : Symbol(D.Y, Decl(derivedGenericClassWithAny.ts, 17, 18))
+
+        return null;
+    }
+    static bar(): any {
+>bar : Symbol(D.bar, Decl(derivedGenericClassWithAny.ts, 20, 5))
+
+        return null;
+    }
+}
+
+// if D is a valid class definition than E is now not safe tranisitively through C
+class E<T extends string> extends D {
+>E : Symbol(E, Decl(derivedGenericClassWithAny.ts, 24, 1))
+>T : Symbol(T, Decl(derivedGenericClassWithAny.ts, 27, 8))
+>D : Symbol(D, Decl(derivedGenericClassWithAny.ts, 6, 1))
+
+    x: T;
+>x : Symbol(E.x, Decl(derivedGenericClassWithAny.ts, 27, 37))
+>T : Symbol(T, Decl(derivedGenericClassWithAny.ts, 27, 8))
+
+    get X(): T { return ''; } // error
+>X : Symbol(E.X, Decl(derivedGenericClassWithAny.ts, 28, 9))
+>T : Symbol(T, Decl(derivedGenericClassWithAny.ts, 27, 8))
+
+    foo(): T {
+>foo : Symbol(E.foo, Decl(derivedGenericClassWithAny.ts, 29, 29))
+>T : Symbol(T, Decl(derivedGenericClassWithAny.ts, 27, 8))
+
+        return ''; // error
+    }
+}
+
+var c: C<number>;
+>c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 3))
+>C : Symbol(C, Decl(derivedGenericClassWithAny.ts, 0, 0))
+
+var d: D;
+>d : Symbol(d, Decl(derivedGenericClassWithAny.ts, 36, 3))
+>D : Symbol(D, Decl(derivedGenericClassWithAny.ts, 6, 1))
+
+var e: E<string>;
+>e : Symbol(e, Decl(derivedGenericClassWithAny.ts, 37, 3))
+>E : Symbol(E, Decl(derivedGenericClassWithAny.ts, 24, 1))
+
+c = d;
+>c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 3))
+>d : Symbol(d, Decl(derivedGenericClassWithAny.ts, 36, 3))
+
+c = e;
+>c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 3))
+>e : Symbol(e, Decl(derivedGenericClassWithAny.ts, 37, 3))
+
+var r = c.foo(); // e.foo would return string
+>r : Symbol(r, Decl(derivedGenericClassWithAny.ts, 41, 3))
+>c.foo : Symbol(C.foo, Decl(derivedGenericClassWithAny.ts, 2, 31))
+>c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 3))
+>foo : Symbol(C.foo, Decl(derivedGenericClassWithAny.ts, 2, 31))
+

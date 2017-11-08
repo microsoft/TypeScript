@@ -21,7 +21,7 @@ c.x1(1, (x: string) => { return 1; } );
 c.x1(1, (x: number) => { return 1; } );
 
 //// [overloadOnConstNoStringImplementation2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.x1 = function (a, callback) {

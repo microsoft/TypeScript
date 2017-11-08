@@ -1,0 +1,42 @@
+=== tests/cases/compiler/file1.ts ===
+export class Calculator {
+>Calculator : Calculator
+
+    handleChar() {}
+>handleChar : () => void
+}
+
+export function test() {
+>test : () => void
+
+}
+
+export function test2() {
+>test2 : () => void
+
+}
+
+=== tests/cases/compiler/file2.ts ===
+import {Calculator as calc, test as t1, test2 as t2} from "./file1"
+>Calculator : typeof calc
+>calc : typeof calc
+>test : () => void
+>t1 : () => void
+>test2 : () => void
+>t2 : () => void
+
+var x = new calc();
+>x : calc
+>new calc() : calc
+>calc : typeof calc
+
+x.handleChar();
+>x.handleChar() : void
+>x.handleChar : () => void
+>x : calc
+>handleChar : () => void
+
+t1();
+>t1() : void
+>t1 : () => void
+

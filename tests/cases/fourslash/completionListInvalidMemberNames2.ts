@@ -3,9 +3,8 @@
 ////enum Foo {
 ////    X, Y, '☆'
 ////}
-////var x = Foo./**/
+////Foo./*a*/;
+////Foo["/*b*/"];
 
-goTo.marker();
-verify.completionListContains("X");
-verify.completionListContains("Y");
-verify.completionListCount(2);
+verify.completionsAt("a", ["X", "Y"]);
+verify.completionsAt("b", ["X", "Y", "☆"]);

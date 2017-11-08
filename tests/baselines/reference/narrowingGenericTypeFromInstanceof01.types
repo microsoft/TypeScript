@@ -41,9 +41,9 @@ function test<T>(x: A<T> | B<T>) {
 >B : typeof B
 
         acceptA(x);
->acceptA(x) : void
+>acceptA(x) : any
 >acceptA : <T>(a: A<T>) => void
->x : A<T>
+>x : B<T>
     }
 
     if (x instanceof A) {
@@ -54,17 +54,6 @@ function test<T>(x: A<T> | B<T>) {
         acceptA(x);
 >acceptA(x) : void
 >acceptA : <T>(a: A<T>) => void
->x : A<any>
-    }
-
-    if (x instanceof B) {
->x instanceof B : boolean
->x : A<T> | B<T>
->B : typeof B
-
-        acceptB(x);
->acceptB(x) : void
->acceptB : <T>(b: B<T>) => void
 >x : A<T>
     }
 
@@ -76,6 +65,17 @@ function test<T>(x: A<T> | B<T>) {
         acceptB(x);
 >acceptB(x) : void
 >acceptB : <T>(b: B<T>) => void
->x : A<T>
+>x : B<T>
+    }
+
+    if (x instanceof B) {
+>x instanceof B : boolean
+>x : A<T> | B<T>
+>B : typeof B
+
+        acceptB(x);
+>acceptB(x) : void
+>acceptB : <T>(b: B<T>) => void
+>x : B<T>
     }
 }

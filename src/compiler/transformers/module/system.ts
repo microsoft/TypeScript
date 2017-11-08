@@ -146,8 +146,7 @@ namespace ts {
         function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {
             const groupIndices = createMap<number>();
             const dependencyGroups: DependencyGroup[] = [];
-            for (let i = 0; i < externalImports.length; i++) {
-                const externalImport = externalImports[i];
+            for (const externalImport of externalImports) {
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
                 if (externalModuleName) {
                     const text = externalModuleName.text;
@@ -225,7 +224,7 @@ namespace ts {
             startLexicalEnvironment();
 
             // Add any prologue directives.
-            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
             const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
@@ -324,7 +323,7 @@ namespace ts {
             const exportedNames: ObjectLiteralElementLike[] = [];
             if (moduleInfo.exportedNames) {
                 for (const exportedLocalName of moduleInfo.exportedNames) {
-                    if (exportedLocalName.text === "default") {
+                    if (exportedLocalName.escapedText === "default") {
                         continue;
                     }
 
@@ -353,7 +352,7 @@ namespace ts {
                     // write name of indirectly exported entry, i.e. 'export {x} from ...'
                     exportedNames.push(
                         createPropertyAssignment(
-                            createLiteral((element.name || element.propertyName).text),
+                            createLiteral(idText(element.name || element.propertyName)),
                             createTrue()
                         )
                     );
@@ -504,10 +503,10 @@ namespace ts {
                                 for (const e of (<ExportDeclaration>entry).exportClause.elements) {
                                     properties.push(
                                         createPropertyAssignment(
-                                            createLiteral(e.name.text),
+                                            createLiteral(idText(e.name)),
                                             createElementAccess(
                                                 parameterName,
-                                                createLiteral((e.propertyName || e.name).text)
+                                                createLiteral(idText(e.propertyName || e.name))
                                             )
                                         )
                                     );
@@ -826,7 +825,7 @@ namespace ts {
                     /*needsValue*/ false,
                     createAssignment
                 )
-                : createAssignment(node.name, visitNode(node.initializer, destructuringAndImportCallVisitor, isExpression));
+                : node.initializer ? createAssignment(node.name, visitNode(node.initializer, destructuringAndImportCallVisitor, isExpression)) : node.name;
         }
 
         /**
@@ -1028,7 +1027,7 @@ namespace ts {
                 let excludeName: string;
                 if (exportSelf) {
                     statements = appendExportStatement(statements, decl.name, getLocalName(decl));
-                    excludeName = decl.name.text;
+                    excludeName = idText(decl.name);
                 }
 
                 statements = appendExportsOfDeclaration(statements, decl, excludeName);
@@ -1055,7 +1054,7 @@ namespace ts {
             if (hasModifier(decl, ModifierFlags.Export)) {
                 const exportName = hasModifier(decl, ModifierFlags.Default) ? createLiteral("default") : decl.name;
                 statements = appendExportStatement(statements, exportName, getLocalName(decl));
-                excludeName = exportName.text;
+                excludeName = getTextOfIdentifierOrLiteral(exportName);
             }
 
             if (decl.name) {
@@ -1080,10 +1079,10 @@ namespace ts {
             }
 
             const name = getDeclarationName(decl);
-            const exportSpecifiers = moduleInfo.exportSpecifiers.get(name.text);
+            const exportSpecifiers = moduleInfo.exportSpecifiers.get(idText(name));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
-                    if (exportSpecifier.name.text !== excludeName) {
+                    if (exportSpecifier.name.escapedText !== excludeName) {
                         statements = appendExportStatement(statements, exportSpecifier.name, name);
                     }
                 }
@@ -1132,7 +1131,8 @@ namespace ts {
          */
         function createExportExpression(name: Identifier | StringLiteral, value: Expression) {
             const exportName = isIdentifier(name) ? createLiteral(name) : name;
-            return createCall(exportFunction, /*typeArguments*/ undefined, [exportName, value]);
+            setEmitFlags(value, getEmitFlags(value) | EmitFlags.NoComments);
+            return setCommentRange(createCall(exportFunction, /*typeArguments*/ undefined, [exportName, value]), value);
         }
 
         //
@@ -1295,6 +1295,9 @@ namespace ts {
                 let expressions: Expression[];
                 for (const variable of node.declarations) {
                     expressions = append(expressions, transformInitializedVariable(variable, /*isExportedDeclaration*/ false));
+                    if (!variable.initializer) {
+                        hoistBindingElement(variable);
+                    }
                 }
 
                 return expressions ? inlineExpressions(expressions) : createOmittedExpression();
@@ -1494,7 +1497,7 @@ namespace ts {
                     createIdentifier("import")
                 ),
                 /*typeArguments*/ undefined,
-                node.arguments
+                some(node.arguments) ? [visitNode(node.arguments[0], destructuringAndImportCallVisitor)] : []
             );
         }
 

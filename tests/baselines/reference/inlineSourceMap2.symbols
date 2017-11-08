@@ -1,0 +1,9 @@
+=== tests/cases/compiler/inlineSourceMap2.ts ===
+// configuration errors
+
+var x = 0;
+>x : Symbol(x, Decl(inlineSourceMap2.ts, 2, 3))
+
+console.log(x);
+>x : Symbol(x, Decl(inlineSourceMap2.ts, 2, 3))
+

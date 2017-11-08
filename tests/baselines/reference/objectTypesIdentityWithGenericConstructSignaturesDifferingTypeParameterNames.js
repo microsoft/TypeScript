@@ -74,13 +74,13 @@ function foo14(x: any) { }
 
 //// [objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterNames.js]
 // object types are identical structurally
-var B = (function () {
+var B = /** @class */ (function () {
     function B(x) {
         return null;
     }
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         return null;
     }

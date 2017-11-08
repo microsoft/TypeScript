@@ -1,0 +1,11 @@
+=== tests/cases/compiler/duplicateTypeParameters3.ts ===
+interface X {
+>X : Symbol(X, Decl(duplicateTypeParameters3.ts, 0, 0))
+
+x: () => <A, A>() => void;
+>x : Symbol(X.x, Decl(duplicateTypeParameters3.ts, 0, 13))
+>A : Symbol(A, Decl(duplicateTypeParameters3.ts, 1, 10), Decl(duplicateTypeParameters3.ts, 1, 12))
+>A : Symbol(A, Decl(duplicateTypeParameters3.ts, 1, 10), Decl(duplicateTypeParameters3.ts, 1, 12))
+}
+ 
+

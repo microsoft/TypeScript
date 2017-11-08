@@ -1,0 +1,7 @@
+=== tests/cases/compiler/ExportAssignment8.ts ===
+export = B;
+>B : No type information available!
+
+export class C {
+>C : C
+}

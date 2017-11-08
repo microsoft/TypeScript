@@ -42,7 +42,7 @@ var i:I1 = function (n) {return n;}
 
 //// [gettersAndSetters.js]
 // classes
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.fooBack = "";
         this.bazBack = "";

@@ -44,19 +44,19 @@ var arr3Tuple = [3, "three"]; // [number, string]
 var arr4Tuple = [3, "three", "hello"]; // [number, string, string]
 var arrEmpty = [];
 var arr5Tuple = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function () { };
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.foo2 = function () { };
     return D;
 }());
-var E = (function (_super) {
+var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -64,7 +64,7 @@ var E = (function (_super) {
     E.prototype.foo3 = function () { };
     return E;
 }(C));
-var F = (function (_super) {
+var F = /** @class */ (function (_super) {
     __extends(F, _super);
     function F() {
         return _super !== null && _super.apply(this, arguments) || this;

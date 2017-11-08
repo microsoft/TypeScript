@@ -295,13 +295,13 @@ verify.completionListContains('f3', 'function f3(a: number): number (+1 overload
 verify.completionListContains('f4', 'function f4(a: number): number (+1 overload)', 'this is signature 4 - with number parameter');
 
 goTo.marker('18');
-verify.completionListContains('i1', 'interface i1', '');
+verify.not.completionListContains('i1', 'interface i1', '');
 verify.completionListContains('i1_i', 'var i1_i: new i1(b: number) => any (+1 overload)', '');
-verify.completionListContains('i2', 'interface i2', '');
+verify.not.completionListContains('i2', 'interface i2', '');
 verify.completionListContains('i2_i', 'var i2_i: new i2(a: string) => any (+1 overload)', '');
-verify.completionListContains('i3', 'interface i3', '');
+verify.not.completionListContains('i3', 'interface i3', '');
 verify.completionListContains('i3_i', 'var i3_i: new i3(a: string) => any (+1 overload)', 'new 1');
-verify.completionListContains('i4', 'interface i4', '');
+verify.not.completionListContains('i4', 'interface i4', '');
 verify.completionListContains('i4_i', 'var i4_i: new i4(a: string) => any (+1 overload)', '');
 
 goTo.marker('19');

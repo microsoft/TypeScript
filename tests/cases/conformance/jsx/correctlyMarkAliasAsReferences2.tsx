@@ -1,6 +1,7 @@
 // @target: es2017
 // @jsx: react
 // @moduleResolution: node
+// @skipLibCheck: true
 // @libFiles: react.d.ts,lib.d.ts
 
 // @filename: declaration.d.ts

@@ -19,22 +19,22 @@ var c = c3;
 var d = c4;
 
 //// [staticPrototypePropertyOnClass.js]
-var c1 = (function () {
+var c1 = /** @class */ (function () {
     function c1() {
     }
     return c1;
 }());
-var c2 = (function () {
+var c2 = /** @class */ (function () {
     function c2() {
     }
     return c2;
 }());
-var c3 = (function () {
+var c3 = /** @class */ (function () {
     function c3() {
     }
     return c3;
 }());
-var c4 = (function () {
+var c4 = /** @class */ (function () {
     function c4(param) {
     }
     return c4;

@@ -1,0 +1,93 @@
+=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts ===
+module m {
+>m : Symbol(m, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 0))
+
+    class private1 {
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+    }
+    module m2 {
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+
+        export class public1 {
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+        }
+    }
+
+    export var x: {
+>x : Symbol(x, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 8, 14))
+
+        x: private1;
+>x : Symbol(x, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 8, 19))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+
+        y: m2.public1;
+>y : Symbol(y, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 9, 20))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+>public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+
+        (): m2.public1[];
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+>public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+
+        method(): private1;
+>method : Symbol(method, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 11, 25))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+
+        [n: number]: private1;
+>n : Symbol(n, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 13, 9))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+
+        [s: string]: m2.public1;
+>s : Symbol(s, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 14, 9))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+>public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+
+    };
+    export var x2 = {
+>x2 : Symbol(x2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 16, 14))
+
+        x: new private1(),
+>x : Symbol(x, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 16, 21))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+
+        y: new m2.public1(),
+>y : Symbol(y, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 17, 26))
+>m2.public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+>public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+
+        method() {
+>method : Symbol(method, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 18, 28))
+
+            return new private1();
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+        }
+    };
+    export var x3 = x;
+>x3 : Symbol(x3, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 23, 14))
+>x : Symbol(x, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 8, 14))
+
+    // Function type
+    export var y: (a: private1) => m2.public1;
+>y : Symbol(y, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 26, 14))
+>a : Symbol(a, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 26, 19))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+>public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+
+    export var y2 = y;
+>y2 : Symbol(y2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 27, 14))
+>y : Symbol(y, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 26, 14))
+
+    // constructor type
+    export var z: new (a: private1) => m2.public1;
+>z : Symbol(z, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 30, 14))
+>a : Symbol(a, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 30, 23))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+>public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+
+    export var z2 = z;
+>z2 : Symbol(z2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 31, 14))
+>z : Symbol(z, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 30, 14))
+}

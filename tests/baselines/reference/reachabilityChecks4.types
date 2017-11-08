@@ -1,0 +1,34 @@
+=== tests/cases/compiler/reachabilityChecks4.ts ===
+function foo(x, y) {
+>foo : (x: any, y: any) => 1 | 2 | 3
+>x : any
+>y : any
+
+    switch (x) {
+>x : any
+
+        case 1:
+>1 : 1
+
+        case 2:
+>2 : 2
+
+            return 1;
+>1 : 1
+
+        case 3:
+>3 : 3
+
+            if (y) {
+>y : any
+
+                return 2;
+>2 : 2
+            }
+        case 4:
+>4 : 4
+
+            return 3;
+>3 : 3
+    }
+}

@@ -7,11 +7,15 @@ function endsWith(s: string, suffix: string) {
     return s.lastIndexOf(suffix, s.length - suffix.length) !== -1;
 }
 
+function isStringEnum(declaration: ts.EnumDeclaration) {
+    return declaration.members.length && declaration.members.every(m => m.initializer && m.initializer.kind === ts.SyntaxKind.StringLiteral);
+}
+
 class DeclarationsWalker {
     private visitedTypes: ts.Type[] = [];
     private text = "";
     private removedTypes: ts.Type[] = [];
-    
+
     private constructor(private typeChecker: ts.TypeChecker, private protocolFile: ts.SourceFile) {
     }
 
@@ -19,7 +23,7 @@ class DeclarationsWalker {
         let text = "declare namespace ts.server.protocol {\n";
         var walker = new DeclarationsWalker(typeChecker, protocolFile);
         walker.visitTypeNodes(protocolFile);
-        text = walker.text 
+        text = walker.text
             ? `declare namespace ts.server.protocol {\n${walker.text}}`
             : "";
         if (walker.removedTypes) {
@@ -47,22 +51,25 @@ class DeclarationsWalker {
             return this.processType((<any>type).typeArguments[0]);
         }
         else {
-            for (const decl of s.getDeclarations()) {
-                const sourceFile = decl.getSourceFile();
-                if (sourceFile === this.protocolFile || path.basename(sourceFile.fileName) === "lib.d.ts") {
-                    return;
-                }
-                if (decl.kind === ts.SyntaxKind.EnumDeclaration) {
-                    this.removedTypes.push(type);
-                    return;
-                }
-                else {
-                    // splice declaration in final d.ts file
-                    let text = decl.getFullText();
-                    this.text += `${text}\n`;
-                    // recursively pull all dependencies into result dts file
+            const declarations = s.getDeclarations();
+            if (declarations) {
+                for (const decl of declarations) {
+                    const sourceFile = decl.getSourceFile();
+                    if (sourceFile === this.protocolFile || path.basename(sourceFile.fileName) === "lib.d.ts") {
+                        return;
+                    }
+                    if (decl.kind === ts.SyntaxKind.EnumDeclaration && !isStringEnum(decl as ts.EnumDeclaration)) {
+                        this.removedTypes.push(type);
+                        return;
+                    }
+                    else {
+                        // splice declaration in final d.ts file
+                        let text = decl.getFullText();
+                        this.text += `${text}\n`;
+                        // recursively pull all dependencies into result dts file
 
-                    this.visitTypeNodes(decl);
+                        this.visitTypeNodes(decl);
+                    }
                 }
             }
         }
@@ -91,7 +98,7 @@ class DeclarationsWalker {
                         for (const type of heritageClauses[0].types) {
                             this.processTypeOfNode(type);
                         }
-                    } 
+                    }
                     break;
             }
         }
@@ -110,10 +117,10 @@ class DeclarationsWalker {
                 this.processType(type);
             }
         }
-    } 
+    }
 }
 
-function generateProtocolFile(protocolTs: string, typeScriptServicesDts: string): string {
+function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptServicesDts: string) {
     const options = { target: ts.ScriptTarget.ES5, declaration: true, noResolve: true, types: <string[]>[], stripInternal: true };
 
     /**
@@ -163,14 +170,17 @@ function generateProtocolFile(protocolTs: string, typeScriptServicesDts: string)
     protocolDts += "\nimport protocol = ts.server.protocol;";
     protocolDts += "\nexport = protocol;";
     protocolDts += "\nexport as namespace protocol;";
+
     // do sanity check and try to compile generated text as standalone program
     const sanityCheckProgram = getProgramWithProtocolText(protocolDts, /*includeTypeScriptServices*/ false);
     const diagnostics = [...sanityCheckProgram.getSyntacticDiagnostics(), ...sanityCheckProgram.getSemanticDiagnostics(), ...sanityCheckProgram.getGlobalDiagnostics()];
+
+    ts.sys.writeFile(outputFile, protocolDts);
+
     if (diagnostics.length) {
         const flattenedDiagnostics = diagnostics.map(d => `${ts.flattenDiagnosticMessageText(d.messageText, "\n")} at ${d.file.fileName} line ${d.start}`).join("\n");
         throw new Error(`Unexpected errors during sanity check: ${flattenedDiagnostics}`);
     }
-    return protocolDts;
 }
 
 if (process.argv.length < 5) {
@@ -181,5 +191,4 @@ if (process.argv.length < 5) {
 const protocolTs = process.argv[2];
 const typeScriptServicesDts = process.argv[3];
 const outputFile = process.argv[4];
-const generatedProtocolDts = generateProtocolFile(protocolTs, typeScriptServicesDts);
-ts.sys.writeFile(outputFile, generatedProtocolDts);
+writeProtocolFile(outputFile, protocolTs, typeScriptServicesDts);

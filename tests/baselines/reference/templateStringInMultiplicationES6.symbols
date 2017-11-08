@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/templates/templateStringInMultiplicationES6.ts ===
+var x = 1 * `abc${ 1 }def`;
+>x : Symbol(x, Decl(templateStringInMultiplicationES6.ts, 0, 3))
+

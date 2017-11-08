@@ -31,7 +31,7 @@ namespace ts.BreakpointResolver {
         }
 
         // Cannot set breakpoint in ambient declarations
-        if (isInAmbientContext(tokenAtLocation)) {
+        if (tokenAtLocation.flags & NodeFlags.Ambient) {
             return undefined;
         }
 
@@ -146,7 +146,7 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.ForOfStatement:
                         // span in initializer
-                        return spanInInitializerOfForLike(<ForOfStatement | ForInStatement>node);
+                        return spanInInitializerOfForLike(<ForOfStatement>node);
 
                     case SyntaxKind.SwitchStatement:
                         // span on switch(...)
@@ -297,7 +297,7 @@ namespace ts.BreakpointResolver {
                             }
                         }
 
-                        if (isPartOfExpression(node)) {
+                        if (isExpressionNode(node)) {
                             switch (node.parent.kind) {
                                 case SyntaxKind.DoStatement:
                                     // Set span as if on while keyword

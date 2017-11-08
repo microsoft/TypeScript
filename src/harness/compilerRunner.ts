@@ -11,19 +11,13 @@ const enum CompilerTestType {
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = "tests/cases";
     private testSuiteName: TestRunnerKind;
-    private errors: boolean;
     private emit: boolean;
-    private decl: boolean;
-    private output: boolean;
 
     public options: string;
 
     constructor(public testType: CompilerTestType) {
         super();
-        this.errors = true;
         this.emit = true;
-        this.decl = true;
-        this.output = true;
         if (testType === CompilerTestType.Conformance) {
             this.testSuiteName = "conformance";
         }
@@ -54,7 +48,7 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     public checkTestCodeOutput(fileName: string) {
-        describe("compiler tests for " + fileName, () => {
+        describe(`${this.testSuiteName} tests for ${fileName}`, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
             // Everything declared here should be cleared out in the "after" callback.
             let justName: string;
@@ -64,6 +58,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             let result: Harness.Compiler.CompilerResult;
             let options: ts.CompilerOptions;
+            let tsConfigFiles: Harness.Compiler.TestFile[];
             // equivalent to the files that will be passed on the command line
             let toBeCompiled: Harness.Compiler.TestFile[];
             // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
@@ -77,46 +72,49 @@ class CompilerBaselineRunner extends RunnerBase {
                 const units = testCaseContent.testUnitData;
                 harnessSettings = testCaseContent.settings;
                 let tsConfigOptions: ts.CompilerOptions;
+                tsConfigFiles = [];
                 if (testCaseContent.tsConfig) {
                     assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
 
-                    tsConfigOptions = ts.clone(testCaseContent.tsConfig.options);
+                    tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
+                    tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath)));
                 }
                 else {
-                    const baseUrl = harnessSettings["baseUrl"];
+                    const baseUrl = harnessSettings.baseUrl;
                     if (baseUrl !== undefined && !ts.isRootedDiskPath(baseUrl)) {
-                        harnessSettings["baseUrl"] = ts.getNormalizedAbsolutePath(baseUrl, rootDir);
+                        harnessSettings.baseUrl = ts.getNormalizedAbsolutePath(baseUrl, rootDir);
                     }
                 }
 
                 lastUnit = units[units.length - 1];
-                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ".d.ts"));
+                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ts.Extension.Dts));
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
                 toBeCompiled = [];
                 otherFiles = [];
 
-                if (testCaseContent.settings["noImplicitReferences"] || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
-                    toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content, fileOptions: lastUnit.fileOptions });
+                if (testCaseContent.settings.noImplicitReferences || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
+                    toBeCompiled.push(this.createHarnessTestFile(lastUnit, rootDir));
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
-                            otherFiles.push({ unitName: this.makeUnitName(unit.name, rootDir), content: unit.content, fileOptions: unit.fileOptions });
+                            otherFiles.push(this.createHarnessTestFile(unit, rootDir));
                         }
                     });
                 }
                 else {
                     toBeCompiled = units.map(unit => {
-                        return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content, fileOptions: unit.fileOptions };
+                        return this.createHarnessTestFile(unit, rootDir);
                     });
                 }
 
                 if (tsConfigOptions && tsConfigOptions.configFilePath !== undefined) {
                     tsConfigOptions.configFilePath = ts.combinePaths(rootDir, tsConfigOptions.configFilePath);
+                    tsConfigOptions.configFile.fileName = tsConfigOptions.configFilePath;
                 }
 
                 const output = Harness.Compiler.compileFiles(
-                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings["currentDirectory"]);
+                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings.currentDirectory);
 
                 options = output.options;
                 result = output.result;
@@ -132,11 +130,12 @@ class CompilerBaselineRunner extends RunnerBase {
                 options = undefined;
                 toBeCompiled = undefined;
                 otherFiles = undefined;
+                tsConfigFiles = undefined;
             });
 
             // check errors
             it("Correct errors for " + fileName, () => {
-                 Harness.Compiler.doErrorBaseline(justName, toBeCompiled.concat(otherFiles), result.errors);
+                Harness.Compiler.doErrorBaseline(justName, tsConfigFiles.concat(toBeCompiled, otherFiles), result.errors, !!options.pretty);
             });
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
@@ -165,7 +164,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             it("Correct JS output for " + fileName, () => {
                 if (hasNonDtsFiles && this.emit) {
-                    Harness.Compiler.doJsEmitBaseline(justName, fileName, options, result, toBeCompiled, otherFiles, harnessSettings);
+                    Harness.Compiler.doJsEmitBaseline(justName, fileName, options, result, tsConfigFiles, toBeCompiled, otherFiles, harnessSettings);
                 }
             });
 
@@ -178,9 +177,13 @@ class CompilerBaselineRunner extends RunnerBase {
                     return;
                 }
 
-                Harness.Compiler.doTypeAndSymbolBaseline(justName, result, toBeCompiled.concat(otherFiles).filter(file => !!result.program.getSourceFile(file.unitName)));
+                Harness.Compiler.doTypeAndSymbolBaseline(justName, result.program, toBeCompiled.concat(otherFiles).filter(file => !!result.program.getSourceFile(file.unitName)));
             });
         });
+    }
+
+    private createHarnessTestFile(lastUnit: Harness.TestCaseParser.TestUnitData, rootDir: string, unitName?: string): Harness.Compiler.TestFile {
+        return { unitName: unitName || this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content, fileOptions: lastUnit.fileOptions };
     }
 
     public initializeTests() {
@@ -205,25 +208,13 @@ class CompilerBaselineRunner extends RunnerBase {
 
     private parseOptions() {
         if (this.options && this.options.length > 0) {
-            this.errors = false;
             this.emit = false;
-            this.decl = false;
-            this.output = false;
 
             const opts = this.options.split(",");
-            for (let i = 0; i < opts.length; i++) {
-                switch (opts[i]) {
-                    case "error":
-                        this.errors = true;
-                        break;
+            for (const opt of opts) {
+                switch (opt) {
                     case "emit":
                         this.emit = true;
-                        break;
-                    case "decl":
-                        this.decl = true;
-                        break;
-                    case "output":
-                        this.output = true;
                         break;
                     default:
                         throw new Error("unsupported flag");
