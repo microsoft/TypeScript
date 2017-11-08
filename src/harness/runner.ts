@@ -18,8 +18,7 @@
 /// <reference path="fourslashRunner.ts" />
 /// <reference path="projectsRunner.ts" />
 /// <reference path="rwcRunner.ts" />
-/// <reference path="userRunner.ts" />
-/// <reference path="dtRunner.ts" />
+/// <reference path="externalCompileRunner.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="./parallel/shared.ts" />
 
