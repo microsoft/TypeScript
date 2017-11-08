@@ -1,9 +1,16 @@
 === tests/cases/conformance/controlFlow/controlFlowStringIndex.ts ===
-type A = { [index: string]: number | null };
+type A = {
 >A : A
+
+    other: number | null;
+>other : number | null
+>null : null
+
+    [index: string]: number | null
 >index : string
 >null : null
 
+};
 declare const value: A;
 >value : A
 >A : A
@@ -22,5 +29,15 @@ if (value.foo !== null) {
 >value : A
 >foo : number
 >toExponential : (fractionDigits?: number | undefined) => string
+
+    value.other // should still be number | null
+>value.other : number | null
+>value : A
+>other : number | null
+
+    value.bar // should still be number | null
+>value.bar : number | null
+>value : A
+>bar : number | null
 }
 

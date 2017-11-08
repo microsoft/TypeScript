@@ -1,8 +1,13 @@
 //// [controlFlowStringIndex.ts]
-type A = { [index: string]: number | null };
+type A = {
+    other: number | null;
+    [index: string]: number | null
+};
 declare const value: A;
 if (value.foo !== null) {
     value.foo.toExponential()
+    value.other // should still be number | null
+    value.bar // should still be number | null
 }
 
 
@@ -10,4 +15,6 @@ if (value.foo !== null) {
 "use strict";
 if (value.foo !== null) {
     value.foo.toExponential();
+    value.other; // should still be number | null
+    value.bar; // should still be number | null
 }
