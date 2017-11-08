@@ -20261,6 +20261,10 @@ namespace ts {
 
                     case SyntaxKind.Parameter:
                         markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
+                        const containingSignature = (node as ParameterDeclaration).parent;
+                        for (const parameter of containingSignature.parameters) {
+                            markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
+                        }
                         break;
                 }
             }
