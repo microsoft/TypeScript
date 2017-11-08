@@ -1,0 +1,7 @@
+=== tests/cases/compiler/variableDeclarationInStrictMode1.ts ===
+"use strict";
+>"use strict" : "use strict"
+
+var eval;
+>eval : any
+

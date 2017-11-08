@@ -7,23 +7,22 @@
 // @Filename: foo.js
 //// function foo() {
 ////     var i = 10;
-////     /*a*/return i++;/*b*/
+////     /*a*/return i + 1;/*b*/
 //// }
 
 goTo.select('a', 'b');
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_1",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_1",
     actionDescription: "Extract to function in global scope",
     newContent:
 `function foo() {
     var i = 10;
-    var __return: any;
-    ({ __return, i } = /*RENAME*/newFunction(i));
-    return __return;
+    return /*RENAME*/newFunction(i);
 }
+
 function newFunction(i) {
-    return { __return: i++, i };
+    return i + 1;
 }
 `
 });

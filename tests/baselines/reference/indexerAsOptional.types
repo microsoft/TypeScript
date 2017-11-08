@@ -1,0 +1,16 @@
+=== tests/cases/compiler/indexerAsOptional.ts ===
+interface indexSig {
+>indexSig : indexSig
+
+    //Index signatures can't be optional
+    [idx?: number]: any; //err
+>idx : number
+}
+
+class indexSig2 {
+>indexSig2 : indexSig2
+
+    //Index signatures can't be optional
+    [idx?: number]: any //err
+>idx : number
+}

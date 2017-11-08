@@ -34,6 +34,6 @@ export = async function() {
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     return async function () {
-        const something = await (__syncRequire ? Promise.resolve().then(function () { return require("./something"); }) : new Promise(function (resolve_1, reject_1) { require(["./something"], resolve_1, reject_1); }));
+        const something = await (__syncRequire ? Promise.resolve().then(() => require("./something")) : new Promise((resolve_1, reject_1) => { require(["./something"], resolve_1, reject_1); }));
     };
 });

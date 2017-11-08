@@ -6,9 +6,9 @@ namespace ts.formatting {
         // Used for debugging to identify each rule based on the property name it's assigned to.
         public debugName?: string;
         constructor(
-            readonly Descriptor: RuleDescriptor,
-            readonly Operation: RuleOperation,
-            readonly Flag: RuleFlags = RuleFlags.None) {
+            readonly descriptor: RuleDescriptor,
+            readonly operation: RuleOperation,
+            readonly flag: RuleFlags = RuleFlags.None) {
         }
     }
 }

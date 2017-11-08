@@ -1,0 +1,17 @@
+/b.js(1,17): error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+/b.js(3,15): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+
+
+==== /a.d.ts (0 errors) ====
+    declare class A<T> { x: T; }
+    
+==== /b.js (2 errors) ====
+    class B extends A {}
+                    ~
+!!! error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+    
+    /** @augments A */
+                  ~
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+    class C { }
+    

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/commentOnClassAccessor1.ts ===
+class C {
+>C : Symbol(C, Decl(commentOnClassAccessor1.ts, 0, 0))
+
+  /**
+   * @type {number}
+   */
+  get bar(): number { return 1;}
+>bar : Symbol(C.bar, Decl(commentOnClassAccessor1.ts, 0, 9))
+}

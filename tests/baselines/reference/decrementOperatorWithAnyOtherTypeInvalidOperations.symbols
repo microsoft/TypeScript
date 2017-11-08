@@ -1,0 +1,207 @@
+=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts ===
+// -- operator on any type
+var ANY1: any;
+>ANY1 : Symbol(ANY1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 1, 3))
+
+var ANY2: any[] = ["", ""];
+>ANY2 : Symbol(ANY2, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 2, 3))
+
+var obj: () => {}
+>obj : Symbol(obj, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 4, 3))
+
+var obj1 = { x: "", y: () => { } };
+>obj1 : Symbol(obj1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 3))
+>x : Symbol(x, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 12))
+>y : Symbol(y, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 19))
+
+function foo(): any {
+>foo : Symbol(foo, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 35))
+
+    var a;
+>a : Symbol(a, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 7, 7))
+
+    return a;
+>a : Symbol(a, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 7, 7))
+}
+class A {
+>A : Symbol(A, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 9, 1))
+
+    public a: any;
+>a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 10, 9))
+
+    static foo(): any {
+>foo : Symbol(A.foo, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+
+        var a;
+>a : Symbol(a, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 13, 11))
+
+        return a;
+>a : Symbol(a, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 13, 11))
+    }
+}
+module M {
+>M : Symbol(M, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 16, 1))
+
+    export var n: any;
+>n : Symbol(n, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 18, 14))
+}
+var objA = new A();
+>objA : Symbol(objA, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 20, 3))
+>A : Symbol(A, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 9, 1))
+
+// any type var
+var ResultIsNumber1 = --ANY2;
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 23, 3))
+>ANY2 : Symbol(ANY2, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 2, 3))
+
+var ResultIsNumber2 = --A;
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 24, 3))
+>A : Symbol(A, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 9, 1))
+
+var ResultIsNumber3 = --M;
+>ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 25, 3))
+>M : Symbol(M, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 16, 1))
+
+var ResultIsNumber4 = --obj;
+>ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 26, 3))
+>obj : Symbol(obj, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 4, 3))
+
+var ResultIsNumber5 = --obj1;
+>ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 27, 3))
+>obj1 : Symbol(obj1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 3))
+
+var ResultIsNumber6 = ANY2--;
+>ResultIsNumber6 : Symbol(ResultIsNumber6, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 29, 3))
+>ANY2 : Symbol(ANY2, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 2, 3))
+
+var ResultIsNumber7 = A--;
+>ResultIsNumber7 : Symbol(ResultIsNumber7, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 30, 3))
+>A : Symbol(A, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 9, 1))
+
+var ResultIsNumber8 = M--;
+>ResultIsNumber8 : Symbol(ResultIsNumber8, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 31, 3))
+>M : Symbol(M, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 16, 1))
+
+var ResultIsNumber9 = obj--;
+>ResultIsNumber9 : Symbol(ResultIsNumber9, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 32, 3))
+>obj : Symbol(obj, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 4, 3))
+
+var ResultIsNumber10 = obj1--;
+>ResultIsNumber10 : Symbol(ResultIsNumber10, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 33, 3))
+>obj1 : Symbol(obj1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 3))
+
+// any type literal
+var ResultIsNumber11 = --{};
+>ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 36, 3))
+
+var ResultIsNumber12 = --null;
+>ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 37, 3))
+
+var ResultIsNumber13 = --undefined;
+>ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 38, 3))
+>undefined : Symbol(undefined)
+
+var ResultIsNumber14 = null--;
+>ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 40, 3))
+
+var ResultIsNumber15 = {}--;
+>ResultIsNumber15 : Symbol(ResultIsNumber15, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 41, 3))
+
+var ResultIsNumber16 = undefined--;
+>ResultIsNumber16 : Symbol(ResultIsNumber16, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 42, 3))
+>undefined : Symbol(undefined)
+
+// any type expressions
+var ResultIsNumber17 = --foo();
+>ResultIsNumber17 : Symbol(ResultIsNumber17, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 45, 3))
+>foo : Symbol(foo, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 35))
+
+var ResultIsNumber18 = --A.foo();
+>ResultIsNumber18 : Symbol(ResultIsNumber18, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 46, 3))
+>A.foo : Symbol(A.foo, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+>A : Symbol(A, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 9, 1))
+>foo : Symbol(A.foo, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+
+var ResultIsNumber19 = --(null + undefined);
+>ResultIsNumber19 : Symbol(ResultIsNumber19, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 47, 3))
+>undefined : Symbol(undefined)
+
+var ResultIsNumber20 = --(null + null);
+>ResultIsNumber20 : Symbol(ResultIsNumber20, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 48, 3))
+
+var ResultIsNumber21 = --(undefined + undefined);
+>ResultIsNumber21 : Symbol(ResultIsNumber21, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 49, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+var ResultIsNumber22 = --obj1.x;
+>ResultIsNumber22 : Symbol(ResultIsNumber22, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 50, 3))
+>obj1.x : Symbol(x, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 12))
+>obj1 : Symbol(obj1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 3))
+>x : Symbol(x, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 12))
+
+var ResultIsNumber23 = --obj1.y;
+>ResultIsNumber23 : Symbol(ResultIsNumber23, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 51, 3))
+>obj1.y : Symbol(y, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 19))
+>obj1 : Symbol(obj1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 3))
+>y : Symbol(y, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 19))
+
+var ResultIsNumber24 = foo()--;
+>ResultIsNumber24 : Symbol(ResultIsNumber24, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 53, 3))
+>foo : Symbol(foo, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 35))
+
+var ResultIsNumber25 = A.foo()--;
+>ResultIsNumber25 : Symbol(ResultIsNumber25, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 54, 3))
+>A.foo : Symbol(A.foo, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+>A : Symbol(A, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 9, 1))
+>foo : Symbol(A.foo, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+
+var ResultIsNumber26 = (null + undefined)--;
+>ResultIsNumber26 : Symbol(ResultIsNumber26, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 55, 3))
+>undefined : Symbol(undefined)
+
+var ResultIsNumber27 = (null + null)--;
+>ResultIsNumber27 : Symbol(ResultIsNumber27, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 56, 3))
+
+var ResultIsNumber28 = (undefined + undefined)--;
+>ResultIsNumber28 : Symbol(ResultIsNumber28, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 57, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+var ResultIsNumber29 = obj1.x--;
+>ResultIsNumber29 : Symbol(ResultIsNumber29, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 58, 3))
+>obj1.x : Symbol(x, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 12))
+>obj1 : Symbol(obj1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 3))
+>x : Symbol(x, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 12))
+
+var ResultIsNumber30 = obj1.y--;
+>ResultIsNumber30 : Symbol(ResultIsNumber30, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 59, 3))
+>obj1.y : Symbol(y, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 19))
+>obj1 : Symbol(obj1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 3))
+>y : Symbol(y, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 5, 19))
+
+// miss assignment operators
+--ANY2;
+>ANY2 : Symbol(ANY2, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 2, 3))
+
+ANY2--;
+>ANY2 : Symbol(ANY2, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 2, 3))
+
+--ANY1--;
+>ANY1 : Symbol(ANY1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 1, 3))
+
+--ANY1++;
+>ANY1 : Symbol(ANY1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 1, 3))
+
+++ANY1--;
+>ANY1 : Symbol(ANY1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 1, 3))
+
+--ANY2[0]--;
+>ANY2 : Symbol(ANY2, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 2, 3))
+
+--ANY2[0]++;
+>ANY2 : Symbol(ANY2, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 2, 3))
+
+++ANY2[0]--;
+>ANY2 : Symbol(ANY2, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 2, 3))
+

@@ -1,0 +1,73 @@
+=== tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts ===
+interface Comparable<T> {
+>Comparable : Symbol(Comparable, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 0))
+>T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 21))
+
+   compareTo(other: T): number;
+>compareTo : Symbol(Comparable.compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 25))
+>other : Symbol(other, Decl(genericAssignmentCompatWithInterfaces1.ts, 1, 13))
+>T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 21))
+}
+interface I<T> {
+>I : Symbol(I, Decl(genericAssignmentCompatWithInterfaces1.ts, 2, 1))
+>T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 12))
+
+    x: Comparable<T>;
+>x : Symbol(I.x, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 16))
+>Comparable : Symbol(Comparable, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 0))
+>T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 12))
+}
+interface K<T> {
+>K : Symbol(K, Decl(genericAssignmentCompatWithInterfaces1.ts, 5, 1))
+>T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 12))
+
+   x: A<T>;
+>x : Symbol(K.x, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 16))
+>A : Symbol(A, Decl(genericAssignmentCompatWithInterfaces1.ts, 8, 1))
+>T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 12))
+}
+class A<T> implements Comparable<T> { compareTo(other: T) { return 1; } }
+>A : Symbol(A, Decl(genericAssignmentCompatWithInterfaces1.ts, 8, 1))
+>T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
+>Comparable : Symbol(Comparable, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 0))
+>T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
+>compareTo : Symbol(A.compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 37))
+>other : Symbol(other, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 48))
+>T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
+
+var z = { x: new A<number>() };
+>z : Symbol(z, Decl(genericAssignmentCompatWithInterfaces1.ts, 10, 3))
+>x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 10, 9))
+>A : Symbol(A, Decl(genericAssignmentCompatWithInterfaces1.ts, 8, 1))
+
+var a1: I<string> = { x: new A<number>() };
+>a1 : Symbol(a1, Decl(genericAssignmentCompatWithInterfaces1.ts, 11, 3))
+>I : Symbol(I, Decl(genericAssignmentCompatWithInterfaces1.ts, 2, 1))
+>x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 11, 21))
+>A : Symbol(A, Decl(genericAssignmentCompatWithInterfaces1.ts, 8, 1))
+
+var a2: I<string> = function (): { x: A<number> } {
+>a2 : Symbol(a2, Decl(genericAssignmentCompatWithInterfaces1.ts, 12, 3))
+>I : Symbol(I, Decl(genericAssignmentCompatWithInterfaces1.ts, 2, 1))
+>x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 12, 34))
+>A : Symbol(A, Decl(genericAssignmentCompatWithInterfaces1.ts, 8, 1))
+
+   var z = { x: new A<number>() }; return z;
+>z : Symbol(z, Decl(genericAssignmentCompatWithInterfaces1.ts, 13, 6))
+>x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 13, 12))
+>A : Symbol(A, Decl(genericAssignmentCompatWithInterfaces1.ts, 8, 1))
+>z : Symbol(z, Decl(genericAssignmentCompatWithInterfaces1.ts, 13, 6))
+
+} ();
+var a3: I<string> = z;
+>a3 : Symbol(a3, Decl(genericAssignmentCompatWithInterfaces1.ts, 15, 3))
+>I : Symbol(I, Decl(genericAssignmentCompatWithInterfaces1.ts, 2, 1))
+>z : Symbol(z, Decl(genericAssignmentCompatWithInterfaces1.ts, 10, 3))
+
+var a4: I<string> = <K<number>>z;
+>a4 : Symbol(a4, Decl(genericAssignmentCompatWithInterfaces1.ts, 16, 3))
+>I : Symbol(I, Decl(genericAssignmentCompatWithInterfaces1.ts, 2, 1))
+>K : Symbol(K, Decl(genericAssignmentCompatWithInterfaces1.ts, 5, 1))
+>z : Symbol(z, Decl(genericAssignmentCompatWithInterfaces1.ts, 10, 3))
+ 
+

@@ -1,0 +1,68 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts ===
+// instantiating a derived type can cause an infinitely expanding type reference to be generated
+
+interface List<T> {
+>List : Symbol(List, Decl(infiniteExpansionThroughInstantiation.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 2, 15))
+
+    data: T;
+>data : Symbol(List.data, Decl(infiniteExpansionThroughInstantiation.ts, 2, 19))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 2, 15))
+
+    next: List<T>;
+>next : Symbol(List.next, Decl(infiniteExpansionThroughInstantiation.ts, 3, 12))
+>List : Symbol(List, Decl(infiniteExpansionThroughInstantiation.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 2, 15))
+
+    owner: OwnerList<T>;
+>owner : Symbol(List.owner, Decl(infiniteExpansionThroughInstantiation.ts, 4, 18))
+>OwnerList : Symbol(OwnerList, Decl(infiniteExpansionThroughInstantiation.ts, 6, 1))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 2, 15))
+}
+
+// will have an owner property that is an infinitely expanding type reference
+interface OwnerList<U> extends List<List<U>> {
+>OwnerList : Symbol(OwnerList, Decl(infiniteExpansionThroughInstantiation.ts, 6, 1))
+>U : Symbol(U, Decl(infiniteExpansionThroughInstantiation.ts, 9, 20))
+>List : Symbol(List, Decl(infiniteExpansionThroughInstantiation.ts, 0, 0))
+>List : Symbol(List, Decl(infiniteExpansionThroughInstantiation.ts, 0, 0))
+>U : Symbol(U, Decl(infiniteExpansionThroughInstantiation.ts, 9, 20))
+
+    name: string;
+>name : Symbol(OwnerList.name, Decl(infiniteExpansionThroughInstantiation.ts, 9, 46))
+}
+
+var list: List<string>;
+>list : Symbol(list, Decl(infiniteExpansionThroughInstantiation.ts, 13, 3))
+>List : Symbol(List, Decl(infiniteExpansionThroughInstantiation.ts, 0, 0))
+
+var ownerList: OwnerList<string>;
+>ownerList : Symbol(ownerList, Decl(infiniteExpansionThroughInstantiation.ts, 14, 3))
+>OwnerList : Symbol(OwnerList, Decl(infiniteExpansionThroughInstantiation.ts, 6, 1))
+
+list = ownerList; 
+>list : Symbol(list, Decl(infiniteExpansionThroughInstantiation.ts, 13, 3))
+>ownerList : Symbol(ownerList, Decl(infiniteExpansionThroughInstantiation.ts, 14, 3))
+
+function other<T>(x: T) {
+>other : Symbol(other, Decl(infiniteExpansionThroughInstantiation.ts, 15, 17))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 17, 15))
+>x : Symbol(x, Decl(infiniteExpansionThroughInstantiation.ts, 17, 18))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 17, 15))
+
+    var list: List<T>;
+>list : Symbol(list, Decl(infiniteExpansionThroughInstantiation.ts, 18, 7))
+>List : Symbol(List, Decl(infiniteExpansionThroughInstantiation.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 17, 15))
+
+    var ownerList: OwnerList<T>;
+>ownerList : Symbol(ownerList, Decl(infiniteExpansionThroughInstantiation.ts, 19, 7))
+>OwnerList : Symbol(OwnerList, Decl(infiniteExpansionThroughInstantiation.ts, 6, 1))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation.ts, 17, 15))
+
+    list = ownerList; 
+>list : Symbol(list, Decl(infiniteExpansionThroughInstantiation.ts, 18, 7))
+>ownerList : Symbol(ownerList, Decl(infiniteExpansionThroughInstantiation.ts, 19, 7))
+
+}
+

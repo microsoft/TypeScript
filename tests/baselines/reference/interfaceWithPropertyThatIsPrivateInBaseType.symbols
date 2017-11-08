@@ -1,0 +1,34 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType.ts ===
+class Base {
+>Base : Symbol(Base, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 0, 0))
+
+    private x: number;
+>x : Symbol(Base.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 0, 12))
+}
+
+interface Foo extends Base { // error
+>Foo : Symbol(Foo, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 2, 1))
+>Base : Symbol(Base, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 0, 0))
+
+    x: number;
+>x : Symbol(Foo.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 4, 28))
+}
+
+class Base2<T> {
+>Base2 : Symbol(Base2, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 6, 1))
+>T : Symbol(T, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 8, 12))
+
+    private x: T;
+>x : Symbol(Base2.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 8, 16))
+>T : Symbol(T, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 8, 12))
+}
+
+interface Foo2<T> extends Base2<T> { // error
+>Foo2 : Symbol(Foo2, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 10, 1))
+>T : Symbol(T, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 12, 15))
+>Base2 : Symbol(Base2, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 6, 1))
+>T : Symbol(T, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 12, 15))
+
+    x: number;
+>x : Symbol(Foo2.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType.ts, 12, 36))
+}

@@ -3,4 +3,7 @@
 //// interface I {}
 //// [|/* */ class /* */ C /* */ extends /* */ I|]{}
 
-verify.rangeAfterCodeFix("/* */ class /* */ C /* */ implements /* */ I");
+verify.codeFix({
+    description: "Change 'extends' to 'implements'.",
+    newRangeContent: "/* */ class /* */ C /* */ implements /* */ I",
+});

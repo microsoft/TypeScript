@@ -1,13 +1,16 @@
 /// <reference path='fourslash.ts' />
 
-//// abstract class A {
+////abstract class A {
 ////    abstract f(): this;
-//// }
+////}
 ////
-//// class C extends A {[| |]}
+////class C extends A {[| |]}
 
-verify.rangeAfterCodeFix(`
-    f(): this {
-        throw new Error("Method not implemented.");
-    }
-`);
+verify.codeFix({
+    description: "Implement inherited abstract class.",
+    // TODO: GH#18795
+    newRangeContent: `f(): this {\r
+    throw new Error("Method not implemented.");\r
+}\r
+ `
+});

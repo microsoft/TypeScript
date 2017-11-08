@@ -6,7 +6,7 @@
 /* tslint:disable:no-null-keyword */
 
 namespace RWC {
-    function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
+    function runWithIOLog(ioLog: IoLog, fn: (oldIO: Harness.Io) => void) {
         const oldIO = Harness.IO;
 
         const wrappedIO = Playback.wrapIO(oldIO);
@@ -26,7 +26,7 @@ namespace RWC {
     }
 
     export function runRWCTest(jsonPath: string) {
-        describe("Testing a RWC project: " + jsonPath, () => {
+        describe("Testing a rwc project: " + jsonPath, () => {
             let inputFiles: Harness.Compiler.TestFile[] = [];
             let otherFiles: Harness.Compiler.TestFile[] = [];
             let tsconfigFiles: Harness.Compiler.TestFile[] = [];
@@ -36,7 +36,7 @@ namespace RWC {
                 Subfolder: "rwc",
                 Baselinefolder: "internal/baselines"
             };
-            const baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
+            const baseName = ts.getBaseFileName(jsonPath);
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
             after(() => {
@@ -58,7 +58,7 @@ namespace RWC {
                 this.timeout(800000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
-                const ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
+                const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
@@ -131,13 +131,14 @@ namespace RWC {
                                 }
                                 else {
                                     // set the flag to put default library to the beginning of the list
-                                    inputFiles.unshift(Harness.getDefaultLibraryFile(oldIO));
+                                    inputFiles.unshift(Harness.getDefaultLibraryFile(fileRead.path, oldIO));
                                 }
                             }
                         }
                     }
 
                     // do not use lib since we already read it in above
+                    opts.options.lib = undefined;
                     opts.options.noLib = true;
 
                     // Emit the results
@@ -195,14 +196,6 @@ namespace RWC {
                 }, baselineOpts, [".map"]);
             });
 
-            /*it("has correct source map record", () => {
-                if (compilerOptions.sourceMap) {
-                    Harness.Baseline.runBaseline(baseName + ".sourcemap.txt", () => {
-                        return compilerResult.getSourceMapRecord();
-                    }, baselineOpts);
-                }
-            });*/
-
             it("has the expected errors", () => {
                 Harness.Baseline.runMultifileBaseline(baseName, ".errors.txt", () => {
                     if (compilerResult.errors.length === 0) {
@@ -213,14 +206,6 @@ namespace RWC {
                     const errors = compilerResult.errors.filter(e => !e.file || !Harness.isDefaultLibraryFile(e.file.fileName));
                     return Harness.Compiler.iterateErrorBaseline(baselineFiles, errors);
                 }, baselineOpts);
-            });
-
-            it("has the expected types", () => {
-                // We don't need to pass the extension here because "doTypeAndSymbolBaseline" will append appropriate extension of ".types" or ".symbols"
-                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
-                    .concat(otherFiles)
-                    .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
-                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts, /*multifile*/ true);
             });
 
             // Ideally, a generated declaration file will have no errors. But we allow generated
@@ -249,7 +234,7 @@ namespace RWC {
 
 class RWCRunner extends RunnerBase {
     public enumerateTestFiles() {
-        return Harness.IO.listFiles("internal/cases/rwc/", /.+\.json$/);
+        return Harness.IO.getDirectories("internal/cases/rwc/");
     }
 
     public kind(): TestRunnerKind {
@@ -261,9 +246,8 @@ class RWCRunner extends RunnerBase {
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
-        for (let i = 0; i < testList.length; i++) {
-            this.runTest(testList[i]);
+        for (const test of this.tests && this.tests.length ? this.tests : this.enumerateTestFiles()) {
+            this.runTest(test);
         }
     }
 

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts ===
+class A<T extends { length: number }> {
+>A : Symbol(A, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 0))
+>T : Symbol(T, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 8))
+>length : Symbol(length, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 19))
+
+    x: T;
+>x : Symbol(A.x, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 39))
+>T : Symbol(T, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 8))
+}
+
+class B<U> extends A<string> {
+>B : Symbol(B, Decl(genericDerivedTypeWithSpecializedBase2.ts, 2, 1))
+>U : Symbol(U, Decl(genericDerivedTypeWithSpecializedBase2.ts, 4, 8))
+>A : Symbol(A, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 0))
+
+    y: U;
+>y : Symbol(B.y, Decl(genericDerivedTypeWithSpecializedBase2.ts, 4, 30))
+>U : Symbol(U, Decl(genericDerivedTypeWithSpecializedBase2.ts, 4, 8))
+}
+
+var x: A<{ length: number; foo: number }>;
+>x : Symbol(x, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 3))
+>A : Symbol(A, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 0))
+>length : Symbol(length, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 10))
+>foo : Symbol(foo, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 26))
+
+var y: B<number>;
+>y : Symbol(y, Decl(genericDerivedTypeWithSpecializedBase2.ts, 9, 3))
+>B : Symbol(B, Decl(genericDerivedTypeWithSpecializedBase2.ts, 2, 1))
+
+x = y;  // error
+>x : Symbol(x, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 3))
+>y : Symbol(y, Decl(genericDerivedTypeWithSpecializedBase2.ts, 9, 3))
+

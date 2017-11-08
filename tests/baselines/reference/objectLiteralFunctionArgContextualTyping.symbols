@@ -1,0 +1,49 @@
+=== tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts ===
+interface I {
+>I : Symbol(I, Decl(objectLiteralFunctionArgContextualTyping.ts, 0, 0))
+
+    value: string;
+>value : Symbol(I.value, Decl(objectLiteralFunctionArgContextualTyping.ts, 0, 13))
+
+    toString: (t: string) => string;
+>toString : Symbol(I.toString, Decl(objectLiteralFunctionArgContextualTyping.ts, 1, 18))
+>t : Symbol(t, Decl(objectLiteralFunctionArgContextualTyping.ts, 2, 15))
+}
+
+function f2(args: I) { }
+>f2 : Symbol(f2, Decl(objectLiteralFunctionArgContextualTyping.ts, 3, 1))
+>args : Symbol(args, Decl(objectLiteralFunctionArgContextualTyping.ts, 5, 12))
+>I : Symbol(I, Decl(objectLiteralFunctionArgContextualTyping.ts, 0, 0))
+
+f2({ hello: 1 }) // error 
+>f2 : Symbol(f2, Decl(objectLiteralFunctionArgContextualTyping.ts, 3, 1))
+>hello : Symbol(hello, Decl(objectLiteralFunctionArgContextualTyping.ts, 7, 4))
+
+f2({ value: '' }) // missing toString satisfied by Object's member
+>f2 : Symbol(f2, Decl(objectLiteralFunctionArgContextualTyping.ts, 3, 1))
+>value : Symbol(value, Decl(objectLiteralFunctionArgContextualTyping.ts, 8, 4))
+
+f2({ value: '', what: 1 }) // missing toString satisfied by Object's member
+>f2 : Symbol(f2, Decl(objectLiteralFunctionArgContextualTyping.ts, 3, 1))
+>value : Symbol(value, Decl(objectLiteralFunctionArgContextualTyping.ts, 9, 4))
+>what : Symbol(what, Decl(objectLiteralFunctionArgContextualTyping.ts, 9, 15))
+
+f2({ toString: (s) => s }) // error, missing property value from ArgsString
+>f2 : Symbol(f2, Decl(objectLiteralFunctionArgContextualTyping.ts, 3, 1))
+>toString : Symbol(toString, Decl(objectLiteralFunctionArgContextualTyping.ts, 10, 4))
+>s : Symbol(s, Decl(objectLiteralFunctionArgContextualTyping.ts, 10, 16))
+>s : Symbol(s, Decl(objectLiteralFunctionArgContextualTyping.ts, 10, 16))
+
+f2({ toString: (s: string) => s }) // error, missing property value from ArgsString
+>f2 : Symbol(f2, Decl(objectLiteralFunctionArgContextualTyping.ts, 3, 1))
+>toString : Symbol(toString, Decl(objectLiteralFunctionArgContextualTyping.ts, 11, 4))
+>s : Symbol(s, Decl(objectLiteralFunctionArgContextualTyping.ts, 11, 16))
+>s : Symbol(s, Decl(objectLiteralFunctionArgContextualTyping.ts, 11, 16))
+
+f2({ value: '', toString: (s) => s.uhhh }) // error
+>f2 : Symbol(f2, Decl(objectLiteralFunctionArgContextualTyping.ts, 3, 1))
+>value : Symbol(value, Decl(objectLiteralFunctionArgContextualTyping.ts, 12, 4))
+>toString : Symbol(toString, Decl(objectLiteralFunctionArgContextualTyping.ts, 12, 15))
+>s : Symbol(s, Decl(objectLiteralFunctionArgContextualTyping.ts, 12, 27))
+>s : Symbol(s, Decl(objectLiteralFunctionArgContextualTyping.ts, 12, 27))
+

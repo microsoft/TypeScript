@@ -1,0 +1,55 @@
+=== tests/cases/compiler/constructorOverloads1.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(constructorOverloads1.ts, 0, 0))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(constructorOverloads1.ts, 1, 16))
+
+    constructor(n: number);
+>n : Symbol(n, Decl(constructorOverloads1.ts, 2, 16))
+
+    constructor(x: any) {
+>x : Symbol(x, Decl(constructorOverloads1.ts, 3, 16))
+
+    }
+    constructor(x: any) {
+>x : Symbol(x, Decl(constructorOverloads1.ts, 6, 16))
+
+    }
+    bar1() {  /*WScript.Echo("bar1");*/ }
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads1.ts, 8, 5))
+
+    bar2() {  /*WScript.Echo("bar1");*/ }
+>bar2 : Symbol(Foo.bar2, Decl(constructorOverloads1.ts, 9, 41))
+}
+
+var f1 = new Foo("hey");
+>f1 : Symbol(f1, Decl(constructorOverloads1.ts, 13, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads1.ts, 0, 0))
+
+var f2 = new Foo(0);
+>f2 : Symbol(f2, Decl(constructorOverloads1.ts, 14, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads1.ts, 0, 0))
+
+var f3 = new Foo(f1);
+>f3 : Symbol(f3, Decl(constructorOverloads1.ts, 15, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads1.ts, 0, 0))
+>f1 : Symbol(f1, Decl(constructorOverloads1.ts, 13, 3))
+
+var f4 = new Foo([f1,f2,f3]);
+>f4 : Symbol(f4, Decl(constructorOverloads1.ts, 16, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads1.ts, 0, 0))
+>f1 : Symbol(f1, Decl(constructorOverloads1.ts, 13, 3))
+>f2 : Symbol(f2, Decl(constructorOverloads1.ts, 14, 3))
+>f3 : Symbol(f3, Decl(constructorOverloads1.ts, 15, 3))
+
+f1.bar1();
+>f1.bar1 : Symbol(Foo.bar1, Decl(constructorOverloads1.ts, 8, 5))
+>f1 : Symbol(f1, Decl(constructorOverloads1.ts, 13, 3))
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads1.ts, 8, 5))
+
+f1.bar2();
+>f1.bar2 : Symbol(Foo.bar2, Decl(constructorOverloads1.ts, 9, 41))
+>f1 : Symbol(f1, Decl(constructorOverloads1.ts, 13, 3))
+>bar2 : Symbol(Foo.bar2, Decl(constructorOverloads1.ts, 9, 41))
+
