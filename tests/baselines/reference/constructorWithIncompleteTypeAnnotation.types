@@ -581,7 +581,7 @@ module TypeScriptAllInOne {
 
             var a: number[] = [1, 2, 3, 4, 5, ];/*[] bug*/ // YES []
 >a : number[]
->[1, 2, 3, 4, 5, ] : number[]
+>[1, 2, 3, 4, 5, ] : (1 | 4 | 2 | 3 | 5)[]
 >1 : 1
 >2 : 2
 >3 : 3

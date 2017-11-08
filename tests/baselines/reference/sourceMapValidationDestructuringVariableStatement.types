@@ -22,7 +22,7 @@ var hello = "hello";
 var robotA: Robot = { name: "mower", skill: "mowing" };
 >robotA : Robot
 >Robot : Robot
->{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+>{ name: "mower", skill: "mowing" } : { name: "mower"; skill: "mowing"; }
 >name : string
 >"mower" : "mower"
 >skill : string
@@ -31,7 +31,7 @@ var robotA: Robot = { name: "mower", skill: "mowing" };
 var robotB: Robot = { name: "trimmer", skill: "trimming" };
 >robotB : Robot
 >Robot : Robot
->{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
+>{ name: "trimmer", skill: "trimming" } : { name: "trimmer"; skill: "trimming"; }
 >name : string
 >"trimmer" : "trimmer"
 >skill : string

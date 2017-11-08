@@ -11,11 +11,11 @@ takeFirstTwoEntries(new Map([["", 0], ["hello", 1]]));
 >takeFirstTwoEntries : (...[[k1, v1], [k2, v2]]: [[any, any], [any, any]]) => void
 >new Map([["", 0], ["hello", 1]]) : Map<string, number>
 >Map : MapConstructor
->[["", 0], ["hello", 1]] : [string, number][]
->["", 0] : [string, number]
+>[["", 0], ["hello", 1]] : (["", 0] | ["hello", 1])[]
+>["", 0] : ["", 0]
 >"" : ""
 >0 : 0
->["hello", 1] : [string, number]
+>["hello", 1] : ["hello", 1]
 >"hello" : "hello"
 >1 : 1
 

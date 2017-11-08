@@ -72,12 +72,12 @@ var b0: [any, any, any] = [undefined, null, undefined];
 
 var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >b1 : [number[], string[]]
->[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
->[1, 2, 3] : number[]
+>[[1, 2, 3], ["hello", "string"]] : [(2 | 3 | 1)[], ("hello" | "string")[]]
+>[1, 2, 3] : (2 | 3 | 1)[]
 >1 : 1
 >2 : 2
 >3 : 3
->["hello", "string"] : string[]
+>["hello", "string"] : ("hello" | "string")[]
 >"hello" : "hello"
 >"string" : "string"
 
@@ -119,12 +119,12 @@ var temp1 = [1, 2, 3];
 
 var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >temp2 : [number[], string[]]
->[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
->[1, 2, 3] : number[]
+>[[1, 2, 3], ["hello", "string"]] : [(2 | 3 | 1)[], ("hello" | "string")[]]
+>[1, 2, 3] : (2 | 3 | 1)[]
 >1 : 1
 >2 : 2
 >3 : 3
->["hello", "string"] : string[]
+>["hello", "string"] : ("hello" | "string")[]
 >"hello" : "hello"
 >"string" : "string"
 

@@ -54,7 +54,7 @@ class E {
 
     constructor() {
         return { foo: 1 };
->{ foo: 1 } : { foo: number; }
+>{ foo: 1 } : { foo: 1; }
 >foo : number
 >1 : 1
     }

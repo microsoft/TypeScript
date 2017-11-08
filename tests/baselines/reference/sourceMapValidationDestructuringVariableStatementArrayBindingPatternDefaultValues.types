@@ -12,7 +12,7 @@ type Robot = [number, string, string];
 var robotA: Robot = [1, "mower", "mowing"];
 >robotA : [number, string, string]
 >Robot : [number, string, string]
->[1, "mower", "mowing"] : [number, string, string]
+>[1, "mower", "mowing"] : [1, "mower", "mowing"]
 >1 : 1
 >"mower" : "mower"
 >"mowing" : "mowing"
@@ -20,7 +20,7 @@ var robotA: Robot = [1, "mower", "mowing"];
 var robotB: Robot = [2, "trimmer", "trimming"];
 >robotB : [number, string, string]
 >Robot : [number, string, string]
->[2, "trimmer", "trimming"] : [number, string, string]
+>[2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"
@@ -51,7 +51,7 @@ let [numberC2 = -1] = [3, "edging", "Trimming edges"];
 >numberC2 : number
 >-1 : -1
 >1 : 1
->[3, "edging", "Trimming edges"] : [number, string, string]
+>[3, "edging", "Trimming edges"] : [3, string, string]
 >3 : 3
 >"edging" : "edging"
 >"Trimming edges" : "Trimming edges"
@@ -64,7 +64,7 @@ let [numberC = -1, nameC = "noName", skillC = "noSkill"] = [3, "edging", "Trimmi
 >"noName" : "noName"
 >skillC : string
 >"noSkill" : "noSkill"
->[3, "edging", "Trimming edges"] : [number, string, string]
+>[3, "edging", "Trimming edges"] : [3, "edging", "Trimming edges"]
 >3 : 3
 >"edging" : "edging"
 >"Trimming edges" : "Trimming edges"

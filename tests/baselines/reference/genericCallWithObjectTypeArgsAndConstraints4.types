@@ -62,7 +62,7 @@ var r3 = foo(c, { x: '', foo: c });
 >foo(c, { x: '', foo: c }) : (x: C) => { x: string; foo: C; }
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
 >c : C
->{ x: '', foo: c } : { x: string; foo: C; }
+>{ x: '', foo: c } : { x: ""; foo: C; }
 >x : string
 >'' : ""
 >foo : C

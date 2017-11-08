@@ -1,0 +1,248 @@
+=== tests/cases/compiler/contextualTypeShouldBeLiteral.ts ===
+interface X {
+>X : X
+
+    type: 'x';
+>type : "x"
+
+    value: string;
+>value : string
+
+    method(): void;
+>method : () => void
+}
+
+interface Y {
+>Y : Y
+
+    type: 'y';
+>type : "y"
+
+    value: 'none' | 'done';
+>value : "none" | "done"
+
+    method(): void;
+>method : () => void
+}
+
+function foo(bar: X | Y) { }
+>foo : (bar: X | Y) => void
+>bar : X | Y
+>X : X
+>Y : Y
+
+foo({
+>foo({    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }}) : void
+>foo : (bar: X | Y) => void
+>{    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }} : { type: "y"; value: "done"; method(): void; }
+
+    type: 'y',
+>type : string
+>'y' : "y"
+
+    value: 'done',
+>value : string
+>'done' : "done"
+
+    method() {
+>method : () => void
+
+        this;
+>this : X | Y
+
+        this.type;
+>this.type : "x" | "y"
+>this : X | Y
+>type : "x" | "y"
+
+        this.value;
+>this.value : string
+>this : X | Y
+>value : string
+    }
+});
+
+interface X2 {
+>X2 : X2
+
+    type1: 'x';
+>type1 : "x"
+
+    value: string;
+>value : string
+
+    method(): void;
+>method : () => void
+}
+
+interface Y2 {
+>Y2 : Y2
+
+    type2: 'y';
+>type2 : "y"
+
+    value: 'none' | 'done';
+>value : "none" | "done"
+
+    method(): void;
+>method : () => void
+}
+
+function foo2(bar: X2 | Y2) { }
+>foo2 : (bar: X2 | Y2) => void
+>bar : X2 | Y2
+>X2 : X2
+>Y2 : Y2
+
+foo2({
+>foo2({    type2: 'y',    value: 'done',    method() {        this;        this.value;    }}) : void
+>foo2 : (bar: X2 | Y2) => void
+>{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method(): void; }
+
+    type2: 'y',
+>type2 : string
+>'y' : "y"
+
+    value: 'done',
+>value : string
+>'done' : "done"
+
+    method() {
+>method : () => void
+
+        this;
+>this : X2 | Y2
+
+        this.value;
+>this.value : string
+>this : X2 | Y2
+>value : string
+    }
+});
+
+interface X3 {
+>X3 : X3
+
+    type: 'x';
+>type : "x"
+
+    value: 1 | 2 | 3;
+>value : 1 | 2 | 3
+
+    xtra: number;
+>xtra : number
+}
+
+interface Y3 {
+>Y3 : Y3
+
+    type: 'y';
+>type : "y"
+
+    value: 11 | 12 | 13;
+>value : 11 | 12 | 13
+
+    ytra: number;
+>ytra : number
+}
+
+let xy: X3 | Y3 = {
+>xy : X3 | Y3
+>X3 : X3
+>Y3 : Y3
+>{    type: 'y',    value: 11,    ytra: 12} : { type: "y"; value: 11; ytra: 12; }
+
+    type: 'y',
+>type : string
+>'y' : "y"
+
+    value: 11,
+>value : number
+>11 : 11
+
+    ytra: 12
+>ytra : number
+>12 : 12
+
+};
+
+xy;
+>xy : Y3
+
+
+interface LikeA {
+>LikeA : LikeA
+
+    x: 'x';
+>x : "x"
+
+    y: 'y';
+>y : "y"
+
+    value: string;
+>value : string
+
+    method(): void;
+>method : () => void
+}
+
+interface LikeB {
+>LikeB : LikeB
+
+    x: 'xx';
+>x : "xx"
+
+    y: 'yy';
+>y : "yy"
+
+    value: number;
+>value : number
+
+    method(): void;
+>method : () => void
+}
+
+let xyz: LikeA | LikeB = {
+>xyz : LikeA | LikeB
+>LikeA : LikeA
+>LikeB : LikeB
+>{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: "foo"; method(): void; }
+
+    x: 'x',
+>x : string
+>'x' : "x"
+
+    y: 'y',
+>y : string
+>'y' : "y"
+
+    value: "foo",
+>value : string
+>"foo" : "foo"
+
+    method() {
+>method : () => void
+
+        this;
+>this : LikeA | LikeB
+
+        this.x;
+>this.x : "x" | "xx"
+>this : LikeA | LikeB
+>x : "x" | "xx"
+
+        this.y;
+>this.y : "y" | "yy"
+>this : LikeA | LikeB
+>y : "y" | "yy"
+
+        this.value;
+>this.value : string | number
+>this : LikeA | LikeB
+>value : string | number
+    }
+};
+
+xyz;
+>xyz : LikeA
+

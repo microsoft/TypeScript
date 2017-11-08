@@ -55,7 +55,7 @@ class Good {
 
     public f:() => number = function() { return 0; }
 >f : () => number
->function() { return 0; } : () => number
+>function() { return 0; } : () => 0
 >0 : 0
 
     public g() { return 0; }

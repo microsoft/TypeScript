@@ -8,12 +8,12 @@ var [...a, x] = [1, 2, 3];  // Error, rest must be last element
 >3 : 3
 
 [...a, x] = [1, 2, 3];      // Error, rest must be last element
->[...a, x] = [1, 2, 3] : number[]
+>[...a, x] = [1, 2, 3] : (1 | 2 | 3)[]
 >[...a, x] : number[]
 >...a : number
 >a : number[]
 >x : number
->[1, 2, 3] : number[]
+>[1, 2, 3] : (1 | 2 | 3)[]
 >1 : 1
 >2 : 2
 >3 : 3

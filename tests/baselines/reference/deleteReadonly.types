@@ -32,7 +32,7 @@ interface B {
 var b: B = {
 >b : B
 >B : B
->{  'test': 'test'} : { 'test': string; }
+>{  'test': 'test'} : { 'test': "test"; }
 
   'test': 'test'
 >'test' : "test"

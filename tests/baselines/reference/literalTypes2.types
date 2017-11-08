@@ -501,7 +501,7 @@ function f6() {
 >0 : 0
 >x3 : string
 >"foo" : "foo"
->{ x1: false, x2: 1, x3: "bar" } : { x1?: false; x2?: number; x3?: string; }
+>{ x1: false, x2: 1, x3: "bar" } : { x1?: false; x2?: 1; x3?: "bar"; }
 >x1 : boolean
 >false : false
 >x2 : number
@@ -721,7 +721,7 @@ const x7 = g6([1, 2]);  // Type number
 >x7 : number
 >g6([1, 2]) : number
 >g6 : <T>(x: T[]) => T
->[1, 2] : number[]
+>[1, 2] : (1 | 2)[]
 >1 : 1
 >2 : 2
 

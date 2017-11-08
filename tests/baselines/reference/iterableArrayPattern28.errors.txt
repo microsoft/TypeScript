@@ -1,13 +1,13 @@
 tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(1,33): error TS2501: A rest element cannot contain a binding pattern.
-tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,32): error TS2345: Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<[string, number]>'.
+tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,32): error TS2345: Argument of type '(["", 0] | ["hello", boolean])[]' is not assignable to parameter of type 'Iterable<[string, number]>'.
   Types of property '[Symbol.iterator]' are incompatible.
-    Type '() => IterableIterator<[string, number] | [string, boolean]>' is not assignable to type '() => Iterator<[string, number]>'.
-      Type 'IterableIterator<[string, number] | [string, boolean]>' is not assignable to type 'Iterator<[string, number]>'.
+    Type '() => IterableIterator<["", 0] | ["hello", boolean]>' is not assignable to type '() => Iterator<[string, number]>'.
+      Type 'IterableIterator<["", 0] | ["hello", boolean]>' is not assignable to type 'Iterator<[string, number]>'.
         Types of property 'next' are incompatible.
-          Type '(value?: any) => IteratorResult<[string, number] | [string, boolean]>' is not assignable to type '(value?: any) => IteratorResult<[string, number]>'.
-            Type 'IteratorResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<[string, number]>'.
-              Type '[string, number] | [string, boolean]' is not assignable to type '[string, number]'.
-                Type '[string, boolean]' is not assignable to type '[string, number]'.
+          Type '(value?: any) => IteratorResult<["", 0] | ["hello", boolean]>' is not assignable to type '(value?: any) => IteratorResult<[string, number]>'.
+            Type 'IteratorResult<["", 0] | ["hello", boolean]>' is not assignable to type 'IteratorResult<[string, number]>'.
+              Type '["", 0] | ["hello", boolean]' is not assignable to type '[string, number]'.
+                Type '["hello", boolean]' is not assignable to type '[string, number]'.
                   Type 'boolean' is not assignable to type 'number'.
 
 
@@ -17,13 +17,13 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,32): error
 !!! error TS2501: A rest element cannot contain a binding pattern.
     takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<[string, number]>'.
+!!! error TS2345: Argument of type '(["", 0] | ["hello", boolean])[]' is not assignable to parameter of type 'Iterable<[string, number]>'.
 !!! error TS2345:   Types of property '[Symbol.iterator]' are incompatible.
-!!! error TS2345:     Type '() => IterableIterator<[string, number] | [string, boolean]>' is not assignable to type '() => Iterator<[string, number]>'.
-!!! error TS2345:       Type 'IterableIterator<[string, number] | [string, boolean]>' is not assignable to type 'Iterator<[string, number]>'.
+!!! error TS2345:     Type '() => IterableIterator<["", 0] | ["hello", boolean]>' is not assignable to type '() => Iterator<[string, number]>'.
+!!! error TS2345:       Type 'IterableIterator<["", 0] | ["hello", boolean]>' is not assignable to type 'Iterator<[string, number]>'.
 !!! error TS2345:         Types of property 'next' are incompatible.
-!!! error TS2345:           Type '(value?: any) => IteratorResult<[string, number] | [string, boolean]>' is not assignable to type '(value?: any) => IteratorResult<[string, number]>'.
-!!! error TS2345:             Type 'IteratorResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<[string, number]>'.
-!!! error TS2345:               Type '[string, number] | [string, boolean]' is not assignable to type '[string, number]'.
-!!! error TS2345:                 Type '[string, boolean]' is not assignable to type '[string, number]'.
+!!! error TS2345:           Type '(value?: any) => IteratorResult<["", 0] | ["hello", boolean]>' is not assignable to type '(value?: any) => IteratorResult<[string, number]>'.
+!!! error TS2345:             Type 'IteratorResult<["", 0] | ["hello", boolean]>' is not assignable to type 'IteratorResult<[string, number]>'.
+!!! error TS2345:               Type '["", 0] | ["hello", boolean]' is not assignable to type '[string, number]'.
+!!! error TS2345:                 Type '["hello", boolean]' is not assignable to type '[string, number]'.
 !!! error TS2345:                   Type 'boolean' is not assignable to type 'number'.

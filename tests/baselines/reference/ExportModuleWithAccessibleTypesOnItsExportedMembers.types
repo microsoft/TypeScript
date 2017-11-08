@@ -40,7 +40,7 @@ module A {
                 return new Line({ x: 0, y: 0 }, p);
 >new Line({ x: 0, y: 0 }, p) : Line
 >Line : typeof Line
->{ x: 0, y: 0 } : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: 0; y: 0; }
 >x : number
 >0 : 0
 >y : number

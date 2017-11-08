@@ -12,7 +12,7 @@ interface I1 {
 var x: I1 = {a: "test", b: 42};
 >x : I1
 >I1 : I1
->{a: "test", b: 42} : { a: string; b: number; }
+>{a: "test", b: 42} : { a: "test"; b: 42; }
 >a : string
 >"test" : "test"
 >b : number

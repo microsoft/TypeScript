@@ -15,7 +15,7 @@ if (true) {
         var { x = 0 } = { x: 0 }; // Error
 >x : number
 >0 : 0
->{ x: 0 } : { x?: number; }
+>{ x: 0 } : { x?: 0; }
 >x : number
 >0 : 0
 
@@ -23,7 +23,7 @@ if (true) {
 >x : any
 >x : number
 >0 : 0
->{ x: 0 } : { x?: number; }
+>{ x: 0 } : { x?: 0; }
 >x : number
 >0 : 0
 

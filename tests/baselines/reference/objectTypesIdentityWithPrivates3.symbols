@@ -1,9 +1,10 @@
 === tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts ===
-interface T1 { }
+interface T1 { y }
 >T1 : Symbol(T1, Decl(objectTypesIdentityWithPrivates3.ts, 0, 0))
+>y : Symbol(T1.y, Decl(objectTypesIdentityWithPrivates3.ts, 0, 14))
 
 interface T2 { z }
->T2 : Symbol(T2, Decl(objectTypesIdentityWithPrivates3.ts, 0, 16))
+>T2 : Symbol(T2, Decl(objectTypesIdentityWithPrivates3.ts, 0, 18))
 >z : Symbol(T2.z, Decl(objectTypesIdentityWithPrivates3.ts, 1, 14))
 
 class C1<T> {
@@ -26,7 +27,7 @@ class C2 extends C1<T1> {
 var c1: C1<T2>;
 >c1 : Symbol(c1, Decl(objectTypesIdentityWithPrivates3.ts, 11, 3))
 >C1 : Symbol(C1, Decl(objectTypesIdentityWithPrivates3.ts, 1, 18))
->T2 : Symbol(T2, Decl(objectTypesIdentityWithPrivates3.ts, 0, 16))
+>T2 : Symbol(T2, Decl(objectTypesIdentityWithPrivates3.ts, 0, 18))
 
 <C2>c1; // Should succeed (private x originates in the same declaration)
 >C2 : Symbol(C2, Decl(objectTypesIdentityWithPrivates3.ts, 5, 1))
@@ -54,7 +55,7 @@ class C4 extends C3<T1> {
 var c3: C3<T2>;
 >c3 : Symbol(c3, Decl(objectTypesIdentityWithPrivates3.ts, 23, 3))
 >C3 : Symbol(C3, Decl(objectTypesIdentityWithPrivates3.ts, 12, 7))
->T2 : Symbol(T2, Decl(objectTypesIdentityWithPrivates3.ts, 0, 16))
+>T2 : Symbol(T2, Decl(objectTypesIdentityWithPrivates3.ts, 0, 18))
 
 <C4>c3; // Should fail (private x originates in the same declaration, but different types)
 >C4 : Symbol(C4, Decl(objectTypesIdentityWithPrivates3.ts, 17, 1))

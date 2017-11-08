@@ -4266,9 +4266,10 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return declaration.initializer ?
+            type = declaration.initializer ?
                 getUnionType([type, checkExpressionCached(declaration.initializer)], /*subtypeReduction*/ true) :
                 type;
+            return shouldUseLiteralType(declaration) ? type : getWidenedLiteralType(type);
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -9035,6 +9036,11 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
+                return (relation === comparableRelation && isRelatedToMonodirectional(target, source, /*reportErrors*/ false, headMessage))
+                    || isRelatedToMonodirectional(source, target, reportErrors, headMessage);
+            }
+
+            function isRelatedToMonodirectional(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
                     source = (<LiteralType>source).regularType;
                 }
@@ -9241,14 +9247,14 @@ namespace ts {
                     return Ternary.True;
                 }
                 for (const type of targetTypes) {
-                    const related = isRelatedTo(source, type, /*reportErrors*/ false);
+                    const related = isRelatedToMonodirectional(source, type, /*reportErrors*/ false);
                     if (related) {
                         return related;
                     }
                 }
                 if (reportErrors) {
                     const discriminantType = findMatchingDiscriminantType(source, target);
-                    isRelatedTo(source, discriminantType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
+                    isRelatedToMonodirectional(source, discriminantType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
                 }
                 return Ternary.False;
             }
@@ -9282,7 +9288,7 @@ namespace ts {
                 let result = Ternary.True;
                 const targetTypes = target.types;
                 for (const targetType of targetTypes) {
-                    const related = isRelatedTo(source, targetType, reportErrors);
+                    const related = isRelatedToMonodirectional(source, targetType, reportErrors);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -9298,7 +9304,7 @@ namespace ts {
                 }
                 const len = sourceTypes.length;
                 for (let i = 0; i < len; i++) {
-                    const related = isRelatedTo(sourceTypes[i], target, reportErrors && i === len - 1);
+                    const related = isRelatedToMonodirectional(sourceTypes[i], target, reportErrors && i === len - 1);
                     if (related) {
                         return related;
                     }
@@ -9310,7 +9316,7 @@ namespace ts {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
                 for (const sourceType of sourceTypes) {
-                    const related = isRelatedTo(sourceType, target, reportErrors);
+                    const related = isRelatedToMonodirectional(sourceType, target, reportErrors);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -9501,7 +9507,7 @@ namespace ts {
                         }
                         // Report constraint errors only if the constraint is not the empty object type
                         const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
-                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
+                        if (result = isRelatedToMonodirectional(constraint, target, reportConstraintErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
@@ -11775,7 +11781,7 @@ namespace ts {
                     }
                 }
             }
-            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
+            return mappedTypes ? getUnionType(mappedTypes, /*subtypeReduction*/ undefined, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined) : mappedType;
         }
 
         function extractTypesOfKind(type: Type, kind: TypeFlags) {
@@ -17396,7 +17402,7 @@ namespace ts {
             if (isUnitType(type) &&
                 !(contextualSignature &&
                     isLiteralContextualType(
-                        contextualSignature === getSignatureFromDeclaration(func) ? type : getReturnTypeOfSignature(contextualSignature)))) {
+                        contextualSignature === getSignatureFromDeclaration(func) ? type : getReturnTypeOfSignature(contextualSignature), type))) {
                 type = getWidenedLiteralType(type);
             }
 
@@ -17895,7 +17901,7 @@ namespace ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (!(isTypeComparableTo(leftType, stringType) || isTypeAssignableToKind(leftType, TypeFlags.NumberLike | TypeFlags.ESSymbol))) {
+            if (!isTypeAssignableToKind(leftType, TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
             if (!isTypeAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.TypeVariable)) {
@@ -18480,24 +18486,28 @@ namespace ts {
 
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
             const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
-            return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
-                getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
-                isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
+            return shouldUseLiteralType(declaration) ? type : getWidenedLiteralType(type);
         }
 
-        function isLiteralContextualType(contextualType: Type) {
+        function shouldUseLiteralType(declaration: VariableLikeDeclaration) {
+            return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
+                getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
+                (declaration.initializer && isTypeAssertion(declaration.initializer));
+        }
+
+        function isLiteralContextualType(contextualType: Type, candidateLiteral: Type): boolean {
             if (contextualType) {
+                if (contextualType.flags & TypeFlags.UnionOrIntersection) {
+                    return some((contextualType as UnionOrIntersectionType).types, t => isLiteralContextualType(t, candidateLiteral));
+                }
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-                    // If the type parameter is constrained to the base primitive type we're checking for,
-                    // consider this a literal context. For example, given a type parameter 'T extends string',
-                    // this causes us to infer string literal types for T.
-                    if (constraint.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum)) {
-                        return true;
-                    }
-                    contextualType = constraint;
+                    return isLiteralContextualType(constraint, candidateLiteral);
                 }
-                return maybeTypeOfKind(contextualType, (TypeFlags.Literal | TypeFlags.Index));
+                // No need to `maybeTypeOfKind` on the contextual type, as it can't be a union, _however_, `candidateLiteral` might still be one!
+                return !!(((contextualType.flags & TypeFlags.StringLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
+                    ((contextualType.flags & TypeFlags.NumberLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
+                    ((contextualType.flags & TypeFlags.BooleanLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)));
             }
             return false;
         }
@@ -18507,8 +18517,8 @@ namespace ts {
                 contextualType = getContextualType(node);
             }
             const type = checkExpression(node, checkMode);
-            const shouldWiden = isTypeAssertion(node) || isLiteralContextualType(contextualType);
-            return shouldWiden ? type : getWidenedLiteralType(type);
+            const shouldNotWiden = isTypeAssertion(node) || isLiteralContextualType(contextualType, type);
+            return shouldNotWiden ? type : getWidenedLiteralType(type);
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {

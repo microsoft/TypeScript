@@ -22,9 +22,9 @@ function parrot<T extends Named>(obj: T): T {
 
 
 parrot({
->parrot({    name: "TypeScript",}) : { name: string; }
+>parrot({    name: "TypeScript",}) : { name: "TypeScript"; }
 >parrot : <T extends Named>(obj: T) => T
->{    name: "TypeScript",} : { name: string; }
+>{    name: "TypeScript",} : { name: "TypeScript"; }
 
     name: "TypeScript",
 >name : string
@@ -33,9 +33,9 @@ parrot({
 });
 
 parrot({
->parrot({    name: "TypeScript",    age: 5,}) : { name: string; age: number; }
+>parrot({    name: "TypeScript",    age: 5,}) : { name: "TypeScript"; age: number; }
 >parrot : <T extends Named>(obj: T) => T
->{    name: "TypeScript",    age: 5,} : { name: string; age: number; }
+>{    name: "TypeScript",    age: 5,} : { name: "TypeScript"; age: 5; }
 
     name: "TypeScript",
 >name : string
@@ -48,9 +48,9 @@ parrot({
 });
 
 parrot({
->parrot({    name: "TypeScript",    age: function () { },}) : { name: string; age: () => void; }
+>parrot({    name: "TypeScript",    age: function () { },}) : { name: "TypeScript"; age: () => void; }
 >parrot : <T extends Named>(obj: T) => T
->{    name: "TypeScript",    age: function () { },} : { name: string; age: () => void; }
+>{    name: "TypeScript",    age: function () { },} : { name: "TypeScript"; age: () => void; }
 
     name: "TypeScript",
 >name : string
@@ -63,9 +63,9 @@ parrot({
 });
 
 parrot({
->parrot({    name: "TypeScript",    sayHello() {    },}) : { name: string; sayHello(): void; }
+>parrot({    name: "TypeScript",    sayHello() {    },}) : { name: "TypeScript"; sayHello(): void; }
 >parrot : <T extends Named>(obj: T) => T
->{    name: "TypeScript",    sayHello() {    },} : { name: string; sayHello(): void; }
+>{    name: "TypeScript",    sayHello() {    },} : { name: "TypeScript"; sayHello(): void; }
 
     name: "TypeScript",
 >name : string

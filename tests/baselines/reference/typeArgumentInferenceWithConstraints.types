@@ -168,7 +168,7 @@ someGenerics3<Window>(() => undefined);
 someGenerics3<number>(() => 3); // Error
 >someGenerics3<number>(() => 3) : void
 >someGenerics3 : <T extends any>(producer: () => T) => void
->() => 3 : () => number
+>() => 3 : () => 3
 >3 : 3
 
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
@@ -430,10 +430,10 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
 >a : number
 >b : string
->{ a: 0 } : { a: number; }
+>{ a: 0 } : { a: 0; }
 >a : number
 >0 : 0
->{ b: '' } : { b: string; }
+>{ b: '' } : { b: ""; }
 >b : string
 >'' : ""
 >null : null
@@ -468,12 +468,12 @@ var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: any; }
+>{ x: 6, z: window } : { x: 6; z: any; }
 >x : number
 >6 : 6
 >z : any
 >window : any
->{ x: 6, y: '' } : { x: number; y: string; }
+>{ x: 6, y: '' } : { x: 6; y: ""; }
 >x : number
 >6 : 6
 >y : string
@@ -508,13 +508,13 @@ var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >a9d : { x: number; }
 >someGenerics9({ x: 3 }, { x: 6 }, { x: 6 }) : { x: number; }
 >someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
->{ x: 3 } : { x: number; }
+>{ x: 3 } : { x: 3; }
 >x : number
 >3 : 3
->{ x: 6 } : { x: number; }
+>{ x: 6 } : { x: 6; }
 >x : number
 >6 : 6
->{ x: 6 } : { x: number; }
+>{ x: 6 } : { x: 6; }
 >x : number
 >6 : 6
 

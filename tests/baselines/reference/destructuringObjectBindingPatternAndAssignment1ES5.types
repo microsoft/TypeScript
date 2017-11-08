@@ -27,9 +27,9 @@ var { b2: { b21 } = { b21: "string" }  } = { b2: { b21: "world" } };
 >{ b21: "string" } : { b21: string; }
 >b21 : string
 >"string" : "string"
->{ b2: { b21: "world" } } : { b2?: { b21: string; }; }
->b2 : { b21: string; }
->{ b21: "world" } : { b21: string; }
+>{ b2: { b21: "world" } } : { b2?: { b21: "world"; }; }
+>b2 : { b21: "world"; }
+>{ b21: "world" } : { b21: "world"; }
 >b21 : string
 >"world" : "world"
 
@@ -114,7 +114,7 @@ function foo1(): F1 {
 >F1 : F1
 
     return {
->{        "prop1": 2    } : { "prop1": number; }
+>{        "prop1": 2    } : { "prop1": 2; }
 
         "prop1": 2
 >2 : 2

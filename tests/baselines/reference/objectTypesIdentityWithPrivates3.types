@@ -1,6 +1,7 @@
 === tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts ===
-interface T1 { }
+interface T1 { y }
 >T1 : T1
+>y : any
 
 interface T2 { z }
 >T2 : T2

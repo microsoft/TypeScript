@@ -32,7 +32,7 @@ class SymbolIterator {
 
 var array: number[] = [0, 1, ...new SymbolIterator];
 >array : number[]
->[0, 1, ...new SymbolIterator] : (number | symbol)[]
+>[0, 1, ...new SymbolIterator] : (symbol | 0 | 1)[]
 >0 : 0
 >1 : 1
 >...new SymbolIterator : symbol

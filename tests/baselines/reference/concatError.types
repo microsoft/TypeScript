@@ -18,7 +18,7 @@ fa = fa.concat([0]);
 >fa.concat : { (...items: ReadonlyArray<number>[]): number[]; (...items: (number | ReadonlyArray<number>)[]): number[]; }
 >fa : number[]
 >concat : { (...items: ReadonlyArray<number>[]): number[]; (...items: (number | ReadonlyArray<number>)[]): number[]; }
->[0] : number[]
+>[0] : 0[]
 >0 : 0
 
 fa = fa.concat(0);

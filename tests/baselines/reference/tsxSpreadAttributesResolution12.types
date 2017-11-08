@@ -20,7 +20,7 @@ const obj3: {y: false, overwrite: string} = {
 >y : false
 >false : false
 >overwrite : string
->{    y: false,    overwrite: "hi"} : { y: false; overwrite: string; }
+>{    y: false,    overwrite: "hi"} : { y: false; overwrite: "hi"; }
 
     y: false,
 >y : boolean

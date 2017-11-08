@@ -24,7 +24,7 @@ export interface Some<a> { readonly some: a; }
 export const none : None = { none: '' };
 >none : None
 >None : None
->{ none: '' } : { none: string; }
+>{ none: '' } : { none: ""; }
 >none : string
 >'' : ""
 

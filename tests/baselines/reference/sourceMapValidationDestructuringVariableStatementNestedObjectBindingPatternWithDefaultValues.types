@@ -26,11 +26,11 @@ interface Robot {
 var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >robotA : Robot
 >Robot : Robot
->{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: "mower"; skills: { primary: "mowing"; secondary: "none"; }; }
 >name : string
 >"mower" : "mower"
->skills : { primary: string; secondary: string; }
->{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
+>skills : { primary: "mowing"; secondary: "none"; }
+>{ primary: "mowing", secondary: "none" } : { primary: "mowing"; secondary: "none"; }
 >primary : string
 >"mowing" : "mowing"
 >secondary : string
@@ -39,11 +39,11 @@ var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "no
 var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } };
 >robotB : Robot
 >Robot : Robot
->{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: "trimmer"; skills: { primary: "trimming"; secondary: "edging"; }; }
 >name : string
 >"trimmer" : "trimmer"
->skills : { primary: string; secondary: string; }
->{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
+>skills : { primary: "trimming"; secondary: "edging"; }
+>{ primary: "trimming", secondary: "edging" } : { primary: "trimming"; secondary: "edging"; }
 >primary : string
 >"trimming" : "trimming"
 >secondary : string
@@ -64,7 +64,7 @@ var {
 >"noSkill" : "noSkill"
 
     } = { primary: "noSkill", secondary: "noSkill" }
->{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>{ primary: "noSkill", secondary: "noSkill" } : { primary?: "noSkill"; secondary?: "noSkill"; }
 >primary : string
 >"noSkill" : "noSkill"
 >secondary : string
@@ -93,7 +93,7 @@ var {
 >"noSkill" : "noSkill"
 
     } = { primary: "noSkill", secondary: "noSkill" }
->{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>{ primary: "noSkill", secondary: "noSkill" } : { primary?: "noSkill"; secondary?: "noSkill"; }
 >primary : string
 >"noSkill" : "noSkill"
 >secondary : string
@@ -122,7 +122,7 @@ var {
 >"noSkill" : "noSkill"
 
     } = { primary: "noSkill", secondary: "noSkill" }
->{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>{ primary: "noSkill", secondary: "noSkill" } : { primary?: "noSkill"; secondary?: "noSkill"; }
 >primary : string
 >"noSkill" : "noSkill"
 >secondary : string
@@ -131,11 +131,11 @@ var {
 } = <Robot>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
 ><Robot>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : Robot
 >Robot : Robot
->{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: "Edger"; skills: { primary: "edging"; secondary: "branch trimming"; }; }
 >name : string
 >"Edger" : "Edger"
->skills : { primary: string; secondary: string; }
->{ primary: "edging", secondary: "branch trimming" } : { primary: string; secondary: string; }
+>skills : { primary: "edging"; secondary: "branch trimming"; }
+>{ primary: "edging", secondary: "branch trimming" } : { primary: "edging"; secondary: "branch trimming"; }
 >primary : string
 >"edging" : "edging"
 >secondary : string

@@ -132,7 +132,7 @@ function implicitThis(n: number): number {
 let impl: I = {
 >impl : I
 >I : I
->{    a: 12,    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)    explicitVoid1() { return 12; },    explicitStructural() {        return this.a;    },    explicitInterface() {        return this.a;    },    explicitThis() {        return this.a;    },} : { a: number; explicitVoid2: () => any; explicitVoid1(this: void): number; explicitStructural(this: { a: number; }): number; explicitInterface(this: I): number; explicitThis(this: I): number; }
+>{    a: 12,    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)    explicitVoid1() { return 12; },    explicitStructural() {        return this.a;    },    explicitInterface() {        return this.a;    },    explicitThis() {        return this.a;    },} : { a: 12; explicitVoid2: () => any; explicitVoid1(this: void): 12; explicitStructural(this: { a: number; }): number; explicitInterface(this: I): number; explicitThis(this: I): number; }
 
     a: 12,
 >a : number
@@ -146,7 +146,7 @@ let impl: I = {
 >a : any
 
     explicitVoid1() { return 12; },
->explicitVoid1 : (this: void) => number
+>explicitVoid1 : (this: void) => 12
 >12 : 12
 
     explicitStructural() {
@@ -178,19 +178,19 @@ let impl: I = {
     },
 }
 impl.explicitVoid1 = function () { return 12; };
->impl.explicitVoid1 = function () { return 12; } : (this: void) => number
+>impl.explicitVoid1 = function () { return 12; } : (this: void) => 12
 >impl.explicitVoid1 : (this: void) => number
 >impl : I
 >explicitVoid1 : (this: void) => number
->function () { return 12; } : (this: void) => number
+>function () { return 12; } : (this: void) => 12
 >12 : 12
 
 impl.explicitVoid2 = () => 12;
->impl.explicitVoid2 = () => 12 : () => number
+>impl.explicitVoid2 = () => 12 : () => 12
 >impl.explicitVoid2 : (this: void) => number
 >impl : I
 >explicitVoid2 : (this: void) => number
->() => 12 : () => number
+>() => 12 : () => 12
 >12 : 12
 
 impl.explicitStructural = function() { return this.a; };
@@ -214,19 +214,19 @@ impl.explicitInterface = function() { return this.a; };
 >a : number
 
 impl.explicitStructural = () => 12;
->impl.explicitStructural = () => 12 : () => number
+>impl.explicitStructural = () => 12 : () => 12
 >impl.explicitStructural : (this: { a: number; }) => number
 >impl : I
 >explicitStructural : (this: { a: number; }) => number
->() => 12 : () => number
+>() => 12 : () => 12
 >12 : 12
 
 impl.explicitInterface = () => 12;
->impl.explicitInterface = () => 12 : () => number
+>impl.explicitInterface = () => 12 : () => 12
 >impl.explicitInterface : (this: I) => number
 >impl : I
 >explicitInterface : (this: I) => number
->() => 12 : () => number
+>() => 12 : () => 12
 >12 : 12
 
 impl.explicitThis = function () { return this.a; };
@@ -247,7 +247,7 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, f:
 >this : { y: number; }
 >y : number
 >x : number
->{ y: 12, f: explicitStructural } : { y: number; f: (this: { y: number; }, x: number) => number; }
+>{ y: 12, f: explicitStructural } : { y: 12; f: (this: { y: number; }, x: number) => number; }
 >y : number
 >12 : 12
 >f : (this: { y: number; }, x: number) => number
@@ -258,7 +258,7 @@ let implicitAnyOk: {notSpecified: number, f: (x: number) => number} = { notSpeci
 >notSpecified : number
 >f : (x: number) => number
 >x : number
->{ notSpecified: 12, f: implicitThis } : { notSpecified: number; f: (n: number) => number; }
+>{ notSpecified: 12, f: implicitThis } : { notSpecified: 12; f: (n: number) => number; }
 >notSpecified : number
 >12 : 12
 >f : (n: number) => number
@@ -371,7 +371,7 @@ let reconstructed: {
 >m : number
 
 } = { 
->{     n: 12,    explicitThis: c.explicitThis,    explicitC: c.explicitC,    explicitProperty: c.explicitProperty,    explicitVoid: c.explicitVoid} : { n: number; explicitThis: (this: C, m: number) => number; explicitC: (this: C, m: number) => number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid: (this: void, m: number) => number; }
+>{     n: 12,    explicitThis: c.explicitThis,    explicitC: c.explicitC,    explicitProperty: c.explicitProperty,    explicitVoid: c.explicitVoid} : { n: 12; explicitThis: (this: C, m: number) => number; explicitC: (this: C, m: number) => number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid: (this: void, m: number) => number; }
 
     n: 12,
 >n : number

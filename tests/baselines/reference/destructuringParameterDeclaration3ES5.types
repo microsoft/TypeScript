@@ -137,7 +137,7 @@ a10([1, 2]);                              // Parameter type is any[]
 a11([1, 2]);                              // Parameter type is number[]
 >a11([1, 2]) : void
 >a11 : ([a, b, c, ...x]: number[]) => void
->[1, 2] : number[]
+>[1, 2] : (1 | 2)[]
 >1 : 1
 >2 : 2
 

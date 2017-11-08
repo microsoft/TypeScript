@@ -9,7 +9,7 @@ interface I {
 var I:I = { I: 3};
 >I : I
 >I : I
->{ I: 3} : { I: number; }
+>{ I: 3} : { I: 3; }
 >I : number
 >3 : 3
 

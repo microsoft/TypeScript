@@ -103,7 +103,7 @@ var y = new C1(10, [0, "", true]);
 >new C1(10, [0, "", true]) : C1
 >C1 : typeof C1
 >10 : 10
->[0, "", true] : [number, string, true]
+>[0, "", true] : [0, "", true]
 >0 : 0
 >"" : ""
 >true : true
@@ -131,7 +131,7 @@ var z = new C1(10, [undefined, "", null]);
 >new C1(10, [undefined, "", null]) : C1
 >C1 : typeof C1
 >10 : 10
->[undefined, "", null] : [undefined, string, null]
+>[undefined, "", null] : [undefined, "", null]
 >undefined : undefined
 >"" : ""
 >null : null

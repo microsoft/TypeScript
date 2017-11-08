@@ -127,7 +127,7 @@ function c3({b}: { b: number|string } = { b: "hello" }) { }
 >c3 : ({ b }?: { b: string | number; }) => void
 >b : string | number
 >b : string | number
->{ b: "hello" } : { b: string; }
+>{ b: "hello" } : { b: "hello"; }
 >b : string
 >"hello" : "hello"
 

@@ -31,8 +31,8 @@ var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
 >b3 : Book | Book[]
 >Book : Book
 >Book : Book
->[{ foreword: "hello" }, { forwards: "back" }] : ({ foreword: string; } | { forwards: string; })[]
->{ foreword: "hello" } : { foreword: string; }
+>[{ foreword: "hello" }, { forwards: "back" }] : ({ foreword: "hello"; } | { forwards: string; })[]
+>{ foreword: "hello" } : { foreword: "hello"; }
 >foreword : string
 >"hello" : "hello"
 >{ forwards: "back" } : { forwards: string; }
@@ -43,7 +43,7 @@ var b4: Book & Cover = { foreword: "hi", colour: "blue" };
 >b4 : Book & Cover
 >Book : Book
 >Cover : Cover
->{ foreword: "hi", colour: "blue" } : { foreword: string; colour: string; }
+>{ foreword: "hi", colour: "blue" } : { foreword: "hi"; colour: string; }
 >foreword : string
 >"hi" : "hi"
 >colour : string
@@ -53,7 +53,7 @@ var b5: Book & Cover = { foreward: "hi", color: "blue" };
 >b5 : Book & Cover
 >Book : Book
 >Cover : Cover
->{ foreward: "hi", color: "blue" } : { foreward: string; color: string; }
+>{ foreward: "hi", color: "blue" } : { foreward: string; color: "blue"; }
 >foreward : string
 >"hi" : "hi"
 >color : string
@@ -63,7 +63,7 @@ var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 >b6 : Book & Cover
 >Book : Book
 >Cover : Cover
->{ foreword: "hi", color: "blue", price: 10.99 } : { foreword: string; color: string; price: number; }
+>{ foreword: "hi", color: "blue", price: 10.99 } : { foreword: "hi"; color: "blue"; price: number; }
 >foreword : string
 >"hi" : "hi"
 >color : string
@@ -74,7 +74,7 @@ var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 var b7: Book & number = { foreword: "hi", price: 10.99 };
 >b7 : Book & number
 >Book : Book
->{ foreword: "hi", price: 10.99 } : { foreword: string; price: number; }
+>{ foreword: "hi", price: 10.99 } : { foreword: "hi"; price: number; }
 >foreword : string
 >"hi" : "hi"
 >price : number
