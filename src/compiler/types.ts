@@ -3347,6 +3347,7 @@ namespace ts {
 
     export interface StringLiteralType extends LiteralType {
         value: string;
+        /*@internal*/ resolvedApparentType?: Type; // Cached generated apparent properties
     }
 
     export interface NumberLiteralType extends LiteralType {

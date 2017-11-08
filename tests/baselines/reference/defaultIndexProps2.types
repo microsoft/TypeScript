@@ -28,8 +28,8 @@ var o = {v:"Yo2"};
 >0 : 0
 
 var q = "s"[0];
->q : string
->"s"[0] : string
+>q : "s"
+>"s"[0] : "s"
 >"s" : "s"
 >0 : 0
 

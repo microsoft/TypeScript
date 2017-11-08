@@ -21,4 +21,5 @@ var o = {v:"Yo2"};
 1[0];
 var q = "s"[0];
 >q : Symbol(q, Decl(defaultIndexProps2.ts, 13, 3))
+>0 : Symbol(0)
 
