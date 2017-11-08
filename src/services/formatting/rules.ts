@@ -2,6 +2,7 @@
 
 /* @internal */
 namespace ts.formatting {
+    // tslint:disable variable-name (TODO)
     export class Rules {
         public IgnoreBeforeComment: Rule;
         public IgnoreAfterLineComment: Rule;
@@ -755,9 +756,8 @@ namespace ts.formatting {
                     return true;
                 case SyntaxKind.Block: {
                     const blockParent = context.currentTokenParent.parent;
-                    if (blockParent.kind !== SyntaxKind.ArrowFunction &&
-                        blockParent.kind !== SyntaxKind.FunctionExpression
-                    ) {
+                    // In a codefix scenario, we can't rely on parents being set. So just always return true.
+                    if (!blockParent || blockParent.kind !== SyntaxKind.ArrowFunction && blockParent.kind !== SyntaxKind.FunctionExpression) {
                         return true;
                     }
                 }
@@ -850,7 +850,7 @@ namespace ts.formatting {
         }
 
         static NodeIsInDecoratorContext(node: Node): boolean {
-            while (isPartOfExpression(node)) {
+            while (isExpressionNode(node)) {
                 node = node.parent;
             }
             return node.kind === SyntaxKind.Decorator;

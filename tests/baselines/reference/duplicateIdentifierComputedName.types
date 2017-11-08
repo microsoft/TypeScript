@@ -1,0 +1,11 @@
+=== tests/cases/compiler/duplicateIdentifierComputedName.ts ===
+class C {
+>C : C
+
+    ["a"]: string;
+>"a" : "a"
+
+    ["a"]: string;
+>"a" : "a"
+}
+

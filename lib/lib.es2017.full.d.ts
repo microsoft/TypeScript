@@ -37,9 +37,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): T | undefined;
-    find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): T | undefined;
-    find<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): T | undefined;
+    find(predicate: (value: T, index: number, obj: T[]) => boolean, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -50,9 +48,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number;
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): number;
-    findIndex<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): number;
+    findIndex(predicate: (value: T, index: number, obj: T[]) => boolean, thisArg?: any): number;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -83,22 +79,13 @@ interface ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U): Array<U>;
-    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U, thisArg: undefined): Array<U>;
-    from<Z, T, U>(arrayLike: ArrayLike<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): Array<U>;
-
-
-    /**
-     * Creates an array from an array-like object.
-     * @param arrayLike An array-like object to convert to an array.
-     */
-    from<T>(arrayLike: ArrayLike<T>): Array<T>;
+    from<T, U = T>(arrayLike: ArrayLike<T>, mapfn?: (v: T, k: number) => U, thisArg?: any): U[];
 
     /**
      * Returns a new array from a set of elements.
      * @param items A set of elements to include in the new array object.
      */
-    of<T>(...items: T[]): Array<T>;
+    of<T>(...items: T[]): T[];
 }
 
 interface DateConstructor {
@@ -367,7 +354,7 @@ interface ObjectConstructor {
      * @param o Object that contains the property.
      * @param p Name of the property.
      */
-    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor;
+    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor | undefined;
 
     /**
      * Adds a property to an object, or modifies attributes of an existing property.
@@ -390,9 +377,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean): T | undefined;
-    find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: undefined): T | undefined;
-    find<Z>(predicate: (this: Z, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: Z): T | undefined;
+    find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -403,9 +388,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number;
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): number;
-    findIndex<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): number;
+    findIndex(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): number;
 }
 
 interface RegExp {
@@ -745,15 +728,7 @@ interface ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U>(iterable: Iterable<T>, mapfn: (this: void, v: T, k: number) => U): Array<U>;
-    from<T, U>(iterable: Iterable<T>, mapfn: (this: void, v: T, k: number) => U, thisArg: undefined): Array<U>;
-    from<Z, T, U>(iterable: Iterable<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): Array<U>;
-
-    /**
-     * Creates an array from an iterable object.
-     * @param iterable An iterable object to convert to an array.
-     */
-    from<T>(iterable: Iterable<T>): Array<T>;
+    from<T, U = T>(iterable: Iterable<T>, mapfn?: (v: T, k: number) => U, thisArg?: any): U[];
 }
 
 interface ReadonlyArray<T> {
@@ -908,10 +883,6 @@ interface String {
     [Symbol.iterator](): IterableIterator<string>;
 }
 
-/**
- * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
- * number of bytes could not be allocated an exception is raised.
- */
 interface Int8Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -937,17 +908,9 @@ interface Int8ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Int8Array;
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int8Array;
-    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int8Array;
-
-    from(arrayLike: Iterable<number>): Int8Array;
+    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
 }
 
-/**
- * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Uint8Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -973,17 +936,9 @@ interface Uint8ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Uint8Array;
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint8Array;
-    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8Array;
-
-    from(arrayLike: Iterable<number>): Uint8Array;
+    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
 }
 
-/**
- * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
- * If the requested number of bytes could not be allocated an exception is raised.
- */
 interface Uint8ClampedArray {
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -1012,17 +967,9 @@ interface Uint8ClampedArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Uint8ClampedArray;
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint8ClampedArray;
-    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8ClampedArray;
-
-    from(arrayLike: Iterable<number>): Uint8ClampedArray;
+    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray;
 }
 
-/**
- * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Int16Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -1050,17 +997,9 @@ interface Int16ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Int16Array;
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int16Array;
-    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int16Array;
-
-    from(arrayLike: Iterable<number>): Int16Array;
+    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
 }
 
-/**
- * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Uint16Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -1086,17 +1025,9 @@ interface Uint16ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Uint16Array;
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint16Array;
-    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint16Array;
-
-    from(arrayLike: Iterable<number>): Uint16Array;
+    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
 }
 
-/**
- * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Int32Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -1122,17 +1053,9 @@ interface Int32ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Int32Array;
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int32Array;
-    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int32Array;
-
-    from(arrayLike: Iterable<number>): Int32Array;
+    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
 }
 
-/**
- * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Uint32Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -1158,17 +1081,9 @@ interface Uint32ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Uint32Array;
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint32Array;
-    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint32Array;
-
-    from(arrayLike: Iterable<number>): Uint32Array;
+    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
 }
 
-/**
- * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
- * of bytes could not be allocated an exception is raised.
- */
 interface Float32Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -1194,17 +1109,9 @@ interface Float32ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Float32Array;
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Float32Array;
-    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float32Array;
-
-    from(arrayLike: Iterable<number>): Float32Array;
+    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
 }
 
-/**
- * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
- * number of bytes could not be allocated an exception is raised.
- */
 interface Float64Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
@@ -1230,11 +1137,7 @@ interface Float64ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Float64Array;
-    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Float64Array;
-    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float64Array;
-
-    from(arrayLike: Iterable<number>): Float64Array;
+    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
 }
 
 
@@ -1472,11 +1375,11 @@ declare namespace Reflect {
     function defineProperty(target: object, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
     function deleteProperty(target: object, propertyKey: PropertyKey): boolean;
     function get(target: object, propertyKey: PropertyKey, receiver?: any): any;
-    function getOwnPropertyDescriptor(target: object, propertyKey: PropertyKey): PropertyDescriptor;
+    function getOwnPropertyDescriptor(target: object, propertyKey: PropertyKey): PropertyDescriptor | undefined;
     function getPrototypeOf(target: object): object;
     function has(target: object, propertyKey: PropertyKey): boolean;
     function isExtensible(target: object): boolean;
-    function ownKeys(target: object): Array<PropertyKey>;
+    function ownKeys(target: object): PropertyKey[];
     function preventExtensions(target: object): boolean;
     function set(target: object, propertyKey: PropertyKey, value: any, receiver?: any): boolean;
     function setPrototypeOf(target: object, proto: any): boolean;
@@ -1762,12 +1665,6 @@ interface String {
     split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
 }
 
-/**
- * Represents a raw buffer of binary data, which is used to store data for the
- * different typed arrays. ArrayBuffers cannot be read from or written to directly,
- * but can be passed to a typed array or DataView Object to interpret the raw
- * buffer as needed.
- */
 interface ArrayBuffer {
     readonly [Symbol.toStringTag]: "ArrayBuffer";
 }
@@ -1776,74 +1673,38 @@ interface DataView {
     readonly [Symbol.toStringTag]: "DataView";
 }
 
-/**
- * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
- * number of bytes could not be allocated an exception is raised.
- */
 interface Int8Array {
     readonly [Symbol.toStringTag]: "Int8Array";
 }
 
-/**
- * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Uint8Array {
     readonly [Symbol.toStringTag]: "UInt8Array";
 }
 
-/**
- * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
- * If the requested number of bytes could not be allocated an exception is raised.
- */
 interface Uint8ClampedArray {
     readonly [Symbol.toStringTag]: "Uint8ClampedArray";
 }
 
-/**
- * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Int16Array {
     readonly [Symbol.toStringTag]: "Int16Array";
 }
 
-/**
- * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Uint16Array {
     readonly [Symbol.toStringTag]: "Uint16Array";
 }
 
-/**
- * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Int32Array {
     readonly [Symbol.toStringTag]: "Int32Array";
 }
 
-/**
- * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
- * requested number of bytes could not be allocated an exception is raised.
- */
 interface Uint32Array {
     readonly [Symbol.toStringTag]: "Uint32Array";
 }
 
-/**
- * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
- * of bytes could not be allocated an exception is raised.
- */
 interface Float32Array {
     readonly [Symbol.toStringTag]: "Float32Array";
 }
 
-/**
- * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
- * number of bytes could not be allocated an exception is raised.
- */
 interface Float64Array {
     readonly [Symbol.toStringTag]: "Float64Array";
 }
@@ -1855,11 +1716,11 @@ interface Float64Array {
 /////////////////////////////
 
 interface Account {
-    displayName?: string;
-    id?: string;
+    displayName: string;
+    id: string;
     imageURL?: string;
     name?: string;
-    rpDisplayName?: string;
+    rpDisplayName: string;
 }
 
 interface Algorithm {
@@ -1886,11 +1747,11 @@ interface CacheQueryOptions {
 }
 
 interface ClientData {
-    challenge?: string;
+    challenge: string;
     extensions?: WebAuthnExtensions;
-    hashAlg?: string | Algorithm;
-    origin?: string;
-    rpId?: string;
+    hashAlg: string | Algorithm;
+    origin: string;
+    rpId: string;
     tokenBinding?: string;
 }
 
@@ -1938,9 +1799,9 @@ interface CustomEventInit extends EventInit {
 }
 
 interface DeviceAccelerationDict {
-    x?: number;
-    y?: number;
-    z?: number;
+    x?: number | null;
+    y?: number | null;
+    z?: number | null;
 }
 
 interface DeviceLightEventInit extends EventInit {
@@ -1948,30 +1809,30 @@ interface DeviceLightEventInit extends EventInit {
 }
 
 interface DeviceMotionEventInit extends EventInit {
-    acceleration?: DeviceAccelerationDict;
-    accelerationIncludingGravity?: DeviceAccelerationDict;
-    interval?: number;
-    rotationRate?: DeviceRotationRateDict;
+    acceleration?: DeviceAccelerationDict | null;
+    accelerationIncludingGravity?: DeviceAccelerationDict | null;
+    interval?: number | null;
+    rotationRate?: DeviceRotationRateDict | null;
 }
 
 interface DeviceOrientationEventInit extends EventInit {
     absolute?: boolean;
-    alpha?: number;
-    beta?: number;
-    gamma?: number;
+    alpha?: number | null;
+    beta?: number | null;
+    gamma?: number | null;
 }
 
 interface DeviceRotationRateDict {
-    alpha?: number;
-    beta?: number;
-    gamma?: number;
+    alpha?: number | null;
+    beta?: number | null;
+    gamma?: number | null;
 }
 
 interface DOMRectInit {
-    height?: any;
-    width?: any;
-    x?: any;
-    y?: any;
+    height?: number;
+    width?: number;
+    x?: number;
+    y?: number;
 }
 
 interface DoubleRange {
@@ -2012,15 +1873,15 @@ interface EventModifierInit extends UIEventInit {
 }
 
 interface ExceptionInformation {
-    domain?: string;
+    domain?: string | null;
 }
 
 interface FocusEventInit extends UIEventInit {
-    relatedTarget?: EventTarget;
+    relatedTarget?: EventTarget | null;
 }
 
 interface FocusNavigationEventInit extends EventInit {
-    navigationReason?: string;
+    navigationReason?: string | null;
     originHeight?: number;
     originLeft?: number;
     originTop?: number;
@@ -2035,7 +1896,7 @@ interface FocusNavigationOrigin {
 }
 
 interface GamepadEventInit extends EventInit {
-    gamepad?: Gamepad;
+    gamepad?: Gamepad | null;
 }
 
 interface GetNotificationOptions {
@@ -2043,8 +1904,8 @@ interface GetNotificationOptions {
 }
 
 interface HashChangeEventInit extends EventInit {
-    newURL?: string;
-    oldURL?: string;
+    newURL?: string | null;
+    oldURL?: string | null;
 }
 
 interface IDBIndexParameters {
@@ -2054,19 +1915,20 @@ interface IDBIndexParameters {
 
 interface IDBObjectStoreParameters {
     autoIncrement?: boolean;
-    keyPath?: IDBKeyPath;
+    keyPath?: IDBKeyPath | null;
 }
 
 interface IntersectionObserverEntryInit {
-    boundingClientRect?: DOMRectInit;
-    intersectionRect?: DOMRectInit;
-    rootBounds?: DOMRectInit;
-    target?: Element;
-    time?: number;
+    isIntersecting: boolean;
+    boundingClientRect: DOMRectInit;
+    intersectionRect: DOMRectInit;
+    rootBounds: DOMRectInit;
+    target: Element;
+    time: number;
 }
 
 interface IntersectionObserverInit {
-    root?: Element;
+    root?: Element | null;
     rootMargin?: string;
     threshold?: number | number[];
 }
@@ -2088,12 +1950,12 @@ interface LongRange {
 }
 
 interface MediaEncryptedEventInit extends EventInit {
-    initData?: ArrayBuffer;
+    initData?: ArrayBuffer | null;
     initDataType?: string;
 }
 
 interface MediaKeyMessageEventInit extends EventInit {
-    message?: ArrayBuffer;
+    message?: ArrayBuffer | null;
     messageType?: MediaKeyMessageType;
 }
 
@@ -2116,7 +1978,7 @@ interface MediaStreamConstraints {
 }
 
 interface MediaStreamErrorEventInit extends EventInit {
-    error?: MediaStreamError;
+    error?: MediaStreamError | null;
 }
 
 interface MediaStreamEventInit extends EventInit {
@@ -2124,7 +1986,7 @@ interface MediaStreamEventInit extends EventInit {
 }
 
 interface MediaStreamTrackEventInit extends EventInit {
-    track?: MediaStreamTrack;
+    track?: MediaStreamTrack | null;
 }
 
 interface MediaTrackCapabilities {
@@ -2201,7 +2063,7 @@ interface MouseEventInit extends EventModifierInit {
     buttons?: number;
     clientX?: number;
     clientY?: number;
-    relatedTarget?: EventTarget;
+    relatedTarget?: EventTarget | null;
     screenX?: number;
     screenY?: number;
 }
@@ -2209,8 +2071,8 @@ interface MouseEventInit extends EventModifierInit {
 interface MSAccountInfo {
     accountImageUri?: string;
     accountName?: string;
-    rpDisplayName?: string;
-    userDisplayName?: string;
+    rpDisplayName: string;
+    userDisplayName: string;
     userId?: string;
 }
 
@@ -2293,7 +2155,7 @@ interface MSCredentialParameters {
 
 interface MSCredentialSpec {
     id?: string;
-    type?: MSCredentialType;
+    type: MSCredentialType;
 }
 
 interface MSDelay {
@@ -2503,8 +2365,8 @@ interface MsZoomToOptions {
     contentX?: number;
     contentY?: number;
     scaleFactor?: number;
-    viewportX?: string;
-    viewportY?: string;
+    viewportX?: string | null;
+    viewportY?: string | null;
 }
 
 interface MutationObserverInit {
@@ -2530,9 +2392,9 @@ interface ObjectURLOptions {
 }
 
 interface PaymentCurrencyAmount {
-    currency?: string;
+    currency: string;
     currencySystem?: string;
-    value?: string;
+    value: string;
 }
 
 interface PaymentDetails {
@@ -2546,19 +2408,19 @@ interface PaymentDetails {
 interface PaymentDetailsModifier {
     additionalDisplayItems?: PaymentItem[];
     data?: any;
-    supportedMethods?: string[];
+    supportedMethods: string[];
     total?: PaymentItem;
 }
 
 interface PaymentItem {
-    amount?: PaymentCurrencyAmount;
-    label?: string;
+    amount: PaymentCurrencyAmount;
+    label: string;
     pending?: boolean;
 }
 
 interface PaymentMethodData {
     data?: any;
-    supportedMethods?: string[];
+    supportedMethods: string[];
 }
 
 interface PaymentOptions {
@@ -2573,9 +2435,9 @@ interface PaymentRequestUpdateEventInit extends EventInit {
 }
 
 interface PaymentShippingOption {
-    amount?: PaymentCurrencyAmount;
-    id?: string;
-    label?: string;
+    amount: PaymentCurrencyAmount;
+    id: string;
+    label: string;
     selected?: boolean;
 }
 
@@ -2623,7 +2485,7 @@ interface RequestInit {
     body?: any;
     cache?: RequestCache;
     credentials?: RequestCredentials;
-    headers?: any;
+    headers?: Headers | string[][];
     integrity?: string;
     keepalive?: boolean;
     method?: string;
@@ -2635,7 +2497,7 @@ interface RequestInit {
 }
 
 interface ResponseInit {
-    headers?: any;
+    headers?: Headers | string[][];
     status?: number;
     statusText?: string;
 }
@@ -2720,15 +2582,15 @@ interface RTCIceGatherOptions {
 }
 
 interface RTCIceParameters {
-    iceLite?: boolean;
+    iceLite?: boolean | null;
     password?: string;
     usernameFragment?: string;
 }
 
 interface RTCIceServer {
-    credential?: string;
+    credential?: string | null;
     urls?: any;
-    username?: string;
+    username?: string | null;
 }
 
 interface RTCInboundRTPStreamStats extends RTCRTPStreamStats {
@@ -2938,9 +2800,9 @@ interface RTCTransportStats extends RTCStats {
 }
 
 interface ScopedCredentialDescriptor {
-    id?: any;
+    id: any;
     transports?: Transport[];
-    type?: ScopedCredentialType;
+    type: ScopedCredentialType;
 }
 
 interface ScopedCredentialOptions {
@@ -2951,29 +2813,29 @@ interface ScopedCredentialOptions {
 }
 
 interface ScopedCredentialParameters {
-    algorithm?: string | Algorithm;
-    type?: ScopedCredentialType;
+    algorithm: string | Algorithm;
+    type: ScopedCredentialType;
 }
 
 interface ServiceWorkerMessageEventInit extends EventInit {
     data?: any;
     lastEventId?: string;
     origin?: string;
-    ports?: MessagePort[];
-    source?: ServiceWorker | MessagePort;
+    ports?: MessagePort[] | null;
+    source?: ServiceWorker | MessagePort | null;
 }
 
 interface SpeechSynthesisEventInit extends EventInit {
     charIndex?: number;
     elapsedTime?: number;
     name?: string;
-    utterance?: SpeechSynthesisUtterance;
+    utterance?: SpeechSynthesisUtterance | null;
 }
 
 interface StoreExceptionsInformation extends ExceptionInformation {
-    detailURI?: string;
-    explanationString?: string;
-    siteName?: string;
+    detailURI?: string | null;
+    explanationString?: string | null;
+    siteName?: string | null;
 }
 
 interface StoreSiteSpecificExceptionsInformation extends StoreExceptionsInformation {
@@ -2981,7 +2843,7 @@ interface StoreSiteSpecificExceptionsInformation extends StoreExceptionsInformat
 }
 
 interface TrackEventInit extends EventInit {
-    track?: VideoTrack | AudioTrack | TextTrack;
+    track?: VideoTrack | AudioTrack | TextTrack | null;
 }
 
 interface TransitionEventInit extends EventInit {
@@ -2991,7 +2853,7 @@ interface TransitionEventInit extends EventInit {
 
 interface UIEventInit extends EventInit {
     detail?: number;
-    view?: Window;
+    view?: Window | null;
 }
 
 interface WebAuthnExtensions {
@@ -3371,9 +3233,9 @@ interface Cache {
     add(request: RequestInfo): Promise<void>;
     addAll(requests: RequestInfo[]): Promise<void>;
     delete(request: RequestInfo, options?: CacheQueryOptions): Promise<boolean>;
-    keys(request?: RequestInfo, options?: CacheQueryOptions): any;
+    keys(request?: RequestInfo, options?: CacheQueryOptions): Promise<Request[]>;
     match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response>;
-    matchAll(request?: RequestInfo, options?: CacheQueryOptions): any;
+    matchAll(request?: RequestInfo, options?: CacheQueryOptions): Promise<Response[]>;
     put(request: RequestInfo, response: Response): Promise<void>;
 }
 
@@ -3385,7 +3247,7 @@ declare var Cache: {
 interface CacheStorage {
     delete(cacheName: string): Promise<boolean>;
     has(cacheName: string): Promise<boolean>;
-    keys(): any;
+    keys(): Promise<string[]>;
     match(request: RequestInfo, options?: CacheQueryOptions): Promise<any>;
     open(cacheName: string): Promise<Cache>;
 }
@@ -4490,7 +4352,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
      */
     readonly compatMode: string;
     cookie: string;
-    readonly currentScript: HTMLScriptElement | SVGScriptElement;
+    readonly currentScript: HTMLScriptElement | SVGScriptElement | null;
     readonly defaultView: Window;
     /**
      * Sets or gets a value that indicates whether the document can be edited.
@@ -5229,7 +5091,7 @@ interface DOMException {
 
 declare var DOMException: {
     prototype: DOMException;
-    new(): DOMException;
+    new(message?: string, name?: string): DOMException;
     readonly ABORT_ERR: number;
     readonly DATA_CLONE_ERR: number;
     readonly DOMSTRING_SIZE_ERR: number;
@@ -5735,7 +5597,7 @@ interface Headers {
 
 declare var Headers: {
     prototype: Headers;
-    new(init?: any): Headers;
+    new(init?: Headers | string[][] | object): Headers;
 };
 
 interface History {
@@ -5895,7 +5757,7 @@ interface HTMLAppletElement extends HTMLElement {
      * Sets or retrieves a character string that can be used to implement your own declare functionality for the object.
      */
     declare: boolean;
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the height of the object.
      */
@@ -6133,7 +5995,7 @@ interface HTMLButtonElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Overrides the action attribute (where the data on a form is sent) on the parent form element.
      */
@@ -6566,7 +6428,7 @@ interface HTMLFieldSetElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     name: string;
     /**
      * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
@@ -7145,7 +7007,7 @@ interface HTMLInputElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Overrides the action attribute (where the data on a form is sent) on the parent form element.
      */
@@ -7312,7 +7174,7 @@ interface HTMLLabelElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the object to which the given label object is assigned.
      */
@@ -7334,7 +7196,7 @@ interface HTMLLegendElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLegendElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -7768,7 +7630,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the height of the object.
      */
@@ -7867,7 +7729,7 @@ interface HTMLOptGroupElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the ordinal position of an option in a list box.
      */
@@ -7906,7 +7768,7 @@ interface HTMLOptionElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the ordinal position of an option in a list box.
      */
@@ -7950,7 +7812,7 @@ declare var HTMLOptionsCollection: {
 
 interface HTMLOutputElement extends HTMLElement {
     defaultValue: string;
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     readonly htmlFor: DOMSettableTokenList;
     name: string;
     readonly type: string;
@@ -8039,7 +7901,7 @@ interface HTMLProgressElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Defines the maximum, or "done" value for a progress element.
      */
@@ -8125,7 +7987,7 @@ interface HTMLSelectElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the number of objects in a collection.
      */
@@ -8596,7 +8458,7 @@ interface HTMLTextAreaElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the maximum number of characters that the user can enter in a text control.
      */
@@ -9062,6 +8924,7 @@ interface IntersectionObserverEntry {
     readonly rootBounds: ClientRect;
     readonly target: Element;
     readonly time: number;
+    readonly isIntersecting: boolean;
 }
 
 declare var IntersectionObserverEntry: {
@@ -9163,7 +9026,7 @@ interface MediaDevicesEventMap {
 
 interface MediaDevices extends EventTarget {
     ondevicechange: (this: MediaDevices, ev: Event) => any;
-    enumerateDevices(): any;
+    enumerateDevices(): Promise<MediaDeviceInfo[]>;
     getSupportedConstraints(): MediaTrackSupportedConstraints;
     getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
     addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, useCapture?: boolean): void;
@@ -10909,6 +10772,7 @@ interface Response extends Object, Body {
     readonly statusText: string;
     readonly type: ResponseType;
     readonly url: string;
+    readonly redirected: boolean;
     clone(): Response;
 }
 
@@ -11362,8 +11226,8 @@ interface ServiceWorkerContainer extends EventTarget {
     oncontrollerchange: (this: ServiceWorkerContainer, ev: Event) => any;
     onmessage: (this: ServiceWorkerContainer, ev: ServiceWorkerMessageEvent) => any;
     readonly ready: Promise<ServiceWorkerRegistration>;
-    getRegistration(clientURL?: USVString): Promise<any>;
-    getRegistrations(): any;
+    getRegistration(): Promise<ServiceWorkerRegistration | undefined>;
+    getRegistrations(): Promise<ServiceWorkerRegistration[]>;
     register(scriptURL: USVString, options?: RegistrationOptions): Promise<ServiceWorkerRegistration>;
     addEventListener<K extends keyof ServiceWorkerContainerEventMap>(type: K, listener: (this: ServiceWorkerContainer, ev: ServiceWorkerContainerEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -11399,7 +11263,7 @@ interface ServiceWorkerRegistration extends EventTarget {
     readonly scope: USVString;
     readonly sync: SyncManager;
     readonly waiting: ServiceWorker | null;
-    getNotifications(filter?: GetNotificationOptions): any;
+    getNotifications(filter?: GetNotificationOptions): Promise<Notification[]>;
     showNotification(title: string, options?: NotificationOptions): Promise<void>;
     unregister(): Promise<boolean>;
     update(): Promise<void>;
@@ -13424,7 +13288,7 @@ declare var SVGZoomEvent: {
 };
 
 interface SyncManager {
-    getTags(): any;
+    getTags(): Promise<string[]>;
     register(tag: string): Promise<void>;
 }
 
@@ -13732,6 +13596,7 @@ interface ValidityState {
     readonly typeMismatch: boolean;
     readonly valid: boolean;
     readonly valueMissing: boolean;
+    readonly tooShort: boolean;
 }
 
 declare var ValidityState: {
@@ -15593,13 +15458,13 @@ interface NavigatorUserMedia {
 
 interface NodeSelector {
     querySelector<K extends keyof ElementTagNameMap>(selectors: K): ElementTagNameMap[K] | null;
-    querySelector(selectors: string): Element | null;
+    querySelector<E extends Element = Element>(selectors: string): E | null;
     querySelectorAll<K extends keyof ElementListTagNameMap>(selectors: K): ElementListTagNameMap[K];
-    querySelectorAll(selectors: string): NodeListOf<Element>;
+    querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E>;
 }
 
 interface RandomSource {
-    getRandomValues(array: ArrayBufferView): ArrayBufferView;
+    getRandomValues<T extends Int8Array | Uint8ClampedArray | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array>(array: T): T;
 }
 
 interface SVGAnimatedPoints {
@@ -15674,15 +15539,35 @@ interface XMLHttpRequestEventTargetEventMap {
 }
 
 interface XMLHttpRequestEventTarget {
-    onabort: (this: XMLHttpRequestEventTarget, ev: Event) => any;
-    onerror: (this: XMLHttpRequestEventTarget, ev: ErrorEvent) => any;
-    onload: (this: XMLHttpRequestEventTarget, ev: Event) => any;
-    onloadend: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
-    onloadstart: (this: XMLHttpRequestEventTarget, ev: Event) => any;
-    onprogress: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
-    ontimeout: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
+    onabort: (this: XMLHttpRequest, ev: Event) => any;
+    onerror: (this: XMLHttpRequest, ev: ErrorEvent) => any;
+    onload: (this: XMLHttpRequest, ev: Event) => any;
+    onloadend: (this: XMLHttpRequest, ev: ProgressEvent) => any;
+    onloadstart: (this: XMLHttpRequest, ev: Event) => any;
+    onprogress: (this: XMLHttpRequest, ev: ProgressEvent) => any;
+    ontimeout: (this: XMLHttpRequest, ev: ProgressEvent) => any;
     addEventListener<K extends keyof XMLHttpRequestEventTargetEventMap>(type: K, listener: (this: XMLHttpRequestEventTarget, ev: XMLHttpRequestEventTargetEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+interface BroadcastChannel extends EventTarget {
+    readonly name: string;
+    onmessage: (ev: MessageEvent) => any;
+    onmessageerror: (ev: MessageEvent) => any;
+    close(): void;
+    postMessage(message: any): void;
+    addEventListener<K extends keyof BroadcastChannelEventMap>(type: K, listener: (this: BroadcastChannel, ev: BroadcastChannelEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var BroadcastChannel: {
+    prototype: BroadcastChannel;
+    new(name: string): BroadcastChannel;
+};
+
+interface BroadcastChannelEventMap {
+    message: MessageEvent;
+    messageerror: MessageEvent;
 }
 
 interface ErrorEventInit {
@@ -15775,8 +15660,7 @@ interface BlobPropertyBag {
     endings?: string;
 }
 
-interface FilePropertyBag {
-    type?: string;
+interface FilePropertyBag extends BlobPropertyBag {
     lastModified?: number;
 }
 
@@ -16051,6 +15935,44 @@ interface TouchEventInit extends EventModifierInit {
     targetTouches?: Touch[];
     changedTouches?: Touch[];
 }
+
+interface HTMLDialogElement extends HTMLElement {
+    open: boolean;
+    returnValue: string;
+    close(returnValue?: string): void;
+    show(): void;
+    showModal(): void;
+}
+
+declare var HTMLDialogElement: {
+    prototype: HTMLDialogElement;
+    new(): HTMLDialogElement;
+};
+
+interface HTMLMainElement extends HTMLElement {
+}
+
+declare var HTMLMainElement: {
+    prototype: HTMLMainElement;
+    new(): HTMLMainElement;
+};
+
+interface HTMLDetailsElement extends HTMLElement {
+    open: boolean;
+}
+
+declare var HTMLDetailsElement: {
+    prototype: HTMLDetailsElement;
+    new(): HTMLDetailsElement;
+};
+
+interface HTMLSummaryElement extends HTMLElement {
+}
+
+declare var HTMLSummaryElement: {
+    prototype: HTMLSummaryElement;
+    new(): HTMLSummaryElement;
+};
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
@@ -16541,7 +16463,7 @@ type GLsizeiptr = number;
 type GLubyte = number;
 type GLuint = number;
 type GLushort = number;
-type HeadersInit = any;
+type HeadersInit = Headers | string[][];
 type IDBKeyPath = string;
 type KeyFormat = string;
 type KeyType = string;
@@ -16846,9 +16768,17 @@ declare var WScript: {
 };
 
 /**
+ * Represents an Automation SAFEARRAY
+ */
+declare class SafeArray<T = any> {
+    private constructor();
+    private SafeArray_typekey: SafeArray<T>;
+}
+
+/**
  * Allows enumerating over a COM collection, which may not have indexed item access.
  */
-interface Enumerator<T> {
+interface Enumerator<T = any> {
     /**
      * Returns true if the current item is the last one in the collection, or the collection is empty,
      * or the current item is undefined.
@@ -16874,8 +16804,9 @@ interface Enumerator<T> {
 }
 
 interface EnumeratorConstructor {
-    new <T>(collection: any): Enumerator<T>;
-    new (collection: any): Enumerator<any>;
+    new <T = any>(safearray: SafeArray<T>): Enumerator<T>;
+    new <T = any>(collection: { Item(index: any): T }): Enumerator<T>;
+    new <T = any>(collection: any): Enumerator<T>;
 }
 
 declare var Enumerator: EnumeratorConstructor;
@@ -16883,7 +16814,7 @@ declare var Enumerator: EnumeratorConstructor;
 /**
  * Enables reading from a COM safe array, which might have an alternate lower bound, or multiple dimensions.
  */
-interface VBArray<T> {
+interface VBArray<T = any> {
     /**
      * Returns the number of dimensions (1-based).
      */
@@ -16915,8 +16846,7 @@ interface VBArray<T> {
 }
 
 interface VBArrayConstructor {
-    new <T>(safeArray: any): VBArray<T>;
-    new (safeArray: any): VBArray<any>;
+    new <T = any>(safeArray: SafeArray<T>): VBArray<T>;
 }
 
 declare var VBArray: VBArrayConstructor;
@@ -16924,7 +16854,10 @@ declare var VBArray: VBArrayConstructor;
 /**
  * Automation date (VT_DATE)
  */
-interface VarDate { }
+declare class VarDate {
+    private constructor();
+    private VarDate_typekey: VarDate;
+}
 
 interface DateConstructor {
     new (vd: VarDate): Date;

@@ -1,0 +1,184 @@
+=== tests/cases/compiler/noImplicitAnyParametersInAmbientClass.ts ===
+declare class D_C {
+>D_C : Symbol(D_C, Decl(noImplicitAnyParametersInAmbientClass.ts, 0, 0))
+
+    // No implicit-'any' errors.
+    public pub_f1(): void;
+>pub_f1 : Symbol(D_C.pub_f1, Decl(noImplicitAnyParametersInAmbientClass.ts, 0, 19))
+
+    // Implicit-'any' errors for x.
+    public pub_f2(x): void;
+>pub_f2 : Symbol(D_C.pub_f2, Decl(noImplicitAnyParametersInAmbientClass.ts, 2, 26))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 5, 18))
+
+    // No implicit-'any' errors.
+    public pub_f3(x: any): void;
+>pub_f3 : Symbol(D_C.pub_f3, Decl(noImplicitAnyParametersInAmbientClass.ts, 5, 27))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 8, 18))
+
+    // Implicit-'any' errors for x, y, and z.
+    public pub_f4(x, y, z): void;
+>pub_f4 : Symbol(D_C.pub_f4, Decl(noImplicitAnyParametersInAmbientClass.ts, 8, 32))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 11, 18))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientClass.ts, 11, 20))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientClass.ts, 11, 23))
+
+    // Implicit-'any' errors for x, and z.
+    public pub_f5(x, y: any, z): void;
+>pub_f5 : Symbol(D_C.pub_f5, Decl(noImplicitAnyParametersInAmbientClass.ts, 11, 33))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 14, 18))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientClass.ts, 14, 20))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientClass.ts, 14, 28))
+
+    // Implicit-'any[]' errors for r.
+    public pub_f6(...r): void;
+>pub_f6 : Symbol(D_C.pub_f6, Decl(noImplicitAnyParametersInAmbientClass.ts, 14, 38))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientClass.ts, 17, 18))
+
+    // Implicit-'any'/'any[]' errors for x, r.
+    public pub_f7(x, ...r): void;
+>pub_f7 : Symbol(D_C.pub_f7, Decl(noImplicitAnyParametersInAmbientClass.ts, 17, 30))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 20, 18))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientClass.ts, 20, 20))
+
+    // Implicit-'any' errors for x1, y2, x3, and y3.
+    public pub_f8(x1, y1: number): any;
+>pub_f8 : Symbol(D_C.pub_f8, Decl(noImplicitAnyParametersInAmbientClass.ts, 20, 33), Decl(noImplicitAnyParametersInAmbientClass.ts, 23, 39), Decl(noImplicitAnyParametersInAmbientClass.ts, 24, 39))
+>x1 : Symbol(x1, Decl(noImplicitAnyParametersInAmbientClass.ts, 23, 18))
+>y1 : Symbol(y1, Decl(noImplicitAnyParametersInAmbientClass.ts, 23, 21))
+
+    public pub_f8(x2: string, y2): any;
+>pub_f8 : Symbol(D_C.pub_f8, Decl(noImplicitAnyParametersInAmbientClass.ts, 20, 33), Decl(noImplicitAnyParametersInAmbientClass.ts, 23, 39), Decl(noImplicitAnyParametersInAmbientClass.ts, 24, 39))
+>x2 : Symbol(x2, Decl(noImplicitAnyParametersInAmbientClass.ts, 24, 18))
+>y2 : Symbol(y2, Decl(noImplicitAnyParametersInAmbientClass.ts, 24, 29))
+
+    public pub_f8(x3, y3): any;
+>pub_f8 : Symbol(D_C.pub_f8, Decl(noImplicitAnyParametersInAmbientClass.ts, 20, 33), Decl(noImplicitAnyParametersInAmbientClass.ts, 23, 39), Decl(noImplicitAnyParametersInAmbientClass.ts, 24, 39))
+>x3 : Symbol(x3, Decl(noImplicitAnyParametersInAmbientClass.ts, 25, 18))
+>y3 : Symbol(y3, Decl(noImplicitAnyParametersInAmbientClass.ts, 25, 21))
+
+    // No implicit-'any' errors.
+    public pub_f9: () => string;
+>pub_f9 : Symbol(D_C.pub_f9, Decl(noImplicitAnyParametersInAmbientClass.ts, 25, 31))
+
+    // Implicit-'any' error for x.
+    public pub_f10: (x) => string;
+>pub_f10 : Symbol(D_C.pub_f10, Decl(noImplicitAnyParametersInAmbientClass.ts, 28, 32))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 31, 21))
+
+    // Implicit-'any' errors for x, y, and z.
+    public pub_f11: (x, y, z) => string;
+>pub_f11 : Symbol(D_C.pub_f11, Decl(noImplicitAnyParametersInAmbientClass.ts, 31, 34))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 34, 21))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientClass.ts, 34, 23))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientClass.ts, 34, 26))
+
+    // Implicit-'any' errors for x and z.
+    public pub_f12: (x, y: any, z) => string;
+>pub_f12 : Symbol(D_C.pub_f12, Decl(noImplicitAnyParametersInAmbientClass.ts, 34, 40))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 37, 21))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientClass.ts, 37, 23))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientClass.ts, 37, 31))
+
+    // Implicit-'any[]' error for r.
+    public pub_f13: (...r) => string;
+>pub_f13 : Symbol(D_C.pub_f13, Decl(noImplicitAnyParametersInAmbientClass.ts, 37, 45))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientClass.ts, 40, 21))
+
+    // Implicit-'any'/'any[]' errors for x, r.
+    public pub_f14: (x, ...r) => string;
+>pub_f14 : Symbol(D_C.pub_f14, Decl(noImplicitAnyParametersInAmbientClass.ts, 40, 37))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 43, 21))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientClass.ts, 43, 23))
+
+    ///////////////////////////////////////////
+
+    // No implicit-'any' errors.
+    private priv_f1(): void;
+>priv_f1 : Symbol(D_C.priv_f1, Decl(noImplicitAnyParametersInAmbientClass.ts, 43, 40))
+
+    // No implicit-'any' errors.
+    private priv_f2(x): void;
+>priv_f2 : Symbol(D_C.priv_f2, Decl(noImplicitAnyParametersInAmbientClass.ts, 48, 28))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 51, 20))
+
+    // No implicit-'any' errors.
+    private priv_f3(x: any): void;
+>priv_f3 : Symbol(D_C.priv_f3, Decl(noImplicitAnyParametersInAmbientClass.ts, 51, 29))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 54, 20))
+
+    // No implicit-'any' errors.
+    private priv_f4(x, y, z): void;
+>priv_f4 : Symbol(D_C.priv_f4, Decl(noImplicitAnyParametersInAmbientClass.ts, 54, 34))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 57, 20))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientClass.ts, 57, 22))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientClass.ts, 57, 25))
+
+    // No implicit-'any' errors.
+    private priv_f5(x, y: any, z): void;
+>priv_f5 : Symbol(D_C.priv_f5, Decl(noImplicitAnyParametersInAmbientClass.ts, 57, 35))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 60, 20))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientClass.ts, 60, 22))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientClass.ts, 60, 30))
+
+    // No implicit-'any' errors.
+    private priv_f6(...r): void;
+>priv_f6 : Symbol(D_C.priv_f6, Decl(noImplicitAnyParametersInAmbientClass.ts, 60, 40))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientClass.ts, 63, 20))
+
+    // No implicit-'any' errors.
+    private priv_f7(x, ...r): void;
+>priv_f7 : Symbol(D_C.priv_f7, Decl(noImplicitAnyParametersInAmbientClass.ts, 63, 32))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 66, 20))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientClass.ts, 66, 22))
+
+    // No implicit-'any' errors.
+    private priv_f8(x1, y1: number): any;
+>priv_f8 : Symbol(D_C.priv_f8, Decl(noImplicitAnyParametersInAmbientClass.ts, 66, 35), Decl(noImplicitAnyParametersInAmbientClass.ts, 69, 41), Decl(noImplicitAnyParametersInAmbientClass.ts, 70, 41))
+>x1 : Symbol(x1, Decl(noImplicitAnyParametersInAmbientClass.ts, 69, 20))
+>y1 : Symbol(y1, Decl(noImplicitAnyParametersInAmbientClass.ts, 69, 23))
+
+    private priv_f8(x2: string, y2): any;
+>priv_f8 : Symbol(D_C.priv_f8, Decl(noImplicitAnyParametersInAmbientClass.ts, 66, 35), Decl(noImplicitAnyParametersInAmbientClass.ts, 69, 41), Decl(noImplicitAnyParametersInAmbientClass.ts, 70, 41))
+>x2 : Symbol(x2, Decl(noImplicitAnyParametersInAmbientClass.ts, 70, 20))
+>y2 : Symbol(y2, Decl(noImplicitAnyParametersInAmbientClass.ts, 70, 31))
+
+    private priv_f8(x3, y3): any;
+>priv_f8 : Symbol(D_C.priv_f8, Decl(noImplicitAnyParametersInAmbientClass.ts, 66, 35), Decl(noImplicitAnyParametersInAmbientClass.ts, 69, 41), Decl(noImplicitAnyParametersInAmbientClass.ts, 70, 41))
+>x3 : Symbol(x3, Decl(noImplicitAnyParametersInAmbientClass.ts, 71, 20))
+>y3 : Symbol(y3, Decl(noImplicitAnyParametersInAmbientClass.ts, 71, 23))
+
+    // No implicit-'any' errors.
+    private priv_f9: () => string;
+>priv_f9 : Symbol(D_C.priv_f9, Decl(noImplicitAnyParametersInAmbientClass.ts, 71, 33))
+
+    // Implicit-'any' error for x.
+    private priv_f10: (x) => string;
+>priv_f10 : Symbol(D_C.priv_f10, Decl(noImplicitAnyParametersInAmbientClass.ts, 74, 34))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 77, 23))
+
+    // Implicit-'any' errors for x, y, and z.
+    private priv_f11: (x, y, z) => string;
+>priv_f11 : Symbol(D_C.priv_f11, Decl(noImplicitAnyParametersInAmbientClass.ts, 77, 36))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 80, 23))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientClass.ts, 80, 25))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientClass.ts, 80, 28))
+
+    // Implicit-'any' errors for x and z.
+    private priv_f12: (x, y: any, z) => string;
+>priv_f12 : Symbol(D_C.priv_f12, Decl(noImplicitAnyParametersInAmbientClass.ts, 80, 42))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 83, 23))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientClass.ts, 83, 25))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientClass.ts, 83, 33))
+
+    // Implicit-'any[]' error for r.
+    private priv_f13: (...r) => string;
+>priv_f13 : Symbol(D_C.priv_f13, Decl(noImplicitAnyParametersInAmbientClass.ts, 83, 47))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientClass.ts, 86, 23))
+
+    // Implicit-'any'/'any[]' errors for x, r.
+    private priv_f14: (x, ...r) => string;
+>priv_f14 : Symbol(D_C.priv_f14, Decl(noImplicitAnyParametersInAmbientClass.ts, 86, 39))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientClass.ts, 89, 23))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientClass.ts, 89, 25))
+}

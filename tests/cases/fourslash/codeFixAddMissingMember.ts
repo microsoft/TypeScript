@@ -1,14 +1,19 @@
 /// <reference path='fourslash.ts' />
 
-////[|class C {
+////class C {
 ////    method() {
 ////        this.foo = 10;
 ////    }
-////}|]
+////}
 
-verify.rangeAfterCodeFix(`class C {
-    foo: number;
+verify.codeFix({
+    description: "Declare property 'foo'.",
+    index: 0,
+    // TODO: GH#18445
+    newFileContent: `class C {
+    foo: number;\r
     method() {
         this.foo = 10;
     }
-}`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 0);
+}`
+});

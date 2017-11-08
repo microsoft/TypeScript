@@ -1,0 +1,32 @@
+=== tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts ===
+interface IHandler {
+>IHandler : Symbol(IHandler, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 0, 0))
+
+    (e): boolean;
+>e : Symbol(e, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 1, 5))
+}
+
+interface IHandlerMap {
+>IHandlerMap : Symbol(IHandlerMap, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 2, 1))
+
+    [type: string]: IHandler;
+>type : Symbol(type, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 5, 5))
+>IHandler : Symbol(IHandler, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 0, 0))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 6, 1))
+
+    public Boz(): void { }
+>Boz : Symbol(Foo.Boz, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 8, 11))
+}
+
+function Biz(map: IHandlerMap) { }
+>Biz : Symbol(Biz, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 10, 1))
+>map : Symbol(map, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 12, 13))
+>IHandlerMap : Symbol(IHandlerMap, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 2, 1))
+
+Biz(new Foo());
+>Biz : Symbol(Biz, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 10, 1))
+>Foo : Symbol(Foo, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 6, 1))
+

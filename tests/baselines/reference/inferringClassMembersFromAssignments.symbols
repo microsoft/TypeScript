@@ -251,34 +251,34 @@ var stringOrNumber = c.inConstructor;
 >inConstructor : Symbol(C.inConstructor, Decl(a.js, 2, 28), Decl(a.js, 5, 14))
 
 var stringOrNumberOrUndefined: string | number | undefined;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 
 var stringOrNumberOrUndefined = c.inMethod;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >c.inMethod : Symbol(C.inMethod, Decl(a.js, 11, 28), Decl(a.js, 14, 14))
 >c : Symbol(c, Decl(b.ts, 0, 3))
 >inMethod : Symbol(C.inMethod, Decl(a.js, 11, 28), Decl(a.js, 14, 14))
 
 var stringOrNumberOrUndefined = c.inGetter;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >c.inGetter : Symbol(C.inGetter, Decl(a.js, 29, 28), Decl(a.js, 32, 14))
 >c : Symbol(c, Decl(b.ts, 0, 3))
 >inGetter : Symbol(C.inGetter, Decl(a.js, 29, 28), Decl(a.js, 32, 14))
 
 var stringOrNumberOrUndefined = c.inSetter;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >c.inSetter : Symbol(C.inSetter, Decl(a.js, 38, 28), Decl(a.js, 41, 14))
 >c : Symbol(c, Decl(b.ts, 0, 3))
 >inSetter : Symbol(C.inSetter, Decl(a.js, 38, 28), Decl(a.js, 41, 14))
 
 var stringOrNumberOrUndefined = c.inPropertyDeclaration;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >c.inPropertyDeclaration : Symbol(C.inPropertyDeclaration, Decl(a.js, 46, 28), Decl(a.js, 49, 14))
 >c : Symbol(c, Decl(b.ts, 0, 3))
 >inPropertyDeclaration : Symbol(C.inPropertyDeclaration, Decl(a.js, 46, 28), Decl(a.js, 49, 14))
 
 var stringOrNumberOrUndefined = c.inNestedArrowFunction
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >c.inNestedArrowFunction : Symbol(C.inNestedArrowFunction, Decl(a.js, 20, 32), Decl(a.js, 23, 18))
 >c : Symbol(c, Decl(b.ts, 0, 3))
 >inNestedArrowFunction : Symbol(C.inNestedArrowFunction, Decl(a.js, 20, 32), Decl(a.js, 23, 18))
@@ -294,31 +294,31 @@ var stringOrNumberOrBoolean = c.inMultiple;
 
 
 var stringOrNumberOrUndefined = C.inStaticMethod;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >C.inStaticMethod : Symbol(C.inStaticMethod, Decl(a.js, 54, 28), Decl(a.js, 57, 14))
 >C : Symbol(C, Decl(a.js, 0, 0))
 >inStaticMethod : Symbol(C.inStaticMethod, Decl(a.js, 54, 28), Decl(a.js, 57, 14))
 
 var stringOrNumberOrUndefined = C.inStaticGetter;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >C.inStaticGetter : Symbol(C.inStaticGetter, Decl(a.js, 71, 28), Decl(a.js, 74, 14))
 >C : Symbol(C, Decl(a.js, 0, 0))
 >inStaticGetter : Symbol(C.inStaticGetter, Decl(a.js, 71, 28), Decl(a.js, 74, 14))
 
 var stringOrNumberOrUndefined = C.inStaticSetter;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >C.inStaticSetter : Symbol(C.inStaticSetter, Decl(a.js, 79, 28), Decl(a.js, 82, 14))
 >C : Symbol(C, Decl(a.js, 0, 0))
 >inStaticSetter : Symbol(C.inStaticSetter, Decl(a.js, 79, 28), Decl(a.js, 82, 14))
 
 var stringOrNumberOrUndefined = C.inStaticPropertyDeclaration;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >C.inStaticPropertyDeclaration : Symbol(C.inStaticPropertyDeclaration, Decl(a.js, 87, 28), Decl(a.js, 90, 14))
 >C : Symbol(C, Decl(a.js, 0, 0))
 >inStaticPropertyDeclaration : Symbol(C.inStaticPropertyDeclaration, Decl(a.js, 87, 28), Decl(a.js, 90, 14))
 
 var stringOrNumberOrUndefined = C.inStaticNestedArrowFunction;
->stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3), Decl(b.ts, 11, 3), Decl(b.ts, 18, 3), Decl(b.ts, 19, 3), Decl(b.ts, 20, 3), Decl(b.ts, 21, 3), Decl(b.ts, 22, 3))
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 10, 3) ... and 6 more)
 >C.inStaticNestedArrowFunction : Symbol(C.inStaticNestedArrowFunction, Decl(a.js, 62, 32), Decl(a.js, 65, 18))
 >C : Symbol(C, Decl(a.js, 0, 0))
 >inStaticNestedArrowFunction : Symbol(C.inStaticNestedArrowFunction, Decl(a.js, 62, 32), Decl(a.js, 65, 18))

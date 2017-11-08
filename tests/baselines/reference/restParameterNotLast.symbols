@@ -1,0 +1,6 @@
+=== tests/cases/compiler/restParameterNotLast.ts ===
+function f(...x, y) { }
+>f : Symbol(f, Decl(restParameterNotLast.ts, 0, 0))
+>x : Symbol(x, Decl(restParameterNotLast.ts, 0, 11))
+>y : Symbol(y, Decl(restParameterNotLast.ts, 0, 16))
+

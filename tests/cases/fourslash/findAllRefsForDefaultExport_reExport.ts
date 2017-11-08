@@ -10,8 +10,6 @@
 // @Filename: /re-export-dep.ts
 ////import [|{| "isWriteAccess": true, "isDefinition": true |}fooDefault|] from "./re-export";
 
-verify.noErrors();
-
 const [r0, r1, r2, r3] = test.ranges();
 verify.referenceGroups([r0, r1], [
     { definition: "const foo: 1", ranges: [r0, r1] },

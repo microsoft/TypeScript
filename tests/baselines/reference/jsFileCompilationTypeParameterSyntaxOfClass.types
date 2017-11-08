@@ -1,0 +1,5 @@
+=== tests/cases/compiler/a.js ===
+class C<T> { }
+>C : C<T>
+>T : T
+

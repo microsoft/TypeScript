@@ -4,16 +4,16 @@
 namespace ts.formatting {
 
     export class RuleOperationContext {
-        private readonly customContextChecks: { (context: FormattingContext): boolean; }[];
+        private readonly customContextChecks: ((context: FormattingContext) => boolean)[];
 
-        constructor(...funcs: { (context: FormattingContext): boolean; }[]) {
+        constructor(...funcs: ((context: FormattingContext) => boolean)[]) {
             this.customContextChecks = funcs;
         }
 
-        static readonly Any: RuleOperationContext = new RuleOperationContext();
+        static readonly any: RuleOperationContext = new RuleOperationContext();
 
         public IsAny(): boolean {
-            return this === RuleOperationContext.Any;
+            return this === RuleOperationContext.any;
         }
 
         public InContext(context: FormattingContext): boolean {

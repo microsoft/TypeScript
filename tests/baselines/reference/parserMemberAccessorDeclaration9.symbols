@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration9.ts ===
+class C {
+>C : Symbol(C, Decl(parserMemberAccessorDeclaration9.ts, 0, 0))
+
+    static public get Foo() { }
+>Foo : Symbol(C.Foo, Decl(parserMemberAccessorDeclaration9.ts, 0, 9))
+}

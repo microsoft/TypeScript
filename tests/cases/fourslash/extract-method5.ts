@@ -10,16 +10,15 @@
 
 goTo.select('start', 'end');
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
-    actionDescription: "Extract function into function 'f'",
-});
-// TODO: GH#18091 (fix formatting to use `2 ? 1 :` and not `2?1:`)
-verify.currentFileContentIs(
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
+    actionDescription: "Extract to inner function in function 'f'",
+    newContent:
 `function f() {
-    var x: 1 | 2 | 3 = newFunction();
+    var x: 1 | 2 | 3 = /*RENAME*/newFunction();
 
     function newFunction(): 1 | 2 | 3 {
-        return 1 + 1 === 2?1: 2;
+        return 1 + 1 === 2 ? 1 : 2;
     }
-}`);
+}`
+});

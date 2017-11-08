@@ -1,0 +1,18 @@
+=== tests/cases/compiler/getterThatThrowsShouldNotNeedReturn.ts ===
+class Greeter {
+>Greeter : Greeter
+
+ public get greet(): string {
+>greet : string
+
+  throw ''; // should not raise an error
+>'' : ""
+ }
+ public greeting(): string {
+>greeting : () => string
+
+  throw ''; // should not raise an error
+>'' : ""
+ }
+}
+

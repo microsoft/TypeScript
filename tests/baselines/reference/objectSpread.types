@@ -230,6 +230,165 @@ let spreadFunc = { ...(function () { }) };
 >(function () { }) : () => void
 >function () { } : () => void
 
+type Header = { head: string, body: string, authToken: string }
+>Header : Header
+>head : string
+>body : string
+>authToken : string
+
+function from16326(this: { header: Header }, header: Header, authToken: string): Header {
+>from16326 : (this: { header: Header; }, header: Header, authToken: string) => Header
+>this : { header: Header; }
+>header : Header
+>Header : Header
+>header : Header
+>Header : Header
+>authToken : string
+>Header : Header
+
+    return {
+>{        ...this.header,        ...header,        ...authToken && { authToken }    } : { head: string; body: string; authToken: string; } | { authToken: string; head: string; body: string; }
+
+        ...this.header,
+>this.header : Header
+>this : { header: Header; }
+>header : Header
+
+        ...header,
+>header : Header
+
+        ...authToken && { authToken }
+>authToken && { authToken } : "" | { authToken: string; }
+>authToken : string
+>{ authToken } : { authToken: string; }
+>authToken : string
+    }
+}
+// boolean && T results in Partial<T>
+function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
+>conditionalSpreadBoolean : (b: boolean) => { x: number; y: number; }
+>b : boolean
+>x : number
+>y : number
+
+    let o = { x: 12, y: 13 }
+>o : { x: number; y: number; }
+>{ x: 12, y: 13 } : { x: number; y: number; }
+>x : number
+>12 : 12
+>y : number
+>13 : 13
+
+    o = {
+>o = {        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: number; y: number; }
+>o : { x: number; y: number; }
+>{        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: number; y: number; }
+
+        ...o,
+>o : { x: number; y: number; }
+
+        ...b && { x: 14 }
+>b && { x: 14 } : false | { x: number; }
+>b : boolean
+>{ x: 14 } : { x: number; }
+>x : number
+>14 : 14
+    }
+    let o2 = { ...b && { x: 21 }}
+>o2 : {}
+>{ ...b && { x: 21 }} : {} | { x: number; }
+>b && { x: 21 } : false | { x: number; }
+>b : boolean
+>{ x: 21 } : { x: number; }
+>x : number
+>21 : 21
+
+    return o;
+>o : { x: number; y: number; }
+}
+function conditionalSpreadNumber(nt: number): { x: number, y: number } {
+>conditionalSpreadNumber : (nt: number) => { x: number; y: number; }
+>nt : number
+>x : number
+>y : number
+
+    let o = { x: 15, y: 16 }
+>o : { x: number; y: number; }
+>{ x: 15, y: 16 } : { x: number; y: number; }
+>x : number
+>15 : 15
+>y : number
+>16 : 16
+
+    o = {
+>o = {        ...o,        ...nt && { x: nt }    } : { x: number; y: number; } | { x: number; y: number; }
+>o : { x: number; y: number; }
+>{        ...o,        ...nt && { x: nt }    } : { x: number; y: number; } | { x: number; y: number; }
+
+        ...o,
+>o : { x: number; y: number; }
+
+        ...nt && { x: nt }
+>nt && { x: nt } : 0 | { x: number; }
+>nt : number
+>{ x: nt } : { x: number; }
+>x : number
+>nt : number
+    }
+    let o2 = { ...nt && { x: nt }}
+>o2 : {}
+>{ ...nt && { x: nt }} : {} | { x: number; }
+>nt && { x: nt } : 0 | { x: number; }
+>nt : number
+>{ x: nt } : { x: number; }
+>x : number
+>nt : number
+
+    return o;
+>o : { x: number; y: number; }
+}
+function conditionalSpreadString(st: string): { x: string, y: number } {
+>conditionalSpreadString : (st: string) => { x: string; y: number; }
+>st : string
+>x : string
+>y : number
+
+    let o = { x: 'hi', y: 17 }
+>o : { x: string; y: number; }
+>{ x: 'hi', y: 17 } : { x: string; y: number; }
+>x : string
+>'hi' : "hi"
+>y : number
+>17 : 17
+
+    o = {
+>o = {        ...o,        ...st && { x: st }    } : { x: string; y: number; } | { x: string; y: number; }
+>o : { x: string; y: number; }
+>{        ...o,        ...st && { x: st }    } : { x: string; y: number; } | { x: string; y: number; }
+
+        ...o,
+>o : { x: string; y: number; }
+
+        ...st && { x: st }
+>st && { x: st } : "" | { x: string; }
+>st : string
+>{ x: st } : { x: string; }
+>x : string
+>st : string
+    }
+    let o2 = { ...st && { x: st }}
+>o2 : {}
+>{ ...st && { x: st }} : {} | { x: string; }
+>st && { x: st } : "" | { x: string; }
+>st : string
+>{ x: st } : { x: string; }
+>x : string
+>st : string
+
+    return o;
+>o : { x: string; y: number; }
+}
+
 // any results in any
 let anything: any;
 >anything : any
@@ -312,53 +471,56 @@ let changeTypeBoth: { a: string, b: number } =
 >swap : { a: string; b: number; }
 
 // optional
-let definiteBoolean: { sn: boolean };
+function container(
+>container : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string | undefined; }, optionalNumber: { sn?: number | undefined; }) => void
+
+    definiteBoolean: { sn: boolean },
 >definiteBoolean : { sn: boolean; }
 >sn : boolean
 
-let definiteString: { sn: string };
+    definiteString: { sn: string },
 >definiteString : { sn: string; }
 >sn : string
 
-let optionalString: { sn?: string };
->optionalString : { sn?: string; }
->sn : string
+    optionalString: { sn?: string },
+>optionalString : { sn?: string | undefined; }
+>sn : string | undefined
 
-let optionalNumber: { sn?: number };
->optionalNumber : { sn?: number; }
->sn : number
+    optionalNumber: { sn?: number }) {
+>optionalNumber : { sn?: number | undefined; }
+>sn : number | undefined
 
-let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
+    let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
 >optionalUnionStops : { sn: string | number | boolean; }
 >sn : string | number | boolean
 >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
 >definiteBoolean : { sn: boolean; }
 >definiteString : { sn: string; }
->optionalNumber : { sn?: number; }
+>optionalNumber : { sn?: number | undefined; }
 
-let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
+    let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 >optionalUnionDuplicates : { sn: string | number; }
 >sn : string | number
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
 >definiteBoolean : { sn: boolean; }
 >definiteString : { sn: string; }
->optionalString : { sn?: string; }
->optionalNumber : { sn?: number; }
+>optionalString : { sn?: string | undefined; }
+>optionalNumber : { sn?: number | undefined; }
 
-let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
->allOptional : { sn?: string | number; }
->sn : string | number
->{ ...optionalString, ...optionalNumber } : { sn?: string | number; }
->optionalString : { sn?: string; }
->optionalNumber : { sn?: number; }
+    let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
+>allOptional : { sn?: string | number | undefined; }
+>sn : string | number | undefined
+>{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
+>optionalString : { sn?: string | undefined; }
+>optionalNumber : { sn?: number | undefined; }
 
-// computed property
-let computedFirst: { a: number, b: string, "before everything": number } =
+    // computed property
+    let computedFirst: { a: number, b: string, "before everything": number } =
 >computedFirst : { a: number; b: string; "before everything": number; }
 >a : number
 >b : string
 
-    { ['before everything']: 12, ...o, b: 'yes' }
+        { ['before everything']: 12, ...o, b: 'yes' }
 >{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; ['before everything']: number; }
 >'before everything' : "before everything"
 >12 : 12
@@ -366,13 +528,13 @@ let computedFirst: { a: number, b: string, "before everything": number } =
 >b : string
 >'yes' : "yes"
 
-let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
+    let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
 >computedMiddle : { a: number; b: string; c: boolean; "in the middle": number; }
 >a : number
 >b : string
 >c : boolean
 
-    { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
+        { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
 >{ ...o, ['in the middle']: 13, b: 'maybe?', ...o2 } : { b: string; c: boolean; ['in the middle']: number; a: number; }
 >o : { a: number; b: string; }
 >'in the middle' : "in the middle"
@@ -381,19 +543,19 @@ let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number 
 >'maybe?' : "maybe?"
 >o2 : { b: string; c: boolean; }
 
-let computedAfter: { a: number, b: string, "at the end": number } =
+    let computedAfter: { a: number, b: string, "at the end": number } =
 >computedAfter : { a: number; b: string; "at the end": number; }
 >a : number
 >b : string
 
-    { ...o, b: 'yeah', ['at the end']: 14 }
+        { ...o, b: 'yeah', ['at the end']: 14 }
 >{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; ['at the end']: number; a: number; }
 >o : { a: number; b: string; }
 >b : string
 >'yeah' : "yeah"
 >'at the end' : "at the end"
 >14 : 14
-
+}
 // shortcut syntax
 let a = 12;
 >a : number
@@ -409,8 +571,8 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 
 // non primitive
 let spreadNonPrimitive = { ...<object>{}};
->spreadNonPrimitive : {}
->{ ...<object>{}} : {}
+>spreadNonPrimitive : object
+>{ ...<object>{}} : object
 ><object>{} : object
 >{} : {}
 

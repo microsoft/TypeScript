@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement1.ts ===
+class C {
+>C : Symbol(C, Decl(parserErrorRecovery_ClassElement1.ts, 0, 0))
+
+// Classes can't be nested.  So we should bail out of parsing here and recover
+// this as a source unit element.
+class D {
+>D : Symbol(D, Decl(parserErrorRecovery_ClassElement1.ts, 0, 9))
+}

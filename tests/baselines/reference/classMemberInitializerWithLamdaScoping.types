@@ -1,0 +1,92 @@
+=== tests/cases/compiler/classMemberInitializerWithLamdaScoping.ts ===
+declare var console: {
+>console : { log(msg?: any): void; }
+
+    log(msg?: any): void;
+>log : (msg?: any) => void
+>msg : any
+
+};
+class Test {
+>Test : Test
+
+    constructor(private field: string) {
+>field : string
+    }
+    messageHandler = () => {
+>messageHandler : () => void
+>() => {        var field = this.field;        console.log(field); // Using field here shouldnt be error    } : () => void
+
+        var field = this.field;
+>field : string
+>this.field : string
+>this : this
+>field : string
+
+        console.log(field); // Using field here shouldnt be error
+>console.log(field) : void
+>console.log : (msg?: any) => void
+>console : { log(msg?: any): void; }
+>log : (msg?: any) => void
+>field : string
+
+    };
+    static field: number;
+>field : number
+
+    static staticMessageHandler = () => {
+>staticMessageHandler : () => void
+>() => {        var field = Test.field;        console.log(field); // Using field here shouldnt be error    } : () => void
+
+        var field = Test.field;
+>field : number
+>Test.field : number
+>Test : typeof Test
+>field : number
+
+        console.log(field); // Using field here shouldnt be error
+>console.log(field) : void
+>console.log : (msg?: any) => void
+>console : { log(msg?: any): void; }
+>log : (msg?: any) => void
+>field : number
+
+    };
+}
+
+var field1: string;
+>field1 : string
+
+class Test1 {
+>Test1 : Test1
+
+    constructor(private field1: string) {
+>field1 : string
+    }
+    messageHandler = () => {
+>messageHandler : () => void
+>() => {        console.log(field1); // But this should be error as the field1 will resolve to var field1                              // but since this code would be generated inside constructor, in generated js                             // it would resolve to private field1 and thats not what user intended here.     } : () => void
+
+        console.log(field1); // But this should be error as the field1 will resolve to var field1 
+>console.log(field1) : void
+>console.log : (msg?: any) => void
+>console : { log(msg?: any): void; }
+>log : (msg?: any) => void
+>field1 : any
+
+                             // but since this code would be generated inside constructor, in generated js
+                             // it would resolve to private field1 and thats not what user intended here. 
+    };
+    static staticMessageHandler = () => {
+>staticMessageHandler : () => void
+>() => {        console.log(field1); // This shouldnt be error as its a static property    } : () => void
+
+        console.log(field1); // This shouldnt be error as its a static property
+>console.log(field1) : void
+>console.log : (msg?: any) => void
+>console : { log(msg?: any): void; }
+>log : (msg?: any) => void
+>field1 : string
+
+    };
+}
