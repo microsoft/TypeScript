@@ -415,7 +415,7 @@ namespace ts.Completions {
         entryId: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
         host: LanguageServiceHost,
-        rulesProvider: formatting.RulesProvider,
+        formatContext: formatting.FormatContext,
     ): CompletionEntryDetails {
         const { name, source } = entryId;
         // Compute all the completion symbols again.
@@ -436,7 +436,7 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, symbolToOriginInfoMap } = symbolCompletion;
-                const codeActions = getCompletionEntryCodeActions(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, rulesProvider);
+                const codeActions = getCompletionEntryCodeActions(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, formatContext);
                 const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
                 return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: source === undefined ? undefined : [textPart(source)] };
@@ -467,7 +467,7 @@ namespace ts.Completions {
         host: LanguageServiceHost,
         compilerOptions: CompilerOptions,
         sourceFile: SourceFile,
-        rulesProvider: formatting.RulesProvider,
+        formatContext: formatting.FormatContext,
     ): CodeAction[] | undefined {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
         if (!symbolOriginInfo) {
@@ -481,7 +481,7 @@ namespace ts.Completions {
             newLineCharacter: host.getNewLine(),
             compilerOptions,
             sourceFile,
-            rulesProvider,
+            formatContext,
             symbolName: symbol.name,
             getCanonicalFileName: createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false),
             symbolToken: undefined,

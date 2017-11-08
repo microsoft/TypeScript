@@ -131,13 +131,14 @@ namespace RWC {
                                 }
                                 else {
                                     // set the flag to put default library to the beginning of the list
-                                    inputFiles.unshift(Harness.getDefaultLibraryFile(oldIO));
+                                    inputFiles.unshift(Harness.getDefaultLibraryFile(fileRead.path, oldIO));
                                 }
                             }
                         }
                     }
 
                     // do not use lib since we already read it in above
+                    opts.options.lib = undefined;
                     opts.options.noLib = true;
 
                     // Emit the results
