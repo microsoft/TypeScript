@@ -1,0 +1,74 @@
+=== tests/cases/compiler/parameterInference.ts ===
+// CASE 1
+function foo(s) {
+>foo : Symbol(foo, Decl(parameterInference.ts, 0, 0))
+>s : Symbol(s, Decl(parameterInference.ts, 1, 13))
+
+    Math.sqrt(s)
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(parameterInference.ts, 1, 13))
+}
+// => function foo(s: number): void
+
+// CASE 2
+declare function swapNumberString(n: string): number;
+>swapNumberString : Symbol(swapNumberString, Decl(parameterInference.ts, 3, 1), Decl(parameterInference.ts, 7, 53))
+>n : Symbol(n, Decl(parameterInference.ts, 7, 34))
+
+declare function swapNumberString(n: number): string;
+>swapNumberString : Symbol(swapNumberString, Decl(parameterInference.ts, 3, 1), Decl(parameterInference.ts, 7, 53))
+>n : Symbol(n, Decl(parameterInference.ts, 8, 34))
+
+function subs(s) {
+>subs : Symbol(subs, Decl(parameterInference.ts, 8, 53))
+>s : Symbol(s, Decl(parameterInference.ts, 10, 14))
+
+  return swapNumberString(s);
+>swapNumberString : Symbol(swapNumberString, Decl(parameterInference.ts, 3, 1), Decl(parameterInference.ts, 7, 53))
+>s : Symbol(s, Decl(parameterInference.ts, 10, 14))
+}
+// => function subs(s: string): number
+// NOTE: Still broken, needs to deal with overloads. Should have been inferred as:
+// => (s: string) => number & (s: number) => string
+
+// CASE 3
+function f3(x: number){
+>f3 : Symbol(f3, Decl(parameterInference.ts, 12, 1))
+>x : Symbol(x, Decl(parameterInference.ts, 18, 12))
+
+   return x;
+>x : Symbol(x, Decl(parameterInference.ts, 18, 12))
+}
+
+function g3(x){ return f3(x); };
+>g3 : Symbol(g3, Decl(parameterInference.ts, 20, 1))
+>x : Symbol(x, Decl(parameterInference.ts, 22, 12))
+>f3 : Symbol(f3, Decl(parameterInference.ts, 12, 1))
+>x : Symbol(x, Decl(parameterInference.ts, 22, 12))
+
+// => function g3(x: number): number
+
+// CASE 4
+declare function f4(g: Function)
+>f4 : Symbol(f4, Decl(parameterInference.ts, 22, 32))
+>g : Symbol(g, Decl(parameterInference.ts, 26, 20))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+function g4(x) {
+>g4 : Symbol(g4, Decl(parameterInference.ts, 26, 32))
+>x : Symbol(x, Decl(parameterInference.ts, 27, 12))
+
+  f4(() => {
+>f4 : Symbol(f4, Decl(parameterInference.ts, 22, 32))
+
+    Math.sqrt(x)
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(parameterInference.ts, 27, 12))
+
+  })
+}
+

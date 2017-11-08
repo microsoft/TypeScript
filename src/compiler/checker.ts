@@ -4389,6 +4389,12 @@ namespace ts {
                 return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ false, /*reportErrors*/ true);
             }
 
+            // Important to do this *after* attempt has been made to resolve via initializer
+            if (declaration.kind === SyntaxKind.Parameter) {
+                const inferredType = getParameterTypeFromBody(<ParameterDeclaration>declaration);
+                if (inferredType) return inferredType;
+            }
+
             // No type specified and nothing can be inferred
             return undefined;
         }
@@ -13340,6 +13346,14 @@ namespace ts {
             return undefined;
         }
 
+        function getParameterTypeFromBody(parameter: ParameterDeclaration): Type {
+            const func = <FunctionLikeDeclaration>parameter.parent;
+            if (!func.body || isRestParameter(parameter)) return;
+
+            const types = checkAndAggregateParameterExpressionTypes(parameter);
+            return types ? getWidenedType(getIntersectionType(types)) : undefined;
+        }
+
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type | undefined {
             const func = parameter.parent;
@@ -17451,6 +17465,36 @@ namespace ts {
                 return false;
             }
             return true;
+        }
+
+        function checkAndAggregateParameterExpressionTypes(parameter: ParameterDeclaration): Type[] {
+            const func = <FunctionLikeDeclaration>parameter.parent;
+            const usageTypes: Type[] = [];
+            const invocations: CallExpression[] = [];
+
+            function seekInvocations(f: FunctionBody) {
+                forEachInvocation(f, invocation => {
+                    invocations.push(invocation);
+                    invocation.arguments.filter(isFunctionExpressionOrArrowFunction).forEach(arg => seekInvocations(<Block>arg.body));
+                });
+            }
+
+            seekInvocations(<Block>func.body);
+
+            invocations.forEach(invocation => {
+                const usages = invocation.arguments
+                    .map((arg, i) => ({ arg, symbol: getSymbolAtLocation(arg), i }))
+                    .filter(({ symbol }) => symbol && symbol.valueDeclaration === parameter);
+                if (!usages.length) return;
+                const funcSymbol = getSymbolAtLocation(invocation.expression);
+                if (!funcSymbol || !isFunctionLike(funcSymbol.valueDeclaration)) return;
+                const sig = getSignatureFromDeclaration(funcSymbol.valueDeclaration);
+                const parameterTypes = sig.parameters.map(getTypeOfParameter);
+                const argumentTypes = usages.map(({ i }) => parameterTypes[i]).filter(t => !!t);
+                usageTypes.splice(0, 0, ...argumentTypes);
+            });
+
+            return usageTypes.length ? usageTypes : undefined;
         }
 
         function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
