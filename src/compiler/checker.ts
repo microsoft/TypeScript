@@ -7310,6 +7310,9 @@ namespace ts {
                 property.type = typeParameter;
                 properties.push(property);
             }
+            const lengthSymbol = createSymbol(SymbolFlags.Property, "length" as __String);
+            lengthSymbol.type = getLiteralType(arity);
+            properties.push(lengthSymbol);
             const type = <GenericType & InterfaceTypeWithDeclaredMembers>createObjectType(ObjectFlags.Tuple | ObjectFlags.Reference);
             type.typeParameters = typeParameters;
             type.outerTypeParameters = undefined;
