@@ -7,9 +7,9 @@
         "es2017",
         "esnext",
         // Host only
-        "dom.generated=lib.dom.d.ts",
+        "dom.generated",
         "dom.iterable",
-        "webworker.generated=lib.webworker.d.ts",
+        "webworker.generated",
         "webworker.importscripts",
         "scripthost",
         // By-feature options
@@ -30,10 +30,16 @@
         "es2017.typedarrays",
         "esnext.asynciterable",
         // Default libraries
-        "default.es5=lib.d.ts",
-        "default.es2015=lib.es6.d.ts",
-        "default.es2016=lib.es2016.full.d.ts",
-        "default.es2017=lib.es2017.full.d.ts",
-        "default.esnext=lib.esnext.full.d.ts"
-    ]
+        "es5.full",
+        "es2015.full",
+        "es2016.full",
+        "es2017.full",
+        "esnext.full"
+    ],
+    "paths": {
+        "dom.generated": "lib.dom.d.ts",
+        "webworker.generated": "lib.webworker.d.ts",
+        "es5.full": "lib.d.ts",
+        "es2015.full": "lib.es6.d.ts"
+    }
 }

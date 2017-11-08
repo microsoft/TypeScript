@@ -130,17 +130,6 @@ const nodeModulesPathPrefix = path.resolve("./node_modules/.bin/");
 const isWin = /^win/.test(process.platform);
 const mocha = path.join(nodeModulesPathPrefix, "mocha") + (isWin ? ".cmd" : "");
 
-const librarySourceMap = (readJson(path.resolve("./src/lib/libs.json")) as { libs: string[] }).libs.map(lib => {
-    const parts = lib.split("=", 2);
-    return {
-        sources: ["header.d.ts", parts[0] + ".d.ts"],
-        target: parts[1] || ("lib." + parts[0] + ".d.ts")
-    };
-});
-
-const libraryTargets = librarySourceMap.map(f =>
-    path.join(builtLocalDirectory, f.target));
-
 /**
  * .lcg file is what localization team uses to know what messages to localize.
  * The file is always generated in 'enu\diagnosticMessages.generated.json.lcg'
@@ -157,17 +146,6 @@ const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessag
 const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
     .map(f => path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json"))
     .concat(generatedLCGFile);
-
-for (const i in libraryTargets) {
-    const entry = librarySourceMap[i];
-    const target = libraryTargets[i];
-    const sources = [copyright].concat(entry.sources.map(s => path.join(libraryDirectory, s)));
-    gulp.task(target, /*help*/ false, [], () =>
-        gulp.src(sources)
-            .pipe(newer(target))
-            .pipe(concat(target, { newLine: "\n\n" }))
-            .pipe(gulp.dest(".")));
-}
 
 const configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
 const configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
@@ -301,6 +279,18 @@ gulp.task(importDefinitelyTypedTestsJs, /*help*/ false, [], () => {
 
 gulp.task("importDefinitelyTypedTests", "Runs scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.ts to copy DT's tests to the TS-internal RWC tests", [importDefinitelyTypedTestsJs], (done) => {
     exec(host, [importDefinitelyTypedTestsJs, "./", "../DefinitelyTyped"], done, done);
+});
+
+const libraries: { libs: string[], paths: Record<string, string> } = readJson(path.resolve("./src/lib/libs.json"));
+const libraryTargets = libraries.libs.map(function (lib) {
+    const sources = [copyright].concat(["header.d.ts", lib + ".d.ts"].map(s =>path.join(libraryDirectory, s)));
+    const target = path.join(builtLocalDirectory, libraries.paths[lib] || ("lib." + lib + ".d.ts"));
+    gulp.task(target, /*help*/ false, [], () =>
+        gulp.src(sources)
+            .pipe(newer(target))
+            .pipe(concat(target, { newLine: "\n\n" }))
+            .pipe(gulp.dest(".")));
+    return target;
 });
 
 gulp.task("lib", "Builds the library targets", libraryTargets);

@@ -201,18 +201,6 @@ var harnessSources = harnessCoreSources.concat([
     return path.join(serverDirectory, f);
 }));
 
-var librarySourceMap = readJson(path.resolve("./src/lib/libs.json")).libs.map(function (lib) {
-    var parts = lib.split("=", 2);
-    return {
-        sources: ["header.d.ts", parts[0] + ".d.ts"],
-        target: parts[1] || ("lib." + parts[0] + ".d.ts")
-    };
-});
-
-var libraryTargets = librarySourceMap.map(function (f) {
-    return path.join(builtLocalDirectory, f.target);
-});
-
 /**
  * .lcg file is what localization team uses to know what messages to localize.
  * The file is always generated in 'enu\diagnosticMessages.generated.json.lcg'
@@ -387,18 +375,18 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
 // Prerequisite task for built directory and library typings
 directory(builtLocalDirectory);
 
-for (var i in libraryTargets) {
-    (function (i) {
-        var entry = librarySourceMap[i];
-        var target = libraryTargets[i];
-        var sources = [copyright].concat(entry.sources.map(function (s) {
-            return path.join(libraryDirectory, s);
-        }));
-        file(target, [builtLocalDirectory].concat(sources), function () {
-            concatenateFiles(target, sources);
-        });
-    })(i);
-}
+/** @type {{ libs:string[], paths: Record<string, string> }} */
+var libraries = readJson(path.resolve("./src/lib/libs.json"));
+var libraryTargets = libraries.libs.map(function (lib) {
+    var sources = [copyright].concat(["header.d.ts", lib + ".d.ts"].map(function (s) { 
+        return path.join(libraryDirectory, s); 
+    }));
+    var target = path.join(builtLocalDirectory, libraries.paths[lib] || ("lib." + lib + ".d.ts"));
+    file(target, [builtLocalDirectory].concat(sources), function () {
+        concatenateFiles(target, sources);
+    });
+    return target;
+});
 
 // Lib target to build the library files
 desc("Builds the library targets");
