@@ -57,7 +57,7 @@ namespace ts.projectSystem {
         getLogFileName: (): string => undefined
     };
     export const libFiles: FileOrFolder[] = [
-        { path: "/a/lib/lib.d.ts", content: Harness.getDefaultLibraryFile(Harness.IO).content },
+        { path: "/a/lib/lib.d.ts", content: Harness.getDefaultLibraryFile("lib.d.ts", Harness.IO).content },
         { path: "/a/lib/lib.es5.d.ts", content: Harness.getNamedDefaultLibraryFile(Harness.IO, "es5").content },
         { path: "/a/lib/lib.dom.d.ts", content: Harness.getNamedDefaultLibraryFile(Harness.IO, "dom").content },
         { path: "/a/lib/lib.webworker.importscripts.d.ts", content: Harness.getNamedDefaultLibraryFile(Harness.IO, "webworker.importscripts").content },
