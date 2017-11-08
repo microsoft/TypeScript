@@ -38,7 +38,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                 Harness.Baseline.runBaseline(`${this.kind()}/${directoryName}.log`, () => {
                     const result = cp.spawnSync(`node`, [path.join(__dirname, "tsc.js")], { cwd, timeout, shell: true });
                     // tslint:disable-next-line:no-null-keyword
-                    return result.status === 0 ? null : `Exit Code: ${result.status}
+                    return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${result.stdout.toString().replace(/\r\n/g, "\n")}
 
