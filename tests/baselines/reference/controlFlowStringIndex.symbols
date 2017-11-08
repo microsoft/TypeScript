@@ -1,0 +1,18 @@
+=== tests/cases/conformance/controlFlow/controlFlowStringIndex.ts ===
+type A = { [index: string]: number | null };
+>A : Symbol(A, Decl(controlFlowStringIndex.ts, 0, 0))
+>index : Symbol(index, Decl(controlFlowStringIndex.ts, 0, 12))
+
+declare const value: A;
+>value : Symbol(value, Decl(controlFlowStringIndex.ts, 1, 13))
+>A : Symbol(A, Decl(controlFlowStringIndex.ts, 0, 0))
+
+if (value.foo !== null) {
+>value : Symbol(value, Decl(controlFlowStringIndex.ts, 1, 13))
+
+    value.foo.toExponential()
+>value.foo.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>value : Symbol(value, Decl(controlFlowStringIndex.ts, 1, 13))
+>toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+}
+
