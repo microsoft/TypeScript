@@ -1547,7 +1547,7 @@ interface TypedArray<T> {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: T) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: this) => boolean, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -1566,7 +1566,7 @@ interface TypedArray<T> {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: T) => any, thisArg?: any): T;
+    filter(callbackfn: (value: number, index: number, array: this) => any, thisArg?: any): T;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -1597,7 +1597,7 @@ interface TypedArray<T> {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: T) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -1635,7 +1635,7 @@ interface TypedArray<T> {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: T) => number, thisArg?: any): T;
+    map(callbackfn: (value: number, index: number, array: this) => number, thisArg?: any): T;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -1647,8 +1647,8 @@ interface TypedArray<T> {
       * the accumulation. The first call to the callbackfn function provides this value as an argument
       * instead of an array value.
       */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: T) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: T) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: this) => number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: this) => number, initialValue: number): number;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -1660,7 +1660,7 @@ interface TypedArray<T> {
       * the accumulation. The first call to the callbackfn function provides this value as an argument
       * instead of an array value.
       */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: T) => U, initialValue: U): U;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: this) => U, initialValue: U): U;
 
     /**
       * Calls the specified callback function for all the elements in an array, in descending order.
@@ -1672,8 +1672,8 @@ interface TypedArray<T> {
       * the accumulation. The first call to the callbackfn function provides this value as an
       * argument instead of an array value.
       */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: T) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: T) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: this) => number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: this) => number, initialValue: number): number;
 
     /**
       * Calls the specified callback function for all the elements in an array, in descending order.
@@ -1685,7 +1685,7 @@ interface TypedArray<T> {
       * the accumulation. The first call to the callbackfn function provides this value as an argument
       * instead of an array value.
       */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: T) => U, initialValue: U): U;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: this) => U, initialValue: U): U;
 
     /**
       * Reverses the elements in an Array.
@@ -1714,7 +1714,7 @@ interface TypedArray<T> {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: T) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: this) => boolean, thisArg?: any): boolean;
 
     /**
       * Sorts an array.
