@@ -261,7 +261,9 @@ namespace ts {
             commentPos + 2 < commentEnd &&
             text.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
             const textSubStr = text.substring(commentPos, commentEnd);
-            return isTripleSlashPathReferenceOrAmdDependency(textSubStr);
+            return fullTripleSlashReferenceRegEx.test(textSubStr) ||
+                fullTripleSlashAmdDependencyRegEx.test(textSubStr) ||
+                fullTripleSlashAmdModuleNameRegEx.test(textSubStr);
         }
         return false;
     }
@@ -1868,7 +1870,6 @@ namespace ts {
     }
 
     const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/im;
-
     /**
      * RegExp that parses a triple-slash reference directive using the following capture groups:
      *
@@ -1879,13 +1880,7 @@ namespace ts {
      * | 3     | Quote character (used by a backreference to balance the quoted attribute value) |
      * | 4     | Attribute value                                                                 |
      */
-    export const fullTripleSlashReferenceRegEx = /^(\/\/\/\s*<reference\s+(no-default-lib|path|types|lib)\s*=\s*)('|")(.+?)\3.*?\/>/i;
-
-    const fullTripleSlashReferencePathOrAmdDependencyPathRegEx = /^\/\/\/\s*<(reference|amd-dependency)\s+path\s*=\s*('|")(.+?)\2.*?\/>/;
-
-    export function isTripleSlashPathReferenceOrAmdDependency(comment: string) {
-        return fullTripleSlashReferencePathOrAmdDependencyPathRegEx.test(comment);
-    }
+    const fullTripleSlashReferenceRegEx = /^(\/\/\/\s*<reference\s+(no-default-lib|path|types|lib)\s*=\s*)('|")(.+?)\3.*?\/>/i;
 
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult | undefined {
         if (!simpleReferenceRegEx.test(comment)) {
@@ -1906,6 +1901,37 @@ namespace ts {
         const pos = commentRange.pos + match[1].length + 1;
         const end = pos + fileName.length;
         return { fileReference: { pos, end, fileName }, kind };
+    }
+
+    const fullTripleSlashAmdModuleNameRegEx = /^\/\/\/\s*<amd-module\s+name\s*=\s*('|")(.+?)\1/i;
+
+    export function getAmdModuleNameFromComment(comment: string): string | undefined {
+        const match = fullTripleSlashAmdModuleNameRegEx.exec(comment);
+        return match && match[2];
+    }
+
+    const fullTripleSlashAmdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+(?:path\s*=\s*('|")(.+?)\1(?:\s+name\s*=\s*('|")(.+?)\3)?|name\s*=\s*('|")(.+?)\5\s+path\s*=\s*('|")(.+?)\7).*?\/>/i;
+
+    export function getAmdDependencyFromComment(comment: string): AmdDependency | undefined {
+        const match = fullTripleSlashAmdDependencyRegEx.exec(comment);
+        if (match) {
+            const path = match[2] || match[8];
+            const name = match[4] || match[6];
+            return { path, name };
+        }
+    }
+
+    const checkJsDirectiveRegEx = /^\/\/\/?\s*(@ts-check|@ts-nocheck)\s*$/i;
+
+    export function getCheckJsDirectiveFromComment(comment: string, commentRange: CommentRange): CheckJsDirective | undefined {
+        const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
+        if (checkJsDirectiveMatchResult) {
+            return {
+                enabled: equateStringsCaseInsensitive(checkJsDirectiveMatchResult[1], "@ts-check"),
+                end: commentRange.end,
+                pos: commentRange.pos
+            };
+        }
     }
 
     export function isKeyword(token: SyntaxKind): boolean {

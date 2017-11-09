@@ -6122,39 +6122,27 @@ namespace ts {
                             referencedFiles.push(referencePathMatchResult.fileReference);
                             break;
                     }
+                    continue;
                 }
-                else {
-                    const amdModuleNameRegEx = /^\/\/\/\s*<amd-module\s+name\s*=\s*('|")(.+?)\1/gim;
-                    const amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
-                    if (amdModuleNameMatchResult) {
-                        if (amdModuleName) {
-                            parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
-                        }
-                        amdModuleName = amdModuleNameMatchResult[2];
-                    }
 
-                    const amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s/gim;
-                    const pathRegex = /\spath\s*=\s*('|")(.+?)\1/gim;
-                    const nameRegex = /\sname\s*=\s*('|")(.+?)\1/gim;
-                    const amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
-                    if (amdDependencyMatchResult) {
-                        const pathMatchResult = pathRegex.exec(comment);
-                        const nameMatchResult = nameRegex.exec(comment);
-                        if (pathMatchResult) {
-                            const amdDependency = { path: pathMatchResult[2], name: nameMatchResult ? nameMatchResult[2] : undefined };
-                            amdDependencies.push(amdDependency);
-                        }
+                const amdModuleNameResult = getAmdModuleNameFromComment(comment);
+                if (amdModuleNameResult) {
+                    if (amdModuleName) {
+                        parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                     }
+                    amdModuleName = amdModuleNameResult;
+                    continue;
+                }
 
-                    const checkJsDirectiveRegEx = /^\/\/\/?\s*(@ts-check|@ts-nocheck)\s*$/gim;
-                    const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
-                    if (checkJsDirectiveMatchResult) {
-                        checkJsDirective = {
-                            enabled: equateStringsCaseInsensitive(checkJsDirectiveMatchResult[1], "@ts-check"),
-                            end: range.end,
-                            pos: range.pos
-                        };
-                    }
+                const amdDependency = getAmdDependencyFromComment(comment);
+                if (amdDependency) {
+                    amdDependencies.push(amdDependency);
+                    continue;
+                }
+
+                const checkJsDirectiveResult = getCheckJsDirectiveFromComment(comment, range);
+                if (checkJsDirectiveResult) {
+                    checkJsDirective = checkJsDirectiveResult;
                 }
             }
 

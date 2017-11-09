@@ -282,8 +282,8 @@ gulp.task("importDefinitelyTypedTests", "Runs scripts/importDefinitelyTypedTests
 });
 
 const libraries: { libs: string[], paths: Record<string, string> } = readJson(path.resolve("./src/lib/libs.json"));
-const libraryTargets = libraries.libs.map(function (lib) {
-    const sources = [copyright].concat(["header.d.ts", lib + ".d.ts"].map(s =>path.join(libraryDirectory, s)));
+const libraryTargets = libraries.libs.map(lib => {
+    const sources = [copyright].concat(["header.d.ts", lib + ".d.ts"].map(s => path.join(libraryDirectory, s)));
     const target = path.join(builtLocalDirectory, libraries.paths[lib] || ("lib." + lib + ".d.ts"));
     gulp.task(target, /*help*/ false, [], () =>
         gulp.src(sources)
