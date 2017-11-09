@@ -190,6 +190,7 @@ namespace ts {
         YieldKeyword,
         // Contextual keywords
         AbstractKeyword,
+        /* @internal */ FirstContextualKeyword = AbstractKeyword,
         AsKeyword,
         AnyKeyword,
         AsyncKeyword,
@@ -215,6 +216,7 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         OfKeyword, // LastKeyword and LastToken
+        /* @internal */ LastContextualKeyword = OfKeyword,
 
         // Parse tree nodes
 
