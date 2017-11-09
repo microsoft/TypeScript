@@ -1569,9 +1569,9 @@ namespace ts.server {
         }
 
         private applyCodeActionCommand(commandName: string, requestSeq: number, args: protocol.ApplyCodeActionCommandRequestArgs): void {
-            const { file, project } = this.getFileAndProject(args);
-            const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
             const command = args.command as CodeActionCommand; // They should be sending back the command we sent them.
+            const { file, project } = this.getFileAndProject(command);
+            const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
             project.getLanguageService().applyCodeActionCommand(file, command).then(
                 ({ successMessage }) => { output(/*success*/ true, successMessage); },
                 error => { output(/*success*/ false, error); });

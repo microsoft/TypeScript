@@ -403,7 +403,12 @@ namespace ts {
     // See `commands?: {}[]` in protocol.ts
     export type CodeActionCommand = InstallPackageAction;
 
-    export interface InstallPackageAction {
+    /* @internal */
+    export interface CodeActionCommandBase {
+        file: string;
+    }
+
+    export interface InstallPackageAction extends CodeActionCommandBase {
         /* @internal */ type: "install package";
         /* @internal */ packageName: string;
     }

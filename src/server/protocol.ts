@@ -585,7 +585,7 @@ namespace ts.server.protocol {
         errorCodes?: number[];
     }
 
-    export interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+    export interface ApplyCodeActionCommandRequestArgs {
         command: {};
     }
 
