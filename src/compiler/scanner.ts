@@ -294,7 +294,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function stringToToken(s: string): SyntaxKind {
+    export function stringToToken(s: string): SyntaxKind | undefined {
         return textToToken.get(s);
     }
 
