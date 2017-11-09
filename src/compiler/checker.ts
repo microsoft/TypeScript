@@ -20170,7 +20170,16 @@ namespace ts {
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.UnionType:
                         let commonEntityName: EntityName;
-                        for (const typeNode of (<UnionOrIntersectionTypeNode>node).types) {
+                        for (let typeNode of (<UnionOrIntersectionTypeNode>node).types) {
+                            while (typeNode.kind === SyntaxKind.ParenthesizedType) {
+                                typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
+                            }
+                            if (typeNode.kind === SyntaxKind.NeverKeyword) {
+                                continue; // Always elide `never` from the union/intersection if possible
+                            }
+                            if (!strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                                continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
+                            }
                             const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);
                             if (!individualEntityName) {
                                 // Individual is something like string number
