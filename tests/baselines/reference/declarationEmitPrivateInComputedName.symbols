@@ -1,0 +1,89 @@
+=== tests/cases/compiler/declarationEmitPrivateInComputedName.ts ===
+enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(declarationEmitPrivateInComputedName.ts, 0, 0))
+
+    member = 0
+>member : Symbol(MyEnum.member, Decl(declarationEmitPrivateInComputedName.ts, 0, 13))
+}
+
+export const someVar1 = {
+>someVar1 : Symbol(someVar1, Decl(declarationEmitPrivateInComputedName.ts, 4, 12))
+
+    [MyEnum.member]: ""
+>MyEnum.member : Symbol(MyEnum.member, Decl(declarationEmitPrivateInComputedName.ts, 0, 13))
+>MyEnum : Symbol(MyEnum, Decl(declarationEmitPrivateInComputedName.ts, 0, 0))
+>member : Symbol(MyEnum.member, Decl(declarationEmitPrivateInComputedName.ts, 0, 13))
+
+};
+
+enum MyStringEnum {
+>MyStringEnum : Symbol(MyStringEnum, Decl(declarationEmitPrivateInComputedName.ts, 6, 2))
+
+    str = "str"
+>str : Symbol(MyStringEnum.str, Decl(declarationEmitPrivateInComputedName.ts, 8, 19))
+}
+
+export const someVar2 = {
+>someVar2 : Symbol(someVar2, Decl(declarationEmitPrivateInComputedName.ts, 12, 12))
+
+    [MyStringEnum.str]: ""
+>MyStringEnum.str : Symbol(MyStringEnum.str, Decl(declarationEmitPrivateInComputedName.ts, 8, 19))
+>MyStringEnum : Symbol(MyStringEnum, Decl(declarationEmitPrivateInComputedName.ts, 6, 2))
+>str : Symbol(MyStringEnum.str, Decl(declarationEmitPrivateInComputedName.ts, 8, 19))
+
+};
+
+export enum MyExportEnum {
+>MyExportEnum : Symbol(MyExportEnum, Decl(declarationEmitPrivateInComputedName.ts, 14, 2))
+
+    member = 0
+>member : Symbol(MyExportEnum.member, Decl(declarationEmitPrivateInComputedName.ts, 16, 26))
+}
+
+export const someVar3 = {
+>someVar3 : Symbol(someVar3, Decl(declarationEmitPrivateInComputedName.ts, 20, 12))
+
+    [MyExportEnum.member]: ""
+>MyExportEnum.member : Symbol(MyExportEnum.member, Decl(declarationEmitPrivateInComputedName.ts, 16, 26))
+>MyExportEnum : Symbol(MyExportEnum, Decl(declarationEmitPrivateInComputedName.ts, 14, 2))
+>member : Symbol(MyExportEnum.member, Decl(declarationEmitPrivateInComputedName.ts, 16, 26))
+
+};
+
+export enum MyExportStringEnum {
+>MyExportStringEnum : Symbol(MyExportStringEnum, Decl(declarationEmitPrivateInComputedName.ts, 22, 2))
+
+    str = "str"
+>str : Symbol(MyExportStringEnum.str, Decl(declarationEmitPrivateInComputedName.ts, 24, 32))
+}
+
+export const someVar4 = {
+>someVar4 : Symbol(someVar4, Decl(declarationEmitPrivateInComputedName.ts, 28, 12))
+
+    [MyExportStringEnum.str]: ""
+>MyExportStringEnum.str : Symbol(MyExportStringEnum.str, Decl(declarationEmitPrivateInComputedName.ts, 24, 32))
+>MyExportStringEnum : Symbol(MyExportStringEnum, Decl(declarationEmitPrivateInComputedName.ts, 22, 2))
+>str : Symbol(MyExportStringEnum.str, Decl(declarationEmitPrivateInComputedName.ts, 24, 32))
+
+};
+
+enum MyComputedEnum {
+>MyComputedEnum : Symbol(MyComputedEnum, Decl(declarationEmitPrivateInComputedName.ts, 30, 2))
+
+    member = Math.random()
+>member : Symbol(MyComputedEnum.member, Decl(declarationEmitPrivateInComputedName.ts, 32, 21))
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+}
+
+export const someVar5 = {
+>someVar5 : Symbol(someVar5, Decl(declarationEmitPrivateInComputedName.ts, 36, 12))
+
+    [MyComputedEnum.member]: ""
+>MyComputedEnum.member : Symbol(MyComputedEnum.member, Decl(declarationEmitPrivateInComputedName.ts, 32, 21))
+>MyComputedEnum : Symbol(MyComputedEnum, Decl(declarationEmitPrivateInComputedName.ts, 30, 2))
+>member : Symbol(MyComputedEnum.member, Decl(declarationEmitPrivateInComputedName.ts, 32, 21))
+
+};
+

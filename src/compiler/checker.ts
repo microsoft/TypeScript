@@ -3536,15 +3536,27 @@ namespace ts {
                     if (links.target && links.target.escapedName === InternalSymbolName.Computed) {
                         const name = ((prop.declarations[0] as NamedDeclaration).name as ComputedPropertyName).expression;
                         const t = getTypeOfNode(name);
-                        const sym = getSymbolAtLocation(name);
-                        const access = isSymbolAccessible(sym, enclosingDeclaration, SymbolFlags.Value, /*shouldComputeAliases*/ false);
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        if (access.accessibility !== SymbolAccessibility.Accessible && !(t.flags & TypeFlags.Union) && isLiteralType(t)) {
+                        if (!(t.flags & TypeFlags.Union) && isLiteralType(t)) {
                             writer.writeStringLiteral(literalTypeToString(t as LiteralType));
                         }
                         else {
-                            // By passing in `enclosingDeclaration`, we should write the name in appropriately qualified way
-                            buildSymbolDisplay(sym, writer, enclosingDeclaration);
+                            writer.writeSymbol("key", prop);
+                            writePunctuation(writer, SyntaxKind.ColonToken);
+                            writeSpace(writer);
+                            let base = getBaseTypeOfLiteralType(t);
+                            if (base !== stringType && base !== numberType) {
+                                if (isTypeAssignableToKind(base, TypeFlags.String)) {
+                                    base = stringType;
+                                }
+                                else if (isTypeAssignableToKind(base, TypeFlags.Number)) {
+                                    base = numberType;
+                                }
+                                else {
+                                    base = anyType;
+                                }
+                            }
+                            writeType(base, globalFlags);
                         }
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
