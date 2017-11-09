@@ -3021,7 +3021,7 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
 
-            const itemsString = items.map(item => stringify({ name: item.name, kind: item.kind })).join(",\n");
+            const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
 
             this.raiseError(`Expected "${stringify({ entryId, text, documentation, kind })}" to be in list [${itemsString}]`);
         }
