@@ -10,7 +10,7 @@ namespace ts.server {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
-        attach(projectService: ProjectService): void;
+        attach(projectService: ProjectService, eventSender?: EventSender): void;
         onProjectClosed(p: Project): void;
         readonly globalTypingsCacheLocation: string;
     }

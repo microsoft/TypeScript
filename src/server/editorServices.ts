@@ -16,6 +16,7 @@ namespace ts.server {
     export const ProjectInfoTelemetryEvent = "projectInfo";
     // tslint:enable variable-name
 
+    // TODO: make these inherit from protocol.Event?
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: { openFiles: string[]; };
@@ -320,6 +321,7 @@ namespace ts.server {
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        eventSender?: EventSender;
     }
 
     type WatchFile = (host: ServerHost, file: string, cb: FileWatcherCallback, watchType: WatchType, project?: Project) => FileWatcher;
@@ -436,7 +438,7 @@ namespace ts.server {
                 this.loadTypesMap();
             }
 
-            this.typingsInstaller.attach(this);
+            this.typingsInstaller.attach(this, opts.eventSender);
 
             this.typingsCache = new TypingsCache(this.typingsInstaller);
 
