@@ -14,19 +14,19 @@ interface FileInformation {
 interface FindFileResult {
 }
 
-interface IOLogFile {
+interface IoLogFile {
     path: string;
     codepage: number;
     result?: FileInformation;
 }
 
-interface IOLog {
+interface IoLog {
     timestamp: string;
     arguments: string[];
     executingPath: string;
     currentDirectory: string;
     useCustomLibraryFile?: boolean;
-    filesRead: IOLogFile[];
+    filesRead: IoLogFile[];
     filesWritten: {
         path: string;
         contents?: string;
@@ -80,16 +80,16 @@ interface IOLog {
 interface PlaybackControl {
     startReplayFromFile(logFileName: string): void;
     startReplayFromString(logContents: string): void;
-    startReplayFromData(log: IOLog): void;
+    startReplayFromData(log: IoLog): void;
     endReplay(): void;
     startRecord(logFileName: string): void;
     endRecord(): void;
 }
 
 namespace Playback {
-    let recordLog: IOLog = undefined;
-    let replayLog: IOLog = undefined;
-    let replayFilesRead: ts.Map<IOLogFile> | undefined = undefined;
+    let recordLog: IoLog = undefined;
+    let replayLog: IoLog = undefined;
+    let replayFilesRead: ts.Map<IoLogFile> | undefined = undefined;
     let recordLogFileNameBase = "";
 
     interface Memoized<T> {
@@ -110,11 +110,11 @@ namespace Playback {
         return run;
     }
 
-    export interface PlaybackIO extends Harness.IO, PlaybackControl { }
+    export interface PlaybackIO extends Harness.Io, PlaybackControl { }
 
     export interface PlaybackSystem extends ts.System, PlaybackControl { }
 
-    function createEmptyLog(): IOLog {
+    function createEmptyLog(): IoLog {
         return {
             timestamp: (new Date()).toString(),
             arguments: [],
@@ -134,7 +134,7 @@ namespace Playback {
         };
     }
 
-    export function newStyleLogIntoOldStyleLog(log: IOLog, host: ts.System | Harness.IO, baseName: string) {
+    export function newStyleLogIntoOldStyleLog(log: IoLog, host: ts.System | Harness.Io, baseName: string) {
         for (const file of log.filesAppended) {
             if (file.contentsPath) {
                 file.contents = host.readFile(ts.combinePaths(baseName, file.contentsPath));
@@ -167,7 +167,7 @@ namespace Playback {
         return path;
     }
 
-    export function oldStyleLogIntoNewStyleLog(log: IOLog, writeFile: typeof Harness.IO.writeFile, baseTestName: string) {
+    export function oldStyleLogIntoNewStyleLog(log: IoLog, writeFile: typeof Harness.IO.writeFile, baseTestName: string) {
         if (log.filesAppended) {
             for (const file of log.filesAppended) {
                 if (file.contents !== undefined) {
@@ -210,8 +210,8 @@ namespace Playback {
     }
 
     function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
-    function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
-    function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
+    function initWrapper(wrapper: PlaybackIO, underlying: Harness.Io): void;
+    function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.Io): void {
         ts.forEach(Object.keys(underlying), prop => {
             (<any>wrapper)[prop] = (<any>underlying)[prop];
         });
@@ -249,12 +249,32 @@ namespace Playback {
         wrapper.endRecord = () => {
             if (recordLog !== undefined) {
                 let i = 0;
-                const fn = () => recordLogFileNameBase + i;
-                while (underlying.fileExists(ts.combinePaths(fn(), "test.json"))) i++;
-                underlying.writeFile(ts.combinePaths(fn(), "test.json"), JSON.stringify(oldStyleLogIntoNewStyleLog(recordLog, (path, string) => underlying.writeFile(path, string), fn()), null, 4)); // tslint:disable-line:no-null-keyword
+                const getBase = () => recordLogFileNameBase + i;
+                while (underlying.fileExists(ts.combinePaths(getBase(), "test.json"))) i++;
+                const newLog = oldStyleLogIntoNewStyleLog(recordLog, (path, str) => underlying.writeFile(path, str), getBase());
+                underlying.writeFile(ts.combinePaths(getBase(), "test.json"), JSON.stringify(newLog, null, 4)); // tslint:disable-line:no-null-keyword
+                const syntheticTsconfig = generateTsconfig(newLog);
+                if (syntheticTsconfig) {
+                    underlying.writeFile(ts.combinePaths(getBase(), "tsconfig.json"), JSON.stringify(syntheticTsconfig, null, 4)); // tslint:disable-line:no-null-keyword
+                }
                 recordLog = undefined;
             }
         };
+
+        function generateTsconfig(newLog: IoLog): undefined | { compilerOptions: ts.CompilerOptions, files: string[] } {
+            if (newLog.filesRead.some(file => /tsconfig.+json$/.test(file.path))) {
+                return;
+            }
+            const files = [];
+            for (const file of newLog.filesRead) {
+                if (file.result.contentsPath &&
+                    Harness.isDefaultLibraryFile(file.result.contentsPath) &&
+                    /\.[tj]s$/.test(file.result.contentsPath)) {
+                    files.push(file.result.contentsPath);
+                }
+            }
+            return { compilerOptions: ts.parseCommandLine(newLog.arguments).options, files };
+        }
 
         wrapper.fileExists = recordReplay(wrapper.fileExists, underlying)(
             path => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path }),
@@ -346,6 +366,7 @@ namespace Playback {
 
     function recordReplay<T extends Function>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
+            // tslint:disable-next-line only-arrow-functions
             return <any>(function () {
                 if (replayLog !== undefined) {
                     return replay.apply(undefined, arguments);
@@ -406,7 +427,7 @@ namespace Playback {
         // console.log("Swallowed write operation during replay: " + name);
     }
 
-    export function wrapIO(underlying: Harness.IO): PlaybackIO {
+    export function wrapIO(underlying: Harness.Io): PlaybackIO {
         const wrapper: PlaybackIO = <any>{};
         initWrapper(wrapper, underlying);
 

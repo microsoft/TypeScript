@@ -55,11 +55,11 @@ namespace ts {
         it("Convert deprecated typingOptions.enableAutoDiscovery format tsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
-                    "typingOptions":
+                    typingOptions:
                     {
-                        "enableAutoDiscovery": true,
-                        "include": ["0.d.ts", "1.d.ts"],
-                        "exclude": ["0.js", "1.js"]
+                        enableAutoDiscovery: true,
+                        include: ["0.d.ts", "1.d.ts"],
+                        exclude: ["0.js", "1.js"]
                     }
                 },
                 "tsconfig.json",
@@ -77,11 +77,11 @@ namespace ts {
         it("Convert correctly format tsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
-                    "typeAcquisition":
+                    typeAcquisition:
                     {
-                        "enable": true,
-                        "include": ["0.d.ts", "1.d.ts"],
-                        "exclude": ["0.js", "1.js"]
+                        enable: true,
+                        include: ["0.d.ts", "1.d.ts"],
+                        exclude: ["0.js", "1.js"]
                     }
                 },
                 "tsconfig.json",
@@ -99,9 +99,9 @@ namespace ts {
         it("Convert incorrect format tsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
-                    "typeAcquisition":
+                    typeAcquisition:
                     {
-                        "enableAutoDiscovy": true,
+                        enableAutoDiscovy: true,
                     }
                 }, "tsconfig.json",
                 {
@@ -140,9 +140,9 @@ namespace ts {
         it("Convert tsconfig.json with only enable property to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
-                    "typeAcquisition":
+                    typeAcquisition:
                     {
-                        "enable": true
+                        enable: true
                     }
                 }, "tsconfig.json",
                 {
@@ -160,11 +160,11 @@ namespace ts {
         it("Convert jsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
-                    "typeAcquisition":
+                    typeAcquisition:
                     {
-                        "enable": false,
-                        "include": ["0.d.ts"],
-                        "exclude": ["0.js"]
+                        enable: false,
+                        include: ["0.d.ts"],
+                        exclude: ["0.js"]
                     }
                 }, "jsconfig.json",
                 {
@@ -194,9 +194,9 @@ namespace ts {
         it("Convert incorrect format jsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
-                    "typeAcquisition":
+                    typeAcquisition:
                     {
-                        "enableAutoDiscovy": true,
+                        enableAutoDiscovy: true,
                     }
                 }, "jsconfig.json",
                 {
@@ -222,9 +222,9 @@ namespace ts {
         it("Convert jsconfig.json with only enable property to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
-                    "typeAcquisition":
+                    typeAcquisition:
                     {
-                        "enable": false
+                        enable: false
                     }
                 }, "jsconfig.json",
                 {

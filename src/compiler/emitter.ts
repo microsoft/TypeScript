@@ -699,9 +699,11 @@ namespace ts {
                 case SyntaxKind.JsxText:
                     return emitJsxText(<JsxText>node);
                 case SyntaxKind.JsxOpeningElement:
-                    return emitJsxOpeningElement(<JsxOpeningElement>node);
+                case SyntaxKind.JsxOpeningFragment:
+                    return emitJsxOpeningElementOrFragment(<JsxOpeningElement>node);
                 case SyntaxKind.JsxClosingElement:
-                    return emitJsxClosingElement(<JsxClosingElement>node);
+                case SyntaxKind.JsxClosingFragment:
+                    return emitJsxClosingElementOrFragment(<JsxClosingElement>node);
                 case SyntaxKind.JsxAttribute:
                     return emitJsxAttribute(<JsxAttribute>node);
                 case SyntaxKind.JsxAttributes:
@@ -836,6 +838,8 @@ namespace ts {
                     return emitJsxElement(<JsxElement>node);
                 case SyntaxKind.JsxSelfClosingElement:
                     return emitJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                case SyntaxKind.JsxFragment:
+                    return emitJsxFragment(<JsxFragment>node);
 
                 // Transformation nodes
                 case SyntaxKind.PartiallyEmittedExpression:
@@ -1729,26 +1733,15 @@ namespace ts {
                         increaseIndent();
                     }
 
-                    if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
-                        emitSignatureHead(node);
-                        if (onEmitNode) {
-                            onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
-                        }
-                        else {
-                            emitBlockFunctionBody(body);
-                        }
+                    pushNameGenerationScope(node);
+                    emitSignatureHead(node);
+                    if (onEmitNode) {
+                        onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
                     }
                     else {
-                        pushNameGenerationScope();
-                        emitSignatureHead(node);
-                        if (onEmitNode) {
-                            onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
-                        }
-                        else {
-                            emitBlockFunctionBody(body);
-                        }
-                        popNameGenerationScope();
+                        emitBlockFunctionBody(body);
                     }
+                    popNameGenerationScope(node);
 
                     if (indentedFlag) {
                         decreaseIndent();
@@ -1867,11 +1860,9 @@ namespace ts {
             emitTypeParameters(node, node.typeParameters);
             emitList(node, node.heritageClauses, ListFormat.ClassHeritageClauses);
 
-            pushNameGenerationScope();
             write(" {");
             emitList(node, node.members, ListFormat.ClassMembers);
             write("}");
-            popNameGenerationScope();
 
             if (indentedFlag) {
                 decreaseIndent();
@@ -1905,11 +1896,9 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             write("enum ");
             emit(node.name);
-            pushNameGenerationScope();
             write(" {");
             emitList(node, node.members, ListFormat.EnumMembers);
             write("}");
-            popNameGenerationScope();
         }
 
         function emitModuleDeclaration(node: ModuleDeclaration) {
@@ -1931,11 +1920,11 @@ namespace ts {
         }
 
         function emitModuleBlock(node: ModuleBlock) {
-            pushNameGenerationScope();
+            pushNameGenerationScope(node);
             write("{");
             emitBlockStatements(node, /*forceSingleLine*/ isEmptyBlock(node));
             write("}");
-            popNameGenerationScope();
+            popNameGenerationScope(node);
         }
 
         function emitCaseBlock(node: CaseBlock) {
@@ -2060,7 +2049,7 @@ namespace ts {
 
         function emitJsxElement(node: JsxElement) {
             emit(node.openingElement);
-            emitList(node, node.children, ListFormat.JsxElementChildren);
+            emitList(node, node.children, ListFormat.JsxElementOrFragmentChildren);
             emit(node.closingElement);
         }
 
@@ -2075,14 +2064,24 @@ namespace ts {
             write("/>");
         }
 
-        function emitJsxOpeningElement(node: JsxOpeningElement) {
+        function emitJsxFragment(node: JsxFragment) {
+            emit(node.openingFragment);
+            emitList(node, node.children, ListFormat.JsxElementOrFragmentChildren);
+            emit(node.closingFragment);
+        }
+
+        function emitJsxOpeningElementOrFragment(node: JsxOpeningElement | JsxOpeningFragment) {
             write("<");
-            emitJsxTagName(node.tagName);
-            writeIfAny(node.attributes.properties, " ");
-            // We are checking here so we won't re-enter the emitting pipeline and emit extra sourcemap
-            if (node.attributes.properties && node.attributes.properties.length > 0) {
-                emit(node.attributes);
+
+            if (isJsxOpeningElement(node)) {
+                emitJsxTagName(node.tagName);
+                // We are checking here so we won't re-enter the emitting pipeline and emit extra sourcemap
+                if (node.attributes.properties && node.attributes.properties.length > 0) {
+                    write(" ");
+                    emit(node.attributes);
+                }
             }
+
             write(">");
         }
 
@@ -2090,9 +2089,11 @@ namespace ts {
             writer.writeLiteral(getTextOfNode(node, /*includeTrivia*/ true));
         }
 
-        function emitJsxClosingElement(node: JsxClosingElement) {
+        function emitJsxClosingElementOrFragment(node: JsxClosingElement | JsxClosingFragment) {
             write("</");
-            emitJsxTagName(node.tagName);
+            if (isJsxClosingElement(node)) {
+                emitJsxTagName(node.tagName);
+            }
             write(">");
         }
 
@@ -2268,11 +2269,11 @@ namespace ts {
 
         function emitSourceFileWorker(node: SourceFile) {
             const statements = node.statements;
-            pushNameGenerationScope();
+            pushNameGenerationScope(node);
             emitHelpersIndirect(node);
             const index = findIndex(statements, statement => !isPrologueDirective(statement));
             emitList(node, statements, ListFormat.MultiLine, index === -1 ? statements.length : index);
-            popNameGenerationScope();
+            popNameGenerationScope(node);
         }
 
         // Transformation nodes
@@ -2611,12 +2612,6 @@ namespace ts {
             writer.decreaseIndent();
         }
 
-        function writeIfAny(nodes: NodeArray<Node>, text: string) {
-            if (some(nodes)) {
-                write(text);
-            }
-        }
-
         function writeToken(token: SyntaxKind, pos: number, contextNode?: Node) {
             return onEmitSourceMapOfToken
                 ? onEmitSourceMapOfToken(contextNode, token, pos, writeTokenText)
@@ -2651,8 +2646,8 @@ namespace ts {
         function writeLines(text: string): void {
             const lines = text.split(/\r\n?|\n/g);
             const indentation = guessIndentation(lines);
-            for (let i = 0; i < lines.length; i++) {
-                const line = indentation ? lines[i].slice(indentation) : lines[i];
+            for (const lineText of lines) {
+                const line = indentation ? lineText.slice(indentation) : lineText;
                 if (line.length) {
                     writeLine();
                     write(line);
@@ -2741,7 +2736,7 @@ namespace ts {
                 }
             }
             else {
-                return nextNode.startsOnNewLine;
+                return getStartsOnNewLine(nextNode);
             }
         }
 
@@ -2772,7 +2767,7 @@ namespace ts {
 
         function synthesizedNodeStartsOnNewLine(node: Node, format?: ListFormat) {
             if (nodeIsSynthesized(node)) {
-                const startsOnNewLine = node.startsOnNewLine;
+                const startsOnNewLine = getStartsOnNewLine(node);
                 if (startsOnNewLine === undefined) {
                     return (format & ListFormat.PreferNewLine) !== 0;
                 }
@@ -2789,7 +2784,7 @@ namespace ts {
             node2 = skipSynthesizedParentheses(node2);
 
             // Always use a newline for synthesized code if the synthesizer desires it.
-            if (node2.startsOnNewLine) {
+            if (getStartsOnNewLine(node2)) {
                 return true;
             }
 
@@ -2848,7 +2843,10 @@ namespace ts {
         /**
          * Push a new name generation scope.
          */
-        function pushNameGenerationScope() {
+        function pushNameGenerationScope(node: Node | undefined) {
+            if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
+                return;
+            }
             tempFlagsStack.push(tempFlags);
             tempFlags = 0;
         }
@@ -2856,7 +2854,10 @@ namespace ts {
         /**
          * Pop the current name generation scope.
          */
-        function popNameGenerationScope() {
+        function popNameGenerationScope(node: Node | undefined) {
+            if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
+                return;
+            }
             tempFlags = tempFlagsStack.pop();
         }
 
@@ -2867,8 +2868,17 @@ namespace ts {
             if (name.autoGenerateKind === GeneratedIdentifierKind.Node) {
                 // Node names generate unique names based on their original node
                 // and are cached based on that node's id.
-                const node = getNodeForGeneratedName(name);
-                return generateNameCached(node);
+                if (name.skipNameGenerationScope) {
+                    const savedTempFlags = tempFlags;
+                    popNameGenerationScope(/*node*/ undefined);
+                    const result = generateNameCached(getNodeForGeneratedName(name));
+                    pushNameGenerationScope(/*node*/ undefined);
+                    tempFlags = savedTempFlags;
+                    return result;
+                  }
+                  else {
+                    return generateNameCached(getNodeForGeneratedName(name));
+                  }
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique
@@ -3176,7 +3186,7 @@ namespace ts {
         EnumMembers = CommaDelimited | Indented | MultiLine,
         CaseBlockClauses = Indented | MultiLine,
         NamedImportsOrExportsElements = CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | SingleLine | SpaceBetweenBraces,
-        JsxElementChildren = SingleLine | NoInterveningComments,
+        JsxElementOrFragmentChildren = SingleLine | NoInterveningComments,
         JsxElementAttributes = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
         CaseOrDefaultClauseStatements = Indented | MultiLine | NoTrailingNewLine | OptionalIfEmpty,
         HeritageClauseTypes = CommaDelimited | SpaceBetweenSiblings | SingleLine,

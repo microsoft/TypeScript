@@ -211,8 +211,8 @@ class CompilerBaselineRunner extends RunnerBase {
             this.emit = false;
 
             const opts = this.options.split(",");
-            for (let i = 0; i < opts.length; i++) {
-                switch (opts[i]) {
+            for (const opt of opts) {
+                switch (opt) {
                     case "emit":
                         this.emit = true;
                         break;

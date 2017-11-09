@@ -3,7 +3,7 @@
 /// <reference path="session.ts" />
 
 namespace ts.server {
-    interface IOSessionOptions {
+    interface IoSessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
         canUseEvents: boolean;
@@ -200,7 +200,7 @@ namespace ts.server {
             return this.loggingEnabled() && this.level >= level;
         }
 
-        msg(s: string, type: Msg.Types = Msg.Err) {
+        msg(s: string, type: Msg = Msg.Err) {
             if (!this.canWrite) return;
 
             s = `[${nowString()}] ${s}\n`;
@@ -529,7 +529,7 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        constructor(options: IOSessionOptions) {
+        constructor(options: IoSessionOptions) {
             const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
@@ -816,7 +816,7 @@ namespace ts.server {
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
         const statusCache = createMap<boolean>();
-        sys.watchDirectory = function (path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+        sys.watchDirectory = (path, callback, recursive) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
             if (status === undefined) {
@@ -828,7 +828,7 @@ namespace ts.server {
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
                     }
-                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { "ELECTRON_RUN_AS_NODE": "1" } });
+                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { ELECTRON_RUN_AS_NODE: "1" } });
                     status = true;
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`WatchGuard for path ${path} returned: OK`);
@@ -933,7 +933,7 @@ namespace ts.server {
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
-    const options: IOSessionOptions = {
+    const options: IoSessionOptions = {
         host: sys,
         cancellationToken,
         installerEventPort: eventPort,
@@ -953,7 +953,7 @@ namespace ts.server {
     };
 
     const ioSession = new IOSession(options);
-    process.on("uncaughtException", function (err: Error) {
+    process.on("uncaughtException", err => {
         ioSession.logError(err, "unknown");
     });
     // See https://github.com/Microsoft/TypeScript/issues/11348

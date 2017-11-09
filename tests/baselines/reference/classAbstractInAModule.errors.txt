@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts(6,1): error TS2511: Cannot create an instance of the abstract class 'A'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts(6,1): error TS2511: Cannot create an instance of an abstract class.
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     
     new M.A;
     ~~~~~~~
-!!! error TS2511: Cannot create an instance of the abstract class 'A'.
+!!! error TS2511: Cannot create an instance of an abstract class.
     new M.B;

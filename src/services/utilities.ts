@@ -178,7 +178,7 @@ namespace ts {
 
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
-                return !isPartOfExpression(node);
+                return !isExpressionNode(node);
             case SyntaxKind.ThisType:
                 return true;
         }
@@ -947,7 +947,7 @@ namespace ts {
         if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+        if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
 
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }
@@ -1068,20 +1068,19 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export const typeKeywords: ReadonlyArray<SyntaxKind> = [
+        SyntaxKind.AnyKeyword,
+        SyntaxKind.BooleanKeyword,
+        SyntaxKind.NeverKeyword,
+        SyntaxKind.NumberKeyword,
+        SyntaxKind.ObjectKeyword,
+        SyntaxKind.StringKeyword,
+        SyntaxKind.SymbolKeyword,
+        SyntaxKind.VoidKeyword,
+    ];
+
     export function isTypeKeyword(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.NeverKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.ObjectKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.SymbolKeyword:
-            case SyntaxKind.VoidKeyword:
-                return true;
-            default:
-                return false;
-        }
+        return contains(typeKeywords, kind);
     }
 
     /** True if the symbol is for an external module, as opposed to a namespace. */
@@ -1330,23 +1329,39 @@ namespace ts {
     export function getSourceFileImportLocation(node: SourceFile) {
         // For a source file, it is possible there are detached comments we should not skip
         const text = node.text;
+        const textLength = text.length;
         let ranges = getLeadingCommentRanges(text, 0);
         if (!ranges) return 0;
         let position = 0;
         // However we should still skip a pinned comment at the top
         if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
-            position = ranges[0].end + 1;
+            position = ranges[0].end;
+            advancePastLineBreak();
             ranges = ranges.slice(1);
         }
         // As well as any triple slash references
         for (const range of ranges) {
             if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
-                position = range.end + 1;
+                position = range.end;
+                advancePastLineBreak();
                 continue;
             }
             break;
         }
         return position;
+
+        function advancePastLineBreak() {
+            if (position < textLength) {
+                const charCode = text.charCodeAt(position);
+                if (isLineBreak(charCode)) {
+                    position++;
+
+                    if (position < textLength && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
+                        position++;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -1398,7 +1413,9 @@ namespace ts {
             addEmitFlags(node, EmitFlags.NoLeadingComments);
 
             const firstChild = forEachChild(node, child => child);
-            firstChild && suppressLeading(firstChild);
+            if (firstChild) {
+                suppressLeading(firstChild);
+            }
         }
 
         function suppressTrailing(node: Node) {
@@ -1415,7 +1432,9 @@ namespace ts {
                     }
                     return undefined;
                 });
-            lastChild && suppressTrailing(lastChild);
+            if (lastChild) {
+                suppressTrailing(lastChild);
+            }
         }
     }
 }

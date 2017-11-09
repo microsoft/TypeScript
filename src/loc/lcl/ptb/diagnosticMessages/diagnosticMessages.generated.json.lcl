@@ -820,10 +820,13 @@
       </Item>
       <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Adicionar {0} à declaração de importação existente de {1}.]]></Val>
+            <Val><![CDATA[Adicione "{0}" à declaração de importação existente de "{1}".]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2222,6 +2225,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_to_default_import_95013" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to default import]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Converter para importação padrão]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Corrupted_locale_file_0_6051" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Corrupted locale file {0}.]]></Val>
@@ -2879,6 +2891,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Expected_0_1_type_arguments_provide_these_with_an_extends_tag_8027" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0}-{1} type arguments; provide these with an '@extends' tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Espera-se {0}-{1} argumentos de tipo; forneça esses recursos com uma marca "@extends".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Expected_0_arguments_but_got_1_2554" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} arguments, but got {1}.]]></Val>
@@ -2906,6 +2927,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Expected_0_type_arguments_provide_these_with_an_extends_tag_8026" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Espera-se {0} argumentos de tipo; forneça esses recursos com uma marca "@extends".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Expected_at_least_0_arguments_but_got_1_2555" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected at least {0} arguments, but got {1}.]]></Val>
@@ -2929,6 +2959,15 @@
           <Val><![CDATA[Expected corresponding JSX closing tag for '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Marca de fechamento de JSX correspondente esperada para '{0}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_corresponding_closing_tag_for_JSX_fragment_17015" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected corresponding closing tag for JSX fragment.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Marca de fechamento correspondente esperada para fragmento JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3658,10 +3697,13 @@
       </Item>
       <Item ItemId=";Import_0_from_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import {0} from {1}.]]></Val>
+          <Val><![CDATA[Import '{0}' from "{1}".]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importar {0} de {1}.]]></Val>
+            <Val><![CDATA[Importar "{0}" de "{1}".]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Import {0} from {1}.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4166,6 +4208,24 @@
           <Prev Cat="Text">
             <Val><![CDATA[JSX expressions must have one parent element]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSX_fragment_has_no_corresponding_closing_tag_17014" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSX fragment has no corresponding closing tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O fragmento JSX não tem uma marcação de fechamento correspondente.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSX_fragment_is_not_supported_when_using_jsxFactory_17016" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSX fragment is not supported when using --jsxFactory]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O fragmento JSX não é compatível com o uso de --jsxFactory]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6332,11 +6392,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_t_2403" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_has_type_1_at_2_but_here_has_typ_2403" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
+          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declarações de variável subsequentes devem ter o mesmo tipo. A variável '{0}' deve ser do tipo '{1}', mas aqui tem o tipo '{2}'.]]></Val>
+            <Val><![CDATA[Declarações de variável subsequentes devem ter o mesmo tipo. A variável "{0}" deve ser do tipo "{1}" em {2}, mas aqui tem o tipo "{3}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

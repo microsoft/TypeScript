@@ -2,7 +2,7 @@
 
 ////var x = class C {
 ////    /*definition*/constructor() {
-////        var other = new /*usage*/C;
+////        var other = new [|/*usage*/C|];
 ////    }
 ////}
 
