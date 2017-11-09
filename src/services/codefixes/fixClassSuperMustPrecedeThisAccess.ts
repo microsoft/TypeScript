@@ -11,7 +11,7 @@ namespace ts.codefix {
             }
 
             const constructor = getContainingFunction(token);
-            const superCall = findSuperCall((<ConstructorDeclaration>constructor).body);
+            const superCall = findSuperCall((<ConstructorDeclaration>constructor).body!);
             if (!superCall) {
                 return undefined;
             }
@@ -27,7 +27,7 @@ namespace ts.codefix {
                 }
             }
             const changeTracker = textChanges.ChangeTracker.fromContext(context);
-            changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>constructor, sourceFile), superCall, { suffix: context.newLineCharacter });
+            changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>constructor, sourceFile)!, superCall, { suffix: context.newLineCharacter });
             changeTracker.deleteNode(sourceFile, superCall);
 
             return [{
@@ -35,7 +35,7 @@ namespace ts.codefix {
                 changes: changeTracker.getChanges()
             }];
 
-            function findSuperCall(n: Node): ExpressionStatement {
+            function findSuperCall(n: Node): ExpressionStatement | undefined {
                 if (n.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>n).expression)) {
                     return <ExpressionStatement>n;
                 }

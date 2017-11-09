@@ -17,7 +17,7 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if ((node.transformFlags & TransformFlags.ContainsES2016) === 0) {
+            if ((node.transformFlags! & TransformFlags.ContainsES2016) === 0) {
                 return node;
             }
             switch (node.kind) {
@@ -51,7 +51,7 @@ namespace ts {
                 target = setTextRange(
                     createElementAccess(
                         setTextRange(createAssignment(expressionTemp, left.expression), left.expression),
-                        setTextRange(createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
+                        setTextRange(createAssignment(argumentExpressionTemp, left.argumentExpression!), left.argumentExpression)
                     ),
                     left
                 );

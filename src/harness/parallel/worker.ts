@@ -29,7 +29,7 @@ namespace Harness.Parallel.Worker {
             if (!testList) {
                 throw new Error("Tests must occur within a describe block");
             }
-            testList.push({ name, callback, kind: "test" });
+            testList.push({ name, callback: callback!, kind: "test" });
         }) as Mocha.ITestDefinition;
     }
 
@@ -40,9 +40,9 @@ namespace Harness.Parallel.Worker {
             timeout() { return this; },
         };
         namestack.push(name);
-        let beforeFunc: Function;
+        let beforeFunc: Function | undefined;
         (before as any) = (cb: Function) => beforeFunc = cb;
-        let afterFunc: Function;
+        let afterFunc: Function | undefined;
         (after as any) = (cb: Function) => afterFunc = cb;
         const savedBeforeEach = beforeEachFunc;
         (beforeEach as any) = (cb: Function) => beforeEachFunc = cb;
@@ -176,7 +176,7 @@ namespace Harness.Parallel.Worker {
                         console.error(data);
                     }
                     const message: ParallelResultMessage = { type: "result", payload: handleTest(runner, file) };
-                    process.send(message);
+                    process.send!(message);
                     break;
                 case "close":
                     process.exit(0);
@@ -196,16 +196,16 @@ namespace Harness.Parallel.Worker {
                         else {
                             message = { type: "progress", payload };
                         }
-                        process.send(message);
+                        process.send!(message);
                     }
                     break;
                 }
             }
         });
         process.on("uncaughtException", error => {
-            const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack, name: [...namestack] } };
+            const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack!, name: [...namestack] } };
             try {
-                process.send(message);
+                process.send!(message);
             }
             catch (e) {
                 console.error(error);
@@ -230,7 +230,7 @@ namespace Harness.Parallel.Worker {
                 if (!runners.has(runner)) {
                     runners.set(runner, createRunner(runner));
                 }
-                const instance = runners.get(runner);
+                const instance = runners.get(runner)!;
                 instance.tests = [file];
                 return { ...resetShimHarnessAndExecute(instance), runner, file };
             }

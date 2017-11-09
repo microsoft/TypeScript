@@ -9,7 +9,7 @@ namespace ts.server {
     export interface ITypingsInstaller {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult>;
-        enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
+        enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
         readonly globalTypingsCacheLocation: string;
@@ -22,19 +22,19 @@ namespace ts.server {
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
-        globalTypingsCacheLocation: undefined
+        globalTypingsCacheLocation: undefined! // TODO: GH#18217
     };
 
     class TypingsCacheEntry {
         readonly typeAcquisition: TypeAcquisition;
         readonly compilerOptions: CompilerOptions;
         readonly typings: SortedReadonlyArray<string>;
-        readonly unresolvedImports: SortedReadonlyArray<string>;
+        readonly unresolvedImports: SortedReadonlyArray<string> | undefined;
         /* mainly useful for debugging */
         poisoned: boolean;
     }
 
-    function setIsEqualTo(arr1: string[], arr2: string[]): boolean {
+    function setIsEqualTo(arr1: string[] | undefined, arr2: string[] | undefined): boolean {
         if (arr1 === arr2) {
             return true;
         }
@@ -44,13 +44,13 @@ namespace ts.server {
         const set: Map<boolean> = createMap<boolean>();
         let unique = 0;
 
-        for (const v of arr1) {
+        for (const v of arr1!) {
             if (set.get(v) !== true) {
                 set.set(v, true);
                 unique++;
             }
         }
-        for (const v of arr2) {
+        for (const v of arr2!) {
             const isSet = set.get(v);
             if (isSet === undefined) {
                 return false;
@@ -74,7 +74,7 @@ namespace ts.server {
         return opt1.allowJs !== opt2.allowJs;
     }
 
-    function unresolvedImportsChanged(imports1: SortedReadonlyArray<string>, imports2: SortedReadonlyArray<string>): boolean {
+    function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefined, imports2: SortedReadonlyArray<string> | undefined): boolean {
         if (imports1 === imports2) {
             return false;
         }
@@ -95,7 +95,7 @@ namespace ts.server {
             return this.installer.installPackage(options);
         }
 
-        getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {
+        getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string> | undefined, forceRefresh: boolean): SortedReadonlyArray<string> {
             const typeAcquisition = project.getTypeAcquisition();
 
             if (!typeAcquisition || !typeAcquisition.enable) {

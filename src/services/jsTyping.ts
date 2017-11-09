@@ -12,7 +12,7 @@ namespace ts.JsTyping {
         directoryExists(path: string): boolean;
         fileExists(fileName: string): boolean;
         readFile(path: string, encoding?: string): string | undefined;
-        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, depth?: number): string[];
     }
 
     interface PackageJson {
@@ -115,7 +115,7 @@ namespace ts.JsTyping {
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            const module = deduplicate(
+            const module = deduplicate<string>(
                 unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
                 equateStringsCaseSensitive,
                 compareStringsCaseSensitive);
@@ -150,7 +150,7 @@ namespace ts.JsTyping {
 
         function addInferredTyping(typingName: string) {
             if (!inferredTypings.has(typingName)) {
-                inferredTypings.set(typingName, undefined);
+                inferredTypings.set(typingName, undefined!); // TODO: GH#18217
             }
         }
         function addInferredTypings(typingNames: ReadonlyArray<string>, message: string) {
@@ -307,7 +307,7 @@ namespace ts.JsTyping {
             case PackageNameValidationResult.Ok:
                 throw Debug.fail(); // Shouldn't have called this.
             default:
-                Debug.assertNever(result);
+                throw Debug.assertNever(result);
         }
     }
 }

@@ -7,8 +7,8 @@ namespace ts {
         resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
         getTypeOfSymbol: (sym: Symbol) => Type,
         getResolvedSymbol: (node: Node) => Symbol,
-        getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type,
-        getConstraintFromTypeParameter: (typeParameter: TypeParameter) => Type,
+        getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type | undefined,
+        getConstraintFromTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
         getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier) {
 
         return getSymbolWalker;
@@ -40,7 +40,7 @@ namespace ts {
                 },
             };
 
-            function visitType(type: Type): void {
+            function visitType(type: Type | undefined): void {
                 if (!type) {
                     return;
                 }
@@ -155,13 +155,13 @@ namespace ts {
                 }
             }
 
-            function visitSymbol(symbol: Symbol): boolean {
+            function visitSymbol(symbol: Symbol | undefined): boolean {
                 if (!symbol) {
-                    return;
+                    return false;
                 }
                 const symbolId = getSymbolId(symbol);
                 if (visitedSymbols[symbolId]) {
-                    return;
+                    return false;
                 }
                 visitedSymbols[symbolId] = symbol;
                 if (!accept(symbol)) {
@@ -170,7 +170,7 @@ namespace ts {
                 const t = getTypeOfSymbol(symbol);
                 visitType(t); // Should handle members on classes and such
                 if (symbol.flags & SymbolFlags.HasExports) {
-                    symbol.exports.forEach(visitSymbol);
+                    symbol.exports!.forEach(visitSymbol);
                 }
                 forEach(symbol.declarations, d => {
                     // Type queries are too far resolved when we just visit the symbol's type
@@ -183,6 +183,7 @@ namespace ts {
                         visitSymbol(entity);
                     }
                 });
+                return false;
             }
         }
     }

@@ -37,7 +37,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         }
     }
 
-    function hasUsableJSDoc(decl: DeclarationWithType): boolean {
+    function hasUsableJSDoc(decl: DeclarationWithType | undefined): boolean {
         if (!decl) {
             return false;
         }
@@ -72,7 +72,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
     function getEditsForAnnotation(context: RefactorContext): RefactorEditInfo | undefined {
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
-        const decl = findAncestor(token, isDeclarationWithType);
+        const decl = findAncestor(token, isDeclarationWithType)!; // TODO: GH#18217
         const jsdocType = getJSDocType(decl);
         if (!decl || !jsdocType || decl.type) {
             return Debug.fail(`!decl || !jsdocType || decl.type: !${decl} || !${jsdocType} || ${decl.type}`);
@@ -92,7 +92,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
     function getEditsForFunctionAnnotation(context: RefactorContext): RefactorEditInfo | undefined {
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
-        const decl = findAncestor(token, isFunctionLikeDeclaration);
+        const decl = findAncestor(token, isFunctionLikeDeclaration)!; // TODO:GH#18217
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const functionWithType = addTypesToFunctionLike(decl);
         suppressLeadingAndTrailingTrivia(functionWithType);
@@ -150,7 +150,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         }
     }
 
-    function transformJSDocType(node: Node): Node | undefined {
+    function transformJSDocType(node: Node | undefined): Node | undefined {
         if (node === undefined) {
             return undefined;
         }
@@ -173,7 +173,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.TypeReference:
                 return transformJSDocTypeReference(node as TypeReferenceNode);
             default:
-                const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined) as TypeNode;
+                const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined!) as TypeNode; // TODO: GH#18217
                 setEmitFlags(visited, EmitFlags.SingleLine);
                 return visited;
         }
@@ -197,8 +197,8 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
     }
 
     function transformJSDocParameter(node: ParameterDeclaration) {
-        const index = node.parent.parameters.indexOf(node);
-        const isRest = node.type.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1;
+        const index = node.parent!.parameters.indexOf(node);
+        const isRest = node.type!.kind === SyntaxKind.JSDocVariadicType && index === node.parent!.parameters.length - 1; // TODO:GH#18217
         const name = node.name || (isRest ? "rest" : "arg" + index);
         const dotdotdot = isRest ? createToken(SyntaxKind.DotDotDotToken) : node.dotDotDotToken;
         return createParameter(node.decorators, node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
@@ -241,11 +241,11 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
-            node.typeArguments[0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
+            node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
             /*questionToken*/ undefined,
-            createTypeReferenceNode(node.typeArguments[0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
+            createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
             /*initializer*/ undefined);
-        const indexSignature = createTypeLiteralNode([createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments[1])]);
+        const indexSignature = createTypeLiteralNode([createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments![1])]);
         setEmitFlags(indexSignature, EmitFlags.SingleLine);
         return indexSignature;
     }

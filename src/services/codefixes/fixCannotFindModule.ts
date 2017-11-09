@@ -19,7 +19,7 @@ namespace ts.codefix {
     export function tryGetCodeActionForInstallPackageTypes(host: LanguageServiceHost, moduleName: string): CodeAction | undefined {
         const { packageName } = getPackageName(moduleName);
 
-        if (!host.isKnownTypesPackageName(packageName)) {
+        if (!host.isKnownTypesPackageName!(packageName)) { // TODO: GH#18217
             // If !registry, registry not available yet, can't do anything.
             return undefined;
         }

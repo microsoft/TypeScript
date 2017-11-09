@@ -73,7 +73,7 @@ namespace ts {
 
     interface FileInfo {
         version: string;
-        signature: string;
+        signature: string | undefined;
     }
 
     export interface BuilderOptions {
@@ -89,7 +89,7 @@ namespace ts {
         const changedFilesSet = createMap<true>();
         const hasShapeChanged = createMap<true>();
         let allFilesExcludingDefaultLibraryFile: ReadonlyArray<SourceFile> | undefined;
-        let emitHandler: EmitHandler;
+        let emitHandler: EmitHandler | undefined;
         return {
             updateProgram,
             getFilesAffectedBy,
@@ -130,7 +130,7 @@ namespace ts {
 
         function addNewFileInfo(program: Program, sourceFile: SourceFile): FileInfo {
             registerChangedFile(sourceFile.path);
-            emitHandler.onAddSourceFile(program, sourceFile);
+            emitHandler!.onAddSourceFile(program, sourceFile);
             return { version: sourceFile.version, signature: undefined };
         }
 
@@ -139,16 +139,16 @@ namespace ts {
             // We can just remove its diagnostics
             changedFilesSet.delete(path);
             semanticDiagnosticsPerFile.delete(path);
-            emitHandler.onRemoveSourceFile(path);
+            emitHandler!.onRemoveSourceFile(path);
         }
 
         function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile) {
             if (existingInfo.version !== sourceFile.version) {
                 registerChangedFile(sourceFile.path);
                 existingInfo.version = sourceFile.version;
-                emitHandler.onUpdateSourceFile(program, sourceFile);
+                emitHandler!.onUpdateSourceFile(program, sourceFile);
             }
-            else if (emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
+            else if (emitHandler!.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
                 registerChangedFile(sourceFile.path);
             }
         }
@@ -176,7 +176,7 @@ namespace ts {
             if (!updateShapeSignature(program, sourceFile)) {
                 return [sourceFile];
             }
-            return emitHandler.getFilesAffectedByUpdatedShape(program, sourceFile);
+            return emitHandler!.getFilesAffectedByUpdatedShape(program, sourceFile);
         }
 
         function emitChangedFiles(program: Program, writeFileCallback: WriteFileCallback): ReadonlyArray<EmitResult> {
@@ -226,7 +226,7 @@ namespace ts {
                 return program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken);
             }
 
-            let diagnostics: Diagnostic[];
+            let diagnostics: Diagnostic[] | undefined;
             for (const sourceFile of program.getSourceFiles()) {
                 diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(program, sourceFile, cancellationToken));
             }
@@ -284,10 +284,10 @@ namespace ts {
 
             hasShapeChanged.set(sourceFile.path, true);
             const info = fileInfos.get(sourceFile.path);
-            Debug.assert(!!info);
+            if (!info) throw Debug.fail();
 
             const prevSignature = info.signature;
-            let latestSignature: string;
+            let latestSignature: string | undefined;
             if (sourceFile.isDeclarationFile) {
                 latestSignature = sourceFile.version;
                 info.signature = latestSignature;
@@ -344,7 +344,7 @@ namespace ts {
                         return;
                     }
 
-                    const fileName = resolvedTypeReferenceDirective.resolvedFileName;
+                    const fileName = resolvedTypeReferenceDirective.resolvedFileName!;
                     const typeFilePath = toPath(fileName, sourceFileDirectory, options.getCanonicalFileName);
                     addReferencedFile(typeFilePath);
                 });
@@ -369,7 +369,7 @@ namespace ts {
                 return allFilesExcludingDefaultLibraryFile;
             }
 
-            let result: SourceFile[];
+            let result: SourceFile[] | undefined;
             addSourceFile(firstSourceFile);
             for (const sourceFile of program.getSourceFiles()) {
                 if (sourceFile !== firstSourceFile) {
@@ -493,9 +493,9 @@ namespace ts {
                 seenFileNamesMap.set(path, sourceFile);
                 const queue = getReferencedByPaths(path);
                 while (queue.length > 0) {
-                    const currentPath = queue.pop();
+                    const currentPath = queue.pop()!;
                     if (!seenFileNamesMap.has(currentPath)) {
-                        const currentSourceFile = program.getSourceFileByPath(currentPath);
+                        const currentSourceFile = program.getSourceFileByPath(currentPath)!;
                         seenFileNamesMap.set(currentPath, currentSourceFile);
                         if (currentSourceFile && updateShapeSignature(program, currentSourceFile)) {
                             queue.push(...getReferencedByPaths(currentPath));

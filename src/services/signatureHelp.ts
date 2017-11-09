@@ -17,7 +17,7 @@ namespace ts.SignatureHelp {
         argumentCount: number;
     }
 
-    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems {
+    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
         const typeChecker = program.getTypeChecker();
 
         // Decide whether to show signature help
@@ -51,7 +51,7 @@ namespace ts.SignatureHelp {
         return createSignatureHelpItems(candidates, resolvedSignature, argumentInfo, typeChecker);
     }
 
-    function createJavaScriptSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Program): SignatureHelpItems {
+    function createJavaScriptSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Program): SignatureHelpItems | undefined {
         if (argumentInfo.invocation.kind !== SyntaxKind.CallExpression) {
             return undefined;
         }
@@ -95,10 +95,10 @@ namespace ts.SignatureHelp {
      * Returns relevant information for the argument list and the current argument if we are
      * in the argument of an invocation; returns undefined otherwise.
      */
-    export function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo {
-        if (isCallOrNewExpression(node.parent)) {
-            const invocation = node.parent;
-            let list: Node;
+    export function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo | undefined {
+        const parent = node.parent!;
+        if (isCallOrNewExpression(parent)) {
+            let list: Node | undefined;
             let argumentIndex: number;
 
             // There are 3 cases to handle:
@@ -118,7 +118,7 @@ namespace ts.SignatureHelp {
             if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
                 // Find the list that starts right *after* the < or ( token.
                 // If the user has just opened a list, consider this item 0.
-                list = getChildListThatStartsWithOpenerToken(invocation, node, sourceFile);
+                list = getChildListThatStartsWithOpenerToken(parent, node, sourceFile);
                 Debug.assert(list !== undefined);
                 argumentIndex = 0;
             }
@@ -134,22 +134,22 @@ namespace ts.SignatureHelp {
                 argumentIndex = getArgumentIndex(list, node);
             }
 
-            const kind = invocation.typeArguments && invocation.typeArguments.pos === list.pos ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments;
+            const kind = parent.typeArguments && parent.typeArguments.pos === list.pos ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments;
             const argumentCount = getArgumentCount(list);
             if (argumentIndex !== 0) {
                 Debug.assertLessThan(argumentIndex, argumentCount);
             }
             const argumentsSpan = getApplicableSpanForArguments(list, sourceFile);
-            return { kind, invocation, argumentsSpan, argumentIndex, argumentCount };
+            return { kind, invocation: parent, argumentsSpan, argumentIndex, argumentCount };
         }
-        else if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+        else if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && parent.kind === SyntaxKind.TaggedTemplateExpression) {
             // Check if we're actually inside the template;
             // otherwise we'll fall out and return undefined.
             if (isInsideTemplateLiteral(<LiteralExpression>node, position)) {
                 return getArgumentListInfoForTemplate(<TaggedTemplateExpression>node.parent, /*argumentIndex*/ 0, sourceFile);
             }
         }
-        else if (node.kind === SyntaxKind.TemplateHead && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+        else if (node.kind === SyntaxKind.TemplateHead && parent.parent!.kind === SyntaxKind.TaggedTemplateExpression) {
             const templateExpression = <TemplateExpression>node.parent;
             const tagExpression = <TaggedTemplateExpression>templateExpression.parent;
             Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
@@ -158,7 +158,7 @@ namespace ts.SignatureHelp {
 
             return getArgumentListInfoForTemplate(tagExpression, argumentIndex, sourceFile);
         }
-        else if (node.parent.kind === SyntaxKind.TemplateSpan && node.parent.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+        else if (parent.kind === SyntaxKind.TemplateSpan && parent.parent!.parent!.kind === SyntaxKind.TaggedTemplateExpression) {
             const templateSpan = <TemplateSpan>node.parent;
             const templateExpression = <TemplateExpression>templateSpan.parent;
             const tagExpression = <TaggedTemplateExpression>templateExpression.parent;
@@ -235,7 +235,7 @@ namespace ts.SignatureHelp {
         const listChildren = argumentsList.getChildren();
 
         let argumentCount = countWhere(listChildren, arg => arg.kind !== SyntaxKind.CommaToken);
-        if (listChildren.length > 0 && lastOrUndefined(listChildren).kind === SyntaxKind.CommaToken) {
+        if (listChildren.length > 0 && last(listChildren).kind === SyntaxKind.CommaToken) {
             argumentCount++;
         }
 
@@ -313,7 +313,7 @@ namespace ts.SignatureHelp {
         // This is because a Missing node has no width. However, what we actually want is to include trivia
         // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
         if (template.kind === SyntaxKind.TemplateExpression) {
-            const lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans);
+            const lastSpan = last((<TemplateExpression>template).templateSpans);
             if (lastSpan.literal.getFullWidth() === 0) {
                 applicableSpanEnd = skipTrivia(sourceFile.text, applicableSpanEnd, /*stopAfterLineBreak*/ false);
             }
@@ -322,16 +322,16 @@ namespace ts.SignatureHelp {
         return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
     }
 
-    export function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo {
-        for (let n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
+    export function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo | undefined {
+        for (let n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent!) {
             if (isFunctionBlock(n)) {
                 return undefined;
             }
 
             // If the node is not a subspan of its parent, this is a big problem.
             // There have been crashes that might be caused by this violation.
-            if (n.pos < n.parent.pos || n.end > n.parent.end) {
-                Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
+            if (n.pos < n.parent!.pos || n.end > n.parent!.end) {
+                Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent!.kind);
             }
 
             const argumentInfo = getImmediatelyContainingArgumentInfo(n, position, sourceFile);
@@ -352,7 +352,7 @@ namespace ts.SignatureHelp {
         return children[indexOfOpenerToken + 1];
     }
 
-    function createSignatureHelpItems(candidates: Signature[], resolvedSignature: Signature, argumentListInfo: ArgumentListInfo, typeChecker: TypeChecker): SignatureHelpItems {
+    function createSignatureHelpItems(candidates: Signature[], resolvedSignature: Signature | undefined, argumentListInfo: ArgumentListInfo, typeChecker: TypeChecker): SignatureHelpItems {
         const { argumentCount, argumentsSpan: applicableSpan, invocation, argumentIndex } = argumentListInfo;
         const isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
 
@@ -406,13 +406,13 @@ namespace ts.SignatureHelp {
         });
 
         if (argumentIndex !== 0) {
-            Debug.assertLessThan(argumentIndex, argumentCount);
+            Debug.assertLessThan(argumentIndex!, argumentCount); // TODO: GH#18217
         }
 
-        const selectedItemIndex = candidates.indexOf(resolvedSignature);
+        const selectedItemIndex = candidates.indexOf(resolvedSignature!); // TODO: GH#18217
         Debug.assert(selectedItemIndex !== -1); // If candidates is non-empty it should always include bestSignature. We check for an empty candidates before calling this function.
 
-        return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
+        return { items, applicableSpan, selectedItemIndex, argumentIndex: argumentIndex!, argumentCount }; // TODO: GH#18217
 
         function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
             const displayParts = mapToDisplayParts(writer =>
@@ -431,7 +431,7 @@ namespace ts.SignatureHelp {
                 typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
 
             return {
-                name: typeParameter.symbol.name,
+                name: typeParameter.symbol!.name,
                 documentation: emptyArray,
                 displayParts,
                 isOptional: false

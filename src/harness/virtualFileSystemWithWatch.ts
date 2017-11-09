@@ -426,7 +426,7 @@ interface Array<T> {}`
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
 
-        private removeFileOrFolder(fileOrDirectory: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean, isRenaming?: boolean) {
+        private removeFileOrFolder(fileOrDirectory: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean, isRenaming = false) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as Folder;
             if (basePath !== fileOrDirectory.path) {
@@ -444,8 +444,8 @@ interface Array<T> {}`
                 // Invoke directory and recursive directory watcher for the folder
                 // Here we arent invoking recursive directory watchers for the base folders
                 // since that is something we would want to do for both file as well as folder we are deleting
-                invokeWatcherCallbacks(this.watchedDirectories.get(fileOrDirectory.path), cb => this.directoryCallback(cb, relativePath));
-                invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrDirectory.path), cb => this.directoryCallback(cb, relativePath));
+                invokeWatcherCallbacks(this.watchedDirectories.get(fileOrDirectory.path)!, cb => this.directoryCallback(cb, relativePath));
+                invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrDirectory.path)!, cb => this.directoryCallback(cb, relativePath));
             }
 
             if (basePath !== fileOrDirectory.path) {
@@ -459,7 +459,7 @@ interface Array<T> {}`
         }
 
         private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind) {
-            const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
+            const callbacks = this.watchedFiles.get(this.toPath(fileFullPath))!;
             invokeWatcherCallbacks(callbacks, ({ cb, fileName }) => cb(fileName, eventKind));
         }
 
@@ -472,7 +472,7 @@ interface Array<T> {}`
          */
         private invokeDirectoryWatcher(folderFullPath: string, fileName: string) {
             const relativePath = this.getRelativePathToDirectory(folderFullPath, fileName);
-            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
+            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath))!, cb => this.directoryCallback(cb, relativePath));
             this.invokeRecursiveDirectoryWatcher(folderFullPath, fileName);
         }
 
@@ -485,7 +485,7 @@ interface Array<T> {}`
          */
         private invokeRecursiveDirectoryWatcher(fullPath: string, fileName: string) {
             const relativePath = this.getRelativePathToDirectory(fullPath, fileName);
-            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(fullPath)), cb => this.directoryCallback(cb, relativePath));
+            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(fullPath))!, cb => this.directoryCallback(cb, relativePath));
             const basePath = getDirectoryPath(fullPath);
             if (this.getCanonicalFileName(fullPath) !== this.getCanonicalFileName(basePath)) {
                 this.invokeRecursiveDirectoryWatcher(basePath, fileName);
@@ -496,7 +496,7 @@ interface Array<T> {}`
             const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
             return {
                 path: this.toPath(fullPath),
-                content: fileOrDirectory.content,
+                content: fileOrDirectory.content!, // TODO: GH#18217
                 fullPath,
                 fileSize: fileOrDirectory.fileSize
             };
@@ -513,31 +513,31 @@ interface Array<T> {}`
 
         fileExists(s: string) {
             const path = this.toFullPath(s);
-            return isFile(this.fs.get(path));
+            return isFile(this.fs.get(path)!);
         }
 
         readFile(s: string) {
-            const fsEntry = this.fs.get(this.toFullPath(s));
+            const fsEntry = this.fs.get(this.toFullPath(s))!;
             return isFile(fsEntry) ? fsEntry.content : undefined;
         }
 
         getFileSize(s: string) {
             const path = this.toFullPath(s);
-            const entry = this.fs.get(path);
+            const entry = this.fs.get(path)!;
             if (isFile(entry)) {
                 return entry.fileSize ? entry.fileSize : entry.content.length;
             }
-            return undefined;
+            return undefined!; // TODO: GH#18217
         }
 
         directoryExists(s: string) {
             const path = this.toFullPath(s);
-            return isFolder(this.fs.get(path));
+            return isFolder(this.fs.get(path)!);
         }
 
         getDirectories(s: string) {
             const path = this.toFullPath(s);
-            const folder = this.fs.get(path);
+            const folder = this.fs.get(path)!;
             if (isFolder(folder)) {
                 return mapDefined(folder.entries, entry => isFolder(entry) ? getBaseFileName(entry.fullPath) : undefined);
             }
@@ -549,7 +549,7 @@ interface Array<T> {}`
             return ts.matchFiles(this.toNormalizedAbsolutePath(path), extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
                 const directories: string[] = [];
                 const files: string[] = [];
-                const dirEntry = this.fs.get(this.toPath(dir));
+                const dirEntry = this.fs.get(this.toPath(dir))!;
                 if (isFolder(dirEntry)) {
                     dirEntry.entries.forEach((entry) => {
                         if (isFolder(entry)) {
@@ -674,7 +674,7 @@ interface Array<T> {}`
         }
 
         readonly existMessage = "System Exit";
-        exitCode: number;
+        exitCode: number | undefined;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;

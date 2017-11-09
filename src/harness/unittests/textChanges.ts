@@ -8,9 +8,9 @@
 namespace ts {
     describe("textChanges", () => {
         function findChild(name: string, n: Node) {
-            return find(n);
+            return find(n)!;
 
-            function find(node: Node): Node {
+            function find(node: Node): Node | undefined {
                 if (isDeclaration(node) && node.name && isIdentifier(node.name) && node.name.escapedText === name) {
                     return node;
                 }
@@ -108,11 +108,11 @@ namespace M
                 // replace statements with return statement
                 const newStatement = createReturn(
                     createCall(
-                        /*expression*/ newFunction.name,
+                        /*expression*/ newFunction.name!,
                         /*typeArguments*/ undefined,
                         /*argumentsArray*/ emptyArray
                     ));
-                changeTracker.replaceNodeRange(sourceFile, statements[0], lastOrUndefined(statements), newStatement, { suffix: newLineCharacter });
+                changeTracker.replaceNodeRange(sourceFile, statements[0], last(statements), newStatement, { suffix: newLineCharacter });
             });
         }
         {
@@ -132,7 +132,7 @@ function bar() {
         function findVariableStatementContaining(name: string, sourceFile: SourceFile) {
             const varDecl = findChild(name, sourceFile);
             assert.equal(varDecl.kind, SyntaxKind.VariableDeclaration);
-            const varStatement = varDecl.parent.parent;
+            const varStatement = varDecl.parent!.parent!;
             assert.equal(varStatement.kind, SyntaxKind.VariableStatement);
             return varStatement;
         }
@@ -340,8 +340,8 @@ namespace M {
 
         function findOpenBraceForConstructor(sourceFile: SourceFile) {
             const classDecl = <ClassDeclaration>sourceFile.statements[0];
-            const constructorDecl = forEach(classDecl.members, m => m.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>m).body && <ConstructorDeclaration>m);
-            return constructorDecl.body.getFirstToken();
+            const constructorDecl = find(classDecl.members, m => m.kind === SyntaxKind.Constructor && !!(<ConstructorDeclaration>m).body) as ConstructorDeclaration;
+            return constructorDecl.body!.getFirstToken()!;
         }
         function createTestSuperCall() {
             const superCall = createCall(

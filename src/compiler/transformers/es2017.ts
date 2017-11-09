@@ -54,7 +54,7 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
+            if ((node.transformFlags! & TransformFlags.ContainsES2017) === 0) {
                 return node;
             }
 
@@ -253,7 +253,7 @@ namespace ts {
                     context,
                     hasLexicalArguments,
                     promiseConstructor,
-                    transformFunctionBodyWorker(node.body)
+                    transformFunctionBodyWorker(node.body!)
                 );
 
                 const declarations = endLexicalEnvironment();
@@ -278,7 +278,7 @@ namespace ts {
             }
         }
 
-        function getPromiseConstructor(type: TypeNode) {
+        function getPromiseConstructor(type: TypeNode | undefined) {
             const typeName = type && getEntityNameFromTypeNode(type);
             if (typeName && isEntityName(typeName)) {
                 const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
@@ -373,7 +373,7 @@ namespace ts {
         function substituteElementAccessExpression(node: ElementAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    node.argumentExpression,
+                    node.argumentExpression!,
                     node
                 );
             }
@@ -449,7 +449,7 @@ namespace ts {
             };`
     };
 
-    function createAwaiterHelper(context: TransformationContext, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
+    function createAwaiterHelper(context: TransformationContext, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block) {
         context.requestEmitHelper(awaiterHelper);
 
         const generatorFunc = createFunctionExpression(
@@ -463,7 +463,7 @@ namespace ts {
         );
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags! |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return createCall(
             getHelperName("__awaiter"),

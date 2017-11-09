@@ -42,12 +42,12 @@ namespace ts {
         // this will return a successful match, having only tested "SK" against "SyntaxKind".  At
         // that point a call can be made to 'getMatches("SyntaxKind", "ts.compiler")', with the
         // work to create 'ts.compiler' only being done once the first match succeeded.
-        getMatchesForLastSegmentOfPattern(candidate: string): PatternMatch[];
+        getMatchesForLastSegmentOfPattern(candidate: string): PatternMatch[] | undefined;
 
         // Fully checks a candidate, with an dotted container, against the search pattern.
         // The candidate must match the last part of the search pattern, and the dotted container
         // must match the preceding segments of the pattern.
-        getMatches(candidateContainers: string[], candidate: string): PatternMatch[] | undefined;
+        getMatches(candidateContainers: string[] | undefined, candidate: string): PatternMatch[] | undefined;
 
         // Whether or not the pattern contained dots or not.  Clients can use this to determine
         // If they should call getMatches, or if getMatchesForLastSegmentOfPattern is sufficient.
@@ -131,15 +131,15 @@ namespace ts {
             return invalidPattern || !candidate;
         }
 
-        function getMatchesForLastSegmentOfPattern(candidate: string): PatternMatch[] {
+        function getMatchesForLastSegmentOfPattern(candidate: string): PatternMatch[] | undefined {
             if (skipMatch(candidate)) {
                 return undefined;
             }
 
-            return matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
+            return matchSegment(candidate, last(dotSeparatedSegments));
         }
 
-        function getMatches(candidateContainers: string[], candidate: string): PatternMatch[] | undefined {
+        function getMatches(candidateContainers: string[] | undefined, candidate: string): PatternMatch[] | undefined {
             if (skipMatch(candidate)) {
                 return undefined;
             }
@@ -147,7 +147,7 @@ namespace ts {
             // First, check that the last part of the dot separated pattern matches the name of the
             // candidate.  If not, then there's no point in proceeding and doing the more
             // expensive work.
-            const candidateMatch = matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
+            const candidateMatch = matchSegment(candidate, last(dotSeparatedSegments));
             if (!candidateMatch) {
                 return undefined;
             }
@@ -195,7 +195,7 @@ namespace ts {
             return spans;
         }
 
-        function matchTextChunk(candidate: string, chunk: TextChunk, punctuationStripped: boolean): PatternMatch {
+        function matchTextChunk(candidate: string, chunk: TextChunk, punctuationStripped: boolean): PatternMatch | undefined {
             const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
             if (index === 0) {
                 if (chunk.text.length === candidate.length) {
@@ -283,7 +283,7 @@ namespace ts {
             return false;
         }
 
-        function matchSegment(candidate: string, segment: Segment): PatternMatch[] {
+        function matchSegment(candidate: string, segment: Segment): PatternMatch[] | undefined {
             // First check if the segment matches as is.  This is also useful if the segment contains
             // characters we would normally strip when splitting into parts that we also may want to
             // match in the candidate.  For example if the segment is "@int" and the candidate is
@@ -336,7 +336,7 @@ namespace ts {
             // Only if all words have some sort of match is the pattern considered matched.
 
             const subWordTextChunks = segment.subWordTextChunks;
-            let matches: PatternMatch[] = undefined;
+            let matches: PatternMatch[] | undefined;
 
             for (const subWordTextChunk of subWordTextChunks) {
                 // Try to match the candidate with this word
@@ -383,7 +383,7 @@ namespace ts {
             return true;
         }
 
-        function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): number {
+        function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): number | undefined {
             const chunkCharacterSpans = chunk.characterSpans;
 
             // Note: we may have more pattern parts than candidate parts.  This is because multiple
@@ -393,8 +393,8 @@ namespace ts {
 
             let currentCandidate = 0;
             let currentChunkSpan = 0;
-            let firstMatch: number = undefined;
-            let contiguous: boolean = undefined;
+            let firstMatch: number | undefined;
+            let contiguous: boolean | undefined;
 
             while (true) {
                 // Let's consider our termination cases

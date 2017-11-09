@@ -19,7 +19,7 @@ namespace ts.server.typingsInstaller {
         writeLine: noop
     };
 
-    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string {
+    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
         try {
             const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
             return result.resolvedModule && result.resolvedModule.resolvedFileName;
@@ -114,7 +114,7 @@ namespace ts.server.typingsInstaller {
                 this.log.isEnabled() ? (s => this.log.writeLine(s)) : undefined,
                 req.fileNames,
                 req.projectRootPath,
-                this.safeList,
+                this.safeList!,
                 this.packageNameToTypingLocation,
                 req.typeAcquisition,
                 req.unresolvedImports);
@@ -169,7 +169,7 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Trying to find '${packageJson}'...`);
             }
             if (this.installTypingHost.fileExists(packageJson)) {
-                const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson));
+                const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson)!); // TODO: GH#18217
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
                 }
@@ -347,7 +347,7 @@ namespace ts.server.typingsInstaller {
             let isInvoked = false;
             const watchers: FileWatcher[] = [];
             for (const file of files) {
-                const w = this.installTypingHost.watchFile(file, f => {
+                const w = this.installTypingHost.watchFile!(file, f => { // TODO: GH#18217
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
                     }
@@ -380,7 +380,7 @@ namespace ts.server.typingsInstaller {
         private executeWithThrottling() {
             while (this.inFlightRequestCount < this.throttleLimit && this.pendingRunRequests.length) {
                 this.inFlightRequestCount++;
-                const request = this.pendingRunRequests.pop();
+                const request = this.pendingRunRequests.pop()!;
                 this.installWorker(request.requestId, request.packageNames, request.cwd, ok => {
                     this.inFlightRequestCount--;
                     request.onRequestCompleted(ok);

@@ -761,7 +761,7 @@ namespace ts {
             case "string":
                 return map(values, v => v || "");
             default:
-                return filter(map(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v, errors)), v => !!v);
+                return mapDefined(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v, errors));
         }
     }
 
@@ -1059,12 +1059,12 @@ namespace ts {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, Diagnostics.String_literal_with_double_quotes_expected));
                 }
 
-                const keyText = unescapeLeadingUnderscores(getTextOfPropertyName(element.name));
+                const keyText = unescapeLeadingUnderscores(getTextOfPropertyName(element.name)!); // TODO: GH#18217
                 const option = knownOptions ? knownOptions.get(keyText) : undefined;
                 if (extraKeyDiagnosticMessage && !option) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
                 }
-                const value = convertPropertyValueToJson(element.initializer, option);
+                const value = convertPropertyValueToJson(element.initializer!, option); // TODO: GH#18217
                 if (typeof keyText !== "undefined") {
                     result[keyText] = value;
                     // Notify key value set, if user asked for it
@@ -1075,17 +1075,17 @@ namespace ts {
                         if (parentOption) {
                             if (isValidOptionValue) {
                                 // Notify option set in the parent if its a valid option value
-                                jsonConversionNotifier.onSetValidOptionKeyValueInParent(parentOption, option, value);
+                                jsonConversionNotifier.onSetValidOptionKeyValueInParent(parentOption, option!, value);
                             }
                         }
                         else if (knownOptions === knownRootOptions) {
                             if (isValidOptionValue) {
                                 // Notify about the valid root key value being set
-                                jsonConversionNotifier.onSetValidOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
+                                jsonConversionNotifier.onSetValidOptionKeyValueInRoot(keyText, element.name, value, element.initializer!);
                             }
                             else if (!option) {
                                 // Notify about the unknown root key value being set
-                                jsonConversionNotifier.onSetUnknownOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
+                                jsonConversionNotifier.onSetUnknownOptionKeyValueInRoot(keyText, element.name, value, element.initializer!);
                             }
                         }
                     }
@@ -1101,7 +1101,7 @@ namespace ts {
             return elements.map(element => convertPropertyValueToJson(element, elementOption));
         }
 
-        function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption): any {
+        function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption | undefined): any {
             switch (valueExpression.kind) {
                 case SyntaxKind.TrueKeyword:
                     reportInvalidOptionValue(option && option.type !== "boolean");
@@ -1184,9 +1184,9 @@ namespace ts {
 
             return undefined;
 
-            function reportInvalidOptionValue(isError: boolean) {
+            function reportInvalidOptionValue(isError: boolean | undefined) {
                 if (isError) {
-                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.name, getCompilerOptionValueTypeString(option)));
+                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, option!.name, getCompilerOptionValueTypeString(option!)));
                 }
             }
         }
@@ -1202,7 +1202,7 @@ namespace ts {
             isString(option.type) ? option.type : "string";
     }
 
-    function isCompilerOptionsValue(option: CommandLineOption, value: any): value is CompilerOptionsValue {
+    function isCompilerOptionsValue(option: CommandLineOption | undefined, value: any): value is CompilerOptionsValue {
         if (option) {
             if (isNullOrUndefined(value)) return true; // All options are undefinable/nullable
             if (option.type === "list") {
@@ -1211,6 +1211,7 @@ namespace ts {
             const expectedType = isString(option.type) ? option.type : "string";
             return typeof value === expectedType;
         }
+        return false;
     }
 
     /**
@@ -1254,7 +1255,7 @@ namespace ts {
                 if (hasProperty(options, name)) {
                     // tsconfig only options cannot be specified via command line,
                     // so we can assume that only types that can appear here string | number | boolean
-                    if (optionsNameMap.has(name) && optionsNameMap.get(name).category === Diagnostics.Command_line_Options) {
+                    if (optionsNameMap.has(name) && optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options) {
                         continue;
                     }
                     const value = <CompilerOptionsValue>options[name];
@@ -1268,7 +1269,7 @@ namespace ts {
                         }
                         else {
                             if (optionDefinition.type === "list") {
-                                result.set(name, (value as ReadonlyArray<string | number>).map(element => getNameOfCompilerOptionValue(element, customTypeMap)));
+                                result.set(name, (value as ReadonlyArray<string | number>).map(element => getNameOfCompilerOptionValue(element, customTypeMap)!)); // TODO: GH#18217
                             }
                             else {
                                 // There is a typeMap associated with this command-line option so use it to map value back to its name
@@ -1374,7 +1375,7 @@ namespace ts {
      *    file to. e.g. outDir
      */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
+        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined!, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions); // TODO: GH#18217
     }
 
     /**
@@ -1389,7 +1390,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function setConfigFileInOptions(options: CompilerOptions, configFile: JsonSourceFile) {
+    export function setConfigFileInOptions(options: CompilerOptions, configFile: JsonSourceFile | undefined) {
         if (configFile) {
             Object.defineProperty(options, "configFile", { enumerable: false, writable: false, value: configFile });
         }
@@ -1447,7 +1448,7 @@ namespace ts {
         };
 
         function getFileNames(): ExpandResult {
-            let filesSpecs: ReadonlyArray<string>;
+            let filesSpecs: ReadonlyArray<string> | undefined;
             if (hasProperty(raw, "files") && !isNullOrUndefined(raw.files)) {
                 if (isArray(raw.files)) {
                     filesSpecs = <ReadonlyArray<string>>raw.files;
@@ -1460,7 +1461,7 @@ namespace ts {
                 }
             }
 
-            let includeSpecs: ReadonlyArray<string>;
+            let includeSpecs: ReadonlyArray<string> | undefined;
             if (hasProperty(raw, "include") && !isNullOrUndefined(raw.include)) {
                 if (isArray(raw.include)) {
                     includeSpecs = <ReadonlyArray<string>>raw.include;
@@ -1470,7 +1471,7 @@ namespace ts {
                 }
             }
 
-            let excludeSpecs: ReadonlyArray<string>;
+            let excludeSpecs: ReadonlyArray<string> | undefined;
             if (hasProperty(raw, "exclude") && !isNullOrUndefined(raw.exclude)) {
                 if (isArray(raw.exclude)) {
                     excludeSpecs = <ReadonlyArray<string>>raw.exclude;
@@ -1539,7 +1540,7 @@ namespace ts {
             sourceFile: JsonSourceFile,
             host: ParseConfigHost,
             basePath: string,
-            configFileName: string,
+            configFileName: string | undefined,
             getCanonicalFileName: GetCanonicalFileName,
             resolutionStack: Path[],
             errors: Push<Diagnostic>,
@@ -1601,7 +1602,7 @@ namespace ts {
         // It should be removed in future releases - use typeAcquisition instead.
         const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition || json.typingOptions, basePath, errors, configFileName);
         json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
-        let extendedConfigPath: Path;
+        let extendedConfigPath: Path | undefined;
 
         if (json.extends) {
             if (!isString(json.extends)) {
@@ -1624,8 +1625,8 @@ namespace ts {
         errors: Push<Diagnostic>
     ): ParsedTsconfig {
         const options = getDefaultCompilerOptions(configFileName);
-        let typeAcquisition: TypeAcquisition, typingOptionstypeAcquisition: TypeAcquisition;
-        let extendedConfigPath: Path;
+        let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
+        let extendedConfigPath: Path | undefined;
 
         const optionsIterator: JsonConversionNotifier = {
             onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
@@ -1730,7 +1731,7 @@ namespace ts {
         const extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
             getBaseFileName(extendedConfigPath), getCanonicalFileName, resolutionStack, errors);
         if (sourceFile) {
-            sourceFile.extendedSourceFiles.push(...extendedResult.extendedSourceFiles);
+            sourceFile.extendedSourceFiles!.push(...extendedResult.extendedSourceFiles!);
         }
 
         if (isSuccessfulParsedTsconfig(extendedConfig)) {
@@ -1754,13 +1755,10 @@ namespace ts {
 
     function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Push<Diagnostic>): boolean {
         if (!hasProperty(jsonOption, compileOnSaveCommandLineOption.name)) {
-            return undefined;
+            return false;
         }
         const result = convertJsonOption(compileOnSaveCommandLineOption, jsonOption.compileOnSave, basePath, errors);
-        if (typeof result === "boolean" && result) {
-            return result;
-        }
-        return false;
+        return typeof result === "boolean" && result;
     }
 
     export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {
@@ -1970,9 +1968,9 @@ namespace ts {
      * @param errors An array for diagnostic reporting.
      */
     function matchFileNames(
-        filesSpecs: ReadonlyArray<string>,
-        includeSpecs: ReadonlyArray<string>,
-        excludeSpecs: ReadonlyArray<string>,
+        filesSpecs: ReadonlyArray<string> | undefined,
+        includeSpecs: ReadonlyArray<string> | undefined,
+        excludeSpecs: ReadonlyArray<string> | undefined,
         basePath: string,
         options: CompilerOptions,
         host: ParseConfigHost,
@@ -1981,7 +1979,7 @@ namespace ts {
         jsonSourceFile: JsonSourceFile
     ): ExpandResult {
         basePath = normalizePath(basePath);
-        let validatedIncludeSpecs: ReadonlyArray<string>, validatedExcludeSpecs: ReadonlyArray<string>;
+        let validatedIncludeSpecs: ReadonlyArray<string> | undefined, validatedExcludeSpecs: ReadonlyArray<string> | undefined;
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
         // test whether a file or directory should be excluded before recursively traversing the
@@ -2091,8 +2089,9 @@ namespace ts {
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
             if (jsonSourceFile && jsonSourceFile.jsonObject) {
                 for (const property of getPropertyAssignment(jsonSourceFile.jsonObject, specKey)) {
-                    if (isArrayLiteralExpression(property.initializer)) {
-                        for (const element of property.initializer.elements) {
+                    const initializer = property.initializer!;
+                    if (isArrayLiteralExpression(initializer)) {
+                        for (const element of initializer.elements) {
                             if (isStringLiteral(element) && element.text === spec) {
                                 return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
                             }
@@ -2119,7 +2118,7 @@ namespace ts {
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
      */
-    function getWildcardDirectories(include: ReadonlyArray<string>, exclude: ReadonlyArray<string>, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
+    function getWildcardDirectories(include: ReadonlyArray<string> | undefined, exclude: ReadonlyArray<string> | undefined, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
         // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
         // of the pattern:
         //
@@ -2279,7 +2278,7 @@ namespace ts {
                     if (optionEnumValue === value) {
                         return optionStringValue;
                     }
-                });
+                })!; // TODO: GH#18217
         }
     }
 }

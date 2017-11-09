@@ -52,7 +52,7 @@ namespace ts.refactor.installTypesForPackage {
     }
 
     function isModuleIdentifier(node: StringLiteral): boolean {
-        switch (node.parent.kind) {
+        switch (node.parent!.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExternalModuleReference:
                 return true;

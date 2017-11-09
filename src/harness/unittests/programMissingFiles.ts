@@ -41,8 +41,8 @@ namespace ts {
 
         const testCompilerHost = Harness.Compiler.createCompilerHost(
             /*inputFiles*/ [emptyFile, referenceFile],
-            /*writeFile*/ undefined,
-            /*scriptTarget*/ undefined,
+            /*writeFile*/ undefined!, // TODO: GH#18217
+            /*scriptTarget*/ undefined!,
             /*useCaseSensitiveFileNames*/ false,
             /*currentDirectory*/ "d:\\pretend\\",
             /*newLineKind*/ NewLineKind.LineFeed,

@@ -83,7 +83,7 @@ namespace ts {
     }
 
     export function addFileWatcher(host: System, file: string, cb: FileWatcherCallback): FileWatcher {
-        return host.watchFile(file, cb);
+        return host.watchFile!(file, cb);
     }
 
     export function addFileWatcherWithLogging(host: System, file: string, cb: FileWatcherCallback, log: (s: string) => void): FileWatcher {
@@ -98,7 +98,7 @@ namespace ts {
 
     export type FilePathWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, filePath: Path) => void;
     export function addFilePathWatcher(host: System, file: string, cb: FilePathWatcherCallback, path: Path): FileWatcher {
-        return host.watchFile(file, (fileName, eventKind) => cb(fileName, eventKind, path));
+        return host.watchFile!(file, (fileName, eventKind) => cb(fileName, eventKind, path));
     }
 
     export function addFilePathWatcherWithLogging(host: System, file: string, cb: FilePathWatcherCallback, path: Path, log: (s: string) => void): FileWatcher {
@@ -113,7 +113,7 @@ namespace ts {
 
     export function addDirectoryWatcher(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher {
         const recursive = (flags & WatchDirectoryFlags.Recursive) !== 0;
-        return host.watchDirectory(directory, cb, recursive);
+        return host.watchDirectory!(directory, cb, recursive);
     }
 
     export function addDirectoryWatcherWithLogging(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, log: (s: string) => void): FileWatcher {

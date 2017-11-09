@@ -25,7 +25,7 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.ContainsJsx) {
+            if (node.transformFlags! & TransformFlags.ContainsJsx) {
                 return visitorWorker(node);
             }
             else {
@@ -52,7 +52,7 @@ namespace ts {
             }
         }
 
-        function transformJsxChildToExpression(node: JsxChild): Expression {
+        function transformJsxChildToExpression(node: JsxChild): Expression | undefined {
             switch (node.kind) {
                 case SyntaxKind.JsxText:
                     return visitJsxText(<JsxText>node);
@@ -87,9 +87,9 @@ namespace ts {
             return visitJsxOpeningFragment(node.openingFragment, node.children, isChild, /*location*/ node);
         }
 
-        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild> | undefined, isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
-            let objectProperties: Expression;
+            let objectProperties: Expression | undefined;
             const attrs = node.attributes.properties;
             if (attrs.length === 0) {
                 // When there are no attributes, React wants "null"
@@ -102,7 +102,7 @@ namespace ts {
                     spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                         ? map(attrs, transformJsxSpreadAttributeToExpression)
                         : createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
-                    )
+                    )! // TODO: GH#18217
                 );
 
                 if (isJsxSpreadAttribute(attrs[0])) {
@@ -121,7 +121,7 @@ namespace ts {
 
             const element = createExpressionForJsxElement(
                 context.getEmitResolver().getJsxFactoryEntity(),
-                compilerOptions.reactNamespace,
+                compilerOptions.reactNamespace!, // TODO: GH#18217
                 tagName,
                 objectProperties,
                 mapDefined(children, transformJsxChildToExpression),
@@ -139,7 +139,7 @@ namespace ts {
         function visitJsxOpeningFragment(node: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
             const element = createExpressionForJsxFragment(
                 context.getEmitResolver().getJsxFactoryEntity(),
-                compilerOptions.reactNamespace,
+                compilerOptions.reactNamespace!, // TODO: GH#18217
                 mapDefined(children, transformJsxChildToExpression),
                 node,
                 location
@@ -158,7 +158,7 @@ namespace ts {
 
         function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {
             const name = getAttributeName(node);
-            const expression = transformJsxAttributeInitializer(node.initializer);
+            const expression = transformJsxAttributeInitializer(node.initializer!)!; // TODO: GH#18217
             return createPropertyAssignment(name, expression);
         }
 
@@ -177,7 +177,7 @@ namespace ts {
                 return visitJsxExpression(<JsxExpression>node);
             }
             else {
-                Debug.failBadSyntaxKind(node);
+                throw Debug.failBadSyntaxKind(node);
             }
         }
 

@@ -32,7 +32,7 @@ describe("Colorization", () => {
     function identifier(text: string, position?: number) { return createClassification(text, ts.TokenClass.Identifier, position); }
     function numberLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.NumberLiteral, position); }
     function stringLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.StringLiteral, position); }
-    function finalEndOfLineState(value: number): ClassificationEntry { return { value, classification: undefined, position: 0 }; }
+    function finalEndOfLineState(value: number): ClassificationEntry { return { value, classification: undefined!, position: 0 }; } // TODO: GH#18217
     function createClassification(value: string, classification: ts.TokenClass, position?: number): ClassificationEntry {
         return { value, classification, position };
     }
@@ -48,7 +48,7 @@ describe("Colorization", () => {
                 const actualEntryPosition = expectedEntry.position !== undefined ? expectedEntry.position : text.indexOf(expectedEntry.value);
                 assert(actualEntryPosition >= 0, "token: '" + expectedEntry.value + "' does not exit in text: '" + text + "'.");
 
-                const actualEntry = getEntryAtPosition(result, actualEntryPosition);
+                const actualEntry = getEntryAtPosition(result, actualEntryPosition)!;
 
                 assert(actualEntry, "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition);
                 assert.equal(actualEntry.classification, expectedEntry.classification, "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] + ", Actual: " + ts.TokenClass[actualEntry.classification]);
@@ -351,7 +351,7 @@ describe("Colorization", () => {
                     pos += lastLength;
                     lastLength = val.length;
                 }
-                return ts.lastOrUndefined(vals);
+                return ts.last(vals);
             }
         });
 

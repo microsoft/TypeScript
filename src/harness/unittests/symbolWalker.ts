@@ -8,13 +8,14 @@ namespace ts {
                     unitName: "main.ts",
                     content: source
                 }], [], {}, {}, "/");
-                let file = result.program.getSourceFile("main.ts");
+                let file = result.program.getSourceFile("main.ts")!;
                 let checker = result.program.getTypeChecker();
                 verifier(file, checker);
 
-                result = undefined;
-                file = undefined;
-                checker = undefined;
+                // TODO: GH#18217 GH#20039 These writes are unused...
+                result = undefined!;
+                file = undefined!;
+                checker = undefined!;
             });
         }
 
@@ -40,7 +41,7 @@ export default function foo(a: number, b: Bar): void {}`, (file, checker) => {
                 foundCount++;
                 return true;
             });
-            const symbols = checker.getExportsOfModule(file.symbol);
+            const symbols = checker.getExportsOfModule(file.symbol!);
             for (const symbol of symbols) {
                 walker.walkSymbol(symbol);
             }

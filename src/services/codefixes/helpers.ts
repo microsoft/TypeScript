@@ -34,7 +34,7 @@ namespace ts.codefix {
      * @returns Empty string iff there are no member insertions.
      */
     export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker): Node[] {
-        const classMembers = classDeclaration.symbol.members;
+        const classMembers = classDeclaration.symbol!.members!;
         const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.escapedName));
 
         let newNodes: Node[] = [];
@@ -63,7 +63,7 @@ namespace ts.codefix {
 
         const declaration = declarations[0] as Declaration;
         // Clone name to remove leading trivia.
-        const name = getSynthesizedClone(getNameOfDeclaration(declaration)) as PropertyName;
+        const name = getSynthesizedClone(getNameOfDeclaration(declaration)!) as PropertyName; // TODO: GH#18217
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
@@ -112,7 +112,7 @@ namespace ts.codefix {
                 }
 
                 if (declarations.length > signatures.length) {
-                    const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
+                    const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration)!; // TODO: GH#18217
                     const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
                     if (methodDeclaration) {
                         signatureDeclarations.push(methodDeclaration);
@@ -144,7 +144,7 @@ namespace ts.codefix {
     export function createMethodFromCallExpression(callExpression: CallExpression, methodName: string, includeTypeScriptSyntax: boolean, makeStatic: boolean): MethodDeclaration {
         const parameters = createDummyParameters(callExpression.arguments.length, /*names*/ undefined, /*minArgumentCount*/ undefined, includeTypeScriptSyntax);
 
-        let typeParameters: TypeParameterDeclaration[];
+        let typeParameters: TypeParameterDeclaration[] | undefined;
         if (includeTypeScriptSyntax) {
             const typeArgCount = length(callExpression.typeArguments);
             for (let i = 0; i < typeArgCount; i++) {
@@ -230,7 +230,7 @@ namespace ts.codefix {
     }
 
     export function createStubbedMethod(
-        modifiers: ReadonlyArray<Modifier>,
+        modifiers: ReadonlyArray<Modifier> | undefined,
         name: PropertyName,
         optional: boolean,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,

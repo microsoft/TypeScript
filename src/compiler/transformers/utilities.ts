@@ -10,7 +10,7 @@ namespace ts {
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
         exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
         exportedBindings: Identifier[][]; // exported names of local declarations
-        exportedNames: Identifier[]; // all exported names local to module
+        exportedNames: Identifier[] | undefined; // all exported names local to module
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
         hasExportStarsToExportValues: boolean; // whether this module contains export*
     }
@@ -20,9 +20,9 @@ namespace ts {
         const exportSpecifiers = createMultiMap<ExportSpecifier>();
         const exportedBindings: Identifier[][] = [];
         const uniqueExports = createMap<boolean>();
-        let exportedNames: Identifier[];
+        let exportedNames: Identifier[] | undefined;
         let hasExportDefault = false;
-        let exportEquals: ExportAssignment = undefined;
+        let exportEquals: ExportAssignment | undefined;
         let hasExportStarsToExportValues = false;
 
         for (const node of sourceFile.statements) {
@@ -57,7 +57,7 @@ namespace ts {
                     }
                     else {
                         // export { x, y }
-                        for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
+                        for (const specifier of (<ExportDeclaration>node).exportClause!.elements) {
                             if (!uniqueExports.get(idText(specifier.name))) {
                                 const name = specifier.propertyName || specifier.name;
                                 exportSpecifiers.add(idText(name), specifier);
@@ -102,7 +102,7 @@ namespace ts {
                         }
                         else {
                             // export function x() { }
-                            const name = (<FunctionDeclaration>node).name;
+                            const name = (<FunctionDeclaration>node).name!;
                             if (!uniqueExports.get(idText(name))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                                 uniqueExports.set(idText(name), true);
@@ -149,7 +149,7 @@ namespace ts {
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
     }
 
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[]) {
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[] | undefined) {
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {

@@ -174,8 +174,8 @@ namespace ts.textChanges {
     /**
      * Checks if 'candidate' argument is a legal separator in the list that contains 'node' as an element
      */
-    function isSeparator(node: Node, candidate: Node): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
-        return candidate && node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
+    function isSeparator(node: Node, candidate: Node | undefined): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
+        return !!candidate && !!node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
     }
 
     function spaces(count: number) {
@@ -313,7 +313,7 @@ namespace ts.textChanges {
 
         public replaceNodesWithNodes(sourceFile: SourceFile, oldNodes: ReadonlyArray<Node>, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions) {
             const startPosition = getAdjustedStartPosition(sourceFile, oldNodes[0], options, Position.Start);
-            const endPosition = getAdjustedEndPosition(sourceFile, lastOrUndefined(oldNodes), options);
+            const endPosition = getAdjustedEndPosition(sourceFile, last(oldNodes), options);
             return this.replaceWithMultiple(sourceFile, startPosition, endPosition, newNodes, options);
         }
 
@@ -399,7 +399,7 @@ namespace ts.textChanges {
                     const lineAndCharOfNextElement = getLineAndCharacterOfPosition(sourceFile, skipWhitespacesAndLineBreaks(sourceFile.text, containingList[index + 1].getFullStart()));
                     // find line and character of the token that precedes next element (usually it is separator)
                     const lineAndCharOfNextToken = getLineAndCharacterOfPosition(sourceFile, nextToken.end);
-                    let prefix: string;
+                    let prefix: string | undefined;
                     let startPos: number;
                     if (lineAndCharOfNextToken.line === lineAndCharOfNextElement.line) {
                         // next element is located on the same line with separator:
@@ -440,7 +440,7 @@ namespace ts.textChanges {
                 const afterStart = after.getStart(sourceFile);
                 const afterStartLinePosition = getLineStartPositionForPosition(afterStart, sourceFile);
 
-                let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken;
+                let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken | undefined;
                 let multilineList = false;
 
                 // insert element after the last element in the list that has more than one item
@@ -545,7 +545,7 @@ namespace ts.textChanges {
             const posStartsLine = getLineStartPositionForPosition(pos, sourceFile) === pos;
             if (change.kind === ChangeKind.ReplaceWithMultipleNodes) {
                 const parts = change.nodes.map(n => this.getFormattedTextOfNode(n, sourceFile, pos, options));
-                text = parts.join(change.options.nodeSeparator);
+                text = parts.join(change.options!.nodeSeparator); // TODO: GH#18217
             }
             else {
                 Debug.assert(change.kind === ChangeKind.ReplaceWithSingleNode, "change.kind === ReplaceWithSingleNode");
@@ -629,7 +629,7 @@ namespace ts.textChanges {
     }
 
     function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
+        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode)!; // TODO: GH#18217
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
         newNode.pos = getPos(node);

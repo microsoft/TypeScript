@@ -117,12 +117,12 @@ namespace ts {
             if (!bucket && createIfMissing) {
                 buckets.set(key, bucket = createMap<DocumentRegistryEntry>());
             }
-            return bucket;
+            return bucket!; // TODO: GH#18217
         }
 
         function reportStats() {
             const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
-                const entries = buckets.get(name);
+                const entries = buckets.get(name)!;
                 const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 entries.forEach((entry, name) => {
                     sourceFiles.push({
@@ -174,7 +174,7 @@ namespace ts {
             let entry = bucket.get(path);
             if (!entry) {
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false, scriptKind);
+                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target!, version, /*setNodeParents*/ false, scriptKind); // TODO: GH#18217
 
                 entry = {
                     sourceFile,
@@ -189,7 +189,7 @@ namespace ts {
                 // return it as is.
                 if (entry.sourceFile.version !== version) {
                     entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
-                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
+                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot!)); // TODO: GH#18217
                 }
 
                 // If we're acquiring, then this is the first time this LS is asking for this document.
@@ -215,7 +215,7 @@ namespace ts {
             const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ false);
             Debug.assert(bucket !== undefined);
 
-            const entry = bucket.get(path);
+            const entry = bucket.get(path)!;
             entry.languageServiceRefCount--;
 
             Debug.assert(entry.languageServiceRefCount >= 0);

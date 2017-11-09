@@ -100,7 +100,7 @@ namespace ts {
         function substitutePropertyAssignment(node: PropertyAssignment): PropertyAssignment {
             const literalName = isIdentifier(node.name) && trySubstituteReservedName(node.name);
             if (literalName) {
-                return updatePropertyAssignment(node, literalName, node.initializer);
+                return updatePropertyAssignment(node, literalName, node.initializer!);
             }
             return node;
         }
@@ -112,7 +112,7 @@ namespace ts {
          */
         function trySubstituteReservedName(name: Identifier) {
             const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(idText(name)) : undefined);
-            if (token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
+            if (token !== undefined && token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
                 return setTextRange(createLiteral(name), name);
             }
             return undefined;

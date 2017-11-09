@@ -14,22 +14,23 @@ namespace ts.codefix {
         // this.missing = 1;
         //      ^^^^^^^
         const token = getTokenAtPosition(tokenSourceFile, start, /*includeJsDocComment*/ false);
+        const parent = token.parent!;
 
         if (token.kind !== SyntaxKind.Identifier) {
             return undefined;
         }
 
-        if (!isPropertyAccessExpression(token.parent)) {
+        if (!isPropertyAccessExpression(parent)) {
             return undefined;
         }
 
         const tokenName = token.getText(tokenSourceFile);
 
         let makeStatic = false;
-        let classDeclaration: ClassLikeDeclaration;
+        let classDeclaration: ClassLikeDeclaration | undefined;
 
-        if (token.parent.expression.kind === SyntaxKind.ThisKeyword) {
-            const containingClassMemberDeclaration = getThisContainer(token, /*includeArrowFunctions*/ false);
+        if (parent.expression.kind === SyntaxKind.ThisKeyword) {
+            const containingClassMemberDeclaration = getThisContainer(token, /*includeArrowFunctions*/ false)!; // TODO: GH#18217
             if (!isClassElement(containingClassMemberDeclaration)) {
                 return undefined;
             }
@@ -42,11 +43,11 @@ namespace ts.codefix {
         else {
 
             const checker = context.program.getTypeChecker();
-            const leftExpression = token.parent.expression;
-            const leftExpressionType = checker.getTypeAtLocation(leftExpression);
+            const leftExpression = parent.expression;
+            const leftExpressionType = checker.getTypeAtLocation(leftExpression)!;
 
             if (leftExpressionType.flags & TypeFlags.Object) {
-                const symbol = leftExpressionType.symbol;
+                const symbol = leftExpressionType.symbol!;
                 if (symbol.flags & SymbolFlags.Class) {
                     classDeclaration = symbol.declarations && <ClassLikeDeclaration>symbol.declarations[0];
                     if (leftExpressionType !== checker.getDeclaredTypeOfSymbol(symbol)) {
@@ -69,7 +70,7 @@ namespace ts.codefix {
             getActionsForAddMissingMemberInTypeScriptFile(classDeclaration, makeStatic);
 
         function getActionsForAddMissingMemberInJavaScriptFile(classDeclaration: ClassLikeDeclaration, makeStatic: boolean): CodeAction[] | undefined {
-            let actions: CodeAction[];
+            let actions: CodeAction[] | undefined;
 
             const methodCodeAction = getActionForMethodDeclaration(/*includeTypeScriptSyntax*/ false);
             if (methodCodeAction) {
@@ -81,7 +82,7 @@ namespace ts.codefix {
                     return actions;
                 }
 
-                const className = classDeclaration.name.getText();
+                const className = classDeclaration.name!.getText();
 
                 const staticInitialization = createStatement(createAssignment(
                     createPropertyAccess(createIdentifier(className), tokenName),
@@ -114,7 +115,7 @@ namespace ts.codefix {
                 const propertyInitializationChangeTracker = textChanges.ChangeTracker.fromContext(context);
                 propertyInitializationChangeTracker.insertNodeBefore(
                     classDeclarationSourceFile,
-                    classConstructor.body.getLastToken(),
+                    classConstructor.body!.getLastToken()!,
                     propertyInitialization,
                     { suffix: context.newLineCharacter });
 
@@ -129,19 +130,19 @@ namespace ts.codefix {
         }
 
         function getActionsForAddMissingMemberInTypeScriptFile(classDeclaration: ClassLikeDeclaration, makeStatic: boolean): CodeAction[] | undefined {
-            let actions: CodeAction[];
+            let actions: CodeAction[] | undefined;
 
             const methodCodeAction = getActionForMethodDeclaration(/*includeTypeScriptSyntax*/ true);
             if (methodCodeAction) {
                 actions = [methodCodeAction];
             }
 
-            let typeNode: TypeNode;
-            if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
-                const binaryExpression = token.parent.parent as BinaryExpression;
-                const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
+            let typeNode: TypeNode | undefined;
+            if (parent.parent!.kind === SyntaxKind.BinaryExpression) {
+                const binaryExpression = parent.parent as BinaryExpression;
+                const otherExpression = parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
                 const checker = context.program.getTypeChecker();
-                const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
+                const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)!));
                 typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
             }
             typeNode = typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -192,8 +193,8 @@ namespace ts.codefix {
         }
 
         function getActionForMethodDeclaration(includeTypeScriptSyntax: boolean): CodeAction | undefined {
-            if (token.parent.parent.kind === SyntaxKind.CallExpression) {
-                const callExpression = <CallExpression>token.parent.parent;
+            if (parent.parent!.kind === SyntaxKind.CallExpression) {
+                const callExpression = <CallExpression>parent.parent;
                 const methodDeclaration = createMethodFromCallExpression(callExpression, tokenName, includeTypeScriptSyntax, makeStatic);
 
                 const methodDeclarationChangeTracker = textChanges.ChangeTracker.fromContext(context);

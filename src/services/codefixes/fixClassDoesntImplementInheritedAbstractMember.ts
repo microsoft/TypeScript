@@ -18,11 +18,11 @@ namespace ts.codefix {
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
 
-        if (isClassLike(token.parent)) {
+        if (isClassLike(token.parent!)) {
             const classDeclaration = token.parent as ClassLikeDeclaration;
 
-            const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration);
-            const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
+            const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration)!;
+            const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode)!;
 
             // Note that this is ultimately derived from a map indexed by symbol names,
             // so duplicates cannot occur.
@@ -46,7 +46,7 @@ namespace ts.codefix {
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {
         const decls = symbol.getDeclarations();
         Debug.assert(!!(decls && decls.length > 0));
-        const flags = getModifierFlags(decls[0]);
+        const flags = getModifierFlags(decls![0]);
         return !(flags & ModifierFlags.Private) && !!(flags & ModifierFlags.Abstract);
     }
 }

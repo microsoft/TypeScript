@@ -1650,7 +1650,7 @@ namespace ts.server.protocol {
 
     export interface CompletionEntryIdentifier {
         name: string;
-        source: string;
+        source: string | undefined;
     }
 
     /**
@@ -1740,12 +1740,12 @@ namespace ts.server.protocol {
         /**
          * Documentation strings for the symbol.
          */
-        documentation: SymbolDisplayPart[];
+        documentation: SymbolDisplayPart[] | undefined;
 
         /**
          * JSDoc tags for the symbol.
          */
-        tags: JSDocTagInfo[];
+        tags: JSDocTagInfo[] | undefined;
 
         /**
          * The associated code actions for this entry

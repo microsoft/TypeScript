@@ -58,7 +58,7 @@ namespace ts {
 
         // if jsx is specified then treat file as .tsx
         const inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
-        const sourceFile = createSourceFile(inputFileName, input, options.target);
+        const sourceFile = createSourceFile(inputFileName, input, options.target!); // TODO: GH#18217
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
@@ -70,8 +70,8 @@ namespace ts {
         const newLine = getNewLineCharacter(options);
 
         // Output
-        let outputText: string;
-        let sourceMapText: string;
+        let outputText: string | undefined;
+        let sourceMapText: string | undefined;
 
         // Create a compilerHost object to allow the compiler to read and write files
         const compilerHost: CompilerHost = {
@@ -108,7 +108,7 @@ namespace ts {
 
         Debug.assert(outputText !== undefined, "Output generation failed");
 
-        return { outputText, diagnostics, sourceMapText };
+        return { outputText: outputText!, diagnostics, sourceMapText };
     }
 
     /*

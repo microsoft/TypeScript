@@ -118,7 +118,7 @@ namespace ts.server {
         private missingFilesMap: Map<FileWatcher>;
 
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
-        private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
+        private lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
 
         // wrapper over the real language service that will suppress all semantic operations
         protected languageService: LanguageService;
@@ -138,7 +138,7 @@ namespace ts.server {
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
-        private updatedFileNames: Map<true>;
+        private updatedFileNames: Map<true> | undefined;
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
@@ -181,10 +181,10 @@ namespace ts.server {
             return this.cachedUnresolvedImportsPerFile;
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} {
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
             const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
-            const result = host.require(resolvedPath, moduleName);
+            const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
             if (result.error) {
                 const err = result.error.stack || result.error.message || JSON.stringify(result.error);
                 log(`Failed to load module '${moduleName}': ${err}`);
@@ -205,7 +205,7 @@ namespace ts.server {
             hasExplicitListOfFiles: boolean,
             languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
-            public compileOnSaveEnabled: boolean,
+            public compileOnSaveEnabled: boolean | undefined,
             /*@internal*/public directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined) {
             this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
@@ -224,15 +224,15 @@ namespace ts.server {
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
             if (host.trace) {
-                this.trace = s => host.trace(s);
+                this.trace = s => host.trace!(s);
             }
 
             if (host.realpath) {
-                this.realpath = path => host.realpath(path);
+                this.realpath = path => host.realpath!(path);
             }
 
             // Use the current directory as resolution root only if the project created using current directory string
-            this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory);
+            this.resolutionCache = createResolutionCache(this, currentDirectory === undefined ? undefined : this.currentDirectory);
             this.languageService = createLanguageService(this, this.documentRegistry);
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
@@ -300,15 +300,15 @@ namespace ts.server {
 
         getScriptKind(fileName: string) {
             const info = this.getOrCreateScriptInfoAndAttachToProject(fileName);
-            return info && info.scriptKind;
+            return (info && info.scriptKind)!; // TODO: GH#18217
         }
 
         getScriptVersion(filename: string) {
             const info = this.getOrCreateScriptInfoAndAttachToProject(filename);
-            return info && info.getLatestVersion();
+            return (info && info.getLatestVersion())!; // TODO: GH#18217
         }
 
-        getScriptSnapshot(filename: string): IScriptSnapshot {
+        getScriptSnapshot(filename: string): IScriptSnapshot | undefined {
             const scriptInfo = this.getOrCreateScriptInfoAndAttachToProject(filename);
             if (scriptInfo) {
                 return scriptInfo.getSnapshot();
@@ -441,7 +441,7 @@ namespace ts.server {
             if (!this.builder) {
                 this.builder = createBuilder({
                     getCanonicalFileName: this.projectService.toCanonicalFileName,
-                    computeHash: data => this.projectService.host.createHash(data)
+                    computeHash: data => this.projectService.host.createHash!(data) // TODO: GH#18217
                 });
             }
         }
@@ -457,7 +457,7 @@ namespace ts.server {
             this.updateGraph();
             this.ensureBuilder();
             return mapDefined(this.builder.getFilesAffectedBy(this.program, scriptInfo.path),
-                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
+                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)!) ? sourceFile.fileName : undefined);
         }
 
         /**
@@ -528,25 +528,25 @@ namespace ts.server {
                 root.detachFromProject(this);
             }
 
-            this.rootFiles = undefined;
-            this.rootFilesMap = undefined;
-            this.externalFiles = undefined;
-            this.program = undefined;
-            this.builder = undefined;
+            this.rootFiles = undefined!;
+            this.rootFilesMap = undefined!;
+            this.externalFiles = undefined!;
+            this.program = undefined!;
+            this.builder = undefined!;
             this.resolutionCache.clear();
-            this.resolutionCache = undefined;
-            this.cachedUnresolvedImportsPerFile = undefined;
-            this.directoryStructureHost = undefined;
+            this.resolutionCache = undefined!;
+            this.cachedUnresolvedImportsPerFile = undefined!;
+            this.directoryStructureHost = undefined!;
 
             // Clean up file watchers waiting for missing files
             if (this.missingFilesMap) {
                 clearMap(this.missingFilesMap, closeFileWatcher);
-                this.missingFilesMap = undefined;
+                this.missingFilesMap = undefined!;
             }
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
-            this.languageService = undefined;
+            this.languageService = undefined!;
         }
 
         private detachScriptInfoIfNotRoot(uncheckedFilename: string) {
@@ -579,17 +579,15 @@ namespace ts.server {
             return this.rootFiles;
         }
 
-        getScriptInfos() {
+        getScriptInfos(): ScriptInfo[]  {
             if (!this.languageServiceEnabled) {
                 // if language service is not enabled - return just root files
                 return this.rootFiles;
             }
             return map(this.program.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
-                if (!scriptInfo) {
-                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' is missing.`);
-                }
-                return scriptInfo;
+                Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' is missing.`);
+                return scriptInfo!;
             });
         }
 
@@ -722,7 +720,7 @@ namespace ts.server {
                 }
                 return;
             }
-            let unresolvedImports: string[];
+            let unresolvedImports: string[] | undefined;
             if (file.resolvedModules) {
                 file.resolvedModules.forEach((resolvedModule, name) => {
                     // pick unresolved non-relative names
@@ -821,7 +819,7 @@ namespace ts.server {
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
-            const hasChanges = !oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused & StructureIsReused.Completely));
+            const hasChanges = !oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused! & StructureIsReused.Completely));
             this.hasChangedAutomaticTypeDirectiveNames = false;
             if (hasChanges) {
                 if (oldProgram) {
@@ -850,12 +848,12 @@ namespace ts.server {
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
-            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles,
+            enumerateInsertsAndDeletes<string>(this.externalFiles, oldExternalFiles,
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost)!;
                     scriptInfo.attachToProject(this);
                 },
                 removed => this.detachScriptInfoFromProject(removed),
@@ -1059,7 +1057,8 @@ namespace ts.server {
                 ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
-                /*files*/ undefined,
+                // TODO: GH#18217
+                /*files*/ undefined!,
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
@@ -1117,7 +1116,7 @@ namespace ts.server {
     export class ConfiguredProject extends Project {
         private typeAcquisition: TypeAcquisition;
         /* @internal */
-        configFileWatcher: FileWatcher;
+        configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
@@ -1125,14 +1124,14 @@ namespace ts.server {
         pendingReload: ConfigFileProgramReloadLevel;
 
         /*@internal*/
-        configFileSpecs: ConfigFileSpecs;
+        configFileSpecs: ConfigFileSpecs | undefined;
 
         private plugins: PluginModule[] = [];
 
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount = 0;
 
-        private projectErrors: Diagnostic[];
+        private projectErrors: Diagnostic[] | undefined;
 
         /*@internal*/
         constructor(configFileName: NormalizedPath,
@@ -1381,7 +1380,7 @@ namespace ts.server {
             // The project is referenced only if open files impacted by this project are present in this project
             return forEachEntry(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
-                (_value, infoPath) => this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path))
+                (_value, infoPath) => this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path)!)
             ) || false;
         }
 
@@ -1392,10 +1391,10 @@ namespace ts.server {
         /*@internal*/
         updateErrorOnNoInputFiles(hasFileNames: boolean) {
             if (hasFileNames) {
-                filterMutate(this.projectErrors, error => !isErrorNoInputFiles(error));
+                filterMutate(this.projectErrors!, error => !isErrorNoInputFiles(error)); // TODO: GH#18217
             }
-            else if (!this.configFileSpecs.filesSpecs && !some(this.projectErrors, isErrorNoInputFiles)) {
-                this.projectErrors.push(getErrorForNoInputFiles(this.configFileSpecs, this.getConfigFilePath()));
+            else if (!this.configFileSpecs!.filesSpecs && !some(this.projectErrors, isErrorNoInputFiles)) { // TODO: GH#18217
+                this.projectErrors!.push(getErrorForNoInputFiles(this.configFileSpecs!, this.getConfigFilePath()));
             }
         }
     }

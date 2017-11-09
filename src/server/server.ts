@@ -56,8 +56,7 @@ namespace ts.server {
                 return combinePaths(combinePaths(cacheLocation, "typescript"), versionMajorMinor);
             }
             default:
-                Debug.fail(`unsupported platform '${process.platform}'`);
-                return;
+                throw Debug.fail(`unsupported platform '${process.platform}'`);
         }
     }
 
@@ -222,7 +221,7 @@ namespace ts.server {
             if (this.fd >= 0) {
                 const buf = new Buffer(s);
                 // tslint:disable-next-line no-null-keyword
-                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
+                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {
                 console.warn(s);
@@ -261,7 +260,7 @@ namespace ts.server {
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: any): void };
+        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: any): void } | undefined;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -419,10 +418,10 @@ namespace ts.server {
                 case EventPackageInstalled: {
                     const { success, message } = response;
                     if (success) {
-                        this.packageInstalledPromise.resolve({ successMessage: message });
+                        this.packageInstalledPromise!.resolve({ successMessage: message });
                     }
                     else {
-                        this.packageInstalledPromise.reject(message);
+                        this.packageInstalledPromise!.reject(message);
                     }
                     this.packageInstalledPromise = undefined;
                     break;
@@ -494,7 +493,7 @@ namespace ts.server {
                     }
 
                     while (this.requestQueue.length > 0) {
-                        const queuedRequest = this.requestQueue.shift();
+                        const queuedRequest = this.requestQueue.shift()!;
                         if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
                             this.requestMap.delete(queuedRequest.operationId);
                             this.scheduleRequest(queuedRequest);
@@ -533,7 +532,7 @@ namespace ts.server {
             const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, host.newLine);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation!, npmLocation, host.newLine); // TODO: GH#18217
 
             super({
                 host,
@@ -579,7 +578,7 @@ namespace ts.server {
         logToFile?: boolean;
     }
 
-    function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
+    function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOptions {
         if (!logEnvStr) {
             return {};
         }
@@ -610,7 +609,7 @@ namespace ts.server {
         return logEnv;
     }
 
-    function getLogLevel(level: string) {
+    function getLogLevel(level: string | undefined) {
         if (level) {
             const l = level.toLowerCase();
             for (const name in LogLevel) {
@@ -635,7 +634,7 @@ namespace ts.server {
                 : undefined;
 
         const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-        return new Logger(logFileName, envLogOptions.traceToConsole, logVerbosity);
+        return new Logger(logFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -660,7 +659,7 @@ namespace ts.server {
             fs.stat(watchedFile.fileName, (err: any, stats: any) => {
                 if (err) {
                     if (err.code === "ENOENT") {
-                        if (watchedFile.mtime.getTime() !== 0) {
+                        if (watchedFile.mtime!.getTime() !== 0) { // TODO: GH#18217
                             watchedFile.mtime = new Date(0);
                             watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Deleted);
                         }
@@ -670,7 +669,7 @@ namespace ts.server {
                     }
                 }
                 else {
-                    const oldTime = watchedFile.mtime.getTime();
+                    const oldTime = watchedFile.mtime!.getTime(); // TODO: GH#18217
                     const newTime = stats.mtime.getTime();
                     if (oldTime !== newTime) {
                         watchedFile.mtime = stats.mtime;
@@ -760,11 +759,11 @@ namespace ts.server {
     function setCanWriteFlagAndWriteMessageIfNecessary() {
         canWrite = true;
         if (pending.length) {
-            writeMessage(pending.shift());
+            writeMessage(pending.shift()!);
         }
     }
 
-    function extractWatchDirectoryCacheKey(path: string, currentDriveKey: string) {
+    function extractWatchDirectoryCacheKey(path: string, currentDriveKey: string | undefined) {
         path = normalizeSlashes(path);
         if (isUNCPath(path)) {
             // UNC path: extract server name
@@ -798,14 +797,14 @@ namespace ts.server {
 
     const sys = <ServerHost>ts.sys;
     // use watchGuard process on Windows when node version is 4 or later
-    const useWatchGuard = process.platform === "win32" && getNodeMajorVersion() >= 4;
-    const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
+    const useWatchGuard = process.platform === "win32" && getNodeMajorVersion()! >= 4;
+    const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory!.bind(sys); // TODO: GH#18217
     const noopWatcher: FileWatcher = { close: noop };
     // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
     // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
     function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
         try {
-            return originalWatchDirectory(path, callback, recursive);
+            return originalWatchDirectory!(path, callback, recursive); // TODO: GH#18217
         }
         catch (e) {
             logger.info(`Exception when creating directory watcher: ${e.message}`);
@@ -896,11 +895,11 @@ namespace ts.server {
         cancellationToken = nullCancellationToken;
     }
 
-    let eventPort: number;
+    let eventPort: number | undefined;
     {
         const str = findArgument("--eventPort");
-        const v = str && parseInt(str);
-        if (!isNaN(v)) {
+        const v = str === undefined ? undefined : parseInt(str);
+        if (v !== undefined && !isNaN(v)) {
             eventPort = v;
         }
     }
@@ -912,7 +911,7 @@ namespace ts.server {
 
     setStackTraceLimit();
 
-    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
+    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
     const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
@@ -936,7 +935,7 @@ namespace ts.server {
     const options: IoSessionOptions = {
         host: sys,
         cancellationToken,
-        installerEventPort: eventPort,
+        installerEventPort: eventPort!, // TODO: GH#18217
         canUseEvents: eventPort === undefined,
         useSingleInferredProject,
         useInferredProjectPerProjectRoot,

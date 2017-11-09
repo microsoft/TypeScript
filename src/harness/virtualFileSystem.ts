@@ -23,7 +23,7 @@ namespace Utils {
     export abstract class VirtualFileSystemContainer extends VirtualFileSystemEntry {
         abstract getFileSystemEntries(): VirtualFileSystemEntry[];
 
-        getFileSystemEntry(name: string): VirtualFileSystemEntry {
+        getFileSystemEntry(name: string): VirtualFileSystemEntry | undefined {
             for (const entry of this.getFileSystemEntries()) {
                 if (this.fileSystem.sameName(entry.name, name)) {
                     return entry;
@@ -40,13 +40,13 @@ namespace Utils {
             return <VirtualFile[]>ts.filter(this.getFileSystemEntries(), entry => entry.isFile());
         }
 
-        getDirectory(name: string): VirtualDirectory {
-            const entry = this.getFileSystemEntry(name);
+        getDirectory(name: string): VirtualDirectory | undefined {
+            const entry = this.getFileSystemEntry(name)!;
             return entry.isDirectory() ? <VirtualDirectory>entry : undefined;
         }
 
-        getFile(name: string): VirtualFile {
-            const entry = this.getFileSystemEntry(name);
+        getFile(name: string): VirtualFile | undefined {
+            const entry = this.getFileSystemEntry(name)!;
             return entry.isFile() ? <VirtualFile>entry : undefined;
         }
     }
@@ -58,7 +58,7 @@ namespace Utils {
 
         getFileSystemEntries() { return this.entries.slice(); }
 
-        addDirectory(name: string): VirtualDirectory {
+        addDirectory(name: string): VirtualDirectory | undefined {
             const entry = this.getFileSystemEntry(name);
             if (entry === undefined) {
                 const directory = new VirtualDirectory(this.fileSystem, name);
@@ -73,7 +73,7 @@ namespace Utils {
             }
         }
 
-        addFile(name: string, content?: Harness.LanguageService.ScriptInfo): VirtualFile {
+        addFile(name: string, content?: Harness.LanguageService.ScriptInfo): VirtualFile | undefined {
             const entry = this.getFileSystemEntry(name);
             if (entry === undefined) {
                 const file = new VirtualFile(this.fileSystem, name);
@@ -98,7 +98,7 @@ namespace Utils {
         useCaseSensitiveFileNames: boolean;
 
         constructor(currentDirectory: string, useCaseSensitiveFileNames: boolean) {
-            super(/*fileSystem*/ undefined, "");
+            super(/*fileSystem*/ undefined!, ""); // TODO: GH#18217
             this.fileSystem = this;
             this.root = new VirtualDirectory(this, "");
             this.currentDirectory = currentDirectory;
@@ -112,7 +112,7 @@ namespace Utils {
         addDirectory(path: string) {
             path = ts.normalizePath(path);
             const components = ts.getNormalizedPathComponents(path, this.currentDirectory);
-            let directory: VirtualDirectory = this.root;
+            let directory: VirtualDirectory | undefined = this.root;
             for (const component of components) {
                 directory = directory.addDirectory(component);
                 if (directory === undefined) {
@@ -199,7 +199,7 @@ namespace Utils {
             super(currentDirectory, ignoreCase);
             if (files instanceof Array) {
                 for (const file of files) {
-                    this.addFile(file, new Harness.LanguageService.ScriptInfo(file, undefined, /*isRootFile*/false));
+                    this.addFile(file, new Harness.LanguageService.ScriptInfo(file, undefined!, /*isRootFile*/false)); // TODO: GH#18217
                 }
             }
             else {
@@ -212,7 +212,7 @@ namespace Utils {
         readFile(path: string): string | undefined {
             const value = this.traversePath(path);
             if (value && value.isFile()) {
-                return value.content.content;
+                return value.content!.content; // TODO: GH#18217
             }
         }
 

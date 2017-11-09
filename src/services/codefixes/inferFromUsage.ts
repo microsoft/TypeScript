@@ -46,7 +46,7 @@ namespace ts.codefix {
                 return undefined;
         }
 
-        const containingFunction = getContainingFunction(token);
+        const containingFunction = getContainingFunction(token)!;
         const checker = program.getTypeChecker();
 
         switch (errorCode) {
@@ -110,7 +110,7 @@ namespace ts.codefix {
             return false;
         }
 
-        function getCodeActionForParameters(parameterDeclaration: ParameterDeclaration): CodeAction[] {
+        function getCodeActionForParameters(parameterDeclaration: ParameterDeclaration): CodeAction[] | undefined {
             if (!isIdentifier(parameterDeclaration.name) || !isApplicableFunctionForInference(containingFunction)) {
                 return undefined;
             }
@@ -130,7 +130,7 @@ namespace ts.codefix {
                         newText: `: ${typeString}`
                     } : undefined;
                 }
-            }).filter(c => !!c);
+            }).filter(c => !!c) as TextChange[]; // TODO: GH#18217 use mapDefinedIter
 
             return textChanges.length ? [{
                 description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_parameter_types_from_usage), [parameterDeclaration.name.getText()]),
@@ -168,7 +168,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const closeParenToken = getFirstChildOfKind(getAccessorDeclaration, sourceFile, SyntaxKind.CloseParenToken);
+            const closeParenToken = getFirstChildOfKind(getAccessorDeclaration, sourceFile, SyntaxKind.CloseParenToken)!;
             return createCodeActions(getAccessorDeclaration.name.getText(), closeParenToken.getEnd(), `: ${typeString}`);
         }
 
@@ -194,9 +194,9 @@ namespace ts.codefix {
                 token.getStart());
 
             Debug.assert(!!references, "Found no references!");
-            Debug.assert(references.length === 1, "Found more references than expected");
+            Debug.assert(references!.length === 1, "Found more references than expected");
 
-            return map(references[0].references, r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start, /*includeJsDocComment*/ false));
+            return map(references![0].references, r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName)!, r.textSpan.start, /*includeJsDocComment*/ false));
         }
 
         function inferTypeForVariableFromUsage(token: Identifier) {
@@ -226,7 +226,7 @@ namespace ts.codefix {
 
                 const writeText: (text: string) => void = text => str += text;
                 writer = {
-                    string: () => typeIsAccessible ? str : undefined,
+                    string: () => typeIsAccessible ? str : undefined!, // TODO: GH#18217
                     writeKeyword: writeText,
                     writeOperator: writeText,
                     writePunctuation: writeText,
@@ -240,7 +240,7 @@ namespace ts.codefix {
                     decreaseIndent: noop,
                     clear: () => { str = ""; typeIsAccessible = true; },
                     trackSymbol: (symbol, declaration, meaning) => {
-                        if (checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                        if (checker.isSymbolAccessible(symbol, declaration, meaning!, /*shouldComputeAliasToMarkVisible*/ false).accessibility !== SymbolAccessibility.Accessible) { // TODO: GH#18217
                             typeIsAccessible = false;
                         }
                     },
@@ -334,7 +334,7 @@ namespace ts.codefix {
                 node = <Expression>node.parent;
             }
 
-            switch (node.parent.kind) {
+            switch (node.parent!.kind) {
                 case SyntaxKind.PostfixUnaryExpression:
                     usageContext.isNumber = true;
                     break;
@@ -433,7 +433,7 @@ namespace ts.codefix {
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.GreaterThanEqualsToken:
-                    const operandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
+                    const operandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left)!;
                     if (operandType.flags & TypeFlags.EnumLike) {
                         addCandidateType(usageContext, operandType);
                     }
@@ -444,7 +444,7 @@ namespace ts.codefix {
 
                 case SyntaxKind.PlusEqualsToken:
                 case SyntaxKind.PlusToken:
-                    const otherOperandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
+                    const otherOperandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left)!;
                     if (otherOperandType.flags & TypeFlags.EnumLike) {
                         addCandidateType(usageContext, otherOperandType);
                     }
@@ -477,7 +477,7 @@ namespace ts.codefix {
                 // LogicalOperator
                 case SyntaxKind.BarBarToken:
                     if (node === parent.left &&
-                        (node.parent.parent.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))) {
+                        (node.parent!.parent!.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent!.parent!, /*excludeCompoundAssignment*/ true))) {
                         // var x = x || {};
                         // TODO: use getFalsyflagsOfType
                         addCandidateType(usageContext, checker.getTypeAtLocation(parent.right));
@@ -493,7 +493,7 @@ namespace ts.codefix {
         }
 
         function inferTypeFromSwitchStatementLabelContext(parent: CaseOrDefaultClause, checker: TypeChecker, usageContext: UsageContext): void {
-            addCandidateType(usageContext, checker.getTypeAtLocation((<SwitchStatement>parent.parent.parent).expression));
+            addCandidateType(usageContext, checker.getTypeAtLocation((<SwitchStatement>parent.parent!.parent).expression));
         }
 
         function inferTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker, usageContext: UsageContext): void {
@@ -504,7 +504,7 @@ namespace ts.codefix {
 
             if (parent.arguments) {
                 for (const argument of parent.arguments) {
-                    callContext.argumentTypes.push(checker.getTypeAtLocation(argument));
+                    callContext.argumentTypes.push(checker.getTypeAtLocation(argument)!);
                 }
             }
 
@@ -533,7 +533,7 @@ namespace ts.codefix {
                 return;
             }
             else {
-                const indexType = checker.getTypeAtLocation(parent);
+                const indexType = checker.getTypeAtLocation(parent)!;
                 const indexUsageContext = {};
                 inferTypeFromContext(parent, checker, indexUsageContext);
                 if (indexType.flags & TypeFlags.NumberLike) {
@@ -559,19 +559,19 @@ namespace ts.codefix {
                 return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), /*subtypeReduction*/ true));
             }
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
-                const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String).callContexts, /*isRestParameter*/ false, checker);
+                const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String)!.callContexts!, /*isRestParameter*/ false, checker)!; // TODO: GH#18217
                 const types = paramType.getCallSignatures().map(c => c.getReturnType());
                 return checker.createPromiseType(types.length ? checker.getUnionType(types, /*subtypeReduction*/ true) : checker.getAnyType());
             }
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("push" as __String))) {
-                return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String).callContexts, /*isRestParameter*/ false, checker));
+                return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String)!.callContexts!, /*isRestParameter*/ false, checker)!);
             }
             else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.numberIndexContext || usageContext.stringIndexContext) {
                 const members = createUnderscoreEscapedMap<Symbol>();
                 const callSignatures: Signature[] = [];
                 const constructSignatures: Signature[] = [];
-                let stringIndexInfo: IndexInfo;
-                let numberIndexInfo: IndexInfo;
+                let stringIndexInfo: IndexInfo | undefined;
+                let numberIndexInfo: IndexInfo | undefined;
 
                 if (usageContext.properties) {
                     usageContext.properties.forEach((context, name) => {
@@ -594,14 +594,14 @@ namespace ts.codefix {
                 }
 
                 if (usageContext.numberIndexContext) {
-                    numberIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.numberIndexContext, checker), /*isReadonly*/ false);
+                    numberIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.numberIndexContext, checker)!, /*isReadonly*/ false); // TODO: GH#18217
                 }
 
                 if (usageContext.stringIndexContext) {
-                    stringIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.stringIndexContext, checker), /*isReadonly*/ false);
+                    stringIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.stringIndexContext, checker)!, /*isReadonly*/ false);
                 }
 
-                return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+                return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo); // TODO: GH#18217
             }
             else {
                 return undefined;
@@ -638,17 +638,18 @@ namespace ts.codefix {
                 parameters.push(symbol);
             }
             const returnType = getTypeFromUsageContext(callContext.returnType, checker) || checker.getVoidType();
-            return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+            // TODO: GH#18217
+            return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }
 
-        function addCandidateType(context: UsageContext, type: Type) {
+        function addCandidateType(context: UsageContext, type: Type | undefined) {
             if (type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never)) {
                 (context.candidateTypes || (context.candidateTypes = [])).push(type);
             }
         }
 
-        function hasCallContext(usageContext: UsageContext) {
-            return usageContext && usageContext.callContexts;
+        function hasCallContext(usageContext: UsageContext | undefined): boolean {
+            return !!usageContext && !!usageContext.callContexts;
         }
     }
 }

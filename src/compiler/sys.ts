@@ -124,9 +124,9 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
+    // TODO: this is used as if it's certainly defined in many places.
     export let sys: System = (() => {
         const utf8ByteOrderMark = "\u00EF\u00BB\u00BF";
-
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
@@ -194,7 +194,7 @@ namespace ts {
                         ? undefined
                         : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
                     // Some applications save a working file via rename operations
-                    if ((eventName === "change" || eventName === "rename")) {
+                    if (fileName !== undefined && (eventName === "change" || eventName === "rename")) {
                         const callbacks = fileWatcherCallbacks.get(fileName);
                         if (callbacks) {
                             for (const fileCallback of callbacks) {
@@ -207,7 +207,7 @@ namespace ts {
             const watchedFileSet = createWatchedFileSet();
 
             const nodeVersion = getNodeMajorVersion();
-            const isNode4OrLater = nodeVersion >= 4;
+            const isNode4OrLater = nodeVersion !== undefined && nodeVersion >= 4;
 
             function isFileSystemCaseSensitive(): boolean {
                 // win32\win64 are case insensitive platforms
@@ -353,7 +353,7 @@ namespace ts {
                     data = utf8ByteOrderMark + data;
                 }
 
-                let fd: number;
+                let fd: number | undefined;
 
                 try {
                     fd = _fs.openSync(fileName, "w");
@@ -416,6 +416,7 @@ namespace ts {
                     switch (entryKind) {
                         case FileSystemEntryKind.File: return stat.isFile();
                         case FileSystemEntryKind.Directory: return stat.isDirectory();
+                        default: return false;
                     }
                 }
                 catch (e) {
@@ -584,7 +585,7 @@ namespace ts {
             }
         }
 
-        let sys: System;
+        let sys: System | undefined;
         if (typeof ChakraHost !== "undefined") {
             sys = getChakraSystem();
         }
@@ -598,13 +599,13 @@ namespace ts {
             const originalWriteFile = sys.writeFile;
             sys.writeFile = (path, data, writeBom) => {
                 const directoryPath = getDirectoryPath(normalizeSlashes(path));
-                if (directoryPath && !sys.directoryExists(directoryPath)) {
-                    recursiveCreateDirectory(directoryPath, sys);
+                if (directoryPath && !sys!.directoryExists(directoryPath)) {
+                    recursiveCreateDirectory(directoryPath, sys!);
                 }
                 originalWriteFile.call(sys, path, data, writeBom);
             };
         }
-        return sys;
+        return sys!;
     })();
 
     if (sys && sys.getEnvironmentVariable) {

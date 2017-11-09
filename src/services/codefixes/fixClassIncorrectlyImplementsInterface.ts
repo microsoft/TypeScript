@@ -18,7 +18,7 @@ namespace ts.codefix {
 
         const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
         const classType = checker.getTypeAtLocation(classDeclaration) as InterfaceType;
-        const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDeclaration);
+        const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDeclaration)!;
 
         const hasNumericIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.Number);
         const hasStringIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.String);
@@ -29,7 +29,7 @@ namespace ts.codefix {
             // so duplicates cannot occur.
             const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
             const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
-            const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
+            const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration!) & ModifierFlags.Private));
 
             let newNodes: Node[] = [];
             createAndAddMissingIndexSignatureDeclaration(implementedType, IndexKind.Number, hasNumericIndexSignature, newNodes);
@@ -53,7 +53,7 @@ namespace ts.codefix {
             if (!indexInfoOfKind) {
                 return;
             }
-            const newIndexSignatureDeclaration = checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration);
+            const newIndexSignatureDeclaration = checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration)!; // TODO: GH#18217
             newNodes.push(newIndexSignatureDeclaration);
         }
 

@@ -6,7 +6,7 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
             const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-            const classDeclNode = getContainingClass(token);
+            const classDeclNode = getContainingClass(token)!; // TODO: GH#18217
             if (!(token.kind === SyntaxKind.Identifier && isClassLike(classDeclNode))) {
                 return undefined;
             }

@@ -23,8 +23,8 @@ namespace ts.refactor.installTypesForPackage {
             return undefined;
         }
 
-        const module = ts.getResolvedModule(file, importInfo.moduleSpecifier.text);
-        const resolvedFile = program.getSourceFile(module.resolvedFileName);
+        const module = ts.getResolvedModule(file, importInfo.moduleSpecifier.text)!; // TODO: GH#18217
+        const resolvedFile = program.getSourceFile(module.resolvedFileName)!; // TODO: GH#18217
         if (!(resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals)) {
             return undefined;
         }
@@ -70,13 +70,21 @@ namespace ts.refactor.installTypesForPackage {
                 case SyntaxKind.ImportEqualsDeclaration:
                     const eq = node as ImportEqualsDeclaration;
                     const { moduleReference } = eq;
-                    return moduleReference.kind === SyntaxKind.ExternalModuleReference && isStringLiteral(moduleReference.expression)
-                        ? { importStatement: eq, name: eq.name, moduleSpecifier: moduleReference.expression }
-                        : undefined;
+                    if (moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                        const moduleSpecifier = moduleReference.expression!;
+                        if (isStringLiteral(moduleSpecifier)) {
+                            return { importStatement: eq, name: eq.name, moduleSpecifier };
+                        }
+                    }
+                    return undefined;
                 case SyntaxKind.ImportDeclaration:
                     const d = node as ImportDeclaration;
                     const { importClause } = d;
-                    return !importClause.name && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(d.moduleSpecifier)
+                    return importClause
+                        && !importClause.name
+                        && importClause.namedBindings
+                        && importClause.namedBindings.kind === SyntaxKind.NamespaceImport
+                        && isStringLiteral(d.moduleSpecifier)
                         ? { importStatement: d, name: importClause.namedBindings.name, moduleSpecifier: d.moduleSpecifier }
                         : undefined;
                 // For known child node kinds of convertible imports, try again with parent node.
@@ -90,7 +98,7 @@ namespace ts.refactor.installTypesForPackage {
                 default:
                     return undefined;
             }
-            node = node.parent;
+            node = node.parent!;
         }
     }
 }
