@@ -16,7 +16,6 @@ namespace ts.server {
     export const ProjectInfoTelemetryEvent = "projectInfo";
     // tslint:enable variable-name
 
-    // TODO: make these inherit from protocol.Event?
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: { openFiles: string[]; };

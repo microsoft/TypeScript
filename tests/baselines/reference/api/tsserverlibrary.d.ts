@@ -6947,7 +6947,6 @@ declare namespace ts.server {
         readonly event: EventSender["event"];
         private socketEventQueue;
         constructor(opts: SessionOptions);
-        private clearSocketEventQueue();
         private writeToEventSocket(info, eventName);
         private sendRequestCompletedEvent(requestId);
         private defaultEventHandler(event);

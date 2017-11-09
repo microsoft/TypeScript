@@ -315,7 +315,13 @@ namespace ts.server {
             else if (this.eventPort) {
                 const s = net.connect({ port: this.eventPort }, () => {
                     this.eventSocket = s;
-                    this.clearSocketEventQueue();
+                    if (this.socketEventQueue) {
+                        // flush queue.
+                        for (const event of this.socketEventQueue) {
+                            this.writeToEventSocket(event.info, event.eventName);
+                        }
+                        this.socketEventQueue = undefined;
+                    }
                 });
 
                 this.event = function <T>(info: T, eventName: string) {
@@ -372,13 +378,6 @@ namespace ts.server {
             };
             this.projectService = new ProjectService(settings);
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
-        }
-
-        private clearSocketEventQueue() {
-            for (const event of this.socketEventQueue) {
-                this.writeToEventSocket(event.info, event.eventName);
-            }
-            this.socketEventQueue = undefined;
         }
 
         private writeToEventSocket(info: any, eventName: string): void {
@@ -451,9 +450,11 @@ namespace ts.server {
         }
 
         public send(msg: protocol.Message) {
-            if (msg.type === "event") {
-                Debug.assert(this.canUseEvents);
-                Debug.assert(!this.eventPort);
+            if (msg.type === "event" && !this.canUseEvents) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                }
+                return;
             }
             this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }

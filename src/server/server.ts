@@ -292,7 +292,7 @@ namespace ts.server {
             if (this.installerPidReported) {
                 return;
             }
-            if (this.installer && this.eventSender) {
+            if (this.eventSender && this.installer) {
                 this.eventSender.event({ pid: this.installer.pid }, "typingsInstallerPid");
                 this.installerPidReported = true;
             }
@@ -332,10 +332,10 @@ namespace ts.server {
                 if (match) {
                     // if port is specified - use port + 1
                     // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
-                    // const currentPort = match[2] !== undefined
-                    //     ? +match[2]
-                    //     : match[1].charAt(0) === "d" ? 5858 : 9229;
-                    // execArgv.push(`--${match[1]}=${currentPort + 1}`);
+                    const currentPort = match[2] !== undefined
+                        ? +match[2]
+                        : match[1].charAt(0) === "d" ? 5858 : 9229;
+                    execArgv.push(`--${match[1]}=${currentPort + 1}`);
                     break;
                 }
             }
