@@ -3532,7 +3532,25 @@ namespace ts {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
                         writeSpace(writer);
                     }
-                    buildSymbolDisplay(prop, writer);
+                    const links = getSymbolLinks(prop);
+                    if (links.target && links.target.escapedName === InternalSymbolName.Computed) {
+                        const name = ((prop.declarations[0] as NamedDeclaration).name as ComputedPropertyName).expression;
+                        const t = getTypeOfNode(name);
+                        const sym = getSymbolAtLocation(name);
+                        const access = isSymbolAccessible(sym, enclosingDeclaration, SymbolFlags.Value, /*shouldComputeAliases*/ false);
+                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                        if (access.accessibility !== SymbolAccessibility.Accessible && !(t.flags & TypeFlags.Union) && isLiteralType(t)) {
+                            writer.writeStringLiteral(literalTypeToString(t as LiteralType));
+                        }
+                        else {
+                            // By passing in `enclosingDeclaration`, we should write the name in appropriately qualified way
+                            buildSymbolDisplay(sym, writer, enclosingDeclaration);
+                        }
+                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    }
+                    else {
+                        buildSymbolDisplay(prop, writer);
+                    }
                     if (prop.flags & SymbolFlags.Optional) {
                         writePunctuation(writer, SyntaxKind.QuestionToken);
                     }
