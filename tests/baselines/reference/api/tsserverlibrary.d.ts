@@ -6918,6 +6918,10 @@ declare namespace ts.server {
         hrtime: (start?: number[]) => number[];
         logger: Logger;
         canUseEvents: boolean;
+        /**
+         * If defined, the Session will send events through `eventPort` instead of stdout.
+         */
+        eventPort?: number;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
@@ -6930,7 +6934,6 @@ declare namespace ts.server {
         private changeSeq;
         private currentRequestId;
         private errorCheck;
-        private eventHandler;
         private host;
         private readonly cancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
@@ -6938,13 +6941,20 @@ declare namespace ts.server {
         private hrtime;
         protected logger: Logger;
         private canUseEvents;
+        private eventPort;
+        private eventSocket;
+        private eventHandler;
+        readonly event: EventSender["event"];
+        private socketEventQueue;
         constructor(opts: SessionOptions);
+        private clearSocketEventQueue();
+        private writeToEventSocket(info, eventName);
         private sendRequestCompletedEvent(requestId);
         private defaultEventHandler(event);
         private projectsUpdatedInBackgroundEvent(openFiles);
         logError(err: Error, cmd: string): void;
         send(msg: protocol.Message): void;
-        event<T>(info: T, eventName: string): void;
+        /** @deprecated */
         output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
         private doOutput(info, cmdName, reqSeq, success, message?);
         private semanticCheck(file, project);
@@ -7102,7 +7112,7 @@ declare namespace ts.server {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
-        attach(projectService: ProjectService): void;
+        attach(projectService: ProjectService, eventSender?: EventSender): void;
         onProjectClosed(p: Project): void;
         readonly globalTypingsCacheLocation: string;
     }
@@ -7461,6 +7471,7 @@ declare namespace ts.server {
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        eventSender?: EventSender;
     }
     class ProjectService {
         readonly typingsCache: TypingsCache;
