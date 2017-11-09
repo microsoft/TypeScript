@@ -583,6 +583,7 @@ namespace ts.server.protocol {
     }
 
     export interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+        /** May also be an array of commands. */
         command: {};
     }
 
