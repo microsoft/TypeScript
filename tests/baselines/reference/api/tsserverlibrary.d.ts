@@ -3815,6 +3815,10 @@ declare namespace ts {
          * Note that it is assumed that the when asked about semantic diagnostics, the file has been taken out of affected files
          */
         getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get all the dependencies of the file
+         */
+        getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): string[];
     }
     /**
      * Information about the source file: Its version and optional signature from last emit

@@ -93,6 +93,11 @@ namespace ts {
          * Note that it is assumed that the when asked about semantic diagnostics, the file has been taken out of affected files
          */
         getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+
+        /**
+         * Get all the dependencies of the file
+         */
+        getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): string[];
     }
 
     /**
@@ -190,7 +195,8 @@ namespace ts {
             canCreateNewStateFrom,
             getFilesAffectedBy,
             emitNextAffectedFile,
-            getSemanticDiagnostics
+            getSemanticDiagnostics,
+            getAllDependencies
         };
 
         /**
@@ -304,6 +310,52 @@ namespace ts {
             const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
             semanticDiagnosticsPerFile.set(path, diagnostics);
             return diagnostics;
+        }
+
+        /**
+         * Get all the dependencies of the sourceFile
+         */
+        function getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): string[] {
+            const compilerOptions = programOfThisState.getCompilerOptions();
+            // With --out or --outFile all outputs go into single file, all files depend on each other
+            if (compilerOptions.outFile || compilerOptions.out) {
+                return programOfThisState.getSourceFiles().map(getFileName);
+            }
+
+            // If this is non module emit, or its a global file, it depends on all the source files
+            if (!isModuleEmit || (!isExternalModule(sourceFile) && !containsOnlyAmbientModules(sourceFile))) {
+                return programOfThisState.getSourceFiles().map(getFileName);
+            }
+
+            // Get the references, traversing deep from the referenceMap
+            Debug.assert(!!referencedMap);
+            const seenMap = createMap<true>();
+            const queue = [sourceFile.path];
+            while (queue.length) {
+                const path = queue.pop();
+                if (!seenMap.has(path)) {
+                    seenMap.set(path, true);
+                    const references = referencedMap.get(path);
+                    if (references) {
+                        const iterator = references.keys();
+                        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
+                            queue.push(value as Path);
+                        }
+                    }
+                }
+            }
+
+            return flatMapIter(seenMap.keys(), path => {
+                const file = programOfThisState.getSourceFileByPath(path as Path);
+                if (file) {
+                    return file.fileName;
+                }
+                return path;
+            });
+        }
+
+        function getFileName(sourceFile: SourceFile) {
+            return sourceFile.fileName;
         }
 
         /**
