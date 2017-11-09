@@ -3,6 +3,7 @@
 interface PromiseConstructor {
     new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
     reject(reason: any): Promise<never>;
+    all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 }
 /* @internal */
 declare var Promise: PromiseConstructor;
