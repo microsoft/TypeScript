@@ -699,7 +699,7 @@ namespace ts.codefix {
             const defaultExport = checker.tryGetMemberInModuleExports("default", moduleSymbol);
             if (defaultExport) {
                 const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if ((localSymbol && localSymbol.escapedName === symbolName || moduleSymbolToValidIdentifier(moduleSymbol) === symbolName)
+                if ((localSymbol && localSymbol.escapedName === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName)
                     && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     // check if this symbol is already used
                     const symbolId = getUniqueSymbolId(localSymbol || defaultExport, checker);
@@ -733,15 +733,15 @@ namespace ts.codefix {
         }
     }
 
-    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol): string {
-        return moduleSpecifierToValidIdentifier(removeFileExtension(getBaseFileName(moduleSymbol.name)));
+    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
+        return moduleSpecifierToValidIdentifier(removeFileExtension(getBaseFileName(moduleSymbol.name)), target);
     }
 
-    function moduleSpecifierToValidIdentifier(moduleSpecifier: string): string {
+    function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
         let res = "";
         let lastCharWasValid = true;
         const firstCharCode = moduleSpecifier.charCodeAt(0);
-        if (isIdentifierStart(firstCharCode, ScriptTarget.ESNext)) {
+        if (isIdentifierStart(firstCharCode, target)) {
             res += String.fromCharCode(firstCharCode);
         }
         else {
@@ -749,7 +749,7 @@ namespace ts.codefix {
         }
         for (let i = 1; i < moduleSpecifier.length; i++) {
             const ch = moduleSpecifier.charCodeAt(i);
-            const isValid = isIdentifierPart(ch, ScriptTarget.ESNext);
+            const isValid = isIdentifierPart(ch, target);
             if (isValid) {
                 let char = String.fromCharCode(ch);
                 if (!lastCharWasValid) {

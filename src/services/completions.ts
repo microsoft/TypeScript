@@ -39,7 +39,7 @@ namespace ts.Completions {
             return getStringLiteralCompletionEntries(sourceFile, position, typeChecker, compilerOptions, host, log);
         }
 
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, options);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, options, compilerOptions.target);
         if (!completionData) {
             return undefined;
         }
@@ -381,7 +381,7 @@ namespace ts.Completions {
         { name, source }: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): { type: "symbol", symbol: Symbol, location: Node, symbolToOriginInfoMap: SymbolOriginInfoMap } | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExports: true });
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExports: true }, compilerOptions.target);
         if (!completionData) {
             return { type: "none" };
         }
@@ -403,8 +403,8 @@ namespace ts.Completions {
         return symbol ? { type: "symbol", symbol, location, symbolToOriginInfoMap } : { type: "none" };
     }
 
-    function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined): string {
-        return origin && origin.isDefaultExport && symbol.name === "default" ? codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol) : symbol.name;
+    function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
+        return origin && origin.isDefaultExport && symbol.name === "default" ? codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target) : symbol.name;
     }
 
     export interface CompletionEntryIdentifier {
@@ -488,7 +488,7 @@ namespace ts.Completions {
             compilerOptions,
             sourceFile,
             formatContext,
-            symbolName: getSymbolName(symbol, symbolOriginInfo),
+            symbolName: getSymbolName(symbol, symbolOriginInfo, compilerOptions.target),
             getCanonicalFileName: createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false),
             symbolToken: undefined,
             kind: isDefaultExport ? codefix.ImportKind.Default : codefix.ImportKind.Named,
@@ -529,6 +529,7 @@ namespace ts.Completions {
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
         options: GetCompletionsAtPositionOptions,
+        target: ScriptTarget,
     ): CompletionData | undefined {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
@@ -927,7 +928,7 @@ namespace ts.Completions {
 
             symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
             if (options.includeExternalModuleExports) {
-                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "");
+                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
             }
             filterGlobalCompletion(symbols);
 
@@ -1009,7 +1010,7 @@ namespace ts.Completions {
             }
         }
 
-        function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string): void {
+        function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
 
             codefix.forEachExternalModule(typeChecker, allSourceFiles, moduleSymbol => {
@@ -1027,7 +1028,7 @@ namespace ts.Completions {
                             name = localSymbol.name;
                         }
                         else {
-                            name = codefix.moduleSymbolToValidIdentifier(moduleSymbol);
+                            name = codefix.moduleSymbolToValidIdentifier(moduleSymbol, target);
                         }
                     }
 
@@ -1857,7 +1858,7 @@ namespace ts.Completions {
      * @return undefined if the name is of external module
      */
     function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, allowStringLiteral: boolean, origin: SymbolOriginInfo | undefined): string | undefined {
-        const name = getSymbolName(symbol, origin);
+        const name = getSymbolName(symbol, origin, target);
         if (!name) return undefined;
 
         // First check of the displayName is not external module; if it is an external module, it is not valid entry
