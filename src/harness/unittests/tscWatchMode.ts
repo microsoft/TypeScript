@@ -1616,6 +1616,36 @@ namespace ts.tscWatch {
                 return files.slice(0, 2);
             }
         });
+
+        it("Elides const enums correctly in incremental compilation", () => {
+            const currentDirectory = "/user/someone/projects/myproject";
+            const file1: FileOrFolder = {
+                path: `${currentDirectory}/file1.ts`,
+                content: "export const enum E1 { V = 1 }"
+            };
+            const file2: FileOrFolder = {
+                path: `${currentDirectory}/file2.ts`,
+                content: `import { E1 } from "./file1"; export const enum E2 { V = E1.V }`
+            };
+            const file3: FileOrFolder = {
+                path: `${currentDirectory}/file3.ts`,
+                content: `import { E2 } from "./file2"; const v: E2 = E2.V;`
+            };
+            const strictAndEsModule = `"use strict";\nexports.__esModule = true;\n`;
+            verifyEmittedFileContents("\n", [file3, file2, file1], [
+                `${strictAndEsModule}var v = 1 /* V */;\n`,
+                strictAndEsModule,
+                strictAndEsModule
+            ], modifyFiles);
+
+            function modifyFiles(files: FileOrFolderEmit[], emittedFiles: EmittedFile[]) {
+                files[0].content += `function foo2() { return 2; }`;
+                emittedFiles[0].content += `function foo2() { return 2; }\n`;
+                emittedFiles[1].shouldBeWritten = false;
+                emittedFiles[2].shouldBeWritten = false;
+                return [files[0]];
+            }
+        });
     });
 
     describe("tsc-watch module resolution caching", () => {
