@@ -17,11 +17,22 @@ namespace ts {
     let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
-    interface Fail { __FAIL: void; }
-    /** Only value of type Fail. */
-    const Fail: Fail = { __FAIL: undefined };
-    function isFail(x: {} | null | undefined | void): x is Fail {
-        return x === Fail;
+    interface Fail extends Node { kind: SyntaxKind.Unknown; }
+    function fail(): Fail {
+        return createNode(SyntaxKind.Unknown) as Fail;
+    }
+    function isFail(x: Node | undefined): x is Fail {
+        return !!x && x.kind === SyntaxKind.Unknown;
+    }
+    interface FailList extends NodeArray<Node> { pos: -1; end: -1; }
+    function failList(): FailList {
+        const x = createNodeArray() as NodeArray<Node> as FailList;
+        x.pos = -1;
+        x.end = -1;
+        return x;
+    }
+    function isFailList(x: NodeArray<Node> | undefined): x is FailList {
+        return !!x && x.pos === -1;
     }
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
@@ -1883,8 +1894,8 @@ namespace ts {
 
         // Parses a comma-delimited list of elements
         function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean, inSpeculation?: false): NodeArray<T>;
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: (inSpeculation: boolean) => T | Fail, considerSemicolonAsDelimiter?: boolean, inSpeculation?: boolean): NodeArray<T> | Fail;
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: (inSpeculation: boolean) => T | Fail, considerSemicolonAsDelimiter?: boolean, inSpeculation?: boolean): NodeArray<T> | Fail {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: (inSpeculation: boolean) => T | Fail, considerSemicolonAsDelimiter?: boolean, inSpeculation?: boolean): NodeArray<T> | FailList;
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: (inSpeculation: boolean) => T | Fail, considerSemicolonAsDelimiter?: boolean, inSpeculation?: boolean): NodeArray<T> | FailList {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             const list: T[] = [];
@@ -1897,7 +1908,7 @@ namespace ts {
                     const elem = parseListElement(kind, parseElement, inSpeculation);
                     if (isFail(elem)) {
                         parsingContext = saveParsingContext;
-                        return Fail;
+                        return failList();
                     }
                     list.push(elem);
                     commaStart = scanner.getTokenPos();
@@ -2281,7 +2292,7 @@ namespace ts {
             //      BindingElement[?Yield,?Await]
             const name = parseIdentifierOrPattern(inSpeculation);
             if (isFail(name)) {
-                return Fail;
+                return name;
             }
             node.name = name;
             if (getFullWidth(node.name) === 0 && !hasModifiers(node) && isModifierKind(token())) {
@@ -2300,23 +2311,25 @@ namespace ts {
             node.type = parseParameterType();
             const initializer = parseInitializer(/*inParameter*/ true, inSpeculation);
             if (isFail(initializer)) {
-                return Fail;
+                return initializer;
             }
             node.initializer = initializer;
 
             return addJSDocComment(finishNode(node));
         }
 
-        function fillSignature(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, flags: SignatureFlags, signature: SignatureDeclaration, inSpeculation?: boolean): void | Fail {
+        /** @return 'true' on success. */
+        function fillSignature(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, flags: SignatureFlags, signature: SignatureDeclaration, inSpeculation?: boolean): boolean {
             if (!(flags & SignatureFlags.JSDoc)) {
                 signature.typeParameters = parseTypeParameters();
             }
             const parameters = parseParameterList(flags, inSpeculation);
-            if (isFail(parameters)) {
-                return Fail;
+            if (isFailList(parameters)) {
+                return false;
             }
             signature.parameters = parameters;
             signature.type = parseReturnType(returnToken, !!(flags & SignatureFlags.Type));
+            return true;
         }
 
         function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode | undefined {
@@ -2339,7 +2352,7 @@ namespace ts {
             return false;
         }
 
-        function parseParameterList(flags: SignatureFlags, inSpeculation: boolean): NodeArray<ParameterDeclaration> | Fail {
+        function parseParameterList(flags: SignatureFlags, inSpeculation: boolean): NodeArray<ParameterDeclaration> | FailList {
             // FormalParameters [Yield,Await]: (modified)
             //      [empty]
             //      FormalParameterList[?Yield,Await]
@@ -3058,7 +3071,7 @@ namespace ts {
                     return undefined;
                 }
                 if (inSpeculation) {
-                    return Fail;
+                    return fail();
                 }
             }
 
@@ -3420,8 +3433,7 @@ namespace ts {
             // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
 
-            const sigFail = fillSignature(SyntaxKind.ColonToken, isAsync | (inSpeculation ? SignatureFlags.RequireCompleteParameterList : SignatureFlags.None), node, inSpeculation);
-            if (isFail(sigFail)) {
+            if (!fillSignature(SyntaxKind.ColonToken, isAsync | (inSpeculation ? SignatureFlags.RequireCompleteParameterList : SignatureFlags.None), node, inSpeculation)) {
                 return undefined;
             }
 
@@ -5185,12 +5197,12 @@ namespace ts {
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             const name = parseIdentifierOrPattern(inSpeculation);
             if (isFail(name)) {
-                return Fail;
+                return name;
             }
             node.name = name;
             const init = parseInitializer(/*inParameter*/ false, inSpeculation);
             if (isFail(init)) {
-                return Fail;
+                return init;
             }
             node.initializer = init;
             return finishNode(node);
@@ -5209,13 +5221,13 @@ namespace ts {
                 node.propertyName = propertyName;
                 const name = parseIdentifierOrPattern(inSpeculation);
                 if (isFail(name)) {
-                    return Fail;
+                    return name;
                 }
                 node.name = name;
             }
             const init = parseInitializer(/*inParameter*/ false, inSpeculation);
             if (isFail(init)) {
-                return Fail;
+                return init;
             }
             node.initializer = init;
             return finishNode(node);
@@ -5225,8 +5237,8 @@ namespace ts {
             const node = <ObjectBindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             parseExpected(SyntaxKind.OpenBraceToken);
             const elements = parseDelimitedList(ParsingContext.ObjectBindingElements, parseObjectBindingElement, /*considerSemicolonAsDelimiter*/ undefined, inSpeculation);
-            if (isFail(elements)) {
-                return Fail;
+            if (isFailList(elements)) {
+                return fail();
             }
             node.elements = elements;
             parseExpected(SyntaxKind.CloseBraceToken);
@@ -5237,8 +5249,8 @@ namespace ts {
             const node = <ArrayBindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             parseExpected(SyntaxKind.OpenBracketToken);
             const elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement, /*considerSemicolonAsDelimiter*/ undefined, inSpeculation);
-            if (isFail(elements)) {
-                return elements;
+            if (isFailList(elements)) {
+                return fail();
             }
             node.elements = elements;
             parseExpected(SyntaxKind.CloseBracketToken);
