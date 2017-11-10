@@ -10898,22 +10898,25 @@ namespace ts {
                     // it as an inference candidate. Hopefully, a better candidate will come along that does
                     // not contain anyFunctionType when we come back to this argument for its second round
                     // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
-                    // when constructing types from type parameters that had no inference candidates) and
-                    // implicitNeverType (which is used as the element type for empty array literals).
-                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType || source === implicitNeverType) {
+                    // when constructing types from type parameters that had no inference candidates).
+                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType) {
                         return;
                     }
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
                         if (!inference.isFixed) {
-                            if (!inference.candidates || priority < inference.priority) {
+                            // We give lowest priority to inferences of implicitNeverType (which is used as the
+                            // element type for empty array literals). Thus, inferences from empty array literals
+                            // only matter when no other inferences are made.
+                            const p = priority | (source === implicitNeverType ? InferencePriority.NeverType : 0);
+                            if (!inference.candidates || p < inference.priority) {
                                 inference.candidates = [source];
-                                inference.priority = priority;
+                                inference.priority = p;
                             }
-                            else if (priority === inference.priority) {
+                            else if (p === inference.priority) {
                                 inference.candidates.push(source);
                             }
-                            if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                            if (!(p & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
                                 inference.topLevel = false;
                             }
                         }

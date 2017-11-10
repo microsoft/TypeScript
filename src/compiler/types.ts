@@ -3613,6 +3613,7 @@ namespace ts {
         NakedTypeVariable = 1 << 1,  // Naked type variable in union or intersection type
         MappedType        = 1 << 2,  // Reverse inference for mapped type
         ReturnType        = 1 << 3,  // Inference made from return type of generic function
+        NeverType         = 1 << 4,  // Inference made from the never type
     }
 
     export interface InferenceInfo {
