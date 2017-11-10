@@ -1018,11 +1018,7 @@ namespace ts.Completions {
         function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
 
-            codefix.forEachExternalModule(typeChecker, allSourceFiles, moduleSymbol => {
-                if (moduleSymbol === sourceFile.symbol) {
-                    return;
-                }
-
+            codefix.forEachExternalModuleToImportFrom(typeChecker, sourceFile, allSourceFiles, moduleSymbol => {
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     let { name } = symbol;
                     const isDefaultExport = name === "default";
