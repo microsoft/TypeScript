@@ -332,16 +332,43 @@ namespace ts.codefix {
             }
         }
 
-        // Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
-        const relativeFirst = getRelativePathNParents(relativePath) < getRelativePathLength(getRelativePath(sourceDirectory, baseUrl, getCanonicalFileName));
+        /*
+        Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
+
+        Suppose we have:
+            baseUrl = /base
+            sourceDirectory = /base/a/b
+            moduleFileName = /base/foo/bar
+        Then:
+            relativePath = ../../foo/bar
+            getRelativePathNParents(relativePath) = 2
+            baseUrlToSource = ./foo/bar
+            getRelativePathLength(baseUrlToSource) = 2
+            2 < 2 = false
+        In this case we should prefer using the baseUrl path "/a/b" instead of the relative path "../../foo/bar".
+
+        Suppose we have:
+            baseUrl = /base
+            sourceDirectory = /base/foo/a
+            moduleFileName = /base/foo/bar
+        Then:
+            relativePath = ../a
+            getRelativePathNParents(relativePath) = 1
+            baseUrlToSource = ./foo/bar
+            getRelativePathLength(baseUrlToSource) = 2
+            1 < 2 = true
+        In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
+        */
+        const pathFromBaseUrlToSource = getRelativePath(sourceDirectory, baseUrl, getCanonicalFileName);
+        const relativeFirst = getRelativePathNParents(relativePath) < getRelativePathLength(pathFromBaseUrlToSource);
         return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
     }
 
     function getRelativePathLength(relativePath: string): number {
-        if (startsWith(relativePath, "../")) {
+        if (startsWith(relativePath, `..${directorySeparator}`)) {
             return 0;
         }
-        Debug.assert(startsWith(relativePath, "./"));
+        Debug.assert(startsWith(relativePath, `.${directorySeparator}`));
         let count = 0;
         for (let i = 2; i < relativePath.length; i++) {
             if (relativePath.charCodeAt(i) === CharacterCodes.slash) {
