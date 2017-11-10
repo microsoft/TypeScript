@@ -8907,7 +8907,9 @@ namespace ts {
             if (target.flags & TypeFlags.StringOrNumberLiteral && target.flags & TypeFlags.FreshLiteral) {
                 target = (<LiteralType>target).regularType;
             }
-            if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
+            if (source === target ||
+                relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
+                relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
@@ -9050,7 +9052,8 @@ namespace ts {
                     return isIdenticalTo(source, target);
                 }
 
-                if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
+                if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
+                    isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 if (isObjectLiteralType(source) && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
