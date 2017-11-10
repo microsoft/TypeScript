@@ -1554,7 +1554,7 @@ namespace ts {
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
-                    const element = parseListElement(kind, parseElement, /*inSpeculation*/ false);
+                    const element = parseListElement(kind, parseElement);
                     list.push(element);
 
                     continue;
@@ -1569,13 +1569,13 @@ namespace ts {
             return createNodeArray(list, listPos);
         }
 
-        function parseListElement<T extends Node | Fail>(parsingContext: ParsingContext, parseElement: (inSpeculation: boolean) => T, inSpeculation: boolean): T {
+        function parseListElement<T extends Node | Fail>(parsingContext: ParsingContext, parseElement: () => T): T {
             const node = currentNode(parsingContext);
             if (node) {
                 return <T>consumeNode(node);
             }
 
-            return parseElement(inSpeculation);
+            return parseElement();
         }
 
         function currentNode(parsingContext: ParsingContext): Node {
@@ -1893,9 +1893,9 @@ namespace ts {
         }
 
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean, inSpeculation?: false): NodeArray<T>;
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: (inSpeculation: boolean) => T | Fail, considerSemicolonAsDelimiter?: boolean, inSpeculation?: boolean): NodeArray<T> | FailList;
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: (inSpeculation: boolean) => T | Fail, considerSemicolonAsDelimiter?: boolean, inSpeculation?: boolean): NodeArray<T> | FailList {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T>;
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T | Fail, considerSemicolonAsDelimiter?: boolean): NodeArray<T> | FailList;
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T | Fail, considerSemicolonAsDelimiter?: boolean): NodeArray<T> | FailList {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             const list: T[] = [];
@@ -1905,7 +1905,7 @@ namespace ts {
             while (true) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
                     const startPos = scanner.getStartPos();
-                    const elem = parseListElement(kind, parseElement, inSpeculation);
+                    const elem = parseListElement(kind, parseElement);
                     if (isFail(elem)) {
                         parsingContext = saveParsingContext;
                         return failList();
@@ -2270,13 +2270,13 @@ namespace ts {
                 isStartOfType(/*inStartOfParameter*/ true);
         }
 
-        function parseParameterNoSpeculation(): ParameterDeclaration {
-            return parseParameter();
+        function parseParameterInSpeculation(): ParameterDeclaration | Fail {
+            return parseParameterWorker(/*inSpeculation*/ true);
         }
-
-        function parseParameter(): ParameterDeclaration;
-        function parseParameter(inSpeculation?: boolean): ParameterDeclaration | Fail;
-        function parseParameter(inSpeculation?: boolean): ParameterDeclaration | Fail {
+        function parseParameterNoSpeculation(): ParameterDeclaration {
+            return parseParameterWorker(/*inSpeculation*/ false) as ParameterDeclaration;
+        }
+        function parseParameterWorker(inSpeculation: boolean): ParameterDeclaration | Fail {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
                 node.name = createIdentifier(/*isIdentifier*/ true);
@@ -2373,7 +2373,9 @@ namespace ts {
                 setYieldContext(!!(flags & SignatureFlags.Yield));
                 setAwaitContext(!!(flags & SignatureFlags.Await));
 
-                const result = parseDelimitedList(ParsingContext.Parameters, flags & SignatureFlags.JSDoc ? parseJSDocParameter : parseParameter, /*considerSemicolonAsDelimiter*/ undefined, inSpeculation);
+                const result = parseDelimitedList<ParameterDeclaration>(
+                    ParsingContext.Parameters,
+                    flags & SignatureFlags.JSDoc ? parseJSDocParameter : inSpeculation ? parseParameterInSpeculation : parseParameterNoSpeculation);
                 setYieldContext(savedYieldContext);
                 setAwaitContext(savedAwaitContext);
 
@@ -5189,7 +5191,13 @@ namespace ts {
 
         // DECLARATIONS
 
-        function parseArrayBindingElement(inSpeculation: boolean): ArrayBindingElement | Fail {
+        function parseArrayBindingElementInSpeculation(): ArrayBindingElement | Fail {
+            return parseArrayBindingElementWorker(/*inSpeculation*/ true);
+        }
+        function parseArrayBindingElementNoSpeculation(): ArrayBindingElement {
+            return parseArrayBindingElementWorker(/*inSpeculation*/ false) as ArrayBindingElement;
+        }
+        function parseArrayBindingElementWorker(inSpeculation: boolean): ArrayBindingElement | Fail {
             if (token() === SyntaxKind.CommaToken) {
                 return <OmittedExpression>createNode(SyntaxKind.OmittedExpression);
             }
@@ -5208,7 +5216,13 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseObjectBindingElement(inSpeculation: boolean): BindingElement | Fail {
+        function parseObjectBindingElementInSpeculation(): BindingElement | Fail {
+            return parseObjectBindingElementWorker(/*inSpeculation*/ true);
+        }
+        function parseObjectBindingElementNoSpeculation(): BindingElement {
+            return parseObjectBindingElementWorker(/*inSpeculation*/ false) as BindingElement;
+        }
+        function parseObjectBindingElementWorker(inSpeculation: boolean): BindingElement | Fail {
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             const tokenIsIdentifier = isIdentifier();
@@ -5236,7 +5250,10 @@ namespace ts {
         function parseObjectBindingPattern(inSpeculation: boolean): ObjectBindingPattern | Fail {
             const node = <ObjectBindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             parseExpected(SyntaxKind.OpenBraceToken);
-            const elements = parseDelimitedList(ParsingContext.ObjectBindingElements, parseObjectBindingElement, /*considerSemicolonAsDelimiter*/ undefined, inSpeculation);
+            const elements = parseDelimitedList<BindingElement>(
+                ParsingContext.ObjectBindingElements,
+                inSpeculation ? parseObjectBindingElementInSpeculation : parseObjectBindingElementNoSpeculation,
+                /*considerSemicolonAsDelimiter*/ undefined);
             if (isFailList(elements)) {
                 return fail();
             }
@@ -5248,7 +5265,10 @@ namespace ts {
         function parseArrayBindingPattern(inSpeculation: boolean): ArrayBindingPattern | Fail {
             const node = <ArrayBindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             parseExpected(SyntaxKind.OpenBracketToken);
-            const elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement, /*considerSemicolonAsDelimiter*/ undefined, inSpeculation);
+            const elements = parseDelimitedList<BindingElement | OmittedExpression>(
+                ParsingContext.ArrayBindingElements,
+                inSpeculation ? parseArrayBindingElementInSpeculation : parseArrayBindingElementNoSpeculation,
+                /*considerSemicolonAsDelimiter*/ undefined);
             if (isFailList(elements)) {
                 return fail();
             }
