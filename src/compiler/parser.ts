@@ -26,7 +26,7 @@ namespace ts {
     }
     interface FailList extends NodeArray<Node> { pos: -1; end: -1; }
     function failList(): FailList {
-        const x = createNodeArray() as NodeArray<Node> as FailList;
+        const x = [] as NodeArray<Node> as FailList;
         x.pos = -1;
         x.end = -1;
         return x;
