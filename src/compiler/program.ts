@@ -7,18 +7,10 @@ namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
-        while (true) {
-            const fileName = combinePaths(searchPath, configName);
-            if (fileExists(fileName)) {
-                return fileName;
-            }
-            const parentPath = getDirectoryPath(searchPath);
-            if (parentPath === searchPath) {
-                break;
-            }
-            searchPath = parentPath;
-        }
-        return undefined;
+        return forEachAncestorDirectory(searchPath, ancestor => {
+            const fileName = combinePaths(ancestor, configName);
+            return fileExists(fileName) ? fileName : undefined;
+        });
     }
 
     export function resolveTripleslashReference(moduleName: string, containingFile: string): string {
@@ -1101,11 +1093,12 @@ namespace ts {
 
             // If '--lib' is not specified, include default library file according to '--target'
             // otherwise, using options specified in '--lib' instead of '--target' default library file
+            const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
             if (!options.lib) {
-               return compareStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+               return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
-                return forEach(options.lib, libFileName => compareStrings(file.fileName, combinePaths(defaultLibraryPath, libFileName), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo);
+                return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
             }
         }
 
@@ -1186,11 +1179,11 @@ namespace ts {
             return emitResult;
         }
 
-        function getSourceFile(fileName: string): SourceFile {
+        function getSourceFile(fileName: string): SourceFile | undefined {
             return getSourceFileByPath(toPath(fileName));
         }
 
-        function getSourceFileByPath(path: Path): SourceFile {
+        function getSourceFileByPath(path: Path): SourceFile | undefined {
             return filesByName.get(path);
         }
 
@@ -2131,7 +2124,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib");
             }
 
-            if (options.noImplicitUseStrict && (options.alwaysStrict === undefined ? options.strict : options.alwaysStrict)) {
+            if (options.noImplicitUseStrict && getStrictOptionValue(options, "alwaysStrict")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
             }
 
@@ -2360,7 +2353,7 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return options.allowJs || !options.noImplicitAny ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+            return options.allowJs || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
     }
 

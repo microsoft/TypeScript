@@ -128,7 +128,7 @@ namespace ts.server {
                     body: undefined
                 });
             });
-            it ("should handle literal types in request", () => {
+            it("should handle literal types in request", () => {
                 const configureRequest: protocol.ConfigureRequest = {
                     command: CommandNames.Configure,
                     seq: 0,
@@ -186,6 +186,8 @@ namespace ts.server {
                 CommandNames.Configure,
                 CommandNames.Definition,
                 CommandNames.DefinitionFull,
+                CommandNames.DefinitionAndBoundSpan,
+                CommandNames.DefinitionAndBoundSpanFull,
                 CommandNames.Implementation,
                 CommandNames.ImplementationFull,
                 CommandNames.Exit,
@@ -315,7 +317,7 @@ namespace ts.server {
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg)).to.not.exist;
+                expect(session.send(msg)).to.not.exist; // tslint:disable-line no-unused-expression
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
@@ -352,7 +354,7 @@ namespace ts.server {
                 session.addProtocolHandler(command, () => resp);
 
                 expect(() => session.addProtocolHandler(command, () => resp))
-                .to.throw(`Protocol handler already exists for command "${command}"`);
+                    .to.throw(`Protocol handler already exists for command "${command}"`);
             });
         });
 
@@ -522,14 +524,14 @@ namespace ts.server {
             });
         });
         it("has access to the project service", () => {
-            class ServiceSession extends TestSession {
+            // tslint:disable-next-line no-unused-expression
+            new class extends TestSession {
                 constructor() {
                     super();
                     assert(this.projectService);
                     expect(this.projectService).to.be.instanceOf(ProjectService);
                 }
-            }
-            new ServiceSession();
+            }();
         });
     });
 
