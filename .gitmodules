@@ -1,0 +1,6 @@
+[submodule "tests/cases/user/TypeScript-React-Starter/TypeScript-React-Starter"]
+	path = tests/cases/user/TypeScript-React-Starter/TypeScript-React-Starter
+	url = https://github.com/Microsoft/TypeScript-React-Starter
+[submodule "tests/cases/user/TypeScript-Node-Starter/TypeScript-Node-Starter"]
+	path = tests/cases/user/TypeScript-Node-Starter/TypeScript-Node-Starter
+	url = https://github.com/Microsoft/TypeScript-Node-Starter.git
