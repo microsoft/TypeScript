@@ -46,8 +46,8 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     private makeUnitName(name: string, root: string) {
-        const path = ts.toPath(name, root, (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
-        const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
+        const path = ts.toPath(name, root, utils.identity);
+        const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", utils.identity);
         return pathStart ? path.replace(pathStart, "/") : path;
     }
 

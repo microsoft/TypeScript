@@ -1030,18 +1030,11 @@ namespace Harness {
             return result;
         }
 
-        const carriageReturnLineFeed = "\r\n";
-        const lineFeed = "\n";
-
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
         // Cache of lib files from "built/local"
         let libFileNameSourceFileMap: ts.Map<ts.SourceFile> | undefined;
-
-        // Cache of lib files from  "tests/lib/"
-        const testLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
-        const es6TestLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
@@ -1082,155 +1075,6 @@ namespace Harness {
 
         export function getCanonicalFileName(fileName: string): string {
             return fileName;
-        }
-
-        export function createCompilerHost(
-            inputFiles: TestFile[],
-            writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
-            scriptTarget: ts.ScriptTarget,
-            useCaseSensitiveFileNames: boolean,
-            // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
-            currentDirectory: string,
-            newLineKind?: ts.NewLineKind,
-            libFiles?: string): ts.CompilerHost {
-
-            // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
-            const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
-
-            /** Maps a symlink name to a realpath. Used only for exposing `realpath`. */
-            const realPathMap = ts.createMap<string>();
-            /**
-             * Maps a file name to a source file.
-             * This will have a different SourceFile for every symlink pointing to that file;
-             * if the program resolves realpaths then symlink entries will be ignored.
-             */
-            const fileMap = ts.createMap<ts.SourceFile>();
-            for (const file of inputFiles) {
-                if (file.content !== undefined) {
-                    const fileName = ts.normalizePath(file.unitName);
-                    const path = ts.toPath(file.unitName, currentDirectory, getCanonicalFileName);
-                    if (file.fileOptions && file.fileOptions.symlink) {
-                        const links = file.fileOptions.symlink.split(",");
-                        for (const link of links) {
-                            const linkPath = ts.toPath(link, currentDirectory, getCanonicalFileName);
-                            realPathMap.set(linkPath, fileName);
-                            // Create a different SourceFile for every symlink.
-                            const sourceFile = createSourceFileAndAssertInvariants(linkPath, file.content, scriptTarget);
-                            fileMap.set(linkPath, sourceFile);
-                        }
-                    }
-                    const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
-                    fileMap.set(path, sourceFile);
-                }
-            }
-
-            if (libFiles) {
-                // Because @libFiles don't change between execution. We would cache the result of the files and reuse it to speed help compilation
-                for (const fileName of libFiles.split(",")) {
-                    const libFileName = "tests/lib/" + fileName;
-
-                    if (scriptTarget <= ts.ScriptTarget.ES5) {
-                        if (!testLibFileNameSourceFileMap.get(libFileName)) {
-                            testLibFileNameSourceFileMap.set(libFileName, createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget));
-                        }
-                    }
-                    else {
-                        if (!es6TestLibFileNameSourceFileMap.get(libFileName)) {
-                            es6TestLibFileNameSourceFileMap.set(libFileName, createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget));
-                        }
-                    }
-                }
-            }
-
-            function getSourceFile(fileName: string) {
-                fileName = ts.normalizePath(fileName);
-                const fromFileMap = fileMap.get(toPath(fileName));
-                if (fromFileMap) {
-                    return fromFileMap;
-                }
-                else if (fileName === fourslashFileName) {
-                    const tsFn = "tests/cases/fourslash/" + fourslashFileName;
-                    fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
-                    return fourslashSourceFile;
-                }
-                else if (ts.startsWith(fileName, "tests/lib/")) {
-                    return scriptTarget <= ts.ScriptTarget.ES5 ? testLibFileNameSourceFileMap.get(fileName) : es6TestLibFileNameSourceFileMap.get(fileName);
-                }
-                else {
-                    // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
-                    // Return if it is other library file, otherwise return undefined
-                    return getDefaultLibrarySourceFile(fileName);
-                }
-            }
-
-            const newLine =
-                newLineKind === ts.NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
-                    newLineKind === ts.NewLineKind.LineFeed ? lineFeed :
-                        Harness.IO.newLine();
-
-            function toPath(fileName: string): ts.Path {
-                return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
-            }
-
-            return {
-                getCurrentDirectory: () => currentDirectory,
-                getSourceFile,
-                getDefaultLibFileName,
-                writeFile,
-                getCanonicalFileName,
-                useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: () => newLine,
-                fileExists: fileName => fileMap.has(toPath(fileName)),
-                readFile(fileName: string): string | undefined {
-                    const file = fileMap.get(toPath(fileName));
-                    if (ts.endsWith(fileName, "json")) {
-                        // strip comments
-                        return file.getText();
-                    }
-                    return file.text;
-                },
-                realpath: (fileName: string): ts.Path => {
-                    const path = toPath(fileName);
-                    return (realPathMap.get(path) as ts.Path) || path;
-                },
-                directoryExists: dir => {
-                    let path = ts.toPath(dir, currentDirectory, getCanonicalFileName);
-                    // Strip trailing /, which may exist if the path is a drive root
-                    if (path[path.length - 1] === "/") {
-                        path = <ts.Path>path.substr(0, path.length - 1);
-                    }
-                    return mapHasFileInDirectory(path, fileMap);
-                },
-                getDirectories: d => {
-                    const path = ts.toPath(d, currentDirectory, getCanonicalFileName);
-                    const result: string[] = [];
-                    ts.forEachKey(fileMap, key => {
-                        if (key.indexOf(path) === 0 && key.lastIndexOf("/") > path.length) {
-                            let dirName = key.substr(path.length, key.indexOf("/", path.length + 1) - path.length);
-                            if (dirName[0] === "/") {
-                                dirName = dirName.substr(1);
-                            }
-                            if (result.indexOf(dirName) < 0) {
-                                result.push(dirName);
-                            }
-                        }
-                    });
-                    return result;
-                }
-            };
-        }
-
-        function mapHasFileInDirectory(directoryPath: ts.Path, map: ts.Map<{}>): boolean {
-            if (!map) {
-                return false;
-            }
-            let exists = false;
-            ts.forEachKey(map, fileName => {
-                if (!exists && ts.startsWith(fileName, directoryPath) && fileName[directoryPath.length] === "/") {
-                    exists = true;
-                }
-            });
-            return exists;
         }
 
         interface HarnessOptions {

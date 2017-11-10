@@ -16,6 +16,7 @@ namespace compiler {
         public readonly defaultLibLocation: string;
         public readonly outputs: TextDocument[] = [];
         public readonly traces: string[] = [];
+        public readonly shouldAssertInvariants = !Harness.lightMode;
 
         private _setParentNodes: boolean;
         private _sourceFiles: KeyedCollection<string, ts.SourceFile>;
@@ -130,7 +131,12 @@ namespace compiler {
                         }
                     }
 
-                    const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes);
+
+                    const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
+                    if (this.shouldAssertInvariants) {
+                        Utils.assertInvariants(parsed, /*parent*/ undefined);
+                    }
+
                     this._sourceFiles.set(canonicalFileName, parsed);
 
                     if (cacheKey) {

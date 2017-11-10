@@ -1,4 +1,5 @@
 /// <reference path="..\harness.ts" />
+/// <reference path="../vfs.ts" />
 
 namespace ts {
     function verifyMissingFilePaths(missingPaths: ReadonlyArray<Path>, expected: ReadonlyArray<string>) {
@@ -39,15 +40,11 @@ namespace ts {
                 "/// <reference path=\"nonexistent4\"/>\n"   // No extension
         };
 
-        const testCompilerHost = Harness.Compiler.createCompilerHost(
-            /*inputFiles*/ [emptyFile, referenceFile],
-            /*writeFile*/ undefined,
-            /*scriptTarget*/ undefined,
-            /*useCaseSensitiveFileNames*/ false,
-            /*currentDirectory*/ "d:\\pretend\\",
-            /*newLineKind*/ NewLineKind.LineFeed,
-            /*libFiles*/ undefined
-        );
+        const testCompilerHost = new compiler.CompilerHost(
+            vfs.VirtualFileSystem.createFromTestFiles(
+                { useCaseSensitiveFileNames: false, currentDirectory: "d:\\pretend\\" }, 
+                [emptyFile, referenceFile]),
+            { newLine: NewLineKind.LineFeed });
 
         it("handles no missing root files", () => {
             const program = createProgram([emptyFileRelativePath], options, testCompilerHost);

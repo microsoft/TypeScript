@@ -1,4 +1,6 @@
 namespace utils {
+    export function identity<T>(v: T) { return v; }
+
     export function getByteOrderMarkLength(text: string) {
         if (text.length >= 2) {
             const ch0 = text.charCodeAt(0);

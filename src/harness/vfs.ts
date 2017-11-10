@@ -1373,7 +1373,7 @@ namespace vfs {
     }
 
     export interface VirtualFile {
-            // #region Event "contentChanged"
+        // #region Event "contentChanged"
         on(event: "contentChanged", listener: (entry: VirtualFile) => void): this;
         once(event: "contentChanged", listener: (entry: VirtualFile) => void): this;
         addListener(event: "contentChanged", listener: (entry: VirtualFile) => void): this;
@@ -1385,7 +1385,7 @@ namespace vfs {
     }
 
     export interface VirtualFile {
-            // #region Untyped events
+        // #region Untyped events
         on(event: string | symbol, listener: (...args: any[]) => void): this;
         once(event: string | symbol, listener: (...args: any[]) => void): this;
         addListener(event: string | symbol, listener: (...args: any[]) => void): this;
