@@ -2540,6 +2540,11 @@ Actual: ${stringify(fullActual)}`);
             const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(codeFixes[0].changes[0].fileName);
             const originalContent = scriptInfo.content;
             for (const codeFix of codeFixes) {
+                if (!/^(Import|Change|Add)/.test(codeFix.description)) {
+                    // Ignore other fixes
+                    continue;
+                }
+
                 this.applyEdits(codeFix.changes[0].fileName, codeFix.changes[0].textChanges, /*isFormattingEdit*/ false);
                 let text = this.rangeText(ranges[0]);
                 // TODO:GH#18445 (remove this line to see errors in many `importNameCodeFix` tests)
@@ -2549,6 +2554,9 @@ Actual: ${stringify(fullActual)}`);
             }
             const sortedExpectedArray = expectedTextArray.sort();
             const sortedActualArray = actualTextArray.sort();
+            if (sortedExpectedArray.length !== sortedActualArray.length) {
+                this.raiseError(`Expected ${sortedExpectedArray.length} import fixes, got ${sortedActualArray.length}`);
+            }
             ts.zipWith(sortedExpectedArray, sortedActualArray, (expected, actual, index) => {
                 if (expected !== actual) {
                     this.raiseError(`Import fix at index ${index} doesn't match.\n${showTextDiff(expected, actual)}`);

@@ -727,7 +727,8 @@ namespace ts.codefix {
             cb(ambient);
         }
         for (const sourceFile of allSourceFiles) {
-            if (isExternalOrCommonJsModule(sourceFile)) {
+            // Exclude accidental inclusion of underscored node_module. https://github.com/Microsoft/TypeScript/issues/19893
+            if (isExternalOrCommonJsModule(sourceFile) && !stringContains(sourceFile.fileName, "node_modules/_") && !stringContains(sourceFile.fileName, "node_modules\_")) {
                 cb(sourceFile.symbol);
             }
         }
