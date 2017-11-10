@@ -17,24 +17,6 @@ namespace ts {
     let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
-    interface Fail extends Node { kind: SyntaxKind.Unknown; }
-    function fail(): Fail {
-        return createNode(SyntaxKind.Unknown) as Fail;
-    }
-    function isFail(x: Node | undefined): x is Fail {
-        return !!x && x.kind === SyntaxKind.Unknown;
-    }
-    interface FailList extends NodeArray<Node> { pos: -1; end: -1; }
-    function failList(): FailList {
-        const x = [] as NodeArray<Node> as FailList;
-        x.pos = -1;
-        x.end = -1;
-        return x;
-    }
-    function isFailList(x: NodeArray<Node> | undefined): x is FailList {
-        return !!x && x.pos === -1;
-    }
-
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
         if (kind === SyntaxKind.SourceFile) {
             return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
@@ -542,6 +524,16 @@ namespace ts {
         let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        interface Fail extends Node { kind: SyntaxKind.Unknown; }
+        interface FailList extends NodeArray<Node> { pos: -1; }
+        let Fail: Fail;
+        let FailList: FailList;
+        function isFail(x: Node | undefined): x is Fail {
+            return !!x && x.kind === SyntaxKind.Unknown;
+        }
+        function isFailList(x: NodeArray<Node> | undefined): x is FailList {
+            return !!x && x.pos === -1;
+        }
 
         let sourceFile: SourceFile;
         let parseDiagnostics: Diagnostic[];
@@ -689,6 +681,9 @@ namespace ts {
             TokenConstructor = objectAllocator.getTokenConstructor();
             IdentifierConstructor = objectAllocator.getIdentifierConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
+
+            Fail = createNode(SyntaxKind.Unknown) as Fail;
+            FailList = createNodeArray([], -1) as FailList;
 
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
@@ -1908,7 +1903,7 @@ namespace ts {
                     const elem = parseListElement(kind, parseElement);
                     if (isFail(elem)) {
                         parsingContext = saveParsingContext;
-                        return failList();
+                        return FailList;
                     }
                     list.push(elem);
                     commaStart = scanner.getTokenPos();
@@ -3073,7 +3068,7 @@ namespace ts {
                     return undefined;
                 }
                 if (inSpeculation) {
-                    return fail();
+                    return Fail;
                 }
             }
 
@@ -5255,7 +5250,7 @@ namespace ts {
                 inSpeculation ? parseObjectBindingElementInSpeculation : parseObjectBindingElementNoSpeculation,
                 /*considerSemicolonAsDelimiter*/ undefined);
             if (isFailList(elements)) {
-                return fail();
+                return Fail;
             }
             node.elements = elements;
             parseExpected(SyntaxKind.CloseBraceToken);
@@ -5270,7 +5265,7 @@ namespace ts {
                 inSpeculation ? parseArrayBindingElementInSpeculation : parseArrayBindingElementNoSpeculation,
                 /*considerSemicolonAsDelimiter*/ undefined);
             if (isFailList(elements)) {
-                return fail();
+                return Fail;
             }
             node.elements = elements;
             parseExpected(SyntaxKind.CloseBracketToken);
