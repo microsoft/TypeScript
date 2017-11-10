@@ -392,7 +392,7 @@ namespace ts {
             description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
         },
         {
-            name: "ESMInterop",
+            name: "ESModuleInterop",
             type: "boolean",
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Create_namespace_objects_for_ECMAScript_imports_which_are_neither_callable_nor_constructable_implies_allowSyntheticDefaultImports
@@ -699,7 +699,8 @@ namespace ts {
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
         target: ScriptTarget.ES5,
-        strict: true
+        strict: true,
+        ESModuleInterop: true
     };
 
     let optionNameMapCache: OptionNameMap;

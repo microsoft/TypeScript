@@ -1920,7 +1920,7 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         return compilerOptions.allowSyntheticDefaultImports !== undefined
             ? compilerOptions.allowSyntheticDefaultImports
-            : compilerOptions.ESMInterop
+            : compilerOptions.ESModuleInterop
                 ? !!moduleKind && moduleKind < ModuleKind.ES2015
                 : moduleKind === ModuleKind.System;
     }

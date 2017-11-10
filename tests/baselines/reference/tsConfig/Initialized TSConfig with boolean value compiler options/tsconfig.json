@@ -27,7 +27,7 @@
     // "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
 
     /* Additional Checks */
-    "noUnusedLocals": true                    /* Report errors on unused locals. */
+    "noUnusedLocals": true,                   /* Report errors on unused locals. */
     // "noUnusedParameters": true,            /* Report errors on unused parameters. */
     // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
     // "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
@@ -40,7 +40,7 @@
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     // "types": [],                           /* Type declaration files to be included in compilation. */
     // "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
-    // "ESMInterop": true,                    /* Create namespace objects for ECMAScript imports which are neither callable nor constructable, implies `allowSyntheticDefaultImports`. */
+    "ESModuleInterop": true                   /* Create namespace objects for ECMAScript imports which are neither callable nor constructable, implies `allowSyntheticDefaultImports`. */
     // "preserveSymlinks": true,              /* Do not resolve the real path of symlinks. */
 
     /* Source Map Options */
