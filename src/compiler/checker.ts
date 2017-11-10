@@ -10666,16 +10666,6 @@ namespace ts {
                 type;
         }
 
-        function getWidenedLiteralLikeType(type: Type): Type {
-            return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
-                type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
-                type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
-                type.flags & TypeFlags.BooleanLiteral ? booleanType :
-                type.flags & TypeFlags.UniqueESSymbol ? esSymbolType :
-                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralLikeType)) :
-                type;
-        }
-
         function getWidenedLiteralType(type: Type): Type {
             return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
                 type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
@@ -10692,12 +10682,13 @@ namespace ts {
         }
 
         function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type) {
-            const widenLiterals = !isLiteralContextualType(contextualType);
-            const widenSymbols = !isUniqueESSymbolContextualType(contextualType);
-            return widenLiterals && widenSymbols ? getWidenedLiteralLikeType(type) :
-                widenLiterals ? getWidenedLiteralType(type) :
-                widenSymbols ? getWidenedUniqueESSymbolType(type) :
-                type;
+            if (!isLiteralContextualType(contextualType)) {
+                type = getWidenedLiteralType(type);
+            }
+            if (!isUniqueESSymbolContextualType(contextualType)) {
+                type = getWidenedUniqueESSymbolType(type);
+            }
+            return type;
         }
 
         /**
