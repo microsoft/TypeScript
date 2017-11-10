@@ -1,4 +1,7 @@
-/// <reference path="harness.ts" />
+/// <reference path="./core.ts" />
+
+// NOTE: The contents of this file are all exported from the namespace 'documents'. This is to
+//       support the eventual conversion of harness into a modular system.
 
 namespace documents {
     export class TextDocument {
@@ -6,16 +9,16 @@ namespace documents {
         public readonly file: string;
         public readonly text: string;
 
-        private _lineStarts: number[] | undefined;
+        private _lineStarts: core.LineStarts | undefined;
 
-        constructor(file: string, content: string, meta?: Map<string, string>) {
+        constructor(file: string, text: string, meta?: Map<string, string>) {
             this.file = file;
-            this.text = content;
+            this.text = text;
             this.meta = meta || new Map<string, string>();
         }
 
-        public get lineStarts(): number[] {
-            return this._lineStarts || (this._lineStarts = ts.computeLineStarts(this.text));
+        public get lineStarts(): core.LineStarts {
+            return this._lineStarts || (this._lineStarts = core.computeLineStarts(this.text));
         }
     }
 
@@ -39,10 +42,6 @@ namespace documents {
         nameIndex?: number;
     }
 
-    const mappingRegExp = /([A-Za-z0-9+/]+),?|(;)|./g;
-    const sourceMappingURLRegExp = /^\/\/[#@]\s*sourceMappingURL\s*=\s*(.*?)\s*$/mig;
-    const dataURLRegExp = /^data:application\/json;base64,([a-z0-9+/=]+)$/i;
-
     export class SourceMap {
         public readonly raw: RawSourceMap;
         public readonly mapFile: string | undefined;
@@ -53,6 +52,11 @@ namespace documents {
         public readonly sourcesContent: ReadonlyArray<string> | undefined;
         public readonly mappings: ReadonlyArray<Mapping> = [];
         public readonly names: ReadonlyArray<string> | undefined;
+
+        private static readonly _mappingRegExp = /([A-Za-z0-9+/]+),?|(;)|./g;
+        private static readonly _sourceMappingURLRegExp = /^\/\/[#@]\s*sourceMappingURL\s*=\s*(.*?)\s*$/mig;
+        private static readonly _dataURLRegExp = /^data:application\/json;base64,([a-z0-9+/=]+)$/i;
+        private static readonly _base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
         private _emittedLineMappings: Mapping[][] = [];
         private _sourceLineMappings: Mapping[][][] = [];
@@ -76,9 +80,9 @@ namespace documents {
             let sourceColumn = 0;
             let nameIndex = 0;
             let match: RegExpExecArray | null;
-            while (match = mappingRegExp.exec(this.raw.mappings)) {
+            while (match = SourceMap._mappingRegExp.exec(this.raw.mappings)) {
                 if (match[1]) {
-                    const segment = decodeVLQ(match[1]);
+                    const segment = SourceMap._decodeVLQ(match[1]);
                     if (segment.length !== 1 && segment.length !== 4 && segment.length !== 5) {
                         throw new Error("Invalid VLQ");
                     }
@@ -120,14 +124,14 @@ namespace documents {
         public static getUrl(text: string) {
             let match: RegExpExecArray | null;
             let lastMatch: RegExpExecArray | undefined;
-            while (match = sourceMappingURLRegExp.exec(text)) {
+            while (match = SourceMap._sourceMappingURLRegExp.exec(text)) {
                 lastMatch = match;
             }
             return lastMatch ? lastMatch[1] : undefined;
         }
 
         public static fromUrl(url: string) {
-            const match = dataURLRegExp.exec(url);
+            const match = SourceMap._dataURLRegExp.exec(url);
             return match ? new SourceMap(/*mapFile*/ undefined, new Buffer(match[1], "base64").toString("utf8")) : undefined;
         }
 
@@ -144,26 +148,24 @@ namespace documents {
             const mappingsForSource = this._sourceLineMappings[sourceIndex];
             return mappingsForSource && mappingsForSource[sourceLine];
         }
-    }
 
-    const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-    export function decodeVLQ(text: string) {
-        const vlq: number[] = [];
-        let shift = 0;
-        let value = 0;
-        for (let i = 0; i < text.length; i++) {
-            const currentByte = base64Chars.indexOf(text.charAt(i));
-            value += (currentByte & 31) << shift;
-            if ((currentByte & 32) === 0) {
-                vlq.push(value & 1 ? -(value >>> 1) : value >>> 1);
-                shift = 0;
-                value = 0;
+        private static _decodeVLQ(text: string): number[] {
+            const vlq: number[] = [];
+            let shift = 0;
+            let value = 0;
+            for (let i = 0; i < text.length; i++) {
+                const currentByte = SourceMap._base64Chars.indexOf(text.charAt(i));
+                value += (currentByte & 31) << shift;
+                if ((currentByte & 32) === 0) {
+                    vlq.push(value & 1 ? -(value >>> 1) : value >>> 1);
+                    shift = 0;
+                    value = 0;
+                }
+                else {
+                    shift += 5;
+                }
             }
-            else {
-                shift += 5;
-            }
+            return vlq;
         }
-        return vlq;
     }
 }

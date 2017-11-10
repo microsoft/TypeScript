@@ -1,26 +1,9 @@
+/// <reference path="./core.ts" />
+
+// NOTE: The contents of this file are all exported from the namespace 'core'. This is to
+//       support the eventual conversion of harness into a modular system.
+
 namespace utils {
-    export function identity<T>(v: T) { return v; }
-
-    export function getByteOrderMarkLength(text: string) {
-        if (text.length >= 2) {
-            const ch0 = text.charCodeAt(0);
-            const ch1 = text.charCodeAt(1);
-            if ((ch0 === 0xff && ch1 === 0xfe) ||
-                (ch0 === 0xfe && ch1 === 0xff)) {
-                return 2;
-            }
-            if (text.length >= 3 && ch0 === 0xef && ch1 === 0xbb && text.charCodeAt(2) === 0xbf) {
-                return 3;
-            }
-        }
-        return 0;
-    }
-
-    export function removeByteOrderMark(text: string) {
-        const length = getByteOrderMarkLength(text);
-        return length ? text.slice(length) : text;
-    }
-
     const leadingCommentRegExp = /^(\s*\/\*[^]*?\*\/\s*|\s*\/\/[^\r\n\u2028\u2029]*[\r\n\u2028\u2029]*)+/;
     const trailingCommentRegExp = /(\s*\/\*[^]*?\*\/\s*|\s*\/\/[^\r\n\u2028\u2029]*[\r\n\u2028\u2029]*)+$/;
     const leadingAndTrailingCommentRegExp = /^(\s*\/\*[^]*?\*\/\s*|\s*\/\/[^\r\n\u2028\u2029]*[\r\n\u2028\u2029]*)+|(\s*\/\*[^]*?\*\/\s*|\s*\/\/[^\r\n\u2028\u2029]*[\r\n\u2028\u2029]*)+$/g;

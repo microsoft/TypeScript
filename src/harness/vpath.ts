@@ -1,11 +1,13 @@
 /// <reference path="./harness.ts" />
-namespace vpath {
-    // NOTE: Some of the functions here duplicate functionality from compiler/core.ts. They have been added
-    //       to reduce the number of direct dependencies on compiler and services to eventually break away
-    //       from depending directly on the compiler to speed up compilation time.
 
-    import compareValues = collections.compareNumbers;
-    import compareStrings = collections.compareStrings;
+// NOTE: The contents of this file are all exported from the namespace 'vpath'. This is to
+//       support the eventual conversion of harness into a modular system.
+
+// NOTE: Some of the functions here duplicate functionality from compiler/core.ts. They have been
+//       added to reduce the number of direct dependencies on compiler and services to eventually
+//       break away from depending directly on the compiler to speed up compilation time.
+
+namespace vpath {
 
     /**
      * Virtual path separator.
@@ -101,10 +103,7 @@ namespace vpath {
         return normalize(combine(path, ...paths));
     }
 
-    /**
-     * Gets a relative path that can be used to traverse between `from` and `to`.
-     */
-    export function relative(from: string, to: string, ignoreCase: boolean) {
+    function relativeWorker(from: string, to: string, stringEqualityComparer: core.EqualityComparer<string>) {
         if (!isAbsolute(from)) throw new Error("Path not absolute");
         if (!isAbsolute(to)) throw new Error("Path not absolute");
 
@@ -113,7 +112,7 @@ namespace vpath {
 
         let start: number;
         for (start = 0; start < fromComponents.length && start < toComponents.length; start++) {
-            if (compareStrings(fromComponents[start], toComponents[start], ignoreCase)) {
+            if (stringEqualityComparer(fromComponents[start], toComponents[start])) {
                 break;
             }
         }
@@ -130,10 +129,22 @@ namespace vpath {
         return format(["", ...components]);
     }
 
+    function relativeCaseSensitive(from: string, to: string) {
+        return relativeWorker(from, to, core.equateStringsCaseSensitive);
+    }
+
+    function relativeCaseInsensitive(from: string, to: string) {
+        return relativeWorker(from, to, core.equateStringsCaseInsensitive);
+    }
+
     /**
-     * Compare two paths.
+     * Gets a relative path that can be used to traverse between `from` and `to`.
      */
-    export function compare(a: string, b: string, ignoreCase: boolean) {
+    export function relative(from: string, to: string, ignoreCase: boolean) {
+        return ignoreCase ? relativeCaseInsensitive(from, to) : relativeCaseSensitive(from, to);
+    }
+
+    function compareWorker(a: string, b: string, stringComparer: core.Comparer<string>) {
         if (a === b) return 0;
         a = removeTrailingSeparator(a);
         b = removeTrailingSeparator(b);
@@ -142,21 +153,32 @@ namespace vpath {
         const bComponents = reduce(parse(b));
         const len = Math.min(aComponents.length, bComponents.length);
         for (let i = 0; i < len; i++) {
-            const result = compareStrings(aComponents[i], bComponents[i], ignoreCase);
+            const result = stringComparer(aComponents[i], bComponents[i]);
             if (result !== 0) return result;
         }
-        return compareValues(aComponents.length, bComponents.length);
+        return core.compareNumbers(aComponents.length, bComponents.length);
     }
 
     /**
      * Performs a case-sensitive comparison of two paths.
      */
-    export function compareCaseSensitive(a: string, b: string) { return compare(a, b, /*ignoreCase*/ false); }
+    export function compareCaseSensitive(a: string, b: string) {
+        return compareWorker(a, b, core.compareStringsCaseSensitive);
+    }
 
     /**
      * Performs a case-insensitive comparison of two paths.
      */
-    export function compareCaseInsensitive(a: string, b: string) { return compare(a, b, /*ignoreCase*/ true); }
+    export function compareCaseInsensitive(a: string, b: string) {
+        return compareWorker(a, b, core.compareStringsCaseInsensitive);
+    }
+
+    /**
+     * Compare two paths.
+     */
+    export function compare(a: string, b: string, ignoreCase: boolean) {
+        return ignoreCase ? compareCaseInsensitive(a, b) : compareCaseSensitive(a, b);
+    }
 
     /**
      * Determines whether two strings are equal.
@@ -174,22 +196,33 @@ namespace vpath {
         return ignoreCase && a.toUpperCase() === b.toUpperCase();
     }
 
-    /**
-     * Determines whether the path `descendant` is beneath the path `ancestor`.
-     */
-    export function beneath(ancestor: string, descendant: string, ignoreCase: boolean) {
+    function beneathWorker(ancestor: string, descendant: string, stringEqualityComparer: ts.EqualityComparer<string>) {
         if (!isAbsolute(ancestor)) throw new Error("Path not absolute");
         if (!isAbsolute(descendant)) throw new Error("Path not absolute");
         const ancestorComponents = reduce(parse(ancestor));
         const descendantComponents = reduce(parse(descendant));
         if (descendantComponents.length < ancestorComponents.length) return false;
-        const equalityComparer = ignoreCase ? collections.equateStringsCaseInsensitive : collections.equateStringsCaseSensitive;
         for (let i = 0; i < ancestorComponents.length; i++) {
-            if (!equalityComparer(ancestorComponents[i], descendantComponents[i])) {
+            if (!stringEqualityComparer(ancestorComponents[i], descendantComponents[i])) {
                 return false;
             }
         }
         return true;
+    }
+
+    function beneathCaseSensitive(ancestor: string, descendant: string) {
+        return beneathWorker(ancestor, descendant, core.equateStringsCaseSensitive);
+    }
+
+    function beneathCaseInsensitive(ancestor: string, descendant: string) {
+        return beneathWorker(ancestor, descendant, core.equateStringsCaseInsensitive);
+    }
+
+    /**
+     * Determines whether the path `descendant` is beneath the path `ancestor`.
+     */
+    export function beneath(ancestor: string, descendant: string, ignoreCase: boolean) {
+        return ignoreCase ? beneathCaseInsensitive(ancestor, descendant) : beneathCaseSensitive(ancestor, descendant);
     }
 
     /**
@@ -239,6 +272,21 @@ namespace vpath {
 
     const extRegExp = /\.\w+$/;
 
+    function extnameWorker(path: string, extensions: string | string[], stringEqualityComparer: core.EqualityComparer<string>) {
+        const manyExtensions = Array.isArray(extensions) ? extensions : undefined;
+        const singleExtension = Array.isArray(extensions) ? undefined : extensions;
+        const length = manyExtensions ? manyExtensions.length : 1;
+        for (let i = 0; i < length; i++) {
+            let extension = manyExtensions ? manyExtensions[i] : singleExtension;
+            if (!extension.startsWith(".")) extension = "." + extension;
+            if (path.length >= extension.length &&
+                stringEqualityComparer(path.slice(path.length - extension.length), extension)) {
+                return extension;
+            }
+        }
+        return "";
+    }
+
     /**
      * Gets the file extension for a path.
      */
@@ -249,19 +297,7 @@ namespace vpath {
     export function extname(path: string, extensions: string | string[], ignoreCase: boolean): string;
     export function extname(path: string, extensions?: string | string[], ignoreCase?: boolean) {
         if (extensions) {
-            const manyExtensions = Array.isArray(extensions) ? extensions : undefined;
-            const singleExtension = Array.isArray(extensions) ? undefined : extensions;
-            const length = manyExtensions ? manyExtensions.length : 1;
-            const comparer = ignoreCase ? collections.compareStringsCaseInsensitive : collections.compareStringsCaseSensitive;
-            for (let i = 0; i < length; i++) {
-                let extension = manyExtensions ? manyExtensions[i] : singleExtension;
-                if (!extension.startsWith(".")) extension = "." + extension;
-                if (path.length >= extension.length &&
-                    comparer(path.slice(path.length - extension.length), extension) === 0) {
-                    return extension;
-                }
-            }
-            return "";
+            return extnameWorker(path, extensions, ignoreCase ? core.equateStringsCaseInsensitive : core.equateStringsCaseSensitive);
         }
 
         const match = extRegExp.exec(path);

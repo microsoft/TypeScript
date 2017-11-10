@@ -1,32 +1,30 @@
 /// <reference path="./harness.ts" />
 /// <reference path="./documents.ts" />
-/// <reference path="./collections.ts" />
+/// <reference path="./core.ts" />
 /// <reference path="./vpath.ts" />
 /// <reference path="./vfs.ts" />
 /// <reference path="./utils.ts" />
 
-namespace compiler {
-    import TextDocument = documents.TextDocument;
-    import SourceMap = documents.SourceMap;
-    import KeyedCollection = collections.KeyedCollection;
-    import VirtualFileSystem = vfs.VirtualFileSystem;
+// NOTE: The contents of this file are all exported from the namespace 'compiler'. This is to
+//       support the eventual conversion of harness into a modular system.
 
+namespace compiler {
     export class CompilerHost {
         public readonly vfs: vfs.VirtualFileSystem;
         public readonly defaultLibLocation: string;
-        public readonly outputs: TextDocument[] = [];
+        public readonly outputs: documents.TextDocument[] = [];
         public readonly traces: string[] = [];
         public readonly shouldAssertInvariants = !Harness.lightMode;
 
         private _setParentNodes: boolean;
-        private _sourceFiles: KeyedCollection<string, ts.SourceFile>;
+        private _sourceFiles: core.KeyedCollection<string, ts.SourceFile>;
         private _newLine: string;
         private _parseConfigHost: ParseConfigHost;
 
-        constructor(vfs: VirtualFileSystem, options: ts.CompilerOptions, setParentNodes = false) {
+        constructor(vfs: vfs.VirtualFileSystem, options: ts.CompilerOptions, setParentNodes = false) {
             this.vfs = vfs;
             this.defaultLibLocation = vfs.metadata.get("defaultLibLocation") || "";
-            this._sourceFiles = new KeyedCollection<string, ts.SourceFile>(this.vfs.pathComparer);
+            this._sourceFiles = new core.KeyedCollection<string, ts.SourceFile>(this.vfs.pathComparer);
             this._newLine = options.newLine === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
             this._setParentNodes = setParentNodes;
         }
@@ -66,7 +64,7 @@ namespace compiler {
 
         public readFile(path: string): string | undefined {
             const entry = this.vfs.getFile(path);
-            const content = entry && entry.content && utils.removeByteOrderMark(entry.content);
+            const content = entry && entry.content && core.removeByteOrderMark(entry.content);
             return content === undefined ? undefined :
                 vpath.extname(path) === ".json" ? utils.removeComments(content, utils.CommentRemoval.leadingAndTrailing) :
                 content;
@@ -77,7 +75,7 @@ namespace compiler {
             if (writeByteOrderMark) content = "\u00EF\u00BB\u00BF" + content;
             const entry = this.vfs.addFile(fileName, content, { overwrite: true });
             if (entry) {
-                const document = new TextDocument(fileName, content);
+                const document = new documents.TextDocument(fileName, content);
                 document.meta.set("fileName", fileName);
                 entry.metadata.set("document", document);
                 const index = this.outputs.findIndex(output => this.vfs.pathComparer(document.file, output.file) === 0);
@@ -115,7 +113,7 @@ namespace compiler {
             if (file) {
                 let content = file.content;
                 if (content !== undefined) {
-                    content = utils.removeByteOrderMark(content);
+                    content = core.removeByteOrderMark(content);
 
                     // We cache and reuse source files for files we know shouldn't change.
                     const shouldCache = vpath.isDefaultLibrary(fileName) ||
@@ -153,9 +151,9 @@ namespace compiler {
     }
 
     export class ParseConfigHost {
-        public readonly vfs: VirtualFileSystem;
+        public readonly vfs: vfs.VirtualFileSystem;
 
-        constructor(vfs: VirtualFileSystem) {
+        constructor(vfs: vfs.VirtualFileSystem) {
             this.vfs = vfs;
         }
 
@@ -218,10 +216,10 @@ namespace compiler {
     }
 
     export interface CompilationOutput {
-        readonly input: TextDocument;
-        readonly js: TextDocument | undefined;
-        readonly dts: TextDocument | undefined;
-        readonly map: TextDocument | undefined;
+        readonly input: documents.TextDocument;
+        readonly js: documents.TextDocument | undefined;
+        readonly dts: documents.TextDocument | undefined;
+        readonly map: documents.TextDocument | undefined;
     }
 
     export class CompilationResult {
@@ -230,12 +228,12 @@ namespace compiler {
         public readonly result: ts.EmitResult | undefined;
         public readonly options: ts.CompilerOptions;
         public readonly diagnostics: ts.Diagnostic[];
-        public readonly js: KeyedCollection<string, TextDocument>;
-        public readonly dts: KeyedCollection<string, TextDocument>;
-        public readonly maps: KeyedCollection<string, TextDocument>;
+        public readonly js: core.KeyedCollection<string, documents.TextDocument>;
+        public readonly dts: core.KeyedCollection<string, documents.TextDocument>;
+        public readonly maps: core.KeyedCollection<string, documents.TextDocument>;
 
-        private _inputs: TextDocument[] = [];
-        private _inputsAndOutputs: KeyedCollection<string, CompilationOutput>;
+        private _inputs: documents.TextDocument[] = [];
+        private _inputsAndOutputs: core.KeyedCollection<string, CompilationOutput>;
 
         constructor(host: CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ts.Diagnostic[]) {
             this.host = host;
@@ -245,9 +243,9 @@ namespace compiler {
             this.options = program ? program.getCompilerOptions() : options;
 
             // collect outputs
-            this.js = new KeyedCollection<string, TextDocument>(this.vfs.pathComparer);
-            this.dts = new KeyedCollection<string, TextDocument>(this.vfs.pathComparer);
-            this.maps = new KeyedCollection<string, TextDocument>(this.vfs.pathComparer);
+            this.js = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
+            this.dts = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
+            this.maps = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
             for (const document of this.host.outputs) {
                 if (vpath.isJavaScript(document.file)) {
                     this.js.set(document.file, document);
@@ -261,11 +259,11 @@ namespace compiler {
             }
 
             // correlate inputs and outputs
-            this._inputsAndOutputs = new KeyedCollection<string, CompilationOutput>(this.vfs.pathComparer);
+            this._inputsAndOutputs = new core.KeyedCollection<string, CompilationOutput>(this.vfs.pathComparer);
             if (program) {
                 for (const sourceFile of program.getSourceFiles()) {
                     if (sourceFile) {
-                        const input = new TextDocument(sourceFile.fileName, sourceFile.text);
+                        const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
                         this._inputs.push(input);
                         if (!vpath.isDeclaration(sourceFile.fileName)) {
                             const outputs = {
@@ -289,11 +287,11 @@ namespace compiler {
             return this.host.vfs;
         }
 
-        public get inputs(): ReadonlyArray<TextDocument> {
+        public get inputs(): ReadonlyArray<documents.TextDocument> {
             return this._inputs;
         }
 
-        public get outputs(): ReadonlyArray<TextDocument> {
+        public get outputs(): ReadonlyArray<documents.TextDocument> {
             return this.host.outputs;
         }
 
@@ -318,25 +316,25 @@ namespace compiler {
             return this._inputsAndOutputs.get(vpath.resolve(this.vfs.currentDirectory, path));
         }
 
-        public getInput(path: string): TextDocument | undefined {
+        public getInput(path: string): documents.TextDocument | undefined {
             const outputs = this.getInputsAndOutputs(path);
             return outputs && outputs.input;
         }
 
-        public getOutput(path: string, kind: "js" | "dts" | "map"): TextDocument | undefined {
+        public getOutput(path: string, kind: "js" | "dts" | "map"): documents.TextDocument | undefined {
             const outputs = this.getInputsAndOutputs(path);
             return outputs && outputs[kind];
         }
 
-        public getSourceMap(path: string): SourceMap | undefined {
+        public getSourceMap(path: string): documents.SourceMap | undefined {
             if (this.options.noEmit || vpath.isDeclaration(path)) return undefined;
             if (this.options.inlineSourceMap) {
                 const document = this.getOutput(path, "js");
-                return document && SourceMap.fromSource(document.text);
+                return document && documents.SourceMap.fromSource(document.text);
             }
             if (this.options.sourceMap) {
                 const document = this.getOutput(path, "map");
-                return document && new SourceMap(document.file, document.text);
+                return document && new documents.SourceMap(document.file, document.text);
             }
         }
 

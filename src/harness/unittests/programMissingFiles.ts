@@ -42,7 +42,7 @@ namespace ts {
 
         const testCompilerHost = new compiler.CompilerHost(
             vfs.VirtualFileSystem.createFromTestFiles(
-                { useCaseSensitiveFileNames: false, currentDirectory: "d:\\pretend\\" }, 
+                { useCaseSensitiveFileNames: false, currentDirectory: "d:\\pretend\\" },
                 [emptyFile, referenceFile]),
             { newLine: NewLineKind.LineFeed });
 

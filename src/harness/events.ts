@@ -1,4 +1,8 @@
 /// <reference path="./harness.ts" />
+
+// NOTE: The contents of this file are all exported from the namespace 'events'. This is to
+//       support the eventual conversion of harness into a modular system.
+
 namespace events {
     const _events = require("events");
 

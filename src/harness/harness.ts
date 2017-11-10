@@ -1222,8 +1222,8 @@ namespace Harness {
 
             const fileOutputs = compilation.outputs ? compilation.outputs.map(output => (<GeneratedFile>{
                 fileName: output.file,
-                code: utils.removeByteOrderMark(output.text),
-                writeByteOrderMark: utils.getByteOrderMarkLength(output.text) > 0
+                code: core.removeByteOrderMark(output.text),
+                writeByteOrderMark: core.getByteOrderMarkLength(output.text) > 0
             })) : [];
 
             const traceResults = compilation.traces && compilation.traces.slice();
@@ -1856,13 +1856,15 @@ namespace Harness {
             return opts;
         }
 
-        /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): {
+        export interface TestCaseContent {
             settings: CompilerSettings;
             testUnitData: TestUnitData[];
             tsConfig: ts.ParsedCommandLine;
             tsConfigFileUnitData: TestUnitData;
-        } {
+        }
+
+        /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
+        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): TestCaseContent {
             const settings = extractCompilerSettings(code);
 
             // List of all the subfiles we've parsed out
