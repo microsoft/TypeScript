@@ -46,7 +46,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     if (update.status !== 0) throw new Error(`git submodule update for ${directoryName} failed!`);
 
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
-                    ts.Debug.assert(!!config.types, "Git is the only reason for using test.json right now");
+                    ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
                     types = config.types;
 
                     cwd = path.join(cwd, directoryName);
