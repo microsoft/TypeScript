@@ -42,7 +42,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                 const stdio = isWorker ? "pipe" : "inherit";
                 let types: string[];
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
-                    const update = cp.spawnSync('git', ["submodule", "update", "--remote"], { cwd, timeout, shell: true, stdio })
+                    const update = cp.spawnSync("git", ["submodule", "update", "--remote"], { cwd, timeout, shell: true, stdio });
                     if (update.status !== 0) throw new Error(`git submodule update for ${directoryName} failed!`);
 
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
