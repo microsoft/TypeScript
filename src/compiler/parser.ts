@@ -536,10 +536,12 @@ namespace ts {
         let Fail: Fail;
         let FailList: FailList;
         function isFail(x: Node | undefined): x is Fail {
-            return !!x && x.kind === SyntaxKind.Unknown;
+            Debug.assert(Fail !== undefined);
+            return x === Fail;
         }
         function isFailList(x: NodeArray<Node> | undefined): x is FailList {
-            return !!x && x.pos === -1;
+            Debug.assert(Fail !== undefined);
+            return x === FailList;
         }
         // tslint:enable variable-name
 
@@ -2315,7 +2317,7 @@ namespace ts {
             //      BindingElement[?Yield,?Await]
             const name = parseIdentifierOrPattern(inSpeculation);
             if (isFail(name)) {
-                return name;
+                return Fail;
             }
             node.name = name;
             if (getFullWidth(node.name) === 0 && !hasModifiers(node) && isModifierKind(token())) {
@@ -2334,7 +2336,7 @@ namespace ts {
             node.type = parseParameterType();
             const initializer = parseInitializer(/*inParameter*/ true, inSpeculation);
             if (isFail(initializer)) {
-                return initializer;
+                return Fail;
             }
             node.initializer = initializer;
 
@@ -5277,12 +5279,12 @@ namespace ts {
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             const name = parseIdentifierOrPattern(inSpeculation);
             if (isFail(name)) {
-                return name;
+                return Fail;
             }
             node.name = name;
             const init = parseInitializer(/*inParameter*/ false, inSpeculation);
             if (isFail(init)) {
-                return init;
+                return Fail;
             }
             node.initializer = init;
             return finishNode(node);
@@ -5307,13 +5309,13 @@ namespace ts {
                 node.propertyName = propertyName;
                 const name = parseIdentifierOrPattern(inSpeculation);
                 if (isFail(name)) {
-                    return name;
+                    return Fail;
                 }
                 node.name = name;
             }
             const init = parseInitializer(/*inParameter*/ false, inSpeculation);
             if (isFail(init)) {
-                return init;
+                return Fail;
             }
             node.initializer = init;
             return finishNode(node);
