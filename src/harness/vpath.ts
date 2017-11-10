@@ -59,7 +59,7 @@ namespace vpath {
         return hasTrailingSeparator(path) ? path.slice(0, -1) : path;
     }
 
-    function reduce(components: string[]) {
+    function reduce(components: ReadonlyArray<string>) {
         const normalized = [components[0]];
         for (let i = 1; i < components.length; i++) {
             const component = components[i];
@@ -242,7 +242,7 @@ namespace vpath {
     /**
      * Formats a parsed path consisting of a root component and zero or more path segments.
      */
-    export function format(components: string[]) {
+    export function format(components: ReadonlyArray<string>) {
         return components.length ? components[0] + components.slice(1).join(sep) : "";
     }
 
@@ -262,30 +262,32 @@ namespace vpath {
      * Gets the portion of a path following the last separator (`/`).
      * If the base name has any one of the provided extensions, it is removed.
      */
-    export function basename(path: string, extensions: string | string[], ignoreCase: boolean): string;
-    export function basename(path: string, extensions?: string | string[], ignoreCase?: boolean) {
+    export function basename(path: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
+    export function basename(path: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
         path = normalizeSeparators(path);
         const name = path.substr(Math.max(getRootLength(path), path.lastIndexOf(sep) + 1));
         const extension = extensions ? extname(path, extensions, ignoreCase) : undefined;
         return extension ? name.slice(0, name.length - extension.length) : name;
     }
 
-    const extRegExp = /\.\w+$/;
-
-    function extnameWorker(path: string, extensions: string | string[], stringEqualityComparer: core.EqualityComparer<string>) {
+    function extnameWorker(path: string, extensions: string | ReadonlyArray<string>, stringEqualityComparer: core.EqualityComparer<string>) {
         const manyExtensions = Array.isArray(extensions) ? extensions : undefined;
         const singleExtension = Array.isArray(extensions) ? undefined : extensions;
         const length = manyExtensions ? manyExtensions.length : 1;
         for (let i = 0; i < length; i++) {
             let extension = manyExtensions ? manyExtensions[i] : singleExtension;
             if (!extension.startsWith(".")) extension = "." + extension;
-            if (path.length >= extension.length &&
-                stringEqualityComparer(path.slice(path.length - extension.length), extension)) {
-                return extension;
+            if (path.length >= extension.length && path.charAt(path.length - extension.length) === ".") {
+                const pathExtension = path.slice(path.length - extension.length);
+                if (stringEqualityComparer(pathExtension, extension)) {
+                    return pathExtension;
+                }
             }
         }
         return "";
     }
+
+    const extRegExp = /\.\w+$/;
 
     /**
      * Gets the file extension for a path.
@@ -294,8 +296,8 @@ namespace vpath {
     /**
      * Gets the file extension for a path, provided it is one of the provided extensions.
      */
-    export function extname(path: string, extensions: string | string[], ignoreCase: boolean): string;
-    export function extname(path: string, extensions?: string | string[], ignoreCase?: boolean) {
+    export function extname(path: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
+    export function extname(path: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
         if (extensions) {
             return extnameWorker(path, extensions, ignoreCase ? core.equateStringsCaseInsensitive : core.equateStringsCaseSensitive);
         }
@@ -305,32 +307,40 @@ namespace vpath {
     }
 
     export function changeExtension(path: string, ext: string): string;
-    export function changeExtension(path: string, ext: string, extensions: string | string[], ignoreCase: boolean): string;
-    export function changeExtension(path: string, ext: string, extensions?: string | string[], ignoreCase?: boolean) {
+    export function changeExtension(path: string, ext: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
+    export function changeExtension(path: string, ext: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
         const pathext = extensions ? extname(path, extensions, ignoreCase) : extname(path);
         return pathext ? path.slice(0, path.length - pathext.length) + (ext.startsWith(".") ? ext : "." + ext) : path;
     }
 
+    const typeScriptExtensions: ReadonlyArray<string> = [".ts", ".tsx"];
+
     export function isTypeScript(path: string) {
-        return path.endsWith(".ts")
-            || path.endsWith(".tsx");
+        return extname(path, typeScriptExtensions, /*ignoreCase*/ false).length > 0;
     }
 
+    const javaScriptExtensions: ReadonlyArray<string> = [".js", ".jsx"];
+
     export function isJavaScript(path: string) {
-        return path.endsWith(".js")
-            || path.endsWith(".jsx");
+        return extname(path, javaScriptExtensions, /*ignoreCase*/ false).length > 0;
     }
 
     export function isDeclaration(path: string) {
-        return path.endsWith(".d.ts");
+        return extname(path, ".d.ts", /*ignoreCase*/ false).length > 0;
     }
 
     export function isSourceMap(path: string) {
-        return path.endsWith(".map");
+        return extname(path, ".map", /*ignoreCase*/ false).length > 0;
+    }
+
+    const javaScriptSourceMapExtensions: ReadonlyArray<string> = [".js.map", ".jsx.map"];
+
+    export function isJavaScriptSourceMap(path: string) {
+        return extname(path, javaScriptSourceMapExtensions, /*ignoreCase*/ false).length > 0;
     }
 
     export function isJson(path: string) {
-        return path.endsWith(".json");
+        return extname(path, ".json", /*ignoreCase*/ false).length > 0;
     }
 
     export function isDefaultLibrary(path: string) {

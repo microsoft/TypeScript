@@ -1,5 +1,6 @@
-///<reference path="harness.ts" />
-///<reference path="runnerbase.ts" />
+/// <reference path="harness.ts" />
+/// <reference path="runnerbase.ts" />
+/// <reference path="./vpath.ts" />
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -319,19 +320,19 @@ class ProjectRunner extends RunnerBase {
                     // we need to instead create files that can live in the project reference folder
                     // but make sure extension of these files matches with the fileName the compiler asked to write
                     diskRelativeName = "diskFile" + nonSubfolderDiskFiles +
-                    (Harness.Compiler.isDTS(fileName) ? ts.Extension.Dts :
-                    Harness.Compiler.isJS(fileName) ? ts.Extension.Js : ".js.map");
+                    (vpath.isDeclaration(fileName) ? ts.Extension.Dts :
+                    vpath.isJavaScript(fileName) ? ts.Extension.Js : ".js.map");
                     nonSubfolderDiskFiles++;
                 }
 
-                if (Harness.Compiler.isJS(fileName)) {
+                if (vpath.isJavaScript(fileName)) {
                     // Make sure if there is URl we have it cleaned up
                     const indexOfSourceMapUrl = data.lastIndexOf(`//# ${"sourceMappingURL"}=`); // This line can be seen as a sourceMappingURL comment
                     if (indexOfSourceMapUrl !== -1) {
                         data = data.substring(0, indexOfSourceMapUrl + 21) + cleanProjectUrl(data.substring(indexOfSourceMapUrl + 21));
                     }
                 }
-                else if (Harness.Compiler.isJSMap(fileName)) {
+                else if (vpath.isJavaScriptSourceMap(fileName)) {
                     // Make sure sources list is cleaned
                     const sourceMapData = JSON.parse(data);
                     for (let i = 0; i < sourceMapData.sources.length; i++) {

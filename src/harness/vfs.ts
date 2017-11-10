@@ -1,8 +1,9 @@
 /// <reference path="../compiler/commandLineParser.ts"/>
 /// <reference path="./harness.ts" />
 /// <reference path="./core.ts" />
-/// <reference path="./vpath.ts" />
 /// <reference path="./events.ts" />
+/// <reference path="./vpath.ts" />
+/// <reference path="./documents.ts" />
 
 // NOTE: The contents of this file are all exported from the namespace 'vfs'. This is to
 //       support the eventual conversion of harness into a modular system.
@@ -190,7 +191,7 @@ namespace vfs {
         }
 
         /**
-         * Gets a virtual file system with the following directories:
+         * Gets a read-only virtual file system with the following directories:
          *
          * | path   | physical/virtual      |
          * |:-------|:----------------------|
@@ -198,7 +199,7 @@ namespace vfs {
          * | /.lib  | physical: tests/lib   |
          * | /.src  | virtual               |
          */
-        public static getBuiltLocal(useCaseSensitiveFileNames: boolean = Harness.IO.useCaseSensitiveFileNames()): VirtualFileSystem {
+        public static getBuiltLocal(useCaseSensitiveFileNames: boolean): VirtualFileSystem {
             let vfs = useCaseSensitiveFileNames ? this._builtLocalCS : this._builtLocalCI;
             if (!vfs) {
                 vfs = this._builtLocal;
@@ -228,27 +229,24 @@ namespace vfs {
             return vfs;
         }
 
-        public static createFromOptions(options: { useCaseSensitiveFileNames?: boolean, currentDirectory?: string }) {
-            const vfs = this.getBuiltLocal(options.useCaseSensitiveFileNames).shadow();
-            if (options.currentDirectory) {
+        public static createFromDocuments(useCaseSensitiveFileNames: boolean, documents: documents.TextDocument[], options?: { currentDirectory?: string, overwrite?: boolean }) {
+            const vfs = this.getBuiltLocal(useCaseSensitiveFileNames).shadow();
+            if (options && options.currentDirectory) {
                 vfs.addDirectory(options.currentDirectory);
                 vfs.changeDirectory(options.currentDirectory);
             }
-            return vfs;
-        }
 
-        public static createFromTestFiles(options: { useCaseSensitiveFileNames?: boolean, currentDirectory?: string }, documents: Harness.Compiler.TestFile[], fileOptions?: { overwrite?: boolean }) {
-            const vfs = this.createFromOptions(options);
+            const fileOptions = options && options.overwrite ? { overwrite: true } : undefined;
             for (const document of documents) {
-                const file = vfs.addFile(document.unitName, document.content, fileOptions)!;
-                assert.isDefined(file, `Failed to add file: '${document.unitName}'`);
+                const file = vfs.addFile(document.file, document.text, fileOptions)!;
+                assert.isDefined(file, `Failed to add file: '${document.file}'`);
                 file.metadata.set("document", document);
                 // Add symlinks
-                const symlink = document.fileOptions && document.fileOptions.symlink;
+                const symlink = document.meta.get("symlink");
                 if (file && symlink) {
                     for (const link of symlink.split(",")) {
                         const symlink = vfs.addSymlink(vpath.resolve(vfs.currentDirectory, link.trim()), file)!;
-                        assert.isDefined(symlink, `Failed to symlink: '${link}'`);
+                        assert.isDefined(symlink, `Failed to create symlink: '${link}'`);
                         symlink.metadata.set("document", document);
                     }
                 }

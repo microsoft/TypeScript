@@ -227,13 +227,21 @@ namespace compiler {
         public readonly program: ts.Program | undefined;
         public readonly result: ts.EmitResult | undefined;
         public readonly options: ts.CompilerOptions;
-        public readonly diagnostics: ts.Diagnostic[];
-        public readonly js: core.KeyedCollection<string, documents.TextDocument>;
-        public readonly dts: core.KeyedCollection<string, documents.TextDocument>;
-        public readonly maps: core.KeyedCollection<string, documents.TextDocument>;
+        public readonly diagnostics: ReadonlyArray<ts.Diagnostic>;
+        public readonly js: core.ReadonlyKeyedCollection<string, documents.TextDocument>;
+        public readonly dts: core.ReadonlyKeyedCollection<string, documents.TextDocument>;
+        public readonly maps: core.ReadonlyKeyedCollection<string, documents.TextDocument>;
 
         private _inputs: documents.TextDocument[] = [];
         private _inputsAndOutputs: core.KeyedCollection<string, CompilationOutput>;
+
+        // from CompilerResult
+        public readonly files: ReadonlyArray<Harness.Compiler.GeneratedFile>;
+        public readonly declFilesCode: ReadonlyArray<Harness.Compiler.GeneratedFile>;
+        public readonly sourceMaps: ReadonlyArray<Harness.Compiler.GeneratedFile>;
+        public readonly errors: ReadonlyArray<ts.Diagnostic>;
+        public readonly currentDirectoryForProgram: string;
+        public readonly traceResults: ReadonlyArray<string>;
 
         constructor(host: CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ts.Diagnostic[]) {
             this.host = host;
@@ -243,18 +251,18 @@ namespace compiler {
             this.options = program ? program.getCompilerOptions() : options;
 
             // collect outputs
-            this.js = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
-            this.dts = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
-            this.maps = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
+            const js = this.js = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
+            const dts = this.dts = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
+            const maps = this.maps = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
             for (const document of this.host.outputs) {
                 if (vpath.isJavaScript(document.file)) {
-                    this.js.set(document.file, document);
+                    js.set(document.file, document);
                 }
                 else if (vpath.isDeclaration(document.file)) {
-                    this.dts.set(document.file, document);
+                    dts.set(document.file, document);
                 }
                 else if (vpath.isSourceMap(document.file)) {
-                    this.maps.set(document.file, document);
+                    maps.set(document.file, document);
                 }
             }
 
@@ -268,9 +276,9 @@ namespace compiler {
                         if (!vpath.isDeclaration(sourceFile.fileName)) {
                             const outputs = {
                                 input,
-                                js: this.js.get(this.getOutputPath(sourceFile.fileName, ts.getOutputExtension(sourceFile, this.options))),
-                                dts: this.dts.get(this.getOutputPath(sourceFile.fileName, ".d.ts", this.options.declarationDir)),
-                                map: this.maps.get(this.getOutputPath(sourceFile.fileName, ts.getOutputExtension(sourceFile, this.options) + ".map"))
+                                js: js.get(this.getOutputPath(sourceFile.fileName, ts.getOutputExtension(sourceFile, this.options))),
+                                dts: dts.get(this.getOutputPath(sourceFile.fileName, ".d.ts", this.options.declarationDir)),
+                                map: maps.get(this.getOutputPath(sourceFile.fileName, ts.getOutputExtension(sourceFile, this.options) + ".map"))
                             };
 
                             this._inputsAndOutputs.set(sourceFile.fileName, outputs);
@@ -281,9 +289,17 @@ namespace compiler {
                     }
                 }
             }
+
+            // from CompilerResult
+            this.files = Array.from(this.js.values(), file => file.asGeneratedFile());
+            this.declFilesCode = Array.from(this.dts.values(), file => file.asGeneratedFile());
+            this.sourceMaps = Array.from(this.maps.values(), file => file.asGeneratedFile());
+            this.errors = diagnostics;
+            this.currentDirectoryForProgram = host.vfs.currentDirectory;
+            this.traceResults = host.traces;
         }
 
-        public get vfs() {
+        public get vfs(): vfs.VirtualFileSystem {
             return this.host.vfs;
         }
 
@@ -326,6 +342,12 @@ namespace compiler {
             return outputs && outputs[kind];
         }
 
+        public getSourceMapRecord(): string | undefined {
+            if (this.result.sourceMaps && this.result.sourceMaps.length > 0) {
+                return Harness.SourceMapRecorder.getSourceMapRecord(this.result.sourceMaps, this.program, this.files);
+            }
+        }
+
         public getSourceMap(path: string): documents.SourceMap | undefined {
             if (this.options.noEmit || vpath.isDeclaration(path)) return undefined;
             if (this.options.inlineSourceMap) {
@@ -338,7 +360,7 @@ namespace compiler {
             }
         }
 
-        public getOutputPath(path: string, ext: string, outDir: string | undefined = this.options.outDir) {
+        public getOutputPath(path: string, ext: string, outDir: string | undefined = this.options.outDir): string {
             if (outDir) {
                 path = vpath.resolve(this.vfs.currentDirectory, path);
                 const common = this.commonSourceDirectory;
@@ -352,8 +374,7 @@ namespace compiler {
         }
     }
 
-    export function compileFiles(host: CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions) {
-        // establish defaults (aligns with old harness)
+    export function compileFiles(host: CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions): CompilationResult {
         if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
             const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
             if (project) {
@@ -368,6 +389,7 @@ namespace compiler {
             delete compilerOptions.project;
         }
 
+        // establish defaults (aligns with old harness)
         if (compilerOptions.target === undefined) compilerOptions.target = ts.ScriptTarget.ES3;
         if (compilerOptions.newLine === undefined) compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;

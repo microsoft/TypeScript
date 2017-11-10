@@ -31,7 +31,7 @@ class Test262BaselineRunner extends RunnerBase {
             // Everything declared here should be cleared out in the "after" callback.
             let testState: {
                 filename: string;
-                compilerResult: Harness.Compiler.CompilerResult;
+                compilerResult: compiler.CompilationResult;
                 inputFiles: Harness.Compiler.TestFile[];
             };
 

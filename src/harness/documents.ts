@@ -10,6 +10,8 @@ namespace documents {
         public readonly text: string;
 
         private _lineStarts: core.LineStarts | undefined;
+        private _testFile: Harness.Compiler.TestFile | undefined;
+        private _generatedFile: Harness.Compiler.GeneratedFile | undefined;
 
         constructor(file: string, text: string, meta?: Map<string, string>) {
             this.file = file;
@@ -19,6 +21,37 @@ namespace documents {
 
         public get lineStarts(): core.LineStarts {
             return this._lineStarts || (this._lineStarts = core.computeLineStarts(this.text));
+        }
+
+        public static fromTestFile(file: Harness.Compiler.TestFile) {
+            return new TextDocument(
+                file.unitName,
+                file.content,
+                file.fileOptions && Object.keys(file.fileOptions)
+                    .reduce((meta, key) => meta.set(key, file.fileOptions[key]), new Map<string, string>()));
+        }
+
+        public asTestFile() {
+            return this._testFile || (this._testFile = {
+                unitName: this.file,
+                content: this.text,
+                fileOptions: Array.from(this.meta)
+                    .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>)
+            });
+        }
+
+        public static fromGeneratedFile(file: Harness.Compiler.GeneratedFile) {
+            return new TextDocument(
+                file.fileName,
+                file.writeByteOrderMark ? core.addUTF8ByteOrderMark(file.code) : file.code);
+        }
+
+        public asGeneratedFile() {
+            return this._generatedFile || (this._generatedFile = {
+                fileName: this.file,
+                code: core.removeByteOrderMark(this.text),
+                writeByteOrderMark: core.getByteOrderMarkLength(this.text) > 0
+            });
         }
     }
 

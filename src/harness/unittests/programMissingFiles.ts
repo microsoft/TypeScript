@@ -1,4 +1,5 @@
 /// <reference path="..\harness.ts" />
+/// <reference path="../documents.ts" />
 /// <reference path="../vfs.ts" />
 
 namespace ts {
@@ -23,27 +24,23 @@ namespace ts {
         const emptyFileName = "empty.ts";
         const emptyFileRelativePath = "./" + emptyFileName;
 
-        const emptyFile: Harness.Compiler.TestFile = {
-            unitName: emptyFileName,
-            content: ""
-        };
+        const emptyFile = new documents.TextDocument(emptyFileName, "");
 
         const referenceFileName = "reference.ts";
         const referenceFileRelativePath = "./" + referenceFileName;
 
-        const referenceFile: Harness.Compiler.TestFile = {
-            unitName: referenceFileName,
-            content:
-                "/// <reference path=\"d:/imaginary/nonexistent1.ts\"/>\n" + // Absolute
-                "/// <reference path=\"./nonexistent2.ts\"/>\n" + // Relative
-                "/// <reference path=\"nonexistent3.ts\"/>\n" + // Unqualified
-                "/// <reference path=\"nonexistent4\"/>\n"   // No extension
-        };
+        const referenceFile = new documents.TextDocument(referenceFileName,
+            "/// <reference path=\"d:/imaginary/nonexistent1.ts\"/>\n" + // Absolute
+            "/// <reference path=\"./nonexistent2.ts\"/>\n" + // Relative
+            "/// <reference path=\"nonexistent3.ts\"/>\n" + // Unqualified
+            "/// <reference path=\"nonexistent4\"/>\n"   // No extension
+        );
 
         const testCompilerHost = new compiler.CompilerHost(
-            vfs.VirtualFileSystem.createFromTestFiles(
-                { useCaseSensitiveFileNames: false, currentDirectory: "d:\\pretend\\" },
-                [emptyFile, referenceFile]),
+            vfs.VirtualFileSystem.createFromDocuments(
+                /*useCaseSensitiveFileNames*/ false,
+                [emptyFile, referenceFile],
+                { currentDirectory: "d:\\pretend\\" }),
             { newLine: NewLineKind.LineFeed });
 
         it("handles no missing root files", () => {

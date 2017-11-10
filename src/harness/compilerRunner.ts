@@ -108,7 +108,7 @@ class CompilerTest {
     private lastUnit: Harness.TestCaseParser.TestUnitData;
     private harnessSettings: Harness.TestCaseParser.CompilerSettings;
     private hasNonDtsFiles: boolean;
-    private result: Harness.Compiler.CompilerResult;
+    private result: compiler.CompilationResult;
     private options: ts.CompilerOptions;
     private tsConfigFiles: Harness.Compiler.TestFile[];
     // equivalent to the files that will be passed on the command line

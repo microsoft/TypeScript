@@ -1,5 +1,3 @@
-/// <reference path="./harness.ts" />
-
 // NOTE: The contents of this file are all exported from the namespace 'core'. This is to
 //       support the eventual conversion of harness into a modular system.
 
@@ -63,10 +61,20 @@ namespace core {
     // Collections
     //
 
+    export interface ReadonlyKeyedCollection<K, V> {
+        readonly size: number;
+        has(key: K): boolean;
+        get(key: K): V | undefined;
+        forEach(callback: (value: V, key: K, collection: this) => void): void;
+        keys(): IterableIterator<K>;
+        values(): IterableIterator<V>;
+        entries(): IterableIterator<[K, V]>;
+    }
+
     /**
      * A collection of key/value pairs internally sorted by key.
      */
-    export class KeyedCollection<K, V> {
+    export class KeyedCollection<K, V> implements ReadonlyKeyedCollection<K, V> {
         private _comparer: (a: K, b: K) => number;
         private _keys: K[] = [];
         private _values: V[] = [];
@@ -101,7 +109,7 @@ namespace core {
                 insertAt(this._keys, ~index, key);
                 insertAt(this._values, ~index, value);
                 insertAt(this._order, ~index, this._version);
-                this._version++;
+                this.writePostScript();
             }
             return this;
         }
@@ -113,7 +121,7 @@ namespace core {
                 removeAt(this._keys, index);
                 removeAt(this._values, index);
                 removeAt(this._order, index);
-                this._version++;
+                this.writePostScript();
                 return true;
             }
             return false;
@@ -125,7 +133,7 @@ namespace core {
                 this._keys.length = 0;
                 this._values.length = 0;
                 this._order.length = 0;
-                this._version = 0;
+                this.writePostScript();
             }
         }
 
@@ -143,6 +151,46 @@ namespace core {
             }
         }
 
+        public * keys() {
+            const keys = this._keys;
+            const order = this.getInsertionOrder();
+            const version = this._version;
+            this._copyOnWrite = true;
+            for (const index of order) {
+                yield keys[index];
+            }
+            if (version === this._version) {
+                this._copyOnWrite = false;
+            }
+        }
+
+        public * values() {
+            const values = this._values;
+            const order = this.getInsertionOrder();
+            const version = this._version;
+            this._copyOnWrite = true;
+            for (const index of order) {
+                yield values[index];
+            }
+            if (version === this._version) {
+                this._copyOnWrite = false;
+            }
+        }
+
+        public * entries() {
+            const keys = this._keys;
+            const values = this._values;
+            const order = this.getInsertionOrder();
+            const version = this._version;
+            this._copyOnWrite = true;
+            for (const index of order) {
+                yield [keys[index], values[index]] as [K, V];
+            }
+            if (version === this._version) {
+                this._copyOnWrite = false;
+            }
+        }
+
         private writePreamble() {
             if (this._copyOnWrite) {
                 this._keys = this._keys.slice();
@@ -152,10 +200,14 @@ namespace core {
             }
         }
 
+        private writePostScript() {
+            this._version++;
+        }
+
         private getInsertionOrder() {
             return this._order
                 .map((_, i) => i)
-                .sort((x, y) => compareNumbers(this._order[x], this._order[y]));
+                .sort((x, y) => this._order[x] - this._order[y]);
         }
     }
 
@@ -323,6 +375,10 @@ namespace core {
     export function removeByteOrderMark(text: string): string {
         const length = getByteOrderMarkLength(text);
         return length ? text.slice(length) : text;
+    }
+
+    export function addUTF8ByteOrderMark(text: string) {
+        return getByteOrderMarkLength(text) === 0 ? "\u00EF\u00BB\u00BF" + text : text;
     }
 
     function splitLinesWorker(text: string, lineStarts: number[] | undefined, lines: string[] | undefined, removeEmptyElements: boolean) {

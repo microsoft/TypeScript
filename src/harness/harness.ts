@@ -482,7 +482,7 @@ namespace Utils {
 }
 
 namespace Harness {
-     // tslint:disable-next-line:interface-name
+    // tslint:disable-next-line:interface-name
     export interface IO {
         newLine(): string;
         getCurrentDirectory(): string;
@@ -1163,7 +1163,7 @@ namespace Harness {
         }
 
         export interface CompilationOutput {
-            result: CompilerResult;
+            result: compiler.CompilationResult;
             options: ts.CompilerOptions & HarnessOptions;
         }
 
@@ -1208,29 +1208,24 @@ namespace Harness {
                 }
             }
 
-            const compilation = compiler.compileFiles(
+            const result = compiler.compileFiles(
                 new compiler.CompilerHost(
-                    vfs.VirtualFileSystem.createFromTestFiles(
-                        { useCaseSensitiveFileNames, currentDirectory },
-                        inputFiles.concat(otherFiles),
-                        { overwrite: true }
+                    vfs.VirtualFileSystem.createFromDocuments(
+                        useCaseSensitiveFileNames,
+                        inputFiles.concat(otherFiles).map(documents.TextDocument.fromTestFile),
+                        { currentDirectory, overwrite: true }
                     ),
                     options
                 ),
                 programFileNames,
                 options);
 
-            const fileOutputs = compilation.outputs ? compilation.outputs.map(output => (<GeneratedFile>{
-                fileName: output.file,
-                code: core.removeByteOrderMark(output.text),
-                writeByteOrderMark: core.getByteOrderMarkLength(output.text) > 0
-            })) : [];
-
-            const traceResults = compilation.traces && compilation.traces.slice();
-            const program = compilation.program;
-            const emitResult = compilation.result;
-            const errors = compilation.diagnostics;
-            const result = new CompilerResult(fileOutputs, errors, program, compilation.vfs.currentDirectory, emitResult.sourceMaps, traceResults);
+            // const fileOutputs = compilation.outputs.map(output => output.asGeneratedFile());
+            // const traceResults = compilation.traces && compilation.traces.slice();
+            // const program = compilation.program;
+            // const emitResult = compilation.result;
+            // const errors = compilation.diagnostics;
+            // const result = new CompilerResult(fileOutputs, errors, program, compilation.vfs.currentDirectory, emitResult.sourceMaps, traceResults);
             return { result, options };
         }
 
@@ -1242,9 +1237,9 @@ namespace Harness {
             currentDirectory: string;
         }
 
-        export function prepareDeclarationCompilationContext(inputFiles: TestFile[],
-            otherFiles: TestFile[],
-            result: CompilerResult,
+        export function prepareDeclarationCompilationContext(inputFiles: ReadonlyArray<TestFile>,
+            otherFiles: ReadonlyArray<TestFile>,
+            result: compiler.CompilationResult,
             harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions,
             options: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
@@ -1264,10 +1259,10 @@ namespace Harness {
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
-                if (isDTS(file.unitName)) {
+                if (vpath.isDeclaration(file.unitName)) {
                     dtsFiles.push(file);
                 }
-                else if (isTS(file.unitName)) {
+                else if (vpath.isTypeScript(file.unitName)) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.fileName, declInputFiles) && !findUnit(declFile.fileName, declOtherFiles)) {
                         dtsFiles.push({ unitName: declFile.fileName, content: declFile.code });
@@ -1465,7 +1460,7 @@ namespace Harness {
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
         }
 
-        export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[], pretty?: boolean) {
+        export function doErrorBaseline(baselinePath: string, inputFiles: ReadonlyArray<TestFile>, errors: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
             Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string => {
                 if (!errors || (errors.length === 0)) {
                     /* tslint:disable:no-null-keyword */
@@ -1611,7 +1606,7 @@ namespace Harness {
             return file.writeByteOrderMark ? "\u00EF\u00BB\u00BF" : "";
         }
 
-        export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: CompilerResult, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
+        export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: compiler.CompilationResult, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
             if (options.inlineSourceMap) {
                 if (result.sourceMaps.length > 0) {
                     throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
@@ -1642,7 +1637,7 @@ namespace Harness {
             }
         }
 
-        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, tsConfigFiles: Harness.Compiler.TestFile[], toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
+        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<Harness.Compiler.TestFile>, toBeCompiled: ReadonlyArray<Harness.Compiler.TestFile>, otherFiles: ReadonlyArray<Harness.Compiler.TestFile>, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
             if (!options.noEmit && result.files.length === 0 && result.errors.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
@@ -1698,7 +1693,7 @@ namespace Harness {
             return "//// [" + fileName + "]\r\n" + getByteOrderMarkText(file) + utils.removeTestPathPrefixes(file.code);
         }
 
-        export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): string {
+        export function collateOutputs(outputFiles: ReadonlyArray<Harness.Compiler.GeneratedFile>): string {
             const gen = iterateOutputs(outputFiles);
             // Emit them
             let result = "";
@@ -1714,9 +1709,9 @@ namespace Harness {
             return result;
         }
 
-        export function *iterateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): IterableIterator<[string, string]> {
+        export function *iterateOutputs(outputFiles: ReadonlyArray<Harness.Compiler.GeneratedFile>): IterableIterator<[string, string]> {
             // Collect, test, and sort the fileNames
-            outputFiles.sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.fileName), cleanName(b.fileName)));
+            outputFiles.slice().sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.fileName), cleanName(b.fileName)));
             const dupeCase = ts.createMap<number>();
             // Yield them
             for (const outputFile of outputFiles) {
@@ -1751,77 +1746,10 @@ namespace Harness {
             return path;
         }
 
-        // This does not need to exist strictly speaking, but many tests will need to be updated if it's removed
-        export function compileString(_code: string, _unitName: string, _callback: (result: CompilerResult) => void) {
-            // NEWTODO: Re-implement 'compileString'
-            return ts.notImplemented();
-        }
-
         export interface GeneratedFile {
             fileName: string;
             code: string;
             writeByteOrderMark: boolean;
-        }
-
-        export function isTS(fileName: string) {
-            return ts.endsWith(fileName, ts.Extension.Ts);
-        }
-
-        export function isTSX(fileName: string) {
-            return ts.endsWith(fileName, ts.Extension.Tsx);
-        }
-
-        export function isDTS(fileName: string) {
-            return ts.endsWith(fileName, ts.Extension.Dts);
-        }
-
-        export function isJS(fileName: string) {
-            return ts.endsWith(fileName, ts.Extension.Js);
-        }
-        export function isJSX(fileName: string) {
-            return ts.endsWith(fileName, ts.Extension.Jsx);
-        }
-
-        export function isJSMap(fileName: string) {
-            return ts.endsWith(fileName, ".js.map") || ts.endsWith(fileName, ".jsx.map");
-        }
-
-        /** Contains the code and errors of a compilation and some helper methods to check its status. */
-        export class CompilerResult {
-            public files: GeneratedFile[] = [];
-            public errors: ts.Diagnostic[] = [];
-            public declFilesCode: GeneratedFile[] = [];
-            public sourceMaps: GeneratedFile[] = [];
-
-            /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
-            constructor(fileResults: GeneratedFile[], errors: ts.Diagnostic[], public program: ts.Program,
-                public currentDirectoryForProgram: string, private sourceMapData: ts.SourceMapData[], public traceResults: string[]) {
-
-                for (const emittedFile of fileResults) {
-                    if (isDTS(emittedFile.fileName)) {
-                        // .d.ts file, add to declFiles emit
-                        this.declFilesCode.push(emittedFile);
-                    }
-                    else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName)) {
-                        // .js file, add to files
-                        this.files.push(emittedFile);
-                    }
-                    else if (isJSMap(emittedFile.fileName)) {
-                        this.sourceMaps.push(emittedFile);
-                    }
-                    else {
-                        throw new Error("Unrecognized file extension for file " + emittedFile.fileName);
-                    }
-                }
-
-                this.errors = errors;
-            }
-
-            public getSourceMapRecord() {
-                if (this.sourceMapData && this.sourceMapData.length > 0) {
-                    return Harness.SourceMapRecorder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
-                }
-            }
         }
     }
 

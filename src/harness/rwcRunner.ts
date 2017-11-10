@@ -30,7 +30,7 @@ namespace RWC {
             let inputFiles: Harness.Compiler.TestFile[] = [];
             let otherFiles: Harness.Compiler.TestFile[] = [];
             let tsconfigFiles: Harness.Compiler.TestFile[] = [];
-            let compilerResult: Harness.Compiler.CompilerResult;
+            let compilerResult: compiler.CompilationResult;
             let compilerOptions: ts.CompilerOptions;
             const baselineOpts: Harness.Baseline.BaselineOptions = {
                 Subfolder: "rwc",
