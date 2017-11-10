@@ -2,9 +2,16 @@
 /// <reference path="runnerbase.ts" />
 const fs = require("fs");
 const path = require("path");
+
+interface ExecResult {
+    stdout: Buffer;
+    stderr: Buffer;
+    status: number;
+}
+
 abstract class ExternalCompileRunnerBase extends RunnerBase {
     abstract testDir: string;
-    abstract report(result: any, cwd: string): string;
+    abstract report(result: ExecResult, cwd: string): string;
     enumerateTestFiles() {
         return Harness.IO.getDirectories(this.testDir);
     }
@@ -24,8 +31,6 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
     private runTest(directoryName: string) {
         describe(directoryName, () => {
             const cp = require("child_process");
-            const path = require("path");
-            const fs = require("fs");
 
             it("should build successfully", () => {
                 const cwd = path.join(__dirname, "../../", this.testDir, directoryName);
@@ -51,7 +56,7 @@ class UserCodeRunner extends ExternalCompileRunnerBase {
     kind(): TestRunnerKind {
         return "user";
     }
-    report(result: any) {
+    report(result: ExecResult) {
         // tslint:disable-next-line:no-null-keyword
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
@@ -69,9 +74,9 @@ class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
     kind(): TestRunnerKind {
         return "dt";
     }
-    report(result: any, cwd: string) {
-        const stdout = filterExpectedErrors(result.stdout.toString(), cwd)
-        const stderr = result.stderr.toString()
+    report(result: ExecResult, cwd: string) {
+        const stdout = removeExpectedErrors(result.stdout.toString(), cwd);
+        const stderr = result.stderr.toString();
         // tslint:disable-next-line:no-null-keyword
         return !stdout.length && !stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
@@ -83,29 +88,40 @@ ${stderr.replace(/\r\n/g, "\n")}`;
     }
 }
 
-function filterExpectedErrors(errors: string, cwd: string): string {
-    return breaks(errors.split("\n"), s => /^\w+/.test(s)).filter(isExpectedError(cwd)).map(lines => lines.join("\n")).join("\n");
+function removeExpectedErrors(errors: string, cwd: string): string {
+    return ts.flatten(splitBy(errors.split("\n"), s => /^\S+/.test(s)).filter(isUnexpectedError(cwd))).join("\n");
 }
-function isExpectedError(cwd: string) {
+/**
+ * Returns true if the line that caused the error contains '$ExpectError',
+ * or if the line before that one contains '$ExpectError'.
+ * '$ExpectError' is a marker used in Definitely Typed tests,
+ * meaning that the error should not contribute toward our error baslines.
+ */
+function isUnexpectedError(cwd: string) {
     return (error: string[]) => {
-        if (error.length === 0) {
-            return true;
-        }
+        ts.Debug.assertGreaterThanOrEqual(error.length, 1);
         const match = error[0].match(/(.+\.ts)\((\d+),\d+\): error TS/);
         if (!match) {
             return true;
         }
-        const errlines = fs.readFileSync(path.join(cwd, match[1]), { encoding: "utf8" }).split("\n");
-        const index = parseInt(match[2]);
-        const errline = index < errlines.length ? errlines[index] : "";
-        const prevline = index - 1 < errlines.length && index > 0 ? errlines[index - 1] : "";
-        if (errline.indexOf("$ExpectError") > -1 || prevline.indexOf("$ExpectError") > -1) {
-            return false;
-        }
-        return true;
-    }
+        const [, errorFile, lineNumberString] = match;
+        const lines = fs.readFileSync(path.join(cwd, errorFile), { encoding: "utf8" }).split("\n");
+        const lineNumber = parseInt(lineNumberString);
+        ts.Debug.assertGreaterThanOrEqual(lineNumber, 0);
+        ts.Debug.assertLessThan(lineNumber, lines.length);
+        const previousLine = lineNumber - 1 > 0 ? lines[lineNumber - 1] : "";
+        return lines[lineNumber].indexOf("$ExpectError") === -1 && previousLine.indexOf("$ExpectError") === -1;
+    };
 }
-function breaks<T>(xs: T[], isStart: (T: any) => boolean): T[][] {
+/**
+ * Split an array into multiple arrays whenever `isStart` returns true.
+ * @example
+ * splitBy([1,2,3,4,5,6], isOdd)
+ * ==> [[1, 2], [3, 4], [5, 6]]
+ * where
+ * const isOdd = n => !!(n % 2)
+ */
+function splitBy<T>(xs: T[], isStart: (x: T) => boolean): T[][] {
     const result = [];
     let group: T[] = [];
     for (const x of xs) {
