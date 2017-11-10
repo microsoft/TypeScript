@@ -357,6 +357,11 @@ namespace core {
         return text;
     }
 
+    export function getByteOrderMark(text: string): string {
+        const length = getByteOrderMarkLength(text);
+        return length > 0 ? text.slice(0, length) : "";
+    }
+
     export function getByteOrderMarkLength(text: string): number {
         if (text.length >= 2) {
             const ch0 = text.charCodeAt(0);

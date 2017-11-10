@@ -68,14 +68,14 @@ class Test262BaselineRunner extends RunnerBase {
 
             it("has the expected emitted code", () => {
                 Harness.Baseline.runBaseline(testState.filename + ".output.js", () => {
-                    const files = testState.compilerResult.files.filter(f => f.fileName !== Test262BaselineRunner.helpersFilePath);
+                    const files = testState.compilerResult.files.filter(f => f.file !== Test262BaselineRunner.helpersFilePath);
                     return Harness.Compiler.collateOutputs(files);
                 }, Test262BaselineRunner.baselineOptions);
             });
 
             it("has the expected errors", () => {
                 Harness.Baseline.runBaseline(testState.filename + ".errors.txt", () => {
-                    const errors = testState.compilerResult.errors;
+                    const errors = testState.compilerResult.diagnostics;
                     if (errors.length === 0) {
                         return null;
                     }

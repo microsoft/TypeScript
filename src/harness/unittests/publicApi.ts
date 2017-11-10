@@ -20,7 +20,7 @@ describe("Public APIs", () => {
             };
             const inputFiles = [testFile];
             const output = Harness.Compiler.compileFiles(inputFiles, [], /*harnessSettings*/ undefined, /*options*/ {}, /*currentDirectory*/ undefined);
-            assert(!output.result.errors || !output.result.errors.length, Harness.Compiler.minimalDiagnosticsToString(output.result.errors, /*pretty*/ true));
+            assert(!output.result.diagnostics || !output.result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(output.result.diagnostics, /*pretty*/ true));
         });
     }
 

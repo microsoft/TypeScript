@@ -208,14 +208,14 @@ class CompilerTest {
         Harness.Compiler.doErrorBaseline(
             this.justName,
             this.tsConfigFiles.concat(this.toBeCompiled, this.otherFiles),
-            this.result.errors,
+            this.result.diagnostics,
             !!this.options.pretty);
     }
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
             Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".trace.json"), () => {
-                return utils.removeTestPathPrefixes(JSON.stringify(this.result.traceResults || [], undefined, 4));
+                return utils.removeTestPathPrefixes(JSON.stringify(this.result.traces, undefined, 4));
             });
         }
     }
@@ -224,7 +224,7 @@ class CompilerTest {
         if (this.options.sourceMap || this.options.inlineSourceMap) {
             Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
                 const record = utils.removeTestPathPrefixes(this.result.getSourceMapRecord());
-                if ((this.options.noEmitOnError && this.result.errors.length !== 0) || record === undefined) {
+                if ((this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined) {
                     // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
                     /* tslint:disable:no-null-keyword */
                     return null;

@@ -197,12 +197,12 @@ namespace RWC {
 
             it("has the expected errors", () => {
                 Harness.Baseline.runMultifileBaseline(baseName, ".errors.txt", () => {
-                    if (compilerResult.errors.length === 0) {
+                    if (compilerResult.diagnostics.length === 0) {
                         return null;
                     }
                     // Do not include the library in the baselines to avoid noise
                     const baselineFiles = tsconfigFiles.concat(inputFiles, otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
-                    const errors = compilerResult.errors.filter(e => !e.file || !Harness.isDefaultLibraryFile(e.file.fileName));
+                    const errors = compilerResult.diagnostics.filter(e => !e.file || !Harness.isDefaultLibraryFile(e.file.fileName));
                     return Harness.Compiler.iterateErrorBaseline(baselineFiles, errors);
                 }, baselineOpts);
             });
@@ -210,9 +210,9 @@ namespace RWC {
             // Ideally, a generated declaration file will have no errors. But we allow generated
             // declaration file errors as part of the baseline.
             it("has the expected errors in generated declaration files", () => {
-                if (compilerOptions.declaration && !compilerResult.errors.length) {
+                if (compilerOptions.declaration && !compilerResult.diagnostics.length) {
                     Harness.Baseline.runMultifileBaseline(baseName, ".dts.errors.txt", () => {
-                        if (compilerResult.errors.length === 0) {
+                        if (compilerResult.diagnostics.length === 0) {
                             return null;
                         }
 
@@ -223,7 +223,7 @@ namespace RWC {
                         compilerResult = undefined;
                         const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext);
 
-                        return Harness.Compiler.iterateErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
+                        return Harness.Compiler.iterateErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
                     }, baselineOpts);
                 }
             });

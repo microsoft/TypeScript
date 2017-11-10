@@ -236,12 +236,9 @@ namespace compiler {
         private _inputsAndOutputs: core.KeyedCollection<string, CompilationOutput>;
 
         // from CompilerResult
-        public readonly files: ReadonlyArray<Harness.Compiler.GeneratedFile>;
-        public readonly declFilesCode: ReadonlyArray<Harness.Compiler.GeneratedFile>;
-        public readonly sourceMaps: ReadonlyArray<Harness.Compiler.GeneratedFile>;
-        public readonly errors: ReadonlyArray<ts.Diagnostic>;
-        public readonly currentDirectoryForProgram: string;
-        public readonly traceResults: ReadonlyArray<string>;
+        public readonly files: ReadonlyArray<documents.TextDocument>;
+        public readonly declFilesCode: ReadonlyArray<documents.TextDocument>;
+        public readonly sourceMaps: ReadonlyArray<documents.TextDocument>;
 
         constructor(host: CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ts.Diagnostic[]) {
             this.host = host;
@@ -291,12 +288,10 @@ namespace compiler {
             }
 
             // from CompilerResult
-            this.files = Array.from(this.js.values(), file => file.asGeneratedFile());
-            this.declFilesCode = Array.from(this.dts.values(), file => file.asGeneratedFile());
-            this.sourceMaps = Array.from(this.maps.values(), file => file.asGeneratedFile());
-            this.errors = diagnostics;
-            this.currentDirectoryForProgram = host.vfs.currentDirectory;
-            this.traceResults = host.traces;
+            this.files = Array.from(this.js.values());
+            this.declFilesCode = Array.from(this.dts.values());
+            this.sourceMaps = Array.from(this.maps.values());
+            this.diagnostics = diagnostics;
         }
 
         public get vfs(): vfs.VirtualFileSystem {
