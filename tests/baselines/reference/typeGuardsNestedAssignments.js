@@ -81,5 +81,5 @@ function f4() {
 var re = /./g;
 var match;
 while ((match = re.exec("xxx")) != null) {
-    var length = match[1].length + match[2].length;
+    var length_1 = match[1].length + match[2].length;
 }

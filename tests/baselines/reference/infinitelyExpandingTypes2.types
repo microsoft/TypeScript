@@ -26,10 +26,10 @@ function f(p: Foo<number>) {
 >Foo : Foo<T>
 
     console.log(p);
->console.log(p) : any
->console.log : any
->console : any
->log : any
+>console.log(p) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >p : Foo<number>
 }
 

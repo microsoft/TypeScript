@@ -1,3 +1,4 @@
+// @lib: es5
 declare function alert(message?: any): void;
 
 var x = {

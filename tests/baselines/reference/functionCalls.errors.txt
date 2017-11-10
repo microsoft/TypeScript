@@ -1,7 +1,6 @@
 tests/cases/conformance/expressions/functionCalls/functionCalls.ts(8,1): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/conformance/expressions/functionCalls/functionCalls.ts(9,1): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/conformance/expressions/functionCalls/functionCalls.ts(10,1): error TS2347: Untyped function calls may not accept type arguments.
-tests/cases/conformance/expressions/functionCalls/functionCalls.ts(10,8): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/expressions/functionCalls/functionCalls.ts(25,1): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/conformance/expressions/functionCalls/functionCalls.ts(26,1): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/conformance/expressions/functionCalls/functionCalls.ts(27,1): error TS2347: Untyped function calls may not accept type arguments.
@@ -10,7 +9,7 @@ tests/cases/conformance/expressions/functionCalls/functionCalls.ts(33,1): error 
 tests/cases/conformance/expressions/functionCalls/functionCalls.ts(34,1): error TS2347: Untyped function calls may not accept type arguments.
 
 
-==== tests/cases/conformance/expressions/functionCalls/functionCalls.ts (10 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/functionCalls.ts (9 errors) ====
     // Invoke function call on value of type 'any' with no type arguments
     var anyVar: any;
     anyVar(0);
@@ -27,8 +26,6 @@ tests/cases/conformance/expressions/functionCalls/functionCalls.ts(34,1): error 
     anyVar<Window>(undefined);
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
-           ~~~~~~
-!!! error TS2304: Cannot find name 'Window'.
     
     
     // Invoke function call on value of a subtype of Function with no call signatures with no type arguments

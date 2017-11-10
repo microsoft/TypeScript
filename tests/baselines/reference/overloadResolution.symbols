@@ -77,12 +77,12 @@ function fn2() { return undefined; }
 var d = fn2<Date>(0, undefined);
 >d : Symbol(d, Decl(overloadResolution.ts, 33, 3), Decl(overloadResolution.ts, 34, 3))
 >fn2 : Symbol(fn2, Decl(overloadResolution.ts, 26, 8), Decl(overloadResolution.ts, 29, 43), Decl(overloadResolution.ts, 30, 36))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 var d: Date;
 >d : Symbol(d, Decl(overloadResolution.ts, 33, 3), Decl(overloadResolution.ts, 34, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = fn2(0, '');
@@ -92,7 +92,7 @@ var s = fn2(0, '');
 // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
 fn2<Date>('', 0); // Error
 >fn2 : Symbol(fn2, Decl(overloadResolution.ts, 26, 8), Decl(overloadResolution.ts, 29, 43), Decl(overloadResolution.ts, 30, 36))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
 fn2('', 0); // OK
@@ -214,7 +214,7 @@ fn4('', null);
 // Generic overloads with constraints called with type arguments that do not satisfy the constraints
 fn4<boolean, Date>(null, null); // Error
 >fn4 : Symbol(fn4, Decl(overloadResolution.ts, 62, 38), Decl(overloadResolution.ts, 65, 61), Decl(overloadResolution.ts, 66, 61))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 fn4(true, null); // Error

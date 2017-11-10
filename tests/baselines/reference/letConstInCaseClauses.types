@@ -16,10 +16,10 @@ var y = 20;
 >2 : 2
 
     console.log(x)
->console.log(x) : any
->console.log : any
->console : any
->log : any
+>console.log(x) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >x : number
 
     switch (x) {
@@ -54,10 +54,10 @@ var y = 20;
 >2 : 2
 
     console.log(x)
->console.log(x) : any
->console.log : any
->console : any
->log : any
+>console.log(x) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >x : 1
 
     switch (x) {

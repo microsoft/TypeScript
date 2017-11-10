@@ -1,3 +1,4 @@
+// @lib: es5
 class Event {
 
 	 private _listeners: any[] = [];

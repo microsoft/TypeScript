@@ -2,7 +2,7 @@
 declare function someOtherFunction(i: any): Promise<void>;
 >someOtherFunction : Symbol(someOtherFunction, Decl(asyncUnParenthesizedArrowFunction_es6.ts, 0, 0))
 >i : Symbol(i, Decl(asyncUnParenthesizedArrowFunction_es6.ts, 0, 35))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
 const x = async i => await someOtherFunction(i)
 >x : Symbol(x, Decl(asyncUnParenthesizedArrowFunction_es6.ts, 1, 5))

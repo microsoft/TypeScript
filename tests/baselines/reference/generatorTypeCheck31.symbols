@@ -1,8 +1,8 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck31.ts ===
 function* g2(): Iterator<() => Iterable<(x: string) => number>> {
 >g2 : Symbol(g2, Decl(generatorTypeCheck31.ts, 0, 0))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es6.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck31.ts, 0, 41))
 
     yield function* () {

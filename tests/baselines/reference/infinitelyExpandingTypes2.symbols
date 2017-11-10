@@ -26,6 +26,9 @@ function f(p: Foo<number>) {
 >Foo : Symbol(Foo, Decl(infinitelyExpandingTypes2.ts, 0, 0))
 
     console.log(p);
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >p : Symbol(p, Decl(infinitelyExpandingTypes2.ts, 8, 11))
 }
 

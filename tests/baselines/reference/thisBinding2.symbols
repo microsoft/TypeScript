@@ -33,7 +33,7 @@ class C {
     }  
 }
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
->setTimeout : Symbol(setTimeout, Decl(thisBinding2.ts, 12, 1))
+>setTimeout : Symbol(setTimeout, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(thisBinding2.ts, 12, 1))
 >expression : Symbol(expression, Decl(thisBinding2.ts, 13, 28))
 >msec : Symbol(msec, Decl(thisBinding2.ts, 13, 44))
 >language : Symbol(language, Decl(thisBinding2.ts, 13, 59))
@@ -48,7 +48,7 @@ var messenger = {
 >start : Symbol(start, Decl(thisBinding2.ts, 15, 27))
 
         return setTimeout(() => { var x = this.message; }, 3000);
->setTimeout : Symbol(setTimeout, Decl(thisBinding2.ts, 12, 1))
+>setTimeout : Symbol(setTimeout, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(thisBinding2.ts, 12, 1))
 >x : Symbol(x, Decl(thisBinding2.ts, 17, 37))
 >this.message : Symbol(message, Decl(thisBinding2.ts, 14, 17))
 >this : Symbol(messenger, Decl(thisBinding2.ts, 14, 15))

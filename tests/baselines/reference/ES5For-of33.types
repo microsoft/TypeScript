@@ -7,9 +7,9 @@ for (var v of ['a', 'b', 'c']) {
 >'c' : "c"
 
     console.log(v);
->console.log(v) : any
->console.log : any
->console : any
->log : any
+>console.log(v) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >v : string
 }

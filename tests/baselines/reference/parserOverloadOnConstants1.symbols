@@ -1,20 +1,24 @@
 === tests/cases/conformance/parser/ecmascript5/parserOverloadOnConstants1.ts ===
 interface Document {
->Document : Symbol(Document, Decl(parserOverloadOnConstants1.ts, 0, 0))
+>Document : Symbol(Document, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(parserOverloadOnConstants1.ts, 0, 0))
 
     createElement(tagName: string): HTMLElement;
->createElement : Symbol(Document.createElement, Decl(parserOverloadOnConstants1.ts, 0, 20), Decl(parserOverloadOnConstants1.ts, 1, 48), Decl(parserOverloadOnConstants1.ts, 2, 56), Decl(parserOverloadOnConstants1.ts, 3, 50))
+>createElement : Symbol(Document.createElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(parserOverloadOnConstants1.ts, 0, 20), Decl(parserOverloadOnConstants1.ts, 1, 48), Decl(parserOverloadOnConstants1.ts, 2, 56) ... and 1 more)
 >tagName : Symbol(tagName, Decl(parserOverloadOnConstants1.ts, 1, 18))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     createElement(tagName: 'canvas'): HTMLCanvasElement;
->createElement : Symbol(Document.createElement, Decl(parserOverloadOnConstants1.ts, 0, 20), Decl(parserOverloadOnConstants1.ts, 1, 48), Decl(parserOverloadOnConstants1.ts, 2, 56), Decl(parserOverloadOnConstants1.ts, 3, 50))
+>createElement : Symbol(Document.createElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(parserOverloadOnConstants1.ts, 0, 20), Decl(parserOverloadOnConstants1.ts, 1, 48), Decl(parserOverloadOnConstants1.ts, 2, 56) ... and 1 more)
 >tagName : Symbol(tagName, Decl(parserOverloadOnConstants1.ts, 2, 18))
+>HTMLCanvasElement : Symbol(HTMLCanvasElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     createElement(tagName: 'div'): HTMLDivElement;
->createElement : Symbol(Document.createElement, Decl(parserOverloadOnConstants1.ts, 0, 20), Decl(parserOverloadOnConstants1.ts, 1, 48), Decl(parserOverloadOnConstants1.ts, 2, 56), Decl(parserOverloadOnConstants1.ts, 3, 50))
+>createElement : Symbol(Document.createElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(parserOverloadOnConstants1.ts, 0, 20), Decl(parserOverloadOnConstants1.ts, 1, 48), Decl(parserOverloadOnConstants1.ts, 2, 56) ... and 1 more)
 >tagName : Symbol(tagName, Decl(parserOverloadOnConstants1.ts, 3, 18))
+>HTMLDivElement : Symbol(HTMLDivElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     createElement(tagName: 'span'): HTMLSpanElement;
->createElement : Symbol(Document.createElement, Decl(parserOverloadOnConstants1.ts, 0, 20), Decl(parserOverloadOnConstants1.ts, 1, 48), Decl(parserOverloadOnConstants1.ts, 2, 56), Decl(parserOverloadOnConstants1.ts, 3, 50))
+>createElement : Symbol(Document.createElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(parserOverloadOnConstants1.ts, 0, 20), Decl(parserOverloadOnConstants1.ts, 1, 48), Decl(parserOverloadOnConstants1.ts, 2, 56) ... and 1 more)
 >tagName : Symbol(tagName, Decl(parserOverloadOnConstants1.ts, 4, 18))
+>HTMLSpanElement : Symbol(HTMLSpanElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }

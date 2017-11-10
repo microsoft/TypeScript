@@ -9,7 +9,7 @@ class A {
     foo<T extends Date>(x: T): string { return null; }
 >foo : Symbol(A.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints.ts, 4, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints.ts, 5, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints.ts, 5, 24))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints.ts, 5, 8))
 }

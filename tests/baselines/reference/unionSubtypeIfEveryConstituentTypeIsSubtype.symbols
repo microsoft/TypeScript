@@ -73,7 +73,7 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 33, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: string | number;
 >foo : Symbol(I5.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 33, 22))

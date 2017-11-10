@@ -5,7 +5,7 @@
  */
 export type Primitive = number | string | boolean | Date;
 >Primitive : Symbol(Primitive, Decl(typeInferenceLiteralUnion.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 /**
  * Administrivia: anything with a valueOf(): number method is comparable, so we allow it in numeric operations

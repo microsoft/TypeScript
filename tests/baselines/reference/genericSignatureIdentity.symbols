@@ -9,7 +9,7 @@ var x: {
 
     <T extends Date>(x: T): T;
 >T : Symbol(T, Decl(genericSignatureIdentity.ts, 6, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(genericSignatureIdentity.ts, 6, 21))
 >T : Symbol(T, Decl(genericSignatureIdentity.ts, 6, 5))
 >T : Symbol(T, Decl(genericSignatureIdentity.ts, 6, 5))

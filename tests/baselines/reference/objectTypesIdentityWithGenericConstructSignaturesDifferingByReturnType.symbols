@@ -28,7 +28,7 @@ interface I<T> {
     new(x: T): Date;
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 13, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 12, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 interface I2 {

@@ -1,7 +1,7 @@
 === tests/cases/compiler/exportDefaultAsyncFunction.ts ===
 export default async function foo(): Promise<void> {}
 >foo : Symbol(foo, Decl(exportDefaultAsyncFunction.ts, 0, 0))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
 foo();
 >foo : Symbol(foo, Decl(exportDefaultAsyncFunction.ts, 0, 0))

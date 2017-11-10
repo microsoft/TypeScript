@@ -4,11 +4,11 @@ var includes: boolean;
 
 includes = "abcde".includes("cd");
 >includes : Symbol(includes, Decl(stringIncludes.ts, 0, 3))
->"abcde".includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
->includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+>"abcde".includes : Symbol(String.includes, Decl(lib.es6.d.ts, --, --))
+>includes : Symbol(String.includes, Decl(lib.es6.d.ts, --, --))
 
 includes = "abcde".includes("cd", 2);
 >includes : Symbol(includes, Decl(stringIncludes.ts, 0, 3))
->"abcde".includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
->includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+>"abcde".includes : Symbol(String.includes, Decl(lib.es6.d.ts, --, --))
+>includes : Symbol(String.includes, Decl(lib.es6.d.ts, --, --))
 

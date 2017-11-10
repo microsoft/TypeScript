@@ -7,7 +7,6 @@ namespace vfs {
     import KeyedCollection = collections.KeyedCollection;
     import Metadata = collections.Metadata;
     import EventEmitter = events.EventEmitter;
-    import IO = Harness.IO;
 
     export interface PathMappings {
         [path: string]: string;
@@ -58,7 +57,7 @@ namespace vfs {
         return new RegExp(pattern, ignoreCase ? "i" : "");
     }
 
-    export function createResolver(io: IO, map?: PathMappings): FileSystemResolver {
+    export function createResolver(io: Harness.IO, map?: PathMappings): FileSystemResolver {
         const mapper = createMapper(!io.useCaseSensitiveFileNames(), map);
         return {
             getEntries(dir) {
@@ -126,6 +125,7 @@ namespace vfs {
         private _watchedDirectories: KeyedCollection<string, DirectoryWatcherEntryArray> | undefined;
         private _stringComparer: ts.Comparer<string> | undefined;
         private _pathComparer: ts.Comparer<string> | undefined;
+        private _metadata: Metadata;
         private _onRootFileSystemChange: (path: string, change: FileSystemChange) => void;
 
         constructor(currentDirectory: string, useCaseSensitiveFileNames: boolean) {
@@ -152,6 +152,13 @@ namespace vfs {
          */
         public get shadowRoot(): VirtualFileSystem | undefined {
             return this._shadowRoot;
+        }
+
+        /**
+         * Gets metadata about this file system.
+         */
+        public get metadata(): Metadata {
+            return this._metadata || (this._metadata = new Metadata(this.shadowRoot ? this.shadowRoot.metadata : undefined));
         }
 
         /**
@@ -183,28 +190,29 @@ namespace vfs {
         }
 
         /**
-         * Gets a virtual file system with the following entries:
+         * Gets a virtual file system with the following directories:
          *
          * | path   | physical/virtual      |
          * |:-------|:----------------------|
          * | /.ts   | physical: built/local |
          * | /.lib  | physical: tests/lib   |
-         * | /.test | virtual               |
+         * | /.src  | virtual               |
          */
-        public static getBuiltLocal(useCaseSensitiveFileNames: boolean = IO.useCaseSensitiveFileNames()): VirtualFileSystem {
+        public static getBuiltLocal(useCaseSensitiveFileNames: boolean = Harness.IO.useCaseSensitiveFileNames()): VirtualFileSystem {
             let vfs = useCaseSensitiveFileNames ? this._builtLocalCS : this._builtLocalCI;
             if (!vfs) {
                 vfs = this._builtLocal;
                 if (!vfs) {
-                    const resolver = createResolver(IO, {
+                    const resolver = createResolver(Harness.IO, {
                         "/.ts": __dirname,
                         "/.lib": vpath.resolve(__dirname, "../../tests/lib")
                     });
-                    vfs = new VirtualFileSystem("/", IO.useCaseSensitiveFileNames());
+                    vfs = new VirtualFileSystem("/", Harness.IO.useCaseSensitiveFileNames());
+                    vfs.metadata.set("defaultLibLocation", "/.ts");
                     vfs.addDirectory("/.ts", resolver);
                     vfs.addDirectory("/.lib", resolver);
-                    vfs.addDirectory("/.test");
-                    vfs.changeDirectory("/.test");
+                    vfs.addDirectory("/.src");
+                    vfs.changeDirectory("/.src");
                     vfs.makeReadOnly();
                     this._builtLocal = vfs;
                 }
@@ -216,6 +224,34 @@ namespace vfs {
                 return useCaseSensitiveFileNames
                     ? this._builtLocalCS = vfs
                     : this._builtLocalCI = vfs;
+            }
+            return vfs;
+        }
+
+        public static createFromOptions(options: { useCaseSensitiveFileNames?: boolean, currentDirectory?: string }) {
+            const vfs = this.getBuiltLocal(options.useCaseSensitiveFileNames).shadow();
+            if (options.currentDirectory) {
+                vfs.addDirectory(options.currentDirectory);
+                vfs.changeDirectory(options.currentDirectory);
+            }
+            return vfs;
+        }
+
+        public static createFromTestFiles(options: { useCaseSensitiveFileNames?: boolean, currentDirectory?: string }, documents: Harness.Compiler.TestFile[], fileOptions?: { overwrite?: boolean }) {
+            const vfs = this.createFromOptions(options);
+            for (const document of documents) {
+                const file = vfs.addFile(document.unitName, document.content, fileOptions)!;
+                assert.isDefined(file, `Failed to add file: '${document.unitName}'`);
+                file.metadata.set("document", document);
+                // Add symlinks
+                const symlink = document.fileOptions && document.fileOptions.symlink;
+                if (file && symlink) {
+                    for (const link of symlink.split(",")) {
+                        const symlink = vfs.addSymlink(vpath.resolve(vfs.currentDirectory, link.trim()), file)!;
+                        assert.isDefined(symlink, `Failed to symlink: '${link}'`);
+                        symlink.metadata.set("document", document);
+                    }
+                }
             }
             return vfs;
         }
@@ -529,8 +565,27 @@ namespace vfs {
     }
 
     export interface VirtualFileSystemEntry {
+        // #region Event "fileSystemChange"
         on(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
-        emit(event: "fileSystemChange", path: string, change: FileSystemChange): boolean;
+        once(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        addListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        removeListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        prependListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        prependOnceListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        emit(name: "fileSystemChange", path: string, change: FileSystemChange): boolean;
+        // #endregion Event "fileSystemChange"
+    }
+
+    export interface VirtualFileSystemEntry {
+        // #region Untyped events
+        on(event: string | symbol, listener: (...args: any[]) => void): this;
+        once(event: string | symbol, listener: (...args: any[]) => void): this;
+        addListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        removeListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        emit(event: string | symbol, ...args: any[]): boolean;
+        // #endregion Untyped events
     }
 
     export abstract class VirtualFileSystemEntry extends VirtualFileSystemObject {
@@ -631,10 +686,39 @@ namespace vfs {
     }
 
     export interface VirtualDirectory {
+        // #region Event "fileSystemChange"
         on(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        once(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        addListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        removeListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        prependListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        prependOnceListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        emit(name: "fileSystemChange", path: string, change: FileSystemChange): boolean;
+        // #endregion Event "fileSystemChange"
+    }
+
+    export interface VirtualDirectory {
+        // #region Event "childAdded" | "childRemoved"
         on(event: "childAdded" | "childRemoved", listener: (child: VirtualEntry) => void): this;
-        emit(event: "fileSystemChange", path: string, change: FileSystemChange): boolean;
-        emit(event: "childAdded" | "childRemoved", child: VirtualEntry): boolean;
+        once(event: "childAdded" | "childRemoved", listener: (child: VirtualEntry) => void): this;
+        addListener(event: "childAdded" | "childRemoved", listener: (child: VirtualEntry) => void): this;
+        removeListener(event: "childAdded" | "childRemoved", listener: (child: VirtualEntry) => void): this;
+        prependListener(event: "childAdded" | "childRemoved", listener: (child: VirtualEntry) => void): this;
+        prependOnceListener(event: "childAdded" | "childRemoved", listener: (child: VirtualEntry) => void): this;
+        emit(name: "childAdded" | "childRemoved", child: VirtualEntry): boolean;
+        // #endregion Event "childAdded" | "childRemoved"
+    }
+
+    export interface VirtualDirectory {
+        // #region Untyped events
+        on(event: string | symbol, listener: (...args: any[]) => void): this;
+        once(event: string | symbol, listener: (...args: any[]) => void): this;
+        addListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        removeListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        emit(event: string | symbol, ...args: any[]): boolean;
+        // #endregion Untyped events
     }
 
     export class VirtualDirectory extends VirtualFileSystemEntry {
@@ -1277,10 +1361,39 @@ namespace vfs {
     }
 
     export interface VirtualFile {
+        // #region Event "fileSystemChange"
         on(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        once(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        addListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        removeListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        prependListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        prependOnceListener(event: "fileSystemChange", listener: (path: string, change: FileSystemChange) => void): this;
+        emit(name: "fileSystemChange", path: string, change: FileSystemChange): boolean;
+        // #endregion Event "fileSystemChange"
+    }
+
+    export interface VirtualFile {
+            // #region Event "contentChanged"
         on(event: "contentChanged", listener: (entry: VirtualFile) => void): this;
-        emit(event: "fileSystemChange", path: string, change: FileSystemChange): boolean;
-        emit(event: "contentChanged", entry: VirtualFile): boolean;
+        once(event: "contentChanged", listener: (entry: VirtualFile) => void): this;
+        addListener(event: "contentChanged", listener: (entry: VirtualFile) => void): this;
+        removeListener(event: "contentChanged", listener: (entry: VirtualFile) => void): this;
+        prependListener(event: "contentChanged", listener: (entry: VirtualFile) => void): this;
+        prependOnceListener(event: "contentChanged", listener: (entry: VirtualFile) => void): this;
+        emit(name: "contentChanged", entry: VirtualFile): boolean;
+        // #endregion Event "contentChanged"
+    }
+
+    export interface VirtualFile {
+            // #region Untyped events
+        on(event: string | symbol, listener: (...args: any[]) => void): this;
+        once(event: string | symbol, listener: (...args: any[]) => void): this;
+        addListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        removeListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        emit(event: string | symbol, ...args: any[]): boolean;
+        // #endregion Untyped events
     }
 
     export class VirtualFile extends VirtualFileSystemEntry {

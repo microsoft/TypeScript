@@ -957,6 +957,10 @@ namespace Harness {
     }
 }
 
+if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
+    Harness.IO.tryEnableSourceMapsForHost();
+}
+
 namespace Harness {
     export const libFolder = "built/local/";
     const tcServicesFileName = ts.combinePaths(libFolder, Utils.getExecutionEnvironment() === Utils.ExecutionEnvironment.Browser ? "typescriptServicesInBrowserTest.js" : "typescriptServices.js");
@@ -1333,7 +1337,7 @@ namespace Harness {
             options.skipDefaultLibCheck = typeof options.skipDefaultLibCheck === "undefined" ? true : options.skipDefaultLibCheck;
 
             if (typeof currentDirectory === "undefined") {
-                currentDirectory = Harness.IO.getCurrentDirectory();
+                currentDirectory = "/.src";
             }
 
             // Parse settings
@@ -1345,56 +1349,44 @@ namespace Harness {
             }
 
             const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : Harness.IO.useCaseSensitiveFileNames();
-            const programFiles: TestFile[] = inputFiles.slice();
+            const programFileNames = inputFiles.map(file => file.unitName);
+
             // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
             // Treat them as library files, so include them in build, but not in baselines.
             if (options.includeBuiltFile) {
-                const builtFileName = ts.combinePaths(libFolder, options.includeBuiltFile);
-                const builtFile: TestFile = {
-                    unitName: builtFileName,
-                    content: normalizeLineEndings(IO.readFile(builtFileName), Harness.IO.newLine()),
-                };
-                programFiles.push(builtFile);
+                programFileNames.push(vpath.combine("/.ts/", options.includeBuiltFile));
             }
-
-            const fileOutputs: GeneratedFile[] = [];
 
             // Files from tests\lib that are requested by "@libFiles"
             if (options.libFiles) {
                 for (const fileName of options.libFiles.split(",")) {
-                    const libFileName = "tests/lib/" + fileName;
-                    // Content is undefined here because in createCompilerHost we will create sourceFile for the lib file and cache the result
-                    programFiles.push({ unitName: libFileName, content: undefined });
+                    programFileNames.push(vpath.combine("/.lib/", fileName));
                 }
             }
 
+            const compilation = compiler.compileFiles(
+                new compiler.CompilerHost(
+                    vfs.VirtualFileSystem.createFromTestFiles(
+                        { useCaseSensitiveFileNames, currentDirectory },
+                        inputFiles.concat(otherFiles),
+                        { overwrite: true }
+                    ),
+                    options
+                ),
+                programFileNames,
+                options);
 
-            const programFileNames = programFiles.map(file => file.unitName);
+            const fileOutputs = compilation.outputs ? compilation.outputs.map(output => (<GeneratedFile>{
+                fileName: output.file,
+                code: utils.removeByteOrderMark(output.text),
+                writeByteOrderMark: utils.getByteOrderMarkLength(output.text) > 0
+            })) : [];
 
-            const compilerHost = createCompilerHost(
-                programFiles.concat(otherFiles),
-                (fileName, code, writeByteOrderMark) => fileOutputs.push({ fileName, code, writeByteOrderMark }),
-                options.target,
-                useCaseSensitiveFileNames,
-                currentDirectory,
-                options.newLine,
-                options.libFiles);
-
-            let traceResults: string[];
-            if (options.traceResolution) {
-                traceResults = [];
-                compilerHost.trace = text => traceResults.push(text);
-            }
-            else {
-                compilerHost.directoryExists = () => true; // This only visibly affects resolution traces, so to save time we always return true where possible
-            }
-            const program = ts.createProgram(programFileNames, options, compilerHost);
-
-            const emitResult = program.emit();
-
-            const errors = ts.getPreEmitDiagnostics(program);
-
-            const result = new CompilerResult(fileOutputs, errors, program, Harness.IO.getCurrentDirectory(), emitResult.sourceMaps, traceResults);
+            const traceResults = compilation.traces && compilation.traces.slice();
+            const program = compilation.program;
+            const emitResult = compilation.result;
+            const errors = compilation.diagnostics;
+            const result = new CompilerResult(fileOutputs, errors, program, compilation.vfs.currentDirectory, emitResult.sourceMaps, traceResults);
             return { result, options };
         }
 
@@ -1479,14 +1471,6 @@ namespace Harness {
             return { declInputFiles, declOtherFiles, declResult: output.result };
         }
 
-        function normalizeLineEndings(text: string, lineEnding: string): string {
-            let normalized = text.replace(/\r\n?/g, "\n");
-            if (lineEnding !== "\n") {
-                normalized = normalized.replace(/\n/g, lineEnding);
-            }
-            return normalized;
-        }
-
         export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
             const host = { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() };
             return (pretty ? ts.formatDiagnosticsWithColorAndContext : ts.formatDiagnostics)(diagnostics, host);
@@ -1524,7 +1508,7 @@ namespace Harness {
             function outputErrorText(error: ts.Diagnostic) {
                 const message = ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine());
 
-                const errLines = RunnerBase.removeFullPaths(message)
+                const errLines = utils.removeTestPathPrefixes(message)
                     .split("\n")
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
@@ -1542,7 +1526,7 @@ namespace Harness {
                 }
             }
 
-            yield [diagnosticSummaryMarker, minimalDiagnosticsToString(diagnostics, pretty) + Harness.IO.newLine() + Harness.IO.newLine(), diagnostics.length];
+            yield [diagnosticSummaryMarker, utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, pretty)) + Harness.IO.newLine() + Harness.IO.newLine(), diagnostics.length];
 
             // Report global errors
             const globalErrors = diagnostics.filter(err => !err.file);
@@ -1557,7 +1541,7 @@ namespace Harness {
                 // Filter down to the errors in the file
                 const fileErrors = diagnostics.filter(e => {
                     const errFn = e.file;
-                    return errFn && errFn.fileName === inputFile.unitName;
+                    return errFn && utils.removeTestPathPrefixes(errFn.fileName) === utils.removeTestPathPrefixes(inputFile.unitName);
                 });
 
 
@@ -1774,7 +1758,7 @@ namespace Harness {
                         }
                         typeLines += "\r\n";
                     }
-                    yield [checkDuplicatedFileName(unitName, dupeCase), typeLines];
+                    yield [checkDuplicatedFileName(unitName, dupeCase), utils.removeTestPathPrefixes(typeLines)];
                 }
             }
         }
@@ -1866,8 +1850,8 @@ namespace Harness {
         }
 
         function fileOutput(file: GeneratedFile, harnessSettings: Harness.TestCaseParser.CompilerSettings): string {
-            const fileName = harnessSettings.fullEmitPaths ? file.fileName : ts.getBaseFileName(file.fileName);
-            return "//// [" + fileName + "]\r\n" + getByteOrderMarkText(file) + file.code;
+            const fileName = harnessSettings.fullEmitPaths ? utils.removeTestPathPrefixes(file.fileName) : ts.getBaseFileName(file.fileName);
+            return "//// [" + fileName + "]\r\n" + getByteOrderMarkText(file) + utils.removeTestPathPrefixes(file.code);
         }
 
         export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): string {
@@ -2325,7 +2309,8 @@ namespace Harness {
     }
 
     export function isBuiltFile(filePath: string): boolean {
-        return filePath.indexOf(Harness.libFolder) === 0;
+        return filePath.indexOf(Harness.libFolder) === 0 ||
+            filePath.indexOf("/.ts/") === 0;
     }
 
     export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {

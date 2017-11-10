@@ -9,11 +9,11 @@ var i = new ifc();
 // Parens are optional
 var x = new Date;
 >x : Symbol(x, Decl(newOperator.ts, 5, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var y = new Date();
 >y : Symbol(y, Decl(newOperator.ts, 6, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Target is not a class or var, good error
 var t1 = new 53();
@@ -27,7 +27,7 @@ new string;
 // Use in LHS of expression?
 (new Date()).toString();
 >(new Date()).toString : Symbol(Date.toString, Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toString : Symbol(Date.toString, Decl(lib.d.ts, --, --))
 
 // Various spacing
@@ -51,7 +51,7 @@ var f = new q();
 // not legal
 var t5 = new new Date;
 >t5 : Symbol(t5, Decl(newOperator.ts, 30, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Can be an expression
 new String;

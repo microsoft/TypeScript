@@ -5,7 +5,7 @@ declare var $;
 >$ : Symbol($, Decl(underscoreTest1_underscoreTests.ts, 2, 11))
 
 declare function alert(x: string): void;
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 >x : Symbol(x, Decl(underscoreTest1_underscoreTests.ts, 3, 23))
 
 _.each([1, 2, 3], (num) => alert(num.toString()));
@@ -13,7 +13,7 @@ _.each([1, 2, 3], (num) => alert(num.toString()));
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 645, 11))
 >each : Symbol(Underscore.Static.each, Decl(underscoreTest1_underscore.ts, 395, 43), Decl(underscoreTest1_underscore.ts, 397, 78))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 5, 19))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 >num.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 5, 19))
 >toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
@@ -27,7 +27,7 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >three : Symbol(three, Decl(underscoreTest1_underscoreTests.ts, 6, 24))
 >value : Symbol(value, Decl(underscoreTest1_underscoreTests.ts, 6, 38))
 >key : Symbol(key, Decl(underscoreTest1_underscoreTests.ts, 6, 52))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 >value.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >value : Symbol(value, Decl(underscoreTest1_underscoreTests.ts, 6, 38))
 >toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
@@ -394,11 +394,11 @@ var buttonView = {
 
     onClick: function () { alert('clicked: ' + this.label); },
 >onClick : Symbol(onClick, Decl(underscoreTest1_underscoreTests.ts, 97, 24))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
     onHover: function () { alert('hovering: ' + this.label); }
 >onHover : Symbol(onHover, Decl(underscoreTest1_underscoreTests.ts, 98, 62))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 };
 _.bindAll(buttonView);
@@ -437,7 +437,7 @@ var log = _.bind((message?: string, ...rest: string[]) => { }, Date);
 >bind : Symbol(Underscore.Static.bind, Decl(underscoreTest1_underscore.ts, 548, 68), Decl(underscoreTest1_underscore.ts, 550, 58))
 >message : Symbol(message, Decl(underscoreTest1_underscoreTests.ts, 108, 18))
 >rest : Symbol(rest, Decl(underscoreTest1_underscoreTests.ts, 108, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 _.delay(log, 1000, 'logged later');
 >_.delay : Symbol(Underscore.Static.delay, Decl(underscoreTest1_underscore.ts, 557, 73))
@@ -449,11 +449,11 @@ _.defer(function () { alert('deferred'); });
 >_.defer : Symbol(Underscore.Static.defer, Decl(underscoreTest1_underscore.ts, 559, 68))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 645, 11))
 >defer : Symbol(Underscore.Static.defer, Decl(underscoreTest1_underscore.ts, 559, 68))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var updatePosition = () => alert('updating position...');
 >updatePosition : Symbol(updatePosition, Decl(underscoreTest1_underscoreTests.ts, 113, 3))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var throttled = _.throttle(updatePosition, 100);
 >throttled : Symbol(throttled, Decl(underscoreTest1_underscoreTests.ts, 114, 3))
@@ -468,7 +468,7 @@ $(null).scroll(throttled);
 
 var calculateLayout = () => alert('calculating layout...');
 >calculateLayout : Symbol(calculateLayout, Decl(underscoreTest1_underscoreTests.ts, 117, 3))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var lazyLayout = _.debounce(calculateLayout, 300);
 >lazyLayout : Symbol(lazyLayout, Decl(underscoreTest1_underscoreTests.ts, 118, 3))
@@ -483,7 +483,7 @@ $(null).resize(lazyLayout);
 
 var createApplication = () => alert('creating application...');
 >createApplication : Symbol(createApplication, Decl(underscoreTest1_underscoreTests.ts, 121, 3))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var initialize = _.once(createApplication);
 >initialize : Symbol(initialize, Decl(underscoreTest1_underscoreTests.ts, 122, 3))
@@ -503,7 +503,7 @@ var notes: any[];
 
 var render = () => alert("rendering...");
 >render : Symbol(render, Decl(underscoreTest1_underscoreTests.ts, 127, 3))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var renderNotes = _.after(notes.length, render);
 >renderNotes : Symbol(renderNotes, Decl(underscoreTest1_underscoreTests.ts, 128, 3))
@@ -662,7 +662,7 @@ _.chain([1, 2, 3, 200])
 
     .tap(<any>alert)
 >tap : Symbol(Underscore.ChainedArray.tap, Decl(underscoreTest1_underscore.ts, 325, 33))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
     .map(function (num) { return num * num })
 >map : Symbol(Underscore.ChainedArray.map, Decl(underscoreTest1_underscore.ts, 240, 82))
@@ -750,7 +750,7 @@ _.isFunction(alert);
 >_.isFunction : Symbol(Underscore.Static.isFunction, Decl(underscoreTest1_underscore.ts, 606, 42))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 645, 11))
 >isFunction : Symbol(Underscore.Static.isFunction, Decl(underscoreTest1_underscore.ts, 606, 42))
->alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>alert : Symbol(alert, Decl(lib.d.ts, --, --), Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 _.isString("moe");
 >_.isString : Symbol(Underscore.Static.isString, Decl(underscoreTest1_underscore.ts, 607, 41))
@@ -782,7 +782,7 @@ _.isDate(new Date());
 >_.isDate : Symbol(Underscore.Static.isDate, Decl(underscoreTest1_underscore.ts, 611, 40))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 645, 11))
 >isDate : Symbol(Underscore.Static.isDate, Decl(underscoreTest1_underscore.ts, 611, 40))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 _.isRegExp(/moe/);
 >_.isRegExp : Symbol(Underscore.Static.isRegExp, Decl(underscoreTest1_underscore.ts, 612, 37))

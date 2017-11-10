@@ -1,6 +1,6 @@
 === tests/cases/compiler/reachabilityCheckWithEmptyDefault.ts ===
 declare function print(s: string): void;
->print : Symbol(print, Decl(reachabilityCheckWithEmptyDefault.ts, 0, 0))
+>print : Symbol(print, Decl(lib.d.ts, --, --), Decl(reachabilityCheckWithEmptyDefault.ts, 0, 0))
 >s : Symbol(s, Decl(reachabilityCheckWithEmptyDefault.ts, 0, 23))
 
 function foo(x: any) {
@@ -14,5 +14,5 @@ function foo(x: any) {
 		default:
 	}
 	print('1');
->print : Symbol(print, Decl(reachabilityCheckWithEmptyDefault.ts, 0, 0))
+>print : Symbol(print, Decl(lib.d.ts, --, --), Decl(reachabilityCheckWithEmptyDefault.ts, 0, 0))
 }

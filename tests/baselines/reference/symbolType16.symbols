@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/Symbols/symbolType16.ts ===
 interface Symbol {
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(symbolType16.ts, 0, 0))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(symbolType16.ts, 0, 0))
 
     newSymbolProp: number;
 >newSymbolProp : Symbol(Symbol.newSymbolProp, Decl(symbolType16.ts, 0, 18))

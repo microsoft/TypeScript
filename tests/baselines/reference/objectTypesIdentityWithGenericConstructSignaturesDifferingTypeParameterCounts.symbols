@@ -159,7 +159,7 @@ function foo8(x: I<string, string, boolean, Date>); // BUG 832086
 >foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 39, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 41, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 42, 51))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 42, 14))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo8(x: any) { }
 >foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 39, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 41, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 42, 51))
@@ -213,14 +213,14 @@ function foo12(x: I<B<string, number>, number, Date, string>);
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 57, 15))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo12(x: C<B<string, number>, number, Date>); // ok
 >foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 55, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 57, 62), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 58, 54))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 58, 15))
 >C : Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 4, 1))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo12(x: any) { }
 >foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 55, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 57, 62), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 58, 54))
@@ -244,9 +244,9 @@ function foo13(x: I<string, Date, RegExp, Date>);
 >foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 63, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 65, 49), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 66, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 65, 15))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo13(x: typeof a); // ok
 >foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 63, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 65, 49), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 66, 28))
@@ -261,7 +261,7 @@ function foo14(x: I<string, Date, RegExp, boolean>);
 >foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 67, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 69, 52), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 70, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 69, 15))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo14(x: typeof b); // ok

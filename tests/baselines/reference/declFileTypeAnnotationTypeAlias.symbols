@@ -36,7 +36,7 @@ module M {
 }
 
 interface Window {
->Window : Symbol(Window, Decl(declFileTypeAnnotationTypeAlias.ts, 17, 1))
+>Window : Symbol(Window, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(declFileTypeAnnotationTypeAlias.ts, 17, 1))
 
     someMethod();
 >someMethod : Symbol(Window.someMethod, Decl(declFileTypeAnnotationTypeAlias.ts, 19, 18))
@@ -47,7 +47,7 @@ module M {
 
     export type W = Window | string;
 >W : Symbol(W, Decl(declFileTypeAnnotationTypeAlias.ts, 23, 10))
->Window : Symbol(Window, Decl(declFileTypeAnnotationTypeAlias.ts, 17, 1))
+>Window : Symbol(Window, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(declFileTypeAnnotationTypeAlias.ts, 17, 1))
 
     export module N {
 >N : Symbol(N, Decl(declFileTypeAnnotationTypeAlias.ts, 24, 36))

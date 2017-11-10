@@ -134,8 +134,6 @@ namespace vpath {
      * Compare two paths.
      */
     export function compare(a: string, b: string, ignoreCase: boolean) {
-        if (!isAbsolute(a)) throw new Error("Path not absolute");
-        if (!isAbsolute(b)) throw new Error("Path not absolute");
         if (a === b) return 0;
         a = removeTrailingSeparator(a);
         b = removeTrailingSeparator(b);
@@ -268,5 +266,39 @@ namespace vpath {
 
         const match = extRegExp.exec(path);
         return match ? match[0] : "";
+    }
+
+    export function changeExtension(path: string, ext: string): string;
+    export function changeExtension(path: string, ext: string, extensions: string | string[], ignoreCase: boolean): string;
+    export function changeExtension(path: string, ext: string, extensions?: string | string[], ignoreCase?: boolean) {
+        const pathext = extensions ? extname(path, extensions, ignoreCase) : extname(path);
+        return pathext ? path.slice(0, path.length - pathext.length) + (ext.startsWith(".") ? ext : "." + ext) : path;
+    }
+
+    export function isTypeScript(path: string) {
+        return path.endsWith(".ts")
+            || path.endsWith(".tsx");
+    }
+
+    export function isJavaScript(path: string) {
+        return path.endsWith(".js")
+            || path.endsWith(".jsx");
+    }
+
+    export function isDeclaration(path: string) {
+        return path.endsWith(".d.ts");
+    }
+
+    export function isSourceMap(path: string) {
+        return path.endsWith(".map");
+    }
+
+    export function isJson(path: string) {
+        return path.endsWith(".json");
+    }
+
+    export function isDefaultLibrary(path: string) {
+        return isDeclaration(path)
+            && basename(path).startsWith("lib.");
     }
 }

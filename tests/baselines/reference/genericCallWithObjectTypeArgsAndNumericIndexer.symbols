@@ -14,7 +14,7 @@ function foo<T>(x: T) {
 var a: { [x: number]: Date };
 >a : Symbol(a, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 6, 3))
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 6, 10))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r = foo(a);
 >r : Symbol(r, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 7, 3))
@@ -41,7 +41,7 @@ function other<T>(arg: T) {
 function other2<T extends Date>(arg: T) {
 >other2 : Symbol(other2, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 12, 1))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 14, 16))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >arg : Symbol(arg, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 14, 32))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 14, 16))
 
@@ -63,9 +63,9 @@ function other2<T extends Date>(arg: T) {
 function other3<T extends Date, U extends Date>(arg: T) {
 >other3 : Symbol(other3, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 18, 1))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 20, 16))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 20, 31))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >arg : Symbol(arg, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 20, 48))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndNumericIndexer.ts, 20, 16))
 

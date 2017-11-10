@@ -41,7 +41,7 @@ class D<T, U> {
 class E<T extends Date> {
 >E : Symbol(E, Decl(constructorImplementationWithDefaultValues2.ts, 12, 1))
 >T : Symbol(T, Decl(constructorImplementationWithDefaultValues2.ts, 14, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     constructor(x);
 >x : Symbol(x, Decl(constructorImplementationWithDefaultValues2.ts, 15, 16))
@@ -49,7 +49,7 @@ class E<T extends Date> {
     constructor(x: T = new Date()) { // error
 >x : Symbol(x, Decl(constructorImplementationWithDefaultValues2.ts, 16, 16))
 >T : Symbol(T, Decl(constructorImplementationWithDefaultValues2.ts, 14, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         var y = x;
 >y : Symbol(y, Decl(constructorImplementationWithDefaultValues2.ts, 17, 11))

@@ -1,21 +1,21 @@
 === tests/cases/conformance/es6/propertyAccess/propertyAccessNumericLiterals.es6.ts ===
 0xffffffff.toString();
->0xffffffff.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>0xffffffff.toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 
 0o01234.toString();
->0o01234.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>0o01234.toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 
 0b01101101.toString();
->0b01101101.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>0b01101101.toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 
 1234..toString();
->1234..toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>1234..toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 
 1e0.toString();
->1e0.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>1e0.toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 

@@ -44,11 +44,11 @@ class C3 {
 
     c: this | Date;
 >c : Symbol(C3.c, Decl(declarationFiles.ts, 17, 20))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     d: this & Date;
 >d : Symbol(C3.d, Decl(declarationFiles.ts, 18, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     e: (((this)));
 >e : Symbol(C3.e, Decl(declarationFiles.ts, 19, 19))

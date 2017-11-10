@@ -40,7 +40,7 @@ var server: {
 
     foo: Date;
 >foo : Symbol(foo, Decl(exportEqualMemberMissing_0.ts, 9, 29))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 };
 export = server;

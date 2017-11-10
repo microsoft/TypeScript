@@ -267,13 +267,13 @@ class D14<T extends U, U extends V, V extends Date> extends C3<Date> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     [x: string]: Date;
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 83, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: T; // ok
 >foo : Symbol(D14.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 83, 22))
@@ -287,7 +287,7 @@ class D15<T extends U, U extends V, V extends Date> extends C3<T> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 10))
 
@@ -307,7 +307,7 @@ class D16<T extends U, U extends V, V extends Date> extends C3<U> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 22))
 
@@ -327,7 +327,7 @@ class D17<T extends U, U extends V, V extends Date> extends C3<V> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 35))
 
@@ -349,13 +349,13 @@ class D18<T extends U, U extends V, V extends Date> extends C3<Date> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     [x: string]: Date;
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 105, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: T; // ok
 >foo : Symbol(D18.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 105, 22))
@@ -369,7 +369,7 @@ class D19<T extends U, U extends V, V extends Date> extends C3<T> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 10))
 
@@ -389,7 +389,7 @@ class D20<T extends U, U extends V, V extends Date> extends C3<U> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 22))
 
@@ -409,7 +409,7 @@ class D21<T extends U, U extends V, V extends Date> extends C3<V> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 35))
 
@@ -431,13 +431,13 @@ class D22<T extends U, U extends V, V extends Date> extends C3<Date> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     [x: string]: Date;
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 127, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: T; // ok
 >foo : Symbol(D22.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 127, 22))
@@ -451,7 +451,7 @@ class D23<T extends U, U extends V, V extends Date> extends C3<T> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 10))
 
@@ -471,7 +471,7 @@ class D24<T extends U, U extends V, V extends Date> extends C3<U> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 22))
 
@@ -491,7 +491,7 @@ class D25<T extends U, U extends V, V extends Date> extends C3<V> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
 
@@ -513,17 +513,17 @@ class D26<T extends U, U extends V, V extends Date> extends C3<Date> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 148, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 148, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 148, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     [x: string]: Date;
 >x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 149, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: Date; // ok
 >foo : Symbol(D26.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 149, 22))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 class D27<T extends U, U extends V, V extends Date> extends C3<T> {
@@ -533,7 +533,7 @@ class D27<T extends U, U extends V, V extends Date> extends C3<T> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 10))
 
@@ -543,7 +543,7 @@ class D27<T extends U, U extends V, V extends Date> extends C3<T> {
 
     foo: Date; // error
 >foo : Symbol(D27.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 154, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 class D28<T extends U, U extends V, V extends Date> extends C3<U> {
@@ -553,7 +553,7 @@ class D28<T extends U, U extends V, V extends Date> extends C3<U> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 22))
 
@@ -563,7 +563,7 @@ class D28<T extends U, U extends V, V extends Date> extends C3<U> {
 
     foo: Date; // error
 >foo : Symbol(D28.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 159, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 class D29<T extends U, U extends V, V extends Date> extends C3<V> {
@@ -573,7 +573,7 @@ class D29<T extends U, U extends V, V extends Date> extends C3<V> {
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 22))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 35))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 35))
 
@@ -583,5 +583,5 @@ class D29<T extends U, U extends V, V extends Date> extends C3<V> {
 
     foo: Date; // error
 >foo : Symbol(D29.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 164, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }

@@ -13,7 +13,7 @@ var y = (null as string).length;
 
 var z = Date as any as string;
 >z : Symbol(z, Decl(asOperator1.ts, 3, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Should parse as a union type, not a bitwise 'or' of (32 as number) and 'string'
 var j = 32 as number|string;

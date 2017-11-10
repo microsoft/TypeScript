@@ -11,7 +11,7 @@ interface A {
 
     (x: Date): void;
 >x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 3, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     <T>(x: T[]): T[];
 >T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 4, 5))
@@ -31,7 +31,7 @@ interface B {
 
     (x: Date): void;
 >x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 10, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     <T>(x: T[]): T[];
 >T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 11, 5))

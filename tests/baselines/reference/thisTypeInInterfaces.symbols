@@ -46,11 +46,11 @@ interface I3 {
 
     c: this | Date;
 >c : Symbol(I3.c, Decl(thisTypeInInterfaces.ts, 18, 20))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     d: this & Date;
 >d : Symbol(I3.d, Decl(thisTypeInInterfaces.ts, 19, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     e: (((this)));
 >e : Symbol(I3.e, Decl(thisTypeInInterfaces.ts, 20, 19))

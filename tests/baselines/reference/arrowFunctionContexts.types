@@ -1,7 +1,7 @@
 === tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts ===
 // Arrow function used in with statement
 with (window) {
->window : any
+>window : Window
 
     var p = () => this;
 >p : any
@@ -32,10 +32,10 @@ class Derived extends Base {
 
 // Arrow function as function argument
 window.setTimeout(() => null, 100);
->window.setTimeout(() => null, 100) : any
->window.setTimeout : any
->window : any
->setTimeout : any
+>window.setTimeout(() => null, 100) : number
+>window.setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>window : Window
+>setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
 >() => null : () => any
 >null : null
 >100 : 100
@@ -104,7 +104,7 @@ module M2 {
 
     // Arrow function used in with statement
     with (window) {
->window : any
+>window : Window
 
         var p = () => this;
 >p : any
@@ -135,10 +135,10 @@ module M2 {
 
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
->window.setTimeout(() => null, 100) : any
->window.setTimeout : any
->window : any
->setTimeout : any
+>window.setTimeout(() => null, 100) : number
+>window.setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>window : Window
+>setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
 >() => null : () => any
 >null : null
 >100 : 100

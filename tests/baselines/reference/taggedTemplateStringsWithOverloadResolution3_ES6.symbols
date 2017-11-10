@@ -3,13 +3,13 @@
 function fn1(strs: TemplateStringsArray, s: string): string;
 >fn1 : Symbol(fn1, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 0, 0), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 1, 60), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 2, 60))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 1, 13))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >s : Symbol(s, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 1, 40))
 
 function fn1(strs: TemplateStringsArray, n: number): number;
 >fn1 : Symbol(fn1, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 0, 0), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 1, 60), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 2, 60))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 2, 13))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 2, 40))
 
 function fn1() { return null; }
@@ -27,7 +27,7 @@ fn1 `${ {} }`; // Error
 function fn2(strs: TemplateStringsArray, s: string, n: number): number;
 >fn2 : Symbol(fn2, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 8, 14), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 10, 71), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 11, 64))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 10, 13))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >s : Symbol(s, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 10, 40))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 10, 51))
 
@@ -35,7 +35,7 @@ function fn2<T>(strs: TemplateStringsArray, n: number, t: T): T;
 >fn2 : Symbol(fn2, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 8, 14), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 10, 71), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 11, 64))
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 11, 13))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 11, 16))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 11, 43))
 >t : Symbol(t, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 11, 54))
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 11, 13))
@@ -47,7 +47,7 @@ function fn2() { return undefined; }
 
 var d1: Date = fn2 `${ 0 }${ undefined }`; // contextually typed
 >d1 : Symbol(d1, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 14, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >fn2 : Symbol(fn2, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 8, 14), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 10, 71), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 11, 64))
 >undefined : Symbol(undefined)
 
@@ -75,7 +75,7 @@ function fn3<T>(strs: TemplateStringsArray, n: T): string;
 >fn3 : Symbol(fn3, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 24, 20), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 27, 58), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 28, 73), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 29, 76))
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 27, 13))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 27, 16))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 27, 43))
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 27, 13))
 
@@ -84,7 +84,7 @@ function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 28, 13))
 >U : Symbol(U, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 28, 15))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 28, 19))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >s : Symbol(s, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 28, 46))
 >t : Symbol(t, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 28, 57))
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 28, 13))
@@ -98,7 +98,7 @@ function fn3<T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number;
 >U : Symbol(U, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 29, 15))
 >V : Symbol(V, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 29, 18))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 29, 22))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >v : Symbol(v, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 29, 49))
 >V : Symbol(V, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 29, 18))
 >u : Symbol(u, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 29, 55))
@@ -147,7 +147,7 @@ function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: 
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 46, 13))
 >U : Symbol(U, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 46, 30))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 46, 49))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 46, 76))
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 46, 13))
 >m : Symbol(m, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 46, 82))
@@ -158,7 +158,7 @@ function fn4<T extends number, U extends string>(strs: TemplateStringsArray, n: 
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 47, 13))
 >U : Symbol(U, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 47, 30))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 47, 49))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 47, 76))
 >T : Symbol(T, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 47, 13))
 >m : Symbol(m, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 47, 82))
@@ -167,7 +167,7 @@ function fn4<T extends number, U extends string>(strs: TemplateStringsArray, n: 
 function fn4(strs: TemplateStringsArray)
 >fn4 : Symbol(fn4, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 43, 7), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 46, 89), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 47, 89), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 48, 40))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 48, 13))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 
 function fn4() { }
 >fn4 : Symbol(fn4, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 43, 7), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 46, 89), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 47, 89), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 48, 40))
@@ -201,14 +201,14 @@ fn4 `${ null }${ true }`;
 function fn5(strs: TemplateStringsArray, f: (n: string) => void): string;
 >fn5 : Symbol(fn5, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 62, 25), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 65, 73), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 66, 73))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 65, 13))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >f : Symbol(f, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 65, 40))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 65, 45))
 
 function fn5(strs: TemplateStringsArray, f: (n: number) => void): number;
 >fn5 : Symbol(fn5, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 62, 25), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 65, 73), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 66, 73))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 66, 13))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es6.d.ts, --, --))
 >f : Symbol(f, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 66, 40))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 66, 45))
 
@@ -224,8 +224,8 @@ fn5 `${ (n) => n.toFixed() }`; // will error; 'n' should have type 'string'.
 fn5 `${ (n) => n.substr(0) }`;
 >fn5 : Symbol(fn5, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 62, 25), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 65, 73), Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 66, 73))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 69, 9))
->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n.substr : Symbol(String.substr, Decl(lib.es6.d.ts, --, --))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3_ES6.ts, 69, 9))
->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es6.d.ts, --, --))
 
 

@@ -11,7 +11,7 @@ let x = async function() {
 // async function with which promised type is void - return can be omitted
 async function f2(): Promise<void> {
 >f2 : Symbol(f2, Decl(reachabilityChecks7.ts, 5, 1))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
     
 }
 
@@ -25,7 +25,7 @@ async function f3(x) {
 
 async function f4(): Promise<number> {
 >f4 : Symbol(f4, Decl(reachabilityChecks7.ts, 14, 1))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
     
 }
 

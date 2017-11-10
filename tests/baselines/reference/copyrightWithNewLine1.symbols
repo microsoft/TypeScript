@@ -8,6 +8,9 @@ import model = require("./greeter")
 
 var el = document.getElementById('content');
 >el : Symbol(el, Decl(copyrightWithNewLine1.ts, 5, 3))
+>document.getElementById : Symbol(Document.getElementById, Decl(lib.d.ts, --, --))
+>document : Symbol(document, Decl(lib.d.ts, --, --))
+>getElementById : Symbol(Document.getElementById, Decl(lib.d.ts, --, --))
 
 var greeter = new model.Greeter(el);
 >greeter : Symbol(greeter, Decl(copyrightWithNewLine1.ts, 6, 3))

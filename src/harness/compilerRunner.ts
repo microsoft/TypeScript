@@ -1,6 +1,10 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="typeWriter.ts" />
+/// <reference path="./vpath.ts" />
+/// <reference path="./vfs.ts" />
+/// <reference path="./compiler.ts" />
+/// <reference path="./documents.ts" />
 
 const enum CompilerTestType {
     Conformance,
@@ -65,7 +69,7 @@ class CompilerBaselineRunner extends RunnerBase {
             let otherFiles: Harness.Compiler.TestFile[];
 
             before(() => {
-                justName = fileName.replace(/^.*[\\\/]/, ""); // strips the fileName from the path.
+                justName = vpath.basename(fileName);
                 const content = Harness.IO.readFile(fileName);
                 const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
                 const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName, rootDir);
@@ -141,7 +145,7 @@ class CompilerBaselineRunner extends RunnerBase {
             it (`Correct module resolution tracing for ${fileName}`, () => {
                 if (options.traceResolution) {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".trace.json"), () => {
-                        return JSON.stringify(result.traceResults || [], undefined, 4);
+                        return utils.removeTestPathPrefixes(JSON.stringify(result.traceResults || [], undefined, 4));
                     });
                 }
             });
@@ -150,7 +154,7 @@ class CompilerBaselineRunner extends RunnerBase {
             it("Correct sourcemap content for " + fileName, () => {
                 if (options.sourceMap || options.inlineSourceMap) {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
-                        const record = result.getSourceMapRecord();
+                        const record = utils.removeTestPathPrefixes(result.getSourceMapRecord());
                         if ((options.noEmitOnError && result.errors.length !== 0) || record === undefined) {
                             // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
                             /* tslint:disable:no-null-keyword */

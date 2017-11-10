@@ -13,6 +13,9 @@ function foo() {
 >_x : Symbol(_x, Decl(letShadowedByNameInNestedScope.ts, 4, 11))
 
         console.log(x);
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(letShadowedByNameInNestedScope.ts, 2, 7))
 
     })();

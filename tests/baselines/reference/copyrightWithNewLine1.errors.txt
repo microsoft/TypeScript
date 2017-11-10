@@ -1,8 +1,7 @@
 tests/cases/compiler/copyrightWithNewLine1.ts(5,24): error TS2307: Cannot find module './greeter'.
-tests/cases/compiler/copyrightWithNewLine1.ts(6,10): error TS2304: Cannot find name 'document'.
 
 
-==== tests/cases/compiler/copyrightWithNewLine1.ts (2 errors) ====
+==== tests/cases/compiler/copyrightWithNewLine1.ts (1 errors) ====
     /*****************************
     * (c) Copyright - Important
     ****************************/
@@ -11,8 +10,6 @@ tests/cases/compiler/copyrightWithNewLine1.ts(6,10): error TS2304: Cannot find n
                            ~~~~~~~~~~~
 !!! error TS2307: Cannot find module './greeter'.
     var el = document.getElementById('content');
-             ~~~~~~~~
-!!! error TS2304: Cannot find name 'document'.
     var greeter = new model.Greeter(el);
     /** things */
     greeter.start();

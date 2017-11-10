@@ -19,6 +19,7 @@ anyVar<number>();
 
 anyVar<Window>(undefined);
 >anyVar : Symbol(anyVar, Decl(functionCalls.ts, 1, 3))
+>Window : Symbol(Window, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 

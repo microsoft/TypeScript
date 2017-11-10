@@ -4,7 +4,7 @@ var sym: symbol;
 
 var symObj: Symbol;
 >symObj : Symbol(symObj, Decl(symbolType15.ts, 1, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
 symObj = sym;
 >symObj : Symbol(symObj, Decl(symbolType15.ts, 1, 3))

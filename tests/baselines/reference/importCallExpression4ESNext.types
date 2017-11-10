@@ -17,9 +17,6 @@ export function backup() { return "backup"; }
 >"backup" : "backup"
 
 === tests/cases/conformance/dynamicImport/2.ts ===
-declare var console: any;
->console : any
-
 class C {
 >C : C
 
@@ -47,10 +44,10 @@ class C {
 >Zero : typeof "tests/cases/conformance/dynamicImport/0"
 
             console.log(Zero.foo());
->console.log(Zero.foo()) : any
->console.log : any
->console : any
->log : any
+>console.log(Zero.foo()) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >Zero.foo() : string
 >Zero.foo : () => string
 >Zero : typeof "tests/cases/conformance/dynamicImport/0"
@@ -61,10 +58,10 @@ class C {
 >err : any
 
             console.log(err);
->console.log(err) : any
->console.log : any
->console : any
->log : any
+>console.log(err) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >err : any
 
             let one = await import("./1");
@@ -74,10 +71,10 @@ class C {
 >"./1" : "./1"
 
             console.log(one.backup());
->console.log(one.backup()) : any
->console.log : any
->console : any
->log : any
+>console.log(one.backup()) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >one.backup() : string
 >one.backup : () => string
 >one : typeof "tests/cases/conformance/dynamicImport/1"

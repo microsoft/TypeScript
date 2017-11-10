@@ -50,7 +50,7 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 27, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: any;
 >foo : Symbol(I5.foo, Decl(anyAssignableToEveryType2.ts, 27, 22))

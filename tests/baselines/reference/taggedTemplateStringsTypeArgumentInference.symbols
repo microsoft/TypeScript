@@ -293,7 +293,7 @@ interface A92 {
 
     z?: Date;
 >z : Symbol(A92.z, Decl(taggedTemplateStringsTypeArgumentInference.ts, 70, 14))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }`;
@@ -302,7 +302,7 @@ var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y:
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 43))
 >z : Symbol(z, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 49))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 71))
 >y : Symbol(y, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 77))
 

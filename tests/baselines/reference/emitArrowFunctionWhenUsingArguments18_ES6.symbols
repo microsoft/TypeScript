@@ -8,9 +8,9 @@ function f() {
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments18_ES6.ts, 1, 31))
 
     if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es6.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es6.d.ts, --, --))
 
         return () => arguments;
 >arguments : Symbol(arguments)

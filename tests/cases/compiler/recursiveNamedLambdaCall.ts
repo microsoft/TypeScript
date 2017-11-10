@@ -1,3 +1,4 @@
+// @lib: es5
 var promise = function( obj ) {
 	
 		if ( top && top.doScroll ) {

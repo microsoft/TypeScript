@@ -6,6 +6,7 @@ Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
 >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.d.ts, --, --))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
 >value : Symbol(value, Decl(excessPropertyCheckWithEmptyObject.ts, 3, 39))
 >readonly : Symbol(readonly, Decl(excessPropertyCheckWithEmptyObject.ts, 3, 56))
 

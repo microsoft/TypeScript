@@ -14,8 +14,8 @@ export class BrokenClass {
 >value : Symbol(value, Decl(file1.ts, 7, 36))
 
   return new Promise<Array<MyModule.MyModel>>((resolve, reject) => {
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
 >MyModel : Symbol(MyModule.MyModel, Decl(mymodule.ts, 0, 0))
 >resolve : Symbol(resolve, Decl(file1.ts, 8, 47))
@@ -23,7 +23,7 @@ export class BrokenClass {
 
     let result: Array<MyModule.MyModel> = [];
 >result : Symbol(result, Decl(file1.ts, 10, 7))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
 >MyModel : Symbol(MyModule.MyModel, Decl(mymodule.ts, 0, 0))
 
@@ -32,19 +32,19 @@ export class BrokenClass {
 >order : Symbol(order, Decl(file1.ts, 12, 25))
 
       return new Promise((resolve, reject) => {
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >resolve : Symbol(resolve, Decl(file1.ts, 13, 26))
 >reject : Symbol(reject, Decl(file1.ts, 13, 34))
 
         this.doStuff(order.id)
->this.doStuff(order.id)          .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>this.doStuff(order.id)          .then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
 >this.doStuff : Symbol(BrokenClass.doStuff, Decl(file1.ts, 27, 3))
 >this : Symbol(BrokenClass, Decl(file1.ts, 1, 39))
 >doStuff : Symbol(BrokenClass.doStuff, Decl(file1.ts, 27, 3))
 >order : Symbol(order, Decl(file1.ts, 12, 25))
 
           .then((items) => {
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
 >items : Symbol(items, Decl(file1.ts, 15, 17))
 
             order.items = items;
@@ -60,19 +60,19 @@ export class BrokenClass {
     };
 
     return Promise.all(result.map(populateItems))
->Promise.all(result.map(populateItems))      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
->Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --) ... and 6 more)
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --) ... and 6 more)
->result.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>Promise.all(result.map(populateItems))      .then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --) ... and 6 more)
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --) ... and 6 more)
+>result.map : Symbol(Array.map, Decl(lib.es6.d.ts, --, --))
 >result : Symbol(result, Decl(file1.ts, 10, 7))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es6.d.ts, --, --))
 >populateItems : Symbol(populateItems, Decl(file1.ts, 12, 7))
 
       .then((orders: Array<MyModule.MyModel>) => {
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
 >orders : Symbol(orders, Decl(file1.ts, 23, 13))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
 >MyModel : Symbol(MyModule.MyModel, Decl(mymodule.ts, 0, 0))
 

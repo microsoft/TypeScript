@@ -8,5 +8,5 @@ function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
 
 takeFirstTwoEntries(...new Map([["", 0], ["hello", 1]]));
 >takeFirstTwoEntries : Symbol(takeFirstTwoEntries, Decl(iterableArrayPattern27.ts, 0, 0))
->Map : Symbol(Map, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 

@@ -1749,7 +1749,7 @@ namespace ts {
     }
 
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
-        return diagnostic.file ? diagnostic.file.fileName : undefined;
+        return diagnostic.file ? diagnostic.file.path : undefined;
     }
 
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {

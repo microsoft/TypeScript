@@ -15,7 +15,7 @@ class B extends A {
 }
 
 interface Object {
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(objectTypeHidingMembersOfExtendedObject.ts, 6, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(objectTypeHidingMembersOfExtendedObject.ts, 6, 1))
 
     data: A;
 >data : Symbol(Object.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 8, 18))
@@ -23,7 +23,7 @@ interface Object {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(objectTypeHidingMembersOfExtendedObject.ts, 10, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(objectTypeHidingMembersOfExtendedObject.ts, 6, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(objectTypeHidingMembersOfExtendedObject.ts, 6, 1))
 }
 
 class C {

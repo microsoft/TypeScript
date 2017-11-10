@@ -33,12 +33,12 @@ var p1 = import(ValidSomeCondition() ? "./0" : "externalModule");
 
 var p1: Promise<any> = import(getSpecifier());
 >p1 : Symbol(p1, Decl(1.ts, 10, 3), Decl(1.ts, 11, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
 
 var p11: Promise<typeof defaultModule> = import(getSpecifier());
 >p11 : Symbol(p11, Decl(1.ts, 12, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
 >getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
 
@@ -46,13 +46,13 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof 
 >p2 : Symbol(p2, Decl(1.ts, 13, 5))
 >whatToLoad : Symbol(whatToLoad, Decl(1.ts, 3, 11))
 >getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
 
 p1.then(zero => {
->p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p1.then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
 >p1 : Symbol(p1, Decl(1.ts, 10, 3), Decl(1.ts, 11, 3))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
 >zero : Symbol(zero, Decl(1.ts, 14, 8))
 
     return zero.foo();  // ok, zero is any
@@ -65,7 +65,7 @@ let j: string;
 
 var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
 >p3 : Symbol(p3, Decl(1.ts, 19, 3))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
 >j : Symbol(j, Decl(1.ts, 18, 3))
 >getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))

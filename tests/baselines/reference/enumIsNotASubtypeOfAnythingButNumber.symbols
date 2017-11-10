@@ -58,7 +58,7 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: E;
 >foo : Symbol(I5.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 22))

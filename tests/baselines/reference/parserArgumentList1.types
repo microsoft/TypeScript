@@ -1,26 +1,26 @@
 === tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts ===
 export function removeClass (node:HTMLElement, className:string) {
->removeClass : (node: any, className: string) => void
->node : any
->HTMLElement : No type information available!
+>removeClass : (node: HTMLElement, className: string) => void
+>node : HTMLElement
+>HTMLElement : HTMLElement
 >className : string
 
 	node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {
->node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	}) : any
->node.className : any
->node : any
->className : any
->node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	}) : any
->node.className.replace : any
->node.className : any
->node : any
->className : any
->replace : any
+>node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	}) : string
+>node.className : string
+>node : HTMLElement
+>className : string
+>node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	}) : string
+>node.className.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>node.className : string
+>node : HTMLElement
+>className : string
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >_classNameRegexp(className) : any
 >_classNameRegexp : any
 >className : string
->function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	} : (everything: any, leftDelimiter: any, name: any, rightDelimiter: any) => " " | ""
->everything : any
+>function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	} : (everything: string, leftDelimiter: any, name: any, rightDelimiter: any) => " " | ""
+>everything : string
 >leftDelimiter : any
 >name : any
 >rightDelimiter : any

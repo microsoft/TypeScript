@@ -87,7 +87,7 @@ var aString: string = 9.9;
 
 var aDate: Date = 9.9;
 >aDate : Symbol(aDate, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 35, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var aVoid: void = 9.9;
 >aVoid : Symbol(aVoid, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 37, 3))

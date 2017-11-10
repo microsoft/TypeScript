@@ -1,8 +1,0 @@
-tests/cases/compiler/inlineSourceMap.ts(2,1): error TS2304: Cannot find name 'console'.
-
-
-==== tests/cases/compiler/inlineSourceMap.ts (1 errors) ====
-    var x = 0;
-    console.log(x);
-    ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.

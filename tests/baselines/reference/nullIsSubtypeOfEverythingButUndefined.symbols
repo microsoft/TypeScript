@@ -39,11 +39,11 @@ var r3 = true ? null : true;
 
 var r4 = true ? new Date() : null;
 >r4 : Symbol(r4, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 18, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 19, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r4 = true ? null : new Date();
 >r4 : Symbol(r4, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 18, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 19, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r5 = true ? /1/ : null;
 >r5 : Symbol(r5, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 21, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 22, 3))

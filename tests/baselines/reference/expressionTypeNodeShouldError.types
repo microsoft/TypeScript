@@ -34,21 +34,21 @@ class C {
 }
 
 const nodes = document.getElementsByTagName("li");
->nodes : any
->document.getElementsByTagName("li") : any
->document.getElementsByTagName : any
->document : any
->getElementsByTagName : any
+>nodes : NodeListOf<HTMLLIElement>
+>document.getElementsByTagName("li") : NodeListOf<HTMLLIElement>
+>document.getElementsByTagName : { <K extends "symbol" | "object" | "abbr" | "acronym" | "address" | "article" | "aside" | "b" | "bdo" | "big" | "center" | "circle" | "cite" | "clippath" | "code" | "dd" | "defs" | "desc" | "dfn" | "dt" | "ellipse" | "em" | "feblend" | "fecolormatrix" | "fecomponenttransfer" | "fecomposite" | "feconvolvematrix" | "fediffuselighting" | "fedisplacementmap" | "fedistantlight" | "feflood" | "fefunca" | "fefuncb" | "fefuncg" | "fefuncr" | "fegaussianblur" | "feimage" | "femerge" | "femergenode" | "femorphology" | "feoffset" | "fepointlight" | "fespecularlighting" | "fespotlight" | "fetile" | "feturbulence" | "figcaption" | "figure" | "filter" | "footer" | "foreignobject" | "g" | "header" | "hgroup" | "i" | "image" | "kbd" | "keygen" | "line" | "lineargradient" | "mark" | "marker" | "mask" | "metadata" | "nav" | "nobr" | "noframes" | "noscript" | "path" | "pattern" | "plaintext" | "polygon" | "polyline" | "radialgradient" | "rect" | "rt" | "ruby" | "s" | "samp" | "section" | "small" | "stop" | "strike" | "strong" | "sub" | "sup" | "svg" | "switch" | "text" | "textpath" | "tspan" | "tt" | "u" | "use" | "var" | "view" | "wbr" | "a" | "applet" | "area" | "audio" | "base" | "basefont" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "col" | "colgroup" | "data" | "datalist" | "del" | "dir" | "div" | "dl" | "embed" | "fieldset" | "font" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "hr" | "html" | "iframe" | "img" | "input" | "ins" | "isindex" | "label" | "legend" | "li" | "link" | "listing" | "map" | "marquee" | "menu" | "meta" | "meter" | "nextid" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "script" | "select" | "source" | "span" | "style" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "ul" | "video" | "x-ms-webview" | "xmp">(tagname: K): ElementListTagNameMap[K]; (tagname: string): NodeListOf<Element>; }
+>document : Document
+>getElementsByTagName : { <K extends "symbol" | "object" | "abbr" | "acronym" | "address" | "article" | "aside" | "b" | "bdo" | "big" | "center" | "circle" | "cite" | "clippath" | "code" | "dd" | "defs" | "desc" | "dfn" | "dt" | "ellipse" | "em" | "feblend" | "fecolormatrix" | "fecomponenttransfer" | "fecomposite" | "feconvolvematrix" | "fediffuselighting" | "fedisplacementmap" | "fedistantlight" | "feflood" | "fefunca" | "fefuncb" | "fefuncg" | "fefuncr" | "fegaussianblur" | "feimage" | "femerge" | "femergenode" | "femorphology" | "feoffset" | "fepointlight" | "fespecularlighting" | "fespotlight" | "fetile" | "feturbulence" | "figcaption" | "figure" | "filter" | "footer" | "foreignobject" | "g" | "header" | "hgroup" | "i" | "image" | "kbd" | "keygen" | "line" | "lineargradient" | "mark" | "marker" | "mask" | "metadata" | "nav" | "nobr" | "noframes" | "noscript" | "path" | "pattern" | "plaintext" | "polygon" | "polyline" | "radialgradient" | "rect" | "rt" | "ruby" | "s" | "samp" | "section" | "small" | "stop" | "strike" | "strong" | "sub" | "sup" | "svg" | "switch" | "text" | "textpath" | "tspan" | "tt" | "u" | "use" | "var" | "view" | "wbr" | "a" | "applet" | "area" | "audio" | "base" | "basefont" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "col" | "colgroup" | "data" | "datalist" | "del" | "dir" | "div" | "dl" | "embed" | "fieldset" | "font" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "hr" | "html" | "iframe" | "img" | "input" | "ins" | "isindex" | "label" | "legend" | "li" | "link" | "listing" | "map" | "marquee" | "menu" | "meta" | "meter" | "nextid" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "script" | "select" | "source" | "span" | "style" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "ul" | "video" | "x-ms-webview" | "xmp">(tagname: K): ElementListTagNameMap[K]; (tagname: string): NodeListOf<Element>; }
 >"li" : "li"
 
 type ItemType = "".typeof(nodes.item(0));
 >ItemType : ""
 >typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->(nodes.item(0)) : any
->nodes.item(0) : any
->nodes.item : any
->nodes : any
->item : any
+>(nodes.item(0)) : HTMLLIElement
+>nodes.item(0) : HTMLLIElement
+>nodes.item : (index: number) => HTMLLIElement
+>nodes : NodeListOf<HTMLLIElement>
+>item : (index: number) => HTMLLIElement
 >0 : 0
 
 === tests/cases/compiler/number.ts ===
@@ -80,21 +80,21 @@ class C2 {
 }
 
 const nodes2 = document.getElementsByTagName("li");
->nodes2 : any
->document.getElementsByTagName("li") : any
->document.getElementsByTagName : any
->document : any
->getElementsByTagName : any
+>nodes2 : NodeListOf<HTMLLIElement>
+>document.getElementsByTagName("li") : NodeListOf<HTMLLIElement>
+>document.getElementsByTagName : { <K extends "symbol" | "object" | "abbr" | "acronym" | "address" | "article" | "aside" | "b" | "bdo" | "big" | "center" | "circle" | "cite" | "clippath" | "code" | "dd" | "defs" | "desc" | "dfn" | "dt" | "ellipse" | "em" | "feblend" | "fecolormatrix" | "fecomponenttransfer" | "fecomposite" | "feconvolvematrix" | "fediffuselighting" | "fedisplacementmap" | "fedistantlight" | "feflood" | "fefunca" | "fefuncb" | "fefuncg" | "fefuncr" | "fegaussianblur" | "feimage" | "femerge" | "femergenode" | "femorphology" | "feoffset" | "fepointlight" | "fespecularlighting" | "fespotlight" | "fetile" | "feturbulence" | "figcaption" | "figure" | "filter" | "footer" | "foreignobject" | "g" | "header" | "hgroup" | "i" | "image" | "kbd" | "keygen" | "line" | "lineargradient" | "mark" | "marker" | "mask" | "metadata" | "nav" | "nobr" | "noframes" | "noscript" | "path" | "pattern" | "plaintext" | "polygon" | "polyline" | "radialgradient" | "rect" | "rt" | "ruby" | "s" | "samp" | "section" | "small" | "stop" | "strike" | "strong" | "sub" | "sup" | "svg" | "switch" | "text" | "textpath" | "tspan" | "tt" | "u" | "use" | "var" | "view" | "wbr" | "a" | "applet" | "area" | "audio" | "base" | "basefont" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "col" | "colgroup" | "data" | "datalist" | "del" | "dir" | "div" | "dl" | "embed" | "fieldset" | "font" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "hr" | "html" | "iframe" | "img" | "input" | "ins" | "isindex" | "label" | "legend" | "li" | "link" | "listing" | "map" | "marquee" | "menu" | "meta" | "meter" | "nextid" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "script" | "select" | "source" | "span" | "style" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "ul" | "video" | "x-ms-webview" | "xmp">(tagname: K): ElementListTagNameMap[K]; (tagname: string): NodeListOf<Element>; }
+>document : Document
+>getElementsByTagName : { <K extends "symbol" | "object" | "abbr" | "acronym" | "address" | "article" | "aside" | "b" | "bdo" | "big" | "center" | "circle" | "cite" | "clippath" | "code" | "dd" | "defs" | "desc" | "dfn" | "dt" | "ellipse" | "em" | "feblend" | "fecolormatrix" | "fecomponenttransfer" | "fecomposite" | "feconvolvematrix" | "fediffuselighting" | "fedisplacementmap" | "fedistantlight" | "feflood" | "fefunca" | "fefuncb" | "fefuncg" | "fefuncr" | "fegaussianblur" | "feimage" | "femerge" | "femergenode" | "femorphology" | "feoffset" | "fepointlight" | "fespecularlighting" | "fespotlight" | "fetile" | "feturbulence" | "figcaption" | "figure" | "filter" | "footer" | "foreignobject" | "g" | "header" | "hgroup" | "i" | "image" | "kbd" | "keygen" | "line" | "lineargradient" | "mark" | "marker" | "mask" | "metadata" | "nav" | "nobr" | "noframes" | "noscript" | "path" | "pattern" | "plaintext" | "polygon" | "polyline" | "radialgradient" | "rect" | "rt" | "ruby" | "s" | "samp" | "section" | "small" | "stop" | "strike" | "strong" | "sub" | "sup" | "svg" | "switch" | "text" | "textpath" | "tspan" | "tt" | "u" | "use" | "var" | "view" | "wbr" | "a" | "applet" | "area" | "audio" | "base" | "basefont" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "col" | "colgroup" | "data" | "datalist" | "del" | "dir" | "div" | "dl" | "embed" | "fieldset" | "font" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "hr" | "html" | "iframe" | "img" | "input" | "ins" | "isindex" | "label" | "legend" | "li" | "link" | "listing" | "map" | "marquee" | "menu" | "meta" | "meter" | "nextid" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "script" | "select" | "source" | "span" | "style" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "ul" | "video" | "x-ms-webview" | "xmp">(tagname: K): ElementListTagNameMap[K]; (tagname: string): NodeListOf<Element>; }
 >"li" : "li"
 
 type ItemType2 = 4..typeof(nodes.item(0));
 >ItemType2 : 4
 >typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->(nodes.item(0)) : any
->nodes.item(0) : any
->nodes.item : any
->nodes : any
->item : any
+>(nodes.item(0)) : HTMLLIElement
+>nodes.item(0) : HTMLLIElement
+>nodes.item : (index: number) => HTMLLIElement
+>nodes : NodeListOf<HTMLLIElement>
+>item : (index: number) => HTMLLIElement
 >0 : 0
 
 === tests/cases/compiler/boolean.ts ===
@@ -127,22 +127,22 @@ class C3 {
 }
 
 const nodes3 = document.getElementsByTagName("li");
->nodes3 : any
->document.getElementsByTagName("li") : any
->document.getElementsByTagName : any
->document : any
->getElementsByTagName : any
+>nodes3 : NodeListOf<HTMLLIElement>
+>document.getElementsByTagName("li") : NodeListOf<HTMLLIElement>
+>document.getElementsByTagName : { <K extends "symbol" | "object" | "abbr" | "acronym" | "address" | "article" | "aside" | "b" | "bdo" | "big" | "center" | "circle" | "cite" | "clippath" | "code" | "dd" | "defs" | "desc" | "dfn" | "dt" | "ellipse" | "em" | "feblend" | "fecolormatrix" | "fecomponenttransfer" | "fecomposite" | "feconvolvematrix" | "fediffuselighting" | "fedisplacementmap" | "fedistantlight" | "feflood" | "fefunca" | "fefuncb" | "fefuncg" | "fefuncr" | "fegaussianblur" | "feimage" | "femerge" | "femergenode" | "femorphology" | "feoffset" | "fepointlight" | "fespecularlighting" | "fespotlight" | "fetile" | "feturbulence" | "figcaption" | "figure" | "filter" | "footer" | "foreignobject" | "g" | "header" | "hgroup" | "i" | "image" | "kbd" | "keygen" | "line" | "lineargradient" | "mark" | "marker" | "mask" | "metadata" | "nav" | "nobr" | "noframes" | "noscript" | "path" | "pattern" | "plaintext" | "polygon" | "polyline" | "radialgradient" | "rect" | "rt" | "ruby" | "s" | "samp" | "section" | "small" | "stop" | "strike" | "strong" | "sub" | "sup" | "svg" | "switch" | "text" | "textpath" | "tspan" | "tt" | "u" | "use" | "var" | "view" | "wbr" | "a" | "applet" | "area" | "audio" | "base" | "basefont" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "col" | "colgroup" | "data" | "datalist" | "del" | "dir" | "div" | "dl" | "embed" | "fieldset" | "font" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "hr" | "html" | "iframe" | "img" | "input" | "ins" | "isindex" | "label" | "legend" | "li" | "link" | "listing" | "map" | "marquee" | "menu" | "meta" | "meter" | "nextid" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "script" | "select" | "source" | "span" | "style" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "ul" | "video" | "x-ms-webview" | "xmp">(tagname: K): ElementListTagNameMap[K]; (tagname: string): NodeListOf<Element>; }
+>document : Document
+>getElementsByTagName : { <K extends "symbol" | "object" | "abbr" | "acronym" | "address" | "article" | "aside" | "b" | "bdo" | "big" | "center" | "circle" | "cite" | "clippath" | "code" | "dd" | "defs" | "desc" | "dfn" | "dt" | "ellipse" | "em" | "feblend" | "fecolormatrix" | "fecomponenttransfer" | "fecomposite" | "feconvolvematrix" | "fediffuselighting" | "fedisplacementmap" | "fedistantlight" | "feflood" | "fefunca" | "fefuncb" | "fefuncg" | "fefuncr" | "fegaussianblur" | "feimage" | "femerge" | "femergenode" | "femorphology" | "feoffset" | "fepointlight" | "fespecularlighting" | "fespotlight" | "fetile" | "feturbulence" | "figcaption" | "figure" | "filter" | "footer" | "foreignobject" | "g" | "header" | "hgroup" | "i" | "image" | "kbd" | "keygen" | "line" | "lineargradient" | "mark" | "marker" | "mask" | "metadata" | "nav" | "nobr" | "noframes" | "noscript" | "path" | "pattern" | "plaintext" | "polygon" | "polyline" | "radialgradient" | "rect" | "rt" | "ruby" | "s" | "samp" | "section" | "small" | "stop" | "strike" | "strong" | "sub" | "sup" | "svg" | "switch" | "text" | "textpath" | "tspan" | "tt" | "u" | "use" | "var" | "view" | "wbr" | "a" | "applet" | "area" | "audio" | "base" | "basefont" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "col" | "colgroup" | "data" | "datalist" | "del" | "dir" | "div" | "dl" | "embed" | "fieldset" | "font" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "hr" | "html" | "iframe" | "img" | "input" | "ins" | "isindex" | "label" | "legend" | "li" | "link" | "listing" | "map" | "marquee" | "menu" | "meta" | "meter" | "nextid" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "script" | "select" | "source" | "span" | "style" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "ul" | "video" | "x-ms-webview" | "xmp">(tagname: K): ElementListTagNameMap[K]; (tagname: string): NodeListOf<Element>; }
 >"li" : "li"
 
 type ItemType3 = true.typeof(nodes.item(0));
 >ItemType3 : true
 >true : true
 >typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->(nodes.item(0)) : any
->nodes.item(0) : any
->nodes.item : any
->nodes : any
->item : any
+>(nodes.item(0)) : HTMLLIElement
+>nodes.item(0) : HTMLLIElement
+>nodes.item : (index: number) => HTMLLIElement
+>nodes : NodeListOf<HTMLLIElement>
+>item : (index: number) => HTMLLIElement
 >0 : 0
 
 

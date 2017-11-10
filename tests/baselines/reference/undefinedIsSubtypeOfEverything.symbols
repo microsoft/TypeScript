@@ -95,7 +95,7 @@ class D5 extends Base {
 
     foo: Date;
 >foo : Symbol(D5.foo, Decl(undefinedIsSubtypeOfEverything.ts, 45, 23))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 

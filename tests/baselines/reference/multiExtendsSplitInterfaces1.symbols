@@ -1,3 +1,6 @@
 === tests/cases/compiler/multiExtendsSplitInterfaces1.ts ===
 self.cancelAnimationFrame(0);
-No type information for this code.
+>self.cancelAnimationFrame : Symbol(Window.cancelAnimationFrame, Decl(lib.d.ts, --, --))
+>self : Symbol(self, Decl(lib.d.ts, --, --))
+>cancelAnimationFrame : Symbol(Window.cancelAnimationFrame, Decl(lib.d.ts, --, --))
+

@@ -18,10 +18,10 @@ import {F} from 'f1';
 >F : any
 
 console.log(A + B + C + D + E + F)
->console.log(A + B + C + D + E + F) : any
->console.log : any
->console : any
->log : any
+>console.log(A + B + C + D + E + F) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >A + B + C + D + E + F : any
 >A + B + C + D + E : any
 >A + B + C + D : any

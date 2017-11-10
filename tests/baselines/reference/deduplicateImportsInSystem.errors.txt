@@ -4,10 +4,9 @@ tests/cases/compiler/deduplicateImportsInSystem.ts(3,17): error TS2307: Cannot f
 tests/cases/compiler/deduplicateImportsInSystem.ts(4,17): error TS2307: Cannot find module 'f2'.
 tests/cases/compiler/deduplicateImportsInSystem.ts(5,17): error TS2307: Cannot find module 'f2'.
 tests/cases/compiler/deduplicateImportsInSystem.ts(6,17): error TS2307: Cannot find module 'f1'.
-tests/cases/compiler/deduplicateImportsInSystem.ts(8,1): error TS2304: Cannot find name 'console'.
 
 
-==== tests/cases/compiler/deduplicateImportsInSystem.ts (7 errors) ====
+==== tests/cases/compiler/deduplicateImportsInSystem.ts (6 errors) ====
     import {A} from "f1";
                     ~~~~
 !!! error TS2307: Cannot find module 'f1'.
@@ -28,5 +27,3 @@ tests/cases/compiler/deduplicateImportsInSystem.ts(8,1): error TS2304: Cannot fi
 !!! error TS2307: Cannot find module 'f1'.
     
     console.log(A + B + C + D + E + F)
-    ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.

@@ -10,11 +10,11 @@ namespace events {
 
     export interface EventEmitter {
         on(event: string | symbol, listener: (...args: any[]) => void): this;
-        once: this["on"];
-        addListener: this["on"];
-        prependListener: this["on"];
-        prependOnceListener: this["on"];
-        removeListener: this["on"];
+        once(event: string | symbol, listener: (...args: any[]) => void): this;
+        addListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this;
+        removeListener(event: string | symbol, listener: (...args: any[]) => void): this;
         removeAllListeners(event?: string | symbol): this;
         setMaxListeners(n: number): this;
         getMaxListeners(): number;

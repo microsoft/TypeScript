@@ -5,15 +5,15 @@ module M {
     function f(s: string): Iterable<any>;
 >f : Symbol(f, Decl(generatorOverloads5.ts, 0, 10), Decl(generatorOverloads5.ts, 1, 41), Decl(generatorOverloads5.ts, 2, 41))
 >s : Symbol(s, Decl(generatorOverloads5.ts, 1, 15))
->Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es6.d.ts, --, --))
 
     function f(s: number): Iterable<any>;
 >f : Symbol(f, Decl(generatorOverloads5.ts, 0, 10), Decl(generatorOverloads5.ts, 1, 41), Decl(generatorOverloads5.ts, 2, 41))
 >s : Symbol(s, Decl(generatorOverloads5.ts, 2, 15))
->Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es6.d.ts, --, --))
 
     function* f(s: any): Iterable<any> { }
 >f : Symbol(f, Decl(generatorOverloads5.ts, 0, 10), Decl(generatorOverloads5.ts, 1, 41), Decl(generatorOverloads5.ts, 2, 41))
 >s : Symbol(s, Decl(generatorOverloads5.ts, 3, 16))
->Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es6.d.ts, --, --))
 }

@@ -12,7 +12,7 @@ declare global {
 >global : Symbol(global, Decl(f1.d.ts, 4, 1))
 
     interface SymbolConstructor {
->SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(f1.d.ts, 5, 16))
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(f1.d.ts, 5, 16))
 
         observable: symbol;
 >observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
@@ -35,7 +35,7 @@ declare global {
 === tests/cases/compiler/main.ts ===
 Symbol.observable;
 >Symbol.observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
 
 new Cls().x

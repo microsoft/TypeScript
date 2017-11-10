@@ -1,7 +1,4 @@
 tests/cases/conformance/functions/functionOverloadErrors.ts(2,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/functions/functionOverloadErrors.ts(44,25): error TS2304: Cannot find name 'Window'.
-tests/cases/conformance/functions/functionOverloadErrors.ts(50,25): error TS2304: Cannot find name 'Window'.
-tests/cases/conformance/functions/functionOverloadErrors.ts(51,32): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/functions/functionOverloadErrors.ts(65,13): error TS2385: Overload signatures must all be public, private or protected.
 tests/cases/conformance/functions/functionOverloadErrors.ts(68,13): error TS2385: Overload signatures must all be public, private or protected.
 tests/cases/conformance/functions/functionOverloadErrors.ts(75,21): error TS2383: Overload signatures must all be exported or non-exported.
@@ -14,7 +11,7 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(103,10): error TS239
 tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
-==== tests/cases/conformance/functions/functionOverloadErrors.ts (14 errors) ====
+==== tests/cases/conformance/functions/functionOverloadErrors.ts (11 errors) ====
     //Function overload signature with initializer
     function fn1(x = 3);
                  ~~~~~
@@ -61,19 +58,13 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     
     //Function overloads that differ only by type parameter constraints
     function fn10<T extends Window>();
-                            ~~~~~~
-!!! error TS2304: Cannot find name 'Window'.
     function fn10<S extends Date>();
     function fn10() { }
     // (actually OK)
     
     //Function overloads that differ only by type parameter constraints where constraints are structually identical
     function fn11<T extends Window>();
-                            ~~~~~~
-!!! error TS2304: Cannot find name 'Window'.
     function fn11<S extends typeof window>();
-                                   ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
     function fn11() { }
     
     //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference

@@ -72,7 +72,7 @@ throw aString;
 
 var aDate = new Date(12);
 >aDate : Symbol(aDate, Decl(throwStatements.ts, 30, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 throw aDate;
 >aDate : Symbol(aDate, Decl(throwStatements.ts, 30, 3))
@@ -202,7 +202,7 @@ throw [];
 throw ['a', ['b']];
 throw /[a-z]/;
 throw new Date();
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 throw new C();
 >C : Symbol(C, Decl(throwStatements.ts, 4, 1))

@@ -64,8 +64,8 @@ for(var aString: string = 'this is a string';;){}
 
 for(var aDate: Date = new Date(12);;){}
 >aDate : Symbol(aDate, Decl(forStatements.ts, 26, 7))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 for(var anObject: Object = new Object();;){}
 >anObject : Symbol(anObject, Decl(forStatements.ts, 27, 7))

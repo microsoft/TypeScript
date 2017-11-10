@@ -4,7 +4,7 @@
 class C<T extends Date> {
 >C : Symbol(C, Decl(wrappedAndRecursiveConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(wrappedAndRecursiveConstraints.ts, 2, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     constructor(public data: T) { }
 >data : Symbol(C.data, Decl(wrappedAndRecursiveConstraints.ts, 3, 16))
@@ -24,7 +24,7 @@ class C<T extends Date> {
 
 interface Foo extends Date {
 >Foo : Symbol(Foo, Decl(wrappedAndRecursiveConstraints.ts, 7, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: string;
 >foo : Symbol(Foo.foo, Decl(wrappedAndRecursiveConstraints.ts, 9, 28))

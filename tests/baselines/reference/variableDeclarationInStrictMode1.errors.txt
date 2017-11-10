@@ -1,6 +1,6 @@
-lib.d.ts(32,18): error TS2300: Duplicate identifier 'eval'.
 tests/cases/compiler/variableDeclarationInStrictMode1.ts(2,5): error TS1100: Invalid use of 'eval' in strict mode.
 tests/cases/compiler/variableDeclarationInStrictMode1.ts(2,5): error TS2300: Duplicate identifier 'eval'.
+lib.d.ts(32,18): error TS2300: Duplicate identifier 'eval'.
 
 
 ==== tests/cases/compiler/variableDeclarationInStrictMode1.ts (2 errors) ====

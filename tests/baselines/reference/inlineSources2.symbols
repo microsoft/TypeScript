@@ -3,6 +3,9 @@ var a = 0;
 >a : Symbol(a, Decl(a.ts, 0, 3))
 
 console.log(a);
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(a.ts, 0, 3))
 
 === tests/cases/compiler/b.ts ===
@@ -10,5 +13,8 @@ var b = 0;
 >b : Symbol(b, Decl(b.ts, 0, 3))
 
 console.log(b);
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >b : Symbol(b, Decl(b.ts, 0, 3))
 

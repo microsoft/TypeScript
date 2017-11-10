@@ -1,7 +1,7 @@
 === tests/cases/conformance/statements/for-inStatements/for-inStatementsArray.ts ===
 let a: Date[];
 >a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 let b: boolean[];
 >b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))

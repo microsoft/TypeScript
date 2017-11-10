@@ -1,9 +1,8 @@
 tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts(9,1): error TS2322: Type '<S>() => S[]' is not assignable to type '<T>(x: T) => T'.
   Type '{}[]' is not assignable to type 'T'.
-tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts(12,1): error TS2304: Cannot find name 'console'.
 
 
-==== tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts (2 errors) ====
+==== tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts (1 errors) ====
     var f : {
      <T>(x:T): T;
     }
@@ -19,6 +18,4 @@ tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts(12,1): error TS2304
     var s = f("str").toUpperCase();
     
     console.log(s);
-    ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.
     

@@ -1,3 +1,4 @@
+// @lib: es5
 // @strict: true
 
 declare function f<T>(x: T[]): T;

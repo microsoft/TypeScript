@@ -82,7 +82,7 @@ true, {}
 >BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandObjectType.ts, 1, 3))
 
 "string", new Date()
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 STRING.toLowerCase(), new CLASS()
 >STRING.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
@@ -110,7 +110,7 @@ var resultIsObject9 = (!BOOLEAN, { a: 1, b: "s" });
 
 var resultIsObject10 = ("string", new Date());
 >resultIsObject10 : Symbol(resultIsObject10, Decl(commaOperatorWithSecondOperandObjectType.ts, 36, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var resultIsObject11 = (STRING.toLowerCase(), new CLASS());
 >resultIsObject11 : Symbol(resultIsObject11, Decl(commaOperatorWithSecondOperandObjectType.ts, 37, 3))

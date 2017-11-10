@@ -97,7 +97,7 @@ class Base2 {
 
     [x: number]: Date;
 >x : Symbol(x, Decl(derivedClassIncludesInheritedMembers.ts, 29, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 class Derived2 extends Base2 {

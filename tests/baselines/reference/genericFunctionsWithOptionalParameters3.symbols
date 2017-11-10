@@ -63,7 +63,7 @@ var r3 = utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() });
 >c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
 >x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 29))
 >y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 50))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r4 = utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return new Date() });
 >r4 : Symbol(r4, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 3))
@@ -73,7 +73,7 @@ var r4 = utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return
 >c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
 >x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 29))
 >y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 58))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var f1 = (x: string) => { return 1 };
 >f1 : Symbol(f1, Decl(genericFunctionsWithOptionalParameters3.ts, 11, 3))
@@ -82,7 +82,7 @@ var f1 = (x: string) => { return 1 };
 var f2 = (y: number) => { return new Date() };
 >f2 : Symbol(f2, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 3))
 >y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 10))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r5 = utils.mapReduce(c, f1, f2);
 >r5 : Symbol(r5, Decl(genericFunctionsWithOptionalParameters3.ts, 13, 3))
