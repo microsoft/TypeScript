@@ -993,29 +993,27 @@ namespace ts {
             const saveToken = currentToken;
             const saveParseDiagnosticsLength = parseDiagnostics.length;
             const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
-            const saveParsingContext = parsingContext;
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
             // because the saving/restoring of these flags happens naturally through the recursive
             // descent nature of our parser.  However, we still store this here just so we can
             // assert that invariant holds.
             const saveContextFlags = contextFlags;
+            const saveParsingContext = parsingContext;
 
             // If we're only looking ahead, then tell the scanner to only lookahead as well.
             // Otherwise, if we're actually speculatively parsing, then tell the scanner to do the
             // same.
-            const reset = scanner.startSpeculation();
-            const result = callback();
+            const result = isLookAhead
+                ? scanner.lookAhead(callback)
+                : scanner.tryScan(callback);
 
-            // Usually contextFlags === saveContextFlags,
-            // but if there was a STOP_SPECULATION exception, resets won't have happened.
-            contextFlags = saveContextFlags;
-            parsingContext = saveParsingContext;
+            Debug.assertEqual(saveContextFlags, contextFlags);
+            Debug.assertEqual(saveParsingContext, parsingContext);
 
             // If our callback returned something 'falsy' or we're just looking ahead,
             // then unconditionally restore us to where we were.
             if (!result || isLookAhead) {
-                scanner.resetAfterSpeculation(reset);
                 currentToken = saveToken;
                 parseDiagnostics.length = saveParseDiagnosticsLength;
                 parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
@@ -1898,6 +1896,7 @@ namespace ts {
                     const startPos = scanner.getStartPos();
                     const elem = parseListElement(kind, parseElement, inSpeculation);
                     if (isFail(elem)) {
+                        parsingContext = saveParsingContext;
                         return Fail;
                     }
                     list.push(elem);
