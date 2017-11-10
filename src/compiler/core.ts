@@ -68,13 +68,13 @@ namespace ts {
     }
 
     // The global Map object. This may not be available, so we must test for it.
-    declare const Map: { new<T>(): Map<T> } | undefined;
+    declare const Map: { new <T>(): Map<T> } | undefined;
     // Internet Explorer's Map doesn't support iteration, so don't use it.
     // tslint:disable-next-line no-in-operator variable-name
     const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
 
     // Keep the class inside a function so it doesn't get compiled if it's not used.
-    function shimMap(): { new<T>(): Map<T> } {
+    function shimMap(): { new <T>(): Map<T> } {
 
         class MapIterator<T, U extends (string | T | [string, T])> {
             private data: MapLike<T>;
@@ -97,7 +97,7 @@ namespace ts {
             }
         }
 
-        return class<T> implements Map<T> {
+        return class <T> implements Map<T> {
             private data = createDictionaryObject<T>();
             public size = 0;
 
@@ -2635,6 +2635,17 @@ namespace ts {
         return <T>(removeFileExtension(path) + newExtension);
     }
 
+    /**
+     * Takes a string like "jquery-min.4.2.3" and returns "jquery"
+     */
+    export function removeMinAndVersionNumbers(fileName: string) {
+        // Match a "." or "-" followed by a version number or 'min' at the end of the name
+        const trailingMinOrVersion = /[.-]((min)|(\d+(\.\d+)*))$/;
+
+        // The "min" or version may both be present, in either order, so try applying the above twice.
+        return fileName.replace(trailingMinOrVersion, "").replace(trailingMinOrVersion, "");
+    }
+
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
@@ -2835,7 +2846,7 @@ namespace ts {
         return findBestPatternMatch(patterns, _ => _, candidate);
     }
 
-    export function patternText({prefix, suffix}: Pattern): string {
+    export function patternText({ prefix, suffix }: Pattern): string {
         return `${prefix}*${suffix}`;
     }
 
@@ -2865,7 +2876,7 @@ namespace ts {
         return matchedValue;
     }
 
-    function isPatternMatch({prefix, suffix}: Pattern, candidate: string) {
+    function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
         return candidate.length >= prefix.length + suffix.length &&
             startsWith(candidate, prefix) &&
             endsWith(candidate, suffix);
