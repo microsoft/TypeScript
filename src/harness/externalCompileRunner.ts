@@ -110,7 +110,7 @@ function isUnexpectedError(cwd: string) {
         ts.Debug.assertGreaterThanOrEqual(lineNumber, 0);
         ts.Debug.assertLessThan(lineNumber, lines.length);
         const previousLine = lineNumber - 1 > 0 ? lines[lineNumber - 1] : "";
-        return lines[lineNumber].indexOf("$ExpectError") === -1 && previousLine.indexOf("$ExpectError") === -1;
+        return !ts.stringContains(lines[lineNumber], "$ExpectError") && !ts.stringContains(previousLine, "$ExpectError");
     };
 }
 /**
