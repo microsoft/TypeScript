@@ -62,39 +62,52 @@ namespace ts {
             this.kind = kind;
         }
 
+        private assertHasRealPosition(message?: string) {
+            // tslint:disable-next-line:debug-assert
+            Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
+        }
+
         public getSourceFile(): SourceFile {
             return getSourceFileOfNode(this);
         }
 
         public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
+            this.assertHasRealPosition();
             return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
         }
 
         public getFullStart(): number {
+            this.assertHasRealPosition();
             return this.pos;
         }
 
         public getEnd(): number {
+            this.assertHasRealPosition();
             return this.end;
         }
 
         public getWidth(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
             return this.getEnd() - this.getStart(sourceFile);
         }
 
         public getFullWidth(): number {
+            this.assertHasRealPosition();
             return this.end - this.pos;
         }
 
         public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
             return this.getStart(sourceFile) - this.pos;
         }
 
         public getFullText(sourceFile?: SourceFile): string {
+            this.assertHasRealPosition();
             return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
         }
 
         public getText(sourceFile?: SourceFile): string {
+            this.assertHasRealPosition();
             if (!sourceFile) {
                 sourceFile = this.getSourceFile();
             }
@@ -183,21 +196,25 @@ namespace ts {
         }
 
         public getChildCount(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
             if (!this._children) this.createChildren(sourceFile);
             return this._children.length;
         }
 
         public getChildAt(index: number, sourceFile?: SourceFile): Node {
+            this.assertHasRealPosition();
             if (!this._children) this.createChildren(sourceFile);
             return this._children[index];
         }
 
         public getChildren(sourceFile?: SourceFileLike): Node[] {
+            this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
             if (!this._children) this.createChildren(sourceFile);
             return this._children;
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
+            this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
             if (!children.length) {
                 return undefined;
@@ -210,6 +227,7 @@ namespace ts {
         }
 
         public getLastToken(sourceFile?: SourceFile): Node {
+            this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
 
             const child = lastOrUndefined(children);
