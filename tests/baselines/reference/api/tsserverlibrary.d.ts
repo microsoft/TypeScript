@@ -2142,6 +2142,7 @@ declare namespace ts {
         NakedTypeVariable = 2,
         MappedType = 4,
         ReturnType = 8,
+        NeverType = 16,
     }
     interface InferenceInfo {
         typeParameter: TypeParameter;
