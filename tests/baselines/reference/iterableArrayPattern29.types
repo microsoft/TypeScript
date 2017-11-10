@@ -12,11 +12,11 @@ takeFirstTwoEntries(...new Map([["", true], ["hello", true]]));
 >...new Map([["", true], ["hello", true]]) : [string, boolean]
 >new Map([["", true], ["hello", true]]) : Map<string, boolean>
 >Map : MapConstructor
->[["", true], ["hello", true]] : [string, true][]
->["", true] : [string, true]
+>[["", true], ["hello", true]] : (["", true] | ["hello", true])[]
+>["", true] : ["", true]
 >"" : ""
 >true : true
->["hello", true] : [string, true]
+>["hello", true] : ["hello", true]
 >"hello" : "hello"
 >true : true
 

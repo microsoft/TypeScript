@@ -22,7 +22,7 @@ function f2() {
 
     let [x]: [string | number] = [1];
 >x : string | number
->[1] : [number]
+>[1] : [1]
 >1 : 1
 
     x;
@@ -30,7 +30,7 @@ function f2() {
 
     let [y]: [string | undefined] = [""];
 >y : string | undefined
->[""] : [string]
+>[""] : [""]
 >"" : ""
 
     y;
@@ -51,7 +51,7 @@ function f3() {
 
     let [x]: (string | number)[] = [1];
 >x : string | number
->[1] : number[]
+>[1] : 1[]
 >1 : 1
 
     x;
@@ -59,7 +59,7 @@ function f3() {
 
     let [y]: (string | undefined)[] = [""];
 >y : string | undefined
->[""] : string[]
+>[""] : ""[]
 >"" : ""
 
     y;
@@ -81,7 +81,7 @@ function f4() {
     let { x }: { x: string | number } = { x: 1 };
 >x : string | number
 >x : string | number
->{ x: 1 } : { x: number; }
+>{ x: 1 } : { x: 1; }
 >x : number
 >1 : 1
 
@@ -91,7 +91,7 @@ function f4() {
     let { y }: { y: string | undefined } = { y: "" };
 >y : string | undefined
 >y : string | undefined
->{ y: "" } : { y: string; }
+>{ y: "" } : { y: ""; }
 >y : string
 >"" : ""
 
@@ -116,7 +116,7 @@ function f5() {
     let { x }: { x?: string | number } = { x: 1 };
 >x : string | number | undefined
 >x : string | number | undefined
->{ x: 1 } : { x: number; }
+>{ x: 1 } : { x: 1; }
 >x : number
 >1 : 1
 
@@ -126,7 +126,7 @@ function f5() {
     let { y }: { y?: string | undefined } = { y: "" };
 >y : string | undefined
 >y : string | undefined
->{ y: "" } : { y: string; }
+>{ y: "" } : { y: ""; }
 >y : string
 >"" : ""
 
@@ -180,7 +180,7 @@ function f7() {
     let o: { [x: string]: number } = { x: 1 };
 >o : { [x: string]: number; }
 >x : string
->{ x: 1 } : { x: number; }
+>{ x: 1 } : { x: 1; }
 >x : number
 >1 : 1
 

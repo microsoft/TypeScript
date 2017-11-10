@@ -4306,9 +4306,10 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return declaration.initializer ?
+            type = declaration.initializer ?
                 getUnionType([type, checkExpressionCached(declaration.initializer)], /*subtypeReduction*/ true) :
                 type;
+            return shouldUseLiteralType(declaration) ? type : getWidenedLiteralType(type);
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -10672,7 +10673,7 @@ namespace ts {
         }
 
         function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type) {
-            if (!isLiteralLikeContextualType(contextualType)) {
+            if (!isLiteralLikeContextualType(type, contextualType)) {
                 type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
             }
             return type;
@@ -18856,24 +18857,30 @@ namespace ts {
 
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
             const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
-            return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
-                (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
-                isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
+            return shouldUseLiteralType(declaration) ? type : getWidenedLiteralType(type);
         }
 
-        function isLiteralLikeContextualType(contextualType: Type) {
+        function shouldUseLiteralType(declaration: VariableLikeDeclaration) {
+            return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
+                getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
+                (declaration.initializer && isTypeAssertion(declaration.initializer));
+        }
+
+        function isLiteralLikeContextualType(candidateLiteral: Type, contextualType: Type): boolean {
             if (contextualType) {
+                if (contextualType.flags & TypeFlags.UnionOrIntersection) {
+                    return some((contextualType as UnionOrIntersectionType).types, t => isLiteralLikeContextualType(candidateLiteral, t));
+                }
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-                    // If the type parameter is constrained to the base primitive type we're checking for,
-                    // consider this a literal context. For example, given a type parameter 'T extends string',
-                    // this causes us to infer string literal types for T.
-                    if (constraint.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum | TypeFlags.ESSymbol)) {
-                        return true;
-                    }
-                    contextualType = constraint;
+                    return isLiteralLikeContextualType(candidateLiteral, constraint);
                 }
-                return maybeTypeOfKind(contextualType, (TypeFlags.Literal | TypeFlags.Index | TypeFlags.UniqueESSymbol));
+                // No need to `maybeTypeOfKind` on the contextual type, as it can't be a union, _however_, `candidateLiteral` might still be one!
+                return !!(((contextualType.flags & TypeFlags.StringLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
+                    ((contextualType.flags & TypeFlags.NumberLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
+                    ((contextualType.flags & TypeFlags.BooleanLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)) ||
+                    ((contextualType.flags & TypeFlags.ESSymbolLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.ESSymbolLike))
+                );
             }
             return false;
         }

@@ -137,34 +137,34 @@ function f4() {
 >0 : 0
 
     ({ x } = { x: 0, y: 0 });
->({ x } = { x: 0, y: 0 }) : { x: number; y: number; }
->{ x } = { x: 0, y: 0 } : { x: number; y: number; }
+>({ x } = { x: 0, y: 0 }) : { x: 0; y: number; }
+>{ x } = { x: 0, y: 0 } : { x: 0; y: number; }
 >{ x } : { x: number; }
 >x : number
->{ x: 0, y: 0 } : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: 0; y: number; }
 >x : number
 >0 : 0
 >y : number
 >0 : 0
 
     ({ y } = { x: 0, y: 0 });
->({ y } = { x: 0, y: 0 }) : { x: number; y: number; }
->{ y } = { x: 0, y: 0 } : { x: number; y: number; }
+>({ y } = { x: 0, y: 0 }) : { x: number; y: 0; }
+>{ y } = { x: 0, y: 0 } : { x: number; y: 0; }
 >{ y } : { y: number; }
 >y : number
->{ x: 0, y: 0 } : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: number; y: 0; }
 >x : number
 >0 : 0
 >y : number
 >0 : 0
 
     ({ x, y } = { x: 0, y: 0 });
->({ x, y } = { x: 0, y: 0 }) : { x: number; y: number; }
->{ x, y } = { x: 0, y: 0 } : { x: number; y: number; }
+>({ x, y } = { x: 0, y: 0 }) : { x: 0; y: 0; }
+>{ x, y } = { x: 0, y: 0 } : { x: 0; y: 0; }
 >{ x, y } : { x: number; y: number; }
 >x : number
 >y : number
->{ x: 0, y: 0 } : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: 0; y: 0; }
 >x : number
 >0 : 0
 >y : number

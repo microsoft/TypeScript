@@ -5,9 +5,9 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(11,21): error TS2322: Type
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(12,1): error TS2322: Type '{ tag: "D"; }' is not assignable to type 'ADT'.
   Type '{ tag: "D"; }' is not assignable to type '{ tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
     Property 'd20' is missing in type '{ tag: "D"; }'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(33,28): error TS2322: Type '{ tag: "A"; x: string; extra: number; }' is not assignable to type 'Ambiguous'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(33,28): error TS2322: Type '{ tag: "A"; x: "hi"; extra: number; }' is not assignable to type 'Ambiguous'.
   Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(34,26): error TS2322: Type '{ tag: "A"; y: number; extra: number; }' is not assignable to type 'Ambiguous'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(34,26): error TS2322: Type '{ tag: "A"; y: 12; extra: number; }' is not assignable to type 'Ambiguous'.
   Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(39,1): error TS2322: Type '{ tag: "A"; }' is not assignable to type 'Ambiguous'.
   Type '{ tag: "A"; }' is not assignable to type '{ tag: "C"; }'.
@@ -17,9 +17,9 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(40,1): error TS2322: Type 
   Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "C"; }'.
     Types of property 'tag' are incompatible.
       Type '"A"' is not assignable to type '"C"'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(49,35): error TS2322: Type '{ a: 1; b: 1; first: string; second: string; }' is not assignable to type 'Overlapping'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(49,35): error TS2322: Type '{ a: 1; b: 1; first: "ok"; second: string; }' is not assignable to type 'Overlapping'.
   Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type '{ a: 1; b: 1; first: string; third: string; }' is not assignable to type 'Overlapping'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type '{ a: 1; b: 1; first: "ok"; third: string; }' is not assignable to type 'Overlapping'.
   Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
 
 
@@ -68,11 +68,11 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type
     // correctly error on excess property 'extra', even when ambiguous
     amb = { tag: "A", x: "hi", extra: 12 }
                                ~~~~~~~~~
-!!! error TS2322: Type '{ tag: "A"; x: string; extra: number; }' is not assignable to type 'Ambiguous'.
+!!! error TS2322: Type '{ tag: "A"; x: "hi"; extra: number; }' is not assignable to type 'Ambiguous'.
 !!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
     amb = { tag: "A", y: 12, extra: 12 }
                              ~~~~~~~~~
-!!! error TS2322: Type '{ tag: "A"; y: number; extra: number; }' is not assignable to type 'Ambiguous'.
+!!! error TS2322: Type '{ tag: "A"; y: 12; extra: number; }' is not assignable to type 'Ambiguous'.
 !!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
     
     // assignability errors still work.
@@ -100,11 +100,11 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type
     // these two are still errors despite their doubled up discriminants
     over = { a: 1, b: 1, first: "ok", second: "error" }
                                       ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: 1; b: 1; first: string; second: string; }' is not assignable to type 'Overlapping'.
+!!! error TS2322: Type '{ a: 1; b: 1; first: "ok"; second: string; }' is not assignable to type 'Overlapping'.
 !!! error TS2322:   Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
     over = { a: 1, b: 1, first: "ok", third: "error" }
                                       ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: 1; b: 1; first: string; third: string; }' is not assignable to type 'Overlapping'.
+!!! error TS2322: Type '{ a: 1; b: 1; first: "ok"; third: string; }' is not assignable to type 'Overlapping'.
 !!! error TS2322:   Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
     
     // Freshness disappears after spreading a union

@@ -19,6 +19,6 @@ map((a) => a.length, [1]);
 >a.length : any
 >a : number
 >length : any
->[1] : number[]
+>[1] : 1[]
 >1 : 1
 

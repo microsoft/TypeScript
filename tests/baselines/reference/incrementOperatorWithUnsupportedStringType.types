@@ -5,7 +5,7 @@ var STRING: string;
 
 var STRING1: string[] = ["", ""];
 >STRING1 : string[]
->["", ""] : string[]
+>["", ""] : ""[]
 >"" : ""
 >"" : ""
 

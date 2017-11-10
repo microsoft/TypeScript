@@ -15,7 +15,7 @@ let [a1 = 10, b1 = 10, c1 = 10] = [1, 2, 3]; // no error
 >10 : 10
 >c1 : number
 >10 : 10
->[1, 2, 3] : [number, number, number]
+>[1, 2, 3] : [1, 2, 3]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -82,7 +82,7 @@ let {x1 = 10, y1 = 10, z1 = 10} = { x1: 1, y1: 2, z1: 3 }; // no error
 >10 : 10
 >z1 : number
 >10 : 10
->{ x1: 1, y1: 2, z1: 3 } : { x1?: number; y1?: number; z1?: number; }
+>{ x1: 1, y1: 2, z1: 3 } : { x1?: 1; y1?: 2; z1?: 3; }
 >x1 : number
 >1 : 1
 >y1 : number

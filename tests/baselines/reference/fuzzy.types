@@ -43,8 +43,8 @@ module M {
             return <R>({ anything: 1 });
 ><R>({ anything: 1 }) : R
 >R : R
->({ anything: 1 }) : { anything: number; }
->{ anything: 1 } : { anything: number; }
+>({ anything: 1 }) : { anything: 1; }
+>{ anything: 1 } : { anything: 1; }
 >anything : number
 >1 : 1
         }
@@ -54,7 +54,7 @@ module M {
 >R : R
 
             return { anything:1, oneI:this };
->{ anything:1, oneI:this } : { anything: number; oneI: this; }
+>{ anything:1, oneI:this } : { anything: 1; oneI: this; }
 >anything : number
 >1 : 1
 >oneI : this

@@ -23,7 +23,7 @@ async function * inferReturnType3() {
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
->[1, 2] : number[]
+>[1, 2] : (1 | 2)[]
 >1 : 1
 >2 : 2
 }

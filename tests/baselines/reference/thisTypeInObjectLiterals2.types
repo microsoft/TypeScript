@@ -93,7 +93,7 @@ type Point = {
 let p1: Point = {
 >p1 : Point
 >Point : Point
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: 10; y: 20; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -144,7 +144,7 @@ let p2: Point | null = {
 >p2 : Point | null
 >Point : Point
 >null : null
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: 10; y: 20; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -194,7 +194,7 @@ let p2: Point | null = {
 let p3: Point | undefined = {
 >p3 : Point | undefined
 >Point : Point
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: 10; y: 20; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -245,7 +245,7 @@ let p4: Point | null | undefined = {
 >p4 : Point | null | undefined
 >Point : Point
 >null : null
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: 10; y: 20; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -300,7 +300,7 @@ declare function f1(p: Point): void;
 f1({
 >f1({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
 >f1 : (p: Point) => void
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: 10; y: 20; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -356,7 +356,7 @@ declare function f2(p: Point | null | undefined): void;
 f2({
 >f2({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
 >f2 : (p: Point | null | undefined) => void
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: 10; y: 20; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -438,11 +438,11 @@ let x1 = makeObject({
 >x1 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >makeObject({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
+>{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: 0; y: 0; }; methods: { moveBy(dx: number, dy: number): void; }; }
 
     data: { x: 0, y: 0 },
->data : { x: number; y: number; }
->{ x: 0, y: 0 } : { x: number; y: number; }
+>data : { x: 0; y: 0; }
+>{ x: 0, y: 0 } : { x: 0; y: 0; }
 >x : number
 >0 : 0
 >y : number
@@ -509,11 +509,11 @@ let x2 = makeObject2({
 >x2 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >makeObject2({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
+>{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: 0; y: 0; }; methods: { moveBy(dx: number, dy: number): void; }; }
 
     data: { x: 0, y: 0 },
->data : { x: number; y: number; }
->{ x: 0, y: 0 } : { x: number; y: number; }
+>data : { x: 0; y: 0; }
+>{ x: 0, y: 0 } : { x: 0; y: 0; }
 >x : number
 >0 : 0
 >y : number
@@ -616,7 +616,7 @@ let p10 = defineProp(p1, "foo", { value: 42 });
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
 >p1 : Point
 >"foo" : "foo"
->{ value: 42 } : { value: number; }
+>{ value: 42 } : { value: 42; }
 >value : number
 >42 : 42
 
@@ -676,11 +676,11 @@ let p12 = defineProps(p1, {
 >defineProps(p1, {    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }}) : Point & { foo: number; bar: number; }
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
 >p1 : Point
->{    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }} : { foo: { value: number; }; bar: { get(): number; set(value: number): void; }; }
+>{    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }} : { foo: { value: 42; }; bar: { get(): number; set(value: number): void; }; }
 
     foo: {
->foo : { value: number; }
->{        value: 42    } : { value: number; }
+>foo : { value: 42; }
+>{        value: 42    } : { value: 42; }
 
         value: 42
 >value : number
@@ -816,8 +816,8 @@ let vue = new Vue({
     data: () => ({ x: 1, y: 2 }),
 >data : () => { x: number; y: number; }
 >() => ({ x: 1, y: 2 }) : () => { x: number; y: number; }
->({ x: 1, y: 2 }) : { x: number; y: number; }
->{ x: 1, y: 2 } : { x: number; y: number; }
+>({ x: 1, y: 2 }) : { x: 1; y: 2; }
+>{ x: 1, y: 2 } : { x: 1; y: 2; }
 >x : number
 >1 : 1
 >y : number

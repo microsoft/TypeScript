@@ -30,7 +30,7 @@ var r2 = foo<string>(<U>(x: U) => ''); // string
 >r2 : string
 >foo<string>(<U>(x: U) => '') : string
 >foo : <T>(x: (a: T) => T) => T
-><U>(x: U) => '' : <U>(x: U) => string
+><U>(x: U) => '' : <U>(x: U) => ""
 >U : U
 >x : U
 >U : U
@@ -86,7 +86,7 @@ var r6 = foo2<string, number>('', <Z>(a: Z) => 1);
 >foo2<string, number>('', <Z>(a: Z) => 1) : number
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >'' : ""
-><Z>(a: Z) => 1 : <Z>(a: Z) => number
+><Z>(a: Z) => 1 : <Z>(a: Z) => 1
 >Z : Z
 >a : Z
 >Z : Z
@@ -138,7 +138,7 @@ var r9 = foo3<number, string>(1, (a) => '', ''); // string
 >foo3<number, string>(1, (a) => '', '') : string
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
 >1 : 1
->(a) => '' : (a: number) => string
+>(a) => '' : (a: number) => ""
 >a : number
 >'' : ""
 >'' : ""

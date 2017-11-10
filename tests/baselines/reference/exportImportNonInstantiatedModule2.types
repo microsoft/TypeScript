@@ -8,7 +8,7 @@ export function w(): e.w { // Should be OK
 >w : e.w
 
     return {name: 'value' };
->{name: 'value' } : { name: string; }
+>{name: 'value' } : { name: "value"; }
 >name : string
 >'value' : "value"
 }

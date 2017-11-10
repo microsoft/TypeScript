@@ -41,7 +41,7 @@ var b: {
 >x : string
 
 } = { y: '' }
->{ y: '' } : { y: string; }
+>{ y: '' } : { y: ""; }
 >y : string
 >'' : ""
 

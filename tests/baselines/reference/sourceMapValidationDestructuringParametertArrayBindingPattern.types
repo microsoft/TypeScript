@@ -12,7 +12,7 @@ type Robot = [number, string, string];
 var robotA: Robot = [1, "mower", "mowing"];
 >robotA : [number, string, string]
 >Robot : [number, string, string]
->[1, "mower", "mowing"] : [number, string, string]
+>[1, "mower", "mowing"] : [1, "mower", "mowing"]
 >1 : 1
 >"mower" : "mower"
 >"mowing" : "mowing"
@@ -81,7 +81,7 @@ foo1(robotA);
 foo1([2, "trimmer", "trimming"]);
 >foo1([2, "trimmer", "trimming"]) : void
 >foo1 : ([, nameA]: [number, string, string]) => void
->[2, "trimmer", "trimming"] : [number, string, string]
+>[2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"
@@ -94,7 +94,7 @@ foo2(robotA);
 foo2([2, "trimmer", "trimming"]);
 >foo2([2, "trimmer", "trimming"]) : void
 >foo2 : ([numberB]: [number, string, string]) => void
->[2, "trimmer", "trimming"] : [number, string, string]
+>[2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"
@@ -107,7 +107,7 @@ foo3(robotA);
 foo3([2, "trimmer", "trimming"]);
 >foo3([2, "trimmer", "trimming"]) : void
 >foo3 : ([numberA2, nameA2, skillA2]: [number, string, string]) => void
->[2, "trimmer", "trimming"] : [number, string, string]
+>[2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"
@@ -120,7 +120,7 @@ foo4(robotA);
 foo4([2, "trimmer", "trimming"]);
 >foo4([2, "trimmer", "trimming"]) : void
 >foo4 : ([numberA3, ...robotAInfo]: [number, string, string]) => void
->[2, "trimmer", "trimming"] : [number, string, string]
+>[2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"

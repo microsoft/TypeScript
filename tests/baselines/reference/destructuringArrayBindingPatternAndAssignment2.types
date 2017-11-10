@@ -18,7 +18,7 @@ var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
 >b0 : number
 >b1 : boolean
 >b2 : string
->[1, 2, "string"] : [number, 2, string]
+>[1, 2, "string"] : [1, number, "string"]
 >1 : 1
 >2 : 2
 >"string" : "string"
@@ -37,13 +37,13 @@ function bar(): J {
 
     return <[number, number, number]>[1, 2, 3];
 ><[number, number, number]>[1, 2, 3] : [number, number, number]
->[1, 2, 3] : [number, number, number]
+>[1, 2, 3] : [1, 2, 3]
 >1 : 1
 >2 : 2
 >3 : 3
 }
 var [b3 = "string", b4, b5] = bar();  // Error
->b3 : Number | "string"
+>b3 : string | Number
 >"string" : "string"
 >b4 : Number
 >b5 : Number

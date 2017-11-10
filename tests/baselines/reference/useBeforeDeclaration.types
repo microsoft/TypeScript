@@ -29,7 +29,7 @@ namespace ts {
     export let sys:{version:string} = {version: "2.0.5"};
 >sys : { version: string; }
 >version : string
->{version: "2.0.5"} : { version: string; }
+>{version: "2.0.5"} : { version: "2.0.5"; }
 >version : string
 >"2.0.5" : "2.0.5"
 

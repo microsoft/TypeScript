@@ -400,13 +400,13 @@ var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y:
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >`${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }` : string
 >undefined : undefined
->{ x: 6, z: new Date() } : { x: number; z: Date; }
+>{ x: 6, z: new Date() } : { x: 6; z: Date; }
 >x : number
 >6 : 6
 >z : Date
 >new Date() : Date
 >Date : DateConstructor
->{ x: 6, y: '' } : { x: number; y: string; }
+>{ x: 6, y: '' } : { x: 6; y: ""; }
 >x : number
 >6 : 6
 >y : string
@@ -421,13 +421,13 @@ var a9d = someGenerics9 `${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }`;
 >someGenerics9 `${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }` : { x: number; }
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >`${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }` : string
->{ x: 3 } : { x: number; }
+>{ x: 3 } : { x: 3; }
 >x : number
 >3 : 3
->{ x: 6 } : { x: number; }
+>{ x: 6 } : { x: 6; }
 >x : number
 >6 : 6
->{ x: 6 } : { x: number; }
+>{ x: 6 } : { x: 6; }
 >x : number
 >6 : 6
 

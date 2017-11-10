@@ -76,7 +76,7 @@ async function * inferReturnType8() {
 const assignability1: () => AsyncIterableIterator<number> = async function * () {
 >assignability1 : () => AsyncIterableIterator<number>
 >AsyncIterableIterator : AsyncIterableIterator<T>
->async function * () {    yield 1;} : () => AsyncIterableIterator<number>
+>async function * () {    yield 1;} : () => AsyncIterableIterator<1>
 
     yield 1;
 >yield 1 : any
@@ -141,7 +141,7 @@ const assignability5: () => AsyncIterableIterator<number> = async function * () 
 const assignability6: () => AsyncIterable<number> = async function * () {
 >assignability6 : () => AsyncIterable<number>
 >AsyncIterable : AsyncIterable<T>
->async function * () {    yield 1;} : () => AsyncIterableIterator<number>
+>async function * () {    yield 1;} : () => AsyncIterableIterator<1>
 
     yield 1;
 >yield 1 : any
@@ -206,7 +206,7 @@ const assignability10: () => AsyncIterable<number> = async function * () {
 const assignability11: () => AsyncIterator<number> = async function * () {
 >assignability11 : () => AsyncIterator<number>
 >AsyncIterator : AsyncIterator<T>
->async function * () {    yield 1;} : () => AsyncIterableIterator<number>
+>async function * () {    yield 1;} : () => AsyncIterableIterator<1>
 
     yield 1;
 >yield 1 : any

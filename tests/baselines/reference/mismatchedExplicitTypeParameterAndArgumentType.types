@@ -38,7 +38,7 @@ var r0 = map([1, ""], (x) => x.toString());
 >r0 : string[]
 >map([1, ""], (x) => x.toString()) : string[]
 >map : <T, U>(xs: T[], f: (x: T) => U) => U[]
->[1, ""] : (string | number)[]
+>[1, ""] : (1 | "")[]
 >1 : 1
 >"" : ""
 >(x) => x.toString() : (x: string | number) => string

@@ -109,31 +109,31 @@ module M2 {
 >3 : 3
 }
 M2.M3 = { x: 3 }; // OK
->M2.M3 = { x: 3 } : { x: number; }
+>M2.M3 = { x: 3 } : { x: 3; }
 >M2.M3 : typeof M2.M3
 >M2 : typeof M2
 >M3 : typeof M2.M3
->{ x: 3 } : { x: number; }
+>{ x: 3 } : { x: 3; }
 >x : number
 >3 : 3
 
 (M2).M3 = { x: 3 }; // OK
->(M2).M3 = { x: 3 } : { x: number; }
+>(M2).M3 = { x: 3 } : { x: 3; }
 >(M2).M3 : typeof M2.M3
 >(M2) : typeof M2
 >M2 : typeof M2
 >M3 : typeof M2.M3
->{ x: 3 } : { x: number; }
+>{ x: 3 } : { x: 3; }
 >x : number
 >3 : 3
 
 (M2.M3) = { x: 3 }; // OK
->(M2.M3) = { x: 3 } : { x: number; }
+>(M2.M3) = { x: 3 } : { x: 3; }
 >(M2.M3) : typeof M2.M3
 >M2.M3 : typeof M2.M3
 >M2 : typeof M2
 >M3 : typeof M2.M3
->{ x: 3 } : { x: number; }
+>{ x: 3 } : { x: 3; }
 >x : number
 >3 : 3
 

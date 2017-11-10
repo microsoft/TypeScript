@@ -46,11 +46,11 @@ function a4({x, a}: { x: number, a: number }) { }
 a1([1, 2, [["world"]]]);
 >a1([1, 2, [["world"]]]) : void
 >a1 : ([a, b, [[c]]]: [number, number, string[][]]) => void
->[1, 2, [["world"]]] : [number, number, string[][]]
+>[1, 2, [["world"]]] : [1, 2, "world"[][]]
 >1 : 1
 >2 : 2
->[["world"]] : string[][]
->["world"] : string[]
+>[["world"]] : "world"[][]
+>["world"] : "world"[]
 >"world" : "world"
 
 a1([1, 2, [["world"]], 3]);
@@ -156,7 +156,7 @@ b2("string", { x: 200, y: "string" });
 >b2("string", { x: 200, y: "string" }) : void
 >b2 : (z?: any, o?: { x: number; y: any; }) => void
 >"string" : "string"
->{ x: 200, y: "string" } : { x: number; y: string; }
+>{ x: 200, y: "string" } : { x: 200; y: string; }
 >x : number
 >200 : 200
 >y : string
@@ -166,7 +166,7 @@ b2("string", { x: 200, y: true });
 >b2("string", { x: 200, y: true }) : void
 >b2 : (z?: any, o?: { x: number; y: any; }) => void
 >"string" : "string"
->{ x: 200, y: true } : { x: number; y: boolean; }
+>{ x: 200, y: true } : { x: 200; y: boolean; }
 >x : number
 >200 : 200
 >y : boolean
@@ -201,7 +201,7 @@ function c3({b}: { b: number|string} = { b: "hello" }) { }
 >c3 : ({ b }?: { b: string | number; }) => void
 >b : string | number
 >b : string | number
->{ b: "hello" } : { b: string; }
+>{ b: "hello" } : { b: "hello"; }
 >b : string
 >"hello" : "hello"
 
@@ -251,7 +251,7 @@ c1();             // Implied type is {z:number}?
 c1({ z: 1 })      // Implied type is {z:number}? 
 >c1({ z: 1 }) : void
 >c1 : ({ z }?: { z: number; }) => void
->{ z: 1 } : { z: number; }
+>{ z: 1 } : { z: 1; }
 >z : number
 >1 : 1
 
@@ -263,14 +263,14 @@ c2({});         // Implied type is {z?: number}
 c2({z:1});      // Implied type is {z?: number}
 >c2({z:1}) : void
 >c2 : ({ z }: { z?: number; }) => void
->{z:1} : { z: number; }
+>{z:1} : { z: 1; }
 >z : number
 >1 : 1
 
 c3({ b: 1 });     // Implied type is { b: number|string }.
 >c3({ b: 1 }) : void
 >c3 : ({ b }?: { b: string | number; }) => void
->{ b: 1 } : { b: number; }
+>{ b: 1 } : { b: 1; }
 >b : number
 >1 : 1
 

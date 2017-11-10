@@ -103,7 +103,7 @@ f2(Array.from([0]), [], (a1, a2) => a1 - a2);
 >Array.from : { <T>(iterable: Iterable<T>): T[]; <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
 >from : { <T>(iterable: Iterable<T>): T[]; <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->[0] : number[]
+>[0] : 0[]
 >0 : 0
 >[] : never[]
 >(a1, a2) => a1 - a2 : (a1: number, a2: number) => number
@@ -121,7 +121,7 @@ f2(Array.from([]), [0], (a1, a2) => a1 - a2);
 >Array : ArrayConstructor
 >from : { <T>(iterable: Iterable<T>): T[]; <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >[] : never[]
->[0] : number[]
+>[0] : 0[]
 >0 : 0
 >(a1, a2) => a1 - a2 : (a1: number, a2: number) => number
 >a1 : number

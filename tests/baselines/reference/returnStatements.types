@@ -57,7 +57,7 @@ class D extends C {
 function fn10(): I { return { id: 12 }; } 
 >fn10 : () => I
 >I : I
->{ id: 12 } : { id: number; }
+>{ id: 12 } : { id: 12; }
 >id : number
 >12 : 12
 

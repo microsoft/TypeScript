@@ -102,10 +102,10 @@ var zipResult = zip(["foo", "bar"], [5, 6]);
 >zipResult : [[string, number]]
 >zip(["foo", "bar"], [5, 6]) : [[string, number]]
 >zip : <T, U>(array1: T[], array2: U[]) => [[T, U]]
->["foo", "bar"] : string[]
+>["foo", "bar"] : ("foo" | "bar")[]
 >"foo" : "foo"
 >"bar" : "bar"
->[5, 6] : number[]
+>[5, 6] : (5 | 6)[]
 >5 : 5
 >6 : 6
 

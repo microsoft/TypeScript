@@ -6,7 +6,7 @@ function f() {
 >x : { a?: string | number | undefined; b: string | number; }
 >a : string | number | undefined
 >b : string | number
->{ b: 1 } : { b: number; }
+>{ b: 1 } : { b: 1; }
 >b : number
 >1 : 1
 

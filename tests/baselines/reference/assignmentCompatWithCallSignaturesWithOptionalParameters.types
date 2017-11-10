@@ -38,15 +38,15 @@ var a: () => number;
 >a : () => number
 
     a = () => 1 // ok, same number of required params
->a = () => 1 : () => number
+>a = () => 1 : () => 1
 >a : () => number
->() => 1 : () => number
+>() => 1 : () => 1
 >1 : 1
 
     a = (x?: number) => 1; // ok, same number of required params
->a = (x?: number) => 1 : (x?: number) => number
+>a = (x?: number) => 1 : (x?: number) => 1
 >a : () => number
->(x?: number) => 1 : (x?: number) => number
+>(x?: number) => 1 : (x?: number) => 1
 >x : number
 >1 : 1
 
@@ -104,22 +104,22 @@ var a2: (x?: number) => number;
 >x : number
 
     a2 = () => 1; // ok, same number of required params
->a2 = () => 1 : () => number
+>a2 = () => 1 : () => 1
 >a2 : (x?: number) => number
->() => 1 : () => number
+>() => 1 : () => 1
 >1 : 1
 
     a2 = (x?: number) => 1; // ok, same number of required params
->a2 = (x?: number) => 1 : (x?: number) => number
+>a2 = (x?: number) => 1 : (x?: number) => 1
 >a2 : (x?: number) => number
->(x?: number) => 1 : (x?: number) => number
+>(x?: number) => 1 : (x?: number) => 1
 >x : number
 >1 : 1
 
     a2 = (x: number) => 1; // ok, same number of params
->a2 = (x: number) => 1 : (x: number) => number
+>a2 = (x: number) => 1 : (x: number) => 1
 >a2 : (x?: number) => number
->(x: number) => 1 : (x: number) => number
+>(x: number) => 1 : (x: number) => 1
 >x : number
 >1 : 1
 
@@ -170,22 +170,22 @@ var a3: (x: number) => number;
 >x : number
 
     a3 = () => 1; // ok, fewer required params
->a3 = () => 1 : () => number
+>a3 = () => 1 : () => 1
 >a3 : (x: number) => number
->() => 1 : () => number
+>() => 1 : () => 1
 >1 : 1
 
     a3 = (x?: number) => 1; // ok, fewer required params
->a3 = (x?: number) => 1 : (x?: number) => number
+>a3 = (x?: number) => 1 : (x?: number) => 1
 >a3 : (x: number) => number
->(x?: number) => 1 : (x?: number) => number
+>(x?: number) => 1 : (x?: number) => 1
 >x : number
 >1 : 1
 
     a3 = (x: number) => 1; // ok, same number of required params
->a3 = (x: number) => 1 : (x: number) => number
+>a3 = (x: number) => 1 : (x: number) => 1
 >a3 : (x: number) => number
->(x: number) => 1 : (x: number) => number
+>(x: number) => 1 : (x: number) => 1
 >x : number
 >1 : 1
 
@@ -245,30 +245,30 @@ var a4: (x: number, y?: number) => number;
 >y : number
 
     a4 = () => 1; // ok, fewer required params
->a4 = () => 1 : () => number
+>a4 = () => 1 : () => 1
 >a4 : (x: number, y?: number) => number
->() => 1 : () => number
+>() => 1 : () => 1
 >1 : 1
 
     a4 = (x?: number, y?: number) => 1; // ok, fewer required params
->a4 = (x?: number, y?: number) => 1 : (x?: number, y?: number) => number
+>a4 = (x?: number, y?: number) => 1 : (x?: number, y?: number) => 1
 >a4 : (x: number, y?: number) => number
->(x?: number, y?: number) => 1 : (x?: number, y?: number) => number
+>(x?: number, y?: number) => 1 : (x?: number, y?: number) => 1
 >x : number
 >y : number
 >1 : 1
 
     a4 = (x: number) => 1; // ok, same number of required params
->a4 = (x: number) => 1 : (x: number) => number
+>a4 = (x: number) => 1 : (x: number) => 1
 >a4 : (x: number, y?: number) => number
->(x: number) => 1 : (x: number) => number
+>(x: number) => 1 : (x: number) => 1
 >x : number
 >1 : 1
 
     a4 = (x: number, y: number) => 1; // ok, same number of params
->a4 = (x: number, y: number) => 1 : (x: number, y: number) => number
+>a4 = (x: number, y: number) => 1 : (x: number, y: number) => 1
 >a4 : (x: number, y?: number) => number
->(x: number, y: number) => 1 : (x: number, y: number) => number
+>(x: number, y: number) => 1 : (x: number, y: number) => 1
 >x : number
 >y : number
 >1 : 1
@@ -321,30 +321,30 @@ var a5: (x?: number, y?: number) => number;
 >y : number
 
     a5 = () => 1; // ok, fewer required params
->a5 = () => 1 : () => number
+>a5 = () => 1 : () => 1
 >a5 : (x?: number, y?: number) => number
->() => 1 : () => number
+>() => 1 : () => 1
 >1 : 1
 
     a5 = (x?: number, y?: number) => 1; // ok, fewer required params
->a5 = (x?: number, y?: number) => 1 : (x?: number, y?: number) => number
+>a5 = (x?: number, y?: number) => 1 : (x?: number, y?: number) => 1
 >a5 : (x?: number, y?: number) => number
->(x?: number, y?: number) => 1 : (x?: number, y?: number) => number
+>(x?: number, y?: number) => 1 : (x?: number, y?: number) => 1
 >x : number
 >y : number
 >1 : 1
 
     a5 = (x: number) => 1; // ok, fewer params in lambda
->a5 = (x: number) => 1 : (x: number) => number
+>a5 = (x: number) => 1 : (x: number) => 1
 >a5 : (x?: number, y?: number) => number
->(x: number) => 1 : (x: number) => number
+>(x: number) => 1 : (x: number) => 1
 >x : number
 >1 : 1
 
     a5 = (x: number, y: number) => 1;  // ok, same number of params
->a5 = (x: number, y: number) => 1 : (x: number, y: number) => number
+>a5 = (x: number, y: number) => 1 : (x: number, y: number) => 1
 >a5 : (x?: number, y?: number) => number
->(x: number, y: number) => 1 : (x: number, y: number) => number
+>(x: number, y: number) => 1 : (x: number, y: number) => 1
 >x : number
 >y : number
 >1 : 1

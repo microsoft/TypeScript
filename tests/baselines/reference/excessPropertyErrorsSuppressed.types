@@ -2,7 +2,7 @@
 var x: { a: string } = { a: "hello", b: 42 };  // No error
 >x : { a: string; }
 >a : string
->{ a: "hello", b: 42 } : { a: string; b: number; }
+>{ a: "hello", b: 42 } : { a: "hello"; b: number; }
 >a : string
 >"hello" : "hello"
 >b : number

@@ -54,15 +54,15 @@ foo(1, 2, 3);
 foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true });
 >foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true }) : { x: number; y: string; z: boolean; }
 >foo : <T, U, V>(x: T, y: U, z: V) => V
->{ x: 1 } : { x: number; }
+>{ x: 1 } : { x: 1; }
 >x : number
 >1 : 1
->{ x: 1, y: '' } : { x: number; y: string; }
+>{ x: 1, y: '' } : { x: 1; y: ""; }
 >x : number
 >1 : 1
 >y : string
 >'' : ""
->{ x: 2, y: '', z: true } : { x: number; y: string; z: true; }
+>{ x: 2, y: '', z: true } : { x: 2; y: ""; z: true; }
 >x : number
 >2 : 2
 >y : string
@@ -82,7 +82,7 @@ foo(a, b, { foo: 1, bar: '', hm: true });
 >foo : <T, U, V>(x: T, y: U, z: V) => V
 >a : A
 >b : B
->{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: true; }
+>{ foo: 1, bar: '', hm: true } : { foo: 1; bar: ""; hm: true; }
 >foo : number
 >1 : 1
 >bar : string
@@ -135,7 +135,7 @@ foo(b, b, { foo: 1, bar: '', hm: '' });
 >foo : <T, U, V>(x: T, y: U, z: V) => V
 >b : B
 >b : B
->{ foo: 1, bar: '', hm: '' } : { foo: number; bar: string; hm: string; }
+>{ foo: 1, bar: '', hm: '' } : { foo: 1; bar: ""; hm: ""; }
 >foo : number
 >1 : 1
 >bar : string

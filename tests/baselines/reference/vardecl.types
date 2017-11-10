@@ -39,7 +39,7 @@ declare var deckareVarWithType: number;
 
 var arrayVar: string[] = ['a', 'b'];
 >arrayVar : string[]
->['a', 'b'] : string[]
+>['a', 'b'] : ("a" | "b")[]
 >'a' : "a"
 >'b' : "b"
 
@@ -53,7 +53,7 @@ complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >complicatedArrayVar.push : (...items: { x: number; y: string; }[]) => number
 >complicatedArrayVar : { x: number; y: string; }[]
 >push : (...items: { x: number; y: string; }[]) => number
->{ x: 30, y : 'hello world' } : { x: number; y: string; }
+>{ x: 30, y : 'hello world' } : { x: 30; y: "hello world"; }
 >x : number
 >30 : 30
 >y : string
