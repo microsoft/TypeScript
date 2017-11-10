@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/typeRelationships/recursiveTypes/nominalSubtypeCheckOfTypeParameter.ts ===
-interface Tuple<T, S> {
->Tuple : Tuple<T, S>
+interface BinaryTuple<T, S> {
+>BinaryTuple : BinaryTuple<T, S>
 >T : T
 >S : S
 
@@ -8,7 +8,7 @@ interface Tuple<T, S> {
 >first : T
 >T : T
 
-      second: S
+    second: S
 >second : S
 >S : S
 }
@@ -20,18 +20,18 @@ interface Sequence<T> {
     hasNext(): boolean
 >hasNext : () => boolean
 
-      pop(): T
+    pop(): T
 >pop : () => T
 >T : T
 
-      zip<S>(seq: Sequence<S>): Sequence<Tuple<T, S>>
->zip : <S>(seq: Sequence<S>) => Sequence<Tuple<T, S>>
+    zip<S>(seq: Sequence<S>): Sequence<BinaryTuple<T, S>>
+>zip : <S>(seq: Sequence<S>) => Sequence<BinaryTuple<T, S>>
 >S : S
 >seq : Sequence<S>
 >Sequence : Sequence<T>
 >S : S
 >Sequence : Sequence<T>
->Tuple : Tuple<T, S>
+>BinaryTuple : BinaryTuple<T, S>
 >T : T
 >S : S
 }
@@ -47,14 +47,14 @@ interface List<T> extends Sequence<T> {
     getLength(): number
 >getLength : () => number
 
-      zip<S>(seq: Sequence<S>): List<Tuple<T, S>>
->zip : <S>(seq: Sequence<S>) => List<Tuple<T, S>>
+    zip<S>(seq: Sequence<S>): List<BinaryTuple<T, S>>
+>zip : <S>(seq: Sequence<S>) => List<BinaryTuple<T, S>>
 >S : S
 >seq : Sequence<S>
 >Sequence : Sequence<T>
 >S : S
 >List : List<T>
->Tuple : Tuple<T, S>
+>BinaryTuple : BinaryTuple<T, S>
 >T : T
 >S : S
 }

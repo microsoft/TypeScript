@@ -39,7 +39,7 @@ namespace ts.Completions {
             return getStringLiteralCompletionEntries(sourceFile, position, typeChecker, compilerOptions, host, log);
         }
 
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, options);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, options, compilerOptions.target);
         if (!completionData) {
             return undefined;
         }
@@ -136,12 +136,12 @@ namespace ts.Completions {
         typeChecker: TypeChecker,
         target: ScriptTarget,
         allowStringLiteral: boolean,
-        origin: SymbolOriginInfo,
+        origin: SymbolOriginInfo | undefined,
     ): CompletionEntry | undefined {
         // Try to get a valid display name for this symbol, if we could not find one, then ignore it.
         // We would like to only show things that can be added after a dot, so for instance numeric properties can
         // not be accessed with a dot (a.1 <- invalid)
-        const displayName = getCompletionEntryDisplayNameForSymbol(symbol, target, performCharacterChecks, allowStringLiteral);
+        const displayName = getCompletionEntryDisplayNameForSymbol(symbol, target, performCharacterChecks, allowStringLiteral, origin);
         if (!displayName) {
             return undefined;
         }
@@ -381,7 +381,7 @@ namespace ts.Completions {
         { name, source }: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): { type: "symbol", symbol: Symbol, location: Node, symbolToOriginInfoMap: SymbolOriginInfoMap } | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExports: true });
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExports: true }, compilerOptions.target);
         if (!completionData) {
             return { type: "none" };
         }
@@ -395,10 +395,16 @@ namespace ts.Completions {
         // We don't need to perform character checks here because we're only comparing the
         // name against 'entryName' (which is known to be good), not building a new
         // completion entry.
-        const symbol = find(symbols, s =>
-            getCompletionEntryDisplayNameForSymbol(s, compilerOptions.target, /*performCharacterChecks*/ false, allowStringLiteral) === name
-            && getSourceFromOrigin(symbolToOriginInfoMap[getSymbolId(s)]) === source);
+        const symbol = find(symbols, s => {
+            const origin = symbolToOriginInfoMap[getSymbolId(s)];
+            return getCompletionEntryDisplayNameForSymbol(s, compilerOptions.target, /*performCharacterChecks*/ false, allowStringLiteral, origin) === name
+                && getSourceFromOrigin(origin) === source;
+        });
         return symbol ? { type: "symbol", symbol, location, symbolToOriginInfoMap } : { type: "none" };
+    }
+
+    function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
+        return origin && origin.isDefaultExport && symbol.name === "default" ? codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target) : symbol.name;
     }
 
     export interface CompletionEntryIdentifier {
@@ -415,7 +421,7 @@ namespace ts.Completions {
         entryId: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
         host: LanguageServiceHost,
-        rulesProvider: formatting.RulesProvider,
+        formatContext: formatting.FormatContext,
     ): CompletionEntryDetails {
         const { name, source } = entryId;
         // Compute all the completion symbols again.
@@ -436,7 +442,7 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, symbolToOriginInfoMap } = symbolCompletion;
-                const codeActions = getCompletionEntryCodeActions(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, rulesProvider);
+                const codeActions = getCompletionEntryCodeActions(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, formatContext);
                 const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
                 return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: source === undefined ? undefined : [textPart(source)] };
@@ -467,7 +473,7 @@ namespace ts.Completions {
         host: LanguageServiceHost,
         compilerOptions: CompilerOptions,
         sourceFile: SourceFile,
-        rulesProvider: formatting.RulesProvider,
+        formatContext: formatting.FormatContext,
     ): CodeAction[] | undefined {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
         if (!symbolOriginInfo) {
@@ -481,8 +487,8 @@ namespace ts.Completions {
             newLineCharacter: host.getNewLine(),
             compilerOptions,
             sourceFile,
-            rulesProvider,
-            symbolName: symbol.name,
+            formatContext,
+            symbolName: getSymbolName(symbol, symbolOriginInfo, compilerOptions.target),
             getCanonicalFileName: createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false),
             symbolToken: undefined,
             kind: isDefaultExport ? codefix.ImportKind.Default : codefix.ImportKind.Named,
@@ -523,6 +529,7 @@ namespace ts.Completions {
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
         options: GetCompletionsAtPositionOptions,
+        target: ScriptTarget,
     ): CompletionData | undefined {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
@@ -921,7 +928,7 @@ namespace ts.Completions {
 
             symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
             if (options.includeExternalModuleExports) {
-                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "");
+                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
             }
             filterGlobalCompletion(symbols);
 
@@ -1003,7 +1010,7 @@ namespace ts.Completions {
             }
         }
 
-        function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string): void {
+        function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
 
             codefix.forEachExternalModule(typeChecker, allSourceFiles, moduleSymbol => {
@@ -1019,6 +1026,9 @@ namespace ts.Completions {
                         if (localSymbol) {
                             symbol = localSymbol;
                             name = localSymbol.name;
+                        }
+                        else {
+                            name = codefix.moduleSymbolToValidIdentifier(moduleSymbol, target);
                         }
                     }
 
@@ -1847,8 +1857,8 @@ namespace ts.Completions {
      *
      * @return undefined if the name is of external module
      */
-    function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, allowStringLiteral: boolean): string | undefined {
-        const name = symbol.name;
+    function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, allowStringLiteral: boolean, origin: SymbolOriginInfo | undefined): string | undefined {
+        const name = getSymbolName(symbol, origin, target);
         if (!name) return undefined;
 
         // First check of the displayName is not external module; if it is an external module, it is not valid entry

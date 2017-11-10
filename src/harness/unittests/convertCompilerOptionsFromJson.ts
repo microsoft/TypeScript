@@ -58,12 +58,12 @@ namespace ts {
         it("Convert correctly format tsconfig.json to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "lib": ["es5", "es2015.core", "es2015.symbol"]
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: ["es5", "es2015.core", "es2015.symbol"]
                     }
                 }, "tsconfig.json",
                 {
@@ -82,13 +82,13 @@ namespace ts {
         it("Convert correctly format tsconfig.json with allowJs is false to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "allowJs": false,
-                        "lib": ["es5", "es2015.core", "es2015.symbol"]
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        allowJs: false,
+                        lib: ["es5", "es2015.core", "es2015.symbol"]
                     }
                 }, "tsconfig.json",
                 {
@@ -108,12 +108,12 @@ namespace ts {
         it("Convert incorrect option of jsx to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "jsx": ""
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        jsx: ""
                     }
                 }, "tsconfig.json",
                 {
@@ -138,11 +138,11 @@ namespace ts {
         it("Convert incorrect option of module to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
+                    compilerOptions: {
+                        module: "",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
                     }
                 }, "tsconfig.json",
                 {
@@ -166,11 +166,11 @@ namespace ts {
         it("Convert incorrect option of newLine to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "newLine": "",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
+                    compilerOptions: {
+                        newLine: "",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
                     }
                 }, "tsconfig.json",
                 {
@@ -194,10 +194,10 @@ namespace ts {
         it("Convert incorrect option of target to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "target": "",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
+                    compilerOptions: {
+                        target: "",
+                        noImplicitAny: false,
+                        sourceMap: false,
                     }
                 }, "tsconfig.json",
                 {
@@ -220,10 +220,10 @@ namespace ts {
         it("Convert incorrect option of module-resolution to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "moduleResolution": "",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
+                    compilerOptions: {
+                        moduleResolution: "",
+                        noImplicitAny: false,
+                        sourceMap: false,
                     }
                 }, "tsconfig.json",
                 {
@@ -246,12 +246,12 @@ namespace ts {
         it("Convert incorrect option of libs to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "lib": ["es5", "es2015.core", "incorrectLib"]
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: ["es5", "es2015.core", "incorrectLib"]
                     }
                 }, "tsconfig.json",
                 {
@@ -277,12 +277,12 @@ namespace ts {
         it("Convert empty string option of libs to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "lib": ["es5", ""]
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: ["es5", ""]
                     }
                 }, "tsconfig.json",
                 {
@@ -308,12 +308,12 @@ namespace ts {
         it("Convert empty string option of libs to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "lib": [""]
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: [""]
                     }
                 }, "tsconfig.json",
                 {
@@ -339,12 +339,12 @@ namespace ts {
         it("Convert trailing-whitespace string option of libs to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "lib": ["   "]
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: ["   "]
                     }
                 }, "tsconfig.json",
                 {
@@ -370,12 +370,12 @@ namespace ts {
         it("Convert empty option of libs to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "lib": []
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: []
                     }
                 }, "tsconfig.json",
                 {
@@ -394,8 +394,8 @@ namespace ts {
         it("Convert incorrectly format tsconfig.json to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "modu": "commonjs",
+                    compilerOptions: {
+                        modu: "commonjs",
                     }
                 }, "tsconfig.json",
                 {
@@ -424,9 +424,9 @@ namespace ts {
         it("Convert negative numbers in tsconfig.json ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "allowJs": true,
-                        "maxNodeModuleJsDepth": -1
+                    compilerOptions: {
+                        allowJs: true,
+                        maxNodeModuleJsDepth: -1
                     }
                 }, "tsconfig.json",
                 {
@@ -443,12 +443,12 @@ namespace ts {
         it("Convert correctly format jsconfig.json to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "lib": ["es5", "es2015.core", "es2015.symbol"]
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: ["es5", "es2015.core", "es2015.symbol"]
                     }
                 }, "jsconfig.json",
                 {
@@ -471,13 +471,13 @@ namespace ts {
         it("Convert correctly format jsconfig.json with allowJs is false to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "module": "commonjs",
-                        "target": "es5",
-                        "noImplicitAny": false,
-                        "sourceMap": false,
-                        "allowJs": false,
-                        "lib": ["es5", "es2015.core", "es2015.symbol"]
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        allowJs: false,
+                        lib: ["es5", "es2015.core", "es2015.symbol"]
                     }
                 }, "jsconfig.json",
                 {
@@ -500,8 +500,8 @@ namespace ts {
         it("Convert incorrectly format jsconfig.json to compiler-options ", () => {
             assertCompilerOptions(
                 {
-                    "compilerOptions": {
-                        "modu": "commonjs",
+                    compilerOptions: {
+                        modu: "commonjs",
                     }
                 }, "jsconfig.json",
                 {

@@ -89,4 +89,4 @@ var X;
 var a = X["foo"];
 var a0 = X["bar"];
 var _a;
-// TODO: make sure that enum still disallow template literals as member names 
+// TODO: make sure that enum still disallow template literals as member names

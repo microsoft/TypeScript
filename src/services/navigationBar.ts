@@ -366,15 +366,9 @@ namespace ts.NavigationBar {
         children.sort(compareChildren);
     }
 
-    function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode): number {
-        const name1 = tryGetName(child1.node), name2 = tryGetName(child2.node);
-        if (name1 && name2) {
-            const cmp = ts.compareStringsCaseInsensitive(name1, name2);
-            return cmp !== 0 ? cmp : navigationBarNodeKind(child1) - navigationBarNodeKind(child2);
-        }
-        else {
-            return name1 ? 1 : name2 ? -1 : navigationBarNodeKind(child1) - navigationBarNodeKind(child2);
-        }
+    function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode) {
+        return compareStringsCaseSensitiveUI(tryGetName(child1.node), tryGetName(child2.node))
+            || compareValues(navigationBarNodeKind(child1), navigationBarNodeKind(child2));
     }
 
     /**

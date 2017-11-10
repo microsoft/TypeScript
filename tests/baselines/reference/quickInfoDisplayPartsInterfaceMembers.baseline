@@ -369,6 +369,10 @@
           "kind": "interfaceName"
         },
         {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
           "text": "(",
           "kind": "punctuation"
         },
@@ -473,16 +477,20 @@
           "kind": "space"
         },
         {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
           "text": "new",
           "kind": "keyword"
         },
         {
           "text": " ",
           "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
         },
         {
           "text": "(",
