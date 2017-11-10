@@ -313,7 +313,7 @@ namespace ts.codefix {
         }
     }
 
-    function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbol: Symbol, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
+    export function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbol: Symbol, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
         const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
         const sourceDirectory = getDirectoryPath(sourceFile.fileName);
 
