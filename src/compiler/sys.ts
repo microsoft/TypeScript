@@ -129,7 +129,11 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
-            const _crypto = require("crypto");
+            // crypto can be absent on reduced node installations
+            let _crypto: any;
+            try {
+              _crypto = require("crypto");
+            } catch { }
 
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
 
@@ -494,9 +498,17 @@ namespace ts {
                     }
                 },
                 createHash(data) {
-                    const hash = _crypto.createHash("md5");
-                    hash.update(data);
-                    return hash.digest("hex");
+                    let hash: any;
+                    if (_crypto) {
+                      hash = _crypto.createHash("md5");
+                      hash.update(data);
+                      hash.digest("hex");
+                    } else {
+                      // djb2 hashing algorithm: http://www.cse.yorku.ca/~oz/hash.html
+                      const chars = data.split('').map(str => str.charCodeAt(0));
+                      hash = `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+                    }
+                    return hash;
                 },
                 getMemoryUsage() {
                     if (global.gc) {
