@@ -22338,7 +22338,7 @@ namespace ts {
                 error(initializer, Diagnostics.In_const_enum_declarations_a_member_initializer_must_have_a_string_or_number_literal_type);
             }
             else if (member.parent.flags & NodeFlags.Ambient) {
-                error(initializer, Diagnostics.In_ambient_enum_declarations_a_member_initializer_must_have_a_string_or_number_literal_typ);
+                error(initializer, Diagnostics.In_ambient_enum_declarations_a_member_initializer_must_have_a_string_or_number_literal_type);
             }
             else {
                 // Only here do we need to check that the initializer is assignable to the enum type.
