@@ -126,8 +126,8 @@ namespace FourSlash {
         // 0 - cancelled
         // >0 - not cancelled
         // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
-        private static readonly NotCanceled: number = -1;
-        private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCanceled;
+        private static readonly notCanceled = -1;
+        private numberOfCallsBeforeCancellation = TestCancellationToken.notCanceled;
 
         public isCancellationRequested(): boolean {
             if (this.numberOfCallsBeforeCancellation < 0) {
@@ -148,7 +148,7 @@ namespace FourSlash {
         }
 
         public resetCancelled(): void {
-            this.numberOfCallsBeforeCancellation = TestCancellationToken.NotCanceled;
+            this.numberOfCallsBeforeCancellation = TestCancellationToken.notCanceled;
         }
     }
 
@@ -221,11 +221,9 @@ namespace FourSlash {
         private addMatchedInputFile(referenceFilePath: string, extensions: ReadonlyArray<string>) {
             const inputFiles = this.inputFiles;
             const languageServiceAdapterHost = this.languageServiceAdapterHost;
-            if (!extensions) {
-                tryAdd(referenceFilePath);
-            }
-            else {
-                tryAdd(referenceFilePath) || ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
+            const didAdd = tryAdd(referenceFilePath);
+            if (extensions && !didAdd) {
+                ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
             }
 
             function tryAdd(path: string) {
@@ -485,9 +483,7 @@ namespace FourSlash {
         }
 
         // Opens a file given its 0-based index or fileName
-        public openFile(index: number, content?: string, scriptKindName?: string): void;
-        public openFile(name: string, content?: string, scriptKindName?: string): void;
-        public openFile(indexOrName: any, content?: string, scriptKindName?: string) {
+        public openFile(indexOrName: number | string, content?: string, scriptKindName?: string): void {
             const fileToOpen: FourSlashFile = this.findFile(indexOrName);
             fileToOpen.fileName = ts.normalizeSlashes(fileToOpen.fileName);
             this.activeFile = fileToOpen;
@@ -568,15 +564,31 @@ namespace FourSlash {
             }
 
             for (const { start, length, messageText, file } of errors) {
-                Harness.IO.log("  from: " + showPosition(file, start) +
-                    ", to: " + showPosition(file, start + length) +
+                Harness.IO.log("  " + this.formatRange(file, start, length) +
                     ", message: " + ts.flattenDiagnosticMessageText(messageText, Harness.IO.newLine()) + "\n");
             }
+        }
 
-            function showPosition(file: ts.SourceFile, pos: number) {
+        private formatRange(file: ts.SourceFile, start: number, length: number) {
+            if (file) {
+                return `from: ${this.formatLineAndCharacterOfPosition(file, start)}, to: ${this.formatLineAndCharacterOfPosition(file, start + length)}`;
+            }
+            return "global";
+        }
+
+        private formatLineAndCharacterOfPosition(file: ts.SourceFile, pos: number) {
+            if (file) {
                 const { line, character } = ts.getLineAndCharacterOfPosition(file, pos);
                 return `${line}:${character}`;
             }
+            return "global";
+        }
+
+        private formatPosition(file: ts.SourceFile, pos: number) {
+            if (file) {
+                return file.fileName + "@" + pos;
+            }
+            return "global";
         }
 
         public verifyNoErrors() {
@@ -586,7 +598,7 @@ namespace FourSlash {
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
                     const error = errors[0];
-                    this.raiseError(`Found an error: ${error.file.fileName}@${error.start}: ${error.messageText}`);
+                    this.raiseError(`Found an error: ${this.formatPosition(error.file, error.start)}: ${error.messageText}`);
                 }
             });
         }
@@ -3090,12 +3102,12 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
 
-            const itemsString = items.map(item => stringify({ name: item.name, kind: item.kind })).join(",\n");
+            const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
 
             this.raiseError(`Expected "${stringify({ entryId, text, documentation, kind })}" to be in list [${itemsString}]`);
         }
 
-        private findFile(indexOrName: any) {
+        private findFile(indexOrName: string | number) {
             let result: FourSlashFile;
             if (typeof indexOrName === "number") {
                 const index = <number>indexOrName;
@@ -3747,9 +3759,7 @@ namespace FourSlashInterface {
             this.state.goToImplementation();
         }
 
-        public position(position: number, fileIndex?: number): void;
-        public position(position: number, fileName?: string): void;
-        public position(position: number, fileNameOrIndex?: any): void {
+        public position(position: number, fileNameOrIndex?: string | number): void {
             if (fileNameOrIndex !== undefined) {
                 this.file(fileNameOrIndex);
             }
@@ -3759,9 +3769,7 @@ namespace FourSlashInterface {
         // Opens a file, given either its index as it
         // appears in the test source, or its filename
         // as specified in the test metadata
-        public file(index: number, content?: string, scriptKindName?: string): void;
-        public file(name: string, content?: string, scriptKindName?: string): void;
-        public file(indexOrName: any, content?: string, scriptKindName?: string): void {
+        public file(indexOrName: number | string, content?: string, scriptKindName?: string): void {
             this.state.openFile(indexOrName, content, scriptKindName);
         }
 
@@ -3968,17 +3976,14 @@ namespace FourSlashInterface {
             this.state.verifyGoToDefinitionIs(endMarkers);
         }
 
-        public goToDefinition(startMarkerName: string | string[], endMarkerName: string | string[]): void;
-        public goToDefinition(startMarkerName: string | string[], endMarkerName: string | string[], range: FourSlash.Range): void;
-        public goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
-        public goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
+        public goToDefinition(startMarkerName: string | string[], endMarkerName: string | string[], range?: FourSlash.Range): void;
+        public goToDefinition(startsAndEnds: [string | string[], string | string[]][] | { [startMarkerName: string]: string | string[] }): void;
         public goToDefinition(arg0: any, endMarkerName?: string | string[]) {
             this.state.verifyGoToDefinition(arg0, endMarkerName);
         }
 
         public goToType(startMarkerName: string | string[], endMarkerName: string | string[]): void;
-        public goToType(startsAndEnds: [string | string[], string | string[]][]): void;
-        public goToType(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
+        public goToType(startsAndEnds: [string | string[], string | string[]][] | { [startMarkerName: string]: string | string[] }): void;
         public goToType(arg0: any, endMarkerName?: string | string[]) {
             this.state.verifyGoToType(arg0, endMarkerName);
         }

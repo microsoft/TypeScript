@@ -16,7 +16,7 @@ namespace ts.server.protocol {
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
         /* @internal */
-        CompletionDetailsFull = "completionEntryDetailsFull",
+        CompletionDetailsFull = "completionEntryDetails-full",
         CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
@@ -586,6 +586,7 @@ namespace ts.server.protocol {
     }
 
     export interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+        /** May also be an array of commands. */
         command: {};
     }
 

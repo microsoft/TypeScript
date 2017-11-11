@@ -285,7 +285,7 @@ namespace ts.server {
         }
 
         private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.directoryStructureHost);
+            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
                 if (existingValue !== scriptInfo && existingValue !== undefined) {
@@ -365,7 +365,7 @@ namespace ts.server {
 
         /*@internal*/
         toPath(fileName: string) {
-            return this.projectService.toPath(fileName);
+            return toPath(fileName, this.currentDirectory, this.projectService.toCanonicalFileName);
         }
 
         /*@internal*/
@@ -658,7 +658,7 @@ namespace ts.server {
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean) {
-            const info = this.projectService.getScriptInfoForNormalizedPath(filename);
+            const info = this.projectService.getScriptInfoForPath(this.toPath(filename));
             if (info && (info.isScriptOpen() || !requireOpen)) {
                 return this.containsScriptInfo(info);
             }
@@ -855,10 +855,11 @@ namespace ts.server {
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.directoryStructureHost);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
                     scriptInfo.attachToProject(this);
                 },
-                removed => this.detachScriptInfoFromProject(removed)
+                removed => this.detachScriptInfoFromProject(removed),
+                compareStringsCaseSensitive
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} structureChanged: ${hasChanges} Elapsed: ${elapsed}ms`);
@@ -901,7 +902,7 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
+            const scriptInfo = this.projectService.getScriptInfoForPath(this.toPath(fileName));
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
             }
@@ -1121,7 +1122,7 @@ namespace ts.server {
         readonly canonicalConfigFilePath: NormalizedPath;
 
         /* @internal */
-        pendingReload: boolean;
+        pendingReload: ConfigFileProgramReloadLevel;
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs;
@@ -1161,12 +1162,17 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
-            if (this.pendingReload) {
-                this.pendingReload = false;
-                this.projectService.reloadConfiguredProject(this);
-                return true;
+            const reloadLevel = this.pendingReload;
+            this.pendingReload = ConfigFileProgramReloadLevel.None;
+            switch (reloadLevel) {
+                case ConfigFileProgramReloadLevel.Partial:
+                    return this.projectService.reloadFileNamesOfConfiguredProject(this);
+                case ConfigFileProgramReloadLevel.Full:
+                    this.projectService.reloadConfiguredProject(this);
+                    return true;
+                default:
+                    return super.updateGraph();
             }
-            return super.updateGraph();
         }
 
         /*@internal*/

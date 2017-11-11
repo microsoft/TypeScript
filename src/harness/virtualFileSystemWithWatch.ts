@@ -182,6 +182,10 @@ interface Array<T> {}`
         private map: TimeOutCallback[] = [];
         private nextId = 1;
 
+        getNextId() {
+            return this.nextId;
+        }
+
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
             this.nextId++;
@@ -203,7 +207,13 @@ interface Array<T> {}`
             return n;
         }
 
-        invoke() {
+        invoke(invokeKey?: number) {
+            if (invokeKey) {
+                this.map[invokeKey]();
+                delete this.map[invokeKey];
+                return;
+            }
+
             // Note: invoking a callback may result in new callbacks been queued,
             // so do not clear the entire callback list regardless. Only remove the
             // ones we have invoked.
@@ -336,6 +346,39 @@ interface Array<T> {}`
             }
         }
 
+        renameFolder(folderName: string, newFolderName: string) {
+            const fullPath = getNormalizedAbsolutePath(folderName, this.currentDirectory);
+            const path = this.toPath(fullPath);
+            const folder = this.fs.get(path) as Folder;
+            Debug.assert(!!folder);
+
+            // Only remove the folder
+            this.removeFileOrFolder(folder, returnFalse, /*isRenaming*/ true);
+
+            // Add updated folder with new folder name
+            const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
+            const newFolder = this.toFolder(newFullPath);
+            const newPath = newFolder.path;
+            const basePath = getDirectoryPath(path);
+            Debug.assert(basePath !== path);
+            Debug.assert(basePath === getDirectoryPath(newPath));
+            const baseFolder = this.fs.get(basePath) as Folder;
+            this.addFileOrFolderInFolder(baseFolder, newFolder);
+
+            // Invoke watches for files in the folder as deleted (from old path)
+            for (const entry of folder.entries) {
+                Debug.assert(isFile(entry));
+                this.fs.delete(entry.path);
+                this.invokeFileWatcher(entry.fullPath, FileWatcherEventKind.Deleted);
+
+                entry.fullPath = combinePaths(newFullPath, getBaseFileName(entry.fullPath));
+                entry.path = this.toPath(entry.fullPath);
+                newFolder.entries.push(entry);
+                this.fs.set(entry.path, entry);
+                this.invokeFileWatcher(entry.fullPath, FileWatcherEventKind.Created);
+            }
+        }
+
         ensureFileOrFolder(fileOrDirectory: FileOrFolder, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
             if (isString(fileOrDirectory.content)) {
                 const file = this.toFile(fileOrDirectory);
@@ -383,7 +426,7 @@ interface Array<T> {}`
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
 
-        private removeFileOrFolder(fileOrDirectory: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean) {
+        private removeFileOrFolder(fileOrDirectory: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean, isRenaming?: boolean) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as Folder;
             if (basePath !== fileOrDirectory.path) {
@@ -396,7 +439,7 @@ interface Array<T> {}`
                 this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
             }
             else {
-                Debug.assert(fileOrDirectory.entries.length === 0);
+                Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
                 const relativePath = this.getRelativePathToDirectory(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
                 // Invoke directory and recursive directory watcher for the folder
                 // Here we arent invoking recursive directory watchers for the base folders
@@ -553,6 +596,10 @@ interface Array<T> {}`
             return this.timeoutCallbacks.register(callback, args);
         }
 
+        getNextTimeoutId() {
+            return this.timeoutCallbacks.getNextId();
+        }
+
         clearTimeout(timeoutId: any): void {
             this.timeoutCallbacks.unregister(timeoutId);
         }
@@ -567,9 +614,9 @@ interface Array<T> {}`
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
 
-        runQueuedTimeoutCallbacks() {
+        runQueuedTimeoutCallbacks(timeoutId?: number) {
             try {
-                this.timeoutCallbacks.invoke();
+                this.timeoutCallbacks.invoke(timeoutId);
             }
             catch (e) {
                 if (e.message === this.existMessage) {

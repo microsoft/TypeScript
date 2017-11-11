@@ -49,7 +49,7 @@ t = [1, "hello"];     // Ok
 t = ["hello", 1];     // Error
 >t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
 
-t = [1, "hello", 2];  // Ok
+t = [1, "hello", 2];  // Error
 >t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
 
 var tf: [string, (x: string) => number] = ["hello", x => x.length];

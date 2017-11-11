@@ -96,11 +96,11 @@ a1(...array);
 a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]]
 >a9([1, 2, [["string"]], false, true]) : void
 >a9 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
->[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
+>[1, 2, [["string"]], false, true] : (number | boolean | string[][])[]
 >1 : 1
 >2 : 2
->[["string"]] : [[string]]
->["string"] : [string]
+>[["string"]] : string[][]
+>["string"] : string[]
 >"string" : "string"
 >false : false
 >true : true

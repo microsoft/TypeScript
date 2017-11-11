@@ -12,10 +12,12 @@ namespace ts {
         JSDoc = 1 << 5,
     }
 
+    // tslint:disable variable-name
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    // tslint:enable variable-name
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
         if (kind === SyntaxKind.SourceFile) {
@@ -524,10 +526,12 @@ namespace ts {
         const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
         // capture constructors in 'initializeState' to avoid null checks
+        // tslint:disable variable-name
         let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        // tslint:enable variable-name
 
         let sourceFile: SourceFile;
         let parseDiagnostics: Diagnostic[];
@@ -6142,7 +6146,7 @@ namespace ts {
                     const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
                     if (checkJsDirectiveMatchResult) {
                         checkJsDirective = {
-                            enabled: compareStrings(checkJsDirectiveMatchResult[1], "@ts-check", /*ignoreCase*/ true) === Comparison.EqualTo,
+                            enabled: equateStringsCaseInsensitive(checkJsDirectiveMatchResult[1], "@ts-check"),
                             end: range.end,
                             pos: range.pos
                         };

@@ -18,7 +18,7 @@
 /// <reference path="fourslashRunner.ts" />
 /// <reference path="projectsRunner.ts" />
 /// <reference path="rwcRunner.ts" />
-/// <reference path="userRunner.ts" />
+/// <reference path="externalCompileRunner.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="./parallel/shared.ts" />
 
@@ -62,6 +62,8 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
             return new Test262BaselineRunner();
         case "user":
             return new UserCodeRunner();
+        case "dt":
+            return new DefinitelyTypedRunner();
     }
     ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -95,6 +97,7 @@ interface TestConfig {
     workerCount?: number;
     stackTraceLimit?: number | "full";
     test?: string[];
+    runners?: string[];
     runUnitTests?: boolean;
     noColors?: boolean;
 }
@@ -132,8 +135,9 @@ function handleTestConfig() {
             return true;
         }
 
-        if (testConfig.test && testConfig.test.length > 0) {
-            for (const option of testConfig.test) {
+        const runnerConfig = testConfig.runners || testConfig.test;
+        if (runnerConfig && runnerConfig.length > 0) {
+            for (const option of runnerConfig) {
                 if (!option) {
                     continue;
                 }
@@ -181,6 +185,9 @@ function handleTestConfig() {
                     case "user":
                         runners.push(new UserCodeRunner());
                         break;
+                    case "dt":
+                        runners.push(new DefinitelyTypedRunner());
+                        break;
                 }
             }
         }
@@ -217,6 +224,14 @@ function beginTests() {
     if (ts.Debug.isDebugging) {
         ts.Debug.enableDebugInfo();
     }
+
+    // run tests in en-US by default.
+    let savedUILocale: string | undefined;
+    beforeEach(() => {
+        savedUILocale = ts.getUILocale();
+        ts.setUILocale("en-US");
+    });
+    afterEach(() => ts.setUILocale(savedUILocale));
 
     runTests(runners);
 

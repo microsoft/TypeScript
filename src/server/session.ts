@@ -124,7 +124,7 @@ namespace ts.server {
     // we want to ensure the value is maintained in the out since the file is
     // built using --preseveConstEnum.
     export type CommandNames = protocol.CommandTypes;
-    export const CommandNames = (<any>protocol).CommandTypes;
+    export const CommandNames = (<any>protocol).CommandTypes; // tslint:disable-line variable-name
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);
@@ -974,7 +974,7 @@ namespace ts.server {
                     projects,
                     project => project.getLanguageService().findReferences(file, position),
                     /*comparer*/ undefined,
-                    /*areEqual (TODO: fixme)*/ undefined
+                    equateValues
                 );
             }
 
@@ -1209,7 +1209,7 @@ namespace ts.server {
                         // Use `hasAction || undefined` to avoid serializing `false`.
                         return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source };
                     }
-                }).sort((a, b) => compareStrings(a.name, b.name));
+                }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
             }
             else {
                 return completions;
@@ -1571,9 +1571,12 @@ namespace ts.server {
         private applyCodeActionCommand(commandName: string, requestSeq: number, args: protocol.ApplyCodeActionCommandRequestArgs): void {
             const { file, project } = this.getFileAndProject(args);
             const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
-            const command = args.command as CodeActionCommand; // They should be sending back the command we sent them.
+            const command = args.command as CodeActionCommand | CodeActionCommand[]; // They should be sending back the command we sent them.
+
             project.getLanguageService().applyCodeActionCommand(file, command).then(
-                ({ successMessage }) => { output(/*success*/ true, successMessage); },
+                result => {
+                    output(/*success*/ true, isArray(result) ? result.map(res => res.successMessage).join(`${this.host.newLine}${this.host.newLine}`) : result.successMessage);
+                },
                 error => { output(/*success*/ false, error); });
         }
 
@@ -1687,8 +1690,7 @@ namespace ts.server {
             return normalizePath(name);
         }
 
-        exit() {
-        }
+        exit() { /*overridden*/ }
 
         private notRequired(): HandlerResponse {
             return { responseRequired: false };
