@@ -2789,6 +2789,7 @@ namespace ts {
         // Options
         NoTruncation                            = 1 << 0,   // Don't truncate result
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
+        WriteDefaultSymbolWithoutName           = 1 << 2,   // Write `default`-named symbols as `default` instead of how they were written
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         UseOnlyExternalAliasing                 = 1 << 7,   // Only use external aliases for a symbol
@@ -2860,6 +2861,7 @@ namespace ts {
     export const enum TypeFormatFlags {
         None                            = 0,
         WriteArrayAsGenericType         = 1 << 0,  // Write Array<T> instead T[]
+        WriteDefaultSymbolWithoutName   = 1 << 1,  // Write all `defaut`-named symbols as `default` instead of their written name
         UseTypeOfFunction               = 1 << 2,  // Write typeof instead of function type literal
         NoTruncation                    = 1 << 3,  // Don't truncate typeToString result
         WriteArrowStyleSignature        = 1 << 4,  // Write arrow style signature

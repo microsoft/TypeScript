@@ -1794,6 +1794,7 @@ declare namespace ts {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
+        WriteDefaultSymbolWithoutName = 4,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
         UseOnlyExternalAliasing = 128,
@@ -1849,6 +1850,7 @@ declare namespace ts {
     enum TypeFormatFlags {
         None = 0,
         WriteArrayAsGenericType = 1,
+        WriteDefaultSymbolWithoutName = 2,
         UseTypeOfFunction = 4,
         NoTruncation = 8,
         WriteArrowStyleSignature = 16,
@@ -2773,7 +2775,7 @@ declare namespace ts {
         EnumMembers = 81,
         CaseBlockClauses = 65,
         NamedImportsOrExportsElements = 432,
-        JsxElementChildren = 131072,
+        JsxElementOrFragmentChildren = 131072,
         JsxElementAttributes = 131328,
         CaseOrDefaultClauseStatements = 81985,
         HeritageClauseTypes = 272,
@@ -4723,14 +4725,7 @@ declare namespace ts {
 }
 declare namespace ts {
     /** The version of the language service API */
-<<<<<<< HEAD
-    const servicesVersion = "0.5";
-=======
     const servicesVersion = "0.7";
-    interface DisplayPartsSymbolWriter extends SymbolWriter {
-        displayParts(): SymbolDisplayPart[];
-    }
->>>>>>> master
     function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
     function displayPartsToString(displayParts: SymbolDisplayPart[]): string;
     function getDefaultCompilerOptions(): CompilerOptions;

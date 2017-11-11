@@ -2604,6 +2604,9 @@ namespace ts {
             if (flags & TypeFormatFlags.UseAliasDefinedOutsideCurrentScope) {
                 result |= NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
             }
+            if (flags & TypeFormatFlags.WriteDefaultSymbolWithoutName) {
+                result |= NodeBuilderFlags.WriteDefaultSymbolWithoutName;
+            }
 
             return result;
         }
@@ -3321,7 +3324,7 @@ namespace ts {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
-                    const symbolName = getNameOfSymbolAsWritten(symbol);
+                    const symbolName = getNameOfSymbolAsWritten(symbol, context);
                     const firstChar = symbolName.charCodeAt(0);
                     const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
                     if (index === 0 || canUsePropertyAccess) {
@@ -3436,6 +3439,9 @@ namespace ts {
          * It will also use a representation of a number as written instead of a decimal form, e.g. `0o11` instead of `9`.
          */
         function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): string {
+            if (context && context.flags & NodeBuilderFlags.WriteDefaultSymbolWithoutName && symbol.escapedName === InternalSymbolName.Default) {
+                return "default";
+            }
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
