@@ -48,7 +48,6 @@ namespace ts {
         // Invokes the provided callback then unconditionally restores the scanner to the state it
         // was in immediately prior to invoking the callback.  The result of invoking the callback
         // is returned from this function.
-        // Present for backwards compatibility only.
         lookAhead<T>(callback: () => T): T;
 
         // Invokes the callback with the scanner set to scan the specified range. When the callback

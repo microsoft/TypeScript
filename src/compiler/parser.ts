@@ -2295,10 +2295,10 @@ namespace ts {
                 isStartOfType(/*inStartOfParameter*/ true);
         }
 
-        function parseParameterInSpeculation(): ParameterDeclaration | Fail {
+        function tryParseParameter(): ParameterDeclaration | Fail {
             return parseParameterWorker(/*inSpeculation*/ true);
         }
-        function parseParameterNoSpeculation(): ParameterDeclaration {
+        function parseParameter(): ParameterDeclaration {
             return parseParameterWorker(/*inSpeculation*/ false) as ParameterDeclaration;
         }
         function parseParameterWorker(inSpeculation: boolean): ParameterDeclaration | Fail {
@@ -2400,7 +2400,7 @@ namespace ts {
 
                 const result = parseDelimitedList<ParameterDeclaration>(
                     ParsingContext.Parameters,
-                    flags & SignatureFlags.JSDoc ? parseJSDocParameter : inSpeculation ? parseParameterInSpeculation : parseParameterNoSpeculation);
+                    flags & SignatureFlags.JSDoc ? parseJSDocParameter : inSpeculation ? tryParseParameter : parseParameter);
                 setYieldContext(savedYieldContext);
                 setAwaitContext(savedAwaitContext);
 
@@ -2507,7 +2507,7 @@ namespace ts {
             const node = <IndexSignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
             node.decorators = decorators;
             node.modifiers = modifiers;
-            node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameterNoSpeculation, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
+            node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
             return addJSDocComment(finishNode(node));
@@ -5265,10 +5265,10 @@ namespace ts {
 
         // DECLARATIONS
 
-        function parseArrayBindingElementInSpeculation(): ArrayBindingElement | Fail {
+        function tryParseArrayBindingElement(): ArrayBindingElement | Fail {
             return parseArrayBindingElementWorker(/*inSpeculation*/ true);
         }
-        function parseArrayBindingElementNoSpeculation(): ArrayBindingElement {
+        function parseArrayBindingElement(): ArrayBindingElement {
             return parseArrayBindingElementWorker(/*inSpeculation*/ false) as ArrayBindingElement;
         }
         function parseArrayBindingElementWorker(inSpeculation: boolean): ArrayBindingElement | Fail {
@@ -5290,10 +5290,10 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseObjectBindingElementInSpeculation(): BindingElement | Fail {
+        function tryParseObjectBindingElement(): BindingElement | Fail {
             return parseObjectBindingElementWorker(/*inSpeculation*/ true);
         }
-        function parseObjectBindingElementNoSpeculation(): BindingElement {
+        function parseObjectBindingElement(): BindingElement {
             return parseObjectBindingElementWorker(/*inSpeculation*/ false) as BindingElement;
         }
         function parseObjectBindingElementWorker(inSpeculation: boolean): BindingElement | Fail {
@@ -5326,7 +5326,7 @@ namespace ts {
             parseExpected(SyntaxKind.OpenBraceToken);
             const elements = parseDelimitedList<BindingElement>(
                 ParsingContext.ObjectBindingElements,
-                inSpeculation ? parseObjectBindingElementInSpeculation : parseObjectBindingElementNoSpeculation,
+                inSpeculation ? tryParseObjectBindingElement : parseObjectBindingElement,
                 /*considerSemicolonAsDelimiter*/ undefined);
             if (isFailList(elements)) {
                 return Fail;
@@ -5341,7 +5341,7 @@ namespace ts {
             parseExpected(SyntaxKind.OpenBracketToken);
             const elements = parseDelimitedList<BindingElement | OmittedExpression>(
                 ParsingContext.ArrayBindingElements,
-                inSpeculation ? parseArrayBindingElementInSpeculation : parseArrayBindingElementNoSpeculation,
+                inSpeculation ? tryParseArrayBindingElement : parseArrayBindingElement,
                 /*considerSemicolonAsDelimiter*/ undefined);
             if (isFailList(elements)) {
                 return Fail;
