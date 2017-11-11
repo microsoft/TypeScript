@@ -3467,27 +3467,107 @@ namespace ts {
         return 0;
     }
 
-    export function levenshtein(s1: string, s2: string): number {
-        let previous: number[] = new Array(s2.length + 1);
-        let current: number[] = new Array(s2.length + 1);
-        for (let i = 0; i < s2.length + 1; i++) {
-            previous[i] = i;
-            current[i] = -1;
-        }
-        for (let i = 1; i < s1.length + 1; i++) {
-            current[0] = i;
-            for (let j = 1; j < s2.length + 1; j++) {
-                current[j] = Math.min(
-                    previous[j] + 1,
-                    current[j - 1] + 1,
-                    previous[j - 1] + (s1[i - 1] === s2[j - 1] ? 0 : 2));
+    /**
+     * Given a name and a list of symbols whose names are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
+     * Names less than length 3 only check for case-insensitive equality, not levenshtein distance.
+     *
+     * If there is a candidate that's the same except for case, return that.
+     * If there is a candidate that's within one edit of the name, return that.
+     * Otherwise, return the candidate with the smallest Levenshtein distance,
+     *    except for candidates:
+     *      * With no name
+     *      * Whose meaning doesn't match the `meaning` parameter.
+     *      * Whose length differs from the target name by more than 0.34 of the length of the name.
+     *      * Whose levenshtein distance is more than 0.4 of the length of the name
+     *        (0.4 allows 1 substitution/transposition for every 5 characters,
+     *         and 1 insertion/deletion at 3 characters)
+     */
+    export function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
+        const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
+        let bestDistance = Math.floor(name.length * 0.4);
+        let bestCandidate: Symbol | undefined;
+        let justCheckExactMatches = false;
+        const nameLowerCase = name.toLowerCase();
+        for (const candidate of symbols) {
+            const candidateName = symbolName(candidate);
+            if (!(candidate.flags & meaning && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference)) {
+                continue;
             }
-            // shift current back to previous, and then reuse previous' array
-            const tmp = previous;
-            previous = current;
-            current = tmp;
+            const candidateNameLowerCase = candidateName.toLowerCase();
+            if (candidateNameLowerCase === nameLowerCase) {
+                return candidate;
+            }
+            if (justCheckExactMatches) {
+                continue;
+            }
+            if (candidateNameLowerCase.length < 3 ||
+                nameLowerCase.length < 3 ||
+                candidateNameLowerCase === "eval" ||
+                candidateNameLowerCase === "intl" ||
+                candidateNameLowerCase === "undefined" ||
+                candidateNameLowerCase === "map" ||
+                candidateNameLowerCase === "nan" ||
+                candidateNameLowerCase === "set") {
+                continue;
+            }
+            const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance);
+            if (distance === undefined) {
+                continue;
+            }
+            if (distance < 3) {
+                justCheckExactMatches = true;
+                bestCandidate = candidate;
+            }
+            else if (distance < bestDistance) {
+                bestDistance = distance;
+                bestCandidate = candidate;
+            }
         }
-        return previous[previous.length - 1];
+        return bestCandidate;
+    }
+
+    function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
+        let previous = new Array(s2.length + 1);
+        let current = new Array(s2.length + 1);
+        /** Represents any value > max. We don't care about the particular value. */
+        const big = max + 1;
+
+        for (let i = 0; i <= s2.length; i++) {
+            previous[i] = i;
+        }
+
+        for (let i = 1; i <= s1.length; i++) {
+            const c1 = s1.charCodeAt(i - 1);
+            const minJ = i > max ? i - max : 1;
+            const maxJ = s2.length > max + i ? max + i : s2.length;
+            current[0] = i;
+            /** Smallest value of the matrix in the ith column. */
+            let colMin = i;
+            for (let j = 1; j < minJ; j++) {
+                current[j] = big;
+            }
+            for (let j = minJ; j <= maxJ; j++) {
+                const dist = c1 === s2.charCodeAt(j - 1)
+                    ? previous[j - 1]
+                    : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ previous[j - 1] + 2);
+                current[j] = dist;
+                colMin = Math.min(colMin, dist);
+            }
+            for (let j = maxJ + 1; j <= s2.length; j++) {
+                current[j] = big;
+            }
+            if (colMin > max) {
+                // Give up -- everything in this column is > max and it can't get better in future columns.
+                return undefined;
+            }
+
+            const temp = previous;
+            previous = current;
+            current = temp;
+        }
+
+        const res = previous[s2.length];
+        return res > max ? undefined : res;
     }
 
     export function skipAlias(symbol: Symbol, checker: TypeChecker) {
