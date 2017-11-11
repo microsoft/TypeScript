@@ -133,7 +133,10 @@ namespace ts {
             let _crypto: any;
             try {
               _crypto = require("crypto");
-            } catch { }
+            }
+            catch {
+              _crypto = undefined;
+            }
 
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
 
@@ -503,9 +506,10 @@ namespace ts {
                       hash = _crypto.createHash("md5");
                       hash.update(data);
                       hash.digest("hex");
-                    } else {
+                    }
+                    else {
                       // djb2 hashing algorithm: http://www.cse.yorku.ca/~oz/hash.html
-                      const chars = data.split('').map(str => str.charCodeAt(0));
+                      const chars = data.split("").map(str => str.charCodeAt(0));
                       hash = `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
                     }
                     return hash;
