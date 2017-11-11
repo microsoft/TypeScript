@@ -2077,8 +2077,8 @@ namespace Harness {
             filePath.indexOf("/.ts/") === 0;
     }
 
-    export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
-        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
+    export function getDefaultLibraryFile(filePath: string, io: Harness.IO): Harness.Compiler.TestFile {
+        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + ts.getBaseFileName(ts.normalizeSlashes(filePath));
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 

@@ -1,7 +1,7 @@
 /// <reference path="harness.ts" />
 
 
-type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "user";
+type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "user" | "dt";
 type CompilerTestKind = "conformance" | "compiler";
 type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
 
@@ -21,6 +21,9 @@ abstract class RunnerBase {
     abstract kind(): TestRunnerKind;
 
     abstract enumerateTestFiles(): string[];
+
+    /** The working directory where tests are found. Needed for batch testing where the input path will differ from the output path inside baselines */
+    public workingDirectory = "";
 
     /** Setup the runner's tests so that they are ready to be executed by the harness
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately

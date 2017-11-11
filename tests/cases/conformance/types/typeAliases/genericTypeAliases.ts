@@ -39,12 +39,12 @@ type Strange<T> = string;  // Type parameter not used
 var s: Strange<number>;
 s = "hello";
 
-interface Tuple<A, B> {
+interface AB<A, B> {
     a: A;
     b: B;
 }
 
-type Pair<T> = Tuple<T, T>;
+type Pair<T> = AB<T, T>;
 
 interface TaggedPair<T> extends Pair<T> {
     tag: string;

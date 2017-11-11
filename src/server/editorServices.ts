@@ -110,7 +110,7 @@ namespace ts.server {
 
     export interface TypesMapFile {
         typesMap: SafeList;
-        simpleMap: string[];
+        simpleMap: { [libName: string]: string };
     }
 
     /**
@@ -380,6 +380,7 @@ namespace ts.server {
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
+        private legacySafelist: { [key: string]: string } = {};
 
         private changedFiles: ScriptInfo[];
         private pendingProjectUpdates = createMap<Project>();
@@ -432,8 +433,11 @@ namespace ts.server {
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.throttledOperations = new ThrottledOperations(this.host, this.logger);
 
-            if (opts.typesMapLocation) {
+            if (this.typesMapLocation) {
                 this.loadTypesMap();
+            }
+            else {
+                this.logger.info("No types map provided; using the default");
             }
 
             this.typingsInstaller.attach(this);
@@ -524,10 +528,12 @@ namespace ts.server {
                 }
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
+                this.legacySafelist = raw.simpleMap;
             }
             catch (e) {
                 this.logger.info(`Error loading types map: ${e}`);
                 this.safelist = defaultTypeSafeList;
+                this.legacySafelist = {};
             }
         }
 
@@ -1418,7 +1424,7 @@ namespace ts.server {
             }
         }
 
-        private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition) {
+        private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition, excludedFiles: NormalizedPath[]) {
             const compilerOptions = convertCompilerOptions(options);
             const project = new ExternalProject(
                 projectFileName,
@@ -1427,6 +1433,7 @@ namespace ts.server {
                 compilerOptions,
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave);
+            project.excludedFiles = excludedFiles;
 
             this.addFilesToNonInferredProjectAndUpdateGraph(project, files, externalFilePropertyReader, typeAcquisition);
             this.externalProjects.push(project);
@@ -2197,7 +2204,7 @@ namespace ts.server {
                 const rule = this.safelist[name];
                 for (const root of normalizedNames) {
                     if (rule.match.test(root)) {
-                        this.logger.info(`Excluding files based on rule ${name}`);
+                        this.logger.info(`Excluding files based on rule ${name} matching file '${root}'`);
 
                         // If the file matches, collect its types packages and exclude rules
                         if (rule.types) {
@@ -2256,7 +2263,22 @@ namespace ts.server {
                     excludedFiles.push(normalizedNames[i]);
                 }
                 else {
-                    filesToKeep.push(proj.rootFiles[i]);
+                    let exclude = false;
+                    if (typeAcquisition && (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery)) {
+                        const baseName = getBaseFileName(normalizedNames[i].toLowerCase());
+                        if (fileExtensionIs(baseName, "js")) {
+                            const inferredTypingName = removeFileExtension(baseName);
+                            const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
+                            if (this.legacySafelist[cleanedTypingName]) {
+                                this.logger.info(`Excluded '${normalizedNames[i]}' because it matched ${cleanedTypingName} from the legacy safelist`);
+                                excludedFiles.push(normalizedNames[i]);
+                                exclude = true;
+                            }
+                        }
+                    }
+                    if (!exclude) {
+                        filesToKeep.push(proj.rootFiles[i]);
+                    }
                 }
             }
             proj.rootFiles = filesToKeep;
@@ -2364,8 +2386,7 @@ namespace ts.server {
             else {
                 // no config files - remove the item from the collection
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
-                const newProj = this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
-                newProj.excludedFiles = excludedFiles;
+                this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
             }
             if (!suppressRefreshOfInferredProjects) {
                 this.ensureProjectStructuresUptoDate(/*refreshInferredProjects*/ true);

@@ -33,9 +33,6 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.7";
 
-    /* @internal */
-    let ruleProvider: formatting.RulesProvider;
-
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
@@ -65,39 +62,52 @@ namespace ts {
             this.kind = kind;
         }
 
+        private assertHasRealPosition(message?: string) {
+            // tslint:disable-next-line:debug-assert
+            Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
+        }
+
         public getSourceFile(): SourceFile {
             return getSourceFileOfNode(this);
         }
 
         public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
+            this.assertHasRealPosition();
             return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
         }
 
         public getFullStart(): number {
+            this.assertHasRealPosition();
             return this.pos;
         }
 
         public getEnd(): number {
+            this.assertHasRealPosition();
             return this.end;
         }
 
         public getWidth(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
             return this.getEnd() - this.getStart(sourceFile);
         }
 
         public getFullWidth(): number {
+            this.assertHasRealPosition();
             return this.end - this.pos;
         }
 
         public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
             return this.getStart(sourceFile) - this.pos;
         }
 
         public getFullText(sourceFile?: SourceFile): string {
+            this.assertHasRealPosition();
             return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
         }
 
         public getText(sourceFile?: SourceFile): string {
+            this.assertHasRealPosition();
             if (!sourceFile) {
                 sourceFile = this.getSourceFile();
             }
@@ -186,21 +196,25 @@ namespace ts {
         }
 
         public getChildCount(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
             if (!this._children) this.createChildren(sourceFile);
             return this._children.length;
         }
 
         public getChildAt(index: number, sourceFile?: SourceFile): Node {
+            this.assertHasRealPosition();
             if (!this._children) this.createChildren(sourceFile);
             return this._children[index];
         }
 
         public getChildren(sourceFile?: SourceFileLike): Node[] {
+            this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
             if (!this._children) this.createChildren(sourceFile);
             return this._children;
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
+            this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
             if (!children.length) {
                 return undefined;
@@ -213,6 +227,7 @@ namespace ts {
         }
 
         public getLastToken(sourceFile?: SourceFile): Node {
+            this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
 
             const child = lastOrUndefined(children);
@@ -1157,7 +1172,6 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        ruleProvider = ruleProvider || new formatting.RulesProvider();
         let program: Program;
         let lastProjectVersion: string;
         let lastTypesRootVersion = 0;
@@ -1185,11 +1199,6 @@ namespace ts {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
             return sourceFile;
-        }
-
-        function getRuleProvider(options: FormatCodeSettings) {
-            ruleProvider.ensureUpToDate(options);
-            return ruleProvider;
         }
 
         function synchronizeHostData(): void {
@@ -1429,7 +1438,6 @@ namespace ts {
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
             synchronizeHostData();
-            const ruleProvider = formattingOptions ? getRuleProvider(formattingOptions) : undefined;
             return Completions.getCompletionEntryDetails(
                 program.getTypeChecker(),
                 log,
@@ -1439,7 +1447,7 @@ namespace ts {
                 { name, source },
                 program.getSourceFiles(),
                 host,
-                ruleProvider);
+                formattingOptions && formatting.getFormatContext(formattingOptions));
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
@@ -1838,32 +1846,27 @@ namespace ts {
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const settings = toEditorSettings(options);
-            return formatting.formatSelection(start, end, sourceFile, getRuleProvider(settings), settings);
+            return formatting.formatSelection(start, end, sourceFile, formatting.getFormatContext(toEditorSettings(options)));
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const settings = toEditorSettings(options);
-            return formatting.formatDocument(sourceFile, getRuleProvider(settings), settings);
+            return formatting.formatDocument(syntaxTreeCache.getCurrentSourceFile(fileName), formatting.getFormatContext(toEditorSettings(options)));
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const settings = toEditorSettings(options);
+            const formatContext = formatting.getFormatContext(toEditorSettings(options));
 
             if (!isInComment(sourceFile, position)) {
-                if (key === "{") {
-                    return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
-                }
-                else if (key === "}") {
-                    return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
-                }
-                else if (key === ";") {
-                    return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
-                }
-                else if (key === "\n") {
-                    return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+                switch (key) {
+                    case "{":
+                        return formatting.formatOnOpeningCurly(position, sourceFile, formatContext);
+                    case "}":
+                        return formatting.formatOnClosingCurly(position, sourceFile, formatContext);
+                    case ";":
+                        return formatting.formatOnSemicolon(position, sourceFile, formatContext);
+                    case "\n":
+                        return formatting.formatOnEnter(position, sourceFile, formatContext);
                 }
             }
 
@@ -1875,16 +1878,22 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
-            const rulesProvider = getRuleProvider(formatOptions);
+            const formatContext = formatting.getFormatContext(formatOptions);
 
             return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
+                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, formatContext });
             });
         }
 
-        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
-            fileName = toPath(fileName, currentDirectory, getCanonicalFileName);
+        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
+        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
+            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(path, a))) : applySingleCodeActionCommand(path, action);
+        }
+
+        function applySingleCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
             switch (action.type) {
                 case "install package":
                     return host.installPackage
@@ -2104,7 +2113,7 @@ namespace ts {
                 program: getProgram(),
                 newLineCharacter: formatOptions ? formatOptions.newLineCharacter : host.getNewLine(),
                 host,
-                rulesProvider: getRuleProvider(formatOptions),
+                formatContext: formatting.getFormatContext(formatOptions),
                 cancellationToken,
             };
         }

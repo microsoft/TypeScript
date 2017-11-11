@@ -4319,7 +4319,7 @@ namespace ts {
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
         if (namespaceDeclaration && !isDefaultImport(node)) {
             const name = namespaceDeclaration.name;
-            return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, namespaceDeclaration.name));
+            return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
         }
         if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
             return getGeneratedNameForNode(node);

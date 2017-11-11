@@ -166,7 +166,7 @@ namespace ts.codefix {
         return {
             host: context.host,
             newLineCharacter: context.newLineCharacter,
-            rulesProvider: context.rulesProvider,
+            formatContext: context.formatContext,
             sourceFile: context.sourceFile,
             checker,
             compilerOptions: context.program.getCompilerOptions(),
@@ -699,9 +699,10 @@ namespace ts.codefix {
             const defaultExport = checker.tryGetMemberInModuleExports("default", moduleSymbol);
             if (defaultExport) {
                 const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if (localSymbol && localSymbol.escapedName === symbolName && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
+                if ((localSymbol && localSymbol.escapedName === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName)
+                    && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     // check if this symbol is already used
-                    const symbolId = getUniqueSymbolId(localSymbol, checker);
+                    const symbolId = getUniqueSymbolId(localSymbol || defaultExport, checker);
                     symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, { ...context, kind: ImportKind.Default }));
                 }
             }
@@ -730,5 +731,36 @@ namespace ts.codefix {
                 cb(sourceFile.symbol);
             }
         }
+    }
+
+    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
+        return moduleSpecifierToValidIdentifier(removeFileExtension(getBaseFileName(moduleSymbol.name)), target);
+    }
+
+    function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
+        let res = "";
+        let lastCharWasValid = true;
+        const firstCharCode = moduleSpecifier.charCodeAt(0);
+        if (isIdentifierStart(firstCharCode, target)) {
+            res += String.fromCharCode(firstCharCode);
+        }
+        else {
+            lastCharWasValid = false;
+        }
+        for (let i = 1; i < moduleSpecifier.length; i++) {
+            const ch = moduleSpecifier.charCodeAt(i);
+            const isValid = isIdentifierPart(ch, target);
+            if (isValid) {
+                let char = String.fromCharCode(ch);
+                if (!lastCharWasValid) {
+                    char = char.toUpperCase();
+                }
+                res += char;
+            }
+            lastCharWasValid = isValid;
+        }
+        // Need `|| "_"` to ensure result isn't empty.
+        const token = stringToToken(res);
+        return token === undefined || !isNonContextualKeyword(token) ? res || "_" : `_${res}`;
     }
 }
