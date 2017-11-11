@@ -103,14 +103,14 @@ namespace ts.server {
 
     const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
     const indentStyle = createMapFromTemplate({
-        "none": IndentStyle.None,
-        "block": IndentStyle.Block,
-        "smart": IndentStyle.Smart
+        none: IndentStyle.None,
+        block: IndentStyle.Block,
+        smart: IndentStyle.Smart
     });
 
     export interface TypesMapFile {
         typesMap: SafeList;
-        simpleMap: string[];
+        simpleMap: { [libName: string]: string };
     }
 
     /**
@@ -134,31 +134,31 @@ namespace ts.server {
     const defaultTypeSafeList: SafeList = {
         "jquery": {
             // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-            "match": /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
-            "types": ["jquery"]
+            match: /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
+            types: ["jquery"]
         },
         "WinJS": {
             // e.g. c:/temp/UWApp1/lib/winjs-4.0.1/js/base.js
-            "match": /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
-            "exclude": [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
-            "types": ["winjs"]                           // And fetch the @types package for WinJS
+            match: /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
+            exclude: [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
+            types: ["winjs"]                           // And fetch the @types package for WinJS
         },
         "Kendo": {
             // e.g. /Kendo3/wwwroot/lib/kendo/kendo.all.min.js
-            "match": /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
-            "exclude": [["^", 1, "/.*"]],
-            "types": ["kendo-ui"]
+            match: /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
+            exclude: [["^", 1, "/.*"]],
+            types: ["kendo-ui"]
         },
         "Office Nuget": {
             // e.g. /scripts/Office/1/excel-15.debug.js
-            "match": /^(.*\/office\/1)\/excel-\d+\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
-            "exclude": [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
-            "types": ["office"]                               // @types package to fetch instead
+            match: /^(.*\/office\/1)\/excel-\d+\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
+            exclude: [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
+            types: ["office"]                               // @types package to fetch instead
         },
         "Minified files": {
             // e.g. /whatever/blah.min.js
-            "match": /^(.+\.min\.js)$/i,
-            "exclude": [["^", 1, "$"]]
+            match: /^(.+\.min\.js)$/i,
+            exclude: [["^", 1, "$"]]
         }
     };
 
@@ -203,8 +203,10 @@ namespace ts.server {
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
     export function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
-        const result = flatMap(projects, action).sort(comparer);
-        return projects.length > 1 ? deduplicate(result, areEqual) : result;
+        const outputs = flatMap(projects, action);
+        return comparer
+            ? sortAndDeduplicate(outputs, comparer, areEqual)
+            : deduplicate(outputs, areEqual);
     }
 
     export interface HostConfiguration {
@@ -378,6 +380,7 @@ namespace ts.server {
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
+        private legacySafelist: { [key: string]: string } = {};
 
         private changedFiles: ScriptInfo[];
         private pendingProjectUpdates = createMap<Project>();
@@ -430,8 +433,11 @@ namespace ts.server {
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.throttledOperations = new ThrottledOperations(this.host, this.logger);
 
-            if (opts.typesMapLocation) {
+            if (this.typesMapLocation) {
                 this.loadTypesMap();
+            }
+            else {
+                this.logger.info("No types map provided; using the default");
             }
 
             this.typingsInstaller.attach(this);
@@ -522,10 +528,12 @@ namespace ts.server {
                 }
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
+                this.legacySafelist = raw.simpleMap;
             }
             catch (e) {
                 this.logger.info(`Error loading types map: ${e}`);
                 this.safelist = defaultTypeSafeList;
+                this.legacySafelist = {};
             }
         }
 
@@ -799,17 +807,14 @@ namespace ts.server {
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrDirectoryPath !== directory && !isSupportedSourceFileName(fileOrDirectory, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {
+                    if (fileOrDirectoryPath !== directory && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {
                         this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
                         return;
                     }
 
                     // Reload is pending, do the reload
-                    if (!project.pendingReload) {
-                        const configFileSpecs = project.configFileSpecs;
-                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
-                        project.updateErrorOnNoInputFiles(result.fileNames.length !== 0);
-                        this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader);
+                    if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
+                        project.pendingReload = ConfigFileProgramReloadLevel.Partial;
                         this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
                     }
                 },
@@ -842,7 +847,7 @@ namespace ts.server {
             }
             else {
                 this.logConfigFileWatchUpdate(project.getConfigFilePath(), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingInferredRootFiles);
-                project.pendingReload = true;
+                project.pendingReload = ConfigFileProgramReloadLevel.Full;
                 this.delayUpdateProjectGraph(project);
                 // As we scheduled the update on configured project graph,
                 // we would need to schedule the project reload for only the root of inferred projects
@@ -1419,7 +1424,7 @@ namespace ts.server {
             }
         }
 
-        private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition) {
+        private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition, excludedFiles: NormalizedPath[]) {
             const compilerOptions = convertCompilerOptions(options);
             const project = new ExternalProject(
                 projectFileName,
@@ -1428,6 +1433,7 @@ namespace ts.server {
                 compilerOptions,
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave);
+            project.excludedFiles = excludedFiles;
 
             this.addFilesToNonInferredProjectAndUpdateGraph(project, files, externalFilePropertyReader, typeAcquisition);
             this.externalProjects.push(project);
@@ -1588,6 +1594,19 @@ namespace ts.server {
                 project.compileOnSaveEnabled = compileOnSave;
             }
             this.addFilesToNonInferredProjectAndUpdateGraph(project, newUncheckedFiles, propertyReader, newTypeAcquisition);
+        }
+
+        /**
+         * Reload the file names from config file specs and update the project graph
+         */
+        /*@internal*/
+        reloadFileNamesOfConfiguredProject(project: ConfiguredProject): boolean {
+            const configFileSpecs = project.configFileSpecs;
+            const configFileName = project.getConfigFilePath();
+            const fileNamesResult = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
+            project.updateErrorOnNoInputFiles(fileNamesResult.fileNames.length !== 0);
+            this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames, fileNamePropertyReader);
+            return project.updateGraph();
         }
 
         /**
@@ -1884,7 +1903,7 @@ namespace ts.server {
                     }
                     else if (!updatedProjects.has(configFileName)) {
                         if (delayReload) {
-                            project.pendingReload = true;
+                            project.pendingReload = ConfigFileProgramReloadLevel.Full;
                             this.delayUpdateProjectGraph(project);
                         }
                         else {
@@ -2185,7 +2204,7 @@ namespace ts.server {
                 const rule = this.safelist[name];
                 for (const root of normalizedNames) {
                     if (rule.match.test(root)) {
-                        this.logger.info(`Excluding files based on rule ${name}`);
+                        this.logger.info(`Excluding files based on rule ${name} matching file '${root}'`);
 
                         // If the file matches, collect its types packages and exclude rules
                         if (rule.types) {
@@ -2244,7 +2263,22 @@ namespace ts.server {
                     excludedFiles.push(normalizedNames[i]);
                 }
                 else {
-                    filesToKeep.push(proj.rootFiles[i]);
+                    let exclude = false;
+                    if (typeAcquisition && (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery)) {
+                        const baseName = getBaseFileName(normalizedNames[i].toLowerCase());
+                        if (fileExtensionIs(baseName, "js")) {
+                            const inferredTypingName = removeFileExtension(baseName);
+                            const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
+                            if (this.legacySafelist[cleanedTypingName]) {
+                                this.logger.info(`Excluded '${normalizedNames[i]}' because it matched ${cleanedTypingName} from the legacy safelist`);
+                                excludedFiles.push(normalizedNames[i]);
+                                exclude = true;
+                            }
+                        }
+                    }
+                    if (!exclude) {
+                        filesToKeep.push(proj.rootFiles[i]);
+                    }
                 }
             }
             proj.rootFiles = filesToKeep;
@@ -2352,8 +2386,7 @@ namespace ts.server {
             else {
                 // no config files - remove the item from the collection
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
-                const newProj = this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
-                newProj.excludedFiles = excludedFiles;
+                this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
             }
             if (!suppressRefreshOfInferredProjects) {
                 this.ensureProjectStructuresUptoDate(/*refreshInferredProjects*/ true);

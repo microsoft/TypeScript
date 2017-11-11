@@ -77,18 +77,18 @@ namespace Harness.Parallel.Host {
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
+        const path: { join: (...args: string[]) => string } = require("path");
         for (const runner of runners) {
-            const files = runner.enumerateTestFiles();
-            for (const file of files) {
+            for (const file of runner.enumerateTestFiles()) {
                 let size: number;
                 if (!perfData) {
                     try {
-                        size = statSync(file).size;
+                        size = statSync(path.join(runner.workingDirectory, file)).size;
                     }
                     catch {
                         // May be a directory
                         try {
-                            size = Harness.IO.listFiles(file, /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                            size = Harness.IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
                         }
                         catch {
                             // Unknown test kind, just return 0 and let the historical analysis take over after one run

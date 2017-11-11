@@ -115,7 +115,10 @@ namespace ts.JsTyping {
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            const module = deduplicate(unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId));
+            const module = deduplicate(
+                unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
+                equateStringsCaseSensitive,
+                compareStringsCaseSensitive);
             addInferredTypings(module, "Inferred typings from unresolved imports");
         }
         // Add the cached typing locations for inferred typings that are already installed
@@ -180,7 +183,7 @@ namespace ts.JsTyping {
                 if (!hasJavaScriptFileExtension(j)) return undefined;
 
                 const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
-                const cleanedTypingName = inferredTypingName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
+                const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
                 return safeList.get(cleanedTypingName);
             });
             if (fromFileNames.length) {
