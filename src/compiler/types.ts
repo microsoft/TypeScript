@@ -1451,20 +1451,25 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum NumericLiteralFlags {
+    export const enum TokenFlags {
         None = 0,
-        Scientific = 1 << 1,        // e.g. `10e2`
-        Octal = 1 << 2,             // e.g. `0777`
-        HexSpecifier = 1 << 3,      // e.g. `0x00000000`
-        BinarySpecifier = 1 << 4,   // e.g. `0b0110010000000000`
-        OctalSpecifier = 1 << 5,    // e.g. `0o777`
+        PrecedingLineBreak = 1 << 0,
+        PrecedingComment = 1 << 1,
+        Unterminated = 1 << 2,
+        ExtendedUnicodeEscape = 1 << 3,
+        Scientific = 1 << 4,        // e.g. `10e2`
+        Octal = 1 << 5,             // e.g. `0777`
+        HexSpecifier = 1 << 6,      // e.g. `0x00000000`
+        BinarySpecifier = 1 << 7,   // e.g. `0b0110010000000000`
+        OctalSpecifier = 1 << 8,    // e.g. `0o777`
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
+        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinarySpecifier | OctalSpecifier
     }
 
     export interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
         /* @internal */
-        numericLiteralFlags?: NumericLiteralFlags;
+        numericLiteralFlags?: TokenFlags;
     }
 
     export interface TemplateHead extends LiteralLikeNode {

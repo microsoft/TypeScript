@@ -2111,7 +2111,7 @@ namespace ts {
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
             if (node.kind === SyntaxKind.NumericLiteral) {
-                (<NumericLiteral>node).numericLiteralFlags = scanner.getNumericLiteralFlags();
+                (<NumericLiteral>node).numericLiteralFlags = scanner.getTokenFlags() & TokenFlags.NumericLiteralFlags;
             }
 
             nextToken();
