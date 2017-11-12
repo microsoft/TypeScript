@@ -2434,10 +2434,7 @@ namespace ts {
     }
 
     export function isIntrinsicJsxName(name: __String | string) {
-        // An escaped identifier had a leading underscore prior to being escaped, which would return true
-        // The escape adds an extra underscore which does not change the result
-        const ch = (name as string).substr(0, 1);
-        return ch.toLowerCase() === ch;
+        return /^[a-z]|-/.test(name as string);
     }
 
     function get16BitUnicodeEscapeSequence(charCode: number): string {
