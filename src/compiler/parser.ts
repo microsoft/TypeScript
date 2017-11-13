@@ -3303,24 +3303,40 @@ namespace ts {
                     return Tristate.True;
                 }
 
+                // Check for "(xxx yyy", where xxx is a modifier and yyy is an identifier. This
+                // isn't actually allowed, but we want to treat it as a lambda so we can provide
+                // a good error message.
+                if (isModifierKind(second) && lookAhead(nextTokenIsIdentifier)) {
+                    return Tristate.True;
+                }
+
                 // If we had "(" followed by something that's not an identifier,
                 // then this definitely doesn't look like a lambda.
-                // Note: we could be a little more lenient and allow
-                // "(public" or "(private". These would not ever actually be allowed,
-                // but we could provide a good error message instead of bailing out.
                 if (!isIdentifier()) {
                     return Tristate.False;
                 }
 
-                // If we have something like "(a:", then we must have a
-                // type-annotated parameter in an arrow function expression.
-                if (nextToken() === SyntaxKind.ColonToken) {
-                    return Tristate.True;
+                switch (nextToken()) {
+                    case SyntaxKind.ColonToken:
+                        // If we have something like "(a:", then we must have a
+                        // type-annotated parameter in an arrow function expression.
+                        return Tristate.True;
+                    case SyntaxKind.QuestionToken:
+                        nextToken();
+                        // If we have "(a?:" or "(a?," or "(a?=" or "(a?)" then it is definitely a lamnda.
+                        if (token() === SyntaxKind.ColonToken || token() === SyntaxKind.CommaToken || token() === SyntaxKind.EqualsToken || token() === SyntaxKind.CloseParenToken) {
+                            return Tristate.True;
+                        }
+                        // Otherwise it is definitely not a lambda.
+                        return Tristate.False;
+                    case SyntaxKind.CommaToken:
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.CloseParenToken:
+                        // If we have "(a," or "(a=" or "(a)" this *could* be an arrow function
+                        return Tristate.Unknown;
                 }
-
-                // This *could* be a parenthesized arrow function.
-                // Return Unknown to let the caller know.
-                return Tristate.Unknown;
+                // It is definitely not an arrow function
+                return Tristate.False;
             }
             else {
                 Debug.assert(first === SyntaxKind.LessThanToken);
