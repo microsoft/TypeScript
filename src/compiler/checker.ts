@@ -14200,19 +14200,7 @@ namespace ts {
             const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
             // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
             if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
-                const childrenTypes: Type[] = [];
-                for (const child of (parent as JsxElement).children) {
-                    // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
-                    // because then type of children property will have constituent of string type.
-                    if (child.kind === SyntaxKind.JsxText) {
-                        if (!child.containsOnlyWhiteSpaces) {
-                            childrenTypes.push(stringType);
-                        }
-                    }
-                    else {
-                        childrenTypes.push(checkExpression(child, checkMode));
-                    }
-                }
+                const childrenTypes: Type[] = checkJsxChildren(parent as JsxElement, checkMode);
 
                 if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
                     // Error if there is a attribute named "children" explicitly specified and children element.
@@ -14250,6 +14238,23 @@ namespace ts {
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
                 return result;
             }
+        }
+
+        function checkJsxChildren(node: JsxElement | JsxFragment, checkMode?: CheckMode) {
+            const childrenTypes: Type[] = [];
+            for (const child of node.children) {
+                // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
+                // because then type of children property will have constituent of string type.
+                if (child.kind === SyntaxKind.JsxText) {
+                    if (!child.containsOnlyWhiteSpaces) {
+                        childrenTypes.push(stringType);
+                    }
+                }
+                else {
+                    childrenTypes.push(checkExpression(child, checkMode));
+                }
+            }
+            return childrenTypes;
         }
 
         /**
@@ -14785,6 +14790,9 @@ namespace ts {
 
             if (isNodeOpeningLikeElement) {
                 checkJsxAttributesAssignableToTagNameAttributes(<JsxOpeningLikeElement>node);
+            }
+            else {
+                checkJsxChildren((node as JsxOpeningFragment).parent);
             }
         }
 
