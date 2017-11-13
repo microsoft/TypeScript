@@ -3500,16 +3500,6 @@ namespace ts {
             if (justCheckExactMatches) {
                 continue;
             }
-            if (candidateNameLowerCase.length < 3 ||
-                nameLowerCase.length < 3 ||
-                candidateNameLowerCase === "eval" ||
-                candidateNameLowerCase === "intl" ||
-                candidateNameLowerCase === "undefined" ||
-                candidateNameLowerCase === "map" ||
-                candidateNameLowerCase === "nan" ||
-                candidateNameLowerCase === "set") {
-                continue;
-            }
             const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance);
             if (distance === undefined) {
                 continue;
