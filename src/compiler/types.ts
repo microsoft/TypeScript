@@ -1454,7 +1454,7 @@ namespace ts {
     export const enum TokenFlags {
         None = 0,
         PrecedingLineBreak = 1 << 0,
-        PrecedingComment = 1 << 1,
+        PrecedingJSDocComment = 1 << 1,
         Unterminated = 1 << 2,
         ExtendedUnicodeEscape = 1 << 3,
         Scientific = 1 << 4,        // e.g. `10e2`
