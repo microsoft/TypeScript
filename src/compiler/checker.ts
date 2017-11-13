@@ -6454,7 +6454,10 @@ namespace ts {
                     }
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
                         const mapper = createTypeMapper(typeParameters, typeArguments);
-                        const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        let defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        if (defaultType && isTypeIdenticalTo(defaultType, emptyObjectType) && isJavaScriptImplicitAny) {
+                            defaultType = anyType;
+                        }
                         typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                     }
                 }
