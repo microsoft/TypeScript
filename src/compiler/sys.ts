@@ -16,6 +16,16 @@ namespace ts {
         }
     }
 
+    /**
+     * djb2 hashing algorithm
+     * http://www.cse.yorku.ca/~oz/hash.html
+     */
+    /* @internal */
+    export function generateDjb2Hash(data: string): string {
+      const chars = data.split("").map(str => str.charCodeAt(0));
+      return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+    }
+
     export enum FileWatcherEventKind {
         Created,
         Changed,
@@ -508,9 +518,7 @@ namespace ts {
                       hash.digest("hex");
                     }
                     else {
-                      // djb2 hashing algorithm: http://www.cse.yorku.ca/~oz/hash.html
-                      const chars = data.split("").map(str => str.charCodeAt(0));
-                      hash = `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+                      hash = generateDjb2Hash(data);
                     }
                     return hash;
                 },
