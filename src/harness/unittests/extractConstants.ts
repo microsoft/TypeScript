@@ -33,6 +33,20 @@ namespace ts {
         testExtractConstant("extractConstant_ExpressionStatementExpression",
             `[#|"hello"|];`);
 
+        testExtractConstant("extractConstant_ExpressionStatementInNestedScope", `
+let i = 0;
+function F() {
+    [#|i++|];
+}
+        `);
+
+        testExtractConstant("extractConstant_ExpressionStatementConsumesLocal", `
+function F() {
+    let i = 0;
+    [#|i++|];
+}
+        `);
+
         testExtractConstant("extractConstant_BlockScopes_NoDependencies",
             `for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
@@ -200,9 +214,61 @@ const x = [#|2 + 1|];
 /* About x */
 const x = [#|2 + 1|];
         `);
+
+        testExtractConstant("extractConstant_ArrowFunction_Block", `
+const f = () => {
+    return [#|2 + 1|];
+};`);
+
+        testExtractConstant("extractConstant_ArrowFunction_Expression",
+            `const f = () => [#|2 + 1|];`);
+
+        testExtractConstant("extractConstant_PreserveTrivia", `
+// a
+var q = /*b*/ //c
+    /*d*/ [#|1 /*e*/ //f
+    /*g*/ + /*h*/ //i
+    /*j*/ 2|] /*k*/ //l
+    /*m*/; /*n*/ //o`);
+
+        testExtractConstantFailed("extractConstant_Void", `
+function f(): void { }
+[#|f();|]`);
+
+        testExtractConstantFailed("extractConstant_Never", `
+function f(): never { }
+[#|f();|]`);
+
+        testExtractConstant("extractConstant_This_Constructor", `
+class C {
+    constructor() {
+        [#|this.m2()|];
+    }
+    m2() { return 1; }
+}`);
+
+        testExtractConstant("extractConstant_This_Method", `
+class C {
+    m1() {
+        [#|this.m2()|];
+    }
+    m2() { return 1; }
+}`);
+
+        testExtractConstant("extractConstant_This_Property", `
+namespace N { // Force this test to be TS-only
+    class C {
+        x = 1;
+        y = [#|this.x|];
+    }
+}`);
     });
 
     function testExtractConstant(caption: string, text: string) {
         testExtractSymbol(caption, text, "extractConstant", Diagnostics.Extract_constant);
+    }
+
+    function testExtractConstantFailed(caption: string, text: string) {
+        testExtractSymbolFailed(caption, text, Diagnostics.Extract_constant);
     }
 }

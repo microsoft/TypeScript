@@ -787,9 +787,7 @@ namespace ts {
             // To preserve the behavior of the old emitter, we explicitly indent
             // the body of the function here if it was requested in an earlier
             // transformation.
-            if (getEmitFlags(node) & EmitFlags.Indented) {
-                setEmitFlags(classFunction, EmitFlags.Indented);
-            }
+            setEmitFlags(classFunction, (getEmitFlags(node) & EmitFlags.Indented) | EmitFlags.ReuseTempVariableScope);
 
             // "inner" and "outer" below are added purely to preserve source map locations from
             // the old emitter
@@ -1327,7 +1325,8 @@ namespace ts {
                     EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps
                 )
             );
-            statement.startsOnNewLine = true;
+
+            startOnNewLine(statement);
             setTextRange(statement, parameter);
             setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue);
             statements.push(statement);
@@ -1683,7 +1682,7 @@ namespace ts {
                 ]
             );
             if (startsOnNewLine) {
-                call.startsOnNewLine = true;
+                startOnNewLine(call);
             }
 
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
@@ -2602,7 +2601,7 @@ namespace ts {
                 );
 
                 if (node.multiLine) {
-                    assignment.startsOnNewLine = true;
+                    startOnNewLine(assignment);
                 }
 
                 expressions.push(assignment);
@@ -3083,7 +3082,7 @@ namespace ts {
             );
             setTextRange(expression, property);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             return expression;
         }
@@ -3105,7 +3104,7 @@ namespace ts {
             );
             setTextRange(expression, property);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             return expression;
         }
@@ -3128,7 +3127,7 @@ namespace ts {
             );
             setTextRange(expression, method);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return expression;
@@ -3676,7 +3675,8 @@ namespace ts {
             // Do not do this in the global scope, as any variable we currently generate could conflict with
             // variables from outside of the current compilation. In the future, we can revisit this behavior.
             if (isExternalModule(currentSourceFile)) {
-                const tempVar = createTempVariable(recordTaggedTemplateString);
+                const tempVar = createUniqueName("templateObject");
+                recordTaggedTemplateString(tempVar);
                 templateArguments[0] = createLogicalOr(
                     tempVar,
                     createAssignment(

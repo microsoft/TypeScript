@@ -801,6 +801,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor_2715" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Abstract property '{0}' in class '{1}' cannot be accessed in the constructor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La propriété abstraite '{0}' de la classe '{1}' n'est pas accessible dans le constructeur.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Accessibility_modifier_already_seen_1028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Accessibility modifier already seen.]]></Val>
@@ -830,12 +839,12 @@
       </Item>
       <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ajoutez {0} à une déclaration d'importation existante à partir de {1}.]]></Val>
+            <Val><![CDATA[Ajoutez '{0}' à une déclaration d'importation existante à partir de "{1}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Add {0} to existing import declaration from {1}]]></Val>
+            <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -1338,6 +1347,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Annotate_with_type_from_JSDoc_95009" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Annotate with type from JSDoc]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Annoter avec le type de JSDoc]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Annotate_with_types_from_JSDoc_95010" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Annotate with types from JSDoc]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Annoter avec les types de JSDoc]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Argument_expression_expected_1135" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Argument expression expected.]]></Val>
@@ -1485,6 +1512,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Call_decorator_expression_90028" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Call decorator expression.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Appelez l'expression de l'élément décoratif.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type_7020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Call signature, which lacks return-type annotation, implicitly has an 'any' return type.]]></Val>
@@ -1584,12 +1620,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_create_an_instance_of_the_abstract_class_0_2511" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_create_an_instance_of_an_abstract_class_2511" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot create an instance of the abstract class '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Impossible de créer une instance de la classe abstraite '{0}'.]]></Val>
-          </Tgt>
+          <Val><![CDATA[Cannot create an instance of an abstract class.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1892,12 +1925,12 @@
       </Item>
       <Item ItemId=";Change_0_to_1_90014" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change {0} to {1}.]]></Val>
+          <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Changez {0} en {1}.]]></Val>
+            <Val><![CDATA[Changez '{0}' en '{1}'.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Change {0} to {1}]]></Val>
+            <Val><![CDATA[Change {0} to {1}.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -2009,6 +2042,15 @@
           <Val><![CDATA[Class '{0}' used before its declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Classe '{0}' utilisée avant sa déclaration.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_declarations_cannot_have_more_than_one_augments_or_extends_tag_8025" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class declarations cannot have more than one `@augments` or `@extends` tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les déclarations de classes ne peuvent pas avoir plusieurs balises '@augments' ou '@extends'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2205,6 +2247,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_to_default_import_95013" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to default import]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Convertir en importation par défaut]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Corrupted_locale_file_0_6051" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Corrupted locale file {0}.]]></Val>
@@ -2294,6 +2345,15 @@
           <Val><![CDATA[Declare static method '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Déclarez la méthode statique '{0}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declare_static_property_0_90027" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Déclarez la propriété statique '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2724,6 +2784,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enable_strict_checking_of_function_types_6186" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable strict checking of function types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Activez la vérification stricte des types de fonction.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enable_strict_null_checks_6113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable strict null checks.]]></Val>
@@ -2844,6 +2913,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Expected_0_1_type_arguments_provide_these_with_an_extends_tag_8027" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0}-{1} type arguments; provide these with an '@extends' tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Arguments de type {0}-{1} attendus ; indiquez-les avec la balise '@extends'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Expected_0_arguments_but_got_1_2554" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} arguments, but got {1}.]]></Val>
@@ -2871,6 +2949,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Expected_0_type_arguments_provide_these_with_an_extends_tag_8026" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Arguments de type {0} attendus ; indiquez-les avec la balise '@extends'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Expected_at_least_0_arguments_but_got_1_2555" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected at least {0} arguments, but got {1}.]]></Val>
@@ -2894,6 +2981,15 @@
           <Val><![CDATA[Expected corresponding JSX closing tag for '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Balise de fermeture JSX correspondante attendue pour '{0}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_corresponding_closing_tag_for_JSX_fragment_17015" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected corresponding closing tag for JSX fragment.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Balise de fermeture correspondante attendue pour le fragment JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3090,7 +3186,16 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Extract_function_95003" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Extract_constant_95006" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Extract constant]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Extraire la constante]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Extract_function_95005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Extract function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -3099,11 +3204,38 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Extract_to_0_95004" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Extract_symbol_95003" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Extract to {0}]]></Val>
+          <Val><![CDATA[Extract symbol]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Extraire vers {0}]]></Val>
+            <Val><![CDATA[Extraire le symbole]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Extract_to_0_in_1_95004" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Extract to {0} in {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Extraire vers {0} dans {1}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Extract_to_0_in_1_scope_95008" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Extract to {0} in {1} scope]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Extraire vers {0} dans la portée {1}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Extract_to_0_in_enclosing_scope_95007" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Extract to {0} in enclosing scope]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Extraire vers {0} dans la portée englobante]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3590,13 +3722,31 @@
       </Item>
       <Item ItemId=";Import_0_from_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import {0} from {1}.]]></Val>
+          <Val><![CDATA[Import '{0}' from "{1}".]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importez {0} à partir de {1}.]]></Val>
+            <Val><![CDATA[Importez '{0}' à partir de "{1}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Import {0} from {1}]]></Val>
+            <Val><![CDATA[Import {0} from {1}.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_0_require_1_95015" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import '{0}' = require("{1}").]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Importer '{0}' = require("{1}").]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_Asterisk_as_0_from_1_95016" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import * as '{0}' from "{1}".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Importer * en tant que '{0}' à partir de "{1}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3741,6 +3891,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infer parameter types from usage.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Déduisez les types des paramètres à partir de l'utilisation.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Infer_type_of_0_from_usage_95011" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Déduisez le type de '{0}' à partir de l'utilisation.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Initialize_property_0_in_the_constructor_90020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
@@ -3809,6 +3977,15 @@
           <Val><![CDATA[Insert command line options and files from a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Insérer les options de ligne de commande et les fichiers à partir d'un fichier texte.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Install_0_95014" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Install '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Installer '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3933,6 +4110,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";JSDoc_0_1_does_not_match_the_extends_2_clause_8023" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '@{0} {1}' does not match the 'extends {2}' clause.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La balise JSDoc '@{0} {1}' ne correspond pas à la clause 'extends {2}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSDoc_0_is_not_attached_to_a_class_8022" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '@{0}' is not attached to a class.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La balise JSDoc '@{0}' n'est pas attachée à une classe.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_8024" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La balise JSDoc '@param' se nomme '{0}', mais il n'existe aucun paramètre portant ce nom.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags_8021" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La balise JSDoc '@typedef' doit avoir une annotation de type ou être suivie des balises '@property' ou '@member'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";JSDoc_types_can_only_be_used_inside_documentation_comments_8020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSDoc types can only be used inside documentation comments.]]></Val>
@@ -4047,6 +4260,24 @@
           <Prev Cat="Text">
             <Val><![CDATA[JSX expressions must have one parent element]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSX_fragment_has_no_corresponding_closing_tag_17014" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSX fragment has no corresponding closing tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le fragment JSX n'a pas de balise de fermeture correspondante.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSX_fragment_is_not_supported_when_using_jsxFactory_17016" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSX fragment is not supported when using --jsxFactory]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le fragment JSX n'est pas pris en charge quand --jsxFactory est utilisé]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4346,15 +4577,6 @@
           <Val><![CDATA[Module '{0}' was resolved as locally declared ambient module in file '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Le module '{0}' a été résolu en tant que module ambiant déclaré localement dans le fichier '{1}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Module_0_was_resolved_to_1_but_allowJs_is_not_set_6143" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' was resolved to '{1}', but '--allowJs' is not set.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le module '{0}' a été résolu en '{1}' mais '--allowJs' n'est pas défini.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5013,24 +5235,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_4036" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le paramètre '{0}' de la méthode setter d'une propriété publique de la classe exportée possède ou utilise le nom '{1}' du module privé '{2}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1_4037" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le paramètre '{0}' de la méthode setter d'une propriété publique de la classe exportée possède ou utilise le nom privé '{1}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module__4068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
@@ -5058,24 +5262,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_4034" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le paramètre '{0}' de la méthode setter d'une propriété statique publique de la classe exportée possède ou utilise le nom '{1}' du module privé '{2}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1_4035" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le paramètre '{0}' de la méthode setter d'une propriété statique publique de la classe exportée possède ou utilise le nom privé '{1}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Parameter_cannot_have_question_mark_and_initializer_1015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter cannot have question mark and initializer.]]></Val>
@@ -5091,6 +5277,30 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Déclaration de paramètre attendue.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_setter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2_4036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_setter_0_from_exported_class_has_or_is_using_private_name_1_4037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_name_1_from_private_mod_4034" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_private_name_1_4035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5799,6 +6009,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_4041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2_4042" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_private_name_1_4043" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_c_4053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
@@ -5826,30 +6054,21 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_external_modul_4041" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_name_1_from_external_modul_4038" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le type de retour de la méthode getter de propriété publique de la classe exportée porte ou utilise le nom '{0}' du module externe {1}, mais il ne peut pas être nommé.]]></Val>
-          </Tgt>
+          <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_4042" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_4039" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le type de retour de la méthode getter de propriété publique de la classe exportée porte ou utilise le nom '{0}' du module privé '{1}'.]]></Val>
-          </Tgt>
+          <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0_4043" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_private_name_1_4040" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Return type of public property getter from exported class has or is using private name '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le type de retour de la méthode getter de propriété publique de la classe exportée porte ou utilise le nom privé '{0}'.]]></Val>
-          </Tgt>
+          <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5876,33 +6095,6 @@
           <Val><![CDATA[Return type of public static method from exported class has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Le type de retour de la méthode statique publique de la classe exportée possède ou utilise le nom privé '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_externa_4038" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le type de retour de la méthode getter de propriété statique publique de la classe exportée porte ou utilise le nom '{0}' du module externe {1}, mais il ne peut pas être nommé.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_private_4039" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le type de retour de la méthode getter de propriété statique publique de la classe exportée porte ou utilise le nom '{0}' du module privé '{1}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_private_name_0_4040" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Return type of public static property getter from exported class has or is using private name '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le type de retour de la méthode getter de propriété statique publique de la classe exportée porte ou utilise le nom privé '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6074,10 +6266,13 @@
       </Item>
       <Item ItemId=";Specify_module_code_generation_Colon_none_commonjs_amd_system_umd_es2015_or_ESNext_6016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify module code generation: 'none', commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.]]></Val>
+          <Val><![CDATA[Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Spécifiez la génération de code du module : 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015' ou 'ESNext'.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify module code generation: 'none', commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6228,11 +6423,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_t_2403" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_has_type_1_at_2_but_here_has_typ_2403" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
+          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les déclarations de variable ultérieures doivent avoir le même type. La variable '{0}' doit être de type '{1}', mais elle a ici le type '{2}'.]]></Val>
+            <Val><![CDATA[Les déclarations de variables ultérieures doivent avoir le même type.  La variable '{0}' a le type '{1}' au niveau de {2}, mais ici elle a le type '{3}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6393,15 +6588,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_config_file_0_found_doesn_t_contain_any_source_files_6129" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The config file '{0}' found doesn't contain any source files.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le fichier config '{0}' trouvé ne contient pas de fichiers sources.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_containing_function_or_module_body_is_too_large_for_control_flow_analysis_2563" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The containing function or module body is too large for control flow analysis.]]></Val>
@@ -6423,6 +6609,9 @@
       <Item ItemId=";The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context_2714" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The expression of an export assignment must be an identifier or qualified name in an ambient context.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[L'expression d'une assignation d'exportation doit être un identificateur ou un nom qualifié dans un contexte ambiant.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7185,6 +7374,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_parameter_0_has_a_circular_default_2716" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type parameter '{0}' has a circular default.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le paramètre de type '{0}' a une valeur par défaut circulaire.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1_4008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
@@ -7661,6 +7859,15 @@
           <Val><![CDATA[You cannot rename this element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Vous ne pouvez pas renommer cet élément.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write__1329" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' accepte trop peu d'arguments pour pouvoir être utilisé ici en tant qu'élément décoratif. Voulez-vous vraiment l'appeler d'abord et écrire '@{0}()' ?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

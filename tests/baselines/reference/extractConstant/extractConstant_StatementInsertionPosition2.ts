@@ -3,7 +3,7 @@
 const i = 0;
 function F() {
     for (let j = 0; j < 10; j++) {
-        const x = i + 1;
+        const x = /*[#|*/i + 1/*|]*/;
     }
 }
         

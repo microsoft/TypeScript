@@ -28,9 +28,9 @@ var [a0, a1]: any = undefined;
 >undefined : undefined
 
 var [a2 = false, a3 = 1]: any = undefined;
->a2 : boolean
+>a2 : any
 >false : false
->a3 : number
+>a3 : any
 >1 : 1
 >undefined : undefined
 

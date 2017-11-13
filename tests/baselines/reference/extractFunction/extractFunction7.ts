@@ -8,11 +8,11 @@ namespace A {
     namespace B {
         function a() {
             let a = 1;
-        
+        /*[#|*/
             let y = 5;
             let z = x;
             a = y;
-            return C.foo();
+            return C.foo();/*|]*/
         }
     }
 }
@@ -49,7 +49,7 @@ namespace A {
         function a() {
             let a = 1;
         
-            var __return: any;
+            let __return;
             ({ __return, a } = /*RENAME*/newFunction(a));
             return __return;
         }
@@ -73,7 +73,7 @@ namespace A {
         function a() {
             let a = 1;
         
-            var __return: any;
+            let __return;
             ({ __return, a } = /*RENAME*/newFunction(a));
             return __return;
         }
@@ -97,12 +97,13 @@ namespace A {
         function a() {
             let a = 1;
         
-            var __return: any;
+            let __return;
             ({ __return, a } = /*RENAME*/newFunction(x, a));
             return __return;
         }
     }
 }
+
 function newFunction(x: number, a: number) {
     let y = 5;
     let z = x;

@@ -6,11 +6,11 @@ namespace A {
     namespace B {
         function a() {
             let a = 1;
-        
+        /*[#|*/
             let y = 5;
             let z = x;
             a = y;
-            foo();
+            foo();/*|]*/
         }
     }
 }
@@ -89,6 +89,7 @@ namespace A {
         }
     }
 }
+
 function newFunction(x: number, a: number) {
     let y = 5;
     let z = x;

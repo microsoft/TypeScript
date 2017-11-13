@@ -4,7 +4,7 @@ const i = 0;
 class C {
     M() {
         for (let j = 0; j < 10; j++) {
-            x = i + 1;
+            x = /*[#|*/i + 1/*|]*/;
         }
     }
 }

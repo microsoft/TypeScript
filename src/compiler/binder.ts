@@ -133,7 +133,7 @@ namespace ts {
 
         let symbolCount = 0;
 
-        let Symbol: { new (flags: SymbolFlags, name: __String): Symbol };
+        let Symbol: { new (flags: SymbolFlags, name: __String): Symbol }; // tslint:disable-line variable-name
         let classifiableNames: UnderscoreEscapedMap<true>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -142,6 +142,15 @@ namespace ts {
         // state used to aggregate transform flags during bind.
         let subtreeTransformFlags: TransformFlags = TransformFlags.None;
         let skipTransformFlagAggregation: boolean;
+
+        /**
+         * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
+         * If so, the node _must_ be in the current file (as that's the only way anything could have traversed to it to yield it as the error node)
+         * This version of `createDiagnosticForNode` uses the binder's context to account for this, and always yields correct diagnostics even in these situations.
+         */
+        function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
+            return createDiagnosticForNodeInSourceFile(getSourceFileOfNode(node) || file, node, message, arg0, arg1, arg2);
+        }
 
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
@@ -183,7 +192,7 @@ namespace ts {
         return bindSourceFile;
 
         function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-            if ((opts.alwaysStrict === undefined ? opts.strict : opts.alwaysStrict) && !file.isDeclarationFile) {
+            if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
                 // bind in strict mode source files with alwaysStrict option
                 return true;
             }
@@ -230,6 +239,10 @@ namespace ts {
         // Should not be called on a declaration with a computed property name,
         // unless it is a well known Symbol.
         function getDeclarationName(node: Declaration): __String {
+            if (node.kind === SyntaxKind.ExportAssignment) {
+                return (<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+            }
+
             const name = getNameOfDeclaration(node);
             if (name) {
                 if (isAmbientModule(node)) {
@@ -261,8 +274,6 @@ namespace ts {
                     return InternalSymbolName.Index;
                 case SyntaxKind.ExportDeclaration:
                     return InternalSymbolName.ExportStar;
-                case SyntaxKind.ExportAssignment:
-                    return (<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
                 case SyntaxKind.BinaryExpression:
                     if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
                         // module.exports = ...
@@ -1539,7 +1550,7 @@ namespace ts {
         function setExportContextFlag(node: ModuleDeclaration | SourceFile) {
             // A declaration source file or ambient module declaration that contains no export declarations (but possibly regular
             // declarations with export modifiers) is an export context in which declarations are implicitly exported.
-            if (isInAmbientContext(node) && !hasExportDeclarations(node)) {
+            if (node.flags & NodeFlags.Ambient && !hasExportDeclarations(node)) {
                 node.flags |= NodeFlags.ExportContext;
             }
             else {
@@ -1559,7 +1570,7 @@ namespace ts {
                 else {
                     let pattern: Pattern | undefined;
                     if (node.name.kind === SyntaxKind.StringLiteral) {
-                        const text = (<StringLiteral>node.name).text;
+                        const { text } = node.name;
                         if (hasZeroOrOneAsteriskCharacter(text)) {
                             pattern = tryParsePattern(text);
                         }
@@ -1578,22 +1589,13 @@ namespace ts {
             else {
                 const state = declareModuleSymbol(node);
                 if (state !== ModuleInstanceState.NonInstantiated) {
-                    if (node.symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)) {
-                        // if module was already merged with some function, class or non-const enum
-                        // treat is a non-const-enum-only
-                        node.symbol.constEnumOnlyModule = false;
-                    }
-                    else {
-                        const currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
-                        if (node.symbol.constEnumOnlyModule === undefined) {
-                            // non-merged case - use the current state
-                            node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
-                        }
-                        else {
-                            // merged case: module is const enum only if all its pieces are non-instantiated or const enum
-                            node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
-                        }
-                    }
+                    const { symbol } = node;
+                    // if module was already merged with some function, class or non-const enum, treat it as non-const-enum-only
+                    symbol.constEnumOnlyModule = (!(symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)))
+                        // Current must be `const enum` only
+                        && state === ModuleInstanceState.ConstEnumOnly
+                        // Can't have been set to 'false' in a previous merged symbol. ('undefined' OK)
+                        && symbol.constEnumOnlyModule !== false;
                 }
             }
         }
@@ -1715,7 +1717,7 @@ namespace ts {
                 node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
                 node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord &&
                 !isIdentifierName(node) &&
-                !isInAmbientContext(node)) {
+                !(node.flags & NodeFlags.Ambient)) {
 
                 // Report error only if there are no parse errors in file
                 if (!file.parseDiagnostics.length) {
@@ -2144,7 +2146,7 @@ namespace ts {
                     // falls through
                 case SyntaxKind.JSDocPropertyTag:
                     const propTag = node as JSDocPropertyLikeTag;
-                    const flags = propTag.isBracketed || propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
+                    const flags = propTag.isBracketed || propTag.typeExpression && propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
                         SymbolFlags.Property | SymbolFlags.Optional :
                         SymbolFlags.Property;
                     return declareSymbolAndAddToSymbolTable(propTag, flags, SymbolFlags.PropertyExcludes);
@@ -2194,15 +2196,14 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
             else {
-                // An export default clause with an expression exports a value
-                // We want to exclude both class and function here,  this is necessary to issue an error when there are both
-                // default export-assignment and default export function and class declaration.
-                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node)
+                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node)
                     // An export default clause with an EntityNameExpression exports all meanings of that identifier
                     ? SymbolFlags.Alias
                     // An export default clause with any other expression exports a value
                     : SymbolFlags.Property;
-                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.Property | SymbolFlags.AliasExcludes | SymbolFlags.Class | SymbolFlags.Function);
+                // If there is an `export default x;` alias declaration, can't `export default` anything else.
+                // (In contrast, you can still have `export default function f() {}` and `export default interface I {}`.)
+                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.All);
             }
         }
 
@@ -2269,16 +2270,13 @@ namespace ts {
         function isExportsOrModuleExportsOrAlias(node: Node): boolean {
             return isExportsIdentifier(node) ||
                 isModuleExportsPropertyAccessExpression(node) ||
-                isNameOfExportsOrModuleExportsAliasDeclaration(node);
+                isIdentifier(node) && isNameOfExportsOrModuleExportsAliasDeclaration(node);
         }
 
-        function isNameOfExportsOrModuleExportsAliasDeclaration(node: Node) {
-            if (isIdentifier(node)) {
-                const symbol = lookupSymbolForName(node.escapedText);
-                return symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
-                    symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(symbol.valueDeclaration.initializer);
-            }
-            return false;
+        function isNameOfExportsOrModuleExportsAliasDeclaration(node: Identifier): boolean {
+            const symbol = lookupSymbolForName(node.escapedText);
+            return symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
+                symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(symbol.valueDeclaration.initializer);
         }
 
         function isExportsOrModuleExportsOrAliasOrAssignment(node: Node): boolean {
@@ -2352,20 +2350,22 @@ namespace ts {
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
             const leftSideOfAssignment = node.left as PropertyAccessExpression;
-            const target = leftSideOfAssignment.expression as Identifier;
+            const target = leftSideOfAssignment.expression;
 
-            // Fix up parent pointers since we're going to use these nodes before we bind into them
-            leftSideOfAssignment.parent = node;
-            target.parent = leftSideOfAssignment;
+            if (isIdentifier(target)) {
+                // Fix up parent pointers since we're going to use these nodes before we bind into them
+                leftSideOfAssignment.parent = node;
+                target.parent = leftSideOfAssignment;
 
-            if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
-                // This can be an alias for the 'exports' or 'module.exports' names, e.g.
-                //    var util = module.exports;
-                //    util.property = function ...
-                bindExportsPropertyAssignment(node);
-            }
-            else {
-                bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+                if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
+                    // This can be an alias for the 'exports' or 'module.exports' names, e.g.
+                    //    var util = module.exports;
+                    //    util.property = function ...
+                    bindExportsPropertyAssignment(node);
+                }
+                else {
+                    bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+                }
             }
         }
 
@@ -2471,7 +2471,7 @@ namespace ts {
         }
 
         function bindParameter(node: ParameterDeclaration) {
-            if (inStrictMode && !isInAmbientContext(node)) {
+            if (inStrictMode && !(node.flags & NodeFlags.Ambient)) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
                 checkStrictModeEvalOrArguments(node, node.name);
@@ -2493,7 +2493,7 @@ namespace ts {
         }
 
         function bindFunctionDeclaration(node: FunctionDeclaration) {
-            if (!file.isDeclarationFile && !isInAmbientContext(node)) {
+            if (!file.isDeclarationFile && !(node.flags & NodeFlags.Ambient)) {
                 if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
@@ -2510,7 +2510,7 @@ namespace ts {
         }
 
         function bindFunctionExpression(node: FunctionExpression) {
-            if (!file.isDeclarationFile && !isInAmbientContext(node)) {
+            if (!file.isDeclarationFile && !(node.flags & NodeFlags.Ambient)) {
                 if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
@@ -2524,7 +2524,7 @@ namespace ts {
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            if (!file.isDeclarationFile && !isInAmbientContext(node) && isAsyncFunction(node)) {
+            if (!file.isDeclarationFile && !(node.flags & NodeFlags.Ambient) && isAsyncFunction(node)) {
                 emitFlags |= NodeFlags.HasAsyncFunctions;
             }
 
@@ -2573,7 +2573,7 @@ namespace ts {
                     //   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
                     const reportUnreachableCode =
                         !options.allowUnreachableCode &&
-                        !isInAmbientContext(node) &&
+                        !(node.flags & NodeFlags.Ambient) &&
                         (
                             node.kind !== SyntaxKind.VariableStatement ||
                             getCombinedNodeFlags((<VariableStatement>node).declarationList) & NodeFlags.BlockScoped ||
@@ -2697,6 +2697,12 @@ namespace ts {
 
         if (expression.kind === SyntaxKind.ImportKeyword) {
             transformFlags |= TransformFlags.ContainsDynamicImport;
+
+            // A dynamic 'import()' call that contains a lexical 'this' will
+            // require a captured 'this' when emitting down-level.
+            if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
+                transformFlags |= TransformFlags.ContainsCapturedLexicalThis;
+            }
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2947,6 +2953,7 @@ namespace ts {
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
             || node.typeParameters
             || node.type
+            || (node.name && isComputedPropertyName(node.name)) // While computed method names aren't typescript, the TS transform must visit them to emit property declarations correctly
             || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -2977,6 +2984,7 @@ namespace ts {
         if (node.decorators
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
             || node.type
+            || (node.name && isComputedPropertyName(node.name)) // While computed accessor names aren't typescript, the TS transform must visit them to emit property declarations correctly
             || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -3280,6 +3288,9 @@ namespace ts {
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxText:
             case SyntaxKind.JsxClosingElement:
+            case SyntaxKind.JsxFragment:
+            case SyntaxKind.JsxOpeningFragment:
+            case SyntaxKind.JsxClosingFragment:
             case SyntaxKind.JsxAttribute:
             case SyntaxKind.JsxAttributes:
             case SyntaxKind.JsxSpreadAttribute:

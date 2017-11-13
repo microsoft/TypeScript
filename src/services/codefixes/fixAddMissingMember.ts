@@ -92,7 +92,7 @@ namespace ts.codefix {
                     classDeclarationSourceFile,
                     classDeclaration,
                     staticInitialization,
-                    { suffix: context.newLineCharacter });
+                    { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
                 const initializeStaticAction = {
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_static_property_0), [tokenName]),
                     changes: staticInitializationChangeTracker.getChanges()
@@ -112,11 +112,11 @@ namespace ts.codefix {
                     createIdentifier("undefined")));
 
                 const propertyInitializationChangeTracker = textChanges.ChangeTracker.fromContext(context);
-                propertyInitializationChangeTracker.insertNodeAt(
+                propertyInitializationChangeTracker.insertNodeBefore(
                     classDeclarationSourceFile,
-                    classConstructor.body.getEnd() - 1,
+                    classConstructor.body.getLastToken(),
                     propertyInitialization,
-                    { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+                    { suffix: context.newLineCharacter });
 
                 const initializeAction = {
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_property_0_in_the_constructor), [tokenName]),

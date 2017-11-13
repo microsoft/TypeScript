@@ -4,10 +4,10 @@ namespace A {
     }
     namespace B {
         function* a(z: number) {
-        
+        /*[#|*/
             let y = 5;
             yield z;
-            return foo();
+            return foo();/*|]*/
         }
     }
 }
@@ -73,6 +73,7 @@ namespace A {
         }
     }
 }
+
 function* newFunction(z: number, foo: () => void) {
     let y = 5;
     yield z;

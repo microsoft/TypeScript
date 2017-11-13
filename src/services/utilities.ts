@@ -1,3 +1,13 @@
+/* @internal */ // Don't expose that we use this
+// Based on lib.es6.d.ts
+interface PromiseConstructor {
+    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    reject(reason: any): Promise<never>;
+    all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
+}
+/* @internal */
+declare var Promise: PromiseConstructor;
+
 // These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
@@ -169,7 +179,7 @@ namespace ts {
 
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
-                return !isPartOfExpression(node);
+                return !isExpressionNode(node);
             case SyntaxKind.ThisType:
                 return true;
         }
@@ -427,8 +437,11 @@ namespace ts {
         return start < end;
     }
 
+    /**
+     * Assumes `candidate.start <= position` holds.
+     */
     export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
-        return candidate.end > position || !isCompletedNode(candidate, sourceFile);
+        return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
     export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
@@ -935,7 +948,7 @@ namespace ts {
         if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+        if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
 
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }
@@ -1056,20 +1069,19 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export const typeKeywords: ReadonlyArray<SyntaxKind> = [
+        SyntaxKind.AnyKeyword,
+        SyntaxKind.BooleanKeyword,
+        SyntaxKind.NeverKeyword,
+        SyntaxKind.NumberKeyword,
+        SyntaxKind.ObjectKeyword,
+        SyntaxKind.StringKeyword,
+        SyntaxKind.SymbolKeyword,
+        SyntaxKind.VoidKeyword,
+    ];
+
     export function isTypeKeyword(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.NeverKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.ObjectKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.SymbolKeyword:
-            case SyntaxKind.VoidKeyword:
-                return true;
-            default:
-                return false;
-        }
+        return contains(typeKeywords, kind);
     }
 
     /** True if the symbol is for an external module, as opposed to a namespace. */
@@ -1278,9 +1290,7 @@ namespace ts {
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 &&
-            name.charCodeAt(0) === name.charCodeAt(length - 1) &&
-            (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isSingleOrDoubleQuote(name.charCodeAt(0))) {
             return name.substring(1, length - 1);
         }
         return name;
@@ -1295,6 +1305,10 @@ namespace ts {
         // First check to see if the script kind was specified by the host. Chances are the host
         // may override the default script kind for the file extension.
         return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
+    }
+
+    export function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker) {
+        return getSymbolId(skipAlias(symbol, checker));
     }
 
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
@@ -1316,22 +1330,112 @@ namespace ts {
     export function getSourceFileImportLocation(node: SourceFile) {
         // For a source file, it is possible there are detached comments we should not skip
         const text = node.text;
+        const textLength = text.length;
         let ranges = getLeadingCommentRanges(text, 0);
         if (!ranges) return 0;
         let position = 0;
         // However we should still skip a pinned comment at the top
         if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
-            position = ranges[0].end + 1;
+            position = ranges[0].end;
+            advancePastLineBreak();
             ranges = ranges.slice(1);
         }
         // As well as any triple slash references
         for (const range of ranges) {
             if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
-                position = range.end + 1;
+                position = range.end;
+                advancePastLineBreak();
                 continue;
             }
             break;
         }
         return position;
+
+        function advancePastLineBreak() {
+            if (position < textLength) {
+                const charCode = text.charCodeAt(position);
+                if (isLineBreak(charCode)) {
+                    position++;
+
+                    if (position < textLength && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
+                        position++;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates a deep, memberwise clone of a node with no source map location.
+     *
+     * WARNING: This is an expensive operation and is only intended to be used in refactorings
+     * and code fixes (because those are triggered by explicit user actions).
+     */
+    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
+        if (node === undefined) {
+            return undefined;
+        }
+
+        const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+        if (visited === node) {
+            // This only happens for leaf nodes - internal nodes always see their children change.
+            const clone = getSynthesizedClone(node);
+            if (isStringLiteral(clone)) {
+                clone.textSourceNode = node as any;
+            }
+            else if (isNumericLiteral(clone)) {
+                clone.numericLiteralFlags = (node as any).numericLiteralFlags;
+            }
+            clone.pos = node.pos;
+            clone.end = node.end;
+            return clone;
+        }
+
+        // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
+        // the new node created by visitEachChild with the extra changes getSynthesizedClone
+        // would have made.
+
+        visited.parent = undefined;
+
+        return visited;
+    }
+
+    /**
+     * Sets EmitFlags to suppress leading and trailing trivia on the node.
+     */
+    /* @internal */
+    export function suppressLeadingAndTrailingTrivia(node: Node) {
+        Debug.assert(node !== undefined);
+
+        suppressLeading(node);
+        suppressTrailing(node);
+
+        function suppressLeading(node: Node) {
+            addEmitFlags(node, EmitFlags.NoLeadingComments);
+
+            const firstChild = forEachChild(node, child => child);
+            if (firstChild) {
+                suppressLeading(firstChild);
+            }
+        }
+
+        function suppressTrailing(node: Node) {
+            addEmitFlags(node, EmitFlags.NoTrailingComments);
+
+            let lastChild: Node = undefined;
+            forEachChild(
+                node,
+                child => (lastChild = child, undefined),
+                children => {
+                    // As an optimization, jump straight to the end of the list.
+                    if (children.length) {
+                        lastChild = last(children);
+                    }
+                    return undefined;
+                });
+            if (lastChild) {
+                suppressTrailing(lastChild);
+            }
+        }
     }
 }

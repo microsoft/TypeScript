@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "2.6.0",
+    "version": "2.7.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -74,16 +74,18 @@
         "q": "latest",
         "run-sequence": "latest",
         "sorcery": "latest",
+        "source-map-support": "latest",
         "through2": "latest",
         "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "latest",
+        "vinyl": "latest",
         "colors": "latest",
         "typescript": "next"
     },
     "scripts": {
         "pretest": "jake tests",
-        "test": "jake runtests-parallel",
+        "test": "jake runtests-parallel light=false",
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "jake local",
         "build:tests": "jake tests",
