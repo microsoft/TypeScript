@@ -322,7 +322,7 @@ namespace ts.codefix {
             tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
             tryGetModuleNameFromBaseUrl(options, moduleFileName, getCanonicalFileName) ||
             options.rootDirs && tryGetModuleNameFromRootDirs(options.rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
-            removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName));
+            removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
@@ -343,7 +343,7 @@ namespace ts.codefix {
         }
 
         const relativeNameWithIndex = removeFileExtension(relativeName);
-        relativeName = removeExtensionAndIndexPostFix(relativeName);
+        relativeName = removeExtensionAndIndexPostFix(relativeName, options);
 
         if (options.paths) {
             for (const key in options.paths) {
@@ -393,7 +393,7 @@ namespace ts.codefix {
         return roots && firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
-                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1));
+                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), options);
             }
         });
     }
@@ -527,8 +527,9 @@ namespace ts.codefix {
         return firstDefined(rootDirs, rootDir => getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName));
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string): string {
-        return removeSuffix(removeFileExtension(fileName), "/index");
+    function removeExtensionAndIndexPostFix(fileName: string, options: CompilerOptions): string {
+        const noExtension = removeFileExtension(fileName);
+        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs ? removeSuffix(noExtension, "/index") : noExtension;
     }
 
     function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string): string | undefined {
