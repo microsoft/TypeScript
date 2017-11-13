@@ -2411,6 +2411,7 @@ namespace ts {
         "\u0085": "\\u0085"  // nextLine
     });
     const escapedNullRegExp = /\\0[0-9]/g;
+    const jsxInstrinsicNameRegExp = /^[a-z]|-/;
 
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
@@ -2434,7 +2435,7 @@ namespace ts {
     }
 
     export function isIntrinsicJsxName(name: __String | string) {
-        return /^[a-z]|-/.test(name as string);
+        return jsxInstrinsicNameRegExp.test(name as string);
     }
 
     function get16BitUnicodeEscapeSequence(charCode: number): string {
