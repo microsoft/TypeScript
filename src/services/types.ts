@@ -294,7 +294,8 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeFix[];
+        getCombinedCodeFix(fileName: string, groupId: {}, formatOptions: FormatCodeSettings): CodeActionAll;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -407,6 +408,16 @@ namespace ts {
          * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
          */
         commands?: CodeActionCommand[];
+    }
+
+    export interface CodeFix extends CodeAction {
+        /** If present, one may call 'applyAllCodeFixesInGroup' with this groupId. */
+        groupId: {} | undefined;
+    }
+
+    export interface CodeActionAll {
+        changes: FileTextChanges[];
+        commands: CodeActionCommand[] | undefined;
     }
 
     // Publicly, this type is just `{}`. Internally it is a union of all the actions we use.

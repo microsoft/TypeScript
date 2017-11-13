@@ -99,9 +99,12 @@ namespace ts.server.protocol {
         BreakpointStatement = "breakpointStatement",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
-        ApplyCodeActionCommand = "applyCodeActionCommand",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
+        GetCombinedCodeFix = "getCombinedCodeFix",
+        /* @internal */
+        GetCombinedCodeFixFull = "getCombinedCodeFix",
+        ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
 
         GetApplicableRefactors = "getApplicableRefactors",
@@ -533,6 +536,11 @@ namespace ts.server.protocol {
         arguments: CodeFixRequestArgs;
     }
 
+    export interface GetCombinedCodeFixRequest extends Request {
+        command: CommandTypes.GetCombinedCodeFix;
+        arguments: GetCombinedCodeFixRequestArgs;
+    }
+
     export interface ApplyCodeActionCommandRequest extends Request {
         command: CommandTypes.ApplyCodeActionCommand;
         arguments: ApplyCodeActionCommandRequestArgs;
@@ -583,6 +591,10 @@ namespace ts.server.protocol {
          * Errorcodes we want to get the fixes for.
          */
         errorCodes?: number[];
+    }
+
+    export interface GetCombinedCodeFixRequestArgs extends FileRequestArgs {
+        groupId: {};
     }
 
     export interface ApplyCodeActionCommandRequestArgs {
@@ -1568,7 +1580,7 @@ namespace ts.server.protocol {
 
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        body?: CodeAction[];
+        body?: CodeFix[];
     }
 
     export interface CodeAction {
@@ -1578,6 +1590,16 @@ namespace ts.server.protocol {
         changes: FileCodeEdits[];
         /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
         commands?: {}[];
+    }
+
+    export interface CodeActionAll {
+        changes: FileCodeEdits[];
+        commands: {}[] | undefined;
+    }
+
+    export interface CodeFix extends CodeAction {
+        /** If present, one may call 'getAllCodeFixesInGroup' with this groupId. */
+        groupId: {} | undefined;
     }
 
     /**

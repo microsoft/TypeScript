@@ -1099,6 +1099,32 @@ namespace ts {
             return !seen[id] && (seen[id] = true);
         };
     }
+
+    /** Add a value to a set, and return true if it wasn't already present. */
+    export function addToSeenIds(seen: true[], key: number): boolean {
+        if (seen[key]) {
+            return false;
+        }
+        seen[key] = true;
+        return true;
+    }
+
+    /** Add a value to a set, and return true if it wasn't already present. */
+    export function addToSeenStrings(seen: Map<true>, key: string): boolean {
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.set(key, true);
+        return true;
+    }
+
+    export function singleElementArray<T>(t: T | undefined): T[] {
+        return t === undefined ? undefined : [t];
+    }
+
+    export function getFirstChildOfKind(node: Node, sourceFile: SourceFile, kind: SyntaxKind): Node | undefined {
+        return find(node.getChildren(sourceFile), c => c.kind === kind);
+    }
 }
 
 // Display-part writer helpers
