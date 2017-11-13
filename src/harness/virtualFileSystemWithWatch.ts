@@ -1,4 +1,5 @@
 /// <reference path="harness.ts" />
+/// <reference path="./mocks.ts" />
 
 // TODO(rbuckton): Migrate this to use vfs.
 
@@ -160,7 +161,7 @@ interface Array<T> {}`
         checkMapKeys(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
     }
 
-    export function checkOutputContains(host: TestServerHost, expected: ReadonlyArray<string>) {
+    export function checkOutputContains(host: TestServerHost | mocks.MockServerHost, expected: ReadonlyArray<string>) {
         const mapExpected = arrayToSet(expected);
         const mapSeen = createMap<true>();
         for (const f of host.getOutput()) {
@@ -173,7 +174,7 @@ interface Array<T> {}`
         assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(flatMapIter(mapExpected.keys(), key => key))} in ${JSON.stringify(host.getOutput())}`);
     }
 
-    export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
+    export function checkOutputDoesNotContain(host: TestServerHost | mocks.MockServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
         const mapExpectedToBeAbsent = arrayToSet(expectedToBeAbsent);
         for (const f of host.getOutput()) {
             assert.isFalse(mapExpectedToBeAbsent.has(f), `Contains ${f} in ${JSON.stringify(host.getOutput())}`);
@@ -686,4 +687,5 @@ interface Array<T> {}`
         }
         readonly getEnvironmentVariable = notImplemented;
     }
+
 }

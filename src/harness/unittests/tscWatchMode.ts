@@ -22,7 +22,7 @@ namespace ts.tscWatch {
         checkFileNames(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 
-    function createWatchingSystemHost(system: WatchedSystem) {
+    function createWatchingSystemHost(system: ts.System) {
         return ts.createWatchingSystemHost(/*pretty*/ undefined, system);
     }
 
@@ -30,22 +30,22 @@ namespace ts.tscWatch {
         return ts.parseConfigFile(configFileName, {}, watchingSystemHost.system, watchingSystemHost.reportDiagnostic, watchingSystemHost.reportWatchDiagnostic);
     }
 
-    function createWatchModeWithConfigFile(configFilePath: string, host: WatchedSystem) {
+    function createWatchModeWithConfigFile(configFilePath: string, host: ts.System) {
         const watchingSystemHost = createWatchingSystemHost(host);
         const configFileResult = parseConfigFile(configFilePath, watchingSystemHost);
         return ts.createWatchModeWithConfigFile(configFileResult, {}, watchingSystemHost);
     }
 
-    function createWatchModeWithoutConfigFile(fileNames: string[], host: WatchedSystem, options: CompilerOptions = {}) {
+    function createWatchModeWithoutConfigFile(fileNames: string[], host: ts.System, options: CompilerOptions = {}) {
         const watchingSystemHost = createWatchingSystemHost(host);
         return ts.createWatchModeWithoutConfigFile(fileNames, options, watchingSystemHost);
     }
 
-    function getEmittedLineForMultiFileOutput(file: FileOrFolder, host: WatchedSystem) {
+    function getEmittedLineForMultiFileOutput(file: FileOrFolder, host: ts.System) {
         return `TSFILE: ${file.path.replace(".ts", ".js")}${host.newLine}`;
     }
 
-    function getEmittedLineForSingleFileOutput(filename: string, host: WatchedSystem) {
+    function getEmittedLineForSingleFileOutput(filename: string, host: ts.System) {
         return `TSFILE: ${filename}${host.newLine}`;
     }
 

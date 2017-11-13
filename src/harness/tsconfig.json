@@ -73,7 +73,7 @@
         "../services/codefixes/disableJsDiagnostics.ts",
 
         "harness.ts",
-        
+
         "core.ts",
         "utils.ts",
         "events.ts",
@@ -81,7 +81,8 @@
         "vpath.ts",
         "vfs.ts",
         "compiler.ts",
-        
+        "mocks.ts",
+
         "virtualFileSystemWithWatch.ts",
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",

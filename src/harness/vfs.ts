@@ -9,6 +9,11 @@
 //       support the eventual conversion of harness into a modular system.
 
 namespace vfs {
+    const S_IFMT = 0xf000;
+    const S_IFLNK = 0xa000;
+    const S_IFREG = 0x8000;
+    const S_IFDIR = 0x4000;
+
     export interface PathMappings {
         [path: string]: string;
     }
@@ -348,7 +353,7 @@ namespace vfs {
          */
         public readFile(path: string): string | undefined {
             const file = this.getFile(vpath.resolve(this.currentDirectory, path));
-            return file && file.content;
+            return file && file.readContent();
         }
 
         /**
@@ -357,9 +362,7 @@ namespace vfs {
         public writeFile(path: string, content: string): void {
             path = vpath.resolve(this.currentDirectory, path);
             const file = this.getFile(path) || this.addFile(path);
-            if (file) {
-                file.content = content;
-            }
+            if (file) file.writeContent(content);
         }
 
         /**
@@ -374,6 +377,35 @@ namespace vfs {
          */
         public fileExists(path: string) {
             return this.getEntry(path) instanceof VirtualFile;
+        }
+
+        public rename(oldpath: string, newpath: string) {
+            oldpath = vpath.resolve(this.currentDirectory, oldpath);
+            newpath = vpath.resolve(this.currentDirectory, newpath);
+            return this.root.replaceEntry(newpath, this.getEntry(oldpath));
+        }
+
+        /**
+         * Get file stats
+         */
+        public getStats(path: string, options?: { noFollowSymlinks?: boolean }) {
+            let entry = this.getEntry(path);
+            if (entry && !(options && options.noFollowSymlinks)) {
+                entry = this.getRealEntry(entry);
+            }
+            return entry && entry.getStats();
+        }
+
+        public setStats(path: string, atime: number | Date, mtime: number | Date, options?: { noFollowSymlinks?: boolean }) {
+            let entry = this.getEntry(path);
+            if (entry && !(options && options.noFollowSymlinks)) {
+                entry = this.getRealEntry(entry);
+            }
+            if (entry && !entry.isReadOnly) {
+                entry.setStats(atime, mtime);
+                return true;
+            }
+            return false;
         }
 
         /**
@@ -423,6 +455,39 @@ namespace vfs {
          */
         public getDirectory(path: string, options?: { followSymlinks?: boolean, pattern?: RegExp }): VirtualDirectory | undefined {
             return this.root.getDirectory(vpath.resolve(this.currentDirectory, path), options);
+        }
+
+        public getEntries(path: string, options: { recursive?: boolean, pattern?: RegExp, kind: "file" }): VirtualFile[];
+        public getEntries(path: string, options: { recursive?: boolean, pattern?: RegExp, kind: "directory" }): VirtualDirectory[];
+        public getEntries(path: string, options?: { recursive?: boolean, pattern?: RegExp, kind?: "file" | "directory" }): VirtualEntry[];
+        public getEntries(path: string, options?: { recursive?: boolean, pattern?: RegExp, kind?: "file" | "directory" }) {
+            const dir = this.root.getDirectory(vpath.resolve(this.currentDirectory, path));
+            return dir ? dir.getEntries(options) : [];
+        }
+
+        public getDirectories(path: string, options?: { recursive?: boolean, pattern?: RegExp }) {
+            const dir = this.root.getDirectory(vpath.resolve(this.currentDirectory, path));
+            return dir ? dir.getDirectories(options) : [];
+        }
+
+        public getFiles(path: string, options?: { recursive?: boolean, pattern?: RegExp }) {
+            const dir = this.root.getDirectory(vpath.resolve(this.currentDirectory, path));
+            return dir ? dir.getFiles(options) : [];
+        }
+
+        public getEntryNames(path: string, options?: { recursive?: boolean, qualified?: boolean, pattern?: RegExp, kind?: "file" | "directory" }) {
+            const dir = this.root.getDirectory(vpath.resolve(this.currentDirectory, path));
+            return dir ? dir.getEntryNames(options) : [];
+        }
+
+        public getDirectoryNames(path: string, options?: { recursive?: boolean, qualified?: boolean, pattern?: RegExp }) {
+            const dir = this.root.getDirectory(vpath.resolve(this.currentDirectory, path));
+            return dir ? dir.getDirectoryNames(options) : [];
+        }
+
+        public getFileNames(path: string, options?: { recursive?: boolean, qualified?: boolean, pattern?: RegExp }) {
+            const dir = this.root.getDirectory(vpath.resolve(this.currentDirectory, path));
+            return dir ? dir.getFileNames(options) : [];
         }
 
         /**
@@ -587,17 +652,29 @@ namespace vfs {
     }
 
     export abstract class VirtualFileSystemEntry extends VirtualFileSystemObject {
+        private static _nextId = 1;
         private _path: string;
+        private _name: string;
+        private _parent: VirtualDirectory | undefined;
         private _metadata: core.Metadata;
+        private _atimeMS: number = Date.now();
+        private _mtimeMS: number = Date.now();
+        private _ctimeMS: number = Date.now();
+        private _birthtimeMS: number = Date.now();
+
+        public readonly id = VirtualFileSystemEntry._nextId++;
+
+        constructor(parent: VirtualDirectory | undefined, name: string) {
+            super();
+            this._parent = parent;
+            this._name = name;
+        }
 
         /**
          * Gets the name of this entry.
          */
-        public readonly name: string;
-
-        constructor(name: string) {
-            super();
-            this.name = name;
+        public get name(): string {
+            return this._name;
         }
 
         /**
@@ -609,9 +686,18 @@ namespace vfs {
         }
 
         /**
+         * Gets the root directory for this entry.
+         */
+        public get root(): VirtualDirectory | undefined {
+            return this.parent.root;
+        }
+
+        /**
          * Gets the parent directory for this entry.
          */
-        public abstract get parent(): VirtualDirectory | undefined;
+        public get parent(): VirtualDirectory | undefined {
+            return this._parent;
+        }
 
         /**
          * Gets the entry that this entry shadows.
@@ -665,6 +751,27 @@ namespace vfs {
          */
         public abstract shadow(parent: VirtualDirectory): VirtualEntry;
 
+        public abstract getStats(): VirtualStats;
+
+        public setStats(atime: number | Date, mtime: number | Date) {
+            this.writePreamble();
+            this._atimeMS = typeof atime === "object" ? atime.getTime() :
+                atime < 0 ? Date.now() :
+                atime;
+            this._mtimeMS = typeof mtime === "object" ? mtime.getTime() :
+                mtime < 0 ? Date.now() :
+                mtime;
+            this._ctimeMS = Date.now();
+        }
+
+        protected static _setNameUnsafe(entry: VirtualFileSystemEntry, name: string) {
+            entry._name = name;
+        }
+
+        protected static _setParentUnsafe(entry: VirtualFileSystemEntry, parent: VirtualDirectory) {
+            entry._parent = parent;
+        }
+
         protected shadowPreamble(parent: VirtualDirectory): void {
             this.checkShadowParent(parent);
             this.checkShadowFileSystem(parent.fileSystem);
@@ -679,6 +786,30 @@ namespace vfs {
             while (fileSystem) {
                 if (shadowFileSystem === fileSystem) throw new Error("Cannot create shadow for parent in the same file system.");
                 fileSystem = fileSystem.shadowRoot;
+            }
+        }
+
+        protected getStatsCore(mode: number, size: number) {
+            return new VirtualStats(
+                this.root.id,
+                this.id,
+                mode,
+                size,
+                this._atimeMS,
+                this._mtimeMS,
+                this._ctimeMS,
+                this._birthtimeMS);
+        }
+
+        protected updateAccessTime() {
+            if (!this.isReadOnly) {
+                this._atimeMS = Date.now();
+            }
+        }
+
+        protected updateModificationTime() {
+            if (!this.isReadOnly) {
+                this._mtimeMS = Date.now();
             }
         }
     }
@@ -721,15 +852,13 @@ namespace vfs {
 
     export class VirtualDirectory extends VirtualFileSystemEntry {
         protected _shadowRoot: VirtualDirectory | undefined;
-        private _parent: VirtualDirectory;
         private _entries: core.KeyedCollection<string, VirtualEntry> | undefined;
         private _resolver: FileSystemResolver | undefined;
         private _onChildFileSystemChange: (path: string, change: FileSystemChange) => void;
 
         constructor(parent: VirtualDirectory | undefined, name: string, resolver?: FileSystemResolver) {
-            super(name);
+            super(parent, name);
             if (parent === undefined && !(this instanceof VirtualRoot)) throw new TypeError();
-            this._parent = parent;
             this._entries = undefined;
             this._resolver = resolver;
             this._shadowRoot = undefined;
@@ -737,10 +866,10 @@ namespace vfs {
         }
 
         /**
-         * Gets the container for this entry.
+         * Gets the root directory for this entry.
          */
-        public get parent(): VirtualDirectory | undefined {
-            return this._parent;
+        public get root(): VirtualDirectory | undefined {
+            return this.parent instanceof VirtualRoot ? this : undefined;
         }
 
         /**
@@ -911,7 +1040,6 @@ namespace vfs {
          * Adds a directory (and all intermediate directories) for a path relative to this directory.
          */
         public addDirectory(path: string, resolver?: FileSystemResolver): VirtualDirectory | undefined {
-            this.writePreamble();
             const components = this.parsePath(path);
             const directory = this.walkContainers(components, /*create*/ true);
             return directory && directory.addOwnDirectory(components[components.length - 1], resolver);
@@ -921,7 +1049,6 @@ namespace vfs {
          * Adds a file (and all intermediate directories) for a path relative to this directory.
          */
         public addFile(path: string, content?: FileSystemResolver | ContentResolver | string, options?: { overwrite?: boolean }): VirtualFile | undefined {
-            this.writePreamble();
             const components = this.parsePath(path);
             const directory = this.walkContainers(components, /*create*/ true);
             return directory && directory.addOwnFile(components[components.length - 1], content, options);
@@ -940,7 +1067,6 @@ namespace vfs {
          */
         public addSymlink(path: string, target: string | VirtualEntry): VirtualSymlink | undefined;
         public addSymlink(path: string, target: string | VirtualEntry): VirtualSymlink | undefined {
-            this.writePreamble();
             const targetEntry = typeof target === "string" ? this.fileSystem.getEntry(vpath.resolve(this.path, target)) : target;
             if (targetEntry === undefined) return undefined;
             const components = this.parsePath(path);
@@ -952,7 +1078,6 @@ namespace vfs {
          * Removes a directory (and all of its contents) at a path relative to this directory.
          */
         public removeDirectory(path: string): boolean {
-            this.writePreamble();
             const components = this.parsePath(path);
             const directory = this.walkContainers(components, /*create*/ false);
             return directory ? directory.removeOwnDirectory(components[components.length - 1]) : false;
@@ -962,11 +1087,15 @@ namespace vfs {
          * Removes a file at a path relative to this directory.
          */
         public removeFile(path: string): boolean {
-            this.writePreamble();
-            this.writePreamble();
             const components = this.parsePath(path);
             const directory = this.walkContainers(components, /*create*/ false);
             return directory ? directory.removeOwnFile(components[components.length - 1]) : false;
+        }
+
+        public replaceEntry(path: string, entry: VirtualEntry) {
+            const components = this.parsePath(path);
+            const directory = this.walkContainers(components, /*create*/ false);
+            return directory ? directory.replaceOwnEntry(components[components.length - 1], entry) : false;
         }
 
         /**
@@ -978,6 +1107,10 @@ namespace vfs {
             const shadow = new VirtualDirectory(shadowParent, this.name);
             shadow._shadowRoot = this;
             return shadow;
+        }
+
+        public getStats() {
+            return super.getStatsCore(S_IFDIR, 0);
         }
 
         protected makeReadOnlyCore(): void {
@@ -1026,67 +1159,95 @@ namespace vfs {
                 return undefined;
             }
 
+            this.writePreamble();
             const entry = new VirtualDirectory(this, name, resolver);
-            this.getOwnEntries().set(entry.name, entry);
-            this.emit("childAdded", entry);
-            entry.emit("fileSystemChange", entry.path, "added");
-            entry.addListener("fileSystemChange", this._onChildFileSystemChange);
+            this.addOwnEntry(entry);
             return entry;
         }
 
         protected addOwnFile(name: string, content?: FileSystemResolver | ContentResolver | string, options: { overwrite?: boolean } = {}): VirtualFile | undefined {
             const existing = this.getOwnEntry(name);
-            if (existing) {
-                if (!options.overwrite || !(existing instanceof VirtualFile)) {
-                    return undefined;
-                }
+            if (existing && (!options.overwrite || !(existing instanceof VirtualFile))) {
+                return undefined;
+            }
 
+            this.writePreamble();
+            if (existing) {
                 // Remove the existing entry
                 this.getOwnEntries().delete(name);
             }
 
             const entry = new VirtualFile(this, name, content);
-            this.getOwnEntries().set(entry.name, entry);
-            this.emit("childAdded", entry);
-            entry.emit("fileSystemChange", entry.path, "added");
-            entry.addListener("fileSystemChange", this._onChildFileSystemChange);
+            this.addOwnEntry(entry);
             return entry;
         }
 
         protected addOwnSymlink(name: string, target: VirtualEntry): VirtualSymlink | undefined {
             if (this.getOwnEntry(name)) return undefined;
+            this.writePreamble();
             const entry = target instanceof VirtualFile ? new VirtualFileSymlink(this, name, target.path) : new VirtualDirectorySymlink(this, name, target.path);
-            this.getOwnEntries().set(entry.name, entry);
-            this.emit("childAdded", entry);
-            entry.emit("fileSystemChange", entry.path, "added");
-            entry.addListener("fileSystemChange", this._onChildFileSystemChange);
+            this.addOwnEntry(entry);
             return entry;
         }
 
         protected removeOwnDirectory(name: string) {
-            const entries = this.getOwnEntries();
-            const entry = entries.get(name);
+            const entry = this.getOwnEntries().get(name);
             if (entry instanceof VirtualDirectory) {
-                entries.delete(name);
-                this.emit("childRemoved", entry);
-                this.emit("fileSystemChange", entry.path, "removed");
-                entry.removeListener("fileSystemChange", this._onChildFileSystemChange);
+                this.writePreamble();
+                this.removeOwnEntry(entry);
                 return true;
             }
             return false;
         }
 
         protected removeOwnFile(name: string) {
-            const entries = this.getOwnEntries();
-            const entry = entries.get(name);
+            const entry = this.getOwnEntries().get(name);
             if (entry instanceof VirtualFile) {
-                entries.delete(name);
-                this.emit("childRemoved", entry);
-                this.emit("fileSystemChange", entry.path, "removed");
-                entry.removeListener("fileSystemChange", this._onChildFileSystemChange);
+                this.writePreamble();
+                this.removeOwnEntry(entry);
                 return true;
             }
             return false;
+        }
+
+        protected replaceOwnEntry(name: string, entry: VirtualEntry) {
+            const existing = this.getOwnEntry(name);
+            // cannot replace yourself
+            // cannot move a file or directory into a read-only container.
+            if (entry === existing ||
+                this.isReadOnly) {
+                return false;
+            }
+            else if (entry instanceof VirtualDirectory) {
+                // cannot move a directory on top of a file.
+                // cannot move a directory on top of a non-empty directory.
+                // cannot move a directory if its parent is read-only
+                // cannot move a directory underneath itself.
+                if (existing instanceof VirtualFile ||
+                    existing instanceof VirtualDirectory && existing.getEntries().length > 0 ||
+                    entry.parent.isReadOnly ||
+                    vpath.beneath(entry.path, vpath.combine(this.path, name), !this.fileSystem.useCaseSensitiveFileNames)) {
+                    return false;
+                }
+            }
+            else if (entry instanceof VirtualFile) {
+                // cannot move a file on top of a directory.
+                // cannot move a file if its parent is read-only.
+                if (existing instanceof VirtualDirectory ||
+                    entry.parent.isReadOnly) {
+                    return false;
+                }
+            }
+
+            // delete any existing file or directory
+            if (existing) this.removeOwnEntry(existing);
+
+            // move and rename the entry
+            entry.parent.removeOwnEntry(entry);
+            VirtualFileSystemEntry._setNameUnsafe(entry, name);
+            VirtualFileSystemEntry._setParentUnsafe(entry, this);
+            this.addOwnEntry(entry);
+            return true;
         }
 
         private parsePath(path: string) {
@@ -1124,6 +1285,25 @@ namespace vfs {
 
         private getOrAddOwnDirectory(name: string) {
             return this.getOwnDirectory(name) || this.addOwnDirectory(name);
+        }
+
+        private addOwnEntry(entry: VirtualEntry) {
+            this.getOwnEntries().set(entry.name, entry);
+            this.updateAccessTime();
+            this.updateModificationTime();
+            this.emit("childAdded", entry);
+            entry.emit("fileSystemChange", entry.path, "added");
+            entry.addListener("fileSystemChange", this._onChildFileSystemChange);
+        }
+
+        private removeOwnEntry(entry: VirtualEntry) {
+            const entries = this.getOwnEntries();
+            entries.delete(entry.name);
+            this.updateAccessTime();
+            this.updateModificationTime();
+            this.emit("childRemoved", entry);
+            this.emit("fileSystemChange", entry.path, "removed");
+            entry.removeListener("fileSystemChange", this._onChildFileSystemChange);
         }
 
         private onChildFileSystemChange(path: string, change: FileSystemChange) {
@@ -1193,6 +1373,21 @@ namespace vfs {
             const shadow = new VirtualDirectorySymlink(shadowParent, this.name, this.targetPath);
             shadow._shadowRoot = this;
             return shadow;
+        }
+
+        public readTargetPath() {
+            const targetPath = this.targetPath;
+            if (targetPath) this.updateAccessTime();
+            return targetPath;
+        }
+
+        public writeTargetPath(targetPath: string) {
+            this.targetPath = targetPath;
+            if (targetPath) this.updateModificationTime();
+        }
+
+        public getStats() {
+            return super.getStatsCore(S_IFLNK, this.targetPath.length);
         }
 
         protected addOwnDirectory(name: string, resolver?: FileSystemResolver): VirtualDirectory | undefined {
@@ -1338,6 +1533,10 @@ namespace vfs {
             return this._fileSystem;
         }
 
+        public get root(): VirtualDirectory | undefined {
+            return undefined;
+        }
+
         public get path(): string {
             return "";
         }
@@ -1396,25 +1595,16 @@ namespace vfs {
 
     export class VirtualFile extends VirtualFileSystemEntry {
         protected _shadowRoot: VirtualFile | undefined;
-        private _parent: VirtualDirectory;
         private _content: string | undefined;
         private _contentWasSet: boolean;
         private _resolver: FileSystemResolver | ContentResolver | undefined;
 
         constructor(parent: VirtualDirectory, name: string, content?: FileSystemResolver | ContentResolver | string) {
-            super(name);
-            this._parent = parent;
+            super(parent, name);
             this._content = typeof content === "string" ? content : undefined;
             this._resolver = typeof content !== "string" ? content : undefined;
             this._shadowRoot = undefined;
             this._contentWasSet = this._content !== undefined;
-        }
-
-        /**
-         * Gets the parent directory for this entry.
-         */
-        public get parent(): VirtualDirectory {
-            return this._parent;
         }
 
         /**
@@ -1468,6 +1658,27 @@ namespace vfs {
             shadow._shadowRoot = this;
             shadow._contentWasSet = false;
             return shadow;
+        }
+
+        /**
+         * Reads the content and updates the file's access time.
+         */
+        public readContent() {
+            const content = this.content;
+            if (content) this.updateAccessTime();
+            return content;
+        }
+
+        /**
+         * Writes the provided content and updates the file's modification time.
+         */
+        public writeContent(content: string) {
+            this.content = content;
+            if (content) this.updateModificationTime();
+        }
+
+        public getStats() {
+            return super.getStatsCore(S_IFREG, this.content ? this.content.length : 0);
         }
 
         protected makeReadOnlyCore(): void { /*ignored*/ }
@@ -1548,6 +1759,29 @@ namespace vfs {
             return shadow;
         }
 
+        public readContent() {
+            return this.content;
+        }
+
+        public writeContent(content: string) {
+            this.content = content;
+        }
+
+        public readTargetPath() {
+            const targetPath = this.targetPath;
+            if (targetPath) this.updateAccessTime();
+            return targetPath;
+        }
+
+        public writeTargetPath(targetPath: string) {
+            this.targetPath = targetPath;
+            if (targetPath) this.updateModificationTime();
+        }
+
+        public getStats() {
+            return super.getStatsCore(S_IFLNK, this.targetPath.length);
+        }
+
         private resolveTarget() {
             if (!this._target) {
                 const entry = findTarget(this.fileSystem, this.targetPath);
@@ -1596,6 +1830,48 @@ namespace vfs {
         }
 
         protected onTargetFileSystemChange() { /* views do not propagate file system events */ }
+    }
+
+    export class VirtualStats {
+        public readonly dev: number;
+        public readonly ino: number;
+        public readonly mode: number;
+        public readonly size: number;
+        public readonly atimeMS: number;
+        public readonly mtimeMS: number;
+        public readonly ctimeMS: number;
+        public readonly birthtimeMS: number;
+        public readonly atime: Date;
+        public readonly mtime: Date;
+        public readonly ctime: Date;
+        public readonly birthtime: Date;
+        constructor(dev: number, ino: number, mode: number, size: number,
+            atimeMS: number, mtimeMS: number, ctimeMS: number, birthtimeMS: number) {
+            this.dev = dev;
+            this.ino = ino;
+            this.mode = mode;
+            this.size = size;
+            this.atimeMS = atimeMS;
+            this.mtimeMS = mtimeMS;
+            this.ctimeMS = ctimeMS;
+            this.birthtimeMS = birthtimeMS;
+            this.atime = new Date(atimeMS + 0.5);
+            this.mtime = new Date(mtimeMS + 0.5);
+            this.ctime = new Date(ctimeMS + 0.5);
+            this.birthtime = new Date(birthtimeMS + 0.5);
+        }
+
+        public isFile() {
+            return (this.mode & S_IFMT) === S_IFREG;
+        }
+
+        public isDirectory() {
+            return (this.mode & S_IFMT) === S_IFDIR;
+        }
+
+        public isSymbolicLink() {
+            return (this.mode & S_IFMT) === S_IFLNK;
+        }
     }
 
     function findTarget(vfs: VirtualFileSystem, target: string, set?: Set<VirtualSymlink>): VirtualEntry | undefined {
