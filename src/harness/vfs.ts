@@ -869,7 +869,7 @@ namespace vfs {
          * Gets the root directory for this entry.
          */
         public get root(): VirtualDirectory | undefined {
-            return this.parent instanceof VirtualRoot ? this : undefined;
+            return this.parent instanceof VirtualRoot ? this : this.parent.root;
         }
 
         /**
@@ -1129,11 +1129,13 @@ namespace vfs {
                     const { files, directories } = resolver.getEntries(this);
                     for (const dir of directories) {
                         const vdir = new VirtualDirectory(this, dir, resolver);
+                        vdir.addListener("fileSystemChange", this._onChildFileSystemChange);
                         if (this.isReadOnly) vdir.makeReadOnly();
                         entries.set(vdir.name, vdir);
                     }
                     for (const file of files) {
                         const vfile = new VirtualFile(this, file, resolver);
+                        vfile.addListener("fileSystemChange", this._onChildFileSystemChange);
                         if (this.isReadOnly) vfile.makeReadOnly();
                         entries.set(vfile.name, vfile);
                     }
@@ -1141,6 +1143,7 @@ namespace vfs {
                 else if (shadowRoot) {
                     shadowRoot.getOwnEntries().forEach(entry => {
                         const clone = entry.shadow(this);
+                        clone.addListener("fileSystemChange", this._onChildFileSystemChange);
                         if (this.isReadOnly) clone.makeReadOnly();
                         entries.set(clone.name, clone);
                     });
@@ -1292,7 +1295,7 @@ namespace vfs {
             this.updateAccessTime();
             this.updateModificationTime();
             this.emit("childAdded", entry);
-            entry.emit("fileSystemChange", entry.path, "added");
+            this.emit("fileSystemChange", entry.path, "added");
             entry.addListener("fileSystemChange", this._onChildFileSystemChange);
         }
 
@@ -1618,34 +1621,14 @@ namespace vfs {
          * Gets the text content of this file.
          */
         public get content(): string | undefined {
-            if (!this._contentWasSet) {
-                const resolver = this._resolver;
-                const shadowRoot = this._shadowRoot;
-                if (resolver) {
-                    this._resolver = undefined;
-                    this._content = typeof resolver === "function" ? resolver(this) : resolver.getContent(this);
-                    this._contentWasSet = true;
-                }
-                else if (shadowRoot) {
-                    this._content = shadowRoot.content;
-                    this._contentWasSet = true;
-                }
-            }
-            return this._content;
+            return this.readContent(/*updateAccessTime*/ false);
         }
 
         /**
          * Sets the text content of this file.
          */
         public set content(value: string | undefined) {
-            if (this.content !== value) {
-                this.writePreamble();
-                this._resolver = undefined;
-                this._content = value;
-                this._contentWasSet = true;
-                this.emit("contentChanged", this);
-                this.emit("fileSystemChange", this.path, "modified");
-            }
+            this.writeContent(value, /*updateModificationType*/ false);
         }
 
         /**
@@ -1663,18 +1646,41 @@ namespace vfs {
         /**
          * Reads the content and updates the file's access time.
          */
-        public readContent() {
-            const content = this.content;
-            if (content) this.updateAccessTime();
-            return content;
+        public readContent(updateAccessTime = true) {
+            if (!this._contentWasSet) {
+                const resolver = this._resolver;
+                const shadowRoot = this._shadowRoot;
+                if (resolver) {
+                    this._resolver = undefined;
+                    this._content = typeof resolver === "function" ? resolver(this) : resolver.getContent(this);
+                    this._contentWasSet = true;
+                }
+                else if (shadowRoot) {
+                    this._content = shadowRoot.content;
+                    this._contentWasSet = true;
+                }
+            }
+            if (this._content && updateAccessTime) {
+                this.updateAccessTime();
+            }
+            return this._content;
         }
 
         /**
          * Writes the provided content and updates the file's modification time.
          */
-        public writeContent(content: string) {
-            this.content = content;
-            if (content) this.updateModificationTime();
+        public writeContent(content: string | undefined, updateModificationTime = true) {
+            if (this.content !== content) {
+                this.writePreamble();
+                this._resolver = undefined;
+                this._content = content;
+                this._contentWasSet = true;
+                if (content && updateModificationTime) {
+                    this.updateModificationTime();
+                }
+                this.emit("contentChanged", this);
+                this.emit("fileSystemChange", this.path, "modified");
+            }
         }
 
         public getStats() {

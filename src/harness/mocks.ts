@@ -1,5 +1,7 @@
 /// <reference path="./core.ts" />
-/// <reference path="./vfs.ts" />
+/// <reference path="./vfs.ts" />import { debug } from "util";
+
+
 
 // NOTE: The contents of this file are all exported from the namespace 'mocks'. This is to
 //       support the eventual conversion of harness into a modular system.
@@ -298,7 +300,6 @@ namespace mocks {
             return undefined;
         }
 
-        // TOOD: record and invoke callbacks to simulate timer events
         public setTimeout(callback: (...args: any[]) => void, timeout: number, ...args: any[]) {
             return this.timers.setTimeout(callback, timeout, ...args);
         }
