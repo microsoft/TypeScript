@@ -348,7 +348,7 @@ namespace ts {
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
-                    data = "\uFEFF" + data;
+                    data = "\u00EF\u00BB\u00BF" + data;
                 }
 
                 let fd: number;
@@ -549,7 +549,7 @@ namespace ts {
                 writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
                     // If a BOM is required, emit one
                     if (writeByteOrderMark) {
-                        data = "\uFEFF" + data;
+                        data = "\u00EF\u00BB\u00BF" + data;
                     }
 
                     ChakraHost.writeFile(path, data);
