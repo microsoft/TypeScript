@@ -449,7 +449,7 @@ interface String {
 
     /**
      * Returns a String value that is made from count copies appended together. If count is 0,
-     * T is the empty String is returned.
+     * the empty string is returned.
      * @param count number of copies to append
      */
     repeat(count: number): string;

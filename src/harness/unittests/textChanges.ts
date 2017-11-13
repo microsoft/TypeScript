@@ -23,60 +23,8 @@ namespace ts {
         const printerOptions = { newLine: NewLineKind.LineFeed };
         const newLineCharacter = getNewLineCharacter(printerOptions);
 
-        const getRuleProviderDefault = memoize(() => {
-            const options = {
-                indentSize: 4,
-                tabSize: 4,
-                newLineCharacter,
-                convertTabsToSpaces: true,
-                indentStyle: ts.IndentStyle.Smart,
-                insertSpaceAfterConstructor: false,
-                insertSpaceAfterCommaDelimiter: true,
-                insertSpaceAfterSemicolonInForStatements: true,
-                insertSpaceBeforeAndAfterBinaryOperators: true,
-                insertSpaceAfterKeywordsInControlFlowStatements: true,
-                insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-                insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-                insertSpaceBeforeFunctionParenthesis: false,
-                placeOpenBraceOnNewLineForFunctions: false,
-                placeOpenBraceOnNewLineForControlBlocks: false,
-            };
-            const rulesProvider = new formatting.RulesProvider();
-            rulesProvider.ensureUpToDate(options);
-            return rulesProvider;
-        });
-        const getRuleProviderNewlineBrace = memoize(() => {
-            const options = {
-                indentSize: 4,
-                tabSize: 4,
-                newLineCharacter,
-                convertTabsToSpaces: true,
-                indentStyle: ts.IndentStyle.Smart,
-                insertSpaceAfterConstructor: false,
-                insertSpaceAfterCommaDelimiter: true,
-                insertSpaceAfterSemicolonInForStatements: true,
-                insertSpaceBeforeAndAfterBinaryOperators: true,
-                insertSpaceAfterKeywordsInControlFlowStatements: true,
-                insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-                insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-                insertSpaceBeforeFunctionParenthesis: false,
-                placeOpenBraceOnNewLineForFunctions: true,
-                placeOpenBraceOnNewLineForControlBlocks: false,
-            };
-            const rulesProvider = new formatting.RulesProvider();
-            rulesProvider.ensureUpToDate(options);
-            return rulesProvider;
-        });
-        function getRuleProvider(placeOpenBraceOnNewLineForFunctions: boolean) {
-            return placeOpenBraceOnNewLineForFunctions ? getRuleProviderNewlineBrace() : getRuleProviderDefault();
+        function getRuleProvider(placeOpenBraceOnNewLineForFunctions: boolean): formatting.FormatContext {
+            return formatting.getFormatContext(placeOpenBraceOnNewLineForFunctions ? { ...testFormatOptions, placeOpenBraceOnNewLineForFunctions: true } : testFormatOptions);
         }
 
         // validate that positions that were recovered from the printed text actually match positions that will be created if the same text is parsed.
@@ -122,9 +70,9 @@ namespace ts {
 
         {
             const text = `
-namespace M 
+namespace M
 {
-    namespace M2 
+    namespace M2
     {
         function foo() {
             // comment 1
@@ -572,7 +520,7 @@ const x = 1;`;
         }
         {
             const text = `
-const x = 1, 
+const x = 1,
     y = 2;`;
             runSingleFileTest("insertNodeInListAfter6", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
@@ -583,7 +531,7 @@ const x = 1,
         }
         {
             const text = `
-const /*x*/ x = 1, 
+const /*x*/ x = 1,
     /*y*/ y = 2;`;
             runSingleFileTest("insertNodeInListAfter8", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));

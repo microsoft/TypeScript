@@ -322,16 +322,16 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
+    function getPos(range: Node) {
+        return range.pos;
+    }
+
     /**
      * Note: it is expected that the `nodeArray` and the `node` are within the same file.
      * For example, searching for a `SourceFile` in a `SourceFile[]` wouldn't work.
      */
     export function indexOfNode(nodeArray: ReadonlyArray<Node>, node: Node) {
-        return binarySearch(nodeArray, node, compareNodePos);
-    }
-
-    function compareNodePos({ pos: aPos }: Node, { pos: bPos}: Node) {
-        return aPos < bPos ? Comparison.LessThan : bPos < aPos ? Comparison.GreaterThan : Comparison.EqualTo;
+        return binarySearch(nodeArray, node, getPos, compareValues);
     }
 
     /**
@@ -364,8 +364,10 @@ namespace ts {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return "`" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.TemplateHead:
+                // tslint:disable-next-line no-invalid-template-strings
                 return "`" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateMiddle:
+                // tslint:disable-next-line no-invalid-template-strings
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateTail:
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
@@ -460,7 +462,7 @@ namespace ts {
     }
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-        return isExternalModule(node) || compilerOptions.isolatedModules;
+        return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
     }
 
     /* @internal */
@@ -1939,6 +1941,14 @@ namespace ts {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
 
+    export function isContextualKeyword(token: SyntaxKind): boolean {
+        return SyntaxKind.FirstContextualKeyword <= token && token <= SyntaxKind.LastContextualKeyword;
+    }
+
+    export function isNonContextualKeyword(token: SyntaxKind): boolean {
+        return isKeyword(token) && !isContextualKeyword(token);
+    }
+
     export function isTrivia(token: SyntaxKind) {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
@@ -2328,6 +2338,7 @@ namespace ts {
         let nonFileDiagnostics: Diagnostic[] = [];
         const fileDiagnostics = createMap<Diagnostic[]>();
 
+        let hasReadNonFileDiagnostics = false;
         let diagnosticsModified = false;
         let modificationCount = 0;
 
@@ -2357,6 +2368,12 @@ namespace ts {
                 }
             }
             else {
+                // If we've already read the non-file diagnostics, do not modify the existing array.
+                if (hasReadNonFileDiagnostics) {
+                    hasReadNonFileDiagnostics = false;
+                    nonFileDiagnostics = nonFileDiagnostics.slice();
+                }
+
                 diagnostics = nonFileDiagnostics;
             }
 
@@ -2367,6 +2384,7 @@ namespace ts {
 
         function getGlobalDiagnostics(): Diagnostic[] {
             sortAndDeduplicate();
+            hasReadNonFileDiagnostics = true;
             return nonFileDiagnostics;
         }
 
@@ -3993,6 +4011,9 @@ namespace ts {
         if (!trySetLanguageAndTerritory(language, territory, errors)) {
             trySetLanguageAndTerritory(language, /*territory*/ undefined, errors);
         }
+
+        // Set the UI locale for string collation
+        setUILocale(locale);
 
         function trySetLanguageAndTerritory(language: string, territory: string, errors?: Push<Diagnostic>): boolean {
             const compilerFilePath = normalizePath(sys.getExecutingFilePath());

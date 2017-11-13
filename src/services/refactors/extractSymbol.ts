@@ -1177,30 +1177,11 @@ namespace ts.refactor.extractSymbol {
         {type: type1, declaration: declaration1}: {type: Type, declaration?: Declaration},
         {type: type2, declaration: declaration2}: {type: Type, declaration?: Declaration}) {
 
-        if (declaration1) {
-            if (declaration2) {
-                const positionDiff = declaration1.pos - declaration2.pos;
-                if (positionDiff !== 0) {
-                    return positionDiff;
-                }
-            }
-            else {
-                return 1; // Sort undeclared type parameters to the front.
-            }
-        }
-        else if (declaration2) {
-            return -1; // Sort undeclared type parameters to the front.
-        }
-
-        const name1 = type1.symbol ? type1.symbol.getName() : "";
-        const name2 = type2.symbol ? type2.symbol.getName() : "";
-        const nameDiff = compareStrings(name1, name2);
-        if (nameDiff !== 0) {
-            return nameDiff;
-        }
-
-        // IDs are guaranteed to be unique, so this ensures a total ordering.
-        return type1.id - type2.id;
+        return compareProperties(declaration1, declaration2, "pos", compareValues)
+            || compareStringsCaseSensitive(
+                type1.symbol ? type1.symbol.getName() : "",
+                type2.symbol ? type2.symbol.getName() : "")
+            || compareValues(type1.id, type2.id);
     }
 
     function getCalledExpression(scope: Node, range: TargetRange, functionNameText: string): Expression {

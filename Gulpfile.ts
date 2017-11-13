@@ -46,15 +46,15 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
-        b: "browser",
-        d: "debug", "debug-brk": "debug",
-        i: "inspect", "inspect-brk": "inspect",
-        t: "tests", test: "tests",
-        ru: "runners", runner: "runners",
-        r: "reporter",
-        c: "colors", color: "colors",
-        f: "files", file: "files",
-        w: "workers",
+        "b": "browser",
+        "d": "debug", "debug-brk": "debug",
+        "i": "inspect", "inspect-brk": "inspect",
+        "t": "tests", "test": "tests",
+        "ru": "runners", "runner": "runners",
+        "r": "reporter",
+        "c": "colors", "color": "colors",
+        "f": "files", "file": "files",
+        "w": "workers",
     },
     default: {
         soft: false,
@@ -74,7 +74,8 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
     }
 });
 
-function exec(cmd: string, args: string[], complete: () => void = (() => { }), error: (e: any, status: number) => void = (() => { })) {
+const noop = () => {}; // tslint:disable-line no-empty
+function exec(cmd: string, args: string[], complete: () => void = noop, error: (e: any, status: number) => void = noop) {
     console.log(`${cmd} ${args.join(" ")}`);
     // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
     const subshellFlag = isWin ? "/c" : "-c";
@@ -1034,7 +1035,7 @@ gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", s
 });
 
 gulp.task("build-rules", "Compiles tslint rules to js", () => {
-    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs", "lib": ["es6"] }, /*useBuiltCompiler*/ false);
+    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs", lib: ["es6"] }, /*useBuiltCompiler*/ false);
     const dest = path.join(builtLocalDirectory, "tslint");
     return gulp.src("scripts/tslint/**/*.ts")
         .pipe(newer({

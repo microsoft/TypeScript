@@ -5,6 +5,6 @@
 ////var f = function (s) { return this/**/; }
 
 goTo.marker();
-verify.completionListCount(117);
+verify.completionListCount(119);
 verify.completionListContains('this');
 

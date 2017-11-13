@@ -1570,7 +1570,7 @@ namespace ts {
                 else {
                     let pattern: Pattern | undefined;
                     if (node.name.kind === SyntaxKind.StringLiteral) {
-                        const text = (<StringLiteral>node.name).text;
+                        const { text } = node.name;
                         if (hasZeroOrOneAsteriskCharacter(text)) {
                             pattern = tryParsePattern(text);
                         }
@@ -1589,22 +1589,13 @@ namespace ts {
             else {
                 const state = declareModuleSymbol(node);
                 if (state !== ModuleInstanceState.NonInstantiated) {
-                    if (node.symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)) {
-                        // if module was already merged with some function, class or non-const enum
-                        // treat is a non-const-enum-only
-                        node.symbol.constEnumOnlyModule = false;
-                    }
-                    else {
-                        const currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
-                        if (node.symbol.constEnumOnlyModule === undefined) {
-                            // non-merged case - use the current state
-                            node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
-                        }
-                        else {
-                            // merged case: module is const enum only if all its pieces are non-instantiated or const enum
-                            node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
-                        }
-                    }
+                    const { symbol } = node;
+                    // if module was already merged with some function, class or non-const enum, treat it as non-const-enum-only
+                    symbol.constEnumOnlyModule = (!(symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)))
+                        // Current must be `const enum` only
+                        && state === ModuleInstanceState.ConstEnumOnly
+                        // Can't have been set to 'false' in a previous merged symbol. ('undefined' OK)
+                        && symbol.constEnumOnlyModule !== false;
                 }
             }
         }
@@ -2205,15 +2196,14 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
             else {
-                // An export default clause with an expression exports a value
-                // We want to exclude both class and function here,  this is necessary to issue an error when there are both
-                // default export-assignment and default export function and class declaration.
-                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node)
+                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node)
                     // An export default clause with an EntityNameExpression exports all meanings of that identifier
                     ? SymbolFlags.Alias
                     // An export default clause with any other expression exports a value
                     : SymbolFlags.Property;
-                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.Property | SymbolFlags.AliasExcludes | SymbolFlags.Class | SymbolFlags.Function);
+                // If there is an `export default x;` alias declaration, can't `export default` anything else.
+                // (In contrast, you can still have `export default function f() {}` and `export default interface I {}`.)
+                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.All);
             }
         }
 

@@ -62,6 +62,18 @@ declare function encodeURI(uri: string): string;
   */
 declare function encodeURIComponent(uriComponent: string): string;
 
+/**
+  * Computes a new string in which certain characters have been replaced by a hexadecimal escape sequence.
+  * @param string A string value
+  */
+declare function escape(string: string): string;
+
+/**
+  * Computes a new string in which hexadecimal escape sequences are replaced with the character that it represents.
+  * @param string A string value
+  */
+declare function unescape(string: string): string;
+
 interface PropertyDescriptor {
     configurable?: boolean;
     enumerable?: boolean;

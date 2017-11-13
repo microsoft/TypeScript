@@ -105,7 +105,7 @@ var harnessCoreSources = [
     "projectsRunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
-    "userRunner.ts",
+    "externalCompileRunner.ts",
     "test262Runner.ts",
     "./parallel/shared.ts",
     "./parallel/host.ts",
@@ -731,7 +731,10 @@ compileFile(word2mdJs,
     [word2mdTs],
     [word2mdTs],
     [],
-            /*useBuiltCompiler*/ false);
+    /*useBuiltCompiler*/ false,
+    {
+        lib: "scripthost,es5"
+    });
 
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
