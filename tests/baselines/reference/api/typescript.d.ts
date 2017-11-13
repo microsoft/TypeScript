@@ -1826,6 +1826,7 @@ declare namespace ts {
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         reportInaccessibleThisError(): void;
         reportPrivateInBaseOfClassExpression(propertyName: string): void;
+        reportInaccessibleUniqueSymbolError(): void;
     }
     enum TypeFormatFlags {
         None = 0,
@@ -1844,6 +1845,7 @@ declare namespace ts {
         WriteClassExpressionAsTypeLiteral = 16384,
         InArrayType = 32768,
         UseAliasDefinedOutsideCurrentScope = 65536,
+        AllowUniqueESSymbolType = 131072,
     }
     enum SymbolFormatFlags {
         None = 0,

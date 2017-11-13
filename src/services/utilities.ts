@@ -1130,6 +1130,7 @@ namespace ts {
             clear: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
+            reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
 

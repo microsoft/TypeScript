@@ -3360,8 +3360,13 @@ namespace ts {
                         writeAnonymousType(<ObjectType>type, nextFlags);
                     }
                     else if (type.flags & TypeFlags.UniqueESSymbol) {
-                        writeKeyword(writer, SyntaxKind.UniqueKeyword);
-                        writeSpace(writer);
+                        if (flags & TypeFormatFlags.AllowUniqueESSymbolType) {
+                            writeKeyword(writer, SyntaxKind.UniqueKeyword);
+                            writeSpace(writer);
+                        }
+                        else {
+                            writer.reportInaccessibleUniqueSymbolError();
+                        }
                         writeKeyword(writer, SyntaxKind.SymbolKeyword);
                     }
                     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
@@ -8365,9 +8370,7 @@ namespace ts {
         }
 
         function getESSymbolLikeTypeForNode(node: Node) {
-            if (isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
-                isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
-                isPropertySignature(node) && hasReadonlyModifier(node)) {
+            if (isValidESSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
                 const links = getSymbolLinks(symbol);
                 return links.type || (links.type = createUniqueESSymbolType(symbol));
@@ -17694,9 +17697,6 @@ namespace ts {
                     // the native Promise<T> type later in this function.
                     type = checkAwaitedType(type, /*errorNode*/ func, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                 }
-
-                // widen 'unique symbol' types when we infer the return type.
-                type = getWidenedUniqueESSymbolType(type);
             }
             else {
                 let types: Type[];
@@ -17728,37 +17728,49 @@ namespace ts {
                             : voidType; // Normal function
                     }
                 }
+
                 // Return a union of the return expression types.
                 type = getUnionType(types, /*subtypeReduction*/ true);
-
-                // widen 'unique symbol' types when we infer the return type.
-                type = getWidenedUniqueESSymbolType(type);
-
-                if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
-                    type = functionFlags & FunctionFlags.Async
-                        ? createAsyncIterableIteratorType(type) // AsyncGenerator function
-                        : createIterableIteratorType(type); // Generator function
-                }
             }
 
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
 
-            if (isUnitType(type) &&
-                !(contextualSignature &&
-                    isLiteralContextualType(
-                        contextualSignature === getSignatureFromDeclaration(func) ? type : getReturnTypeOfSignature(contextualSignature)))) {
-                type = getWidenedLiteralType(type);
+            if (isUnitType(type)) {
+                let contextualType = !contextualSignature ? undefined :
+                    contextualSignature === getSignatureFromDeclaration(func) ? type :
+                    getReturnTypeOfSignature(contextualSignature);
+                if (contextualType) {
+                    switch (functionFlags & FunctionFlags.AsyncGenerator) {
+                        case FunctionFlags.AsyncGenerator:
+                            contextualType = getIteratedTypeOfGenerator(contextualType, /*isAsyncGenerator*/ true);
+                            break;
+                        case FunctionFlags.Generator:
+                            contextualType = getIteratedTypeOfGenerator(contextualType, /*isAsyncGenerator*/ false);
+                            break;
+                        case FunctionFlags.Async:
+                            contextualType = getPromisedTypeOfPromise(contextualType);
+                            break;
+                    }
+                }
+                type = getWidenedLiteralLikeTypeForContextualType(type, contextualType);
             }
 
             const widenedType = getWidenedType(type);
-            // From within an async function you can return either a non-promise value or a promise. Any
-            // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
-            // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
-            return (functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async
-                ? createPromiseReturnType(func, widenedType) // Async function
-                : widenedType; // Generator function, AsyncGenerator function, or normal function
+            switch (functionFlags & FunctionFlags.AsyncGenerator) {
+                case FunctionFlags.AsyncGenerator:
+                    return createAsyncIterableIteratorType(widenedType);
+                case FunctionFlags.Generator:
+                    return createIterableIteratorType(widenedType);
+                case FunctionFlags.Async:
+                    // From within an async function you can return either a non-promise value or a promise. Any
+                    // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
+                    // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
+                    return createPromiseType(widenedType);
+                default:
+                    return widenedType;
+            }
         }
 
         function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
@@ -24627,9 +24639,14 @@ namespace ts {
             let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
                 ? getWidenedLiteralType(getTypeOfSymbol(symbol))
                 : unknownType;
+            if (type.flags & TypeFlags.UniqueESSymbol &&
+                type.symbol === symbol) {
+                flags |= TypeFormatFlags.AllowUniqueESSymbolType;
+            }
             if (flags & TypeFormatFlags.AddUndefined) {
                 type = getNullableType(type, TypeFlags.Undefined);
             }
+
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 

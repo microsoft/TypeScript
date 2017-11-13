@@ -1804,7 +1804,7 @@
         "category": "Error",
         "code": 2526
     },
-    "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
+    "The inferred type of '{0}' references an inaccessible '{1}' type. A type annotation is necessary.": {
         "category": "Error",
         "code": 2527
     },

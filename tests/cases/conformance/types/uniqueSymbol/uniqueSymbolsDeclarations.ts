@@ -1,6 +1,6 @@
 // @target: esnext
 // @lib: esnext
-// @declaration: false
+// @declaration: true
 
 // declarations with call initializer
 const constCall = Symbol();
@@ -146,7 +146,7 @@ const o2 = {
     async method2() { return s; },
     async * method3() { yield s; },
     * method4() { yield s; },
-    method5(p = s) { return p; },
+    method5(p = s) { return p; }
 };
 
 // property initializers
@@ -223,7 +223,7 @@ interface Context {
     method5(p?: typeof s): typeof s;
 }
 
-const o3: Context = {
+const o4: Context = {
     method1() {
         return s; // return type should not widen due to contextual type
     },
@@ -238,29 +238,5 @@ const o3: Context = {
     },
     method5(p = s) { // parameter should not widen due to contextual type
         return p;
-    },
-};
-
-// allowed when not emitting declarations
-
-const o4 = {
-    method1(p: typeof s): typeof s {
-        return p;
-    },
-    method2(p: I["readonlyType"]): I["readonlyType"] {
-        return p;
     }
 };
-
-const ce0 = class {
-    method1(p: typeof s): typeof s {
-        return p;
-    }
-    method2(p: I["readonlyType"]): I["readonlyType"] {
-        return p;
-    }
-};
-
-function funcInferredReturnType(obj: { method(p: typeof s): void }) {
-    return obj;
-}

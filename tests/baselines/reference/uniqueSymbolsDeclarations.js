@@ -1,4 +1,4 @@
-//// [uniqueSymbols.ts]
+//// [uniqueSymbolsDeclarations.ts]
 // declarations with call initializer
 const constCall = Symbol();
 let letCall = Symbol();
@@ -143,7 +143,7 @@ const o2 = {
     async method2() { return s; },
     async * method3() { yield s; },
     * method4() { yield s; },
-    method5(p = s) { return p; },
+    method5(p = s) { return p; }
 };
 
 // property initializers
@@ -220,7 +220,7 @@ interface Context {
     method5(p?: typeof s): typeof s;
 }
 
-const o3: Context = {
+const o4: Context = {
     method1() {
         return s; // return type should not widen due to contextual type
     },
@@ -235,35 +235,10 @@ const o3: Context = {
     },
     method5(p = s) { // parameter should not widen due to contextual type
         return p;
-    },
-};
-
-// allowed when not emitting declarations
-
-const o4 = {
-    method1(p: typeof s): typeof s {
-        return p;
-    },
-    method2(p: I["readonlyType"]): I["readonlyType"] {
-        return p;
     }
 };
 
-const ce0 = class {
-    method1(p: typeof s): typeof s {
-        return p;
-    }
-    method2(p: I["readonlyType"]): I["readonlyType"] {
-        return p;
-    }
-};
-
-function funcInferredReturnType(obj: { method(p: typeof s): void }) {
-    return obj;
-}
-
-
-//// [uniqueSymbols.js]
+//// [uniqueSymbolsDeclarations.js]
 // declarations with call initializer
 const constCall = Symbol();
 let letCall = Symbol();
@@ -360,7 +335,7 @@ const o2 = {
     async method2() { return s; },
     async *method3() { yield s; },
     *method4() { yield s; },
-    method5(p = s) { return p; },
+    method5(p = s) { return p; }
 };
 // property initializers
 class C0 {
@@ -411,7 +386,7 @@ Math.random() * 2 ? N["s"] : "a";
 });
 class C1 {
 }
-const o3 = {
+const o4 = {
     method1() {
         return s; // return type should not widen due to contextual type
     },
@@ -426,25 +401,140 @@ const o3 = {
     },
     method5(p = s) {
         return p;
-    },
-};
-// allowed when not emitting declarations
-const o4 = {
-    method1(p) {
-        return p;
-    },
-    method2(p) {
-        return p;
     }
 };
-const ce0 = class {
-    method1(p) {
-        return p;
-    }
-    method2(p) {
-        return p;
-    }
-};
-function funcInferredReturnType(obj) {
-    return obj;
+
+
+//// [uniqueSymbolsDeclarations.d.ts]
+declare const constCall: unique symbol;
+declare let letCall: symbol;
+declare var varCall: symbol;
+declare const constType: unique symbol;
+declare const constTypeAndCall: unique symbol;
+declare const constInitToConstCall: symbol;
+declare const constInitToLetCall: symbol;
+declare const constInitToVarCall: symbol;
+declare const constInitToConstDeclAmbient: symbol;
+declare let letInitToConstCall: symbol;
+declare let letInitToLetCall: symbol;
+declare let letInitToVarCall: symbol;
+declare let letInitToConstDeclAmbient: symbol;
+declare var varInitToConstCall: symbol;
+declare var varInitToLetCall: symbol;
+declare var varInitToVarCall: symbol;
+declare var varInitToConstDeclAmbient: symbol;
+declare const constInitToConstCallWithTypeQuery: typeof constCall;
+declare const constInitToConstDeclAmbientWithTypeQuery: typeof constType;
+declare function funcReturnConstCall(): symbol;
+declare function funcReturnLetCall(): symbol;
+declare function funcReturnVarCall(): symbol;
+declare function funcReturnConstCallWithTypeQuery(): typeof constCall;
+declare function genFuncYieldConstCall(): IterableIterator<symbol>;
+declare function genFuncYieldLetCall(): IterableIterator<symbol>;
+declare function genFuncYieldVarCall(): IterableIterator<symbol>;
+declare function genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall>;
+declare function asyncFuncReturnConstCall(): Promise<symbol>;
+declare function asyncFuncReturnLetCall(): Promise<symbol>;
+declare function asyncFuncReturnVarCall(): Promise<symbol>;
+declare function asyncGenFuncYieldConstCall(): AsyncIterableIterator<symbol>;
+declare function asyncGenFuncYieldLetCall(): AsyncIterableIterator<symbol>;
+declare function asyncGenFuncYieldVarCall(): AsyncIterableIterator<symbol>;
+declare class C {
+    static readonly readonlyStaticCall: unique symbol;
+    static readonly readonlyStaticType: unique symbol;
+    static readonly readonlyStaticTypeAndCall: unique symbol;
+    static readwriteStaticCall: symbol;
+    readonly readonlyCall: symbol;
+    readwriteCall: symbol;
 }
+declare const c: C;
+declare const constInitToCReadonlyStaticCall: symbol;
+declare const constInitToCReadonlyStaticType: symbol;
+declare const constInitToCReadonlyStaticTypeAndCall: symbol;
+declare const constInitToCReadwriteStaticCall: symbol;
+declare const constInitToCReadonlyStaticCallWithTypeQuery: typeof C.readonlyStaticCall;
+declare const constInitToCReadonlyStaticTypeWithTypeQuery: typeof C.readonlyStaticType;
+declare const constInitToCReadonlyStaticTypeAndCallWithTypeQuery: typeof C.readonlyStaticTypeAndCall;
+declare const constInitToCReadwriteStaticCallWithTypeQuery: typeof C.readwriteStaticCall;
+declare const constInitToCReadonlyCall: symbol;
+declare const constInitToCReadwriteCall: symbol;
+declare const constInitToCReadonlyCallWithTypeQuery: typeof c.readonlyCall;
+declare const constInitToCReadwriteCallWithTypeQuery: typeof c.readwriteCall;
+declare const constInitToCReadonlyCallWithIndexedAccess: C["readonlyCall"];
+declare const constInitToCReadwriteCallWithIndexedAccess: C["readwriteCall"];
+interface I {
+    readonly readonlyType: unique symbol;
+}
+declare const i: I;
+declare const constInitToIReadonlyType: symbol;
+declare const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType;
+declare const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"];
+declare type L = {
+    readonly readonlyType: unique symbol;
+    nested: {
+        readonly readonlyNestedType: unique symbol;
+    };
+};
+declare const l: L;
+declare const constInitToLReadonlyType: symbol;
+declare const constInitToLReadonlyNestedType: symbol;
+declare const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType;
+declare const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType;
+declare const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"];
+declare const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"];
+declare const promiseForConstCall: Promise<symbol>;
+declare const arrayOfConstCall: symbol[];
+declare const s: unique symbol;
+declare namespace N {
+    const s: unique symbol;
+}
+declare const o: {
+    [s]: "a";
+    [N.s]: "b";
+};
+declare function f<T>(x: T): T;
+declare function g(x: typeof s): void;
+declare function g(x: typeof N.s): void;
+declare const o2: {
+    a: symbol;
+    b: symbol;
+    c: symbol;
+    method1(): symbol;
+    method2(): Promise<symbol>;
+    method3(): AsyncIterableIterator<symbol>;
+    method4(): IterableIterator<symbol>;
+    method5(p?: symbol): symbol;
+};
+declare class C0 {
+    static readonly a: symbol;
+    static readonly b: symbol;
+    static readonly c: symbol;
+    static d: symbol;
+    static e: symbol;
+    static f: symbol;
+    readonly a: symbol;
+    readonly b: symbol;
+    readonly c: symbol;
+    d: symbol;
+    e: symbol;
+    f: symbol;
+    method1(): symbol;
+    method2(): Promise<symbol>;
+    method3(): AsyncIterableIterator<symbol>;
+    method4(): IterableIterator<symbol>;
+    method5(p?: symbol): symbol;
+}
+declare class C1 {
+    static [s]: "a";
+    static [N.s]: "b";
+    [s]: "a";
+    [N.s]: "b";
+}
+interface Context {
+    method1(): typeof s;
+    method2(): Promise<typeof s>;
+    method3(): AsyncIterableIterator<typeof s>;
+    method4(): IterableIterator<typeof s>;
+    method5(p?: typeof s): typeof s;
+}
+declare const o4: Context;

@@ -56,6 +56,7 @@ namespace ts {
             clear: () => str = "",
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
+            reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
     }
@@ -943,6 +944,12 @@ namespace ts {
     export function isVariableDeclarationInVariableStatement(node: VariableDeclaration) {
         return node.parent.kind === SyntaxKind.VariableDeclarationList
             && node.parent.parent.kind === SyntaxKind.VariableStatement;
+    }
+
+    export function isValidESSymbolDeclaration(node: Node) {
+        return isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+            isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
+            isPropertySignature(node) && hasReadonlyModifier(node);
     }
 
     export function introducesArgumentsExoticObject(node: Node) {

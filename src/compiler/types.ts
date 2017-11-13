@@ -2857,6 +2857,7 @@ namespace ts {
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         reportInaccessibleThisError(): void;
         reportPrivateInBaseOfClassExpression(propertyName: string): void;
+        reportInaccessibleUniqueSymbolError(): void;
     }
 
     export const enum TypeFormatFlags {
@@ -2877,6 +2878,7 @@ namespace ts {
         InArrayType                     = 1 << 15,  // Writing an array element type
         UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
                                                       // even though `T` can't be accessed in the current scope.
+        AllowUniqueESSymbolType         = 1 << 17,
     }
 
     export const enum SymbolFormatFlags {

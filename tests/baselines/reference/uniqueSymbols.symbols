@@ -431,6 +431,7 @@ declare function g(x: typeof N.s): void;
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
 // widening positions
+
 // argument inference
 f(s);
 >f : Symbol(f, Decl(uniqueSymbols.ts, 117, 42))
@@ -460,90 +461,134 @@ f(N["s"]);
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
-// property assignments
+// property assignments/methods
 const o2 = {
->o2 : Symbol(o2, Decl(uniqueSymbols.ts, 134, 5))
+>o2 : Symbol(o2, Decl(uniqueSymbols.ts, 135, 5))
 
     a: s,
->a : Symbol(a, Decl(uniqueSymbols.ts, 134, 12))
+>a : Symbol(a, Decl(uniqueSymbols.ts, 135, 12))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     b: N.s,
->b : Symbol(b, Decl(uniqueSymbols.ts, 135, 9))
+>b : Symbol(b, Decl(uniqueSymbols.ts, 136, 9))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
-    c: N["s"]
->c : Symbol(c, Decl(uniqueSymbols.ts, 136, 11))
+    c: N["s"],
+>c : Symbol(c, Decl(uniqueSymbols.ts, 137, 11))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    method1() { return s; },
+>method1 : Symbol(method1, Decl(uniqueSymbols.ts, 138, 14))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    async method2() { return s; },
+>method2 : Symbol(method2, Decl(uniqueSymbols.ts, 140, 28))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    async * method3() { yield s; },
+>method3 : Symbol(method3, Decl(uniqueSymbols.ts, 141, 34))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    * method4() { yield s; },
+>method4 : Symbol(method4, Decl(uniqueSymbols.ts, 142, 35))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    method5(p = s) { return p; },
+>method5 : Symbol(method5, Decl(uniqueSymbols.ts, 143, 29))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 144, 12))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 144, 12))
 
 };
 
 // property initializers
 class C0 {
->C0 : Symbol(C0, Decl(uniqueSymbols.ts, 138, 2))
+>C0 : Symbol(C0, Decl(uniqueSymbols.ts, 145, 2))
 
     static readonly a = s;
->a : Symbol(C0.a, Decl(uniqueSymbols.ts, 141, 10))
+>a : Symbol(C0.a, Decl(uniqueSymbols.ts, 148, 10))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     static readonly b = N.s;
->b : Symbol(C0.b, Decl(uniqueSymbols.ts, 142, 26))
+>b : Symbol(C0.b, Decl(uniqueSymbols.ts, 149, 26))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
     static readonly c = N["s"];
->c : Symbol(C0.c, Decl(uniqueSymbols.ts, 143, 28))
+>c : Symbol(C0.c, Decl(uniqueSymbols.ts, 150, 28))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
     static d = s;
->d : Symbol(C0.d, Decl(uniqueSymbols.ts, 144, 31))
+>d : Symbol(C0.d, Decl(uniqueSymbols.ts, 151, 31))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     static e = N.s;
->e : Symbol(C0.e, Decl(uniqueSymbols.ts, 146, 17))
+>e : Symbol(C0.e, Decl(uniqueSymbols.ts, 153, 17))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
     static f = N["s"];
->f : Symbol(C0.f, Decl(uniqueSymbols.ts, 147, 19))
+>f : Symbol(C0.f, Decl(uniqueSymbols.ts, 154, 19))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
     readonly a = s;
->a : Symbol(C0.a, Decl(uniqueSymbols.ts, 148, 22))
+>a : Symbol(C0.a, Decl(uniqueSymbols.ts, 155, 22))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     readonly b = N.s;
->b : Symbol(C0.b, Decl(uniqueSymbols.ts, 150, 19))
+>b : Symbol(C0.b, Decl(uniqueSymbols.ts, 157, 19))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
     readonly c = N["s"];
->c : Symbol(C0.c, Decl(uniqueSymbols.ts, 151, 21))
+>c : Symbol(C0.c, Decl(uniqueSymbols.ts, 158, 21))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
     d = s;
->d : Symbol(C0.d, Decl(uniqueSymbols.ts, 152, 24))
+>d : Symbol(C0.d, Decl(uniqueSymbols.ts, 159, 24))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     e = N.s;
->e : Symbol(C0.e, Decl(uniqueSymbols.ts, 154, 10))
+>e : Symbol(C0.e, Decl(uniqueSymbols.ts, 161, 10))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
     f = N["s"];
->f : Symbol(C0.f, Decl(uniqueSymbols.ts, 155, 12))
+>f : Symbol(C0.f, Decl(uniqueSymbols.ts, 162, 12))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
+
+    method1() { return s; }
+>method1 : Symbol(C0.method1, Decl(uniqueSymbols.ts, 163, 15))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    async method2() { return s; }
+>method2 : Symbol(C0.method2, Decl(uniqueSymbols.ts, 165, 27))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    async * method3() { yield s; }
+>method3 : Symbol(C0.method3, Decl(uniqueSymbols.ts, 166, 33))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    * method4() { yield s; }
+>method4 : Symbol(C0.method4, Decl(uniqueSymbols.ts, 167, 34))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    method5(p = s) { return p; }
+>method5 : Symbol(C0.method5, Decl(uniqueSymbols.ts, 168, 28))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 169, 12))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 169, 12))
 }
 
 // non-widening positions
@@ -650,7 +695,7 @@ Math.random() * 2 ? N["s"] : "a";
 });
 
 class C1 {
->C1 : Symbol(C1, Decl(uniqueSymbols.ts, 188, 3))
+>C1 : Symbol(C1, Decl(uniqueSymbols.ts, 201, 3))
 
     static [s]: "a";
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
@@ -668,3 +713,138 @@ class C1 {
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 }
+
+// contextual types
+
+interface Context {
+>Context : Symbol(Context, Decl(uniqueSymbols.ts, 209, 1))
+
+    method1(): typeof s;
+>method1 : Symbol(Context.method1, Decl(uniqueSymbols.ts, 213, 19))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    method2(): Promise<typeof s>;
+>method2 : Symbol(Context.method2, Decl(uniqueSymbols.ts, 214, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    method3(): AsyncIterableIterator<typeof s>;
+>method3 : Symbol(Context.method3, Decl(uniqueSymbols.ts, 215, 33))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.esnext.asynciterable.d.ts, --, --))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    method4(): IterableIterator<typeof s>;
+>method4 : Symbol(Context.method4, Decl(uniqueSymbols.ts, 216, 47))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    method5(p?: typeof s): typeof s;
+>method5 : Symbol(Context.method5, Decl(uniqueSymbols.ts, 217, 42))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 218, 12))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+}
+
+const o3: Context = {
+>o3 : Symbol(o3, Decl(uniqueSymbols.ts, 221, 5))
+>Context : Symbol(Context, Decl(uniqueSymbols.ts, 209, 1))
+
+    method1() {
+>method1 : Symbol(method1, Decl(uniqueSymbols.ts, 221, 21))
+
+        return s; // return type should not widen due to contextual type
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    },
+    async method2() {
+>method2 : Symbol(method2, Decl(uniqueSymbols.ts, 224, 6))
+
+        return s; // return type should not widen due to contextual type
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    },
+    async * method3() {
+>method3 : Symbol(method3, Decl(uniqueSymbols.ts, 227, 6))
+
+        yield s; // yield type should not widen due to contextual type
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    },
+    * method4() {
+>method4 : Symbol(method4, Decl(uniqueSymbols.ts, 230, 6))
+
+        yield s; // yield type should not widen due to contextual type
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    },
+    method5(p = s) { // parameter should not widen due to contextual type
+>method5 : Symbol(method5, Decl(uniqueSymbols.ts, 233, 6))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 234, 12))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+        return p;
+>p : Symbol(p, Decl(uniqueSymbols.ts, 234, 12))
+
+    },
+};
+
+// allowed when not emitting declarations
+
+const o4 = {
+>o4 : Symbol(o4, Decl(uniqueSymbols.ts, 241, 5))
+
+    method1(p: typeof s): typeof s {
+>method1 : Symbol(method1, Decl(uniqueSymbols.ts, 241, 12))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 242, 12))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+        return p;
+>p : Symbol(p, Decl(uniqueSymbols.ts, 242, 12))
+
+    },
+    method2(p: I["readonlyType"]): I["readonlyType"] {
+>method2 : Symbol(method2, Decl(uniqueSymbols.ts, 244, 6))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 245, 12))
+>I : Symbol(I, Decl(uniqueSymbols.ts, 82, 87))
+>I : Symbol(I, Decl(uniqueSymbols.ts, 82, 87))
+
+        return p;
+>p : Symbol(p, Decl(uniqueSymbols.ts, 245, 12))
+    }
+};
+
+const ce0 = class {
+>ce0 : Symbol(ce0, Decl(uniqueSymbols.ts, 250, 5))
+
+    method1(p: typeof s): typeof s {
+>method1 : Symbol(ce0.method1, Decl(uniqueSymbols.ts, 250, 19))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 251, 12))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+        return p;
+>p : Symbol(p, Decl(uniqueSymbols.ts, 251, 12))
+    }
+    method2(p: I["readonlyType"]): I["readonlyType"] {
+>method2 : Symbol(ce0.method2, Decl(uniqueSymbols.ts, 253, 5))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 254, 12))
+>I : Symbol(I, Decl(uniqueSymbols.ts, 82, 87))
+>I : Symbol(I, Decl(uniqueSymbols.ts, 82, 87))
+
+        return p;
+>p : Symbol(p, Decl(uniqueSymbols.ts, 254, 12))
+    }
+};
+
+function funcInferredReturnType(obj: { method(p: typeof s): void }) {
+>funcInferredReturnType : Symbol(funcInferredReturnType, Decl(uniqueSymbols.ts, 257, 2))
+>obj : Symbol(obj, Decl(uniqueSymbols.ts, 259, 32))
+>method : Symbol(method, Decl(uniqueSymbols.ts, 259, 38))
+>p : Symbol(p, Decl(uniqueSymbols.ts, 259, 46))
+>s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+
+    return obj;
+>obj : Symbol(obj, Decl(uniqueSymbols.ts, 259, 32))
+}
+

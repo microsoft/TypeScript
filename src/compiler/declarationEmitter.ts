@@ -190,6 +190,7 @@ namespace ts {
             const writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
             writer.reportInaccessibleThisError = reportInaccessibleThisError;
+            writer.reportInaccessibleUniqueSymbolError = reportInaccessibleUniqueSymbolError;
             writer.reportPrivateInBaseOfClassExpression = reportPrivateInBaseOfClassExpression;
             writer.writeKeyword = writer.write;
             writer.writeOperator = writer.write;
@@ -322,11 +323,21 @@ namespace ts {
             }
         }
 
+        function reportInaccessibleUniqueSymbolError() {
+            if (errorNameNode) {
+                reportedDeclarationError = true;
+                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    declarationNameToString(errorNameNode),
+                    "unique symbol"));
+            }
+        }
+
         function reportInaccessibleThisError() {
             if (errorNameNode) {
                 reportedDeclarationError = true;
-                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode)));
+                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    declarationNameToString(errorNameNode),
+                    "this"));
             }
         }
 

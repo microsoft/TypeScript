@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbols.ts ===
+=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarations.ts ===
 // declarations with call initializer
 const constCall = Symbol();
 >constCall : unique symbol
@@ -490,7 +490,7 @@ f(N["s"]);
 // property assignments/methods
 const o2 = {
 >o2 : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncIterableIterator<symbol>; method4(): IterableIterator<symbol>; method5(p?: symbol): symbol; }
->{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; },} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncIterableIterator<symbol>; method4(): IterableIterator<symbol>; method5(p?: symbol): symbol; }
+>{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; }} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncIterableIterator<symbol>; method4(): IterableIterator<symbol>; method5(p?: symbol): symbol; }
 
     a: s,
 >a : symbol
@@ -526,7 +526,7 @@ const o2 = {
 >yield s : any
 >s : unique symbol
 
-    method5(p = s) { return p; },
+    method5(p = s) { return p; }
 >method5 : (p?: symbol) => symbol
 >p : symbol
 >s : unique symbol
@@ -821,10 +821,10 @@ interface Context {
 >s : unique symbol
 }
 
-const o3: Context = {
->o3 : Context
+const o4: Context = {
+>o4 : Context
 >Context : Context
->{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncIterableIterator<unique symbol>; method4(): IterableIterator<unique symbol>; method5(p?: unique symbol): unique symbol; }
+>{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    }} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncIterableIterator<unique symbol>; method4(): IterableIterator<unique symbol>; method5(p?: unique symbol): unique symbol; }
 
     method1() {
 >method1 : () => unique symbol
@@ -863,69 +863,5 @@ const o3: Context = {
 
         return p;
 >p : unique symbol
-
-    },
-};
-
-// allowed when not emitting declarations
-
-const o4 = {
->o4 : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
->{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
-
-    method1(p: typeof s): typeof s {
->method1 : (p: unique symbol) => unique symbol
->p : unique symbol
->s : unique symbol
->s : unique symbol
-
-        return p;
->p : unique symbol
-
-    },
-    method2(p: I["readonlyType"]): I["readonlyType"] {
->method2 : (p: unique symbol) => unique symbol
->p : unique symbol
->I : I
->I : I
-
-        return p;
->p : unique symbol
     }
 };
-
-const ce0 = class {
->ce0 : typeof ce0
->class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : typeof ce0
-
-    method1(p: typeof s): typeof s {
->method1 : (p: unique symbol) => unique symbol
->p : unique symbol
->s : unique symbol
->s : unique symbol
-
-        return p;
->p : unique symbol
-    }
-    method2(p: I["readonlyType"]): I["readonlyType"] {
->method2 : (p: unique symbol) => unique symbol
->p : unique symbol
->I : I
->I : I
-
-        return p;
->p : unique symbol
-    }
-};
-
-function funcInferredReturnType(obj: { method(p: typeof s): void }) {
->funcInferredReturnType : (obj: { method(p: unique symbol): void; }) => { method(p: unique symbol): void; }
->obj : { method(p: unique symbol): void; }
->method : (p: unique symbol) => void
->p : unique symbol
->s : unique symbol
-
-    return obj;
->obj : { method(p: unique symbol): void; }
-}
-
