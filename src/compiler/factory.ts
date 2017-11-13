@@ -3709,12 +3709,7 @@ namespace ts {
         while (statementOffset < numStatements) {
             let statement = source[statementOffset];
             if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
-                if (visitor) {
-                    statement = visitNode(statement, visitor, isStatement);
-                }
-                if (statement) {
-                    target.push(statement);
-                }
+                append(target, visitor ? visitNode(statement, visitor, isStatement) : statement);
             }
             else {
                 break;
