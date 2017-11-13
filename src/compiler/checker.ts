@@ -2928,7 +2928,7 @@ namespace ts {
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
                 if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
-                    parameterType = getUndefinedableType(parameterType);
+                    parameterType = getOptionalType(parameterType);
                 }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
 
@@ -3709,7 +3709,7 @@ namespace ts {
 
                 let type = getTypeOfSymbol(p);
                 if (parameterNode && isRequiredInitializedParameter(parameterNode)) {
-                    type = getUndefinedableType(type);
+                    type = getOptionalType(type);
                 }
                 buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
             }
@@ -4281,7 +4281,7 @@ namespace ts {
         }
 
         function addOptionality(type: Type, optional = true): Type {
-            return strictNullChecks && optional ? getUndefinedableType(type) : type;
+            return strictNullChecks && optional ? getOptionalType(type) : type;
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
@@ -4699,7 +4699,7 @@ namespace ts {
                         links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
                     }
                     else {
-                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getUndefinedableType(type) : type;
+                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
                     }
                 }
             }
@@ -6519,31 +6519,33 @@ namespace ts {
                 const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
                     undefined;
-                // JS functions get a free rest parameter if:
-                // a) The last parameter has `...` preceding its type
-                // b) It references `arguments` somewhere
-                let hasRestLikeParameter = hasRestParameter(declaration);
-                if (!hasRestLikeParameter && isInJavaScriptFile(declaration)) {
-                    const lastParam = lastOrUndefined(declaration.parameters);
-                    const lastParamTags = lastParam && getJSDocParameterTags(lastParam);
-                    const lastParamVariadicType = lastParamTags && firstDefined(lastParamTags, p =>
-                        p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
-                    if (lastParamVariadicType || containsArgumentsReference(declaration)) {
-                        hasRestLikeParameter = true;
-                        const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
-                        syntheticArgsSymbol.type = lastParamVariadicType ? createArrayType(getTypeFromTypeNode(lastParamVariadicType.type)) : anyArrayType;
-                        syntheticArgsSymbol.isRestParameter = true;
-                        if (lastParamVariadicType) {
-                            // Replace the last parameter with a rest parameter.
-                            parameters.pop();
-                        }
-                        parameters.push(syntheticArgsSymbol);
-                    }
-                }
-
+                const hasRestLikeParameter = hasRestParameter(declaration) || isInJavaScriptFile(declaration) && maybeAddJsSyntheticRestParameter(declaration, parameters);
                 links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
             }
             return links.resolvedSignature;
+        }
+
+        function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration, parameters: Symbol[]): boolean {
+            // JS functions get a free rest parameter if:
+            // a) The last parameter has `...` preceding its type
+            // b) It references `arguments` somewhere
+            const lastParam = lastOrUndefined(declaration.parameters);
+            const lastParamTags = lastParam && getJSDocParameterTags(lastParam);
+            const lastParamVariadicType = lastParamTags && firstDefined(lastParamTags, p =>
+                p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
+            if (!lastParamVariadicType && !containsArgumentsReference(declaration)) {
+                return false;
+            }
+
+            const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
+            syntheticArgsSymbol.type = lastParamVariadicType ? createArrayType(getTypeFromTypeNode(lastParamVariadicType.type)) : anyArrayType;
+            syntheticArgsSymbol.isRestParameter = true;
+            if (lastParamVariadicType) {
+                // Replace the last parameter with a rest parameter.
+                parameters.pop();
+            }
+            parameters.push(syntheticArgsSymbol);
+            return true;
         }
 
         function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration, isJSConstructSignature: boolean, classType: Type) {
@@ -10433,7 +10435,7 @@ namespace ts {
                 getUnionType([type, undefinedType, nullType]);
         }
 
-        function getUndefinedableType(type: Type): Type {
+        function getOptionalType(type: Type): Type {
             Debug.assert(strictNullChecks);
             return type.flags & TypeFlags.Undefined ? type : getUnionType([type, undefinedType]);
         }
@@ -12787,7 +12789,7 @@ namespace ts {
                 declaration.flags & NodeFlags.Ambient;
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
-                    getUndefinedableType(type);
+                    getOptionalType(type);
             const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
@@ -17221,7 +17223,7 @@ namespace ts {
             if (strictNullChecks) {
                 const declaration = symbol.valueDeclaration;
                 if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
-                    return getUndefinedableType(type);
+                    return getOptionalType(type);
                 }
             }
             return type;
@@ -24333,7 +24335,7 @@ namespace ts {
                 ? getWidenedLiteralType(getTypeOfSymbol(symbol))
                 : unknownType;
             if (flags & TypeFormatFlags.AddUndefined) {
-                type = getUndefinedableType(type);
+                type = getOptionalType(type);
             }
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
