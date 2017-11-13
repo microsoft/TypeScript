@@ -321,16 +321,16 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
+    function getPos(range: Node) {
+        return range.pos;
+    }
+
     /**
      * Note: it is expected that the `nodeArray` and the `node` are within the same file.
      * For example, searching for a `SourceFile` in a `SourceFile[]` wouldn't work.
      */
     export function indexOfNode(nodeArray: ReadonlyArray<Node>, node: Node) {
-        return binarySearch(nodeArray, node, compareNodePos);
-    }
-
-    function compareNodePos({ pos: aPos }: Node, { pos: bPos}: Node) {
-        return aPos < bPos ? Comparison.LessThan : bPos < aPos ? Comparison.GreaterThan : Comparison.EqualTo;
+        return binarySearch(nodeArray, node, getPos, compareValues);
     }
 
     /**
@@ -363,8 +363,10 @@ namespace ts {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return "`" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.TemplateHead:
+                // tslint:disable-next-line no-invalid-template-strings
                 return "`" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateMiddle:
+                // tslint:disable-next-line no-invalid-template-strings
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateTail:
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
@@ -459,7 +461,7 @@ namespace ts {
     }
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-        return isExternalModule(node) || compilerOptions.isolatedModules;
+        return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
     }
 
     /* @internal */
@@ -1132,7 +1134,7 @@ namespace ts {
     }
 
     /**
-     * Determines whether a node is a property or element access expression for super.
+     * Determines whether a node is a property or element access expression for `super`.
      */
     export function isSuperProperty(node: Node): node is SuperProperty {
         const kind = node.kind;
@@ -1140,7 +1142,16 @@ namespace ts {
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-    export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
+    /**
+     * Determines whether a node is a property or element access expression for `this`.
+     */
+    export function isThisProperty(node: Node): boolean {
+        const kind = node.kind;
+        return (kind === SyntaxKind.PropertyAccessExpression || kind === SyntaxKind.ElementAccessExpression)
+            && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.ThisKeyword;
+    }
+
+   export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
                 return (<TypeReferenceNode>node).typeName;
@@ -1228,7 +1239,7 @@ namespace ts {
         return false;
     }
 
-    export function isPartOfExpression(node: Node): boolean {
+    export function isExpressionNode(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NullKeyword:
@@ -1262,6 +1273,7 @@ namespace ts {
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxFragment:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.MetaProperty:
@@ -1331,7 +1343,7 @@ namespace ts {
             case SyntaxKind.ExpressionWithTypeArguments:
                 return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
             default:
-                return isPartOfExpression(parent);
+                return isExpressionNode(parent);
         }
     }
 
@@ -1394,8 +1406,8 @@ namespace ts {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
     }
 
-    export function isStringDoubleQuoted(string: StringLiteral, sourceFile: SourceFile): boolean {
-        return getSourceTextOfNodeFromSourceFile(sourceFile, string).charCodeAt(0) === CharacterCodes.doubleQuote;
+    export function isStringDoubleQuoted(str: StringLiteral, sourceFile: SourceFile): boolean {
+        return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
     /**
@@ -1724,16 +1736,6 @@ namespace ts {
         return false;
     }
 
-    export function isInAmbientContext(node: Node): boolean {
-        while (node) {
-            if (hasModifier(node, ModifierFlags.Ambient) || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
-                return true;
-            }
-            node = node.parent;
-        }
-        return false;
-    }
-
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
         switch (name.kind) {
@@ -1907,6 +1909,14 @@ namespace ts {
 
     export function isKeyword(token: SyntaxKind): boolean {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
+    }
+
+    export function isContextualKeyword(token: SyntaxKind): boolean {
+        return SyntaxKind.FirstContextualKeyword <= token && token <= SyntaxKind.LastContextualKeyword;
+    }
+
+    export function isNonContextualKeyword(token: SyntaxKind): boolean {
+        return isKeyword(token) && !isContextualKeyword(token);
     }
 
     export function isTrivia(token: SyntaxKind) {
@@ -2176,6 +2186,7 @@ namespace ts {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxFragment:
             case SyntaxKind.RegularExpressionLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateExpression:
@@ -2297,6 +2308,7 @@ namespace ts {
         let nonFileDiagnostics: Diagnostic[] = [];
         const fileDiagnostics = createMap<Diagnostic[]>();
 
+        let hasReadNonFileDiagnostics = false;
         let diagnosticsModified = false;
         let modificationCount = 0;
 
@@ -2326,6 +2338,12 @@ namespace ts {
                 }
             }
             else {
+                // If we've already read the non-file diagnostics, do not modify the existing array.
+                if (hasReadNonFileDiagnostics) {
+                    hasReadNonFileDiagnostics = false;
+                    nonFileDiagnostics = nonFileDiagnostics.slice();
+                }
+
                 diagnostics = nonFileDiagnostics;
             }
 
@@ -2336,6 +2354,7 @@ namespace ts {
 
         function getGlobalDiagnostics(): Diagnostic[] {
             sortAndDeduplicate();
+            hasReadNonFileDiagnostics = true;
             return nonFileDiagnostics;
         }
 
@@ -3597,7 +3616,7 @@ namespace ts {
     }
 
     /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */
-    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T): T {
+    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T | undefined): T | undefined {
         while (true) {
             const result = callback(directory);
             if (result !== undefined) {
@@ -3954,6 +3973,9 @@ namespace ts {
         if (!trySetLanguageAndTerritory(language, territory, errors)) {
             trySetLanguageAndTerritory(language, /*territory*/ undefined, errors);
         }
+
+        // Set the UI locale for string collation
+        setUILocale(locale);
 
         function trySetLanguageAndTerritory(language: string, territory: string, errors?: Push<Diagnostic>): boolean {
             const compilerFilePath = normalizePath(sys.getExecutingFilePath());
@@ -4800,6 +4822,18 @@ namespace ts {
         return node.kind === SyntaxKind.JsxClosingElement;
     }
 
+    export function isJsxFragment(node: Node): node is JsxFragment {
+        return node.kind === SyntaxKind.JsxFragment;
+    }
+
+    export function isJsxOpeningFragment(node: Node): node is JsxOpeningFragment {
+        return node.kind === SyntaxKind.JsxOpeningFragment;
+    }
+
+    export function isJsxClosingFragment(node: Node): node is JsxClosingFragment {
+        return node.kind === SyntaxKind.JsxClosingFragment;
+    }
+
     export function isJsxAttribute(node: Node): node is JsxAttribute {
         return node.kind === SyntaxKind.JsxAttribute;
     }
@@ -5325,6 +5359,7 @@ namespace ts {
             case SyntaxKind.CallExpression:
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxFragment:
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ParenthesizedExpression:
@@ -5387,7 +5422,7 @@ namespace ts {
     /* @internal */
     /**
      * Determines whether a node is an expression based only on its kind.
-     * Use `isPartOfExpression` if not in transforms.
+     * Use `isExpressionNode` if not in transforms.
      */
     export function isExpression(node: Node): node is Expression {
         return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);
@@ -5646,7 +5681,8 @@ namespace ts {
         return kind === SyntaxKind.JsxElement
             || kind === SyntaxKind.JsxExpression
             || kind === SyntaxKind.JsxSelfClosingElement
-            || kind === SyntaxKind.JsxText;
+            || kind === SyntaxKind.JsxText
+            || kind === SyntaxKind.JsxFragment;
     }
 
     /* @internal */

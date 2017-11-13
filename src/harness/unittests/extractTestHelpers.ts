@@ -67,35 +67,27 @@ namespace ts {
     }
 
     export const newLineCharacter = "\n";
-    export function getRuleProvider(action?: (opts: FormatCodeSettings) => void) {
-        const options = {
-            indentSize: 4,
-            tabSize: 4,
-            newLineCharacter,
-            convertTabsToSpaces: true,
-            indentStyle: ts.IndentStyle.Smart,
-            insertSpaceAfterConstructor: false,
-            insertSpaceAfterCommaDelimiter: true,
-            insertSpaceAfterSemicolonInForStatements: true,
-            insertSpaceBeforeAndAfterBinaryOperators: true,
-            insertSpaceAfterKeywordsInControlFlowStatements: true,
-            insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-            insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-            insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-            insertSpaceBeforeFunctionParenthesis: false,
-            placeOpenBraceOnNewLineForFunctions: false,
-            placeOpenBraceOnNewLineForControlBlocks: false,
-        };
-        if (action) {
-            action(options);
-        }
-        const rulesProvider = new formatting.RulesProvider();
-        rulesProvider.ensureUpToDate(options);
-        return rulesProvider;
-    }
+    export const testFormatOptions: ts.FormatCodeSettings = {
+        indentSize: 4,
+        tabSize: 4,
+        newLineCharacter,
+        convertTabsToSpaces: true,
+        indentStyle: ts.IndentStyle.Smart,
+        insertSpaceAfterConstructor: false,
+        insertSpaceAfterCommaDelimiter: true,
+        insertSpaceAfterSemicolonInForStatements: true,
+        insertSpaceBeforeAndAfterBinaryOperators: true,
+        insertSpaceAfterKeywordsInControlFlowStatements: true,
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+        insertSpaceBeforeFunctionParenthesis: false,
+        placeOpenBraceOnNewLineForFunctions: false,
+        placeOpenBraceOnNewLineForControlBlocks: false,
+    };
 
     const notImplementedHost: LanguageServiceHost = {
         getCompilationSettings: notImplemented,
@@ -128,14 +120,14 @@ namespace ts {
 
             const sourceFile = program.getSourceFile(path);
             const context: RefactorContext = {
-                cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
+                cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 newLineCharacter,
                 program,
                 file: sourceFile,
                 startPosition: selectionRange.start,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                rulesProvider: getRuleProvider()
+                formatContext: formatting.getFormatContext(testFormatOptions),
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
             assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
@@ -192,14 +184,14 @@ namespace ts {
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
             const sourceFile = program.getSourceFile(f.path);
             const context: RefactorContext = {
-                cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
+                cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 newLineCharacter,
                 program,
                 file: sourceFile,
                 startPosition: selectionRange.start,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                rulesProvider: getRuleProvider()
+                formatContext: formatting.getFormatContext(testFormatOptions),
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
             assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);

@@ -142,12 +142,13 @@ declare namespace FourSlashInterface {
         constructor(negative?: boolean);
         completionListCount(expectedCount: number): void;
         completionListContains(
-            symbol: string,
+            entryId: string | { name: string, source?: string },
             text?: string,
             documentation?: string,
             kind?: string,
             spanIndex?: number,
             hasAction?: boolean,
+            options?: { includeExternalModuleExports: boolean },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
@@ -196,6 +197,7 @@ declare namespace FourSlashInterface {
         ): void; //TODO: better type
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
+            source?: string,
             description: string,
             newFileContent?: string,
             newRangeContent?: string,
@@ -220,6 +222,7 @@ declare namespace FourSlashInterface {
          * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
          */
         goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
+        goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[], range: Range): void;
         /** Performs `goToDefinition` for each pair. */
         goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
         /** Performs `goToDefinition` on each key and value. */
@@ -295,7 +298,7 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[]): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[]): void;
-        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string): void;
+        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */

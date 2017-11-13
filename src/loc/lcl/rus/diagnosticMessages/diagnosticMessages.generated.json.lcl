@@ -829,12 +829,12 @@
       </Item>
       <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Добавьте {0} в существующее объявление импорта из {1}.]]></Val>
+            <Val><![CDATA[Добавьте "{0}" в существующее объявление импорта из "{1}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Add {0} to existing import declaration from {1}]]></Val>
+            <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -1610,12 +1610,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_create_an_instance_of_the_abstract_class_0_2511" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_create_an_instance_of_an_abstract_class_2511" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot create an instance of the abstract class '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Не удается создать экземпляр абстрактного класса "{0}".]]></Val>
-          </Tgt>
+          <Val><![CDATA[Cannot create an instance of an abstract class.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2236,6 +2233,15 @@
           <Val><![CDATA[Convert function to an ES2015 class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Преобразование функции в класс ES2015]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_to_default_import_95013" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to default import]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Преобразовать в импорт по умолчанию]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2897,6 +2903,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Expected_0_1_type_arguments_provide_these_with_an_extends_tag_8027" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0}-{1} type arguments; provide these with an '@extends' tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ожидается аргументов типа: {0}–{1}. Укажите их с тегом "@extends".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Expected_0_arguments_but_got_1_2554" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} arguments, but got {1}.]]></Val>
@@ -2924,6 +2939,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Expected_0_type_arguments_provide_these_with_an_extends_tag_8026" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ожидается аргументов типа: {0}. Укажите их с тегом "@extends".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Expected_at_least_0_arguments_but_got_1_2555" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected at least {0} arguments, but got {1}.]]></Val>
@@ -2947,6 +2971,15 @@
           <Val><![CDATA[Expected corresponding JSX closing tag for '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Ожидался соответствующий закрывающий тег JSX для "{0}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_corresponding_closing_tag_for_JSX_fragment_17015" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected corresponding closing tag for JSX fragment.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ожидался соответствующий закрывающий тег фрагмента JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3679,13 +3712,31 @@
       </Item>
       <Item ItemId=";Import_0_from_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import {0} from {1}.]]></Val>
+          <Val><![CDATA[Import '{0}' from "{1}".]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Импортируйте {0} из {1}.]]></Val>
+            <Val><![CDATA[Импортируйте "{0}" из "{1}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Import {0} from {1}]]></Val>
+            <Val><![CDATA[Import {0} from {1}.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_0_require_1_95015" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import '{0}' = require("{1}").]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Import "{0}" = require("{1}").]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_Asterisk_as_0_from_1_95016" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import * as '{0}' from "{1}".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Import * as "{0}" from "{1}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3916,6 +3967,15 @@
           <Val><![CDATA[Insert command line options and files from a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Вставка параметров командной строки и файлов из файла.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Install_0_95014" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Install '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Установить "{0}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4190,6 +4250,24 @@
           <Prev Cat="Text">
             <Val><![CDATA[JSX expressions must have one parent element]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSX_fragment_has_no_corresponding_closing_tag_17014" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSX fragment has no corresponding closing tag.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Фрагмент JSX не имеет соответствующего закрывающего тега.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSX_fragment_is_not_supported_when_using_jsxFactory_17016" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSX fragment is not supported when using --jsxFactory]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Фрагмент JSX не поддерживается при использовании --jsxFactory]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5147,24 +5225,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_4036" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр "{0}" общего метода задания свойства из экспортированного класса имеет или использует имя "{1}" из закрытого модуля "{2}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1_4037" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр "{0}" общего метода задания свойства из экспортированного класса имеет или использует закрытое имя "{1}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module__4068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
@@ -5192,24 +5252,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_4034" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр "{0}" общего статического метода задания свойства из экспортированного класса имеет или использует имя "{1}" из закрытого модуля "{2}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1_4035" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр "{0}" общего статического метода задания свойства из экспортированного класса имеет или использует закрытое имя "{1}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Parameter_cannot_have_question_mark_and_initializer_1015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter cannot have question mark and initializer.]]></Val>
@@ -5225,6 +5267,30 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Ожидалось объявление параметра.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_setter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2_4036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_setter_0_from_exported_class_has_or_is_using_private_name_1_4037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_name_1_from_private_mod_4034" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_private_name_1_4035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5933,6 +5999,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_4041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2_4042" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_private_name_1_4043" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_c_4053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
@@ -5960,30 +6044,21 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_external_modul_4041" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_name_1_from_external_modul_4038" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип возвращаемого значения общего метода получения свойства из экспортированного класса имеет или использует имя "{0}" из внешнего модуля {1}, но не может быть именован.]]></Val>
-          </Tgt>
+          <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_4042" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_4039" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип возвращаемого значения общего метода получения свойства из экспортированного класса имеет или использует имя "{0}" из закрытого модуля "{1}".]]></Val>
-          </Tgt>
+          <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0_4043" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_private_name_1_4040" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Return type of public property getter from exported class has or is using private name '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип возвращаемого значения общего метода получения свойства из экспортированного класса имеет или использует закрытое имя "{0}".]]></Val>
-          </Tgt>
+          <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6010,33 +6085,6 @@
           <Val><![CDATA[Return type of public static method from exported class has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Тип возвращаемого значения общего статического метода из экспортированного класса имеет или использует закрытое имя "{0}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_externa_4038" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип возвращаемого значения общего статического метода получения свойства из экспортированного класса имеет или использует имя "{0}" из внешнего модуля {1}, но не может быть именован.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_private_4039" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип возвращаемого значения общего статического метода получения свойства из экспортированного класса имеет или использует имя "{0}" из закрытого модуля "{1}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_private_name_0_4040" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Return type of public static property getter from exported class has or is using private name '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип возвращаемого значения общего статического метода получения свойства из экспортированного класса имеет или использует закрытое имя "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6365,11 +6413,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_t_2403" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_has_type_1_at_2_but_here_has_typ_2403" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
+          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Последующие объявления переменных должны иметь тот же тип. Переменная "{0}" должна иметь тип "{1}", однако имеет тип "{2}".]]></Val>
+            <Val><![CDATA[Последующие объявления переменных должны иметь тот же тип.  Переменная "{0}" должна иметь тип "{1}" в {2}, но имеет тип "{3}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

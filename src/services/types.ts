@@ -5,9 +5,11 @@ namespace ts {
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
         /* @internal */
+        // tslint:disable-next-line unified-signatures
         getChildren(sourceFile?: SourceFileLike): Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
         /* @internal */
+        // tslint:disable-next-line unified-signatures
         getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
@@ -32,7 +34,7 @@ namespace ts {
         getEscapedName(): __String;
         getName(): string;
         getDeclarations(): Declaration[] | undefined;
-        getDocumentationComment(): SymbolDisplayPart[];
+        getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
     }
 
@@ -55,7 +57,7 @@ namespace ts {
         getTypeParameters(): TypeParameter[] | undefined;
         getParameters(): Symbol[];
         getReturnType(): Type;
-        getDocumentationComment(): SymbolDisplayPart[];
+        getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
     }
 
@@ -86,6 +88,7 @@ namespace ts {
      * snapshot is observably immutable. i.e. the same calls with the same parameters will return
      * the same values.
      */
+    // tslint:disable-next-line interface-name
     export interface IScriptSnapshot {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
@@ -236,10 +239,16 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
-        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        // "options" is optional only for backwards-compatibility
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options?: FormatCodeOptions | FormatCodeSettings): CompletionEntryDetails;
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo;
+        // "options" and "source" are optional only for backwards-compatibility
+        getCompletionEntryDetails(
+            fileName: string,
+            position: number,
+            name: string,
+            options: FormatCodeOptions | FormatCodeSettings | undefined,
+            source: string | undefined,
+        ): CompletionEntryDetails;
+        getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
@@ -253,6 +262,7 @@ namespace ts {
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan;
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[];
 
@@ -284,6 +294,8 @@ namespace ts {
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
         applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
+        applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
+        applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
 
@@ -300,6 +312,10 @@ namespace ts {
         getSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
+    }
+
+    export interface GetCompletionsAtPositionOptions {
+        includeExternalModuleExports: boolean;
     }
 
     export interface ApplyCodeActionCommandResult {
@@ -575,6 +591,11 @@ namespace ts {
         containerName: string;
     }
 
+    export interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<DefinitionInfo>;
+        textSpan: TextSpan;
+    }
+
     export interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
         displayParts: SymbolDisplayPart[];
     }
@@ -696,6 +717,7 @@ namespace ts {
          */
         replacementSpan?: TextSpan;
         hasAction?: true;
+        source?: string;
     }
 
     export interface CompletionEntryDetails {
@@ -706,6 +728,7 @@ namespace ts {
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        source?: SymbolDisplayPart[];
     }
 
     export interface OutliningSpan {

@@ -45,7 +45,7 @@ var result1 = true ? x : a;
 
 //Expr1 and Expr2 are literals
 true ? {} : 1;
->true ? {} : 1 : {}
+>true ? {} : 1 : 1 | {}
 >true : true
 >{} : {}
 >1 : 1
@@ -64,13 +64,13 @@ true ? { a: 1 } : { a: 2, b: 'string' };
 
 var result2 = true ? {} : 1;
 >result2 : {}
->true ? {} : 1 : {}
+>true ? {} : 1 : 1 | {}
 >true : true
 >{} : {}
 >1 : 1
 
 var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
->result3 : { a: number; } | { a: number; b: string; }
+>result3 : { a: number; b?: undefined; } | { a: number; b: string; }
 >true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
 >true : true
 >{ a: 1 } : { a: number; }
@@ -125,7 +125,7 @@ var result5 = true ? a : x;
 
 //Expr1 and Expr2 are literals
 true ? 1 : {};
->true ? 1 : {} : {}
+>true ? 1 : {} : 1 | {}
 >true : true
 >1 : 1
 >{} : {}
@@ -144,13 +144,13 @@ true ? { a: 2, b: 'string' } : { a: 1 };
 
 var result6 = true ? 1 : {};
 >result6 : {}
->true ? 1 : {} : {}
+>true ? 1 : {} : 1 | {}
 >true : true
 >1 : 1
 >{} : {}
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
->result7 : { a: number; b: string; } | { a: number; }
+>result7 : { a: number; b: string; } | { a: number; b?: undefined; }
 >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
 >true : true
 >{ a: 2, b: 'string' } : { a: number; b: string; }

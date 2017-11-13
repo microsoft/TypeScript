@@ -15,12 +15,17 @@ namespace ts.server.protocol {
         /* @internal */
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
+        /* @internal */
+        CompletionDetailsFull = "completionEntryDetails-full",
         CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
         Definition = "definition",
         /* @internal */
         DefinitionFull = "definition-full",
+        DefinitionAndBoundSpan = "definitionAndBoundSpan",
+        /* @internal */
+        DefinitionAndBoundSpanFull = "definitionAndBoundSpan-full",
         Implementation = "implementation",
         /* @internal */
         ImplementationFull = "implementation-full",
@@ -581,6 +586,7 @@ namespace ts.server.protocol {
     }
 
     export interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+        /** May also be an array of commands. */
         command: {};
     }
 
@@ -708,11 +714,20 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    export interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<FileSpan>;
+        textSpan: TextSpan;
+    }
+
     /**
      * Definition response message.  Gives text range for definition.
      */
     export interface DefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+
+    export interface DefinitionInfoAndBoundSpanReponse extends Response {
+        body?: DefinitionInfoAndBoundSpan;
     }
 
     /**
@@ -1605,6 +1620,11 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
+        includeExternalModuleExports: boolean;
     }
 
     /**
@@ -1625,7 +1645,12 @@ namespace ts.server.protocol {
         /**
          * Names of one or more entries for which to obtain details.
          */
-        entryNames: string[];
+        entryNames: (string | CompletionEntryIdentifier)[];
+    }
+
+    export interface CompletionEntryIdentifier {
+        name: string;
+        source: string;
     }
 
     /**
@@ -1685,6 +1710,10 @@ namespace ts.server.protocol {
          * made to avoid errors. The CompletionEntryDetails will have these actions.
          */
         hasAction?: true;
+        /**
+         * Identifier (not necessarily human-readable) identifying where this completion came from.
+         */
+        source?: string;
     }
 
     /**
@@ -1722,6 +1751,11 @@ namespace ts.server.protocol {
          * The associated code actions for this entry
          */
         codeActions?: CodeAction[];
+
+        /**
+         * Human-readable description of the `source` from the CompletionEntry.
+         */
+        source?: SymbolDisplayPart[];
     }
 
     export interface CompletionsResponse extends Response {

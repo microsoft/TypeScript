@@ -124,7 +124,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
-    export let sys: System = (function() {
+    export let sys: System = (() => {
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
@@ -511,7 +511,7 @@ namespace ts {
                             return stat.size;
                         }
                     }
-                    catch (e) { }
+                    catch { /*ignore*/ }
                     return 0;
                 },
                 exit(exitCode?: number): void {
@@ -525,7 +525,7 @@ namespace ts {
                     try {
                         require("source-map-support").install();
                     }
-                    catch (e) {
+                    catch {
                         // Could not enable source maps.
                     }
                 },
@@ -594,7 +594,7 @@ namespace ts {
         if (sys) {
             // patch writefile to create folder before writing the file
             const originalWriteFile = sys.writeFile;
-            sys.writeFile = function(path, data, writeBom) {
+            sys.writeFile = (path, data, writeBom) => {
                 const directoryPath = getDirectoryPath(normalizeSlashes(path));
                 if (directoryPath && !sys.directoryExists(directoryPath)) {
                     recursiveCreateDirectory(directoryPath, sys);
