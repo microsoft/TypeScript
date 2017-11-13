@@ -13469,9 +13469,13 @@ namespace ts {
         }
 
         function isInParameterInitializerBeforeContainingFunction(node: Node) {
+            let inBindingInitializer = false;
             while (node.parent && !isFunctionLike(node.parent)) {
-                if (node.parent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node.parent).initializer === node) {
+                if (isParameter(node.parent) && (inBindingInitializer || node.parent.initializer === node)) {
                     return true;
+                }
+                if (isBindingElement(node.parent) && node.parent.initializer === node) {
+                    inBindingInitializer = true;
                 }
 
                 node = node.parent;

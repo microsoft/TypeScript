@@ -3707,9 +3707,14 @@ namespace ts {
     export function addCustomPrologue(target: Statement[], source: ReadonlyArray<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>): number {
         const numStatements = source.length;
         while (statementOffset < numStatements) {
-            const statement = source[statementOffset];
+            let statement = source[statementOffset];
             if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
-                target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
+                if (visitor) {
+                    statement = visitNode(statement, visitor, isStatement);
+                }
+                if (statement) {
+                    target.push(statement);
+                }
             }
             else {
                 break;
