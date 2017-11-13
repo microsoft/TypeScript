@@ -3707,7 +3707,7 @@ namespace ts {
     export function addCustomPrologue(target: Statement[], source: ReadonlyArray<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>): number {
         const numStatements = source.length;
         while (statementOffset < numStatements) {
-            let statement = source[statementOffset];
+            const statement = source[statementOffset];
             if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
                 append(target, visitor ? visitNode(statement, visitor, isStatement) : statement);
             }
