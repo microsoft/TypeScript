@@ -322,7 +322,7 @@ namespace ts.codefix {
             tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
             tryGetModuleNameFromBaseUrl(options, moduleFileName, getCanonicalFileName) ||
             options.rootDirs && tryGetModuleNameFromRootDirs(options.rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
-            removeFileExtension(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName));
+            removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName));
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
@@ -527,12 +527,8 @@ namespace ts.codefix {
         return firstDefined(rootDirs, rootDir => getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName));
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string) {
-        fileName = removeFileExtension(fileName);
-        if (endsWith(fileName, "/index")) {
-            fileName = fileName.substr(0, fileName.length - 6/* "/index".length */);
-        }
-        return fileName;
+    function removeExtensionAndIndexPostFix(fileName: string): string {
+        return removeSuffix(removeFileExtension(fileName), "/index");
     }
 
     function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string): string | undefined {

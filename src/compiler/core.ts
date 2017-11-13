@@ -2169,6 +2169,10 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function removeSuffix(str: string, suffix: string): string {
+        return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
+    }
+
     export function stringContains(str: string, substring: string): boolean {
         return str.indexOf(substring) !== -1;
     }
