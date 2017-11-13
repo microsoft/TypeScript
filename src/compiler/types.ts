@@ -36,6 +36,19 @@ namespace ts {
         push(...values: T[]): void;
     }
 
+    /* @internal */
+    export type EqualityComparer<T> = (a: T, b: T) => boolean;
+
+    /* @internal */
+    export type Comparer<T> = (a: T, b: T) => Comparison;
+
+    /* @internal */
+    export const enum Comparison {
+        LessThan    = -1,
+        EqualTo     = 0,
+        GreaterThan = 1
+    }
+
     // branded string type used to store absolute, normalized and canonicalized paths
     // arbitrary file name can be converted to Path via toPath function
     export type Path = string & { __pathBrand: any };
@@ -201,7 +214,7 @@ namespace ts {
         UndefinedKeyword,
         FromKeyword,
         GlobalKeyword,
-        OfKeyword, // LastKeyword and LastToken
+        OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
 
@@ -418,7 +431,9 @@ namespace ts {
         FirstJSDocNode = JSDocTypeExpression,
         LastJSDocNode = JSDocPropertyTag,
         FirstJSDocTagNode = JSDocTag,
-        LastJSDocTagNode = JSDocPropertyTag
+        LastJSDocTagNode = JSDocPropertyTag,
+        /* @internal */ FirstContextualKeyword = AbstractKeyword,
+        /* @internal */ LastContextualKeyword = OfKeyword,
     }
 
     export const enum NodeFlags {
@@ -454,7 +469,8 @@ namespace ts {
         /* @internal */
         PossiblyContainsDynamicImport = 1 << 19,
         JSDoc =              1 << 20, // If node was parsed inside jsdoc
-        /* @internal */ InWithStatement =    1 << 21, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        /* @internal */ Ambient =         1 << 21, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement = 1 << 22, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
 
         BlockScoped = Let | Const,
 
@@ -462,7 +478,7 @@ namespace ts {
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement,
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement | Ambient,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
@@ -519,7 +535,6 @@ namespace ts {
         /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
         parent?: Node;                                        // Parent node (initialized by binding)
         /* @internal */ original?: Node;                      // The original node if this is an updated node.
-        /* @internal */ startsOnNewLine?: boolean;            // Whether a synthesized node should start on a new line (used by transforms).
         /* @internal */ symbol?: Symbol;                      // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
@@ -629,6 +644,7 @@ namespace ts {
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode>;        // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics.
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
+        /*@internal*/ skipNameGenerationScope?: boolean;          // Should skip a name generation scope when generating the name for this identifier
     }
 
     // Transient identifier node (marked by id === -1)
@@ -2452,8 +2468,8 @@ namespace ts {
 
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
-        getSourceFile(fileName: string): SourceFile;
-        getSourceFileByPath(path: Path): SourceFile;
+        getSourceFile(fileName: string): SourceFile | undefined;
+        getSourceFileByPath(path: Path): SourceFile | undefined;
         getCurrentDirectory(): string;
     }
 
@@ -2471,9 +2487,13 @@ namespace ts {
         readFile(path: string): string | undefined;
     }
 
-    export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles: ReadonlyArray<SourceFile>): void;
-    }
+    export type WriteFileCallback = (
+        fileName: string,
+        data: string,
+        writeByteOrderMark: boolean,
+        onError: ((message: string) => void) | undefined,
+        sourceFiles: ReadonlyArray<SourceFile>,
+    ) => void;
 
     export class OperationCanceledException { }
 
@@ -3002,6 +3022,10 @@ namespace ts {
         ExportStar              = 1 << 23,  // Export * declaration
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
+
+        /* @internal */
+        All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
+            | ObjectLiteral | Method | Constructor | GetAccessor | SetAccessor | Signature | TypeParameter | TypeAlias | ExportValue | Alias | Prototype | ExportStar | Optional | Transient,
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -3582,15 +3606,14 @@ namespace ts {
     }
 
     /* @internal */
-    export interface TypeMapper {
-        (t: TypeParameter): Type;
-    }
+    export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
         Contravariant     = 1 << 0,  // Inference from contravariant position
         NakedTypeVariable = 1 << 1,  // Naked type variable in union or intersection type
         MappedType        = 1 << 2,  // Reverse inference for mapped type
         ReturnType        = 1 << 3,  // Inference made from return type of generic function
+        NeverType         = 1 << 4,  // Inference made from the never type
     }
 
     export interface InferenceInfo {
@@ -4192,9 +4215,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface HasInvalidatedResolution {
-        (sourceFile: Path): boolean;
-    }
+    export type HasInvalidatedResolution = (sourceFile: Path) => boolean;
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -4329,6 +4350,7 @@ namespace ts {
         constantValue?: string | number;         // The constant value of an expression
         externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
         helpers?: EmitHelper[];                  // Emit helpers for the node
+        startsOnNewLine?: boolean;               // If the node should begin on a new line
     }
 
     export const enum EmitFlags {

@@ -710,12 +710,12 @@ namespace ts.tscWatch {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify(
                     {
-                        "compilerOptions": {
-                            "module": "commonjs",
-                            "target": "es5",
-                            "noImplicitAny": true,
-                            "sourceMap": false,
-                            "lib": [
+                        compilerOptions: {
+                            module: "commonjs",
+                            target: "es5",
+                            noImplicitAny: true,
+                            sourceMap: false,
+                            lib: [
                                 "es5"
                             ]
                         }
@@ -725,12 +725,12 @@ namespace ts.tscWatch {
                 path: config1.path,
                 content: JSON.stringify(
                     {
-                        "compilerOptions": {
-                            "module": "commonjs",
-                            "target": "es5",
-                            "noImplicitAny": true,
-                            "sourceMap": false,
-                            "lib": [
+                        compilerOptions: {
+                            module: "commonjs",
+                            target: "es5",
+                            noImplicitAny: true,
+                            sourceMap: false,
+                            lib: [
                                 "es5",
                                 "es2015.promise"
                             ]
@@ -1616,6 +1616,36 @@ namespace ts.tscWatch {
                 return files.slice(0, 2);
             }
         });
+
+        it("Elides const enums correctly in incremental compilation", () => {
+            const currentDirectory = "/user/someone/projects/myproject";
+            const file1: FileOrFolder = {
+                path: `${currentDirectory}/file1.ts`,
+                content: "export const enum E1 { V = 1 }"
+            };
+            const file2: FileOrFolder = {
+                path: `${currentDirectory}/file2.ts`,
+                content: `import { E1 } from "./file1"; export const enum E2 { V = E1.V }`
+            };
+            const file3: FileOrFolder = {
+                path: `${currentDirectory}/file3.ts`,
+                content: `import { E2 } from "./file2"; const v: E2 = E2.V;`
+            };
+            const strictAndEsModule = `"use strict";\nexports.__esModule = true;\n`;
+            verifyEmittedFileContents("\n", [file3, file2, file1], [
+                `${strictAndEsModule}var v = 1 /* V */;\n`,
+                strictAndEsModule,
+                strictAndEsModule
+            ], modifyFiles);
+
+            function modifyFiles(files: FileOrFolderEmit[], emittedFiles: EmittedFile[]) {
+                files[0].content += `function foo2() { return 2; }`;
+                emittedFiles[0].content += `function foo2() { return 2; }\n`;
+                emittedFiles[1].shouldBeWritten = false;
+                emittedFiles[2].shouldBeWritten = false;
+                return [files[0]];
+            }
+        });
     });
 
     describe("tsc-watch module resolution caching", () => {
@@ -1963,12 +1993,12 @@ declare module "fs" {
             const configFile: FileOrFolder = {
                 path: "/a/rootFolder/project/tsconfig.json",
                 content: JSON.stringify({
-                    "compilerOptions": {
-                        "module": "none",
-                        "allowJs": true,
-                        "outDir": "Static/scripts/"
+                    compilerOptions: {
+                        module: "none",
+                        allowJs: true,
+                        outDir: "Static/scripts/"
                     },
-                    "include": [
+                    include: [
                         "Scripts/**/*"
                     ],
                 })
@@ -1988,7 +2018,7 @@ declare module "fs" {
 
             checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
             file1.content = "var zz30 = 100;";
-            host.reloadFS(files, /*invokeDirectoryWatcherInsteadOfFileChanged*/ true);
+            host.reloadFS(files, { invokeDirectoryWatcherInsteadOfFileChanged: true });
             host.runQueuedTimeoutCallbacks();
 
             checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));

@@ -12,7 +12,7 @@
 ////
 ////var x : One | Two;
 ////
-////x./*propertyReference*/commonProperty;
+////x.[|/*propertyReference*/commonProperty|];
 ////x./*3*/commonFunction;
 
 verify.goToDefinition("propertyReference", ["propertyDefinition1", "propertyDefinition2"]);

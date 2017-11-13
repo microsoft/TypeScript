@@ -1,5 +1,8 @@
 /// <reference path="fourslash.ts" />
 
+// @AllowSyntheticDefaultImports: false
+// @Module: esnext
+
 // @Filename: a/f1.ts
 //// [|import { bar } from "./foo";
 ////

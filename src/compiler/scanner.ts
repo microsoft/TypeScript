@@ -2,9 +2,7 @@
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 
 namespace ts {
-    export interface ErrorCallback {
-        (message: DiagnosticMessage, length: number): void;
-    }
+    export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
     /* @internal */
     export function tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
@@ -296,7 +294,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function stringToToken(s: string): SyntaxKind {
+    export function stringToToken(s: string): SyntaxKind | undefined {
         return textToToken.get(s);
     }
 
@@ -357,7 +355,7 @@ namespace ts {
      * We assume the first line starts at position 0 and 'position' is non-negative.
      */
     export function computeLineAndCharacterOfPosition(lineStarts: ReadonlyArray<number>, position: number): LineAndCharacter {
-        let lineNumber = binarySearch(lineStarts, position);
+        let lineNumber = binarySearch(lineStarts, position, identity, compareValues);
         if (lineNumber < 0) {
             // If the actual position was not found,
             // the binary search returns the 2's-complement of the next line start
