@@ -352,8 +352,8 @@ function f12(t: [Shape, boolean]) {
 >Shape : Shape
 
     let len = getProperty(t, "length");
->len : number
->getProperty(t, "length") : number
+>len : 2
+>getProperty(t, "length") : 2
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >t : [Shape, boolean]
 >"length" : "length"
@@ -1793,8 +1793,8 @@ declare function on<T>(handlerHash: Handlers<T>): T
 >T : T
 
 var hashOfEmpty1 = on({ test: () => {} });  // {}
->hashOfEmpty1 : {}
->on({ test: () => {} }) : {}
+>hashOfEmpty1 : { test: {}; }
+>on({ test: () => {} }) : { test: {}; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: () => {} } : { test: () => void; }
 >test : () => void

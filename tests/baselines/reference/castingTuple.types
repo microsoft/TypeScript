@@ -52,6 +52,16 @@ var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
 ><[number, string, boolean]>numStrTuple : [number, string, boolean]
 >numStrTuple : [number, string]
 
+var shorter = numStrBoolTuple as [number, string]
+>shorter : [number, string]
+>numStrBoolTuple as [number, string] : [number, string]
+>numStrBoolTuple : [number, string, boolean]
+
+var longer = numStrTuple as [number, string, boolean]
+>longer : [number, string, boolean]
+>numStrTuple as [number, string, boolean] : [number, string, boolean]
+>numStrTuple : [number, string]
+
 var classCDTuple: [C, D] = [new C(), new D()];
 >classCDTuple : [C, D]
 >C : C

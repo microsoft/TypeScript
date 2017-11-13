@@ -57,7 +57,9 @@ namespace Harness.Parallel.Worker {
             return cleanup();
         }
         try {
-            beforeFunc && beforeFunc();
+            if (beforeFunc) {
+                beforeFunc();
+            }
         }
         catch (e) {
             errors.push({ error: `Error executing before function: ${e.message}`, stack: e.stack, name: [...namestack] });
@@ -69,7 +71,9 @@ namespace Harness.Parallel.Worker {
         testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
 
         try {
-            afterFunc && afterFunc();
+            if (afterFunc) {
+                afterFunc();
+            }
         }
         catch (e) {
             errors.push({ error: `Error executing after function: ${e.message}`, stack: e.stack, name: [...namestack] });

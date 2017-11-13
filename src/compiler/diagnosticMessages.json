@@ -1316,7 +1316,7 @@
         "category": "Error",
         "code": 2402
     },
-    "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.": {
+    "Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.": {
         "category": "Error",
         "code": 2403
     },
@@ -1716,7 +1716,7 @@
         "category": "Error",
         "code": 2510
     },
-    "Cannot create an instance of the abstract class '{0}'.": {
+    "Cannot create an instance of an abstract class.": {
         "category": "Error",
         "code": 2511
     },
@@ -2321,43 +2321,43 @@
         "category": "Error",
         "code": 4033
     },
-    "Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+    "Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4034
     },
-    "Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.": {
+    "Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4035
     },
-    "Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+    "Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4036
     },
-    "Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.": {
+    "Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4037
     },
-    "Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+    "Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4038
     },
-    "Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+    "Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4039
     },
-    "Return type of public static property getter from exported class has or is using private name '{0}'.": {
+    "Return type of public static getter '{0}' from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4040
     },
-    "Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+    "Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4041
     },
-    "Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+    "Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4042
     },
-    "Return type of public property getter from exported class has or is using private name '{0}'.": {
+    "Return type of public getter '{0}' from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4043
     },
@@ -3539,6 +3539,14 @@
         "category": "Error",
         "code": 8025
     },
+    "Expected {0} type arguments; provide these with an '@extends' tag.": {
+        "category": "Error",
+        "code": 8026
+    },
+    "Expected {0}-{1} type arguments; provide these with an '@extends' tag.": {
+        "category": "Error",
+        "code": 8027
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -3607,6 +3615,18 @@
         "category": "Error",
         "code": 17013
     },
+    "JSX fragment has no corresponding closing tag.": {
+        "category": "Error",
+        "code": 17014
+    },
+    "Expected corresponding closing tag for JSX fragment.": {
+        "category": "Error",
+        "code": 17015
+    },
+    "JSX fragment is not supported when using --jsxFactory": {
+        "category": "Error",
+        "code":17016
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
@@ -3661,7 +3681,7 @@
         "category": "Error",
         "code": 90010
     },
-    "Import {0} from {1}.": {
+    "Import '{0}' from \"{1}\".": {
         "category": "Message",
         "code": 90013
     },
@@ -3669,7 +3689,7 @@
         "category": "Message",
         "code": 90014
     },
-    "Add {0} to existing import declaration from {1}.": {
+    "Add '{0}' to existing import declaration from \"{1}\".": {
         "category": "Message",
         "code": 90015
     },
@@ -3773,5 +3793,21 @@
     "Infer parameter types from usage.": {
         "category": "Message",
         "code": 95012
+    },
+    "Convert to default import": {
+        "category": "Message",
+        "code": 95013
+    },
+    "Install '{0}'": {
+        "category": "Message",
+        "code": 95014
+    },
+    "Import '{0}' = require(\"{1}\").": {
+        "category": "Message",
+        "code": 95015
+    },
+    "Import * as '{0}' from \"{1}\".": {
+        "category": "Message",
+        "code": 95016
     }
 }

@@ -108,4 +108,4 @@ function foo2(x, y) {
 //function foo2<T extends { (): void }, U extends T>(x: T, y: U) {
 //    foo(x);
 //    foo(y);
-//} 
+//}

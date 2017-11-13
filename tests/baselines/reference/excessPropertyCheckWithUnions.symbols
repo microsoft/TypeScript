@@ -127,7 +127,7 @@ let over: Overlapping
 >over : Symbol(over, Decl(excessPropertyCheckWithUnions.ts, 45, 3))
 >Overlapping : Symbol(Overlapping, Decl(excessPropertyCheckWithUnions.ts, 39, 27))
 
-// these two are not reported because there are two discriminant properties
+// these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" }
 >over : Symbol(over, Decl(excessPropertyCheckWithUnions.ts, 45, 3))
 >a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 48, 8))
@@ -141,4 +141,29 @@ over = { a: 1, b: 1, first: "ok", third: "error" }
 >b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 49, 14))
 >first : Symbol(first, Decl(excessPropertyCheckWithUnions.ts, 49, 20))
 >third : Symbol(third, Decl(excessPropertyCheckWithUnions.ts, 49, 33))
+
+// Freshness disappears after spreading a union
+declare let t0: { a: any, b: any } | { d: any, e: any }
+>t0 : Symbol(t0, Decl(excessPropertyCheckWithUnions.ts, 52, 11))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 52, 17))
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 52, 25))
+>d : Symbol(d, Decl(excessPropertyCheckWithUnions.ts, 52, 38))
+>e : Symbol(e, Decl(excessPropertyCheckWithUnions.ts, 52, 46))
+
+declare let t1: { a: any, b: any, c: any } | { c: any, d: any, e: any }
+>t1 : Symbol(t1, Decl(excessPropertyCheckWithUnions.ts, 53, 11))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 53, 17))
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 53, 25))
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 53, 33))
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 53, 46))
+>d : Symbol(d, Decl(excessPropertyCheckWithUnions.ts, 53, 54))
+>e : Symbol(e, Decl(excessPropertyCheckWithUnions.ts, 53, 62))
+
+let t2 = { ...t1 }
+>t2 : Symbol(t2, Decl(excessPropertyCheckWithUnions.ts, 54, 3))
+>t1 : Symbol(t1, Decl(excessPropertyCheckWithUnions.ts, 53, 11))
+
+t0 = t2
+>t0 : Symbol(t0, Decl(excessPropertyCheckWithUnions.ts, 52, 11))
+>t2 : Symbol(t2, Decl(excessPropertyCheckWithUnions.ts, 54, 3))
 

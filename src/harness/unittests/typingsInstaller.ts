@@ -4,6 +4,8 @@
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
+    import validatePackageName = JsTyping.validatePackageName;
+    import PackageNameValidationResult = JsTyping.PackageNameValidationResult;
 
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
@@ -266,7 +268,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1]);
             let enqueueIsCalled = false;
-            const installer = new (class extends Installer {
+            const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
@@ -774,8 +776,8 @@ namespace ts.projectSystem {
             const bowerJson = {
                 path: "/bower.json",
                 content: JSON.stringify({
-                    "dependencies": {
-                        "jquery": "^3.1.0"
+                    dependencies: {
+                        jquery: "^3.1.0"
                     }
                 })
             };
@@ -983,21 +985,21 @@ namespace ts.projectSystem {
             for (let i = 0; i < 8; i++) {
                 packageName += packageName;
             }
-            assert.equal(TI.validatePackageName(packageName), TI.PackageNameValidationResult.NameTooLong);
+            assert.equal(validatePackageName(packageName), PackageNameValidationResult.NameTooLong);
         });
         it("name cannot start with dot", () => {
-            assert.equal(TI.validatePackageName(".foo"), TI.PackageNameValidationResult.NameStartsWithDot);
+            assert.equal(validatePackageName(".foo"), PackageNameValidationResult.NameStartsWithDot);
         });
         it("name cannot start with underscore", () => {
-            assert.equal(TI.validatePackageName("_foo"), TI.PackageNameValidationResult.NameStartsWithUnderscore);
+            assert.equal(validatePackageName("_foo"), PackageNameValidationResult.NameStartsWithUnderscore);
         });
         it("scoped packages not supported", () => {
-            assert.equal(TI.validatePackageName("@scope/bar"), TI.PackageNameValidationResult.ScopedPackagesNotSupported);
+            assert.equal(validatePackageName("@scope/bar"), PackageNameValidationResult.ScopedPackagesNotSupported);
         });
         it("non URI safe characters are not supported", () => {
-            assert.equal(TI.validatePackageName("  scope  "), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
-            assert.equal(TI.validatePackageName("; say ‘Hello from TypeScript!’ #"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
-            assert.equal(TI.validatePackageName("a/b/c"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("  scope  "), PackageNameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), PackageNameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("a/b/c"), PackageNameValidationResult.NameContainsNonURISafeCharacters);
         });
     });
 
@@ -1010,7 +1012,7 @@ namespace ts.projectSystem {
             const packageJson = {
                 path: "/a/b/package.json",
                 content: JSON.stringify({
-                    "dependencies": {
+                    dependencies: {
                         "; say ‘Hello from TypeScript!’ #": "0.0.x"
                     }
                 })
@@ -1055,11 +1057,12 @@ namespace ts.projectSystem {
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true }, emptyArray);
-            assert.deepEqual(logger.finish(), [
+            const finish = logger.finish();
+            assert.deepEqual(finish, [
                 'Inferred typings from file names: ["jquery","chroma-js"]',
                 "Inferred typings from unresolved imports: []",
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","chroma-js"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
-            ]);
+            ], finish.join("\r\n"));
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
         });
 
@@ -1092,7 +1095,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<string>({ "node": node.path });
+            const cache = createMapFromTemplate<string>({ node: node.path });
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"]);
             assert.deepEqual(logger.finish(), [
@@ -1142,7 +1145,7 @@ namespace ts.projectSystem {
             };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
             const cachePath = "/a/cache/";
             const commander = {
@@ -1192,7 +1195,7 @@ namespace ts.projectSystem {
             };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
             const cachePath = "/a/cache/";
             const commander = {
@@ -1244,13 +1247,13 @@ namespace ts.projectSystem {
             };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
             const cachePath = "/a/cache/";
             const host = createServerHost([f1, packageFile]);
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
-            const installer = new (class extends Installer {
+            const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
