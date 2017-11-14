@@ -2781,6 +2781,17 @@ namespace ts {
         /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
+
+        /**
+         * Note that this will return undefined in the following case:
+         *     // a.ts
+         *     export namespace N { export class C { } }
+         *     // b.ts
+         *     <<enclosingDeclaration>>
+         * Where `C` is the symbol we're looking for.
+         * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
+         */
+        /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
     }
 
     export enum NodeBuilderFlags {

@@ -44,7 +44,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isGlobalCompletion, isMemberCompletion, allowStringLiteral, isNewIdentifierLocation, location, request, keywordFilters, symbolToOriginInfoMap } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, allowStringLiteral, isNewIdentifierLocation, location, request, keywordFilters, symbolToOriginInfoMap, recommendedCompletion } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX &&
             location && location.parent && location.parent.kind === SyntaxKind.JsxClosingElement) {
@@ -76,7 +76,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, allowStringLiteral, symbolToOriginInfoMap);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, allowStringLiteral, recommendedCompletion, symbolToOriginInfoMap);
             getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target, entries);
         }
         else {
@@ -84,7 +84,7 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, allowStringLiteral, symbolToOriginInfoMap);
+            getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, allowStringLiteral, recommendedCompletion, symbolToOriginInfoMap);
         }
 
         // TODO add filter for keyword based on type/value/namespace and also location
@@ -137,6 +137,7 @@ namespace ts.Completions {
         target: ScriptTarget,
         allowStringLiteral: boolean,
         origin: SymbolOriginInfo | undefined,
+        recommendedCompletion: Symbol | undefined,
     ): CompletionEntry | undefined {
         // Try to get a valid display name for this symbol, if we could not find one, then ignore it.
         // We would like to only show things that can be added after a dot, so for instance numeric properties can
@@ -160,8 +161,18 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText: "0",
             source: getSourceFromOrigin(origin),
-            hasAction: origin === undefined ? undefined : true,
+            hasAction: trueOrUndef(origin !== undefined),
+            isRecommended: trueOrUndef(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
         };
+    }
+
+    function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion: Symbol, checker: TypeChecker): boolean {
+        return localSymbol === recommendedCompletion ||
+            !!(localSymbol.flags & SymbolFlags.ExportValue) && checker.getExportSymbolOfSymbol(localSymbol) === recommendedCompletion;
+    }
+
+    function trueOrUndef(b: boolean): true | undefined {
+        return b ? true : undefined;
     }
 
     function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
@@ -177,6 +188,7 @@ namespace ts.Completions {
         target: ScriptTarget,
         log: Log,
         allowStringLiteral: boolean,
+        recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
     ): Map<true> {
         const start = timestamp();
@@ -188,7 +200,7 @@ namespace ts.Completions {
         if (symbols) {
             for (const symbol of symbols) {
                 const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
-                const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target, allowStringLiteral, origin);
+                const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target, allowStringLiteral, origin, recommendedCompletion);
                 if (!entry) {
                     continue;
                 }
@@ -524,8 +536,31 @@ namespace ts.Completions {
         request?: Request;
         keywordFilters: KeywordCompletionFilters;
         symbolToOriginInfoMap: SymbolOriginInfoMap;
+        recommendedCompletion: Symbol | undefined;
     }
     type Request = { kind: "JsDocTagName" } | { kind: "JsDocTag" } | { kind: "JsDocParameterName", tag: JSDocParameterTag };
+
+    function getRecommendedCompletion(currentToken: Node, checker: TypeChecker/*, symbolToOriginInfoMap: SymbolOriginInfoMap*/): Symbol | undefined {
+        const ty = checker.getContextualType(currentToken as Expression);
+        const symbol = ty && ty.symbol;
+        // Don't include make a recommended completion for an abstract class
+        return symbol && (symbol.flags & SymbolFlags.Enum || symbol.flags & SymbolFlags.Class && !isAbstractConstructorSymbol(symbol))
+            ? getFirstSymbolInChain(symbol, currentToken, checker)
+            : undefined;
+    }
+
+    function getFirstSymbolInChain(symbol: Symbol, enclosingDeclaration: Node, checker: TypeChecker): Symbol | undefined {
+        const chain = checker.getAccessibleSymbolChain(symbol, enclosingDeclaration, /*meaning*/ SymbolFlags.All, /*useOnlyExternalAliasing*/ false);
+        return chain
+            ? first(chain)
+            : isModuleSymbol(symbol.parent)
+            ? symbol
+            : symbol.parent && getFirstSymbolInChain(symbol.parent, enclosingDeclaration, checker);
+    }
+
+    function isModuleSymbol(symbol: Symbol): boolean {
+        return symbol.declarations.some(d => d.kind === SyntaxKind.SourceFile);
+    }
 
     function getCompletionData(
         typeChecker: TypeChecker,
@@ -618,6 +653,7 @@ namespace ts.Completions {
                     request,
                     keywordFilters: KeywordCompletionFilters.None,
                     symbolToOriginInfoMap: undefined,
+                    recommendedCompletion: undefined,
                 };
             }
 
@@ -757,7 +793,8 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isGlobalCompletion, isMemberCompletion, allowStringLiteral, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, keywordFilters, symbolToOriginInfoMap };
+        const recommendedCompletion = getRecommendedCompletion(previousToken, typeChecker);
+        return { symbols, isGlobalCompletion, isMemberCompletion, allowStringLiteral, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, keywordFilters, symbolToOriginInfoMap, recommendedCompletion };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
 
