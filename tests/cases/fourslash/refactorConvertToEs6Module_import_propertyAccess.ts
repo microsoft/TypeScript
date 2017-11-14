@@ -7,7 +7,7 @@
 ////const a = require("b").c;
 ////const a = require("a").a;
 ////const [a, b] = require("c").d;
-////const [a, b] = require("c").a; // Test that we avoid shadowing 'a'
+////const [a, b] = require("c").a; // Test that we avoid shadowing the earlier local variable 'a' from 'const [a,b] = d;'.
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -20,5 +20,5 @@ import { a } from "a";
 import { d } from "c";
 const [a, b] = d;
 import { a as _a } from "c";
-const [a, b] = _a; // Test that we avoid shadowing 'a'`,
+const [a, b] = _a; // Test that we avoid shadowing the earlier local variable 'a' from 'const [a,b] = d;'.`,
 });

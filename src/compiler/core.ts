@@ -394,14 +394,12 @@ namespace ts {
         return result;
     }
 
-    export function mapIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): U[] {
-        const result: U[] = [];
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) break;
-            result.push(mapFn(value));
+    export function mapIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
+        return { next };
+        function  next(): { value: U, done: false } | { value: never, done: true } {
+            const iterRes = iter.next();
+            return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
         }
-        return result;
     }
 
     // Maps from T to T and avoids allocation if all elements map to themselves
@@ -529,7 +527,7 @@ namespace ts {
         const result: U[] = [];
         for (let i = 0; i < array.length; i++) {
             const mapped = mapFn(array[i], i);
-            if (!mapped) {
+            if (mapped === undefined) {
                 return undefined;
             }
             result.push(mapped);

@@ -1,7 +1,5 @@
 /// <reference path='fourslash.ts' />
 
-// Test that we leave it alone if the name is a keyword.
-
 // @allowJs: true
 
 // @Filename: /a.js

@@ -75,7 +75,7 @@ namespace ts.refactor {
         const { file, program } = context;
         Debug.assert(isSourceFileJavaScript(file));
         const edits = textChanges.ChangeTracker.with(context, changes => {
-            const moduleExportsChangedToDefault = convertFileToEs6Module(file, program.getTypeChecker(), changes, program.getCompilerOptions().target);
+            const moduleExportsChangedToDefault = convertFileToEs6Module(file, program.getTypeChecker(), changes, context.newLineCharacter, program.getCompilerOptions().target);
             if (moduleExportsChangedToDefault) {
                 for (const importingFile of program.getSourceFiles()) {
                     fixImportOfModuleExports(importingFile, file, changes);
@@ -111,13 +111,13 @@ namespace ts.refactor {
     }
 
     /** @returns Whether we converted a `module.exports =` to a default export. */
-    function convertFileToEs6Module(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget): ModuleExportsChanged {
+    function convertFileToEs6Module(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, newLine: string, target: ScriptTarget): ModuleExportsChanged {
         const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: createMap<true>() };
         const exports = collectExportRenames(sourceFile, checker, identifiers);
         convertExportsAccesses(sourceFile, exports, changes);
         let moduleExportsChangedToDefault = false;
         for (const statement of sourceFile.statements) {
-            const moduleExportsChanged = convertStatement(sourceFile, statement, checker, changes, identifiers, target, exports);
+            const moduleExportsChanged = convertStatement(sourceFile, statement, checker, changes, newLine, identifiers, target, exports);
             moduleExportsChangedToDefault = moduleExportsChangedToDefault || moduleExportsChanged;
         }
         return moduleExportsChangedToDefault;
@@ -127,7 +127,7 @@ namespace ts.refactor {
      * Contains an entry for each renamed export.
      * This is necessary because `exports.x = 0;` does not declare a local variable.
      * Converting this to `export const x = 0;` would declare a local, so we must be careful to avoid shadowing.
-     * If there would be shadowing at either the declaration or at any reference to `exports.x` (now just `x`), we must conver to:
+     * If there would be shadowing at either the declaration or at any reference to `exports.x` (now just `x`), we must convert to:
      *     const _x = 0;
      *     export { _x as x };
      * This conversion also must place if the exported name is not a valid identifier, e.g. `exports.class = 0;`.
@@ -140,6 +140,7 @@ namespace ts.refactor {
             const { text, originalKeywordKind } = node.name;
             if (!res.has(text) && (originalKeywordKind !== undefined && isNonContextualKeyword(originalKeywordKind)
                 || checker.resolveName(node.name.text, node, SymbolFlags.Value, /*includeGlobals*/ false))) {
+                // Unconditionally add an underscore in case `text` is a keyword.
                 res.set(text, makeUniqueName(`_${text}`, identifiers));
             }
         });
@@ -147,8 +148,8 @@ namespace ts.refactor {
     }
 
     function convertExportsAccesses(sourceFile: SourceFile, exports: ExportRenames, changes: textChanges.ChangeTracker): void {
-        forEachExportReference(sourceFile, (node, isAssignment) => {
-            if (isAssignment) {
+        forEachExportReference(sourceFile, (node, isAssignmentLhs) => {
+            if (isAssignmentLhs) {
                 return;
             }
             const { text } = node.name;
@@ -156,7 +157,7 @@ namespace ts.refactor {
         });
     }
 
-    function forEachExportReference(sourceFile: SourceFile, cb: (node: PropertyAccessExpression, isAssignment: boolean) => void): void {
+    function forEachExportReference(sourceFile: SourceFile, cb: (node: PropertyAccessExpression, isAssignmentLhs: boolean) => void): void {
         sourceFile.forEachChild(function recur(node) {
             if (isPropertyAccessExpression(node) && isExportsOrModuleExportsOrAlias(sourceFile, node.expression)) {
                 const { parent } = node;
@@ -169,10 +170,10 @@ namespace ts.refactor {
     /** Whether `module.exports =` was changed to `export default` */
     type ModuleExportsChanged = boolean;
 
-    function convertStatement(sourceFile: SourceFile, statement: Statement, checker: TypeChecker, changes: textChanges.ChangeTracker, identifiers: Identifiers, target: ScriptTarget, exports: ExportRenames): ModuleExportsChanged {
+    function convertStatement(sourceFile: SourceFile, statement: Statement, checker: TypeChecker, changes: textChanges.ChangeTracker, newLine: string, identifiers: Identifiers, target: ScriptTarget, exports: ExportRenames): ModuleExportsChanged {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
-                convertVariableStatement(sourceFile, statement as VariableStatement, changes, checker, identifiers, target);
+                convertVariableStatement(sourceFile, statement as VariableStatement, changes, newLine, checker, identifiers, target);
                 return false;
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
@@ -186,7 +187,7 @@ namespace ts.refactor {
                     }
                     case SyntaxKind.BinaryExpression: {
                         const { left, operatorToken, right } = expression as BinaryExpression;
-                        return operatorToken.kind === SyntaxKind.EqualsToken && convertAssignment(sourceFile, statement as ExpressionStatement, left, right, changes, exports);
+                        return operatorToken.kind === SyntaxKind.EqualsToken && convertAssignment(sourceFile, statement as ExpressionStatement, left, right, changes, newLine, exports);
                     }
                 }
             }
@@ -196,7 +197,7 @@ namespace ts.refactor {
         }
     }
 
-    function convertVariableStatement(sourceFile: SourceFile, statement: VariableStatement, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, target: ScriptTarget): void {
+    function convertVariableStatement(sourceFile: SourceFile, statement: VariableStatement, changes: textChanges.ChangeTracker, newLine: string, checker: TypeChecker, identifiers: Identifiers, target: ScriptTarget): void {
         const { declarationList } = statement as VariableStatement;
         let foundImport = false;
         const newNodes = flatMap(declarationList.declarations, decl => {
@@ -221,7 +222,7 @@ namespace ts.refactor {
         });
         if (foundImport) {
             // useNonAdjustedEndPosition to ensure we don't eat the newline after the statement.
-            changes.replaceNodeWithNodes(sourceFile, statement, newNodes, { nodeSeparator: "\n", useNonAdjustedEndPosition: true });
+            changes.replaceNodeWithNodes(sourceFile, statement, newNodes, { nodeSeparator: newLine, useNonAdjustedEndPosition: true });
         }
     }
 
@@ -251,6 +252,7 @@ namespace ts.refactor {
         left: Expression,
         right: Expression,
         changes: textChanges.ChangeTracker,
+        newLine: string,
         exports: ExportRenames,
     ): ModuleExportsChanged {
         if (!isPropertyAccessExpression(left)) {
@@ -268,12 +270,12 @@ namespace ts.refactor {
                 if (!newNodes) {
                     ([newNodes, changedToDefaultExport] = convertModuleExportsToExportDefault(right));
                 }
-                changes.replaceNodeWithNodes(sourceFile, statement, newNodes, { nodeSeparator: "\n", useNonAdjustedEndPosition: true });
+                changes.replaceNodeWithNodes(sourceFile, statement, newNodes, { nodeSeparator: newLine, useNonAdjustedEndPosition: true });
                 return changedToDefaultExport;
             }
         }
         else if (isExportsOrModuleExportsOrAlias(sourceFile, left.expression)) {
-            convertNamedExport(sourceFile, statement, left.name, right, changes, exports);
+            convertNamedExport(sourceFile, statement, left.name, right, changes, newLine, exports);
         }
 
         return false;
@@ -312,6 +314,7 @@ namespace ts.refactor {
         propertyName: Identifier,
         right: Expression,
         changes: textChanges.ChangeTracker,
+        newLine: string,
         exports: ExportRenames,
     ): void {
         // If "originalKeywordKind" was set, this is e.g. `exports.
@@ -326,7 +329,7 @@ namespace ts.refactor {
                 makeConst(/*modifiers*/ undefined, rename, right),
                 makeExportDeclaration([createExportSpecifier(rename, text)]),
             ];
-            changes.replaceNodeWithNodes(sourceFile, statement, newNodes, { nodeSeparator: "\n", useNonAdjustedEndPosition: true });
+            changes.replaceNodeWithNodes(sourceFile, statement, newNodes, { nodeSeparator: newLine, useNonAdjustedEndPosition: true });
         }
         else {
             changes.replaceNode(sourceFile, statement, convertExportsDotXEquals(text, right), { useNonAdjustedEndPosition: true });
@@ -456,8 +459,8 @@ namespace ts.refactor {
             }
         }
 
-        const namedBindings = namedBindingsNames.size === 0 ? undefined : mapIter(namedBindingsNames.entries(), ([propertyName, idName]) =>
-            createImportSpecifier(propertyName === idName ? undefined : createIdentifier(propertyName), createIdentifier(idName)));
+        const namedBindings = namedBindingsNames.size === 0 ? undefined : arrayFrom(mapIter(namedBindingsNames.entries(), ([propertyName, idName]) =>
+            createImportSpecifier(propertyName === idName ? undefined : createIdentifier(propertyName), createIdentifier(idName))));
         if (!namedBindings) {
             // If it was unused, ensure that we at least import *something*.
             needDefaultImport = true;
