@@ -274,17 +274,11 @@ namespace ts.codefix {
             }
         });
 
-        const actionFormat = kind === ImportKind.Equals
-            ? Diagnostics.Import_0_require_1
-            : kind === ImportKind.Namespace
-                ? Diagnostics.Import_Asterisk_as_0_from_1
-                : Diagnostics.Import_0_from_1;
-
         // if this file doesn't have any import statements, insert an import statement and then insert a new line
         // between the only import statement and user code. Otherwise just insert the statement because chances
         // are there are already a new line seperating code and import statements.
         return createCodeAction(
-            actionFormat,
+            Diagnostics.Import_0_from_1,
             [symbolName, moduleSpecifierWithoutQuotes],
             changes,
             "NewImport",
