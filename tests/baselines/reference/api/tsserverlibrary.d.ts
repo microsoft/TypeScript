@@ -5262,7 +5262,7 @@ declare namespace ts.server.protocol {
          */
         errorCodes?: number[];
     }
-    interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+    interface ApplyCodeActionCommandRequestArgs {
         command: {};
     }
     /**
