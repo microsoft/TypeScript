@@ -6902,12 +6902,13 @@ declare namespace ts.server {
         fileName: NormalizedPath;
         project: Project;
     }
-    interface EventSender {
-        event<T>(payload: T, eventName: string): void;
-    }
     type CommandNames = protocol.CommandTypes;
     const CommandNames: any;
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
+    type Event = <T>(body: T, eventName: string) => void;
+    interface EventSender {
+        event: Event;
+    }
     interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -6917,9 +6918,13 @@ declare namespace ts.server {
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
         logger: Logger;
+        /**
+         * If falsy, all events are suppressed.
+         */
         canUseEvents: boolean;
         /**
-         * If defined, the Session will send events through `eventPort` instead of stdout.
+         * If defined, specifies the socket to send events to the client.
+         * Otherwise, events are sent through the host.
          */
         eventPort?: number;
         eventHandler?: ProjectServiceEventHandler;
@@ -6929,6 +6934,7 @@ declare namespace ts.server {
         allowLocalPluginLoads?: boolean;
     }
     class Session implements EventSender {
+        readonly event: Event;
         private readonly gcTimer;
         protected projectService: ProjectService;
         private changeSeq;
@@ -6942,12 +6948,8 @@ declare namespace ts.server {
         protected logger: Logger;
         private canUseEvents;
         private eventPort;
-        private eventSocket;
         private eventHandler;
-        readonly event: EventSender["event"];
-        private socketEventQueue;
         constructor(opts: SessionOptions);
-        private writeToEventSocket(info, eventName);
         private sendRequestCompletedEvent(requestId);
         private defaultEventHandler(event);
         private projectsUpdatedInBackgroundEvent(openFiles);
