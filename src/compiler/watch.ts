@@ -468,9 +468,9 @@ namespace ts {
                 else {
                     let fileWatcher: FileWatcher;
                     if (sourceFile) {
-                        sourceFile.version = "0";
+                        sourceFile.version = "1";
                         fileWatcher = watchFilePath(system, fileName, onSourceFileChange, path, writeLog);
-                        sourceFilesCache.set(path, { sourceFile, version: 0, fileWatcher });
+                        sourceFilesCache.set(path, { sourceFile, version: 1, fileWatcher });
                     }
                     else {
                         sourceFilesCache.set(path, "0");
@@ -612,7 +612,7 @@ namespace ts {
                     resolutionCache.invalidateResolutionOfFile(path);
                     if (!isString(hostSourceFile)) {
                         hostSourceFile.fileWatcher.close();
-                        sourceFilesCache.set(path, (hostSourceFile.version++).toString());
+                        sourceFilesCache.set(path, (++hostSourceFile.version).toString());
                     }
                 }
                 else {
