@@ -115,10 +115,6 @@ namespace ts.server {
         project: Project;
     }
 
-    export interface EventSender {
-        event<T>(payload: T, eventName: string): void;
-    }
-
     function allEditsBeforePos(edits: ts.TextChange[], pos: number) {
         for (const edit of edits) {
             if (textSpanEnd(edit.span) >= pos) {
@@ -253,6 +249,55 @@ namespace ts.server {
         }
     }
 
+    export type Event = <T>(body: T, eventName: string) => void;
+
+    export interface EventSender {
+        event: Event;
+    }
+
+    class SocketEventSender implements EventSender {
+        private host: ServerHost;
+        private logger: Logger;
+        private eventPort: number;
+        private eventSocket: NodeSocket;
+        private socketEventQueue: { body: any, eventName: string }[] | undefined;
+
+        constructor(host: ServerHost, logger: Logger, eventPort: number) {
+            this.host = host;
+            this.logger = logger;
+            this.eventPort = eventPort;
+
+            const s = net.connect({ port: this.eventPort }, () => {
+                this.eventSocket = s;
+                if (this.socketEventQueue) {
+                    // flush queue.
+                    for (const event of this.socketEventQueue) {
+                        this.writeToEventSocket(event.body, event.eventName);
+                    }
+                    this.socketEventQueue = undefined;
+                }
+            });
+        }
+
+        public event<T>(body: T, eventName: string): void {
+            if (!this.eventSocket) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
+                }
+                (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
+                return;
+            }
+            else {
+                Debug.assert(this.socketEventQueue === undefined);
+                this.writeToEventSocket(body, eventName);
+            }
+        }
+
+        private writeToEventSocket(body: any, eventName: string): void {
+            this.eventSocket.write(formatMessage({ seq: 0, type: "event", event: eventName, body: body }, this.logger, Buffer.byteLength, this.host.newLine), "utf8");
+        }
+    }
+
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -262,9 +307,13 @@ namespace ts.server {
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
         logger: Logger;
+        /**
+         * If falsy, all events are suppressed.
+         */
         canUseEvents: boolean;
         /**
-         * If defined, the Session will send events through `eventPort` instead of stdout.
+         * If defined, specifies the socket to send events to the client.
+         * Otherwise, events are sent through the host.
          */
         eventPort?: number;
         eventHandler?: ProjectServiceEventHandler;
@@ -276,6 +325,8 @@ namespace ts.server {
     }
 
     export class Session implements EventSender {
+        public readonly event: Event;
+
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private changeSeq = 0;
@@ -292,10 +343,7 @@ namespace ts.server {
 
         private canUseEvents: boolean;
         private eventPort: number | undefined;
-        private eventSocket: NodeSocket;
         private eventHandler: ProjectServiceEventHandler;
-        public readonly event: EventSender["event"];
-        private socketEventQueue: { info: any, eventName: string}[] | undefined;
 
         constructor(opts: SessionOptions) {
             this.host = opts.host;
@@ -308,43 +356,18 @@ namespace ts.server {
             this.canUseEvents = opts.canUseEvents;
 
             const { throttleWaitMilliseconds } = opts;
-
-            if (!this.canUseEvents) {
-                this.event = noop;
-            }
-            else if (this.eventPort) {
-                const s = net.connect({ port: this.eventPort }, () => {
-                    this.eventSocket = s;
-                    if (this.socketEventQueue) {
-                        // flush queue.
-                        for (const event of this.socketEventQueue) {
-                            this.writeToEventSocket(event.info, event.eventName);
-                        }
-                        this.socketEventQueue = undefined;
-                    }
-                });
-
-                this.event = function <T>(info: T, eventName: string) {
-                    if (!this.eventSocket) {
-                        if (this.logger.hasLevel(LogLevel.verbose)) {
-                            this.logger.info(`eventPort: event queued, but socket not yet initialized`);
-                        }
-                        (this.socketEventQueue || (this.socketEventQueue = [])).push({ info, eventName });
-                        return;
-                    }
-                    else {
-                        Debug.assert(this.socketEventQueue === undefined);
-                        this.writeToEventSocket(info, eventName);
-                    }
-                };
+            
+            if (this.eventPort && this.canUseEvents) {
+                const eventSender = new SocketEventSender(this.host, this.logger, this.eventPort);
+                this.event = eventSender.event;
             }
             else {
-                this.event = function <T>(info: T, eventName: string) {
+                this.event = function <T>(body: T, eventName: string): void {
                     const ev: protocol.Event = {
                         seq: 0,
                         type: "event",
                         event: eventName,
-                        body: info
+                        body
                     };
                     this.send(ev);
                 };
@@ -378,10 +401,6 @@ namespace ts.server {
             };
             this.projectService = new ProjectService(settings);
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
-        }
-
-        private writeToEventSocket(info: any, eventName: string): void {
-            this.eventSocket.write(formatMessage({ seq: 0, type: "event", event: eventName, body: info }, this.logger, Buffer.byteLength, this.host.newLine), "utf8");
         }
 
         private sendRequestCompletedEvent(requestId: number): void {

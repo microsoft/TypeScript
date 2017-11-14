@@ -1441,7 +1441,9 @@ namespace ts.server {
             }
             this.seenProjects.set(projectKey, true);
 
-            if (!this.eventHandler) return;
+            if (!this.eventHandler) {
+                return;
+            }
 
             const data: ProjectInfoTelemetryEventData = {
                 projectId: this.host.createHash(projectKey),

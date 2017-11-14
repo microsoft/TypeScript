@@ -6,7 +6,7 @@ namespace ts.server {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
         canUseEvents: boolean;
-        eventPort: number;
+        eventPort?: number;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
         disableAutomaticTypingAcquisition: boolean;
@@ -872,7 +872,7 @@ namespace ts.server {
         cancellationToken = nullCancellationToken;
     }
 
-    let eventPort: number;
+    let eventPort: number | undefined;
     {
         const str = findArgument("--eventPort");
         const v = str && parseInt(str);
