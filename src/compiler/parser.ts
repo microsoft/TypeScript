@@ -2271,7 +2271,7 @@ namespace ts {
                 isStartOfType(/*inStartOfParameter*/ true);
         }
 
-        function parseParameter(requireEqualsToken?: boolean): ParameterDeclaration {
+        function parseParameter(): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
                 node.name = createIdentifier(/*isIdentifier*/ true);
@@ -2300,7 +2300,7 @@ namespace ts {
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
-            node.initializer = parseInitializer(/*inParameter*/ true, requireEqualsToken);
+            node.initializer = parseInitializer();
 
             return addJSDocComment(finishNode(node));
         }
@@ -2357,8 +2357,7 @@ namespace ts {
                 setYieldContext(!!(flags & SignatureFlags.Yield));
                 setAwaitContext(!!(flags & SignatureFlags.Await));
 
-                const result = parseDelimitedList(ParsingContext.Parameters,
-                                                  flags & SignatureFlags.JSDoc ? parseJSDocParameter : () => parseParameter(!!(flags & SignatureFlags.RequireCompleteParameterList)));
+                const result = parseDelimitedList(ParsingContext.Parameters, flags & SignatureFlags.JSDoc ? parseJSDocParameter : parseParameter);
 
                 setYieldContext(savedYieldContext);
                 setAwaitContext(savedAwaitContext);
@@ -2499,7 +2498,7 @@ namespace ts {
                     // Although type literal properties cannot not have initializers, we attempt
                     // to parse an initializer so we can report in the checker that an interface
                     // property or type literal property cannot have an initializer.
-                    property.initializer = parseNonParameterInitializer();
+                    property.initializer = parseInitializer();
                 }
 
                 parseTypeMemberSemicolon();
@@ -3039,34 +3038,8 @@ namespace ts {
             return expr;
         }
 
-        function parseInitializer(inParameter: boolean, requireEqualsToken?: boolean): Expression {
-            if (token() !== SyntaxKind.EqualsToken) {
-                // It's not uncommon during typing for the user to miss writing the '=' token.  Check if
-                // there is no newline after the last token and if we're on an expression.  If so, parse
-                // this as an equals-value clause with a missing equals.
-                // NOTE: There are two places where we allow equals-value clauses.  The first is in a
-                // variable declarator.  The second is with a parameter.  For variable declarators
-                // it's more likely that a { would be a allowed (as an object literal).  While this
-                // is also allowed for parameters, the risk is that we consume the { as an object
-                // literal when it really will be for the block following the parameter.
-                if (scanner.hasPrecedingLineBreak() || (inParameter && token() === SyntaxKind.OpenBraceToken) || !isStartOfExpression()) {
-                    // preceding line break, open brace in a parameter (likely a function body) or current token is not an expression -
-                    // do not try to parse initializer
-                    return undefined;
-                }
-                if (inParameter && requireEqualsToken) {
-                    // = is required when speculatively parsing arrow function parameters,
-                    // so return a fake initializer as a signal that the equals token was missing
-                    const result = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics._0_expected, "=") as Identifier;
-                    result.escapedText = "= not found" as __String;
-                    return result;
-                }
-            }
-
-            // Initializer[In, Yield] :
-            //     = AssignmentExpression[?In, ?Yield]
-            parseExpected(SyntaxKind.EqualsToken);
-            return parseAssignmentExpressionOrHigher();
+        function parseInitializer(): Expression | undefined {
+            return parseOptional(SyntaxKind.EqualsToken) ? parseAssignmentExpressionOrHigher() : undefined;
         }
 
         function parseAssignmentExpressionOrHigher(): Expression {
@@ -5234,7 +5207,7 @@ namespace ts {
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             node.name = parseIdentifierOrPattern();
-            node.initializer = parseInitializer(/*inParameter*/ false);
+            node.initializer = parseInitializer();
             return finishNode(node);
         }
 
@@ -5251,7 +5224,7 @@ namespace ts {
                 node.propertyName = propertyName;
                 node.name = parseIdentifierOrPattern();
             }
-            node.initializer = parseInitializer(/*inParameter*/ false);
+            node.initializer = parseInitializer();
             return finishNode(node);
         }
 
@@ -5290,7 +5263,7 @@ namespace ts {
             node.name = parseIdentifierOrPattern();
             node.type = parseTypeAnnotation();
             if (!isInOrOfKeyword(token())) {
-                node.initializer = parseNonParameterInitializer();
+                node.initializer = parseInitializer();
             }
             return finishNode(node);
         }
@@ -5406,8 +5379,8 @@ namespace ts {
             //
             // The checker may still error in the static case to explicitly disallow the yield expression.
             property.initializer = hasModifier(property, ModifierFlags.Static)
-                ? allowInAnd(parseNonParameterInitializer)
-                : doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.DisallowInContext, parseNonParameterInitializer);
+                ? allowInAnd(parseInitializer)
+                : doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.DisallowInContext, parseInitializer);
 
             parseSemicolon();
             return addJSDocComment(finishNode(property));
@@ -5426,10 +5399,6 @@ namespace ts {
             else {
                 return parsePropertyDeclaration(fullStart, decorators, modifiers, name, questionToken);
             }
-        }
-
-        function parseNonParameterInitializer() {
-            return parseInitializer(/*inParameter*/ false);
         }
 
         function parseAccessorDeclaration(kind: SyntaxKind, fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): AccessorDeclaration {
@@ -5755,7 +5724,7 @@ namespace ts {
         function parseEnumMember(): EnumMember {
             const node = <EnumMember>createNode(SyntaxKind.EnumMember, scanner.getStartPos());
             node.name = parsePropertyName();
-            node.initializer = allowInAnd(parseNonParameterInitializer);
+            node.initializer = allowInAnd(parseInitializer);
             return addJSDocComment(finishNode(node));
         }
 

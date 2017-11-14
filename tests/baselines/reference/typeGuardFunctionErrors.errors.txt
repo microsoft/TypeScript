@@ -2,7 +2,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(1,7): 
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(14,5): error TS2322: Type '""' is not assignable to type 'boolean'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,55): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,57): error TS2304: Cannot find name 'is'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,60): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,62): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(21,33): error TS2304: Cannot find name 'x'.
@@ -33,17 +32,14 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(84,1):
     Parameter 'p2' is not in the same position as parameter 'p1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(90,1): error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,9): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,11): error TS1005: '=' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,11): error TS2304: Cannot find name 'is'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,16): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,18): error TS1005: '=' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,18): error TS2304: Cannot find name 'is'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,18): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,21): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,20): error TS2304: Cannot find name 'b'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,22): error TS1144: '{' or ';' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,22): error TS2304: Cannot find name 'is'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,25): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,27): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(103,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
@@ -55,7 +51,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(110,9)
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(115,18): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(119,22): error TS2304: Cannot find name 'p1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(119,25): error TS1005: ';' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(119,25): error TS2304: Cannot find name 'is'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(119,28): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(120,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(123,20): error TS1229: A type predicate cannot reference a rest parameter.
@@ -76,7 +71,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,45
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (62 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (57 errors) ====
     class A {
           ~
 !!! error TS2300: Duplicate identifier 'A'.
@@ -102,8 +97,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
 !!! error TS2304: Cannot find name 'x'.
                                                             ~~
 !!! error TS1144: '{' or ';' expected.
-                                                            ~~
-!!! error TS2304: Cannot find name 'is'.
                                                                ~
 !!! error TS1005: ';' expected.
                                                                  ~
@@ -233,9 +226,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
             ~
 !!! error TS2304: Cannot find name 'b'.
               ~~
-!!! error TS1005: '=' expected.
-              ~~
-!!! error TS2304: Cannot find name 'is'.
+!!! error TS1005: ',' expected.
                  ~
 !!! error TS1005: ',' expected.
                  ~
@@ -244,9 +235,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                    ~
 !!! error TS2304: Cannot find name 'b'.
                      ~~
-!!! error TS1005: '=' expected.
-                     ~~
-!!! error TS2304: Cannot find name 'is'.
+!!! error TS1005: ',' expected.
                         ~
 !!! error TS1005: ',' expected.
     function b3(): A | b is A {
@@ -254,8 +243,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
 !!! error TS2304: Cannot find name 'b'.
                          ~~
 !!! error TS1144: '{' or ';' expected.
-                         ~~
-!!! error TS2304: Cannot find name 'is'.
                             ~
 !!! error TS1005: ';' expected.
                               ~
@@ -300,8 +287,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
 !!! error TS2304: Cannot find name 'p1'.
                             ~~
 !!! error TS1005: ';' expected.
-                            ~~
-!!! error TS2304: Cannot find name 'is'.
                                ~
 !!! error TS1005: ';' expected.
     }
