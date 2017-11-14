@@ -3409,8 +3409,7 @@ namespace ts {
             //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
-            if (!allowAmbiguity && ((token() !== SyntaxKind.EqualsGreaterThanToken && token() !== SyntaxKind.OpenBraceToken) ||
-                                    find(node.parameters, p => p.initializer && ts.isIdentifier(p.initializer) && p.initializer.escapedText === "= not found"))) {
+            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && token() !== SyntaxKind.OpenBraceToken) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                 return undefined;
             }
