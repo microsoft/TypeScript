@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/es6/modules/defaultExportInAwaitExpression01.ts] ////
 
 //// [a.ts]
-const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
+const x = new Promise<{}>( ( resolve, reject ) => { resolve( {} ); } );
 export default x;
 
 //// [b.ts]
