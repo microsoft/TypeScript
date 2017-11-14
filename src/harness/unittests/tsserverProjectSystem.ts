@@ -1539,6 +1539,42 @@ namespace ts.projectSystem {
             }
         });
 
+        it("removes version numbers correctly", () => {
+            const testData: [string, string][] = [
+                ["jquery-max", "jquery-max"],
+                ["jquery.min", "jquery"],
+                ["jquery-min.4.2.3", "jquery"],
+                ["jquery.min.4.2.1", "jquery"],
+                ["minimum", "minimum"],
+                ["min", "min"],
+                ["min.3.2", "min"],
+                ["jquery", "jquery"]
+            ];
+            for (const t of testData) {
+                assert.equal(removeMinAndVersionNumbers(t[0]), t[1], t[0]);
+            }
+        });
+
+        it("ignores files excluded by a legacy safe type list", () => {
+            const file1 = {
+                path: "/a/b/bliss.js",
+                content: "let x = 5"
+            };
+            const file2 = {
+                path: "/a/b/foo.js",
+                content: ""
+            };
+            const host = createServerHost([file1, file2, customTypesMap]);
+            const projectService = createProjectService(host);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]), typeAcquisition: { enable: true } });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(), [file2.path]);
+            } finally {
+                projectService.resetSafeList();
+            }
+        });
+
         it("open file become a part of configured project if it is referenced from root file", () => {
             const file1 = {
                 path: "/a/b/f1.ts",

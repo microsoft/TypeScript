@@ -1569,12 +1569,14 @@ namespace ts.server {
         }
 
         private applyCodeActionCommand(commandName: string, requestSeq: number, args: protocol.ApplyCodeActionCommandRequestArgs): void {
-            const command = args.command as CodeActionCommand; // They should be sending back the command we sent them.
-            const { file, project } = this.getFileAndProject(command);
-            const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
-            project.getLanguageService().applyCodeActionCommand(file, command).then(
-                ({ successMessage }) => { output(/*success*/ true, successMessage); },
-                error => { output(/*success*/ false, error); });
+            const commands = args.command as CodeActionCommand | CodeActionCommand[]; // They should be sending back the command we sent them.
+            for (const command of toArray(commands)) {
+                const { file, project } = this.getFileAndProject(command);
+                const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
+                project.getLanguageService().applyCodeActionCommand(file, command).then(
+                    result => { output(/*success*/ true, result.successMessage); },
+                    error => { output(/*success*/ false, error); });
+            }
         }
 
         private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {
