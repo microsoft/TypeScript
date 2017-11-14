@@ -3076,7 +3076,7 @@ namespace ts {
         /* @internal */
         // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.
-        Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module,
+        Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module | Alias,
     }
 
     export interface Symbol {
