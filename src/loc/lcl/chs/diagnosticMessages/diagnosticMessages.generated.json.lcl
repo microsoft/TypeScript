@@ -1614,6 +1614,9 @@
       <Item ItemId=";Cannot_create_an_instance_of_an_abstract_class_2511" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot create an instance of an abstract class.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[无法创建抽象类的实例。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3181,7 +3184,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract constant]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解压缩常数]]></Val>
+            <Val><![CDATA[提取常数]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3190,7 +3193,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解压缩函数]]></Val>
+            <Val><![CDATA[提取函数]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3199,7 +3202,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract symbol]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解压缩符号]]></Val>
+            <Val><![CDATA[提取符号]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3208,7 +3211,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to {0} in {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解压缩到 {1} 中的 {0}]]></Val>
+            <Val><![CDATA[提取到 {1} 中的 {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3217,7 +3220,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to {0} in {1} scope]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解压缩到 {1} 范围中的 {0}]]></Val>
+            <Val><![CDATA[提取到 {1} 范围中的 {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3226,7 +3229,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to {0} in enclosing scope]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解压缩到封闭范围中的 {0}]]></Val>
+            <Val><![CDATA[提取到封闭范围中的 {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5274,24 +5277,36 @@
       <Item ItemId=";Parameter_type_of_public_setter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2_4036" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共 setter“{0}”的参数类型具有或正在使用私有模块“{2}”中的名称“{1}”。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Parameter_type_of_public_setter_0_from_exported_class_has_or_is_using_private_name_1_4037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共 setter“{0}”的参数类型具有或正在使用专用名称“{1}”。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_name_1_from_private_mod_4034" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共静态 setter“{0}”的参数类型具有或正在使用私有模块“{2}”中的名称“{1}”。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_private_name_1_4035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共静态 setter“{0}”的参数类型具有或正在使用专用名称“{1}”。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6003,18 +6018,27 @@
       <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_4041" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共 getter“{0}”的返回类型具有或正在使用外部模块“{2}”中的名称“{1}”，但不能为其命名。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2_4042" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共 getter“{0}”的返回类型具有或正在使用私有模块“{2}”中的名称“{1}”。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_private_name_1_4043" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共 getter“{0}”的返回类型具有或正在使用专用名称“{1}”。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6048,18 +6072,27 @@
       <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_name_1_from_external_modul_4038" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共静态 getter“{0}”的返回类型具有或正在使用外部模块“{2}”中的名称“{1}”，但不能为其命名。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_4039" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共静态 getter“{0}”的返回类型具有或正在使用私有模块“{2}”中的名称“{1}”。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_private_name_1_4040" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出类中的公共静态 getter“{0}”的返回类型具有或正在使用专用名称“{1}”。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

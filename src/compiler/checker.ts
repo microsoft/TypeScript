@@ -6454,7 +6454,10 @@ namespace ts {
                     }
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
                         const mapper = createTypeMapper(typeParameters, typeArguments);
-                        const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        let defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        if (defaultType && isTypeIdenticalTo(defaultType, emptyObjectType) && isJavaScriptImplicitAny) {
+                            defaultType = anyType;
+                        }
                         typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                     }
                 }
@@ -13469,9 +13472,13 @@ namespace ts {
         }
 
         function isInParameterInitializerBeforeContainingFunction(node: Node) {
+            let inBindingInitializer = false;
             while (node.parent && !isFunctionLike(node.parent)) {
-                if (node.parent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node.parent).initializer === node) {
+                if (isParameter(node.parent) && (inBindingInitializer || node.parent.initializer === node)) {
                     return true;
+                }
+                if (isBindingElement(node.parent) && node.parent.initializer === node) {
+                    inBindingInitializer = true;
                 }
 
                 node = node.parent;
@@ -14197,7 +14204,7 @@ namespace ts {
             // type with those properties for which the binding pattern specifies a default value.
             if (contextualTypeHasPattern) {
                 for (const prop of getPropertiesOfType(contextualType)) {
-                    if (!propertiesTable.get(prop.escapedName)) {
+                    if (!propertiesTable.get(prop.escapedName) && !(spread && getPropertyOfType(spread, prop.escapedName))) {
                         if (!(prop.flags & SymbolFlags.Optional)) {
                             error(prop.valueDeclaration || (<TransientSymbol>prop).bindingElement,
                                 Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
@@ -14378,19 +14385,7 @@ namespace ts {
             const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
             // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
             if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
-                const childrenTypes: Type[] = [];
-                for (const child of (parent as JsxElement).children) {
-                    // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
-                    // because then type of children property will have constituent of string type.
-                    if (child.kind === SyntaxKind.JsxText) {
-                        if (!child.containsOnlyWhiteSpaces) {
-                            childrenTypes.push(stringType);
-                        }
-                    }
-                    else {
-                        childrenTypes.push(checkExpression(child, checkMode));
-                    }
-                }
+                const childrenTypes: Type[] = checkJsxChildren(parent as JsxElement, checkMode);
 
                 if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
                     // Error if there is a attribute named "children" explicitly specified and children element.
@@ -14428,6 +14423,23 @@ namespace ts {
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
                 return result;
             }
+        }
+
+        function checkJsxChildren(node: JsxElement | JsxFragment, checkMode?: CheckMode) {
+            const childrenTypes: Type[] = [];
+            for (const child of node.children) {
+                // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
+                // because then type of children property will have constituent of string type.
+                if (child.kind === SyntaxKind.JsxText) {
+                    if (!child.containsOnlyWhiteSpaces) {
+                        childrenTypes.push(stringType);
+                    }
+                }
+                else {
+                    childrenTypes.push(checkExpression(child, checkMode));
+                }
+            }
+            return childrenTypes;
         }
 
         /**
@@ -14963,6 +14975,9 @@ namespace ts {
 
             if (isNodeOpeningLikeElement) {
                 checkJsxAttributesAssignableToTagNameAttributes(<JsxOpeningLikeElement>node);
+            }
+            else {
+                checkJsxChildren((node as JsxOpeningFragment).parent);
             }
         }
 
@@ -17164,7 +17179,7 @@ namespace ts {
             if (targetDeclarationKind !== SyntaxKind.Unknown) {
                 const decl = getDeclarationOfKind(resolvedRequire, targetDeclarationKind);
                 // function/variable declaration should be ambient
-                return !!(decl.flags & NodeFlags.Ambient);
+                return !!decl && !!(decl.flags & NodeFlags.Ambient);
             }
             return false;
         }

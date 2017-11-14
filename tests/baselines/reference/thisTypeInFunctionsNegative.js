@@ -340,18 +340,20 @@ var ThisConstructor = /** @class */ (function () {
 var thisConstructorType;
 function notFirst(a) { return this.n; }
 ///// parse errors /////
-function modifiers(, C) {
-    if ( === void 0) {  = this; }
+function modifiers() { return this.n; }
+function restParam() {
+    var  = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        [_i] = arguments[_i];
+    }
     return this.n;
 }
-function restParam(C) { return this.n; }
 function optional() { return this.n; }
-function decorated(, C) {
-    if ( === void 0) {  = this; }
-    return this.n;
-}
-function initializer() {
-    if ( === void 0) {  = new C(); }
+function decorated() { return this.n; }
+function initializer(, C) { }
+();
+number;
+{
     return this.n;
 }
 // can't name parameters 'this' in a lambda.
