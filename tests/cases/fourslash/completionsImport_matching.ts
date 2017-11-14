@@ -14,7 +14,7 @@
 
 goTo.marker("");
 
-const options = { includeExternalModuleExports: true };
+const options = { includeExternalModuleExports: true, sourceDisplay: "./a" };
 verify.not.completionListContains({ name: "abcde", source: "/a" }, undefined, undefined, undefined, undefined, undefined, options);
 verify.not.completionListContains({ name: "dbf", source: "/a" }, undefined, undefined, undefined, undefined, undefined, options);
 

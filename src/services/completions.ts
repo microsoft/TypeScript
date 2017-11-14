@@ -404,8 +404,9 @@ namespace ts.Completions {
         allSourceFiles: ReadonlyArray<SourceFile>,
         host: LanguageServiceHost,
         rulesProvider: formatting.RulesProvider,
+        getCanonicalFileName: GetCanonicalFileName,
     ): CompletionEntryDetails {
-        const { name, source } = entryId;
+        const { name } = entryId;
         // Compute all the completion symbols again.
         const symbolCompletion = getSymbolCompletionFromEntryId(typeChecker, log, compilerOptions, sourceFile, position, entryId, allSourceFiles);
         switch (symbolCompletion.type) {
@@ -424,10 +425,10 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, symbolToOriginInfoMap } = symbolCompletion;
-                const codeActions = getCompletionEntryCodeActions(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, rulesProvider);
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, rulesProvider, getCanonicalFileName);
                 const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
-                return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: source === undefined ? undefined : [textPart(source)] };
+                return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: sourceDisplay };
             }
             case "none": {
                 // Didn't find a symbol with this name.  See if we can find a keyword instead.
@@ -448,7 +449,7 @@ namespace ts.Completions {
         }
     }
 
-    function  getCompletionEntryCodeActions(
+    function getCompletionEntryCodeActionsAndSourceDisplay(
         symbolToOriginInfoMap: SymbolOriginInfoMap,
         symbol: Symbol,
         checker: TypeChecker,
@@ -456,14 +457,17 @@ namespace ts.Completions {
         compilerOptions: CompilerOptions,
         sourceFile: SourceFile,
         rulesProvider: formatting.RulesProvider,
-    ): CodeAction[] | undefined {
+        getCanonicalFileName: GetCanonicalFileName,
+    ): { codeActions: CodeAction[] | undefined, sourceDisplay: SymbolDisplayPart[] | undefined } {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
         if (!symbolOriginInfo) {
-            return undefined;
+            return { codeActions: undefined, sourceDisplay: undefined };
         }
 
         const { moduleSymbol, isDefaultExport } = symbolOriginInfo;
-        return codefix.getCodeActionForImport(moduleSymbol, {
+
+        const sourceDisplay = [textPart(codefix.getModuleSpecifierForNewImport(sourceFile, moduleSymbol, compilerOptions, getCanonicalFileName, host))];
+        const codeActions = codefix.getCodeActionForImport(moduleSymbol, {
             host,
             checker,
             newLineCharacter: host.getNewLine(),
@@ -471,10 +475,11 @@ namespace ts.Completions {
             sourceFile,
             rulesProvider,
             symbolName: getSymbolName(symbol, symbolOriginInfo, compilerOptions.target),
-            getCanonicalFileName: createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false),
+            getCanonicalFileName,
             symbolToken: undefined,
             kind: isDefaultExport ? codefix.ImportKind.Default : codefix.ImportKind.Named,
         });
+        return { sourceDisplay, codeActions };
     }
 
     export function getCompletionEntrySymbol(
