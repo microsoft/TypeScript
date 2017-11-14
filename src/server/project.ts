@@ -139,7 +139,7 @@ namespace ts.server {
         /*@internal*/
         resolutionCache: ResolutionCache;
 
-        private builderState: BuilderState;
+        private builder: InternalBuilder | undefined;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
@@ -451,11 +451,14 @@ namespace ts.server {
                 return [];
             }
             this.updateGraph();
-            this.builderState = createBuilderState(this.program, {
-                getCanonicalFileName: this.projectService.toCanonicalFileName,
-                computeHash: data => this.projectService.host.createHash(data)
-            }, this.builderState);
-            return mapDefined(this.builderState.getFilesAffectedBy(this.program, scriptInfo.path),
+            if (!this.builder) {
+                this.builder = createInternalBuilder({
+                    getCanonicalFileName: this.projectService.toCanonicalFileName,
+                    computeHash: data => this.projectService.host.createHash(data)
+                });
+            }
+            this.builder.updateProgram(this.program);
+            return mapDefined(this.builder.getFilesAffectedBy(this.program, scriptInfo.path),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 
@@ -491,7 +494,7 @@ namespace ts.server {
             }
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
-            this.builderState = undefined;
+            this.builder = undefined;
             this.resolutionCache.closeTypeRootsWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
@@ -532,7 +535,7 @@ namespace ts.server {
             this.rootFilesMap = undefined;
             this.externalFiles = undefined;
             this.program = undefined;
-            this.builderState = undefined;
+            this.builder = undefined;
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;

@@ -84,18 +84,17 @@ namespace ts {
     }
 
     /**
-     * Creates the function that compiles the program by maintaining the builder state and also return diagnostic reporter
+     * Creates the function that compiles the program by maintaining the builder for the program and reports the errors and emits files
      */
     export function createProgramCompilerWithBuilderState(system = sys, reportDiagnostic?: DiagnosticReporter) {
         reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
-        let builderState: Readonly<BuilderState> | undefined;
-        const options: BuilderOptions = {
+        const builder = createEmitAndSemanticDiagnosticsBuilder({
             getCanonicalFileName: createGetCanonicalFileName(system.useCaseSensitiveFileNames),
-            computeHash: data => system.createHash ? system.createHash(data) : data
-        };
+            computeHash: system.createHash ? system.createHash.bind(system) : identity
+        });
 
         return (host: DirectoryStructureHost, program: Program) => {
-            builderState = createBuilderState(program, options, builderState);
+            builder.updateProgram(program);
 
             // First get and report any syntactic errors.
             const diagnostics = program.getSyntacticDiagnostics().slice();
@@ -118,14 +117,14 @@ namespace ts {
             let emitSkipped: boolean;
 
             let affectedEmitResult: AffectedFileEmitResult;
-            while (affectedEmitResult = builderState.emitNextAffectedFile(program, writeFile)) {
+            while (affectedEmitResult = builder.emitNextAffectedFile(program, writeFile)) {
                 emitSkipped = emitSkipped || affectedEmitResult.emitSkipped;
                 addRange(diagnostics, affectedEmitResult.diagnostics);
                 sourceMaps = addRange(sourceMaps, affectedEmitResult.sourceMaps);
             }
 
             if (reportSemanticDiagnostics) {
-                addRange(diagnostics, builderState.getSemanticDiagnostics(program));
+                addRange(diagnostics, builder.getSemanticDiagnostics(program));
             }
 
             sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);

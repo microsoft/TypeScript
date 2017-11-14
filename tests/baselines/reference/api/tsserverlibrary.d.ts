@@ -3771,40 +3771,48 @@ declare namespace ts {
         writeByteOrderMark: boolean;
         text: string;
     }
+    interface AffectedFileEmitResult extends EmitResult {
+        affectedFile?: SourceFile;
+    }
+    interface BuilderOptions {
+        getCanonicalFileName: (fileName: string) => string;
+        computeHash: (data: string) => string;
+    }
     /**
-     * State on which you can query affected files (files to save) and get semantic diagnostics(with their cache managed in the object)
-     * Note that it is only safe to pass BuilderState as old state when creating new state, when
-     * - If iterator's next method to get next affected file is never called
-     * - Iteration of single changed file and its dependencies (iteration through all of its affected files) is complete
+     * Builder to manage the program state changes
      */
-    interface BuilderState {
+    interface BaseBuilder {
         /**
-         * The map of file infos, where there is entry for each file in the program
-         * The entry is signature of the file (from last emit) or empty string
+         * Updates the program in the builder to represent new state
          */
-        fileInfos: ReadonlyMap<Readonly<FileInfo>>;
+        updateProgram(newProgram: Program): void;
         /**
-         * Returns true if module gerneration is not ModuleKind.None
+         * Get all the dependencies of the file
          */
-        isModuleEmit: boolean;
+        getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): string[];
+    }
+    /**
+     * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
+     */
+    interface SemanticDiagnosticsBuilder extends BaseBuilder {
         /**
-         * Map of file referenced or undefined if it wasnt module emit
-         * The entry is present only if file references other files
-         * The key is path of file and value is referenced map for that file (for every file referenced, there is entry in the set)
+         * Gets the semantic diagnostics from the program for the next affected file and caches it
+         * Returns undefined if the iteration is complete
          */
-        referencedMap: ReadonlyMap<ReferencedSet> | undefined;
+        getSemanticDiagnosticsOfNextAffectedFile(programOfThisState: Program, cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): ReadonlyArray<Diagnostic>;
         /**
-         * Set of source file's paths that have been changed, either in resolution or versions
+         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
+         * The semantic diagnostics are cached and managed here
+         * Note that it is assumed that the when asked about semantic diagnostics through this API,
+         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
          */
-        changedFilesSet: ReadonlyMap<true>;
-        /**
-         * Set of cached semantic diagnostics per file
-         */
-        semanticDiagnosticsPerFile: ReadonlyMap<ReadonlyArray<Diagnostic>>;
-        /**
-         * Returns true if this state is safe to use as oldState
-         */
-        canCreateNewStateFrom(): boolean;
+        getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+    }
+    /**
+     * The builder that can handle the changes in program and iterate through changed file to emit the files
+     * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
+     */
+    interface EmitAndSemanticDiagnosticsBuilder extends BaseBuilder {
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
          */
@@ -3812,33 +3820,20 @@ declare namespace ts {
         /**
          * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
          * The semantic diagnostics are cached and managed here
-         * Note that it is assumed that the when asked about semantic diagnostics, the file has been taken out of affected files
+         * Note that it is assumed that the when asked about semantic diagnostics through this API,
+         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
          */
         getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        /**
-         * Get all the dependencies of the file
-         */
-        getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): string[];
     }
     /**
-     * Information about the source file: Its version and optional signature from last emit
+     * Create the builder to manage semantic diagnostics and cache them
      */
-    interface FileInfo {
-        version: string;
-        signature: string;
-    }
-    interface AffectedFileEmitResult extends EmitResult {
-        affectedFile?: SourceFile;
-    }
+    function createSemanticDiagnosticsBuilder(options: BuilderOptions): SemanticDiagnosticsBuilder;
     /**
-     * Referenced files with values for the keys as referenced file's path to be true
+     * Create the builder that can handle the changes in program and iterate through changed files
+     * to emit the those files and manage semantic diagnostics cache as well
      */
-    type ReferencedSet = ReadonlyMap<true>;
-    interface BuilderOptions {
-        getCanonicalFileName: (fileName: string) => string;
-        computeHash: (data: string) => string;
-    }
-    function createBuilderState(newProgram: Program, options: BuilderOptions, oldState?: Readonly<BuilderState>): BuilderState;
+    function createEmitAndSemanticDiagnosticsBuilder(options: BuilderOptions): EmitAndSemanticDiagnosticsBuilder;
 }
 declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
@@ -7278,7 +7273,7 @@ declare namespace ts.server {
         languageServiceEnabled: boolean;
         readonly trace?: (s: string) => void;
         readonly realpath?: (path: string) => string;
-        private builderState;
+        private builder;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */

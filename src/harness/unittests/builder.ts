@@ -44,17 +44,16 @@ namespace ts {
     });
 
     function makeAssertChanges(getProgram: () => Program): (fileNames: ReadonlyArray<string>) => void  {
-        let builderState: BuilderState;
-        const builderOptions: BuilderOptions = {
+        const builder = createEmitAndSemanticDiagnosticsBuilder({
             getCanonicalFileName: identity,
             computeHash: identity
-        };
+        });
         return fileNames => {
             const program = getProgram();
-            builderState = createBuilderState(program, builderOptions, builderState);
+            builder.updateProgram(program);
             const outputFileNames: string[] = [];
             // tslint:disable-next-line no-empty
-            while (builderState.emitNextAffectedFile(program, fileName => outputFileNames.push(fileName))) {
+            while (builder.emitNextAffectedFile(program, fileName => outputFileNames.push(fileName))) {
             }
             assert.deepEqual(outputFileNames, fileNames);
         };
