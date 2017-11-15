@@ -5111,13 +5111,13 @@ namespace ts {
          * to "this" in its body, if all base types are interfaces,
          * and if none of the base interfaces have a "this" type.
          */
-        function interfaceMayReferenceThis(symbol: Symbol): boolean {
+        function interfaceReferencesThis(symbol: Symbol): boolean {
             return some(symbol.declarations, declaration =>
                 isInterfaceDeclaration(declaration) && (
                     !!(declaration.flags & NodeFlags.ContainsThis)
-                    || some(getInterfaceBaseTypeNodes(declaration), baseTypeMayReferenceThis)));
+                    || some(getInterfaceBaseTypeNodes(declaration), baseTypeReferencesThis)));
         }
-        function baseTypeMayReferenceThis({ expression }: ExpressionWithTypeArguments): boolean {
+        function baseTypeReferencesThis({ expression }: ExpressionWithTypeArguments): boolean {
             if (!isEntityNameExpression(expression)) {
                 return false;
             }
@@ -5137,7 +5137,7 @@ namespace ts {
                 // property types inferred from initializers and method return types inferred from return statements are very hard
                 // to exhaustively analyze). We give interfaces a "this" type if we can't definitely determine that they are free of
                 // "this" references.
-                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || interfaceMayReferenceThis(symbol)) {
+                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || interfaceReferencesThis(symbol)) {
                     type.objectFlags |= ObjectFlags.Reference;
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
@@ -5320,7 +5320,7 @@ namespace ts {
         }
 
         /** A type may reference `this` unless it's one of a few special types. */
-        function typeMayReferenceThis(node: TypeNode | undefined): boolean {
+        function typeReferencesThis(node: TypeNode | undefined): boolean {
             switch (node && node.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -5335,17 +5335,17 @@ namespace ts {
                 case SyntaxKind.LiteralType:
                     return false;
                 case SyntaxKind.ArrayType:
-                    return typeMayReferenceThis((<ArrayTypeNode>node).elementType);
+                    return typeReferencesThis((<ArrayTypeNode>node).elementType);
                 case SyntaxKind.TypeReference:
-                    return some((node as TypeReferenceNode).typeArguments, typeMayReferenceThis);
+                    return some((node as TypeReferenceNode).typeArguments, typeReferencesThis);
             }
-            return true;
+            return true; // TODO: GH#20034
         }
 
         /** A variable-like declaration may reference `this` if its type does or if it has no declared type and an initializer (which may infer a `this` type). */
-        function variableLikeDeclarationMayReferenceThis(node: VariableLikeDeclaration): boolean {
+        function variableLikeDeclarationReferencesThis(node: VariableLikeDeclaration): boolean {
             const typeNode = getEffectiveTypeAnnotationNode(node);
-            return typeNode ? typeMayReferenceThis(typeNode) : !!node.initializer;
+            return typeNode ? typeReferencesThis(typeNode) : !!node.initializer;
         }
 
         /**
@@ -5354,22 +5354,22 @@ namespace ts {
          * For example, property members with types inferred from initializers or function members with inferred return types are
          * conservatively assumed to reference `this`.
          */
-        function symbolMayReferenceThis(symbol: Symbol): boolean {
+        function symbolReferencesThis(symbol: Symbol): boolean {
             const declaration = singleOrUndefined(symbol.declarations);
             if (!declaration) return true;
             switch (declaration.kind) {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    return variableLikeDeclarationMayReferenceThis(<PropertyDeclaration | PropertySignature>declaration);
+                    return variableLikeDeclarationReferencesThis(<PropertyDeclaration | PropertySignature>declaration);
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.Constructor: {
                     // A function-like declaration references `this` if its return type does or some parameter / type parameter does.
                     const fn = declaration as MethodDeclaration | MethodSignature | ConstructorDeclaration;
-                    return (declaration.kind !== SyntaxKind.Constructor && typeMayReferenceThis(getEffectiveReturnTypeNode(fn)))
-                        || fn.parameters.some(variableLikeDeclarationMayReferenceThis)
+                    return typeReferencesThis(getEffectiveReturnTypeNode(fn))
+                        || fn.parameters.some(variableLikeDeclarationReferencesThis)
                         // A type parameter references `this` if its constraint does.
-                        || some(fn.typeParameters, tp => typeMayReferenceThis(tp.constraint));
+                        || some(fn.typeParameters, tp => typeReferencesThis(tp.constraint));
                 }
                 case SyntaxKind.Parameter:
                 case SyntaxKind.GetAccessor:
@@ -5387,7 +5387,7 @@ namespace ts {
         function createInstantiatedSymbolTable(symbols: Symbol[], mapper: TypeMapper, mappingThisOnly: boolean): SymbolTable {
             const result = createSymbolTable();
             for (const symbol of symbols) {
-                result.set(symbol.escapedName, mappingThisOnly && !symbolMayReferenceThis(symbol) ? symbol : instantiateSymbol(symbol, mapper));
+                result.set(symbol.escapedName, mappingThisOnly && !symbolReferencesThis(symbol) ? symbol : instantiateSymbol(symbol, mapper));
             }
             return result;
         }
