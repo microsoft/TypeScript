@@ -34,7 +34,7 @@ namespace ts.codefix {
         host: LanguageServiceHost;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
-        getCanonicalFileName(fileName: string): string;
+        getCanonicalFileName: GetCanonicalFileName;
         cachedImportDeclarations?: ImportDeclarationMap;
     }
 
@@ -313,7 +313,7 @@ namespace ts.codefix {
         }
     }
 
-    function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbol: Symbol, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
+    export function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbol: Symbol, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
         const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
         const sourceDirectory = getDirectoryPath(sourceFile.fileName);
 
@@ -523,7 +523,7 @@ namespace ts.codefix {
         return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
     }
 
-    function getPathRelativeToRootDirs(path: string, rootDirs: ReadonlyArray<string>, getCanonicalFileName: (fileName: string) => string): string | undefined {
+    function getPathRelativeToRootDirs(path: string, rootDirs: ReadonlyArray<string>, getCanonicalFileName: GetCanonicalFileName): string | undefined {
         return firstDefined(rootDirs, rootDir => getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName));
     }
 
@@ -535,12 +535,12 @@ namespace ts.codefix {
         return fileName;
     }
 
-    function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string): string | undefined {
+    function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
         const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
     }
 
-    function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string) {
+    function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
         const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
     }
@@ -699,9 +699,10 @@ namespace ts.codefix {
             const defaultExport = checker.tryGetMemberInModuleExports("default", moduleSymbol);
             if (defaultExport) {
                 const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if (localSymbol && localSymbol.escapedName === symbolName && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
+                if ((localSymbol && localSymbol.escapedName === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName)
+                    && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     // check if this symbol is already used
-                    const symbolId = getUniqueSymbolId(localSymbol, checker);
+                    const symbolId = getUniqueSymbolId(localSymbol || defaultExport, checker);
                     symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, { ...context, kind: ImportKind.Default }));
                 }
             }
@@ -730,5 +731,36 @@ namespace ts.codefix {
                 cb(sourceFile.symbol);
             }
         }
+    }
+
+    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
+        return moduleSpecifierToValidIdentifier(removeFileExtension(getBaseFileName(moduleSymbol.name)), target);
+    }
+
+    function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
+        let res = "";
+        let lastCharWasValid = true;
+        const firstCharCode = moduleSpecifier.charCodeAt(0);
+        if (isIdentifierStart(firstCharCode, target)) {
+            res += String.fromCharCode(firstCharCode);
+        }
+        else {
+            lastCharWasValid = false;
+        }
+        for (let i = 1; i < moduleSpecifier.length; i++) {
+            const ch = moduleSpecifier.charCodeAt(i);
+            const isValid = isIdentifierPart(ch, target);
+            if (isValid) {
+                let char = String.fromCharCode(ch);
+                if (!lastCharWasValid) {
+                    char = char.toUpperCase();
+                }
+                res += char;
+            }
+            lastCharWasValid = isValid;
+        }
+        // Need `|| "_"` to ensure result isn't empty.
+        const token = stringToToken(res);
+        return token === undefined || !isNonContextualKeyword(token) ? res || "_" : `_${res}`;
     }
 }

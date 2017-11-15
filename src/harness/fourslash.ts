@@ -867,10 +867,10 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: ts.GetCompletionsAtPositionOptions) {
+        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
             const completions = this.getCompletionListAtCaret(options);
             if (completions) {
-                this.assertItemInCompletionList(completions.entries, entryId, text, documentation, kind, spanIndex, hasAction);
+                this.assertItemInCompletionList(completions.entries, entryId, text, documentation, kind, spanIndex, hasAction, options);
             }
             else {
                 this.raiseError(`No completions at position '${this.currentCaretPosition}' when looking for '${JSON.stringify(entryId)}'.`);
@@ -3071,6 +3071,7 @@ Actual: ${stringify(fullActual)}`);
             kind: string | undefined,
             spanIndex: number | undefined,
             hasAction: boolean | undefined,
+            options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
         ) {
             for (const item of items) {
                 if (item.name === entryId.name && item.source === entryId.source) {
@@ -3084,7 +3085,12 @@ Actual: ${stringify(fullActual)}`);
                             assert.equal(ts.displayPartsToString(details.displayParts), text, this.assertionMessageAtLastKnownMarker("completion item detail text for " + entryId));
                         }
 
-                        assert.deepEqual(details.source, entryId.source === undefined ? undefined : [ts.textPart(entryId.source)]);
+                        if (entryId.source === undefined) {
+                            assert.equal(options && options.sourceDisplay, undefined);
+                        }
+                        else {
+                            assert.deepEqual(details.source, [ts.textPart(options!.sourceDisplay)]);
+                        }
                     }
 
                     if (kind !== undefined) {
@@ -3102,7 +3108,7 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
 
-            const itemsString = items.map(item => stringify({ name: item.name, kind: item.kind })).join(",\n");
+            const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
 
             this.raiseError(`Expected "${stringify({ entryId, text, documentation, kind })}" to be in list [${itemsString}]`);
         }
@@ -3811,7 +3817,7 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: ts.GetCompletionsAtPositionOptions) {
+        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: VerifyCompletionListContainsOptions) {
             if (typeof entryId === "string") {
                 entryId = { name: entryId, source: undefined };
             }
@@ -4545,6 +4551,10 @@ namespace FourSlashInterface {
 
     export interface CompletionsAtOptions {
         isNewIdentifierLocation?: boolean;
+    }
+
+    export interface VerifyCompletionListContainsOptions extends ts.GetCompletionsAtPositionOptions {
+        sourceDisplay: string;
     }
 
     export interface NewContentOptions {

@@ -461,7 +461,7 @@ namespace ts {
     }
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-        return isExternalModule(node) || compilerOptions.isolatedModules;
+        return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
     }
 
     /* @internal */
@@ -1905,6 +1905,14 @@ namespace ts {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
 
+    export function isContextualKeyword(token: SyntaxKind): boolean {
+        return SyntaxKind.FirstContextualKeyword <= token && token <= SyntaxKind.LastContextualKeyword;
+    }
+
+    export function isNonContextualKeyword(token: SyntaxKind): boolean {
+        return isKeyword(token) && !isContextualKeyword(token);
+    }
+
     export function isTrivia(token: SyntaxKind) {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
@@ -2426,10 +2434,8 @@ namespace ts {
     }
 
     export function isIntrinsicJsxName(name: __String | string) {
-        // An escaped identifier had a leading underscore prior to being escaped, which would return true
-        // The escape adds an extra underscore which does not change the result
-        const ch = (name as string).substr(0, 1);
-        return ch.toLowerCase() === ch;
+        const ch = (name as string).charCodeAt(0);
+        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || (name as string).indexOf("-") > -1;
     }
 
     function get16BitUnicodeEscapeSequence(charCode: number): string {

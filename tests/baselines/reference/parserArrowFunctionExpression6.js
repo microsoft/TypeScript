@@ -6,6 +6,7 @@ function foo(q: string, b: number) {
 
 //// [parserArrowFunctionExpression6.js]
 function foo(q, b) {
-    return true ? (q ? true : false) : (b = q.length, function () { });
+    return true ? function (q, , ) { } : ;
+    ;
 }
 ;

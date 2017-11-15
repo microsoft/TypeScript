@@ -1598,11 +1598,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_create_an_instance_of_the_abstract_class_0_2511" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_create_an_instance_of_an_abstract_class_2511" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot create an instance of the abstract class '{0}'.]]></Val>
+          <Val><![CDATA[Cannot create an instance of an abstract class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Não é possível criar uma instância da classe abstrata '{0}'.]]></Val>
+            <Val><![CDATA[Não é possível criar uma instância de uma classe abstrata.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3707,6 +3707,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Import_0_require_1_95015" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import '{0}' = require("{1}").]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Importar '{0}' = exigir ("{1}").]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_Asterisk_as_0_from_1_95016" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import * as '{0}' from "{1}".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Importar * como '{0}' de "{1}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_1202" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.]]></Val>
@@ -3934,6 +3952,15 @@
           <Val><![CDATA[Insert command line options and files from a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Inserir opções e arquivos de linha de comando de um arquivo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Install_0_95014" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Install '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Instalar '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5183,24 +5210,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_4036" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O parâmetro '{0}' do setter de propriedade pública da classe exportada tem ou está usando o nome '{1}' do módulo particular '{2}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1_4037" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O parâmetro '{0}' do setter de propriedade pública da classe exportada tem ou está usando o nome particular '{1}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module__4068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
@@ -5228,24 +5237,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_4034" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O parâmetro '{0}' do setter de propriedade estática pública da classe exportada tem ou está usando o nome '{1}' do módulo particular '{2}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1_4035" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O parâmetro '{0}' do setter da propriedade estática pública da classe exportada tem ou está usando o nome particular '{1}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Parameter_cannot_have_question_mark_and_initializer_1015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Parameter cannot have question mark and initializer.]]></Val>
@@ -5260,6 +5251,42 @@
           <Val><![CDATA[Parameter declaration expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Declaração de parâmetro esperada.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_setter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2_4036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo de parâmetro do setter público '{0}' da classe exportada tem ou está usando o nome '{1}' do módulo privado '{2}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_setter_0_from_exported_class_has_or_is_using_private_name_1_4037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo de parâmetro do setter público '{0}' da classe exportada tem ou está usando o nome privado '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_name_1_from_private_mod_4034" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo de parâmetro do setter estático público '{0}' da classe exportada tem ou está usando o nome '{1}' do módulo privado '{2}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_private_name_1_4035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo de parâmetro do setter estático público '{0}' da classe exportada tem ou está usando o nome privado '{1}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5963,6 +5990,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_4041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo de retorno do getter público '{0}' da classe exportada tem ou está usando o nome '{1}' do módulo externo {2}, mas não pode ser nomeado.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2_4042" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo de retorno do getter público '{0}' da classe exportada tem ou está usando o nome '{1}' do módulo privado '{2}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Return_type_of_public_getter_0_from_exported_class_has_or_is_using_private_name_1_4043" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo de retorno do getter público '{0}' da classe exportada tem ou está usando o nome privado '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_c_4053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
@@ -5990,29 +6044,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_external_modul_4041" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_name_1_from_external_modul_4038" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
+          <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo de retorno do getter de propriedade pública da classe exportada tem ou está usando o nome '{0}' do módulo externo {1}, mas não pode ser nomeado.]]></Val>
+            <Val><![CDATA[O tipo de retorno do getter estático público '{0}' da classe exportada tem ou está usando o nome '{1}' do módulo externo '{2}', mas não pode ser nomeado.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_4042" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_4039" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
+          <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo de retorno do getter de propriedade pública da classe exportada tem ou está usando o nome '{0}' do módulo particular '{1}'.]]></Val>
+            <Val><![CDATA[O tipo de retorno do getter estático público '{0}' da classe exportada tem ou está usando o nome '{1}' do módulo privado '{2}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0_4043" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_private_name_1_4040" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Return type of public property getter from exported class has or is using private name '{0}'.]]></Val>
+          <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo de retorno do getter de propriedade pública da classe exportada tem ou está usando o nome particular '{0}'.]]></Val>
+            <Val><![CDATA[O tipo de retorno do getter estático público '{0}' da classe exportada tem ou está usando o nome privado '{1}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6040,33 +6094,6 @@
           <Val><![CDATA[Return type of public static method from exported class has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[O tipo de retorno do método estático público da classe exportada tem ou está usando o nome particular '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_externa_4038" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo de retorno do getter de propriedade estática pública da classe exportada tem ou está usando o nome '{0}' do módulo externo {1}, mas não pode ser nomeado.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_private_4039" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo de retorno do getter de propriedade estática pública da classe exportada tem ou está usando o nome '{0}' do módulo particular '{1}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_private_name_0_4040" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Return type of public static property getter from exported class has or is using private name '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo de retorno do getter de propriedade estática pública da classe exportada tem ou está usando o nome particular '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

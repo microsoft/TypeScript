@@ -1648,9 +1648,12 @@ namespace ts.server {
         private applyCodeActionCommand(commandName: string, requestSeq: number, args: protocol.ApplyCodeActionCommandRequestArgs): void {
             const { file, project } = this.getFileAndProject(args);
             const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
-            const command = args.command as CodeActionCommand; // They should be sending back the command we sent them.
+            const command = args.command as CodeActionCommand | CodeActionCommand[]; // They should be sending back the command we sent them.
+
             project.getLanguageService().applyCodeActionCommand(file, command).then(
-                ({ successMessage }) => { output(/*success*/ true, successMessage); },
+                result => {
+                    output(/*success*/ true, isArray(result) ? result.map(res => res.successMessage).join(`${this.host.newLine}${this.host.newLine}`) : result.successMessage);
+                },
                 error => { output(/*success*/ false, error); });
         }
 

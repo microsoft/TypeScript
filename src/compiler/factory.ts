@@ -3709,7 +3709,7 @@ namespace ts {
         while (statementOffset < numStatements) {
             const statement = source[statementOffset];
             if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
-                target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
+                append(target, visitor ? visitNode(statement, visitor, isStatement) : statement);
             }
             else {
                 break;
@@ -4319,7 +4319,7 @@ namespace ts {
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
         if (namespaceDeclaration && !isDefaultImport(node)) {
             const name = namespaceDeclaration.name;
-            return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, namespaceDeclaration.name));
+            return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
         }
         if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
             return getGeneratedNameForNode(node);

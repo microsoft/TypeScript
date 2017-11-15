@@ -2161,7 +2161,6 @@ namespace ts {
                 return forEachEntry(symbols, symbolFromSymbolTable => {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Alias
                         && symbolFromSymbolTable.escapedName !== "export="
-                        && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)
                         && !(isUMDExportSymbol(symbolFromSymbolTable) && enclosingDeclaration && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
                         // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
                         && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))) {
@@ -5105,10 +5104,14 @@ namespace ts {
             }
         }
 
-        // Returns true if the interface given by the symbol is free of "this" references. Specifically, the result is
-        // true if the interface itself contains no references to "this" in its body, if all base types are interfaces,
-        // and if none of the base interfaces have a "this" type.
-        function isIndependentInterface(symbol: Symbol): boolean {
+        /**
+         * Returns true if the interface given by the symbol is free of "this" references.
+         *
+         * Specifically, the result is true if the interface itself contains no references
+         * to "this" in its body, if all base types are interfaces,
+         * and if none of the base interfaces have a "this" type.
+         */
+        function isThislessInterface(symbol: Symbol): boolean {
             for (const declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
                     if (declaration.flags & NodeFlags.ContainsThis) {
@@ -5142,7 +5145,7 @@ namespace ts {
                 // property types inferred from initializers and method return types inferred from return statements are very hard
                 // to exhaustively analyze). We give interfaces a "this" type if we can't definitely determine that they are free of
                 // "this" references.
-                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || !isIndependentInterface(symbol)) {
+                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || !isThislessInterface(symbol)) {
                     type.objectFlags |= ObjectFlags.Reference;
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
@@ -5324,22 +5327,12 @@ namespace ts {
             return undefined;
         }
 
-        // A type reference is considered independent if each type argument is considered independent.
-        function isIndependentTypeReference(node: TypeReferenceNode): boolean {
-            if (node.typeArguments) {
-                for (const typeNode of node.typeArguments) {
-                    if (!isIndependentType(typeNode)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        // A type is considered independent if it the any, string, number, boolean, symbol, or void keyword, a string
-        // literal type, an array with an element type that is considered independent, or a type reference that is
-        // considered independent.
-        function isIndependentType(node: TypeNode): boolean {
+        /**
+         * A type is free of this references if it's the any, string, number, boolean, symbol, or void keyword, a string
+         * literal type, an array with an element type that is free of this references, or a type reference that is
+         * free of this references.
+         */
+        function isThislessType(node: TypeNode): boolean {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -5354,54 +5347,58 @@ namespace ts {
                 case SyntaxKind.LiteralType:
                     return true;
                 case SyntaxKind.ArrayType:
-                    return isIndependentType((<ArrayTypeNode>node).elementType);
+                    return isThislessType((<ArrayTypeNode>node).elementType);
                 case SyntaxKind.TypeReference:
-                    return isIndependentTypeReference(<TypeReferenceNode>node);
+                    return !(node as TypeReferenceNode).typeArguments || (node as TypeReferenceNode).typeArguments.every(isThislessType);
             }
             return false;
         }
 
-        // A variable-like declaration is considered independent (free of this references) if it has a type annotation
-        // that specifies an independent type, or if it has no type annotation and no initializer (and thus of type any).
-        function isIndependentVariableLikeDeclaration(node: VariableLikeDeclaration): boolean {
+        /** A type parameter is thisless if its contraint is thisless, or if it has no constraint. */
+        function isThislessTypeParameter(node: TypeParameterDeclaration) {
+            return !node.constraint || isThislessType(node.constraint);
+        }
+
+        /**
+         * A variable-like declaration is free of this references if it has a type annotation
+         * that is thisless, or if it has no type annotation and no initializer (and is thus of type any).
+         */
+        function isThislessVariableLikeDeclaration(node: VariableLikeDeclaration): boolean {
             const typeNode = getEffectiveTypeAnnotationNode(node);
-            return typeNode ? isIndependentType(typeNode) : !node.initializer;
+            return typeNode ? isThislessType(typeNode) : !node.initializer;
         }
 
-        // A function-like declaration is considered independent (free of this references) if it has a return type
-        // annotation that is considered independent and if each parameter is considered independent.
-        function isIndependentFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-            if (node.kind !== SyntaxKind.Constructor) {
-                const typeNode = getEffectiveReturnTypeNode(node);
-                if (!typeNode || !isIndependentType(typeNode)) {
-                    return false;
-                }
-            }
-            for (const parameter of node.parameters) {
-                if (!isIndependentVariableLikeDeclaration(parameter)) {
-                    return false;
-                }
-            }
-            return true;
+        /**
+         * A function-like declaration is considered free of `this` references if it has a return type
+         * annotation that is free of this references and if each parameter is thisless and if
+         * each type parameter (if present) is thisless.
+         */
+        function isThislessFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
+            const returnType = getEffectiveReturnTypeNode(node);
+            return (node.kind === SyntaxKind.Constructor || (returnType && isThislessType(returnType))) &&
+                node.parameters.every(isThislessVariableLikeDeclaration) &&
+                (!node.typeParameters || node.typeParameters.every(isThislessTypeParameter));
         }
 
-        // Returns true if the class or interface member given by the symbol is free of "this" references. The
-        // function may return false for symbols that are actually free of "this" references because it is not
-        // feasible to perform a complete analysis in all cases. In particular, property members with types
-        // inferred from their initializers and function members with inferred return types are conservatively
-        // assumed not to be free of "this" references.
-        function isIndependentMember(symbol: Symbol): boolean {
+        /**
+         * Returns true if the class or interface member given by the symbol is free of "this" references. The
+         * function may return false for symbols that are actually free of "this" references because it is not
+         * feasible to perform a complete analysis in all cases. In particular, property members with types
+         * inferred from their initializers and function members with inferred return types are conservatively
+         * assumed not to be free of "this" references.
+         */
+        function isThisless(symbol: Symbol): boolean {
             if (symbol.declarations && symbol.declarations.length === 1) {
                 const declaration = symbol.declarations[0];
                 if (declaration) {
                     switch (declaration.kind) {
                         case SyntaxKind.PropertyDeclaration:
                         case SyntaxKind.PropertySignature:
-                            return isIndependentVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
+                            return isThislessVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
-                            return isIndependentFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
+                            return isThislessFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
                     }
                 }
             }
@@ -5413,7 +5410,7 @@ namespace ts {
         function createInstantiatedSymbolTable(symbols: Symbol[], mapper: TypeMapper, mappingThisOnly: boolean): SymbolTable {
             const result = createSymbolTable();
             for (const symbol of symbols) {
-                result.set(symbol.escapedName, mappingThisOnly && isIndependentMember(symbol) ? symbol : instantiateSymbol(symbol, mapper));
+                result.set(symbol.escapedName, mappingThisOnly && isThisless(symbol) ? symbol : instantiateSymbol(symbol, mapper));
             }
             return result;
         }
@@ -6455,7 +6452,10 @@ namespace ts {
                     }
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
                         const mapper = createTypeMapper(typeParameters, typeArguments);
-                        const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        let defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        if (defaultType && isTypeIdenticalTo(defaultType, emptyObjectType) && isJavaScriptImplicitAny) {
+                            defaultType = anyType;
+                        }
                         typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                     }
                 }
@@ -8908,7 +8908,9 @@ namespace ts {
             if (target.flags & TypeFlags.StringOrNumberLiteral && target.flags & TypeFlags.FreshLiteral) {
                 target = (<LiteralType>target).regularType;
             }
-            if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
+            if (source === target ||
+                relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
+                relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
@@ -9051,7 +9053,8 @@ namespace ts {
                     return isIdenticalTo(source, target);
                 }
 
-                if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
+                if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
+                    isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 if (isObjectLiteralType(source) && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
@@ -10899,22 +10902,25 @@ namespace ts {
                     // it as an inference candidate. Hopefully, a better candidate will come along that does
                     // not contain anyFunctionType when we come back to this argument for its second round
                     // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
-                    // when constructing types from type parameters that had no inference candidates) and
-                    // implicitNeverType (which is used as the element type for empty array literals).
-                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType || source === implicitNeverType) {
+                    // when constructing types from type parameters that had no inference candidates).
+                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType) {
                         return;
                     }
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
                         if (!inference.isFixed) {
-                            if (!inference.candidates || priority < inference.priority) {
+                            // We give lowest priority to inferences of implicitNeverType (which is used as the
+                            // element type for empty array literals). Thus, inferences from empty array literals
+                            // only matter when no other inferences are made.
+                            const p = priority | (source === implicitNeverType ? InferencePriority.NeverType : 0);
+                            if (!inference.candidates || p < inference.priority) {
                                 inference.candidates = [source];
-                                inference.priority = priority;
+                                inference.priority = p;
                             }
-                            else if (priority === inference.priority) {
+                            else if (p === inference.priority) {
                                 inference.candidates.push(source);
                             }
-                            if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                            if (!(p & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
                                 inference.topLevel = false;
                             }
                         }
@@ -13464,9 +13470,13 @@ namespace ts {
         }
 
         function isInParameterInitializerBeforeContainingFunction(node: Node) {
+            let inBindingInitializer = false;
             while (node.parent && !isFunctionLike(node.parent)) {
-                if (node.parent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node.parent).initializer === node) {
+                if (isParameter(node.parent) && (inBindingInitializer || node.parent.initializer === node)) {
                     return true;
+                }
+                if (isBindingElement(node.parent) && node.parent.initializer === node) {
+                    inBindingInitializer = true;
                 }
 
                 node = node.parent;
@@ -14192,7 +14202,7 @@ namespace ts {
             // type with those properties for which the binding pattern specifies a default value.
             if (contextualTypeHasPattern) {
                 for (const prop of getPropertiesOfType(contextualType)) {
-                    if (!propertiesTable.get(prop.escapedName)) {
+                    if (!propertiesTable.get(prop.escapedName) && !(spread && getPropertyOfType(spread, prop.escapedName))) {
                         if (!(prop.flags & SymbolFlags.Optional)) {
                             error(prop.valueDeclaration || (<TransientSymbol>prop).bindingElement,
                                 Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
@@ -14373,19 +14383,7 @@ namespace ts {
             const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
             // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
             if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
-                const childrenTypes: Type[] = [];
-                for (const child of (parent as JsxElement).children) {
-                    // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
-                    // because then type of children property will have constituent of string type.
-                    if (child.kind === SyntaxKind.JsxText) {
-                        if (!child.containsOnlyWhiteSpaces) {
-                            childrenTypes.push(stringType);
-                        }
-                    }
-                    else {
-                        childrenTypes.push(checkExpression(child, checkMode));
-                    }
-                }
+                const childrenTypes: Type[] = checkJsxChildren(parent as JsxElement, checkMode);
 
                 if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
                     // Error if there is a attribute named "children" explicitly specified and children element.
@@ -14423,6 +14421,23 @@ namespace ts {
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
                 return result;
             }
+        }
+
+        function checkJsxChildren(node: JsxElement | JsxFragment, checkMode?: CheckMode) {
+            const childrenTypes: Type[] = [];
+            for (const child of node.children) {
+                // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
+                // because then type of children property will have constituent of string type.
+                if (child.kind === SyntaxKind.JsxText) {
+                    if (!child.containsOnlyWhiteSpaces) {
+                        childrenTypes.push(stringType);
+                    }
+                }
+                else {
+                    childrenTypes.push(checkExpression(child, checkMode));
+                }
+            }
+            return childrenTypes;
         }
 
         /**
@@ -14959,6 +14974,9 @@ namespace ts {
             if (isNodeOpeningLikeElement) {
                 checkJsxAttributesAssignableToTagNameAttributes(<JsxOpeningLikeElement>node);
             }
+            else {
+                checkJsxChildren((node as JsxOpeningFragment).parent);
+            }
         }
 
         /**
@@ -15162,12 +15180,11 @@ namespace ts {
             if (flags & ModifierFlags.Static) {
                 return true;
             }
-            // An instance property must be accessed through an instance of the enclosing class
-            if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
+             if (type.flags & TypeFlags.TypeParameter) {
                 // get the original type -- represented as the type constraint of the 'this' type
-                type = getConstraintOfTypeParameter(<TypeParameter>type);
+                type = (type as TypeParameter).isThisType ? getConstraintOfTypeParameter(<TypeParameter>type) : getBaseConstraintOfType(<TypeParameter>type);
             }
-            if (!(getObjectFlags(getTargetType(type)) & ObjectFlags.ClassOrInterface && hasBaseType(type, enclosingClass))) {
+            if (!type || !hasBaseType(type, enclosingClass)) {
                 error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
                 return false;
             }
@@ -17160,7 +17177,7 @@ namespace ts {
             if (targetDeclarationKind !== SyntaxKind.Unknown) {
                 const decl = getDeclarationOfKind(resolvedRequire, targetDeclarationKind);
                 // function/variable declaration should be ambient
-                return !!(decl.flags & NodeFlags.Ambient);
+                return !!decl && !!(decl.flags & NodeFlags.Ambient);
             }
             return false;
         }
@@ -20172,7 +20189,16 @@ namespace ts {
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.UnionType:
                         let commonEntityName: EntityName;
-                        for (const typeNode of (<UnionOrIntersectionTypeNode>node).types) {
+                        for (let typeNode of (<UnionOrIntersectionTypeNode>node).types) {
+                            while (typeNode.kind === SyntaxKind.ParenthesizedType) {
+                                typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
+                            }
+                            if (typeNode.kind === SyntaxKind.NeverKeyword) {
+                                continue; // Always elide `never` from the union/intersection if possible
+                            }
+                            if (!strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                                continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
+                            }
                             const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);
                             if (!individualEntityName) {
                                 // Individual is something like string number
@@ -20264,6 +20290,10 @@ namespace ts {
 
                     case SyntaxKind.Parameter:
                         markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
+                        const containingSignature = (node as ParameterDeclaration).parent;
+                        for (const parameter of containingSignature.parameters) {
+                            markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
+                        }
                         break;
                 }
             }
@@ -22410,7 +22440,7 @@ namespace ts {
                     const declaration = memberSymbol.valueDeclaration;
                     if (declaration !== member) {
                         if (isBlockScopedNameDeclaredBeforeUse(declaration, member)) {
-                            return getNodeLinks(declaration).enumMemberValue;
+                            return getEnumMemberValue(declaration as EnumMember);
                         }
                         error(expr, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
                         return 0;

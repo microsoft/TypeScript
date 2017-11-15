@@ -214,7 +214,7 @@ namespace ts {
         UndefinedKeyword,
         FromKeyword,
         GlobalKeyword,
-        OfKeyword, // LastKeyword and LastToken
+        OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
 
@@ -431,7 +431,9 @@ namespace ts {
         FirstJSDocNode = JSDocTypeExpression,
         LastJSDocNode = JSDocPropertyTag,
         FirstJSDocTagNode = JSDocTag,
-        LastJSDocTagNode = JSDocPropertyTag
+        LastJSDocTagNode = JSDocPropertyTag,
+        /* @internal */ FirstContextualKeyword = AbstractKeyword,
+        /* @internal */ LastContextualKeyword = OfKeyword,
     }
 
     export const enum NodeFlags {
@@ -3021,6 +3023,10 @@ namespace ts {
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
 
+        /* @internal */
+        All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
+            | ObjectLiteral | Method | Constructor | GetAccessor | SetAccessor | Signature | TypeParameter | TypeAlias | ExportValue | Alias | Prototype | ExportStar | Optional | Transient,
+
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
         Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
@@ -3607,6 +3613,7 @@ namespace ts {
         NakedTypeVariable = 1 << 1,  // Naked type variable in union or intersection type
         MappedType        = 1 << 2,  // Reverse inference for mapped type
         ReturnType        = 1 << 3,  // Inference made from return type of generic function
+        NeverType         = 1 << 4,  // Inference made from the never type
     }
 
     export interface InferenceInfo {
