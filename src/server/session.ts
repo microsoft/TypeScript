@@ -295,7 +295,7 @@ namespace ts.server {
         }
 
         private writeToEventSocket(body: any, eventName: string): void {
-            this.eventSocket.write(formatMessage({ seq: 0, type: "event", event: eventName, body: body }, this.logger, Buffer.byteLength, this.host.newLine), "utf8");
+            this.eventSocket.write(formatMessage({ seq: 0, type: "event", event: eventName, body }, this.logger, Buffer.byteLength, this.host.newLine), "utf8");
         }
     }
 
