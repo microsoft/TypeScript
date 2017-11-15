@@ -56,6 +56,13 @@ namespace ts.projectSystem {
         endGroup: noop,
         getLogFileName: (): string => undefined
     };
+    export const libFiles: FileOrFolder[] = [
+        { path: "/a/lib/lib.d.ts", content: Harness.getDefaultLibraryFile("lib.d.ts", Harness.IO).content },
+        { path: "/a/lib/lib.es5.d.ts", content: Harness.getNamedDefaultLibraryFile(Harness.IO, "es5").content },
+        { path: "/a/lib/lib.dom.d.ts", content: Harness.getNamedDefaultLibraryFile(Harness.IO, "dom").content },
+        { path: "/a/lib/lib.webworker.importscripts.d.ts", content: Harness.getNamedDefaultLibraryFile(Harness.IO, "webworker.importscripts").content },
+        { path: "/a/lib/lib.scripthost.d.ts", content: Harness.getNamedDefaultLibraryFile(Harness.IO, "scripthost").content }
+    ];
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
@@ -1281,7 +1288,7 @@ namespace ts.projectSystem {
                 content: "let x: number;"
             };
 
-            const host = createServerHost([f1, f2, libFile]);
+            const host = createServerHost([f1, f2, ...libFiles]);
             const service = createProjectService(host);
             service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: toExternalFiles([f1.path, f2.path]), options: {} });
 
@@ -1289,7 +1296,7 @@ namespace ts.projectSystem {
             service.openClientFile(f2.path, "let x: string");
 
             service.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
+            checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, ...libFiles.map(f => f.path)]);
 
             const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false });
             // should contain completions for string
@@ -1958,7 +1965,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: { allowJs: true } })
             };
 
-            let host = createServerHost([file1, file2, config1, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            let host = createServerHost([file1, file2, config1, ...libFiles], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             let session = createSession(host);
 
             // Specify .html extension as mixed content in a configure host request
@@ -1980,7 +1987,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: { allowJs: false } })
             };
 
-            host = createServerHost([file1, file2, config2, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            host = createServerHost([file1, file2, config2, ...libFiles], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
             session.executeCommand(configureHostRequest);
@@ -1999,7 +2006,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({})
             };
 
-            host = createServerHost([file1, file2, config3, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            host = createServerHost([file1, file2, config3, ...libFiles], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
             session.executeCommand(configureHostRequest);
@@ -2018,7 +2025,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] })
             };
 
-            host = createServerHost([file1, file2, config4, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            host = createServerHost([file1, file2, config4, ...libFiles], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
             session.executeCommand(configureHostRequest);
@@ -2037,7 +2044,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: [file2.path] })
             };
 
-            host = createServerHost([file1, file2, config5, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            host = createServerHost([file1, file2, config5, ...libFiles], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
             session.executeCommand(configureHostRequest);
@@ -4499,7 +4506,7 @@ namespace ts.projectSystem {
                 path: "/a/b/f1.js",
                 content: "function test1() { }"
             };
-            const host = createServerHost([f1, libFile]);
+            const host = createServerHost([f1, ...libFiles]);
             const session = createSession(host);
             openFilesForSession([f1], session);
 
@@ -4535,7 +4542,7 @@ namespace ts.projectSystem {
                 path: "/a/b/f1.js",
                 content: "function test1() { }"
             };
-            const host = createServerHost([f1, libFile]);
+            const host = createServerHost([f1, ...libFiles]);
             const session = createSession(host);
             const projectService = session.getProjectService();
             const projectFileName = "/a/b/project.csproj";

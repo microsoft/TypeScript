@@ -1,0 +1,7 @@
+=== tests/cases/compiler/libReferenceDirective.ts ===
+/// <reference lib="es2015" />
+const m = new Map<string, number>();
+>m : Map<string, number>
+>new Map<string, number>() : Map<string, number>
+>Map : MapConstructor
+

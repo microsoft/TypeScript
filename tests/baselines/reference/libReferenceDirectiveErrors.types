@@ -1,0 +1,11 @@
+=== tests/cases/compiler/a.ts ===
+/// <reference />
+No type information for this code.=== tests/cases/compiler/b.ts ===
+/// <reference lib="" />
+No type information for this code.=== tests/cases/compiler/c.ts ===
+/// <reference lib="es2015.foo" />
+No type information for this code.=== tests/cases/compiler/d.ts ===
+/// <reference lib="es2015.collections" />
+No type information for this code.=== tests/cases/compiler/e.ts ===
+/// <reference lib="lib.es2015.d.ts" />
+No type information for this code.

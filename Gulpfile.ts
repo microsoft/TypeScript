@@ -30,6 +30,7 @@ import through2 = require("through2");
 import merge2 = require("merge2");
 import * as os from "os";
 import fold = require("travis-fold");
+import ts = require("./lib/typescript");
 const gulp = helpMaker(originalGulp);
 
 Error.stackTraceLimit = 1000;
@@ -74,7 +75,22 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
     }
 });
 
+function readJson(jsonPath: string): any {
+    const jsonText = fs.readFileSync(jsonPath).toString();
+    const result = ts.parseConfigFileTextToJson(jsonPath, jsonText);
+    if (result.error) {
+        throw new Error(diagnosticsToString([result.error]));
+    }
+
+    return result.config;
+
+    function diagnosticsToString(s: ts.Diagnostic[]) {
+        return s.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join(ts.sys.newLine);
+    }
+}
+
 const noop = () => {}; // tslint:disable-line no-empty
+
 function exec(cmd: string, args: string[], complete: () => void = noop, error: (e: any, status: number) => void = noop) {
     console.log(`${cmd} ${args.join(" ")}`);
     // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
@@ -114,71 +130,6 @@ const nodeModulesPathPrefix = path.resolve("./node_modules/.bin/");
 const isWin = /^win/.test(process.platform);
 const mocha = path.join(nodeModulesPathPrefix, "mocha") + (isWin ? ".cmd" : "");
 
-const es2015LibrarySources = [
-    "es2015.core.d.ts",
-    "es2015.collection.d.ts",
-    "es2015.generator.d.ts",
-    "es2015.iterable.d.ts",
-    "es2015.promise.d.ts",
-    "es2015.proxy.d.ts",
-    "es2015.reflect.d.ts",
-    "es2015.symbol.d.ts",
-    "es2015.symbol.wellknown.d.ts"
-];
-
-const es2015LibrarySourceMap = es2015LibrarySources.map(source =>
-    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
-
-const es2016LibrarySource = ["es2016.array.include.d.ts"];
-
-const es2016LibrarySourceMap = es2016LibrarySource.map(source =>
-    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
-
-const es2017LibrarySource = [
-    "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts",
-    "es2017.string.d.ts",
-    "es2017.intl.d.ts",
-    "es2017.typedarrays.d.ts",
-];
-
-const es2017LibrarySourceMap = es2017LibrarySource.map(source =>
-    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
-
-const esnextLibrarySource = [
-    "esnext.asynciterable.d.ts"
-];
-
-const esnextLibrarySourceMap = esnextLibrarySource.map(source =>
-    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
-
-const hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
-
-const librarySourceMap = [
-    // Host library
-    { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"] },
-    { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
-    { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
-    { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
-
-    // JavaScript library
-    { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
-    { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
-    { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
-    { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
-    { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
-
-    // JavaScript + all host library
-    { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
-    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
-
-const libraryTargets = librarySourceMap.map(f =>
-    path.join(builtLocalDirectory, f.target));
-
 /**
  * .lcg file is what localization team uses to know what messages to localize.
  * The file is always generated in 'enu\diagnosticMessages.generated.json.lcg'
@@ -195,17 +146,6 @@ const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessag
 const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
     .map(f => path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json"))
     .concat(generatedLCGFile);
-
-for (const i in libraryTargets) {
-    const entry = librarySourceMap[i];
-    const target = libraryTargets[i];
-    const sources = [copyright].concat(entry.sources.map(s => path.join(libraryDirectory, s)));
-    gulp.task(target, /*help*/ false, [], () =>
-        gulp.src(sources)
-            .pipe(newer(target))
-            .pipe(concat(target, { newLine: "\n\n" }))
-            .pipe(gulp.dest(".")));
-}
 
 const configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
 const configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
@@ -339,6 +279,18 @@ gulp.task(importDefinitelyTypedTestsJs, /*help*/ false, [], () => {
 
 gulp.task("importDefinitelyTypedTests", "Runs scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.ts to copy DT's tests to the TS-internal RWC tests", [importDefinitelyTypedTestsJs], (done) => {
     exec(host, [importDefinitelyTypedTestsJs, "./", "../DefinitelyTyped"], done, done);
+});
+
+const libraries: { libs: string[], paths: Record<string, string> } = readJson(path.resolve("./src/lib/libs.json"));
+const libraryTargets = libraries.libs.map(lib => {
+    const sources = [copyright].concat(["header.d.ts", lib + ".d.ts"].map(s => path.join(libraryDirectory, s)));
+    const target = path.join(builtLocalDirectory, libraries.paths[lib] || ("lib." + lib + ".d.ts"));
+    gulp.task(target, /*help*/ false, [], () =>
+        gulp.src(sources)
+            .pipe(newer(target))
+            .pipe(concat(target, { newLine: "\n\n" }))
+            .pipe(gulp.dest(".")));
+    return target;
 });
 
 gulp.task("lib", "Builds the library targets", libraryTargets);

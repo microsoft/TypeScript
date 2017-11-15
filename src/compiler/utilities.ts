@@ -7,12 +7,21 @@ namespace ts {
 
     export const externalHelpersModuleNameText = "tslib";
 
-    export interface ReferencePathMatchResult {
-        fileReference?: FileReference;
-        diagnosticMessage?: DiagnosticMessage;
-        isNoDefaultLib?: boolean;
-        isTypeReferenceDirective?: boolean;
+    export interface NoDefaultLibDirective {
+        kind: "no-default-lib";
     }
+
+    export interface ReferenceDirective {
+        kind: "path" | "types" | "lib";
+        fileReference: FileReference;
+    }
+
+    export interface ReferenceDirectiveError {
+        kind: "error";
+        diagnosticMessage: DiagnosticMessage;
+    }
+
+    export type ReferencePathMatchResult = NoDefaultLibDirective | ReferenceDirective | ReferenceDirectiveError;
 
     export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T {
         const declarations = symbol.declarations;
@@ -252,11 +261,9 @@ namespace ts {
             commentPos + 2 < commentEnd &&
             text.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
             const textSubStr = text.substring(commentPos, commentEnd);
-            return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
-                textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ||
-                textSubStr.match(fullTripleSlashReferenceTypeReferenceDirectiveRegEx) ||
-                textSubStr.match(defaultLibReferenceRegEx) ?
-                true : false;
+            return fullTripleSlashReferenceRegEx.test(textSubStr) ||
+                fullTripleSlashAmdDependencyRegEx.test(textSubStr) ||
+                fullTripleSlashAmdModuleNameRegEx.test(textSubStr);
         }
         return false;
     }
@@ -721,11 +728,6 @@ namespace ts {
             text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
             text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
     }
-
-    export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-    const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
-    export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-    const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/;
 
     export function isPartOfTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -1873,38 +1875,69 @@ namespace ts {
         return undefined;
     }
 
-    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
-        const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-        const isNoDefaultLibRegEx = new RegExp(defaultLibReferenceRegEx.source, "gim");
-        if (simpleReferenceRegEx.test(comment)) {
-            if (isNoDefaultLibRegEx.test(comment)) {
-                return { isNoDefaultLib: true };
-            }
-            else {
-                const refMatchResult = fullTripleSlashReferencePathRegEx.exec(comment);
-                const refLibResult = !refMatchResult && fullTripleSlashReferenceTypeReferenceDirectiveRegEx.exec(comment);
-                const match = refMatchResult || refLibResult;
-                if (match) {
-                    const pos = commentRange.pos + match[1].length + match[2].length;
-                    return {
-                        fileReference: {
-                            pos,
-                            end: pos + match[3].length,
-                            fileName: match[3]
-                        },
-                        isNoDefaultLib: false,
-                        isTypeReferenceDirective: !!refLibResult
-                    };
-                }
+    const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/im;
+    /**
+     * RegExp that parses a triple-slash reference directive using the following capture groups:
+     *
+     * | Group | Purpose                                                                         |
+     * |:-----:|:--------------------------------------------------------------------------------|
+     * | 1     | Leading characters of the directive                                             |
+     * | 2     | Attribute name ('no-default-lib', 'path', 'types', or 'lib')                    |
+     * | 3     | Quote character (used by a backreference to balance the quoted attribute value) |
+     * | 4     | Attribute value                                                                 |
+     */
+    const fullTripleSlashReferenceRegEx = /^(\/\/\/\s*<reference\s+(no-default-lib|path|types|lib)\s*=\s*)('|")(.+?)\3.*?\/>/i;
 
-                return {
-                    diagnosticMessage: Diagnostics.Invalid_reference_directive_syntax,
-                    isNoDefaultLib: false
-                };
-            }
+    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult | undefined {
+        if (!simpleReferenceRegEx.test(comment)) {
+            return undefined;
         }
+        const match = fullTripleSlashReferenceRegEx.exec(comment);
+        if (!match) {
+            return {
+                diagnosticMessage: Diagnostics.Invalid_reference_directive_syntax,
+                kind: "error"
+            };
+        }
+        const kind = match[2] as "no-default-lib" | "path" | "types" | "lib";
+        if (kind === "no-default-lib") {
+            return { kind };
+        }
+        const fileName = match[4];
+        const pos = commentRange.pos + match[1].length + 1;
+        const end = pos + fileName.length;
+        return { fileReference: { pos, end, fileName }, kind };
+    }
 
-        return undefined;
+    const fullTripleSlashAmdModuleNameRegEx = /^\/\/\/\s*<amd-module\s+name\s*=\s*('|")(.+?)\1/i;
+
+    export function getAmdModuleNameFromComment(comment: string): string | undefined {
+        const match = fullTripleSlashAmdModuleNameRegEx.exec(comment);
+        return match && match[2];
+    }
+
+    const fullTripleSlashAmdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+(?:path\s*=\s*('|")(.+?)\1(?:\s+name\s*=\s*('|")(.+?)\3)?|name\s*=\s*('|")(.+?)\5\s+path\s*=\s*('|")(.+?)\7).*?\/>/i;
+
+    export function getAmdDependencyFromComment(comment: string): AmdDependency | undefined {
+        const match = fullTripleSlashAmdDependencyRegEx.exec(comment);
+        if (match) {
+            const path = match[2] || match[8];
+            const name = match[4] || match[6];
+            return { path, name };
+        }
+    }
+
+    const checkJsDirectiveRegEx = /^\/\/\/?\s*(@ts-check|@ts-nocheck)\s*$/i;
+
+    export function getCheckJsDirectiveFromComment(comment: string, commentRange: CommentRange): CheckJsDirective | undefined {
+        const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
+        if (checkJsDirectiveMatchResult) {
+            return {
+                enabled: equateStringsCaseInsensitive(checkJsDirectiveMatchResult[1], "@ts-check"),
+                end: commentRange.end,
+                pos: commentRange.pos
+            };
+        }
     }
 
     export function isKeyword(token: SyntaxKind): boolean {
@@ -3469,6 +3502,64 @@ namespace ts {
             return ModifierFlags.Public | ModifierFlags.Static;
         }
         return 0;
+    }
+
+    /**
+     * Given a name and a list of names are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
+     * Names less than length 3 only check for case-insensitive equality, not Levenshtein distance.
+     *
+     * If there is a candidate that's the same except for case, return that.
+     * If there is a candidate that's within one edit of the name, return that.
+     * Otherwise, return the candidate with the smallest Levenshtein distance,
+     *    except for candidates:
+     *      * With no name
+     *      * Whose length differs from the target name by more than 0.3 of the length of the name.
+     *      * Whose levenshtein distance is more than 0.4 of the length of the name
+     *        (0.4 allows 1 substitution/transposition for every 5 characters,
+     *         and 1 insertion/deletion at 3 characters)
+     * Names longer than 30 characters don't get suggestions because Levenshtein distance is an n**2 algorithm.
+     */
+    export function getSpellingSuggestion<T>(name: string, choices: T[], exclusions: string[] | undefined, getName: (candidate: T) => string | undefined): T | undefined {
+        const worstDistance = name.length * 0.4;
+        const maximumLengthDifference = Math.min(3, name.length * 0.34);
+        let bestDistance = Number.MAX_VALUE;
+        let bestCandidate = undefined;
+        let justCheckExactMatches = false;
+        if (name.length > 30) {
+            return undefined;
+        }
+        name = name.toLowerCase();
+        for (const candidate of choices) {
+            let candidateName = getName(candidate);
+            if (candidateName &&
+                Math.abs(candidateName.length - name.length) < maximumLengthDifference) {
+                candidateName = candidateName.toLowerCase();
+                if (candidateName === name) {
+                    return candidate;
+                }
+                if (justCheckExactMatches) {
+                    continue;
+                }
+                if (candidateName.length < 3 ||
+                    name.length < 3 ||
+                    contains(exclusions, candidateName)) {
+                    continue;
+                }
+                const distance = levenshtein(name, candidateName);
+                if (distance > worstDistance) {
+                    continue;
+                }
+                if (distance < 3) {
+                    justCheckExactMatches = true;
+                    bestCandidate = candidate;
+                }
+                else if (distance < bestDistance) {
+                    bestDistance = distance;
+                    bestCandidate = candidate;
+                }
+            }
+        }
+        return bestCandidate;
     }
 
     export function levenshtein(s1: string, s2: string): number {

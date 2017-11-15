@@ -37,19 +37,49 @@ else if (process.env.PATH !== undefined) {
     process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
-function filesFromConfig(configPath) {
-    var configText = fs.readFileSync(configPath).toString();
-    var config = ts.parseConfigFileTextToJson(configPath, configText);
-    if (config.error) {
-        throw new Error(diagnosticsToString([config.error]));
+function readJson(jsonPath) {
+    var jsonText = fs.readFileSync(jsonPath).toString();
+    var result = ts.parseJsonText(jsonPath, jsonText);
+    reportDiagnostics(/** @type {*} */(result).parseDiagnostics);
+    var diagnostics = [];
+    var json = ts.convertToObject(result, diagnostics);
+    reportDiagnostics(diagnostics);
+    return json;
+    // var result = ts.parseConfigFileTextToJson(jsonPath, jsonText);
+    // if (result.error) {
+    //     throw new Error(diagnosticsToString([result.error]));
+    // }
+
+    // return result.config;
+
+    // function diagnosticsToString(s) {
+    //     return s.map(function(e) { return ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine); }).join(ts.sys.newLine);
+    // }
+}
+
+function reportDiagnostics(diagnostics) {
+    if (diagnostics && diagnostics.length) {
+        throw new Error("An error ocurred during parse:\n" + diagnosticsToString(diagnostics));
     }
-    const configFileContent = ts.parseJsonConfigFileContent(config.config, ts.sys, path.dirname(configPath));
+
+    function diagnosticsToString(s) {
+        return ts.formatDiagnostics(s, {
+            getCurrentDirectory() { return process.cwd(); },
+            getCanonicalFileName(fileName) { return fileName; },
+            getNewLine() { return os.EOL; }
+        });
+    }
+}
+
+function filesFromConfig(configPath) {
+    var jsonText = fs.readFileSync(configPath).toString();
+    var config = ts.parseConfigFileTextToJson(configPath, jsonText).config;
+    var configFileContent = ts.parseJsonConfigFileContent(config, ts.sys, path.dirname(configPath));
     if (configFileContent.errors && configFileContent.errors.length) {
         throw new Error(diagnosticsToString(configFileContent.errors));
     }
 
     return configFileContent.fileNames;
-
     function diagnosticsToString(s) {
         return s.map(function(e) { return ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine); }).join(ts.sys.newLine);
     }
@@ -170,76 +200,6 @@ var harnessSources = harnessCoreSources.concat([
 ].map(function (f) {
     return path.join(serverDirectory, f);
 }));
-
-var es2015LibrarySources = [
-    "es2015.core.d.ts",
-    "es2015.collection.d.ts",
-    "es2015.generator.d.ts",
-    "es2015.iterable.d.ts",
-    "es2015.promise.d.ts",
-    "es2015.proxy.d.ts",
-    "es2015.reflect.d.ts",
-    "es2015.symbol.d.ts",
-    "es2015.symbol.wellknown.d.ts"
-];
-
-var es2015LibrarySourceMap = es2015LibrarySources.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2016LibrarySource = ["es2016.array.include.d.ts"];
-
-var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2017LibrarySource = [
-    "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts",
-    "es2017.string.d.ts",
-    "es2017.intl.d.ts",
-    "es2017.typedarrays.d.ts",
-];
-
-var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var esnextLibrarySource = [
-    "esnext.asynciterable.d.ts"
-];
-
-var esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
-
-var librarySourceMap = [
-    // Host library
-    { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"] },
-    { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
-    { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
-    { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
-
-    // JavaScript library
-    { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
-    { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
-    { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
-    { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
-    { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
-
-    // JavaScript + all host library
-    { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
-    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
-
-var libraryTargets = librarySourceMap.map(function (f) {
-    return path.join(builtLocalDirectory, f.target);
-});
 
 /**
  * .lcg file is what localization team uses to know what messages to localize.
@@ -415,18 +375,18 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
 // Prerequisite task for built directory and library typings
 directory(builtLocalDirectory);
 
-for (var i in libraryTargets) {
-    (function (i) {
-        var entry = librarySourceMap[i];
-        var target = libraryTargets[i];
-        var sources = [copyright].concat(entry.sources.map(function (s) {
-            return path.join(libraryDirectory, s);
-        }));
-        file(target, [builtLocalDirectory].concat(sources), function () {
-            concatenateFiles(target, sources);
-        });
-    })(i);
-}
+/** @type {{ libs:string[], paths: Record<string, string> }} */
+var libraries = readJson(path.resolve("./src/lib/libs.json"));
+var libraryTargets = libraries.libs.map(function (lib) {
+    var sources = [copyright].concat(["header.d.ts", lib + ".d.ts"].map(function (s) { 
+        return path.join(libraryDirectory, s); 
+    }));
+    var target = path.join(builtLocalDirectory, libraries.paths[lib] || ("lib." + lib + ".d.ts"));
+    file(target, [builtLocalDirectory].concat(sources), function () {
+        concatenateFiles(target, sources);
+    });
+    return target;
+});
 
 // Lib target to build the library files
 desc("Builds the library targets");

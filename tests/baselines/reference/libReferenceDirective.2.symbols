@@ -1,0 +1,7 @@
+=== tests/cases/compiler/libReferenceDirective.2.ts ===
+/// <reference lib="dom" />
+Object.create(null);
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+

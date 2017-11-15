@@ -1,4 +1,4 @@
-/// <reference path="lib.dom.d.ts" />
+/// <reference lib="dom" />
 
 interface DOMTokenList {
     [Symbol.iterator](): IterableIterator<string>;
