@@ -1,0 +1,22 @@
+=== tests/cases/compiler/getGlobalESSymbolType.ts ===
+interface A {
+>A : A
+
+    m(x: string): void;
+>m : (x: string) => void
+>x : string
+}
+
+declare class B {
+>B : B
+
+    m(x: string | symbol): void;
+>m : (x: string | symbol) => void
+>x : string | symbol
+}
+
+declare class C extends B implements A {}
+>C : C
+>B : B
+>A : A
+
