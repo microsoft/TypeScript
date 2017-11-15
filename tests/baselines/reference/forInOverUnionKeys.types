@@ -1,0 +1,39 @@
+=== tests/cases/compiler/forInOverUnionKeys.ts ===
+type TypeDescription<T> = {[prop in keyof T]: undefined };
+>TypeDescription : TypeDescription<T>
+>T : T
+>prop : prop
+>T : T
+
+function getAllProperties<T>(typeDesc: (T|TypeDescription<T>)): ReadonlyArray<keyof T>
+>getAllProperties : <T>(typeDesc: T | TypeDescription<T>) => ReadonlyArray<keyof T>
+>T : T
+>typeDesc : T | TypeDescription<T>
+>T : T
+>TypeDescription : TypeDescription<T>
+>T : T
+>ReadonlyArray : ReadonlyArray<T>
+>T : T
+{
+    const props: Array<keyof T> = [];
+>props : (keyof T)[]
+>Array : T[]
+>T : T
+>[] : undefined[]
+
+    for (var iPropName in typeDesc)
+>iPropName : keyof (T | TypeDescription<T>)
+>typeDesc : T | TypeDescription<T>
+    {
+        props.push(iPropName);
+>props.push(iPropName) : number
+>props.push : (...items: (keyof T)[]) => number
+>props : (keyof T)[]
+>push : (...items: (keyof T)[]) => number
+>iPropName : keyof (T | TypeDescription<T>)
+    }
+
+    return props;
+>props : (keyof T)[]
+}
+

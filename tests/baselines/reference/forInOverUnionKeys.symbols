@@ -1,0 +1,37 @@
+=== tests/cases/compiler/forInOverUnionKeys.ts ===
+type TypeDescription<T> = {[prop in keyof T]: undefined };
+>TypeDescription : Symbol(TypeDescription, Decl(forInOverUnionKeys.ts, 0, 0))
+>T : Symbol(T, Decl(forInOverUnionKeys.ts, 0, 21))
+>prop : Symbol(prop, Decl(forInOverUnionKeys.ts, 0, 28))
+>T : Symbol(T, Decl(forInOverUnionKeys.ts, 0, 21))
+
+function getAllProperties<T>(typeDesc: (T|TypeDescription<T>)): ReadonlyArray<keyof T>
+>getAllProperties : Symbol(getAllProperties, Decl(forInOverUnionKeys.ts, 0, 58))
+>T : Symbol(T, Decl(forInOverUnionKeys.ts, 2, 26))
+>typeDesc : Symbol(typeDesc, Decl(forInOverUnionKeys.ts, 2, 29))
+>T : Symbol(T, Decl(forInOverUnionKeys.ts, 2, 26))
+>TypeDescription : Symbol(TypeDescription, Decl(forInOverUnionKeys.ts, 0, 0))
+>T : Symbol(T, Decl(forInOverUnionKeys.ts, 2, 26))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(forInOverUnionKeys.ts, 2, 26))
+{
+    const props: Array<keyof T> = [];
+>props : Symbol(props, Decl(forInOverUnionKeys.ts, 4, 9))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(forInOverUnionKeys.ts, 2, 26))
+
+    for (var iPropName in typeDesc)
+>iPropName : Symbol(iPropName, Decl(forInOverUnionKeys.ts, 6, 12))
+>typeDesc : Symbol(typeDesc, Decl(forInOverUnionKeys.ts, 2, 29))
+    {
+        props.push(iPropName);
+>props.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>props : Symbol(props, Decl(forInOverUnionKeys.ts, 4, 9))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>iPropName : Symbol(iPropName, Decl(forInOverUnionKeys.ts, 6, 12))
+    }
+
+    return props;
+>props : Symbol(props, Decl(forInOverUnionKeys.ts, 4, 9))
+}
+
