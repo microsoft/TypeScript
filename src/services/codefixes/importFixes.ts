@@ -184,8 +184,10 @@ namespace ts.codefix {
         Equals
     }
 
-    export function getCodeActionForImport(moduleSymbol: Symbol, context: ImportCodeFixOptions): ImportCodeAction[] {
-        const declarations = getImportDeclarations(moduleSymbol, context.checker, context.sourceFile, context.cachedImportDeclarations);
+    export function getCodeActionForImport(moduleSymbols: Symbol | ReadonlyArray<Symbol>, context: ImportCodeFixOptions): ImportCodeAction[] {
+        moduleSymbols = toArray(moduleSymbols);
+        const declarations = flatMap(moduleSymbols, moduleSymbol =>
+            getImportDeclarations(moduleSymbol, context.checker, context.sourceFile, context.cachedImportDeclarations));
         const actions: ImportCodeAction[] = [];
         if (context.symbolToken) {
             // It is possible that multiple import statements with the same specifier exist in the file.
@@ -207,7 +209,7 @@ namespace ts.codefix {
                 }
             }
         }
-        actions.push(getCodeActionForAddImport(moduleSymbol, context, declarations));
+        actions.push(getCodeActionForAddImport(moduleSymbols, context, declarations));
         return actions;
     }
 
@@ -313,16 +315,19 @@ namespace ts.codefix {
         }
     }
 
-    export function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbol: Symbol, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
-        const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
-        const sourceDirectory = getDirectoryPath(sourceFile.fileName);
+    export function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbols: ReadonlyArray<Symbol>, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
+        const choices = mapIter(arrayIter(moduleSymbols), moduleSymbol => {
+            const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
+            const sourceDirectory = getDirectoryPath(sourceFile.fileName);
 
-        return tryGetModuleNameFromAmbientModule(moduleSymbol) ||
-            tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName) ||
-            tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
-            tryGetModuleNameFromBaseUrl(options, moduleFileName, getCanonicalFileName) ||
-            options.rootDirs && tryGetModuleNameFromRootDirs(options.rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
-            removeFileExtension(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName));
+            return tryGetModuleNameFromAmbientModule(moduleSymbol) ||
+                tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName) ||
+                tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
+                tryGetModuleNameFromBaseUrl(options, moduleFileName, getCanonicalFileName) ||
+                options.rootDirs && tryGetModuleNameFromRootDirs(options.rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
+                removeFileExtension(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName));
+        });
+        return best(choices, (a, b) => a.length < b.length);
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
@@ -546,7 +551,7 @@ namespace ts.codefix {
     }
 
     function getCodeActionForAddImport(
-        moduleSymbol: Symbol,
+        moduleSymbols: ReadonlyArray<Symbol>,
         ctx: ImportCodeFixOptions,
         declarations: ReadonlyArray<AnyImportSyntax>): ImportCodeAction {
         const fromExistingImport = firstDefined(declarations, declaration => {
@@ -568,7 +573,7 @@ namespace ts.codefix {
         }
 
         const moduleSpecifier = firstDefined(declarations, moduleSpecifierFromAnyImport)
-            || getModuleSpecifierForNewImport(ctx.sourceFile, moduleSymbol, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
+            || getModuleSpecifierForNewImport(ctx.sourceFile, moduleSymbols, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
         return getCodeActionForNewImport(ctx, moduleSpecifier);
     }
 
@@ -662,24 +667,33 @@ namespace ts.codefix {
             symbolName = symbol.name;
         }
         else {
-            Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
+            throw Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
         }
 
-        const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
-
+        return getCodeActionForImport(symbol, { ...context, symbolName, kind: getUmdImportKind(compilerOptions) });
+    }
+    function getUmdImportKind(compilerOptions: CompilerOptions) {
         // Import a synthetic `default` if enabled.
-        if (allowSyntheticDefaultImports) {
-            return getCodeActionForImport(symbol, { ...context, symbolName, kind: ImportKind.Default });
+        if (getAllowSyntheticDefaultImports(compilerOptions)) {
+            return ImportKind.Default;
         }
-        const moduleKind = getEmitModuleKind(compilerOptions);
 
         // When a synthetic `default` is unavailable, use `import..require` if the module kind supports it.
-        if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.CommonJS || moduleKind === ModuleKind.UMD) {
-            return getCodeActionForImport(symbol, { ...context, symbolName, kind: ImportKind.Equals });
+        const moduleKind = getEmitModuleKind(compilerOptions);
+        switch (moduleKind) {
+            case ModuleKind.AMD:
+            case ModuleKind.CommonJS:
+            case ModuleKind.UMD:
+                return ImportKind.Equals;
+            case ModuleKind.System:
+            case ModuleKind.ES2015:
+            case ModuleKind.ESNext:
+            case ModuleKind.None:
+                // Fall back to the `import * as ns` style import.
+                return ImportKind.Namespace;
+            default:
+                throw Debug.assertNever(moduleKind);
         }
-
-        // Fall back to the `import * as ns` style import.
-        return getCodeActionForImport(symbol, { ...context, symbolName, kind: ImportKind.Namespace });
     }
 
     function getActionsForNonUMDImport(context: ImportCodeFixContext, allSourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): ImportCodeAction[] {
