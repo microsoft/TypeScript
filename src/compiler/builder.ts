@@ -77,7 +77,7 @@ namespace ts {
     }
 
     export interface BuilderOptions {
-        getCanonicalFileName: (fileName: string) => string;
+        getCanonicalFileName: GetCanonicalFileName;
         computeHash: (data: string) => string;
     }
 
