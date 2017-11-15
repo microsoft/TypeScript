@@ -5111,26 +5111,18 @@ namespace ts {
          * to "this" in its body, if all base types are interfaces,
          * and if none of the base interfaces have a "this" type.
          */
-        function isThislessInterface(symbol: Symbol): boolean {
-            for (const declaration of symbol.declarations) {
-                if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                    if (declaration.flags & NodeFlags.ContainsThis) {
-                        return false;
-                    }
-                    const baseTypeNodes = getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration);
-                    if (baseTypeNodes) {
-                        for (const node of baseTypeNodes) {
-                            if (isEntityNameExpression(node.expression)) {
-                                const baseSymbol = resolveEntityName(node.expression, SymbolFlags.Type, /*ignoreErrors*/ true);
-                                if (!baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || getDeclaredTypeOfClassOrInterface(baseSymbol).thisType) {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
+        function interfaceMayReferenceThis(symbol: Symbol): boolean {
+            return some(symbol.declarations, declaration =>
+                isInterfaceDeclaration(declaration) && (
+                    !!(declaration.flags & NodeFlags.ContainsThis)
+                    || some(getInterfaceBaseTypeNodes(declaration), baseTypeReferencesThis)));
+        }
+        function baseTypeReferencesThis({ expression }: ExpressionWithTypeArguments): boolean {
+            if (!isEntityNameExpression(expression)) {
+                return false;
             }
-            return true;
+            const baseSymbol = resolveEntityName(expression, SymbolFlags.Type, /*ignoreErrors*/ true);
+            return !baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || !!getDeclaredTypeOfClassOrInterface(baseSymbol).thisType;
         }
 
         function getDeclaredTypeOfClassOrInterface(symbol: Symbol): InterfaceType {
@@ -5145,7 +5137,7 @@ namespace ts {
                 // property types inferred from initializers and method return types inferred from return statements are very hard
                 // to exhaustively analyze). We give interfaces a "this" type if we can't definitely determine that they are free of
                 // "this" references.
-                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || !isThislessInterface(symbol)) {
+                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || interfaceMayReferenceThis(symbol)) {
                     type.objectFlags |= ObjectFlags.Reference;
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
@@ -5327,13 +5319,9 @@ namespace ts {
             return undefined;
         }
 
-        /**
-         * A type is free of this references if it's the any, string, number, boolean, symbol, or void keyword, a string
-         * literal type, an array with an element type that is free of this references, or a type reference that is
-         * free of this references.
-         */
-        function isThislessType(node: TypeNode): boolean {
-            switch (node.kind) {
+        /** A type may reference `this` unless it's one of a few special types. */
+        function typeMayReferenceThis(node: TypeNode | undefined): boolean {
+            switch (node && node.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
@@ -5345,64 +5333,53 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.LiteralType:
-                    return true;
+                    return false;
                 case SyntaxKind.ArrayType:
-                    return isThislessType((<ArrayTypeNode>node).elementType);
+                    return typeMayReferenceThis((<ArrayTypeNode>node).elementType);
                 case SyntaxKind.TypeReference:
-                    return !(node as TypeReferenceNode).typeArguments || (node as TypeReferenceNode).typeArguments.every(isThislessType);
+                    return some((node as TypeReferenceNode).typeArguments, typeMayReferenceThis);
             }
-            return false;
+            return true;
         }
 
-        /** A type parameter is thisless if its contraint is thisless, or if it has no constraint. */
-        function isThislessTypeParameter(node: TypeParameterDeclaration) {
-            return !node.constraint || isThislessType(node.constraint);
-        }
-
-        /**
-         * A variable-like declaration is free of this references if it has a type annotation
-         * that is thisless, or if it has no type annotation and no initializer (and is thus of type any).
-         */
-        function isThislessVariableLikeDeclaration(node: VariableLikeDeclaration): boolean {
+        /** A variable-like declaration may reference `this` if its type does or if it has no declared type and an initializer (which may infer a `this` type). */
+        function variableLikeDeclarationMayReferenceThis(node: VariableLikeDeclaration): boolean {
             const typeNode = getEffectiveTypeAnnotationNode(node);
-            return typeNode ? isThislessType(typeNode) : !node.initializer;
+            return typeNode ? typeMayReferenceThis(typeNode) : !!node.initializer;
         }
 
         /**
-         * A function-like declaration is considered free of `this` references if it has a return type
-         * annotation that is free of this references and if each parameter is thisless and if
-         * each type parameter (if present) is thisless.
+         * Returns true if the class/interface member may reference `this`.
+         * May return true for symbols that don't actually reference `this` because it would be slow to do a complete analysis.
+         * For example, property members with types inferred from initializers or function members with inferred return types are
+         * conservatively assumed to reference `this`.
          */
-        function isThislessFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-            const returnType = getEffectiveReturnTypeNode(node);
-            return (node.kind === SyntaxKind.Constructor || (returnType && isThislessType(returnType))) &&
-                node.parameters.every(isThislessVariableLikeDeclaration) &&
-                (!node.typeParameters || node.typeParameters.every(isThislessTypeParameter));
-        }
-
-        /**
-         * Returns true if the class or interface member given by the symbol is free of "this" references. The
-         * function may return false for symbols that are actually free of "this" references because it is not
-         * feasible to perform a complete analysis in all cases. In particular, property members with types
-         * inferred from their initializers and function members with inferred return types are conservatively
-         * assumed not to be free of "this" references.
-         */
-        function isThisless(symbol: Symbol): boolean {
-            if (symbol.declarations && symbol.declarations.length === 1) {
-                const declaration = symbol.declarations[0];
-                if (declaration) {
-                    switch (declaration.kind) {
-                        case SyntaxKind.PropertyDeclaration:
-                        case SyntaxKind.PropertySignature:
-                            return isThislessVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.MethodSignature:
-                        case SyntaxKind.Constructor:
-                            return isThislessFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
-                    }
+        function symbolMayReferenceThis(symbol: Symbol): boolean {
+            const declaration = singleOrUndefined(symbol.declarations);
+            if (!declaration) return true;
+            switch (declaration.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return variableLikeDeclarationMayReferenceThis(<PropertyDeclaration | PropertySignature>declaration);
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.Constructor: {
+                    // A function-like declaration references `this` if its return type does or some parameter / type parameter does.
+                    const fn = declaration as MethodDeclaration | MethodSignature | ConstructorDeclaration;
+                    return (declaration.kind !== SyntaxKind.Constructor && typeMayReferenceThis(getEffectiveReturnTypeNode(fn)))
+                        || fn.parameters.some(variableLikeDeclarationMayReferenceThis)
+                        // A type parameter references `this` if its constraint does.
+                        || some(fn.typeParameters, tp => typeMayReferenceThis(tp.constraint));
                 }
+                case SyntaxKind.Parameter:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.PropertyAccessExpression: // See `tests/cases/fourslash/renameJsThisProperty05` and 06
+                    return true; // TODO: GH#20034
+                default:
+                    throw Debug.failBadSyntaxKind(declaration);
             }
-            return false;
         }
 
         // The mappingThisOnly flag indicates that the only type parameter being mapped is "this". When the flag is true,
@@ -5410,7 +5387,7 @@ namespace ts {
         function createInstantiatedSymbolTable(symbols: Symbol[], mapper: TypeMapper, mappingThisOnly: boolean): SymbolTable {
             const result = createSymbolTable();
             for (const symbol of symbols) {
-                result.set(symbol.escapedName, mappingThisOnly && isThisless(symbol) ? symbol : instantiateSymbol(symbol, mapper));
+                result.set(symbol.escapedName, mappingThisOnly && !symbolMayReferenceThis(symbol) ? symbol : instantiateSymbol(symbol, mapper));
             }
             return result;
         }
