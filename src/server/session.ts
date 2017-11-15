@@ -260,7 +260,7 @@ namespace ts.server {
         private host: ServerHost;
         private logger: Logger;
         private eventPort: number;
-        private eventSocket: NodeSocket;
+        private eventSocket: NodeSocket | undefined;
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
 
         constructor(host: ServerHost, logger: Logger, eventPort: number) {
@@ -280,7 +280,7 @@ namespace ts.server {
             });
         }
 
-        public event<T>(body: T, eventName: string): void {
+        public event = <T>(body: T, eventName: string) => {
             if (!this.eventSocket) {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
                     this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
