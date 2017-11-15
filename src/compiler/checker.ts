@@ -13525,48 +13525,43 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualTypeForBinaryOperand(node: Expression): Type {
+        function getContextualTypeForBinaryOperand(node: Expression): Type | undefined {
             const binaryExpression = <BinaryExpression>node.parent;
-            const operator = binaryExpression.operatorToken.kind;
-            if (isAssignmentOperator(operator)) {
-                if (node === binaryExpression.right) {
-                    // Don't do this for special property assignments to avoid circularity
-                    switch (getSpecialPropertyAssignmentKind(binaryExpression)) {
-                        case SpecialPropertyAssignmentKind.None:
-                            break;
-                        case SpecialPropertyAssignmentKind.Property:
-                            // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
-                            // See `bindStaticPropertyAssignment` in `binder.ts`.
-                            if (!binaryExpression.left.symbol) {
-                                break;
-                            }
-                            // falls through
-                        case SpecialPropertyAssignmentKind.ExportsProperty:
-                        case SpecialPropertyAssignmentKind.ModuleExports:
-                        case SpecialPropertyAssignmentKind.PrototypeProperty:
-                        case SpecialPropertyAssignmentKind.ThisProperty:
-                            return undefined;
-                    }
+            const { left, operatorToken, right } = binaryExpression;
+            switch (operatorToken.kind) {
+                case SyntaxKind.EqualsToken:
                     // In an assignment expression, the right operand is contextually typed by the type of the left operand.
-                    return getTypeOfExpression(binaryExpression.left);
-                }
+                    // Don't do this for special property assignments to avoid circularity
+                    return node !== right || isNonContextualBinaryExpression(binaryExpression) ? undefined : getTypeOfExpression(left);
+                case SyntaxKind.BarBarToken:
+                    // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
+                    // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
+                    const type = getContextualType(binaryExpression);
+                    return !type && node === right ? getTypeOfExpression(left, /*cache*/ true) : type;
+                case SyntaxKind.AmpersandAmpersandToken:
+                case SyntaxKind.CommaToken:
+                    return node === right ? getContextualType(binaryExpression) : undefined;
+                default:
+                    return undefined;
             }
-            else if (operator === SyntaxKind.BarBarToken) {
-                // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
-                // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
-                let type = getContextualType(binaryExpression);
-                if (!type && node === binaryExpression.right) {
-                    type = getTypeOfExpression(binaryExpression.left, /*cache*/ true);
-                }
-                return type;
+        }
+        function isNonContextualBinaryExpression(binaryExpression: BinaryExpression): boolean {
+            const kind = getSpecialPropertyAssignmentKind(binaryExpression);
+            switch (kind) {
+                case SpecialPropertyAssignmentKind.None:
+                    return false;
+                case SpecialPropertyAssignmentKind.Property:
+                    // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
+                    // See `bindStaticPropertyAssignment` in `binder.ts`.
+                    return !!binaryExpression.left.symbol;
+                case SpecialPropertyAssignmentKind.ExportsProperty:
+                case SpecialPropertyAssignmentKind.ModuleExports:
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
+                case SpecialPropertyAssignmentKind.ThisProperty:
+                    return true;
+                default:
+                    Debug.assertNever(kind);
             }
-            else if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.CommaToken) {
-                if (node === binaryExpression.right) {
-                    return getContextualType(binaryExpression);
-                }
-            }
-
-            return undefined;
         }
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
