@@ -6927,6 +6927,11 @@ declare namespace ts.server {
          * Otherwise, events are sent through the host.
          */
         eventPort?: number;
+        /**
+         * An optional callback overriding the default behavior for sending events.
+         * if set, `canUseEvents` and `eventPort` are ignored.
+         */
+        event?: Event;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
