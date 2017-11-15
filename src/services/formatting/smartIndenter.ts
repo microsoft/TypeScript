@@ -559,10 +559,29 @@ namespace ts.formatting {
             return indentByDefault;
         }
 
-        function isControlFlowEndingStatement(kind: SyntaxKind) {
+        function isControlFlowEndingStatement(kind: SyntaxKind, parent: TextRangeWithKind): boolean {
             switch (kind) {
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.ThrowStatement:
+                    switch (parent.kind) {
+                        case SyntaxKind.Block:
+                            const grandParent = (parent as Node).parent;
+                            switch (grandParent && grandParent.kind) {
+                                case SyntaxKind.FunctionDeclaration:
+                                case SyntaxKind.FunctionExpression:
+                                    // We may want to write inner functions after this.
+                                    return false;
+                                default:
+                                    return true;
+                            }
+                        case SyntaxKind.CaseClause:
+                        case SyntaxKind.DefaultClause:
+                        case SyntaxKind.SourceFile:
+                        case SyntaxKind.ModuleBlock:
+                            return true;
+                        default:
+                            throw Debug.fail();
+                    }
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
                     return true;
@@ -577,7 +596,7 @@ namespace ts.formatting {
          */
         export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind, isNextChild = false): boolean {
             return (nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, /*indentByDefault*/ false))
-                && !(isNextChild && child && isControlFlowEndingStatement(child.kind));
+                && !(isNextChild && child && isControlFlowEndingStatement(child.kind, parent));
         }
     }
 }
