@@ -5111,7 +5111,7 @@ namespace ts {
          * to "this" in its body, if all base types are interfaces,
          * and if none of the base interfaces have a "this" type.
          */
-        function isInterfaceFreeOfThisReference(symbol: Symbol): boolean {
+        function isThislessInterface(symbol: Symbol): boolean {
             for (const declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
                     if (declaration.flags & NodeFlags.ContainsThis) {
@@ -5145,7 +5145,7 @@ namespace ts {
                 // property types inferred from initializers and method return types inferred from return statements are very hard
                 // to exhaustively analyze). We give interfaces a "this" type if we can't definitely determine that they are free of
                 // "this" references.
-                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || !isInterfaceFreeOfThisReference(symbol)) {
+                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || !isThislessInterface(symbol)) {
                     type.objectFlags |= ObjectFlags.Reference;
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
@@ -5327,17 +5327,12 @@ namespace ts {
             return undefined;
         }
 
-        /** A type reference is free of this references if each type argument is free of this references. */
-        function isTypeReferenceFreeOfThisReference(node: TypeReferenceNode): boolean {
-            return !node.typeArguments || node.typeArguments.every(isTypeFreeOfThisReference);
-        }
-
         /**
          * A type is free of this references if it's the any, string, number, boolean, symbol, or void keyword, a string
          * literal type, an array with an element type that is free of this references, or a type reference that is
          * free of this references.
          */
-        function isTypeFreeOfThisReference(node: TypeNode): boolean {
+        function isThislessType(node: TypeNode): boolean {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -5352,37 +5347,37 @@ namespace ts {
                 case SyntaxKind.LiteralType:
                     return true;
                 case SyntaxKind.ArrayType:
-                    return isTypeFreeOfThisReference((<ArrayTypeNode>node).elementType);
+                    return isThislessType((<ArrayTypeNode>node).elementType);
                 case SyntaxKind.TypeReference:
-                    return isTypeReferenceFreeOfThisReference(<TypeReferenceNode>node);
+                    return !(node as TypeReferenceNode).typeArguments || (node as TypeReferenceNode).typeArguments.every(isThislessType);
             }
             return false;
         }
 
-        /** A type parameter is this-free if its contraint is this-free, or if it has no constraint. */
-        function isTypeParameterFreeOfThisReference(node: TypeParameterDeclaration) {
-            return !node.constraint || isTypeFreeOfThisReference(node.constraint);
+        /** A type parameter is thisless if its contraint is thisless, or if it has no constraint. */
+        function isThislessTypeParameter(node: TypeParameterDeclaration) {
+            return !node.constraint || isThislessType(node.constraint);
         }
 
         /**
          * A variable-like declaration is free of this references if it has a type annotation
-         * that is this-free, or if it has no type annotation and no initializer (and is thus of type any).
+         * that is thisless, or if it has no type annotation and no initializer (and is thus of type any).
          */
-        function isVariableLikeDeclarationFreeOfThisReference(node: VariableLikeDeclaration): boolean {
+        function isThislessVariableLikeDeclaration(node: VariableLikeDeclaration): boolean {
             const typeNode = getEffectiveTypeAnnotationNode(node);
-            return typeNode ? isTypeFreeOfThisReference(typeNode) : !node.initializer;
+            return typeNode ? isThislessType(typeNode) : !node.initializer;
         }
 
         /**
          * A function-like declaration is considered free of `this` references if it has a return type
-         * annotation that is free of this references and if each parameter is this-free and if
-         * each type parameter (if present) is this-free.
+         * annotation that is free of this references and if each parameter is thisless and if
+         * each type parameter (if present) is thisless.
          */
-        function isFunctionLikeDeclarationFreeOfThisReference(node: FunctionLikeDeclaration): boolean {
+        function isThislessFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             const returnType = getEffectiveReturnTypeNode(node);
-            return (node.kind === SyntaxKind.Constructor || (returnType && isTypeFreeOfThisReference(returnType))) &&
-                node.parameters.every(isVariableLikeDeclarationFreeOfThisReference) &&
-                (!node.typeParameters || node.typeParameters.every(isTypeParameterFreeOfThisReference));
+            return (node.kind === SyntaxKind.Constructor || (returnType && isThislessType(returnType))) &&
+                node.parameters.every(isThislessVariableLikeDeclaration) &&
+                (!node.typeParameters || node.typeParameters.every(isThislessTypeParameter));
         }
 
         /**
@@ -5392,18 +5387,18 @@ namespace ts {
          * inferred from their initializers and function members with inferred return types are conservatively
          * assumed not to be free of "this" references.
          */
-        function isFreeOfThisReference(symbol: Symbol): boolean {
+        function isThisless(symbol: Symbol): boolean {
             if (symbol.declarations && symbol.declarations.length === 1) {
                 const declaration = symbol.declarations[0];
                 if (declaration) {
                     switch (declaration.kind) {
                         case SyntaxKind.PropertyDeclaration:
                         case SyntaxKind.PropertySignature:
-                            return isVariableLikeDeclarationFreeOfThisReference(<VariableLikeDeclaration>declaration);
+                            return isThislessVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
-                            return isFunctionLikeDeclarationFreeOfThisReference(<FunctionLikeDeclaration>declaration);
+                            return isThislessFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
                     }
                 }
             }
@@ -5415,7 +5410,7 @@ namespace ts {
         function createInstantiatedSymbolTable(symbols: Symbol[], mapper: TypeMapper, mappingThisOnly: boolean): SymbolTable {
             const result = createSymbolTable();
             for (const symbol of symbols) {
-                result.set(symbol.escapedName, mappingThisOnly && isFreeOfThisReference(symbol) ? symbol : instantiateSymbol(symbol, mapper));
+                result.set(symbol.escapedName, mappingThisOnly && isThisless(symbol) ? symbol : instantiateSymbol(symbol, mapper));
             }
             return result;
         }
