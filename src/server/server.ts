@@ -6,6 +6,10 @@ namespace ts.server {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
         canUseEvents: boolean;
+        /**
+        * If defined, specifies the socket used to send events to the client.
+        * Otherwise, events are sent through the host.
+        */
         eventPort?: number;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
@@ -30,6 +34,14 @@ namespace ts.server {
         homedir?(): string;
         tmpdir(): string;
     } = require("os");
+
+    interface NodeSocket {
+        write(data: string, encoding: string): boolean;
+    }
+
+    const net: {
+        connect(options: { port: number }, onConnect?: () => void): NodeSocket
+    } = require("net");
 
     function getGlobalTypingsCacheLocation() {
         switch (process.platform) {
@@ -507,6 +519,49 @@ namespace ts.server {
         }
     }
 
+    class SocketEventSender implements EventSender {
+        private host: ServerHost;
+        private logger: Logger;
+        private eventPort: number;
+        private eventSocket: NodeSocket | undefined;
+        private socketEventQueue: { body: any, eventName: string }[] | undefined;
+
+        constructor(host: ServerHost, logger: Logger, eventPort: number) {
+            this.host = host;
+            this.logger = logger;
+            this.eventPort = eventPort;
+
+            const s = net.connect({ port: this.eventPort }, () => {
+                this.eventSocket = s;
+                if (this.socketEventQueue) {
+                    // flush queue.
+                    for (const event of this.socketEventQueue) {
+                        this.writeToEventSocket(event.body, event.eventName);
+                    }
+                    this.socketEventQueue = undefined;
+                }
+            });
+        }
+
+        public event = <T>(body: T, eventName: string) => {
+            if (!this.eventSocket) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
+                }
+                (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
+                return;
+            }
+            else {
+                Debug.assert(this.socketEventQueue === undefined);
+                this.writeToEventSocket(body, eventName);
+            }
+        }
+
+        private writeToEventSocket(body: any, eventName: string): void {
+            this.eventSocket.write(formatMessage({ seq: 0, type: "event", event: eventName, body }, this.logger, Buffer.byteLength, this.host.newLine), "utf8");
+        }
+    }
+
     class IOSession extends Session {
         constructor(options: IoSessionOptions) {
             const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
@@ -531,7 +586,6 @@ namespace ts.server {
                 hrtime: process.hrtime,
                 logger,
                 canUseEvents,
-                eventPort,
                 event,
                 globalPlugins: options.globalPlugins,
                 pluginProbeLocations: options.pluginProbeLocations,
