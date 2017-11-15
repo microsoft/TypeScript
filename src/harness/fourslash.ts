@@ -2549,6 +2549,9 @@ Actual: ${stringify(fullActual)}`);
             }
             const sortedExpectedArray = expectedTextArray.sort();
             const sortedActualArray = actualTextArray.sort();
+            if (sortedExpectedArray.length !== sortedActualArray.length) {
+                this.raiseError(`Expected ${sortedExpectedArray.length} import fixes, got ${sortedActualArray.length}`);
+            }
             ts.zipWith(sortedExpectedArray, sortedActualArray, (expected, actual, index) => {
                 if (expected !== actual) {
                     this.raiseError(`Import fix at index ${index} doesn't match.\n${showTextDiff(expected, actual)}`);
@@ -2867,7 +2870,7 @@ Actual: ${stringify(fullActual)}`);
 
             if (negative) {
                 if (codeFixes.length) {
-                    this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found one.`);
+                    this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found ${codeFixes.map(c => c.description)}.`);
                 }
                 return;
             }
