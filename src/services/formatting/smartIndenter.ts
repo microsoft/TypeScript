@@ -119,7 +119,7 @@ namespace ts.formatting {
                         // handle cases when codefix is about to be inserted before the close brace
                         ? assumeNewLineBeforeCloseBrace && nextTokenKind === NextTokenKind.CloseBrace ? options.indentSize : 0
                         : lineAtPosition !== currentStart.line ? options.indentSize : 0;
-                    return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
+                    return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, /*isNextChild*/ true, options);
                 }
 
                 // check if current node is a list item - if yes, take indentation from it
@@ -141,7 +141,7 @@ namespace ts.formatting {
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: EditorSettings): number {
             const start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
-            return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
+            return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, /*isNextChild*/ false, options);
         }
 
         export function getBaseIndentation(options: EditorSettings) {
@@ -154,6 +154,7 @@ namespace ts.formatting {
             ignoreActualIndentationRange: TextRange,
             indentationDelta: number,
             sourceFile: SourceFile,
+            isNextChild: boolean,
             options: EditorSettings): number {
             let parent = current.parent!;
             // Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
@@ -192,7 +193,7 @@ namespace ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent, current, /*isNextChild*/ true) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent, current, isNextChild) && !parentAndChildShareLine) {
                     indentationDelta += options.indentSize;
                 }
 
@@ -576,7 +577,7 @@ namespace ts.formatting {
          */
         export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind, isNextChild = false): boolean {
             return (nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, /*indentByDefault*/ false))
-                && !(isNextChild && child && isControlFlowEndingStatement(child.kind));;
+                && !(isNextChild && child && isControlFlowEndingStatement(child.kind));
         }
     }
 }
