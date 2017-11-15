@@ -510,6 +510,13 @@ namespace ts.server {
     class IOSession extends Session {
         constructor(options: IoSessionOptions) {
             const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
+            
+            let event: Event;
+            if (canUseEvents && eventPort) {
+                const eventSender = new SocketEventSender(host, logger, eventPort);
+                event = eventSender.event;
+            }
+            
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
                 : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation);
@@ -525,6 +532,7 @@ namespace ts.server {
                 logger,
                 canUseEvents,
                 eventPort,
+                event,
                 globalPlugins: options.globalPlugins,
                 pluginProbeLocations: options.pluginProbeLocations,
                 allowLocalPluginLoads: options.allowLocalPluginLoads });

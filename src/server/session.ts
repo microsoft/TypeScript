@@ -255,7 +255,8 @@ namespace ts.server {
         event: Event;
     }
 
-    class SocketEventSender implements EventSender {
+    /** @internal */
+    export class SocketEventSender implements EventSender {
         private host: ServerHost;
         private logger: Logger;
         private eventPort: number;
@@ -316,6 +317,11 @@ namespace ts.server {
          * Otherwise, events are sent through the host.
          */
         eventPort?: number;
+        /**
+         * An optional callback overriding the default behavior for sending events.
+         * if set, `canUseEvents` and `eventPort` are ignored.
+         */
+        event?: Event;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
 
@@ -353,11 +359,14 @@ namespace ts.server {
             this.hrtime = opts.hrtime;
             this.logger = opts.logger;
             this.eventPort = opts.eventPort;
-            this.canUseEvents = opts.canUseEvents;
+            this.canUseEvents = opts.canUseEvents || !!opts.event;
 
             const { throttleWaitMilliseconds } = opts;
-            
-            if (this.eventPort && this.canUseEvents) {
+
+            if (opts.event) {
+                this.event = opts.event;
+            }
+            else if (this.eventPort && this.canUseEvents) {
                 const eventSender = new SocketEventSender(this.host, this.logger, this.eventPort);
                 this.event = eventSender.event;
             }
