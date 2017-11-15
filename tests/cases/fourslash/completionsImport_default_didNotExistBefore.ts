@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @noLib: true
+
 // @Filename: /a.ts
 ////export default function foo() {}
 

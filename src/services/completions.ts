@@ -1025,6 +1025,14 @@ namespace ts.Completions {
 
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     let { name } = symbol;
+
+                    // Don't add a completion for a re-export, only for the original.
+                    // If `symbol.parent !== moduleSymbol`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
+                    // If `some(...)`, this comes from an `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
+                    if (symbol.parent !== moduleSymbol || some(symbol.declarations, d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
+                        continue;
+                    }
+
                     const isDefaultExport = name === "default";
                     if (isDefaultExport) {
                         const localSymbol = getLocalSymbolForExportDefault(symbol);
@@ -1035,11 +1043,6 @@ namespace ts.Completions {
                         else {
                             name = codefix.moduleSymbolToValidIdentifier(moduleSymbol, target);
                         }
-                    }
-
-                    if (symbol.declarations && symbol.declarations.some(d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
-                        // Don't add a completion for a re-export, only for the original.
-                        continue;
                     }
 
                     if (stringContainsCharactersInOrder(name.toLowerCase(), tokenTextLowerCase)) {
