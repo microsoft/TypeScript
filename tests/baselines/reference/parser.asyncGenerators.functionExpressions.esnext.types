@@ -9,7 +9,7 @@ const f1 = async function * f() {
 const f2 = async function * await() {
 >f2 : () => any
 >async function * : () => any
->await : () => void
+>await : any
 >() {} : () => void
 
 };
@@ -17,7 +17,7 @@ const f2 = async function * await() {
 const f3 = async function * yield() {
 >f3 : () => any
 >async function * : () => any
->yield : () => void
+>yield : any
 >() {} : () => void
 
 };

@@ -1650,16 +1650,22 @@ namespace ts {
             return undefined;
         }
         const name = node.name.escapedText;
+        const decl = getHostSignatureFromJSDoc(node);
+        if (!decl) {
+            return undefined;
+        }
+        const parameter = find(decl.parameters, p => p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
+        return parameter && parameter.symbol;
+    }
+
+    export function getHostSignatureFromJSDoc(node: JSDocParameterTag): FunctionLike | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfAssignment(host) ||
             getSingleInitializerOfVariableStatement(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
             host;
-        if (decl && isFunctionLike(decl)) {
-            const parameter = find(decl.parameters, p => p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
-            return parameter && parameter.symbol;
-        }
+        return decl && isFunctionLike(decl) ? decl : undefined;
     }
 
     export function getJSDocHost(node: JSDocTag): HasJSDoc {
@@ -2470,10 +2476,8 @@ namespace ts {
     }
 
     export function isIntrinsicJsxName(name: __String | string) {
-        // An escaped identifier had a leading underscore prior to being escaped, which would return true
-        // The escape adds an extra underscore which does not change the result
-        const ch = (name as string).substr(0, 1);
-        return ch.toLowerCase() === ch;
+        const ch = (name as string).charCodeAt(0);
+        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || (name as string).indexOf("-") > -1;
     }
 
     function get16BitUnicodeEscapeSequence(charCode: number): string {

@@ -441,6 +441,7 @@ namespace ts {
      * Assumes `candidate.start <= position` holds.
      */
     export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
+        Debug.assert(candidate.pos <= position);
         return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 

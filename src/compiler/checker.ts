@@ -2952,32 +2952,24 @@ namespace ts {
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext): ParameterDeclaration {
                 const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
-                if (isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) {
-                    // special-case synthetic rest parameters in JS files
-                    return createParameter(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        parameterSymbol.isRestParameter ? createToken(SyntaxKind.DotDotDotToken) : undefined,
-                        "args",
-                        /*questionToken*/ undefined,
-                        typeToTypeNodeHelper(anyArrayType, context),
-                        /*initializer*/ undefined);
-                }
-                const modifiers = parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
-                const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
-                const name = parameterDeclaration.name ?
-                    parameterDeclaration.name.kind === SyntaxKind.Identifier ?
-                        setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
-                        cloneBindingName(parameterDeclaration.name) :
-                    symbolName(parameterSymbol);
-                const questionToken = isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
+                Debug.assert(!!parameterDeclaration || isTransientSymbol(parameterSymbol) && !!parameterSymbol.isRestParameter);
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
-                if (isRequiredInitializedParameter(parameterDeclaration)) {
-                    parameterType = getNullableType(parameterType, TypeFlags.Undefined);
+                if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
+                    parameterType = getOptionalType(parameterType);
                 }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
 
+                const modifiers = parameterDeclaration && parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
+                const dotDotDotToken = !parameterDeclaration || isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
+                const name = parameterDeclaration
+                    ? parameterDeclaration.name ?
+                        parameterDeclaration.name.kind === SyntaxKind.Identifier ?
+                            setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                            cloneBindingName(parameterDeclaration.name) :
+                        symbolName(parameterSymbol)
+                    : symbolName(parameterSymbol);
+                const questionToken = parameterDeclaration && isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
                 const parameterNode = createParameter(
                     /*decorators*/ undefined,
                     modifiers,
@@ -3766,7 +3758,7 @@ namespace ts {
 
                 let type = getTypeOfSymbol(p);
                 if (parameterNode && isRequiredInitializedParameter(parameterNode)) {
-                    type = getNullableType(type, TypeFlags.Undefined);
+                    type = getOptionalType(type);
                 }
                 buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
             }
@@ -4337,8 +4329,8 @@ namespace ts {
             return expr.kind === SyntaxKind.ArrayLiteralExpression && (<ArrayLiteralExpression>expr).elements.length === 0;
         }
 
-        function addOptionality(type: Type, optional: boolean): Type {
-            return strictNullChecks && optional ? getNullableType(type, TypeFlags.Undefined) : type;
+        function addOptionality(type: Type, optional = true): Type {
+            return strictNullChecks && optional ? getOptionalType(type) : type;
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
@@ -4367,7 +4359,7 @@ namespace ts {
             const typeNode = getEffectiveTypeAnnotationNode(declaration);
             if (typeNode) {
                 const declaredType = getTypeFromTypeNode(typeNode);
-                return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
+                return addOptionality(declaredType, /*optional*/ !!declaration.questionToken && includeOptionality);
             }
 
             if ((noImplicitAny || isInJavaScriptFile(declaration)) &&
@@ -4411,14 +4403,14 @@ namespace ts {
                     type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 }
                 if (type) {
-                    return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+                    return addOptionality(type, /*optional*/ !!declaration.questionToken && includeOptionality);
                 }
             }
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 const type = checkDeclarationInitializer(declaration);
-                return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+                return addOptionality(type, /*optional*/ !!declaration.questionToken && includeOptionality);
             }
 
             if (isJsxAttribute(declaration)) {
@@ -4762,7 +4754,7 @@ namespace ts {
                         links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
                     }
                     else {
-                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getNullableType(type, TypeFlags.Undefined) : type;
+                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
                     }
                 }
             }
@@ -5159,29 +5151,25 @@ namespace ts {
             }
         }
 
-        // Returns true if the interface given by the symbol is free of "this" references. Specifically, the result is
-        // true if the interface itself contains no references to "this" in its body, if all base types are interfaces,
-        // and if none of the base interfaces have a "this" type.
-        function isIndependentInterface(symbol: Symbol): boolean {
-            for (const declaration of symbol.declarations) {
-                if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                    if (declaration.flags & NodeFlags.ContainsThis) {
-                        return false;
-                    }
-                    const baseTypeNodes = getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration);
-                    if (baseTypeNodes) {
-                        for (const node of baseTypeNodes) {
-                            if (isEntityNameExpression(node.expression)) {
-                                const baseSymbol = resolveEntityName(node.expression, SymbolFlags.Type, /*ignoreErrors*/ true);
-                                if (!baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || getDeclaredTypeOfClassOrInterface(baseSymbol).thisType) {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
+        /**
+         * Returns true if the interface given by the symbol is free of "this" references.
+         *
+         * Specifically, the result is true if the interface itself contains no references
+         * to "this" in its body, if all base types are interfaces,
+         * and if none of the base interfaces have a "this" type.
+         */
+        function interfaceReferencesThis(symbol: Symbol): boolean {
+            return some(symbol.declarations, declaration =>
+                isInterfaceDeclaration(declaration) && (
+                    !!(declaration.flags & NodeFlags.ContainsThis)
+                    || some(getInterfaceBaseTypeNodes(declaration), baseTypeReferencesThis)));
+        }
+        function baseTypeReferencesThis({ expression }: ExpressionWithTypeArguments): boolean {
+            if (!isEntityNameExpression(expression)) {
+                return false;
             }
-            return true;
+            const baseSymbol = resolveEntityName(expression, SymbolFlags.Type, /*ignoreErrors*/ true);
+            return !baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || !!getDeclaredTypeOfClassOrInterface(baseSymbol).thisType;
         }
 
         function getDeclaredTypeOfClassOrInterface(symbol: Symbol): InterfaceType {
@@ -5196,7 +5184,7 @@ namespace ts {
                 // property types inferred from initializers and method return types inferred from return statements are very hard
                 // to exhaustively analyze). We give interfaces a "this" type if we can't definitely determine that they are free of
                 // "this" references.
-                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || !isIndependentInterface(symbol)) {
+                if (outerTypeParameters || localTypeParameters || kind === ObjectFlags.Class || interfaceReferencesThis(symbol)) {
                     type.objectFlags |= ObjectFlags.Reference;
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
@@ -5378,23 +5366,9 @@ namespace ts {
             return undefined;
         }
 
-        // A type reference is considered independent if each type argument is considered independent.
-        function isIndependentTypeReference(node: TypeReferenceNode): boolean {
-            if (node.typeArguments) {
-                for (const typeNode of node.typeArguments) {
-                    if (!isIndependentType(typeNode)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        // A type is considered independent if it the any, string, number, boolean, symbol, or void keyword, a string
-        // literal type, an array with an element type that is considered independent, or a type reference that is
-        // considered independent.
-        function isIndependentType(node: TypeNode): boolean {
-            switch (node.kind) {
+        /** A type may reference `this` unless it's one of a few special types. */
+        function typeReferencesThis(node: TypeNode | undefined): boolean {
+            switch (node && node.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
@@ -5406,60 +5380,53 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.LiteralType:
-                    return true;
+                    return false;
                 case SyntaxKind.ArrayType:
-                    return isIndependentType((<ArrayTypeNode>node).elementType);
+                    return typeReferencesThis((<ArrayTypeNode>node).elementType);
                 case SyntaxKind.TypeReference:
-                    return isIndependentTypeReference(<TypeReferenceNode>node);
+                    return some((node as TypeReferenceNode).typeArguments, typeReferencesThis);
             }
-            return false;
+            return true; // TODO: GH#20034
         }
 
-        // A variable-like declaration is considered independent (free of this references) if it has a type annotation
-        // that specifies an independent type, or if it has no type annotation and no initializer (and thus of type any).
-        function isIndependentVariableLikeDeclaration(node: VariableLikeDeclaration): boolean {
+        /** A variable-like declaration may reference `this` if its type does or if it has no declared type and an initializer (which may infer a `this` type). */
+        function variableLikeDeclarationReferencesThis(node: VariableLikeDeclaration): boolean {
             const typeNode = getEffectiveTypeAnnotationNode(node);
-            return typeNode ? isIndependentType(typeNode) : !node.initializer;
+            return typeNode ? typeReferencesThis(typeNode) : !!node.initializer;
         }
 
-        // A function-like declaration is considered independent (free of this references) if it has a return type
-        // annotation that is considered independent and if each parameter is considered independent.
-        function isIndependentFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-            if (node.kind !== SyntaxKind.Constructor) {
-                const typeNode = getEffectiveReturnTypeNode(node);
-                if (!typeNode || !isIndependentType(typeNode)) {
-                    return false;
+        /**
+         * Returns true if the class/interface member may reference `this`.
+         * May return true for symbols that don't actually reference `this` because it would be slow to do a complete analysis.
+         * For example, property members with types inferred from initializers or function members with inferred return types are
+         * conservatively assumed to reference `this`.
+         */
+        function symbolReferencesThis(symbol: Symbol): boolean {
+            const declaration = singleOrUndefined(symbol.declarations);
+            if (!declaration) return true;
+            switch (declaration.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return variableLikeDeclarationReferencesThis(<PropertyDeclaration | PropertySignature>declaration);
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.Constructor: {
+                    // A function-like declaration references `this` if its return type does or some parameter / type parameter does.
+                    const fn = declaration as MethodDeclaration | MethodSignature | ConstructorDeclaration;
+                    return typeReferencesThis(getEffectiveReturnTypeNode(fn))
+                        || fn.parameters.some(variableLikeDeclarationReferencesThis)
+                        // A type parameter references `this` if its constraint does.
+                        || some(fn.typeParameters, tp => typeReferencesThis(tp.constraint));
                 }
+                case SyntaxKind.Parameter:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.PropertyAccessExpression: // See `tests/cases/fourslash/renameJsThisProperty05` and 06
+                    return true; // TODO: GH#20034
+                default:
+                    throw Debug.failBadSyntaxKind(declaration);
             }
-            for (const parameter of node.parameters) {
-                if (!isIndependentVariableLikeDeclaration(parameter)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        // Returns true if the class or interface member given by the symbol is free of "this" references. The
-        // function may return false for symbols that are actually free of "this" references because it is not
-        // feasible to perform a complete analysis in all cases. In particular, property members with types
-        // inferred from their initializers and function members with inferred return types are conservatively
-        // assumed not to be free of "this" references.
-        function isIndependentMember(symbol: Symbol): boolean {
-            if (symbol.declarations && symbol.declarations.length === 1) {
-                const declaration = symbol.declarations[0];
-                if (declaration) {
-                    switch (declaration.kind) {
-                        case SyntaxKind.PropertyDeclaration:
-                        case SyntaxKind.PropertySignature:
-                            return isIndependentVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.MethodSignature:
-                        case SyntaxKind.Constructor:
-                            return isIndependentFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
-                    }
-                }
-            }
-            return false;
         }
 
         // The mappingThisOnly flag indicates that the only type parameter being mapped is "this". When the flag is true,
@@ -5467,7 +5434,7 @@ namespace ts {
         function createInstantiatedSymbolTable(symbols: Symbol[], mapper: TypeMapper, mappingThisOnly: boolean): SymbolTable {
             const result = createSymbolTable();
             for (const symbol of symbols) {
-                result.set(symbol.escapedName, mappingThisOnly && isIndependentMember(symbol) ? symbol : instantiateSymbol(symbol, mapper));
+                result.set(symbol.escapedName, mappingThisOnly && !symbolReferencesThis(symbol) ? symbol : instantiateSymbol(symbol, mapper));
             }
             return result;
         }
@@ -6722,7 +6689,10 @@ namespace ts {
                     }
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
                         const mapper = createTypeMapper(typeParameters, typeArguments);
-                        const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        let defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        if (defaultType && isTypeIdenticalTo(defaultType, emptyObjectType) && isJavaScriptImplicitAny) {
+                            defaultType = anyType;
+                        }
                         typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                     }
                 }
@@ -6795,19 +6765,33 @@ namespace ts {
                 const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
                     undefined;
-                // JS functions get a free rest parameter if they reference `arguments`
-                let hasRestLikeParameter = hasRestParameter(declaration);
-                if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && containsArgumentsReference(declaration)) {
-                    hasRestLikeParameter = true;
-                    const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
-                    syntheticArgsSymbol.type = anyArrayType;
-                    syntheticArgsSymbol.isRestParameter = true;
-                    parameters.push(syntheticArgsSymbol);
-                }
-
+                const hasRestLikeParameter = hasRestParameter(declaration) || isInJavaScriptFile(declaration) && maybeAddJsSyntheticRestParameter(declaration, parameters);
                 links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
             }
             return links.resolvedSignature;
+        }
+
+        function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration, parameters: Symbol[]): boolean {
+            // JS functions get a free rest parameter if:
+            // a) The last parameter has `...` preceding its type
+            // b) It references `arguments` somewhere
+            const lastParam = lastOrUndefined(declaration.parameters);
+            const lastParamTags = lastParam && getJSDocParameterTags(lastParam);
+            const lastParamVariadicType = lastParamTags && firstDefined(lastParamTags, p =>
+                p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
+            if (!lastParamVariadicType && !containsArgumentsReference(declaration)) {
+                return false;
+            }
+
+            const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
+            syntheticArgsSymbol.type = lastParamVariadicType ? createArrayType(getTypeFromTypeNode(lastParamVariadicType.type)) : anyArrayType;
+            syntheticArgsSymbol.isRestParameter = true;
+            if (lastParamVariadicType) {
+                // Replace the last parameter with a rest parameter.
+                parameters.pop();
+            }
+            parameters.push(syntheticArgsSymbol);
+            return true;
         }
 
         function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration, isJSConstructSignature: boolean, classType: Type) {
@@ -7364,7 +7348,7 @@ namespace ts {
 
         function getTypeFromJSDocNullableTypeNode(node: JSDocNullableType) {
             const type = getTypeFromTypeNode(node.type);
-            return strictNullChecks ? getUnionType([type, nullType]) : type;
+            return strictNullChecks ? getNullableType(type, TypeFlags.Null) : type;
         }
 
         function getTypeFromTypeReference(node: TypeReferenceType): Type {
@@ -8364,15 +8348,6 @@ namespace ts {
             return esSymbolType;
         }
 
-        function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                const type = getTypeFromTypeNode(node.type);
-                links.resolvedType = type ? createArrayType(type) : unknownType;
-            }
-            return links.resolvedType;
-        }
-
         function getThisType(node: Node): Type {
             const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             const parent = container && container.parent;
@@ -8446,6 +8421,8 @@ namespace ts {
                 case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocTypeExpression:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
+                case SyntaxKind.JSDocVariadicType:
+                    return getTypeFromJSDocVariadicType(node as JSDocVariadicType);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
@@ -8464,8 +8441,6 @@ namespace ts {
                 case SyntaxKind.QualifiedName:
                     const symbol = getSymbolAtLocation(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
-                case SyntaxKind.JSDocVariadicType:
-                    return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
                 default:
                     return unknownType;
             }
@@ -10741,6 +10716,11 @@ namespace ts {
                 missing === TypeFlags.Undefined ? getUnionType([type, undefinedType]) :
                 missing === TypeFlags.Null ? getUnionType([type, nullType]) :
                 getUnionType([type, undefinedType, nullType]);
+        }
+
+        function getOptionalType(type: Type): Type {
+            Debug.assert(strictNullChecks);
+            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, undefinedType]);
         }
 
         function getNonNullableType(type: Type): Type {
@@ -13095,7 +13075,7 @@ namespace ts {
                 declaration.flags & NodeFlags.Ambient;
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
-                    getNullableType(type, TypeFlags.Undefined);
+                    getOptionalType(type);
             const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
@@ -13777,9 +13757,13 @@ namespace ts {
         }
 
         function isInParameterInitializerBeforeContainingFunction(node: Node) {
+            let inBindingInitializer = false;
             while (node.parent && !isFunctionLike(node.parent)) {
-                if (node.parent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node.parent).initializer === node) {
+                if (isParameter(node.parent) && (inBindingInitializer || node.parent.initializer === node)) {
                     return true;
+                }
+                if (isBindingElement(node.parent) && node.parent.initializer === node) {
+                    inBindingInitializer = true;
                 }
 
                 node = node.parent;
@@ -14510,7 +14494,7 @@ namespace ts {
             // type with those properties for which the binding pattern specifies a default value.
             if (contextualTypeHasPattern) {
                 for (const prop of getPropertiesOfType(contextualType)) {
-                    if (!propertiesTable.get(prop.escapedName)) {
+                    if (!propertiesTable.get(prop.escapedName) && !(spread && getPropertyOfType(spread, prop.escapedName))) {
                         if (!(prop.flags & SymbolFlags.Optional)) {
                             error(prop.valueDeclaration || (<TransientSymbol>prop).bindingElement,
                                 Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
@@ -17511,7 +17495,7 @@ namespace ts {
             if (targetDeclarationKind !== SyntaxKind.Unknown) {
                 const decl = getDeclarationOfKind(resolvedRequire, targetDeclarationKind);
                 // function/variable declaration should be ambient
-                return !!(decl.flags & NodeFlags.Ambient);
+                return !!decl && !!(decl.flags & NodeFlags.Ambient);
             }
             return false;
         }
@@ -17568,7 +17552,7 @@ namespace ts {
             if (strictNullChecks) {
                 const declaration = symbol.valueDeclaration;
                 if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
-                    return getNullableType(type, TypeFlags.Undefined);
+                    return getOptionalType(type);
                 }
             }
             return type;
@@ -20547,7 +20531,16 @@ namespace ts {
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.UnionType:
                         let commonEntityName: EntityName;
-                        for (const typeNode of (<UnionOrIntersectionTypeNode>node).types) {
+                        for (let typeNode of (<UnionOrIntersectionTypeNode>node).types) {
+                            while (typeNode.kind === SyntaxKind.ParenthesizedType) {
+                                typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
+                            }
+                            if (typeNode.kind === SyntaxKind.NeverKeyword) {
+                                continue; // Always elide `never` from the union/intersection if possible
+                            }
+                            if (!strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                                continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
+                            }
                             const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);
                             if (!individualEntityName) {
                                 // Individual is something like string number
@@ -23437,14 +23430,15 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                     checkSignatureDeclaration(node as JSDocFunctionType);
                     // falls through
-                case SyntaxKind.JSDocVariadicType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocAllType:
                 case SyntaxKind.JSDocUnknownType:
-                    if (!isInJavaScriptFile(node) && !isInJSDoc(node)) {
-                        grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
-                    }
+                    checkJSDocTypeIsInJsFile(node);
+                    forEachChild(node, checkSourceElement);
+                    return;
+                case SyntaxKind.JSDocVariadicType:
+                    checkJSDocVariadicType(node as JSDocVariadicType);
                     return;
                 case SyntaxKind.JSDocTypeExpression:
                     return checkSourceElement((node as JSDocTypeExpression).type);
@@ -23519,6 +23513,65 @@ namespace ts {
                 case SyntaxKind.MissingDeclaration:
                     return checkMissingDeclaration(node);
             }
+        }
+
+        function checkJSDocTypeIsInJsFile(node: Node): void {
+            if (!isInJavaScriptFile(node)) {
+                grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+            }
+        }
+
+        function checkJSDocVariadicType(node: JSDocVariadicType): void {
+            checkJSDocTypeIsInJsFile(node);
+            checkSourceElement(node.type);
+
+            // Only legal location is in the *last* parameter tag.
+            const { parent } = node;
+            if (!isJSDocTypeExpression(parent)) {
+                error(node, Diagnostics.JSDoc_may_only_appear_in_the_last_parameter_of_a_signature);
+            }
+
+            const paramTag = parent.parent;
+            if (!isJSDocParameterTag(paramTag)) {
+                error(node, Diagnostics.JSDoc_may_only_appear_in_the_last_parameter_of_a_signature);
+                return;
+            }
+
+            const param = getParameterSymbolFromJSDoc(paramTag);
+            if (!param) {
+                // We will error in `checkJSDocParameterTag`.
+                return;
+            }
+
+            const host = getHostSignatureFromJSDoc(paramTag);
+            if (!host || last(host.parameters).symbol !== param) {
+                error(node, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
+            }
+        }
+
+        function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
+            const type = getTypeFromTypeNode(node.type);
+            const { parent } = node;
+            const paramTag = parent.parent;
+            if (isJSDocTypeExpression(parent) && isJSDocParameterTag(paramTag)) {
+                // Else we will add a diagnostic, see `checkJSDocVariadicType`.
+                const param = getParameterSymbolFromJSDoc(paramTag);
+                if (param) {
+                    const host = getHostSignatureFromJSDoc(paramTag);
+                    /*
+                    Only return an array type if the corresponding parameter is marked as a rest parameter.
+                    So in the following situation we will not create an array type:
+                        /** @param {...number} a * /
+                        function f(a) {}
+                    Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
+                    */
+                    const lastParamDeclaration = host && last(host.parameters);
+                    if (lastParamDeclaration.symbol === param && isRestParameter(lastParamDeclaration)) {
+                        return createArrayType(type);
+                    }
+                }
+            }
+            return addOptionality(type);
         }
 
         // Function and class expression bodies are checked after all statements in the enclosing body. This is
@@ -24653,7 +24706,7 @@ namespace ts {
                 flags |= TypeFormatFlags.AllowUniqueESSymbolType;
             }
             if (flags & TypeFormatFlags.AddUndefined) {
-                type = getNullableType(type, TypeFlags.Undefined);
+                type = getOptionalType(type);
             }
 
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);

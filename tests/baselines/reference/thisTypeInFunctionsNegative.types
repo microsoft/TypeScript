@@ -725,19 +725,19 @@ function notFirst(a: number, this: C): number { return this.n; }
 
 ///// parse errors /////
 function modifiers(async this: C): number { return this.n; }
->modifiers : (async : any, C: any) => number
+>modifiers : (async : any, this: C) => number
 > : any
->this : any
->C : any
+>this : C
+>C : C
 >this.n : any
 >this : any
 >n : any
 
 function restParam(...this: C): number { return this.n; }
->restParam : (...: any, C: any) => number
-> : any
->this : any
->C : any
+>restParam : (...: any[], this: C) => number
+> : any[]
+>this : C
+>C : C
 >this.n : any
 >this : any
 >n : any
@@ -752,26 +752,28 @@ function optional(this?: C): number { return this.n; }
 >n : any
 
 function decorated(@deco() this: C): number { return this.n; }
->decorated : (: any, C: any) => number
+>decorated : (: any, this: C) => number
 >deco() : any
 >deco : any
 > : any
->this : any
->C : any
+>this : C
+>C : C
 >this.n : any
 >this : any
 >n : any
 
 function initializer(this: C = new C()): number { return this.n; }
->initializer : (this: C, ?: C) => number
+>initializer : (this: C, : any, C: any) => any
 >this : C
 >C : C
-> : C
->new C() : C
->C : typeof C
->this.n : number
->this : C
->n : number
+> : any
+>C : any
+>() : any
+> : any
+>number : any
+>this.n : any
+>this : any
+>n : any
 
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (this, m) => m + this.n;

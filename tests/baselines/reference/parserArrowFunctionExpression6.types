@@ -1,25 +1,21 @@
 === tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression6.ts ===
 function foo(q: string, b: number) {
->foo : (q: string, b: number) => boolean | (() => void)
+>foo : (q: string, b: number) => any
 >q : string
 >b : number
 
     return true ? (q ? true : false) : (b = q.length, function() { });
->true ? (q ? true : false) : (b = q.length, function() { }) : boolean | (() => void)
+>true ? (q ? true : false) : (b = q.length, function() { } : any
 >true : true
->(q ? true : false) : boolean
->q ? true : false : boolean
->q : string
->true : true
->false : false
->(b = q.length, function() { }) : () => void
->b = q.length, function() { } : () => void
->b = q.length : number
->b : number
->q.length : number
->q : string
->length : number
->function() { } : () => void
+>(q ? true : false) : (b = q.length, function() { } : (q?: any, : any, : any) => (b?: any) => () => any
+>q : any
+> : any
+> : any
+>b : any
+>q.length : any
+>q : any
+>length : any
+> : any
 
 };
 
