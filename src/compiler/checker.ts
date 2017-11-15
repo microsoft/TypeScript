@@ -5115,9 +5115,9 @@ namespace ts {
             return some(symbol.declarations, declaration =>
                 isInterfaceDeclaration(declaration) && (
                     !!(declaration.flags & NodeFlags.ContainsThis)
-                    || some(getInterfaceBaseTypeNodes(declaration), baseTypeReferencesThis)));
+                    || some(getInterfaceBaseTypeNodes(declaration), baseTypeMayReferenceThis)));
         }
-        function baseTypeReferencesThis({ expression }: ExpressionWithTypeArguments): boolean {
+        function baseTypeMayReferenceThis({ expression }: ExpressionWithTypeArguments): boolean {
             if (!isEntityNameExpression(expression)) {
                 return false;
             }
