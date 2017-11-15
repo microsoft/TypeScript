@@ -5449,7 +5449,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' is declared but its value is never read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[속성 '{0}'이(가) 선언되었지만 해당 값을 읽을 수 없습니다.]]></Val>
+            <Val><![CDATA[속성 '{0}'이(가) 선언되었지만 해당 값은 읽히지 않습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7954,7 +7954,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is declared but its value is never read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}'이(가) 선언되었지만 해당 값을 읽을 수 없습니다.]]></Val>
+            <Val><![CDATA['{0}'이(가) 선언되었지만 해당 값은 읽히지 않습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
