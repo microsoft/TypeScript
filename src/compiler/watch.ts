@@ -116,11 +116,11 @@ namespace ts {
             let sourceMaps: SourceMapData[];
             let emitSkipped: boolean;
 
-            let affectedEmitResult: AffectedFileEmitResult;
+            let affectedEmitResult: AffectedFileResult<EmitResult>;
             while (affectedEmitResult = builder.emitNextAffectedFile(program, writeFile)) {
-                emitSkipped = emitSkipped || affectedEmitResult.emitSkipped;
-                addRange(diagnostics, affectedEmitResult.diagnostics);
-                sourceMaps = addRange(sourceMaps, affectedEmitResult.sourceMaps);
+                emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
+                addRange(diagnostics, affectedEmitResult.result.diagnostics);
+                sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
             }
 
             if (reportSemanticDiagnostics) {

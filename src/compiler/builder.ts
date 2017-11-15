@@ -332,10 +332,17 @@ namespace ts {
         }
 
         /**
+         * Returns the result with affected file
+         */
+        function toAffectedFileResult<T>(result: T, affectedFile?: SourceFile): AffectedFileResult<T> {
+            return { result, affectedFile };
+        }
+
+        /**
          * Emits the next affected file, and returns the EmitResult along with source files emitted
          * Returns undefined when iteration is complete
          */
-        function emitNextAffectedFile(programOfThisState: Program, writeFileCallback: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileEmitResult | undefined {
+        function emitNextAffectedFile(programOfThisState: Program, writeFileCallback: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult> {
             const affectedFile = getNextAffectedFile(programOfThisState);
             if (!affectedFile) {
                 // Done
@@ -343,21 +350,22 @@ namespace ts {
             }
             else if (affectedFile === programOfThisState) {
                 // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
-                return programOfThisState.emit(/*targetSourceFile*/ undefined, writeFileCallback, cancellationToken, /*emitOnlyDtsFiles*/ false, customTransformers);
+                return toAffectedFileResult(programOfThisState.emit(/*targetSourceFile*/ undefined, writeFileCallback, cancellationToken, /*emitOnlyDtsFiles*/ false, customTransformers));
             }
 
             // Emit the affected file
             const targetSourceFile = affectedFile as SourceFile;
-            const result = programOfThisState.emit(targetSourceFile, writeFileCallback, cancellationToken, /*emitOnlyDtsFiles*/ false, customTransformers) as AffectedFileEmitResult;
-            result.affectedFile = targetSourceFile;
-            return result;
+            return toAffectedFileResult(
+                programOfThisState.emit(targetSourceFile, writeFileCallback, cancellationToken, /*emitOnlyDtsFiles*/ false, customTransformers),
+                targetSourceFile
+            );
         }
 
         /**
          * Return the semantic diagnostics for the next affected file or undefined if iteration is complete
          * If provided ignoreSourceFile would be called before getting the diagnostics and would ignore the sourceFile if the returned value was true
          */
-        function getSemanticDiagnosticsOfNextAffectedFile(programOfThisState: Program, cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): ReadonlyArray<Diagnostic> {
+        function getSemanticDiagnosticsOfNextAffectedFile(programOfThisState: Program, cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>> {
             while (true) {
                 const affectedFile = getNextAffectedFile(programOfThisState);
                 if (!affectedFile) {
@@ -366,7 +374,7 @@ namespace ts {
                 }
                 else if (affectedFile === programOfThisState) {
                     // When whole program is affected, get all semantic diagnostics (eg when --out or --outFile is specified)
-                    return programOfThisState.getSemanticDiagnostics(/*targetSourceFile*/ undefined, cancellationToken);
+                    return toAffectedFileResult(programOfThisState.getSemanticDiagnostics(/*targetSourceFile*/ undefined, cancellationToken));
                 }
 
                 // Get diagnostics for the affected file if its not ignored
@@ -376,7 +384,10 @@ namespace ts {
                     continue;
                 }
 
-                return getSemanticDiagnosticsOfFile(programOfThisState, targetSourceFile, cancellationToken);
+                return toAffectedFileResult(
+                    getSemanticDiagnosticsOfFile(programOfThisState, targetSourceFile, cancellationToken),
+                    targetSourceFile
+                );
             }
         }
 
@@ -682,9 +693,7 @@ namespace ts {
         text: string;
     }
 
-    export interface AffectedFileEmitResult extends EmitResult {
-        affectedFile?: SourceFile;
-    }
+    export type AffectedFileResult<T> = { result: T; affectedFile?: SourceFile; } | undefined;
 
     export interface BuilderOptions {
         getCanonicalFileName: (fileName: string) => string;
@@ -714,7 +723,7 @@ namespace ts {
          * Gets the semantic diagnostics from the program for the next affected file and caches it
          * Returns undefined if the iteration is complete
          */
-        getSemanticDiagnosticsOfNextAffectedFile(programOfThisState: Program, cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnosticsOfNextAffectedFile(programOfThisState: Program, cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
 
         /**
          * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
@@ -733,7 +742,7 @@ namespace ts {
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
          */
-        emitNextAffectedFile(programOfThisState: Program, writeFileCallback: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileEmitResult | undefined;
+        emitNextAffectedFile(programOfThisState: Program, writeFileCallback: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
 
         /**
          * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
