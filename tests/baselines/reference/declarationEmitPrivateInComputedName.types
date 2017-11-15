@@ -1,0 +1,104 @@
+=== tests/cases/compiler/declarationEmitPrivateInComputedName.ts ===
+enum MyEnum {
+>MyEnum : MyEnum
+
+    member = 0
+>member : MyEnum
+>0 : 0
+}
+
+export const someVar1 = {
+>someVar1 : { [MyEnum.member]: string; }
+>{    [MyEnum.member]: ""} : { [MyEnum.member]: string; }
+
+    [MyEnum.member]: ""
+>MyEnum.member : MyEnum
+>MyEnum : typeof MyEnum
+>member : MyEnum
+>"" : ""
+
+};
+
+enum MyStringEnum {
+>MyStringEnum : MyStringEnum
+
+    str = "str"
+>str : MyStringEnum
+>"str" : "str"
+}
+
+export const someVar2 = {
+>someVar2 : { [MyStringEnum.str]: string; }
+>{    [MyStringEnum.str]: ""} : { [MyStringEnum.str]: string; }
+
+    [MyStringEnum.str]: ""
+>MyStringEnum.str : MyStringEnum
+>MyStringEnum : typeof MyStringEnum
+>str : MyStringEnum
+>"" : ""
+
+};
+
+export enum MyExportEnum {
+>MyExportEnum : MyExportEnum
+
+    member = 0
+>member : MyExportEnum
+>0 : 0
+}
+
+export const someVar3 = {
+>someVar3 : { [MyExportEnum.member]: string; }
+>{    [MyExportEnum.member]: ""} : { [MyExportEnum.member]: string; }
+
+    [MyExportEnum.member]: ""
+>MyExportEnum.member : MyExportEnum
+>MyExportEnum : typeof MyExportEnum
+>member : MyExportEnum
+>"" : ""
+
+};
+
+export enum MyExportStringEnum {
+>MyExportStringEnum : MyExportStringEnum
+
+    str = "str"
+>str : MyExportStringEnum
+>"str" : "str"
+}
+
+export const someVar4 = {
+>someVar4 : { [MyExportStringEnum.str]: string; }
+>{    [MyExportStringEnum.str]: ""} : { [MyExportStringEnum.str]: string; }
+
+    [MyExportStringEnum.str]: ""
+>MyExportStringEnum.str : MyExportStringEnum
+>MyExportStringEnum : typeof MyExportStringEnum
+>str : MyExportStringEnum
+>"" : ""
+
+};
+
+enum MyComputedEnum {
+>MyComputedEnum : MyComputedEnum
+
+    member = Math.random()
+>member : MyComputedEnum
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+}
+
+export const someVar5 = {
+>someVar5 : { [x: number]: string; }
+>{    [MyComputedEnum.member]: ""} : { [x: number]: string; }
+
+    [MyComputedEnum.member]: ""
+>MyComputedEnum.member : MyComputedEnum
+>MyComputedEnum : typeof MyComputedEnum
+>member : MyComputedEnum
+>"" : ""
+
+};
+

@@ -3524,7 +3524,37 @@ namespace ts {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
                         writeSpace(writer);
                     }
-                    buildSymbolDisplay(prop, writer);
+                    const links = getSymbolLinks(prop);
+                    if (links.target && links.target.escapedName === InternalSymbolName.Computed) {
+                        const name = ((prop.declarations[0] as NamedDeclaration).name as ComputedPropertyName).expression;
+                        const t = getTypeOfNode(name);
+                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                        if (!(t.flags & TypeFlags.Union) && isLiteralType(t)) {
+                            writer.writeStringLiteral(literalTypeToString(t as LiteralType));
+                        }
+                        else {
+                            writer.writeSymbol("key", prop);
+                            writePunctuation(writer, SyntaxKind.ColonToken);
+                            writeSpace(writer);
+                            let base = getBaseTypeOfLiteralType(t);
+                            if (base !== stringType && base !== numberType) {
+                                if (isTypeAssignableToKind(base, TypeFlags.String)) {
+                                    base = stringType;
+                                }
+                                else if (isTypeAssignableToKind(base, TypeFlags.Number)) {
+                                    base = numberType;
+                                }
+                                else {
+                                    base = anyType;
+                                }
+                            }
+                            writeType(base, globalFlags);
+                        }
+                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    }
+                    else {
+                        buildSymbolDisplay(prop, writer);
+                    }
                     if (prop.flags & SymbolFlags.Optional) {
                         writePunctuation(writer, SyntaxKind.QuestionToken);
                     }
