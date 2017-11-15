@@ -1626,16 +1626,22 @@ namespace ts {
             return undefined;
         }
         const name = node.name.escapedText;
+        const decl = getHostSignatureFromJSDoc(node);
+        if (!decl) {
+            return undefined;
+        }
+        const parameter = find(decl.parameters, p => p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
+        return parameter && parameter.symbol;
+    }
+
+    export function getHostSignatureFromJSDoc(node: JSDocParameterTag): FunctionLike | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfAssignment(host) ||
             getSingleInitializerOfVariableStatement(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
             host;
-        if (decl && isFunctionLike(decl)) {
-            const parameter = find(decl.parameters, p => p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
-            return parameter && parameter.symbol;
-        }
+        return decl && isFunctionLike(decl) ? decl : undefined;
     }
 
     export function getJSDocHost(node: JSDocTag): HasJSDoc {
