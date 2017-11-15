@@ -2228,6 +2228,14 @@
         "category": "Error",
         "code": 2716
     },
+    "Type parameter '{0}' has a circular default.": {
+        "category": "Error",
+        "code": 2716
+    },
+    "No overload expects {0} arguments. The most matching overloads expect {1} arguments.": {
+        "category": "Error",
+        "code": 2717
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
