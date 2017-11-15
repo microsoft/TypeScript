@@ -349,11 +349,11 @@ namespace ts {
         let deferredGlobalPromiseConstructorSymbol: Symbol;
         let deferredGlobalPromiseConstructorLikeType: ObjectType;
         let deferredGlobalIterableType: GenericType;
+        let deferredGlobalNonIterableIteratorType: GenericType;
         let deferredGlobalIteratorType: GenericType;
-        let deferredGlobalIterableIteratorType: GenericType;
         let deferredGlobalAsyncIterableType: GenericType;
+        let deferredGlobalAsyncNonIterableIteratorType: GenericType;
         let deferredGlobalAsyncIteratorType: GenericType;
-        let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredJsxElementClassType: Type;
         let deferredJsxElementType: Type;
@@ -7202,24 +7202,24 @@ namespace ts {
             return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalAsyncIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        function getGlobalAsyncNonIterableIteratorType(reportErrors: boolean) {
+            return deferredGlobalAsyncNonIterableIteratorType || (deferredGlobalAsyncNonIterableIteratorType = getGlobalType("AsyncNonIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalAsyncIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        function getGlobalAsyncIteratorType(reportErrors: boolean) {
+            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableType(reportErrors: boolean) {
             return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalIteratorType(reportErrors: boolean) {
-            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        function getGlobalNonIterableIteratorType(reportErrors: boolean) {
+            return deferredGlobalNonIterableIteratorType || (deferredGlobalNonIterableIteratorType = getGlobalType("NonIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        function getGlobalIteratorType(reportErrors: boolean) {
+            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalTypeOrUndefined(name: __String, arity = 0): ObjectType {
@@ -7252,16 +7252,16 @@ namespace ts {
             return createTypeFromGenericGlobalType(getGlobalAsyncIterableType(/*reportErrors*/ true), [iteratedType]);
         }
 
-        function createAsyncIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalAsyncIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
+        function createAsyncIteratorType(iteratedType: Type): Type {
+            return createTypeFromGenericGlobalType(getGlobalAsyncIteratorType(/*reportErrors*/ true), [iteratedType]);
         }
 
         function createIterableType(iteratedType: Type): Type {
             return createTypeFromGenericGlobalType(getGlobalIterableType(/*reportErrors*/ true), [iteratedType]);
         }
 
-        function createIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
+        function createIteratorType(iteratedType: Type): Type {
+            return createTypeFromGenericGlobalType(getGlobalIteratorType(/*reportErrors*/ true), [iteratedType]);
         }
 
         function createArrayType(elementType: Type): ObjectType {
@@ -17353,14 +17353,14 @@ namespace ts {
                 if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
                     types = concatenate(checkAndAggregateYieldOperandTypes(func, checkMode), checkAndAggregateReturnExpressionTypes(func, checkMode));
                     if (!types || types.length === 0) {
-                        const iterableIteratorAny = functionFlags & FunctionFlags.Async
-                            ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
-                            : createIterableIteratorType(anyType); // Generator function
+                        const iteratorAny = functionFlags & FunctionFlags.Async
+                            ? createAsyncIteratorType(anyType) // AsyncGenerator function
+                            : createIteratorType(anyType); // Generator function
                         if (noImplicitAny) {
                             error(func.asteriskToken,
-                                Diagnostics.Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type, typeToString(iterableIteratorAny));
+                                Diagnostics.Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type, typeToString(iteratorAny));
                         }
-                        return iterableIteratorAny;
+                        return iteratorAny;
                     }
                 }
                 else {
@@ -17383,8 +17383,8 @@ namespace ts {
 
                 if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
                     type = functionFlags & FunctionFlags.Async
-                        ? createAsyncIterableIteratorType(type) // AsyncGenerator function
-                        : createIterableIteratorType(type); // Generator function
+                        ? createAsyncIteratorType(type) // AsyncGenerator function
+                        : createIteratorType(type); // Generator function
                 }
             }
 
@@ -18953,17 +18953,17 @@ namespace ts {
                         }
                         else {
                             const generatorElementType = getIteratedTypeOfGenerator(returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
-                            const iterableIteratorInstantiation = functionFlags & FunctionFlags.Async
-                                ? createAsyncIterableIteratorType(generatorElementType) // AsyncGenerator function
-                                : createIterableIteratorType(generatorElementType); // Generator function
+                            const iteratorInstantiation = functionFlags & FunctionFlags.Async
+                                ? createAsyncIteratorType(generatorElementType) // AsyncGenerator function
+                                : createIteratorType(generatorElementType); // Generator function
 
-                            // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
+                            // Naively, one could check that Iterator<any> is assignable to the return type annotation.
                             // However, that would not catch the error in the following case.
                             //
                             //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
                             //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
                             //
-                            checkTypeAssignableTo(iterableIteratorInstantiation, returnType, returnTypeNode);
+                            checkTypeAssignableTo(iteratorInstantiation, returnType, returnTypeNode);
                         }
                     }
                     else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
@@ -21256,7 +21256,7 @@ namespace ts {
             const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
             const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
 
-            // Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015
+            // Get the iterated type of an `Iterable<T>` or `Iterator<T>` only in ES2015
             // or higher, when inside of an async generator or for-await-if, or when
             // downlevelIteration is requested.
             if (uplevelIteration || downlevelIteration || allowAsyncIterables) {
@@ -21390,9 +21390,9 @@ namespace ts {
                     }
 
                     // As an optimization, if the type is an instantiation of the global `AsyncIterable<T>`
-                    // or the global `AsyncIterableIterator<T>` then just grab its type argument.
+                    // or the global `AsyncIterator<T>` then just grab its type argument.
                     if (isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
-                        isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))) {
+                        isReferenceToType(type, getGlobalAsyncIteratorType(/*reportErrors*/ false))) {
                         return typeAsIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0];
                     }
                 }
@@ -21403,9 +21403,9 @@ namespace ts {
                     }
 
                     // As an optimization, if the type is an instantiation of the global `Iterable<T>` or
-                    // `IterableIterator<T>` then just grab its type argument.
+                    // `Iterator<T>` then just grab its type argument.
                     if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
-                        isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
+                        isReferenceToType(type, getGlobalIteratorType(/*reportErrors*/ false))) {
                         return typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments[0];
                     }
                 }
@@ -21481,7 +21481,7 @@ namespace ts {
             // As an optimization, if the type is an instantiation of the global `Iterator<T>` (for
             // a non-async iterator) or the global `AsyncIterator<T>` (for an async-iterator) then
             // just grab its type argument.
-            const getIteratorType = isAsyncIterator ? getGlobalAsyncIteratorType : getGlobalIteratorType;
+            const getIteratorType = isAsyncIterator ? getGlobalAsyncNonIterableIteratorType : getGlobalNonIterableIteratorType;
             if (isReferenceToType(type, getIteratorType(/*reportErrors*/ false))) {
                 return isAsyncIterator
                     ? typeAsIterator.iteratedTypeOfAsyncIterator = (<GenericType>type).typeArguments[0]
@@ -21534,8 +21534,8 @@ namespace ts {
 
         /**
          * A generator may have a return type of `Iterator<T>`, `Iterable<T>`, or
-         * `IterableIterator<T>`. An async generator may have a return type of `AsyncIterator<T>`,
-         * `AsyncIterable<T>`, or `AsyncIterableIterator<T>`. This function can be used to extract
+         * `Iterator<T>`. An async generator may have a return type of `AsyncIterator<T>`,
+         * `AsyncIterable<T>`, or `AsyncIterator<T>`. This function can be used to extract
          * the iterated type from this return type for contextual typing and verifying signatures.
          */
         function getIteratedTypeOfGenerator(returnType: Type, isAsyncGenerator: boolean): Type {

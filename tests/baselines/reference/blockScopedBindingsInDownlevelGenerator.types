@@ -1,6 +1,6 @@
 === tests/cases/compiler/blockScopedBindingsInDownlevelGenerator.ts ===
 function* a() {
->a : () => IterableIterator<number>
+>a : () => Iterator<number>
 
   for (const i of [1,2,3]) {
 >i : number

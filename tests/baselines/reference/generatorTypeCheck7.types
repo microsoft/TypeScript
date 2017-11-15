@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts ===
-interface WeirdIter extends IterableIterator<number> {
+interface WeirdIter extends Iterator<number> {
 >WeirdIter : WeirdIter
->IterableIterator : IterableIterator<T>
+>Iterator : Iterator<T>
 
     hello: string;
 >hello : string

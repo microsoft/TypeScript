@@ -1,5 +1,5 @@
 //// [generatorTypeCheck7.ts]
-interface WeirdIter extends IterableIterator<number> {
+interface WeirdIter extends Iterator<number> {
     hello: string;
 }
 function* g1(): WeirdIter { }

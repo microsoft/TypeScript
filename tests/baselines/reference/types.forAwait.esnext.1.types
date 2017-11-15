@@ -31,7 +31,7 @@ async function f1() {
     }
 }
 async function * f2() {
->f2 : () => AsyncIterableIterator<any>
+>f2 : () => AsyncIterator<any>
 
     let y: number;
 >y : number

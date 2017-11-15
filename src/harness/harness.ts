@@ -1322,7 +1322,7 @@ namespace Harness {
 
         export const diagnosticSummaryMarker = "__diagnosticSummary";
         export const globalErrorsMarker = "__globalErrors";
-        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean): IterableIterator<[string, string, number]> {
+        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean): Iterator<[string, string, number]> {
             diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -1546,7 +1546,7 @@ namespace Harness {
                 /* tslint:enable:no-null-keyword */
             }
 
-            function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
+            function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): Iterator<[string, string]> {
                 if (skipBaseline) {
                     return;
                 }
@@ -1556,7 +1556,7 @@ namespace Harness {
                     const { unitName } = file;
                     let typeLines = "=== " + unitName + " ===\r\n";
                     const codeLines = ts.flatMap(file.content.split(/\r?\n/g), e => e.split(/[\r\u2028\u2029]/g));
-                    const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
+                    const gen: Iterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
                     let lastIndexWritten: number | undefined;
                     for (let {done, value: result} = gen.next(); !done; { done, value: result } = gen.next()) {
                         if (isSymbolBaseline && !result.symbol) {
@@ -1704,7 +1704,7 @@ namespace Harness {
             return result;
         }
 
-        export function *iterateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): IterableIterator<[string, string]> {
+        export function *iterateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): Iterator<[string, string]> {
             // Collect, test, and sort the fileNames
             outputFiles.sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.fileName), cleanName(b.fileName)));
             const dupeCase = ts.createMap<number>();
@@ -2078,7 +2078,7 @@ namespace Harness {
             writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName);
         }
 
-        export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]>, opts?: BaselineOptions, referencedExtensions?: string[]): void {
+        export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => Iterator<[string, string, number]> | Iterator<[string, string]>, opts?: BaselineOptions, referencedExtensions?: string[]): void {
             const gen = generateContent();
             const writtenFiles = ts.createMap<true>();
             const errors: Error[] = [];

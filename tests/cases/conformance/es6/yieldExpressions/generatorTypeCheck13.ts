@@ -1,5 +1,5 @@
 //@target: ES6
-function* g(): IterableIterator<number> {
+function* g(): Iterator<number> {
     yield 0;
     return "";
 }

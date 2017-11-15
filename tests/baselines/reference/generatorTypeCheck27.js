@@ -1,5 +1,5 @@
 //// [generatorTypeCheck27.ts]
-function* g(): IterableIterator<(x: string) => number> {
+function* g(): Iterator<(x: string) => number> {
     yield * function* () {
         yield x => x.length;
     } ();

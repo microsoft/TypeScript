@@ -1,30 +1,28 @@
 /// <reference path="lib.dom.d.ts" />
 
-interface DOMTokenList {
-    [Symbol.iterator](): IterableIterator<string>;
+interface DOMTokenList extends Iterable<string> {
 }
 
-interface Headers {
-    [Symbol.iterator](): IterableIterator<[string, string]>;
+interface Headers extends Iterable<[string, string]> {
     /**
      * Returns an iterator allowing to go through all key/value pairs contained in this object.
      */
-    entries(): IterableIterator<[string, string]>;
+    entries(): Iterator<[string, string]>;
     /**
      * Returns an iterator allowing to go through all keys f the key/value pairs contained in this object.
      */
-    keys(): IterableIterator<string>;
+    keys(): Iterator<string>;
     /**
      * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
      */
-    values(): IterableIterator<string>;
+    values(): Iterator<string>;
 }
 
-interface NodeList {
+interface NodeList extends Iterable<Node> {
     /**
      * Returns an array of key, value pairs for every entry in the list
      */
-    entries(): IterableIterator<[number, Node]>;
+    entries(): Iterator<[number, Node]>;
     /**
      * Performs the specified action for each node in an list.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
@@ -34,24 +32,18 @@ interface NodeList {
     /**
      * Returns an list of keys in the list
      */
-    keys(): IterableIterator<number>;
-
+    keys(): Iterator<number>;
     /**
      * Returns an list of values in the list
      */
-    values(): IterableIterator<Node>;
-
-
-    [Symbol.iterator](): IterableIterator<Node>;
+    values(): Iterator<Node>;
 }
 
-interface NodeListOf<TNode extends Node> {
-
+interface NodeListOf<TNode extends Node> extends Iterable<TNode> {
     /**
      * Returns an array of key, value pairs for every entry in the list
      */
-    entries(): IterableIterator<[number, TNode]>;
-
+    entries(): Iterator<[number, TNode]>;
     /**
      * Performs the specified action for each node in an list.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
@@ -61,55 +53,45 @@ interface NodeListOf<TNode extends Node> {
     /**
      * Returns an list of keys in the list
      */
-    keys(): IterableIterator<number>;
+    keys(): Iterator<number>;
     /**
      * Returns an list of values in the list
      */
-    values(): IterableIterator<TNode>;
-
-    [Symbol.iterator](): IterableIterator<TNode>;
+    values(): Iterator<TNode>;
 }
 
-interface HTMLCollectionBase {
-    [Symbol.iterator](): IterableIterator<Element>;
+interface HTMLCollectionBase extends Iterable<Element> {
 }
 
-interface HTMLCollectionOf<T extends Element> {
-    [Symbol.iterator](): IterableIterator<T>;
+interface HTMLCollectionOf<T extends Element> extends Iterable<T> {
 }
 
-interface FormData {
+interface FormData extends Iterable<string | File> {
     /**
      * Returns an array of key, value pairs for every entry in the list
      */
-    entries(): IterableIterator<[string, string | File]>;
+    entries(): Iterator<[string, string | File]>;
     /**
      * Returns a list of keys in the list
      */
-    keys(): IterableIterator<string>;
+    keys(): Iterator<string>;
     /**
      * Returns a list of values in the list
      */
-    values(): IterableIterator<string | File>;
-
-    [Symbol.iterator](): IterableIterator<string | File>;
+    values(): Iterator<string | File>;
 }
 
-interface URLSearchParams {
+interface URLSearchParams extends Iterable<[string, string]> {
     /**
      * Returns an array of key, value pairs for every entry in the search params
      */
-    entries(): IterableIterator<[string, string]>;
+    entries(): Iterator<[string, string]>;
     /**
      * Returns a list of keys in the search params
      */
-    keys(): IterableIterator<string>;
+    keys(): Iterator<string>;
     /**
      * Returns a list of values in the search params
      */
-    values(): IterableIterator<string>;
-    /**
-     * iterate over key/value pairs
-     */
-    [Symbol.iterator](): IterableIterator<[string, string]>;
+    values(): Iterator<string>;
 }

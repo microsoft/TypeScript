@@ -1,6 +1,6 @@
 === tests/cases/compiler/sourceMapValidationVarInDownLevelGenerator.ts ===
 function * f() {
->f : () => IterableIterator<any>
+>f : () => Iterator<any>
 
     var x = 1, y;
 >x : number

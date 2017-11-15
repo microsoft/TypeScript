@@ -1,49 +1,49 @@
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/functionDeclarationIsOk.ts ===
 async function * f1() {
->f1 : () => AsyncIterableIterator<any>
+>f1 : () => AsyncIterator<any>
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitNameIsOk.ts ===
 async function * await() {
->await : () => AsyncIterableIterator<any>
+>await : () => AsyncIterator<any>
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldNameIsOk.ts ===
 async function * yield() {
->yield : () => AsyncIterableIterator<any>
+>yield : () => AsyncIterator<any>
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts ===
 async function * f4(await) {
 >f4 : () => any
->await : () => AsyncIterableIterator<any>
+>await : () => AsyncIterator<any>
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts ===
 async function * f5(yield) {
 >f5 : () => any
->yield : () => AsyncIterableIterator<any>
+>yield : () => AsyncIterator<any>
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitInParameterInitializerIsError.ts ===
 async function * f6(a = await 1) {
->f6 : (a?: number) => AsyncIterableIterator<any>
+>f6 : (a?: number) => AsyncIterator<any>
 >a : number
 >await 1 : 1
 >1 : 1
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInParameterInitializerIsError.ts ===
 async function * f7(a = yield) {
->f7 : (a?: any) => AsyncIterableIterator<any>
+>f7 : (a?: any) => AsyncIterator<any>
 >a : any
 >yield : any
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedAsyncGeneratorIsOk.ts ===
 async function * f8() {
->f8 : () => AsyncIterableIterator<any>
+>f8 : () => AsyncIterator<any>
 
     async function * g() {
->g : () => AsyncIterableIterator<any>
+>g : () => AsyncIterator<any>
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts ===
 async function * f9() {
->f9 : () => AsyncIterableIterator<() => void>
+>f9 : () => AsyncIterator<() => void>
 
     function yield() {
 > : () => any
@@ -53,7 +53,7 @@ async function * f9() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts ===
 async function * f10() {
->f10 : () => AsyncIterableIterator<() => void>
+>f10 : () => AsyncIterator<() => void>
 
     const x = function yield() {
 >x : () => any
@@ -65,7 +65,7 @@ async function * f10() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts ===
 async function * f11() {
->f11 : () => AsyncIterableIterator<any>
+>f11 : () => AsyncIterator<any>
 
     function await() {
 > : () => any
@@ -76,7 +76,7 @@ async function * f11() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts ===
 async function * f12() {
->f12 : () => AsyncIterableIterator<() => void>
+>f12 : () => AsyncIterator<() => void>
 
     const x = function yield() {
 >x : () => any
@@ -88,14 +88,14 @@ async function * f12() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldIsOk.ts ===
 async function * f13() {
->f13 : () => AsyncIterableIterator<any>
+>f13 : () => AsyncIterator<any>
 
     yield;
 >yield : any
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldWithValueIsOk.ts ===
 async function * f14() {
->f14 : () => AsyncIterableIterator<1>
+>f14 : () => AsyncIterator<1>
 
     yield 1;
 >yield 1 : any
@@ -103,7 +103,7 @@ async function * f14() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingValueIsError.ts ===
 async function * f15() {
->f15 : () => AsyncIterableIterator<any>
+>f15 : () => AsyncIterator<any>
 
     yield *;
 >yield * : any
@@ -111,7 +111,7 @@ async function * f15() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarWithValueIsOk.ts ===
 async function * f16() {
->f16 : () => AsyncIterableIterator<undefined>
+>f16 : () => AsyncIterator<undefined>
 
     yield * [];
 >yield * [] : any
@@ -119,7 +119,7 @@ async function * f16() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitWithValueIsOk.ts ===
 async function * f17() {
->f17 : () => AsyncIterableIterator<any>
+>f17 : () => AsyncIterator<any>
 
     await 1;
 >await 1 : 1
@@ -127,7 +127,7 @@ async function * f17() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitMissingValueIsError.ts ===
 async function * f18() {
->f18 : () => AsyncIterableIterator<any>
+>f18 : () => AsyncIterator<any>
 
     await;
 >await : any
@@ -138,7 +138,7 @@ interface await {}
 >await : await
 
 async function * f19() {
->f19 : () => AsyncIterableIterator<any>
+>f19 : () => AsyncIterator<any>
 
     let x: await;
 >x : await
@@ -149,7 +149,7 @@ interface yield {}
 >yield : yield
 
 async function * f20() {
->f20 : () => AsyncIterableIterator<any>
+>f20 : () => AsyncIterator<any>
 
     let x: yield;
 >x : yield
@@ -157,7 +157,7 @@ async function * f20() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===
 async function * f21() {
->f21 : () => AsyncIterableIterator<any>
+>f21 : () => AsyncIterator<any>
 
     const x = { [yield]: 1 };
 >x : { [x: number]: number; }

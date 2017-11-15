@@ -1,5 +1,5 @@
 //// [generatorTypeCheck10.ts]
-function* g(): IterableIterator<any> {
+function* g(): Iterator<any> {
     return;
 }
 

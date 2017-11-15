@@ -1711,10 +1711,14 @@ declare module Immutable {
 >Readonly : Readonly<T>
 >T : T
     }
-    export interface Instance<T extends Object> {
+    export interface Instance<T extends Object> extends Iterable<[keyof T, T[keyof T]]> {
 >Instance : Instance<T>
 >T : T
 >Object : Object
+>Iterable : Iterable<T>
+>T : T
+>T : T
+>T : T
 
       readonly size: number;
 >size : number
@@ -1903,15 +1907,6 @@ declare module Immutable {
 >toSeq : () => Seq.Keyed<keyof T, T[keyof T]>
 >Seq : any
 >Keyed : Seq.Keyed<K, V>
->T : T
->T : T
->T : T
-
-      [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
->IterableIterator : IterableIterator<T>
 >T : T
 >T : T
 >T : T
@@ -2583,11 +2578,14 @@ declare module Immutable {
 >Keyed : Keyed<K, V>
 >V : V
 
-    export interface Keyed<K, V> extends Collection<K, V> {
+    export interface Keyed<K, V> extends Collection<K, V>, Iterable<[K, V]> {
 >Keyed : Keyed<K, V>
 >K : K
 >V : V
 >Collection : Collection<K, V>
+>K : K
+>V : V
+>Iterable : Iterable<T>
 >K : K
 >V : V
 
@@ -2732,14 +2730,6 @@ declare module Immutable {
 >K : K
 >iter : this
 >context : any
-
-      [Symbol.iterator](): IterableIterator<[K, V]>;
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
->IterableIterator : IterableIterator<T>
->K : K
->V : V
     }
     export module Indexed {}
 >Indexed : <T>(collection: Iterable<T>) => Indexed<T>
@@ -2754,10 +2744,12 @@ declare module Immutable {
 >Indexed : Indexed<T>
 >T : T
 
-    export interface Indexed<T> extends Collection<number, T> {
+    export interface Indexed<T> extends Collection<number, T>, Iterable<T> {
 >Indexed : Indexed<T>
 >T : T
 >Collection : Collection<K, V>
+>T : T
+>Iterable : Iterable<T>
 >T : T
 
       toJS(): Array<any>;
@@ -2975,13 +2967,6 @@ declare module Immutable {
 >index : number
 >iter : this
 >context : any
-
-      [Symbol.iterator](): IterableIterator<T>;
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
->IterableIterator : IterableIterator<T>
->T : T
     }
     export module Set {}
 >Set : <T>(collection: Iterable<T>) => Set<T>
@@ -2996,10 +2981,12 @@ declare module Immutable {
 >Set : Set<T>
 >T : T
 
-    export interface Set<T> extends Collection<never, T> {
+    export interface Set<T> extends Collection<never, T>, Iterable<T> {
 >Set : Set<T>
 >T : T
 >Collection : Collection<K, V>
+>T : T
+>Iterable : Iterable<T>
 >T : T
 
       toJS(): Array<any>;
@@ -3084,13 +3071,6 @@ declare module Immutable {
 >key : never
 >iter : this
 >context : any
-
-      [Symbol.iterator](): IterableIterator<T>;
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
->IterableIterator : IterableIterator<T>
->T : T
     }
   }
   export function Collection<I extends Collection<any, any>>(collection: I): I;
@@ -3276,19 +3256,19 @@ declare module Immutable {
 >V : V
 
     // Iterators
-    keys(): IterableIterator<K>;
->keys : () => IterableIterator<K>
->IterableIterator : IterableIterator<T>
+    keys(): Iterator<K>;
+>keys : () => Iterator<K>
+>Iterator : Iterator<T>
 >K : K
 
-    values(): IterableIterator<V>;
->values : () => IterableIterator<V>
->IterableIterator : IterableIterator<T>
+    values(): Iterator<V>;
+>values : () => Iterator<V>
+>Iterator : Iterator<T>
 >V : V
 
-    entries(): IterableIterator<[K, V]>;
->entries : () => IterableIterator<[K, V]>
->IterableIterator : IterableIterator<T>
+    entries(): Iterator<[K, V]>;
+>entries : () => Iterator<[K, V]>
+>Iterator : Iterator<T>
 >K : K
 >V : V
 

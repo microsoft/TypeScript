@@ -25,7 +25,7 @@ async function f2() {
 }
 === tests/cases/conformance/emitter/esnext/forAwait/file3.ts ===
 async function* f3() {
->f3 : () => AsyncIterableIterator<any>
+>f3 : () => AsyncIterator<any>
 
     let y: any;
 >y : any
@@ -37,7 +37,7 @@ async function* f3() {
 }
 === tests/cases/conformance/emitter/esnext/forAwait/file4.ts ===
 async function* f4() {
->f4 : () => AsyncIterableIterator<any>
+>f4 : () => AsyncIterator<any>
 
     let x: any, y: any;
 >x : any

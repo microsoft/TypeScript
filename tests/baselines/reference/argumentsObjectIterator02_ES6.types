@@ -6,8 +6,8 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 >z : number
 
     let blah = arguments[Symbol.iterator];
->blah : () => IterableIterator<any>
->arguments[Symbol.iterator] : () => IterableIterator<any>
+>blah : () => Iterator<any>
+>arguments[Symbol.iterator] : () => Iterator<any>
 >arguments : IArguments
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -19,8 +19,8 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 
     for (let arg of blah()) {
 >arg : any
->blah() : IterableIterator<any>
->blah : () => IterableIterator<any>
+>blah() : Iterator<any>
+>blah : () => Iterator<any>
 
         result.push(arg + arg);
 >result.push(arg + arg) : number

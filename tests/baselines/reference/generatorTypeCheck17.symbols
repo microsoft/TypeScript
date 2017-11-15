@@ -8,9 +8,9 @@ class Bar extends Foo { y: string }
 >Foo : Symbol(Foo, Decl(generatorTypeCheck17.ts, 0, 0))
 >y : Symbol(Bar.y, Decl(generatorTypeCheck17.ts, 1, 23))
 
-function* g(): IterableIterator<Foo> {
+function* g(): Iterator<Foo> {
 >g : Symbol(g, Decl(generatorTypeCheck17.ts, 1, 35))
->IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(generatorTypeCheck17.ts, 0, 0))
 
     yield;

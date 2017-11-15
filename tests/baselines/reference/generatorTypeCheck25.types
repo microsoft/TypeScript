@@ -16,7 +16,7 @@ var g3: () => Iterable<Foo> = function* () {
 >g3 : () => Iterable<Foo>
 >Iterable : Iterable<T>
 >Foo : Foo
->function* () {    yield;    yield new Bar;    yield new Baz;    yield *[new Bar];    yield *[new Baz];} : () => IterableIterator<Bar | Baz>
+>function* () {    yield;    yield new Bar;    yield new Baz;    yield *[new Bar];    yield *[new Baz];} : () => Iterator<Bar | Baz>
 
     yield;
 >yield : any

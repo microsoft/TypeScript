@@ -1,4 +1,4 @@
 //@target: ES6
-function* g(): IterableIterator<any> {
+function* g(): Iterator<any> {
     return;
 }
