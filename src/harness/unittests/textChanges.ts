@@ -132,7 +132,7 @@ function bar() {
         function findVariableStatementContaining(name: string, sourceFile: SourceFile) {
             const varDecl = findChild(name, sourceFile);
             assert.equal(varDecl.kind, SyntaxKind.VariableDeclaration);
-            const varStatement = varDecl.parent!.parent!;
+            const varStatement = varDecl.parent.parent;
             assert.equal(varStatement.kind, SyntaxKind.VariableStatement);
             return varStatement;
         }

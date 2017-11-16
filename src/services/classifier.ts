@@ -882,14 +882,14 @@ namespace ts {
             if (tokenKind === SyntaxKind.LessThanToken || tokenKind === SyntaxKind.GreaterThanToken) {
                 // If the node owning the token has a type argument list or type parameter list, then
                 // we can effectively assume that a '<' and '>' belong to those lists.
-                if (token && getTypeArgumentOrTypeParameterList(token.parent!)) {
+                if (token && getTypeArgumentOrTypeParameterList(token.parent)) {
                     return ClassificationType.punctuation;
                 }
             }
 
             if (isPunctuation(tokenKind)) {
                 if (token) {
-                    const parent = token.parent!;
+                    const parent = token.parent;
                     if (tokenKind === SyntaxKind.EqualsToken) {
                         // the '=' in a variable declaration is special cased here.
                         if (parent.kind === SyntaxKind.VariableDeclaration ||
@@ -915,7 +915,7 @@ namespace ts {
             }
             else if (tokenKind === SyntaxKind.StringLiteral) {
                 // TODO: GH#18217
-                return token!.parent!.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
+                return token!.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
             }
             else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
                 // TODO: we should get another classification type for these literals.
@@ -930,7 +930,7 @@ namespace ts {
             }
             else if (tokenKind === SyntaxKind.Identifier) {
                 if (token) {
-                    switch (token.parent!.kind) {
+                    switch (token.parent.kind) {
                         case SyntaxKind.ClassDeclaration:
                             if ((<ClassDeclaration>token.parent).name === token) {
                                 return ClassificationType.className;

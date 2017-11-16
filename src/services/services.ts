@@ -33,12 +33,12 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.7";
 
-    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
+    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
                 new TokenObject(kind, pos, end);
-        node.parent = parent!;
-        node.flags = parent!.flags & NodeFlags.ContextFlags; // TODO: GH#18217
+        node.parent = parent;
+        node.flags = parent.flags & NodeFlags.ContextFlags; // TODO: GH#18217
         return node;
     }
 
@@ -1518,9 +1518,8 @@ namespace ts {
 
         function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
             if ((isIdentifier(node) || isStringLiteral(node))) {
-                const parent = node.parent!;
-                if (isPropertyAssignment(parent) && parent.name === node) {
-                    const type = checker.getContextualType(parent.parent);
+                if (isPropertyAssignment(node.parent) && node.parent.name === node) {
+                    const type = checker.getContextualType(node.parent.parent);
                     if (type) {
                         const property = checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
                         if (property) {
@@ -1702,16 +1701,16 @@ namespace ts {
             while (true) {
                 if (isRightSideOfPropertyAccess(nodeForStartPos) || isRightSideOfQualifiedName(nodeForStartPos)) {
                     // If on the span is in right side of the the property or qualified name, return the span from the qualified name pos to end of this node
-                    nodeForStartPos = nodeForStartPos.parent!;
+                    nodeForStartPos = nodeForStartPos.parent;
                 }
                 else if (isNameOfModuleDeclaration(nodeForStartPos)) {
                     // If this is name of a module declarations, check if this is right side of dotted module name
                     // If parent of the module declaration which is parent of this node is module declaration and its body is the module declaration that this node is name of
                     // Then this name is name from dotted module
-                    if (nodeForStartPos.parent!.parent!.kind === SyntaxKind.ModuleDeclaration &&
-                        (<ModuleDeclaration>nodeForStartPos.parent!.parent).body === nodeForStartPos.parent) {
+                    if (nodeForStartPos.parent.parent.kind === SyntaxKind.ModuleDeclaration &&
+                        (<ModuleDeclaration>nodeForStartPos.parent.parent).body === nodeForStartPos.parent) {
                         // Use parent module declarations name for start pos
-                        nodeForStartPos = (<ModuleDeclaration>nodeForStartPos.parent!.parent).name;
+                        nodeForStartPos = (<ModuleDeclaration>nodeForStartPos.parent.parent).name;
                     }
                     else {
                         // We have to use this name for start pos
@@ -1792,7 +1791,7 @@ namespace ts {
 
                 // Ensure that there is a corresponding token to match ours.
                 if (matchKind) {
-                    const parentElement = token.parent!;
+                    const parentElement = token.parent;
 
                     const childNodes = parentElement.getChildren(sourceFile);
                     for (const current of childNodes) {
@@ -2224,7 +2223,7 @@ namespace ts {
      */
     function literalIsName(node: ts.StringLiteral | ts.NumericLiteral): boolean {
         return isDeclarationName(node) ||
-            node.parent!.kind === SyntaxKind.ExternalModuleReference ||
+            node.parent.kind === SyntaxKind.ExternalModuleReference ||
             isArgumentOfElementAccessExpression(node) ||
             isLiteralComputedPropertyDeclarationName(node);
     }
@@ -2251,13 +2250,13 @@ namespace ts {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
-                if (node.parent!.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralElement(node.parent!.parent!) ? node.parent!.parent! as ObjectLiteralElement : undefined;
+                if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
+                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent as ObjectLiteralElement : undefined;
                 }
             // falls through
             case SyntaxKind.Identifier:
-                return isObjectLiteralElement(node.parent!) &&
-                    (node.parent!.parent!.kind === SyntaxKind.ObjectLiteralExpression || node.parent!.parent!.kind === SyntaxKind.JsxAttributes) &&
+                return isObjectLiteralElement(node.parent) &&
+                    (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     (<ObjectLiteralElement>node.parent).name === node ? node.parent as ObjectLiteralElement : undefined;
         }
         return undefined;

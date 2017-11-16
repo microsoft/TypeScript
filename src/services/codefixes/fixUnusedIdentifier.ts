@@ -22,7 +22,7 @@ namespace ts.codefix {
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.NamespaceImport:
-                    return [deleteNode(token.parent!)];
+                    return [deleteNode(token.parent)];
 
                 default:
                     return deleteDefault();
@@ -30,10 +30,10 @@ namespace ts.codefix {
 
             function deleteDefault(): CodeAction[] | undefined {
                 if (isDeclarationName(token)) {
-                    return [deleteNode(token.parent!)];
+                    return [deleteNode(token.parent)];
                 }
                 else if (isLiteralComputedPropertyDeclarationName(token)) {
-                    return [deleteNode(token.parent!.parent!)];
+                    return [deleteNode(token.parent.parent)];
                 }
                 else {
                     return undefined;
@@ -55,7 +55,7 @@ namespace ts.codefix {
             }
 
             function deleteIdentifierOrPrefixWithUnderscore(identifier: Identifier): CodeAction[] | undefined {
-                const parent = identifier.parent!;
+                const parent = identifier.parent;
                 switch (parent.kind) {
                     case ts.SyntaxKind.VariableDeclaration:
                         return deleteVariableDeclarationOrPrefixWithUnderscore(identifier, <ts.VariableDeclaration>parent);
@@ -144,14 +144,14 @@ namespace ts.codefix {
 
             // token.parent is a variableDeclaration
             function deleteVariableDeclarationOrPrefixWithUnderscore(identifier: Identifier, varDecl: ts.VariableDeclaration): CodeAction[] | undefined {
-                switch (varDecl.parent!.parent!.kind) {
+                switch (varDecl.parent.parent.kind) {
                     case SyntaxKind.ForStatement:
-                        const forStatement = <ForStatement>varDecl.parent!.parent;
+                        const forStatement = <ForStatement>varDecl.parent.parent;
                         const forInitializer = <VariableDeclarationList>forStatement.initializer;
                         return [forInitializer.declarations.length === 1 ? deleteNode(forInitializer) : deleteNodeInList(varDecl)];
 
                     case SyntaxKind.ForOfStatement:
-                        const forOfStatement = <ForOfStatement>varDecl.parent!.parent;
+                        const forOfStatement = <ForOfStatement>varDecl.parent.parent;
                         Debug.assert(forOfStatement.initializer!.kind === SyntaxKind.VariableDeclarationList);
                         const forOfInitializer = <VariableDeclarationList>forOfStatement.initializer;
                         return [
@@ -165,7 +165,7 @@ namespace ts.codefix {
                         return [prefixIdentifierWithUnderscore(identifier)];
 
                     default:
-                        const variableStatement = <VariableStatement>varDecl.parent!.parent;
+                        const variableStatement = <VariableStatement>varDecl.parent.parent;
                         if (variableStatement.declarationList.declarations.length === 1) {
                             return [deleteNode(variableStatement)];
                         }

@@ -88,14 +88,14 @@ namespace ts {
         if (node.kind === SyntaxKind.SourceFile) {
             return SemanticMeaning.Value;
         }
-        else if (node.parent!.kind === SyntaxKind.ExportAssignment) {
+        else if (node.parent.kind === SyntaxKind.ExportAssignment) {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
             return getMeaningFromRightHandSideOfImportEquals(node);
         }
         else if (isDeclarationName(node)) {
-            return getMeaningFromDeclaration(node.parent!);
+            return getMeaningFromDeclaration(node.parent);
         }
         else if (isTypeReference(node)) {
             return SemanticMeaning.Type;
@@ -103,8 +103,8 @@ namespace ts {
         else if (isNamespaceReference(node)) {
             return SemanticMeaning.Namespace;
         }
-        else if (isTypeParameterDeclaration(node.parent!)) {
-            Debug.assert(isJSDocTemplateTag(node.parent!.parent!)); // Else would be handled by isDeclarationName
+        else if (isTypeParameterDeclaration(node.parent)) {
+            Debug.assert(isJSDocTemplateTag(node.parent.parent)); // Else would be handled by isDeclarationName
             return SemanticMeaning.Type;
         }
         else {
@@ -119,19 +119,19 @@ namespace ts {
         //     import a = |b.c|; // Value, type, namespace
         //     import a = |b.c|.d; // Namespace
 
-        if (node.parent!.kind === SyntaxKind.QualifiedName &&
+        if (node.parent.kind === SyntaxKind.QualifiedName &&
             (<QualifiedName>node.parent).right === node &&
-            node.parent!.parent!.kind === SyntaxKind.ImportEqualsDeclaration) {
+            node.parent.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
             return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
         }
         return SemanticMeaning.Namespace;
     }
 
     export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
-        while (node.parent!.kind === SyntaxKind.QualifiedName) {
-            node = node.parent!;
+        while (node.parent.kind === SyntaxKind.QualifiedName) {
+            node = node.parent;
         }
-        return isInternalModuleImportEqualsDeclaration(node.parent!) && (<ImportEqualsDeclaration>node.parent).moduleReference === node;
+        return isInternalModuleImportEqualsDeclaration(node.parent) && (<ImportEqualsDeclaration>node.parent).moduleReference === node;
     }
 
     function isNamespaceReference(node: Node): boolean {
@@ -141,7 +141,7 @@ namespace ts {
     function isQualifiedNameNamespaceReference(node: Node): boolean {
         let root = node;
         let isLastClause = true;
-        if (root.parent!.kind === SyntaxKind.QualifiedName) {
+        if (root.parent.kind === SyntaxKind.QualifiedName) {
             while (root.parent && root.parent.kind === SyntaxKind.QualifiedName) {
                 root = root.parent;
             }
@@ -149,13 +149,13 @@ namespace ts {
             isLastClause = (<QualifiedName>root).right === node;
         }
 
-        return root.parent!.kind === SyntaxKind.TypeReference && !isLastClause;
+        return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
     }
 
     function isPropertyAccessNamespaceReference(node: Node): boolean {
         let root = node;
         let isLastClause = true;
-        if (root.parent!.kind === SyntaxKind.PropertyAccessExpression) {
+        if (root.parent.kind === SyntaxKind.PropertyAccessExpression) {
             while (root.parent && root.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 root = root.parent;
             }
@@ -163,10 +163,10 @@ namespace ts {
             isLastClause = (<PropertyAccessExpression>root).name === node;
         }
 
-        if (!isLastClause && root.parent!.kind === SyntaxKind.ExpressionWithTypeArguments && root.parent!.parent!.kind === SyntaxKind.HeritageClause) {
-            const decl = root.parent!.parent!.parent!;
-            return (decl.kind === SyntaxKind.ClassDeclaration && (<HeritageClause>root.parent!.parent).token === SyntaxKind.ImplementsKeyword) ||
-                (decl.kind === SyntaxKind.InterfaceDeclaration && (<HeritageClause>root.parent!.parent).token === SyntaxKind.ExtendsKeyword);
+        if (!isLastClause && root.parent.kind === SyntaxKind.ExpressionWithTypeArguments && root.parent.parent.kind === SyntaxKind.HeritageClause) {
+            const decl = root.parent.parent.parent;
+            return (decl.kind === SyntaxKind.ClassDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ImplementsKeyword) ||
+                (decl.kind === SyntaxKind.InterfaceDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ExtendsKeyword);
         }
 
         return false;
@@ -174,7 +174,7 @@ namespace ts {
 
     function isTypeReference(node: Node): boolean {
         if (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
-            node = node.parent!;
+            node = node.parent;
         }
 
         switch (node.kind) {
@@ -184,7 +184,7 @@ namespace ts {
                 return true;
         }
 
-        switch (node.parent!.kind) {
+        switch (node.parent.kind) {
             case SyntaxKind.TypeReference:
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
@@ -208,7 +208,7 @@ namespace ts {
     }
 
     export function climbPastPropertyAccess(node: Node) {
-        return isRightSideOfPropertyAccess(node) ? node.parent! : node;
+        return isRightSideOfPropertyAccess(node) ? node.parent : node;
     }
 
     export function getTargetLabel(referenceNode: Node, labelName: string): Identifier | undefined {
@@ -216,20 +216,20 @@ namespace ts {
             if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.escapedText === labelName) {
                 return (<LabeledStatement>referenceNode).label;
             }
-            referenceNode = referenceNode.parent!;
+            referenceNode = referenceNode.parent;
         }
         return undefined;
     }
 
     export function isJumpStatementTarget(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            (node.parent!.kind === SyntaxKind.BreakStatement || node.parent!.kind === SyntaxKind.ContinueStatement) &&
+            (node.parent.kind === SyntaxKind.BreakStatement || node.parent.kind === SyntaxKind.ContinueStatement) &&
             (<BreakOrContinueStatement>node.parent).label === node;
     }
 
     function isLabelOfLabeledStatement(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            node.parent!.kind === SyntaxKind.LabeledStatement &&
+            node.parent.kind === SyntaxKind.LabeledStatement &&
             (<LabeledStatement>node.parent).label === node;
     }
 
@@ -238,7 +238,7 @@ namespace ts {
     }
 
     export function isRightSideOfQualifiedName(node: Node) {
-        return node.parent!.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node;
+        return node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node;
     }
 
     export function isRightSideOfPropertyAccess(node: Node) {
@@ -246,16 +246,16 @@ namespace ts {
     }
 
     export function isNameOfModuleDeclaration(node: Node) {
-        return node.parent!.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node.parent).name === node;
+        return node.parent.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node.parent).name === node;
     }
 
     export function isNameOfFunctionDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            isFunctionLike(node.parent!) && (<FunctionLikeDeclaration>node.parent).name === node;
+            isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
     export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLiteral | NumericLiteral): boolean {
-        switch (node.parent!.kind) {
+        switch (node.parent.kind) {
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
@@ -271,15 +271,15 @@ namespace ts {
             case SyntaxKind.ComputedPropertyName:
                 return true;
             case SyntaxKind.LiteralType:
-                return node.parent!.parent!.kind === SyntaxKind.IndexedAccessType;
+                return node.parent.parent.kind === SyntaxKind.IndexedAccessType;
             default:
                 return false;
         }
     }
 
     export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
-        return isExternalModuleImportEqualsDeclaration(node.parent!.parent!) &&
-            getExternalModuleImportEqualsDeclarationExpression(node.parent!.parent!) === node;
+        return isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
+            getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
     }
 
     export function getContainerNode(node: Node): Declaration | undefined {
@@ -287,11 +287,11 @@ namespace ts {
             // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
             // node.parent = the JSDoc comment, node.parent.parent = the node having the comment.
             // Then we get parent again in the loop.
-            node = node.parent!.parent!;
+            node = node.parent.parent;
         }
 
         while (true) {
-            node = node.parent!;
+            node = node.parent;
             if (!node) {
                 return undefined;
             }
@@ -397,7 +397,7 @@ namespace ts {
                 return true;
             case SyntaxKind.Identifier:
                 // 'this' as a parameter
-                return identifierIsThisKeyword(node as Identifier) && node.parent!.kind === SyntaxKind.Parameter;
+                return identifierIsThisKeyword(node as Identifier) && node.parent.kind === SyntaxKind.Parameter;
             default:
                 return false;
         }
@@ -634,7 +634,7 @@ namespace ts {
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
-        const syntaxList = forEach(node.parent!.getChildren(), c => {
+        const syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
             if (isSyntaxList(c) && c.pos <= node.pos && c.end >= node.end) {
                 return c;
@@ -874,24 +874,24 @@ namespace ts {
         }
 
         // <div>Hello |</div>
-        if (token.kind === SyntaxKind.LessThanToken && token.parent!.kind === SyntaxKind.JsxText) {
+        if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxText) {
             return true;
         }
 
         // <div> { | </div> or <div a={| </div>
-        if (token.kind === SyntaxKind.LessThanToken && token.parent!.kind === SyntaxKind.JsxExpression) {
+        if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxExpression) {
             return true;
         }
 
         // <div> {
         // |
         // } < /div>
-        if (token && token.kind === SyntaxKind.CloseBraceToken && token.parent!.kind === SyntaxKind.JsxExpression) {
+        if (token && token.kind === SyntaxKind.CloseBraceToken && token.parent.kind === SyntaxKind.JsxExpression) {
             return true;
         }
 
         // <div>|</div>
-        if (token.kind === SyntaxKind.LessThanToken && token.parent!.kind === SyntaxKind.JsxClosingElement) {
+        if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxClosingElement) {
             return true;
         }
 
@@ -1020,7 +1020,7 @@ namespace ts {
             node.kind === SyntaxKind.ObjectLiteralExpression) {
             // [a,b,c] from:
             // [a, b, c] = someExpression;
-            if (node.parent!.kind === SyntaxKind.BinaryExpression &&
+            if (node.parent.kind === SyntaxKind.BinaryExpression &&
                 (<BinaryExpression>node.parent).left === node &&
                 (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
                 return true;
@@ -1028,7 +1028,7 @@ namespace ts {
 
             // [a, b, c] from:
             // for([a, b, c] of expression)
-            if (node.parent!.kind === SyntaxKind.ForOfStatement &&
+            if (node.parent.kind === SyntaxKind.ForOfStatement &&
                 (<ForOfStatement>node.parent).initializer === node) {
                 return true;
             }
@@ -1037,7 +1037,7 @@ namespace ts {
             // [x, [a, b, c] ] = someExpression
             // or
             // {x, a: {a, b, c} } = someExpression
-            if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent!.kind === SyntaxKind.PropertyAssignment ? node.parent!.parent! : node.parent!)) {
+            if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
                 return true;
             }
         }
@@ -1271,7 +1271,7 @@ namespace ts {
     export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
         // If this is an export or import specifier it could have been renamed using the 'as' syntax.
         // If so we want to search for whatever is under the cursor.
-        if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent!.kind === SyntaxKind.ComputedPropertyName) {
+        if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
             return getTextOfIdentifierOrLiteral(location);
         }
 
@@ -1401,7 +1401,7 @@ namespace ts {
         // the new node created by visitEachChild with the extra changes getSynthesizedClone
         // would have made.
 
-        visited.parent = undefined;
+        visited.parent = undefined!;
 
         return visited;
     }

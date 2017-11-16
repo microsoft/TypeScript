@@ -72,7 +72,7 @@ namespace ts.refactor.convertFunctionToES6Class {
                 break;
 
             case SyntaxKind.VariableDeclaration:
-                precedingNode = ctorDeclaration.parent!.parent!;
+                precedingNode = ctorDeclaration.parent.parent;
                 if ((<VariableDeclarationList>ctorDeclaration.parent).declarations.length === 1) {
                     deleteNode(precedingNode);
                 }
@@ -207,7 +207,7 @@ namespace ts.refactor.convertFunctionToES6Class {
                         }
                         const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
                             /*type*/ undefined, assignmentBinaryExpression.right);
-                        copyComments(assignmentBinaryExpression.parent!, prop);
+                        copyComments(assignmentBinaryExpression.parent, prop);
                         return prop;
                     }
                 }

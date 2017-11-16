@@ -24,7 +24,7 @@ namespace ts.GoToDefinition {
         if (node === sourceFile) {
             return undefined;
         }
-        const parent = node.parent!;
+        const { parent } = node;
 
         // Labels
         if (isJumpStatementTarget(node)) {
@@ -89,9 +89,9 @@ namespace ts.GoToDefinition {
         //          pr/*destination*/op1: number
         //      }
         //      bar<Test>(({pr/*goto*/op1})=>{});
-        if (isPropertyName(node) && isBindingElement(parent) && isObjectBindingPattern(parent.parent!) &&
+        if (isPropertyName(node) && isBindingElement(parent) && isObjectBindingPattern(parent.parent) &&
             (node === (parent.propertyName || parent.name))) {
-            const type = typeChecker.getTypeAtLocation(parent.parent!);
+            const type = typeChecker.getTypeAtLocation(parent.parent);
             if (type) {
                 const propSymbols = getPropertySymbolsFromType(type, node);
                 if (propSymbols) {
@@ -190,7 +190,7 @@ namespace ts.GoToDefinition {
             case SyntaxKind.ImportEqualsDeclaration:
                 return true;
             case SyntaxKind.ImportSpecifier:
-                return declaration.parent!.kind === SyntaxKind.NamedImports;
+                return declaration.parent.kind === SyntaxKind.NamedImports;
             default:
                 return false;
         }
@@ -331,7 +331,7 @@ namespace ts.GoToDefinition {
     }
 
     function climbPastManyPropertyAccesses(node: Node): Node {
-        return isRightSideOfPropertyAccess(node) ? climbPastManyPropertyAccesses(node.parent!) : node;
+        return isRightSideOfPropertyAccess(node) ? climbPastManyPropertyAccesses(node.parent) : node;
     }
 
     function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {

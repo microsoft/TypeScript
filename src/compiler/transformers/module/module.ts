@@ -1528,7 +1528,7 @@ namespace ts {
                     if (isImportClause(importDeclaration)) {
                         return setTextRange(
                             createPropertyAccess(
-                                getGeneratedNameForNode(importDeclaration.parent!),
+                                getGeneratedNameForNode(importDeclaration.parent),
                                 createIdentifier("default")
                             ),
                             /*location*/ node
@@ -1538,7 +1538,7 @@ namespace ts {
                         const name = importDeclaration.propertyName || importDeclaration.name;
                         return setTextRange(
                             createPropertyAccess(
-                                getGeneratedNameForNode(importDeclaration.parent!.parent!.parent!),
+                                getGeneratedNameForNode(importDeclaration.parent.parent.parent),
                                 getSynthesizedClone(name)
                             ),
                             /*location*/ node

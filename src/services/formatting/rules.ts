@@ -646,7 +646,7 @@ namespace ts.formatting {
 
     function nodeIsInDecoratorContext(node: Node): boolean {
         while (isExpressionNode(node)) {
-            node = node.parent!;
+            node = node.parent;
         }
         return node.kind === SyntaxKind.Decorator;
     }

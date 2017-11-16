@@ -7326,7 +7326,7 @@ namespace ts {
         }
 
         interface IncrementalElement extends TextRange {
-            parent?: Node;
+            parent: Node;
             intersectsChange: boolean;
             length?: number;
             _children: Node[] | undefined;

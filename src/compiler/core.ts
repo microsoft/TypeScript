@@ -208,7 +208,7 @@ namespace ts {
             else if (result) {
                 return node;
             }
-            node = node.parent!;
+            node = node.parent;
         }
         return undefined;
     }
@@ -2716,7 +2716,7 @@ namespace ts {
         this.flags = NodeFlags.None;
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
-        this.parent = undefined;
+        this.parent = undefined!;
         this.original = undefined;
     }
 

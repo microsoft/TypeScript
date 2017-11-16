@@ -90,7 +90,7 @@ namespace ts.OutliningElementsCollector {
         }
 
         function autoCollapse(node: Node) {
-            return isFunctionBlock(node) && node.parent!.kind !== SyntaxKind.ArrowFunction;
+            return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
         }
 
         function gatherRegions(): void {
@@ -139,7 +139,7 @@ namespace ts.OutliningElementsCollector {
             switch (n.kind) {
                 case SyntaxKind.Block:
                     if (!isFunctionBlock(n)) {
-                        const parent = n.parent!;
+                        const parent = n.parent;
                         const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile)!;
                         const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile)!;
 
@@ -193,7 +193,7 @@ namespace ts.OutliningElementsCollector {
                 case SyntaxKind.ModuleBlock: {
                     const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile)!;
                     const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile)!;
-                    addOutliningSpan(n.parent!, openBrace, closeBrace, autoCollapse(n), /*useFullStart*/ true);
+                    addOutliningSpan(n.parent, openBrace, closeBrace, autoCollapse(n), /*useFullStart*/ true);
                     break;
                 }
                 case SyntaxKind.ClassDeclaration:
@@ -211,12 +211,12 @@ namespace ts.OutliningElementsCollector {
                 case SyntaxKind.ObjectLiteralExpression:
                     const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile)!;
                     const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile)!;
-                    addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n), /*useFullStart*/ !isArrayLiteralExpression(n.parent!));
+                    addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n), /*useFullStart*/ !isArrayLiteralExpression(n.parent));
                     break;
                 case SyntaxKind.ArrayLiteralExpression:
                     const openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile)!;
                     const closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile)!;
-                    addOutliningSpan(n, openBracket, closeBracket, autoCollapse(n), /*useFullStart*/ !isArrayLiteralExpression(n.parent!));
+                    addOutliningSpan(n, openBracket, closeBracket, autoCollapse(n), /*useFullStart*/ !isArrayLiteralExpression(n.parent));
                     break;
             }
             depth++;

@@ -334,7 +334,7 @@ namespace ts.codefix {
                 node = <Expression>node.parent;
             }
 
-            switch (node.parent!.kind) {
+            switch (node.parent.kind) {
                 case SyntaxKind.PostfixUnaryExpression:
                     usageContext.isNumber = true;
                     break;
@@ -477,7 +477,7 @@ namespace ts.codefix {
                 // LogicalOperator
                 case SyntaxKind.BarBarToken:
                     if (node === parent.left &&
-                        (node.parent!.parent!.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent!.parent!, /*excludeCompoundAssignment*/ true))) {
+                        (node.parent.parent.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))) {
                         // var x = x || {};
                         // TODO: use getFalsyflagsOfType
                         addCandidateType(usageContext, checker.getTypeAtLocation(parent.right));
@@ -493,7 +493,7 @@ namespace ts.codefix {
         }
 
         function inferTypeFromSwitchStatementLabelContext(parent: CaseOrDefaultClause, checker: TypeChecker, usageContext: UsageContext): void {
-            addCandidateType(usageContext, checker.getTypeAtLocation((<SwitchStatement>parent.parent!.parent).expression));
+            addCandidateType(usageContext, checker.getTypeAtLocation((<SwitchStatement>parent.parent.parent).expression));
         }
 
         function inferTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker, usageContext: UsageContext): void {

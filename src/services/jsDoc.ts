@@ -166,7 +166,7 @@ namespace ts.JsDoc {
         }
         const nameThusFar = tag.name.text;
         const jsdoc = tag.parent;
-        const fn = jsdoc.parent!;
+        const fn = jsdoc.parent;
         if (!isFunctionLike(fn)) return [];
 
         return mapDefined(fn.parameters, param => {
@@ -276,7 +276,7 @@ namespace ts.JsDoc {
         readonly parameters: ReadonlyArray<ParameterDeclaration>;
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
-        for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent!) {
+        for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
             switch (commentOwner.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:

@@ -624,16 +624,16 @@ namespace ts.NavigationBar {
             return declarationNameToString(node.name);
         }
         // See if it is a var initializer. If so, use the var name.
-        else if (node.parent!.kind === SyntaxKind.VariableDeclaration) {
+        else if (node.parent.kind === SyntaxKind.VariableDeclaration) {
             return declarationNameToString((node.parent as VariableDeclaration).name);
         }
         // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
-        else if (node.parent!.kind === SyntaxKind.BinaryExpression &&
+        else if (node.parent.kind === SyntaxKind.BinaryExpression &&
             (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
             return nodeText((node.parent as BinaryExpression).left).replace(whiteSpaceRegex, "");
         }
         // See if it is a property assignment, and if so use the property name
-        else if (node.parent!.kind === SyntaxKind.PropertyAssignment && (node.parent as PropertyAssignment).name) {
+        else if (node.parent.kind === SyntaxKind.PropertyAssignment && (node.parent as PropertyAssignment).name) {
             return nodeText((node.parent as PropertyAssignment).name);
         }
         // Default exports are named "default"

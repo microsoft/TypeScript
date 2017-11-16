@@ -98,7 +98,7 @@ namespace ts.refactor.installTypesForPackage {
                 default:
                     return undefined;
             }
-            node = node.parent!;
+            node = node.parent;
         }
     }
 }

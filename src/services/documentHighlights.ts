@@ -5,12 +5,11 @@ namespace ts.DocumentHighlights {
         // Note that getTouchingWord indicates failure by returning the sourceFile node.
         if (node === sourceFile) return undefined;
 
-        Debug.assert(node.parent !== undefined);
-
-        const parent = node.parent!;
+        const { parent } = node;
+        Debug.assert(parent !== undefined);
         if (isJsxOpeningElement(parent) && parent.tagName === node || isJsxClosingElement(parent)) {
             // For a JSX element, just highlight the matching tag, not all references.
-            const { openingElement, closingElement } = parent.parent!;
+            const { openingElement, closingElement } = parent.parent;
             const highlightSpans = [openingElement, closingElement].map(({ tagName }) => getHighlightSpanForNode(tagName, sourceFile));
             return [{ fileName: sourceFile.fileName, highlightSpans }];
         }
@@ -72,17 +71,17 @@ namespace ts.DocumentHighlights {
         switch (node.kind) {
             case SyntaxKind.IfKeyword:
             case SyntaxKind.ElseKeyword:
-                if (hasKind(node.parent!, SyntaxKind.IfStatement)) {
+                if (hasKind(node.parent, SyntaxKind.IfStatement)) {
                     return getIfElseOccurrences(<IfStatement>node.parent, sourceFile);
                 }
                 break;
             case SyntaxKind.ReturnKeyword:
-                if (hasKind(node.parent!, SyntaxKind.ReturnStatement)) {
+                if (hasKind(node.parent, SyntaxKind.ReturnStatement)) {
                     return highlightSpans(getReturnOccurrences(<ReturnStatement>node.parent));
                 }
                 break;
             case SyntaxKind.ThrowKeyword:
-                if (hasKind(node.parent!, SyntaxKind.ThrowStatement)) {
+                if (hasKind(node.parent, SyntaxKind.ThrowStatement)) {
                     return highlightSpans(getThrowOccurrences(<ThrowStatement>node.parent));
                 }
                 break;
@@ -102,7 +101,7 @@ namespace ts.DocumentHighlights {
             case SyntaxKind.CaseKeyword:
             case SyntaxKind.DefaultKeyword:
                 if (hasKind(parent(parent(parent(node))), SyntaxKind.SwitchStatement)) {
-                    return highlightSpans(getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent!.parent!.parent));
+                    return highlightSpans(getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent.parent));
                 }
                 break;
             case SyntaxKind.BreakKeyword:
@@ -281,7 +280,7 @@ namespace ts.DocumentHighlights {
     }
 
     function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> | undefined {
-        const container = declaration.parent!;
+        const container = declaration.parent;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
@@ -319,7 +318,7 @@ namespace ts.DocumentHighlights {
     }
 
     function isLegalModifier(modifier: SyntaxKind, declaration: Node): boolean {
-        const container = declaration.parent!;
+        const container = declaration.parent;
         switch (modifier) {
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
@@ -581,7 +580,7 @@ namespace ts.DocumentHighlights {
      * Note: 'node' cannot be a SourceFile.
      */
     function isLabeledBy(node: Node, labelName: string) {
-        for (let owner = node.parent!; owner.kind === SyntaxKind.LabeledStatement; owner = owner.parent!) {
+        for (let owner = node.parent; owner.kind === SyntaxKind.LabeledStatement; owner = owner.parent) {
             if ((<LabeledStatement>owner).label.escapedText === labelName) {
                 return true;
             }

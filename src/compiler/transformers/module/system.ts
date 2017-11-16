@@ -1675,7 +1675,7 @@ namespace ts {
                     if (isImportClause(importDeclaration)) {
                         return setTextRange(
                             createPropertyAccess(
-                                getGeneratedNameForNode(importDeclaration.parent!),
+                                getGeneratedNameForNode(importDeclaration.parent),
                                 createIdentifier("default")
                             ),
                             /*location*/ node
@@ -1684,7 +1684,7 @@ namespace ts {
                     else if (isImportSpecifier(importDeclaration)) {
                         return setTextRange(
                             createPropertyAccess(
-                                getGeneratedNameForNode(importDeclaration.parent!.parent!.parent!),
+                                getGeneratedNameForNode(importDeclaration.parent.parent.parent),
                                 getSynthesizedClone(importDeclaration.propertyName || importDeclaration.name)
                             ),
                             /*location*/ node

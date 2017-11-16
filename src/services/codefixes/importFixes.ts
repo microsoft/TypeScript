@@ -233,7 +233,7 @@ namespace ts.codefix {
     }
 
     function getImportDeclaration({ parent }: LiteralExpression): AnyImportSyntax | undefined {
-        switch (parent!.kind) {
+        switch (parent.kind) {
             case SyntaxKind.ImportDeclaration:
                 return parent as ImportDeclaration;
             case SyntaxKind.ExternalModuleReference:
@@ -647,7 +647,7 @@ namespace ts.codefix {
     function getActionsForUMDImport(context: ImportCodeFixContext): ImportCodeAction[] {
         const { checker, symbolToken, compilerOptions } = context;
         const umdSymbol = checker.getSymbolAtLocation(symbolToken!)!; // TODO: GH#18217
-        const parent = symbolToken!.parent!; // TODO: GH#18217
+        const parent = symbolToken!.parent; // TODO: GH#18217
         let symbol: ts.Symbol;
         let symbolName: string;
         if (umdSymbol.flags & ts.SymbolFlags.Alias) {

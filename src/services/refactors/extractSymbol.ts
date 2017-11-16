@@ -225,7 +225,7 @@ namespace ts.refactor.extractSymbol {
 
         if (start !== end) {
             // start and end should be statements and parent should be either block or a source file
-            if (!isBlockLike(start.parent!)) {
+            if (!isBlockLike(start.parent)) {
                 return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
             }
             const statements: Statement[] = [];
@@ -321,7 +321,7 @@ namespace ts.refactor.extractSymbol {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                 }
-                current = current.parent!;
+                current = current.parent;
             }
         }
 
@@ -362,7 +362,7 @@ namespace ts.refactor.extractSymbol {
                 }
 
                 if (isDeclaration(node)) {
-                    const declaringNode = (node.kind === SyntaxKind.VariableDeclaration) ? node.parent!.parent! : node;
+                    const declaringNode = (node.kind === SyntaxKind.VariableDeclaration) ? node.parent.parent : node;
                     if (hasModifier(declaringNode, ModifierFlags.Export)) {
                         // TODO: GH#18217 Silly to use `errors ||` since it's definitely not defined (see top of `visit`)
                         // Also, if we're only pushing one error, just use `let error: Diagnostic | undefined`!
@@ -381,7 +381,7 @@ namespace ts.refactor.extractSymbol {
                     case SyntaxKind.SuperKeyword:
                         // For a super *constructor call*, we have to be extracting the entire class,
                         // but a super *method call* simply implies a 'this' reference
-                        if (node.parent!.kind === SyntaxKind.CallExpression) {
+                        if (node.parent.kind === SyntaxKind.CallExpression) {
                             // Super constructor call
                             const containingClass = getContainingClass(node)!; // TODO:GH#18217
                             if (containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
@@ -399,7 +399,7 @@ namespace ts.refactor.extractSymbol {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ClassDeclaration:
-                            if (node.parent!.kind === SyntaxKind.SourceFile && (node.parent as ts.SourceFile).externalModuleIndicator === undefined) {
+                            if (node.parent.kind === SyntaxKind.SourceFile && (node.parent as ts.SourceFile).externalModuleIndicator === undefined) {
                                 // You cannot extract global declarations
                                 (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
                             }
@@ -501,8 +501,7 @@ namespace ts.refactor.extractSymbol {
             // the selection to include the enclosing Statement (this stops us
             // from trying to care about the return value of the extracted function
             // and eliminates double semicolon insertion in certain scenarios)
-            const parent = node.parent!;
-            return isExpressionStatement(parent) ? [parent] : node as Expression;
+            return isExpressionStatement(node.parent) ? [node.parent] : node as Expression;
         }
         return undefined;
     }
@@ -531,11 +530,11 @@ namespace ts.refactor.extractSymbol {
 
         const scopes: Scope[] = [];
         while (true) {
-            current = current.parent!;
+            current = current.parent;
             // A function parameter's initializer is actually in the outer scope, not the function declaration
             if (current.kind === SyntaxKind.Parameter) {
                 // Skip all the way to the outer scope of the function that declared this parameter
-                current = findAncestor(current, parent => isFunctionLikeDeclaration(parent))!.parent!;
+                current = findAncestor(current, parent => isFunctionLikeDeclaration(parent))!.parent;
             }
 
             // We want to find the nearest parent where we can place an "equivalent" sibling to the node we're extracting out of.
@@ -688,7 +687,7 @@ namespace ts.refactor.extractSymbol {
     }
     function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string | SpecialScope {
         return scope.kind === SyntaxKind.ModuleBlock
-            ? `namespace '${scope.parent!.name.getText()}'`
+            ? `namespace '${scope.parent.name.getText()}'`
             : scope.externalModuleIndicator ? SpecialScope.Module : SpecialScope.Global;
     }
 
@@ -855,14 +854,14 @@ namespace ts.refactor.extractSymbol {
                     /*modifiers*/ undefined,
                     createVariableDeclarationList(
                         [createVariableDeclaration(getSynthesizedDeepClone(variableDeclaration.name), /*type*/ getSynthesizedDeepClone(variableDeclaration.type), /*initializer*/ call)], // TODO (acasey): test binding patterns
-                        variableDeclaration.parent!.flags)));
+                        variableDeclaration.parent.flags)));
             }
             else {
                 // Declaring multiple variables / return properties:
                 //   let {x, y} = newFunction();
                 const bindingElements: BindingElement[] = [];
                 const typeElements: TypeElement[] = [];
-                let commonNodeFlags = exposedVariableDeclarations[0].parent!.flags;
+                let commonNodeFlags = exposedVariableDeclarations[0].parent.flags;
                 let sawExplicitType = false;
                 for (const variableDeclaration of exposedVariableDeclarations) {
                     bindingElements.push(createBindingElement(
@@ -883,7 +882,7 @@ namespace ts.refactor.extractSymbol {
                         /*type*/ variableType,
                         /*initializer*/ undefined));
                     sawExplicitType = sawExplicitType || variableDeclaration.type !== undefined;
-                    commonNodeFlags = commonNodeFlags & variableDeclaration.parent!.flags;
+                    commonNodeFlags = commonNodeFlags & variableDeclaration.parent.flags;
                 }
 
                 const typeLiteral: TypeLiteralNode | undefined = sawExplicitType ? createTypeLiteralNode(typeElements) : undefined;
@@ -905,7 +904,7 @@ namespace ts.refactor.extractSymbol {
             if (exposedVariableDeclarations.length) {
                 // CONSIDER: we're going to create one statement per variable, but we could actually preserve their original grouping.
                 for (const variableDeclaration of exposedVariableDeclarations) {
-                    let flags: NodeFlags = variableDeclaration.parent!.flags;
+                    let flags: NodeFlags = variableDeclaration.parent.flags;
                     if (flags & NodeFlags.Const) {
                         flags = (flags & ~NodeFlags.Const) | NodeFlags.Let;
                     }
@@ -1069,13 +1068,13 @@ namespace ts.refactor.extractSymbol {
                 const localReference = createIdentifier(localNameText);
                 changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
             }
-            else if (node.parent!.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
+            else if (node.parent.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
                 // If the parent is an expression statement and the target scope is the immediately enclosing one,
                 // replace the statement with the declaration.
                 const newVariableStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
-                changeTracker.replaceRange(context.file, { pos: node.parent!.getStart(), end: node.parent!.end }, newVariableStatement);
+                changeTracker.replaceRange(context.file, { pos: node.parent.getStart(), end: node.parent.end }, newVariableStatement);
             }
             else {
                 const newVariableStatement = createVariableStatement(
@@ -1099,9 +1098,9 @@ namespace ts.refactor.extractSymbol {
                 }
 
                 // Consume
-                if (node.parent!.kind === SyntaxKind.ExpressionStatement) {
+                if (node.parent.kind === SyntaxKind.ExpressionStatement) {
                     // If the parent is an expression statement, delete it.
-                    changeTracker.deleteRange(context.file, { pos: node.parent!.getStart(), end: node.parent!.end });
+                    changeTracker.deleteRange(context.file, { pos: node.parent.getStart(), end: node.parent.end });
                 }
                 else {
                     const localReference = createIdentifier(localNameText);
@@ -1120,17 +1119,16 @@ namespace ts.refactor.extractSymbol {
     function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
         let prevNode = undefined;
         while (node !== undefined && node !== scope) {
-            const parent = node.parent!;
             if (isVariableDeclaration(node) &&
                 node.initializer === prevNode &&
-                isVariableDeclarationList(parent) &&
-                parent.declarations.length > 1) {
+                isVariableDeclarationList(node.parent) &&
+                node.parent.declarations.length > 1) {
 
                 return node;
             }
 
             prevNode = node;
-            node = parent;
+            node = node.parent;
         }
     }
 
@@ -1328,13 +1326,13 @@ namespace ts.refactor.extractSymbol {
         Debug.assert(!isClassLike(scope));
 
         let prevScope: Scope | undefined = undefined;
-        for (let curr = node; curr !== scope; curr = curr.parent!) {
+        for (let curr = node; curr !== scope; curr = curr.parent) {
             if (isScope(curr)) {
                 prevScope = curr;
             }
         }
 
-        for (let curr = (prevScope || node).parent!; ; curr = curr.parent!) {
+        for (let curr = (prevScope || node).parent; ; curr = curr.parent) {
             if (isBlockLike(curr)) {
                 let prevStatement = undefined;
                 for (const statement of curr.statements) {
@@ -1491,7 +1489,7 @@ namespace ts.refactor.extractSymbol {
             const seenTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
 
             let i = 0;
-            for (let curr: Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent!) {
+            for (let curr: Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent) {
                 if (curr === scopes[i]) {
                     // Copy current contents of seenTypeParameterUsages into scope.
                     seenTypeParameterUsages.forEach((typeParameter, id) => {
@@ -1521,7 +1519,7 @@ namespace ts.refactor.extractSymbol {
         // If there are any declarations in the extracted block that are used in the same enclosing
         // lexical scope, we can't move the extraction "up" as those declarations will become unreachable
         if (visibleDeclarationsInExtractedRange.length) {
-            const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent!)
+            const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent)
                 ? scopes[0]
                 : getEnclosingBlockScopeContainer(scopes[0]);
             forEachChild(containingLexicalScopeOfExtraction, checkForUsedDeclarations);
@@ -1768,14 +1766,14 @@ namespace ts.refactor.extractSymbol {
                 : checker.getSymbolAtLocation(identifier);
         }
 
-        function tryReplaceWithQualifiedNameOrPropertyAccess(symbol: Symbol, scopeDecl: Node, isTypeNode: boolean): PropertyAccessExpression | EntityName | undefined {
+        function tryReplaceWithQualifiedNameOrPropertyAccess(symbol: Symbol | undefined, scopeDecl: Node, isTypeNode: boolean): PropertyAccessExpression | EntityName | undefined {
             if (!symbol) {
                 return undefined;
             }
             if (symbol.getDeclarations()!.some(d => d.parent === scopeDecl)) { // TODO: GH#18217
                 return createIdentifier(symbol.name);
             }
-            const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent!, scopeDecl, isTypeNode);
+            const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent, scopeDecl, isTypeNode);
             if (prefix === undefined) {
                 return undefined;
             }
@@ -1810,7 +1808,7 @@ namespace ts.refactor.extractSymbol {
      * in the sense of something that you could extract on
      */
     function isExtractableExpression(node: Node): boolean {
-        const parent = node.parent!;
+        const { parent } = node;
         switch (parent.kind) {
             case SyntaxKind.EnumMember:
                 return false;

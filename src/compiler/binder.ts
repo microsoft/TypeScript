@@ -290,7 +290,7 @@ namespace ts {
                 case SyntaxKind.Parameter:
                     // Parameters with names are handled at the top of this function.  Parameters
                     // without names can only come from JSDocFunctionTypes.
-                    Debug.assert(node.parent!.kind === SyntaxKind.JSDocFunctionType);
+                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
                     const functionType = <JSDocFunctionType>node.parent;
                     const index = indexOf(functionType.parameters, node);
                     return "arg" + index as __String;
@@ -845,15 +845,14 @@ namespace ts {
         }
 
         function isStatementCondition(node: Node) {
-            const parent = node.parent!;
-            switch (parent.kind) {
+            switch (node.parent.kind) {
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.DoStatement:
-                    return (<IfStatement | WhileStatement | DoStatement>parent).expression === node;
+                    return (<IfStatement | WhileStatement | DoStatement>node.parent).expression === node;
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ConditionalExpression:
-                    return (<ForStatement | ConditionalExpression>parent).condition === node;
+                    return (<ForStatement | ConditionalExpression>node.parent).condition === node;
             }
             return false;
         }
@@ -875,12 +874,12 @@ namespace ts {
         }
 
         function isTopLevelLogicalExpression(node: Node): boolean {
-            while (node.parent!.kind === SyntaxKind.ParenthesizedExpression ||
-                node.parent!.kind === SyntaxKind.PrefixUnaryExpression &&
+            while (node.parent.kind === SyntaxKind.ParenthesizedExpression ||
+                node.parent.kind === SyntaxKind.PrefixUnaryExpression &&
                 (<PrefixUnaryExpression>node.parent).operator === SyntaxKind.ExclamationToken) {
-                node = node.parent!;
+                node = node.parent;
             }
-            return !isStatementCondition(node) && !isLogicalExpression(node.parent!);
+            return !isStatementCondition(node) && !isLogicalExpression(node.parent);
         }
 
         function bindCondition(node: Expression | undefined, trueTarget: FlowLabel, falseTarget: FlowLabel) {
@@ -922,7 +921,7 @@ namespace ts {
 
         function bindDoStatement(node: DoStatement): void {
             const preDoLabel = createLoopLabel();
-            const enclosingLabeledStatement = node.parent!.kind === SyntaxKind.LabeledStatement
+            const enclosingLabeledStatement = node.parent.kind === SyntaxKind.LabeledStatement
                 ? lastOrUndefined(activeLabels)
                 : undefined;
             // if do statement is wrapped in labeled statement then target labels for break/continue with or without
@@ -1331,7 +1330,7 @@ namespace ts {
 
         function bindVariableDeclarationFlow(node: VariableDeclaration) {
             bindEachChild(node);
-            if (node.initializer || isForInOrOfStatement(node.parent!.parent!)) {
+            if (node.initializer || isForInOrOfStatement(node.parent.parent)) {
                 bindInitializedVariableFlow(node);
             }
         }
@@ -1453,7 +1452,7 @@ namespace ts {
                     // By not creating a new block-scoped-container here, we ensure that both 'var x'
                     // and 'let x' go into the Function-container's locals, and we do get a collision
                     // conflict.
-                    return isFunctionLike(node.parent!) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
+                    return isFunctionLike(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
             }
 
             return ContainerFlags.None;
@@ -2134,7 +2133,7 @@ namespace ts {
                     updateStrictModeStatementList((<SourceFile>node).statements);
                     return bindSourceFileIfExternalModule();
                 case SyntaxKind.Block:
-                    if (!isFunctionLike(node.parent!)) {
+                    if (!isFunctionLike(node.parent)) {
                         return;
                     }
                 // falls through
@@ -2142,7 +2141,7 @@ namespace ts {
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
                 case SyntaxKind.JSDocParameterTag:
-                    if (node.parent!.kind !== SyntaxKind.JSDocTypeLiteral) {
+                    if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {
                         break;
                     }
                     // falls through
@@ -2214,7 +2213,7 @@ namespace ts {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
 
-            if (node.parent!.kind !== SyntaxKind.SourceFile) {
+            if (node.parent.kind !== SyntaxKind.SourceFile) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_at_top_level));
                 return;
             }
@@ -2322,7 +2321,7 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
-                    const containingClass = container.parent!;
+                    const containingClass = container.parent;
                     const symbolTable = hasModifier(container, ModifierFlags.Static) ? containingClass.symbol!.exports! : containingClass.symbol!.members!;
                     declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
@@ -2480,7 +2479,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node.name)) {
-                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + indexOf(node.parent!.parameters, node) as __String);
+                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + indexOf(node.parent.parameters, node) as __String);
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
@@ -2489,7 +2488,7 @@ namespace ts {
             // If this is a property-parameter, then also declare the property symbol into the
             // containing class.
             if (isParameterPropertyDeclaration(node)) {
-                const classDeclaration = <ClassLikeDeclaration>node.parent!.parent;
+                const classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol!.members!, classDeclaration.symbol, node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
             }
         }

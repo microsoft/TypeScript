@@ -3920,14 +3920,13 @@ namespace ts {
          * @param node An original source tree node.
          */
         function isNameOfDeclarationWithCollidingName(node: Identifier) {
-            const parent = node.parent;
-            switch (parent!.kind) {
+            switch (node.parent.kind) {
                 case SyntaxKind.BindingElement:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.VariableDeclaration:
-                    return (<NamedDeclaration>parent).name === node
-                        && resolver.isDeclarationWithCollidingName(<Declaration>parent);
+                    return (<NamedDeclaration>node.parent).name === node
+                        && resolver.isDeclarationWithCollidingName(<Declaration>node.parent);
             }
 
             return false;

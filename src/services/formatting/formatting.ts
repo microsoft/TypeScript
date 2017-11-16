@@ -335,7 +335,7 @@ namespace ts.formatting {
 
             previousLine = line;
             child = n;
-            n = n.parent!;
+            n = n.parent;
         }
         return 0;
     }

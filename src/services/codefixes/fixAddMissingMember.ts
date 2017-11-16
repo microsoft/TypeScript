@@ -14,7 +14,7 @@ namespace ts.codefix {
         // this.missing = 1;
         //      ^^^^^^^
         const token = getTokenAtPosition(tokenSourceFile, start, /*includeJsDocComment*/ false);
-        const parent = token.parent!;
+        const parent = token.parent;
 
         if (token.kind !== SyntaxKind.Identifier) {
             return undefined;
@@ -138,7 +138,7 @@ namespace ts.codefix {
             }
 
             let typeNode: TypeNode | undefined;
-            if (parent.parent!.kind === SyntaxKind.BinaryExpression) {
+            if (parent.parent.kind === SyntaxKind.BinaryExpression) {
                 const binaryExpression = parent.parent as BinaryExpression;
                 const otherExpression = parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
                 const checker = context.program.getTypeChecker();
@@ -193,7 +193,7 @@ namespace ts.codefix {
         }
 
         function getActionForMethodDeclaration(includeTypeScriptSyntax: boolean): CodeAction | undefined {
-            if (parent.parent!.kind === SyntaxKind.CallExpression) {
+            if (parent.parent.kind === SyntaxKind.CallExpression) {
                 const callExpression = <CallExpression>parent.parent;
                 const methodDeclaration = createMethodFromCallExpression(callExpression, tokenName, includeTypeScriptSyntax, makeStatic);
 

@@ -217,7 +217,7 @@ namespace ts {
             forEach(nodes, declaration => {
                 let nodeToCheck: Node;
                 if (declaration.kind === SyntaxKind.VariableDeclaration) {
-                    nodeToCheck = declaration.parent!.parent!;
+                    nodeToCheck = declaration.parent.parent;
                 }
                 else if (declaration.kind === SyntaxKind.NamedImports || declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause) {
                     throw Debug.fail("We should be getting ImportDeclaration instead to write");
@@ -487,7 +487,7 @@ namespace ts {
             function emitEntityName(entityName: EntityNameOrEntityNameExpression) {
                 const visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
-                    entityName.parent!.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
+                    entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
 
                 handleSymbolAccessibilityError(visibilityResult);
                 recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
@@ -685,8 +685,8 @@ namespace ts {
             }
             // Import equals declaration in internal module can become visible as part of any emit so lets make sure we add these irrespective
             else if (node.kind === SyntaxKind.ImportEqualsDeclaration ||
-                (node.parent!.kind === SyntaxKind.SourceFile && isCurrentFileExternalModule)) {
-                if (asynchronousSubModuleDeclarationEmitInfo && node.parent!.kind !== SyntaxKind.SourceFile) {
+                (node.parent.kind === SyntaxKind.SourceFile && isCurrentFileExternalModule)) {
+                if (asynchronousSubModuleDeclarationEmitInfo && node.parent.kind !== SyntaxKind.SourceFile) {
                     // Import declaration of another module that is visited async so lets put it in right spot
                     asynchronousSubModuleDeclarationEmitInfo.push({
                         node,
@@ -741,7 +741,7 @@ namespace ts {
 
         function emitModuleElementDeclarationFlags(node: Node) {
             // If the node is parented in the current source file we need to emit export declare or just export
-            if (node.parent!.kind === SyntaxKind.SourceFile) {
+            if (node.parent.kind === SyntaxKind.SourceFile) {
                 const modifiers = getModifierFlags(node);
                 // If the node is exported
                 if (modifiers & ModifierFlags.Export) {
@@ -1015,12 +1015,12 @@ namespace ts {
         }
 
         function isPrivateMethodTypeParameter(node: TypeParameterDeclaration) {
-            return node.parent!.kind === SyntaxKind.MethodDeclaration && hasModifier(node.parent!, ModifierFlags.Private);
+            return node.parent.kind === SyntaxKind.MethodDeclaration && hasModifier(node.parent, ModifierFlags.Private);
         }
 
         function emitTypeParameters(typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined) {
             function emitTypeParameter(node: TypeParameterDeclaration) {
-                const parent = node.parent!;
+                const { parent } = node;
                 increaseIndent();
                 emitJsDocComments(node);
                 decreaseIndent();
@@ -1086,7 +1086,7 @@ namespace ts {
                             if (hasModifier(parent, ModifierFlags.Static)) {
                                 diagnosticMessage = Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                             }
-                            else if (parent.parent!.kind === SyntaxKind.ClassDeclaration) {
+                            else if (parent.parent.kind === SyntaxKind.ClassDeclaration) {
                                 diagnosticMessage = Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
                             }
                             else {
@@ -1138,7 +1138,7 @@ namespace ts {
                 function getHeritageClauseVisibilityError(): SymbolAccessibilityDiagnostic {
                     let diagnosticMessage: DiagnosticMessage;
                     // Heritage clause is written by user so it can always be named
-                    if (node.parent!.parent!.kind === SyntaxKind.ClassDeclaration) {
+                    if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
                         // Class or Interface implemented/extended is inaccessible
                         diagnosticMessage = isImplementsList ?
                             Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
@@ -1152,7 +1152,7 @@ namespace ts {
                     return {
                         diagnosticMessage,
                         errorNode: node,
-                        typeName: getNameOfDeclaration(node.parent!.parent!)
+                        typeName: getNameOfDeclaration(node.parent.parent)
                     };
                 }
             }
@@ -1267,7 +1267,7 @@ namespace ts {
                         (node.kind === SyntaxKind.Parameter && !isParameterPropertyDeclaration(<ParameterDeclaration>node))) && hasQuestionToken(node)) {
                         write("?");
                     }
-                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent!.kind === SyntaxKind.TypeLiteral) {
+                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
                         emitTypeOfVariableDeclarationFromTypeLiteral(node);
                     }
                     else if (resolver.isLiteralConstDeclaration(node)) {
@@ -1291,7 +1291,7 @@ namespace ts {
                 // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
                 // The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
                 else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
-                    (node.kind === SyntaxKind.Parameter && hasModifier(node.parent!, ModifierFlags.Private))) {
+                    (node.kind === SyntaxKind.Parameter && hasModifier(node.parent, ModifierFlags.Private))) {
                     // TODO(jfreeman): Deal with computed properties in error reporting.
                     if (hasModifier(node, ModifierFlags.Static)) {
                         return symbolAccessibilityResult.errorModuleName ?
@@ -1300,7 +1300,7 @@ namespace ts {
                                 Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
                     }
-                    else if (node.parent!.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.Parameter) {
+                    else if (node.parent.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.Parameter) {
                         return symbolAccessibilityResult.errorModuleName ?
                             symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -1454,7 +1454,7 @@ namespace ts {
                             Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                         Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
                 }
-                else if (node.parent!.kind === SyntaxKind.ClassDeclaration) {
+                else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                     return symbolAccessibilityResult.errorModuleName ?
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                             Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -1556,7 +1556,7 @@ namespace ts {
                             Diagnostics.Public_static_method_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                         Diagnostics.Public_static_method_0_of_exported_class_has_or_is_using_private_name_1;
                 }
-                else if (node.parent!.kind === SyntaxKind.ClassDeclaration) {
+                else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                     return symbolAccessibilityResult.errorModuleName ?
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                             Diagnostics.Public_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -1647,7 +1647,7 @@ namespace ts {
 
             // If this is not a constructor and is not private, emit the return type
             const isFunctionTypeOrConstructorType = node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType;
-            if (isFunctionTypeOrConstructorType || node.parent!.kind === SyntaxKind.TypeLiteral) {
+            if (isFunctionTypeOrConstructorType || node.parent.kind === SyntaxKind.TypeLiteral) {
                 // Emit type literal signature return type only if specified
                 if (node.type) {
                     write(isFunctionTypeOrConstructorType ? " => " : ": ");
@@ -1701,7 +1701,7 @@ namespace ts {
                                     Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
                                 Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
                         }
-                        else if (node.parent!.kind === SyntaxKind.ClassDeclaration) {
+                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             diagnosticMessage = symbolAccessibilityResult.errorModuleName ?
                                 symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                     Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
@@ -1755,12 +1755,12 @@ namespace ts {
             }
             decreaseIndent();
 
-            if (node.parent!.kind === SyntaxKind.FunctionType ||
-                node.parent!.kind === SyntaxKind.ConstructorType ||
-                node.parent!.parent!.kind === SyntaxKind.TypeLiteral) {
+            if (node.parent.kind === SyntaxKind.FunctionType ||
+                node.parent.kind === SyntaxKind.ConstructorType ||
+                node.parent.parent.kind === SyntaxKind.TypeLiteral) {
                 emitTypeOfVariableDeclarationFromTypeLiteral(node);
             }
-            else if (!hasModifier(node.parent!, ModifierFlags.Private)) {
+            else if (!hasModifier(node.parent, ModifierFlags.Private)) {
                 writeTypeOfDeclaration(node, node.type, getParameterDeclarationTypeVisibilityError);
             }
 
@@ -1774,7 +1774,7 @@ namespace ts {
             }
 
             function getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult): DiagnosticMessage {
-                switch (node.parent!.kind) {
+                switch (node.parent.kind) {
                     case SyntaxKind.Constructor:
                         return symbolAccessibilityResult.errorModuleName ?
                             symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
@@ -1802,14 +1802,14 @@ namespace ts {
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        if (hasModifier(node.parent!, ModifierFlags.Static)) {
+                        if (hasModifier(node.parent, ModifierFlags.Static)) {
                             return symbolAccessibilityResult.errorModuleName ?
                                 symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                     Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                                     Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                                 Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                         }
-                        else if (node.parent!.parent!.kind === SyntaxKind.ClassDeclaration) {
+                        else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
                              return symbolAccessibilityResult.errorModuleName ?
                                 symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                     Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -1831,7 +1831,7 @@ namespace ts {
                             Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
 
                     default:
-                        throw Debug.fail("This is unknown parent for parameter: " + node.parent!.kind);
+                        throw Debug.fail("This is unknown parent for parameter: " + node.parent.kind);
                 }
             }
 

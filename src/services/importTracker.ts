@@ -84,7 +84,7 @@ namespace ts.FindAllReferences {
                     switch (direct.kind) {
                         case SyntaxKind.CallExpression:
                             if (!isAvailableThroughGlobal) {
-                                const parent = direct.parent!;
+                                const parent = direct.parent;
                                 if (exportKind === ExportKind.ExportEquals && parent.kind === SyntaxKind.VariableDeclaration) {
                                     const { name } = parent as ts.VariableDeclaration;
                                     if (name.kind === SyntaxKind.Identifier) {
@@ -408,14 +408,14 @@ namespace ts.FindAllReferences {
     }
 
     function importerFromModuleSpecifier(moduleSpecifier: StringLiteral): ImporterOrCallExpression {
-        const decl = moduleSpecifier.parent!;
+        const decl = moduleSpecifier.parent;
         switch (decl.kind) {
             case SyntaxKind.CallExpression:
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
                 return decl as ImportDeclaration | ExportDeclaration | CallExpression;
             case SyntaxKind.ExternalModuleReference:
-                return (decl as ExternalModuleReference).parent!;
+                return (decl as ExternalModuleReference).parent;
             default:
                 throw Debug.fail("Unexpected module specifier parent: " + decl.kind);
         }
@@ -443,14 +443,14 @@ namespace ts.FindAllReferences {
         return comingFromExport ? getExport() : getExport() || getImport();
 
         function getExport(): ExportedSymbol | ImportedSymbol | undefined {
-            const parent = node.parent!;
-            const grandParent = parent.parent!;
+            const { parent } = node;
+            const grandParent = parent.parent;
             if (symbol.exportSymbol) {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     // When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
                     // So check that we are at the declaration.
                     return symbol.declarations!.some(d => d === parent) && isBinaryExpression(grandParent)
-                        ? getSpecialPropertyExport(grandParent!, /*useLhsSymbol*/ false)
+                        ? getSpecialPropertyExport(grandParent, /*useLhsSymbol*/ false)
                         : undefined;
                 }
                 else {
@@ -572,7 +572,7 @@ namespace ts.FindAllReferences {
         if (parent.kind === SyntaxKind.VariableDeclaration) {
             const p = parent as ts.VariableDeclaration;
             return p.name !== node ? undefined :
-                p.parent!.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent!.parent!.kind === SyntaxKind.VariableStatement ? p.parent!.parent : undefined;
+                p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
         }
         else {
             return parent;
@@ -580,7 +580,7 @@ namespace ts.FindAllReferences {
     }
 
     function isNodeImport(node: Node): { isNamedImport: boolean } | undefined {
-        const parent = node.parent!;
+        const { parent } = node;
         switch (parent.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 return (parent as ImportEqualsDeclaration).name === node && isExternalModuleImportEquals(parent as ImportEqualsDeclaration)
@@ -620,7 +620,7 @@ namespace ts.FindAllReferences {
         // For `export { foo } from './bar", there's nothing to skip, because it does  not create a new alias. But `export { foo } does.
         if (symbol.declarations) {
             for (const declaration of symbol.declarations) {
-                if (isExportSpecifier(declaration) && !(declaration as ExportSpecifier).propertyName && !(declaration as ExportSpecifier).parent!.parent!.moduleSpecifier) {
+                if (isExportSpecifier(declaration) && !(declaration as ExportSpecifier).propertyName && !(declaration as ExportSpecifier).parent.parent.moduleSpecifier) {
                     return checker.getExportSpecifierLocalTargetSymbol(declaration)!;
                 }
             }
@@ -637,12 +637,11 @@ namespace ts.FindAllReferences {
             return node.getSourceFile();
         }
 
-        const parent = node.parent!;
-
+        const { parent } = node;
         if (parent.kind === SyntaxKind.SourceFile) {
             return parent as SourceFile;
         }
-        Debug.assert(parent.kind === SyntaxKind.ModuleBlock && isAmbientModuleDeclaration(parent.parent!));
+        Debug.assert(parent.kind === SyntaxKind.ModuleBlock && isAmbientModuleDeclaration(parent.parent));
         return parent.parent as AmbientModuleDeclaration;
     }
 

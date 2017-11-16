@@ -58,7 +58,7 @@ namespace ts.formatting {
                 return getBlockIndent(sourceFile, position, options);
             }
 
-            if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent!.kind !== SyntaxKind.BinaryExpression) {
+            if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
                 // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
                 const actualIndentation = getActualIndentationForListItemBeforeComma(precedingToken, sourceFile, options);
                 if (actualIndentation !== Value.Unknown) {
@@ -134,7 +134,7 @@ namespace ts.formatting {
                 }
 
                 previous = current;
-                current = current.parent!;
+                current = current.parent;
             }
             // no parent was found - return the base indentation of the SourceFile
             return getBaseIndentation(options);
@@ -157,7 +157,7 @@ namespace ts.formatting {
             sourceFile: SourceFile,
             isNextChild: boolean,
             options: EditorSettings): number {
-            let parent = current.parent!;
+            let parent = current.parent;
 
             // Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
             // * parent and child nodes start on the same line, or
@@ -212,7 +212,7 @@ namespace ts.formatting {
                     isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
 
                 current = parent;
-                parent = current.parent!;
+                parent = current.parent;
                 currentStart = useTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart(sourceFile)) : containingListOrParentStart;
             }
 

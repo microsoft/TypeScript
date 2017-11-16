@@ -96,7 +96,7 @@ namespace ts.SignatureHelp {
      * in the argument of an invocation; returns undefined otherwise.
      */
     export function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo | undefined {
-        const parent = node.parent!;
+        const { parent } = node;
         if (isCallOrNewExpression(parent)) {
             let list: Node | undefined;
             let argumentIndex: number;
@@ -149,7 +149,7 @@ namespace ts.SignatureHelp {
                 return getArgumentListInfoForTemplate(<TaggedTemplateExpression>node.parent, /*argumentIndex*/ 0, sourceFile);
             }
         }
-        else if (node.kind === SyntaxKind.TemplateHead && parent.parent!.kind === SyntaxKind.TaggedTemplateExpression) {
+        else if (node.kind === SyntaxKind.TemplateHead && parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
             const templateExpression = <TemplateExpression>node.parent;
             const tagExpression = <TaggedTemplateExpression>templateExpression.parent;
             Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
@@ -158,7 +158,7 @@ namespace ts.SignatureHelp {
 
             return getArgumentListInfoForTemplate(tagExpression, argumentIndex, sourceFile);
         }
-        else if (parent.kind === SyntaxKind.TemplateSpan && parent.parent!.parent!.kind === SyntaxKind.TaggedTemplateExpression) {
+        else if (parent.kind === SyntaxKind.TemplateSpan && parent.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
             const templateSpan = <TemplateSpan>node.parent;
             const templateExpression = <TemplateExpression>templateSpan.parent;
             const tagExpression = <TaggedTemplateExpression>templateExpression.parent;
@@ -323,15 +323,15 @@ namespace ts.SignatureHelp {
     }
 
     export function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo | undefined {
-        for (let n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent!) {
+        for (let n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
             if (isFunctionBlock(n)) {
                 return undefined;
             }
 
             // If the node is not a subspan of its parent, this is a big problem.
             // There have been crashes that might be caused by this violation.
-            if (n.pos < n.parent!.pos || n.end > n.parent!.end) {
-                Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent!.kind);
+            if (n.pos < n.parent.pos || n.end > n.parent.end) {
+                Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
             }
 
             const argumentInfo = getImmediatelyContainingArgumentInfo(n, position, sourceFile);

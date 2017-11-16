@@ -13,12 +13,11 @@ namespace ts.codefix {
         // this.speling = 1;
         //      ^^^^^^^
         const node = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false); // TODO: GH#15852
-        const parent = node.parent!;
         const checker = context.program.getTypeChecker();
         let suggestion: string | undefined;
-        if (isPropertyAccessExpression(parent) && parent.name === node) {
+        if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
             Debug.assert(node.kind === SyntaxKind.Identifier);
-            const containingType = checker.getTypeAtLocation(parent.expression)!;
+            const containingType = checker.getTypeAtLocation(node.parent.expression)!;
             suggestion = checker.getSuggestionForNonexistentProperty(node as Identifier, containingType);
         }
         else {

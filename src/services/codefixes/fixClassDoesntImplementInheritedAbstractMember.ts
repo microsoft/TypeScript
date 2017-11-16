@@ -18,7 +18,7 @@ namespace ts.codefix {
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
 
-        if (isClassLike(token.parent!)) {
+        if (isClassLike(token.parent)) {
             const classDeclaration = token.parent as ClassLikeDeclaration;
 
             const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration)!;

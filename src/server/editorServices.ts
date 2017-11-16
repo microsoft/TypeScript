@@ -202,7 +202,8 @@ namespace ts.server {
     /**
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
-    export function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: Comparer<T>, areEqual?: EqualityComparer<T>) {
+    // TODO: Maybe use Comparer and AreEqual types here.
+    export function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
         const outputs = flatMap(projects, action);
         return comparer
             ? sortAndDeduplicate(outputs, comparer, areEqual)
