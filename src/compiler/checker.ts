@@ -10649,11 +10649,8 @@ namespace ts {
         }
 
         function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type) {
-            if (!isLiteralContextualType(contextualType)) {
-                type = getWidenedLiteralType(type);
-            }
-            if (!isUniqueESSymbolContextualType(contextualType)) {
-                type = getWidenedUniqueESSymbolType(type);
+            if (!isLiteralLikeContextualType(contextualType)) {
+                type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
             }
             return type;
         }
@@ -18838,25 +18835,21 @@ namespace ts {
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
         }
 
-        function isLiteralContextualType(contextualType: Type) {
+        function isLiteralLikeContextualType(contextualType: Type) {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
                     // If the type parameter is constrained to the base primitive type we're checking for,
                     // consider this a literal context. For example, given a type parameter 'T extends string',
                     // this causes us to infer string literal types for T.
-                    if (constraint.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum)) {
+                    if (constraint.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum | TypeFlags.UniqueESSymbol)) {
                         return true;
                     }
                     contextualType = constraint;
                 }
-                return maybeTypeOfKind(contextualType, (TypeFlags.Literal | TypeFlags.Index));
+                return maybeTypeOfKind(contextualType, (TypeFlags.Literal | TypeFlags.Index | TypeFlags.UniqueESSymbol));
             }
             return false;
-        }
-
-        function isUniqueESSymbolContextualType(contextualType: Type) {
-            return contextualType ? maybeTypeOfKind(contextualType, TypeFlags.UniqueESSymbol) : false;
         }
 
         function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode, contextualType?: Type): Type {
