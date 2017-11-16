@@ -514,8 +514,9 @@ namespace ts {
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
                         (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
-                    currentReturnTarget = undefined;
+                    currentReturnTarget = node.kind === SyntaxKind.Constructor ? createBranchLabel() : undefined;
                 }
+                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor ? createBranchLabel() : undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
@@ -535,6 +536,10 @@ namespace ts {
                     currentFlow = finishFlowLabel(currentReturnTarget);
                 }
                 else {
+                    if (node.kind === SyntaxKind.Constructor) {
+                        addAntecedent(currentReturnTarget, currentFlow);
+                        (<ConstructorDeclaration>node).returnFlowNode = currentFlow;
+                    }
                     currentFlow = saveCurrentFlow;
                 }
                 currentBreakTarget = saveBreakTarget;

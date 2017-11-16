@@ -929,6 +929,7 @@ namespace ts {
         kind: SyntaxKind.Constructor;
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
+        returnFlowNode?: FlowNode;
     }
 
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
