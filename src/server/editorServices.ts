@@ -145,7 +145,7 @@ namespace ts.server {
         },
         "Kendo": {
             // e.g. /Kendo3/wwwroot/lib/kendo/kendo.all.min.js
-            match: /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
+            match: /^(.*\/kendo(-ui)?)\/kendo\.all(\.min)?\.js$/i,
             exclude: [["^", 1, "/.*"]],
             types: ["kendo-ui"]
         },

@@ -1518,6 +1518,10 @@ namespace ts.projectSystem {
                 path: "/q/lib/kendo/kendo.ui.min.js",
                 content: "unspecified"
             };
+            const kendoFile3 = {
+                path: "/q/lib/kendo-ui/kendo.all.js",
+                content: "unspecified"
+            };
             const officeFile1 = {
                 path: "/scripts/Office/1/excel-15.debug.js",
                 content: "unspecified"
@@ -1526,7 +1530,7 @@ namespace ts.projectSystem {
                 path: "/scripts/Office/1/powerpoint.js",
                 content: "unspecified"
             };
-            const files = [file1, minFile, kendoFile1, kendoFile2, officeFile1, officeFile2];
+            const files = [file1, minFile, kendoFile1, kendoFile2, kendoFile3, officeFile1, officeFile2];
             const host = createServerHost(files);
             const projectService = createProjectService(host);
             try {
