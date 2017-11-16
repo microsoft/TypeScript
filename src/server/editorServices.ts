@@ -110,7 +110,7 @@ namespace ts.server {
 
     export interface TypesMapFile {
         typesMap: SafeList;
-        simpleMap: string[];
+        simpleMap: { [libName: string]: string };
     }
 
     /**
@@ -378,6 +378,7 @@ namespace ts.server {
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
+        private legacySafelist: { [key: string]: string } = {};
 
         private changedFiles: ScriptInfo[];
         private pendingProjectUpdates = createMap<Project>();
@@ -522,10 +523,12 @@ namespace ts.server {
                 }
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
+                this.legacySafelist = raw.simpleMap;
             }
             catch (e) {
                 this.logger.info(`Error loading types map: ${e}`);
                 this.safelist = defaultTypeSafeList;
+                this.legacySafelist = {};
             }
         }
 
@@ -2159,8 +2162,13 @@ namespace ts.server {
 
         applySafeList(proj: protocol.ExternalProject): NormalizedPath[] {
             const { rootFiles, typeAcquisition } = proj;
-            const types = (typeAcquisition && typeAcquisition.include) || [];
+            Debug.assert(!!typeAcquisition, "proj.typeAcquisition should be set by now");
+            // If type acquisition has been explicitly disabled, do not exclude anything from the project
+            if (typeAcquisition.enable === false) {
+                return [];
+            }
 
+            const typeAcqInclude = typeAcquisition.include || (typeAcquisition.include = []);
             const excludeRules: string[] = [];
 
             const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName)) as NormalizedPath[];
@@ -2175,8 +2183,10 @@ namespace ts.server {
                         // If the file matches, collect its types packages and exclude rules
                         if (rule.types) {
                             for (const type of rule.types) {
-                                if (types.indexOf(type) < 0) {
-                                    types.push(type);
+                                // Best-effort de-duping here - doesn't need to be unduplicated but
+                                // we don't want the list to become a 400-element array of just 'kendo'
+                                if (typeAcqInclude.indexOf(type) < 0) {
+                                    typeAcqInclude.push(type);
                                 }
                             }
                         }
@@ -2214,12 +2224,6 @@ namespace ts.server {
                         }
                     }
                 }
-
-                // Copy back this field into the project if needed
-                if (types.length > 0) {
-                    proj.typeAcquisition = proj.typeAcquisition || {};
-                    proj.typeAcquisition.include = types;
-                }
             }
 
             const excludeRegexes = excludeRules.map(e => new RegExp(e, "i"));
@@ -2229,7 +2233,29 @@ namespace ts.server {
                     excludedFiles.push(normalizedNames[i]);
                 }
                 else {
-                    filesToKeep.push(proj.rootFiles[i]);
+                    let exclude = false;
+                    if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
+                        const baseName = getBaseFileName(normalizedNames[i].toLowerCase());
+                        if (fileExtensionIs(baseName, "js")) {
+                            const inferredTypingName = removeFileExtension(baseName);
+                            const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
+                            if (this.legacySafelist[cleanedTypingName]) {
+                                this.logger.info(`Excluded '${normalizedNames[i]}' because it matched ${cleanedTypingName} from the legacy safelist`);
+                                excludedFiles.push(normalizedNames[i]);
+                                // *exclude* it from the project...
+                                exclude = true;
+                                // ... but *include* it in the list of types to acquire
+                                const typeName = this.legacySafelist[cleanedTypingName];
+                                // Same best-effort dedupe as above
+                                if (typeAcqInclude.indexOf(typeName) < 0) {
+                                    typeAcqInclude.push(typeName);
+                                }
+                            }
+                        }
+                    }
+                    if (!exclude) {
+                        filesToKeep.push(proj.rootFiles[i]);
+                    }
                 }
             }
             proj.rootFiles = filesToKeep;
@@ -2242,6 +2268,12 @@ namespace ts.server {
             if (proj.typingOptions && !proj.typeAcquisition) {
                 const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
                 proj.typeAcquisition = typeAcquisition;
+            }
+            proj.typeAcquisition = proj.typeAcquisition || {};
+            proj.typeAcquisition.include = proj.typeAcquisition.include || [];
+            proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];
+            if (proj.typeAcquisition.enable === undefined) {
+                proj.typeAcquisition.enable = hasNoTypeScriptSource(proj.rootFiles.map(f => f.fileName));
             }
 
             const excludedFiles = this.applySafeList(proj);
