@@ -6909,9 +6909,8 @@ declare namespace ts.server {
     type CommandNames = protocol.CommandTypes;
     const CommandNames: any;
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
-    type Event = <T>(body: T, eventName: string) => void;
     interface EventSender {
-        event: Event;
+        event: <T>(body: T, eventName: string) => void;
     }
     interface SessionOptions {
         host: ServerHost;
@@ -6927,15 +6926,9 @@ declare namespace ts.server {
          */
         canUseEvents: boolean;
         /**
-         * If defined, specifies the socket to send events to the client.
-         * Otherwise, events are sent through the host.
+         * An optional callback overriding the default behavior for sending messages.
          */
-        eventPort?: number;
-        /**
-         * An optional callback overriding the default behavior for sending events.
-         * if set, `canUseEvents` and `eventPort` are ignored.
-         */
-        event?: Event;
+        eventSender?: EventSender;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
@@ -6943,7 +6936,6 @@ declare namespace ts.server {
         allowLocalPluginLoads?: boolean;
     }
     class Session implements EventSender {
-        readonly event: Event;
         private readonly gcTimer;
         protected projectService: ProjectService;
         private changeSeq;
@@ -6956,7 +6948,6 @@ declare namespace ts.server {
         private hrtime;
         protected logger: Logger;
         private canUseEvents;
-        private eventPort;
         private eventHandler;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent(requestId);
@@ -6964,6 +6955,7 @@ declare namespace ts.server {
         private projectsUpdatedInBackgroundEvent(openFiles);
         logError(err: Error, cmd: string): void;
         send(msg: protocol.Message): void;
+        event<T>(body: T, eventName: string): void;
         /** @deprecated */
         output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
         private doOutput(info, cmdName, reqSeq, success, message?);
@@ -7122,7 +7114,7 @@ declare namespace ts.server {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
-        attach(projectService: ProjectService, eventSender?: EventSender): void;
+        attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
         readonly globalTypingsCacheLocation: string;
     }
@@ -7483,7 +7475,6 @@ declare namespace ts.server {
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
-        eventSender?: EventSender;
     }
     class ProjectService {
         readonly typingsCache: TypingsCache;
