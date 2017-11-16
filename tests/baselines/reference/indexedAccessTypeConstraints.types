@@ -29,7 +29,7 @@ class Parent<M> {
 >Parent : Parent<M>
 >M : M
 
-    private data: Data<M>;
+    constructor(private data: Data<M>) {}
 >data : { get: <K extends keyof M>(prop: K) => M[K]; }
 >Data : { get: <K extends keyof T>(prop: K) => T[K]; }
 >M : M

@@ -20,7 +20,7 @@ interface Banana {
 }
 
 class Monkey<T extends Banana | undefined> {
-    a: T;
+    constructor(public a: T) {}
     render() {
         if (this.a) {
             this.a.color;
