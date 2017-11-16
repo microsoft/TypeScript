@@ -2665,8 +2665,8 @@ namespace ts {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
-                case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
@@ -2720,6 +2720,7 @@ namespace ts {
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.UniqueKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NullKeyword:
@@ -2805,7 +2806,7 @@ namespace ts {
             return finishNode(postfix);
         }
 
-        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword) {
+        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword) {
             const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
             parseExpected(operator);
             node.operator = operator;
@@ -2814,9 +2815,11 @@ namespace ts {
         }
 
         function parseTypeOperatorOrHigher(): TypeNode {
-            switch (token()) {
+            const operator = token();
+            switch (operator) {
                 case SyntaxKind.KeyOfKeyword:
-                    return parseTypeOperator(SyntaxKind.KeyOfKeyword);
+                case SyntaxKind.UniqueKeyword:
+                    return parseTypeOperator(operator);
                 case SyntaxKind.DotDotDotToken: {
                     const result = createNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
                     nextToken();

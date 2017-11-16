@@ -56,6 +56,7 @@ namespace ts {
             clear: () => str = "",
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
+            reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
     }
@@ -913,6 +914,18 @@ namespace ts {
         }
     }
 
+    export function getMembersOfDeclaration(node: Declaration): NodeArray<ClassElement | TypeElement | ObjectLiteralElement> | undefined {
+        switch (node.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.TypeLiteral:
+                return (<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node).members;
+            case SyntaxKind.ObjectLiteralExpression:
+                return (<ObjectLiteralExpression>node).properties;
+        }
+    }
+
     export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         if (node) {
             switch (node.kind) {
@@ -928,6 +941,17 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    export function isVariableDeclarationInVariableStatement(node: VariableDeclaration) {
+        return node.parent.kind === SyntaxKind.VariableDeclarationList
+            && node.parent.parent.kind === SyntaxKind.VariableStatement;
+    }
+
+    export function isValidESSymbolDeclaration(node: Node) {
+        return isVariableDeclaration(node) ? isConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+            isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
+            isPropertySignature(node) && hasReadonlyModifier(node);
     }
 
     export function introducesArgumentsExoticObject(node: Node) {
@@ -1716,15 +1740,27 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
+    function walkUp(node: Node, kind: SyntaxKind) {
+        while (node && node.kind === kind) {
+            node = node.parent;
+        }
+        return node;
+    }
+
+    export function walkUpParenthesizedTypes(node: Node) {
+        return walkUp(node, SyntaxKind.ParenthesizedType);
+    }
+
+    export function walkUpParenthesizedExpressions(node: Node) {
+        return walkUp(node, SyntaxKind.ParenthesizedExpression);
+    }
+
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
     export function isDeleteTarget(node: Node): boolean {
         if (node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
             return false;
         }
-        node = node.parent;
-        while (node && node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = node.parent;
-        }
+        node = walkUpParenthesizedExpressions(node.parent);
         return node && node.kind === SyntaxKind.DeleteExpression;
     }
 
@@ -1985,7 +2021,7 @@ namespace ts {
      *      is a property of the Symbol constructor that denotes a built in
      *      Symbol.
      */
-    export function hasDynamicName(declaration: Declaration): boolean {
+    export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration {
         const name = getNameOfDeclaration(declaration);
         return name && isDynamicName(name);
     }
@@ -3029,6 +3065,14 @@ namespace ts {
 
     export function hasModifier(node: Node, flags: ModifierFlags): boolean {
         return !!getSelectedModifierFlags(node, flags);
+    }
+
+    export function hasStaticModifier(node: Node): boolean {
+        return hasModifier(node, ModifierFlags.Static);
+    }
+
+    export function hasReadonlyModifier(node: Node): boolean {
+        return hasModifier(node, ModifierFlags.Readonly);
     }
 
     export function getSelectedModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
