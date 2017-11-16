@@ -15383,7 +15383,7 @@ namespace ts {
          */
         function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
             const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
-            let bestDistance = Math.floor(name.length * 0.4);
+            let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result isn't better than this, don't bother.
             let bestCandidate: Symbol | undefined;
             let justCheckExactMatches = false;
             const nameLowerCase = name.toLowerCase();
@@ -15399,7 +15399,12 @@ namespace ts {
                 if (justCheckExactMatches) {
                     continue;
                 }
-                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance);
+                if (candidateName.length < 3) {
+                    // Don't bother, user would have noticed a 2-character name having an extra character
+                    continue;
+                }
+                // Only care about a result better than the best so far.
+                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance - 1);
                 if (distance === undefined) {
                     continue;
                 }
@@ -15407,7 +15412,8 @@ namespace ts {
                     justCheckExactMatches = true;
                     bestCandidate = candidate;
                 }
-                else if (distance < bestDistance) {
+                else {
+                    Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
                     bestDistance = distance;
                     bestCandidate = candidate;
                 }
