@@ -2314,6 +2314,17 @@ namespace ts {
         return <T>(removeFileExtension(path) + newExtension);
     }
 
+    /**
+     * Takes a string like "jquery-min.4.2.3" and returns "jquery"
+     */
+    export function removeMinAndVersionNumbers(fileName: string) {
+        // Match a "." or "-" followed by a version number or 'min' at the end of the name
+        const trailingMinOrVersion = /[.-]((min)|(\d+(\.\d+)*))$/;
+
+        // The "min" or version may both be present, in either order, so try applying the above twice.
+        return fileName.replace(trailingMinOrVersion, "").replace(trailingMinOrVersion, "");
+    }
+
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
