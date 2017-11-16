@@ -13530,9 +13530,7 @@ namespace ts {
             const { left, operatorToken, right } = binaryExpression;
             switch (operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
-                    // In an assignment expression, the right operand is contextually typed by the type of the left operand.
-                    // Don't do this for special property assignments to avoid circularity
-                    return node !== right || isNonContextualBinaryExpression(binaryExpression) ? undefined : getTypeOfExpression(left);
+                    return node === right && isContextSensitiveAssignment(binaryExpression) ? getTypeOfExpression(left) : undefined;
                 case SyntaxKind.BarBarToken:
                     // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
                     // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
@@ -13545,20 +13543,22 @@ namespace ts {
                     return undefined;
             }
         }
-        function isNonContextualBinaryExpression(binaryExpression: BinaryExpression): boolean {
+        // In an assignment expression, the right operand is contextually typed by the type of the left operand.
+        // Don't do this for special property assignments to avoid circularity.
+        function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean {
             const kind = getSpecialPropertyAssignmentKind(binaryExpression);
             switch (kind) {
                 case SpecialPropertyAssignmentKind.None:
-                    return false;
+                    return true;
                 case SpecialPropertyAssignmentKind.Property:
                     // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                     // See `bindStaticPropertyAssignment` in `binder.ts`.
-                    return !!binaryExpression.left.symbol;
+                    return !binaryExpression.left.symbol;
                 case SpecialPropertyAssignmentKind.ExportsProperty:
                 case SpecialPropertyAssignmentKind.ModuleExports:
                 case SpecialPropertyAssignmentKind.PrototypeProperty:
                 case SpecialPropertyAssignmentKind.ThisProperty:
-                    return true;
+                    return false;
                 default:
                     Debug.assertNever(kind);
             }
