@@ -521,8 +521,9 @@ namespace ts.projectSystem {
             // Commander: Existed as a JS file
             // JQuery: Specified in 'include'
             // Moment: Specified in 'include'
+            // Express: Specified in package.json
             // lodash: Excluded (not present)
-            checkProjectActualFiles(p, [file3dts.path, commander.path, jquery.path, moment.path]);
+            checkProjectActualFiles(p, [file3dts.path, commander.path, express.path, jquery.path, moment.path]);
         });
 
         it("Throttle - delayed typings to install", () => {
@@ -601,7 +602,7 @@ namespace ts.projectSystem {
             }
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [file3.path, commander.path, jquery.path, moment.path, lodash.path]);
+            checkProjectActualFiles(p, [file3.path, commander.path, express.path, jquery.path, moment.path, lodash.path]);
         });
 
         it("Throttle - delayed run install requests", () => {
@@ -1101,11 +1102,12 @@ namespace ts.projectSystem {
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true }, emptyArray);
-            assert.deepEqual(logger.finish(), [
+            const finish = logger.finish();
+            assert.deepEqual(finish, [
                 'Inferred typings from file names: ["jquery","chroma-js"]',
                 "Inferred typings from unresolved imports: []",
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","chroma-js"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
-            ]);
+            ], finish.join("\r\n"));
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
         });
 
