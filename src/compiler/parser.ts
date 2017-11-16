@@ -6132,16 +6132,16 @@ namespace ts {
             }
 
             // Parses out a JSDoc type expression.
-            export function parseJSDocTypeExpression(): JSDocTypeExpression;
-            export function parseJSDocTypeExpression(requireBraces: true): JSDocTypeExpression | undefined;
-            export function parseJSDocTypeExpression(requireBraces?: boolean): JSDocTypeExpression | undefined {
+            export function parseJSDocTypeExpression(braceless?: boolean): JSDocTypeExpression {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
-                if (!parseExpected(SyntaxKind.OpenBraceToken) && requireBraces) {
-                    return undefined;
+                if (!braceless) {
+                    parseExpected(SyntaxKind.OpenBraceToken);
                 }
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
-                parseExpected(SyntaxKind.CloseBraceToken);
+                if (!braceless) {
+                    parseExpected(SyntaxKind.CloseBraceToken);
+                }
 
                 fixupParentReferences(result);
                 return finishNode(result);
@@ -6486,9 +6486,9 @@ namespace ts {
                     tagsEnd = tag.end;
                 }
 
-                function tryParseTypeExpression(): JSDocTypeExpression | undefined {
+                function tryParseTypeExpression(bracelessFallback?: boolean): JSDocTypeExpression | undefined {
                     skipWhitespace();
-                    return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
+                    return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : bracelessFallback && parseJSDocTypeExpression(/*braceless*/ true);
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
@@ -6597,7 +6597,7 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = parseJSDocTypeExpression(/*requireBraces*/ true);
+                    result.typeExpression = tryParseTypeExpression(/*bracketlessFallback*/ true);
                     return finishNode(result);
                 }
 

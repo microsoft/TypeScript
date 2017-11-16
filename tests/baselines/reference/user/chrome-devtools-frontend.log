@@ -1,8 +1,6 @@
 Exit Code: 1
 Standard output:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(398,24): error TS1138: Parameter declaration expected.
-node_modules/chrome-devtools-frontend/front_end/Runtime.js(527,55): error TS1005: '{' expected.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(314,15): error TS1005: '{' expected.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(810,65): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/audits/AuditRules.js(488,2): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/audits/AuditsPanel.js(513,28): error TS1005: '>' expected.
@@ -48,10 +46,8 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1521,2): 
 node_modules/chrome-devtools-frontend/front_end/console_test_runner/ConsoleTestRunner.js(10,73): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(39,36): error TS1138: Parameter declaration expected.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(7,2): error TS1131: Property or signature expected.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(258,34): error TS1005: '{' expected.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(5,72): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(8,57): error TS1003: Identifier expected.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(231,59): error TS1005: '{' expected.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1200,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(890,194): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(893,105): error TS1003: Identifier expected.
@@ -98,7 +94,6 @@ node_modules/chrome-devtools-frontend/front_end/formatter/FormatterWorkerPool.js
 node_modules/chrome-devtools-frontend/front_end/formatter/FormatterWorkerPool.js(322,2): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/formatter/FormatterWorkerPool.js(327,2): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(32,30): error TS1138: Parameter declaration expected.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(58,26): error TS1005: '{' expected.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js(180,2): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1370,4): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2118,2): error TS1131: Property or signature expected.
@@ -107,7 +102,6 @@ node_modules/chrome-devtools-frontend/front_end/help/Help.js(57,2): error TS1131
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHostAPI.js(16,4): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHostAPI.js(23,4): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/BezierEditor.js(270,103): error TS1003: Identifier expected.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(68,15): error TS1005: '{' expected.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(761,67): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(14,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(56,2): error TS1131: Property or signature expected.
@@ -129,8 +123,6 @@ node_modules/chrome-devtools-frontend/front_end/network_log/NetworkLog.js(470,13
 node_modules/chrome-devtools-frontend/front_end/object_ui/CustomPreviewComponent.js(140,16): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/object_ui/CustomPreviewComponent.js(141,16): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/object_ui/JavaScriptAutocomplete.js(7,64): error TS1003: Identifier expected.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(907,17): error TS1005: '{' expected.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1167,15): error TS1005: '{' expected.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1387,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1397,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineGrid.js(266,89): error TS1003: Identifier expected.
@@ -164,7 +156,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(8,1): error
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(182,71): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(198,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(238,48): error TS1003: Identifier expected.
-node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1197,86): error TS1003: Identifier expected.
+node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1200,86): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(1117,47): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(1127,122): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(1130,82): error TS1003: Identifier expected.
@@ -210,13 +202,11 @@ node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(340,32):
 node_modules/chrome-devtools-frontend/front_end/timeline/PerformanceMonitor.js(394,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/timeline/PerformanceMonitor.js(406,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineController.js(283,2): error TS1131: Property or signature expected.
-node_modules/chrome-devtools-frontend/front_end/timeline/TimelineDetailsView.js(34,15): error TS1005: '{' expected.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineHistoryManager.js(255,86): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelinePanel.js(1087,106): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(2113,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1246,99): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1420,82): error TS1003: Identifier expected.
-node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModelFilter.js(43,22): error TS1005: '{' expected.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.js(17,1): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.js(26,1): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(14,33): error TS1110: Type expected.
