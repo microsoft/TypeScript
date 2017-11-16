@@ -1920,11 +1920,11 @@
         "category": "Error",
         "code": 2555
     },
-    "Expected {0} arguments, but got a minimum of {1}.": {
+    "Expected {0} arguments, but got {1} or more.": {
         "category": "Error",
         "code": 2556
     },
-    "Expected at least {0} arguments, but got a minimum of {1}.": {
+    "Expected at least {0} arguments, but got {1} or more.": {
         "category": "Error",
         "code": 2557
     },

@@ -18,13 +18,9 @@ prefix("a", ...ns)
 rest("d", ...ns)
 
 
-// this covers the arguments case
+// extra arguments
 normal("g", ...ns)
-normal("h", ...mixed)
-normal("i", ...tuple)
 thunk(...ns)
-thunk(...mixed)
-thunk(...tuple)
 
 // bad
 all(...mixed)
