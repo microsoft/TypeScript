@@ -3330,6 +3330,10 @@
         "category": "Message",
         "code": 6186
     },
+    "Enable strict checking of property initialization in classes.": {
+        "category": "Message",
+        "code": 6187
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

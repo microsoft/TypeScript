@@ -69,6 +69,7 @@ namespace ts {
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
+        const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
 
@@ -22230,7 +22231,7 @@ namespace ts {
         }
 
         function checkPropertyInitialization(node: ClassLikeDeclaration) {
-            if (!strictNullChecks || node.flags & NodeFlags.Ambient) {
+            if (!strictNullChecks || !strictPropertyInitialization || node.flags & NodeFlags.Ambient) {
                 return;
             }
             const constructor = findConstructorDeclaration(node);
