@@ -17471,8 +17471,8 @@ namespace ts {
             if (!(func.flags & NodeFlags.HasImplicitReturn)) {
                 return false;
             }
-            const lastStatement = lastOrUndefined((<Block>func.body).statements);
-            if (lastStatement && lastStatement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>lastStatement)) {
+
+            if (some((<Block>func.body).statements, statement => statement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>statement))) {
                 return false;
             }
             return true;
