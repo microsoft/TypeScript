@@ -7,9 +7,9 @@ namespace ts.server {
         cancellationToken: ServerCancellationToken;
         canUseEvents: boolean;
         /**
-        * If defined, specifies the socket used to send events to the client.
-        * Otherwise, events are sent through the host.
-        */
+         * If defined, specifies the socket used to send events to the client.
+         * Otherwise, events are sent through the host.
+         */
         eventPort?: number;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
@@ -248,7 +248,6 @@ namespace ts.server {
         private installer: NodeChildProcess;
         private installerPidReported = false;
         private projectService: ProjectService;
-        private eventSender: EventSender | undefined;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
@@ -272,7 +271,11 @@ namespace ts.server {
             readonly globalTypingsCacheLocation: string,
             readonly typingSafeListLocation: string,
             readonly typesMapLocation: string,
-            private readonly npmLocation: string | undefined) {
+            private readonly npmLocation: string | undefined,
+            /**
+             * If undefined, event-related work will be suppressed.
+             */
+            private eventSender: EventSender | undefined) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -311,14 +314,10 @@ namespace ts.server {
         }
 
 
-        attach(projectService: ProjectService, eventSender?: EventSender) {
+        attach(projectService: ProjectService) {
             this.projectService = projectService;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 this.logger.info("Binding...");
-            }
-
-            if (eventSender) {
-                this.eventSender = eventSender;
             }
 
             const args: string[] = [Arguments.GlobalCacheLocation, this.globalTypingsCacheLocation];
@@ -519,17 +518,15 @@ namespace ts.server {
         }
     }
 
-    class SocketEventSender implements EventSender {
-        private host: ServerHost;
-        private logger: Logger;
-        private eventPort: number;
+    class SocketEventSender extends DefaultMessageSender {
         private eventSocket: NodeSocket | undefined;
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
 
-        constructor(host: ServerHost, logger: Logger, eventPort: number) {
-            this.host = host;
-            this.logger = logger;
-            this.eventPort = eventPort;
+        constructor(host: ServerHost,
+            byteLength: (buf: string, encoding?: string) => number,
+            logger: Logger,
+            private eventPort: number) {
+            super(host, byteLength, logger, /*canUseEvents*/ true);
 
             const s = net.connect({ port: this.eventPort }, () => {
                 this.eventSocket = s;
@@ -541,20 +538,20 @@ namespace ts.server {
                     this.socketEventQueue = undefined;
                 }
             });
-        }
 
-        public event = <T>(body: T, eventName: string) => {
-            if (!this.eventSocket) {
-                if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
+            this.event = <T>(body: T, eventName: string) => {
+                if (!this.eventSocket) {
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
+                        this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
+                    }
+                    (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
+                    return;
                 }
-                (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
-                return;
-            }
-            else {
-                Debug.assert(this.socketEventQueue === undefined);
-                this.writeToEventSocket(body, eventName);
-            }
+                else {
+                    Debug.assert(this.socketEventQueue === undefined);
+                    this.writeToEventSocket(body, eventName);
+                }
+            };
         }
 
         private writeToEventSocket(body: any, eventName: string): void {
@@ -566,15 +563,11 @@ namespace ts.server {
         constructor(options: IoSessionOptions) {
             const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
 
-            let event: Event;
-            if (canUseEvents && eventPort) {
-                const eventSender = new SocketEventSender(host, logger, eventPort);
-                event = eventSender.event;
-            }
+            const messageSender = eventPort && canUseEvents ? new SocketEventSender(host, Buffer.byteLength, logger, eventPort) : new DefaultMessageSender(host, Buffer.byteLength, logger, canUseEvents);
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents ? messageSender : undefined);
 
             super({
                 host,
@@ -586,7 +579,7 @@ namespace ts.server {
                 hrtime: process.hrtime,
                 logger,
                 canUseEvents,
-                event,
+                messageSender,
                 globalPlugins: options.globalPlugins,
                 pluginProbeLocations: options.pluginProbeLocations,
                 allowLocalPluginLoads: options.allowLocalPluginLoads });

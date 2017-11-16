@@ -245,6 +245,58 @@ namespace ts.server {
         event: Event;
     }
 
+    export type Send = (msg: protocol.Message) => void;
+
+    export interface MessageSender extends EventSender {
+        send: Send;
+        event: Event;
+    }
+
+    function defaultSend(
+        host: ServerHost,
+        byteLength: (buf: string, encoding?: string) => number,
+        logger: Logger,
+        canUseEvents: boolean,
+        msg: protocol.Message) {
+        if (msg.type === "event" && !canUseEvents) {
+            if (logger.hasLevel(LogLevel.verbose)) {
+                logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+            }
+            return;
+        }
+        host.write(formatMessage(msg, logger, byteLength, host.newLine));
+    }
+
+    function defaultEvent<T>(
+        host: ServerHost,
+        byteLength: (buf: string, encoding?: string) => number,
+        logger: Logger,
+        canUseEvents: boolean,
+        body: T, eventName: string): void {
+        const ev: protocol.Event = {
+            seq: 0,
+            type: "event",
+            event: eventName,
+            body
+        };
+        defaultSend(host, byteLength, logger, canUseEvents, ev);
+    }
+
+    export class DefaultMessageSender implements MessageSender {
+        constructor(protected host: ServerHost,
+            protected byteLength: (buf: string, encoding?: string) => number,
+            protected logger: Logger,
+            protected canUseEvents: boolean) { }
+
+        public send = (msg: protocol.Message) => {
+            defaultSend(this.host, this.byteLength, this.logger, this.canUseEvents, msg);
+        }
+
+        public event = <T>(body: T, eventName: string) => {
+            defaultEvent(this.host, this.byteLength, this.logger, this.canUseEvents, body, eventName);
+        }
+    }
+
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -259,10 +311,9 @@ namespace ts.server {
          */
         canUseEvents: boolean;
         /**
-         * An optional callback overriding the default behavior for sending events.
-         * if set, `canUseEvents` and `eventPort` are ignored.
+         * An optional callback overriding the default behavior for sending messages.
          */
-        event?: Event;
+        messageSender?: MessageSender;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
 
@@ -271,9 +322,7 @@ namespace ts.server {
         allowLocalPluginLoads?: boolean;
     }
 
-    export class Session implements EventSender {
-        public readonly event: Event;
-
+    export class Session implements MessageSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private changeSeq = 0;
@@ -298,23 +347,13 @@ namespace ts.server {
             this.byteLength = opts.byteLength;
             this.hrtime = opts.hrtime;
             this.logger = opts.logger;
-            this.canUseEvents = opts.canUseEvents || !!opts.event;
+            this.canUseEvents = opts.canUseEvents;
 
             const { throttleWaitMilliseconds } = opts;
 
-            if (opts.event) {
-                this.event = opts.event;
-            }
-            else {
-                this.event = function <T>(body: T, eventName: string): void {
-                    const ev: protocol.Event = {
-                        seq: 0,
-                        type: "event",
-                        event: eventName,
-                        body
-                    };
-                    this.send(ev);
-                };
+            if (opts.messageSender) {
+                this.send = opts.messageSender.send;
+                this.event = opts.messageSender.event;
             }
 
             this.eventHandler = this.canUseEvents
@@ -340,8 +379,7 @@ namespace ts.server {
                 eventHandler: this.eventHandler,
                 globalPlugins: opts.globalPlugins,
                 pluginProbeLocations: opts.pluginProbeLocations,
-                allowLocalPluginLoads: opts.allowLocalPluginLoads,
-                eventSender: this
+                allowLocalPluginLoads: opts.allowLocalPluginLoads
             };
             this.projectService = new ProjectService(settings);
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
@@ -413,13 +451,11 @@ namespace ts.server {
         }
 
         public send(msg: protocol.Message) {
-            if (msg.type === "event" && !this.canUseEvents) {
-                if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
-                }
-                return;
-            }
-            this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
+            defaultSend(this.host, this.byteLength, this.logger, this.canUseEvents, msg);
+        }
+
+        public event<T>(body: T, eventName: string): void {
+            defaultEvent(this.host, this.byteLength, this.logger, this.canUseEvents, body, eventName);
         }
 
         // For backwards-compatibility only.

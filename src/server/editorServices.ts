@@ -320,7 +320,6 @@ namespace ts.server {
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
-        eventSender?: EventSender;
     }
 
     type WatchFile = (host: ServerHost, file: string, cb: FileWatcherCallback, watchType: WatchType, project?: Project) => FileWatcher;
@@ -441,7 +440,7 @@ namespace ts.server {
                 this.logger.info("No types map provided; using the default");
             }
 
-            this.typingsInstaller.attach(this, opts.eventSender);
+            this.typingsInstaller.attach(this);
 
             this.typingsCache = new TypingsCache(this.typingsInstaller);
 
