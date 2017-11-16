@@ -64,30 +64,14 @@ rest("d", ...ns)
 >ns : Symbol(ns, Decl(callWithSpread2.ts, 7, 11))
 
 
-// this covers the arguments case
+// extra arguments
 normal("g", ...ns)
 >normal : Symbol(normal, Decl(callWithSpread2.ts, 3, 83))
 >ns : Symbol(ns, Decl(callWithSpread2.ts, 7, 11))
 
-normal("h", ...mixed)
->normal : Symbol(normal, Decl(callWithSpread2.ts, 3, 83))
->mixed : Symbol(mixed, Decl(callWithSpread2.ts, 8, 11))
-
-normal("i", ...tuple)
->normal : Symbol(normal, Decl(callWithSpread2.ts, 3, 83))
->tuple : Symbol(tuple, Decl(callWithSpread2.ts, 9, 11))
-
 thunk(...ns)
 >thunk : Symbol(thunk, Decl(callWithSpread2.ts, 4, 41))
 >ns : Symbol(ns, Decl(callWithSpread2.ts, 7, 11))
-
-thunk(...mixed)
->thunk : Symbol(thunk, Decl(callWithSpread2.ts, 4, 41))
->mixed : Symbol(mixed, Decl(callWithSpread2.ts, 8, 11))
-
-thunk(...tuple)
->thunk : Symbol(thunk, Decl(callWithSpread2.ts, 4, 41))
->tuple : Symbol(tuple, Decl(callWithSpread2.ts, 9, 11))
 
 // bad
 all(...mixed)
