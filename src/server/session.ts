@@ -239,20 +239,12 @@ namespace ts.server {
         }
     }
 
-    export type Event = <T>(body: T, eventName: string) => void;
-
     export interface EventSender {
-        event: Event;
+        event: <T>(body: T, eventName: string) => void;
     }
 
-    export type Send = (msg: protocol.Message) => void;
-
-    export interface MessageSender extends EventSender {
-        send: Send;
-        event: Event;
-    }
-
-    function defaultSend(
+    /** @internal */
+    export function defaultSend(
         host: ServerHost,
         byteLength: (buf: string, encoding?: string) => number,
         logger: Logger,
@@ -266,37 +258,6 @@ namespace ts.server {
         }
         host.write(formatMessage(msg, logger, byteLength, host.newLine));
     }
-
-    function defaultEvent<T>(
-        host: ServerHost,
-        byteLength: (buf: string, encoding?: string) => number,
-        logger: Logger,
-        canUseEvents: boolean,
-        body: T, eventName: string): void {
-        const ev: protocol.Event = {
-            seq: 0,
-            type: "event",
-            event: eventName,
-            body
-        };
-        defaultSend(host, byteLength, logger, canUseEvents, ev);
-    }
-
-    export class DefaultMessageSender implements MessageSender {
-        constructor(protected host: ServerHost,
-            protected byteLength: (buf: string, encoding?: string) => number,
-            protected logger: Logger,
-            protected canUseEvents: boolean) { }
-
-        public send = (msg: protocol.Message) => {
-            defaultSend(this.host, this.byteLength, this.logger, this.canUseEvents, msg);
-        }
-
-        public event = <T>(body: T, eventName: string) => {
-            defaultEvent(this.host, this.byteLength, this.logger, this.canUseEvents, body, eventName);
-        }
-    }
-
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -313,7 +274,7 @@ namespace ts.server {
         /**
          * An optional callback overriding the default behavior for sending messages.
          */
-        messageSender?: MessageSender;
+        eventSender?: EventSender;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
 
@@ -322,7 +283,7 @@ namespace ts.server {
         allowLocalPluginLoads?: boolean;
     }
 
-    export class Session implements MessageSender {
+    export class Session implements EventSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private changeSeq = 0;
@@ -351,9 +312,8 @@ namespace ts.server {
 
             const { throttleWaitMilliseconds } = opts;
 
-            if (opts.messageSender) {
-                this.send = opts.messageSender.send;
-                this.event = opts.messageSender.event;
+            if (opts.eventSender) {
+                this.event = opts.eventSender.event;
             }
 
             this.eventHandler = this.canUseEvents
@@ -455,7 +415,13 @@ namespace ts.server {
         }
 
         public event<T>(body: T, eventName: string): void {
-            defaultEvent(this.host, this.byteLength, this.logger, this.canUseEvents, body, eventName);
+            const ev: protocol.Event = {
+                seq: 0,
+                type: "event",
+                event: eventName,
+                body
+            };
+            this.send(ev);
         }
 
         // For backwards-compatibility only.

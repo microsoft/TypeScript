@@ -518,15 +518,31 @@ namespace ts.server {
         }
     }
 
-    class SocketEventSender extends DefaultMessageSender {
+    export class DefaultEventSender implements EventSender {
+        constructor(protected host: ServerHost,
+            protected byteLength: (buf: string, encoding?: string) => number,
+            protected logger: Logger,
+            protected canUseEvents: boolean) { }
+
+        public event = <T>(body: T, eventName: string) => {
+            const ev: protocol.Event = {
+                seq: 0,
+                type: "event",
+                event: eventName,
+                body
+            };
+            defaultSend(this.host, this.byteLength, this.logger, this.canUseEvents, ev);
+        }
+    }
+
+    class SocketEventSender implements EventSender {
         private eventSocket: NodeSocket | undefined;
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
 
-        constructor(host: ServerHost,
-            byteLength: (buf: string, encoding?: string) => number,
-            logger: Logger,
+        constructor(private host: ServerHost,
+            private byteLength: (buf: string, encoding?: string) => number,
+            private logger: Logger,
             private eventPort: number) {
-            super(host, byteLength, logger, /*canUseEvents*/ true);
 
             const s = net.connect({ port: this.eventPort }, () => {
                 this.eventSocket = s;
@@ -538,24 +554,24 @@ namespace ts.server {
                     this.socketEventQueue = undefined;
                 }
             });
-
-            this.event = <T>(body: T, eventName: string) => {
-                if (!this.eventSocket) {
-                    if (this.logger.hasLevel(LogLevel.verbose)) {
-                        this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
-                    }
-                    (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
-                    return;
-                }
-                else {
-                    Debug.assert(this.socketEventQueue === undefined);
-                    this.writeToEventSocket(body, eventName);
-                }
-            };
         }
 
+        public event = <T>(body: T, eventName: string) => {
+            if (!this.eventSocket) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
+                }
+                (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
+                return;
+            }
+            else {
+                Debug.assert(this.socketEventQueue === undefined);
+                this.writeToEventSocket(body, eventName);
+            }
+        };
+
         private writeToEventSocket(body: any, eventName: string): void {
-            this.eventSocket.write(formatMessage({ seq: 0, type: "event", event: eventName, body }, this.logger, Buffer.byteLength, this.host.newLine), "utf8");
+            this.eventSocket.write(formatMessage({ seq: 0, type: "event", event: eventName, body }, this.logger, this.byteLength, this.host.newLine), "utf8");
         }
     }
 
@@ -563,11 +579,11 @@ namespace ts.server {
         constructor(options: IoSessionOptions) {
             const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
 
-            const messageSender = eventPort && canUseEvents ? new SocketEventSender(host, Buffer.byteLength, logger, eventPort) : new DefaultMessageSender(host, Buffer.byteLength, logger, canUseEvents);
+            const eventSender = eventPort && canUseEvents ? new SocketEventSender(host, Buffer.byteLength, logger, eventPort) : new DefaultEventSender(host, Buffer.byteLength, logger, canUseEvents);
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents ? messageSender : undefined);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents ? eventSender : undefined);
 
             super({
                 host,
@@ -579,7 +595,7 @@ namespace ts.server {
                 hrtime: process.hrtime,
                 logger,
                 canUseEvents,
-                messageSender,
+                eventSender,
                 globalPlugins: options.globalPlugins,
                 pluginProbeLocations: options.pluginProbeLocations,
                 allowLocalPluginLoads: options.allowLocalPluginLoads });
