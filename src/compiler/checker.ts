@@ -11925,7 +11925,7 @@ namespace ts {
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
             const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? anyArrayType : finalizeEvolvingArrayType(evolvedType);
-            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            if (reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
             return resultType;
@@ -22072,6 +22072,7 @@ namespace ts {
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
+                checkPropertyInitialization(node);
             }
         }
 
@@ -22226,6 +22227,33 @@ namespace ts {
             }
 
             return ok;
+        }
+
+        function checkPropertyInitialization(node: ClassLikeDeclaration) {
+            if (!strictNullChecks || node.flags & NodeFlags.Ambient) {
+                return;
+            }
+            const constructor = findConstructorDeclaration(node);
+            for (const member of node.members) {
+                if (member.kind === SyntaxKind.PropertyDeclaration && !(<PropertyDeclaration>member).initializer) {
+                    const propName = (<PropertyDeclaration>member).name;
+                    if (isIdentifier(propName)) {
+                        const type = getTypeOfSymbol(getSymbolOfNode(member));
+                        if (!(type.flags & TypeFlags.Any || getFalsyFlags(type) & TypeFlags.Undefined)) {
+                            if (!constructor || !isPropertyInitializedInConstructor(propName, type, constructor)) {
+                                error(member.name, Diagnostics.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor, declarationNameToString(propName));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function isPropertyInitializedInConstructor(propName: Identifier, propType: Type, constructor: ConstructorDeclaration) {
+            const reference = createPropertyAccess(createThis(), propName);
+            reference.flowNode = constructor.returnFlowNode;
+            const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
+            return !(getFalsyFlags(flowType) & TypeFlags.Undefined);
         }
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {

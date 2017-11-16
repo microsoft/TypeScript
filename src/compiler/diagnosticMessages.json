@@ -1928,6 +1928,10 @@
         "category": "Error",
         "code": 2563
     },
+    "Property '{0}' has no initializer and is not definitely assigned in the constructor.": {
+        "category": "Error",
+        "code": 2564
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
