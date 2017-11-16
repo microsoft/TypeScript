@@ -426,8 +426,14 @@ namespace ts.server {
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
-            this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(this.host);
+
+            if (this.typesMapLocation) {
+                this.loadTypesMap();
+            }
+            else {
+                this.logger.info("No types map provided; using the default");
+            }
 
             this.typingsInstaller.attach(this);
 
@@ -1085,7 +1091,7 @@ namespace ts.server {
             return false;
         }
 
-        private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition) {
+        private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition, excludedFiles: NormalizedPath[]) {
             const compilerOptions = convertCompilerOptions(options);
             const project = new ExternalProject(
                 projectFileName,
@@ -1094,6 +1100,7 @@ namespace ts.server {
                 compilerOptions,
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave);
+            project.excludedFiles = excludedFiles;
 
             this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typeAcquisition, /*configFileErrors*/ undefined);
             this.externalProjects.push(project);
@@ -1749,7 +1756,7 @@ namespace ts.server {
                 const rule = this.safelist[name];
                 for (const root of normalizedNames) {
                     if (rule.match.test(root)) {
-                        this.logger.info(`Excluding files based on rule ${name}`);
+                        this.logger.info(`Excluding files based on rule ${name} matching file '${root}'`);
 
                         // If the file matches, collect its types packages and exclude rules
                         if (rule.types) {
@@ -1906,7 +1913,11 @@ namespace ts.server {
             else {
                 // no config files - remove the item from the collection
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
+<<<<<<< HEAD
                 this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
+=======
+                this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
+>>>>>>> b9a548cd13... Squash port of PR #19542
             }
             if (!suppressRefreshOfInferredProjects) {
                 this.refreshInferredProjects();
