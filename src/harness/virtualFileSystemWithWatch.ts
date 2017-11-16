@@ -144,9 +144,9 @@ interface Array<T> {}`
     }
 
     export function checkFileNames(caption: string, actualFileNames: ReadonlyArray<string>, expectedFileNames: string[]) {
-        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${expectedFileNames}, got ${actualFileNames}`);
+        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected:\r\n${expectedFileNames.join("\r\n")}\r\ngot: ${actualFileNames.join("\r\n")}`);
         for (const f of expectedFileNames) {
-            assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
+            assert.equal(true, contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
         }
     }
 
