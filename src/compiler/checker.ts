@@ -15790,10 +15790,10 @@ namespace ts {
                 return false;
             }
 
-            // If spread arguments are present, check that they correspond to a rest parameter. If so, no
-            // further checking is necessary.
+            // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
             if (spreadArgIndex >= 0) {
-                return isRestParameterIndex(signature, spreadArgIndex) || spreadArgIndex >= signature.minArgumentCount;
+                return isRestParameterIndex(signature, spreadArgIndex) ||
+                    signature.minArgumentCount <= spreadArgIndex && spreadArgIndex < signature.parameters.length;
             }
 
             // Too many arguments implies incorrect arity.
@@ -16501,7 +16501,10 @@ namespace ts {
                 const paramCount = hasRestParameter ? min :
                     min < max ? min + "-" + max :
                     min;
-                const argCount = args.length - (hasSpreadArgument ? 1 : 0);
+                let argCount = args.length;
+                if (argCount <= max && hasSpreadArgument) {
+                    argCount--;
+                }
                 const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_a_minimum_of_1 :
                     hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
                     hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_a_minimum_of_1 :
