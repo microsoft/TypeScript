@@ -272,10 +272,7 @@ namespace ts.server {
             readonly typingSafeListLocation: string,
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
-            /**
-             * If undefined, event-related work will be suppressed.
-             */
-            private eventSender: EventSender | undefined) {
+            private eventSender: EventSender) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -583,7 +580,7 @@ namespace ts.server {
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents ? eventSender : undefined);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, eventSender);
 
             super({
                 host,
