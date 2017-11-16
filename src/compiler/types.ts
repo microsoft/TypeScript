@@ -1852,14 +1852,14 @@ namespace ts {
 
     export interface ForInStatement extends IterationStatement {
         kind: SyntaxKind.ForInStatement;
-        initializer: ForInitializer | undefined;
+        initializer: ForInitializer;
         expression: Expression;
     }
 
     export interface ForOfStatement extends IterationStatement {
         kind: SyntaxKind.ForOfStatement;
         awaitModifier?: AwaitKeywordToken;
-        initializer: ForInitializer | undefined;
+        initializer: ForInitializer;
         expression: Expression;
     }
 

@@ -13055,7 +13055,7 @@ namespace ts {
                     // to the constructor in the initializer, we will need to substitute that
                     // binding with an alias as the class name is not in scope.
                     let container = getThisContainer(node, /*includeArrowFunctions*/ false);
-                    while (container !== undefined) {
+                    while (container.kind !== SyntaxKind.SourceFile) {
                         if (container.parent === declaration) {
                             if (container.kind === SyntaxKind.PropertyDeclaration && hasModifier(container, ModifierFlags.Static)) {
                                 getNodeLinks(declaration).flags! |= NodeCheckFlags.ClassWithConstructorReference;

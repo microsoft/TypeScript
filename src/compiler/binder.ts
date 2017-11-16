@@ -119,7 +119,7 @@ namespace ts {
         let currentTrueTarget: FlowLabel | undefined;
         let currentFalseTarget: FlowLabel | undefined;
         let preSwitchCaseFlow: FlowNode | undefined;
-        let activeLabels: ActiveLabel[];
+        let activeLabels: ActiveLabel[] | undefined;
         let hasExplicitReturn: boolean;
 
         // state used for emit helpers
@@ -259,7 +259,10 @@ namespace ts {
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
                     return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
                 }
-                return getEscapedTextOfIdentifierOrLiteral(<Identifier | StringLiteral | NumericLiteral>name); // TODO: GH#18217
+                if (isBindingPattern(name)) {
+                    return undefined;
+                }
+                return getEscapedTextOfIdentifierOrLiteral(name);
             }
             switch (node.kind) {
                 case SyntaxKind.Constructor:
@@ -301,7 +304,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return (node as NamedDeclaration).name ? declarationNameToString((node as NamedDeclaration).name!) : unescapeLeadingUnderscores(getDeclarationName(node)!);
+            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(getDeclarationName(node)!); // TODO: GH#18217
         }
 
         /**
@@ -369,9 +372,8 @@ namespace ts {
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
                     else {
-                        const { name: nameNode } = node as NamedDeclaration;
-                        if (nameNode) {
-                            nameNode.parent = node;
+                        if (isNamedDeclaration(node)) {
+                            node.name.parent = node;
                         }
 
                         // Report errors every position with duplicate declaration
@@ -519,7 +521,7 @@ namespace ts {
                 }
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
-                activeLabels = undefined!;
+                activeLabels = undefined;
                 hasExplicitReturn = false;
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
@@ -845,14 +847,15 @@ namespace ts {
         }
 
         function isStatementCondition(node: Node) {
-            switch (node.parent.kind) {
+            const parent = node.parent;
+            switch (parent.kind) {
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.DoStatement:
-                    return (<IfStatement | WhileStatement | DoStatement>node.parent).expression === node;
+                    return (<IfStatement | WhileStatement | DoStatement>parent).expression === node;
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ConditionalExpression:
-                    return (<ForStatement | ConditionalExpression>node.parent).condition === node;
+                    return (<ForStatement | ConditionalExpression>parent).condition === node;
             }
             return false;
         }
@@ -963,7 +966,7 @@ namespace ts {
             bind(node.expression);
             addAntecedent(postLoopLabel, currentFlow);
             bind(node.initializer);
-            if (node.initializer!.kind !== SyntaxKind.VariableDeclarationList) {
+            if (node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
                 bindAssignmentTargetFlow(<Expression>node.initializer);
             }
             bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
@@ -1171,7 +1174,7 @@ namespace ts {
         }
 
         function popActiveLabel() {
-            activeLabels.pop();
+            activeLabels!.pop();
         }
 
         function bindLabeledStatement(node: LabeledStatement): void {
@@ -1579,7 +1582,7 @@ namespace ts {
                         }
                     }
 
-                    const symbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes)!;
+                    const symbol = declareModuleMember(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
 
                     if (pattern) {
                         (file.patternAmbientModules || (file.patternAmbientModules = [])).push({ pattern, symbol });
@@ -1616,7 +1619,7 @@ namespace ts {
             // We do that by making an anonymous type literal symbol, and then setting the function
             // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable
             // from an actual type literal symbol you would have gotten had you used the long form.
-            const symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node)!);
+            const symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node)!); // TODO: GH#18217
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
 
             const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
@@ -2304,7 +2307,7 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
             Debug.assert(isInJavaScriptFile(node));
-            const container = getThisContainer(node, /*includeArrowFunctions*/ false)!; // TODO: GH#18217
+            const container = getThisContainer(node, /*includeArrowFunctions*/ false); // TODO: GH#18217
             switch (container!.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -2378,6 +2381,7 @@ namespace ts {
             let targetSymbol = lookupSymbolForName(functionName);
 
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
+                // TODO: GH#18217 Casts should not be necessary, see comment on isDeclarationOfFunctionOrClassExpression
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer!.symbol;
             }
 

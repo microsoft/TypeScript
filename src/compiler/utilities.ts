@@ -1026,11 +1026,12 @@ namespace ts {
         return findAncestor(node.parent, isClassLike);
     }
 
-    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node | undefined {
+    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
+        Debug.assert(node.kind !== SyntaxKind.SourceFile);
         while (true) {
             node = node.parent;
             if (!node) {
-                return undefined;
+                throw Debug.fail(); // If we never pass in a SourceFile, this should be unreachable, since we'll stop when we reach that.
             }
             switch (node.kind) {
                 case SyntaxKind.ComputedPropertyName:
@@ -1447,10 +1448,11 @@ namespace ts {
      * Returns true if the node is a variable declaration whose initializer is a function expression.
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
+    // TODO: Would like to return `s is Symbol & { valueDeclaration: { initializer: Expression } }` but it causes long (at least 5min) compile times
+    export function isDeclarationOfFunctionOrClassExpression(s: Symbol): boolean {
         if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
             const declaration = s.valueDeclaration as VariableDeclaration;
-            return declaration.initializer && (declaration.initializer.kind === SyntaxKind.FunctionExpression || declaration.initializer.kind === SyntaxKind.ClassExpression);
+            return !!declaration.initializer && (declaration.initializer.kind === SyntaxKind.FunctionExpression || declaration.initializer.kind === SyntaxKind.ClassExpression);
         }
         return false;
     }
@@ -4215,6 +4217,10 @@ namespace ts {
         return declaration.name || nameForNamelessJSDocTypedef(declaration as JSDocTypedefTag);
     }
 
+    export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName } {
+        return !!(node as NamedDeclaration).name;
+    }
+
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
         if (!declaration) {
             return undefined;
@@ -5800,7 +5806,7 @@ namespace ts {
 
     /** True if has jsdoc nodes attached to it. */
     /* @internal */
-    // TODO: GH#19856
+    // TODO: GH#19856 Would like to return `node is Node & { jsDoc: JSDoc[] }` but it causes long compile times
     export function hasJSDocNodes(node: Node): node is HasJSDoc {
         const { jsDoc } = node as JSDocContainer;
         return !!jsDoc && jsDoc.length > 0;

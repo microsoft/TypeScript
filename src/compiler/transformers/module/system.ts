@@ -1219,7 +1219,7 @@ namespace ts {
 
             node = updateFor(
                 node,
-                visitForInitializer(node.initializer),
+                node.initializer && visitForInitializer(node.initializer),
                 visitNode(node.condition, destructuringAndImportCallVisitor, isExpression),
                 visitNode(node.incrementor, destructuringAndImportCallVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement)
@@ -1286,11 +1286,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitForInitializer(node: ForInitializer | undefined): ForInitializer | undefined {
-            if (!node) {
-                return node;
-            }
-
+        function visitForInitializer(node: ForInitializer): ForInitializer {
             if (shouldHoistForInitializer(node)) {
                 let expressions: Expression[] | undefined;
                 for (const variable of node.declarations) {

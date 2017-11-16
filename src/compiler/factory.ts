@@ -1484,7 +1484,7 @@ namespace ts {
             : node;
     }
 
-    export function createForIn(initializer: ForInitializer | undefined, expression: Expression, statement: Statement) {
+    export function createForIn(initializer: ForInitializer, expression: Expression, statement: Statement) {
         const node = <ForInStatement>createSynthesizedNode(SyntaxKind.ForInStatement);
         node.initializer = initializer;
         node.expression = expression;
@@ -1492,7 +1492,7 @@ namespace ts {
         return node;
     }
 
-    export function updateForIn(node: ForInStatement, initializer: ForInitializer | undefined, expression: Expression, statement: Statement) {
+    export function updateForIn(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement) {
         return node.initializer !== initializer
             || node.expression !== expression
             || node.statement !== statement
@@ -1500,7 +1500,7 @@ namespace ts {
             : node;
     }
 
-    export function createForOf(awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer | undefined, expression: Expression, statement: Statement) {
+    export function createForOf(awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer, expression: Expression, statement: Statement) {
         const node = <ForOfStatement>createSynthesizedNode(SyntaxKind.ForOfStatement);
         node.awaitModifier = awaitModifier;
         node.initializer = initializer;
@@ -1509,7 +1509,7 @@ namespace ts {
         return node;
     }
 
-    export function updateForOf(node: ForOfStatement, awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer | undefined, expression: Expression, statement: Statement) {
+    export function updateForOf(node: ForOfStatement, awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer, expression: Expression, statement: Statement) {
         return node.awaitModifier !== awaitModifier
             || node.initializer !== initializer
             || node.expression !== expression
