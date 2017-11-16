@@ -7622,6 +7622,17 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTupleTypeElementTypes(type: Type): Type[] {
+            Debug.assert(isTupleLikeType(type));
+            const types = [];
+            let idx = 0;
+            let symbol: Symbol;
+            while (symbol = getPropertyOfObjectType(type, idx++ + "" as __String)) {
+                types.push(getTypeOfSymbol(symbol));
+            }
+            return types;
+        }
+
         interface TypeSet extends Array<Type> {
             containsAny?: boolean;
             containsUndefined?: boolean;
@@ -16388,7 +16399,28 @@ namespace ts {
                 return node.attributes.properties.length > 0 ? [node.attributes] : emptyArray;
             }
             else {
-                return node.arguments || emptyArray;
+                return flatMap(node.arguments || emptyArray, (arg: Expression) => {
+                    if (arg.kind !== SyntaxKind.SpreadElement) {
+                        return arg;
+                    }
+                    const spread = (arg as SpreadElement).expression;
+                    if (spread.kind === SyntaxKind.ArrayLiteralExpression) {
+                        return (spread as ArrayLiteralExpression).elements;
+                    }
+                    const type = getApparentType(checkExpression(spread));
+                    if (isTupleLikeType(type)) {
+                        const types = getTupleTypeElementTypes(type);
+                        // hack to make expression nodes for the elements: create element access nodes
+                        return map(types, (el: Type, i: number) => {
+                            const elNode = el && createElementAccess(spread, i);
+                            elNode.parent = spread.parent;
+                            return elNode;
+                        });
+                    }
+                    else {
+                        return arg;
+                    }
+                });
             }
         }
 

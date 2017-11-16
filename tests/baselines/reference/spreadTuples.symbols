@@ -1,0 +1,14 @@
+=== tests/cases/compiler/spreadTuples.ts ===
+function foo(x: number, y: number, z: number) {}
+>foo : Symbol(foo, Decl(spreadTuples.ts, 0, 0))
+>x : Symbol(x, Decl(spreadTuples.ts, 0, 13))
+>y : Symbol(y, Decl(spreadTuples.ts, 0, 23))
+>z : Symbol(z, Decl(spreadTuples.ts, 0, 34))
+
+var args: [0, 1, 2] = [0, 1, 2];
+>args : Symbol(args, Decl(spreadTuples.ts, 1, 3))
+
+foo(...args);
+>foo : Symbol(foo, Decl(spreadTuples.ts, 0, 0))
+>args : Symbol(args, Decl(spreadTuples.ts, 1, 3))
+
