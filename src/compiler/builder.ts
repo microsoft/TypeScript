@@ -334,8 +334,8 @@ namespace ts {
         /**
          * Returns the result with affected file
          */
-        function toAffectedFileResult<T>(result: T, affectedFile?: SourceFile): AffectedFileResult<T> {
-            return { result, affectedFile };
+        function toAffectedFileResult<T>(result: T, affected: SourceFile | Program): AffectedFileResult<T> {
+            return { result, affected };
         }
 
         /**
@@ -350,7 +350,10 @@ namespace ts {
             }
             else if (affectedFile === programOfThisState) {
                 // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
-                return toAffectedFileResult(programOfThisState.emit(/*targetSourceFile*/ undefined, writeFileCallback, cancellationToken, /*emitOnlyDtsFiles*/ false, customTransformers));
+                return toAffectedFileResult(
+                    programOfThisState.emit(/*targetSourceFile*/ undefined, writeFileCallback, cancellationToken, /*emitOnlyDtsFiles*/ false, customTransformers),
+                    programOfThisState
+                );
             }
 
             // Emit the affected file
@@ -374,7 +377,10 @@ namespace ts {
                 }
                 else if (affectedFile === programOfThisState) {
                     // When whole program is affected, get all semantic diagnostics (eg when --out or --outFile is specified)
-                    return toAffectedFileResult(programOfThisState.getSemanticDiagnostics(/*targetSourceFile*/ undefined, cancellationToken));
+                    return toAffectedFileResult(
+                        programOfThisState.getSemanticDiagnostics(/*targetSourceFile*/ undefined, cancellationToken),
+                        programOfThisState
+                    );
                 }
 
                 // Get diagnostics for the affected file if its not ignored
@@ -693,7 +699,7 @@ namespace ts {
         text: string;
     }
 
-    export type AffectedFileResult<T> = { result: T; affectedFile?: SourceFile; } | undefined;
+    export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
 
     export interface BuilderOptions {
         getCanonicalFileName: (fileName: string) => string;

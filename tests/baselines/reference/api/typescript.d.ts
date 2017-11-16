@@ -3720,7 +3720,7 @@ declare namespace ts {
     }
     type AffectedFileResult<T> = {
         result: T;
-        affectedFile?: SourceFile;
+        affected: SourceFile | Program;
     } | undefined;
     interface BuilderOptions {
         getCanonicalFileName: (fileName: string) => string;
