@@ -38,7 +38,7 @@ namespace ts {
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
                 new TokenObject(kind, pos, end);
         node.parent = parent;
-        node.flags = parent.flags & NodeFlags.ContextFlags; // TODO: GH#18217
+        node.flags = parent.flags & NodeFlags.ContextFlags;
         return node;
     }
 
@@ -58,7 +58,7 @@ namespace ts {
             this.end = end;
             this.flags = NodeFlags.None;
             this.transformFlags = undefined!; // TODO: GH#18217
-            this.parent = undefined!; // TODO: GH#18217
+            this.parent = undefined!;
             this.kind = kind;
         }
 
@@ -191,7 +191,7 @@ namespace ts {
             if (pos < this.end) {
                 this.addSyntheticNodes(children, pos, this.end);
             }
-            scanner.setText(undefined!);  // TODO: GH#18217
+            scanner.setText(undefined);
             this._children = children;
         }
 
@@ -2271,7 +2271,7 @@ namespace ts {
 
     /* @internal */
     export function getPropertySymbolsFromType(type: Type, propName: PropertyName) {
-        const name = unescapeLeadingUnderscores(getTextOfPropertyName(propName)!); // TODO: GH#18217
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(propName));
         if (name && type) {
             const result: Symbol[] = [];
             const symbol = type.getProperty(name);

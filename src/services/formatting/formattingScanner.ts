@@ -48,7 +48,7 @@ namespace ts.formatting {
         });
 
         lastTokenInfo = undefined;
-        scanner.setText(undefined!); // TODO: GH#18217
+        scanner.setText(undefined);
 
         return res;
 

@@ -4219,7 +4219,7 @@ namespace ts {
             const members = createSymbolTable();
             const names = createUnderscoreEscapedMap<true>();
             for (const name of properties) {
-                names.set(getTextOfPropertyName(name)!, true); // TODO: GH#18217
+                names.set(getTextOfPropertyName(name), true);
             }
             for (const prop of getPropertiesOfType(source)) {
                 const inNamesToRemove = names.has(prop.escapedName);
@@ -4277,7 +4277,7 @@ namespace ts {
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                     // or otherwise the type of the string index signature.
-                    const text = getTextOfPropertyName(name)!; // TODO: GH#18217
+                    const text = getTextOfPropertyName(name);
 
                     const declaredType = getTypeOfPropertyOfType(parentType, text);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
@@ -4524,7 +4524,7 @@ namespace ts {
                     return;
                 }
 
-                const text = getTextOfPropertyName(name)!; // TODO: GH#18217
+                const text = getTextOfPropertyName(name);
                 const flags = SymbolFlags.Property | (e.initializer ? SymbolFlags.Optional : 0);
                 const symbol = createSymbol(flags, text);
                 symbol.type = getTypeFromBindingElement(e, includePatternInType, reportErrors);
@@ -11897,7 +11897,7 @@ namespace ts {
         }
 
         function getTypeOfDestructuredProperty(type: Type, name: PropertyName) {
-            const text = getTextOfPropertyName(name)!; // TODO: GH#18217
+            const text = getTextOfPropertyName(name);
             return getTypeOfPropertyOfType(type, text) ||
                 isNumericLiteralName(text) && getIndexTypeOfType(type, IndexKind.Number) ||
                 getIndexTypeOfType(type, IndexKind.String) ||
@@ -15799,8 +15799,7 @@ namespace ts {
         }
 
         function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
-            if (prop &&
-                noUnusedIdentifiers &&
+            if (noUnusedIdentifiers &&
                 (prop.flags & SymbolFlags.ClassMember) &&
                 prop.valueDeclaration && hasModifier(prop.valueDeclaration, ModifierFlags.Private)
                 && !(nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly))) {
@@ -18342,7 +18341,7 @@ namespace ts {
                     return undefined;
                 }
 
-                const text = getTextOfPropertyName(name)!; // TODO: GH#18217
+                const text = getTextOfPropertyName(name);
                 const type = isTypeAny(objectLiteralType)
                     ? objectLiteralType
                     : getTypeOfPropertyOfType(objectLiteralType, text) ||
@@ -21361,11 +21360,15 @@ namespace ts {
                 // check private/protected variable access
                 const parent = <VariableLikeDeclaration>(<BindingPattern>node.parent).parent;
                 const parentType = getTypeForBindingElementParent(parent)!;
-                const name = node.propertyName || <Identifier>node.name;
-                const property = getPropertyOfType(parentType, getTextOfPropertyName(name)!)!;
-                markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                if (parent.initializer && property) {
-                    checkPropertyAccessibility(parent, parent.initializer, parentType, property);
+                const name = node.propertyName || node.name;
+                if (isPropertyName(name)) {
+                    const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
+                    if (property) {
+                        markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
+                        if (parent.initializer) {
+                            checkPropertyAccessibility(parent, parent.initializer, parentType, property);
+                        }
+                    }
                 }
             }
 
@@ -22740,7 +22743,7 @@ namespace ts {
                 error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
             }
             else {
-                const text = getTextOfPropertyName(<PropertyName>member.name)!; // TODO: GH#18217
+                const text = getTextOfPropertyName(<PropertyName>member.name);
                 if (isNumericLiteralName(text) && !isInfinityOrNaNString(text)) {
                     error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                 }

@@ -322,7 +322,7 @@ namespace ts {
                 }
             }
 
-            scanner.setText(undefined!); // TODO: GH#18217
+            scanner.setText(undefined);
         }
 
         if (readImportFiles) {

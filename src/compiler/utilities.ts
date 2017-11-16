@@ -556,7 +556,7 @@ namespace ts {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
-    export function getTextOfPropertyName(name: PropertyName): __String | undefined {
+    export function getTextOfPropertyName(name: PropertyName): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 return (<Identifier>name).escapedText;
@@ -567,12 +567,13 @@ namespace ts {
                 if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression)) {
                     return escapeLeadingUnderscores((<LiteralExpression>(<ComputedPropertyName>name).expression).text);
                 }
+                return undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
+            default:
+                Debug.assertNever(name);
         }
-
-        return undefined;
     }
 
-    export function entityNameToString(name: EntityNameOrEntityNameExpression): string | undefined {
+    export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 return getFullWidth(name) === 0 ? idText(name) : getTextOfNode(name);
@@ -580,6 +581,10 @@ namespace ts {
                 return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
                 return entityNameToString(name.expression) + "." + entityNameToString(name.name!);
+            case SyntaxKind.ParenthesizedExpression:
+                return undefined!; // TODO: GH#18217 Handle ParenthesizedExpression
+            default:
+                throw Debug.assertNever(name);
         }
     }
 
