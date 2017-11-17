@@ -88,6 +88,8 @@ var watchGuardSources = filesFromConfig(path.join(serverDirectory, "watchGuard/t
 var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"))
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
 
+var typesMapOutputPath = path.join(builtLocalDirectory, 'typesMap.json');
+
 var harnessCoreSources = [
     "harness.ts",
     "virtualFileSystem.ts",
@@ -423,6 +425,7 @@ var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
 var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
 var buildProtocolDts = path.join(builtLocalDirectory, "protocol.d.ts");
 var typescriptServicesDts = path.join(builtLocalDirectory, "typescriptServices.d.ts");
+var typesMapJson = path.join(builtLocalDirectory, "typesMap.json");
 
 file(buildProtocolTs);
 
@@ -587,6 +590,16 @@ var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources).concat(servicesSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], preserveConstEnums: true, lib: "es6" });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
+file(typesMapOutputPath, function() {
+    var content = fs.readFileSync(path.join(serverDirectory, 'typesMap.json'));
+    // Validate that it's valid JSON
+    try {
+        JSON.parse(content.toString());
+    } catch (e) {
+        console.log("Parse error in typesMap.json: " + e);
+    }
+    fs.writeFileSync(typesMapOutputPath, content);
+});
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
@@ -609,7 +622,7 @@ compileFile(
 
 // Local target to build the language service server library
 desc("Builds language service server library");
-task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile]);
+task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile, typesMapOutputPath]);
 
 desc("Emit the start of the build fold");
 task("build-fold-start", [], function () {
