@@ -1227,9 +1227,6 @@ namespace ts {
             if (isSourceFileJavaScript(sourceFile)) {
                 if (!sourceFile.additionalSyntacticDiagnostics) {
                     sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
-                    if (isCheckJsEnabledForFile(sourceFile, options)) {
-                        sourceFile.additionalSyntacticDiagnostics = concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.jsDocDiagnostics);
-                    }
                 }
                 return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
@@ -1283,8 +1280,10 @@ namespace ts {
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
-
-                const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                let diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                if (isCheckJsEnabledForFile(sourceFile, options)) {
+                    diagnostics = concatenate(diagnostics, sourceFile.jsDocDiagnostics);
+                }
                 return filter(diagnostics, shouldReportDiagnostic);
             });
         }
