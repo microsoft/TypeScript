@@ -22236,7 +22236,7 @@ namespace ts {
             }
             const constructor = findConstructorDeclaration(node);
             for (const member of node.members) {
-                if (member.kind === SyntaxKind.PropertyDeclaration && !(<PropertyDeclaration>member).initializer) {
+                if (member.kind === SyntaxKind.PropertyDeclaration && !hasModifier(member, ModifierFlags.Static) && !(<PropertyDeclaration>member).initializer) {
                     const propName = (<PropertyDeclaration>member).name;
                     if (isIdentifier(propName)) {
                         const type = getTypeOfSymbol(getSymbolOfNode(member));
