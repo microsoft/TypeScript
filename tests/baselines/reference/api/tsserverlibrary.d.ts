@@ -6909,8 +6909,9 @@ declare namespace ts.server {
     type CommandNames = protocol.CommandTypes;
     const CommandNames: any;
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
+    type Event = <T>(body: T, eventName: string) => void;
     interface EventSender {
-        event: <T>(body: T, eventName: string) => void;
+        event: Event;
     }
     interface SessionOptions {
         host: ServerHost;
@@ -6925,10 +6926,6 @@ declare namespace ts.server {
          * If falsy, all events are suppressed.
          */
         canUseEvents: boolean;
-        /**
-         * An optional callback overriding the default behavior for sending messages.
-         */
-        eventSender?: EventSender;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
@@ -6941,13 +6938,13 @@ declare namespace ts.server {
         private changeSeq;
         private currentRequestId;
         private errorCheck;
-        private host;
+        protected host: ServerHost;
         private readonly cancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
-        private byteLength;
+        protected byteLength: (buf: string, encoding?: string) => number;
         private hrtime;
         protected logger: Logger;
-        private canUseEvents;
+        protected canUseEvents: boolean;
         private eventHandler;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent(requestId);
