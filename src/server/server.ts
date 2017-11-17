@@ -515,23 +515,6 @@ namespace ts.server {
         }
     }
 
-    // export class DefaultEventSender implements EventSender {
-    //     constructor(protected host: ServerHost,
-    //         protected byteLength: (buf: string, encoding?: string) => number,
-    //         protected logger: Logger,
-    //         protected canUseEvents: boolean) { }
-
-    //     public event = <T>(body: T, eventName: string) => {
-    //         const ev: protocol.Event = {
-    //             seq: 0,
-    //             type: "event",
-    //             event: eventName,
-    //             body
-    //         };
-    //         defaultSend(this.host, this.byteLength, this.logger, this.canUseEvents, ev);
-    //     }
-    // }
-
     class IOSession extends Session {
         private eventPort: number;
         private eventSocket: NodeSocket | undefined;
