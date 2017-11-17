@@ -34,7 +34,7 @@ namespace ts.codefix {
         host: LanguageServiceHost;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
-        getCanonicalFileName(fileName: string): string;
+        getCanonicalFileName: GetCanonicalFileName;
         cachedImportDeclarations?: ImportDeclarationMap;
     }
 
@@ -313,7 +313,7 @@ namespace ts.codefix {
         }
     }
 
-    function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbol: Symbol, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
+    export function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbol: Symbol, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
         const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
         const sourceDirectory = getDirectoryPath(sourceFile.fileName);
 
@@ -322,7 +322,7 @@ namespace ts.codefix {
             tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
             tryGetModuleNameFromBaseUrl(options, moduleFileName, getCanonicalFileName) ||
             options.rootDirs && tryGetModuleNameFromRootDirs(options.rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
-            removeFileExtension(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName));
+            removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
@@ -343,7 +343,7 @@ namespace ts.codefix {
         }
 
         const relativeNameWithIndex = removeFileExtension(relativeName);
-        relativeName = removeExtensionAndIndexPostFix(relativeName);
+        relativeName = removeExtensionAndIndexPostFix(relativeName, options);
 
         if (options.paths) {
             for (const key in options.paths) {
@@ -393,7 +393,7 @@ namespace ts.codefix {
         return roots && firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
-                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1));
+                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), options);
             }
         });
     }
@@ -523,24 +523,21 @@ namespace ts.codefix {
         return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
     }
 
-    function getPathRelativeToRootDirs(path: string, rootDirs: ReadonlyArray<string>, getCanonicalFileName: (fileName: string) => string): string | undefined {
+    function getPathRelativeToRootDirs(path: string, rootDirs: ReadonlyArray<string>, getCanonicalFileName: GetCanonicalFileName): string | undefined {
         return firstDefined(rootDirs, rootDir => getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName));
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string) {
-        fileName = removeFileExtension(fileName);
-        if (endsWith(fileName, "/index")) {
-            fileName = fileName.substr(0, fileName.length - 6/* "/index".length */);
-        }
-        return fileName;
+    function removeExtensionAndIndexPostFix(fileName: string, options: CompilerOptions): string {
+        const noExtension = removeFileExtension(fileName);
+        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs ? removeSuffix(noExtension, "/index") : noExtension;
     }
 
-    function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string): string | undefined {
+    function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
         const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
     }
 
-    function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string) {
+    function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
         const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
     }

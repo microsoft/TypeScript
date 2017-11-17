@@ -2033,7 +2033,7 @@ namespace ts {
         }
     }
 
-    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean) {
+    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, isAbsolutePathAnUrl: boolean) {
         const pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         const directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
@@ -2167,6 +2167,10 @@ namespace ts {
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
+    export function removeSuffix(str: string, suffix: string): string {
+        return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
     }
 
     export function stringContains(str: string, substring: string): boolean {
@@ -2819,7 +2823,8 @@ namespace ts {
         }
     }
 
-    export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): (fileName: string) => string {
+    export type GetCanonicalFileName = (fileName: string) => string;
+    export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
         return useCaseSensitiveFileNames
             ? ((fileName) => fileName)
             : ((fileName) => fileName.toLowerCase());
