@@ -2284,7 +2284,13 @@ namespace ts.server {
                         }
                     }
                     if (!exclude) {
-                        filesToKeep.push(proj.rootFiles[i]);
+                        // Exclude any minified files that get this far
+                        if (/^.+[\.-]min\.js$/.test(normalizedNames[i])) {
+                            excludedFiles.push(normalizedNames[i]);
+                        }
+                        else {
+                            filesToKeep.push(proj.rootFiles[i]);
+                        }
                     }
                 }
             }
