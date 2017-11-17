@@ -161,8 +161,8 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText: "0",
             source: getSourceFromOrigin(origin),
-            hasAction: trueOrUndef(origin !== undefined),
-            isRecommended: trueOrUndef(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
+            hasAction: trueOrUndefined(origin !== undefined),
+            isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
         };
     }
 
@@ -171,7 +171,7 @@ namespace ts.Completions {
             !!(localSymbol.flags & SymbolFlags.ExportValue) && checker.getExportSymbolOfSymbol(localSymbol) === recommendedCompletion;
     }
 
-    function trueOrUndef(b: boolean): true | undefined {
+    function trueOrUndefined(b: boolean): true | undefined {
         return b ? true : undefined;
     }
 
@@ -551,11 +551,8 @@ namespace ts.Completions {
 
     function getFirstSymbolInChain(symbol: Symbol, enclosingDeclaration: Node, checker: TypeChecker): Symbol | undefined {
         const chain = checker.getAccessibleSymbolChain(symbol, enclosingDeclaration, /*meaning*/ SymbolFlags.All, /*useOnlyExternalAliasing*/ false);
-        return chain
-            ? first(chain)
-            : isModuleSymbol(symbol.parent)
-            ? symbol
-            : symbol.parent && getFirstSymbolInChain(symbol.parent, enclosingDeclaration, checker);
+        if (chain) return first(chain);
+        return isModuleSymbol(symbol.parent) ? symbol : symbol.parent && getFirstSymbolInChain(symbol.parent, enclosingDeclaration, checker);
     }
 
     function isModuleSymbol(symbol: Symbol): boolean {
