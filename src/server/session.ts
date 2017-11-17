@@ -239,25 +239,12 @@ namespace ts.server {
         }
     }
 
+    export type Event = <T>(body: T, eventName: string) => void;
+
     export interface EventSender {
-        event: <T>(body: T, eventName: string) => void;
+        event: Event;
     }
 
-    /** @internal */
-    export function defaultSend(
-        host: ServerHost,
-        byteLength: (buf: string, encoding?: string) => number,
-        logger: Logger,
-        canUseEvents: boolean,
-        msg: protocol.Message) {
-        if (msg.type === "event" && !canUseEvents) {
-            if (logger.hasLevel(LogLevel.verbose)) {
-                logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
-            }
-            return;
-        }
-        host.write(formatMessage(msg, logger, byteLength, host.newLine));
-    }
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -271,10 +258,6 @@ namespace ts.server {
          * If falsy, all events are suppressed.
          */
         canUseEvents: boolean;
-        /**
-         * An optional callback overriding the default behavior for sending messages.
-         */
-        eventSender?: EventSender;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
 
@@ -291,14 +274,14 @@ namespace ts.server {
         private currentRequestId: number;
         private errorCheck: MultistepOperation;
 
-        private host: ServerHost;
+        protected host: ServerHost;
         private readonly cancellationToken: ServerCancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
-        private byteLength: (buf: string, encoding?: string) => number;
+        protected byteLength: (buf: string, encoding?: string) => number;
         private hrtime: (start?: number[]) => number[];
         protected logger: Logger;
 
-        private canUseEvents: boolean;
+        protected canUseEvents: boolean;
         private eventHandler: ProjectServiceEventHandler;
 
         constructor(opts: SessionOptions) {
@@ -311,10 +294,6 @@ namespace ts.server {
             this.canUseEvents = opts.canUseEvents;
 
             const { throttleWaitMilliseconds } = opts;
-
-            if (opts.eventSender) {
-                this.event = opts.eventSender.event;
-            }
 
             this.eventHandler = this.canUseEvents
                 ? opts.eventHandler || (event => this.defaultEventHandler(event))
@@ -411,7 +390,13 @@ namespace ts.server {
         }
 
         public send(msg: protocol.Message) {
-            defaultSend(this.host, this.byteLength, this.logger, this.canUseEvents, msg);
+            if (msg.type === "event" && !this.canUseEvents) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                }
+                return;
+            }
+            this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }
 
         public event<T>(body: T, eventName: string): void {

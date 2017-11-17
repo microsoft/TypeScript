@@ -272,7 +272,7 @@ namespace ts.server {
             readonly typingSafeListLocation: string,
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
-            private eventSender: EventSender) {
+            private event: Event) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -304,8 +304,8 @@ namespace ts.server {
             if (this.installerPidReported) {
                 return;
             }
-            if (this.eventSender && this.installer) {
-                this.eventSender.event({ pid: this.installer.pid }, "typingsInstallerPid");
+            if (this.event && this.installer) {
+                this.event({ pid: this.installer.pid }, "typingsInstallerPid");
                 this.installerPidReported = true;
             }
         }
@@ -416,19 +416,19 @@ namespace ts.server {
                 }
                 case EventInitializationFailed:
                 {
-                    if (!this.eventSender) {
+                    if (!this.event) {
                         break;
                     }
                     const body: protocol.TypesInstallerInitializationFailedEventBody = {
                         message: response.message
                     };
                     const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
-                    this.eventSender.event(body, eventName);
+                    this.event(body, eventName);
                     break;
                 }
                 case EventBeginInstallTypes:
                 {
-                    if (!this.eventSender) {
+                    if (!this.event) {
                         break;
                     }
                     const body: protocol.BeginInstallTypesEventBody = {
@@ -436,12 +436,12 @@ namespace ts.server {
                         packages: response.packagesToInstall,
                     };
                     const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
-                    this.eventSender.event(body, eventName);
+                    this.event(body, eventName);
                     break;
                 }
                 case EventEndInstallTypes:
                 {
-                    if (!this.eventSender) {
+                    if (!this.event) {
                         break;
                     }
                     if (this.telemetryEnabled) {
@@ -454,7 +454,7 @@ namespace ts.server {
                             }
                         };
                         const eventName: protocol.TelemetryEventName = "telemetry";
-                        this.eventSender.event(body, eventName);
+                        this.event(body, eventName);
                     }
 
                     const body: protocol.EndInstallTypesEventBody = {
@@ -463,7 +463,7 @@ namespace ts.server {
                         success: response.installSuccess,
                     };
                     const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
-                    this.eventSender.event(body, eventName);
+                    this.event(body, eventName);
                     break;
                 }
                 case ActionInvalidate:
@@ -495,8 +495,8 @@ namespace ts.server {
 
                     this.projectService.updateTypingsForProject(response);
 
-                    if (this.eventSender) {
-                        this.eventSender.event(response, "setTypings");
+                    if (this.event) {
+                        this.event(response, "setTypings");
                     }
 
                     break;
@@ -515,72 +515,49 @@ namespace ts.server {
         }
     }
 
-    export class DefaultEventSender implements EventSender {
-        constructor(protected host: ServerHost,
-            protected byteLength: (buf: string, encoding?: string) => number,
-            protected logger: Logger,
-            protected canUseEvents: boolean) { }
+    // export class DefaultEventSender implements EventSender {
+    //     constructor(protected host: ServerHost,
+    //         protected byteLength: (buf: string, encoding?: string) => number,
+    //         protected logger: Logger,
+    //         protected canUseEvents: boolean) { }
 
-        public event = <T>(body: T, eventName: string) => {
-            const ev: protocol.Event = {
-                seq: 0,
-                type: "event",
-                event: eventName,
-                body
-            };
-            defaultSend(this.host, this.byteLength, this.logger, this.canUseEvents, ev);
-        }
-    }
-
-    class SocketEventSender implements EventSender {
-        private eventSocket: NodeSocket | undefined;
-        private socketEventQueue: { body: any, eventName: string }[] | undefined;
-
-        constructor(private host: ServerHost,
-            private byteLength: (buf: string, encoding?: string) => number,
-            private logger: Logger,
-            private eventPort: number) {
-
-            const s = net.connect({ port: this.eventPort }, () => {
-                this.eventSocket = s;
-                if (this.socketEventQueue) {
-                    // flush queue.
-                    for (const event of this.socketEventQueue) {
-                        this.writeToEventSocket(event.body, event.eventName);
-                    }
-                    this.socketEventQueue = undefined;
-                }
-            });
-        }
-
-        public event = <T>(body: T, eventName: string) => {
-            if (!this.eventSocket) {
-                if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
-                }
-                (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
-                return;
-            }
-            else {
-                Debug.assert(this.socketEventQueue === undefined);
-                this.writeToEventSocket(body, eventName);
-            }
-        };
-
-        private writeToEventSocket(body: any, eventName: string): void {
-            this.eventSocket.write(formatMessage({ seq: 0, type: "event", event: eventName, body }, this.logger, this.byteLength, this.host.newLine), "utf8");
-        }
-    }
+    //     public event = <T>(body: T, eventName: string) => {
+    //         const ev: protocol.Event = {
+    //             seq: 0,
+    //             type: "event",
+    //             event: eventName,
+    //             body
+    //         };
+    //         defaultSend(this.host, this.byteLength, this.logger, this.canUseEvents, ev);
+    //     }
+    // }
 
     class IOSession extends Session {
+        private eventPort: number;
+        private eventSocket: NodeSocket | undefined;
+        private socketEventQueue: { body: any, eventName: string }[] | undefined;
+        private constructed: boolean | undefined;
+
         constructor(options: IoSessionOptions) {
             const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
 
-            const eventSender = eventPort && canUseEvents ? new SocketEventSender(host, Buffer.byteLength, logger, eventPort) : new DefaultEventSender(host, Buffer.byteLength, logger, canUseEvents);
+            const event: Event | undefined = canUseEvents ?
+                (body: {}, eventName: string) => {
+                    if (this.constructed) {
+                        this.event(body, eventName);
+                    }
+                    else {
+                        // It is unsafe to dereference `this` before initialization completes,
+                        // so we defer until the next tick.
+                        //
+                        // Construction should finish before the next tick fires, so we do not need to do this recursively.
+                        setImmediate(() => this.event(body, eventName));
+                    }
+                } : undefined;
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, eventSender);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, event);
 
             super({
                 host,
@@ -592,10 +569,51 @@ namespace ts.server {
                 hrtime: process.hrtime,
                 logger,
                 canUseEvents,
-                eventSender,
                 globalPlugins: options.globalPlugins,
                 pluginProbeLocations: options.pluginProbeLocations,
-                allowLocalPluginLoads: options.allowLocalPluginLoads });
+                allowLocalPluginLoads: options.allowLocalPluginLoads
+            });
+
+            this.eventPort = eventPort;
+            if (this.canUseEvents && this.eventPort) {
+                const s = net.connect({ port: this.eventPort }, () => {
+                    this.eventSocket = s;
+                    if (this.socketEventQueue) {
+                        // flush queue.
+                        for (const event of this.socketEventQueue) {
+                            this.writeToEventSocket(event.body, event.eventName);
+                        }
+                        this.socketEventQueue = undefined;
+                    }
+                });
+            }
+
+            this.constructed = true;
+        }
+
+        event<T>(body: T, eventName: string): void {
+            Debug.assert(this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
+
+            if (this.canUseEvents && this.eventPort) {
+                if (!this.eventSocket) {
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
+                        this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
+                    }
+                    (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
+                    return;
+                }
+                else {
+                    Debug.assert(this.socketEventQueue === undefined);
+                    this.writeToEventSocket(body, eventName);
+                }
+            }
+            else {
+                super.event(body, eventName);
+            }
+        }
+
+        private writeToEventSocket(body: any, eventName: string): void {
+            this.eventSocket.write(formatMessage({ seq: 0, type: "event", event: eventName, body }, this.logger, this.byteLength, this.host.newLine), "utf8");
         }
 
         exit() {
