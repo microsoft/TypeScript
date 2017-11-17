@@ -145,3 +145,21 @@ class C8 {
     0: number;
 }
 
+// No strict initialization checks for abstract members
+
+abstract class C9 {
+>C9 : Symbol(C9, Decl(strictPropertyInitialization.ts, 73, 1))
+
+    abstract a: number;
+>a : Symbol(C9.a, Decl(strictPropertyInitialization.ts, 77, 19))
+
+    abstract b: number | undefined;
+>b : Symbol(C9.b, Decl(strictPropertyInitialization.ts, 78, 23))
+
+    abstract c: number | null;
+>c : Symbol(C9.c, Decl(strictPropertyInitialization.ts, 79, 35))
+
+    abstract d?: number;
+>d : Symbol(C9.d, Decl(strictPropertyInitialization.ts, 80, 30))
+}
+

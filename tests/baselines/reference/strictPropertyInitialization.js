@@ -74,6 +74,15 @@ class C8 {
     0: number;
 }
 
+// No strict initialization checks for abstract members
+
+abstract class C9 {
+    abstract a: number;
+    abstract b: number | undefined;
+    abstract c: number | null;
+    abstract d?: number;
+}
+
 
 //// [strictPropertyInitialization.js]
 "use strict";
@@ -131,6 +140,12 @@ var C8 = /** @class */ (function () {
     }
     return C8;
 }());
+// No strict initialization checks for abstract members
+var C9 = /** @class */ (function () {
+    function C9() {
+    }
+    return C9;
+}());
 
 
 //// [strictPropertyInitialization.d.ts]
@@ -173,4 +188,10 @@ declare class C8 {
     a: number;
     "b": number;
     0: number;
+}
+declare abstract class C9 {
+    abstract a: number;
+    abstract b: number | undefined;
+    abstract c: number | null;
+    abstract d?: number;
 }

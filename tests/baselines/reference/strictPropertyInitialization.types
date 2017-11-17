@@ -159,3 +159,22 @@ class C8 {
     0: number;
 }
 
+// No strict initialization checks for abstract members
+
+abstract class C9 {
+>C9 : C9
+
+    abstract a: number;
+>a : number
+
+    abstract b: number | undefined;
+>b : number | undefined
+
+    abstract c: number | null;
+>c : number | null
+>null : null
+
+    abstract d?: number;
+>d : number | undefined
+}
+
