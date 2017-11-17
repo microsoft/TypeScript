@@ -155,9 +155,8 @@ namespace ts.server {
             "exclude": [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
             "types": ["office"]                               // @types package to fetch instead
         },
-        "Minified files": {
-            // e.g. /whatever/blah.min.js
-            "match": /^(.+\.min\.js)$/i,
+        "References": {
+            "match": /^(.*\/_references\.js)$/i,
             "exclude": [["^", 1, "$"]]
         }
     };
@@ -2258,7 +2257,13 @@ namespace ts.server {
                         }
                     }
                     if (!exclude) {
-                        filesToKeep.push(proj.rootFiles[i]);
+                        // Exclude any minified files that get this far
+                        if (/^.+[\.-]min\.js$/.test(normalizedNames[i])) {
+                            excludedFiles.push(normalizedNames[i]);
+                        }
+                        else {
+                            filesToKeep.push(proj.rootFiles[i]);
+                        }
                     }
                 }
             }
