@@ -1324,6 +1324,10 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
+    export function toArray<T>(value: T | T[]): T[] {
+        return isArray(value) ? value : [value];
+    }
+
     /**
      * Tests whether a value is string
      */
@@ -2167,6 +2171,10 @@ namespace ts {
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
+    export function removeSuffix(str: string, suffix: string): string {
+        return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
     }
 
     export function stringContains(str: string, substring: string): boolean {
