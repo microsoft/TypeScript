@@ -272,7 +272,7 @@ namespace ts.server {
             readonly typingSafeListLocation: string,
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
-            private event: Event) {
+            private event: Event | undefined) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
