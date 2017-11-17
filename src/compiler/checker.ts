@@ -11088,10 +11088,32 @@ namespace ts {
             return type === typeParameter || type.flags & TypeFlags.UnionOrIntersection && forEach((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter));
         }
 
-        // Infer a suitable input type for a homomorphic mapped type { [P in keyof T]: X }. We construct
-        // an object type with the same set of properties as the source type, where the type of each
-        // property is computed by inferring from the source property type to X for the type
-        // variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
+        /** Create an object with properties named in the string literal type. Every property has type `{}` */
+        function createEmptyObjectTypeFromStringLiteral(type: Type) {
+            const members = createSymbolTable();
+            forEachType(type, t => {
+                if (!(t.flags & TypeFlags.StringLiteral)) {
+                    return;
+                }
+                const name = escapeLeadingUnderscores((t as StringLiteralType).value);
+                const literalProp = createSymbol(SymbolFlags.Property, name);
+                literalProp.type = emptyObjectType;
+                if (t.symbol) {
+                    literalProp.declarations = t.symbol.declarations;
+                    literalProp.valueDeclaration = t.symbol.valueDeclaration;
+                }
+                members.set(name, literalProp);
+            });
+            const indexInfo = type.flags & TypeFlags.String ? createIndexInfo(emptyObjectType, /*isReadonly*/ false) : undefined;
+            return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
+        }
+
+        /**
+         * Infer a suitable input type for a homomorphic mapped type { [P in keyof T]: X }. We construct
+         * an object type with the same set of properties as the source type, where the type of each
+         * property is computed by inferring from the source property type to X for the type
+         * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
+         */
         function inferTypeForHomomorphicMappedType(source: Type, target: MappedType): Type {
             const properties = getPropertiesOfType(source);
             let indexInfo = getIndexInfoOfType(source, IndexKind.String);
@@ -11247,7 +11269,15 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
+                    priority ^= InferencePriority.Contravariant;
                     inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
+                    priority ^= InferencePriority.Contravariant;
+                }
+                else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
+                    const empty = createEmptyObjectTypeFromStringLiteral(source);
+                    priority ^= InferencePriority.Contravariant;
+                    inferFromTypes(empty, (target as IndexType).type);
+                    priority ^= InferencePriority.Contravariant;
                 }
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                     inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
@@ -13832,48 +13862,43 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualTypeForBinaryOperand(node: Expression): Type {
+        function getContextualTypeForBinaryOperand(node: Expression): Type | undefined {
             const binaryExpression = <BinaryExpression>node.parent;
-            const operator = binaryExpression.operatorToken.kind;
-            if (isAssignmentOperator(operator)) {
-                if (node === binaryExpression.right) {
-                    // Don't do this for special property assignments to avoid circularity
-                    switch (getSpecialPropertyAssignmentKind(binaryExpression)) {
-                        case SpecialPropertyAssignmentKind.None:
-                            break;
-                        case SpecialPropertyAssignmentKind.Property:
-                            // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
-                            // See `bindStaticPropertyAssignment` in `binder.ts`.
-                            if (!binaryExpression.left.symbol) {
-                                break;
-                            }
-                            // falls through
-                        case SpecialPropertyAssignmentKind.ExportsProperty:
-                        case SpecialPropertyAssignmentKind.ModuleExports:
-                        case SpecialPropertyAssignmentKind.PrototypeProperty:
-                        case SpecialPropertyAssignmentKind.ThisProperty:
-                            return undefined;
-                    }
-                    // In an assignment expression, the right operand is contextually typed by the type of the left operand.
-                    return getTypeOfExpression(binaryExpression.left);
-                }
+            const { left, operatorToken, right } = binaryExpression;
+            switch (operatorToken.kind) {
+                case SyntaxKind.EqualsToken:
+                    return node === right && isContextSensitiveAssignment(binaryExpression) ? getTypeOfExpression(left) : undefined;
+                case SyntaxKind.BarBarToken:
+                    // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
+                    // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
+                    const type = getContextualType(binaryExpression);
+                    return !type && node === right ? getTypeOfExpression(left, /*cache*/ true) : type;
+                case SyntaxKind.AmpersandAmpersandToken:
+                case SyntaxKind.CommaToken:
+                    return node === right ? getContextualType(binaryExpression) : undefined;
+                default:
+                    return undefined;
             }
-            else if (operator === SyntaxKind.BarBarToken) {
-                // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
-                // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
-                let type = getContextualType(binaryExpression);
-                if (!type && node === binaryExpression.right) {
-                    type = getTypeOfExpression(binaryExpression.left, /*cache*/ true);
-                }
-                return type;
+        }
+        // In an assignment expression, the right operand is contextually typed by the type of the left operand.
+        // Don't do this for special property assignments to avoid circularity.
+        function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean {
+            const kind = getSpecialPropertyAssignmentKind(binaryExpression);
+            switch (kind) {
+                case SpecialPropertyAssignmentKind.None:
+                    return true;
+                case SpecialPropertyAssignmentKind.Property:
+                    // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
+                    // See `bindStaticPropertyAssignment` in `binder.ts`.
+                    return !binaryExpression.left.symbol;
+                case SpecialPropertyAssignmentKind.ExportsProperty:
+                case SpecialPropertyAssignmentKind.ModuleExports:
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
+                case SpecialPropertyAssignmentKind.ThisProperty:
+                    return false;
+                default:
+                    Debug.assertNever(kind);
             }
-            else if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.CommaToken) {
-                if (node === binaryExpression.right) {
-                    return getContextualType(binaryExpression);
-                }
-            }
-
-            return undefined;
         }
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
@@ -17827,8 +17852,8 @@ namespace ts {
             if (!(func.flags & NodeFlags.HasImplicitReturn)) {
                 return false;
             }
-            const lastStatement = lastOrUndefined((<Block>func.body).statements);
-            if (lastStatement && lastStatement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>lastStatement)) {
+
+            if (some((<Block>func.body).statements, statement => statement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>statement))) {
                 return false;
             }
             return true;
@@ -20148,7 +20173,7 @@ namespace ts {
                     case SyntaxKind.JSDocTypedefTag:
                         return DeclarationSpaces.ExportType;
                     case SyntaxKind.ModuleDeclaration:
-                        return isAmbientModule(d) || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
+                        return isAmbientModule(d as ModuleDeclaration) || getModuleInstanceState(d as ModuleDeclaration) !== ModuleInstanceState.NonInstantiated
                             ? DeclarationSpaces.ExportNamespace | DeclarationSpaces.ExportValue
                             : DeclarationSpaces.ExportNamespace;
                     case SyntaxKind.ClassDeclaration:
@@ -21096,7 +21121,7 @@ namespace ts {
             }
 
             // Uninstantiated modules shouldnt do this check
-            if (node.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+            if (isModuleDeclaration(node) && getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                 return;
             }
 
@@ -21115,7 +21140,7 @@ namespace ts {
             }
 
             // Uninstantiated modules shouldnt do this check
-            if (node.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+            if (isModuleDeclaration(node) && getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                 return;
             }
 
