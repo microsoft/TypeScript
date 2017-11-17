@@ -246,7 +246,6 @@ namespace ts.server {
 
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
-        private installerPidReported = false;
         private projectService: ProjectService;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
@@ -272,7 +271,7 @@ namespace ts.server {
             readonly typingSafeListLocation: string,
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
-            private event: Event | undefined) {
+            private event: Event) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -299,17 +298,6 @@ namespace ts.server {
                 this.packageInstalledPromise = { resolve, reject };
             });
         }
-
-        private reportInstallerProcessId() {
-            if (this.installerPidReported) {
-                return;
-            }
-            if (this.event && this.installer) {
-                this.event({ pid: this.installer.pid }, "typingsInstallerPid");
-                this.installerPidReported = true;
-            }
-        }
-
 
         attach(projectService: ProjectService) {
             this.projectService = projectService;
@@ -350,7 +338,8 @@ namespace ts.server {
 
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
-            this.reportInstallerProcessId();
+
+            this.event({ pid: this.installer.pid }, "typingsInstallerPid");
 
             process.on("exit", () => {
                 this.installer.kill();
@@ -415,92 +404,81 @@ namespace ts.server {
                     break;
                 }
                 case EventInitializationFailed:
-                {
-                    if (!this.event) {
-                        break;
-                    }
-                    const body: protocol.TypesInstallerInitializationFailedEventBody = {
-                        message: response.message
-                    };
-                    const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
-                    this.event(body, eventName);
-                    break;
-                }
-                case EventBeginInstallTypes:
-                {
-                    if (!this.event) {
-                        break;
-                    }
-                    const body: protocol.BeginInstallTypesEventBody = {
-                        eventId: response.eventId,
-                        packages: response.packagesToInstall,
-                    };
-                    const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
-                    this.event(body, eventName);
-                    break;
-                }
-                case EventEndInstallTypes:
-                {
-                    if (!this.event) {
-                        break;
-                    }
-                    if (this.telemetryEnabled) {
-                        const body: protocol.TypingsInstalledTelemetryEventBody = {
-                            telemetryEventName: "typingsInstalled",
-                            payload: {
-                                installedPackages: response.packagesToInstall.join(","),
-                                installSuccess: response.installSuccess,
-                                typingsInstallerVersion: response.typingsInstallerVersion
-                            }
+                    {
+                        const body: protocol.TypesInstallerInitializationFailedEventBody = {
+                            message: response.message
                         };
-                        const eventName: protocol.TelemetryEventName = "telemetry";
+                        const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
                         this.event(body, eventName);
+                        break;
                     }
+                case EventBeginInstallTypes:
+                    {
+                        const body: protocol.BeginInstallTypesEventBody = {
+                            eventId: response.eventId,
+                            packages: response.packagesToInstall,
+                        };
+                        const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
+                        this.event(body, eventName);
+                        break;
+                    }
+                case EventEndInstallTypes:
+                    {
+                        if (this.telemetryEnabled) {
+                            const body: protocol.TypingsInstalledTelemetryEventBody = {
+                                telemetryEventName: "typingsInstalled",
+                                payload: {
+                                    installedPackages: response.packagesToInstall.join(","),
+                                    installSuccess: response.installSuccess,
+                                    typingsInstallerVersion: response.typingsInstallerVersion
+                                }
+                            };
+                            const eventName: protocol.TelemetryEventName = "telemetry";
+                            this.event(body, eventName);
+                        }
 
-                    const body: protocol.EndInstallTypesEventBody = {
-                        eventId: response.eventId,
-                        packages: response.packagesToInstall,
-                        success: response.installSuccess,
-                    };
-                    const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
-                    this.event(body, eventName);
-                    break;
-                }
+                        const body: protocol.EndInstallTypesEventBody = {
+                            eventId: response.eventId,
+                            packages: response.packagesToInstall,
+                            success: response.installSuccess,
+                        };
+                        const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
+                        this.event(body, eventName);
+                        break;
+                    }
                 case ActionInvalidate:
-                {
-                    this.projectService.updateTypingsForProject(response);
-                    break;
-                }
+                    {
+                        this.projectService.updateTypingsForProject(response);
+                        break;
+                    }
                 case ActionSet:
-                {
-                    if (this.activeRequestCount > 0) {
-                        this.activeRequestCount--;
-                    }
-                    else {
-                        Debug.fail("Received too many responses");
-                    }
-
-                    while (this.requestQueue.length > 0) {
-                        const queuedRequest = this.requestQueue.shift();
-                        if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
-                            this.requestMap.delete(queuedRequest.operationId);
-                            this.scheduleRequest(queuedRequest);
-                            break;
+                    {
+                        if (this.activeRequestCount > 0) {
+                            this.activeRequestCount--;
+                        }
+                        else {
+                            Debug.fail("Received too many responses");
                         }
 
-                        if (this.logger.hasLevel(LogLevel.verbose)) {
-                            this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                        while (this.requestQueue.length > 0) {
+                            const queuedRequest = this.requestQueue.shift();
+                            if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
+                                this.requestMap.delete(queuedRequest.operationId);
+                                this.scheduleRequest(queuedRequest);
+                                break;
+                            }
+
+                            if (this.logger.hasLevel(LogLevel.verbose)) {
+                                this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                            }
                         }
-                    }
 
-                    this.projectService.updateTypingsForProject(response);
+                        this.projectService.updateTypingsForProject(response);
 
-                    if (this.event) {
                         this.event(response, "setTypings");
-                    }
 
-                    break;
-                }
+                        break;
+                    }
                 default:
                     assertTypeIsNever(response);
             }
@@ -524,19 +502,18 @@ namespace ts.server {
         constructor(options: IoSessionOptions) {
             const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
 
-            const event: Event | undefined = canUseEvents ?
-                (body: {}, eventName: string) => {
-                    if (this.constructed) {
-                        this.event(body, eventName);
-                    }
-                    else {
-                        // It is unsafe to dereference `this` before initialization completes,
-                        // so we defer until the next tick.
-                        //
-                        // Construction should finish before the next tick fires, so we do not need to do this recursively.
-                        setImmediate(() => this.event(body, eventName));
-                    }
-                } : undefined;
+            const event: Event | undefined = (body: {}, eventName: string) => {
+                if (this.constructed) {
+                    this.event(body, eventName);
+                }
+                else {
+                    // It is unsafe to dereference `this` before initialization completes,
+                    // so we defer until the next tick.
+                    //
+                    // Construction should finish before the next tick fires, so we do not need to do this recursively.
+                    setImmediate(() => this.event(body, eventName));
+                }
+            };
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
