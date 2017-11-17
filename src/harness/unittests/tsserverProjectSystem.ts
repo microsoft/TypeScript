@@ -1482,7 +1482,7 @@ namespace ts.projectSystem {
 
         it("ignores files excluded by a custom safe type list", () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/a/b/f1.js",
                 content: "export let x = 5"
             };
             const office = {
@@ -1503,7 +1503,7 @@ namespace ts.projectSystem {
 
         it("ignores files excluded by the default type list", () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/a/b/f1.js",
                 content: "export let x = 5"
             };
             const minFile = {

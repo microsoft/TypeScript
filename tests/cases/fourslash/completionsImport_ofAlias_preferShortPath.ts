@@ -16,16 +16,16 @@
 ////fo/**/
 
 goTo.marker("");
-const options = { includeExternalModuleExports: true, sourceDisplay: "./foo/index" }; // TODO: GH#19962
+const options = { includeExternalModuleExports: true, sourceDisplay: "./foo" };
 verify.completionListContains({ name: "foo", source: "/foo/lib/foo" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, options);
 verify.not.completionListContains({ name: "foo", source: "/foo/index" }, undefined, undefined, undefined, undefined, undefined, options);
 
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/foo/lib/foo",
-    description: `Import 'foo' from "./foo/index".`,
+    description: `Import 'foo' from "./foo".`,
     // TODO: GH#18445
-    newFileContent: `import { foo } from "./foo/index";\r
+    newFileContent: `import { foo } from "./foo";\r
 \r
 fo`,
 });

@@ -364,7 +364,7 @@ namespace ts {
                         const rightKind = getNodeKind(right);
                         return rightKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : rightKind;
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
-                        return ScriptElementKind.memberFunctionElement; // instance method
+                        return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
                     case SpecialPropertyAssignmentKind.ThisProperty:
                         return ScriptElementKind.memberVariableElement; // property
                     case SpecialPropertyAssignmentKind.Property:
@@ -1131,6 +1131,7 @@ namespace ts {
             clear: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
+            reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
 

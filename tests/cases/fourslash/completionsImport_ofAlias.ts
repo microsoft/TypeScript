@@ -11,14 +11,19 @@
 // Should not show up in completions
 ////export { foo } from "./a";
 
+// @Filename: /a_reexport_2.ts
+////export * from "./a";
+
 // @Filename: /b.ts
 ////fo/**/
 
 goTo.marker("");
 const options = { includeExternalModuleExports: true, sourceDisplay: "./a" };
 // TODO: https://github.com/Microsoft/TypeScript/issues/14003
+//TODO: verify that there's only one!
 verify.completionListContains({ name: "foo", source: "/a" }, "import foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true, options);
 verify.not.completionListContains({ name: "foo", source: "/a_reexport" }, undefined, undefined, undefined, undefined, undefined, options);
+verify.not.completionListContains({ name: "foo", source: "/a_reexport_2" }, undefined, undefined, undefined, undefined, undefined, options);
 
 verify.applyCodeActionFromCompletion("", {
     name: "foo",

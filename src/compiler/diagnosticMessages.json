@@ -491,23 +491,23 @@
         "category": "Error",
         "code": 1164
     },
-    "A computed property name in an ambient context must directly refer to a built-in symbol.": {
+    "A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1165
     },
-    "A computed property name in a class property declaration must directly refer to a built-in symbol.": {
+    "A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1166
     },
-    "A computed property name in a method overload must directly refer to a built-in symbol.": {
+    "A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1168
     },
-    "A computed property name in an interface must directly refer to a built-in symbol.": {
+    "A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1169
     },
-    "A computed property name in a type literal must directly refer to a built-in symbol.": {
+    "A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1170
     },
@@ -910,6 +910,30 @@
     "'{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?": {
         "category": "Error",
         "code": 1329
+    },
+    "A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.": {
+        "category": "Error",
+        "code": 1330
+    },
+    "A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.": {
+        "category": "Error",
+        "code": 1331
+    },
+    "A variable whose type is a 'unique symbol' type must be 'const'.": {
+        "category": "Error",
+        "code": 1332
+    },
+    "'unique symbol' types may not be used on a variable declaration with a binding name.": {
+        "category": "Error",
+        "code": 1333
+    },
+    "'unique symbol' types are only allowed on variables in a variable statement.": {
+        "category": "Error",
+        "code": 1334
+    },
+    "'unique symbol' types are not allowed here.": {
+        "category": "Error",
+        "code": 1335
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1780,7 +1804,7 @@
         "category": "Error",
         "code": 2526
     },
-    "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
+    "The inferred type of '{0}' references an inaccessible '{1}' type. A type annotation is necessary.": {
         "category": "Error",
         "code": 2527
     },
@@ -1896,11 +1920,11 @@
         "category": "Error",
         "code": 2555
     },
-    "Expected {0} arguments, but got a minimum of {1}.": {
+    "Expected {0} arguments, but got {1} or more.": {
         "category": "Error",
         "code": 2556
     },
-    "Expected at least {0} arguments, but got a minimum of {1}.": {
+    "Expected at least {0} arguments, but got {1} or more.": {
         "category": "Error",
         "code": 2557
     },
@@ -2228,6 +2252,14 @@
         "category": "Error",
         "code": 2716
     },
+    "Subsequent property declarations must have the same type.  Property '{0}' has type '{1}' at {2}, but here has type '{3}'.": {
+        "category": "Error",
+        "code": 2717
+    },
+    "Duplicate declaration '{0}'.": {
+        "category": "Error",
+        "code": 2718
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2530,6 +2562,39 @@
         "code": 4094
     },
 
+    "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4095
+    },
+    "Public static method '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4096
+    },
+    "Public static method '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4097
+    },
+    "Public method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4098
+    },
+    "Public method '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4099
+    },
+    "Public method '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4100
+    },
+    "Method '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4101
+    },
+    "Method '{0}' of exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4102
+    },
+    
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -3546,6 +3611,10 @@
     "Expected {0}-{1} type arguments; provide these with an '@extends' tag.": {
         "category": "Error",
         "code": 8027
+    },
+    "JSDoc '...' may only appear in the last parameter of a signature.": {
+        "category": "Error",
+        "code": 8028
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
