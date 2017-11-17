@@ -28,6 +28,30 @@ namespace ts.projectSystem {
         })
     };
 
+    export const customTypesMap = {
+        path: <Path>"/typesMap.json",
+        content: `{
+            "typesMap": {
+                "jquery": {
+                    "match": "jquery(-(\\\\.?\\\\d+)+)?(\\\\.intellisense)?(\\\\.min)?\\\\.js$",
+                    "types": ["jquery"]
+                },
+                "quack": {
+                    "match": "/duckquack-(\\\\d+)\\\\.min\\\\.js",
+                    "types": ["duck-types"]
+                }
+            },
+            "simpleMap": {
+                "Bacon": "baconjs",
+                "bliss": "blissfuljs",
+                "commander": "commander",
+                "cordova": "cordova",
+                "react": "react",
+                "lodash": "lodash"
+            }
+        }`
+    };
+
     export interface PostExecAction {
         readonly success: boolean;
         readonly callback: TI.RequestCompletedAction;
@@ -204,7 +228,7 @@ namespace ts.projectSystem {
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger,
-            canUseEvents: false
+            canUseEvents: false,
         };
 
         return new TestSession({ ...sessionOptions, ...opts });
@@ -230,6 +254,7 @@ namespace ts.projectSystem {
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller,
                 eventHandler,
+                typesMapLocation: customTypesMap.path,
                 ...opts
             });
         }

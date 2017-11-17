@@ -109,14 +109,11 @@ namespace ts.server {
         "smart": IndentStyle.Smart
     });
 
-<<<<<<< HEAD
-=======
     export interface TypesMapFile {
         typesMap: SafeList;
         simpleMap: { [libName: string]: string };
     }
 
->>>>>>> f2931a1320... Port PR #20048
     /**
      * How to understand this block:
      *  * The 'match' property is a regexp that matches a filename.
@@ -353,6 +350,7 @@ namespace ts.server {
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
+        typesMapLocation?: string;
     }
 
     export class ProjectService {
@@ -415,6 +413,7 @@ namespace ts.server {
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
         public readonly allowLocalPluginLoads: boolean;
+        public readonly typesMapLocation: string | undefined;
 
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();
@@ -431,10 +430,12 @@ namespace ts.server {
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
+            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
+            this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(this.host);
 
             if (this.typesMapLocation) {
@@ -481,8 +482,16 @@ namespace ts.server {
             this.eventHandler(event);
         }
 
-<<<<<<< HEAD
-=======
+        /*@internal*/
+        getNormalizedAbsolutePath(fileName: string) {
+            return getNormalizedAbsolutePath(fileName, this.host.getCurrentDirectory());
+        }
+
+        /*@internal*/
+        getExecutingFilePath() {
+            return this.getNormalizedAbsolutePath(this.host.getExecutingFilePath());
+        }
+
         private loadTypesMap() {
             try {
                 const fileContent = this.host.readFile(this.typesMapLocation);
@@ -506,7 +515,6 @@ namespace ts.server {
             }
         }
 
->>>>>>> f2931a1320... Port PR #20048
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
             const project = this.findProject(response.projectName);
             if (!project) {
@@ -1791,7 +1799,7 @@ namespace ts.server {
             const excludeRules: string[] = [];
             const excludedFiles: NormalizedPath[] = [];
 
-            const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName));
+            const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName)) as NormalizedPath[];
 
             for (const name of Object.keys(this.safelist)) {
                 const rule = this.safelist[name];
@@ -1895,7 +1903,7 @@ namespace ts.server {
                 proj.typeAcquisition.enable = hasNoTypeScriptSource(proj.rootFiles.map(f => f.fileName));
             }
 
-            this.applySafeList(proj);
+            const excludedFiles = this.applySafeList(proj);
 
             let tsConfigFiles: NormalizedPath[];
             const rootFiles: protocol.ExternalFile[] = [];

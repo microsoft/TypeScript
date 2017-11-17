@@ -322,7 +322,7 @@ namespace ts.projectSystem {
                 content: "declare const lodash: { x: number }"
             };
 
-            const host = createServerHost([lodashJs, file2Jsx, file3dts]);
+            const host = createServerHost([lodashJs, file2Jsx, file3dts, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("lodash", "react") });
@@ -350,7 +350,6 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            host.checkTimeoutQueueLength(2);
             host.runQueuedTimeoutCallbacks();
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file2Jsx.path, file3dts.path, lodashDts.path, reactDts.path]);
@@ -486,7 +485,7 @@ namespace ts.projectSystem {
                 content: "declare const moment: { x: number }"
             };
 
-            const host = createServerHost([lodashJs, commanderJs, file3dts, packageJson]);
+            const host = createServerHost([lodashJs, commanderJs, file3dts, packageJson, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery", "commander", "moment", "express") });
@@ -514,15 +513,13 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            host.checkTimeoutQueueLength(2);
             host.runQueuedTimeoutCallbacks();
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             // Commander: Existed as a JS file
             // JQuery: Specified in 'include'
             // Moment: Specified in 'include'
-            // Express: Specified in package.json
             // lodash: Excluded (not present)
-            checkProjectActualFiles(p, [file3dts.path, commander.path, express.path, jquery.path, moment.path]);
+            checkProjectActualFiles(p, [file3dts.path, commander.path, jquery.path, moment.path]);
         });
 
         it("Throttle - delayed typings to install", () => {
@@ -570,7 +567,7 @@ namespace ts.projectSystem {
             };
 
             const typingFiles = [commander, express, jquery, moment, lodash];
-            const host = createServerHost([lodashJs, commanderJs, file3, packageJson]);
+            const host = createServerHost([lodashJs, commanderJs, file3, packageJson, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { throttleLimit: 3, typesRegistry: createTypesRegistry("commander", "express", "jquery", "moment", "lodash") });
@@ -649,7 +646,7 @@ namespace ts.projectSystem {
                 typings: typingsName("gulp")
             };
 
-            const host = createServerHost([lodashJs, commanderJs, file3]);
+            const host = createServerHost([lodashJs, commanderJs, file3, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
@@ -702,7 +699,6 @@ namespace ts.projectSystem {
             assert.equal(installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
             installer.executePendingCommands();
-            host.checkTimeoutQueueLength(3); // for 2 projects and 1 refreshing inferred project
             host.runQueuedTimeoutCallbacks();
             checkProjectActualFiles(p1, [file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);

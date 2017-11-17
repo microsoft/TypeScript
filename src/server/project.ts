@@ -1190,6 +1190,7 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
+        excludedFiles: ReadonlyArray<NormalizedPath> = [];
         private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,
             projectService: ProjectService,
