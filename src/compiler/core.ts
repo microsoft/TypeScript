@@ -1160,10 +1160,6 @@ namespace ts {
         return result;
     }
 
-    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T> {
-        return isArray(value) ? value : [value];
-    }
-
     /**
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
@@ -1366,6 +1362,8 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
+    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
+    export function toArray<T>(value: T | T[]): T[];
     export function toArray<T>(value: T | T[]): T[] {
         return isArray(value) ? value : [value];
     }
