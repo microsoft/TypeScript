@@ -316,7 +316,7 @@ namespace ts.codefix {
     }
 
     export function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbols: ReadonlyArray<Symbol>, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
-        const choices = mapIter(arrayIter(moduleSymbols), moduleSymbol => {
+        const choices = mapIterator(arrayIterator(moduleSymbols), moduleSymbol => {
             const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
             const sourceDirectory = getDirectoryPath(sourceFile.fileName);
 

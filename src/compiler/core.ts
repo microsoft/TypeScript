@@ -394,9 +394,9 @@ namespace ts {
         return result;
     }
 
-    export function mapIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
+    export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
         return { next };
-        function  next(): { value: U, done: false } | { value: never, done: true } {
+        function next(): { value: U, done: false } | { value: never, done: true } {
             const iterRes = iter.next();
             return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
         }
@@ -942,7 +942,7 @@ namespace ts {
         }
     }
 
-    export function arrayIter<T>(array: ReadonlyArray<T>): Iterator<T> {
+    export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
         let i = 0;
         return { next: () => {
             if (i === array.length) {
