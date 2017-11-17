@@ -156,9 +156,8 @@ namespace ts.server {
             "exclude": [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
             "types": ["office"]                               // @types package to fetch instead
         },
-        "Minified files": {
-            // e.g. /whatever/blah.min.js
-            "match": /^(.+\.min\.js)$/i,
+        "References": {
+            "match": /^(.*\/_references\.js)$/i,
             "exclude": [["^", 1, "$"]]
         }
     };
