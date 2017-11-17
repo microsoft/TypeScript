@@ -123,9 +123,6 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);
             }
 
-            // respond with whatever cached typings we have now
-            this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
-
             // start watching files
             this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch);
 
@@ -134,6 +131,7 @@ namespace ts.server.typingsInstaller {
                 this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
             }
             else {
+                this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`No new typings were requested as a result of typings discovery`);
                 }
