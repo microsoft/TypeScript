@@ -28,4 +28,4 @@ verify.completionListContains("substr", /*displayText*/ undefined, /*documentati
 edit.backspace('bar.'.length);
 
 edit.insert('union.');
-verify.completionListContains("toString", /*displayText*/ undefined, /*documentation*/ undefined, "method");
+verify.completionListContains("toString", /*displayText*/ undefined, /*documentation*/ undefined, "method", undefined, undefined, { allowDuplicate: true });

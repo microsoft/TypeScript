@@ -8,5 +8,5 @@ verify.completionListContains("boolean");
 verify.completionListContains("null");
 verify.completionListContains("number");
 verify.completionListContains("string");
-verify.completionListContains("undefined");
+verify.completionListContains("undefined", undefined, undefined, undefined, undefined, undefined, { allowDuplicate: true }); // TODO: GH#20042
 verify.completionListContains("void");
