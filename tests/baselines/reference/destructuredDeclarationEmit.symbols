@@ -8,15 +8,25 @@ const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } 
 >bar : Symbol(bar, Decl(foo.ts, 0, 56))
 >baz : Symbol(baz, Decl(foo.ts, 0, 66))
 
-export { foo };
->foo : Symbol(foo, Decl(foo.ts, 1, 8))
+const arr: [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]] = [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]];
+>arr : Symbol(arr, Decl(foo.ts, 1, 5))
+>def : Symbol(def, Decl(foo.ts, 1, 39))
+>sec : Symbol(sec, Decl(foo.ts, 1, 53))
+>def : Symbol(def, Decl(foo.ts, 1, 98))
+>sec : Symbol(sec, Decl(foo.ts, 1, 112))
+
+export { foo, arr };
+>foo : Symbol(foo, Decl(foo.ts, 2, 8))
+>arr : Symbol(arr, Decl(foo.ts, 2, 13))
 
 === tests/cases/compiler/index.ts ===
-import { foo } from './foo';
+import { foo, arr } from './foo';
 >foo : Symbol(foo, Decl(index.ts, 0, 8))
+>arr : Symbol(arr, Decl(index.ts, 0, 13))
 
-export { foo };
+export { foo, arr };
 >foo : Symbol(foo, Decl(index.ts, 1, 8))
+>arr : Symbol(arr, Decl(index.ts, 1, 13))
 
 const { bar: baz, bat, bam: { bork: { bar: ibar, baz: ibaz } } } = foo;
 >bar : Symbol(bar, Decl(foo.ts, 0, 13))
@@ -33,4 +43,15 @@ const { bar: baz, bat, bam: { bork: { bar: ibar, baz: ibaz } } } = foo;
 export { baz, ibaz };
 >baz : Symbol(baz, Decl(index.ts, 4, 8))
 >ibaz : Symbol(ibaz, Decl(index.ts, 4, 13))
+
+const [ , one, , [, bee, , [, {sec} ]]] = arr;
+>one : Symbol(one, Decl(index.ts, 6, 9))
+>bee : Symbol(bee, Decl(index.ts, 6, 19))
+>sec : Symbol(sec, Decl(index.ts, 6, 31))
+>arr : Symbol(arr, Decl(index.ts, 0, 13))
+
+export { one, bee, sec };
+>one : Symbol(one, Decl(index.ts, 7, 8))
+>bee : Symbol(bee, Decl(index.ts, 7, 13))
+>sec : Symbol(sec, Decl(index.ts, 7, 18))
 

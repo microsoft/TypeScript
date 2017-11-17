@@ -15,15 +15,38 @@ const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } 
 >baz : string
 >'b' : "b"
 
-export { foo };
+const arr: [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]] = [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]];
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
+>def : "def"
+>sec : "sec"
+>[0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]] : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
+>0 : 0
+>1 : 1
+>2 : 2
+>['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]] : ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]
+>'a' : "a"
+>'b' : "b"
+>'c' : "c"
+>[{def: 'def'}, {sec: 'sec'}] : [{ def: "def"; }, { sec: "sec"; }]
+>{def: 'def'} : { def: "def"; }
+>def : string
+>'def' : "def"
+>{sec: 'sec'} : { sec: "sec"; }
+>sec : string
+>'sec' : "sec"
+
+export { foo, arr };
 >foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
 
 === tests/cases/compiler/index.ts ===
-import { foo } from './foo';
+import { foo, arr } from './foo';
 >foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
 
-export { foo };
+export { foo, arr };
 >foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
 
 const { bar: baz, bat, bam: { bork: { bar: ibar, baz: ibaz } } } = foo;
 >bar : any
@@ -40,4 +63,20 @@ const { bar: baz, bat, bam: { bork: { bar: ibar, baz: ibaz } } } = foo;
 export { baz, ibaz };
 >baz : string
 >ibaz : string
+
+const [ , one, , [, bee, , [, {sec} ]]] = arr;
+> : undefined
+>one : 1
+> : undefined
+> : undefined
+>bee : "b"
+> : undefined
+> : undefined
+>sec : "sec"
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
+
+export { one, bee, sec };
+>one : 1
+>bee : "b"
+>sec : "sec"
 
