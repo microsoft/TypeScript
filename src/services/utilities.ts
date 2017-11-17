@@ -60,7 +60,7 @@ namespace ts {
                 if (isAmbientModule(<ModuleDeclaration>node)) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
-                else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
+                else if (getModuleInstanceState(node as ModuleDeclaration) === ModuleInstanceState.Instantiated) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
                 else {

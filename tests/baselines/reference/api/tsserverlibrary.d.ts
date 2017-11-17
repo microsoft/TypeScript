@@ -2992,6 +2992,7 @@ declare namespace ts {
     function isForOfStatement(node: Node): node is ForOfStatement;
     function isContinueStatement(node: Node): node is ContinueStatement;
     function isBreakStatement(node: Node): node is BreakStatement;
+    function isBreakOrContinueStatement(node: Node): node is BreakOrContinueStatement;
     function isReturnStatement(node: Node): node is ReturnStatement;
     function isWithStatement(node: Node): node is WithStatement;
     function isSwitchStatement(node: Node): node is SwitchStatement;
@@ -3974,8 +3975,14 @@ declare namespace ts {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
+        applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
+        applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+        /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
+        /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
+        /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
@@ -5270,7 +5277,7 @@ declare namespace ts.server.protocol {
          */
         errorCodes?: number[];
     }
-    interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+    interface ApplyCodeActionCommandRequestArgs {
         /** May also be an array of commands. */
         command: {};
     }

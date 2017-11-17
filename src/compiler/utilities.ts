@@ -4740,6 +4740,10 @@ namespace ts {
         return node.kind === SyntaxKind.BreakStatement;
     }
 
+    export function isBreakOrContinueStatement(node: Node): node is BreakOrContinueStatement {
+        return node.kind === SyntaxKind.BreakStatement || node.kind === SyntaxKind.ContinueStatement;
+    }
+
     export function isReturnStatement(node: Node): node is ReturnStatement {
         return node.kind === SyntaxKind.ReturnStatement;
     }
