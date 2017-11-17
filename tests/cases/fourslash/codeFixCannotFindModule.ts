@@ -19,6 +19,7 @@ verify.codeFixAvailable([{
     description: "Install '@types/abs'",
     commands: [{
         type: "install package",
+        file: "/a.ts",
         packageName: "@types/abs",
     }],
 }]);

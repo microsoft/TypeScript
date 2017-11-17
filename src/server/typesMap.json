@@ -10,7 +10,7 @@
             "types": ["winjs"]
         },
         "Kendo": {
-            "match": "^(.*\\/kendo)\\/kendo\\.all\\.min\\.js$",
+            "match": "^(.*\\/kendo(-ui)?)\\/kendo\\.all(\\.min)?\\.js$",
             "exclude": [["^", 1, "/.*"]],
             "types": ["kendo-ui"]
         },

@@ -1482,7 +1482,7 @@ namespace ts.projectSystem {
 
         it("ignores files excluded by a custom safe type list", () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/a/b/f1.js",
                 content: "export let x = 5"
             };
             const office = {
@@ -1503,7 +1503,7 @@ namespace ts.projectSystem {
 
         it("ignores files excluded by the default type list", () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/a/b/f1.js",
                 content: "export let x = 5"
             };
             const minFile = {
@@ -1518,6 +1518,10 @@ namespace ts.projectSystem {
                 path: "/q/lib/kendo/kendo.ui.min.js",
                 content: "unspecified"
             };
+            const kendoFile3 = {
+                path: "/q/lib/kendo-ui/kendo.all.js",
+                content: "unspecified"
+            };
             const officeFile1 = {
                 path: "/scripts/Office/1/excel-15.debug.js",
                 content: "unspecified"
@@ -1526,7 +1530,7 @@ namespace ts.projectSystem {
                 path: "/scripts/Office/1/powerpoint.js",
                 content: "unspecified"
             };
-            const files = [file1, minFile, kendoFile1, kendoFile2, officeFile1, officeFile2];
+            const files = [file1, minFile, kendoFile1, kendoFile2, kendoFile3, officeFile1, officeFile2];
             const host = createServerHost(files);
             const projectService = createProjectService(host);
             try {
@@ -1534,6 +1538,42 @@ namespace ts.projectSystem {
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
                 assert.deepEqual(proj.getTypeAcquisition().include, ["kendo-ui", "office"]);
+            } finally {
+                projectService.resetSafeList();
+            }
+        });
+
+        it("removes version numbers correctly", () => {
+            const testData: [string, string][] = [
+                ["jquery-max", "jquery-max"],
+                ["jquery.min", "jquery"],
+                ["jquery-min.4.2.3", "jquery"],
+                ["jquery.min.4.2.1", "jquery"],
+                ["minimum", "minimum"],
+                ["min", "min"],
+                ["min.3.2", "min"],
+                ["jquery", "jquery"]
+            ];
+            for (const t of testData) {
+                assert.equal(removeMinAndVersionNumbers(t[0]), t[1], t[0]);
+            }
+        });
+
+        it("ignores files excluded by a legacy safe type list", () => {
+            const file1 = {
+                path: "/a/b/bliss.js",
+                content: "let x = 5"
+            };
+            const file2 = {
+                path: "/a/b/foo.js",
+                content: ""
+            };
+            const host = createServerHost([file1, file2, customTypesMap]);
+            const projectService = createProjectService(host);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]), typeAcquisition: { enable: true } });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(), [file2.path]);
             } finally {
                 projectService.resetSafeList();
             }

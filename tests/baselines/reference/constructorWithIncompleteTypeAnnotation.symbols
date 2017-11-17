@@ -64,25 +64,18 @@ module TypeScriptAllInOne {
 
 
                 retValue = bfs.TYPES();
->retValue : Symbol(retValue, Decl(constructorWithIncompleteTypeAnnotation.ts, 27, 20))
-
                 if (retValue != 0) {
->retValue : Symbol(retValue, Decl(constructorWithIncompleteTypeAnnotation.ts, 27, 20))
 
                     return 1 && 
                 }
 
                 retValue = bfs.OPERATOR ' );
->retValue : Symbol(retValue, Decl(constructorWithIncompleteTypeAnnotation.ts, 27, 20))
-
                 if (retValue != 0) {
->retValue : Symbol(retValue, Decl(constructorWithIncompleteTypeAnnotation.ts, 27, 20))
 
                     return 1;
                 }
             }
             catch (e) {
->catch : Symbol(Program.catch, Decl(constructorWithIncompleteTypeAnnotation.ts, 44, 13))
 >e : Symbol(e, Decl(constructorWithIncompleteTypeAnnotation.ts, 45, 19))
 
                 console.log(e);

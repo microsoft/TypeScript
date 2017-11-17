@@ -51,5 +51,5 @@ for (const kind of kinds) {
     verify.completionListContains("1test");
 
     goTo.marker(kind + "2");
-    verify.completionListContains("2test");
+    verify.completionListContains("2test", undefined, undefined, undefined, undefined, undefined, { allowDuplicate: true }); // TODO: GH#20042
 }

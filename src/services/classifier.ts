@@ -488,89 +488,71 @@ namespace ts {
 
     /* @internal */
     export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: UnderscoreEscapedMap<true>, span: TextSpan): Classifications {
-        const result: number[] = [];
-        processNode(sourceFile);
-
-        return { spans: result, endOfLineState: EndOfLineState.None };
-
-        function pushClassification(start: number, length: number, type: ClassificationType) {
-            result.push(start);
-            result.push(length);
-            result.push(type);
-        }
-
-        function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning): ClassificationType {
-            const flags = symbol.getFlags();
-            if ((flags & SymbolFlags.Classifiable) === SymbolFlags.None) {
+        const spans: number[] = [];
+        sourceFile.forEachChild(function cb(node: Node): void {
+            // Only walk into nodes that intersect the requested span.
+            if (!node || !textSpanIntersectsWith(span, node.pos, node.getFullWidth())) {
                 return;
             }
 
-            if (flags & SymbolFlags.Class) {
-                return ClassificationType.className;
-            }
-            else if (flags & SymbolFlags.Enum) {
-                return ClassificationType.enumName;
-            }
-            else if (flags & SymbolFlags.TypeAlias) {
-                return ClassificationType.typeAliasName;
-            }
-            else if (meaningAtPosition & SemanticMeaning.Type) {
-                if (flags & SymbolFlags.Interface) {
-                    return ClassificationType.interfaceName;
-                }
-                else if (flags & SymbolFlags.TypeParameter) {
-                    return ClassificationType.typeParameterName;
-                }
-            }
-            else if (flags & SymbolFlags.Module) {
-                // Only classify a module as such if
-                //  - It appears in a namespace context.
-                //  - There exists a module declaration which actually impacts the value side.
-                if (meaningAtPosition & SemanticMeaning.Namespace ||
-                    (meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol))) {
-                    return ClassificationType.moduleName;
+            checkForClassificationCancellation(cancellationToken, node.kind);
+            // Only bother calling into the typechecker if this is an identifier that
+            // could possibly resolve to a type name.  This makes classification run
+            // in a third of the time it would normally take.
+            if (isIdentifier(node) && !nodeIsMissing(node) && classifiableNames.has(node.escapedText)) {
+                const symbol = typeChecker.getSymbolAtLocation(node);
+                const type = symbol && classifySymbol(symbol, getMeaningFromLocation(node), typeChecker);
+                if (type) {
+                    pushClassification(node.getStart(sourceFile), node.getEnd(), type);
                 }
             }
 
+            node.forEachChild(cb);
+        });
+        return { spans, endOfLineState: EndOfLineState.None };
+
+        function pushClassification(start: number, end: number, type: ClassificationType): void {
+            spans.push(start);
+            spans.push(end - start);
+            spans.push(type);
+        }
+    }
+
+    function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, checker: TypeChecker): ClassificationType | undefined {
+        const flags = symbol.getFlags();
+        if ((flags & SymbolFlags.Classifiable) === SymbolFlags.None) {
             return undefined;
-
-            /**
-             * Returns true if there exists a module that introduces entities on the value side.
-             */
-            function hasValueSideModule(symbol: Symbol): boolean {
-                return forEach(symbol.declarations, declaration => {
-                    return declaration.kind === SyntaxKind.ModuleDeclaration &&
-                        getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated;
-                });
-            }
         }
-
-        function processNode(node: Node) {
-            // Only walk into nodes that intersect the requested span.
-            if (node && textSpanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
-                const kind = node.kind;
-                checkForClassificationCancellation(cancellationToken, kind);
-
-                if (kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
-                    const identifier = <Identifier>node;
-
-                    // Only bother calling into the typechecker if this is an identifier that
-                    // could possibly resolve to a type name.  This makes classification run
-                    // in a third of the time it would normally take.
-                    if (classifiableNames.has(identifier.escapedText)) {
-                        const symbol = typeChecker.getSymbolAtLocation(node);
-                        if (symbol) {
-                            const type = classifySymbol(symbol, getMeaningFromLocation(node));
-                            if (type) {
-                                pushClassification(node.getStart(), node.getWidth(), type);
-                            }
-                        }
-                    }
-                }
-
-                forEachChild(node, processNode);
-            }
+        else if (flags & SymbolFlags.Class) {
+            return ClassificationType.className;
         }
+        else if (flags & SymbolFlags.Enum) {
+            return ClassificationType.enumName;
+        }
+        else if (flags & SymbolFlags.TypeAlias) {
+            return ClassificationType.typeAliasName;
+        }
+        else if (flags & SymbolFlags.Module) {
+            // Only classify a module as such if
+            //  - It appears in a namespace context.
+            //  - There exists a module declaration which actually impacts the value side.
+            return meaningAtPosition & SemanticMeaning.Namespace || meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol) ? ClassificationType.moduleName : undefined;
+        }
+        else if (flags & SymbolFlags.Alias) {
+            return classifySymbol(checker.getAliasedSymbol(symbol), meaningAtPosition, checker);
+        }
+        else if (meaningAtPosition & SemanticMeaning.Type) {
+            return flags & SymbolFlags.Interface ? ClassificationType.interfaceName : flags & SymbolFlags.TypeParameter ? ClassificationType.typeParameterName : undefined;
+        }
+        else {
+            return undefined;
+        }
+    }
+
+    /** Returns true if there exists a module that introduces entities on the value side. */
+    function hasValueSideModule(symbol: Symbol): boolean {
+        return some(symbol.declarations, declaration =>
+            isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated);
     }
 
     function getClassificationTypeName(type: ClassificationType): ClassificationTypeNames {

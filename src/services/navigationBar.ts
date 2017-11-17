@@ -269,6 +269,24 @@ namespace ts.NavigationBar {
                 addLeafNode(node);
                 break;
 
+            case SyntaxKind.BinaryExpression: {
+                const special = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                switch (special) {
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
+                        break;
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case SpecialPropertyAssignmentKind.Property:
+                    case SpecialPropertyAssignmentKind.None:
+                        break;
+                    default:
+                        Debug.assertNever(special);
+                }
+            }
+            // falls through
+
             default:
                 if (hasJSDocNodes(node)) {
                     forEach(node.jsDoc, jsDoc => {

@@ -60,7 +60,7 @@ namespace ts {
                 if (isAmbientModule(<ModuleDeclaration>node)) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
-                else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
+                else if (getModuleInstanceState(node as ModuleDeclaration) === ModuleInstanceState.Instantiated) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
                 else {
@@ -364,7 +364,7 @@ namespace ts {
                         const rightKind = getNodeKind(right);
                         return rightKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : rightKind;
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
-                        return ScriptElementKind.memberFunctionElement; // instance method
+                        return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
                     case SpecialPropertyAssignmentKind.ThisProperty:
                         return ScriptElementKind.memberVariableElement; // property
                     case SpecialPropertyAssignmentKind.Property:
@@ -441,6 +441,7 @@ namespace ts {
      * Assumes `candidate.start <= position` holds.
      */
     export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
+        Debug.assert(candidate.pos <= position);
         return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
@@ -1130,6 +1131,7 @@ namespace ts {
             clear: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
+            reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
 

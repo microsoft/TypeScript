@@ -20,7 +20,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: (fileName: string) => string): string {
+    export function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
         let commonPathComponents: string[];
         const failed = forEach(fileNames, sourceFile => {
             // Each file contributes into common source file path

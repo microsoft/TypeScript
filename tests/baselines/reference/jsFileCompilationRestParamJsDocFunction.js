@@ -9,7 +9,7 @@
  * @param {...*} args The arguments to invoke `func` with.
  * @returns {*} Returns the result of `func`.
  */
-function apply(func, thisArg, args) {
+function apply(func, thisArg, ...args) {
     var length = args.length;
     switch (length) {
         case 0: return func.call(thisArg);
@@ -36,7 +36,11 @@ define("_apply", ["require", "exports"], function (require, exports) {
      * @param {...*} args The arguments to invoke `func` with.
      * @returns {*} Returns the result of `func`.
      */
-    function apply(func, thisArg, args) {
+    function apply(func, thisArg) {
+        var args = [];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            args[_i - 2] = arguments[_i];
+        }
         var length = args.length;
         switch (length) {
             case 0: return func.call(thisArg);

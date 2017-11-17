@@ -8,6 +8,6 @@ class C {
 >10 : 10
 
     var constructor() { }
->constructor : () => void
+>constructor : any
 >() { } : () => void
 }
