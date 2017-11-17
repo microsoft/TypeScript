@@ -75,3 +75,12 @@ class C8 {
     "b": number;
     0: number;
 }
+
+// No strict initialization checks for abstract members
+
+abstract class C9 {
+    abstract a: number;
+    abstract b: number | undefined;
+    abstract c: number | null;
+    abstract d?: number;
+}
