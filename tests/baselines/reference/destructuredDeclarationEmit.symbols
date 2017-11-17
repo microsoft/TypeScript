@@ -55,3 +55,19 @@ export { one, bee, sec };
 >bee : Symbol(bee, Decl(index.ts, 7, 13))
 >sec : Symbol(sec, Decl(index.ts, 7, 18))
 
+const getFoo = () => ({
+>getFoo : Symbol(getFoo, Decl(index.ts, 9, 5))
+
+    foo: 'foo'
+>foo : Symbol(foo, Decl(index.ts, 9, 23))
+
+});
+
+const { foo: foo2 } = getFoo();
+>foo : Symbol(foo, Decl(index.ts, 9, 23))
+>foo2 : Symbol(foo2, Decl(index.ts, 13, 7))
+>getFoo : Symbol(getFoo, Decl(index.ts, 9, 5))
+
+export { foo2 };
+>foo2 : Symbol(foo2, Decl(index.ts, 14, 8))
+

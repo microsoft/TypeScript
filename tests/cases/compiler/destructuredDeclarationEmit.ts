@@ -12,3 +12,10 @@ export { baz, ibaz };
 
 const [ , one, , [, bee, , [, {sec} ]]] = arr;
 export { one, bee, sec };
+
+const getFoo = () => ({
+    foo: 'foo'
+});
+
+const { foo: foo2 } = getFoo();
+export { foo2 };

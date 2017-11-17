@@ -80,3 +80,24 @@ export { one, bee, sec };
 >bee : "b"
 >sec : "sec"
 
+const getFoo = () => ({
+>getFoo : () => { foo: string; }
+>() => ({    foo: 'foo'}) : () => { foo: string; }
+>({    foo: 'foo'}) : { foo: string; }
+>{    foo: 'foo'} : { foo: string; }
+
+    foo: 'foo'
+>foo : string
+>'foo' : "foo"
+
+});
+
+const { foo: foo2 } = getFoo();
+>foo : any
+>foo2 : string
+>getFoo() : { foo: string; }
+>getFoo : () => { foo: string; }
+
+export { foo2 };
+>foo2 : string
+
