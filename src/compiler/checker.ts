@@ -4309,7 +4309,7 @@ namespace ts {
             type = declaration.initializer ?
                 getUnionType([type, checkExpressionCached(declaration.initializer)], /*subtypeReduction*/ true) :
                 type;
-            return shouldUseLiteralType(declaration) ? type : getWidenedLiteralType(type);
+            return shouldKeepLiteralType(declaration) ? type : getWidenedLiteralType(type);
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -10673,7 +10673,7 @@ namespace ts {
         }
 
         function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type) {
-            if (!isLiteralLikeContextualType(type, contextualType)) {
+            if (!isLiteralOfContextualType(type, contextualType)) {
                 type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
             }
             return type;
@@ -18857,29 +18857,29 @@ namespace ts {
 
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
             const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
-            return shouldUseLiteralType(declaration) ? type : getWidenedLiteralType(type);
+            return shouldKeepLiteralType(declaration) ? type : getWidenedLiteralType(type);
         }
 
-        function shouldUseLiteralType(declaration: VariableLikeDeclaration) {
+        function shouldKeepLiteralType(declaration: VariableLikeDeclaration) {
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
                 (declaration.initializer && isTypeAssertion(declaration.initializer));
         }
 
-        function isLiteralLikeContextualType(candidateLiteral: Type, contextualType: Type): boolean {
+        function isLiteralOfContextualType(candidateLiteral: Type, contextualType: Type): boolean {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.UnionOrIntersection) {
-                    return some((contextualType as UnionOrIntersectionType).types, t => isLiteralLikeContextualType(candidateLiteral, t));
+                    return some((contextualType as UnionOrIntersectionType).types, t => isLiteralOfContextualType(candidateLiteral, t));
                 }
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-                    return isLiteralLikeContextualType(candidateLiteral, constraint);
+                    return isLiteralOfContextualType(candidateLiteral, constraint);
                 }
                 // No need to `maybeTypeOfKind` on the contextual type, as it can't be a union, _however_, `candidateLiteral` might still be one!
-                return !!(((contextualType.flags & TypeFlags.StringLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
-                    ((contextualType.flags & TypeFlags.NumberLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
-                    ((contextualType.flags & TypeFlags.BooleanLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)) ||
-                    ((contextualType.flags & TypeFlags.ESSymbolLike) && maybeTypeOfKind(candidateLiteral, TypeFlags.ESSymbolLike))
+                return !!((contextualType.flags & TypeFlags.StringLike && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
+                    (contextualType.flags & TypeFlags.NumberLike && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
+                    (contextualType.flags & TypeFlags.BooleanLike && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)) ||
+                    (contextualType.flags & TypeFlags.ESSymbolLike && maybeTypeOfKind(candidateLiteral, TypeFlags.ESSymbolLike))
                 );
             }
             return false;
