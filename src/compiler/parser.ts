@@ -6132,14 +6132,12 @@ namespace ts {
             }
 
             // Parses out a JSDoc type expression.
-            export function parseJSDocTypeExpression(braceless?: boolean): JSDocTypeExpression {
+            export function parseJSDocTypeExpression(mayOmitBraces?: boolean): JSDocTypeExpression {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
-                if (!braceless) {
-                    parseExpected(SyntaxKind.OpenBraceToken);
-                }
+                const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
-                if (!braceless) {
+                if (!mayOmitBraces || hasBrace) {
                     parseExpected(SyntaxKind.CloseBraceToken);
                 }
 
@@ -6486,9 +6484,9 @@ namespace ts {
                     tagsEnd = tag.end;
                 }
 
-                function tryParseTypeExpression(bracelessFallback?: boolean): JSDocTypeExpression | undefined {
+                function tryParseTypeExpression(): JSDocTypeExpression | undefined {
                     skipWhitespace();
-                    return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : bracelessFallback && parseJSDocTypeExpression(/*braceless*/ true);
+                    return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
@@ -6597,7 +6595,7 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = tryParseTypeExpression(/*bracketlessFallback*/ true);
+                    result.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     return finishNode(result);
                 }
 
