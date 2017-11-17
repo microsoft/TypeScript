@@ -1504,14 +1504,11 @@ namespace ts.tscWatch {
             shouldBeWritten: boolean;
         }
         function getEmittedFiles(files: FileOrFolderEmit[], contents: string[]): EmittedFile[] {
-            return map(contents, (content, index) => {
-                return {
-                    content,
-                    path: changeExtension(files[index].path, Extension.Js),
-                    shouldBeWritten: true
-                };
-            }
-            );
+            return map(contents, (content, index) => ({
+                content,
+                path: changeExtension(files[index].path, Extension.Js),
+                shouldBeWritten: true
+            }));
         }
         function verifyEmittedFiles(host: WatchedSystem, emittedFiles: EmittedFile[]) {
             for (const { path, content, shouldBeWritten } of emittedFiles) {

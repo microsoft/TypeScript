@@ -6405,11 +6405,7 @@ namespace ts.projectSystem {
                 };
 
                 function verifyProjectsUpdatedInBackgroundEventHandler(expected: ReadonlyArray<server.ProjectsUpdatedInBackgroundEvent>) {
-                    const expectedEvents: protocol.ProjectsUpdatedInBackgroundEventBody[] = map(expected, e => {
-                        return {
-                            openFiles: e.data.openFiles
-                        };
-                    });
+                    const expectedEvents: protocol.ProjectsUpdatedInBackgroundEventBody[] = map(expected, e => ({ openFiles: e.data.openFiles }));
                     const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
                     const events: protocol.ProjectsUpdatedInBackgroundEvent[] = filter(
                         map(

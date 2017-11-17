@@ -312,11 +312,10 @@ gulp.task(configureNightlyJs, /*help*/ false, [], () => {
 gulp.task("configure-nightly", "Runs scripts/configureNightly.ts to prepare a build for nightly publishing", [configureNightlyJs], (done) => {
     exec(host, [configureNightlyJs, packageJson, versionFile], done, done);
 });
-gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nightly build on npm", ["LKG"], () => {
-    return runSequence("clean", "useDebugMode", "runtests-parallel", (done) => {
+gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nightly build on npm", ["LKG"], () =>
+    runSequence("clean", "useDebugMode", "runtests-parallel", (done) => {
         exec("npm", ["publish", "--tag", "next"], done, done);
-    });
-});
+    }));
 
 const importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
 const importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
@@ -528,21 +527,19 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (do
             .pipe(sourcemaps.write("."))
             .pipe(gulp.dest("src/server")),
         dts.pipe(prependCopyright(/*outputCopyright*/ true))
-            .pipe(insert.transform((content) => {
-                return content.replace(constEnumCaptureRegexp, constEnumReplacement) + "\nexport = ts;\nexport as namespace ts;";
-            }))
+            .pipe(insert.transform(content =>
+                content.replace(constEnumCaptureRegexp, constEnumReplacement) + "\nexport = ts;\nexport as namespace ts;"))
             .pipe(gulp.dest("src/server"))
     ]);
 });
 
-gulp.task(typesMapJson, /*help*/ false, [], () => {
-    return gulp.src("src/server/typesMap.json")
+gulp.task(typesMapJson, /*help*/ false, [], () =>
+    gulp.src("src/server/typesMap.json")
         .pipe(insert.transform((contents, file) => {
             JSON.parse(contents);
             return contents;
         }))
-        .pipe(gulp.dest(builtLocalDirectory));
-});
+        .pipe(gulp.dest(builtLocalDirectory)));
 
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
 gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile, "localize"]);
@@ -576,9 +573,7 @@ gulp.task(specMd, /*help*/ false, [word2mdJs], (done) => {
 
 gulp.task("generate-spec", "Generates a Markdown version of the Language Specification", [specMd]);
 
-gulp.task("clean", "Cleans the compiler output, declare files, and tests", [], () => {
-    return del([builtDirectory]);
-});
+gulp.task("clean", "Cleans the compiler output, declare files, and tests", [], () => del([builtDirectory]));
 
 gulp.task("useDebugMode", /*help*/ false, [], (done) => { useDebugMode = true; done(); });
 gulp.task("dontUseDebugMode", /*help*/ false, [], (done) => { useDebugMode = false; done(); });
@@ -598,9 +593,7 @@ gulp.task("VerifyLKG", /*help*/ false, [], () => {
 
 gulp.task("LKGInternal", /*help*/ false, ["lib", "local"]);
 
-gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
-    return runSequence("LKGInternal", "VerifyLKG");
-});
+gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => runSequence("LKGInternal", "VerifyLKG"));
 
 
 // Task to build the tests infrastructure using the built compiler
@@ -626,9 +619,7 @@ const refRwcBaseline = path.join(internalTests, "baselines/rwc/reference");
 const localTest262Baseline = path.join(internalTests, "baselines/test262/local");
 
 gulp.task("tests", "Builds the test infrastructure using the built compiler", [run]);
-gulp.task("tests-debug", "Builds the test sources and automation in debug mode", () => {
-    return runSequence("useDebugMode", "tests");
-});
+gulp.task("tests-debug", "Builds the test sources and automation in debug mode", () => runSequence("useDebugMode", "tests"));
 
 function deleteTemporaryProjectOutput() {
     return del(path.join(localBaseline, "projectOutput/"));
@@ -802,9 +793,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
 
             next(/*err*/ undefined, file.contents);
         }))
-        .on("error", err => {
-            return done(err);
-        }), { debug: true, basedir: __dirname }) // Attach error handler to inner stream
+        .on("error", done), { debug: true, basedir: __dirname }) // Attach error handler to inner stream
         .bundle((err, contents) => {
             if (err) {
                 if (err.message.match(/Cannot find module '.*_stream_0.js'/)) {
@@ -835,9 +824,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
             const finalMap = chain.apply();
             file.sourceMap = finalMap;
 
-            const stream = through2.obj((file, enc, callback) => {
-                return callback(/*err*/ undefined, file);
-            });
+            const stream = through2.obj((file, enc, callback) => callback(/*err*/ undefined, file));
             stream.pipe(sourcemaps.write(".", { includeContent: false }))
                 .pipe(gulp.dest("."))
                 .on("end", done)
@@ -920,9 +907,7 @@ gulp.task("diff-rwc", "Diffs the RWC baselines using the diff tool specified by 
     exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], done, done);
 });
 
-gulp.task("baseline-accept", "Makes the most recent test results the new baseline, overwriting the old baseline", () => {
-    return baselineAccept("");
-});
+gulp.task("baseline-accept", "Makes the most recent test results the new baseline, overwriting the old baseline", () => baselineAccept(""));
 
 function baselineAccept(subfolder = "") {
     return merge2(baselineCopy(subfolder), baselineDelete(subfolder));
@@ -943,14 +928,11 @@ function baselineDelete(subfolder = "") {
         }));
 }
 
-gulp.task("baseline-accept-rwc", "Makes the most recent rwc test results the new baseline, overwriting the old baseline", () => {
-    return baselineAccept("rwc");
-});
+gulp.task("baseline-accept-rwc", "Makes the most recent rwc test results the new baseline, overwriting the old baseline", () =>
+    baselineAccept("rwc"));
 
-
-gulp.task("baseline-accept-test262", "Makes the most recent test262 test results the new baseline, overwriting the old baseline", () => {
-    return baselineAccept("test262");
-});
+gulp.task("baseline-accept-test262", "Makes the most recent test262 test results the new baseline, overwriting the old baseline", () =>
+    baselineAccept("test262"));
 
 
 // Webhost
@@ -968,9 +950,8 @@ gulp.task(webhostJsPath, /*help*/ false, [servicesFile], () => {
         .pipe(gulp.dest(path.dirname(webhostJsPath)));
 });
 
-gulp.task("webhost", "Builds the tsc web host", [webhostJsPath], () => {
-    return gulp.src(path.join(builtLocalDirectory, "lib.d.ts")).pipe(gulp.dest("tests/webhost/"));
-});
+gulp.task("webhost", "Builds the tsc web host", [webhostJsPath], () =>
+    gulp.src(path.join(builtLocalDirectory, "lib.d.ts")).pipe(gulp.dest("tests/webhost/")));
 
 
 // Perf compiler
@@ -1030,9 +1011,8 @@ gulp.task("tsc-instrumented", "Builds an instrumented tsc.js - run with --test=[
     exec(host, [instrumenterJsPath, "record", test, builtLocalCompiler], done, done);
 });
 
-gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", serverFile], () => {
-    return gulp.src([serverFile, serverFile + ".map"]).pipe(gulp.dest("../TypeScript-Sublime-Plugin/tsserver/"));
-});
+gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", serverFile], () =>
+    gulp.src([serverFile, serverFile + ".map"]).pipe(gulp.dest("../TypeScript-Sublime-Plugin/tsserver/")));
 
 gulp.task("build-rules", "Compiles tslint rules to js", () => {
     const settings: tsc.Settings = getCompilerSettings({ module: "commonjs", lib: ["es6"] }, /*useBuiltCompiler*/ false);

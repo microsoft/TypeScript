@@ -991,9 +991,7 @@ namespace ts {
         }
 
         public getRootFileNames(): string[] {
-            return arrayFrom(this.fileNameToEntry.values(), entry => {
-                return isString(entry) ? entry : entry.hostFileName;
-            });
+            return arrayFrom(this.fileNameToEntry.values(), entry => isString(entry) ? entry : entry.hostFileName);
         }
 
         public getVersion(path: Path): string {
@@ -1261,12 +1259,8 @@ namespace ts {
                     }
                     return host.readFile && host.readFile(fileName);
                 },
-                directoryExists: directoryName => {
-                    return directoryProbablyExists(directoryName, host);
-                },
-                getDirectories: path => {
-                    return host.getDirectories ? host.getDirectories(path) : [];
-                },
+                directoryExists: directoryName => directoryProbablyExists(directoryName, host),
+                getDirectories: path => host.getDirectories ? host.getDirectories(path) : [],
                 onReleaseOldSourceFile,
                 hasInvalidatedResolution,
                 hasChangedAutomaticTypeDirectiveNames: host.hasChangedAutomaticTypeDirectiveNames
@@ -1279,9 +1273,8 @@ namespace ts {
                 compilerHost.resolveModuleNames = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames(moduleNames, containingFile, reusedNames);
             }
             if (host.resolveTypeReferenceDirectives) {
-                compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
-                    return host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
-                };
+                compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) =>
+                    host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
             }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);

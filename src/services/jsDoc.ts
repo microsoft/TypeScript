@@ -125,27 +125,23 @@ namespace ts.JsDoc {
     }
 
     export function getJSDocTagNameCompletions(): CompletionEntry[] {
-        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = ts.map(jsDocTagNames, tagName => {
-            return {
-                name: tagName,
-                kind: ScriptElementKind.keyword,
-                kindModifiers: "",
-                sortText: "0",
-            };
-        }));
+        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = map(jsDocTagNames, tagName => ({
+            name: tagName,
+            kind: ScriptElementKind.keyword,
+            kindModifiers: "",
+            sortText: "0",
+        })));
     }
 
     export const getJSDocTagNameCompletionDetails = getJSDocTagCompletionDetails;
 
     export function getJSDocTagCompletions(): CompletionEntry[] {
-        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = ts.map(jsDocTagNames, tagName => {
-            return {
-                name: `@${tagName}`,
-                kind: ScriptElementKind.keyword,
-                kindModifiers: "",
-                sortText: "0"
-            };
-        }));
+        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = map(jsDocTagNames, tagName => ({
+            name: `@${tagName}`,
+            kind: ScriptElementKind.keyword,
+            kindModifiers: "",
+            sortText: "0"
+        })));
     }
 
     export function getJSDocTagCompletionDetails(name: string): CompletionEntryDetails {

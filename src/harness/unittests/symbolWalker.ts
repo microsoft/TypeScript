@@ -29,9 +29,7 @@ export default function foo(a: number, b: Bar): void {}`, (file, checker) => {
             let stdLibRefSymbols = 0;
             const expectedSymbols = ["default", "a", "b", "Bar", "x", "y", "history"];
             const walker = checker.getSymbolWalker(symbol => {
-                const isStdLibSymbol = forEach(symbol.declarations, d => {
-                    return getSourceFileOfNode(d).hasNoDefaultLib;
-                });
+                const isStdLibSymbol = forEach(symbol.declarations, d => getSourceFileOfNode(d).hasNoDefaultLib);
                 if (isStdLibSymbol) {
                     stdLibRefSymbols++;
                     return false; // Don't traverse into the stdlib. That's unnecessary for this test.

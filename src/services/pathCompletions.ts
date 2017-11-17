@@ -252,9 +252,7 @@ namespace ts.Completions.PathCompletions {
         // starts
         if (isNestedModule) {
             const moduleNameWithSeperator = ensureTrailingDirectorySeparator(moduleNameFragment);
-            nonRelativeModuleNames = map(nonRelativeModuleNames, nonRelativeModuleName => {
-                return removePrefix(nonRelativeModuleName, moduleNameWithSeperator);
-            });
+            nonRelativeModuleNames = map(nonRelativeModuleNames, nonRelativeModuleName => removePrefix(nonRelativeModuleName, moduleNameWithSeperator));
         }
 
 
