@@ -15562,63 +15562,49 @@ namespace ts {
         }
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
-            const type = checkNonNullExpression(left);
-            if (isTypeAny(type) || type === silentNeverType) {
-                return type;
-            }
-
-            const apparentType = getApparentType(getWidenedType(type));
-            if (apparentType === unknownType || (type.flags & TypeFlags.TypeParameter && isTypeAny(apparentType))) {
-                // handle cases when type is Type parameter with invalid or any constraint
+            let propType: Type;
+            const leftType = checkNonNullExpression(left);
+            const apparentType = getApparentType(getWidenedType(leftType));
+            if (isTypeAny(apparentType) || apparentType === silentNeverType) {
                 return apparentType;
             }
+            const assignmentKind = getAssignmentTargetKind(node);
             const prop = getPropertyOfType(apparentType, right.escapedText);
             if (!prop) {
                 const indexInfo = getIndexInfoOfType(apparentType, IndexKind.String);
-                if (indexInfo && indexInfo.type) {
-                    if (indexInfo.isReadonly && (isAssignmentTarget(node) || isDeleteTarget(node))) {
-                        error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
+                if (!(indexInfo && indexInfo.type)) {
+                    if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
+                        reportNonexistentProperty(right, leftType.flags & TypeFlags.TypeParameter && (leftType as TypeParameter).isThisType ? apparentType : leftType);
                     }
-                    return getFlowTypeOfPropertyAccess(node, /*prop*/ undefined, indexInfo.type, getAssignmentTargetKind(node));
-                }
-                if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
-                    reportNonexistentProperty(right, type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType ? apparentType : type);
-                }
-                return unknownType;
-            }
-
-            checkPropertyNotUsedBeforeDeclaration(prop, node, right);
-
-            markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
-
-            getNodeLinks(node).resolvedSymbol = prop;
-
-            checkPropertyAccessibility(node, left, apparentType, prop);
-
-            const propType = getDeclaredOrApparentType(prop, node);
-            const assignmentKind = getAssignmentTargetKind(node);
-
-            if (assignmentKind) {
-                if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
-                    error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, idText(right));
                     return unknownType;
                 }
+                if (indexInfo.isReadonly && (isAssignmentTarget(node) || isDeleteTarget(node))) {
+                    error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
+                }
+                propType = indexInfo.type;
             }
-            return getFlowTypeOfPropertyAccess(node, prop, propType, assignmentKind);
-        }
-
-        /**
-         * Only compute control flow type if this is a property access expression that isn't an
-         * assignment target, and the referenced property was declared as a variable, property,
-         * accessor, or optional method.
-         */
-        function getFlowTypeOfPropertyAccess(node: PropertyAccessExpression | QualifiedName, prop: Symbol | undefined, type: Type, assignmentKind: AssignmentKind) {
+            else {
+                checkPropertyNotUsedBeforeDeclaration(prop, node, right);
+                markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
+                getNodeLinks(node).resolvedSymbol = prop;
+                checkPropertyAccessibility(node, left, apparentType, prop);
+                if (assignmentKind) {
+                    if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
+                        error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, idText(right));
+                        return unknownType;
+                    }
+                }
+                propType = getDeclaredOrApparentType(prop, node);
+            }
+            // Only compute control flow type if this is a property access expression that isn't an
+            // assignment target, and the referenced property was declared as a variable, property,
+            // accessor, or optional method.
             if (node.kind !== SyntaxKind.PropertyAccessExpression ||
                 assignmentKind === AssignmentKind.Definite ||
-                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && type.flags & TypeFlags.Union)) {
-                return type;
+                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
+                return propType;
             }
-            const flowType = getFlowTypeOfReference(node, type);
+            const flowType = getFlowTypeOfReference(node, propType);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
