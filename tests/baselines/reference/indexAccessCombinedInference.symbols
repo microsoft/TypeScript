@@ -1,0 +1,46 @@
+=== tests/cases/compiler/indexAccessCombinedInference.ts ===
+interface Args {
+>Args : Symbol(Args, Decl(indexAccessCombinedInference.ts, 0, 0))
+
+    TA: object,
+>TA : Symbol(Args.TA, Decl(indexAccessCombinedInference.ts, 0, 16))
+
+    TY: object
+>TY : Symbol(Args.TY, Decl(indexAccessCombinedInference.ts, 1, 15))
+}
+
+function foo<T extends Args>(
+>foo : Symbol(foo, Decl(indexAccessCombinedInference.ts, 3, 1))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 5, 13))
+>Args : Symbol(Args, Decl(indexAccessCombinedInference.ts, 0, 0))
+
+    a: T["TA"],
+>a : Symbol(a, Decl(indexAccessCombinedInference.ts, 5, 29))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 5, 13))
+
+    b: T["TY"]): T["TA"] & T["TY"] {
+>b : Symbol(b, Decl(indexAccessCombinedInference.ts, 6, 15))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 5, 13))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 5, 13))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 5, 13))
+
+    return undefined!;
+>undefined : Symbol(undefined)
+}
+
+const x = foo({
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 11, 5))
+>foo : Symbol(foo, Decl(indexAccessCombinedInference.ts, 3, 1))
+
+    x: {
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 11, 15))
+
+        j: 12,
+>j : Symbol(j, Decl(indexAccessCombinedInference.ts, 12, 8))
+
+        i: 11
+>i : Symbol(i, Decl(indexAccessCombinedInference.ts, 13, 14))
+    }
+}, { y: 42 });
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 16, 4))
+

@@ -1,0 +1,54 @@
+=== tests/cases/compiler/indexAccessCombinedInference.ts ===
+interface Args {
+>Args : Args
+
+    TA: object,
+>TA : object
+
+    TY: object
+>TY : object
+}
+
+function foo<T extends Args>(
+>foo : <T extends Args>(a: T["TA"], b: T["TY"]) => T["TA"] & T["TY"]
+>T : T
+>Args : Args
+
+    a: T["TA"],
+>a : T["TA"]
+>T : T
+
+    b: T["TY"]): T["TA"] & T["TY"] {
+>b : T["TY"]
+>T : T
+>T : T
+>T : T
+
+    return undefined!;
+>undefined! : undefined
+>undefined : undefined
+}
+
+const x = foo({
+>x : { x: { j: number; i: number; }; } & { y: number; }
+>foo({    x: {        j: 12,        i: 11    }}, { y: 42 }) : { x: { j: number; i: number; }; } & { y: number; }
+>foo : <T extends Args>(a: T["TA"], b: T["TY"]) => T["TA"] & T["TY"]
+>{    x: {        j: 12,        i: 11    }} : { x: { j: number; i: number; }; }
+
+    x: {
+>x : { j: number; i: number; }
+>{        j: 12,        i: 11    } : { j: number; i: number; }
+
+        j: 12,
+>j : number
+>12 : 12
+
+        i: 11
+>i : number
+>11 : 11
+    }
+}, { y: 42 });
+>{ y: 42 } : { y: number; }
+>y : number
+>42 : 42
+
