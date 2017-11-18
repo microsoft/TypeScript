@@ -178,3 +178,49 @@ abstract class C9 {
 >d : number | undefined
 }
 
+// Properties with non-undefined types must be assigned before they can be accessed
+// within their constructor
+
+class C10 {
+>C10 : C10
+
+    a: number;
+>a : number
+
+    b: number;
+>b : number
+
+    c?: number;
+>c : number | undefined
+
+    constructor() {
+        let x = this.a;  // Error
+>x : number
+>this.a : number
+>this : this
+>a : number
+
+        this.a = this.b;  // Error
+>this.a = this.b : number
+>this.a : number
+>this : this
+>a : number
+>this.b : number
+>this : this
+>b : number
+
+        this.b = x;
+>this.b = x : number
+>this.b : number
+>this : this
+>b : number
+>x : number
+
+        let y = this.c;
+>y : number | undefined
+>this.c : number | undefined
+>this : this
+>c : number | undefined
+    }
+}
+

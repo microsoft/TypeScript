@@ -83,6 +83,21 @@ abstract class C9 {
     abstract d?: number;
 }
 
+// Properties with non-undefined types must be assigned before they can be accessed
+// within their constructor
+
+class C10 {
+    a: number;
+    b: number;
+    c?: number;
+    constructor() {
+        let x = this.a;  // Error
+        this.a = this.b;  // Error
+        this.b = x;
+        let y = this.c;
+    }
+}
+
 
 //// [strictPropertyInitialization.js]
 "use strict";
@@ -146,6 +161,17 @@ var C9 = /** @class */ (function () {
     }
     return C9;
 }());
+// Properties with non-undefined types must be assigned before they can be accessed
+// within their constructor
+var C10 = /** @class */ (function () {
+    function C10() {
+        var x = this.a; // Error
+        this.a = this.b; // Error
+        this.b = x;
+        var y = this.c;
+    }
+    return C10;
+}());
 
 
 //// [strictPropertyInitialization.d.ts]
@@ -194,4 +220,10 @@ declare abstract class C9 {
     abstract b: number | undefined;
     abstract c: number | null;
     abstract d?: number;
+}
+declare class C10 {
+    a: number;
+    b: number;
+    c?: number;
+    constructor();
 }

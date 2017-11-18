@@ -2,9 +2,11 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
 tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(6,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(48,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(71,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(93,22): error TS2565: Property 'a' is used before being assigned.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(94,23): error TS2565: Property 'b' is used before being assigned.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts (4 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts (6 errors) ====
     // Properties with non-undefined types require initialization
     
     class C1 {
@@ -95,5 +97,24 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
         abstract b: number | undefined;
         abstract c: number | null;
         abstract d?: number;
+    }
+    
+    // Properties with non-undefined types must be assigned before they can be accessed
+    // within their constructor
+    
+    class C10 {
+        a: number;
+        b: number;
+        c?: number;
+        constructor() {
+            let x = this.a;  // Error
+                         ~
+!!! error TS2565: Property 'a' is used before being assigned.
+            this.a = this.b;  // Error
+                          ~
+!!! error TS2565: Property 'b' is used before being assigned.
+            this.b = x;
+            let y = this.c;
+        }
     }
     

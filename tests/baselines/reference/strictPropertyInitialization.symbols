@@ -163,3 +163,47 @@ abstract class C9 {
 >d : Symbol(C9.d, Decl(strictPropertyInitialization.ts, 80, 30))
 }
 
+// Properties with non-undefined types must be assigned before they can be accessed
+// within their constructor
+
+class C10 {
+>C10 : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+
+    a: number;
+>a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+
+    b: number;
+>b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+
+    c?: number;
+>c : Symbol(C10.c, Decl(strictPropertyInitialization.ts, 89, 14))
+
+    constructor() {
+        let x = this.a;  // Error
+>x : Symbol(x, Decl(strictPropertyInitialization.ts, 92, 11))
+>this.a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+
+        this.a = this.b;  // Error
+>this.a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+>this.b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+
+        this.b = x;
+>this.b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+>x : Symbol(x, Decl(strictPropertyInitialization.ts, 92, 11))
+
+        let y = this.c;
+>y : Symbol(y, Decl(strictPropertyInitialization.ts, 95, 11))
+>this.c : Symbol(C10.c, Decl(strictPropertyInitialization.ts, 89, 14))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>c : Symbol(C10.c, Decl(strictPropertyInitialization.ts, 89, 14))
+    }
+}
+
