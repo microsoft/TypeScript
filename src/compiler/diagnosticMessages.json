@@ -1956,6 +1956,10 @@
         "category": "Error",
         "code": 2564
     },
+    "Property '{0}' is used before being assigned.": {
+        "category": "Error",
+        "code": 2565
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

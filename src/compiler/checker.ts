@@ -15604,7 +15604,26 @@ namespace ts {
                 prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
-            const flowType = getFlowTypeOfReference(node, propType);
+            // If strict null checks and strict property initialization checks are enabled, if we have
+            // a this.xxx property access, if the property is an instance property without an initializer,
+            // and if we are in a constructor of the same class as the property declaration, assume that
+            // the property is uninitialized at the top of the control flow.
+            let assumeUninitialized = false;
+            if (strictNullChecks && strictPropertyInitialization && left.kind === SyntaxKind.ThisKeyword) {
+                const declaration = prop && prop.valueDeclaration;
+                if (declaration && isInstancePropertyWithoutInitializer(declaration)) {
+                    const flowContainer = getControlFlowContainer(node);
+                    if (flowContainer.kind === SyntaxKind.Constructor && flowContainer.parent === declaration.parent) {
+                        assumeUninitialized = true;
+                    }
+                }
+            }
+            const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
+            if (assumeUninitialized && !(getFalsyFlags(propType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
+                error(right, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop));
+                // Return the declared type to reduce follow-on errors
+                return propType;
+            }
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
@@ -22633,7 +22652,7 @@ namespace ts {
             }
             const constructor = findConstructorDeclaration(node);
             for (const member of node.members) {
-                if (member.kind === SyntaxKind.PropertyDeclaration && !hasModifier(member, ModifierFlags.Static | ModifierFlags.Abstract) && !(<PropertyDeclaration>member).initializer) {
+                if (isInstancePropertyWithoutInitializer(member)) {
                     const propName = (<PropertyDeclaration>member).name;
                     if (isIdentifier(propName)) {
                         const type = getTypeOfSymbol(getSymbolOfNode(member));
@@ -22645,6 +22664,12 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function isInstancePropertyWithoutInitializer(node: Node) {
+            return node.kind === SyntaxKind.PropertyDeclaration &&
+                !hasModifier(node, ModifierFlags.Static | ModifierFlags.Abstract) &&
+                !(<PropertyDeclaration>node).initializer;
         }
 
         function isPropertyInitializedInConstructor(propName: Identifier, propType: Type, constructor: ConstructorDeclaration) {
