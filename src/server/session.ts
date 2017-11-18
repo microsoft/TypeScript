@@ -245,6 +245,16 @@ namespace ts.server {
         event: Event;
     }
 
+    /** @internal */
+    export function toEvent(eventName: string, body: {}): protocol.Event {
+        return {
+            seq: 0,
+            type: "event",
+            event: eventName,
+            body
+        };
+    }
+
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -400,13 +410,7 @@ namespace ts.server {
         }
 
         public event<T>(body: T, eventName: string): void {
-            const ev: protocol.Event = {
-                seq: 0,
-                type: "event",
-                event: eventName,
-                body
-            };
-            this.send(ev);
+            this.send(toEvent(eventName, body));
         }
 
         // For backwards-compatibility only.
