@@ -156,8 +156,8 @@ namespace ts.server {
             types: ["office"]                               // @types package to fetch instead
         },
         "References": {
-            "match": /^(.*\/_references\.js)$/i,
-            "exclude": [["^", 1, "$"]]
+            match: /^(.*\/_references\.js)$/i,
+            exclude: [["^", 1, "$"]]
         }
     };
 
