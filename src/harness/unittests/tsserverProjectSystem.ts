@@ -210,6 +210,8 @@ namespace ts.projectSystem {
 
     class TestSession extends server.Session {
         private seq = 0;
+        public events: protocol.Event[] = [];
+        public host: TestServerHost;
 
         getProjectService() {
             return this.projectService;
@@ -228,6 +230,16 @@ namespace ts.projectSystem {
             request.seq = this.seq;
             request.type = "request";
             return this.executeCommand(<T>request);
+        }
+
+        public event<T>(body: T, eventName: string) {
+            this.events.push(server.toEvent(eventName, body));
+            super.event(body, eventName);
+        }
+
+        public clearMessages() {
+            clear(this.events);
+            this.host.clearOutput();
         }
     }
 
@@ -436,48 +448,29 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
-    function assertEvent(actualOutput: string, expectedEvent: protocol.Event, host: TestServerHost) {
-        assert.equal(actualOutput, server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, host.newLine));
+    function checkErrorMessage(session: TestSession, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
+        checkNthEvent(session, ts.server.toEvent(eventName, diagnostics), 0, /*isMostRecent*/ false);
     }
 
-    function checkErrorMessage(host: TestServerHost, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
-        const outputs = host.getOutput();
-        assert.isTrue(outputs.length >= 1, outputs.toString());
-        const event: protocol.Event = {
-            seq: 0,
-            type: "event",
-            event: eventName,
-            body: diagnostics
-        };
-        assertEvent(outputs[0], event, host);
+    function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number) {
+        checkNthEvent(session, ts.server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, /*isMostRecent*/ true);
     }
 
-    function checkCompleteEvent(host: TestServerHost, numberOfCurrentEvents: number, expectedSequenceId: number) {
-        const outputs = host.getOutput();
-        assert.equal(outputs.length, numberOfCurrentEvents, outputs.toString());
-        const event: protocol.RequestCompletedEvent = {
-            seq: 0,
-            type: "event",
-            event: "requestCompleted",
-            body: {
-                request_seq: expectedSequenceId
-            }
-        };
-        assertEvent(outputs[numberOfCurrentEvents - 1], event, host);
+    function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
+        checkNthEvent(session, ts.server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
     }
 
-    function checkProjectUpdatedInBackgroundEvent(host: TestServerHost, openFiles: string[]) {
-        const outputs = host.getOutput();
-        assert.equal(outputs.length, 1, outputs.toString());
-        const event: protocol.ProjectsUpdatedInBackgroundEvent = {
-            seq: 0,
-            type: "event",
-            event: "projectsUpdatedInBackground",
-            body: {
-                openFiles
-            }
-        };
-        assertEvent(outputs[0], event, host);
+    function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
+        const events = session.events;
+        assert.deepEqual(events[index], expectedEvent);
+
+        const outputs = session.host.getOutput();
+        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
+
+        if (isMostRecent) {
+            assert.strictEqual(events.length, index + 1, JSON.stringify(events));
+            assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
+        }
     }
 
     describe("tsserverProjectSystem", () => {
@@ -2891,14 +2884,14 @@ namespace ts.projectSystem {
 
                 assert.isFalse(hasError);
                 host.checkTimeoutQueueLength(2);
-                checkErrorMessage(host, "syntaxDiag", { file: untitledFile, diagnostics: [] });
-                host.clearOutput();
+                checkErrorMessage(session, "syntaxDiag", { file: untitledFile, diagnostics: [] });
+                session.clearMessages();
 
                 host.runQueuedImmediateCallbacks();
                 assert.isFalse(hasError);
-                checkErrorMessage(host, "semanticDiag", { file: untitledFile, diagnostics: [] });
+                checkErrorMessage(session, "semanticDiag", { file: untitledFile, diagnostics: [] });
 
-                checkCompleteEvent(host, 2, expectedSequenceId);
+                checkCompleteEvent(session, 2, expectedSequenceId);
             }
 
             it("has projectRoot", () => {
@@ -2942,7 +2935,7 @@ namespace ts.projectSystem {
             verifyErrorsInApp();
 
             function verifyErrorsInApp() {
-                host.clearOutput();
+                session.clearMessages();
                 const expectedSequenceId = session.getNextSeq();
                 session.executeCommandSeq<protocol.GeterrRequest>({
                     command: server.CommandNames.Geterr,
@@ -2952,13 +2945,13 @@ namespace ts.projectSystem {
                     }
                 });
                 host.checkTimeoutQueueLengthAndRun(1);
-                checkErrorMessage(host, "syntaxDiag", { file: app.path, diagnostics: [] });
-                host.clearOutput();
+                checkErrorMessage(session, "syntaxDiag", { file: app.path, diagnostics: [] });
+                session.clearMessages();
 
                 host.runQueuedImmediateCallbacks();
-                checkErrorMessage(host, "semanticDiag", { file: app.path, diagnostics: [] });
-                checkCompleteEvent(host, 2, expectedSequenceId);
-                host.clearOutput();
+                checkErrorMessage(session, "semanticDiag", { file: app.path, diagnostics: [] });
+                checkCompleteEvent(session, 2, expectedSequenceId);
+                session.clearMessages();
             }
         });
     });
@@ -3683,7 +3676,7 @@ namespace ts.projectSystem {
                 }
             });
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            host.clearOutput();
+            session.clearMessages();
             const expectedSequenceId = session.getNextSeq();
             session.executeCommandSeq<protocol.GeterrRequest>({
                 command: server.CommandNames.Geterr,
@@ -3694,23 +3687,24 @@ namespace ts.projectSystem {
             });
 
             host.checkTimeoutQueueLengthAndRun(1);
-            checkErrorMessage(host, "syntaxDiag", { file: file1.path, diagnostics: [] });
-            host.clearOutput();
+            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            session.clearMessages();
 
             host.runQueuedImmediateCallbacks();
             const moduleNotFound = Diagnostics.Cannot_find_module_0;
             const startOffset = file1.content.indexOf('"') + 1;
-            checkErrorMessage(host, "semanticDiag", {
+            checkErrorMessage(session, "semanticDiag", {
                 file: file1.path, diagnostics: [{
                     start: { line: 1, offset: startOffset },
                     end: { line: 1, offset: startOffset + '"pad"'.length },
                     text: formatStringFromArgs(moduleNotFound.message, ["pad"]),
                     code: moduleNotFound.code,
-                    category: DiagnosticCategory[moduleNotFound.category].toLowerCase()
+                    category: DiagnosticCategory[moduleNotFound.category].toLowerCase(),
+                    source: undefined
                 }]
             });
-            checkCompleteEvent(host, 2, expectedSequenceId);
-            host.clearOutput();
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
 
             const padIndex: FileOrFolder = {
                 path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
@@ -3719,15 +3713,15 @@ namespace ts.projectSystem {
             files.push(padIndex);
             host.reloadFS(files, { ignoreWatchInvokedWithTriggerAsFileCreate: true });
             host.runQueuedTimeoutCallbacks();
-            checkProjectUpdatedInBackgroundEvent(host, [file1.path]);
-            host.clearOutput();
+            checkProjectUpdatedInBackgroundEvent(session, [file1.path]);
+            session.clearMessages();
 
             host.runQueuedTimeoutCallbacks();
-            checkErrorMessage(host, "syntaxDiag", { file: file1.path, diagnostics: [] });
-            host.clearOutput();
+            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            session.clearMessages();
 
             host.runQueuedImmediateCallbacks();
-            checkErrorMessage(host, "semanticDiag", { file: file1.path, diagnostics: [] });
+            checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
         });
     });
 
@@ -4841,7 +4835,7 @@ namespace ts.projectSystem {
                     command: "projectInfo",
                     arguments: { file: f1.path }
                 });
-                host.clearOutput();
+                session.clearMessages();
 
                 // cancel previously issued Geterr
                 cancellationToken.setRequestToCancel(getErrId);
@@ -4865,7 +4859,7 @@ namespace ts.projectSystem {
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 const e1 = <protocol.Event>getMessage(0);
                 assert.equal(e1.event, "syntaxDiag");
-                host.clearOutput();
+                session.clearMessages();
 
                 cancellationToken.setRequestToCancel(getErrId);
                 host.runQueuedImmediateCallbacks();
@@ -4887,7 +4881,7 @@ namespace ts.projectSystem {
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 const e1 = <protocol.Event>getMessage(0);
                 assert.equal(e1.event, "syntaxDiag");
-                host.clearOutput();
+                session.clearMessages();
 
                 // the semanticDiag message
                 host.runQueuedImmediateCallbacks();
@@ -4910,7 +4904,7 @@ namespace ts.projectSystem {
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 const e1 = <protocol.Event>getMessage(0);
                 assert.equal(e1.event, "syntaxDiag");
-                host.clearOutput();
+                session.clearMessages();
 
                 session.executeCommandSeq(<protocol.GeterrRequest>{
                     command: "geterr",
@@ -4924,7 +4918,7 @@ namespace ts.projectSystem {
                 const event = <protocol.RequestCompletedEvent>getMessage(n);
                 assert.equal(event.event, "requestCompleted");
                 assert.equal(event.body.request_seq, expectedSeq, "expectedSeq");
-                host.clearOutput();
+                session.clearMessages();
             }
 
             function getMessage(n: number) {
@@ -6427,7 +6421,7 @@ namespace ts.projectSystem {
                     });
 
                     // Verified the events, reset them
-                    host.clearOutput();
+                    session.clearMessages();
                 }
             }
         });

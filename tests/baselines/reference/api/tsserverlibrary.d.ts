@@ -6922,12 +6922,13 @@ declare namespace ts.server {
         fileName: NormalizedPath;
         project: Project;
     }
-    interface EventSender {
-        event<T>(payload: T, eventName: string): void;
-    }
     type CommandNames = protocol.CommandTypes;
     const CommandNames: any;
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
+    type Event = <T>(body: T, eventName: string) => void;
+    interface EventSender {
+        event: Event;
+    }
     interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -6937,6 +6938,9 @@ declare namespace ts.server {
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
         logger: Logger;
+        /**
+         * If falsy, all events are suppressed.
+         */
         canUseEvents: boolean;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
@@ -6950,21 +6954,22 @@ declare namespace ts.server {
         private changeSeq;
         private currentRequestId;
         private errorCheck;
-        private eventHandler;
-        private host;
+        protected host: ServerHost;
         private readonly cancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
-        private byteLength;
+        protected byteLength: (buf: string, encoding?: string) => number;
         private hrtime;
         protected logger: Logger;
-        private canUseEvents;
+        protected canUseEvents: boolean;
+        private eventHandler;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent(requestId);
         private defaultEventHandler(event);
         private projectsUpdatedInBackgroundEvent(openFiles);
         logError(err: Error, cmd: string): void;
         send(msg: protocol.Message): void;
-        event<T>(info: T, eventName: string): void;
+        event<T>(body: T, eventName: string): void;
+        /** @deprecated */
         output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
         private doOutput(info, cmdName, reqSeq, success, message?);
         private semanticCheck(file, project);
