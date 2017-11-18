@@ -1271,6 +1271,10 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
+    export function toArray<T>(value: T | T[]): T[] {
+        return isArray(value) ? value : [value];
+    }
+
     /**
      * Tests whether a value is string
      */

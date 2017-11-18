@@ -582,7 +582,7 @@ namespace ts.server.protocol {
         errorCodes?: number[];
     }
 
-    export interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+    export interface ApplyCodeActionCommandRequestArgs {
         /** May also be an array of commands. */
         command: {};
     }
