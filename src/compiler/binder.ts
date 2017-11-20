@@ -2742,14 +2742,13 @@ namespace ts {
     function computeCallExpression(node: CallExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
         const expression = node.expression;
-        const expressionKind = expression.kind;
 
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
         if (subtreeFlags & TransformFlags.ContainsSpread
-            || isSuperOrSuperProperty(expression, expressionKind)) {
+            || isSuperOrSuperProperty(expression)) {
             // If the this node contains a SpreadExpression, or is a super call, then it is an ES6
             // node.
             transformFlags |= TransformFlags.AssertES2015;
@@ -2769,8 +2768,9 @@ namespace ts {
         return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
     }
 
-    function isSuperOrSuperProperty(node: Node, kind: SyntaxKind) {
-        switch (kind) {
+    function isSuperOrSuperProperty(node: Node) {
+        node = skipOuterExpressions(node);
+        switch (node.kind) {
             case SyntaxKind.SuperKeyword:
                 return true;
 
