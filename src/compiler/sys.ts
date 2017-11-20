@@ -291,12 +291,11 @@ namespace ts {
                         callback
                     );
                     dirWatcher.on("error", () => {
-                        if (!directoryExists(directoryName)) {
-                            // Deleting directory
-                            watcher = watchMissingDirectory();
-                            // Call the callback for current directory
-                            callback("rename", "");
-                        }
+                        // Watch the missing directory
+                        watcher.close();
+                        watcher = watchMissingDirectory();
+                        // Call the callback for current directory
+                        callback("rename", "");
                     });
                     return dirWatcher;
                 }
