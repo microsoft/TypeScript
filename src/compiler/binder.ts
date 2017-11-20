@@ -517,16 +517,15 @@ namespace ts {
                 const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasModifier(node, ModifierFlags.Async) && !!getImmediatelyInvokedFunctionExpression(node);
                 // A non-async IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
-                if (isIIFE) {
-                    currentReturnTarget = createBranchLabel();
-                }
-                else {
+                if (!isIIFE) {
                     currentFlow = { flags: FlowFlags.Start };
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
                         (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
-                    currentReturnTarget = undefined;
                 }
+                // We create a return control flow graph for IIFEs and constructors. For constructors
+                // we use the return control flow graph in strict property intialization checks.
+                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor ? createBranchLabel() : undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
@@ -541,11 +540,14 @@ namespace ts {
                 if (node.kind === SyntaxKind.SourceFile) {
                     node.flags |= emitFlags;
                 }
-                if (isIIFE) {
+                if (currentReturnTarget) {
                     addAntecedent(currentReturnTarget, currentFlow);
                     currentFlow = finishFlowLabel(currentReturnTarget);
+                    if (node.kind === SyntaxKind.Constructor) {
+                        (<ConstructorDeclaration>node).returnFlowNode = currentFlow;
+                    }
                 }
-                else {
+                if (!isIIFE) {
                     currentFlow = saveCurrentFlow;
                 }
                 currentBreakTarget = saveBreakTarget;
