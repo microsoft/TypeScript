@@ -15535,31 +15535,35 @@ namespace ts {
             });
         }
 
-        function checkNonNullExpression(node: Expression | QualifiedName) {
-            return checkNonNullType(checkExpression(node), node);
+        function checkNonNullExpression(
+            node: Expression | QualifiedName,
+            nullDiagnostic?: DiagnosticMessage,
+            undefinedDiagnostic?: DiagnosticMessage,
+            nullOrUndefinedDiagnostic?: DiagnosticMessage,
+        ) {
+            return checkNonNullType(
+                checkExpression(node),
+                node,
+                nullDiagnostic,
+                undefinedDiagnostic,
+                nullOrUndefinedDiagnostic
+            );
         }
 
-        function checkNonNullCallLikeExpression(node: Expression | QualifiedName) {
-            const type = checkExpression(node);
+        function checkNonNullType(
+            type: Type,
+            node: Node,
+            nullDiagnostic?: DiagnosticMessage,
+            undefinedDiagnostic?: DiagnosticMessage,
+            nullOrUndefinedDiagnostic?: DiagnosticMessage
+        ): Type {
             const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
             if (kind) {
                 error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
-                    Diagnostics.Cannot_invoke_an_object_which_is_possibly_null_or_undefined :
-                    Diagnostics.Cannot_invoke_an_object_which_is_possibly_undefined :
-                    Diagnostics.Cannot_invoke_an_object_which_is_possibly_null);
-                const t = getNonNullableType(type);
-                return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? unknownType : t;
-            }
-            return type;
-        }
-
-        function checkNonNullType(type: Type, errorNode: Node): Type {
-            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
-            if (kind) {
-                error(errorNode, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
-                    Diagnostics.Object_is_possibly_null_or_undefined :
-                    Diagnostics.Object_is_possibly_undefined :
-                    Diagnostics.Object_is_possibly_null);
+                    (nullOrUndefinedDiagnostic || Diagnostics.Object_is_possibly_null_or_undefined) :
+                    (undefinedDiagnostic || Diagnostics.Object_is_possibly_undefined) :
+                    (nullDiagnostic || Diagnostics.Object_is_possibly_null)
+                );
                 const t = getNonNullableType(type);
                 return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? unknownType : t;
             }
@@ -17001,7 +17005,13 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
-            const funcType = checkNonNullCallLikeExpression(node.expression);
+            const funcType = checkNonNullExpression(
+                node.expression,
+                Diagnostics.Cannot_invoke_an_object_which_is_possibly_null,
+                Diagnostics.Cannot_invoke_an_object_which_is_possibly_undefined,
+                Diagnostics.Cannot_invoke_an_object_which_is_possibly_null_or_undefined
+            );
+
             if (funcType === silentNeverType) {
                 return silentNeverSignature;
             }
