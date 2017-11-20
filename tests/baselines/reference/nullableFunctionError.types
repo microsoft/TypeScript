@@ -8,10 +8,10 @@ undefined();
 >undefined : undefined
 
 let f: null | undefined;
->f : null
+>f : null | undefined
 >null : null
 
 f();
 >f() : any
->f : null
+>f : null | undefined
 

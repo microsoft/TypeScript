@@ -15539,6 +15539,20 @@ namespace ts {
             return checkNonNullType(checkExpression(node), node);
         }
 
+        function checkNonNullCallLikeExpression(node: Expression | QualifiedName) {
+            const type = checkExpression(node);
+            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
+            if (kind) {
+                error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
+                    Diagnostics.Cannot_invoke_an_object_which_is_possibly_null_or_undefined :
+                    Diagnostics.Cannot_invoke_an_object_which_is_possibly_undefined :
+                    Diagnostics.Cannot_invoke_an_object_which_is_possibly_null);
+                const t = getNonNullableType(type);
+                return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? unknownType : t;
+            }
+            return type;
+        }
+
         function checkNonNullType(type: Type, errorNode: Node): Type {
             const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
             if (kind) {
@@ -16987,7 +17001,7 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
-            const funcType = checkNonNullExpression(node.expression);
+            const funcType = checkNonNullCallLikeExpression(node.expression);
             if (funcType === silentNeverType) {
                 return silentNeverSignature;
             }
