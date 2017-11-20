@@ -23,7 +23,7 @@ function f2<T extends C, U extends D>(v: T | U) {
     }
 }
 
-class E { x: string }
+class E { x: string | undefined }
 
 function f3<T extends E>(v: T | { x: string }) {
     if (v instanceof E) {

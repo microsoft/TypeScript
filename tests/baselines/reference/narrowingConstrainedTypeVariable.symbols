@@ -57,12 +57,12 @@ function f2<T extends C, U extends D>(v: T | U) {
     }
 }
 
-class E { x: string }
+class E { x: string | undefined }
 >E : Symbol(E, Decl(narrowingConstrainedTypeVariable.ts, 22, 1))
 >x : Symbol(E.x, Decl(narrowingConstrainedTypeVariable.ts, 24, 9))
 
 function f3<T extends E>(v: T | { x: string }) {
->f3 : Symbol(f3, Decl(narrowingConstrainedTypeVariable.ts, 24, 21))
+>f3 : Symbol(f3, Decl(narrowingConstrainedTypeVariable.ts, 24, 33))
 >T : Symbol(T, Decl(narrowingConstrainedTypeVariable.ts, 26, 12))
 >E : Symbol(E, Decl(narrowingConstrainedTypeVariable.ts, 22, 1))
 >v : Symbol(v, Decl(narrowingConstrainedTypeVariable.ts, 26, 25))
