@@ -598,6 +598,7 @@ namespace ts {
 
     export type DotDotDotToken = Token<SyntaxKind.DotDotDotToken>;
     export type QuestionToken = Token<SyntaxKind.QuestionToken>;
+    export type ExclamationToken = Token<SyntaxKind.ExclamationToken>;
     export type ColonToken = Token<SyntaxKind.ColonToken>;
     export type EqualsToken = Token<SyntaxKind.EqualsToken>;
     export type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
@@ -761,9 +762,10 @@ namespace ts {
     export interface VariableDeclaration extends NamedDeclaration {
         kind: SyntaxKind.VariableDeclaration;
         parent?: VariableDeclarationList | CatchClause;
-        name: BindingName;                  // Declared variable name
-        type?: TypeNode;                    // Optional type annotation
-        initializer?: Expression;           // Optional initializer
+        name: BindingName;                    // Declared variable name
+        exclamationToken?: ExclamationToken;  // Optional definite assignment assertion
+        type?: TypeNode;                      // Optional type annotation
+        initializer?: Expression;             // Optional initializer
     }
 
     export interface VariableDeclarationList extends Node {
@@ -801,8 +803,9 @@ namespace ts {
 
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
-        questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         name: PropertyName;
+        questionToken?: QuestionToken;      // Present for use with reporting a grammar error
+        exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;           // Optional initializer
     }
@@ -860,6 +863,7 @@ namespace ts {
         dotDotDotToken?: DotDotDotToken;
         name: DeclarationName;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;
     }
