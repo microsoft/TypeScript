@@ -250,6 +250,7 @@ namespace ts {
             getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
             getBaseConstraintOfType,
+            getDefaultFromTypeParameter: type => type && type.flags & TypeFlags.TypeParameter ? getDefaultFromTypeParameter(type as TypeParameter) : undefined,
             resolveName(name, location, meaning) {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
             },
