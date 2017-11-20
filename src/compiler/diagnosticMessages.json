@@ -1952,6 +1952,14 @@
         "category": "Error",
         "code": 2563
     },
+    "Property '{0}' has no initializer and is not definitely assigned in the constructor.": {
+        "category": "Error",
+        "code": 2564
+    },
+    "Property '{0}' is used before being assigned.": {
+        "category": "Error",
+        "code": 2565
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -3390,6 +3398,10 @@
     "Enable strict checking of function types.": {
         "category": "Message",
         "code": 6186
+    },
+    "Enable strict checking of property initialization in classes.": {
+        "category": "Message",
+        "code": 6187
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

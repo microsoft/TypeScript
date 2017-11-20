@@ -69,6 +69,7 @@ namespace ts {
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
+        const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
 
@@ -8868,6 +8869,7 @@ namespace ts {
         // An object type S is considered to be derived from an object type T if
         // S is a union type and every constituent of S is derived from T,
         // T is a union type and S is derived from at least one constituent of T, or
+        // S is a type variable with a base constraint that is derived from T,
         // T is one of the global types Object and Function and S is a subtype of T, or
         // T occurs directly or indirectly in an 'extends' clause of S.
         // Note that this check ignores type parameters and only considers the
@@ -8875,6 +8877,7 @@ namespace ts {
         function isTypeDerivedFrom(source: Type, target: Type): boolean {
             return source.flags & TypeFlags.Union ? every((<UnionType>source).types, t => isTypeDerivedFrom(t, target)) :
                 target.flags & TypeFlags.Union ? some((<UnionType>target).types, t => isTypeDerivedFrom(source, t)) :
+                source.flags & TypeFlags.TypeVariable ? isTypeDerivedFrom(getBaseConstraintOfType(source) || emptyObjectType, target) :
                 target === globalObjectType || target === globalFunctionType ? isTypeSubtypeOf(source, target) :
                 hasBaseType(source, getTargetType(target));
             }
@@ -12283,7 +12286,7 @@ namespace ts {
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
             const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? anyArrayType : finalizeEvolvingArrayType(evolvedType);
-            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            if (reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
             return resultType;
@@ -15561,63 +15564,68 @@ namespace ts {
         }
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
-            const type = checkNonNullExpression(left);
-            if (isTypeAny(type) || type === silentNeverType) {
-                return type;
-            }
-
-            const apparentType = getApparentType(getWidenedType(type));
-            if (apparentType === unknownType || (type.flags & TypeFlags.TypeParameter && isTypeAny(apparentType))) {
-                // handle cases when type is Type parameter with invalid or any constraint
+            let propType: Type;
+            const leftType = checkNonNullExpression(left);
+            const apparentType = getApparentType(getWidenedType(leftType));
+            if (isTypeAny(apparentType) || apparentType === silentNeverType) {
                 return apparentType;
             }
+            const assignmentKind = getAssignmentTargetKind(node);
             const prop = getPropertyOfType(apparentType, right.escapedText);
             if (!prop) {
                 const indexInfo = getIndexInfoOfType(apparentType, IndexKind.String);
-                if (indexInfo && indexInfo.type) {
-                    if (indexInfo.isReadonly && (isAssignmentTarget(node) || isDeleteTarget(node))) {
-                        error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
+                if (!(indexInfo && indexInfo.type)) {
+                    if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
+                        reportNonexistentProperty(right, leftType.flags & TypeFlags.TypeParameter && (leftType as TypeParameter).isThisType ? apparentType : leftType);
                     }
-                    return getFlowTypeOfPropertyAccess(node, /*prop*/ undefined, indexInfo.type, getAssignmentTargetKind(node));
-                }
-                if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
-                    reportNonexistentProperty(right, type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType ? apparentType : type);
-                }
-                return unknownType;
-            }
-
-            checkPropertyNotUsedBeforeDeclaration(prop, node, right);
-
-            markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
-
-            getNodeLinks(node).resolvedSymbol = prop;
-
-            checkPropertyAccessibility(node, left, apparentType, prop);
-
-            const propType = getDeclaredOrApparentType(prop, node);
-            const assignmentKind = getAssignmentTargetKind(node);
-
-            if (assignmentKind) {
-                if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
-                    error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, idText(right));
                     return unknownType;
                 }
+                if (indexInfo.isReadonly && (isAssignmentTarget(node) || isDeleteTarget(node))) {
+                    error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
+                }
+                propType = indexInfo.type;
             }
-            return getFlowTypeOfPropertyAccess(node, prop, propType, assignmentKind);
-        }
-
-        /**
-         * Only compute control flow type if this is a property access expression that isn't an
-         * assignment target, and the referenced property was declared as a variable, property,
-         * accessor, or optional method.
-         */
-        function getFlowTypeOfPropertyAccess(node: PropertyAccessExpression | QualifiedName, prop: Symbol | undefined, type: Type, assignmentKind: AssignmentKind) {
+            else {
+                checkPropertyNotUsedBeforeDeclaration(prop, node, right);
+                markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
+                getNodeLinks(node).resolvedSymbol = prop;
+                checkPropertyAccessibility(node, left, apparentType, prop);
+                if (assignmentKind) {
+                    if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
+                        error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, idText(right));
+                        return unknownType;
+                    }
+                }
+                propType = getDeclaredOrApparentType(prop, node);
+            }
+            // Only compute control flow type if this is a property access expression that isn't an
+            // assignment target, and the referenced property was declared as a variable, property,
+            // accessor, or optional method.
             if (node.kind !== SyntaxKind.PropertyAccessExpression ||
                 assignmentKind === AssignmentKind.Definite ||
-                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && type.flags & TypeFlags.Union)) {
-                return type;
+                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
+                return propType;
             }
-            const flowType = getFlowTypeOfReference(node, type);
+            // If strict null checks and strict property initialization checks are enabled, if we have
+            // a this.xxx property access, if the property is an instance property without an initializer,
+            // and if we are in a constructor of the same class as the property declaration, assume that
+            // the property is uninitialized at the top of the control flow.
+            let assumeUninitialized = false;
+            if (strictNullChecks && strictPropertyInitialization && left.kind === SyntaxKind.ThisKeyword) {
+                const declaration = prop && prop.valueDeclaration;
+                if (declaration && isInstancePropertyWithoutInitializer(declaration)) {
+                    const flowContainer = getControlFlowContainer(node);
+                    if (flowContainer.kind === SyntaxKind.Constructor && flowContainer.parent === declaration.parent) {
+                        assumeUninitialized = true;
+                    }
+                }
+            }
+            const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
+            if (assumeUninitialized && !(getFalsyFlags(propType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
+                error(right, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop));
+                // Return the declared type to reduce follow-on errors
+                return propType;
+            }
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
@@ -22483,6 +22491,7 @@ namespace ts {
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
+                checkPropertyInitialization(node);
             }
         }
 
@@ -22637,6 +22646,39 @@ namespace ts {
             }
 
             return ok;
+        }
+
+        function checkPropertyInitialization(node: ClassLikeDeclaration) {
+            if (!strictNullChecks || !strictPropertyInitialization || node.flags & NodeFlags.Ambient) {
+                return;
+            }
+            const constructor = findConstructorDeclaration(node);
+            for (const member of node.members) {
+                if (isInstancePropertyWithoutInitializer(member)) {
+                    const propName = (<PropertyDeclaration>member).name;
+                    if (isIdentifier(propName)) {
+                        const type = getTypeOfSymbol(getSymbolOfNode(member));
+                        if (!(type.flags & TypeFlags.Any || getFalsyFlags(type) & TypeFlags.Undefined)) {
+                            if (!constructor || !isPropertyInitializedInConstructor(propName, type, constructor)) {
+                                error(member.name, Diagnostics.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor, declarationNameToString(propName));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function isInstancePropertyWithoutInitializer(node: Node) {
+            return node.kind === SyntaxKind.PropertyDeclaration &&
+                !hasModifier(node, ModifierFlags.Static | ModifierFlags.Abstract) &&
+                !(<PropertyDeclaration>node).initializer;
+        }
+
+        function isPropertyInitializedInConstructor(propName: Identifier, propType: Type, constructor: ConstructorDeclaration) {
+            const reference = createPropertyAccess(createThis(), propName);
+            reference.flowNode = constructor.returnFlowNode;
+            const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
+            return !(getFalsyFlags(flowType) & TypeFlags.Undefined);
         }
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
