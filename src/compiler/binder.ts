@@ -273,6 +273,9 @@ namespace ts {
                 return getEscapedTextOfIdentifierOrLiteral(<Identifier | LiteralExpression>name);
             }
             switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    // THIS IS WRONG
+                    return (node as any as Identifier).escapedText;
                 case SyntaxKind.Constructor:
                     return InternalSymbolName.Constructor;
                 case SyntaxKind.FunctionType:
@@ -2354,7 +2357,7 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = leftSideOfAssignment;
 
-            bindPropertyAssignment(constructorFunction.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ true);
+            bindPropertyAssignment(constructorFunction.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ true, /*isMagic*/ false);
         }
 
         function bindStaticPropertyAssignment(node: BinaryExpression) {
@@ -2377,7 +2380,7 @@ namespace ts {
                     bindExportsPropertyAssignment(node);
                 }
                 else {
-                    bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+                    bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false, /*isMagic*/ true);
                 }
             }
         }
@@ -2386,14 +2389,22 @@ namespace ts {
             return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || (container.locals && container.locals.get(name));
         }
 
-        function bindPropertyAssignment(functionName: __String, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
+        function bindPropertyAssignment(functionName: __String, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean, isMagic: boolean) {
             let targetSymbol = lookupSymbolForName(functionName);
-
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }
-
-            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class))) {
+            if (isMagic && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace))) {
+                // TODO: Magic may not be required
+                // TODO: Container.locals as symbolTable is probably wrong sometimes (maybe it's sometimes exports?)
+                // TODO: Container.symbol as parent is probably wrong sometimes
+                // TODO: propertyAccessExpression.expression isn't a Declaration
+                targetSymbol = declareSymbol(container.locals, container.symbol, propertyAccessExpression.expression as any as Declaration, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+            }
+            if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
+                targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
+            }
+            if (!isMagic && (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class)))) {
                 return;
             }
 

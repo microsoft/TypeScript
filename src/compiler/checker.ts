@@ -1381,7 +1381,8 @@ namespace ts {
         function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
-                if (symbol) {
+                // TODO: WRONG
+                if (symbol && !isInJavaScriptFile(errorLocation)) {
                     error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_value, unescapeLeadingUnderscores(name));
                     return true;
                 }
@@ -1734,15 +1735,7 @@ namespace ts {
                     return undefined;
                 }
                 const right = name.kind === SyntaxKind.QualifiedName ? name.right : name.name;
-                let namespace = resolveEntityName(left, SymbolFlags.Namespace, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
-                if (!namespace && name.parent && isJSDocTypeReference(name.parent as TypeReferenceType)) {
-                    // jsdoc type references may be values
-                    namespace = resolveEntityName(left, SymbolFlags.Value, ignoreErrors, /*dontResolveAlias*/ false, location);
-                }
-                else if (!ignoreErrors) {
-                    // run again for error reporting purposes
-                    resolveEntityName(left, SymbolFlags.Namespace, /*ignoreErrors*/ false, /*dontResolveAlias*/ false, location);
-                }
+                let namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, /*dontResolveAlias*/ false, location);
                 if (!namespace || nodeIsMissing(right)) {
                     return undefined;
                 }
