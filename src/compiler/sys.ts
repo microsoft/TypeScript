@@ -217,7 +217,7 @@ namespace ts {
              * Create new childDirectoryWatcher and add it to the new ChildDirectoryWatcher list
              */
             function createAndAddChildDirectoryWatcher(childName: string) {
-                const childPath = getNormalizedAbsolutePath(parentDir, childName);
+                const childPath = ts.getNormalizedAbsolutePath(childName, parentDir);
                 const result = createDirectoryWatcher(childPath) as ChildDirectoryWatcher;
                 result.childName = childName;
                 addChildDirectoryWatcher(result);

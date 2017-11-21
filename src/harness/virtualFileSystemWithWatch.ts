@@ -143,10 +143,10 @@ interface Array<T> {}`
         }
     }
 
-    export function checkFileNames(caption: string, actualFileNames: ReadonlyArray<string>, expectedFileNames: string[]) {
-        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected:\r\n${expectedFileNames.join("\r\n")}\r\ngot: ${actualFileNames.join("\r\n")}`);
-        for (const f of expectedFileNames) {
-            assert.equal(true, contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
+    export function checkArray(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
+        assert.equal(actual.length, expected.length, `${caption}: incorrect actual number of files, expected:\r\n${expected.join("\r\n")}\r\ngot: ${actual.join("\r\n")}`);
+        for (const f of expected) {
+            assert.equal(true, contains(actual, f), `${caption}: expected to find ${f} in ${actual}`);
         }
     }
 
@@ -588,7 +588,9 @@ interface Array<T> {}`
         getPollingWatchDirectoryHost() {
             return this.pollingWatchDirectoryHost || (this.pollingWatchDirectoryHost = {
                 watchFile: (fileName, cb) => this.watchFile(fileName, cb),
-                getAccessileSortedChildDirectories: path => this.getDirectories(path),
+                // Since we are watching missing directories as well with polling,
+                // check for directory exists before getting directories of the path
+                getAccessileSortedChildDirectories: path => this.directoryExists(path) ? this.getDirectories(path) : emptyArray,
                 filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
             });
         }
