@@ -540,7 +540,7 @@ namespace ts.server {
             }
         }
 
-        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void {
             const project = this.findProject(response.projectName);
             if (!project) {
                 return;
