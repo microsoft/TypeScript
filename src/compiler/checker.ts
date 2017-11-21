@@ -23263,7 +23263,9 @@ namespace ts {
 
         function checkExportSpecifier(node: ExportSpecifier) {
             checkAliasSymbol(node);
-            collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true); // Collect linked aliases to set visibility links
+            if (compilerOptions.declaration) {
+                collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true); // Collect linked aliases to set visibility links
+            }
             if (!(<ExportDeclaration>node.parent.parent).moduleSpecifier) {
                 const exportedName = node.propertyName || node.name;
                 // find immediate value referenced by exported name (SymbolFlags.Alias is set so we don't chase down aliases)
@@ -23301,7 +23303,10 @@ namespace ts {
             }
             if (node.expression.kind === SyntaxKind.Identifier) {
                 markExportAsReferenced(node);
-                collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true); // Sets visibility flags on refernced nodes
+
+                if (compilerOptions.declaration) {
+                    collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true); // Sets visibility flags on refernced nodes
+                }
             }
             else {
                 checkExpressionCached(node.expression);

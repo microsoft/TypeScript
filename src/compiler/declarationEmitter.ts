@@ -1250,7 +1250,7 @@ namespace ts {
         }
 
         function bindingNameContainsVisibleBindingElement(node: BindingName): boolean {
-            return !!node && isBindingPattern(node) && some(node.elements, elem => !isOmittedExpression(elem) && (resolver.isDeclarationVisible(elem) || bindingNameContainsVisibleBindingElement(elem.name)));
+            return !!node && isBindingPattern(node) && some(node.elements, elem => !isOmittedExpression(elem) && isVariableDeclarationVisible(elem));
         }
 
         function isVariableDeclarationVisible(node: VariableDeclaration | BindingElement) {
