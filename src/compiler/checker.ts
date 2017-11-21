@@ -1733,12 +1733,23 @@ namespace ts {
                     return undefined;
                 }
                 const right = name.kind === SyntaxKind.QualifiedName ? name.right : name.name;
-                const namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, /*dontResolveAlias*/ false, location);
+                let namespace = resolveEntityName(left, SymbolFlags.Namespace, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
+                if (!namespace && name.parent && isJSDocTypeReference(name.parent as TypeReferenceType)) {
+                    // jsdoc type references may be values
+                    namespace = resolveEntityName(left, SymbolFlags.Value, ignoreErrors, /*dontResolveAlias*/ false, location);
+                }
+                else if (!ignoreErrors) {
+                    // run again for error reporting purposes
+                    resolveEntityName(left, SymbolFlags.Namespace, /*ignoreErrors*/ false, /*dontResolveAlias*/ false, location);
+                }
                 if (!namespace || nodeIsMissing(right)) {
                     return undefined;
                 }
                 else if (namespace === unknownSymbol) {
                     return namespace;
+                }
+                if (isInJavaScriptFile(name) && isDeclarationOfFunctionOrClassExpression(namespace)) {
+                    namespace = getSymbolOfNode((namespace.valueDeclaration as VariableDeclaration).initializer);
                 }
                 symbol = getSymbol(getExportsOfSymbol(namespace), right.escapedText, meaning);
                 if (!symbol) {

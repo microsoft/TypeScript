@@ -1435,7 +1435,7 @@ namespace ts {
     }
 
     /**
-     * Returns true if the node is a variable declaration whose initializer is a function expression.
+     * Returns true if the node is a variable declaration whose initializer is a function or class expression.
      * This function does not test if the node is in a JavaScript file or not.
      */
     export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
