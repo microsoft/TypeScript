@@ -4047,15 +4047,15 @@ namespace ts {
             }
         }
 
-        function collectLinkedAliases(node: Identifier): Node[] {
+        function collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined {
             let exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-                exportSymbol = resolveName(node.parent, node.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node, /*isUse*/ false);
+                exportSymbol = resolveName(node, node.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, node, /*isUse*/ false);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
                 exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
-            const result: Node[] = [];
+            let result: Node[];
             if (exportSymbol) {
                 buildVisibleNodeList(exportSymbol.declarations);
             }
@@ -4063,9 +4063,14 @@ namespace ts {
 
             function buildVisibleNodeList(declarations: Declaration[]) {
                 forEach(declarations, declaration => {
-                    getNodeLinks(declaration).isVisible = true;
                     const resultNode = getAnyImportSyntax(declaration) || declaration;
-                    pushIfUnique(result, resultNode);
+                    if (setVisibility) {
+                        getNodeLinks(declaration).isVisible = true;
+                    }
+                    else {
+                        result = result || [];
+                        pushIfUnique(result, resultNode);
+                    }
 
                     if (isInternalModuleImportEqualsDeclaration(declaration)) {
                         // Add the referenced top container visible
@@ -23328,6 +23333,9 @@ namespace ts {
 
         function checkExportSpecifier(node: ExportSpecifier) {
             checkAliasSymbol(node);
+            if (compilerOptions.declaration) {
+                collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true); // Collect linked aliases to set visibility links
+            }
             if (!(<ExportDeclaration>node.parent.parent).moduleSpecifier) {
                 const exportedName = node.propertyName || node.name;
                 // find immediate value referenced by exported name (SymbolFlags.Alias is set so we don't chase down aliases)
@@ -23365,6 +23373,10 @@ namespace ts {
             }
             if (node.expression.kind === SyntaxKind.Identifier) {
                 markExportAsReferenced(node);
+
+                if (compilerOptions.declaration) {
+                    collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true); // Sets visibility flags on refernced nodes
+                }
             }
             else {
                 checkExpressionCached(node.expression);
