@@ -367,12 +367,13 @@ namespace ts.formatting {
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
             const containingList = getContainingList(node, sourceFile);
-            return containingList ? getActualIndentationFromList(containingList) : Value.Unknown;
-
-            function getActualIndentationFromList(list: ReadonlyArray<Node>): number {
-                const index = indexOf(list, node);
-                return index !== -1 ? deriveActualIndentationFromList(list, index, sourceFile, options) : Value.Unknown;
+            if (containingList) {
+                const index = containingList.indexOf(node);
+                if (index !== -1) {
+                    return deriveActualIndentationFromList(containingList, index, sourceFile, options);
+                }
             }
+            return Value.Unknown;
         }
 
         function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
