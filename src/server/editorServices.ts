@@ -155,9 +155,8 @@ namespace ts.server {
             exclude: [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
             types: ["office"]                               // @types package to fetch instead
         },
-        "Minified files": {
-            // e.g. /whatever/blah.min.js
-            match: /^(.+\.min\.js)$/i,
+        "References": {
+            match: /^(.*\/_references\.js)$/i,
             exclude: [["^", 1, "$"]]
         }
     };
@@ -528,7 +527,11 @@ namespace ts.server {
                 }
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
-                this.legacySafelist = raw.simpleMap;
+                for (const key in raw.simpleMap) {
+                    if (raw.simpleMap.hasOwnProperty(key)) {
+                        this.legacySafelist[key] = raw.simpleMap[key].toLowerCase();
+                    }
+                }
             }
             catch (e) {
                 this.logger.info(`Error loading types map: ${e}`);
@@ -1447,7 +1450,9 @@ namespace ts.server {
             }
             this.seenProjects.set(projectKey, true);
 
-            if (!this.eventHandler) return;
+            if (!this.eventHandler) {
+                return;
+            }
 
             const data: ProjectInfoTelemetryEventData = {
                 projectId: this.host.createHash(projectKey),
@@ -2285,7 +2290,13 @@ namespace ts.server {
                         }
                     }
                     if (!exclude) {
-                        filesToKeep.push(proj.rootFiles[i]);
+                        // Exclude any minified files that get this far
+                        if (/^.+[\.-]min\.js$/.test(normalizedNames[i])) {
+                            excludedFiles.push(normalizedNames[i]);
+                        }
+                        else {
+                            filesToKeep.push(proj.rootFiles[i]);
+                        }
                     }
                 }
             }

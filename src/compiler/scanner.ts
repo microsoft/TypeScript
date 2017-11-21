@@ -1873,7 +1873,17 @@ namespace ts {
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.dot:
                     pos++;
+                    if (text.substr(tokenPos, pos + 2) === "...") {
+                        pos += 2;
+                        return token = SyntaxKind.DotDotDotToken;
+                    }
                     return token = SyntaxKind.DotToken;
+                case CharacterCodes.exclamation:
+                    pos++;
+                    return token = SyntaxKind.ExclamationToken;
+                case CharacterCodes.question:
+                    pos++;
+                    return token = SyntaxKind.QuestionToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
@@ -1881,6 +1891,7 @@ namespace ts {
                 while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
                     pos++;
                 }
+                tokenValue = text.substring(tokenPos, pos);
                 return token = SyntaxKind.Identifier;
             }
             else {
