@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/a.js ===
 var Outer = function O() {
->Outer : Symbol(Outer, Decl(a.js, 0, 3))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
 >O : Symbol(O, Decl(a.js, 0, 11))
 
     this.y = 2
@@ -8,7 +8,7 @@ var Outer = function O() {
 }
 Outer.Inner = class I {
 >Outer.Inner : Symbol(O.Inner, Decl(a.js, 2, 1))
->Outer : Symbol(Outer, Decl(a.js, 0, 3))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
 >Inner : Symbol(O.Inner, Decl(a.js, 2, 1))
 >I : Symbol(I, Decl(a.js, 3, 13))
 

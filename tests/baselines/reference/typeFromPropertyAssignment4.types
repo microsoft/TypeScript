@@ -1,0 +1,32 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Common = {};
+>Common : { [x: string]: any; }
+>{} : { [x: string]: any; }
+
+Common.Outer = class {
+>Common.Outer = class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof (Anonymous class)
+>Common.Outer : any
+>Common : { [x: string]: any; }
+>Outer : any
+>class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof (Anonymous class)
+
+    constructor() {
+        /** @type {number} */
+        this.y = 12
+>this.y = 12 : 12
+>this.y : number
+>this : this
+>y : number
+>12 : 12
+    }
+}
+
+/** @type {Common.Outer} */
+var x;
+>x : (Anonymous class)
+
+x.y
+>x.y : number
+>x : (Anonymous class)
+>y : number
+

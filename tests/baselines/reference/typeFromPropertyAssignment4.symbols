@@ -1,0 +1,25 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Common = {};
+>Common : Symbol(Common, Decl(a.js, 0, 3), Decl(a.js, 0, 16))
+
+Common.Outer = class {
+>Common : Symbol(Common, Decl(a.js, 0, 3), Decl(a.js, 0, 16))
+
+    constructor() {
+        /** @type {number} */
+        this.y = 12
+>this.y : Symbol((Anonymous class).y, Decl(a.js, 2, 19))
+>this : Symbol((Anonymous class), Decl(a.js, 1, 14))
+>y : Symbol((Anonymous class).y, Decl(a.js, 2, 19))
+    }
+}
+
+/** @type {Common.Outer} */
+var x;
+>x : Symbol(x, Decl(a.js, 9, 3))
+
+x.y
+>x.y : Symbol((Anonymous class).y, Decl(a.js, 2, 19))
+>x : Symbol(x, Decl(a.js, 9, 3))
+>y : Symbol((Anonymous class).y, Decl(a.js, 2, 19))
+
