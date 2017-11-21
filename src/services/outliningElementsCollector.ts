@@ -8,10 +8,9 @@ namespace ts.OutliningElementsCollector {
     }
 
     function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
-        let depth = 0;
-        const maxDepth = 39;
+        let depthRemaining = 40;
         sourceFile.forEachChild(function walk(n) {
-            if (depth > maxDepth) return;
+            if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
             if (isDeclaration(n)) {
@@ -21,9 +20,9 @@ namespace ts.OutliningElementsCollector {
             const span = getOutliningSpanForNode(n, sourceFile);
             if (span) out.push(span);
 
-            depth++;
+            depthRemaining--;
             n.forEachChild(walk);
-            depth--;
+            depthRemaining++;
         });
     }
 
