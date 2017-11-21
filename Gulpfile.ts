@@ -577,7 +577,7 @@ gulp.task(specMd, /*help*/ false, [word2mdJs], (done) => {
 gulp.task("generate-spec", "Generates a Markdown version of the Language Specification", [specMd]);
 
 gulp.task("clean", "Cleans the compiler output, declare files, and tests", [], () => {
-    return del([builtDirectory]);
+    return del([builtDirectory, processDiagnosticMessagesJs, generatedDiagnosticMessagesJSON, diagnosticInfoMapTs]);
 });
 
 gulp.task("useDebugMode", /*help*/ false, [], (done) => { useDebugMode = true; done(); });

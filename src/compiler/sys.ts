@@ -125,11 +125,6 @@ namespace ts {
     };
 
     /*@internal*/
-    export function closeFileWatcher(watcher: FileWatcher) {
-        watcher.close();
-    }
-
-    /*@internal*/
     export interface PollingWatchDirectoryHost {
         watchFile: System["watchFile"];
         getAccessileSortedChildDirectories(path: string): ReadonlyArray<string>;

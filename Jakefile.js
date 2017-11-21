@@ -716,6 +716,9 @@ task("default", ["local"]);
 desc("Cleans the compiler output, declare files, and tests");
 task("clean", function () {
     jake.rmRf(builtDirectory);
+    jake.rmRf(processDiagnosticMessagesJs);
+    jake.rmRf(generatedDiagnosticMessagesJSON);
+    jake.rmRf(diagnosticInfoMapTs);
 });
 
 // Generate Markdown spec
