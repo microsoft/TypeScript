@@ -132,7 +132,8 @@ namespace ts {
     /*@internal*/
     export interface PollingWatchDirectoryHost {
         watchFile: System["watchFile"];
-        getAccessileSortedChildDirectories: (path: string) => ReadonlyArray<string>;
+        getAccessileSortedChildDirectories(path: string): ReadonlyArray<string>;
+        directoryExists(path: string): boolean;
         filePathComparer: Comparer<string>;
     }
 
@@ -202,6 +203,10 @@ namespace ts {
          * Watch the directories in the parentDir
          */
         function watchChildDirectoriesWithPolling(parentDir: string, existingChildWatches: ChildWatches): ChildWatches {
+            if (!host.directoryExists(parentDir)) {
+                return emptyArray;
+            }
+
             let newChildWatches: ChildDirectoryWatcher[] | undefined;
             enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
                 host.getAccessileSortedChildDirectories(parentDir),
@@ -257,7 +262,8 @@ namespace ts {
             // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
             const fsSupportsRecursiveWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const filePathComparer = useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
-            let pollingWatchDirectoryHost: PollingWatchDirectoryHost | undefined;
+            let pollingWatchPresentDirectoryHost: PollingWatchDirectoryHost | undefined;
+            let pollingWatchPresentOrMissingDirectoryHost: PollingWatchDirectoryHost | undefined;
 
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -446,19 +452,15 @@ namespace ts {
             }
 
             function fsWatchDirectory(directoryName: string, callback: (eventName: string, relativeFileName: string) => void, recursive?: boolean): FileWatcher {
-                /**
-                 * Watch the directory that is currently present
-                 * and when the watched directory is deleted, switch to missing directory watcher
-                 */
-                const watchPresentDirectory = !recursive || fsSupportsRecursiveWatch ?
-                    fsWatchPresentDirectory : watchPresentDirectoryWithPolling;
+                // When doing recursive watch on non supported system, just use polling watcher
+                if (recursive && !fsSupportsRecursiveWatch) {
+                    return watchPresentOrMissingDirectoryWithPolling();
+                }
 
                 /**
                  * Watcher for the directory depending on whether it is missing or present
                  */
-                let watcher = !directoryExists(directoryName) ?
-                    watchMissingDirectory() :
-                    watchPresentDirectory();
+                let watcher = !directoryExists(directoryName) ? watchMissingDirectoryWithPolling() : fsWatchPresentDirectory();
                 return {
                     close: () => {
                         // Close the watcher (either existing directory watcher or missing directory watcher)
@@ -490,7 +492,7 @@ namespace ts {
                             callback
                         );
                         // Watch the missing directory on error (eg. directory deleted)
-                        dirWatcher.on("error", () => invokeCallbackAndUpdateWatcher(watchMissingDirectory));
+                        dirWatcher.on("error", () => invokeCallbackAndUpdateWatcher(watchMissingDirectoryWithPolling));
                         return dirWatcher;
                     }
                     catch (e) {
@@ -508,25 +510,43 @@ namespace ts {
                  */
                 function watchPresentDirectoryWithPolling(): FileWatcher {
                     return watchDirectoryWithPolling(directoryName, recursive,
-                        pollingWatchDirectoryHost || (pollingWatchDirectoryHost = {
+                        pollingWatchPresentDirectoryHost || (pollingWatchPresentDirectoryHost = {
                             filePathComparer,
                             watchFile: fsWatchFile,
+                            // Since we are watching present directory, it would always be present
+                            directoryExists: returnTrue,
                             getAccessileSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories
                         }),
                         () => callback("rename", ""),
-                        () => invokeCallbackAndUpdateWatcher(watchMissingDirectory));
+                        () => invokeCallbackAndUpdateWatcher(watchMissingDirectoryWithPolling));
+                }
+
+                /**
+                 * Watch missing or present directory with polling,
+                 * this is invoked when recursive is not supported through fs.watch
+                 * which means we would always need to poll, so no need to handle missing directory separately
+                 */
+                function watchPresentOrMissingDirectoryWithPolling(): FileWatcher {
+                    return watchDirectoryWithPolling(directoryName, recursive,
+                        pollingWatchPresentOrMissingDirectoryHost || (pollingWatchPresentOrMissingDirectoryHost = {
+                            filePathComparer,
+                            watchFile: fsWatchFile,
+                            directoryExists,
+                            getAccessileSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories
+                        }),
+                        () => callback("rename", ""));
                 }
 
                 /**
                  * Watch the directory that is missing
                  * and switch to existing directory when the directory is created
                  */
-                function watchMissingDirectory(): FileWatcher {
+                function watchMissingDirectoryWithPolling(): FileWatcher {
                     return fsWatchFile(directoryName, (_fileName, eventKind) => {
                         if (eventKind === FileWatcherEventKind.Created && directoryExists(directoryName)) {
                             // This could be resulted as part of creating another directory or file
                             // but instead of spending time to detect that invoke callback on current directory
-                            invokeCallbackAndUpdateWatcher(watchPresentDirectory);
+                            invokeCallbackAndUpdateWatcher(fsWatchPresentDirectory);
                         }
                     });
                 }

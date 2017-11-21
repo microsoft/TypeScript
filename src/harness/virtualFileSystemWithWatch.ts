@@ -588,9 +588,8 @@ interface Array<T> {}`
         getPollingWatchDirectoryHost() {
             return this.pollingWatchDirectoryHost || (this.pollingWatchDirectoryHost = {
                 watchFile: (fileName, cb) => this.watchFile(fileName, cb),
-                // Since we are watching missing directories as well with polling,
-                // check for directory exists before getting directories of the path
-                getAccessileSortedChildDirectories: path => this.directoryExists(path) ? this.getDirectories(path) : emptyArray,
+                directoryExists: path => this.directoryExists(path),
+                getAccessileSortedChildDirectories: path => this.getDirectories(path).sort(this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive),
                 filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
             });
         }
