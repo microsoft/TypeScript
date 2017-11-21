@@ -232,26 +232,28 @@ namespace ts {
 
             function fsWatchFile(fileName: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher {
                 _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
+                let eventKind: FileWatcherEventKind;
                 return {
                     close: () => _fs.unwatchFile(fileName, fileChanged)
                 };
 
                 function fileChanged(curr: any, prev: any) {
-                    const isCurrZero = +curr.mtime === 0;
-                    const isPrevZero = +prev.mtime === 0;
-                    const created = !isCurrZero && isPrevZero;
-                    const deleted = isCurrZero && !isPrevZero;
-
-                    const eventKind = created
-                        ? FileWatcherEventKind.Created
-                        : deleted
-                            ? FileWatcherEventKind.Deleted
-                            : FileWatcherEventKind.Changed;
-
-                    if (eventKind === FileWatcherEventKind.Changed && +curr.mtime <= +prev.mtime) {
+                    if (+curr.mtime === 0) {
+                        eventKind = FileWatcherEventKind.Deleted;
+                    }
+                    // previous event kind check is to ensure we send created event when file is restored or renamed twice (that is it disappears and reappears)
+                    // since in that case the prevTime returned is same as prev time of event when file was deleted as per node documentation
+                    else if (+prev.mtime === 0 || eventKind === FileWatcherEventKind.Deleted) {
+                        eventKind = FileWatcherEventKind.Created;
+                    }
+                    // If there is no change in modified time, ignore the event
+                    else if (+curr.mtime === +prev.mtime) {
                         return;
                     }
-
+                    else {
+                        // File changed
+                        eventKind = FileWatcherEventKind.Changed;
+                    }
                     callback(fileName, eventKind);
                 }
             }
