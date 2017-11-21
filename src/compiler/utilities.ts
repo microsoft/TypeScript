@@ -1463,7 +1463,7 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getSpecialPropertyAssignmentKind(expr: ts.BinaryExpression): SpecialPropertyAssignmentKind {
+    export function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
         if (!isInJavaScriptFile(expr)) {
             return SpecialPropertyAssignmentKind.None;
         }
@@ -1609,21 +1609,24 @@ namespace ts {
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
             const parent = node.parent;
+            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || getNestedModuleDeclaration(parent))) {
+                getJSDocCommentsAndTagsWorker(parent);
+            }
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
             // /**
             //   * @param {number} name
             //   * @returns {number}
             //   */
             // var x = function(name) { return name.length; }
-            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || getNestedModuleDeclaration(parent))) {
-                getJSDocCommentsAndTagsWorker(parent);
-            }
             if (parent && parent.parent &&
                 (getSingleVariableOfVariableStatement(parent.parent, node) || getSourceOfAssignment(parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
             if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatement(parent.parent.parent, node)) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
+            }
+            if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None) {
+                getJSDocCommentsAndTagsWorker(parent);
             }
 
             // Pull parameter comments from declaring function as well
