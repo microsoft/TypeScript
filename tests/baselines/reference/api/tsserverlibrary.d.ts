@@ -2308,15 +2308,6 @@ declare namespace ts {
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
     }
-    interface DiscoverTypingsInfo {
-        fileNames: string[];
-        projectRootPath: string;
-        safeListPath: string;
-        packageNameToTypingLocation: Map<string>;
-        typeAcquisition: TypeAcquisition;
-        compilerOptions: CompilerOptions;
-        unresolvedImports: ReadonlyArray<string>;
-    }
     enum ModuleKind {
         None = 0,
         CommonJS = 1,

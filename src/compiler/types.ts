@@ -3999,16 +3999,6 @@ namespace ts {
         [option: string]: string[] | boolean | undefined;
     }
 
-    export interface DiscoverTypingsInfo {
-        fileNames: string[];                            // The file names that belong to the same project.
-        projectRootPath: string;                        // The path to the project root directory
-        safeListPath: string;                           // The path used to retrieve the safe list
-        packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
-        typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
-        compilerOptions: CompilerOptions;               // Used as a source for typing inference
-        unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
-    }
-
     export enum ModuleKind {
         None = 0,
         CommonJS = 1,

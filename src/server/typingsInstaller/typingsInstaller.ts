@@ -41,13 +41,74 @@ namespace ts.server.typingsInstaller {
         onRequestCompleted: RequestCompletedAction;
     }
 
+    interface TypeDeclarationTimestampFile {
+        entries: MapLike<number>;
+    }
+
+    function loadTypeDeclarationTimestampFile(typeDeclarationTimestampFilePath: string, host: InstallTypingHost, log: Log): Map<number> {
+        const fileExists = host.fileExists(typeDeclarationTimestampFilePath);
+        if (!fileExists) {
+            if (log.isEnabled()) {
+                log.writeLine(`Type declaration timestamp file '${typeDeclarationTimestampFilePath}' does not exist`);
+            }
+        }
+        try {
+            if (fileExists) {
+                const content = <TypeDeclarationTimestampFile>JSON.parse(host.readFile(typeDeclarationTimestampFilePath));
+                return createMapFromTemplate(content.entries);
+            }
+            else {
+                host.writeFile(typeDeclarationTimestampFilePath, "{}");
+                if (log.isEnabled()) {
+                    log.writeLine("Type declaration timestamp file was created.");
+                }
+                return createMap<number>();
+            }
+        }
+        catch (e) {
+            if (log.isEnabled()) {
+                log.writeLine(`Error when loading type declaration timestamp file '${typeDeclarationTimestampFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
+            }
+            return createMap<number>();
+        }
+    }
+
+    function writeTypeDeclarationTimestampFile(typeDeclarationTimestampFilePath: string, newContents: TypeDeclarationTimestampFile, host: InstallTypingHost, log: Log): void {
+        const fileExists = host.fileExists(typeDeclarationTimestampFilePath);
+        if (!fileExists) {
+            if (log.isEnabled()) {
+                log.writeLine(`Type declaration timestamp file '${typeDeclarationTimestampFilePath}' does not exist`);
+            }
+        }
+        try {
+            if (fileExists) {
+                host.writeFile(typeDeclarationTimestampFilePath, JSON.stringify(newContents));
+                return;
+            }
+            else {
+                host.writeFile(typeDeclarationTimestampFilePath, JSON.stringify(newContents));
+                if (log.isEnabled()) {
+                    log.writeLine("Type declaration time stamp file was created.");
+                }
+                return;
+            }
+        }
+        catch (e) {
+            if (log.isEnabled()) {
+                log.writeLine(`Error when writing new type declaration timestamp file '${typeDeclarationTimestampFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
+            }
+            return;
+        }
+    }
+
     export abstract class TypingsInstaller {
-        private readonly packageNameToTypingLocation: Map<string> = createMap<string>();
+        private readonly packageNameToTypingLocation: Map<JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
         private readonly missingTypingsSet: Map<true> = createMap<true>();
         private readonly knownCachesSet: Map<true> = createMap<true>();
         private readonly projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
         private safeList: JsTyping.SafeList | undefined;
         readonly pendingRunRequests: PendingRequest[] = [];
+        private typeDeclarationTimestamps: Map<number> = createMap<number>();
 
         private installRunCount = 1;
         private inFlightRequestCount = 0;
@@ -162,6 +223,8 @@ namespace ts.server.typingsInstaller {
                 }
                 return;
             }
+            const timestampJson = combinePaths(cacheLocation, "timestamps.json");
+            this.typeDeclarationTimestamps = loadTypeDeclarationTimestampFile(timestampJson, this.installTypingHost, this.log);
             const packageJson = combinePaths(cacheLocation, "package.json");
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Trying to find '${packageJson}'...`);
@@ -184,7 +247,7 @@ namespace ts.server.typingsInstaller {
                             continue;
                         }
                         const existingTypingFile = this.packageNameToTypingLocation.get(packageName);
-                        if (existingTypingFile === typingFile) {
+                        if (existingTypingFile.typingLocation === typingFile) {
                             continue;
                         }
                         if (existingTypingFile) {
@@ -195,7 +258,15 @@ namespace ts.server.typingsInstaller {
                         if (this.log.isEnabled()) {
                             this.log.writeLine(`Adding entry into typings cache: '${packageName}' => '${typingFile}'`);
                         }
-                        this.packageNameToTypingLocation.set(packageName, typingFile);
+                        if (this.typeDeclarationTimestamps.get(key) === undefined) {
+                            // getModifiedTime is only undefined if we were to use the ChakraHost, but we never do in this scenario
+                            // defaults to old behavior of never updating if we ever use a host without getModifiedTime in the future
+                            const timestamp = this.installTypingHost.getModifiedTime === undefined ? Date.now() : this.installTypingHost.getModifiedTime(typingFile).getTime();
+                            this.typeDeclarationTimestamps.set(key, timestamp);
+                        }
+                        // timestamp guaranteed to not be undefined by above check
+                        const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, timestamp: this.typeDeclarationTimestamps.get(key) };
+                        this.packageNameToTypingLocation.set(packageName, newTyping);
                     }
                 }
             }
@@ -211,7 +282,7 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) this.log.writeLine(`'${typing}' is in missingTypingsSet - skipping...`);
                     return false;
                 }
-                if (this.packageNameToTypingLocation.get(typing)) {
+                if (this.packageNameToTypingLocation.get(typing) && !JsTyping.isTypingExpired(this.packageNameToTypingLocation.get(typing))) {
                     if (this.log.isEnabled()) this.log.writeLine(`'${typing}' already has a typing - skipping...`);
                     return false;
                 }
@@ -295,13 +366,18 @@ namespace ts.server.typingsInstaller {
                             continue;
                         }
                         if (!this.packageNameToTypingLocation.has(packageName)) {
-                            this.packageNameToTypingLocation.set(packageName, typingFile);
+                            const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, timestamp: Date.now() };
+                            this.packageNameToTypingLocation.set(packageName, newTyping);
+                            this.typeDeclarationTimestamps.set(packageName, Date.now());
                         }
                         installedTypingFiles.push(typingFile);
                     }
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Installed typing files ${JSON.stringify(installedTypingFiles)}`);
                     }
+
+                    const newFileContents: TypeDeclarationTimestampFile = { entries: this.typeDeclarationTimestamps };
+                    writeTypeDeclarationTimestampFile(cachePath, newFileContents, this.installTypingHost, this.log); // WRONG PATH
 
                     this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
                 }

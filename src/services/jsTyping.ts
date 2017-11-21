@@ -26,6 +26,17 @@ namespace ts.JsTyping {
         typings?: string;
     }
 
+    export interface CachedTyping {
+        typingLocation: string;
+        timestamp: number;
+    }
+
+    const typingLifetime = new Date(0, 1);
+
+    export function isTypingExpired(typing: JsTyping.CachedTyping | undefined) {
+        return typing && Date.now() - typingLifetime.getTime() < typing.timestamp;
+    }
+
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
         "buffer", "querystring", "events", "http", "cluster",
@@ -60,7 +71,7 @@ namespace ts.JsTyping {
      * @param fileNames are the file names that belong to the same project
      * @param projectRootPath is the path to the project root directory
      * @param safeListPath is the path used to retrieve the safe list
-     * @param packageNameToTypingLocation is the map of package names to their cached typing locations
+     * @param packageNameToTypingLocation is the map of package names to their cached typing locations and time of caching
      * @param typeAcquisition is used to customize the typing acquisition process
      * @param compilerOptions are used as a source for typing inference
      */
@@ -70,7 +81,7 @@ namespace ts.JsTyping {
         fileNames: string[],
         projectRootPath: Path,
         safeList: SafeList,
-        packageNameToTypingLocation: ReadonlyMap<string>,
+        packageNameToTypingLocation: ReadonlyMap<CachedTyping>,
         typeAcquisition: TypeAcquisition,
         unresolvedImports: ReadonlyArray<string>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
@@ -122,9 +133,9 @@ namespace ts.JsTyping {
             addInferredTypings(module, "Inferred typings from unresolved imports");
         }
         // Add the cached typing locations for inferred typings that are already installed
-        packageNameToTypingLocation.forEach((typingLocation, name) => {
-            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined) {
-                inferredTypings.set(name, typingLocation);
+        packageNameToTypingLocation.forEach((typing, name) => {
+            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && !isTypingExpired(typing)) {
+                inferredTypings.set(name, typing.typingLocation);
             }
         });
 

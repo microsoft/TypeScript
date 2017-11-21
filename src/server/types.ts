@@ -128,5 +128,6 @@ declare namespace ts.server {
         writeFile(path: string, content: string): void;
         createDirectory(path: string): void;
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
+        getModifiedTime?(path: string): Date;
     }
 }

@@ -1148,7 +1148,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f]);
-            const cache = createMap<string>();
+            const cache = createMap<JsTyping.CachedTyping>();
 
             for (const name of JsTyping.nodeCoreModuleList) {
                 const logger = trackingLogger();
@@ -1171,7 +1171,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<string>({ node: node.path });
+            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, timestamp: Date.now() } });
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"]);
             assert.deepEqual(logger.finish(), [
@@ -1196,7 +1196,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ name: "b" }),
             };
             const host = createServerHost([app, a, b]);
-            const cache = createMap<string>();
+            const cache = createMap<JsTyping.CachedTyping>();
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ []);
             assert.deepEqual(logger.finish(), [
