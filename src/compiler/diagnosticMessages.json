@@ -831,6 +831,10 @@
         "category": "Error",
         "code": 1254
     },
+    "A definite assignment assertion '!' is not permitted in this context.": {
+        "category": "Error",
+        "code": 1255
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300

@@ -99,6 +99,7 @@ namespace ts {
                     visitNode(cbNode, (<VariableLikeDeclaration>node).dotDotDotToken) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).name) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).questionToken) ||
+                    visitNode(cbNode, (<VariableLikeDeclaration>node).exclamationToken) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).type) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).initializer);
             case SyntaxKind.FunctionType:
@@ -5251,9 +5252,17 @@ namespace ts {
             return parseIdentifier();
         }
 
-        function parseVariableDeclaration(): VariableDeclaration {
+        function parseVariableDeclarationAllowExclamation() {
+            return parseVariableDeclaration(/*allowExclamation*/ true);
+        }
+
+        function parseVariableDeclaration(allowExclamation?: boolean): VariableDeclaration {
             const node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.name = parseIdentifierOrPattern();
+            if (allowExclamation && node.name.kind === SyntaxKind.Identifier &&
+                token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                node.exclamationToken = parseTokenNode();
+            }
             node.type = parseTypeAnnotation();
             if (!isInOrOfKeyword(token())) {
                 node.initializer = parseInitializer();
@@ -5295,7 +5304,8 @@ namespace ts {
                 const savedDisallowIn = inDisallowInContext();
                 setDisallowInContext(inForStatementInitializer);
 
-                node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+                node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations,
+                    inForStatementInitializer ? parseVariableDeclaration : parseVariableDeclarationAllowExclamation);
 
                 setDisallowInContext(savedDisallowIn);
             }
@@ -5346,6 +5356,9 @@ namespace ts {
 
         function parsePropertyDeclaration(node: PropertyDeclaration): PropertyDeclaration {
             node.kind = SyntaxKind.PropertyDeclaration;
+            if (!node.questionToken && token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                node.exclamationToken = parseTokenNode();
+            }
             node.type = parseTypeAnnotation();
 
             // For instance properties specifically, since they are evaluated inside the constructor,

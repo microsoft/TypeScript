@@ -13123,8 +13123,10 @@ namespace ts {
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
             const assumeInitialized = isParameter || isAlias || isOuterVariable ||
-                type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
+                type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0 ||
+                isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
+                declaration.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>declaration).exclamationToken ||
                 declaration.flags & NodeFlags.Ambient;
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
@@ -22671,6 +22673,7 @@ namespace ts {
         function isInstancePropertyWithoutInitializer(node: Node) {
             return node.kind === SyntaxKind.PropertyDeclaration &&
                 !hasModifier(node, ModifierFlags.Static | ModifierFlags.Abstract) &&
+                !(<PropertyDeclaration>node).exclamationToken &&
                 !(<PropertyDeclaration>node).initializer;
         }
 
@@ -26103,6 +26106,10 @@ namespace ts {
                 }
             }
 
+            if (node.exclamationToken && (node.parent.parent.kind !== SyntaxKind.VariableStatement || !node.type || node.initializer || node.flags & NodeFlags.Ambient)) {
+                return grammarErrorOnNode(node.exclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context);
+            }
+
             if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.ESNext && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
                 !(node.parent.parent.flags & NodeFlags.Ambient) && hasModifier(node.parent.parent, ModifierFlags.Export)) {
                 checkESModuleMarker(node.name);
@@ -26265,6 +26272,11 @@ namespace ts {
 
             if (node.flags & NodeFlags.Ambient && node.initializer) {
                 return grammarErrorOnFirstToken(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+            }
+
+            if (node.exclamationToken && (!isClassLike(node.parent) || !node.type || node.initializer ||
+                node.flags & NodeFlags.Ambient || hasModifier(node, ModifierFlags.Static | ModifierFlags.Abstract))) {
+                return grammarErrorOnNode(node.exclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context);
             }
         }
 
