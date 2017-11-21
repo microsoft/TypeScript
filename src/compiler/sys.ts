@@ -124,6 +124,114 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
+    /*@internal*/
+    export function closeFileWatcher(watcher: FileWatcher) {
+        watcher.close();
+    }
+
+    /*@internal*/
+    export interface PollingWatchDirectoryHost {
+        watchFile: System["watchFile"];
+        getAccessileSortedChildDirectories: (path: string) => ReadonlyArray<string>;
+        filePathComparer: Comparer<string>;
+    }
+
+    /**
+     * Watch the directory using polling watchFile
+     * that means if this is recursive watcher, watch the children directories as well
+     * (eg on OS that dont support recursive watch using fs.watch use fs.watchFile)
+     */
+    /*@internal*/
+    export function watchDirectoryWithPolling(directoryName: string, recursive: boolean | undefined, host: PollingWatchDirectoryHost,
+        onChangedPollingDirectory: () => void, onDeletedPollingDirectory?: () => void): FileWatcher {
+        type ChildWatches = ReadonlyArray<ChildDirectoryWatcher>;
+        interface DirectoryWatcher extends FileWatcher {
+            childWatches: ChildWatches;
+        }
+        interface ChildDirectoryWatcher extends DirectoryWatcher {
+            childName: string;
+        }
+
+        return createDirectoryWatcher(directoryName);
+
+        /**
+         * Create the directory watcher for the dirPath.
+         * If not watching recursively just return FileWatcher,
+         * otherwise create DirectoryWatcher that watches child directories as well
+         */
+        function createDirectoryWatcher(dirPath: string): DirectoryWatcher | FileWatcher {
+            const dirWatcher = host.watchFile(dirPath, (_fileName, eventKind) => {
+                if (dirPath === directoryName) {
+                    if (onDeletedPollingDirectory && eventKind === FileWatcherEventKind.Deleted) {
+                        // Watch missing directory hence forward
+                        onDeletedPollingDirectory();
+                        return;
+                    }
+                }
+                // Create and delete should be handled by parent, no special action needed
+                else if (eventKind !== FileWatcherEventKind.Changed) {
+                    return;
+                }
+
+                // For now just call the rename on current directory
+                onChangedPollingDirectory();
+
+                // Iterate through existing children and update the watches if needed
+                if (result) {
+                    result.childWatches = watchChildDirectoriesWithPolling(dirPath, result.childWatches);
+                }
+            });
+
+            // If not recursive just use this watcher, no need to iterate through children
+            if (!recursive) {
+                return dirWatcher;
+            }
+
+            let result: DirectoryWatcher = {
+                close: () => {
+                    dirWatcher.close();
+                    result.childWatches.forEach(closeFileWatcher);
+                    result = undefined;
+                },
+                childWatches: watchChildDirectoriesWithPolling(dirPath, emptyArray)
+            };
+            return result;
+        }
+
+        /**
+         * Watch the directories in the parentDir
+         */
+        function watchChildDirectoriesWithPolling(parentDir: string, existingChildWatches: ChildWatches): ChildWatches {
+            let newChildWatches: ChildDirectoryWatcher[] | undefined;
+            enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
+                host.getAccessileSortedChildDirectories(parentDir),
+                existingChildWatches,
+                (child, childWatcher) => host.filePathComparer(child, childWatcher.childName),
+                createAndAddChildDirectoryWatcher,
+                closeFileWatcher,
+                addChildDirectoryWatcher
+            );
+            return newChildWatches || emptyArray;
+
+            /**
+             * Create new childDirectoryWatcher and add it to the new ChildDirectoryWatcher list
+             */
+            function createAndAddChildDirectoryWatcher(childName: string) {
+                const childPath = getNormalizedAbsolutePath(parentDir, childName);
+                const result = createDirectoryWatcher(childPath) as ChildDirectoryWatcher;
+                result.childName = childName;
+                addChildDirectoryWatcher(result);
+            }
+
+            /**
+             * Add child directory watcher to the new ChildDirectoryWatcher list
+             */
+            function addChildDirectoryWatcher(childWatcher: ChildDirectoryWatcher) {
+                (newChildWatches || (newChildWatches = [])).push(childWatcher);
+            }
+        }
+    }
+
     export let sys: System = (() => {
         const utf8ByteOrderMark = "\u00EF\u00BB\u00BF";
 
@@ -148,6 +256,8 @@ namespace ts {
             // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
             // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
             const fsSupportsRecursiveWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
+            const filePathComparer = useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
+            let pollingWatchDirectoryHost: PollingWatchDirectoryHost | undefined;
 
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -353,9 +463,25 @@ namespace ts {
                     close: () => {
                         // Close the watcher (either existing directory watcher or missing directory watcher)
                         watcher.close();
+                        watcher = undefined;
                     }
                 };
 
+                function invokeCallbackAndUpdateWatcher(createWatcher: () => FileWatcher) {
+                    // Call the callback for current directory
+                    callback("rename", "");
+
+                    // If watcher is not closed, update it
+                    if (watcher) {
+                        watcher.close();
+                        watcher = createWatcher();
+                    }
+                }
+
+                /**
+                 * Watch the present directory through fs.watch and if that results in exception use polling directory watching
+                 * when directory goes missing use switch to missing directory watcher
+                 */
                 function fsWatchPresentDirectory(): FileWatcher {
                     try {
                         const dirWatcher = _fs.watch(
@@ -363,13 +489,8 @@ namespace ts {
                             { persistent: true, recursive: !!recursive },
                             callback
                         );
-                        dirWatcher.on("error", () => {
-                            // Watch the missing directory
-                            watcher.close();
-                            watcher = watchMissingDirectory();
-                            // Call the callback for current directory
-                            callback("rename", "");
-                        });
+                        // Watch the missing directory on error (eg. directory deleted)
+                        dirWatcher.on("error", () => invokeCallbackAndUpdateWatcher(watchMissingDirectory));
                         return dirWatcher;
                     }
                     catch (e) {
@@ -380,8 +501,20 @@ namespace ts {
                     }
                 }
 
+                /**
+                 * Watch the existing directory using polling,
+                 * that means if this is recursive watcher, watch the children directories as well
+                 * (eg on OS that dont support recursive watch using fs.watch)
+                 */
                 function watchPresentDirectoryWithPolling(): FileWatcher {
-                    // TODO:
+                    return watchDirectoryWithPolling(directoryName, recursive,
+                        pollingWatchDirectoryHost || (pollingWatchDirectoryHost = {
+                            filePathComparer,
+                            watchFile: fsWatchFile,
+                            getAccessileSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories
+                        }),
+                        () => callback("rename", ""),
+                        () => invokeCallbackAndUpdateWatcher(watchMissingDirectory));
                 }
 
                 /**
@@ -391,12 +524,9 @@ namespace ts {
                 function watchMissingDirectory(): FileWatcher {
                     return fsWatchFile(directoryName, (_fileName, eventKind) => {
                         if (eventKind === FileWatcherEventKind.Created && directoryExists(directoryName)) {
-                            watcher.close();
-                            watcher = watchPresentDirectory();
-                            // Call the callback for current directory
-                            // For now it could be callback for the inner directory creation,
-                            // but just return current directory, better than current no-op
-                            callback("rename", "");
+                            // This could be resulted as part of creating another directory or file
+                            // but instead of spending time to detect that invoke callback on current directory
+                            invokeCallbackAndUpdateWatcher(watchPresentDirectory);
                         }
                     });
                 }
@@ -452,7 +582,7 @@ namespace ts {
 
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
                 try {
-                    const entries = _fs.readdirSync(path || ".").sort();
+                    const entries = _fs.readdirSync(path || ".").sort(filePathComparer);
                     const files: string[] = [];
                     const directories: string[] = [];
                     for (const entry of entries) {

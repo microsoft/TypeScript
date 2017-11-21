@@ -151,10 +151,6 @@ namespace ts {
         };
     }
 
-    export function closeFileWatcher(watcher: FileWatcher) {
-        watcher.close();
-    }
-
     export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
         objWithWatcher.watcher.close();
     }
