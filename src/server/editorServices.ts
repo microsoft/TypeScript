@@ -528,7 +528,9 @@ namespace ts.server {
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
                 for (const key in raw.simpleMap) {
-                    this.legacySafelist[key] = raw.simpleMap[key].toLowerCase();
+                    if (raw.simpleMap.hasOwnProperty(key)) {
+                        this.legacySafelist[key] = raw.simpleMap[key].toLowerCase();
+                    }
                 }
             }
             catch (e) {
