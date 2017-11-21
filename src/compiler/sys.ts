@@ -145,6 +145,9 @@ namespace ts {
             }
 
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
+            // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
+            // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
+            const fsSupportsRecursiveWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
 
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -333,8 +336,16 @@ namespace ts {
             }
 
             function fsWatchDirectory(directoryName: string, callback: (eventName: string, relativeFileName: string) => void, recursive?: boolean): FileWatcher {
-                let options: any;
-                /** Watcher for the directory depending on whether it is missing or present */
+                /**
+                 * Watch the directory that is currently present
+                 * and when the watched directory is deleted, switch to missing directory watcher
+                 */
+                const watchPresentDirectory = !recursive || fsSupportsRecursiveWatch ?
+                    fsWatchPresentDirectory : watchPresentDirectoryWithPolling;
+
+                /**
+                 * Watcher for the directory depending on whether it is missing or present
+                 */
                 let watcher = !directoryExists(directoryName) ?
                     watchMissingDirectory() :
                     watchPresentDirectory();
@@ -345,35 +356,32 @@ namespace ts {
                     }
                 };
 
-                /**
-                 * Watch the directory that is currently present
-                 * and when the watched directory is deleted, switch to missing directory watcher
-                 */
-                function watchPresentDirectory(): FileWatcher {
-                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
-                    // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
-                    if (options === undefined) {
-                        if (isNode4OrLater && (process.platform === "win32" || process.platform === "darwin")) {
-                            options = { persistent: true, recursive: !!recursive };
-                        }
-                        else {
-                            options = { persistent: true };
-                        }
+                function fsWatchPresentDirectory(): FileWatcher {
+                    try {
+                        const dirWatcher = _fs.watch(
+                            directoryName,
+                            { persistent: true, recursive: !!recursive },
+                            callback
+                        );
+                        dirWatcher.on("error", () => {
+                            // Watch the missing directory
+                            watcher.close();
+                            watcher = watchMissingDirectory();
+                            // Call the callback for current directory
+                            callback("rename", "");
+                        });
+                        return dirWatcher;
                     }
+                    catch (e) {
+                        // Catch the exception and use polling instead
+                        // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
+                        // so instead of throwing error, use polling directory watcher
+                        return watchPresentDirectoryWithPolling();
+                    }
+                }
 
-                    const dirWatcher = _fs.watch(
-                        directoryName,
-                        options,
-                        callback
-                    );
-                    dirWatcher.on("error", () => {
-                        // Watch the missing directory
-                        watcher.close();
-                        watcher = watchMissingDirectory();
-                        // Call the callback for current directory
-                        callback("rename", "");
-                    });
-                    return dirWatcher;
+                function watchPresentDirectoryWithPolling(): FileWatcher {
+                    // TODO:
                 }
 
                 /**
