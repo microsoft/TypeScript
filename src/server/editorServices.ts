@@ -527,7 +527,11 @@ namespace ts.server {
                 }
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
-                this.legacySafelist = raw.simpleMap;
+                for (const key in raw.simpleMap) {
+                    if (raw.simpleMap.hasOwnProperty(key)) {
+                        this.legacySafelist[key] = raw.simpleMap[key].toLowerCase();
+                    }
+                }
             }
             catch (e) {
                 this.logger.info(`Error loading types map: ${e}`);
