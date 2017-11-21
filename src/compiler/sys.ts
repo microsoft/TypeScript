@@ -146,7 +146,6 @@ namespace ts {
             }
 
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
-            const watchedFileSet = createWatchedFileSet();
 
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -157,17 +156,7 @@ namespace ts {
                 },
                 readFile,
                 writeFile,
-                watchFile: (fileName, callback, pollingInterval) => {
-                    if (useNonPollingWatchers) {
-                        const watchedFile = watchedFileSet.addFile(fileName, callback);
-                        return {
-                            close: () => watchedFileSet.removeFile(watchedFile)
-                        };
-                    }
-                    else {
-                        return fsWatchFile(fileName, callback, pollingInterval);
-                    }
-                },
+                watchFile: useNonPollingWatchers ? createNonPollingWatchFile() : fsWatchFile,
                 watchDirectory: (directoryName, callback, recursive) => {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
@@ -269,73 +258,53 @@ namespace ts {
                 });
             }
 
-            function createWatchedFileSet() {
-                const dirWatchers = createMap<DirectoryWatcher>();
+            function createNonPollingWatchFile() {
                 // One file can have multiple watchers
                 const fileWatcherCallbacks = createMultiMap<FileWatcherCallback>();
-                return { addFile, removeFile };
+                const dirWatchers = createMap<DirectoryWatcher>();
+                const toCanonicalName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+                return nonPollingWatchFile;
 
-                function reduceDirWatcherRefCountForFile(fileName: string) {
-                    const dirName = getDirectoryPath(fileName);
-                    const watcher = dirWatchers.get(dirName);
-                    if (watcher) {
-                        watcher.referenceCount -= 1;
-                        if (watcher.referenceCount <= 0) {
-                            watcher.close();
-                            dirWatchers.delete(dirName);
-                        }
-                    }
-                }
-
-                function addDirWatcher(dirPath: string): void {
-                    let watcher = dirWatchers.get(dirPath);
-                    if (watcher) {
-                        watcher.referenceCount += 1;
-                        return;
-                    }
-                    watcher = fsWatchDirectory(
-                        dirPath || ".",
-                        (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
-                    ) as DirectoryWatcher;
-                    watcher.referenceCount = 1;
-                    dirWatchers.set(dirPath, watcher);
-                    return;
-                }
-
-                function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
+                function nonPollingWatchFile(fileName: string, callback: FileWatcherCallback): FileWatcher {
+                    const filePath = toCanonicalName(fileName);
                     fileWatcherCallbacks.add(filePath, callback);
+                    const dirPath = getDirectoryPath(filePath) || ".";
+                    const watcher = dirWatchers.get(dirPath) || createDirectoryWatcher(getDirectoryPath(fileName) || ".", dirPath);
+                    watcher.referenceCount++;
+                    return {
+                        close: () => {
+                            if (watcher.referenceCount === 1) {
+                                watcher.close();
+                                dirWatchers.delete(dirPath);
+                            }
+                            else {
+                                watcher.referenceCount--;
+                            }
+                            fileWatcherCallbacks.remove(filePath, callback);
+                        }
+                    };
                 }
 
-                function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
-                    addFileWatcherCallback(fileName, callback);
-                    addDirWatcher(getDirectoryPath(fileName));
-
-                    return { fileName, callback };
-                }
-
-                function removeFile(watchedFile: WatchedFile) {
-                    removeFileWatcherCallback(watchedFile.fileName, watchedFile.callback);
-                    reduceDirWatcherRefCountForFile(watchedFile.fileName);
-                }
-
-                function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
-                    fileWatcherCallbacks.remove(filePath, callback);
-                }
-
-                function fileEventHandler(eventName: string, relativeFileName: string | undefined, baseDirPath: string) {
-                    // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                    const fileName = !isString(relativeFileName)
-                        ? undefined
-                        : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
-                    // Some applications save a working file via rename operations
-                    if ((eventName === "change" || eventName === "rename")) {
-                        const callbacks = fileWatcherCallbacks.get(fileName);
-                        if (callbacks) {
-                            for (const fileCallback of callbacks) {
-                                fileCallback(fileName, FileWatcherEventKind.Changed);
+                function createDirectoryWatcher(dirName: string, dirPath: string) {
+                    const watcher = fsWatchDirectory(
+                        dirName,
+                        (_eventName: string, relativeFileName) => {
+                            // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
+                            const fileName = !isString(relativeFileName)
+                                ? undefined
+                                : ts.getNormalizedAbsolutePath(relativeFileName, dirName);
+                            // Some applications save a working file via rename operations
+                            const callbacks = fileWatcherCallbacks.get(toCanonicalName(fileName));
+                            if (callbacks) {
+                                for (const fileCallback of callbacks) {
+                                    fileCallback(fileName, FileWatcherEventKind.Changed);
+                                }
                             }
                         }
-                    }
+                    ) as DirectoryWatcher;
+                    watcher.referenceCount = 0;
+                    dirWatchers.set(dirPath, watcher);
+                    return watcher;
                 }
             }
 
