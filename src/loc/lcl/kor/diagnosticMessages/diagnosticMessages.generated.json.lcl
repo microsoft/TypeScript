@@ -2796,6 +2796,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enable_strict_checking_of_property_initialization_in_classes_6187" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable strict checking of property initialization in classes.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enable_strict_null_checks_6113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable strict null checks.]]></Val>
@@ -5439,6 +5445,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' has no initializer and is not definitely assigned in the constructor.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation_7033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.]]></Val>
@@ -5473,7 +5485,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' is declared but its value is never read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[속성 '{0}'이(가) 선언되었지만 해당 값은 읽히지 않습니다.]]></Val>
+            <Val><![CDATA[속성 '{0}'이(가) 선언은 되었지만 해당 값이 읽히지는 않았습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5556,6 +5568,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 속성은 '{1}' 형식에서는 보호된 속성이지만 '{2}' 형식에서는 공용입니다.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_is_used_before_being_assigned_2565" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' is used before being assigned.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8017,7 +8035,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is declared but its value is never read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}'이(가) 선언되었지만 해당 값은 읽히지 않습니다.]]></Val>
+            <Val><![CDATA['{0}'이(가) 선언은 되었지만 해당 값이 읽히지는 않았습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
