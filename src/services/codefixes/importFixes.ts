@@ -34,7 +34,7 @@ namespace ts.codefix {
         host: LanguageServiceHost;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
-        getCanonicalFileName(fileName: string): string;
+        getCanonicalFileName: GetCanonicalFileName;
         cachedImportDeclarations?: ImportDeclarationMap;
     }
 
@@ -166,7 +166,7 @@ namespace ts.codefix {
         return {
             host: context.host,
             newLineCharacter: context.newLineCharacter,
-            rulesProvider: context.rulesProvider,
+            formatContext: context.formatContext,
             sourceFile: context.sourceFile,
             checker,
             compilerOptions: context.program.getCompilerOptions(),
@@ -181,10 +181,13 @@ namespace ts.codefix {
         Named,
         Default,
         Namespace,
+        Equals
     }
 
-    export function getCodeActionForImport(moduleSymbol: Symbol, context: ImportCodeFixOptions): ImportCodeAction[] {
-        const declarations = getImportDeclarations(moduleSymbol, context.checker, context.sourceFile, context.cachedImportDeclarations);
+    export function getCodeActionForImport(moduleSymbols: Symbol | ReadonlyArray<Symbol>, context: ImportCodeFixOptions): ImportCodeAction[] {
+        moduleSymbols = toArray(moduleSymbols);
+        const declarations = flatMap(moduleSymbols, moduleSymbol =>
+            getImportDeclarations(moduleSymbol, context.checker, context.sourceFile, context.cachedImportDeclarations));
         const actions: ImportCodeAction[] = [];
         if (context.symbolToken) {
             // It is possible that multiple import statements with the same specifier exist in the file.
@@ -206,13 +209,13 @@ namespace ts.codefix {
                 }
             }
         }
-        actions.push(getCodeActionForAddImport(moduleSymbol, context, declarations));
+        actions.push(getCodeActionForAddImport(moduleSymbols, context, declarations));
         return actions;
     }
 
     function getNamespaceImportName(declaration: AnyImportSyntax): Identifier {
         if (declaration.kind === SyntaxKind.ImportDeclaration) {
-            const namedBindings = declaration.importClause && declaration.importClause.namedBindings;
+            const namedBindings = declaration.importClause && isImportClause(declaration.importClause) && declaration.importClause.namedBindings;
             return namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport ? namedBindings.name : undefined;
         }
         else {
@@ -237,10 +240,12 @@ namespace ts.codefix {
                 return parent as ImportDeclaration;
             case SyntaxKind.ExternalModuleReference:
                 return (parent as ExternalModuleReference).parent;
-            default:
-                Debug.assert(parent.kind === SyntaxKind.ExportDeclaration);
+            case SyntaxKind.ExportDeclaration:
+            case SyntaxKind.CallExpression: // For "require()" calls
                 // Ignore these, can't add imports to them.
                 return undefined;
+            default:
+                Debug.fail();
         }
     }
 
@@ -249,11 +254,19 @@ namespace ts.codefix {
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
-        const importDecl = createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClauseOfKind(kind, symbolName),
-            createStringLiteralWithQuoteStyle(sourceFile, moduleSpecifierWithoutQuotes));
+        const quotedModuleSpecifier = createStringLiteralWithQuoteStyle(sourceFile, moduleSpecifierWithoutQuotes);
+        const importDecl = kind !== ImportKind.Equals
+            ? createImportDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                createImportClauseOfKind(kind, symbolName),
+                quotedModuleSpecifier)
+            : createImportEqualsDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                createIdentifier(symbolName),
+                createExternalModuleReference(quotedModuleSpecifier));
+
         const changes = ChangeTracker.with(context, changeTracker => {
             if (lastImportDeclaration) {
                 changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: newLineCharacter });
@@ -263,11 +276,17 @@ namespace ts.codefix {
             }
         });
 
+        const actionFormat = kind === ImportKind.Equals
+            ? Diagnostics.Import_0_require_1
+            : kind === ImportKind.Namespace
+                ? Diagnostics.Import_Asterisk_as_0_from_1
+                : Diagnostics.Import_0_from_1;
+
         // if this file doesn't have any import statements, insert an import statement and then insert a new line
         // between the only import statement and user code. Otherwise just insert the statement because chances
         // are there are already a new line seperating code and import statements.
         return createCodeAction(
-            Diagnostics.Import_0_from_1,
+            actionFormat,
             [symbolName, moduleSpecifierWithoutQuotes],
             changes,
             "NewImport",
@@ -282,7 +301,7 @@ namespace ts.codefix {
         return literal;
     }
 
-    function createImportClauseOfKind(kind: ImportKind, symbolName: string) {
+    function createImportClauseOfKind(kind: ImportKind.Default | ImportKind.Named | ImportKind.Namespace, symbolName: string) {
         const id = createIdentifier(symbolName);
         switch (kind) {
             case ImportKind.Default:
@@ -296,16 +315,19 @@ namespace ts.codefix {
         }
     }
 
-    function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbol: Symbol, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
-        const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
-        const sourceDirectory = getDirectoryPath(sourceFile.fileName);
+    export function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbols: ReadonlyArray<Symbol>, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
+        const choices = mapIterator(arrayIterator(moduleSymbols), moduleSymbol => {
+            const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
+            const sourceDirectory = getDirectoryPath(sourceFile.fileName);
 
-        return tryGetModuleNameFromAmbientModule(moduleSymbol) ||
-            tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName) ||
-            tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
-            tryGetModuleNameFromBaseUrl(options, moduleFileName, getCanonicalFileName) ||
-            options.rootDirs && tryGetModuleNameFromRootDirs(options.rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
-            removeFileExtension(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName));
+            return tryGetModuleNameFromAmbientModule(moduleSymbol) ||
+                tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName) ||
+                tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
+                tryGetModuleNameFromBaseUrl(options, moduleFileName, getCanonicalFileName) ||
+                options.rootDirs && tryGetModuleNameFromRootDirs(options.rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
+                removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
+        });
+        return best(choices, (a, b) => a.length < b.length);
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
@@ -326,7 +348,7 @@ namespace ts.codefix {
         }
 
         const relativeNameWithIndex = removeFileExtension(relativeName);
-        relativeName = removeExtensionAndIndexPostFix(relativeName);
+        relativeName = removeExtensionAndIndexPostFix(relativeName, options);
 
         if (options.paths) {
             for (const key in options.paths) {
@@ -376,7 +398,7 @@ namespace ts.codefix {
         return roots && firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
-                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1));
+                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), options);
             }
         });
     }
@@ -506,35 +528,32 @@ namespace ts.codefix {
         return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
     }
 
-    function getPathRelativeToRootDirs(path: string, rootDirs: ReadonlyArray<string>, getCanonicalFileName: (fileName: string) => string): string | undefined {
+    function getPathRelativeToRootDirs(path: string, rootDirs: ReadonlyArray<string>, getCanonicalFileName: GetCanonicalFileName): string | undefined {
         return firstDefined(rootDirs, rootDir => getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName));
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string) {
-        fileName = removeFileExtension(fileName);
-        if (endsWith(fileName, "/index")) {
-            fileName = fileName.substr(0, fileName.length - 6/* "/index".length */);
-        }
-        return fileName;
+    function removeExtensionAndIndexPostFix(fileName: string, options: CompilerOptions): string {
+        const noExtension = removeFileExtension(fileName);
+        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs ? removeSuffix(noExtension, "/index") : noExtension;
     }
 
-    function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string): string | undefined {
+    function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
         const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
     }
 
-    function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string) {
+    function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
         const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
     }
 
     function getCodeActionForAddImport(
-        moduleSymbol: Symbol,
+        moduleSymbols: ReadonlyArray<Symbol>,
         ctx: ImportCodeFixOptions,
         declarations: ReadonlyArray<AnyImportSyntax>): ImportCodeAction {
         const fromExistingImport = firstDefined(declarations, declaration => {
             if (declaration.kind === SyntaxKind.ImportDeclaration && declaration.importClause) {
-                const changes = tryUpdateExistingImport(ctx, declaration.importClause);
+                const changes = tryUpdateExistingImport(ctx, isImportClause(declaration.importClause) && declaration.importClause || undefined);
                 if (changes) {
                     const moduleSpecifierWithoutQuotes = stripQuotes(declaration.moduleSpecifier.getText());
                     return createCodeAction(
@@ -551,7 +570,7 @@ namespace ts.codefix {
         }
 
         const moduleSpecifier = firstDefined(declarations, moduleSpecifierFromAnyImport)
-            || getModuleSpecifierForNewImport(ctx.sourceFile, moduleSymbol, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
+            || getModuleSpecifierForNewImport(ctx.sourceFile, moduleSymbols, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
         return getCodeActionForNewImport(ctx, moduleSpecifier);
     }
 
@@ -564,9 +583,10 @@ namespace ts.codefix {
         return expression && isStringLiteral(expression) ? expression.text : undefined;
     }
 
-    function tryUpdateExistingImport(context: SymbolContext & { kind: ImportKind }, importClause: ImportClause): FileTextChanges[] | undefined {
+    function tryUpdateExistingImport(context: SymbolContext & { kind: ImportKind }, importClause: ImportClause | ImportEqualsDeclaration): FileTextChanges[] | undefined {
         const { symbolName, sourceFile, kind } = context;
-        const { name, namedBindings } = importClause;
+        const { name } = importClause;
+        const { namedBindings } = importClause.kind !== SyntaxKind.ImportEqualsDeclaration && importClause;
         switch (kind) {
             case ImportKind.Default:
                 return name ? undefined : ChangeTracker.with(context, t =>
@@ -591,6 +611,9 @@ namespace ts.codefix {
             case ImportKind.Namespace:
                 return namedBindings ? undefined : ChangeTracker.with(context, t =>
                     t.replaceNode(sourceFile, importClause, createImportClause(name, createNamespaceImport(createIdentifier(symbolName)))));
+
+            case ImportKind.Equals:
+                return undefined;
 
             default:
                 Debug.assertNever(kind);
@@ -627,7 +650,7 @@ namespace ts.codefix {
     }
 
     function getActionsForUMDImport(context: ImportCodeFixContext): ImportCodeAction[] {
-        const { checker, symbolToken } = context;
+        const { checker, symbolToken, compilerOptions } = context;
         const umdSymbol = checker.getSymbolAtLocation(symbolToken);
         let symbol: ts.Symbol;
         let symbolName: string;
@@ -641,10 +664,33 @@ namespace ts.codefix {
             symbolName = symbol.name;
         }
         else {
-            Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
+            throw Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
         }
 
-        return getCodeActionForImport(symbol, { ...context, symbolName, kind: ImportKind.Namespace });
+        return getCodeActionForImport(symbol, { ...context, symbolName, kind: getUmdImportKind(compilerOptions) });
+    }
+    function getUmdImportKind(compilerOptions: CompilerOptions) {
+        // Import a synthetic `default` if enabled.
+        if (getAllowSyntheticDefaultImports(compilerOptions)) {
+            return ImportKind.Default;
+        }
+
+        // When a synthetic `default` is unavailable, use `import..require` if the module kind supports it.
+        const moduleKind = getEmitModuleKind(compilerOptions);
+        switch (moduleKind) {
+            case ModuleKind.AMD:
+            case ModuleKind.CommonJS:
+            case ModuleKind.UMD:
+                return ImportKind.Equals;
+            case ModuleKind.System:
+            case ModuleKind.ES2015:
+            case ModuleKind.ESNext:
+            case ModuleKind.None:
+                // Fall back to the `import * as ns` style import.
+                return ImportKind.Namespace;
+            default:
+                throw Debug.assertNever(moduleKind);
+        }
     }
 
     function getActionsForNonUMDImport(context: ImportCodeFixContext, allSourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): ImportCodeAction[] {
@@ -664,9 +710,10 @@ namespace ts.codefix {
             const defaultExport = checker.tryGetMemberInModuleExports("default", moduleSymbol);
             if (defaultExport) {
                 const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if (localSymbol && localSymbol.escapedName === symbolName && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
+                if ((localSymbol && localSymbol.escapedName === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName)
+                    && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     // check if this symbol is already used
-                    const symbolId = getUniqueSymbolId(localSymbol, checker);
+                    const symbolId = getUniqueSymbolId(localSymbol || defaultExport, checker);
                     symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, { ...context, kind: ImportKind.Default }));
                 }
             }
@@ -695,5 +742,36 @@ namespace ts.codefix {
                 cb(sourceFile.symbol);
             }
         }
+    }
+
+    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
+        return moduleSpecifierToValidIdentifier(removeFileExtension(getBaseFileName(moduleSymbol.name)), target);
+    }
+
+    function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
+        let res = "";
+        let lastCharWasValid = true;
+        const firstCharCode = moduleSpecifier.charCodeAt(0);
+        if (isIdentifierStart(firstCharCode, target)) {
+            res += String.fromCharCode(firstCharCode);
+        }
+        else {
+            lastCharWasValid = false;
+        }
+        for (let i = 1; i < moduleSpecifier.length; i++) {
+            const ch = moduleSpecifier.charCodeAt(i);
+            const isValid = isIdentifierPart(ch, target);
+            if (isValid) {
+                let char = String.fromCharCode(ch);
+                if (!lastCharWasValid) {
+                    char = char.toUpperCase();
+                }
+                res += char;
+            }
+            lastCharWasValid = isValid;
+        }
+        // Need `|| "_"` to ensure result isn't empty.
+        const token = stringToToken(res);
+        return token === undefined || !isNonContextualKeyword(token) ? res || "_" : `_${res}`;
     }
 }

@@ -151,7 +151,7 @@ class C14 {
 >C14 : C14
 
     async * f() {
->f : () => AsyncIterableIterator<1>
+>f : () => AsyncIterableIterator<number>
 
         yield 1;
 >yield 1 : any
@@ -175,7 +175,7 @@ class C16 {
 >C16 : C16
 
     async * f() {
->f : () => AsyncIterableIterator<undefined>
+>f : () => AsyncIterableIterator<any>
 
         yield * [];
 >yield * [] : any
