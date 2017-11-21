@@ -134,7 +134,140 @@ namespace ts {
             const _os = require("os");
             const _crypto = require("crypto");
 
+            const nodeVersion = getNodeMajorVersion();
+            const isNode4OrLater = nodeVersion >= 4;
+
+            const platform: string = _os.platform();
+            const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
+
+            const enum FileSystemEntryKind {
+                File,
+                Directory
+            }
+
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
+            const watchedFileSet = createWatchedFileSet();
+
+            const nodeSystem: System = {
+                args: process.argv.slice(2),
+                newLine: _os.EOL,
+                useCaseSensitiveFileNames,
+                write(s: string): void {
+                    process.stdout.write(s);
+                },
+                readFile,
+                writeFile,
+                watchFile: (fileName, callback, pollingInterval) => {
+                    if (useNonPollingWatchers) {
+                        const watchedFile = watchedFileSet.addFile(fileName, callback);
+                        return {
+                            close: () => watchedFileSet.removeFile(watchedFile)
+                        };
+                    }
+                    else {
+                        return fsWatchFile(fileName, callback, pollingInterval);
+                    }
+                },
+                watchDirectory: (directoryName, callback, recursive) => {
+                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
+                    // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
+                    return fsWatchDirectory(directoryName, (eventName, relativeFileName) => {
+                        // In watchDirectory we only care about adding and removing files (when event name is
+                        // "rename"); changes made within files are handled by corresponding fileWatchers (when
+                        // event name is "change")
+                        if (eventName === "rename") {
+                            // When deleting a file, the passed baseFileName is null
+                            callback(!relativeFileName ? relativeFileName : normalizePath(combinePaths(directoryName, relativeFileName)));
+                        }
+                    }, recursive);
+                },
+                resolvePath: path => _path.resolve(path),
+                fileExists,
+                directoryExists,
+                createDirectory(directoryName: string) {
+                    if (!nodeSystem.directoryExists(directoryName)) {
+                        _fs.mkdirSync(directoryName);
+                    }
+                },
+                getExecutingFilePath() {
+                    return __filename;
+                },
+                getCurrentDirectory() {
+                    return process.cwd();
+                },
+                getDirectories,
+                getEnvironmentVariable(name: string) {
+                    return process.env[name] || "";
+                },
+                readDirectory,
+                getModifiedTime(path) {
+                    try {
+                        return _fs.statSync(path).mtime;
+                    }
+                    catch (e) {
+                        return undefined;
+                    }
+                },
+                createHash(data) {
+                    const hash = _crypto.createHash("md5");
+                    hash.update(data);
+                    return hash.digest("hex");
+                },
+                getMemoryUsage() {
+                    if (global.gc) {
+                        global.gc();
+                    }
+                    return process.memoryUsage().heapUsed;
+                },
+                getFileSize(path) {
+                    try {
+                        const stat = _fs.statSync(path);
+                        if (stat.isFile()) {
+                            return stat.size;
+                        }
+                    }
+                    catch { /*ignore*/ }
+                    return 0;
+                },
+                exit(exitCode?: number): void {
+                    process.exit(exitCode);
+                },
+                realpath(path: string): string {
+                    return _fs.realpathSync(path);
+                },
+                debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+                tryEnableSourceMapsForHost() {
+                    try {
+                        require("source-map-support").install();
+                    }
+                    catch {
+                        // Could not enable source maps.
+                    }
+                },
+                setTimeout,
+                clearTimeout,
+                clearScreen: () => {
+                    process.stdout.write("\x1Bc");
+                }
+            };
+            return nodeSystem;
+
+            function isFileSystemCaseSensitive(): boolean {
+                // win32\win64 are case insensitive platforms
+                if (platform === "win32" || platform === "win64") {
+                    return false;
+                }
+                // If this file exists under a different case, we must be case-insensitve.
+                return !fileExists(swapCase(__filename));
+            }
+
+            /** Convert all lowercase chars to uppercase, and vice-versa */
+            function swapCase(s: string): string {
+                return s.replace(/\w/g, (ch) => {
+                    const up = ch.toUpperCase();
+                    return ch === up ? ch.toLowerCase() : up;
+                });
+            }
 
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
@@ -205,30 +338,6 @@ namespace ts {
                     }
                 }
             }
-            const watchedFileSet = createWatchedFileSet();
-
-            const nodeVersion = getNodeMajorVersion();
-            const isNode4OrLater = nodeVersion >= 4;
-
-            function isFileSystemCaseSensitive(): boolean {
-                // win32\win64 are case insensitive platforms
-                if (platform === "win32" || platform === "win64") {
-                    return false;
-                }
-                // If this file exists under a different case, we must be case-insensitve.
-                return !fileExists(swapCase(__filename));
-            }
-
-            /** Convert all lowercase chars to uppercase, and vice-versa */
-            function swapCase(s: string): string {
-                return s.replace(/\w/g, (ch) => {
-                    const up = ch.toUpperCase();
-                    return ch === up ? ch.toLowerCase() : up;
-                });
-            }
-
-            const platform: string = _os.platform();
-            const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
             function fsWatchFile(fileName: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher {
                 _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
@@ -407,11 +516,6 @@ namespace ts {
                 return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries);
             }
 
-            const enum FileSystemEntryKind {
-                File,
-                Directory
-            }
-
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
                 try {
                     const stat = _fs.statSync(path);
@@ -436,110 +540,6 @@ namespace ts {
             function getDirectories(path: string): string[] {
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
-
-            const nodeSystem: System = {
-                clearScreen: () => {
-                    process.stdout.write("\x1Bc");
-                },
-                args: process.argv.slice(2),
-                newLine: _os.EOL,
-                useCaseSensitiveFileNames,
-                write(s: string): void {
-                    process.stdout.write(s);
-                },
-                readFile,
-                writeFile,
-                watchFile: (fileName, callback, pollingInterval) => {
-                    if (useNonPollingWatchers) {
-                        const watchedFile = watchedFileSet.addFile(fileName, callback);
-                        return {
-                            close: () => watchedFileSet.removeFile(watchedFile)
-                        };
-                    }
-                    else {
-                        return fsWatchFile(fileName, callback, pollingInterval);
-                    }
-                },
-                watchDirectory: (directoryName, callback, recursive) => {
-                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
-                    // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
-                    return fsWatchDirectory(directoryName, (eventName, relativeFileName) => {
-                        // In watchDirectory we only care about adding and removing files (when event name is
-                        // "rename"); changes made within files are handled by corresponding fileWatchers (when
-                        // event name is "change")
-                        if (eventName === "rename") {
-                            // When deleting a file, the passed baseFileName is null
-                            callback(!relativeFileName ? relativeFileName : normalizePath(combinePaths(directoryName, relativeFileName)));
-                        }
-                    }, recursive);
-                },
-                resolvePath: path => _path.resolve(path),
-                fileExists,
-                directoryExists,
-                createDirectory(directoryName: string) {
-                    if (!nodeSystem.directoryExists(directoryName)) {
-                        _fs.mkdirSync(directoryName);
-                    }
-                },
-                getExecutingFilePath() {
-                    return __filename;
-                },
-                getCurrentDirectory() {
-                    return process.cwd();
-                },
-                getDirectories,
-                getEnvironmentVariable(name: string) {
-                    return process.env[name] || "";
-                },
-                readDirectory,
-                getModifiedTime(path) {
-                    try {
-                        return _fs.statSync(path).mtime;
-                    }
-                    catch (e) {
-                        return undefined;
-                    }
-                },
-                createHash(data) {
-                    const hash = _crypto.createHash("md5");
-                    hash.update(data);
-                    return hash.digest("hex");
-                },
-                getMemoryUsage() {
-                    if (global.gc) {
-                        global.gc();
-                    }
-                    return process.memoryUsage().heapUsed;
-                },
-                getFileSize(path) {
-                    try {
-                        const stat = _fs.statSync(path);
-                        if (stat.isFile()) {
-                            return stat.size;
-                        }
-                    }
-                    catch { /*ignore*/ }
-                    return 0;
-                },
-                exit(exitCode?: number): void {
-                    process.exit(exitCode);
-                },
-                realpath(path: string): string {
-                    return _fs.realpathSync(path);
-                },
-                debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
-                tryEnableSourceMapsForHost() {
-                    try {
-                        require("source-map-support").install();
-                    }
-                    catch {
-                        // Could not enable source maps.
-                    }
-                },
-                setTimeout,
-                clearTimeout
-            };
-            return nodeSystem;
         }
 
         function getChakraSystem(): System {
