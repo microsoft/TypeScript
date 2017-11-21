@@ -6132,16 +6132,14 @@ namespace ts {
             }
 
             // Parses out a JSDoc type expression.
-            export function parseJSDocTypeExpression(): JSDocTypeExpression;
-            export function parseJSDocTypeExpression(requireBraces: true): JSDocTypeExpression | undefined;
-            export function parseJSDocTypeExpression(requireBraces?: boolean): JSDocTypeExpression | undefined {
+            export function parseJSDocTypeExpression(mayOmitBraces?: boolean): JSDocTypeExpression {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
-                if (!parseExpected(SyntaxKind.OpenBraceToken) && requireBraces) {
-                    return undefined;
-                }
+                const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
-                parseExpected(SyntaxKind.CloseBraceToken);
+                if (!mayOmitBraces || hasBrace) {
+                    parseExpected(SyntaxKind.CloseBraceToken);
+                }
 
                 fixupParentReferences(result);
                 return finishNode(result);
@@ -6597,7 +6595,7 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = parseJSDocTypeExpression(/*requireBraces*/ true);
+                    result.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     return finishNode(result);
                 }
 
