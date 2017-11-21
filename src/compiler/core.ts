@@ -1455,6 +1455,9 @@ namespace ts {
     /** Returns its argument. */
     export function identity<T>(x: T) { return x; }
 
+    /** Returns the lower case string */
+    export function toLowerCase(x: string) { return x.toLowerCase(); }
+
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
         throw new Error("Not implemented");
@@ -2925,9 +2928,7 @@ namespace ts {
 
     export type GetCanonicalFileName = (fileName: string) => string;
     export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
-        return useCaseSensitiveFileNames
-            ? ((fileName) => fileName)
-            : ((fileName) => fileName.toLowerCase());
+        return useCaseSensitiveFileNames ? identity : toLowerCase;
     }
 
     /**
