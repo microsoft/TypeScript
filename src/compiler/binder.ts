@@ -2009,6 +2009,9 @@ namespace ts {
                     if (currentFlow && isNarrowableReference(<Expression>node)) {
                         node.flowNode = currentFlow;
                     }
+                    if (isSpecialPropertyDeclaration(node as PropertyAccessExpression)) {
+                        bindThisPropertyAssignment(node as PropertyAccessExpression);
+                    }
                     break;
                 case SyntaxKind.BinaryExpression:
                     const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
@@ -2317,7 +2320,7 @@ namespace ts {
             declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule, SymbolFlags.None);
         }
 
-        function bindThisPropertyAssignment(node: BinaryExpression) {
+        function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
             Debug.assert(isInJavaScriptFile(node));
             const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             switch (container.kind) {
