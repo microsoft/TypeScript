@@ -461,6 +461,7 @@ declare namespace ts {
     }
     type DotDotDotToken = Token<SyntaxKind.DotDotDotToken>;
     type QuestionToken = Token<SyntaxKind.QuestionToken>;
+    type ExclamationToken = Token<SyntaxKind.ExclamationToken>;
     type ColonToken = Token<SyntaxKind.ColonToken>;
     type EqualsToken = Token<SyntaxKind.EqualsToken>;
     type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
@@ -537,6 +538,7 @@ declare namespace ts {
         kind: SyntaxKind.VariableDeclaration;
         parent?: VariableDeclarationList | CatchClause;
         name: BindingName;
+        exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -571,8 +573,9 @@ declare namespace ts {
     }
     interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
-        questionToken?: QuestionToken;
         name: PropertyName;
+        questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -606,6 +609,7 @@ declare namespace ts {
         dotDotDotToken?: DotDotDotToken;
         name: DeclarationName;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -2287,6 +2291,7 @@ declare namespace ts {
         strict?: boolean;
         strictFunctionTypes?: boolean;
         strictNullChecks?: boolean;
+        strictPropertyInitialization?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;

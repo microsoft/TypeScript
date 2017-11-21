@@ -208,8 +208,8 @@ namespace Harness.Parallel.Host {
             workers.push(child);
         }
 
-        // It's only really worth doing an initial batching if there are a ton of files to go through
-        if (totalFiles > 1000) {
+        // It's only really worth doing an initial batching if there are a ton of files to go through (and they have estimates)
+        if (totalFiles > 1000 && batchSize > 0) {
             console.log("Batching initial test lists...");
             const batches: { runner: TestRunnerKind | "unittest", file: string, size: number }[][] = new Array(batchCount);
             const doneBatching = new Array(batchCount);

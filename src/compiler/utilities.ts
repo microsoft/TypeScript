@@ -5078,16 +5078,7 @@ namespace ts {
     }
 
     export function isStringTextContainingNode(node: Node) {
-        switch (node.kind) {
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.TemplateHead:
-            case SyntaxKind.TemplateMiddle:
-            case SyntaxKind.TemplateTail:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return true;
-            default:
-                return false;
-        }
+        return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }
 
     // Identifiers
