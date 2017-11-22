@@ -502,7 +502,7 @@ namespace ts.server {
         constructor(options: IoSessionOptions) {
             const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
 
-            const event: Event | undefined = (body: {}, eventName: string) => {
+            const event: Event | undefined = (body: object, eventName: string) => {
                 if (this.constructed) {
                     this.event(body, eventName);
                 }
@@ -551,7 +551,7 @@ namespace ts.server {
             this.constructed = true;
         }
 
-        event<T>(body: T, eventName: string): void {
+        event<T extends object>(body: T, eventName: string): void {
             Debug.assert(this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
             if (this.canUseEvents && this.eventPort) {
@@ -572,7 +572,7 @@ namespace ts.server {
             }
         }
 
-        private writeToEventSocket(body: {}, eventName: string): void {
+        private writeToEventSocket(body: object, eventName: string): void {
             this.eventSocket.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
         }
 

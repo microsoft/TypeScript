@@ -239,14 +239,14 @@ namespace ts.server {
         }
     }
 
-    export type Event = <T>(body: T, eventName: string) => void;
+    export type Event = <T extends object>(body: T, eventName: string) => void;
 
     export interface EventSender {
         event: Event;
     }
 
     /** @internal */
-    export function toEvent(eventName: string, body: {}): protocol.Event {
+    export function toEvent(eventName: string, body: object): protocol.Event {
         return {
             seq: 0,
             type: "event",
@@ -409,7 +409,7 @@ namespace ts.server {
             this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }
 
-        public event<T>(body: T, eventName: string): void {
+        public event<T extends object>(body: T, eventName: string): void {
             this.send(toEvent(eventName, body));
         }
 

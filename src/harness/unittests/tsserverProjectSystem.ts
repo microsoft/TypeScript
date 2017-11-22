@@ -232,7 +232,7 @@ namespace ts.projectSystem {
             return this.executeCommand(<T>request);
         }
 
-        public event<T>(body: T, eventName: string) {
+        public event<T extends object>(body: T, eventName: string) {
             this.events.push(server.toEvent(eventName, body));
             super.event(body, eventName);
         }
