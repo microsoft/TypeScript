@@ -429,7 +429,10 @@ namespace ts.server {
                     this.projectService.updateTypingsForProject(response);
 
                     // The behavior is the same as for setTypings, so send the same event.
-                    this.event(response, "setTypings");
+                    if (this.socket) {
+                        this.sendEvent(0, "setTypings", response);
+                    }
+
                     break;
                 }
                 case EventInitializationFailed:
