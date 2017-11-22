@@ -6930,7 +6930,7 @@ declare namespace ts.server {
     type CommandNames = protocol.CommandTypes;
     const CommandNames: any;
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
-    type Event = <T>(body: T, eventName: string) => void;
+    type Event = <T extends object>(body: T, eventName: string) => void;
     interface EventSender {
         event: Event;
     }
@@ -6973,7 +6973,7 @@ declare namespace ts.server {
         private projectsUpdatedInBackgroundEvent(openFiles);
         logError(err: Error, cmd: string): void;
         send(msg: protocol.Message): void;
-        event<T>(body: T, eventName: string): void;
+        event<T extends object>(body: T, eventName: string): void;
         /** @deprecated */
         output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
         private doOutput(info, cmdName, reqSeq, success, message?);
