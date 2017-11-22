@@ -633,7 +633,7 @@ namespace ts {
         Node,   // Unique name based on the node in the 'original' property.
     }
 
-    export interface Identifier extends PrimaryExpression {
+    export interface Identifier extends PrimaryExpression, Declaration {
         kind: SyntaxKind.Identifier;
         /**
          * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)

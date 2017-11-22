@@ -274,7 +274,7 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    // THIS IS WRONG
+                    // TODO: THIS IS WRONG
                     return (node as any as Identifier).escapedText;
                 case SyntaxKind.Constructor:
                     return InternalSymbolName.Constructor;
@@ -2010,6 +2010,7 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     if (isSpecialPropertyDeclaration(node as PropertyAccessExpression)) {
+                        // TODO: this is wrong now that I allow it anywhere
                         bindThisPropertyAssignment(node as PropertyAccessExpression);
                     }
                     break;
@@ -2397,17 +2398,21 @@ namespace ts {
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }
-            if (isMagic && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace))) {
-                // TODO: Magic may not be required
-                // TODO: Container.locals as symbolTable is probably wrong sometimes (maybe it's sometimes exports?)
-                // TODO: Container.symbol as parent is probably wrong sometimes
-                // TODO: propertyAccessExpression.expression isn't a Declaration
-                targetSymbol = declareSymbol(container.locals, container.symbol, propertyAccessExpression.expression as any as Declaration, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+            Debug.assert(propertyAccessExpression.parent.kind === SyntaxKind.BinaryExpression);
+            if (isMagic &&
+                (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) &&
+                ((propertyAccessExpression.parent as BinaryExpression).right.kind === SyntaxKind.ClassExpression || (propertyAccessExpression.parent as BinaryExpression).right.kind === SyntaxKind.FunctionExpression) &&
+                propertyAccessExpression.parent.parent.parent.kind === SyntaxKind.SourceFile) {
+                // TODO: Magic may not be required (but is so far)
+                Debug.assert(isIdentifier(propertyAccessExpression.expression));
+                // TODO: This should be exports if the tgargetSymbol is found, and already exported, otherwise locals
+                const symbolTable = container.symbol && container.symbol.exports ? container.symbol.exports : container.locals;
+                targetSymbol = declareSymbol(symbolTable, container.symbol, propertyAccessExpression.expression as Identifier, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
             }
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }
-            if (!isMagic && (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class)))) {
+            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule))) {
                 return;
             }
 
