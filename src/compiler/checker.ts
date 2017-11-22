@@ -26248,14 +26248,17 @@ namespace ts {
         }
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
-            if (node.typeParameters) {
-                return grammarErrorAtPos(node, node.typeParameters.pos, node.typeParameters.end - node.typeParameters.pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
+            const typeParameters = getEffectiveTypeParameterDeclarations(node);
+            if (typeParameters) {
+                const { pos, end } = isNodeArray(typeParameters) ? typeParameters : first(typeParameters);
+                return grammarErrorAtPos(node, pos, end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }
 
         function checkGrammarConstructorTypeAnnotation(node: ConstructorDeclaration) {
-            if (node.type) {
-                return grammarErrorOnNode(node.type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
+            const type = getEffectiveReturnTypeNode(node);
+            if (type) {
+                return grammarErrorOnNode(type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
             }
         }
 
