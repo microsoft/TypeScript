@@ -5,7 +5,7 @@
 
 namespace ts.TestFSWithWatch {
     export const libFile: FileOrFolder = {
-        path: "/a/lib/lib.d.ts",
+        path: "/.ts/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -41,10 +41,24 @@ interface Array<T> {}`
         useWindowsStylePaths?: boolean;
     }
 
-    export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolder>, params?: TestServerHostCreationParameters): TestServerHost {
-        if (!params) {
-            params = {};
-        }
+    export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolder>, params: TestServerHostCreationParameters = {}) {
+        // const host = new mocks.MockServerHost({
+        //     vfs: {
+        //         currentDirectory: params.currentDirectory,
+        //         useCaseSensitiveFileNames: params.useCaseSensitiveFileNames
+        //     },
+        //     executingFilePath: params.executingFilePath,
+        //     newLine: params.newLine as "\r\n" | "\n"
+        // });
+        // for (const entry of fileOrFolderList) {
+        //     if (typeof entry.content === "string") {
+        //         host.vfs.addFile(entry.path, entry.content);
+        //     }
+        //     else {
+        //         host.vfs.addDirectory(entry.path);
+        //     }
+        // }
+        // if (params.useWindowsStylePaths) throw new Error("Not supported");
         const host = new TestServerHost(/*withSafelist*/ false,
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
             params.executingFilePath || getExecutingFilePathFromLibFile(),
@@ -153,11 +167,25 @@ interface Array<T> {}`
         }
     }
 
-    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[]) {
+    function checkSortedSet<T>(set: ReadonlySet<T>, values: ReadonlyArray<T>) {
+        assert.strictEqual(set.size, values.length, `Actual: ${Array.from(set)}, expected: ${values}.`);
+        for (const value of values) {
+            assert.isTrue(set.has(value));
+        }
+    }
+
+    export function checkWatchedFiles(host: TestServerHost | mocks.MockServerHost, expectedFiles: string[]) {
+        if (host instanceof mocks.MockServerHost) {
+            return checkSortedSet(host.vfs.watchedFiles, expectedFiles);
+        }
+
         checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
     }
 
-    export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[], recursive = false) {
+    export function checkWatchedDirectories(host: TestServerHost | mocks.MockServerHost, expectedDirectories: string[], recursive = false) {
+        if (host instanceof mocks.MockServerHost) {
+            return checkSortedSet(recursive ? host.vfs.watchedRecursiveDirectories : host.vfs.watchedNonRecursiveDirectories, expectedDirectories);
+        }
         checkMapKeys(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
     }
 
@@ -244,6 +272,16 @@ interface Array<T> {}`
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
     }
 
+    function createFileMatcher(host: TestServerHost, path: string) {
+        path = host.getCanonicalFileName(host.getHostSpecificPath(path));
+        return (file: FileOrFolder) => host.getCanonicalFileName(host.getHostSpecificPath(file.path)) === path && isString(file.content);
+    }
+
+    function createFolderMatcher(host: TestServerHost, path: string) {
+        path = host.getCanonicalFileName(host.getHostSpecificPath(path));
+        return (file: FileOrFolder) => host.getCanonicalFileName(host.getHostSpecificPath(file.path)) === path && !isString(file.content);
+    }
+
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
         args: string[] = [];
 
@@ -260,6 +298,63 @@ interface Array<T> {}`
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
+        public files: FileOrFolder[] = [];
+
+        // temporary vfs shim
+        public vfs = {
+            addFile: (path: string, content: string, options?: { overwrite?: boolean }) => {
+                let file = this.files.find(createFileMatcher(this, path));
+                if (file) {
+                    if (!(options && options.overwrite)) return undefined;
+                    file.content = content;
+                }
+                else {
+                    file = { path, content };
+                    this.files.push(file);
+                }
+                this.reloadFS(this.files);
+                return file;
+            },
+            writeFile: (path: string, content: string) => {
+                let file = this.files.find(createFileMatcher(this, path));
+                if (file) {
+                    file.content = content;
+                }
+                else {
+                    file = { path, content };
+                    this.files.push(file);
+                }
+                this.reloadFS(this.files);
+            },
+            getFile: (path: string) => {
+                return this.files.find(createFileMatcher(this, path));
+            },
+            removeFile: (path: string) => {
+                const index = this.files.findIndex(createFileMatcher(this, path));
+                if (index >= 0) {
+                    ts.orderedRemoveItemAt(this.files, index);
+                    this.reloadFS(this.files);
+                }
+            },
+            renameFile: (oldpath: string, newpath: string) => {
+                const oldItem = this.vfs.getFile(oldpath);
+                if (oldItem) {
+                    const newIndex = this.files.findIndex(createFileMatcher(this, newpath));
+                    if (newIndex >= 0) ts.orderedRemoveItemAt(this.files, newIndex);
+                    oldItem.path = newpath;
+                    this.reloadFS(this.files);
+                }
+            },
+            addDirectory: (path: string) => {
+                let file = this.files.find(createFolderMatcher(this, path));
+                if (!file) {
+                    file = { path };
+                    this.files.push(file);
+                    this.reloadFS(this.files);
+                }
+                return file;
+            },
+        };
 
         constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -291,7 +386,9 @@ interface Array<T> {}`
         reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, options?: Partial<ReloadWatchInvokeOptions>) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
-            fileOrFolderList = fileOrFolderList.concat(this.withSafeList ? safeList : []);
+            if (this.files !== fileOrFolderList) {
+                this.files = fileOrFolderList = fileOrFolderList.concat(this.withSafeList ? safeList : []);
+            }
             const filesOrFoldersToLoad: ReadonlyArray<FileOrFolder> = !this.useWindowsStylePath ? fileOrFolderList :
                 fileOrFolderList.map<FileOrFolder>(f => {
                     const result = clone(f);

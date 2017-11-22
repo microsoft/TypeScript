@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2017",
+        "strict": true,
+        "declaration": true,
+        "sourceMap": true,
+        "types": ["mocha"]
+    }
+}

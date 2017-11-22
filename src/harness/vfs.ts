@@ -88,6 +88,7 @@ namespace vfs {
 
     interface DirectoryWatcherEntryArray extends Array<DirectoryWatcherEntry> {
         recursiveCount?: number;
+        nonRecursiveCount?: number;
     }
 
     interface DirectoryWatcherEntry {
@@ -118,6 +119,9 @@ namespace vfs {
     }
 
     export class VirtualFileSystem extends VirtualFileSystemObject {
+        public watchFiles = true;
+        public watchDirectories = true;
+
         private static _builtLocal: VirtualFileSystem | undefined;
         private static _builtLocalCI: VirtualFileSystem | undefined;
         private static _builtLocalCS: VirtualFileSystem | undefined;
@@ -128,7 +132,10 @@ namespace vfs {
         private _currentDirectoryStack: string[] | undefined;
         private _shadowRoot: VirtualFileSystem | undefined;
         private _watchedFiles: core.KeyedCollection<string, FileWatcherEntry[]> | undefined;
+        private _watchedFilesSet: core.SortedSet<string> | undefined;
         private _watchedDirectories: core.KeyedCollection<string, DirectoryWatcherEntryArray> | undefined;
+        private _watchedRecursiveDirectoriesSet: core.SortedSet<string> | undefined;
+        private _watchedNonRecursiveDirectoriesSet: core.SortedSet<string> | undefined;
         private _stringComparer: ts.Comparer<string> | undefined;
         private _pathComparer: ts.Comparer<string> | undefined;
         private _metadata: core.Metadata;
@@ -151,6 +158,18 @@ namespace vfs {
             return this._pathComparer || (this._pathComparer = this.useCaseSensitiveFileNames
                 ? vpath.compareCaseSensitive
                 : vpath.compareCaseInsensitive);
+        }
+
+        public get watchedFiles(): ReadonlySet<string> {
+            return this.watchedFilesSetPrivate;
+        }
+
+        public get watchedRecursiveDirectories(): ReadonlySet<string> {
+            return this.watchedRecursiveDirectoriesSetPrivate;
+        }
+
+        public get watchedNonRecursiveDirectories(): ReadonlySet<string> {
+            return this.watchedNonRecursiveDirectoriesSetPrivate;
         }
 
         /**
@@ -179,6 +198,26 @@ namespace vfs {
          */
         public get currentDirectory() {
             return this._currentDirectory;
+        }
+
+        private get watchedFilesPrivate() {
+            return this._watchedFiles || (this._watchedFiles = new core.KeyedCollection<string, FileWatcherEntry[]>(this.pathComparer));
+        }
+
+        private get watchedFilesSetPrivate() {
+            return this._watchedFilesSet || (this._watchedFilesSet = new core.SortedSet<string>(this.pathComparer));
+        }
+
+        private get watchedDirectoriesPrivate() {
+            return this._watchedDirectories || (this._watchedDirectories = new core.KeyedCollection<string, DirectoryWatcherEntryArray>(this.pathComparer))
+        }
+
+        private get watchedRecursiveDirectoriesSetPrivate() {
+            return this._watchedRecursiveDirectoriesSet || (this._watchedRecursiveDirectoriesSet = new core.SortedSet<string>(this.pathComparer));
+        }
+
+        private get watchedNonRecursiveDirectoriesSetPrivate() {
+            return this._watchedNonRecursiveDirectoriesSet || (this._watchedNonRecursiveDirectoriesSet = new core.SortedSet<string>(this.pathComparer));
         }
 
         private get root(): VirtualRoot {
@@ -361,8 +400,13 @@ namespace vfs {
          */
         public writeFile(path: string, content: string): void {
             path = vpath.resolve(this.currentDirectory, path);
-            const file = this.getFile(path) || this.addFile(path);
-            if (file) file.writeContent(content);
+            const file = this.getFile(path);
+            if (file) {
+                file.writeContent(content);
+            }
+            else {
+                this.addFile(path, content);
+            }
         }
 
         /**
@@ -508,25 +552,24 @@ namespace vfs {
          * Watch a path for changes to a file.
          */
         public watchFile(path: string, watcher: (path: string, change: FileSystemChange) => void): ts.FileWatcher {
-            if (!this._watchedFiles) {
-                const pathComparer = this.useCaseSensitiveFileNames ? vpath.compareCaseSensitive : vpath.compareCaseInsensitive;
-                this._watchedFiles = new core.KeyedCollection<string, FileWatcherEntry[]>(pathComparer);
-            }
-
             path = vpath.resolve(this.currentDirectory, path);
-            let watchers = this._watchedFiles.get(path);
-            if (!watchers) this._watchedFiles.set(path, watchers = []);
+            let watchers = this.watchedFilesPrivate.get(path);
+            if (!watchers) {
+                this.watchedFilesPrivate.set(path, watchers = []);
+                this.watchedFilesSetPrivate.add(path);
+            }
 
             const entry: FileWatcherEntry = { watcher };
             watchers.push(entry);
 
             return {
                 close: () => {
-                    const watchers = this._watchedFiles.get(path);
+                    const watchers = this.watchedFilesPrivate.get(path);
                     if (watchers) {
                         ts.orderedRemoveItem(watchers, entry);
                         if (watchers.length === 0) {
-                            this._watchedFiles.delete(path);
+                            this.watchedFilesPrivate.delete(path);
+                            this.watchedFilesSetPrivate.delete(path);
                         }
                     }
                 }
@@ -543,27 +586,48 @@ namespace vfs {
             }
 
             path = vpath.resolve(this.currentDirectory, path);
-            let watchers = this._watchedDirectories.get(path);
+            let watchers = this.watchedDirectoriesPrivate.get(path);
             if (!watchers) {
                 watchers = [];
                 watchers.recursiveCount = 0;
-                this._watchedDirectories.set(path, watchers);
+                watchers.nonRecursiveCount = 0;
+                this.watchedDirectoriesPrivate.set(path, watchers);
             }
 
             const entry: DirectoryWatcherEntry = { watcher, recursive };
             watchers.push(entry);
-            if (recursive) watchers.recursiveCount++;
+            if (recursive) {
+                if (watchers.recursiveCount === 0) {
+                    this.watchedRecursiveDirectoriesSetPrivate.add(path);
+                }
+                watchers.recursiveCount++;
+            }
+            else {
+                if (watchers.nonRecursiveCount === 0) {
+                    this.watchedNonRecursiveDirectoriesSetPrivate.add(path);
+                }
+                watchers.nonRecursiveCount++;
+            }
 
             return {
                 close: () => {
-                    const watchers = this._watchedDirectories.get(path);
+                    const watchers = this.watchedDirectoriesPrivate.get(path);
                     if (watchers) {
                         ts.orderedRemoveItem(watchers, entry);
-                        if (watchers.length === 0) {
-                            this._watchedDirectories.delete(path);
-                        }
-                        else if (entry.recursive) {
+                        if (entry.recursive) {
                             watchers.recursiveCount--;
+                            if (watchers.recursiveCount === 0) {
+                                this.watchedRecursiveDirectoriesSetPrivate.delete(path);
+                            }
+                        }
+                        else {
+                            watchers.nonRecursiveCount--;
+                            if (watchers.nonRecursiveCount === 0) {
+                                this.watchedNonRecursiveDirectoriesSetPrivate.delete(path);
+                            }
+                        }
+                        if (watchers.length === 0) {
+                            this.watchedDirectoriesPrivate.delete(path);
                         }
                     }
                 }
@@ -603,26 +667,31 @@ namespace vfs {
         }
 
         private onRootFileSystemChange(path: string, change: FileSystemChange) {
-            const fileWatchers = this._watchedFiles && this._watchedFiles.get(path);
-            if (fileWatchers) {
-                for (const { watcher } of fileWatchers) {
-                    watcher(path, change);
+            if (this.watchFiles) {
+                const fileWatchers = this._watchedFiles && this._watchedFiles.get(path);
+                if (fileWatchers) {
+                    for (const { watcher } of fileWatchers) {
+                        watcher(path, change);
+                    }
                 }
             }
 
-            if (this._watchedDirectories && (change === "added" || change === "removed")) {
-                const ignoreCase = !this.useCaseSensitiveFileNames;
-                const dirname = vpath.dirname(path);
-                this._watchedDirectories.forEach((watchers, path) => {
-                    const exactMatch = vpath.equals(dirname, path, ignoreCase);
-                    if (exactMatch || (watchers.recursiveCount > 0 && vpath.beneath(dirname, path, ignoreCase))) {
-                        for (const { recursive, watcher } of watchers) {
-                            if (exactMatch || !recursive) {
-                                watcher(path);
+            if (this.watchDirectories) {
+                if (this._watchedDirectories && (change === "added" || change === "removed")) {
+                    const ignoreCase = !this.useCaseSensitiveFileNames;
+                    const dirname = vpath.dirname(path);
+                    this._watchedDirectories.forEach((watchers, watchedPath) => {
+                        const nonRecursiveMatch = watchers.nonRecursiveCount > 0 && vpath.equals(watchedPath, dirname, ignoreCase);
+                        const recursiveMatch = watchers.recursiveCount > 0 && vpath.beneath(watchedPath, dirname, ignoreCase);
+                        if (nonRecursiveMatch || recursiveMatch) {
+                            for (const { recursive, watcher } of watchers) {
+                                if (recursive ? recursiveMatch : nonRecursiveMatch) {
+                                    watcher(path);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
     }
@@ -766,10 +835,16 @@ namespace vfs {
 
         protected static _setNameUnsafe(entry: VirtualFileSystemEntry, name: string) {
             entry._name = name;
+            entry.invalidate();
         }
 
         protected static _setParentUnsafe(entry: VirtualFileSystemEntry, parent: VirtualDirectory) {
             entry._parent = parent;
+            entry.invalidate();
+        }
+
+        protected static _invalidate(entry: VirtualFileSystemEntry) {
+            entry.invalidate();
         }
 
         protected shadowPreamble(parent: VirtualDirectory): void {
@@ -811,6 +886,10 @@ namespace vfs {
             if (!this.isReadOnly) {
                 this._mtimeMS = Date.now();
             }
+        }
+
+        protected invalidate() {
+            this._path = undefined;
         }
     }
 
@@ -877,6 +956,10 @@ namespace vfs {
          */
         public get shadowRoot(): VirtualDirectory | undefined {
             return this._shadowRoot;
+        }
+
+        protected get hasOwnEntries() {
+            return this._entries !== undefined;
         }
 
         /**
@@ -1253,6 +1336,19 @@ namespace vfs {
             return true;
         }
 
+        protected invalidate() {
+            super.invalidate();
+            this.invalidateEntries();
+        }
+
+        protected invalidateEntries() {
+            if (this.hasOwnEntries) {
+                for (const entry of Array.from(this.getOwnEntries().values())) {
+                    VirtualFileSystemEntry._invalidate(entry);
+                }
+            }
+        }
+
         private parsePath(path: string) {
             return vpath.parse(vpath.normalize(path));
         }
@@ -1432,6 +1528,10 @@ namespace vfs {
                 }
             }
             return this._allViews;
+        }
+
+        protected invalidateEntries() {
+            this.invalidateTarget();
         }
 
         private getView(entry: VirtualFile): VirtualFileView;
@@ -1786,6 +1886,11 @@ namespace vfs {
 
         public getStats() {
             return super.getStatsCore(S_IFLNK, this.targetPath.length);
+        }
+
+        protected invalidate() {
+            super.invalidate();
+            this.invalidateTarget();
         }
 
         private resolveTarget() {

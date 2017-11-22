@@ -1,6 +1,7 @@
 /// <reference path="../harness.ts" />
 /// <reference path="./tsserverProjectSystem.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
+/// <reference path="../mocks.ts" />
 
 namespace ts.projectSystem {
     describe("Project errors", () => {
@@ -30,177 +31,127 @@ namespace ts.projectSystem {
         }
 
         it("external project - diagnostics for missing files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/applib.ts",
-                content: ""
-            };
-            const host = createServerHost([file1, libFile]);
+            const host = new mocks.MockServerHost({ safeList: true, lib: true });
+            host.vfs.addFile("/a/b/app.ts", ``);
+
+            const projectFileName = "/a/b/test.csproj";
+
             const session = createSession(host);
             const projectService = session.getProjectService();
-            const projectFileName = "/a/b/test.csproj";
-            const compilerOptionsRequest: server.protocol.CompilerOptionsDiagnosticsRequest = {
-                type: "request",
-                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
-                seq: 2,
-                arguments: { projectFileName }
-            };
+            projectService.openExternalProject({
+                projectFileName,
+                options: {},
+                rootFiles: toExternalFiles(["/a/b/app.ts", "/a/b/applib.ts"])
+            });
 
-            {
-                projectService.openExternalProject({
-                    projectFileName,
-                    options: {},
-                    rootFiles: toExternalFiles([file1.path, file2.path])
-                });
+            // only file1 exists - expect error
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            const diags1 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName }, /*seq*/ 2);
+            checkDiagnosticsWithLinePos(diags1, ["File '/a/b/applib.ts' not found."]);
 
-                checkNumberOfProjects(projectService, { externalProjects: 1 });
-                const diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
-                // only file1 exists - expect error
-                checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
-            }
-            host.reloadFS([file2, libFile]);
-            {
-                // only file2 exists - expect error
-                checkNumberOfProjects(projectService, { externalProjects: 1 });
-                const diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
-                checkDiagnosticsWithLinePos(diags, ["File '/a/b/app.ts' not found."]);
-            }
+            host.vfs.removeFile("/a/b/app.ts");
+            host.vfs.addFile("/a/b/applib.ts", ``);
 
-            host.reloadFS([file1, file2, libFile]);
-            {
-                // both files exist - expect no errors
-                checkNumberOfProjects(projectService, { externalProjects: 1 });
-                const diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
-                checkDiagnosticsWithLinePos(diags, []);
-            }
+            // only file2 exists - expect error
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            const diags2 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName }, /*seq*/ 2);
+            checkDiagnosticsWithLinePos(diags2, ["File '/a/b/app.ts' not found."]);
+
+            host.vfs.addFile("/a/b/app.ts", ``);
+
+            // both files exist - expect no errors
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            const diags3 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName }, /*seq*/ 2);
+            checkDiagnosticsWithLinePos(diags3, []);
         });
 
         it("configured projects - diagnostics for missing files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/applib.ts",
-                content: ""
-            };
-            const config = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
-            };
-            const host = createServerHost([file1, config, libFile]);
+            const host = new mocks.MockServerHost({ safeList: true, lib: true });
+            host.vfs.addFile("/a/b/app.ts", ``);
+            host.vfs.addFile("/a/b/tsconfig.json", `{ "files": ["app.ts", "applib.ts"] }`);
+
             const session = createSession(host);
             const projectService = session.getProjectService();
-            openFilesForSession([file1], session);
+
+            openFilesForSession(["/a/b/app.ts"], session);
+
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);
-            const compilerOptionsRequest: server.protocol.CompilerOptionsDiagnosticsRequest = {
-                type: "request",
-                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
-                seq: 2,
-                arguments: { projectFileName: project.getProjectName() }
-            };
-            let diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
-            checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
+            const diags1 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName: project.getProjectName() }, /*seq*/ 2);
+            checkDiagnosticsWithLinePos(diags1, ["File '/a/b/applib.ts' not found."]);
 
-            host.reloadFS([file1, file2, config, libFile]);
+            host.vfs.addFile("/a/b/applib.ts", ``);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
-            checkDiagnosticsWithLinePos(diags, []);
+            const diags2 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName: project.getProjectName() }, /*seq*/ 2);
+            checkDiagnosticsWithLinePos(diags2, []);
         });
 
         it("configured projects - diagnostics for corrupted config 1", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/lib.ts",
-                content: ""
-            };
-            const correctConfig = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
-            };
-            const corruptedConfig = {
-                path: correctConfig.path,
-                content: correctConfig.content.substr(1)
-            };
-            const host = createServerHost([file1, file2, corruptedConfig]);
+            const host = new mocks.MockServerHost({ safeList: true });
+            host.vfs.addFile("/a/b/app.ts", ``);
+            host.vfs.addFile("/a/b/lib.ts", ``);
+            host.vfs.addFile("/a/b/tsconfig.json", ` "files": ["app.ts", "lib.ts"] }`);
+
             const projectService = createProjectService(host);
 
-            projectService.openClientFile(file1.path);
-            {
-                projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
-                assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, []);
-                const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
-                checkProjectErrorsWorker(projectErrors, [
-                    "'{' expected."
-                ]);
-                assert.isNotNull(projectErrors[0].file);
-                assert.equal(projectErrors[0].file.fileName, corruptedConfig.path);
-            }
+            projectService.openClientFile("/a/b/app.ts");
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+
+            const configuredProject1 = find(projectService.synchronizeProjectList([]), f => f.info.projectName === "/a/b/tsconfig.json");
+            assert.isTrue(configuredProject1 !== undefined, "should find configured project");
+            checkProjectErrors(configuredProject1, []);
+
+            const projectErrors1 = configuredProjectAt(projectService, 0).getAllProjectErrors();
+            checkProjectErrorsWorker(projectErrors1, ["'{' expected."]);
+            assert.isNotNull(projectErrors1[0].file);
+            assert.equal(projectErrors1[0].file.fileName, "/a/b/tsconfig.json");
+
             // fix config and trigger watcher
-            host.reloadFS([file1, file2, correctConfig]);
-            {
-                projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
-                assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, []);
-                const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
-                checkProjectErrorsWorker(projectErrors, []);
-            }
+            host.vfs.writeFile("/a/b/tsconfig.json", `{ "files": ["app.ts", "lib.ts"] }`);
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+
+            const configuredProject2 = find(projectService.synchronizeProjectList([]), f => f.info.projectName === "/a/b/tsconfig.json");
+            assert.isTrue(configuredProject2 !== undefined, "should find configured project");
+            checkProjectErrors(configuredProject2, []);
+
+            const projectErrors2 = configuredProjectAt(projectService, 0).getAllProjectErrors();
+            checkProjectErrorsWorker(projectErrors2, []);
         });
 
         it("configured projects - diagnostics for corrupted config 2", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/lib.ts",
-                content: ""
-            };
-            const correctConfig = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
-            };
-            const corruptedConfig = {
-                path: correctConfig.path,
-                content: correctConfig.content.substr(1)
-            };
-            const host = createServerHost([file1, file2, correctConfig]);
+            const host = new mocks.MockServerHost({ safeList: true });
+            host.vfs.addFile("/a/b/app.ts", ``);
+            host.vfs.addFile("/a/b/lib.ts", ``);
+            host.vfs.addFile("/a/b/tsconfig.json", `{ "files": ["app.ts", "lib.ts"] }`);
+
             const projectService = createProjectService(host);
 
-            projectService.openClientFile(file1.path);
-            {
-                projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
-                assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, []);
-                const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
-                checkProjectErrorsWorker(projectErrors, []);
-            }
+            projectService.openClientFile("/a/b/app.ts");
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            const configuredProject1 = find(projectService.synchronizeProjectList([]), f => f.info.projectName === "/a/b/tsconfig.json");
+            assert.isTrue(configuredProject1 !== undefined, "should find configured project");
+            checkProjectErrors(configuredProject1, []);
+
+            const projectErrors1 = configuredProjectAt(projectService, 0).getAllProjectErrors();
+            checkProjectErrorsWorker(projectErrors1, []);
+
             // break config and trigger watcher
-            host.reloadFS([file1, file2, corruptedConfig]);
-            {
-                projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
-                assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, []);
-                const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
-                checkProjectErrorsWorker(projectErrors, [
-                    "'{' expected."
-                ]);
-                assert.isNotNull(projectErrors[0].file);
-                assert.equal(projectErrors[0].file.fileName, corruptedConfig.path);
-            }
+            host.vfs.writeFile("/a/b/tsconfig.json", ` "files": ["app.ts", "lib.ts"] }`);
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+
+            const configuredProject2 = find(projectService.synchronizeProjectList([]), f => f.info.projectName === "/a/b/tsconfig.json");
+            assert.isTrue(configuredProject2 !== undefined, "should find configured project");
+            checkProjectErrors(configuredProject2, []);
+
+            const projectErrors2 = configuredProjectAt(projectService, 0).getAllProjectErrors();
+            checkProjectErrorsWorker(projectErrors2, ["'{' expected."]);
+            assert.isNotNull(projectErrors2[0].file);
+            assert.equal(projectErrors2[0].file.fileName, "/a/b/tsconfig.json");
         });
     });
 }

@@ -915,7 +915,7 @@ namespace ts {
         }
 
         function verifyProgram(vfs: vfs.VirtualFileSystem, rootFiles: string[], options: CompilerOptions, configFile: string) {
-            const watchingSystemHost = createWatchingSystemHost(new mocks.MockServerHost(vfs));
+            const watchingSystemHost = createWatchingSystemHost(new mocks.MockServerHost({ vfs }));
             verifyProgramWithoutConfigFile(watchingSystemHost, rootFiles, options);
             verifyProgramWithConfigFile(watchingSystemHost, configFile);
         }
@@ -997,7 +997,7 @@ namespace ts {
                 `export default classD;`);
             const configFile = fs.addFile("/src/tsconfig.json",
                 JSON.stringify({ compilerOptions, include: ["packages/**/ *.ts"] }));
-            const watchingSystemHost = createWatchingSystemHost(new mocks.MockServerHost(fs));
+            const watchingSystemHost = createWatchingSystemHost(new mocks.MockServerHost({ vfs: fs }));
             verifyProgramWithConfigFile(watchingSystemHost, configFile.path);
         });
     });

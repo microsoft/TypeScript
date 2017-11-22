@@ -191,6 +191,10 @@ namespace core {
             }
         }
 
+        public [Symbol.iterator]() {
+            return this.entries();
+        }
+
         private writePreamble() {
             if (this._copyOnWrite) {
                 this._keys = this._keys.slice();
@@ -208,6 +212,109 @@ namespace core {
             return this._order
                 .map((_, i) => i)
                 .sort((x, y) => this._order[x] - this._order[y]);
+        }
+    }
+
+    export class SortedSet<T> implements ReadonlySet<T> {
+        private _comparer: (a: T, b: T) => number;
+        private _values: T[] = [];
+        private _version = 0;
+        private _copyOnWrite = false;
+
+        constructor(comparer: (a: T, b: T) => number) {
+            this._comparer = comparer;
+        }
+
+        public get size() {
+            return this._values.length;
+        }
+
+        public has(value: T) {
+            return binarySearch(this._values, value, identity, this._comparer) >= 0;
+        }
+
+        public add(value: T) {
+            const index = binarySearch(this._values, value, identity, this._comparer);
+            if (index < 0) {
+                this.writePreamble();
+                insertAt(this._values, ~index, value);
+                this.writePostScript();
+            }
+            return this;
+        }
+
+        public delete(value: T) {
+            const index = binarySearch(this._values, value, identity, this._comparer);
+            if (index >= 0) {
+                this.writePreamble();
+                removeAt(this._values, index);
+                this.writePostScript();
+                return true;
+            }
+            return false;
+        }
+
+        public clear() {
+            if (this.size > 0) {
+                this.writePreamble();
+                this._values.length = 0;
+                this.writePostScript();
+            }
+        }
+
+        public forEach(callback: (value: T, key: T, collection: this) => void) {
+            const values = this._values;
+            const version = this._version;
+            this._copyOnWrite = true;
+            for (const value of values) {
+                callback(value, value, this);
+            }
+            if (version === this._version) {
+                this._copyOnWrite = false;
+            }
+        }
+
+        public keys() {
+            return this.values();
+        }
+
+        public * values() {
+            const values = this._values;
+            const version = this._version;
+            this._copyOnWrite = true;
+            for (const value of values) {
+                yield value;
+            }
+            if (version === this._version) {
+                this._copyOnWrite = false;
+            }
+        }
+
+        public * entries() {
+            const values = this._values;
+            const version = this._version;
+            this._copyOnWrite = true;
+            for (const value of values) {
+                yield [value, value] as [T, T];
+            }
+            if (version === this._version) {
+                this._copyOnWrite = false;
+            }
+        }
+
+        public [Symbol.iterator]() {
+            return this.values();
+        }
+
+        private writePreamble() {
+            if (this._copyOnWrite) {
+                this._values = this._values.slice();
+                this._copyOnWrite = false;
+            }
+        }
+
+        private writePostScript() {
+            this._version++;
         }
     }
 
@@ -314,11 +421,21 @@ namespace core {
     }
 
     export function removeAt<T>(array: T[], index: number): void {
-        for (let i = index; i < array.length - 1; i++) {
-            array[i] = array[i + 1];
+        if (index < 0 || index >= array.length) {
+            return;
         }
-
-        array.length--;
+        else if (index === 0) {
+            array.shift();
+        }
+        else if (index === array.length - 1) {
+            array.pop();
+        }
+        else {
+            for (let i = index; i < array.length - 1; i++) {
+                array[i] = array[i + 1];
+            }
+            array.length--;
+        }
     }
 
     export function insertAt<T>(array: T[], index: number, value: T): void {

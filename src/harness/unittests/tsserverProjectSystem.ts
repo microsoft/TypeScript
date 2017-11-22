@@ -401,9 +401,9 @@ namespace ts.projectSystem {
         }
     }
 
-    export function makeSessionRequest<T>(command: string, args: T) {
+    export function makeSessionRequest<T>(command: string, args: T, seq = 0) {
         const newRequest: protocol.Request = {
-            seq: 0,
+            seq,
             type: "request",
             command,
             arguments: args
@@ -411,9 +411,29 @@ namespace ts.projectSystem {
         return newRequest;
     }
 
-    export function openFilesForSession(files: FileOrFolder[], session: server.Session) {
+    export function sendOpenRequest(session: server.Session, args: server.protocol.OpenRequestArgs, seq?: number) {
+        session.executeCommand(makeSessionRequest(CommandNames.Open, args, seq));
+    }
+
+    export function sendChangeRequest(session: server.Session, args: server.protocol.ChangeRequestArgs, seq?: number) {
+        session.executeCommand(makeSessionRequest(CommandNames.Change, args, seq));
+    }
+
+    export function sendCompileOnSaveAffectedFileListRequest(session: server.Session, args: server.protocol.FileRequestArgs, seq?: number) {
+        return session.executeCommand(makeSessionRequest(CommandNames.CompileOnSaveAffectedFileList, args, seq)).response as server.protocol.CompileOnSaveAffectedFileListSingleProject[];
+    }
+
+    export function sendCompileOnSaveEmitFileRequest(session: server.Session, args: server.protocol.CompileOnSaveEmitFileRequestArgs, seq?: number) {
+        session.executeCommand(makeSessionRequest(CommandNames.CompileOnSaveEmitFile, args, seq));
+    }
+
+    export function sendCompilerOptionsDiagnosticsRequest(session: server.Session, args: server.protocol.CompilerOptionsDiagnosticsRequestArgs, seq?: number) {
+        return session.executeCommand(makeSessionRequest(CommandNames.CompilerOptionsDiagnosticsFull, args, seq)).response as server.protocol.DiagnosticWithLinePosition[];
+    }
+
+    export function openFilesForSession(files: (string | FileOrFolder | vfs.VirtualFile)[], session: server.Session) {
         for (const file of files) {
-            const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
+            const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: typeof file === "string" ? file : file.path });
             session.executeCommand(request);
         }
     }

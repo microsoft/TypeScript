@@ -602,10 +602,19 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
     return runSequence("LKGInternal", "VerifyLKG");
 });
 
+gulp.task("typemock", () => {
+    const typemock = tsc.createProject("scripts/typemock/src/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
+    return typemock.src()
+        .pipe(sourcemaps.init())
+        .pipe(newer("scripts/typemock/dist"))
+        .pipe(typemock())
+        .pipe(sourcemaps.write(".", <any>{ includeContent: false, destPath: "scripts/typemock/dist" }))
+        .pipe(gulp.dest("scripts/typemock/dist"));
+});
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
-gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile], () => {
+gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile, "typemock"], () => {
     const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return testProject.src()
         .pipe(newer(run))
@@ -644,7 +653,7 @@ function restoreSavedNodeEnv() {
     process.env.NODE_ENV = savedNodeEnv;
 }
 
-function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void) {
+function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void, noExit?: boolean) {
     const lintFlag = cmdLineOptions.lint;
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
@@ -720,8 +729,10 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
     });
 
     function failWithStatus(err?: any, status?: number) {
-        if (err || status) {
-            process.exit(typeof status === "number" ? status : 2);
+        if (!noExit) {
+            if (err || status) {
+                process.exit(typeof status === "number" ? status : 2);
+            }
         }
         done();
     }
@@ -761,6 +772,10 @@ gulp.task("runtests",
     (done) => {
         runConsoleTests("mocha-fivemat-progress-reporter", /*runInParallel*/ false, done);
     });
+
+gulp.task("runtests-in-watch", ["build-rules", "tests"], done => {
+    runConsoleTests("min", /*runInParallel*/ false, done, /*noExit*/ true);
+});
 
 const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
@@ -1109,4 +1124,8 @@ gulp.task("default", "Runs 'local'", ["local"]);
 
 gulp.task("watch", "Watches the src/ directory for changes and executes runtests-parallel.", [], () => {
     gulp.watch("src/**/*.*", ["runtests-parallel"]);
+});
+
+gulp.task("watch-no-parallel", "Watches the src/ directory for changes and executes runtests.", [], () => {
+    gulp.watch(["src/**/*.*", "scripts/typemock/src/**/*.*"], ["runtests-in-watch"]);
 });

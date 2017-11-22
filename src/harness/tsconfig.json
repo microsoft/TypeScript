@@ -76,6 +76,7 @@
 
         "core.ts",
         "utils.ts",
+        "typemock.ts",
         "events.ts",
         "documents.ts",
         "vpath.ts",

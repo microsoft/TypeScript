@@ -1,6 +1,9 @@
 /// <reference path="../harness.ts" />
 /// <reference path="./tsserverProjectSystem.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
+/// <reference path="../vfs.ts" />
+/// <reference path="../typemock.ts" />
+/// <reference path="../mocks.ts" />
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
@@ -37,10 +40,20 @@ namespace ts.projectSystem {
         }
     }
 
-    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
+    function executeCommand(self: Installer, host: TestServerHost | mocks.MockServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
         self.addPostExecAction(installedTypings, success => {
             for (const file of typingFiles) {
-                host.ensureFileOrFolder(file);
+                if (host instanceof mocks.MockServerHost) {
+                    if (typeof file.content === "string") {
+                        host.vfs.addFile(file.path, file.content, { overwrite: true });
+                    }
+                    else {
+                        host.vfs.addDirectory(file.path);
+                    }
+                }
+                else {
+                    host.ensureFileOrFolder(file);
+                }
             }
             cb(success);
         });
@@ -62,35 +75,22 @@ namespace ts.projectSystem {
 
     describe("local module", () => {
         it("should not be picked up", () => {
-            const f1 = {
-                path: "/a/app.js",
-                content: "const c = require('./config');"
-            };
-            const f2 = {
-                path: "/a/config.js",
-                content: "export let x = 1"
-            };
-            const typesCache = "/cache";
-            const typesConfig = {
-                path: typesCache + "/node_modules/@types/config/index.d.ts",
-                content: "export let y: number;"
-            };
-            const config = {
-                path: "/a/jsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: { moduleResolution: "commonjs" },
-                    typeAcquisition: { enable: true }
-                })
-            };
-            const host = createServerHost([f1, f2, config, typesConfig]);
-            const installer = new (class extends Installer {
+            const host = new mocks.MockServerHost();
+            const f1 = host.vfs.addFile("/a/app.js", `const c = require('./config');`);
+            const f2 = host.vfs.addFile("/a/config.js", `export let x = 1`);
+            const config = host.vfs.addFile("/a/jsconfig.json", `{ "typeAcquisition": { "enable": true }, "compilerOptions": { "moduleResolution": "commonjs } }`);
+            host.vfs.addFile("/cache/node_modules/@types/config/index.d.ts", `export let y: number;`);
+
+            const installer = new class extends Installer {
                 constructor() {
-                    super(host, { typesRegistry: createTypesRegistry("config"), globalTypingsCacheLocation: typesCache });
+                    super(host, { typesRegistry: createTypesRegistry("config"), globalTypingsCacheLocation: "/cache" });
                 }
+
                 installWorker(_requestId: number, _args: string[], _cwd: string, _cb: TI.RequestCompletedAction) {
                     assert(false, "should not be called");
                 }
-            })();
+            };
+
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(f1.path);
             service.checkNumberOfProjects({ configuredProjects: 1 });
@@ -101,46 +101,27 @@ namespace ts.projectSystem {
 
     describe("typingsInstaller", () => {
         it("configured projects (typings installed) 1", () => {
-            const file1 = {
-                path: "/a/b/app.js",
-                content: ""
-            };
-            const tsconfig = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: {
-                        allowJs: true
-                    },
-                    typeAcquisition: {
-                        enable: true
-                    }
-                })
-            };
-            const packageJson = {
-                path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
-            };
-
             const jquery = {
                 path: "/a/data/node_modules/@types/jquery/index.d.ts",
                 content: "declare const $: { x: number }"
             };
-            const host = createServerHost([file1, tsconfig, packageJson]);
-            const installer = new (class extends Installer {
+
+            const host = new mocks.MockServerHost({ safeList: true });
+            const file1 = host.vfs.addFile("/a/b/app.js", ``);
+            const tsconfig = host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": { "allowJs": true }, "typeAcquisition": { "enable": true } }`);
+            host.vfs.addFile("/a/b/package.json", `{ "name": "test", "dependencies": { "jquery": "^3.1.0" } }`);
+
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
+
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
             projectService.openClientFile(file1.path);
@@ -157,35 +138,26 @@ namespace ts.projectSystem {
         });
 
         it("inferred project (typings installed)", () => {
-            const file1 = {
-                path: "/a/b/app.js",
-                content: ""
-            };
-            const packageJson = {
-                path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
-            };
-
             const jquery = {
                 path: "/a/data/node_modules/@types/jquery/index.d.ts",
                 content: "declare const $: { x: number }"
             };
-            const host = createServerHost([file1, packageJson]);
-            const installer = new (class extends Installer {
+
+            const host = new mocks.MockServerHost({ safeList: true });
+            const file1 = host.vfs.addFile("/a/b/app.js", ``);
+            host.vfs.addFile("/a/b/package.json", `{ "name": "test", "dependencies": { "jquery": "^3.1.0" } }`);
+
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
+
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
             projectService.openClientFile(file1.path);
@@ -201,19 +173,18 @@ namespace ts.projectSystem {
         });
 
         it("external project - no type acquisition, no .d.ts/js files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const host = createServerHost([file1]);
-            const installer = new (class extends Installer {
+            const host = new mocks.MockServerHost({ safeList: true });
+            const file1 = host.vfs.addFile("/a/b/app.ts", ``);
+
+            const installer = new class extends Installer {
                 constructor() {
                     super(host);
                 }
+
                 enqueueInstallTypingsRequest() {
                     assert(false, "auto discovery should not be enabled");
                 }
-            })();
+            };
 
             const projectFileName = "/a/app/test.csproj";
             const projectService = createProjectService(host, { typingsInstaller: installer });
@@ -222,6 +193,7 @@ namespace ts.projectSystem {
                 options: {},
                 rootFiles: [toExternalFile(file1.path)]
             });
+
             installer.checkPendingCommands(/*expectedCount*/ 0);
             // by default auto discovery will kick in if project contain only .js/.d.ts files
             // in this case project contain only ts files - no auto discovery
@@ -229,19 +201,16 @@ namespace ts.projectSystem {
         });
 
         it("external project - no auto in typing acquisition, no .d.ts/js files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const host = createServerHost([file1]);
-            const installer = new (class extends Installer {
+            const host = new mocks.MockServerHost({ safeList: true });
+            const file1 = host.vfs.addFile("/a/b/app.ts", ``);
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
                 enqueueInstallTypingsRequest() {
                     assert(false, "auto discovery should not be enabled");
                 }
-            })();
+            };
 
             const projectFileName = "/a/app/test.csproj";
             const projectService = createProjectService(host, { typingsInstaller: installer });
@@ -258,17 +227,16 @@ namespace ts.projectSystem {
         });
 
         it("external project - autoDiscovery = true, no .d.ts/js files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const file1 = host.vfs.addFile("/a/b/app.ts", ``);
+
             const jquery = {
                 path: "/a/data/node_modules/@types/jquery/index.d.ts",
                 content: "declare const $: { x: number }"
             };
-            const host = createServerHost([file1]);
+
             let enqueueIsCalled = false;
-            const installer: Installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
@@ -281,7 +249,7 @@ namespace ts.projectSystem {
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectFileName = "/a/app/test.csproj";
             const projectService = createProjectService(host, { typingsInstaller: installer });
@@ -304,18 +272,12 @@ namespace ts.projectSystem {
             // 1. react typings are installed for .jsx
             // 2. loose files names are matched against safe list for typings if
             //    this is a JS project (only js, jsx, d.ts files are present)
-            const file1 = {
-                path: "/a/b/lodash.js",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/file2.jsx",
-                content: ""
-            };
-            const file3 = {
-                path: "/a/b/file3.d.ts",
-                content: ""
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const file1 = host.vfs.addFile("/a/b/lodash.js", ``);
+            const file2 = host.vfs.addFile("/a/b/file2.jsx", ``);
+            const file3 = host.vfs.addFile("/a/b/file3.d.ts", ``);
+            host.vfs.addFile(customTypesMap.path, customTypesMap.content);
+
             const react = {
                 path: "/a/data/node_modules/@types/react/index.d.ts",
                 content: "declare const react: { x: number }"
@@ -325,8 +287,7 @@ namespace ts.projectSystem {
                 content: "declare const lodash: { x: number }"
             };
 
-            const host = createServerHost([file1, file2, file3, customTypesMap]);
-            const installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("lodash", "react") });
                 }
@@ -335,7 +296,7 @@ namespace ts.projectSystem {
                     const typingFiles = [lodash, react];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectFileName = "/a/app/test.csproj";
             const projectService = createProjectService(host, { typingsInstaller: installer });
@@ -361,17 +322,11 @@ namespace ts.projectSystem {
         it("external project - no type acquisition, with js & ts files", () => {
             // Tests:
             // 1. No typings are included for JS projects when the project contains ts files
-            const file1 = {
-                path: "/a/b/jquery.js",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/file2.ts",
-                content: ""
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const file1 = host.vfs.addFile("/a/b/jquery.js", ``);
+            const file2 = host.vfs.addFile("/a/b/file2.ts", ``);
 
-            const host = createServerHost([file1, file2]);
-            const installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
@@ -383,7 +338,7 @@ namespace ts.projectSystem {
                     const typingFiles: FileOrFolder[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectFileName = "/a/app/test.csproj";
             const projectService = createProjectService(host, { typingsInstaller: installer });
@@ -409,27 +364,12 @@ namespace ts.projectSystem {
             // 1. Safelist matching, type acquisition includes/excludes and package.json typings are all acquired
             // 2. Types for safelist matches are not included when they also appear in the type acquisition exclude list
             // 3. Multiple includes and excludes are respected in type acquisition
-            const file1 = {
-                path: "/a/b/lodash.js",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/commander.js",
-                content: ""
-            };
-            const file3 = {
-                path: "/a/b/file3.d.ts",
-                content: ""
-            };
-            const packageJson = {
-                path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        express: "^3.1.0"
-                    }
-                })
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const file1 = host.vfs.addFile("/a/b/lodash.js", ``);
+            const file2 = host.vfs.addFile("/a/b/commander.js", ``);
+            const file3 = host.vfs.addFile("/a/b/file3.d.ts", ``);
+            host.vfs.addFile("/a/b/package.json", `{ "name": "test", "dependencies": { "express": "^3.1.0" } }`);
+            host.vfs.addFile(customTypesMap.path, customTypesMap.content);
 
             const commander = {
                 path: "/a/data/node_modules/@types/commander/index.d.ts",
@@ -448,8 +388,7 @@ namespace ts.projectSystem {
                 content: "declare const moment: { x: number }"
             };
 
-            const host = createServerHost([file1, file2, file3, packageJson, customTypesMap]);
-            const installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery", "commander", "moment", "express") });
                 }
@@ -458,7 +397,7 @@ namespace ts.projectSystem {
                     const typingFiles = [commander, express, jquery, moment];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectFileName = "/a/app/test.csproj";
             const projectService = createProjectService(host, { typingsInstaller: installer });
@@ -482,27 +421,12 @@ namespace ts.projectSystem {
         });
 
         it("Throttle - delayed typings to install", () => {
-            const lodashJs = {
-                path: "/a/b/lodash.js",
-                content: ""
-            };
-            const commanderJs = {
-                path: "/a/b/commander.js",
-                content: ""
-            };
-            const file3 = {
-                path: "/a/b/file3.d.ts",
-                content: ""
-            };
-            const packageJson = {
-                path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        express: "^3.1.0"
-                    }
-                })
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const lodashJs = host.vfs.addFile("/a/b/lodash.js", ``);
+            const commanderJs = host.vfs.addFile("/a/b/commander.js", ``);
+            const file3 = host.vfs.addFile("/a/b/file3.d.ts", ``);
+            host.vfs.addFile("/a/b/package.json", `{ "name": "test", "dependencies": { "express": "^3.1.0" } }`);
+            host.vfs.addFile(customTypesMap.path, customTypesMap.content);
 
             const commander = {
                 path: "/a/data/node_modules/@types/commander/index.d.ts",
@@ -526,8 +450,7 @@ namespace ts.projectSystem {
             };
 
             const typingFiles = [commander, express, jquery, moment, lodash];
-            const host = createServerHost([lodashJs, commanderJs, file3, packageJson, customTypesMap]);
-            const installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { throttleLimit: 3, typesRegistry: createTypesRegistry("commander", "express", "jquery", "moment", "lodash") });
                 }
@@ -535,7 +458,7 @@ namespace ts.projectSystem {
                     const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectFileName = "/a/app/test.csproj";
             const projectService = createProjectService(host, { typingsInstaller: installer });
@@ -561,18 +484,11 @@ namespace ts.projectSystem {
         });
 
         it("Throttle - delayed run install requests", () => {
-            const lodashJs = {
-                path: "/a/b/lodash.js",
-                content: ""
-            };
-            const commanderJs = {
-                path: "/a/b/commander.js",
-                content: ""
-            };
-            const file3 = {
-                path: "/a/b/file3.d.ts",
-                content: ""
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const lodashJs = host.vfs.addFile("/a/b/lodash.js", ``);
+            const commanderJs = host.vfs.addFile("/a/b/commander.js", ``);
+            const file3 = host.vfs.addFile("/a/b/file3.d.ts", ``);
+            host.vfs.addFile(customTypesMap.path, customTypesMap.content);
 
             const commander = {
                 path: "/a/data/node_modules/@types/commander/index.d.ts",
@@ -605,8 +521,7 @@ namespace ts.projectSystem {
                 typings: typingsName("gulp")
             };
 
-            const host = createServerHost([lodashJs, commanderJs, file3, customTypesMap]);
-            const installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
                 }
@@ -620,7 +535,7 @@ namespace ts.projectSystem {
                     }
                     executeCommand(this, host, typingFiles.map(f => f.typings), typingFiles, cb);
                 }
-            })();
+            };
 
             // Create project #1 with 4 typings
             const projectService = createProjectService(host, { typingsInstaller: installer });
@@ -658,39 +573,25 @@ namespace ts.projectSystem {
             assert.equal(installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
             installer.executePendingCommands();
-            host.checkTimeoutQueueLengthAndRun(3); // for 2 projects and 1 refreshing inferred project
+            host.checkTimeoutQueueLengthAndRun(3);
             checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
         });
 
         it("configured projects discover from node_modules", () => {
-            const app = {
-                path: "/app.js",
-                content: ""
-            };
-            const jsconfig = {
-                path: "/jsconfig.json",
-                content: JSON.stringify({})
-            };
-            const jquery = {
-                path: "/node_modules/jquery/index.js",
-                content: ""
-            };
-            const jqueryPackage = {
-                path: "/node_modules/jquery/package.json",
-                content: JSON.stringify({ name: "jquery" })
-            };
-            // Should not search deeply in node_modules.
-            const nestedPackage = {
-                path: "/node_modules/jquery/nested/package.json",
-                content: JSON.stringify({ name: "nested" }),
-            };
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
                 content: ""
             };
-            const host = createServerHost([app, jsconfig, jquery, jqueryPackage, nestedPackage]);
-            const installer = new (class extends Installer {
+            const host = new mocks.MockServerHost({ safeList: true });
+            const app = host.vfs.addFile("/app.js", ``);
+            const jsconfig = host.vfs.addFile("/jsconfig.json", `{}`);
+            host.vfs.addFile("/node_modules/jquery/index.js", ``);
+            host.vfs.addFile("/node_modules/jquery/package.json", `{ "name": "jquery" }`);
+            // Should not search deeply in node_modules.
+            host.vfs.addFile("/node_modules/jquery/nested/package.json", `{ "name": "nested" }`);
+
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery", "nested") });
                 }
@@ -700,7 +601,7 @@ namespace ts.projectSystem {
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
             projectService.openClientFile(app.path);
@@ -717,28 +618,18 @@ namespace ts.projectSystem {
         });
 
         it("configured projects discover from bower_components", () => {
-            const app = {
-                path: "/app.js",
-                content: ""
-            };
-            const jsconfig = {
-                path: "/jsconfig.json",
-                content: JSON.stringify({})
-            };
-            const jquery = {
-                path: "/bower_components/jquery/index.js",
-                content: ""
-            };
-            const jqueryPackage = {
-                path: "/bower_components/jquery/package.json",
-                content: JSON.stringify({ name: "jquery" })
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const app = host.vfs.addFile("/app.js", ``);
+            const jsconfig = host.vfs.addFile("/jsconfig.json", `{}`);
+            host.vfs.addFile("/bower_components/jquery/index.js", ``);
+            host.vfs.addFile("/bower_components/jquery/package.json", `{ "name": "jquery" }`);
+
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
                 content: ""
             };
-            const host = createServerHost([app, jsconfig, jquery, jqueryPackage]);
-            const installer = new (class extends Installer {
+
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
                 }
@@ -747,7 +638,7 @@ namespace ts.projectSystem {
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
             projectService.openClientFile(app.path);
@@ -755,7 +646,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
-            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", libFile.path]);
+            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", "/.ts/lib.d.ts"]);
 
             installer.installAll(/*expectedCount*/ 1);
 
@@ -765,28 +656,17 @@ namespace ts.projectSystem {
         });
 
         it("configured projects discover from bower.json", () => {
-            const app = {
-                path: "/app.js",
-                content: ""
-            };
-            const jsconfig = {
-                path: "/jsconfig.json",
-                content: JSON.stringify({})
-            };
-            const bowerJson = {
-                path: "/bower.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const app = host.vfs.addFile("/app.js", ``);
+            const jsconfig = host.vfs.addFile("/jsconfig.json", `{}`);
+            host.vfs.addFile("/bower.json", `{ "dependencies": { "jquery": "^3.1.0" } }`);
+
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
                 content: ""
             };
-            const host = createServerHost([app, jsconfig, bowerJson]);
-            const installer = new (class extends Installer {
+
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
                 }
@@ -795,7 +675,7 @@ namespace ts.projectSystem {
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
             projectService.openClientFile(app.path);
@@ -812,25 +692,17 @@ namespace ts.projectSystem {
         });
 
         it("Malformed package.json should be watched", () => {
-            const f = {
-                path: "/a/b/app.js",
-                content: "var x = 1"
-            };
-            const brokenPackageJson = {
-                path: "/a/b/package.json",
-                content: `{ "dependencies": { "co } }`
-            };
-            const fixedPackageJson = {
-                path: brokenPackageJson.path,
-                content: `{ "dependencies": { "commander": "0.0.2" } }`
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const f = host.vfs.addFile("/a/b/app.js", `var x = 1`);
+            host.vfs.addFile("/a/b/package.json", `{ "dependencies": { "co } }`);
+
             const cachePath = "/a/cache/";
             const commander = {
                 path: cachePath + "node_modules/@types/commander/index.d.ts",
                 content: "export let x: number"
             };
-            const host = createServerHost([f, brokenPackageJson]);
-            const installer = new (class extends Installer {
+
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
@@ -839,28 +711,32 @@ namespace ts.projectSystem {
                     const typingFiles = [commander];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
+
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(f.path);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
-            host.reloadFS([f, fixedPackageJson]);
+            host.vfs.writeFile("/a/b/package.json", `{ "dependencies": { "commander": "0.0.2" } }`);
+
             host.checkTimeoutQueueLengthAndRun(2); // To refresh the project and refresh inferred projects
+
             // expected install request
             installer.installAll(/*expectedCount*/ 1);
+
             host.checkTimeoutQueueLengthAndRun(2);
+
             service.checkNumberOfProjects({ inferredProjects: 1 });
             checkProjectActualFiles(service.inferredProjects[0], [f.path, commander.path]);
         });
 
         it("should install typings for unresolved imports", () => {
-            const file = {
-                path: "/a/b/app.js",
-                content: `
-                import * as fs from "fs";
-                import * as commander from "commander";`
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const file = host.vfs.addFile("/a/b/app.js",
+                `import * as fs from "fs";\n` +
+                `import * as commander from "commander";`);
+
             const cachePath = "/a/cache";
             const node = {
                 path: cachePath + "/node_modules/@types/node/index.d.ts",
@@ -870,8 +746,8 @@ namespace ts.projectSystem {
                 path: cachePath + "/node_modules/@types/commander/index.d.ts",
                 content: "export let y: string"
             };
-            const host = createServerHost([file]);
-            const installer = new (class extends Installer {
+
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("node", "commander") });
                 }
@@ -880,7 +756,8 @@ namespace ts.projectSystem {
                     const typingFiles = [node, commander];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-            })();
+            };
+
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(file.path);
 
@@ -896,28 +773,25 @@ namespace ts.projectSystem {
         });
 
         it("should pick typing names from non-relative unresolved imports", () => {
-            const f1 = {
-                path: "/a/b/app.js",
-                content: `
-                import * as a from "foo/a/a";
-                import * as b from "foo/a/b";
-                import * as c from "foo/a/c";
-                import * as d from "@bar/router/";
-                import * as e from "@bar/common/shared";
-                import * as e from "@bar/common/apps";
-                import * as f from "./lib"
-                `
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const f1 = host.vfs.addFile("/a/b/app.js",
+                `import * as a from "foo/a/a";\n` +
+                `import * as b from "foo/a/b";\n` +
+                `import * as c from "foo/a/c";\n` +
+                `import * as d from "@bar/router/";\n` +
+                `import * as e from "@bar/common/shared";\n` +
+                `import * as e from "@bar/common/apps";\n` +
+                `import * as f from "./lib"`);
 
-            const host = createServerHost([f1]);
-            const installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("foo") });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     executeCommand(this, host, ["foo"], [], cb);
                 }
-            })();
+            };
+
             const projectService = createProjectService(host, { typingsInstaller: installer });
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
@@ -934,7 +808,7 @@ namespace ts.projectSystem {
         });
 
         it("cached unresolved typings are not recomputed if program structure did not change", () => {
-            const host = createServerHost([]);
+            const host = new mocks.MockServerHost({ safeList: true });
             const session = createSession(host);
             const f = {
                 path: "/a/app.js",
@@ -1005,28 +879,20 @@ namespace ts.projectSystem {
 
     describe("Invalid package names", () => {
         it("should not be installed", () => {
-            const f1 = {
-                path: "/a/b/app.js",
-                content: "let x = 1"
-            };
-            const packageJson = {
-                path: "/a/b/package.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        "; say ‘Hello from TypeScript!’ #": "0.0.x"
-                    }
-                })
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const f1 = host.vfs.addFile("/a/b/app.js", `let x = 1`);
+            host.vfs.addFile("/a/b/package.json", `{ "dependencies": { "; say ‘Hello from TypeScript!’ #": "0.0.x" } }`);
+
             const messages: string[] = [];
-            const host = createServerHost([f1, packageJson]);
-            const installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp" }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, _cb: TI.RequestCompletedAction) {
                     assert(false, "runCommand should not be invoked");
                 }
-            })();
+            };
+
             const projectService = createProjectService(host, { typingsInstaller: installer });
             projectService.openClientFile(f1.path);
 
@@ -1039,22 +905,14 @@ namespace ts.projectSystem {
         const emptySafeList = emptyMap;
 
         it("should use mappings from safe list", () => {
-            const app = {
-                path: "/a/b/app.js",
-                content: ""
-            };
-            const jquery = {
-                path: "/a/b/jquery.js",
-                content: ""
-            };
-            const chroma = {
-                path: "/a/b/chroma.min.js",
-                content: ""
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const app = host.vfs.addFile("/a/b/app.js", ``);
+            const jquery = host.vfs.addFile("/a/b/jquery.js", ``);
+            const chroma = host.vfs.addFile("/a/b/chroma.min.js", ``);
 
             const safeList = createMapFromTemplate({ jquery: "jquery", chroma: "chroma-js" });
 
-            const host = createServerHost([app, jquery, chroma]);
+            // const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true }, emptyArray);
             const finish = logger.finish();
@@ -1067,11 +925,9 @@ namespace ts.projectSystem {
         });
 
         it("should return node for core modules", () => {
-            const f = {
-                path: "/a/b/app.js",
-                content: ""
-            };
-            const host = createServerHost([f]);
+            const host = new mocks.MockServerHost({ safeList: true });
+            const f = host.vfs.addFile("/a/b/app.js", ``);
+
             const cache = createMap<string>();
 
             for (const name of JsTyping.nodeCoreModuleList) {
@@ -1086,15 +942,10 @@ namespace ts.projectSystem {
         });
 
         it("should use cached locations", () => {
-            const f = {
-                path: "/a/b/app.js",
-                content: ""
-            };
-            const node = {
-                path: "/a/b/node.d.ts",
-                content: ""
-            };
-            const host = createServerHost([f, node]);
+            const host = new mocks.MockServerHost({ safeList: true });
+            const f = host.vfs.addFile("/a/b/app.js", ``);
+            const node = host.vfs.addFile("/a/b/node.d.ts", ``);
+
             const cache = createMapFromTemplate<string>({ node: node.path });
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"]);
@@ -1107,19 +958,11 @@ namespace ts.projectSystem {
         });
 
         it("should search only 2 levels deep", () => {
-            const app = {
-                path: "/app.js",
-                content: "",
-            };
-            const a = {
-                path: "/node_modules/a/package.json",
-                content: JSON.stringify({ name: "a" }),
-            };
-            const b = {
-                path: "/node_modules/a/b/package.json",
-                content: JSON.stringify({ name: "b" }),
-            };
-            const host = createServerHost([app, a, b]);
+            const host = new mocks.MockServerHost({ safeList: true });
+            const app = host.vfs.addFile("/app.js");
+            host.vfs.addFile("/node_modules/a/package.json", `{ "name": "a" }`);
+            host.vfs.addFile("/node_modules/a/b/package.json", `{ "name": "b" }`);
+
             const cache = createMap<string>();
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ []);
@@ -1139,22 +982,18 @@ namespace ts.projectSystem {
 
     describe("telemetry events", () => {
         it("should be received", () => {
-            const f1 = {
-                path: "/a/app.js",
-                content: ""
-            };
-            const packageFile = {
-                path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const f1 = host.vfs.addFile("/a/app.js", ``);
+            host.vfs.addFile("/a/package.json", `{ "dependencies": { "commander": "1.0.0" } }`);
+
             const cachePath = "/a/cache/";
             const commander = {
                 path: cachePath + "node_modules/@types/commander/index.d.ts",
                 content: "export let x: number"
             };
-            const host = createServerHost([f1, packageFile]);
+
             let seenTelemetryEvent = false;
-            const installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
@@ -1174,7 +1013,8 @@ namespace ts.projectSystem {
                     }
                     super.sendResponse(response);
                 }
-            })();
+            };
+
             const projectService = createProjectService(host, { typingsInstaller: installer });
             projectService.openClientFile(f1.path);
 
@@ -1189,23 +1029,19 @@ namespace ts.projectSystem {
 
     describe("progress notifications", () => {
         it("should be sent for success", () => {
-            const f1 = {
-                path: "/a/app.js",
-                content: ""
-            };
-            const packageFile = {
-                path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
-            };
+            const host = new mocks.MockServerHost({ safeList: true });
+            const f1 = host.vfs.addFile("/a/app.js", ``);
+            host.vfs.addFile("/a/package.json", `{ "dependencies": { "commander": "1.0.0" } }`);
+
             const cachePath = "/a/cache/";
             const commander = {
                 path: cachePath + "node_modules/@types/commander/index.d.ts",
                 content: "export let x: number"
             };
-            const host = createServerHost([f1, packageFile]);
+
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
-            const installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
@@ -1225,7 +1061,8 @@ namespace ts.projectSystem {
                     }
                     super.sendResponse(response);
                 }
-            })();
+            };
+
             const projectService = createProjectService(host, { typingsInstaller: installer });
             projectService.openClientFile(f1.path);
 
@@ -1241,19 +1078,15 @@ namespace ts.projectSystem {
         });
 
         it("should be sent for error", () => {
-            const f1 = {
-                path: "/a/app.js",
-                content: ""
-            };
-            const packageFile = {
-                path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
-            };
+            // const host = createServerHost([f1, packageFile]);
+            const host = new mocks.MockServerHost({ safeList: true });
+            const f1 = host.vfs.addFile("/a/app.js", ``);
+            host.vfs.addFile("/a/package.json", `{ "dependencies": { "commander": "1.0.0" } }`);
+
             const cachePath = "/a/cache/";
-            const host = createServerHost([f1, packageFile]);
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
-            const installer: Installer = new (class extends Installer {
+            const installer = new class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
@@ -1271,7 +1104,8 @@ namespace ts.projectSystem {
                     }
                     super.sendResponse(response);
                 }
-            })();
+            };
+
             const projectService = createProjectService(host, { typingsInstaller: installer });
             projectService.openClientFile(f1.path);
 
