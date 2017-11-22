@@ -427,7 +427,8 @@ declare namespace ts.server.protocol {
          */
         errorCodes?: number[];
     }
-    interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+    interface ApplyCodeActionCommandRequestArgs {
+        /** May also be an array of commands. */
         command: {};
     }
     /**
