@@ -7195,6 +7195,17 @@ namespace ts {
                             : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
                     const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
                     error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
+                    if (!isJs) {
+                        // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
+                        return unknownType;
+                    }
+                    else {
+                        // Permissively instantiate the type with any type arguments provided in JS mode, even if there are too few or an excess
+                        const typeArguments = concatenate(type.outerTypeParameters,
+                            fillMissingTypeArguments(typeArgs && typeArgs.slice(0, typeParameters.length), typeParameters, minTypeArgumentCount, isJs)
+                        );
+                        return createTypeReference(<GenericType>type, typeArguments);
+                    }
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
