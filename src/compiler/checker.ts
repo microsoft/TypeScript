@@ -2645,8 +2645,8 @@ namespace ts {
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const readonlyToken = isReadonlyMappedType(type) ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
-                    const questionToken = isOptionalMappedType(type) ? createToken(SyntaxKind.QuestionToken) : undefined;
+                    const readonlyToken = type.declaration && type.declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
+                    const questionToken = type.declaration && type.declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
                     const typeParameterNode = typeParameterToDeclaration(getTypeParameterFromMappedType(type), context);
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
 
@@ -3717,7 +3717,7 @@ namespace ts {
                     writePunctuation(writer, SyntaxKind.OpenBraceToken);
                     writer.writeLine();
                     writer.increaseIndent();
-                    if (isReadonlyMappedType(type)) {
+                    if (type.declaration.readonlyToken) {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
                         writeSpace(writer);
                     }
@@ -3728,7 +3728,7 @@ namespace ts {
                     writeSpace(writer);
                     writeType(getConstraintTypeFromMappedType(type), TypeFormatFlags.None);
                     writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                    if (isOptionalMappedType(type)) {
+                    if (type.declaration.questionToken) {
                         writePunctuation(writer, SyntaxKind.QuestionToken);
                     }
                     writePunctuation(writer, SyntaxKind.ColonToken);
@@ -6108,9 +6108,11 @@ namespace ts {
             const constraintType = getConstraintTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(type);
             const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
-            const templateReadonly = isReadonlyMappedType(type);
-            const templateOptional = isOptionalMappedType(type);
-            if (isPossiblyHomomorphicMappedType(type)) {
+            const templateReadonly = !!type.declaration.readonlyToken;
+            const templateOptional = !!type.declaration.questionToken;
+            const constraintDeclaration = type.declaration.typeParameter.constraint;
+            if (constraintDeclaration.kind === SyntaxKind.TypeOperator &&
+                (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
                 // We have a { [P in keyof T]: X }
                 for (const propertySymbol of getPropertiesOfType(modifiersType)) {
                     addMemberForKeyType(getLiteralTypeFromPropertyName(propertySymbol), propertySymbol);
@@ -6178,14 +6180,15 @@ namespace ts {
         function getTemplateTypeFromMappedType(type: MappedType) {
             return type.templateType ||
                 (type.templateType = type.declaration.type ?
-                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), isOptionalMappedType(type)), type.mapper || identityMapper) :
+                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!type.declaration.questionToken), type.mapper || identityMapper) :
                     unknownType);
         }
 
         function getModifiersTypeFromMappedType(type: MappedType) {
             if (!type.modifiersType) {
-                if (isPossiblyHomomorphicMappedType(type)) {
-                    const constraintDeclaration = type.declaration.typeParameter.constraint;
+                const constraintDeclaration = type.declaration.typeParameter.constraint;
+                if (constraintDeclaration.kind === SyntaxKind.TypeOperator &&
+                    (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
                     // If the constraint declaration is a 'keyof T' node, the modifiers type is T. We check
                     // AST nodes here because, when T is a non-generic type, the logic below eagerly resolves
                     // 'keyof T' to a literal union type and we can't recover T from that type.
@@ -6205,8 +6208,8 @@ namespace ts {
         }
 
         function getMappedTypeModifiers(type: MappedType): MappedTypeModifiers {
-            return (isReadonlyMappedType(type) ? MappedTypeModifiers.Readonly : 0) |
-                (isOptionalMappedType(type) ? MappedTypeModifiers.Optional : 0);
+            return (type.declaration.readonlyToken ? MappedTypeModifiers.Readonly : 0) |
+                (type.declaration.questionToken ? MappedTypeModifiers.Optional : 0);
         }
 
         function getCombinedMappedTypeModifiers(type: MappedType): MappedTypeModifiers {
@@ -6216,7 +6219,7 @@ namespace ts {
         }
 
         function isPartialMappedType(type: Type) {
-            return getObjectFlags(type) & ObjectFlags.Mapped && isOptionalMappedType(type as MappedType);
+            return getObjectFlags(type) & ObjectFlags.Mapped && !!(<MappedType>type).declaration.questionToken;
         }
 
         function isGenericMappedType(type: Type) {
@@ -9882,7 +9885,7 @@ namespace ts {
                 if (target.flags & TypeFlags.TypeParameter) {
                     // A source type { [P in keyof T]: X } is related to a target type T if X is related to T[P].
                     if (getObjectFlags(source) & ObjectFlags.Mapped && getConstraintTypeFromMappedType(<MappedType>source) === getIndexType(target)) {
-                        if (!isOptionalMappedType(<MappedType>source)) {
+                        if (!(<MappedType>source).declaration.questionToken) {
                             const templateType = getTemplateTypeFromMappedType(<MappedType>source);
                             const indexedAccessType = getIndexedAccessType(target, getTypeParameterFromMappedType(<MappedType>source));
                             if (result = isRelatedTo(templateType, indexedAccessType, reportErrors)) {
@@ -11270,8 +11273,8 @@ namespace ts {
             const inference = createInferenceInfo(typeParameter);
             const inferences = [inference];
             const templateType = getTemplateTypeFromMappedType(target);
-            const readonlyMask = isReadonlyMappedType(target) ? false : true;
-            const optionalMask = isOptionalMappedType(target) ? 0 : SymbolFlags.Optional;
+            const readonlyMask = target.declaration.readonlyToken ? false : true;
+            const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
             const members = createSymbolTable();
             for (const prop of properties) {
                 const propType = getTypeOfSymbol(prop);
@@ -11403,18 +11406,14 @@ namespace ts {
                         const inference = getInferenceInfoForType(targetConstraint);
                         if (inference) {
                             if (!inference.isFixed) {
-                                const map = <MappedType>createObjectType(ObjectFlags.Mapped);
-                                map.templateType = source;
-                                map.constraintType = (<IndexedAccessType>target).indexType;
-                                map.typeParameter = <TypeParameter>createType(TypeFlags.TypeParameter);
-                                // TODO (weswigham): Ensure the name chosen for the unused "K" does not shadow any other type variables in the given scope, so as to not have a chance of breaking declaration emit
-                                map.typeParameter.symbol = createSymbol(SymbolFlags.TypeParameter, "K" as __String);
-                                map.typeParameter.constraint = map.constraintType;
-                                map.modifiersType = (<IndexedAccessType>target).indexType;
-                                map.hasQuestionToken = false;
-                                map.hasReadonlyToken = false;
-                                map.hasPossiblyHomomorphicConstraint = false;
-                                (inference.indexes || (inference.indexes = [])).push(map);
+                                // Instantiates instance of `type PartialInference<T, Keys extends string> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`
+                                // Where `T` is `source` and `Keys` is `target.indexType`
+                                const inferenceTypeSymbol = getGlobalSymbol("PartialInference" as __String, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0);
+                                const inferenceType = getDeclaredTypeOfSymbol(inferenceTypeSymbol);
+                                if (inferenceType !== unknownType) {
+                                    const mapper = createTypeMapper(getSymbolLinks(inferenceTypeSymbol).typeParameters, [source, (target as IndexedAccessType).indexType]);
+                                    (inference.indexes || (inference.indexes = [])).push(instantiateType(inferenceType, mapper));
+                                }
                             }
                             return;
                         }
@@ -20112,28 +20111,6 @@ namespace ts {
             forEach(node.types, checkSourceElement);
         }
 
-        function isReadonlyMappedType(type: MappedType) {
-            if (type.hasReadonlyToken === undefined) {
-                type.hasReadonlyToken = !!type.declaration.readonlyToken;
-            }
-            return type.hasReadonlyToken;
-        }
-
-        function isOptionalMappedType(type: MappedType) {
-            if (type.hasQuestionToken === undefined) {
-                type.hasQuestionToken = !!type.declaration.questionToken;
-            }
-            return type.hasQuestionToken;
-        }
-
-        function isPossiblyHomomorphicMappedType(type: MappedType) {
-            if (type.hasPossiblyHomomorphicConstraint === undefined) {
-                const constraint = type.declaration.typeParameter.constraint;
-                type.hasPossiblyHomomorphicConstraint = isTypeOperatorNode(constraint) && constraint.operator === SyntaxKind.KeyOfKeyword;
-            }
-            return type.hasPossiblyHomomorphicConstraint;
-        }
-
         function checkIndexedAccessIndexType(type: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode) {
             if (!(type.flags & TypeFlags.IndexedAccess)) {
                 return type;
@@ -20143,7 +20120,7 @@ namespace ts {
             const indexType = (<IndexedAccessType>type).indexType;
             if (isTypeAssignableTo(indexType, getIndexType(objectType))) {
                 if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
-                    getObjectFlags(objectType) & ObjectFlags.Mapped && isReadonlyMappedType(<MappedType>objectType)) {
+                    getObjectFlags(objectType) & ObjectFlags.Mapped && (<MappedType>objectType).declaration.readonlyToken) {
                     error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
                 }
                 return type;
