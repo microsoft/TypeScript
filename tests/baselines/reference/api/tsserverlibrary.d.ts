@@ -4699,7 +4699,7 @@ declare namespace ts.server {
     interface TypesRegistryRequest {
         readonly kind: "typesRegistry";
     }
-    interface InstallPackageRequest {
+    interface InstallPackageRequest extends TypingInstallerRequestWithProjectName {
         readonly kind: "installPackage";
         readonly fileName: Path;
         readonly packageName: string;
@@ -4707,13 +4707,18 @@ declare namespace ts.server {
     }
     type ActionSet = "action::set";
     type ActionInvalidate = "action::invalidate";
+    type ActionPackageInstalled = "action::packageInstalled";
     type EventTypesRegistry = "event::typesRegistry";
-    type EventPackageInstalled = "event::packageInstalled";
     type EventBeginInstallTypes = "event::beginInstallTypes";
     type EventEndInstallTypes = "event::endInstallTypes";
     type EventInitializationFailed = "event::initializationFailed";
     interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | EventPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+    }
+    interface PackageInstalledResponse extends ProjectResponse {
+        readonly kind: ActionPackageInstalled;
+        readonly success: boolean;
+        readonly message: string;
     }
     interface InitializationFailedResponse extends TypingInstallerResponse {
         readonly kind: EventInitializationFailed;
@@ -4749,8 +4754,8 @@ declare namespace ts.server {
 declare namespace ts.server {
     const ActionSet: ActionSet;
     const ActionInvalidate: ActionInvalidate;
+    const ActionPackageInstalled: ActionPackageInstalled;
     const EventTypesRegistry: EventTypesRegistry;
-    const EventPackageInstalled: EventPackageInstalled;
     const EventBeginInstallTypes: EventBeginInstallTypes;
     const EventEndInstallTypes: EventEndInstallTypes;
     const EventInitializationFailed: EventInitializationFailed;
@@ -7092,12 +7097,13 @@ declare namespace ts.server {
     }
 }
 declare namespace ts.server {
-    interface InstallPackageOptionsWithProjectRootPath extends InstallPackageOptions {
+    interface InstallPackageOptionsWithProject extends InstallPackageOptions {
+        projectName: string;
         projectRootPath: Path;
     }
     interface ITypingsInstaller {
         isKnownTypesPackageName(name: string): boolean;
-        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult>;
+        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -7109,7 +7115,7 @@ declare namespace ts.server {
         private readonly perProjectCache;
         constructor(installer: ITypingsInstaller);
         isKnownTypesPackageName(name: string): boolean;
-        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult>;
+        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string>;
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]): void;
         deleteTypingsForProject(projectName: string): void;
@@ -7537,7 +7543,7 @@ declare namespace ts.server {
         private createWatcherLog(watchType, project);
         toPath(fileName: string): Path;
         private loadTypesMap();
-        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void;
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
         private delayInferredProjectsRefresh();
         private delayUpdateProjectGraph(project);
         private sendProjectsUpdatedInBackgroundEvent();

@@ -251,7 +251,7 @@ namespace ts.server {
             return this.typingsCache.isKnownTypesPackageName(name);
         }
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
-            return this.typingsCache.installPackage({ ...options, projectRootPath: this.toPath(this.currentDirectory) });
+            return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
         }
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;

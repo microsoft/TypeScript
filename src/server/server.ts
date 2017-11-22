@@ -297,7 +297,7 @@ namespace ts.server {
             return false;
         }
 
-        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult> {
+        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
             const rq: InstallPackageRequest = { kind: "installPackage", ...options };
             this.send(rq);
             Debug.assert(this.packageInstalledPromise === undefined);
@@ -416,7 +416,7 @@ namespace ts.server {
                 case EventTypesRegistry:
                     this.typesRegistryCache = ts.createMapFromTemplate(response.typesRegistry);
                     break;
-                case EventPackageInstalled: {
+                case ActionPackageInstalled: {
                     const { success, message } = response;
                     if (success) {
                         this.packageInstalledPromise.resolve({ successMessage: message });
@@ -425,6 +425,14 @@ namespace ts.server {
                         this.packageInstalledPromise.reject(message);
                     }
                     this.packageInstalledPromise = undefined;
+
+                    this.projectService.updateTypingsForProject(response);
+
+                    // The behavior is the same as for setTypings, so send the same event.
+                    if (this.socket) {
+                        this.sendEvent(0, "setTypings", response);
+                    }
+
                     break;
                 }
                 case EventInitializationFailed:
