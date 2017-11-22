@@ -7195,12 +7195,11 @@ namespace ts {
                             : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
                     const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
                     error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
-                    return unknownType;
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJsImplicitAny));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJs));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {
