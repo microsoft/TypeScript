@@ -1425,7 +1425,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Base class expressions cannot reference class type parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wyrażenia klasy podstawowej nie mogą odwoływać się do parametrów typu klasy.]]></Val>
+            <Val><![CDATA[Wyrażenia klasy bazowej nie mogą odwoływać się do parametrów typu klasy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1434,7 +1434,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Base constructor return type '{0}' is not a class or interface type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zwracany typ konstruktora podstawowego „{0}” nie jest typem klasy ani interfejsu.]]></Val>
+            <Val><![CDATA[Zwracany typ konstruktora bazowego „{0}” nie jest typem klasy ani interfejsu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2004,7 +2004,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' incorrectly extends base class '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Klasa „{0}” niepoprawnie rozszerza klasę podstawową „{1}”.]]></Val>
+            <Val><![CDATA[Klasa „{0}” niepoprawnie rozszerza klasę bazową „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2052,7 +2052,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class static side '{0}' incorrectly extends base class static side '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Strona statyczna klasy „{0}” niepoprawnie rozszerza stronę statyczną klasy podstawowej „{1}”.]]></Val>
+            <Val><![CDATA[Strona statyczna klasy „{0}” niepoprawnie rozszerza stronę statyczną klasy bazowej „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2637,7 +2637,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zduplikowany identyfikator „_super”. Kompilator używa ciągu „_super” do przechwycenia odwołania do klasy podstawowej.]]></Val>
+            <Val><![CDATA[Zduplikowany identyfikator „_super”. Kompilator używa ciągu „_super” do przechwycenia odwołania do klasy bazowej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2777,6 +2777,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Włącz dokładne sprawdzanie typów funkcji.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Enable_strict_checking_of_property_initialization_in_classes_6187" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable strict checking of property initialization in classes.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3135,7 +3141,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expression resolves to '_super' that compiler uses to capture base class reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wynikiem rozpoznania wyrażenia jest element „_super” używany przez kompilator do przechwycenia odwołania do klasy podstawowej.]]></Val>
+            <Val><![CDATA[Wynikiem rozpoznania wyrażenia jest element „_super” używany przez kompilator do przechwycenia odwołania do klasy bazowej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4896,7 +4902,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tylko publiczne i chronione metody klasy podstawowej są dostępne przy użyciu słowa kluczowego „super”.]]></Val>
+            <Val><![CDATA[Tylko publiczne i chronione metody klasy bazowej są dostępne przy użyciu słowa kluczowego „super”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5417,6 +5423,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' has no initializer and is not definitely assigned in the constructor.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation_7033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.]]></Val>
@@ -5534,6 +5546,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Właściwość „{0}” jest chroniona w typie „{1}”, ale jest publiczna w typie „{2}”.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_is_used_before_being_assigned_2565" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' is used before being assigned.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
