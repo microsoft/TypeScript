@@ -23334,7 +23334,7 @@ namespace ts {
         function checkExportSpecifier(node: ExportSpecifier) {
             checkAliasSymbol(node);
             if (compilerOptions.declaration) {
-                collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true); // Collect linked aliases to set visibility links
+                collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true);
             }
             if (!(<ExportDeclaration>node.parent.parent).moduleSpecifier) {
                 const exportedName = node.propertyName || node.name;
@@ -23375,7 +23375,7 @@ namespace ts {
                 markExportAsReferenced(node);
 
                 if (compilerOptions.declaration) {
-                    collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true); // Sets visibility flags on refernced nodes
+                    collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true);
                 }
             }
             else {
