@@ -942,6 +942,7 @@ namespace ts.Completions {
                     scopeNode.kind === SyntaxKind.SourceFile ||
                     scopeNode.kind === SyntaxKind.TemplateExpression ||
                     scopeNode.kind === SyntaxKind.JsxExpression ||
+                    scopeNode.kind === SyntaxKind.Block || // Some blocks aren't statements, but all get global completions
                     isStatement(scopeNode);
             }
 
