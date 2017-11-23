@@ -3681,7 +3681,7 @@
         "category": "Error",
         "code": 90010
     },
-    "Import '{0}' from \"{1}\".": {
+    "Import '{0}' from module \"{1}\".": {
         "category": "Message",
         "code": 90013
     },
