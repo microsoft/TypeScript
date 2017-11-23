@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "outDir": "./built",
+        "allowJs": true,
+        "checkJs": true,
+        "lib": ["dom", "es2017"],
+        "types": []
+    },
+    "include": [
+        "./node_modules/chrome-devtools-frontend/front_end/**/*.js"
+    ]
+}

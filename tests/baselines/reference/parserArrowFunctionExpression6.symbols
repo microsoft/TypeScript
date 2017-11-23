@@ -5,11 +5,11 @@ function foo(q: string, b: number) {
 >b : Symbol(b, Decl(parserArrowFunctionExpression6.ts, 0, 23))
 
     return true ? (q ? true : false) : (b = q.length, function() { });
->q : Symbol(q, Decl(parserArrowFunctionExpression6.ts, 1, 19))
-> : Symbol((Missing), Decl(parserArrowFunctionExpression6.ts, 1, 22))
-> : Symbol((Missing), Decl(parserArrowFunctionExpression6.ts, 1, 29))
->b : Symbol(b, Decl(parserArrowFunctionExpression6.ts, 1, 40))
->q : Symbol(q, Decl(parserArrowFunctionExpression6.ts, 1, 19))
+>q : Symbol(q, Decl(parserArrowFunctionExpression6.ts, 0, 13))
+>b : Symbol(b, Decl(parserArrowFunctionExpression6.ts, 0, 23))
+>q.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>q : Symbol(q, Decl(parserArrowFunctionExpression6.ts, 0, 13))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
 };
 

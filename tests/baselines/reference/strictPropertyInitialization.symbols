@@ -1,0 +1,209 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts ===
+// Properties with non-undefined types require initialization
+
+class C1 {
+>C1 : Symbol(C1, Decl(strictPropertyInitialization.ts, 0, 0))
+
+    a: number;  // Error
+>a : Symbol(C1.a, Decl(strictPropertyInitialization.ts, 2, 10))
+
+    b: number | undefined;
+>b : Symbol(C1.b, Decl(strictPropertyInitialization.ts, 3, 14))
+
+    c: number | null;  // Error
+>c : Symbol(C1.c, Decl(strictPropertyInitialization.ts, 4, 26))
+
+    d?: number;
+>d : Symbol(C1.d, Decl(strictPropertyInitialization.ts, 5, 21))
+}
+
+// No strict initialization checks in ambient contexts
+
+declare class C2 {
+>C2 : Symbol(C2, Decl(strictPropertyInitialization.ts, 7, 1))
+
+    a: number;
+>a : Symbol(C2.a, Decl(strictPropertyInitialization.ts, 11, 18))
+
+    b: number | undefined;
+>b : Symbol(C2.b, Decl(strictPropertyInitialization.ts, 12, 14))
+
+    c: number | null;
+>c : Symbol(C2.c, Decl(strictPropertyInitialization.ts, 13, 26))
+
+    d?: number;
+>d : Symbol(C2.d, Decl(strictPropertyInitialization.ts, 14, 21))
+}
+
+// No strict initialization checks for static members
+
+class C3 {
+>C3 : Symbol(C3, Decl(strictPropertyInitialization.ts, 16, 1))
+
+    static a: number;
+>a : Symbol(C3.a, Decl(strictPropertyInitialization.ts, 20, 10))
+
+    static b: number | undefined;
+>b : Symbol(C3.b, Decl(strictPropertyInitialization.ts, 21, 21))
+
+    static c: number | null;
+>c : Symbol(C3.c, Decl(strictPropertyInitialization.ts, 22, 33))
+
+    static d?: number;
+>d : Symbol(C3.d, Decl(strictPropertyInitialization.ts, 23, 28))
+}
+
+// Initializer satisfies strict initialization check
+
+class C4 {
+>C4 : Symbol(C4, Decl(strictPropertyInitialization.ts, 25, 1))
+
+    a = 0;
+>a : Symbol(C4.a, Decl(strictPropertyInitialization.ts, 29, 10))
+
+    b: number = 0;
+>b : Symbol(C4.b, Decl(strictPropertyInitialization.ts, 30, 10))
+
+    c: string = "abc";
+>c : Symbol(C4.c, Decl(strictPropertyInitialization.ts, 31, 18))
+}
+
+// Assignment in constructor satisfies strict initialization check
+
+class C5 {
+>C5 : Symbol(C5, Decl(strictPropertyInitialization.ts, 33, 1))
+
+    a: number;
+>a : Symbol(C5.a, Decl(strictPropertyInitialization.ts, 37, 10))
+
+    constructor() {
+        this.a = 0;
+>this.a : Symbol(C5.a, Decl(strictPropertyInitialization.ts, 37, 10))
+>this : Symbol(C5, Decl(strictPropertyInitialization.ts, 33, 1))
+>a : Symbol(C5.a, Decl(strictPropertyInitialization.ts, 37, 10))
+    }
+}
+
+// All code paths must contain assignment
+
+class C6 {
+>C6 : Symbol(C6, Decl(strictPropertyInitialization.ts, 42, 1))
+
+    a: number;  // Error
+>a : Symbol(C6.a, Decl(strictPropertyInitialization.ts, 46, 10))
+
+    constructor(cond: boolean) {
+>cond : Symbol(cond, Decl(strictPropertyInitialization.ts, 48, 16))
+
+        if (cond) {
+>cond : Symbol(cond, Decl(strictPropertyInitialization.ts, 48, 16))
+
+            return;
+        }
+        this.a = 0;
+>this.a : Symbol(C6.a, Decl(strictPropertyInitialization.ts, 46, 10))
+>this : Symbol(C6, Decl(strictPropertyInitialization.ts, 42, 1))
+>a : Symbol(C6.a, Decl(strictPropertyInitialization.ts, 46, 10))
+    }
+}
+
+class C7 {
+>C7 : Symbol(C7, Decl(strictPropertyInitialization.ts, 54, 1))
+
+    a: number;
+>a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 56, 10))
+
+    constructor(cond: boolean) {
+>cond : Symbol(cond, Decl(strictPropertyInitialization.ts, 58, 16))
+
+        if (cond) {
+>cond : Symbol(cond, Decl(strictPropertyInitialization.ts, 58, 16))
+
+            this.a = 1;
+>this.a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 56, 10))
+>this : Symbol(C7, Decl(strictPropertyInitialization.ts, 54, 1))
+>a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 56, 10))
+
+            return;
+        }
+        this.a = 0;
+>this.a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 56, 10))
+>this : Symbol(C7, Decl(strictPropertyInitialization.ts, 54, 1))
+>a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 56, 10))
+    }
+}
+
+// Properties with string literal names aren't checked
+
+class C8 {
+>C8 : Symbol(C8, Decl(strictPropertyInitialization.ts, 65, 1))
+
+    a: number;  // Error
+>a : Symbol(C8.a, Decl(strictPropertyInitialization.ts, 69, 10))
+
+    "b": number;
+    0: number;
+}
+
+// No strict initialization checks for abstract members
+
+abstract class C9 {
+>C9 : Symbol(C9, Decl(strictPropertyInitialization.ts, 73, 1))
+
+    abstract a: number;
+>a : Symbol(C9.a, Decl(strictPropertyInitialization.ts, 77, 19))
+
+    abstract b: number | undefined;
+>b : Symbol(C9.b, Decl(strictPropertyInitialization.ts, 78, 23))
+
+    abstract c: number | null;
+>c : Symbol(C9.c, Decl(strictPropertyInitialization.ts, 79, 35))
+
+    abstract d?: number;
+>d : Symbol(C9.d, Decl(strictPropertyInitialization.ts, 80, 30))
+}
+
+// Properties with non-undefined types must be assigned before they can be accessed
+// within their constructor
+
+class C10 {
+>C10 : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+
+    a: number;
+>a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+
+    b: number;
+>b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+
+    c?: number;
+>c : Symbol(C10.c, Decl(strictPropertyInitialization.ts, 89, 14))
+
+    constructor() {
+        let x = this.a;  // Error
+>x : Symbol(x, Decl(strictPropertyInitialization.ts, 92, 11))
+>this.a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+
+        this.a = this.b;  // Error
+>this.a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 87, 11))
+>this.b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+
+        this.b = x;
+>this.b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 88, 14))
+>x : Symbol(x, Decl(strictPropertyInitialization.ts, 92, 11))
+
+        let y = this.c;
+>y : Symbol(y, Decl(strictPropertyInitialization.ts, 95, 11))
+>this.c : Symbol(C10.c, Decl(strictPropertyInitialization.ts, 89, 14))
+>this : Symbol(C10, Decl(strictPropertyInitialization.ts, 82, 1))
+>c : Symbol(C10.c, Decl(strictPropertyInitialization.ts, 89, 14))
+    }
+}
+
