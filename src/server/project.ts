@@ -458,7 +458,7 @@ namespace ts.server {
                 });
             }
             this.builder.updateProgram(this.program);
-            return mapDefined(this.builder.getFilesAffectedBy(this.program, scriptInfo.path),
+            return mapDefined(this.builder.getFilesAffectedBy(this.program, scriptInfo.path, this.cancellationToken),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 

@@ -22,7 +22,7 @@ namespace ts {
          * This api is only for internal use
          */
         /*@internal*/
-        getFilesAffectedBy(programOfThisState: Program, path: Path): ReadonlyArray<SourceFile>;
+        getFilesAffectedBy(programOfThisState: Program, path: Path, cancellationToken: CancellationToken): ReadonlyArray<SourceFile>;
     }
 
     /**
@@ -86,7 +86,7 @@ namespace ts {
          * Get the files affected by the source file.
          * This is dependent on whether its a module emit or not and hence function expression
          */
-        let getEmitDependentFilesAffectedBy: (programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: Map<string> | undefined) => ReadonlyArray<SourceFile>;
+        let getEmitDependentFilesAffectedBy: (programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: Map<string>, cancellationToken: CancellationToken | undefined) => ReadonlyArray<SourceFile>;
 
         /**
          * Cache of semantic diagnostics for files with their Path being the key
@@ -272,38 +272,65 @@ namespace ts {
         /**
          * Gets the files affected by the path from the program
          */
-        function getFilesAffectedBy(programOfThisState: Program, path: Path, cacheToUpdateSignature?: Map<string>): ReadonlyArray<SourceFile> {
+        function getFilesAffectedBy(programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, cacheToUpdateSignature?: Map<string>): ReadonlyArray<SourceFile> {
+            // Since the operation could be cancelled, the signatures are always stored in the cache
+            // They will be commited once it is safe to use them
+            // eg when calling this api from tsserver, if there is no cancellation of the operation
+            // In the other cases the affected files signatures are commited only after the iteration through the result is complete
+            const signatureCache = cacheToUpdateSignature || createMap();
             const sourceFile = programOfThisState.getSourceFileByPath(path);
             if (!sourceFile) {
                 return emptyArray;
             }
 
-            if (!updateShapeSignature(programOfThisState, sourceFile, cacheToUpdateSignature)) {
+            if (!updateShapeSignature(programOfThisState, sourceFile, signatureCache, cancellationToken)) {
                 return [sourceFile];
             }
 
-            return getEmitDependentFilesAffectedBy(programOfThisState, sourceFile, cacheToUpdateSignature);
+            const result = getEmitDependentFilesAffectedBy(programOfThisState, sourceFile, signatureCache, cancellationToken);
+            if (!cacheToUpdateSignature) {
+                // Commit all the signatures in the signature cache
+                updateSignaturesFromCache(signatureCache);
+            }
+            return result;
         }
 
-        function getNextAffectedFile(programOfThisState: Program): SourceFile | Program | undefined {
+        /**
+         * Updates the signatures from the cache
+         * This should be called whenever it is safe to commit the state of the builder
+         */
+        function updateSignaturesFromCache(signatureCache: Map<string>) {
+            signatureCache.forEach((signature, path) => {
+                fileInfos.get(path).signature = signature;
+                hasCalledUpdateShapeSignature.set(path, true);
+            });
+        }
+
+        /**
+         * This function returns the next affected file to be processed.
+         * Note that until doneAffected is called it would keep reporting same result
+         * This is to allow the callers to be able to actually remove affected file only when the operation is complete
+         * eg. if during diagnostics check cancellation token ends up cancelling the request, the affected file should be retained
+         */
+        function getNextAffectedFile(programOfThisState: Program, cancellationToken: CancellationToken | undefined): SourceFile | Program | undefined {
             while (true) {
                 if (affectedFiles) {
                     while (affectedFilesIndex < affectedFiles.length) {
                         const affectedFile = affectedFiles[affectedFilesIndex];
-                        affectedFilesIndex++;
                         if (!seenAffectedFiles.has(affectedFile.path)) {
                             // Set the next affected file as seen and remove the cached semantic diagnostics
-                            seenAffectedFiles.set(affectedFile.path, true);
                             semanticDiagnosticsPerFile.delete(affectedFile.path);
                             return affectedFile;
                         }
+                        seenAffectedFiles.set(affectedFile.path, true);
+                        affectedFilesIndex++;
                     }
 
                     // Remove the changed file from the change set
                     changedFilesSet.delete(currentChangedFilePath);
                     currentChangedFilePath = undefined;
                     // Commit the changes in file signature
-                    currentAffectedFilesSignatures.forEach((signature, path) => fileInfos.get(path).signature = signature);
+                    updateSignaturesFromCache(currentAffectedFilesSignatures);
                     currentAffectedFilesSignatures.clear();
                     affectedFiles = undefined;
                 }
@@ -320,21 +347,37 @@ namespace ts {
                 // so operations are performed directly on program, return program
                 if (compilerOptions.outFile || compilerOptions.out) {
                     Debug.assert(semanticDiagnosticsPerFile.size === 0);
-                    changedFilesSet.clear();
                     return programOfThisState;
                 }
 
                 // Get next batch of affected files
+                currentAffectedFilesSignatures.clear();
+                affectedFiles = getFilesAffectedBy(programOfThisState, nextKey.value as Path, cancellationToken, currentAffectedFilesSignatures);
                 currentChangedFilePath = nextKey.value as Path;
+                semanticDiagnosticsPerFile.delete(currentChangedFilePath);
                 affectedFilesIndex = 0;
-                affectedFiles = getFilesAffectedBy(programOfThisState, nextKey.value as Path, currentAffectedFilesSignatures);
+            }
+        }
+
+        /**
+         * This is called after completing operation on the next affected file.
+         * The operations here are postponed to ensure that cancellation during the iteration is handled correctly
+         */
+        function doneWithAffectedFile(programOfThisState: Program, affected: SourceFile | Program) {
+            if (affected === programOfThisState) {
+                changedFilesSet.clear();
+            }
+            else {
+                seenAffectedFiles.set((<SourceFile>affected).path, true);
+                affectedFilesIndex++;
             }
         }
 
         /**
          * Returns the result with affected file
          */
-        function toAffectedFileResult<T>(result: T, affected: SourceFile | Program): AffectedFileResult<T> {
+        function toAffectedFileResult<T>(programOfThisState: Program, result: T, affected: SourceFile | Program): AffectedFileResult<T> {
+            doneWithAffectedFile(programOfThisState, affected);
             return { result, affected };
         }
 
@@ -343,7 +386,7 @@ namespace ts {
          * Returns undefined when iteration is complete
          */
         function emitNextAffectedFile(programOfThisState: Program, writeFileCallback: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult> {
-            const affectedFile = getNextAffectedFile(programOfThisState);
+            const affectedFile = getNextAffectedFile(programOfThisState, cancellationToken);
             if (!affectedFile) {
                 // Done
                 return undefined;
@@ -351,6 +394,7 @@ namespace ts {
             else if (affectedFile === programOfThisState) {
                 // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
                 return toAffectedFileResult(
+                    programOfThisState,
                     programOfThisState.emit(/*targetSourceFile*/ undefined, writeFileCallback, cancellationToken, /*emitOnlyDtsFiles*/ false, customTransformers),
                     programOfThisState
                 );
@@ -359,6 +403,7 @@ namespace ts {
             // Emit the affected file
             const targetSourceFile = affectedFile as SourceFile;
             return toAffectedFileResult(
+                programOfThisState,
                 programOfThisState.emit(targetSourceFile, writeFileCallback, cancellationToken, /*emitOnlyDtsFiles*/ false, customTransformers),
                 targetSourceFile
             );
@@ -370,7 +415,7 @@ namespace ts {
          */
         function getSemanticDiagnosticsOfNextAffectedFile(programOfThisState: Program, cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>> {
             while (true) {
-                const affectedFile = getNextAffectedFile(programOfThisState);
+                const affectedFile = getNextAffectedFile(programOfThisState, cancellationToken);
                 if (!affectedFile) {
                     // Done
                     return undefined;
@@ -378,6 +423,7 @@ namespace ts {
                 else if (affectedFile === programOfThisState) {
                     // When whole program is affected, get all semantic diagnostics (eg when --out or --outFile is specified)
                     return toAffectedFileResult(
+                        programOfThisState,
                         programOfThisState.getSemanticDiagnostics(/*targetSourceFile*/ undefined, cancellationToken),
                         programOfThisState
                     );
@@ -387,10 +433,12 @@ namespace ts {
                 const targetSourceFile = affectedFile as SourceFile;
                 if (ignoreSourceFile && ignoreSourceFile(targetSourceFile)) {
                     // Get next affected file
+                    doneWithAffectedFile(programOfThisState, targetSourceFile);
                     continue;
                 }
 
                 return toAffectedFileResult(
+                    programOfThisState,
                     getSemanticDiagnosticsOfFile(programOfThisState, targetSourceFile, cancellationToken),
                     targetSourceFile
                 );
@@ -505,16 +553,14 @@ namespace ts {
          * Returns if the shape of the signature has changed since last emit
          * Note that it also updates the current signature as the latest signature for the file
          */
-        function updateShapeSignature(program: Program, sourceFile: SourceFile, cacheToUpdateSignature: Map<string> | undefined) {
+        function updateShapeSignature(program: Program, sourceFile: SourceFile, cacheToUpdateSignature: Map<string>, cancellationToken: CancellationToken | undefined) {
             Debug.assert(!!sourceFile);
 
             // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
-            if (hasCalledUpdateShapeSignature.has(sourceFile.path)) {
+            if (hasCalledUpdateShapeSignature.has(sourceFile.path) || cacheToUpdateSignature.has(sourceFile.path)) {
                 return false;
             }
 
-            Debug.assert(!cacheToUpdateSignature || !cacheToUpdateSignature.has(sourceFile.path));
-            hasCalledUpdateShapeSignature.set(sourceFile.path, true);
             const info = fileInfos.get(sourceFile.path);
             Debug.assert(!!info);
 
@@ -522,29 +568,19 @@ namespace ts {
             let latestSignature: string;
             if (sourceFile.isDeclarationFile) {
                 latestSignature = sourceFile.version;
-                setLatestSigature();
             }
             else {
-                const emitOutput = getFileEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true);
+                const emitOutput = getFileEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true, cancellationToken);
                 if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
                     latestSignature = options.computeHash(emitOutput.outputFiles[0].text);
-                    setLatestSigature();
                 }
                 else {
                     latestSignature = prevSignature;
                 }
             }
+            cacheToUpdateSignature.set(sourceFile.path, latestSignature);
 
             return !prevSignature || latestSignature !== prevSignature;
-
-            function setLatestSigature() {
-                if (cacheToUpdateSignature) {
-                    cacheToUpdateSignature.set(sourceFile.path, latestSignature);
-                }
-                else {
-                    info.signature = latestSignature;
-                }
-            }
         }
 
         /**
@@ -652,7 +688,7 @@ namespace ts {
         /**
          * When program emits modular code, gets the files affected by the sourceFile whose shape has changed
          */
-        function getFilesAffectedByUpdatedShapeWhenModuleEmit(programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: Map<string> | undefined) {
+        function getFilesAffectedByUpdatedShapeWhenModuleEmit(programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: Map<string>, cancellationToken: CancellationToken | undefined) {
             if (!isExternalModule(sourceFileWithUpdatedShape) && !containsOnlyAmbientModules(sourceFileWithUpdatedShape)) {
                 return getAllFilesExcludingDefaultLibraryFile(programOfThisState, sourceFileWithUpdatedShape);
             }
@@ -675,7 +711,7 @@ namespace ts {
                 if (!seenFileNamesMap.has(currentPath)) {
                     const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath);
                     seenFileNamesMap.set(currentPath, currentSourceFile);
-                    if (currentSourceFile && updateShapeSignature(programOfThisState, currentSourceFile, cacheToUpdateSignature)) {
+                    if (currentSourceFile && updateShapeSignature(programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken)) {
                         queue.push(...getReferencedByPaths(currentPath));
                     }
                 }
