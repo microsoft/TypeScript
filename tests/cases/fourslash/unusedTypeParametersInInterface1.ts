@@ -5,6 +5,6 @@
 //// [|interface I<T> {}|]
 
 verify.codeFix({
-    description: "Remove declaration for: 'T'.",
+    description: "Remove declaration for: 'T'",
     newRangeContent: "interface I {}",
 });

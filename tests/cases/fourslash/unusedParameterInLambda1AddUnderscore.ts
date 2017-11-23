@@ -7,7 +7,7 @@
 //// }
 
 verify.codeFix({
-    description: "Prefix 'x' with an underscore.",
+    description: "Prefix 'x' with an underscore",
     index: 1,
     newRangeContent: "return (_x:number) => {}",
 });
