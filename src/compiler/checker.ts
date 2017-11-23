@@ -5804,7 +5804,7 @@ namespace ts {
             for (const baseSig of baseSignatures) {
                 const minTypeArgumentCount = getMinTypeArgumentCount(baseSig.typeParameters);
                 const typeParamCount = length(baseSig.typeParameters);
-                if ((isJavaScript || typeArgCount >= minTypeArgumentCount) && typeArgCount <= typeParamCount) {
+                if (isJavaScript || (typeArgCount >= minTypeArgumentCount && typeArgCount <= typeParamCount)) {
                     const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript)) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
@@ -6705,7 +6705,7 @@ namespace ts {
             const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
-                if ((isJavaScriptImplicitAny || numTypeArguments >= minTypeArgumentCount) && numTypeArguments <= numTypeParameters) {
+                if (isJavaScriptImplicitAny || (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters)) {
                     if (!typeArguments) {
                         typeArguments = [];
                     }
@@ -6724,6 +6724,7 @@ namespace ts {
                         }
                         typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                     }
+                    typeArguments.length = typeParameters.length;
                 }
             }
             return typeArguments;
@@ -7198,13 +7199,6 @@ namespace ts {
                     if (!isJs) {
                         // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
                         return unknownType;
-                    }
-                    else {
-                        // Permissively instantiate the type with any type arguments provided in JS mode, even if there are too few or an excess
-                        const typeArguments = concatenate(type.outerTypeParameters,
-                            fillMissingTypeArguments(typeArgs && typeArgs.slice(0, typeParameters.length), typeParameters, minTypeArgumentCount, isJs)
-                        );
-                        return createTypeReference(<GenericType>type, typeArguments);
                     }
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
