@@ -3,12 +3,12 @@
 /// <reference path="./vfs.ts" />
 /// <reference path="./typemock.ts" />
 
-// NOTE: The contents of this file are all exported from the namespace 'mocks'. This is to
+// NOTE: The contents of this file are all exported from the namespace 'fakes'. This is to
 //       support the eventual conversion of harness into a modular system.
 
-// harness mocks
-namespace mocks {
-    export interface MockServerHostOptions {
+// harness fakes
+namespace fakes {
+    export interface FakeServerHostOptions {
         /**
          * The `VirtualFleSystem` to use. If not specified, a new case-sensitive `VirtualFileSystem`
          * is created.
@@ -32,7 +32,7 @@ namespace mocks {
         lib?: boolean;
     }
 
-    export class MockServerHost implements ts.server.ServerHost, ts.FormatDiagnosticsHost {
+    export class FakeServerHost implements ts.server.ServerHost, ts.FormatDiagnosticsHost {
         public static readonly defaultExecutingFilePath = "/.ts/tsc.js";
         public static readonly defaultCurrentDirectory = "/";
         public static readonly safeListPath = "/safelist.json";
@@ -67,16 +67,16 @@ namespace mocks {
         private readonly _executingFilePath: string;
         private readonly _getCanonicalFileName: (file: string) => string;
 
-        constructor(options: MockServerHostOptions = {}) {
+        constructor(options: FakeServerHostOptions = {}) {
             const {
                 vfs: _vfs = {},
-                executingFilePath = MockServerHost.defaultExecutingFilePath,
+                executingFilePath = FakeServerHost.defaultExecutingFilePath,
                 newLine = "\n",
                 safeList = false,
                 lib = false
             } = options;
 
-            const { currentDirectory = MockServerHost.defaultCurrentDirectory, useCaseSensitiveFileNames = false } = _vfs;
+            const { currentDirectory = FakeServerHost.defaultCurrentDirectory, useCaseSensitiveFileNames = false } = _vfs;
 
             this.vfs = _vfs instanceof vfs.VirtualFileSystem ? _vfs :
                 new vfs.VirtualFileSystem(currentDirectory, useCaseSensitiveFileNames);
@@ -87,11 +87,11 @@ namespace mocks {
             this._getCanonicalFileName = ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames);
 
             if (safeList) {
-                this.vfs.addFile(MockServerHost.safeListPath, MockServerHost.safeListContent);
+                this.vfs.addFile(FakeServerHost.safeListPath, FakeServerHost.safeListContent);
             }
 
             if (lib) {
-                this.vfs.addFile(MockServerHost.libPath, MockServerHost.libContent);
+                this.vfs.addFile(FakeServerHost.libPath, FakeServerHost.libContent);
             }
         }
 
@@ -139,7 +139,7 @@ namespace mocks {
 
         public exit(exitCode?: number) {
             this.exitCode = exitCode;
-            throw MockServerHost.processExitSentinel;
+            throw FakeServerHost.processExitSentinel;
         }
         // #endregion DirectoryStructureHost members
 
@@ -241,7 +241,7 @@ namespace mocks {
                 this.timers.advanceToEnd();
             }
             catch (e) {
-                if (e !== MockServerHost.processExitSentinel) {
+                if (e !== FakeServerHost.processExitSentinel) {
                     throw e;
                 }
             }

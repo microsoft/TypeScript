@@ -99,7 +99,7 @@ namespace ts.projectSystem {
             this.addPostExecAction("success", cb);
         }
 
-        sendResponse(response: server.SetTypings | server.InvalidateCachedTypings) {
+        sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
             this.projectService.updateTypingsForProject(response);
         }
 
@@ -5583,7 +5583,7 @@ namespace ts.projectSystem {
                     content: "export class Cookie { }"
                 };
                 const es2016LibFile: FileOrFolder = {
-                    path: "/a/lib/lib.es2016.full.d.ts",
+                    path: "/.ts/lib.es2016.full.d.ts",
                     content: libFile.content
                 };
                 const typeRoots = ["types", "node_modules/@types"];

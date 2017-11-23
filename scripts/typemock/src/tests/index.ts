@@ -1,5 +1,5 @@
 import "./argTests";
 import "./timesTests";
 import "./mockTests";
-import "./stubTests";
+import "./injectTests";
 import "./timersTests";

@@ -9,11 +9,10 @@ describe("arg", () => {
             const target = Arg.from(Arg.any());
 
             // act
-            const result = Arg.validate(target, ["a"], 0);
+            const result = Arg.validate(target, "a");
 
             // assert
-            assert.isTrue(result.valid);
-            assert.strictEqual(result.next, 1);
+            assert.isTrue(result);
         });
         it("toString", () => {
             // arrange
@@ -32,21 +31,20 @@ describe("arg", () => {
             const target = Arg.from(Arg.is(value => value === "a"));
 
             // act
-            const result = Arg.validate(target, ["a"], 0);
+            const result = Arg.validate(target, "a");
 
             // assert
-            assert.isTrue(result.valid);
-            assert.strictEqual(result.next, 1);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.is(value => value === "a"));
 
             // act
-            const result = Arg.validate(target, ["b"], 0);
+            const result = Arg.validate(target, "b");
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -65,21 +63,20 @@ describe("arg", () => {
             const target = Arg.from(Arg.notNull());
 
             // act
-            const result = Arg.validate(target, [{}], 0);
+            const result = Arg.validate(target, {});
 
             // assert
-            assert.isTrue(result.valid);
-            assert.strictEqual(result.next, 1);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.notNull());
 
             // act
-            const result = Arg.validate(target, [null], 0);
+            const result = Arg.validate(target, null);
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -98,21 +95,20 @@ describe("arg", () => {
             const target = Arg.from(Arg.null());
 
             // act
-            const result = Arg.validate(target, [null], 0);
+            const result = Arg.validate(target, null);
 
             // assert
-            assert.isTrue(result.valid);
-            assert.strictEqual(result.next, 1);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.null());
 
             // act
-            const result = Arg.validate(target, [{}], 0);
+            const result = Arg.validate(target, {});
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -131,21 +127,20 @@ describe("arg", () => {
             const target = Arg.from(Arg.notUndefined());
 
             // act
-            const result = Arg.validate(target, [{}], 0);
+            const result = Arg.validate(target, {});
 
             // assert
-            assert.isTrue(result.valid);
-            assert.strictEqual(result.next, 1);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.notUndefined());
 
             // act
-            const result = Arg.validate(target, [undefined], 0);
+            const result = Arg.validate(target, undefined);
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -164,21 +159,20 @@ describe("arg", () => {
             const target = Arg.from(Arg.undefined());
 
             // act
-            const result = Arg.validate(target, [undefined], 0);
+            const result = Arg.validate(target, undefined);
 
             // assert
-            assert.isTrue(result.valid);
-            assert.strictEqual(result.next, 1);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.undefined());
 
             // act
-            const result = Arg.validate(target, [{}], 0);
+            const result = Arg.validate(target, {});
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -197,31 +191,30 @@ describe("arg", () => {
             const target = Arg.from(Arg.notNullOrUndefined());
 
             // act
-            const result = Arg.validate(target, [{}], 0);
+            const result = Arg.validate(target, {});
 
             // assert
-            assert.isTrue(result.valid);
-            assert.strictEqual(result.next, 1);
+            assert.isTrue(result);
         });
         it("invalid (null)", () => {
             // arrange
             const target = Arg.from(Arg.notNullOrUndefined());
 
             // act
-            const result = Arg.validate(target, [null], 0);
+            const result = Arg.validate(target, null);
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("invalid (undefined)", () => {
             // arrange
             const target = Arg.from(Arg.notNullOrUndefined());
 
             // act
-            const result = Arg.validate(target, [undefined], 0);
+            const result = Arg.validate(target, undefined);
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -240,32 +233,30 @@ describe("arg", () => {
             const target = Arg.from(Arg.nullOrUndefined());
 
             // act
-            const result = Arg.validate(target, [null], 0);
+            const result = Arg.validate(target, null);
 
             // assert
-            assert.isTrue(result.valid);
-            assert.strictEqual(result.next, 1);
+            assert.isTrue(result);
         });
         it("valid (undefined)", () => {
             // arrange
             const target = Arg.from(Arg.nullOrUndefined());
 
             // act
-            const result = Arg.validate(target, [undefined], 0);
+            const result = Arg.validate(target, undefined);
 
             // assert
-            assert.isTrue(result.valid);
-            assert.strictEqual(result.next, 1);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.nullOrUndefined());
 
             // act
-            const result = Arg.validate(target, [{}], 0);
+            const result = Arg.validate(target, {});
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -284,26 +275,26 @@ describe("arg", () => {
             const target = Arg.from(Arg.between(1, 3));
 
             // act
-            const min = Arg.validate(target, [1], 0);
-            const mid = Arg.validate(target, [2], 0);
-            const max = Arg.validate(target, [3], 0);
+            const min = Arg.validate(target, 1);
+            const mid = Arg.validate(target, 2);
+            const max = Arg.validate(target, 3);
 
             // assert
-            assert.isTrue(min.valid);
-            assert.isTrue(mid.valid);
-            assert.isTrue(max.valid);
+            assert.isTrue(min);
+            assert.isTrue(mid);
+            assert.isTrue(max);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.between(1, 3));
 
             // act
-            const before = Arg.validate(target, [0], 0);
-            const after = Arg.validate(target, [4], 0);
+            const before = Arg.validate(target, 0);
+            const after = Arg.validate(target, 4);
 
             // assert
-            assert.isFalse(before.valid);
-            assert.isFalse(after.valid);
+            assert.isFalse(before);
+            assert.isFalse(after);
         });
         it("toString", () => {
             // arrange
@@ -322,20 +313,20 @@ describe("arg", () => {
             const target = Arg.from(Arg.in(["a", "b"]));
 
             // act
-            const result = Arg.validate(target, ["a"], 0);
+            const result = Arg.validate(target, "a");
 
             // assert
-            assert.isTrue(result.valid);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.in(["a", "b"]));
 
             // act
-            const result = Arg.validate(target, ["c"], 0);
+            const result = Arg.validate(target, "c");
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -354,20 +345,20 @@ describe("arg", () => {
             const target = Arg.from(Arg.notIn(["a", "b"]));
 
             // act
-            const result = Arg.validate(target, ["c"], 0);
+            const result = Arg.validate(target, "c");
 
             // assert
-            assert.isTrue(result.valid);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.notIn(["a", "b"]));
 
             // act
-            const result = Arg.validate(target, ["a"], 0);
+            const result = Arg.validate(target, "a");
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -386,20 +377,20 @@ describe("arg", () => {
             const target = Arg.from(Arg.match(/^a$/));
 
             // act
-            const result = Arg.validate(target, ["a"], 0);
+            const result = Arg.validate(target, "a");
 
             // assert
-            assert.isTrue(result.valid);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.match(/^a$/));
 
             // act
-            const result = Arg.validate(target, ["b"], 0);
+            const result = Arg.validate(target, "b");
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -418,20 +409,20 @@ describe("arg", () => {
             const target = Arg.from(Arg.typeof("number"));
 
             // act
-            const result = Arg.validate(target, [1], 0);
+            const result = Arg.validate(target, 1);
 
             // assert
-            assert.isTrue(result.valid);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.typeof("number"));
 
             // act
-            const result = Arg.validate(target, ["a"], 0);
+            const result = Arg.validate(target, "a");
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -451,10 +442,10 @@ describe("arg", () => {
             const target = Arg.from(Arg.instanceof(C));
 
             // act
-            const result = Arg.validate(target, [new C()], 0);
+            const result = Arg.validate(target, new C());
 
             // assert
-            assert.isTrue(result.valid);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
@@ -462,10 +453,10 @@ describe("arg", () => {
             const target = Arg.from(Arg.instanceof(C));
 
             // act
-            const result = Arg.validate(target, [{}], 0);
+            const result = Arg.validate(target, {});
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -485,22 +476,22 @@ describe("arg", () => {
             const target = Arg.from(Arg.has("a"));
 
             // act
-            const own = Arg.validate(target, [{ a: 1 }], 0);
-            const proto = Arg.validate(target, [{ __proto__: { a: 1 } }], 0);
+            const own = Arg.validate(target, { a: 1 });
+            const proto = Arg.validate(target, { __proto__: { a: 1 } });
 
             // assert
-            assert.isTrue(own.valid);
-            assert.isTrue(proto.valid);
+            assert.isTrue(own);
+            assert.isTrue(proto);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.has("a"));
 
             // act
-            const result = Arg.validate(target, [{ b: 1 }], 0);
+            const result = Arg.validate(target, { b: 1 });
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange
@@ -519,22 +510,22 @@ describe("arg", () => {
             const target = Arg.from(Arg.hasOwn("a"));
 
             // act
-            const own = Arg.validate(target, [{ a: 1 }], 0);
+            const own = Arg.validate(target, { a: 1 });
 
             // assert
-            assert.isTrue(own.valid);
+            assert.isTrue(own);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from(Arg.hasOwn("a"));
 
             // act
-            const result = Arg.validate(target, [{ b: 1 }], 0);
-            const proto = Arg.validate(target, [{ __proto__: { a: 1 } }], 0);
+            const result = Arg.validate(target, { b: 1 });
+            const proto = Arg.validate(target, { __proto__: { a: 1 } });
 
             // assert
-            assert.isFalse(result.valid);
-            assert.isFalse(proto.valid);
+            assert.isFalse(result);
+            assert.isFalse(proto);
         });
         it("toString", () => {
             // arrange
@@ -554,14 +545,12 @@ describe("arg", () => {
                 const target = Arg.from(Arg.rest());
 
                 // act
-                const empty = Arg.validate(target, [], 0);
-                const multiple = Arg.validate(target, ["a", "b"], 0);
+                const empty = Arg.validateAll([target], []);
+                const multiple = Arg.validateAll([target], ["a", "b"]);
 
                 // assert
-                assert.isTrue(empty.valid);
-                assert.strictEqual(empty.next, 0);
-                assert.isTrue(multiple.valid);
-                assert.strictEqual(multiple.next, 2);
+                assert.isTrue(empty);
+                assert.isTrue(multiple);
             });
             it("toString", () => {
                 // arrange
@@ -580,24 +569,22 @@ describe("arg", () => {
                 const target = Arg.from(Arg.rest(Arg.typeof("string")));
 
                 // act
-                const empty = Arg.validate(target, [], 0);
-                const multiple = Arg.validate(target, ["a", "b"], 0);
+                const empty = Arg.validateAll([target], []);
+                const multiple = Arg.validateAll([target], ["a", "b"]);
 
                 // assert
-                assert.isTrue(empty.valid);
-                assert.strictEqual(empty.next, 0);
-                assert.isTrue(multiple.valid);
-                assert.strictEqual(multiple.next, 2);
+                assert.isTrue(empty);
+                assert.isTrue(multiple);
             });
             it("invalid", () => {
                 // arrange
                 const target = Arg.from(Arg.rest(Arg.typeof("string")));
 
                 // act
-                const result = Arg.validate(target, ["a", 1], 0);
+                const result = Arg.validateAll([target], ["a", 1]);
 
                 // assert
-                assert.isFalse(result.valid);
+                assert.isFalse(result);
             });
             it("toString", () => {
                 // arrange
@@ -617,20 +604,20 @@ describe("arg", () => {
             const target = Arg.from("a");
 
             // act
-            const result = Arg.validate(target, ["a"], 0);
+            const result = Arg.validate(target, "a");
 
             // assert
-            assert.isTrue(result.valid);
+            assert.isTrue(result);
         });
         it("invalid", () => {
             // arrange
             const target = Arg.from("a");
 
             // act
-            const result = Arg.validate(target, ["b"], 0);
+            const result = Arg.validate(target, "b");
 
             // assert
-            assert.isFalse(result.valid);
+            assert.isFalse(result);
         });
         it("toString", () => {
             // arrange

@@ -1,7 +1,7 @@
 /**
  * Temporarily injects a value into an object property
  */
-export class Stub<T, K extends keyof T> {
+export class Inject<T extends object, K extends keyof T> {
     private _target: T;
     private _key: K;
     private _value: any;
@@ -28,11 +28,11 @@ export class Stub<T, K extends keyof T> {
         return this._key;
     }
 
-    public get stubValue(): T[K] {
+    public get injectedValue(): T[K] {
         return this._installed ? this.currentValue : this._value;
     }
 
-    public set stubValue(value: T[K]) {
+    public set injectedValue(value: T[K]) {
         if (this._installed) {
             this._target[this._key] = value;
         }
@@ -79,8 +79,8 @@ export class Stub<T, K extends keyof T> {
         this._originalValue = null;
     }
 
-    public static exec<T, K extends keyof T, V>(target: T, propertyKey: K, value: T[K], action: () => V) {
-        const stub = new Stub<T, K>(target, propertyKey, value);
+    public static exec<T extends object, K extends keyof T, V>(target: T, propertyKey: K, value: T[K], action: () => V) {
+        const stub = new Inject<T, K>(target, propertyKey, value);
         return stub.exec(action);
     }
 

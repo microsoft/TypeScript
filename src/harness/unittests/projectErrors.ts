@@ -1,7 +1,7 @@
 /// <reference path="../harness.ts" />
 /// <reference path="./tsserverProjectSystem.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
-/// <reference path="../mocks.ts" />
+/// <reference path="../fakes.ts" />
 
 namespace ts.projectSystem {
     describe("Project errors", () => {
@@ -31,7 +31,7 @@ namespace ts.projectSystem {
         }
 
         it("external project - diagnostics for missing files", () => {
-            const host = new mocks.MockServerHost({ safeList: true, lib: true });
+            const host = new fakes.FakeServerHost({ safeList: true, lib: true });
             host.vfs.addFile("/a/b/app.ts", ``);
 
             const projectFileName = "/a/b/test.csproj";
@@ -66,7 +66,7 @@ namespace ts.projectSystem {
         });
 
         it("configured projects - diagnostics for missing files", () => {
-            const host = new mocks.MockServerHost({ safeList: true, lib: true });
+            const host = new fakes.FakeServerHost({ safeList: true, lib: true });
             host.vfs.addFile("/a/b/app.ts", ``);
             host.vfs.addFile("/a/b/tsconfig.json", `{ "files": ["app.ts", "applib.ts"] }`);
 
@@ -88,7 +88,7 @@ namespace ts.projectSystem {
         });
 
         it("configured projects - diagnostics for corrupted config 1", () => {
-            const host = new mocks.MockServerHost({ safeList: true });
+            const host = new fakes.FakeServerHost({ safeList: true });
             host.vfs.addFile("/a/b/app.ts", ``);
             host.vfs.addFile("/a/b/lib.ts", ``);
             host.vfs.addFile("/a/b/tsconfig.json", ` "files": ["app.ts", "lib.ts"] }`);
@@ -122,7 +122,7 @@ namespace ts.projectSystem {
         });
 
         it("configured projects - diagnostics for corrupted config 2", () => {
-            const host = new mocks.MockServerHost({ safeList: true });
+            const host = new fakes.FakeServerHost({ safeList: true });
             host.vfs.addFile("/a/b/app.ts", ``);
             host.vfs.addFile("/a/b/lib.ts", ``);
             host.vfs.addFile("/a/b/tsconfig.json", `{ "files": ["app.ts", "lib.ts"] }`);

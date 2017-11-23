@@ -2,7 +2,7 @@
 /// <reference path="./tsserverProjectSystem.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 /// <reference path="../vfs.ts" />
-/// <reference path="../mocks.ts" />
+/// <reference path="../fakes.ts" />
 
 namespace ts.projectSystem {
     const nullCancellationToken = server.nullCancellationToken;
@@ -62,7 +62,7 @@ namespace ts.projectSystem {
 
         describe("for configured projects", () => {
             it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -109,7 +109,7 @@ namespace ts.projectSystem {
             });
 
             it("should be up-to-date with the reference map changes", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -176,7 +176,7 @@ namespace ts.projectSystem {
             });
 
             it("should be up-to-date with changes made in non-open files", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -211,7 +211,7 @@ namespace ts.projectSystem {
             });
 
             it("should be up-to-date with deleted files", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -245,7 +245,7 @@ namespace ts.projectSystem {
             });
 
             it("should be up-to-date with newly created files", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -279,7 +279,7 @@ namespace ts.projectSystem {
             });
 
             it("should detect changes in non-root files", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json",  `{ "compileOnSave": true, "files": ["${file1Consumer1.path}"] }`);
@@ -323,7 +323,7 @@ namespace ts.projectSystem {
             });
 
             it("should return all files if a global file changed shape", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -352,7 +352,7 @@ namespace ts.projectSystem {
             });
 
             it("should return empty array if CompileOnSave is not enabled", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{}`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -371,7 +371,7 @@ namespace ts.projectSystem {
             });
 
             it("should save when compileOnSave is enabled in base tsconfig.json", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ "extends": "/a/tsconfig.json" }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -391,7 +391,7 @@ namespace ts.projectSystem {
             });
 
             it("should always return the file itself if '--isolatedModules' is specified", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ "compileOnSave": true, "compilerOptions": { "isolatedModules": true } }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -416,7 +416,7 @@ namespace ts.projectSystem {
             });
 
             it("should always return the file itself if '--out' or '--outFile' is specified", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ "compileOnSave": true, "compilerOptions": { "module": "system", "outFile": "/a/b/out.js" } }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -441,7 +441,7 @@ namespace ts.projectSystem {
             });
 
             it("should return cascaded affected file list", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
@@ -481,7 +481,7 @@ namespace ts.projectSystem {
             });
 
             it("should work fine for files with circular references", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const file1 = host.vfs.addFile("/a/b/file1.ts", `/// <reference path="./file2.ts" />\nexport var t1 = 10;`);
                 const file2 = host.vfs.addFile("/a/b/file2.ts", `/// <reference path="./file1.ts" />\nexport var t2 = 10;`);
@@ -496,7 +496,7 @@ namespace ts.projectSystem {
             });
 
             it("should return results for all projects if not specifying projectFileName", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const file1 = host.vfs.addFile("/a/b/file1.ts", `export var t = 10;`);
                 const file2 = host.vfs.addFile("/a/b/file2.ts", `import {t} from "./file1"; var t2 = 11;`);
                 const file3 = host.vfs.addFile("/a/c/file2.ts", `import {t} from "../b/file1"; var t3 = 11;`);
@@ -516,7 +516,7 @@ namespace ts.projectSystem {
             });
 
             it("should detect removed code file", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const referenceFile1 = host.vfs.addFile("/a/b/referenceFile1.ts", `/// <reference path="./moduleFile1.ts" />\nexport var x = Foo();`);
@@ -537,7 +537,7 @@ namespace ts.projectSystem {
             });
 
             it("should detect non-existing code file", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const referenceFile1 = host.vfs.addFile("/a/b/referenceFile1.ts", `/// <reference path="./moduleFile2.ts" />\nexport var x = Foo();`);
 
@@ -558,7 +558,7 @@ namespace ts.projectSystem {
             test("\r\n");
 
             function test(newLine: "\r\n" | "\n") {
-                const host = new mocks.MockServerHost({ newLine });
+                const host = new fakes.FakeServerHost({ newLine });
                 const f = host.vfs.addFile("/a/app.ts", `var x = 1;${newLine}var y = 2;`);
 
                 const session = createSession(host);
@@ -572,7 +572,7 @@ namespace ts.projectSystem {
         });
 
         it("should emit specified file", () => {
-            const host = new mocks.MockServerHost({ newLine: "\r\n" });
+            const host = new fakes.FakeServerHost({ newLine: "\r\n" });
             const file1 = host.vfs.addFile("/a/b/f1.ts", `export function Foo() { return 10; }`);
             const file2 = host.vfs.addFile("/a/b/f2.ts", `import {Foo} from "./f1"; let y = Foo();`);
             const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{}`);
@@ -593,7 +593,7 @@ namespace ts.projectSystem {
         it("shoud not emit js files in external projects", () => {
             const externalProjectName = "/a/b/externalproject";
 
-            const host = new mocks.MockServerHost();
+            const host = new fakes.FakeServerHost();
             const file1 = host.vfs.addFile("/a/b/file1.ts", `consonle.log('file1');`);
             // file2 has errors. The emit should not be blocked.
             const file2 = host.vfs.addFile("/a/b/file2.js", `console.log'file2');`);
@@ -626,7 +626,7 @@ namespace ts.projectSystem {
         it("should use project root as current directory so that compile on save results in correct file mapping", () => {
             const externalProjectName = "/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
 
-            const host = new mocks.MockServerHost();
+            const host = new fakes.FakeServerHost();
             const file1 = host.vfs.addFile("/root/TypeScriptProject3/TypeScriptProject3/Foo.ts", `consonle.log('file1');`);
             host.vfs.addFile(libFile.path, libFile.content);
 

@@ -209,7 +209,7 @@ namespace vfs {
         }
 
         private get watchedDirectoriesPrivate() {
-            return this._watchedDirectories || (this._watchedDirectories = new core.KeyedCollection<string, DirectoryWatcherEntryArray>(this.pathComparer))
+            return this._watchedDirectories || (this._watchedDirectories = new core.KeyedCollection<string, DirectoryWatcherEntryArray>(this.pathComparer));
         }
 
         private get watchedRecursiveDirectoriesSetPrivate() {

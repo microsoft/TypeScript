@@ -1,5 +1,5 @@
 /// <reference path="harness.ts" />
-/// <reference path="./mocks.ts" />
+/// <reference path="./fakes.ts" />
 
 // TODO(rbuckton): Migrate this to use vfs.
 
@@ -39,34 +39,6 @@ interface Array<T> {}`
         currentDirectory?: string;
         newLine?: string;
         useWindowsStylePaths?: boolean;
-    }
-
-    export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolder>, params: TestServerHostCreationParameters = {}) {
-        // const host = new mocks.MockServerHost({
-        //     vfs: {
-        //         currentDirectory: params.currentDirectory,
-        //         useCaseSensitiveFileNames: params.useCaseSensitiveFileNames
-        //     },
-        //     executingFilePath: params.executingFilePath,
-        //     newLine: params.newLine as "\r\n" | "\n"
-        // });
-        // for (const entry of fileOrFolderList) {
-        //     if (typeof entry.content === "string") {
-        //         host.vfs.addFile(entry.path, entry.content);
-        //     }
-        //     else {
-        //         host.vfs.addDirectory(entry.path);
-        //     }
-        // }
-        // if (params.useWindowsStylePaths) throw new Error("Not supported");
-        const host = new TestServerHost(/*withSafelist*/ false,
-            params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
-            params.executingFilePath || getExecutingFilePathFromLibFile(),
-            params.currentDirectory || "/",
-            fileOrFolderList,
-            params.newLine,
-            params.useWindowsStylePaths);
-        return host;
     }
 
     export function createServerHost(fileOrFolderList: ReadonlyArray<FileOrFolder>, params?: TestServerHostCreationParameters): TestServerHost {
@@ -174,22 +146,22 @@ interface Array<T> {}`
         }
     }
 
-    export function checkWatchedFiles(host: TestServerHost | mocks.MockServerHost, expectedFiles: string[]) {
-        if (host instanceof mocks.MockServerHost) {
+    export function checkWatchedFiles(host: TestServerHost | fakes.FakeServerHost, expectedFiles: string[]) {
+        if (host instanceof fakes.FakeServerHost) {
             return checkSortedSet(host.vfs.watchedFiles, expectedFiles);
         }
 
         checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
     }
 
-    export function checkWatchedDirectories(host: TestServerHost | mocks.MockServerHost, expectedDirectories: string[], recursive = false) {
-        if (host instanceof mocks.MockServerHost) {
+    export function checkWatchedDirectories(host: TestServerHost | fakes.FakeServerHost, expectedDirectories: string[], recursive = false) {
+        if (host instanceof fakes.FakeServerHost) {
             return checkSortedSet(recursive ? host.vfs.watchedRecursiveDirectories : host.vfs.watchedNonRecursiveDirectories, expectedDirectories);
         }
         checkMapKeys(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
     }
 
-    export function checkOutputContains(host: TestServerHost | mocks.MockServerHost, expected: ReadonlyArray<string>) {
+    export function checkOutputContains(host: TestServerHost | fakes.FakeServerHost, expected: ReadonlyArray<string>) {
         const mapExpected = arrayToSet(expected);
         const mapSeen = createMap<true>();
         for (const f of host.getOutput()) {
@@ -202,7 +174,7 @@ interface Array<T> {}`
         assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(flatMapIter(mapExpected.keys(), key => key))} in ${JSON.stringify(host.getOutput())}`);
     }
 
-    export function checkOutputDoesNotContain(host: TestServerHost | mocks.MockServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
+    export function checkOutputDoesNotContain(host: TestServerHost | fakes.FakeServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
         const mapExpectedToBeAbsent = arrayToSet(expectedToBeAbsent);
         for (const f of host.getOutput()) {
             assert.isFalse(mapExpectedToBeAbsent.has(f), `Contains ${f} in ${JSON.stringify(host.getOutput())}`);

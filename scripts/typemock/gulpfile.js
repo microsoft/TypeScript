@@ -23,7 +23,6 @@ gulp.task("test", ["build"], () => gulp
     .src(["dist/tests/index.js"], { read: false })
     .pipe(mocha({ reporter: "dot" })));
 
-
-gulp.task("watch", ["test"], () => gulp.watch(["src/**/*"], ["test"]));
+gulp.task("watch", () => gulp.watch(["src/**/*"], ["test"]));
 
 gulp.task("default", ["test"]);

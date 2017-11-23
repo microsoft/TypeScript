@@ -1,28 +1,53 @@
 import { Times } from "./times";
 import { Arg } from "./arg";
+import { Inject } from "./inject";
 
 const weakHandler = new WeakMap<object, MockHandler<object>>();
+const weakMock = new WeakMap<object, Mock<object>>();
 
 function noop() {}
+const empty = {};
 
-function getHandler(value: object) {
-    return weakHandler.get(value);
+export type Callable = (...args: any[]) => any;
+
+export type Constructable = new (...args: any[]) => any;
+
+export interface ThisArg {
+    this: any;
 }
 
 export interface Returns<U> {
-    returns: U;
+    return: U;
+}
+
+export interface Fallback {
+    fallback: true;
 }
 
 export interface Throws {
-    throws: any;
+    throw: any;
 }
+
+export interface Callback {
+    callback: Callable;
+}
+
+export type Setup<U> =
+    | Returns<U> & (ThisArg & Callback | ThisArg | Callback)
+    | Returns<U>
+    | Throws & (ThisArg & Callback | ThisArg | Callback)
+    | Throws
+    | Fallback & (ThisArg & Callback | ThisArg | Callback)
+    | Fallback
+    | ThisArg & Callback
+    | ThisArg
+    | Callback;
 
 /**
  * A mock version of another oject
  */
 export class Mock<T extends object> {
-    private _target: T;
-    private _handler = new MockHandler<T>();
+    private _handler: MockHandler<T>;
     private _proxy: T;
     private _revoke: () => void;
 
@@ -32,13 +57,16 @@ export class Mock<T extends object> {
      * @param setups Optional setups to use
      */
     constructor(target: T = <T>{}, setups?: Partial<T>) {
-        this._target = target;
+        this._handler = typeof target === "function"
+            ? new MockFunctionHandler<T & (Callable | Constructable)>()
+            : new MockHandler<T>();
 
-        const { proxy, revoke } = Proxy.revocable<T>(this._target, this._handler);
+        const { proxy, revoke } = Proxy.revocable<T>(target, this._handler);
         this._proxy = proxy;
         this._revoke = revoke;
 
         weakHandler.set(proxy, this._handler);
+        weakMock.set(proxy, this);
 
         if (setups) {
             this.setup(setups);
@@ -48,8 +76,50 @@ export class Mock<T extends object> {
     /**
      * Gets the mock version of the target
      */
-    public get value(): T {
+    public get proxy(): T {
         return this._proxy;
+    }
+
+    /**
+     * Creates an empty Mock object.
+     */
+    public static object<T extends object = any>() {
+        return new Mock(<T>{});
+    }
+
+    /**
+     * Creates an empty Mock function.
+     */
+    public static function<T extends Callable | Constructable = Callable & Constructable>() {
+        return new Mock(<T>function () {});
+    }
+
+    /**
+     * Creates a function spy.
+     */
+    public static spy<T extends Callable | Constructable = Callable & Constructable>(): Mock<T>;
+    /**
+     * Creates a spy on an object or function.
+     */
+    public static spy<T extends object>(target: T): Mock<T>;
+    /**
+     * Installs a spy on a method of an object. Use `revoke()` on the result to reset the spy.
+     * @param object The object containing a method.
+     * @param propertyKey The name of the method on the object.
+     */
+    public static spy<T extends { [P in K]: (...args: any[]) => any }, K extends keyof T>(object: T, propertyKey: K): Spy<T, K>;
+    public static spy<T extends { [P in K]: (...args: any[]) => any }, K extends keyof T>(object?: T, propertyKey?: K) {
+        return object !== undefined && propertyKey !== undefined
+            ? new Spy(object, propertyKey)
+            : new Mock(object || noop);
+    }
+
+    /**
+     * Gets the mock for an object.
+     * @param target The target.
+     */
+    public static from<T extends object>(target: T) {
+        return <Mock<T> | undefined>weakMock.get(target);
     }
 
     /**
@@ -58,14 +128,14 @@ export class Mock<T extends object> {
      * @param result An object used to describe the result of the method.
      * @returns This mock instance.
      */
-    public setup<U = any>(callback: (value: T) => U, result?: Returns<U> | Throws): Mock<T>;
+    public setup<U = any>(callback: (value: T) => U, result?: Setup<U>): this;
     /**
      * Performs setup of the mock object, overriding the target object's functionality with that provided by the setup
      * @param setups An object whose members are used instead of the target object.
      * @returns This mock instance.
      */
-    public setup(setups: Partial<T>): Mock<T>;
-    public setup<U>(setup: Partial<T> | ((value: T) => U), result?: Returns<U> | Throws): Mock<T> {
+    public setup(setups: Partial<T>): this;
+    public setup<U>(setup: Partial<T> | ((value: T) => U), result?: Setup<U>): this {
         if (typeof setup === "function") {
             this._handler.setupCall(setup, result);
         }
@@ -76,186 +146,258 @@ export class Mock<T extends object> {
     }
 
     /**
+     * Performs verification that a specific action occurred at least once.
+     * @param callback A callback that simulates the expected action.
+     * @param message An optional message to use if verification fails.
+     * @returns This mock instance.
+     */
+    public verify<U>(callback: (value: T) => U, message?: string): this;
+    /**
+     * Performs verification that a specific action occurred.
+     * @param callback A callback that simulates the expected action.
+     * @param times The number of times the action should have occurred.
+     * @param message An optional message to use if verification fails.
+     * @returns This mock instance.
+     */
+    public verify<U>(callback: (value: T) => U, times: Times, message?: string): this;
+    /**
      * Performs verification that a specific action occurred.
      * @param callback A callback that simulates the expected action.
      * @param times The number of times the action should have occurred.
      * @returns This mock instance.
      */
-    public verify(callback: (value: T) => any, times: Times): Mock<T> {
+    public verify<U>(callback: (value: T) => U, times?: Times | string, message?: string): this {
+        if (typeof times === "string") {
+            message = times;
+            times = undefined;
+        }
+        if (times === undefined) {
+            times = Times.atLeastOnce();
+        }
         this._handler.verify(callback, times);
         return this;
     }
 
     public revoke() {
+        weakMock.delete(this._proxy);
+        weakHandler.delete(this._proxy);
         this._handler.revoke();
         this._revoke();
     }
 }
 
-class Setup {
-    public recording: Recording;
-    public result: Partial<Returns<any> & Throws> | undefined;
+export class Spy<T extends { [P in K]: (...args: any[]) => any }, K extends keyof T> extends Mock<T[K]> {
+    private _spy: Inject<any, any> | undefined;
 
-    constructor (recording: Recording, result?: Returns<any> | Throws) {
-        this.recording = recording;
-        this.result = result;
+    constructor(target: T, propertyKey: K) {
+        super(target[propertyKey]);
+        this._spy = new Inject(target, propertyKey, this.proxy);
+        this._spy.install();
     }
 
-    public static evaluate(setups: ReadonlyArray<Setup> | undefined, trap: string, args: any[], newTarget?: any) {
-        if (setups) {
-            for (let i = setups.length - 1; i >= 0; i--) {
-                const setup = setups[i];
-                if (setup.recording.trap === trap &&
-                    setup.recording.newTarget === newTarget &&
-                    setup.matchArguments(args)) {
-                    return setup.getResult();
-                }
-            }
+    public get installed() {
+        return this._spy ? this._spy.installed : false;
+    }
+
+    public install() {
+        if (!this._spy) throw new Error("Cannot install a revoked spy.");
+        this._spy.install();
+        return this;
+    }
+
+    public uninstall() {
+        if (this._spy) this._spy.uninstall();
+        return this;
+    }
+
+    public revoke() {
+        if (this._spy) {
+            this._spy.uninstall();
+            this._spy = undefined;
         }
-        throw new Error("No matching setups.");
-    }
-
-    public matchArguments(args: any[]) {
-        return this.recording.matchArguments(args);
-    }
-
-    public getResult() {
-        if (this.result) {
-            if (this.result.throws) {
-                throw this.result.throws;
-            }
-            return this.result.returns;
-        }
-        return undefined;
+        super.revoke();
     }
 }
 
 class Recording {
+    public static readonly noThisArg = {};
     public readonly trap: string;
     public readonly name: PropertyKey | undefined;
-    public readonly args: ReadonlyArray<any>;
+    public readonly thisArg: any;
+    public readonly argArray: ReadonlyArray<any>;
     public readonly newTarget: any;
+    public readonly result: Partial<Returns<any> & Throws & Fallback> | undefined;
+    public readonly callback: Callable | undefined;
 
+    private _thisCondition: Arg | undefined;
+    private _newTargetCondition: Arg | undefined;
     private _conditions: ReadonlyArray<Arg> | undefined;
 
-    constructor(trap: string, name: PropertyKey | undefined, args: ReadonlyArray<any>, newTarget?: any) {
+    constructor(trap: string, name: PropertyKey | undefined, thisArg: any, argArray: ReadonlyArray<any>, newTarget: any, result: Partial<Returns<any> & Throws & Fallback> | undefined, callback: Callable | undefined) {
         this.trap = trap;
         this.name = name;
-        this.args = args || [];
+        this.thisArg = thisArg;
+        this.argArray = argArray || [];
         this.newTarget = newTarget;
+        this.result = result;
+        this.callback = callback;
     }
 
-    public get conditions() {
-        return this._conditions || (this._conditions = this.args.map(Arg.from));
+    public get thisCondition() {
+        return this._thisCondition || (this._thisCondition = this.thisArg === Recording.noThisArg ? Arg.any() : Arg.from(this.thisArg));
+    }
+
+    public get newTargetCondition() {
+        return this._newTargetCondition || (this._newTargetCondition = Arg.from(this.newTarget));
+    }
+
+    public get argConditions() {
+        return this._conditions || (this._conditions = this.argArray.map(Arg.from));
+    }
+
+    public get kind() {
+        switch (this.trap) {
+            case "apply": return "function";
+            case "construct": return "function";
+            case "invoke": return "method";
+            case "get": return "property";
+            case "set": return "property";
+        }
+    }
+
+    public static select(setups: ReadonlyArray<Recording>, kind: Recording["kind"], name: PropertyKey | undefined) {
+        return setups.filter(setup => setup.kind === kind && setup.name === name);
+    }
+
+    public static evaluate(setups: ReadonlyArray<Recording> | undefined, trap: string, name: PropertyKey | undefined, thisArg: any, argArray: any[], newTarget: any, fallback: () => any) {
+        if (setups && setups.length > 0) {
+            for (const setup of setups) {
+                if (setup.match(trap, name, thisArg, argArray, newTarget)) {
+                    const callback = setup.callback;
+                    if (callback) {
+                        Reflect.apply(callback, thisArg, argArray);
+                    }
+
+                    const result = setup.getResult(fallback);
+                    return trap === "set" ? true : result;
+                }
+            }
+            return trap === "set" ? false : undefined;
+        }
+        return fallback();
     }
 
     public toString(): string {
-        return `${this.trap} ${this.name || ""}(${this.conditions.join(", ")})${this.newTarget ? ` [${this.newTarget.name}]` : ``}`;
+        return `${this.trap} ${this.name || ""}(${this.argConditions.join(", ")})${this.newTarget ? ` [${this.newTarget.name}]` : ``}`;
+    }
+
+    public match(trap: string, name: PropertyKey | undefined, thisArg: any, argArray: any, newTarget: any) {
+        return this.trap === trap
+            && this.name === name
+            && Arg.validate(this.thisCondition, thisArg)
+            && Arg.validateAll(this.argConditions, argArray)
+            && Arg.validate(this.newTargetCondition, newTarget);
     }
 
     public matchRecording(recording: Recording) {
-        if (recording.trap !== this.trap ||
-            recording.name !== this.name ||
-            recording.newTarget !== this.newTarget) {
-            return false;
-        }
-
-        return this.matchArguments(recording.args);
+        return this.match(recording.trap, recording.name, recording.thisArg, recording.argArray, recording.newTarget)
+            && this.matchResult(recording.result);
     }
 
-    public matchArguments(args: ReadonlyArray<any>) {
-        let argi = 0;
-        while (argi < this.conditions.length) {
-            const condition = this.conditions[argi];
-            const { valid, next } = Arg.validate(condition, args, argi);
-            if (!valid) {
-                return false;
-            }
-            argi = typeof next === "number" ? next : argi + 1;
-        }
-        if (argi < args.length) {
-            return false;
-        }
-        return true;
+    private matchThisArg(thisArg: any) {
+        return thisArg === Recording.noThisArg
+            || Arg.validate(this.thisCondition, thisArg);
+    }
+
+    private matchResult(result: Partial<Returns<any> & Throws> | undefined) {
+        return !this.result
+            || this.result.return === (result && result.return)
+            && this.result.throw === (result && result.throw);
+    }
+
+    private getResult(fallback: () => any) {
+        if (hasOwn(this.result, "throw")) throw this.result.throw;
+        if (hasOwn(this.result, "return")) return this.result.return;
+        if (hasOwn(this.result, "fallback")) return this.result.fallback ? fallback() : undefined;
+        return undefined;
     }
 }
 
 class MockHandler<T extends object> implements ProxyHandler<T> {
-    private readonly overrides = Object.create(null);
-    private readonly recordings: Recording[] = [];
-    private readonly selfSetups: Setup[] = [];
-    private readonly memberSetups = new Map<PropertyKey, Setup[]>();
-    private readonly methodTargets = new WeakMap<Function, Function>();
-    private readonly methodProxies = new Map<PropertyKey, Function>();
-    private readonly methodRevocations = new Set<() => void>();
+    protected readonly overrides = Object.create(null);
+    protected readonly recordings: Recording[] = [];
+    protected readonly setups: Recording[] = [];
+    protected readonly methodTargets = new WeakMap<Function, Function>();
+    protected readonly methodProxies = new Map<PropertyKey, Function>();
+    protected readonly methodRevocations = new Set<() => void>();
 
-    constructor() {
-    }
-
-    public apply(target: T | Function, thisArg: any, argArray: any[]): any {
-        if (typeof target === "function") {
-            this.recordings.push(new Recording("apply", undefined, argArray));
-            return this.selfSetups.length > 0
-                ? Setup.evaluate(this.selfSetups, "apply", argArray)
-                : Reflect.apply(target, thisArg, argArray);
+    public get(target: T, name: PropertyKey, receiver: any = target): any {
+        const setups = Recording.select(this.setups, "property", name);
+        const result: Partial<Returns<any> & Throws> = {};
+        const recording = new Recording("get", name, target, [], /*newTarget*/ undefined, result, /*callback*/ undefined);
+        this.recordings.push(recording);
+        try {
+            const value = Recording.evaluate(setups, "get", name, receiver, [], /*newTarget*/ undefined,
+                () => Reflect.get(this.getTarget(target, name), name, receiver));
+            return typeof value === "function" ? this.getMethod(name, value) : value;
         }
-        return undefined;
-    }
-
-    public construct(target: T | Function, argArray: any[], newTarget?: any): any {
-        if (typeof target === "function") {
-            this.recordings.push(new Recording("construct", undefined, argArray, newTarget));
-            return this.selfSetups.length > 0
-                ? Setup.evaluate(this.selfSetups, "construct", argArray, newTarget)
-                : Reflect.construct(target, argArray, newTarget);
+        catch (e) {
+            throw result.throw = e;
         }
-        return undefined;
     }
 
-    public get(target: T, name: PropertyKey, receiver: any): any {
-        this.recordings.push(new Recording("get", name, []));
-        const value = Reflect.get(this.getTarget(target, name), name, receiver);
-        return typeof value === "function" ? this.getMethod(name, value) : value;
-    }
-
-    public set(target: T, name: PropertyKey, value: any, receiver: any): boolean {
-        this.recordings.push(new Recording("set", name, [value]));
+    public set(target: T, name: PropertyKey, value: any, receiver: any = target): boolean {
         if (typeof value === "function" && this.methodTargets.has(value)) {
             value = this.methodTargets.get(value);
         }
 
-        return Reflect.set(this.getTarget(target, name), name, value, receiver);
+        const setups = Recording.select(this.setups, "property", name);
+        const result: Partial<Returns<any> & Throws> = {};
+        const recording = new Recording("set", name, target, [value], /*newTarget*/ undefined, result, /*callback*/ undefined);
+        this.recordings.push(recording);
+        try {
+            const success = Recording.evaluate(setups, "set", name, receiver, [value], /*newTarget*/ undefined,
+                () => Reflect.set(this.getTarget(target, name), name, value, receiver));
+            result.return = undefined;
+            return success;
+        }
+        catch (e) {
+            throw result.throw = e;
+        }
     }
 
     public invoke(proxy: T, name: PropertyKey, method: Function, argArray: any[]): any {
-        this.recordings.push(new Recording("invoke", name, argArray));
-        return Reflect.apply(method, proxy, argArray);
+        const setups = Recording.select(this.setups, "method", name);
+        const result: Partial<Returns<any> & Throws> = {};
+        const recording = new Recording("invoke", name, proxy, argArray, /*newTarget*/ undefined, result, /*callback*/ undefined);
+        this.recordings.push(recording);
+        try {
+            return Recording.evaluate(setups, "invoke", name, proxy, argArray, /*newTarget*/ undefined,
+                () => Reflect.apply(method, proxy, argArray));
+        }
+        catch (e) {
+            throw result.throw = e;
+        }
     }
 
-    public setupCall(callback: (value: any) => any, result: Returns<any> | Throws | undefined) {
-        const recording = capture(callback);
-        if (recording.name === undefined) {
-            this.selfSetups.push(new Setup(recording, result));
+    public setupCall(callback: (value: any) => any, result: Setup<any> | undefined) {
+        const recording = this.capture(callback, result);
+        const existing = this.setups.find(setup => setup.name === recording.name);
+        if (existing) {
+            if (existing.kind !== recording.kind) {
+                throw new Error(`Cannot mix method and property setups for the same member name.`);
+            }
         }
-        else {
-            let setups = this.memberSetups.get(recording.name);
-            if (!setups) {
-                this.memberSetups.set(recording.name, setups = []);
-                if (recording.trap === "invoke") {
-                    this.defineMethod(recording.name);
-                }
-                else {
-                    this.defineAccessor(recording.name);
-                }
+        else if (recording.name !== undefined) {
+            if (recording.kind === "method") {
+                this.defineMethod(recording.name);
             }
-            else {
-                if ((setups[0].recording.trap === "invoke") !== (recording.trap === "invoke")) {
-                    throw new Error(`Cannot mix method and acessor setups for the same property.`);
-                }
+            else if (recording.kind === "property") {
+                this.defineAccessor(recording.name);
             }
+        }
 
-            setups.push(new Setup(recording, result));
-        }
+        this.setups.push(recording);
     }
 
     public setupMembers(setup: object) {
@@ -270,8 +412,8 @@ class MockHandler<T extends object> implements ProxyHandler<T> {
         }
     }
 
-    public verify(callback: (value: T) => any, times: Times): void {
-        const expectation = capture(callback);
+    public verify<U>(callback: (value: T) => U, times: Times, message?: string): void {
+        const expectation = this.capture(callback, /*result*/ undefined);
 
         let count: number = 0;
         for (const recording of this.recordings) {
@@ -280,7 +422,7 @@ class MockHandler<T extends object> implements ProxyHandler<T> {
             }
         }
 
-        times.check(count, `An error occured when verifying expectation: ${expectation}`);
+        times.check(count, message || `An error occured when verifying expectation: ${expectation}`);
     }
 
     public getTarget(target: T, name: PropertyKey) {
@@ -307,25 +449,77 @@ class MockHandler<T extends object> implements ProxyHandler<T> {
         }
     }
 
+    protected capture<U>(callback: (value: T) => U, result: Setup<any> | undefined) {
+        return this.captureCore(<T>empty, new CapturingHandler<T, U>(result), callback);
+    }
+
+    protected captureCore<T extends object, U>(target: T, handler: CapturingHandler<T, U>, callback: (value: T) => U): Recording {
+        const { proxy, revoke } = Proxy.revocable<T>(target, handler);
+        try {
+            callback(proxy);
+            if (!handler.recording) {
+                throw new Error("Nothing was captured.");
+            }
+            return handler.recording;
+        }
+        finally {
+            revoke();
+        }
+    }
+
     private defineMethod(name: PropertyKey) {
-        const setups = this.memberSetups;
+        const setups = this.setups;
         this.setupMembers({
-            [name](...args: any[]) {
-                return Setup.evaluate(setups.get(name), "invoke", args);
+            [name](...argArray: any[]) {
+                return Recording.evaluate(setups, "invoke", name, this, argArray, /*newTarget*/ undefined, noop);
             }
         });
     }
 
     private defineAccessor(name: PropertyKey) {
-        const setups = this.memberSetups;
+        const setups = this.setups;
         this.setupMembers({
             get [name]() {
-                return Setup.evaluate(setups.get(name), "get", []);
+                return Recording.evaluate(setups, "get", name, this, [], /*newTarget*/ undefined, noop);
             },
             set [name](value: any) {
-                Setup.evaluate(setups.get(name), "set", [value]);
+                Recording.evaluate(setups, "set", name, this, [value], /*newTarget*/ undefined, noop);
             }
         });
+    }
+}
+
+class MockFunctionHandler<T extends Callable | Constructable> extends MockHandler<T> {
+    public apply(target: T, thisArg: any, argArray: any[]): any {
+        const setups = Recording.select(this.setups, "function", /*name*/ undefined);
+        const result: Partial<Returns<any> & Throws> = {};
+        const recording = new Recording("apply", /*name*/ undefined, thisArg, argArray, /*newTarget*/ undefined, result, /*callback*/ undefined);
+        this.recordings.push(recording);
+        try {
+            return Recording.evaluate(setups, "apply", /*name*/ undefined, thisArg, argArray, /*newTarget*/ undefined,
+                () => Reflect.apply(target, thisArg, argArray));
+        }
+        catch (e) {
+            throw result.throw = e;
+        }
+    }
+
+    public construct(target: T, argArray: any[], newTarget?: any): any {
+        const setups = Recording.select(this.setups, "function", /*name*/ undefined);
+        const result: Partial<Returns<any> & Throws> = {};
+        const recording = new Recording("construct", /*name*/ undefined, /*thisArg*/ undefined, argArray, newTarget, result, /*callback*/ undefined);
+        this.recordings.push(recording);
+        try {
+            return Recording.evaluate(setups, "construct", /*name*/ undefined, /*thisArg*/ undefined, argArray, newTarget,
+                () => Reflect.construct(target, argArray, newTarget));
+        }
+        catch (e) {
+            throw result.throw = e;
+        }
+    }
+
+    protected capture<U>(callback: (value: T) => U, result: Returns<any> & ThisArg | Returns<any> | Throws & ThisArg | Throws | ThisArg | undefined) {
+        return this.captureCore(<T>noop, new CapturingFunctionHandler<T, U>(result), callback);
     }
 }
 
@@ -337,58 +531,53 @@ class MethodHandler {
     }
 
     public apply(target: Function, thisArgument: any, argumentsList: any[]): any {
-        const handler = getHandler(thisArgument);
+        const handler = weakHandler.get(thisArgument);
         return handler
             ? handler.invoke(thisArgument, this.name, target, argumentsList)
             : Reflect.apply(target, thisArgument, argumentsList);
     }
 }
 
-class CapturingHandler {
+class CapturingHandler<T extends object, U> implements ProxyHandler<T> {
     public recording: Recording | undefined;
 
-    private _name: PropertyKey;
-    private _method: Function;
+    protected readonly callback: Callable | undefined;
+    protected readonly thisArg: any;
+    protected readonly result: Returns<U> | Throws | Fallback | undefined;
 
-    constructor() {
-        this._method = (...args: any[]) => {
-            this.recording = new Recording("invoke", this._name, args);
-        };
+    constructor(result: Partial<Returns<U> & Throws & ThisArg & Callback & Fallback> | undefined) {
+        this.thisArg = hasOwn(result, "this") ? result.this : Recording.noThisArg;
+        this.callback = hasOwn(result, "callback") ? result.callback : undefined;
+        this.result = hasOwn(result, "return") ? { return: result.return } :
+            hasOwn(result, "throw") ? { throw: result.throw } :
+            hasOwn(result, "fallback") && result.fallback ? { fallback: true } :
+            undefined;
     }
 
-    public apply(_target: object, _thisArg: any, argArray: any[]): any {
-        this.recording = new Recording("apply", /*name*/ undefined, argArray);
-        return undefined;
+    public get(_target: T, name: PropertyKey, _receiver: any): any {
+        this.recording = new Recording("get", name, this.thisArg, [], /*newTarget*/ undefined, this.result, this.callback);
+        return (...argArray: any[]) => { this.recording = new Recording("invoke", name, this.thisArg, argArray, /*newTarget*/ undefined, this.result, this.callback); };
     }
 
-    public construct(_target: object, argArray: any[], newTarget?: any): any {
-        this.recording = new Recording("construct", /*name*/ undefined, argArray, newTarget);
-        return undefined;
-    }
-
-    public get(_target: object, name: PropertyKey, _receiver: any): any {
-        this.recording = new Recording("get", name, []);
-        this._name = name;
-        return this._method;
-    }
-
-    public set(_target: object, name: PropertyKey, value: any, _receiver: any): boolean {
-        this.recording = new Recording("set", name, [value]);
+    public set(_target: T, name: PropertyKey, value: any, _receiver: any): boolean {
+        this.recording = new Recording("set", name, this.thisArg, [value], /*newTarget*/ undefined, this.result, this.callback);
         return true;
     }
 }
 
-function capture<T, U>(callback: (value: T) => U): Recording {
-    const handler = new CapturingHandler();
-    const { proxy, revoke } = Proxy.revocable<any>(noop, handler);
-    try {
-        callback(proxy);
-        if (!handler.recording) {
-            throw new Error("Nothing was captured.");
-        }
-        return handler.recording;
+class CapturingFunctionHandler<T extends Callable | Constructable, U> extends CapturingHandler<T, U> {
+    public apply(_target: T, _thisArg: any, argArray: any[]): any {
+        this.recording = new Recording("apply", /*name*/ undefined, this.thisArg, argArray, /*newTarget*/ undefined, this.result, this.callback);
+        return undefined;
     }
-    finally {
-        revoke();
+
+    public construct(_target: T, argArray: any[], newTarget?: any): any {
+        this.recording = new Recording("construct", /*name*/ undefined, /*thisArg*/ undefined, argArray, newTarget, this.result, this.callback);
+        return undefined;
     }
+}
+
+function hasOwn<T extends object, K extends keyof T>(object: Partial<T> | undefined, key: K): object is (T | T & never) & { [P in K]: T[P] } {
+    return object !== undefined
+        && Object.prototype.hasOwnProperty.call(object, key);
 }

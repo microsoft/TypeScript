@@ -1,5 +1,6 @@
 /// <reference path="..\harness.ts" />
 /// <reference path="..\..\harness\harnessLanguageService.ts" />
+/// <reference path="../fakes.ts" />
 
 namespace ts {
 
@@ -915,7 +916,7 @@ namespace ts {
         }
 
         function verifyProgram(vfs: vfs.VirtualFileSystem, rootFiles: string[], options: CompilerOptions, configFile: string) {
-            const watchingSystemHost = createWatchingSystemHost(new mocks.MockServerHost({ vfs }));
+            const watchingSystemHost = createWatchingSystemHost(new fakes.FakeServerHost({ vfs }));
             verifyProgramWithoutConfigFile(watchingSystemHost, rootFiles, options);
             verifyProgramWithConfigFile(watchingSystemHost, configFile);
         }
@@ -997,7 +998,7 @@ namespace ts {
                 `export default classD;`);
             const configFile = fs.addFile("/src/tsconfig.json",
                 JSON.stringify({ compilerOptions, include: ["packages/**/ *.ts"] }));
-            const watchingSystemHost = createWatchingSystemHost(new mocks.MockServerHost({ vfs: fs }));
+            const watchingSystemHost = createWatchingSystemHost(new fakes.FakeServerHost({ vfs: fs }));
             verifyProgramWithConfigFile(watchingSystemHost, configFile.path);
         });
     });

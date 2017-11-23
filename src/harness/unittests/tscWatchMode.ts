@@ -1,12 +1,12 @@
 /// <reference path="..\harness.ts" />
 /// <reference path="..\..\compiler\watch.ts" />
 /// <reference path="..\virtualFileSystemWithWatch.ts" />
-/// <reference path="../mocks.ts" />
+/// <reference path="../fakes.ts" />
 /// <reference path="../vpath.ts" />
 
 namespace ts.tscWatch {
     import theory = utils.theory;
-    import Spy = typemock.Spy;
+    import spy = typemock.spy;
     import Arg = typemock.Arg;
     import Times = typemock.Times;
 
@@ -63,7 +63,7 @@ namespace ts.tscWatch {
         return result;
     }
 
-    function checkOutputErrors(host: mocks.MockServerHost, errors: ReadonlyArray<Diagnostic>, isInitial?: true, skipWaiting?: true) {
+    function checkOutputErrors(host: fakes.FakeServerHost, errors: ReadonlyArray<Diagnostic>, isInitial?: true, skipWaiting?: true) {
         const outputs = host.getOutput();
         const expectedOutputCount = (isInitial ? 0 : 1) + errors.length + (skipWaiting ? 0 : 1);
         assert.equal(outputs.length, expectedOutputCount, "Outputs = " + outputs.toString());
@@ -82,17 +82,17 @@ namespace ts.tscWatch {
         host.clearOutput();
     }
 
-    function assertDiagnosticAt(host: mocks.MockServerHost, outputAt: number, diagnostic: Diagnostic) {
+    function assertDiagnosticAt(host: fakes.FakeServerHost, outputAt: number, diagnostic: Diagnostic) {
         const output = host.getOutput()[outputAt];
         assert.equal(output, formatDiagnostic(diagnostic, host), "outputs[" + outputAt + "] is " + output);
     }
 
-    function assertWatchDiagnosticAt(host: mocks.MockServerHost, outputAt: number, diagnosticMessage: DiagnosticMessage) {
+    function assertWatchDiagnosticAt(host: fakes.FakeServerHost, outputAt: number, diagnosticMessage: DiagnosticMessage) {
         const output = host.getOutput()[outputAt];
         assert.isTrue(endsWith(output, getWatchDiagnosticWithoutDate(host, diagnosticMessage)), "outputs[" + outputAt + "] is " + output);
     }
 
-    function getWatchDiagnosticWithoutDate(host: mocks.MockServerHost, diagnosticMessage: DiagnosticMessage) {
+    function getWatchDiagnosticWithoutDate(host: fakes.FakeServerHost, diagnosticMessage: DiagnosticMessage) {
         return ` - ${flattenDiagnosticMessageText(getLocaleSpecificMessage(diagnosticMessage), host.newLine)}${host.newLine + host.newLine + host.newLine}`;
     }
 
@@ -159,12 +159,12 @@ namespace ts.tscWatch {
 
         describe("program updates", () => {
             it("create watch without config file", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/c/app.ts", `import {f} from "./module"\nconsole.log(f)`);
                 host.vfs.addFile("/a/b/c/module.d.ts", `export let x: number`);
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/c/app.ts"], host);
-                checkProgramActualFiles(watch(), ["/a/b/c/app.ts", mocks.MockServerHost.libPath, "/a/b/c/module.d.ts"]);
+                checkProgramActualFiles(watch(), ["/a/b/c/app.ts", fakes.FakeServerHost.libPath, "/a/b/c/module.d.ts"]);
 
                 // TODO: Should we watch creation of config files in the root file's file hierarchy?
 
@@ -174,7 +174,7 @@ namespace ts.tscWatch {
             });
 
             it("can handle tsconfig file name with difference casing", () => {
-                const host = new mocks.MockServerHost({ vfs: { useCaseSensitiveFileNames: false } });
+                const host = new fakes.FakeServerHost({ vfs: { useCaseSensitiveFileNames: false } });
                 host.vfs.addFile("/a/b/app.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "include": ["app.ts"] }`);
 
@@ -183,7 +183,7 @@ namespace ts.tscWatch {
             });
 
             it("create configured project without file list", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "exclude": ["e"] }`);
                 host.vfs.addFile("/a/b/c/f1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/d/f2.ts", `let y = 1`);
@@ -195,9 +195,9 @@ namespace ts.tscWatch {
 
                 const watch = ts.createWatchModeWithConfigFile(configFileResult, {}, watchingSystemHost);
 
-                checkProgramActualFiles(watch(), ["/a/b/c/f1.ts", mocks.MockServerHost.libPath, "/a/b/d/f2.ts"]);
+                checkProgramActualFiles(watch(), ["/a/b/c/f1.ts", fakes.FakeServerHost.libPath, "/a/b/d/f2.ts"]);
                 checkProgramRootFiles(watch(), ["/a/b/c/f1.ts", "/a/b/d/f2.ts"]);
-                checkWatchedFiles(host, ["/a/b/tsconfig.json", "/a/b/c/f1.ts", "/a/b/d/f2.ts", mocks.MockServerHost.libPath]);
+                checkWatchedFiles(host, ["/a/b/tsconfig.json", "/a/b/c/f1.ts", "/a/b/d/f2.ts", fakes.FakeServerHost.libPath]);
                 checkWatchedDirectories(host, ["/a/b", "/a/b/node_modules/@types"], /*recursive*/ true);
             });
 
@@ -206,7 +206,7 @@ namespace ts.tscWatch {
             // });
 
             it("add new files to a configured program without file list", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{}`);
 
@@ -222,7 +222,7 @@ namespace ts.tscWatch {
             });
 
             it("should ignore non-existing files specified in the config file", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["commonFile1.ts", "commonFile3.ts"] }`);
@@ -233,7 +233,7 @@ namespace ts.tscWatch {
             });
 
             it("handle recreated files correctly", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{}`);
@@ -255,13 +255,13 @@ namespace ts.tscWatch {
             it("handles the missing files - that were added to program because they were added with ///<ref", () => {
                 const file1Content = `/// <reference path="commonFile2.ts"/>\nlet x = y`;
 
-                const host = new mocks.MockServerHost({ lib: true, vfs: { useCaseSensitiveFileNames: false } });
+                const host = new fakes.FakeServerHost({ lib: true, vfs: { useCaseSensitiveFileNames: false } });
                 host.vfs.addFile("/a/b/commonFile1.ts", file1Content);
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/commonFile1.ts"], host);
 
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
-                checkProgramActualFiles(watch(), ["/a/b/commonFile1.ts", mocks.MockServerHost.libPath]);
+                checkProgramActualFiles(watch(), ["/a/b/commonFile1.ts", fakes.FakeServerHost.libPath]);
                 checkOutputErrors(host, [
                     createFileNotFoundDiagnostic(watch(), "/a/b/commonFile1.ts", file1Content, "commonFile2.ts", "/a/b/commonFile2.ts"),
                     createCannotFindNameDiagnostic(watch(), "/a/b/commonFile1.ts", file1Content, "y"),
@@ -270,12 +270,12 @@ namespace ts.tscWatch {
                 host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
-                checkProgramActualFiles(watch(), ["/a/b/commonFile1.ts", mocks.MockServerHost.libPath, "/a/b/commonFile2.ts"]);
+                checkProgramActualFiles(watch(), ["/a/b/commonFile1.ts", fakes.FakeServerHost.libPath, "/a/b/commonFile2.ts"]);
                 checkOutputErrors(host, emptyArray);
             });
 
             it("should reflect change in config file", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"] }`);
@@ -289,7 +289,7 @@ namespace ts.tscWatch {
             });
 
             it("files explicitly excluded in config file", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
                 host.vfs.addFile("/a/c/excludedFile1.ts", `let t = 1;`);
@@ -300,7 +300,7 @@ namespace ts.tscWatch {
             });
 
             it("should properly handle module resolution changes in config file", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/file1.ts", `import { T } from "module1";`);
                 host.vfs.addFile("/a/b/node_modules/module1.ts", `export interface T {}`);
                 host.vfs.addFile("/a/module1.ts", `export interface T {}`);
@@ -317,7 +317,7 @@ namespace ts.tscWatch {
             });
 
             it("should tolerate config file errors and still try to build a project", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json",
@@ -334,7 +334,7 @@ namespace ts.tscWatch {
             });
 
             it("changes in files are reflected in project structure", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/f1.ts", `export * from "./f2"`);
                 host.vfs.addFile("/a/b/f2.ts", `export let x = 1`);
                 host.vfs.addFile("/a/c/f3.ts", `export let y = 1;`);
@@ -350,7 +350,7 @@ namespace ts.tscWatch {
             });
 
             it("deleted files affect project structure", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/f1.ts", `export * from "./f2"`);
                 host.vfs.addFile("/a/b/f2.ts", `export * from "../c/f3"`);
                 host.vfs.addFile("/a/c/f3.ts", `export let y = 1;`);
@@ -364,7 +364,7 @@ namespace ts.tscWatch {
             });
 
             it("deleted files affect project structure - 2", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/f1.ts", `export * from "./f2"`);
                 host.vfs.addFile("/a/b/f2.ts", `export * from "../c/f3"`);
                 host.vfs.addFile("/a/c/f3.ts", `export let y = 1;`);
@@ -378,7 +378,7 @@ namespace ts.tscWatch {
             });
 
             it("config file includes the file", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/f1.ts", `export let x = 5`);
                 host.vfs.addFile("/a/c/f2.ts", `import {x} from "../b/f1"`);
                 host.vfs.addFile("/a/c/f3.ts", `export let y = 1`);
@@ -390,7 +390,7 @@ namespace ts.tscWatch {
             });
 
             it("correctly migrate files between projects", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/f1.ts",
                     `export * from "../c/f2";\n` +
                     `export * from "../d/f3";`);
@@ -409,7 +409,7 @@ namespace ts.tscWatch {
             });
 
             it("can correctly update configured project when set of root files has changed (new file on disk)", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/f1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
 
@@ -423,7 +423,7 @@ namespace ts.tscWatch {
             });
 
             it("can correctly update configured project when set of root files has changed (new file in list of files)", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/f1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/f2.ts", `let y = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["f1.ts"] }`);
@@ -438,7 +438,7 @@ namespace ts.tscWatch {
             });
 
             it("can update configured project when set of root files was not changed", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/f1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/f2.ts", `let y = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["f1.ts", "f2.ts"] }`);
@@ -453,14 +453,14 @@ namespace ts.tscWatch {
             });
 
             it("config file is deleted", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/f1.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/f2.ts", `let y = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
 
-                checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", mocks.MockServerHost.libPath]);
+                checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", fakes.FakeServerHost.libPath]);
                 checkOutputErrors(host, emptyArray, /*isInitial*/ true);
 
                 host.vfs.removeFile("/a/b/tsconfig.json");
@@ -473,7 +473,7 @@ namespace ts.tscWatch {
             });
 
             it("Proper errors: document is not contained in project", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/b/app.ts", ``);
                 host.vfs.addFile("/a/b/tsconfig.json", `{`);
 
@@ -482,7 +482,7 @@ namespace ts.tscWatch {
             });
 
             it("correctly handles changes in lib section of config file", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/.ts/lib.es5.d.ts", `declare const eval: any`);
                 host.vfs.addFile("/.ts/lib.es2015.promise.d.ts", `declare class Promise<T> {}`);
                 host.vfs.addFile("/src/app.ts", `var x: Promise<string>;`);
@@ -497,7 +497,7 @@ namespace ts.tscWatch {
             });
 
             it("should handle non-existing directories in config file", () => {
-                const host = new mocks.MockServerHost();
+                const host = new fakes.FakeServerHost();
                 host.vfs.addFile("/a/src/app.ts", `let x = 1;`);
                 host.vfs.addFile("/a/tsconfig.json", `{ "compilerOptions": {}, "include": ["src/**/*", "notexistingfolder/*"] }`);
 
@@ -507,7 +507,7 @@ namespace ts.tscWatch {
 
             it("rename a module file and rename back should restore the states for inferred projects", () => {
                 const file1Content = `import * as T from "./moduleFile"; T.bar();`;
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/file1.ts", file1Content);
                 host.vfs.addFile("/a/b/moduleFile.ts", `export function bar() { };`);
 
@@ -531,7 +531,7 @@ namespace ts.tscWatch {
 
             it("rename a module file and rename back should restore the states for configured projects", () => {
                 const file1Content = `import * as T from "./moduleFile"; T.bar();`;
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/file1.ts", file1Content);
                 host.vfs.addFile("/a/b/moduleFile.ts", `export function bar() { };`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{}`);
@@ -555,7 +555,7 @@ namespace ts.tscWatch {
             });
 
             it("types should load from config file path if config exists", () => {
-                const host = new mocks.MockServerHost({ vfs: { currentDirectory: "/a/c" }});
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/c" } });
                 host.vfs.addDirectory("/a/c");
                 host.vfs.addFile("/a/b/app.ts", `let x = 1`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": { "types": ["node"], "typeRoots": [] } }`);
@@ -567,7 +567,7 @@ namespace ts.tscWatch {
 
             it("add the missing module file for inferred project: should remove the `module not found` error", () => {
                 const file1Content = `import * as T from "./moduleFile"; T.bar();`;
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/file1.ts", file1Content);
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/file1.ts"], host);
@@ -584,7 +584,7 @@ namespace ts.tscWatch {
 
             it("Configure file diagnostics events are generated when the config file has errors", () => {
                 const configFileContent = `{ "compilerOptions": { "foo": "bar", "allowJS": true } }`;
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/app.ts", `let x = 10`);
                 host.vfs.addFile("/a/b/tsconfig.json", configFileContent);
 
@@ -596,7 +596,7 @@ namespace ts.tscWatch {
             });
 
             it("If config file doesnt have errors, they are not reported", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/app.ts", `let x = 10`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
 
@@ -605,7 +605,7 @@ namespace ts.tscWatch {
             });
 
             it("Reports errors when the config file changes", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/app.ts", `let x = 10`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
 
@@ -627,16 +627,16 @@ namespace ts.tscWatch {
             });
 
             it("non-existing directories listed in config file input array should be tolerated without crashing the server", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/file1.ts", `let t = 10;`);
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "include": ["app/*", "test/**/*", "something"] }`);
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
-                checkProgramActualFiles(watch(), [mocks.MockServerHost.libPath]);
+                checkProgramActualFiles(watch(), [fakes.FakeServerHost.libPath]);
             });
 
             it("non-existing directories listed in config file input array should be able to handle @types if input file list is empty", () => {
-                const host = new mocks.MockServerHost({ vfs: { currentDirectory: "/a/" } });
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/" } });
                 host.vfs.addFile("/a/app.ts", `let x = 1`);
                 host.vfs.addFile("/a/tsconfig.json", `{ "compilerOptions": {}, "files": [] }`);
                 host.vfs.addFile("/a/node_modules/@types/typings/index.d.ts", `export * from "./lib"`);
@@ -648,11 +648,11 @@ namespace ts.tscWatch {
             });
 
             it("should support files without extensions", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/compile", `let x = 1`);
 
                 const watch = createWatchModeWithoutConfigFile(["/a/compile"], host, { allowNonTsExtensions: true });
-                checkProgramActualFiles(watch(), ["/a/compile", mocks.MockServerHost.libPath]);
+                checkProgramActualFiles(watch(), ["/a/compile", fakes.FakeServerHost.libPath]);
             });
 
             it("Options Diagnostic locations reported correctly with changes in configFile contents when options change", () => {
@@ -675,7 +675,7 @@ namespace ts.tscWatch {
                     `    }\n` +
                     `}`;
 
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/b/app.ts", `let x = 10`);
                 host.vfs.addFile("/a/b/tsconfig.json", configFileContentWithComment);
 
@@ -713,13 +713,7 @@ namespace ts.tscWatch {
                     ]
                 });
 
-                const filesWritten = new Map<string, number>();
-                const host = new class extends mocks.MockServerHost {
-                    writeFile(path: string, data: string) {
-                        filesWritten.set(path, (filesWritten.get(path) || 0) + 1);
-                        super.writeFile(path, data);
-                    }
-                };
+                const host = new fakes.FakeServerHost();
 
                 host.vfs.addFile("/a/b/output/AnotherDependency/file1.d.ts", `declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0, Min = 1, Average = 2, } }`);
                 host.vfs.addFile("/a/b/dependencies/file2.d.ts", `declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }`);
@@ -727,20 +721,23 @@ namespace ts.tscWatch {
                 host.vfs.addFile("/a/b/project/src/main2.ts", `namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) { } }`);
                 host.vfs.addFile("/a/b/project/tsconfig.json", configContent);
 
+                const writeFileSpy = spy(host, "writeFile");
+
                 createWatchModeWithConfigFile("/a/b/project/tsconfig.json", host);
 
                 if (useOutFile) {
-                    // Only out file
-                    assert.equal(filesWritten.size, 1);
+                    writeFileSpy
+                        .verify(_ => _("/a/b/output/common.js", Arg.string(), Arg.any()), Times.once())
+                        .verify(_ => _(Arg.string(), Arg.string(), Arg.any()), Times.once())
+                        .revoke();
                 }
                 else {
-                    // main.js and main2.js
-                    assert.equal(filesWritten.size, 2);
+                    writeFileSpy
+                        .verify(_ => _("/a/b/output/main.js", Arg.string(), Arg.any()), Times.once())
+                        .verify(_ => _("/a/b/output/main2.js", Arg.string(), Arg.any()), Times.once())
+                        .verify(_ => _(Arg.string(), Arg.string(), Arg.any()), Times.exactly(2))
+                        .revoke();
                 }
-
-                filesWritten.forEach((value, key) => {
-                    assert.equal(value, 1, "Key: " + key);
-                });
             }
 
             it("with --outFile and multiple declaration files in the program", () => {
@@ -753,22 +750,22 @@ namespace ts.tscWatch {
         });
 
         describe("emit", () => {
-            function writeFile(host: mocks.MockServerHost, path: string, content: string) {
+            function writeFile(host: fakes.FakeServerHost, path: string, content: string) {
                 host.vfs.writeFile(path, content);
             }
 
-            function writeConfigFile(host: mocks.MockServerHost, path: string, config: any = {}) {
+            function writeConfigFile(host: fakes.FakeServerHost, path: string, config: any = {}) {
                 const compilerOptions = (config.compilerOptions || (config.compilerOptions = {}));
                 compilerOptions.listEmittedFiles = true;
                 writeFile(host, path, JSON.stringify(config));
             }
 
-            function waitAndCheckAffectedFiles(host: mocks.MockServerHost, affectedFiles: ReadonlyArray<string>, unaffectedFiles?: ReadonlyArray<string>) {
+            function waitAndCheckAffectedFiles(host: fakes.FakeServerHost, affectedFiles: ReadonlyArray<string>, unaffectedFiles?: ReadonlyArray<string>) {
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkAffectedFiles(host, affectedFiles, unaffectedFiles);
             }
 
-            function checkAffectedFiles(host: mocks.MockServerHost, affectedFiles: ReadonlyArray<string>, unaffectedFiles?: ReadonlyArray<string>) {
+            function checkAffectedFiles(host: fakes.FakeServerHost, affectedFiles: ReadonlyArray<string>, unaffectedFiles?: ReadonlyArray<string>) {
                 affectedFiles = getEmittedLines(affectedFiles, host, formatOutputFile);
                 checkOutputContains(host, affectedFiles);
                 if (unaffectedFiles) {
@@ -788,13 +785,13 @@ namespace ts.tscWatch {
                     const file2OutputPath = "/a/b.js";
                     const commonOutputPaths: ReadonlyArray<string> = [file1OutputPath, file2OutputPath];
 
-                    function writeCommonFiles(host: mocks.MockServerHost) {
+                    function writeCommonFiles(host: fakes.FakeServerHost) {
                         writeFile(host, file1Path, `let x = 1`);
                         writeFile(host, file2Path, `let y = 1`);
                     }
 
                     it("if neither is set", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
@@ -806,7 +803,7 @@ namespace ts.tscWatch {
                     });
 
                     it("if --out is set", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath, { compilerOptions: { out: "/a/out.js" } });
 
@@ -818,7 +815,7 @@ namespace ts.tscWatch {
                     });
 
                     it("if --outFile is set", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath, { compilerOptions: { outFile: "/a/out.js" } });
 
@@ -851,7 +848,7 @@ namespace ts.tscWatch {
                         globalFile3OutputPath
                     ];
 
-                    function writeCommonFiles(host: mocks.MockServerHost, files?: string[]) {
+                    function writeCommonFiles(host: fakes.FakeServerHost, files?: string[]) {
                         if (!files || ts.contains(files, moduleFile1Path)) {
                             writeFile(host, moduleFile1Path, `export function Foo() { };`);
                         }
@@ -870,7 +867,7 @@ namespace ts.tscWatch {
                     }
 
                     it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
@@ -887,7 +884,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should be up-to-date with the reference map changes", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
@@ -917,7 +914,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should be up-to-date with deleted files", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
@@ -933,7 +930,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should be up-to-date with newly created files", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
@@ -946,7 +943,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should detect changes in non-root files", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host, [file1Consumer1Path, moduleFile1Path]);
                         writeConfigFile(host, configFilePath, { files: [file1Consumer1Path] });
 
@@ -963,7 +960,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should return all files if a global file changed shape", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
@@ -976,7 +973,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should always return the file itself if '--isolatedModules' is specified", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath, { compilerOptions: { isolatedModules: true } });
 
@@ -989,7 +986,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should always return the file itself if '--out' or '--outFile' is specified", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath, { compilerOptions: { module: "system", outFile: "/a/b/out.js" } });
 
@@ -1001,7 +998,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should return cascaded affected file list", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
@@ -1009,7 +1006,7 @@ namespace ts.tscWatch {
                         checkAffectedFiles(host, commonOutputPaths);
 
                         writeFile(host, "/a/b/file1Consumer1Consumer1.ts", `import {y} from "./file1Consumer1";`);
-                        writeFile(host, file1Consumer1Path, `import {Foo} from "./moduleFile1"; export var y = 10; export var T: number;`)
+                        writeFile(host, file1Consumer1Path, `import {Foo} from "./moduleFile1"; export var y = 10; export var T: number;`);
                         waitAndCheckAffectedFiles(host, [file1Consumer1OutputPath, "/a/b/file1Consumer1Consumer1.js"], commonOutputPaths);
 
                         // Doesn't change the shape of file1Consumer1
@@ -1017,14 +1014,14 @@ namespace ts.tscWatch {
                         waitAndCheckAffectedFiles(host, [moduleFile1OutputPath, file1Consumer1OutputPath, file1Consumer2OutputPath], commonOutputPaths);
 
                         // Change both files before the timeout
-                        writeFile(host, file1Consumer1Path, `import {Foo} from "./moduleFile1"; export var y = 10; export var T: number; export var T2: number;`)
+                        writeFile(host, file1Consumer1Path, `import {Foo} from "./moduleFile1"; export var y = 10; export var T: number; export var T2: number;`);
                         writeFile(host, moduleFile1Path, `export var T2: number;export function Foo() { };`);
                         waitAndCheckAffectedFiles(host, [moduleFile1OutputPath, file1Consumer1OutputPath, file1Consumer2OutputPath, "/a/b/file1Consumer1Consumer1.js"], commonOutputPaths);
                     });
 
                     it("should work fine for files with circular references", () => {
                         // TODO: do not exit on such errors? Just continue to watch the files for update in watch mode
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeFile(host, "/a/b/file1.ts", `/// <reference path="./file2.ts" />\nexport var t1 = 10;`);
                         writeFile(host, "/a/b/file2.ts", `/// <reference path="./file1.ts" />\nexport var t2 = 10;`);
                         writeConfigFile(host, configFilePath);
@@ -1037,7 +1034,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should detect removed code file", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeFile(host, "/a/b/referenceFile1.ts", `/// <reference path="./moduleFile1.ts" />\nexport var x = Foo();`);
                         writeCommonFiles(host, [moduleFile1Path]);
                         writeConfigFile(host, configFilePath);
@@ -1050,7 +1047,7 @@ namespace ts.tscWatch {
                     });
 
                     it("should detect non-existing code file", () => {
-                        const host = new mocks.MockServerHost({ lib: true });
+                        const host = new fakes.FakeServerHost({ lib: true });
                         writeFile(host, "/a/b/referenceFile1.ts", `/// <reference path="./moduleFile2.ts" />\nexport var x = Foo();`);
                         writeConfigFile(host, configFilePath);
 
@@ -1071,7 +1068,7 @@ namespace ts.tscWatch {
                     { title: "\\r\\n", args: ["\r\n"] },
                     { title: "\\n", args: ["\n"] }
                 ], (newLine: "\r\n" | "\n") => {
-                    const host = new mocks.MockServerHost({ newLine });
+                    const host = new fakes.FakeServerHost({ newLine });
                     writeFile(host, "/a/app.ts", `var x = 1;${newLine}var y = 2;`);
 
                     createWatchModeWithoutConfigFile(["/a/app.ts"], host, { listEmittedFiles: true });
@@ -1088,80 +1085,64 @@ namespace ts.tscWatch {
                 });
 
                 it("should emit specified file", () => {
-                    const filesWritten = new Set<string>();
-                    const host = new class extends mocks.MockServerHost {
-                        writeFile(path: string, content: string) {
-                            filesWritten.add(path);
-                            super.writeFile(path, content);
-                        }
-                    }({ newLine: "\r\n" });
+                    const host = new fakes.FakeServerHost({ newLine: "\r\n" });
 
                     writeFile(host, "/a/b/f1.ts", `export function Foo() { return 10; }`);
                     writeFile(host, "/a/b/f2.ts", `import {Foo} from "./f1"; export let y = Foo();`);
                     writeFile(host, "/a/b/f3.ts", `import {y} from "./f2"; let x = y;`);
                     writeConfigFile(host, "/a/b/tsconfig.json");
 
+                    const writeFileSpy1 = spy(host, "writeFile");
+
                     createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                     checkAffectedFiles(host, ["/a/b/f1.js", "/a/b/f2.js", "/a/b/f3.js"]);
 
-                    assert.isTrue(filesWritten.has("/a/b/f1.js"));
-                    assert.strictEqual(host.readFile("/a/b/f1.js"), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+                    writeFileSpy1
+                        .verify(_ => _("/a/b/f1.js", `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`, Arg.any()), Times.once())
+                        .verify(_ => _("/a/b/f2.js", `"use strict";\r\nexports.__esModule = true;\r\nvar f1_1 = require("./f1");\r\nexports.y = f1_1.Foo();\r\n`, Arg.any()), Times.once())
+                        .verify(_ => _("/a/b/f3.js", `"use strict";\r\nexports.__esModule = true;\r\nvar f2_1 = require("./f2");\r\nvar x = f2_1.y;\r\n`, Arg.any()), Times.once())
+                        .revoke();
 
-                    assert.isTrue(filesWritten.has("/a/b/f2.js"));
-                    assert.strictEqual(host.readFile("/a/b/f2.js"), `"use strict";\r\nexports.__esModule = true;\r\nvar f1_1 = require("./f1");\r\nexports.y = f1_1.Foo();\r\n`);
-
-                    assert.isTrue(filesWritten.has("/a/b/f3.js"));
-                    assert.strictEqual(host.readFile("/a/b/f3.js"), `"use strict";\r\nexports.__esModule = true;\r\nvar f2_1 = require("./f2");\r\nvar x = f2_1.y;\r\n`);
-
-                    filesWritten.clear();
+                    const writeFileSpy2 = spy(host, "writeFile");
 
                     writeFile(host, "/a/b/f1.ts", `export function Foo() { return 10; }export function foo2() { return 2; }`);
                     waitAndCheckAffectedFiles(host, ["/a/b/f1.js", "/a/b/f2.js"], ["/a/b/f3.js"]);
 
-                    assert.isTrue(filesWritten.has("/a/b/f1.js"));
-                    assert.strictEqual(host.readFile("/a/b/f1.js"), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\nfunction foo2() { return 2; }\r\nexports.foo2 = foo2;\r\n`);
-
-                    assert.isTrue(filesWritten.has("/a/b/f2.js"));
-                    assert.strictEqual(host.readFile("/a/b/f2.js"), `"use strict";\r\nexports.__esModule = true;\r\nvar f1_1 = require("./f1");\r\nexports.y = f1_1.Foo();\r\n`);
-
-                    assert.isFalse(filesWritten.has("/a/b/f3.js"));
+                    writeFileSpy2
+                        .verify(_ => _("/a/b/f1.js", `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\nfunction foo2() { return 2; }\r\nexports.foo2 = foo2;\r\n`, Arg.any()), Times.once())
+                        .verify(_ => _("/a/b/f2.js", `"use strict";\r\nexports.__esModule = true;\r\nvar f1_1 = require("./f1");\r\nexports.y = f1_1.Foo();\r\n`, Arg.any()), Times.once())
+                        .verify(_ => _("/a/b/f3.js", Arg.string(), Arg.any()), Times.none())
+                        .revoke();
                 });
 
                 it("Elides const enums correctly in incremental compilation", () => {
-                    const filesWritten = new Set<string>();
-                    const host = new class extends mocks.MockServerHost {
-                        writeFile(path: string, content: string) {
-                            filesWritten.add(path);
-                            super.writeFile(path, content);
-                        }
-                    }({ lib: true, newLine: "\n" });
+                    const host = new fakes.FakeServerHost({ lib: true, newLine: "\n" });
 
                     writeFile(host, "/user/someone/projects/myproject/file1.ts", `export const enum E1 { V = 1 }`);
                     writeFile(host, "/user/someone/projects/myproject/file2.ts", `import { E1 } from "./file1"; export const enum E2 { V = E1.V }`);
                     writeFile(host, "/user/someone/projects/myproject/file3.ts", `import { E2 } from "./file2"; const v: E2 = E2.V;`);
 
+                    const writeFileSpy1 = spy(host, "writeFile");
+
                     createWatchModeWithoutConfigFile(["/user/someone/projects/myproject/file1.ts", "/user/someone/projects/myproject/file2.ts", "/user/someone/projects/myproject/file3.ts"], host, { listEmittedFiles: true });
                     checkAffectedFiles(host, ["/user/someone/projects/myproject/file1.js", "/user/someone/projects/myproject/file2.js", "/user/someone/projects/myproject/file3.js"]);
 
-                    assert.isTrue(filesWritten.has("/user/someone/projects/myproject/file1.js"));
-                    assert.strictEqual(host.readFile("/user/someone/projects/myproject/file1.js"), `"use strict";\nexports.__esModule = true;\n`);
+                    writeFileSpy1
+                        .verify(_ => _("/user/someone/projects/myproject/file1.js", `"use strict";\nexports.__esModule = true;\n`, Arg.any()), Times.once())
+                        .verify(_ => _("/user/someone/projects/myproject/file2.js", `"use strict";\nexports.__esModule = true;\n`, Arg.any()), Times.once())
+                        .verify(_ => _("/user/someone/projects/myproject/file3.js", `"use strict";\nexports.__esModule = true;\nvar v = 1 /* V */;\n`, Arg.any()), Times.once())
+                        .revoke();
 
-                    assert.isTrue(filesWritten.has("/user/someone/projects/myproject/file2.js"));
-                    assert.strictEqual(host.readFile("/user/someone/projects/myproject/file2.js"), `"use strict";\nexports.__esModule = true;\n`);
-
-                    assert.isTrue(filesWritten.has("/user/someone/projects/myproject/file3.js"));
-                    assert.strictEqual(host.readFile("/user/someone/projects/myproject/file3.js"), `"use strict";\nexports.__esModule = true;\nvar v = 1 /* V */;\n`);
-
-                    filesWritten.clear();
+                    const writeFileSpy2 = spy(host, "writeFile");
 
                     writeFile(host, "/user/someone/projects/myproject/file1.ts", `export const enum E1 { V = 1 }function foo2() { return 2; }`);
                     waitAndCheckAffectedFiles(host, ["/user/someone/projects/myproject/file1.js"], ["/user/someone/projects/myproject/file2.js", "/user/someone/projects/myproject/file3.js"]);
 
-                    assert.isTrue(filesWritten.has("/user/someone/projects/myproject/file1.js"));
-                    assert.strictEqual(host.readFile("/user/someone/projects/myproject/file1.js"), `"use strict";\nexports.__esModule = true;\nfunction foo2() { return 2; }\n`);
-
-                    assert.isFalse(filesWritten.has("/user/someone/projects/myproject/file2.js"));
-                    assert.isFalse(filesWritten.has("/user/someone/projects/myproject/file3.js"));
+                    writeFileSpy2
+                        .verify(_ => _("/user/someone/projects/myproject/file1.js", `"use strict";\nexports.__esModule = true;\nfunction foo2() { return 2; }\n`, Arg.any()), Times.once())
+                        .verify(_ => _("/user/someone/projects/myproject/file2.js", Arg.string(), Arg.any()), Times.none())
+                        .verify(_ => _("/user/someone/projects/myproject/file3.js", Arg.string(), Arg.any()), Times.none())
+                        .revoke();
                 });
             });
         });
@@ -1171,11 +1152,10 @@ namespace ts.tscWatch {
                 const rootContent1 = `import {x} from "f1"`;
                 const importedContent = `foo()`;
 
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/d/f0.ts", rootContent1);
                 host.vfs.addFile("/a/f1.ts", importedContent);
 
-                const fileExists = host.fileExists;
                 const watch = createWatchModeWithoutConfigFile(["/a/d/f0.ts"], host, { module: ModuleKind.AMD });
 
                 // ensure that imported file was found
@@ -1185,8 +1165,7 @@ namespace ts.tscWatch {
                 ], /*isInitial*/ true);
 
                 // spy on calls to fileExists to make sure that disk is not touched
-                const fileExistsSpy1 = new Spy(fileExists);
-                host.fileExists = fileExistsSpy1.value;
+                const fileExistsSpy1 = spy(host, "fileExists");
 
                 // write file and trigger synchronization
                 const rootContent2 = `import {x} from "f1"\nvar x: string = 1;`;
@@ -1194,7 +1173,9 @@ namespace ts.tscWatch {
                 host.runQueuedTimeoutCallbacks();
 
                 // verify fileExists was not called.
-                fileExistsSpy1.verify(_ => _(Arg.any()), Times.none());
+                fileExistsSpy1
+                    .verify(_ => _(Arg.any()), Times.none())
+                    .revoke();
 
                 // ensure file has correct number of errors after edit
                 checkOutputErrors(host, [
@@ -1204,8 +1185,7 @@ namespace ts.tscWatch {
                 ]);
 
                 // spy on calls to fileExists to make sure LSHost only searches for 'f2'
-                const fileExistsSpy2 = new Spy(fileExists);
-                host.fileExists = fileExistsSpy2.value;
+                const fileExistsSpy2 = spy(host, "fileExists");
 
                 // write file and trigger synchronization
                 const rootContent3 = `import {x} from "f2"`;
@@ -1215,7 +1195,8 @@ namespace ts.tscWatch {
                 // verify fileExists was called correctly
                 fileExistsSpy2
                     .verify(_ => _(Arg.includes("/f2.")), Times.atLeastOnce())
-                    .verify(_ => _(Arg.not(Arg.includes("/f2."))), Times.none());
+                    .verify(_ => _(Arg.not(Arg.includes("/f2."))), Times.none())
+                    .revoke();
 
                 // ensure file has correct number of errors after edit
                 checkOutputErrors(host, [
@@ -1223,8 +1204,7 @@ namespace ts.tscWatch {
                 ]);
 
                 // spy on calls to fileExists to make sure LSHost only searches for 'f1'
-                const fileExistsSpy3 = new Spy(fileExists);
-                host.fileExists = fileExistsSpy3.value;
+                const fileExistsSpy3 = spy(host, "fileExists");
 
                 // write file and trigger synchronization
                 const rootContent4 = `import {x} from "f1"`;
@@ -1234,7 +1214,8 @@ namespace ts.tscWatch {
                 // verify fileExists was called correctly
                 fileExistsSpy3
                     .verify(_ => _(Arg.includes("/f1.")), Times.atLeastOnce())
-                    .verify(_ => _(Arg.not(Arg.includes("/f1."))), Times.none());
+                    .verify(_ => _(Arg.not(Arg.includes("/f1."))), Times.none())
+                    .revoke();
 
                 checkOutputErrors(host, [
                     createFileIsNotAModuleDiagnostic(watch(), "/a/d/f0.ts", rootContent1, "f1", "/a/f1.ts"),
@@ -1245,34 +1226,34 @@ namespace ts.tscWatch {
             it("loads missing files from disk", () => {
                 const rootContent1 = `import {x} from "bar"`;
 
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/foo.ts", rootContent1);
 
-                const fileExists = host.fileExists;
-
                 // spy on calls to fileExists when starting watch mode
-                const fileExistsSpy1 = new Spy(fileExists);
-                host.fileExists = fileExistsSpy1.value;
+                const fileExistsSpy1 = spy(host, "fileExists");
 
                 const watch = createWatchModeWithoutConfigFile(["/a/foo.ts"], host, { module: ModuleKind.AMD });
 
                 // verify fileExists was called correctly
-                fileExistsSpy1.verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce());
+                fileExistsSpy1
+                    .verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce())
+                    .revoke();
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/foo.ts", rootContent1, "bar")
                 ], /*isInitial*/ true);
 
                 // spy on calls to fileExists after synchronization is triggered
-                const fileExistsSpy2 = new Spy(fileExists);
-                host.fileExists = fileExistsSpy2.value;
+                const fileExistsSpy2 = spy(host, "fileExists");
 
                 host.vfs.writeFile("/a/foo.ts", `import {y} from "bar"`);
                 host.vfs.writeFile("/a/bar.d.ts", `export const y = 1;`);
                 host.runQueuedTimeoutCallbacks();
 
                 // verify fileExists was called correctly
-                fileExistsSpy2.verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce());
+                fileExistsSpy2
+                    .verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce())
+                    .revoke();
 
                 checkOutputErrors(host, emptyArray);
             });
@@ -1281,53 +1262,54 @@ namespace ts.tscWatch {
                 const rootContent = `import {x} from "bar"`;
                 const importedContent = `export const y = 1;export const x = 10;`;
 
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/foo.ts", rootContent);
                 host.vfs.addFile("/a/bar.d.ts", importedContent);
 
-                const fileExists = host.fileExists;
-
                 // spy on fileExists when starting watch mode
-                const fileExistsSpy1 = new Spy(fileExists);
-                host.fileExists = fileExistsSpy1.value;
+                const fileExistsSpy1 = spy(host, "fileExists");
 
                 const watch = createWatchModeWithoutConfigFile(["/a/foo.ts"], host, { module: ModuleKind.AMD });
 
                 // verify fileExists was called correctly
-                fileExistsSpy1.verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce());
+                fileExistsSpy1
+                    .verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce())
+                    .revoke();
 
                 checkOutputErrors(host, emptyArray, /*isInitial*/ true);
 
                 // spy on fileExists when triggering synchronization
-                const fileExistsSpy2 = new Spy(fileExists);
-                host.fileExists = fileExistsSpy2.value;
+                const fileExistsSpy2 = spy(host, "fileExists");
 
                 host.vfs.removeFile("/a/bar.d.ts");
                 host.runQueuedTimeoutCallbacks();
 
                 // verify fileExists was called correctly
-                fileExistsSpy2.verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce());
+                fileExistsSpy2
+                    .verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce())
+                    .revoke();
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/foo.ts", rootContent, "bar")
                 ]);
 
                 // spy on fileExists when triggering synchronization
-                const fileExistsSpy3 = new Spy(fileExists);
-                host.fileExists = fileExistsSpy3.value;
+                const fileExistsSpy3 = spy(host, "fileExists");
 
-                host.vfs.writeFile("/a/bar.d.ts", importedContent);;
+                host.vfs.writeFile("/a/bar.d.ts", importedContent);
                 host.checkTimeoutQueueLengthAndRun(1);
 
                 // verify fileExists was called correctly.
-                fileExistsSpy3.verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce());
+                fileExistsSpy3
+                    .verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce())
+                    .revoke();
 
                 checkOutputErrors(host, emptyArray);
             });
 
             it("works when module resolution changes to ambient module", () => {
                 const rootContent = `import * as fs from "fs";`;
-                const host = new mocks.MockServerHost({ vfs: { currentDirectory: "/a/b" }, lib: true });
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/b" }, lib: true });
                 host.vfs.addFile("/a/b/foo.ts", rootContent);
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/foo.ts"], host, { });
@@ -1346,7 +1328,7 @@ namespace ts.tscWatch {
                 const rootContent = `import * as fs from "fs";\nimport * as u from "url";`;
                 const fileContent1 = `declare module "url" {\n    export interface Url {\n        href?: string;\n    }\n}`;
 
-                const host = new mocks.MockServerHost({ vfs: { currentDirectory: "/a/b" }, lib: true });
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/b" }, lib: true });
                 host.vfs.addFile("/a/b/foo.ts", rootContent);
                 host.vfs.addFile("/a/b/bar.d.ts", fileContent1);
 
@@ -1368,7 +1350,7 @@ namespace ts.tscWatch {
                 const file2Content = `import module11 = require("module1");\nmodule11("hello");`;
                 const file2Output = `"use strict";\nexports.__esModule = true;\nvar module11 = require("module1");\nmodule11("hello");\n`;
 
-                const host = new mocks.MockServerHost({ vfs: { currentDirectory: "/a/b/projects/myProject/" }, lib: true });
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/b/projects/myProject/" }, lib: true });
                 host.vfs.addFile("/a/b/projects/myProject/src/file1.ts", file1Content);
                 host.vfs.addFile("/a/b/projects/myProject/src/file2.ts", file2Content);
                 host.vfs.addFile("/a/b/projects/myProject/node_modules/module1/index.js", `module.exports = options => { return options.toString(); }`);
@@ -1382,18 +1364,15 @@ namespace ts.tscWatch {
                     }
                 }));
 
-                const writeFile = host.writeFile;
-
                 // spy on calls to writeFile when starting watch mode
-                const writeFileSpy1 = new Spy(writeFile);
-                host.writeFile = writeFileSpy1.value;
+                const writeFileSpy1 = spy(host, "writeFile");
 
                 const watch = createWatchModeWithConfigFile("/a/b/projects/myProject/src/tsconfig.json", host);
                 checkProgramActualFiles(watch(), [
                     "/a/b/projects/myProject/src/file1.ts",
                     "/a/b/projects/myProject/src/file2.ts",
                     "/a/b/projects/myProject/node_modules/module1/index.js",
-                    mocks.MockServerHost.libPath
+                    fakes.FakeServerHost.libPath
                 ]);
                 checkOutputErrors(host, emptyArray, /*isInitial*/ true);
 
@@ -1401,16 +1380,11 @@ namespace ts.tscWatch {
                 writeFileSpy1
                     .verify(_ => _("/a/b/projects/myProject/dist/file1.js", file1Output, Arg.any()), Times.once())
                     .verify(_ => _("/a/b/projects/myProject/dist/file2.js", file2Output, Arg.any()), Times.once())
-                    .verify(_ => _("/a/b/projects/myProject/dist/index.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/src/index.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/src/file1.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/src/file2.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/lib.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/lib.d.ts", Arg.string(), Arg.any()), Times.none());
+                    .verify(_ => _(Arg.nor("/a/b/projects/myProject/dist/file1.js", "/a/b/projects/myProject/dist/file2.js"), Arg.string(), Arg.any()), Times.none())
+                    .revoke();
 
                 // spy on calls to writeFile when triggering synchronization
-                const writeFileSpy2 = new Spy(writeFile);
-                host.writeFile = writeFileSpy2.value;
+                const writeFileSpy2 = spy(host, "writeFile");
 
                 host.vfs.writeFile("/a/b/projects/myProject/src/file1.ts", file1Content + "\n;");
                 host.runQueuedTimeoutCallbacks();
@@ -1418,26 +1392,21 @@ namespace ts.tscWatch {
                     "/a/b/projects/myProject/src/file1.ts",
                     "/a/b/projects/myProject/src/file2.ts",
                     "/a/b/projects/myProject/node_modules/module1/index.js",
-                    mocks.MockServerHost.libPath
+                    fakes.FakeServerHost.libPath
                 ]);
                 checkOutputErrors(host, emptyArray);
 
                 // verify writeFile was called correctly
                 writeFileSpy2
                     .verify(_ => _("/a/b/projects/myProject/dist/file1.js", file1Output + ";\n", Arg.any()), Times.once())
-                    .verify(_ => _("/a/b/projects/myProject/dist/file2.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/index.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/src/index.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/src/file1.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/src/file2.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/lib.js", Arg.string(), Arg.any()), Times.none())
-                    .verify(_ => _("/a/b/projects/myProject/dist/lib.d.ts", Arg.string(), Arg.any()), Times.none());
+                    .verify(_ => _(Arg.not("/a/b/projects/myProject/dist/file1.js"), Arg.string(), Arg.any()), Times.none())
+                    .revoke();
             });
         });
 
         describe("with when module emit is specified as node", () => {
             it("when instead of filechanged recursive directory watcher is invoked", () => {
-                const host = new mocks.MockServerHost({ lib: true });
+                const host = new fakes.FakeServerHost({ lib: true });
                 host.vfs.addFile("/a/rootFolder/project/Scripts/TypeScript.ts", `var z = 10;`);
                 host.vfs.addFile("/a/rootFolder/project/Scripts/Javascript.js", `var zz = 10;`);
                 host.vfs.addFile("/a/rootFolder/project/tsconfig.json", JSON.stringify({
@@ -1451,13 +1420,12 @@ namespace ts.tscWatch {
                     ],
                 }));
 
-                const writeFile = host.writeFile;
                 const watch = createWatchModeWithConfigFile("/a/rootFolder/project/tsconfig.json", host);
 
                 checkProgramActualFiles(watch(), [
                     "/a/rootFolder/project/Scripts/TypeScript.ts",
                     "/a/rootFolder/project/Scripts/Javascript.js",
-                    mocks.MockServerHost.libPath
+                    fakes.FakeServerHost.libPath
                 ]);
 
 
@@ -1465,8 +1433,7 @@ namespace ts.tscWatch {
                 host.vfs.removeFile("/a/rootFolder/project/Scripts/TypeScript.ts");
                 host.runQueuedTimeoutCallbacks();
 
-                const writeFileSpy1 = new Spy(writeFile);
-                host.writeFile = writeFileSpy1.value;
+                const writeFileSpy1 = spy(host, "writeFile");
 
                 host.vfs.writeFile("/a/rootFolder/project/Scripts/TypeScript.ts", `var zz30 = 100;`);
                 host.runQueuedTimeoutCallbacks();
@@ -1474,10 +1441,12 @@ namespace ts.tscWatch {
                 checkProgramActualFiles(watch(), [
                     "/a/rootFolder/project/Scripts/TypeScript.ts",
                     "/a/rootFolder/project/Scripts/Javascript.js",
-                    mocks.MockServerHost.libPath
+                    fakes.FakeServerHost.libPath
                 ]);
 
-                writeFileSpy1.verify(_ => _("/a/rootFolder/project/Static/scripts/TypeScript.js", `var zz30 = 100;\n`, Arg.any()), Times.once());
+                writeFileSpy1
+                    .verify(_ => _("/a/rootFolder/project/Static/scripts/TypeScript.js", `var zz30 = 100;\n`, Arg.any()), Times.once())
+                    .revoke();
             });
         });
     });
