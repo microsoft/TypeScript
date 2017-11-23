@@ -15208,7 +15208,7 @@ namespace ts {
             if (!deferredJsxStatelessElementType) {
                 const jsxElementType = getJsxGlobalElementType();
                 if (jsxElementType) {
-                    deferredJsxStatelessElementType = getUnionType([jsxElementType, nullType]);
+                    deferredJsxStatelessElementType = getUnionType([createArrayType(jsxElementType), jsxElementType, nullType]);
                 }
             }
             return deferredJsxStatelessElementType;
