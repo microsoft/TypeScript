@@ -1,0 +1,32 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Outer = class { }
+>Outer : typeof Outer
+>class { } : typeof Outer
+
+Outer.Inner = class {
+>Outer.Inner = class {    messages() { return [] }} : typeof (Anonymous class)
+>Outer.Inner : typeof (Anonymous class)
+>Outer : typeof Outer
+>Inner : typeof (Anonymous class)
+>class {    messages() { return [] }} : typeof (Anonymous class)
+
+    messages() { return [] }
+>messages : () => any[]
+>[] : undefined[]
+}
+/** @type {!Outer.Inner} */
+Outer.i
+>Outer.i : (Anonymous class)
+>Outer : typeof Outer
+>i : (Anonymous class)
+
+=== tests/cases/conformance/salsa/b.js ===
+var msgs = Outer.i.messages()
+>msgs : any[]
+>Outer.i.messages() : any[]
+>Outer.i.messages : () => any[]
+>Outer.i : (Anonymous class)
+>Outer : typeof Outer
+>i : (Anonymous class)
+>messages : () => any[]
+

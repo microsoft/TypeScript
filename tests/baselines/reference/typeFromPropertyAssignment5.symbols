@@ -1,0 +1,22 @@
+=== tests/cases/conformance/salsa/a.js ===
+export default function MyClass() {
+>MyClass : Symbol(MyClass, Decl(a.js, 0, 0))
+}
+MyClass.bar = class C {
+>MyClass : Symbol(MyClass, Decl(a.js, 0, 0))
+>C : Symbol(C, Decl(a.js, 2, 13))
+}
+MyClass.bar
+>MyClass : Symbol(MyClass, Decl(a.js, 0, 0))
+
+=== tests/cases/conformance/salsa/b.js ===
+import MC from './a'
+>MC : Symbol(MC, Decl(b.js, 0, 6))
+
+MC.bar
+>MC : Symbol(MC, Decl(b.js, 0, 6))
+
+/** @type {MC.bar} */
+var x
+>x : Symbol(x, Decl(b.js, 3, 3))
+

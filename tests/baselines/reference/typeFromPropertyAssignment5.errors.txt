@@ -1,0 +1,21 @@
+tests/cases/conformance/salsa/b.js(2,4): error TS2339: Property 'bar' does not exist on type '() => void'.
+tests/cases/conformance/salsa/b.js(3,12): error TS2503: Cannot find namespace 'MC'.
+
+
+==== tests/cases/conformance/salsa/a.js (0 errors) ====
+    export default function MyClass() {
+    }
+    MyClass.bar = class C {
+    }
+    MyClass.bar
+    
+==== tests/cases/conformance/salsa/b.js (2 errors) ====
+    import MC from './a'
+    MC.bar
+       ~~~
+!!! error TS2339: Property 'bar' does not exist on type '() => void'.
+    /** @type {MC.bar} */
+               ~~
+!!! error TS2503: Cannot find namespace 'MC'.
+    var x
+    

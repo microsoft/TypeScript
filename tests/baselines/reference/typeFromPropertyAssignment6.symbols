@@ -1,0 +1,27 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Outer = class { }
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 21), Decl(a.js, 3, 1))
+
+Outer.Inner = class {
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 21))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 21), Decl(a.js, 3, 1))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 21))
+
+    messages() { return [] }
+>messages : Symbol((Anonymous class).messages, Decl(a.js, 1, 21))
+}
+/** @type {!Outer.Inner} */
+Outer.i
+>Outer.i : Symbol(Outer.i, Decl(a.js, 3, 1))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 21), Decl(a.js, 3, 1))
+>i : Symbol(Outer.i, Decl(a.js, 3, 1))
+
+=== tests/cases/conformance/salsa/b.js ===
+var msgs = Outer.i.messages()
+>msgs : Symbol(msgs, Decl(b.js, 0, 3))
+>Outer.i.messages : Symbol((Anonymous class).messages, Decl(a.js, 1, 21))
+>Outer.i : Symbol(Outer.i, Decl(a.js, 3, 1))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 21), Decl(a.js, 3, 1))
+>i : Symbol(Outer.i, Decl(a.js, 3, 1))
+>messages : Symbol((Anonymous class).messages, Decl(a.js, 1, 21))
+

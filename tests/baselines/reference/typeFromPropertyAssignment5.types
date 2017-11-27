@@ -1,0 +1,30 @@
+=== tests/cases/conformance/salsa/a.js ===
+export default function MyClass() {
+>MyClass : () => void
+}
+MyClass.bar = class C {
+>MyClass.bar = class C {} : typeof C
+>MyClass.bar : any
+>MyClass : any
+>bar : any
+>class C {} : typeof C
+>C : typeof C
+}
+MyClass.bar
+>MyClass.bar : any
+>MyClass : any
+>bar : any
+
+=== tests/cases/conformance/salsa/b.js ===
+import MC from './a'
+>MC : () => void
+
+MC.bar
+>MC.bar : any
+>MC : () => void
+>bar : any
+
+/** @type {MC.bar} */
+var x
+>x : any
+
