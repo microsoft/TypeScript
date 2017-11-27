@@ -273,9 +273,6 @@ namespace ts {
                 return getEscapedTextOfIdentifierOrLiteral(<Identifier | LiteralExpression>name);
             }
             switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    // TODO: THIS IS WRONG
-                    return (node as any as Identifier).escapedText;
                 case SyntaxKind.Constructor:
                     return InternalSymbolName.Constructor;
                 case SyntaxKind.FunctionType:
@@ -2014,8 +2011,7 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     if (isSpecialPropertyDeclaration(node as PropertyAccessExpression)) {
-                        // TODO: this is wrong now that I allow it anywhere
-                        bindThisPropertyAssignment(node as PropertyAccessExpression);
+                        bindSpecialPropertyDeclaration(node as PropertyAccessExpression);
                     }
                     break;
                 case SyntaxKind.BinaryExpression:
@@ -2351,6 +2347,17 @@ namespace ts {
             }
         }
 
+        function bindSpecialPropertyDeclaration(node: PropertyAccessExpression) {
+            Debug.assert(isInJavaScriptFile(node));
+            if (node.expression.kind === SyntaxKind.ThisKeyword) {
+                bindThisPropertyAssignment(node);
+            }
+            else if ((node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression) &&
+                node.parent.parent.kind === SyntaxKind.SourceFile) {
+                bindStaticPropertyAssignment(node);
+            }
+        }
+
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
             // We saw a node of the form 'x.prototype.y = z'. Declare a 'member' y on x if x was a function.
 
@@ -2368,24 +2375,27 @@ namespace ts {
             bindPropertyAssignment(constructorFunction.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ true);
         }
 
-        function bindStaticPropertyAssignment(node: BinaryExpression) {
-            // We saw a node of the form 'x.y = z'. Declare a 'member' y on x if x was a function.
-
-            // Look up the function in the local scope, since prototype assignments should
+        /**
+         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x was a function.
+         * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
+         */
+        function bindStaticPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
+            // Look up the function in the local scope, since static assignments should
             // follow the function declaration
-            const leftSideOfAssignment = node.left as PropertyAccessExpression;
+            const leftSideOfAssignment = node.kind === SyntaxKind.PropertyAccessExpression ? node : node.left as PropertyAccessExpression;
             const target = leftSideOfAssignment.expression;
 
             if (isIdentifier(target)) {
                 // Fix up parent pointers since we're going to use these nodes before we bind into them
-                leftSideOfAssignment.parent = node;
                 target.parent = leftSideOfAssignment;
-
+                if (node.kind === SyntaxKind.BinaryExpression) {
+                    leftSideOfAssignment.parent = node;
+                }
                 if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
                     // This can be an alias for the 'exports' or 'module.exports' names, e.g.
                     //    var util = module.exports;
                     //    util.property = function ...
-                    bindExportsPropertyAssignment(node);
+                    bindExportsPropertyAssignment(node as BinaryExpression);
                 }
                 else {
                     bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
@@ -2403,14 +2413,19 @@ namespace ts {
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }
-            Debug.assert(propertyAccessExpression.parent.kind === SyntaxKind.BinaryExpression);
-            if (!isPrototypeProperty &&
-                (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) &&
-                // TODO: Rewrite to be easier to read
-                ((propertyAccessExpression.parent as BinaryExpression).right.kind === SyntaxKind.ClassExpression || (propertyAccessExpression.parent as BinaryExpression).right.kind === SyntaxKind.FunctionExpression) &&
-                propertyAccessExpression.parent.parent.parent.kind === SyntaxKind.SourceFile) {
+            Debug.assert(propertyAccessExpression.parent.kind === SyntaxKind.BinaryExpression || propertyAccessExpression.parent.kind === SyntaxKind.ExpressionStatement);
+            let isLegalPosition: boolean;
+            if (propertyAccessExpression.parent.kind === SyntaxKind.BinaryExpression) {
+                const initializerKind = (propertyAccessExpression.parent as BinaryExpression).right.kind;
+                isLegalPosition = (initializerKind === SyntaxKind.ClassExpression || initializerKind === SyntaxKind.FunctionExpression) &&
+                    propertyAccessExpression.parent.parent.parent.kind === SyntaxKind.SourceFile;
+            }
+            else {
+                isLegalPosition = propertyAccessExpression.parent.parent.kind === SyntaxKind.SourceFile;
+            }
+            if (!isPrototypeProperty && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
                 // TODO: Update refactoring to understand that ES5 classes now have statics in a namespace instead
-                const hasExportModifier = getCombinedModifierFlags(targetSymbol.valueDeclaration) & ModifierFlags.Export;
+                const hasExportModifier = targetSymbol && getCombinedModifierFlags(targetSymbol.valueDeclaration) & ModifierFlags.Export;
                 Debug.assert(isIdentifier(propertyAccessExpression.expression));
                 Debug.assertEqual(propertyAccessExpression.expression.kind, SyntaxKind.Identifier);
                 targetSymbol = declareModuleMember(propertyAccessExpression.expression as Identifier, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, hasExportModifier);

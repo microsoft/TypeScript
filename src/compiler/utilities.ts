@@ -1621,7 +1621,7 @@ namespace ts {
             //   * @returns {number}
             //   */
             // var x = function(name) { return name.length; }
-            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || getNestedModuleDeclaration(parent))) {
+            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.ExpressionStatement || getNestedModuleDeclaration(parent))) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
             if (parent && parent.parent &&
@@ -4209,6 +4209,8 @@ namespace ts {
             return undefined;
         }
         switch (declaration.kind) {
+            case SyntaxKind.Identifier:
+                return declaration as Identifier;
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag: {
                 const { name } = declaration as JSDocPropertyLikeTag;
