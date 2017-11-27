@@ -13,6 +13,7 @@ namespace ts.projectSystem {
     import TI = server.typingsInstaller;
     import validatePackageName = JsTyping.validatePackageName;
     import PackageNameValidationResult = JsTyping.PackageNameValidationResult;
+    import FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
 
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
@@ -628,7 +629,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
-            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", "/.ts/lib.d.ts"]);
+            ts.TestFSWithWatch.checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", "/.ts/lib.d.ts"]);
 
             installer.installAll(/*expectedCount*/ 1);
 

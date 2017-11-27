@@ -2,6 +2,8 @@
 /// <reference path="./tsserverProjectSystem.ts" />
 
 namespace ts.projectSystem {
+    import FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
+
     describe("project telemetry", () => {
         it("does nothing for inferred project", () => {
             const file = makeFile("/a.js");
@@ -235,7 +237,7 @@ namespace ts.projectSystem {
         });
     });
 
-    function makeFile(path: string, content: {} = ""): projectSystem.FileOrFolder {
+    function makeFile(path: string, content: {} = ""): FileOrFolder {
         return { path, content: isString(content) ? "" : JSON.stringify(content) };
     }
 }

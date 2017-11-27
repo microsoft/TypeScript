@@ -426,7 +426,8 @@ namespace vfs {
         public rename(oldpath: string, newpath: string) {
             oldpath = vpath.resolve(this.currentDirectory, oldpath);
             newpath = vpath.resolve(this.currentDirectory, newpath);
-            return this.root.replaceEntry(newpath, this.getEntry(oldpath));
+            const oldEntry = this.getEntry(oldpath);
+            return oldEntry !== undefined && this.root.replaceEntry(newpath, oldEntry);
         }
 
         /**

@@ -124,12 +124,16 @@ export class Timers {
      * - Use `Timers.MAX_DEPTH` to continue processing nested `setImmediate` calls up to the maximum depth.
      */
     public advance(ms: number, maxDepth = 0): number {
-        if (ms <= 0) throw new TypeError("Argument 'ms' out of range.");
+        if (ms < 0) throw new TypeError("Argument 'ms' out of range.");
         if (maxDepth < 0) throw new TypeError("Argument 'maxDepth' out of range.");
         let count = 0;
         const endTime = this._time + (ms | 0);
         while (true) {
-            count += this.executeImmediates(maxDepth);
+            if (maxDepth >= 0) {
+                count += this.executeImmediates(maxDepth);
+                maxDepth--;
+            }
+
             const dueTimer = this.dequeueIfBefore(endTime);
             if (dueTimer) {
                 this._time = dueTimer.due;
@@ -150,7 +154,7 @@ export class Timers {
      * - Use `Timers.MAX_DEPTH` to continue processing nested `setImmediate` calls up to the maximum depth.
      */
     public advanceToEnd(maxDepth = 0) {
-        return this.remainingTime > 0 ? this.advance(this.remainingTime, maxDepth) : 0;
+        return this.advance(this.remainingTime, maxDepth);
     }
 
     /**

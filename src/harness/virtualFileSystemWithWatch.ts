@@ -274,6 +274,8 @@ interface Array<T> {}`
 
         // temporary vfs shim
         public vfs = {
+            watchFiles: true,
+            watchDirectories: true,
             addFile: (path: string, content: string, options?: { overwrite?: boolean }) => {
                 let file = this.files.find(createFileMatcher(this, path));
                 if (file) {
@@ -308,14 +310,31 @@ interface Array<T> {}`
                     this.reloadFS(this.files);
                 }
             },
-            renameFile: (oldpath: string, newpath: string) => {
-                const oldItem = this.vfs.getFile(oldpath);
-                if (oldItem) {
-                    const newIndex = this.files.findIndex(createFileMatcher(this, newpath));
-                    if (newIndex >= 0) ts.orderedRemoveItemAt(this.files, newIndex);
-                    oldItem.path = newpath;
-                    this.reloadFS(this.files);
+            rename: (oldpath: string, newpath: string) => {
+                if (this.vfs.getFile(oldpath)) {
+                    const oldIndex = this.files.findIndex(createFileMatcher(this, oldpath));
+                    if (oldIndex >= 0) {
+                        const oldItem = this.files[oldIndex];
+                        ts.orderedRemoveItemAt(this.files, oldIndex);
+                        const newIndex = this.files.findIndex(createFileMatcher(this, newpath));
+                        if (newIndex >= 0) {
+                            ts.orderedRemoveItemAt(this.files, newIndex);
+                        }
+                        this.files.push({ path: newpath, content: oldItem.content });
+                    }
                 }
+                else {
+                    for (let i = 0; i < this.files.length; i++) {
+                        const file = this.files[i];
+                        if (vpath.beneath(oldpath, file.path, !this.useCaseSensitiveFileNames)) {
+                            this.files[i] = {
+                                path: vpath.combine(newpath, vpath.relative(oldpath, file.path, !this.useCaseSensitiveFileNames)),
+                                content: file.content
+                            };
+                        }
+                    }
+                }
+                this.reloadFS(this.files);
             },
             addDirectory: (path: string) => {
                 let file = this.files.find(createFolderMatcher(this, path));
@@ -326,6 +345,13 @@ interface Array<T> {}`
                 }
                 return file;
             },
+            removeDirectory: (path: string) => {
+                const index = this.files.findIndex(createFolderMatcher(this, path));
+                if (index >= 0) {
+                    ts.orderedRemoveItemAt(this.files, index);
+                    this.reloadFS(this.files);
+                }
+            }
         };
 
         constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean) {
@@ -512,12 +538,14 @@ interface Array<T> {}`
             }
             else {
                 Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
-                const relativePath = this.getRelativePathToDirectory(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
-                // Invoke directory and recursive directory watcher for the folder
-                // Here we arent invoking recursive directory watchers for the base folders
-                // since that is something we would want to do for both file as well as folder we are deleting
-                invokeWatcherCallbacks(this.watchedDirectories.get(fileOrDirectory.path), cb => this.directoryCallback(cb, relativePath));
-                invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrDirectory.path), cb => this.directoryCallback(cb, relativePath));
+                if (this.vfs.watchDirectories) {
+                    const relativePath = this.getRelativePathToDirectory(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
+                    // Invoke directory and recursive directory watcher for the folder
+                    // Here we arent invoking recursive directory watchers for the base folders
+                    // since that is something we would want to do for both file as well as folder we are deleting
+                    invokeWatcherCallbacks(this.watchedDirectories.get(fileOrDirectory.path), cb => this.directoryCallback(cb, relativePath));
+                    invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrDirectory.path), cb => this.directoryCallback(cb, relativePath));
+                }
             }
 
             if (basePath !== fileOrDirectory.path) {
@@ -531,6 +559,7 @@ interface Array<T> {}`
         }
 
         private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind) {
+            if (!this.vfs.watchFiles) return;
             const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
             invokeWatcherCallbacks(callbacks, ({ cb, fileName }) => cb(fileName, eventKind));
         }
@@ -543,6 +572,7 @@ interface Array<T> {}`
          * This will call the directory watcher for the folderFullPath and recursive directory watchers for this and base folders
          */
         private invokeDirectoryWatcher(folderFullPath: string, fileName: string) {
+            if (!this.vfs.watchDirectories) return;
             const relativePath = this.getRelativePathToDirectory(folderFullPath, fileName);
             invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
             this.invokeRecursiveDirectoryWatcher(folderFullPath, fileName);
@@ -556,6 +586,7 @@ interface Array<T> {}`
          * This will call the recursive directory watcher for this directory as well as all the base directories
          */
         private invokeRecursiveDirectoryWatcher(fullPath: string, fileName: string) {
+            if (!this.vfs.watchDirectories) return;
             const relativePath = this.getRelativePathToDirectory(fullPath, fileName);
             invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(fullPath)), cb => this.directoryCallback(cb, relativePath));
             const basePath = getDirectoryPath(fullPath);

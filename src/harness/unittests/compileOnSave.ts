@@ -6,6 +6,8 @@
 
 namespace ts.projectSystem {
     const nullCancellationToken = server.nullCancellationToken;
+    import libFile = ts.TestFSWithWatch.libFile;
+    import FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
 
     function createTestTypingsInstaller(host: server.ServerHost) {
         return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);

@@ -55,4 +55,52 @@ namespace utils {
             }
         });
     }
+
+    /**
+     * Removes leading indentation from a template literal string.
+     */
+    export function dedent(array: TemplateStringsArray, ...args: any[]) {
+        let text = array[0];
+        for (let i = 0; i < args.length; i++) {
+            text += args[i];
+            text += array[i + 1];
+        }
+
+        const lineTerminatorRegExp = /\r\n?|\n/g;
+        const lines: string[] = [];
+        const lineTerminators: string[] = [];
+        let match: RegExpExecArray | null;
+        let lineStart = 0;
+        while (match = lineTerminatorRegExp.exec(text)) {
+            lines.push(text.slice(lineStart, match.index));
+            lineTerminators.push(match[0]);
+            lineStart = match.index + match[0].length;
+        }
+
+        const indentation = guessIndentation(lines);
+
+        let result = "";
+        for (let i = 0; i < lines.length; i++) {
+            const lineText = lines[i];
+            const line = indentation ? lineText.slice(indentation) : lineText;
+            result += line;
+            result += lineTerminators[i];
+        }
+        return result;
+    }
+
+    function guessIndentation(lines: string[]) {
+        let indentation: number;
+        for (const line of lines) {
+            for (let i = 0; i < line.length && (indentation === undefined || i < indentation); i++) {
+                if (!ts.isWhiteSpaceLike(line.charCodeAt(i))) {
+                    if (indentation === undefined || i < indentation) {
+                        indentation = i;
+                        break;
+                    }
+                }
+            }
+        }
+        return indentation;
+    }
 }

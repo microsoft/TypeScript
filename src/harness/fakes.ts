@@ -30,11 +30,18 @@ namespace fakes {
          * Indicates whether to include a bare _lib.d.ts_.
          */
         lib?: boolean;
+        /**
+         * Indicates whether to use DOS paths by default.
+         */
+        dos?: boolean;
     }
 
-    export class FakeServerHost implements ts.server.ServerHost, ts.FormatDiagnosticsHost {
+    export class FakeServerHost implements ts.server.ServerHost, ts.FormatDiagnosticsHost, ts.ModuleResolutionHost {
+        public static readonly dosExecutingFilePath = "c:/.ts/tsc.js";
         public static readonly defaultExecutingFilePath = "/.ts/tsc.js";
+        public static readonly dosDefaultCurrentDirectory = "c:/";
         public static readonly defaultCurrentDirectory = "/";
+        public static readonly dosSafeListPath = "c:/safelist.json";
         public static readonly safeListPath = "/safelist.json";
         public static readonly safeListContent =
             `{\n` +
@@ -46,6 +53,7 @@ namespace fakes {
             `    "chroma": "chroma-js"\n` +
             `}`;
 
+        public static readonly dosLibPath = "c:/.ts/lib.d.ts";
         public static readonly libPath = "/.ts/lib.d.ts";
         public static readonly libContent =
             `/// <reference no-default-lib="true"/>\n` +
@@ -64,22 +72,32 @@ namespace fakes {
 
         private static readonly processExitSentinel = new Error("System exit");
         private readonly _output: string[] = [];
+        private readonly _trace: string[] = [];
         private readonly _executingFilePath: string;
         private readonly _getCanonicalFileName: (file: string) => string;
 
         constructor(options: FakeServerHostOptions = {}) {
             const {
+                dos = false,
                 vfs: _vfs = {},
-                executingFilePath = FakeServerHost.defaultExecutingFilePath,
+                executingFilePath = dos
+                    ? FakeServerHost.dosExecutingFilePath
+                    : FakeServerHost.defaultExecutingFilePath,
                 newLine = "\n",
                 safeList = false,
                 lib = false
             } = options;
 
-            const { currentDirectory = FakeServerHost.defaultCurrentDirectory, useCaseSensitiveFileNames = false } = _vfs;
+            const {
+                currentDirectory = dos
+                    ? FakeServerHost.dosDefaultCurrentDirectory
+                    : FakeServerHost.defaultCurrentDirectory,
+                useCaseSensitiveFileNames = false
+            } = _vfs;
 
-            this.vfs = _vfs instanceof vfs.VirtualFileSystem ? _vfs :
-                new vfs.VirtualFileSystem(currentDirectory, useCaseSensitiveFileNames);
+            this.vfs = _vfs instanceof vfs.VirtualFileSystem
+                ? _vfs
+                : new vfs.VirtualFileSystem(currentDirectory, useCaseSensitiveFileNames);
 
             this.useCaseSensitiveFileNames = this.vfs.useCaseSensitiveFileNames;
             this.newLine = newLine;
@@ -87,11 +105,15 @@ namespace fakes {
             this._getCanonicalFileName = ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames);
 
             if (safeList) {
-                this.vfs.addFile(FakeServerHost.safeListPath, FakeServerHost.safeListContent);
+                this.vfs.addFile(
+                    dos ? FakeServerHost.dosSafeListPath : FakeServerHost.safeListPath,
+                    FakeServerHost.safeListContent);
             }
 
             if (lib) {
-                this.vfs.addFile(FakeServerHost.libPath, FakeServerHost.libContent);
+                this.vfs.addFile(
+                    dos ? FakeServerHost.dosLibPath : FakeServerHost.libPath,
+                    FakeServerHost.libContent);
             }
         }
 
@@ -142,6 +164,12 @@ namespace fakes {
             throw FakeServerHost.processExitSentinel;
         }
         // #endregion DirectoryStructureHost members
+
+        // #region ModuleResolutionHost members
+        public trace(message: string) {
+            this._trace.push(message);
+        }
+        // #endregion
 
         // #region System members
         public readonly args: string[] = [];
@@ -226,6 +254,14 @@ namespace fakes {
             this._output.length = 0;
         }
 
+        public getTrace(): ReadonlyArray<string> {
+            return this._trace;
+        }
+
+        public clearTrace() {
+            this._trace.length = 0;
+        }
+
         public checkTimeoutQueueLength(expected: number) {
             const callbacksCount = this.timers.getPending({ kind: "timeout", ms: this.timers.remainingTime }).length;
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
@@ -234,6 +270,17 @@ namespace fakes {
         public checkTimeoutQueueLengthAndRun(count: number) {
             this.checkTimeoutQueueLength(count);
             this.runQueuedTimeoutCallbacks();
+        }
+
+        public runQueuedImmediateCallbacks() {
+            try {
+                this.timers.executeImmediates();
+            }
+            catch (e) {
+                if (e !== FakeServerHost.processExitSentinel) {
+                    throw e;
+                }
+            }
         }
 
         public runQueuedTimeoutCallbacks() {

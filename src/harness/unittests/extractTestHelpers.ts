@@ -1,5 +1,6 @@
 /// <reference path="..\harness.ts" />
 /// <reference path="tsserverProjectSystem.ts" />
+/// <reference path="../fakes.ts" />
 
 namespace ts {
     export interface Range {
@@ -98,6 +99,19 @@ namespace ts {
         getCurrentDirectory: notImplemented,
     };
 
+    function createServerHost(files: ts.TestFSWithWatch.FileOrFolder[], options?: Partial<fakes.FakeServerHostOptions>) {
+        const host = new fakes.FakeServerHost(options);
+        for (const file of files) {
+            if (isString(file.content)) {
+                host.vfs.writeFile(file.path, file.content);
+            }
+            else {
+                host.vfs.addDirectory(file.path);
+            }
+        }
+        return host;
+    }
+
     export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection");
@@ -154,7 +168,7 @@ namespace ts {
         }
 
         function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
-            const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
+            const host = createServerHost(includeLib ? [f, ts.TestFSWithWatch.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
@@ -178,7 +192,7 @@ namespace ts {
                 path: "/a.ts",
                 content: t.source
             };
-            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
+            const host = ts.TestFSWithWatch.createServerHost([f, ts.TestFSWithWatch.libFile]);
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
