@@ -474,6 +474,8 @@ namespace ts.projectSystem {
     }
 
     describe("tsserverProjectSystem", () => {
+        
+        describe("general functionality", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
             content: "let x = 1"
@@ -6469,5 +6471,6 @@ namespace ts.projectSystem {
         it("When files at some folder other than root", () => {
             verifyWatchedDirectories(/*useProjectAtRoot*/ false);
         });
+    });
     });
 }
