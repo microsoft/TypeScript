@@ -428,8 +428,12 @@ namespace ts {
             return symbol;
         }
 
-        function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
-            const hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export;
+        function declareModuleMember(
+            node: Declaration,
+            symbolFlags: SymbolFlags,
+            symbolExcludes: SymbolFlags,
+            hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export
+        ): Symbol {
             if (symbolFlags & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
@@ -2361,7 +2365,7 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = leftSideOfAssignment;
 
-            bindPropertyAssignment(constructorFunction.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ true, /*isMagic*/ false);
+            bindPropertyAssignment(constructorFunction.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ true);
         }
 
         function bindStaticPropertyAssignment(node: BinaryExpression) {
@@ -2384,7 +2388,7 @@ namespace ts {
                     bindExportsPropertyAssignment(node);
                 }
                 else {
-                    bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false, /*isMagic*/ true);
+                    bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
                 }
             }
         }
@@ -2393,26 +2397,28 @@ namespace ts {
             return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || (container.locals && container.locals.get(name));
         }
 
-        function bindPropertyAssignment(functionName: __String, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean, isMagic: boolean) {
+        function bindPropertyAssignment(functionName: __String, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
             let targetSymbol = lookupSymbolForName(functionName);
+            targetSymbol = targetSymbol && targetSymbol.exportSymbol || targetSymbol;
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }
             Debug.assert(propertyAccessExpression.parent.kind === SyntaxKind.BinaryExpression);
-            if (isMagic &&
+            if (!isPrototypeProperty &&
                 (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) &&
+                // TODO: Rewrite to be easier to read
                 ((propertyAccessExpression.parent as BinaryExpression).right.kind === SyntaxKind.ClassExpression || (propertyAccessExpression.parent as BinaryExpression).right.kind === SyntaxKind.FunctionExpression) &&
                 propertyAccessExpression.parent.parent.parent.kind === SyntaxKind.SourceFile) {
-                // TODO: Magic may not be required (but is so far)
+                // TODO: Update refactoring to understand that ES5 classes now have statics in a namespace instead
+                const hasExportModifier = getCombinedModifierFlags(targetSymbol.valueDeclaration) & ModifierFlags.Export;
                 Debug.assert(isIdentifier(propertyAccessExpression.expression));
-                // TODO: This should be exports if the tgargetSymbol is found, and already exported, otherwise locals
-                const symbolTable = container.symbol && container.symbol.exports ? container.symbol.exports : container.locals;
-                targetSymbol = declareSymbol(symbolTable, container.symbol, propertyAccessExpression.expression as Identifier, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+                Debug.assertEqual(propertyAccessExpression.expression.kind, SyntaxKind.Identifier);
+                targetSymbol = declareModuleMember(propertyAccessExpression.expression as Identifier, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, hasExportModifier);
             }
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }
-            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule))) {
+            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ExportValue))) {
                 return;
             }
 
