@@ -425,12 +425,8 @@ namespace ts {
             return symbol;
         }
 
-        function declareModuleMember(
-            node: Declaration,
-            symbolFlags: SymbolFlags,
-            symbolExcludes: SymbolFlags,
-            hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export
-        ): Symbol {
+        function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
+            const hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export;
             if (symbolFlags & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
@@ -2404,52 +2400,39 @@ namespace ts {
         }
 
         function lookupSymbolForName(name: __String) {
-            return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || (container.locals && container.locals.get(name));
-        }
-
-        function reallyLookup(name: __String) {
-            const local = container.locals.get(name)
+            const local = container.locals && container.locals.get(name);
             if (local) {
                 return local.exportSymbol || local;
             }
-            return container.symbol && container.symbol.exports.get(name);
+            return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
         }
 
-        function bindPropertyAssignment(functionName: __String, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
-            let targetSymbol = lookupSymbolForName(functionName);
-            targetSymbol = targetSymbol && targetSymbol.exportSymbol || targetSymbol;
-            if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
-                targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
-            }
-            Debug.assert(propertyAccessExpression.parent.kind === SyntaxKind.BinaryExpression || propertyAccessExpression.parent.kind === SyntaxKind.ExpressionStatement);
+        function bindPropertyAssignment(functionName: __String, propertyAccess: PropertyAccessExpression, isPrototypeProperty: boolean) {
+            const symbol = lookupSymbolForName(functionName);
+            let targetSymbol = symbol && isDeclarationOfFunctionOrClassExpression(symbol) ?
+                (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
+                symbol;
+            Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression || propertyAccess.parent.kind === SyntaxKind.ExpressionStatement);
             let isLegalPosition: boolean;
-            if (propertyAccessExpression.parent.kind === SyntaxKind.BinaryExpression) {
-                const initializerKind = (propertyAccessExpression.parent as BinaryExpression).right.kind;
+            if (propertyAccess.parent.kind === SyntaxKind.BinaryExpression) {
+                const initializerKind = (propertyAccess.parent as BinaryExpression).right.kind;
                 isLegalPosition = (initializerKind === SyntaxKind.ClassExpression || initializerKind === SyntaxKind.FunctionExpression) &&
-                    propertyAccessExpression.parent.parent.parent.kind === SyntaxKind.SourceFile;
+                    propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile;
             }
             else {
-                isLegalPosition = propertyAccessExpression.parent.parent.kind === SyntaxKind.SourceFile;
+                isLegalPosition = propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             }
             if (!isPrototypeProperty && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
-                // TODO: Update refactoring to understand that ES5 classes now have statics in a namespace instead
-                // const hasExportModifier = targetSymbol && getCombinedModifierFlags(targetSymbol.valueDeclaration) & ModifierFlags.Export;
-                Debug.assert(isIdentifier(propertyAccessExpression.expression));
-                Debug.assertEqual(propertyAccessExpression.expression.kind, SyntaxKind.Identifier);
-                // targetSymbol = declareSymbol(symbolTable, targetSymbol.parent, propertyAccessExpression.expression as Identifier, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-
-                const symbol = reallyLookup(functionName);
-                if (symbol) {
-                    addDeclarationToSymbol(symbol, propertyAccessExpression.expression as Identifier, SymbolFlags.ValueModule | SymbolFlags.NamespaceModule);
+                Debug.assert(isIdentifier(propertyAccess.expression));
+                const identifier = propertyAccess.expression as Identifier;
+                if (targetSymbol) {
+                    addDeclarationToSymbol(symbol, identifier, SymbolFlags.Module);
                 }
-                else if (!targetSymbol) {
-                    targetSymbol = declareSymbol(container.locals, undefined, propertyAccessExpression.expression as Identifier, SymbolFlags.ValueModule | SymbolFlags.NamespaceModule, SymbolFlags.ValueModuleExcludes | SymbolFlags.NamespaceModuleExcludes);
+                else {
+                    targetSymbol = declareSymbol(container.locals, /*parent*/ undefined, identifier, SymbolFlags.Module, SymbolFlags.ValueModuleExcludes);
                 }
             }
-            if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) { // TODO: Probably can move inside the preceding if
-                targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
-            }
-            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ExportValue))) {
+            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule))) {
                 return;
             }
 
@@ -2459,7 +2442,7 @@ namespace ts {
                 (targetSymbol.exports || (targetSymbol.exports = createSymbolTable()));
 
             // Declare the method/property
-            declareSymbol(symbolTable, targetSymbol, propertyAccessExpression, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            declareSymbol(symbolTable, targetSymbol, propertyAccess, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         function bindCallExpression(node: CallExpression) {
