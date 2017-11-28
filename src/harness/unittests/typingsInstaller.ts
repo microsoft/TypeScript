@@ -1018,7 +1018,7 @@ namespace ts.projectSystem {
                 }
             };
             session.executeCommand(changeRequest);
-            host.checkTimeoutQueueLengthAndRun(0); // This enqueues the updategraph and refresh inferred projects
+            host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
             const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
             assert.equal(version1, version2, "set of unresolved imports should not change");
         });

@@ -598,6 +598,7 @@ namespace ts {
 
     export type DotDotDotToken = Token<SyntaxKind.DotDotDotToken>;
     export type QuestionToken = Token<SyntaxKind.QuestionToken>;
+    export type ExclamationToken = Token<SyntaxKind.ExclamationToken>;
     export type ColonToken = Token<SyntaxKind.ColonToken>;
     export type EqualsToken = Token<SyntaxKind.EqualsToken>;
     export type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
@@ -761,9 +762,10 @@ namespace ts {
     export interface VariableDeclaration extends NamedDeclaration {
         kind: SyntaxKind.VariableDeclaration;
         parent?: VariableDeclarationList | CatchClause;
-        name: BindingName;                  // Declared variable name
-        type?: TypeNode;                    // Optional type annotation
-        initializer?: Expression;           // Optional initializer
+        name: BindingName;                    // Declared variable name
+        exclamationToken?: ExclamationToken;  // Optional definite assignment assertion
+        type?: TypeNode;                      // Optional type annotation
+        initializer?: Expression;             // Optional initializer
     }
 
     export interface VariableDeclarationList extends Node {
@@ -801,8 +803,9 @@ namespace ts {
 
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
-        questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         name: PropertyName;
+        questionToken?: QuestionToken;      // Present for use with reporting a grammar error
+        exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;           // Optional initializer
     }
@@ -860,6 +863,7 @@ namespace ts {
         dotDotDotToken?: DotDotDotToken;
         name: DeclarationName;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -947,6 +951,7 @@ namespace ts {
         kind: SyntaxKind.Constructor;
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
+        /* @internal */ returnFlowNode?: FlowNode;
     }
 
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
@@ -2761,12 +2766,16 @@ namespace ts {
         getAmbientModules(): Symbol[];
 
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
-        /** Unlike `tryGetMemberInModuleExports`, this includes properties of an `export =` value. */
+        /**
+         * Unlike `tryGetMemberInModuleExports`, this includes properties of an `export =` value.
+         * Does *not* return properties of primitive types.
+         */
         /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
         getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
-        /* @internal */ getBaseConstraintOfType(type: Type): Type | undefined;
+        getBaseConstraintOfType(type: Type): Type | undefined;
+        getDefaultFromTypeParameter(type: Type): Type | undefined;
 
         /* @internal */ getAnyType(): Type;
         /* @internal */ getStringType(): Type;
@@ -3571,15 +3580,17 @@ namespace ts {
 
     export interface TypeVariable extends Type {
         /* @internal */
-        resolvedBaseConstraint: Type;
+        resolvedBaseConstraint?: Type;
         /* @internal */
-        resolvedIndexType: IndexType;
+        resolvedIndexType?: IndexType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends TypeVariable {
         /** Retrieve using getConstraintFromTypeParameter */
-        constraint: Type;        // Constraint
+        /* @internal */
+        constraint?: Type;        // Constraint
+        /* @internal */
         default?: Type;
         /* @internal */
         target?: TypeParameter;  // Instantiation target
@@ -3855,6 +3866,7 @@ namespace ts {
         strict?: boolean;
         strictFunctionTypes?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
+        strictPropertyInitialization?: boolean;  // Always combine with strict property
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;

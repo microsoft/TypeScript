@@ -8,22 +8,26 @@ declare class C<T> { t: T }
 === tests/cases/conformance/jsdoc/badTypeArguments.js ===
 /** @param {C.<>} x */
 /** @param {C.<number,>} y */
-function f(x, y) {
+// @ts-ignore
+/** @param {C.<number,>} skipped */
+function f(x, y, skipped) {
 >f : Symbol(f, Decl(badTypeArguments.js, 0, 0))
->x : Symbol(x, Decl(badTypeArguments.js, 2, 11))
->y : Symbol(y, Decl(badTypeArguments.js, 2, 13))
+>x : Symbol(x, Decl(badTypeArguments.js, 4, 11))
+>y : Symbol(y, Decl(badTypeArguments.js, 4, 13))
+>skipped : Symbol(skipped, Decl(badTypeArguments.js, 4, 16))
 
     return x.t + y.t;
 >x.t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
->x : Symbol(x, Decl(badTypeArguments.js, 2, 11))
+>x : Symbol(x, Decl(badTypeArguments.js, 4, 11))
 >t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
 >y.t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
->y : Symbol(y, Decl(badTypeArguments.js, 2, 13))
+>y : Symbol(y, Decl(badTypeArguments.js, 4, 13))
 >t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
 }
-var x = f({ t: 1000 }, { t: 3000 });
->x : Symbol(x, Decl(badTypeArguments.js, 5, 3))
+var x = f({ t: 1000 }, { t: 3000 }, { t: 5000 });
+>x : Symbol(x, Decl(badTypeArguments.js, 7, 3))
 >f : Symbol(f, Decl(badTypeArguments.js, 0, 0))
->t : Symbol(t, Decl(badTypeArguments.js, 5, 11))
->t : Symbol(t, Decl(badTypeArguments.js, 5, 24))
+>t : Symbol(t, Decl(badTypeArguments.js, 7, 11))
+>t : Symbol(t, Decl(badTypeArguments.js, 7, 24))
+>t : Symbol(t, Decl(badTypeArguments.js, 7, 37))
 

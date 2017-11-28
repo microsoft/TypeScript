@@ -1,0 +1,226 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts ===
+// Properties with non-undefined types require initialization
+
+class C1 {
+>C1 : C1
+
+    a: number;  // Error
+>a : number
+
+    b: number | undefined;
+>b : number | undefined
+
+    c: number | null;  // Error
+>c : number | null
+>null : null
+
+    d?: number;
+>d : number | undefined
+}
+
+// No strict initialization checks in ambient contexts
+
+declare class C2 {
+>C2 : C2
+
+    a: number;
+>a : number
+
+    b: number | undefined;
+>b : number | undefined
+
+    c: number | null;
+>c : number | null
+>null : null
+
+    d?: number;
+>d : number | undefined
+}
+
+// No strict initialization checks for static members
+
+class C3 {
+>C3 : C3
+
+    static a: number;
+>a : number
+
+    static b: number | undefined;
+>b : number | undefined
+
+    static c: number | null;
+>c : number | null
+>null : null
+
+    static d?: number;
+>d : number | undefined
+}
+
+// Initializer satisfies strict initialization check
+
+class C4 {
+>C4 : C4
+
+    a = 0;
+>a : number
+>0 : 0
+
+    b: number = 0;
+>b : number
+>0 : 0
+
+    c: string = "abc";
+>c : string
+>"abc" : "abc"
+}
+
+// Assignment in constructor satisfies strict initialization check
+
+class C5 {
+>C5 : C5
+
+    a: number;
+>a : number
+
+    constructor() {
+        this.a = 0;
+>this.a = 0 : 0
+>this.a : number
+>this : this
+>a : number
+>0 : 0
+    }
+}
+
+// All code paths must contain assignment
+
+class C6 {
+>C6 : C6
+
+    a: number;  // Error
+>a : number
+
+    constructor(cond: boolean) {
+>cond : boolean
+
+        if (cond) {
+>cond : boolean
+
+            return;
+        }
+        this.a = 0;
+>this.a = 0 : 0
+>this.a : number
+>this : this
+>a : number
+>0 : 0
+    }
+}
+
+class C7 {
+>C7 : C7
+
+    a: number;
+>a : number
+
+    constructor(cond: boolean) {
+>cond : boolean
+
+        if (cond) {
+>cond : boolean
+
+            this.a = 1;
+>this.a = 1 : 1
+>this.a : number
+>this : this
+>a : number
+>1 : 1
+
+            return;
+        }
+        this.a = 0;
+>this.a = 0 : 0
+>this.a : number
+>this : this
+>a : number
+>0 : 0
+    }
+}
+
+// Properties with string literal names aren't checked
+
+class C8 {
+>C8 : C8
+
+    a: number;  // Error
+>a : number
+
+    "b": number;
+    0: number;
+}
+
+// No strict initialization checks for abstract members
+
+abstract class C9 {
+>C9 : C9
+
+    abstract a: number;
+>a : number
+
+    abstract b: number | undefined;
+>b : number | undefined
+
+    abstract c: number | null;
+>c : number | null
+>null : null
+
+    abstract d?: number;
+>d : number | undefined
+}
+
+// Properties with non-undefined types must be assigned before they can be accessed
+// within their constructor
+
+class C10 {
+>C10 : C10
+
+    a: number;
+>a : number
+
+    b: number;
+>b : number
+
+    c?: number;
+>c : number | undefined
+
+    constructor() {
+        let x = this.a;  // Error
+>x : number
+>this.a : number
+>this : this
+>a : number
+
+        this.a = this.b;  // Error
+>this.a = this.b : number
+>this.a : number
+>this : this
+>a : number
+>this.b : number
+>this : this
+>b : number
+
+        this.b = x;
+>this.b = x : number
+>this.b : number
+>this : this
+>b : number
+>x : number
+
+        let y = this.c;
+>y : number | undefined
+>this.c : number | undefined
+>this : this
+>c : number | undefined
+    }
+}
+

@@ -22,7 +22,7 @@ verify.completionListContains({ name: "foo", source: "/a" }, "const foo: 0", "",
 verify.applyCodeActionFromCompletion("b", {
     name: "foo",
     source: "/a",
-    description: `Import 'foo' from "./a".`,
+    description: `Import 'foo' from module "./a".`,
     // TODO: GH#18445
     newFileContent: `import { foo } from "./a";\r
 \r
@@ -39,7 +39,7 @@ verify.completionListContains({ name: "foo", source: "/a" }, "const foo: 0", "",
 verify.applyCodeActionFromCompletion("c", {
     name: "foo",
     source: "/a",
-    description: `Import 'foo' from "./a".`,
+    description: `Import 'foo' from module "./a".`,
     // TODO: GH#18445
     newFileContent: `import { foo } from "./a";\r
 \r

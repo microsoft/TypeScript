@@ -278,6 +278,13 @@ namespace ts {
             description: Diagnostics.Enable_strict_checking_of_function_types
         },
         {
+            name: "strictPropertyInitialization",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_checking_of_property_initialization_in_classes
+        },
+        {
             name: "noImplicitThis",
             type: "boolean",
             showInSimplifiedHelpView: true,

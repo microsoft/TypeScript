@@ -1260,10 +1260,12 @@ namespace ts {
         return result;
     }
 
-    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[] {
-        const result: T[] = [];
+    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[];
+    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => V): V[];
+    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue?: (value: T) => V): V[] {
+        const result: V[] = [];
         for (const value of array) {
-            result[makeKey(value)] = value;
+            result[makeKey(value)] = makeValue ? makeValue(value) : value as any as V;
         }
         return result;
     }
@@ -1969,7 +1971,7 @@ namespace ts {
                 : moduleKind === ModuleKind.System;
     }
 
-    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict";
+    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? compilerOptions.strict : compilerOptions[flag];
