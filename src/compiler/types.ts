@@ -2785,7 +2785,6 @@ namespace ts {
         /* @internal */ getNullType(): Type;
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
-        /* @internal */
         /* @internal */ getUnionType(types: Type[], subtypeReduction?: boolean): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ createPromiseType(type: Type): Type;
