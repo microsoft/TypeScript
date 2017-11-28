@@ -1385,8 +1385,7 @@ namespace ts {
         function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
-                // TODO: WRONG
-                if (symbol && !isInJavaScriptFile(errorLocation)) {
+                if (symbol) {
                     error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_value, unescapeLeadingUnderscores(name));
                     return true;
                 }
