@@ -3518,29 +3518,6 @@ namespace ts {
         return 0;
     }
 
-    export function levenshtein(s1: string, s2: string): number {
-        let previous: number[] = new Array(s2.length + 1);
-        let current: number[] = new Array(s2.length + 1);
-        for (let i = 0; i < s2.length + 1; i++) {
-            previous[i] = i;
-            current[i] = -1;
-        }
-        for (let i = 1; i < s1.length + 1; i++) {
-            current[0] = i;
-            for (let j = 1; j < s2.length + 1; j++) {
-                current[j] = Math.min(
-                    previous[j] + 1,
-                    current[j - 1] + 1,
-                    previous[j - 1] + (s1[i - 1] === s2[j - 1] ? 0 : 2));
-            }
-            // shift current back to previous, and then reuse previous' array
-            const tmp = previous;
-            previous = current;
-            current = tmp;
-        }
-        return previous[previous.length - 1];
-    }
-
     export function skipAlias(symbol: Symbol, checker: TypeChecker) {
         return symbol.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
     }
