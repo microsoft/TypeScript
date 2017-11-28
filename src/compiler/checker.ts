@@ -251,6 +251,7 @@ namespace ts {
             getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
             getBaseConstraintOfType,
+            getDefaultFromTypeParameter: type => type && type.flags & TypeFlags.TypeParameter ? getDefaultFromTypeParameter(type as TypeParameter) : undefined,
             resolveName(name, location, meaning) {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
             },
@@ -4054,15 +4055,15 @@ namespace ts {
             }
         }
 
-        function collectLinkedAliases(node: Identifier): Node[] {
+        function collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined {
             let exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-                exportSymbol = resolveName(node.parent, node.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node, /*isUse*/ false);
+                exportSymbol = resolveName(node, node.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, node, /*isUse*/ false);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
                 exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
-            const result: Node[] = [];
+            let result: Node[];
             if (exportSymbol) {
                 buildVisibleNodeList(exportSymbol.declarations);
             }
@@ -4070,9 +4071,14 @@ namespace ts {
 
             function buildVisibleNodeList(declarations: Declaration[]) {
                 forEach(declarations, declaration => {
-                    getNodeLinks(declaration).isVisible = true;
                     const resultNode = getAnyImportSyntax(declaration) || declaration;
-                    pushIfUnique(result, resultNode);
+                    if (setVisibility) {
+                        getNodeLinks(declaration).isVisible = true;
+                    }
+                    else {
+                        result = result || [];
+                        pushIfUnique(result, resultNode);
+                    }
 
                     if (isInternalModuleImportEqualsDeclaration(declaration)) {
                         // Add the referenced top container visible
@@ -4231,7 +4237,7 @@ namespace ts {
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type {
             const pattern = declaration.parent;
-            const parentType = getTypeForBindingElementParent(pattern.parent);
+            let parentType = getTypeForBindingElementParent(pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -4273,6 +4279,10 @@ namespace ts {
                     // or otherwise the type of the string index signature.
                     const text = getTextOfPropertyName(name);
 
+                    // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
+                    if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
+                        parentType = getNonNullableType(parentType);
+                    }
                     const declaredType = getTypeOfPropertyOfType(parentType, text);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
@@ -15746,59 +15756,93 @@ namespace ts {
          *    except for candidates:
          *      * With no name
          *      * Whose meaning doesn't match the `meaning` parameter.
-         *      * Whose length differs from the target name by more than 0.3 of the length of the name.
+         *      * Whose length differs from the target name by more than 0.34 of the length of the name.
          *      * Whose levenshtein distance is more than 0.4 of the length of the name
          *        (0.4 allows 1 substitution/transposition for every 5 characters,
          *         and 1 insertion/deletion at 3 characters)
-         * Names longer than 30 characters don't get suggestions because Levenshtein distance is an n**2 algorithm.
          */
         function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
-            const worstDistance = name.length * 0.4;
-            const maximumLengthDifference = Math.min(3, name.length * 0.34);
-            let bestDistance = Number.MAX_VALUE;
-            let bestCandidate = undefined;
+            const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
+            let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result isn't better than this, don't bother.
+            let bestCandidate: Symbol | undefined;
             let justCheckExactMatches = false;
-            if (name.length > 30) {
-                return undefined;
-            }
-            name = name.toLowerCase();
+            const nameLowerCase = name.toLowerCase();
             for (const candidate of symbols) {
-                let candidateName = symbolName(candidate);
-                if (candidate.flags & meaning &&
-                    candidateName &&
-                    Math.abs(candidateName.length - name.length) < maximumLengthDifference) {
-                    candidateName = candidateName.toLowerCase();
-                    if (candidateName === name) {
-                        return candidate;
-                    }
-                    if (justCheckExactMatches) {
-                        continue;
-                    }
-                    if (candidateName.length < 3 ||
-                        name.length < 3 ||
-                        candidateName === "eval" ||
-                        candidateName === "intl" ||
-                        candidateName === "undefined" ||
-                        candidateName === "map" ||
-                        candidateName === "nan" ||
-                        candidateName === "set") {
-                        continue;
-                    }
-                    const distance = levenshtein(name, candidateName);
-                    if (distance > worstDistance) {
-                        continue;
-                    }
-                    if (distance < 3) {
-                        justCheckExactMatches = true;
-                        bestCandidate = candidate;
-                    }
-                    else if (distance < bestDistance) {
-                        bestDistance = distance;
-                        bestCandidate = candidate;
-                    }
+                const candidateName = symbolName(candidate);
+                if (!(candidate.flags & meaning && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference)) {
+                    continue;
+                }
+                const candidateNameLowerCase = candidateName.toLowerCase();
+                if (candidateNameLowerCase === nameLowerCase) {
+                    return candidate;
+                }
+                if (justCheckExactMatches) {
+                    continue;
+                }
+                if (candidateName.length < 3) {
+                    // Don't bother, user would have noticed a 2-character name having an extra character
+                    continue;
+                }
+                // Only care about a result better than the best so far.
+                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance - 1);
+                if (distance === undefined) {
+                    continue;
+                }
+                if (distance < 3) {
+                    justCheckExactMatches = true;
+                    bestCandidate = candidate;
+                }
+                else {
+                    Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
+                    bestDistance = distance;
+                    bestCandidate = candidate;
                 }
             }
             return bestCandidate;
+        }
+
+        function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
+            let previous = new Array(s2.length + 1);
+            let current = new Array(s2.length + 1);
+            /** Represents any value > max. We don't care about the particular value. */
+            const big = max + 1;
+
+            for (let i = 0; i <= s2.length; i++) {
+                previous[i] = i;
+            }
+
+            for (let i = 1; i <= s1.length; i++) {
+                const c1 = s1.charCodeAt(i - 1);
+                const minJ = i > max ? i - max : 1;
+                const maxJ = s2.length > max + i ? max + i : s2.length;
+                current[0] = i;
+                /** Smallest value of the matrix in the ith column. */
+                let colMin = i;
+                for (let j = 1; j < minJ; j++) {
+                    current[j] = big;
+                }
+                for (let j = minJ; j <= maxJ; j++) {
+                    const dist = c1 === s2.charCodeAt(j - 1)
+                        ? previous[j - 1]
+                        : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ previous[j - 1] + 2);
+                    current[j] = dist;
+                    colMin = Math.min(colMin, dist);
+                }
+                for (let j = maxJ + 1; j <= s2.length; j++) {
+                    current[j] = big;
+                }
+                if (colMin > max) {
+                    // Give up -- everything in this column is > max and it can't get better in future columns.
+                    return undefined;
+                }
+
+                const temp = previous;
+                previous = current;
+                current = temp;
+            }
+
+            const res = previous[s2.length];
+            return res > max ? undefined : res;
         }
 
         function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
@@ -23335,6 +23379,9 @@ namespace ts {
 
         function checkExportSpecifier(node: ExportSpecifier) {
             checkAliasSymbol(node);
+            if (compilerOptions.declaration) {
+                collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true);
+            }
             if (!(<ExportDeclaration>node.parent.parent).moduleSpecifier) {
                 const exportedName = node.propertyName || node.name;
                 // find immediate value referenced by exported name (SymbolFlags.Alias is set so we don't chase down aliases)
@@ -23372,6 +23419,10 @@ namespace ts {
             }
             if (node.expression.kind === SyntaxKind.Identifier) {
                 markExportAsReferenced(node);
+
+                if (compilerOptions.declaration) {
+                    collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true);
+                }
             }
             else {
                 checkExpressionCached(node.expression);
@@ -26243,14 +26294,17 @@ namespace ts {
         }
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
-            if (node.typeParameters) {
-                return grammarErrorAtPos(node, node.typeParameters.pos, node.typeParameters.end - node.typeParameters.pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
+            const typeParameters = getEffectiveTypeParameterDeclarations(node);
+            if (typeParameters) {
+                const { pos, end } = isNodeArray(typeParameters) ? typeParameters : first(typeParameters);
+                return grammarErrorAtPos(node, pos, end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }
 
         function checkGrammarConstructorTypeAnnotation(node: ConstructorDeclaration) {
-            if (node.type) {
-                return grammarErrorOnNode(node.type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
+            const type = getEffectiveReturnTypeNode(node);
+            if (type) {
+                return grammarErrorOnNode(type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
             }
         }
 

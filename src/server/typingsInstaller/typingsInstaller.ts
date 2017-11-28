@@ -257,8 +257,9 @@ namespace ts.server.typingsInstaller {
             const filteredTypings = this.filterTypings(typingsToInstall);
             if (filteredTypings.length === 0) {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`All typings are known to be missing or invalid - no need to go any further`);
+                    this.log.writeLine(`All typings are known to be missing or invalid - no need to install more typings`);
                 }
+                this.sendResponse(this.createSetTypings(req, currentlyCachedTypings));
                 return;
             }
 

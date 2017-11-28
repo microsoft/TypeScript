@@ -232,7 +232,7 @@ namespace ts.projectSystem {
             return this.executeCommand(<T>request);
         }
 
-        public event<T>(body: T, eventName: string) {
+        public event<T extends object>(body: T, eventName: string) {
             this.events.push(server.toEvent(eventName, body));
             super.event(body, eventName);
         }
@@ -1561,7 +1561,11 @@ namespace ts.projectSystem {
                 path: "/a/b/foo.js",
                 content: ""
             };
-            const host = createServerHost([file1, file2, customTypesMap]);
+            const file3 = {
+                path: "/a/b/Bacon.js",
+                content: "let y = 5"
+            };
+            const host = createServerHost([file1, file2, file3, customTypesMap]);
             const projectService = createProjectService(host);
             try {
                 projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]), typeAcquisition: { enable: true } });

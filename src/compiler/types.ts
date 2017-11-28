@@ -2771,7 +2771,8 @@ namespace ts {
         getApparentType(type: Type): Type;
         getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
-        /* @internal */ getBaseConstraintOfType(type: Type): Type | undefined;
+        getBaseConstraintOfType(type: Type): Type | undefined;
+        getDefaultFromTypeParameter(type: Type): Type | undefined;
 
         /* @internal */ getAnyType(): Type;
         /* @internal */ getStringType(): Type;
@@ -3575,15 +3576,17 @@ namespace ts {
 
     export interface TypeVariable extends Type {
         /* @internal */
-        resolvedBaseConstraint: Type;
+        resolvedBaseConstraint?: Type;
         /* @internal */
-        resolvedIndexType: IndexType;
+        resolvedIndexType?: IndexType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends TypeVariable {
         /** Retrieve using getConstraintFromTypeParameter */
-        constraint: Type;        // Constraint
+        /* @internal */
+        constraint?: Type;        // Constraint
+        /* @internal */
         default?: Type;
         /* @internal */
         target?: TypeParameter;  // Instantiation target

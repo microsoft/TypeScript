@@ -488,7 +488,7 @@ namespace ts.Completions {
         const moduleSymbols = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
         Debug.assert(contains(moduleSymbols, moduleSymbol));
 
-        const sourceDisplay = [textPart(codefix.getModuleSpecifierForNewImport(sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host))];
+        const sourceDisplay = [textPart(first(codefix.getModuleSpecifiersForNewImport(sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host)))];
         const codeActions = codefix.getCodeActionForImport(moduleSymbols, {
             host,
             checker,
@@ -942,6 +942,7 @@ namespace ts.Completions {
                     scopeNode.kind === SyntaxKind.SourceFile ||
                     scopeNode.kind === SyntaxKind.TemplateExpression ||
                     scopeNode.kind === SyntaxKind.JsxExpression ||
+                    scopeNode.kind === SyntaxKind.Block || // Some blocks aren't statements, but all get global completions
                     isStatement(scopeNode);
             }
 

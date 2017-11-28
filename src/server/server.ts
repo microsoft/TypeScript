@@ -290,7 +290,7 @@ namespace ts.server {
             return false;
         }
 
-        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult> {
+        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
             const rq: InstallPackageRequest = { kind: "installPackage", ...options };
             this.send(rq);
             Debug.assert(this.packageInstalledPromise === undefined);
@@ -392,7 +392,7 @@ namespace ts.server {
                 case EventTypesRegistry:
                     this.typesRegistryCache = ts.createMapFromTemplate(response.typesRegistry);
                     break;
-                case EventPackageInstalled: {
+                case ActionPackageInstalled: {
                     const { success, message } = response;
                     if (success) {
                         this.packageInstalledPromise.resolve({ successMessage: message });
@@ -401,6 +401,11 @@ namespace ts.server {
                         this.packageInstalledPromise.reject(message);
                     }
                     this.packageInstalledPromise = undefined;
+
+                    this.projectService.updateTypingsForProject(response);
+
+                    // The behavior is the same as for setTypings, so send the same event.
+                    this.event(response, "setTypings");
                     break;
                 }
                 case EventInitializationFailed:
@@ -502,7 +507,7 @@ namespace ts.server {
         constructor(options: IoSessionOptions) {
             const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
 
-            const event: Event | undefined = (body: {}, eventName: string) => {
+            const event: Event | undefined = (body: object, eventName: string) => {
                 if (this.constructed) {
                     this.event(body, eventName);
                 }
@@ -551,7 +556,7 @@ namespace ts.server {
             this.constructed = true;
         }
 
-        event<T>(body: T, eventName: string): void {
+        event<T extends object>(body: T, eventName: string): void {
             Debug.assert(this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
             if (this.canUseEvents && this.eventPort) {
@@ -572,8 +577,8 @@ namespace ts.server {
             }
         }
 
-        private writeToEventSocket(body: any, eventName: string): void {
-            this.eventSocket.write(formatMessage(toEvent(body, eventName), this.logger, this.byteLength, this.host.newLine), "utf8");
+        private writeToEventSocket(body: object, eventName: string): void {
+            this.eventSocket.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
         }
 
         exit() {

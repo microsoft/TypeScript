@@ -1329,13 +1329,17 @@ namespace ts {
         return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
     }
 
-    export function getSourceFileImportLocation(node: SourceFile) {
-        // For a source file, it is possible there are detached comments we should not skip
-        const text = node.text;
-        const textLength = text.length;
-        let ranges = getLeadingCommentRanges(text, 0);
-        if (!ranges) return 0;
+    export function getSourceFileImportLocation({ text }: SourceFile) {
+        const shebang = getShebang(text);
         let position = 0;
+        if (shebang !== undefined) {
+            position = shebang.length;
+            advancePastLineBreak();
+        }
+
+        // For a source file, it is possible there are detached comments we should not skip
+        let ranges = getLeadingCommentRanges(text, position);
+        if (!ranges) return position;
         // However we should still skip a pinned comment at the top
         if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
             position = ranges[0].end;
@@ -1344,7 +1348,7 @@ namespace ts {
         }
         // As well as any triple slash references
         for (const range of ranges) {
-            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
+            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(text, range.pos, range.end)) {
                 position = range.end;
                 advancePastLineBreak();
                 continue;
@@ -1354,12 +1358,12 @@ namespace ts {
         return position;
 
         function advancePastLineBreak() {
-            if (position < textLength) {
+            if (position < text.length) {
                 const charCode = text.charCodeAt(position);
                 if (isLineBreak(charCode)) {
                     position++;
 
-                    if (position < textLength && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
+                    if (position < text.length && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
                         position++;
                     }
                 }

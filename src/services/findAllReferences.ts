@@ -1427,10 +1427,7 @@ namespace ts.FindAllReferences.Core {
         // we should include both parameter declaration symbol and property declaration symbol
         // Parameter Declaration symbol is only visible within function scope, so the symbol is stored in constructor.locals.
         // Property Declaration symbol is a member of the class, so the symbol is stored in its class Declaration.symbol.members
-        if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.Parameter &&
-            isParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration)) {
-            addRange(result, checker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
-        }
+        addRange(result, getParameterPropertySymbols(symbol, checker));
 
         // If this is symbol of binding element without propertyName declaration in Object binding pattern
         // Include the property in the search
@@ -1458,6 +1455,12 @@ namespace ts.FindAllReferences.Core {
                 }
             }
         }
+    }
+
+    function getParameterPropertySymbols(symbol: Symbol, checker: TypeChecker): Symbol[] {
+        return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isParameterPropertyDeclaration(symbol.valueDeclaration)
+            ? checker.getSymbolsOfParameterPropertyDeclaration(symbol.valueDeclaration, symbol.name)
+            : undefined;
     }
 
     /**
@@ -1519,8 +1522,17 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): Symbol | undefined {
+        const { checker } = state;
         if (search.includes(referenceSymbol)) {
             return referenceSymbol;
+        }
+
+        if (referenceSymbol.flags & SymbolFlags.FunctionScopedVariable) {
+            Debug.assert(!(referenceSymbol.flags & SymbolFlags.Property));
+            const paramProps = getParameterPropertySymbols(referenceSymbol, checker);
+            if (paramProps) {
+                return getRelatedSymbol(search, find(paramProps, x => !!(x.flags & SymbolFlags.Property))!, referenceLocation, state);
+            }
         }
 
         // If the reference location is in an object literal, try to get the contextual type for the
@@ -1528,8 +1540,8 @@ namespace ts.FindAllReferences.Core {
         // compare to our searchSymbol
         const containingObjectLiteralElement = getContainingObjectLiteralElement(referenceLocation);
         if (containingObjectLiteralElement) {
-            const contextualSymbol = forEach(getPropertySymbolsFromContextualType(containingObjectLiteralElement, state.checker), contextualSymbol =>
-                find(state.checker.getRootSymbols(contextualSymbol), search.includes));
+            const contextualSymbol = forEach(getPropertySymbolsFromContextualType(containingObjectLiteralElement, checker), contextualSymbol =>
+                find(checker.getRootSymbols(contextualSymbol), search.includes));
 
             if (contextualSymbol) {
                 return contextualSymbol;
@@ -1539,7 +1551,7 @@ namespace ts.FindAllReferences.Core {
             // Get the property symbol from the object literal's type and look if thats the search symbol
             // In below eg. get 'property' from type of elems iterating type
             //      for ( { property: p2 } of elems) { }
-            const propertySymbol = getPropertySymbolOfDestructuringAssignment(referenceLocation, state.checker);
+            const propertySymbol = getPropertySymbolOfDestructuringAssignment(referenceLocation, checker);
             if (propertySymbol && search.includes(propertySymbol)) {
                 return propertySymbol;
             }
@@ -1548,7 +1560,7 @@ namespace ts.FindAllReferences.Core {
         // If the reference location is the binding element and doesn't have property name
         // then include the binding element in the related symbols
         //      let { a } : { a };
-        const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol, state.checker);
+        const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol, checker);
         if (bindingElementPropertySymbol) {
             const fromBindingElement = findRootSymbol(bindingElementPropertySymbol);
             if (fromBindingElement) return fromBindingElement;
