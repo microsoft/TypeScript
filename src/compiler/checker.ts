@@ -1907,7 +1907,6 @@ namespace ts {
             }
 
             const type = getTypeOfSymbol(exportEquals);
-            // If the apparent type is different, this is a primitive, so let's not treat that as an exported symbol.
             return type.flags & TypeFlags.Primitive ? undefined : getPropertyOfType(type, memberName);
         }
 
