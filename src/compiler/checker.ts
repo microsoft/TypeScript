@@ -21462,6 +21462,10 @@ namespace ts {
         }
 
         function errorNextVariableOrPropertyDeclarationMustHaveSameType(firstDeclaration: Declaration, firstType: Type, nextDeclaration: Declaration, nextType: Type): void {
+            if (isIdentifier(firstDeclaration) || isIdentifier(nextDeclaration)) {
+                // js static assignment declarations don't have a type, so don't have to be consistent
+                return;
+            }
             const firstSourceFile = getSourceFileOfNode(firstDeclaration);
             const firstSpan = getErrorSpanForNode(firstSourceFile, getNameOfDeclaration(firstDeclaration) || firstDeclaration);
             const firstLocation = getLineAndCharacterOfPosition(firstSourceFile, firstSpan.start);
