@@ -76,13 +76,13 @@ namespace ts {
             name: "target",
             shortName: "t",
             type: createMapFromTemplate({
-                "es3": ScriptTarget.ES3,
-                "es5": ScriptTarget.ES5,
-                "es6": ScriptTarget.ES2015,
-                "es2015": ScriptTarget.ES2015,
-                "es2016": ScriptTarget.ES2016,
-                "es2017": ScriptTarget.ES2017,
-                "esnext": ScriptTarget.ESNext,
+                es3: ScriptTarget.ES3,
+                es5: ScriptTarget.ES5,
+                es6: ScriptTarget.ES2015,
+                es2015: ScriptTarget.ES2015,
+                es2016: ScriptTarget.ES2016,
+                es2017: ScriptTarget.ES2017,
+                esnext: ScriptTarget.ESNext,
             }),
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
@@ -93,14 +93,14 @@ namespace ts {
             name: "module",
             shortName: "m",
             type: createMapFromTemplate({
-                "none": ModuleKind.None,
-                "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD,
-                "system": ModuleKind.System,
-                "umd": ModuleKind.UMD,
-                "es6": ModuleKind.ES2015,
-                "es2015": ModuleKind.ES2015,
-                "esnext": ModuleKind.ESNext
+                none: ModuleKind.None,
+                commonjs: ModuleKind.CommonJS,
+                amd: ModuleKind.AMD,
+                system: ModuleKind.System,
+                umd: ModuleKind.UMD,
+                es6: ModuleKind.ES2015,
+                es2015: ModuleKind.ES2015,
+                esnext: ModuleKind.ESNext
             }),
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
@@ -141,6 +141,7 @@ namespace ts {
                     "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts",
                     "es2017.string": "lib.es2017.string.d.ts",
                     "es2017.intl": "lib.es2017.intl.d.ts",
+                    "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
                     "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
                 }),
             },
@@ -277,6 +278,13 @@ namespace ts {
             description: Diagnostics.Enable_strict_checking_of_function_types
         },
         {
+            name: "strictPropertyInitialization",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_checking_of_property_initialization_in_classes
+        },
+        {
             name: "noImplicitThis",
             type: "boolean",
             showInSimplifiedHelpView: true,
@@ -325,8 +333,8 @@ namespace ts {
         {
             name: "moduleResolution",
             type: createMapFromTemplate({
-                "node": ModuleResolutionKind.NodeJs,
-                "classic": ModuleResolutionKind.Classic,
+                node: ModuleResolutionKind.NodeJs,
+                classic: ModuleResolutionKind.Classic,
             }),
             paramType: Diagnostics.STRATEGY,
             category: Diagnostics.Module_Resolution_Options,
@@ -521,8 +529,8 @@ namespace ts {
         {
             name: "newLine",
             type: createMapFromTemplate({
-                "crlf": NewLineKind.CarriageReturnLineFeed,
-                "lf": NewLineKind.LineFeed
+                crlf: NewLineKind.CarriageReturnLineFeed,
+                lf: NewLineKind.LineFeed
             }),
             paramType: Diagnostics.NEWLINE,
             category: Diagnostics.Advanced_Options,
@@ -1539,7 +1547,7 @@ namespace ts {
             host: ParseConfigHost,
             basePath: string,
             configFileName: string,
-            getCanonicalFileName: (fileName: string) => string,
+            getCanonicalFileName: GetCanonicalFileName,
             resolutionStack: Path[],
             errors: Push<Diagnostic>,
     ): ParsedTsconfig {
@@ -1587,7 +1595,7 @@ namespace ts {
         json: any,
         host: ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         configFileName: string | undefined,
         errors: Push<Diagnostic>
     ): ParsedTsconfig {
@@ -1618,7 +1626,7 @@ namespace ts {
         sourceFile: JsonSourceFile,
         host: ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         configFileName: string | undefined,
         errors: Push<Diagnostic>
     ): ParsedTsconfig {
@@ -1687,7 +1695,7 @@ namespace ts {
         extendedConfig: string,
         host: ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         errors: Push<Diagnostic>,
         createDiagnostic: (message: DiagnosticMessage, arg1?: string) => Diagnostic) {
         extendedConfig = normalizeSlashes(extendedConfig);
@@ -1712,7 +1720,7 @@ namespace ts {
         extendedConfigPath: Path,
         host: ts.ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         resolutionStack: Path[],
         errors: Push<Diagnostic>,
     ): ParsedTsconfig | undefined {

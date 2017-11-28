@@ -269,6 +269,24 @@ namespace ts.NavigationBar {
                 addLeafNode(node);
                 break;
 
+            case SyntaxKind.BinaryExpression: {
+                const special = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                switch (special) {
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
+                        break;
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case SpecialPropertyAssignmentKind.Property:
+                    case SpecialPropertyAssignmentKind.None:
+                        break;
+                    default:
+                        Debug.assertNever(special);
+                }
+            }
+            // falls through
+
             default:
                 if (hasJSDocNodes(node)) {
                     forEach(node.jsDoc, jsDoc => {
@@ -366,15 +384,9 @@ namespace ts.NavigationBar {
         children.sort(compareChildren);
     }
 
-    function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode): number {
-        const name1 = tryGetName(child1.node), name2 = tryGetName(child2.node);
-        if (name1 && name2) {
-            const cmp = ts.compareStringsCaseInsensitive(name1, name2);
-            return cmp !== 0 ? cmp : navigationBarNodeKind(child1) - navigationBarNodeKind(child2);
-        }
-        else {
-            return name1 ? 1 : name2 ? -1 : navigationBarNodeKind(child1) - navigationBarNodeKind(child2);
-        }
+    function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode) {
+        return compareStringsCaseSensitiveUI(tryGetName(child1.node), tryGetName(child2.node))
+            || compareValues(navigationBarNodeKind(child1), navigationBarNodeKind(child2));
     }
 
     /**

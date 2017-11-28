@@ -124,7 +124,9 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
-    export let sys: System = (function() {
+    export let sys: System = (() => {
+        const utf8ByteOrderMark = "\u00EF\u00BB\u00BF";
+
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
@@ -348,7 +350,7 @@ namespace ts {
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
-                    data = "\uFEFF" + data;
+                    data = utf8ByteOrderMark + data;
                 }
 
                 let fd: number;
@@ -511,7 +513,7 @@ namespace ts {
                             return stat.size;
                         }
                     }
-                    catch (e) { }
+                    catch { /*ignore*/ }
                     return 0;
                 },
                 exit(exitCode?: number): void {
@@ -525,7 +527,7 @@ namespace ts {
                     try {
                         require("source-map-support").install();
                     }
-                    catch (e) {
+                    catch {
                         // Could not enable source maps.
                     }
                 },
@@ -549,7 +551,7 @@ namespace ts {
                 writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
                     // If a BOM is required, emit one
                     if (writeByteOrderMark) {
-                        data = "\uFEFF" + data;
+                        data = utf8ByteOrderMark + data;
                     }
 
                     ChakraHost.writeFile(path, data);
@@ -594,7 +596,7 @@ namespace ts {
         if (sys) {
             // patch writefile to create folder before writing the file
             const originalWriteFile = sys.writeFile;
-            sys.writeFile = function(path, data, writeBom) {
+            sys.writeFile = (path, data, writeBom) => {
                 const directoryPath = getDirectoryPath(normalizeSlashes(path));
                 if (directoryPath && !sys.directoryExists(directoryPath)) {
                     recursiveCreateDirectory(directoryPath, sys);

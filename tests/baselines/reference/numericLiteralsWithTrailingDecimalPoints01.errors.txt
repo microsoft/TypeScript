@@ -1,6 +1,6 @@
 tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(3,3): error TS1005: ';' expected.
 tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,15): error TS1005: ',' expected.
-tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,23): error TS1005: '=' expected.
+tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,23): error TS1005: ',' expected.
 tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,24): error TS1109: Expression expected.
 
 
@@ -19,7 +19,7 @@ tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,24): error 
                   ~~~~~~~~
 !!! error TS1005: ',' expected.
                           ~
-!!! error TS1005: '=' expected.
+!!! error TS1005: ',' expected.
                            ~
 !!! error TS1109: Expression expected.
     var test3 = 3 .toString();

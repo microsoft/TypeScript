@@ -131,13 +131,14 @@ namespace RWC {
                                 }
                                 else {
                                     // set the flag to put default library to the beginning of the list
-                                    inputFiles.unshift(Harness.getDefaultLibraryFile(oldIO));
+                                    inputFiles.unshift(Harness.getDefaultLibraryFile(fileRead.path, oldIO));
                                 }
                             }
                         }
                     }
 
                     // do not use lib since we already read it in above
+                    opts.options.lib = undefined;
                     opts.options.noLib = true;
 
                     // Emit the results
@@ -245,10 +246,8 @@ class RWCRunner extends RunnerBase {
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
-
-        for (let i = 0; i < testList.length; i++) {
-            this.runTest(testList[i]);
+        for (const test of this.tests && this.tests.length ? this.tests : this.enumerateTestFiles()) {
+            this.runTest(test);
         }
     }
 
