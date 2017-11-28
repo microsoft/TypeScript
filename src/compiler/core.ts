@@ -394,6 +394,14 @@ namespace ts {
         return result;
     }
 
+    export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
+        return { next };
+        function next(): { value: U, done: false } | { value: never, done: true } {
+            const iterRes = iter.next();
+            return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+        }
+    }
+
     // Maps from T to T and avoids allocation if all elements map to themselves
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
     export function sameMap<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => T): ReadonlyArray<T>;
@@ -917,6 +925,36 @@ namespace ts {
         return array.slice().sort(comparer);
     }
 
+    export function best<T>(iter: Iterator<T>, isBetter: (a: T, b: T) => boolean): T | undefined {
+        const x = iter.next();
+        if (x.done) {
+            return undefined;
+        }
+        let best = x.value;
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) {
+                return best;
+            }
+            if (isBetter(value, best)) {
+                best = value;
+            }
+        }
+    }
+
+    export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
+        let i = 0;
+        return { next: () => {
+            if (i === array.length) {
+                return { value: undefined as never, done: true };
+            }
+            else {
+                i++;
+                return { value: array[i - 1], done: false };
+            }
+        }};
+    }
+
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
@@ -1222,10 +1260,12 @@ namespace ts {
         return result;
     }
 
-    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[] {
-        const result: T[] = [];
+    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[];
+    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => V): V[];
+    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue?: (value: T) => V): V[] {
+        const result: V[] = [];
         for (const value of array) {
-            result[makeKey(value)] = value;
+            result[makeKey(value)] = makeValue ? makeValue(value) : value as any as V;
         }
         return result;
     }
@@ -1322,6 +1362,12 @@ namespace ts {
      */
     export function isArray(value: any): value is ReadonlyArray<any> {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
+    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
+    export function toArray<T>(value: T | T[]): T[];
+    export function toArray<T>(value: T | T[]): T[] {
+        return isArray(value) ? value : [value];
     }
 
     /**
@@ -1923,7 +1969,7 @@ namespace ts {
             : moduleKind === ModuleKind.System;
     }
 
-    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict";
+    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? compilerOptions.strict : compilerOptions[flag];
@@ -2167,6 +2213,10 @@ namespace ts {
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
+    export function removeSuffix(str: string, suffix: string): string {
+        return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
     }
 
     export function stringContains(str: string, substring: string): boolean {

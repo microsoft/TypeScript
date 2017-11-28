@@ -27,7 +27,7 @@ namespace ts {
         isReservedWord(): boolean;
         isUnterminated(): boolean;
         /* @internal */
-        getNumericLiteralFlags(): NumericLiteralFlags;
+        getTokenFlags(): TokenFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
@@ -815,10 +815,7 @@ namespace ts {
 
         let token: SyntaxKind;
         let tokenValue: string;
-        let precedingLineBreak: boolean;
-        let hasExtendedUnicodeEscape: boolean;
-        let tokenIsUnterminated: boolean;
-        let numericLiteralFlags: NumericLiteralFlags;
+        let tokenFlags: TokenFlags;
 
         setText(text, start, length);
 
@@ -829,12 +826,12 @@ namespace ts {
             getTokenPos: () => tokenPos,
             getTokenText: () => text.substring(tokenPos, pos),
             getTokenValue: () => tokenValue,
-            hasExtendedUnicodeEscape: () => hasExtendedUnicodeEscape,
-            hasPrecedingLineBreak: () => precedingLineBreak,
+            hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
+            hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
-            isUnterminated: () => tokenIsUnterminated,
-            getNumericLiteralFlags: () => numericLiteralFlags,
+            isUnterminated: () => (tokenFlags & TokenFlags.Unterminated) !== 0,
+            getTokenFlags: () => tokenFlags,
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
@@ -871,7 +868,7 @@ namespace ts {
             let end = pos;
             if (text.charCodeAt(pos) === CharacterCodes.E || text.charCodeAt(pos) === CharacterCodes.e) {
                 pos++;
-                numericLiteralFlags = NumericLiteralFlags.Scientific;
+                tokenFlags |= TokenFlags.Scientific;
                 if (text.charCodeAt(pos) === CharacterCodes.plus || text.charCodeAt(pos) === CharacterCodes.minus) pos++;
                 if (isDigit(text.charCodeAt(pos))) {
                     pos++;
@@ -943,7 +940,7 @@ namespace ts {
             while (true) {
                 if (pos >= end) {
                     result += text.substring(start, pos);
-                    tokenIsUnterminated = true;
+                    tokenFlags |= TokenFlags.Unterminated;
                     error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
@@ -961,7 +958,7 @@ namespace ts {
                 }
                 if (isLineBreak(ch)) {
                     result += text.substring(start, pos);
-                    tokenIsUnterminated = true;
+                    tokenFlags |= TokenFlags.Unterminated;
                     error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
@@ -985,7 +982,7 @@ namespace ts {
             while (true) {
                 if (pos >= end) {
                     contents += text.substring(start, pos);
-                    tokenIsUnterminated = true;
+                    tokenFlags |= TokenFlags.Unterminated;
                     error(Diagnostics.Unterminated_template_literal);
                     resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
                     break;
@@ -1071,7 +1068,7 @@ namespace ts {
                 case CharacterCodes.u:
                     // '\u{DDDDDDDD}'
                     if (pos < end && text.charCodeAt(pos) === CharacterCodes.openBrace) {
-                        hasExtendedUnicodeEscape = true;
+                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
                         pos++;
                         return scanExtendedUnicodeEscape();
                     }
@@ -1240,10 +1237,7 @@ namespace ts {
 
         function scan(): SyntaxKind {
             startPos = pos;
-            hasExtendedUnicodeEscape = false;
-            precedingLineBreak = false;
-            tokenIsUnterminated = false;
-            numericLiteralFlags = 0;
+            tokenFlags = 0;
             while (true) {
                 tokenPos = pos;
                 if (pos >= end) {
@@ -1265,7 +1259,7 @@ namespace ts {
                 switch (ch) {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
-                        precedingLineBreak = true;
+                        tokenFlags |= TokenFlags.PrecedingLineBreak;
                         if (skipTrivia) {
                             pos++;
                             continue;
@@ -1396,6 +1390,9 @@ namespace ts {
                         // Multi-line comment
                         if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                             pos += 2;
+                            if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash) {
+                                tokenFlags |= TokenFlags.PrecedingJSDocComment;
+                            }
 
                             let commentClosed = false;
                             while (pos < end) {
@@ -1408,7 +1405,7 @@ namespace ts {
                                 }
 
                                 if (isLineBreak(ch)) {
-                                    precedingLineBreak = true;
+                                    tokenFlags |= TokenFlags.PrecedingLineBreak;
                                 }
                                 pos++;
                             }
@@ -1421,7 +1418,9 @@ namespace ts {
                                 continue;
                             }
                             else {
-                                tokenIsUnterminated = !commentClosed;
+                                if (!commentClosed) {
+                                    tokenFlags |= TokenFlags.Unterminated;
+                                }
                                 return token = SyntaxKind.MultiLineCommentTrivia;
                             }
                         }
@@ -1442,7 +1441,7 @@ namespace ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
-                            numericLiteralFlags = NumericLiteralFlags.HexSpecifier;
+                            tokenFlags |= TokenFlags.HexSpecifier;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
@@ -1453,7 +1452,7 @@ namespace ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
-                            numericLiteralFlags = NumericLiteralFlags.BinarySpecifier;
+                            tokenFlags |= TokenFlags.BinarySpecifier;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
@@ -1464,13 +1463,13 @@ namespace ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
-                            numericLiteralFlags = NumericLiteralFlags.OctalSpecifier;
+                            tokenFlags |= TokenFlags.OctalSpecifier;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanOctalDigits();
-                            numericLiteralFlags = NumericLiteralFlags.Octal;
+                            tokenFlags |= TokenFlags.Octal;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
@@ -1627,7 +1626,7 @@ namespace ts {
                             continue;
                         }
                         else if (isLineBreak(ch)) {
-                            precedingLineBreak = true;
+                            tokenFlags |= TokenFlags.PrecedingLineBreak;
                             pos++;
                             continue;
                         }
@@ -1670,14 +1669,14 @@ namespace ts {
                     // If we reach the end of a file, or hit a newline, then this is an unterminated
                     // regex.  Report error and return what we have so far.
                     if (p >= end) {
-                        tokenIsUnterminated = true;
+                        tokenFlags |= TokenFlags.Unterminated;
                         error(Diagnostics.Unterminated_regular_expression_literal);
                         break;
                     }
 
                     const ch = text.charCodeAt(p);
                     if (isLineBreak(ch)) {
-                        tokenIsUnterminated = true;
+                        tokenFlags |= TokenFlags.Unterminated;
                         error(Diagnostics.Unterminated_regular_expression_literal);
                         break;
                     }
@@ -1874,7 +1873,17 @@ namespace ts {
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.dot:
                     pos++;
+                    if (text.substr(tokenPos, pos + 2) === "...") {
+                        pos += 2;
+                        return token = SyntaxKind.DotDotDotToken;
+                    }
                     return token = SyntaxKind.DotToken;
+                case CharacterCodes.exclamation:
+                    pos++;
+                    return token = SyntaxKind.ExclamationToken;
+                case CharacterCodes.question:
+                    pos++;
+                    return token = SyntaxKind.QuestionToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
@@ -1882,6 +1891,7 @@ namespace ts {
                 while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
                     pos++;
                 }
+                tokenValue = text.substring(tokenPos, pos);
                 return token = SyntaxKind.Identifier;
             }
             else {
@@ -1895,7 +1905,7 @@ namespace ts {
             const saveTokenPos = tokenPos;
             const saveToken = token;
             const saveTokenValue = tokenValue;
-            const savePrecedingLineBreak = precedingLineBreak;
+            const saveTokenFlags = tokenFlags;
             const result = callback();
 
             // If our callback returned something 'falsy' or we're just looking ahead,
@@ -1906,7 +1916,7 @@ namespace ts {
                 tokenPos = saveTokenPos;
                 token = saveToken;
                 tokenValue = saveTokenValue;
-                precedingLineBreak = savePrecedingLineBreak;
+                tokenFlags = saveTokenFlags;
             }
             return result;
         }
@@ -1917,10 +1927,8 @@ namespace ts {
             const saveStartPos = startPos;
             const saveTokenPos = tokenPos;
             const saveToken = token;
-            const savePrecedingLineBreak = precedingLineBreak;
             const saveTokenValue = tokenValue;
-            const saveHasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
-            const saveTokenIsUnterminated = tokenIsUnterminated;
+            const saveTokenFlags = tokenFlags;
 
             setText(text, start, length);
             const result = callback();
@@ -1930,10 +1938,8 @@ namespace ts {
             startPos = saveStartPos;
             tokenPos = saveTokenPos;
             token = saveToken;
-            precedingLineBreak = savePrecedingLineBreak;
             tokenValue = saveTokenValue;
-            hasExtendedUnicodeEscape = saveHasExtendedUnicodeEscape;
-            tokenIsUnterminated = saveTokenIsUnterminated;
+            tokenFlags = saveTokenFlags;
 
             return result;
         }
@@ -1974,11 +1980,8 @@ namespace ts {
             startPos = textPos;
             tokenPos = textPos;
             token = SyntaxKind.Unknown;
-            precedingLineBreak = false;
-
             tokenValue = undefined;
-            hasExtendedUnicodeEscape = false;
-            tokenIsUnterminated = false;
+            tokenFlags = 0;
         }
     }
 }

@@ -111,7 +111,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A class member cannot have the '{0}' keyword.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Element członkowski klasy nie może zawierać słowa kluczowego „{0}”.]]></Val>
+            <Val><![CDATA[Składowa klasy nie może zawierać słowa kluczowego „{0}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -134,47 +134,47 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_computed_property_name_in_a_class_property_declaration_must_directly_refer_to_a_built_in_symbol_1166" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_computed_property_name_in_a_class_property_declaration_must_refer_to_an_expression_whose_type_is_a_1166" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A computed property name in a class property declaration must directly refer to a built-in symbol.]]></Val>
+          <Val><![CDATA[A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Obliczona nazwa właściwości w deklaracji właściwości klasy musi odwoływać się bezpośrednio do wbudowanego symbolu.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w deklaracji właściwości klasy musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_computed_property_name_in_a_method_overload_must_directly_refer_to_a_built_in_symbol_1168" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_computed_property_name_in_a_method_overload_must_refer_to_an_expression_whose_type_is_a_literal_ty_1168" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A computed property name in a method overload must directly refer to a built-in symbol.]]></Val>
+          <Val><![CDATA[A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Obliczona nazwa właściwości w przeciążeniu metody musi odwoływać się bezpośrednio do wbudowanego symbolu.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w przeciążeniu metody musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol_1170" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_computed_property_name_in_a_type_literal_must_refer_to_an_expression_whose_type_is_a_literal_type__1170" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A computed property name in a type literal must directly refer to a built-in symbol.]]></Val>
+          <Val><![CDATA[A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Obliczona nazwa właściwości w literale typu musi odwoływać się bezpośrednio do wbudowanego symbolu.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w typie literału musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_computed_property_name_in_an_ambient_context_must_directly_refer_to_a_built_in_symbol_1165" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_computed_property_name_in_an_ambient_context_must_refer_to_an_expression_whose_type_is_a_literal_t_1165" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A computed property name in an ambient context must directly refer to a built-in symbol.]]></Val>
+          <Val><![CDATA[A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Obliczona nazwa właściwości w otaczającym kontekście musi odwoływać się bezpośrednio do wbudowanego symbolu.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w otaczającym kontekście musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_symbol_1169" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_computed_property_name_in_an_interface_must_refer_to_an_expression_whose_type_is_a_literal_type_or_1169" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A computed property name in an interface must directly refer to a built-in symbol.]]></Val>
+          <Val><![CDATA[A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Obliczona nazwa właściwości w interfejsie musi odwoływać się bezpośrednio do wbudowanego symbolu.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w interfejsie musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -201,7 +201,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A const enum member can only be accessed using a string literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dostęp do elementu członkowskiego wyliczenia ze specyfikatorem const można uzyskać tylko za pomocą literału ciągu.]]></Val>
+            <Val><![CDATA[Dostęp do składowej wyliczenia ze specyfikatorem const można uzyskać tylko za pomocą literału ciągu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -296,6 +296,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Eksport domyślny może być używany tylko w module w stylu języka ECMAScript.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_definite_assignment_assertion_is_not_permitted_in_this_context_1255" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A definite assignment assertion '!' is not permitted in this context.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -402,7 +408,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicjator elementu członkowskiego w deklaracji wyliczenia nie może przywoływać elementów członkowskich zadeklarowanych po nim, w tym elementów członkowskich zdefiniowanych w innych wyliczeniach.]]></Val>
+            <Val><![CDATA[Inicjator składowej w deklaracji wyliczenia nie może przywoływać składowych zadeklarowanych po nim, w tym składowych zdefiniowanych w innych wyliczeniach.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -508,6 +514,24 @@
           <Val><![CDATA[A promise must have a 'then' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Obietnica musi mieć metodę „then”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly_1331" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Właściwość klasy, której typem jest typ „unikatowy symbol”, musi być „static” i „readonly”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly_1330" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Właściwość interfejsu lub typu, którego typem jest typ „unikatowy symbol”, musi być „readonly”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -678,7 +702,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'this' type is available only in a non-static member of a class or interface.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ „this” jest dostępny tylko w niestatycznym elemencie członkowskim klasy lub interfejsu.]]></Val>
+            <Val><![CDATA[Typ „this” jest dostępny tylko w niestatycznej składowej klasy lub interfejsu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -751,6 +775,15 @@
           <Val><![CDATA[A type predicate's type must be assignable to its parameter's type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Musi być możliwe przypisanie typu predykatu typów do typu jego parametru.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_variable_whose_type_is_a_unique_symbol_type_must_be_const_1332" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Zmienna, której typem jest typ „unikatowy symbol”, musi być „const”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1050,7 +1083,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An enum member cannot have a numeric name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Element członkowski wyliczenia nie może mieć nazwy liczbowej.]]></Val>
+            <Val><![CDATA[Składowa wyliczenia nie może mieć nazwy liczbowej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1302,7 +1335,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An object member cannot be declared optional.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Element członkowski obiektu nie może być zadeklarowany jako opcjonalny.]]></Val>
+            <Val><![CDATA[Składowa obiektu nie może być zadeklarowana jako opcjonalna.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1422,7 +1455,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Base class expressions cannot reference class type parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wyrażenia klasy podstawowej nie mogą odwoływać się do parametrów typu klasy.]]></Val>
+            <Val><![CDATA[Wyrażenia klasy bazowej nie mogą odwoływać się do parametrów typu klasy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1431,7 +1464,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Base constructor return type '{0}' is not a class or interface type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zwracany typ konstruktora podstawowego „{0}” nie jest typem klasy ani interfejsu.]]></Val>
+            <Val><![CDATA[Zwracany typ konstruktora bazowego „{0}” nie jest typem klasy ani interfejsu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1695,7 +1728,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Did you mean the instance member 'this.{0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można znaleźć nazwy „{0}”. Czy chodziło o element członkowski wystąpienia „this.{0}”?]]></Val>
+            <Val><![CDATA[Nie można znaleźć nazwy „{0}”. Czy chodziło o składową wystąpienia „this.{0}”?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1704,7 +1737,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Did you mean the static member '{1}.{0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można znaleźć nazwy „{0}”. Czy chodziło o statyczny element członkowski „{1}.{0}”?]]></Val>
+            <Val><![CDATA[Nie można znaleźć nazwy „{0}”. Czy chodziło o statyczną składową „{1}.{0}”?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1965,7 +1998,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member function.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Klasa „{0}” definiuje metodę dostępu do elementu członkowskiego wystąpienia „{1}”, ale rozszerzona klasa „{2}” definiuje ją jako funkcję elementu członkowskiego wystąpienia.]]></Val>
+            <Val><![CDATA[Klasa „{0}” definiuje metodę dostępu do składowej wystąpienia „{1}”, ale rozszerzona klasa „{2}” definiuje ją jako funkcję składową wystąpienia.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1974,7 +2007,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Klasa „{0}” definiuje funkcję elementu członkowskiego wystąpienia „{1}”,ale rozszerzona klasa „{2}” definiuje ją jako metodę dostępu do elementu członkowskiego wystąpienia.]]></Val>
+            <Val><![CDATA[Klasa „{0}” definiuje funkcję składową wystąpienia „{1}”, ale rozszerzona klasa „{2}” definiuje ją jako metodę dostępu do składowej wystąpienia.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1983,7 +2016,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Klasa „{0}” definiuje funkcję elementu członkowskiego wystąpienia „{1}”, ale rozszerzona klasa „{2}” definiuje ją jako właściwość elementu członkowskiego wystąpienia.]]></Val>
+            <Val><![CDATA[Klasa „{0}” definiuje funkcję składową wystąpienia „{1}”, ale rozszerzona klasa „{2}” definiuje ją jako właściwość składowej wystąpienia.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1992,7 +2025,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Klasa „{0}” definiuje właściwość elementu członkowskiego wystąpienia „{1}”, ale rozszerzona klasa „{2}” definiuje ją jako funkcję elementu członkowskiego wystąpienia.]]></Val>
+            <Val><![CDATA[Klasa „{0}” definiuje właściwość składowej wystąpienia „{1}”, ale rozszerzona klasa „{2}” definiuje ją jako funkcję składową wystąpienia.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2001,7 +2034,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' incorrectly extends base class '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Klasa „{0}” niepoprawnie rozszerza klasę podstawową „{1}”.]]></Val>
+            <Val><![CDATA[Klasa „{0}” niepoprawnie rozszerza klasę bazową „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2049,7 +2082,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class static side '{0}' incorrectly extends base class static side '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Strona statyczna klasy „{0}” niepoprawnie rozszerza stronę statyczną klasy podstawowej „{1}”.]]></Val>
+            <Val><![CDATA[Strona statyczna klasy „{0}” niepoprawnie rozszerza stronę statyczną klasy bazowej „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2130,7 +2163,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Computed values are not permitted in an enum with string valued members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Obliczone wartości nie są dozwolone w wyliczeniu z elementami członkowskimi o wartości ciągu.]]></Val>
+            <Val><![CDATA[Obliczone wartości nie są dozwolone w wyliczeniu ze składowymi o wartości ciągu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2561,6 +2594,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Duplicate_declaration_0_2718" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Duplicate declaration '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Zduplikowana deklaracja „{0}”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Duplicate_function_implementation_2393" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate function implementation.]]></Val>
@@ -2628,7 +2670,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zduplikowany identyfikator „_super”. Kompilator używa ciągu „_super” do przechwycenia odwołania do klasy podstawowej.]]></Val>
+            <Val><![CDATA[Zduplikowany identyfikator „_super”. Kompilator używa ciągu „_super” do przechwycenia odwołania do klasy bazowej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2771,6 +2813,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enable_strict_checking_of_property_initialization_in_classes_6187" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable strict checking of property initialization in classes.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Włącz dokładne sprawdzanie inicjowania właściwości w klasach.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enable_strict_null_checks_6113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable strict null checks.]]></Val>
@@ -2838,7 +2889,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Oczekiwano elementu członkowskiego wyliczenia.]]></Val>
+            <Val><![CDATA[Oczekiwano składowych wyliczenia.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2847,7 +2898,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member must have initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Element członkowski wyliczenia musi mieć inicjator.]]></Val>
+            <Val><![CDATA[Składowa wyliczenia musi mieć inicjator.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2868,7 +2919,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum type '{0}' has members with initializers that are not literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ wyliczania „{0}” zawiera elementy z inicjatorami niebędącymi literałami.]]></Val>
+            <Val><![CDATA[Typ wyliczenia „{0}” ma składowe z inicjatorami niebędącymi literałami.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2909,11 +2960,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Expected_0_arguments_but_got_a_minimum_of_1_2556" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Expected_0_arguments_but_got_1_or_more_2556" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Expected {0} arguments, but got a minimum of {1}.]]></Val>
+          <Val><![CDATA[Expected {0} arguments, but got {1} or more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Oczekiwane argumenty: {0}, uzyskano minimum {1}.]]></Val>
+            <Val><![CDATA[Oczekiwano {0} argumentów, ale otrzymano {1} lub więcej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2945,11 +2996,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Expected_at_least_0_arguments_but_got_a_minimum_of_1_2557" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Expected_at_least_0_arguments_but_got_1_or_more_2557" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Expected at least {0} arguments, but got a minimum of {1}.]]></Val>
+          <Val><![CDATA[Expected at least {0} arguments, but got {1} or more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Oczekiwane argumenty: co najmniej {0}, uzyskano minimum {1}.]]></Val>
+            <Val><![CDATA[Oczekiwano co najmniej {0} argumentów, ale otrzymano {1} lub więcej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3132,7 +3183,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expression resolves to '_super' that compiler uses to capture base class reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wynikiem rozpoznania wyrażenia jest element „_super” używany przez kompilator do przechwycenia odwołania do klasy podstawowej.]]></Val>
+            <Val><![CDATA[Wynikiem rozpoznania wyrażenia jest element „_super” używany przez kompilator do przechwycenia odwołania do klasy bazowej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3807,7 +3858,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In ambient enum declarations member initializer must be constant expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[W deklaracjach wyliczenia otoczenia inicjator elementu członkowskiego musi być wyrażeniem stałym.]]></Val>
+            <Val><![CDATA[W deklaracjach wyliczenia otoczenia inicjator składowej musi być wyrażeniem stałym.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3825,7 +3876,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In 'const' enum declarations member initializer must be constant expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[W deklaracjach wyliczeń ze specyfikatorem „const” inicjator elementu członkowskiego musi być wyrażeniem stałym.]]></Val>
+            <Val><![CDATA[W deklaracjach wyliczeń ze specyfikatorem „const” inicjator składowej musi być wyrażeniem stałym.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3906,7 +3957,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicjator zmiennej elementu członkowskiego wystąpienia „{0}” nie może przywoływać identyfikatora „{1}” zadeklarowanego w konstruktorze.]]></Val>
+            <Val><![CDATA[Inicjator zmiennej składowej wystąpienia „{0}” nie może przywoływać identyfikatora „{1}” zadeklarowanego w konstruktorze.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4103,6 +4154,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";JSDoc_may_only_appear_in_the_last_parameter_of_a_signature_8028" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '...' may only appear in the last parameter of a signature.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element „...” JSDoc może występować tylko w ostatnim parametrze sygnatury.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_8024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name.]]></Val>
@@ -4116,7 +4176,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tag JSDoc „@typedef” powinien mieć adnotację typu albo powinien następować po nim tag „@property” lub „@member”.]]></Val>
+            <Val><![CDATA[Tag „@typedef” JSDoc powinien mieć adnotację typu lub powinien po nim następować tag „@property” lub „@member”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4431,7 +4491,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Member '{0}' implicitly has an '{1}' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dla elementu członkowskiego „{0}” niejawnie określono typ „{1}”.]]></Val>
+            <Val><![CDATA[Dla składowej „{0}” niejawnie określono typ „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4472,6 +4532,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Method_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2_4101" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Method '{0}' of exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Metoda „{0}” wyeksportowanego interfejsu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Method_0_of_exported_interface_has_or_is_using_private_name_1_4102" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Method '{0}' of exported interface has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Metoda „{0}” wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Modifiers_cannot_appear_here_1184" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Modifiers cannot appear here.]]></Val>
@@ -4485,7 +4563,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module {0} has already exported a member named '{1}'. Consider explicitly re-exporting to resolve the ambiguity.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Moduł {0} już wyeksportował element członkowski o nazwie „{1}”. Zastanów się nad jawnym ponownym eksportem, aby rozstrzygnąć niejednoznaczność.]]></Val>
+            <Val><![CDATA[Moduł {0} już wyeksportował składową o nazwie „{1}”. Zastanów się nad jawnym ponownym eksportem, aby rozstrzygnąć niejednoznaczność.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4503,7 +4581,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Moduł „{0}” nie ma wyeksportowanego elementu członkowskiego „{1}”.]]></Val>
+            <Val><![CDATA[Moduł „{0}” nie ma wyeksportowanej składowej „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4653,7 +4731,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Namespace '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Przestrzeń nazw „{0}” nie ma wyeksportowanego elementu członkowskiego „{1}”.]]></Val>
+            <Val><![CDATA[Przestrzeń nazw „{0}” nie ma wyeksportowanej składowej „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4680,7 +4758,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Klasa nieabstrakcyjna „{0}” nie implementuje odziedziczonego abstrakcyjnego elementu członkowskiego „{1}” z klasy „{2}”.]]></Val>
+            <Val><![CDATA[Klasa nieabstrakcyjna „{0}” nie implementuje odziedziczonej abstrakcyjnej składowej „{1}” z klasy „{2}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4689,7 +4767,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Non-abstract class expression does not implement inherited abstract member '{0}' from class '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wyrażenie klasy nieabstrakcyjnej nie implementuje odziedziczonego abstrakcyjnego elementu członkowskiego „{0}” z klasy „{1}”.]]></Val>
+            <Val><![CDATA[Wyrażenie klasy nieabstrakcyjnej nie implementuje odziedziczonej abstrakcyjnej składowej „{0}” z klasy „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4788,7 +4866,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Literały ósemkowe są niedozwolone w inicjatorze elementów czlonkowskich wyliczeń. Użyj składni „{0}”.]]></Val>
+            <Val><![CDATA[Literały ósemkowe są niedozwolone w inicjatorze składowych wyliczeń. Użyj składni „{0}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4872,7 +4950,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tylko publiczne i chronione metody klasy podstawowej są dostępne przy użyciu słowa kluczowego „super”.]]></Val>
+            <Val><![CDATA[Tylko publiczne i chronione metody klasy bazowej są dostępne przy użyciu słowa kluczowego „super”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5393,6 +5471,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' has no initializer and is not definitely assigned in the constructor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Właściwość „{0}” nie ma inicjatora i nie jest na pewno przypisana w konstruktorze.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation_7033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.]]></Val>
@@ -5513,6 +5600,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_is_used_before_being_assigned_2565" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' is used before being assigned.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Właściwość „{0}” jest używana przed przypisaniem.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property_2606" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of JSX spread attribute is not assignable to target property.]]></Val>
@@ -5612,6 +5708,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Public_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4098" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Public method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Metoda publiczna „{0}” wyeksportowanej klasy ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można jej nazwać.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Public_method_0_of_exported_class_has_or_is_using_name_1_from_private_module_2_4099" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Public method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Metoda publiczna „{0}” wyeksportowanej klasy ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Public_method_0_of_exported_class_has_or_is_using_private_name_1_4100" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Public method '{0}' of exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Metoda publiczna „{0}” wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_name_4029" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
@@ -5635,6 +5758,33 @@
           <Val><![CDATA[Public property '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Właściwość publiczna „{0}” wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Public_static_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_4095" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Publiczna metoda statyczna „{0}” wyeksportowanej klasy ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można jej nazwać.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Public_static_method_0_of_exported_class_has_or_is_using_name_1_from_private_module_2_4096" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Publiczna metoda statyczna „{0}” wyeksportowanej klasy ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Public_static_method_0_of_exported_class_has_or_is_using_private_name_1_4097" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Public static method '{0}' of exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Publiczna metoda statyczna „{0}” wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6366,7 +6516,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Static members cannot reference class type parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Statyczne elementy członkowskie nie mogą przywoływać parametrów typu klasy.]]></Val>
+            <Val><![CDATA[Statyczne składowe nie mogą przywoływać parametrów typu klasy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6416,6 +6566,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Stylize errors and messages using color and context. (experimental)]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_has_type_1_at_2_but_here_has_typ_2717" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' has type '{1}' at {2}, but here has type '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kolejne deklaracje właściwości muszą być tego samego typu. Właściwość „{0}” jest typu „{1}” w {2} , ale w tym miejscu jest typu „{3}”.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6641,11 +6800,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary_2527" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary_2527" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.]]></Val>
+          <Val><![CDATA[The inferred type of '{0}' references an inaccessible '{1}' type. A type annotation is necessary.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wnioskowany typ „{0}” przywołuje niedostępny typ „this”. Adnotacja typu jest konieczna.]]></Val>
+            <Val><![CDATA[Wnioskowany typ „{0}” przywołuje niedostępny typ „{1}”. Adnotacja typu jest konieczna.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6819,7 +6978,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The return type of an async function must either be a valid promise or must not contain a callable 'then' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zwracany typ funkcji asynchronicznej musi być prawidłową obietnicą lub nie może zawierać wywoływalnego elementu członkowskiego „then”.]]></Val>
+            <Val><![CDATA[Zwracany typ funkcji asynchronicznej musi być prawidłową obietnicą lub nie może zawierać wywoływalnej składowej „then”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6987,7 +7146,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper named '{1}', but module '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ta składnia wymaga zaimportowanego pomocnika o nazwie „{1}”, ale moduł „{0}” nie ma wyeksportowanego elementu członkowskiego „{1}”.]]></Val>
+            <Val><![CDATA[Ta składnia wymaga zaimportowanego pomocnika o nazwie „{1}”, ale moduł „{0}” nie ma wyeksportowanej składowej „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7338,7 +7497,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ operandu „await” musi być prawidłową obietnicą lub nie może zawierać wywoływalnego elementu członkowskiego „then”.]]></Val>
+            <Val><![CDATA[Typ operandu „await” musi być prawidłową obietnicą lub nie może zawierać wywoływalnej składowej „then”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7347,7 +7506,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ iterowanych elementów operandu „yield*” musi być prawidłową obietnicą lub nie może zawierać wywoływalnego elementu członkowskiego „then”.]]></Val>
+            <Val><![CDATA[Typ iterowanych elementów operandu „yield*” musi być prawidłową obietnicą lub nie może zawierać wywoływalnej składowej „then”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7356,7 +7515,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ operandu „yield” w generatorze asynchronicznym musi być prawidłową obietnicą lub nie może zawierać wywoływalnego elementu członkowskiego „then”.]]></Val>
+            <Val><![CDATA[Typ operandu „yield” w generatorze asynchronicznym musi być prawidłową obietnicą lub nie może zawierać wywoływalnej składowej „then”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8025,7 +8184,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' modifier cannot appear on a type member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modyfikator „{0}” nie może być stosowany w przypadku elementu członkowskiego typu.]]></Val>
+            <Val><![CDATA[Modyfikator „{0}” nie może być stosowany w przypadku składowej typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8229,7 +8388,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to a non-finite value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wynikiem obliczenia inicjatora elementu członkowskiego wyliczenia ze specyfikatorem „const” jest wartość nieskończona.]]></Val>
+            <Val><![CDATA[Wynikiem obliczenia inicjatora składowej wyliczenia ze specyfikatorem „const” jest wartość nieskończona.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8238,7 +8397,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to disallowed value 'NaN'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wynikiem obliczenia inicjatora elementu członkowskiego wyliczenia ze specyfikatorem „const” jest niedozwolona wartość „NaN”.]]></Val>
+            <Val><![CDATA[Wynikiem obliczenia inicjatora składowej wyliczenia ze specyfikatorem „const” jest niedozwolona wartość „NaN”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8529,7 +8688,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' can only be referenced in members of derived classes or object literal expressions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Element „super” może być przywoływany jedynie w elementach członkowskich klas pochodnych lub wyrażeń literałów obiektów.]]></Val>
+            <Val><![CDATA[Element „super” może być przywoływany jedynie w składowych klas pochodnych lub wyrażeń literałów obiektów.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8556,7 +8715,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Element „super” jest dozwolony w elementach członkowskich wyrażeń literałów obiektów tylko wtedy, gdy opcja „target” ma wartość „ES2015” lub wyższą.]]></Val>
+            <Val><![CDATA[Element „super” jest dozwolony w składowych wyrażeń literałów obiektów tylko wtedy, gdy opcja „target” ma wartość „ES2015” lub wyższą.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8583,7 +8742,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' must be followed by an argument list or member access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Po elemencie „super” musi występować lista argumentów lub metoda dostępu do elementu członkowskiego.]]></Val>
+            <Val><![CDATA[Po elemencie „super” musi występować lista argumentów lub metoda dostępu do składowej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8592,7 +8751,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' property access is permitted only in a constructor, member function, or member accessor of a derived class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dostęp do właściwości „super” jest dozwolony tylko w konstruktorze, funkcji członkowskiej lub metodzie dostępu elementu członkowskiego klasy pochodnej.]]></Val>
+            <Val><![CDATA[Dostęp do właściwości „super” jest dozwolony tylko w konstruktorze, funkcji składowej lub metodzie dostępu składowej klasy pochodnej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8692,6 +8851,33 @@
           <Val><![CDATA['types' can only be used in a .ts file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Typów można używać tylko w pliku ts.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";unique_symbol_types_are_not_allowed_here_1335" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['unique symbol' types are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typy „unikatowy symbol” nie są dozwolone w tym miejscu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";unique_symbol_types_are_only_allowed_on_variables_in_a_variable_statement_1334" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['unique symbol' types are only allowed on variables in a variable statement.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typy „unikatowy symbol” są dozwolone tylko w zmiennych w instrukcji zmiennej.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name_1333" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['unique symbol' types may not be used on a variable declaration with a binding name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typów „unikatowy symbol” nie można używać w deklaracji zmiennej z nazwą powiązania.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

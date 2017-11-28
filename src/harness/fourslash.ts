@@ -1703,8 +1703,8 @@ Actual: ${stringify(fullActual)}`);
             Harness.IO.log(stringify(sigHelp));
         }
 
-        public printCompletionListMembers() {
-            const completions = this.getCompletionListAtCaret();
+        public printCompletionListMembers(options: ts.GetCompletionsAtPositionOptions | undefined) {
+            const completions = this.getCompletionListAtCaret(options);
             this.printMembersOrCompletions(completions);
         }
 
@@ -2549,6 +2549,9 @@ Actual: ${stringify(fullActual)}`);
             }
             const sortedExpectedArray = expectedTextArray.sort();
             const sortedActualArray = actualTextArray.sort();
+            if (sortedExpectedArray.length !== sortedActualArray.length) {
+                this.raiseError(`Expected ${sortedExpectedArray.length} import fixes, got ${sortedActualArray.length}`);
+            }
             ts.zipWith(sortedExpectedArray, sortedActualArray, (expected, actual, index) => {
                 if (expected !== actual) {
                     this.raiseError(`Import fix at index ${index} doesn't match.\n${showTextDiff(expected, actual)}`);
@@ -2867,7 +2870,7 @@ Actual: ${stringify(fullActual)}`);
 
             if (negative) {
                 if (codeFixes.length) {
-                    this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found one.`);
+                    this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found ${codeFixes.map(c => c.description)}.`);
                 }
                 return;
             }
@@ -3073,44 +3076,44 @@ Actual: ${stringify(fullActual)}`);
             hasAction: boolean | undefined,
             options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
         ) {
-            for (const item of items) {
-                if (item.name === entryId.name && item.source === entryId.source) {
-                    if (documentation !== undefined || text !== undefined || entryId.source !== undefined) {
-                        const details = this.getCompletionEntryDetails(item.name, item.source);
+            const matchingItems = items.filter(item => item.name === entryId.name && item.source === entryId.source);
+            if (matchingItems.length === 0) {
+                const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
+                this.raiseError(`Expected "${stringify({ entryId, text, documentation, kind })}" to be in list [${itemsString}]`);
+            }
+            else if (matchingItems.length > 1 && !(options && options.allowDuplicate)) {
+                this.raiseError(`Found duplicate completion items for ${stringify(entryId)}`);
+            }
+            const item = matchingItems[0];
 
-                        if (documentation !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.documentation), documentation, this.assertionMessageAtLastKnownMarker("completion item documentation for " + entryId));
-                        }
-                        if (text !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.displayParts), text, this.assertionMessageAtLastKnownMarker("completion item detail text for " + entryId));
-                        }
+            if (documentation !== undefined || text !== undefined || entryId.source !== undefined) {
+                const details = this.getCompletionEntryDetails(item.name, item.source);
 
-                        if (entryId.source === undefined) {
-                            assert.equal(options && options.sourceDisplay, undefined);
-                        }
-                        else {
-                            assert.deepEqual(details.source, [ts.textPart(options!.sourceDisplay)]);
-                        }
-                    }
+                if (documentation !== undefined) {
+                    assert.equal(ts.displayPartsToString(details.documentation), documentation, this.assertionMessageAtLastKnownMarker("completion item documentation for " + entryId));
+                }
+                if (text !== undefined) {
+                    assert.equal(ts.displayPartsToString(details.displayParts), text, this.assertionMessageAtLastKnownMarker("completion item detail text for " + entryId));
+                }
 
-                    if (kind !== undefined) {
-                        assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
-                    }
-
-                    if (spanIndex !== undefined) {
-                        const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                        assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
-                    }
-
-                    assert.equal(item.hasAction, hasAction);
-
-                    return;
+                if (entryId.source === undefined) {
+                    assert.equal(options && options.sourceDisplay, undefined);
+                }
+                else {
+                    assert.deepEqual(details.source, [ts.textPart(options!.sourceDisplay)]);
                 }
             }
 
-            const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
+            if (kind !== undefined) {
+                assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+            }
 
-            this.raiseError(`Expected "${stringify({ entryId, text, documentation, kind })}" to be in list [${itemsString}]`);
+            if (spanIndex !== undefined) {
+                const span = this.getTextSpanForRangeAtIndex(spanIndex);
+                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
+            }
+
+            assert.equal(item.hasAction, hasAction);
         }
 
         private findFile(indexOrName: string | number) {
@@ -4355,8 +4358,8 @@ namespace FourSlashInterface {
             this.state.printCurrentSignatureHelp();
         }
 
-        public printCompletionListMembers() {
-            this.state.printCompletionListMembers();
+        public printCompletionListMembers(options: ts.GetCompletionsAtPositionOptions | undefined) {
+            this.state.printCompletionListMembers(options);
         }
 
         public printAvailableCodeFixes() {
@@ -4555,6 +4558,7 @@ namespace FourSlashInterface {
 
     export interface VerifyCompletionListContainsOptions extends ts.GetCompletionsAtPositionOptions {
         sourceDisplay: string;
+        allowDuplicate: boolean; // TODO: GH#20042
     }
 
     export interface NewContentOptions {

@@ -105,10 +105,6 @@ namespace ts.server {
         project: Project;
     }
 
-    export interface EventSender {
-        event<T>(payload: T, eventName: string): void;
-    }
-
     function allEditsBeforePos(edits: ts.TextChange[], pos: number) {
         for (const edit of edits) {
             if (textSpanEnd(edit.span) >= pos) {
@@ -243,6 +239,22 @@ namespace ts.server {
         }
     }
 
+    export type Event = <T extends object>(body: T, eventName: string) => void;
+
+    export interface EventSender {
+        event: Event;
+    }
+
+    /** @internal */
+    export function toEvent(eventName: string, body: object): protocol.Event {
+        return {
+            seq: 0,
+            type: "event",
+            event: eventName,
+            body
+        };
+    }
+
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -252,6 +264,9 @@ namespace ts.server {
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
         logger: Logger;
+        /**
+         * If falsy, all events are suppressed.
+         */
         canUseEvents: boolean;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
@@ -269,15 +284,15 @@ namespace ts.server {
         private currentRequestId: number;
         private errorCheck: MultistepOperation;
 
-        private eventHandler: ProjectServiceEventHandler;
-
-        private host: ServerHost;
+        protected host: ServerHost;
         private readonly cancellationToken: ServerCancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
-        private byteLength: (buf: string, encoding?: string) => number;
+        protected byteLength: (buf: string, encoding?: string) => number;
         private hrtime: (start?: number[]) => number[];
         protected logger: Logger;
-        private canUseEvents: boolean;
+
+        protected canUseEvents: boolean;
+        private eventHandler: ProjectServiceEventHandler;
 
         constructor(opts: SessionOptions) {
             this.host = opts.host;
@@ -293,7 +308,6 @@ namespace ts.server {
             this.eventHandler = this.canUseEvents
                 ? opts.eventHandler || (event => this.defaultEventHandler(event))
                 : undefined;
-
             const multistepOperationHost: MultistepOperationHost = {
                 executeWithRequestId: (requestId, action) => this.executeWithRequestId(requestId, action),
                 getCurrentRequestId: () => this.currentRequestId,
@@ -321,13 +335,7 @@ namespace ts.server {
         }
 
         private sendRequestCompletedEvent(requestId: number): void {
-            const event: protocol.RequestCompletedEvent = {
-                seq: 0,
-                type: "event",
-                event: "requestCompleted",
-                body: { request_seq: requestId }
-            };
-            this.send(event);
+            this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
         }
 
         private defaultEventHandler(event: ProjectServiceEvent) {
@@ -401,17 +409,12 @@ namespace ts.server {
             this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }
 
-        public event<T>(info: T, eventName: string) {
-            const ev: protocol.Event = {
-                seq: 0,
-                type: "event",
-                event: eventName,
-                body: info
-            };
-            this.send(ev);
+        public event<T extends object>(body: T, eventName: string): void {
+            this.send(toEvent(eventName, body));
         }
 
         // For backwards-compatibility only.
+        /** @deprecated */
         public output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void {
             this.doOutput(info, cmdName, reqSeq, /*success*/ !errorMsg, errorMsg);
         }
@@ -1569,15 +1572,14 @@ namespace ts.server {
         }
 
         private applyCodeActionCommand(commandName: string, requestSeq: number, args: protocol.ApplyCodeActionCommandRequestArgs): void {
-            const { file, project } = this.getFileAndProject(args);
-            const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
-            const command = args.command as CodeActionCommand | CodeActionCommand[]; // They should be sending back the command we sent them.
-
-            project.getLanguageService().applyCodeActionCommand(file, command).then(
-                result => {
-                    output(/*success*/ true, isArray(result) ? result.map(res => res.successMessage).join(`${this.host.newLine}${this.host.newLine}`) : result.successMessage);
-                },
-                error => { output(/*success*/ false, error); });
+            const commands = args.command as CodeActionCommand | CodeActionCommand[]; // They should be sending back the command we sent them.
+            for (const command of toArray(commands)) {
+                const { project } = this.getFileAndProject(command);
+                const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
+                project.getLanguageService().applyCodeActionCommand(command).then(
+                    result => { output(/*success*/ true, result.successMessage); },
+                    error => { output(/*success*/ false, error); });
+            }
         }
 
         private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {

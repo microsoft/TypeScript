@@ -598,6 +598,7 @@ namespace ts {
 
     export type DotDotDotToken = Token<SyntaxKind.DotDotDotToken>;
     export type QuestionToken = Token<SyntaxKind.QuestionToken>;
+    export type ExclamationToken = Token<SyntaxKind.ExclamationToken>;
     export type ColonToken = Token<SyntaxKind.ColonToken>;
     export type EqualsToken = Token<SyntaxKind.EqualsToken>;
     export type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
@@ -761,9 +762,10 @@ namespace ts {
     export interface VariableDeclaration extends NamedDeclaration {
         kind: SyntaxKind.VariableDeclaration;
         parent?: VariableDeclarationList | CatchClause;
-        name: BindingName;                  // Declared variable name
-        type?: TypeNode;                    // Optional type annotation
-        initializer?: Expression;           // Optional initializer
+        name: BindingName;                    // Declared variable name
+        exclamationToken?: ExclamationToken;  // Optional definite assignment assertion
+        type?: TypeNode;                      // Optional type annotation
+        initializer?: Expression;             // Optional initializer
     }
 
     export interface VariableDeclarationList extends Node {
@@ -801,8 +803,9 @@ namespace ts {
 
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
-        questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         name: PropertyName;
+        questionToken?: QuestionToken;      // Present for use with reporting a grammar error
+        exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;           // Optional initializer
     }
@@ -860,6 +863,7 @@ namespace ts {
         dotDotDotToken?: DotDotDotToken;
         name: DeclarationName;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -947,6 +951,7 @@ namespace ts {
         kind: SyntaxKind.Constructor;
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
+        /* @internal */ returnFlowNode?: FlowNode;
     }
 
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
@@ -1474,20 +1479,25 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum NumericLiteralFlags {
+    export const enum TokenFlags {
         None = 0,
-        Scientific = 1 << 1,        // e.g. `10e2`
-        Octal = 1 << 2,             // e.g. `0777`
-        HexSpecifier = 1 << 3,      // e.g. `0x00000000`
-        BinarySpecifier = 1 << 4,   // e.g. `0b0110010000000000`
-        OctalSpecifier = 1 << 5,    // e.g. `0o777`
+        PrecedingLineBreak = 1 << 0,
+        PrecedingJSDocComment = 1 << 1,
+        Unterminated = 1 << 2,
+        ExtendedUnicodeEscape = 1 << 3,
+        Scientific = 1 << 4,        // e.g. `10e2`
+        Octal = 1 << 5,             // e.g. `0777`
+        HexSpecifier = 1 << 6,      // e.g. `0x00000000`
+        BinarySpecifier = 1 << 7,   // e.g. `0b0110010000000000`
+        OctalSpecifier = 1 << 8,    // e.g. `0o777`
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
+        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinarySpecifier | OctalSpecifier
     }
 
     export interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
         /* @internal */
-        numericLiteralFlags?: NumericLiteralFlags;
+        numericLiteralFlags?: TokenFlags;
     }
 
     export interface TemplateHead extends LiteralLikeNode {
@@ -3102,7 +3112,7 @@ namespace ts {
         /* @internal */
         // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.
-        Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module,
+        Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module | Alias,
 
         /* @internal */
         LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral,
@@ -3849,6 +3859,7 @@ namespace ts {
         strict?: boolean;
         strictFunctionTypes?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
+        strictPropertyInitialization?: boolean;  // Always combine with strict property
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;

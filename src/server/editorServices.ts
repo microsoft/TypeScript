@@ -145,7 +145,7 @@ namespace ts.server {
         },
         "Kendo": {
             // e.g. /Kendo3/wwwroot/lib/kendo/kendo.all.min.js
-            match: /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
+            match: /^(.*\/kendo(-ui)?)\/kendo\.all(\.min)?\.js$/i,
             exclude: [["^", 1, "/.*"]],
             types: ["kendo-ui"]
         },
@@ -155,9 +155,8 @@ namespace ts.server {
             exclude: [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
             types: ["office"]                               // @types package to fetch instead
         },
-        "Minified files": {
-            // e.g. /whatever/blah.min.js
-            match: /^(.+\.min\.js)$/i,
+        "References": {
+            match: /^(.*\/_references\.js)$/i,
             exclude: [["^", 1, "$"]]
         }
     };
@@ -528,7 +527,11 @@ namespace ts.server {
                 }
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
-                this.legacySafelist = raw.simpleMap;
+                for (const key in raw.simpleMap) {
+                    if (raw.simpleMap.hasOwnProperty(key)) {
+                        this.legacySafelist[key] = raw.simpleMap[key].toLowerCase();
+                    }
+                }
             }
             catch (e) {
                 this.logger.info(`Error loading types map: ${e}`);
@@ -537,7 +540,7 @@ namespace ts.server {
             }
         }
 
-        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void {
             const project = this.findProject(response.projectName);
             if (!project) {
                 return;
@@ -1447,7 +1450,9 @@ namespace ts.server {
             }
             this.seenProjects.set(projectKey, true);
 
-            if (!this.eventHandler) return;
+            if (!this.eventHandler) {
+                return;
+            }
 
             const data: ProjectInfoTelemetryEventData = {
                 projectId: this.host.createHash(projectKey),
@@ -2193,8 +2198,13 @@ namespace ts.server {
 
         applySafeList(proj: protocol.ExternalProject): NormalizedPath[] {
             const { rootFiles, typeAcquisition } = proj;
-            const types = (typeAcquisition && typeAcquisition.include) || [];
+            Debug.assert(!!typeAcquisition, "proj.typeAcquisition should be set by now");
+            // If type acquisition has been explicitly disabled, do not exclude anything from the project
+            if (typeAcquisition.enable === false) {
+                return [];
+            }
 
+            const typeAcqInclude = typeAcquisition.include || (typeAcquisition.include = []);
             const excludeRules: string[] = [];
 
             const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName)) as NormalizedPath[];
@@ -2209,8 +2219,10 @@ namespace ts.server {
                         // If the file matches, collect its types packages and exclude rules
                         if (rule.types) {
                             for (const type of rule.types) {
-                                if (types.indexOf(type) < 0) {
-                                    types.push(type);
+                                // Best-effort de-duping here - doesn't need to be unduplicated but
+                                // we don't want the list to become a 400-element array of just 'kendo'
+                                if (typeAcqInclude.indexOf(type) < 0) {
+                                    typeAcqInclude.push(type);
                                 }
                             }
                         }
@@ -2248,12 +2260,6 @@ namespace ts.server {
                         }
                     }
                 }
-
-                // Copy back this field into the project if needed
-                if (types.length > 0) {
-                    proj.typeAcquisition = proj.typeAcquisition || {};
-                    proj.typeAcquisition.include = types;
-                }
             }
 
             const excludeRegexes = excludeRules.map(e => new RegExp(e, "i"));
@@ -2264,7 +2270,7 @@ namespace ts.server {
                 }
                 else {
                     let exclude = false;
-                    if (typeAcquisition && (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery)) {
+                    if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
                         const baseName = getBaseFileName(normalizedNames[i].toLowerCase());
                         if (fileExtensionIs(baseName, "js")) {
                             const inferredTypingName = removeFileExtension(baseName);
@@ -2272,12 +2278,25 @@ namespace ts.server {
                             if (this.legacySafelist[cleanedTypingName]) {
                                 this.logger.info(`Excluded '${normalizedNames[i]}' because it matched ${cleanedTypingName} from the legacy safelist`);
                                 excludedFiles.push(normalizedNames[i]);
+                                // *exclude* it from the project...
                                 exclude = true;
+                                // ... but *include* it in the list of types to acquire
+                                const typeName = this.legacySafelist[cleanedTypingName];
+                                // Same best-effort dedupe as above
+                                if (typeAcqInclude.indexOf(typeName) < 0) {
+                                    typeAcqInclude.push(typeName);
+                                }
                             }
                         }
                     }
                     if (!exclude) {
-                        filesToKeep.push(proj.rootFiles[i]);
+                        // Exclude any minified files that get this far
+                        if (/^.+[\.-]min\.js$/.test(normalizedNames[i])) {
+                            excludedFiles.push(normalizedNames[i]);
+                        }
+                        else {
+                            filesToKeep.push(proj.rootFiles[i]);
+                        }
                     }
                 }
             }
@@ -2291,6 +2310,12 @@ namespace ts.server {
             if (proj.typingOptions && !proj.typeAcquisition) {
                 const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
                 proj.typeAcquisition = typeAcquisition;
+            }
+            proj.typeAcquisition = proj.typeAcquisition || {};
+            proj.typeAcquisition.include = proj.typeAcquisition.include || [];
+            proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];
+            if (proj.typeAcquisition.enable === undefined) {
+                proj.typeAcquisition.enable = hasNoTypeScriptSource(proj.rootFiles.map(f => f.fileName));
             }
 
             const excludedFiles = this.applySafeList(proj);

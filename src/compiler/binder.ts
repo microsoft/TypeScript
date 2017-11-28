@@ -16,52 +16,63 @@ namespace ts {
         referenced: boolean;
     }
 
-    export function getModuleInstanceState(node: Node): ModuleInstanceState {
+    export function getModuleInstanceState(node: ModuleDeclaration): ModuleInstanceState {
+        return node.body ? getModuleInstanceStateWorker(node.body) : ModuleInstanceState.Instantiated;
+    }
+
+    function getModuleInstanceStateWorker(node: Node): ModuleInstanceState {
         // A module is uninstantiated if it contains only
-        // 1. interface declarations, type alias declarations
-        if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.TypeAliasDeclaration) {
-            return ModuleInstanceState.NonInstantiated;
-        }
-        // 2. const enum declarations
-        else if (isConstEnumDeclaration(node)) {
-            return ModuleInstanceState.ConstEnumOnly;
-        }
-        // 3. non-exported import declarations
-        else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && !(hasModifier(node, ModifierFlags.Export))) {
-            return ModuleInstanceState.NonInstantiated;
-        }
-        // 4. other uninstantiated module declarations.
-        else if (node.kind === SyntaxKind.ModuleBlock) {
-            let state = ModuleInstanceState.NonInstantiated;
-            forEachChild(node, n => {
-                switch (getModuleInstanceState(n)) {
-                    case ModuleInstanceState.NonInstantiated:
-                        // child is non-instantiated - continue searching
-                        return false;
-                    case ModuleInstanceState.ConstEnumOnly:
-                        // child is const enum only - record state and continue searching
-                        state = ModuleInstanceState.ConstEnumOnly;
-                        return false;
-                    case ModuleInstanceState.Instantiated:
-                        // child is instantiated - record state and stop
-                        state = ModuleInstanceState.Instantiated;
-                        return true;
+        switch (node.kind) {
+            // 1. interface declarations, type alias declarations
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return ModuleInstanceState.NonInstantiated;
+            // 2. const enum declarations
+            case SyntaxKind.EnumDeclaration:
+                if (isConst(node)) {
+                    return ModuleInstanceState.ConstEnumOnly;
                 }
-            });
-            return state;
+                break;
+            // 3. non-exported import declarations
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ImportEqualsDeclaration:
+                if (!(hasModifier(node, ModifierFlags.Export))) {
+                    return ModuleInstanceState.NonInstantiated;
+                }
+                break;
+            // 4. other uninstantiated module declarations.
+            case SyntaxKind.ModuleBlock: {
+                let state = ModuleInstanceState.NonInstantiated;
+                forEachChild(node, n => {
+                    const childState = getModuleInstanceStateWorker(n);
+                    switch (childState) {
+                        case ModuleInstanceState.NonInstantiated:
+                            // child is non-instantiated - continue searching
+                            return;
+                        case ModuleInstanceState.ConstEnumOnly:
+                            // child is const enum only - record state and continue searching
+                            state = ModuleInstanceState.ConstEnumOnly;
+                            return;
+                        case ModuleInstanceState.Instantiated:
+                            // child is instantiated - record state and stop
+                            state = ModuleInstanceState.Instantiated;
+                            return true;
+                        default:
+                            Debug.assertNever(childState);
+                    }
+                });
+                return state;
+            }
+            case SyntaxKind.ModuleDeclaration:
+                return getModuleInstanceState(node as ModuleDeclaration);
+            case SyntaxKind.Identifier:
+                // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
+                // be considered the same as type alias
+                if ((<Identifier>node).isInJSDocNamespace) {
+                    return ModuleInstanceState.NonInstantiated;
+                }
         }
-        else if (node.kind === SyntaxKind.ModuleDeclaration) {
-            const body = (<ModuleDeclaration>node).body;
-            return body ? getModuleInstanceState(body) : ModuleInstanceState.Instantiated;
-        }
-        // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
-        // be considered the same as type alias
-        else if (node.kind === SyntaxKind.Identifier && (<Identifier>node).isInJSDocNamespace) {
-            return ModuleInstanceState.NonInstantiated;
-        }
-        else {
-            return ModuleInstanceState.Instantiated;
-        }
+        return ModuleInstanceState.Instantiated;
     }
 
     const enum ContainerFlags {
@@ -506,16 +517,15 @@ namespace ts {
                 const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasModifier(node, ModifierFlags.Async) && !!getImmediatelyInvokedFunctionExpression(node);
                 // A non-async IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
-                if (isIIFE) {
-                    currentReturnTarget = createBranchLabel();
-                }
-                else {
+                if (!isIIFE) {
                     currentFlow = { flags: FlowFlags.Start };
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
                         (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
-                    currentReturnTarget = undefined;
                 }
+                // We create a return control flow graph for IIFEs and constructors. For constructors
+                // we use the return control flow graph in strict property intialization checks.
+                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor ? createBranchLabel() : undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
@@ -530,11 +540,14 @@ namespace ts {
                 if (node.kind === SyntaxKind.SourceFile) {
                     node.flags |= emitFlags;
                 }
-                if (isIIFE) {
+                if (currentReturnTarget) {
                     addAntecedent(currentReturnTarget, currentFlow);
                     currentFlow = finishFlowLabel(currentReturnTarget);
+                    if (node.kind === SyntaxKind.Constructor) {
+                        (<ConstructorDeclaration>node).returnFlowNode = currentFlow;
+                    }
                 }
-                else {
+                if (!isIIFE) {
                     currentFlow = saveCurrentFlow;
                 }
                 currentBreakTarget = saveBreakTarget;
@@ -1835,7 +1848,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: NumericLiteral) {
-            if (inStrictMode && node.numericLiteralFlags & NumericLiteralFlags.Octal) {
+            if (inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
@@ -3319,7 +3332,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.NumericLiteral:
-                if ((<NumericLiteral>node).numericLiteralFlags & NumericLiteralFlags.BinaryOrOctalSpecifier) {
+                if ((<NumericLiteral>node).numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
                     transformFlags |= TransformFlags.AssertES2015;
                 }
                 break;

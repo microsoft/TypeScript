@@ -47,7 +47,7 @@ namespace ts.refactor.installTypesForPackage {
         const { file, startPosition } = context;
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
         if (isStringLiteral(node) && isModuleIdentifier(node) && getResolvedModule(file, node.text) === undefined) {
-            return codefix.tryGetCodeActionForInstallPackageTypes(context.host, node.text);
+            return codefix.tryGetCodeActionForInstallPackageTypes(context.host, file.fileName, node.text);
         }
     }
 

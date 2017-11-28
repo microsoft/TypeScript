@@ -6,5 +6,4 @@
 
 goTo.marker();
 verify.completionListCount(119);
-verify.completionListContains('this');
-
+verify.completionListContains('this', undefined, undefined, undefined, undefined, undefined, { allowDuplicate: true }); // TODO: GH#20042
