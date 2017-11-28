@@ -9,7 +9,7 @@ interface ReadonlyData {
 const data: ReadonlyData = { value: 'foo' };
 >data : ReadonlyData
 >ReadonlyData : ReadonlyData
->{ value: 'foo' } : { value: "foo"; }
+>{ value: 'foo' } : { value: string; }
 >value : string
 >'foo' : "foo"
 

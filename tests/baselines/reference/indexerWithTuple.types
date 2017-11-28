@@ -1,27 +1,27 @@
 === tests/cases/conformance/types/tuple/indexerWithTuple.ts ===
 var strNumTuple: [string, number] = ["foo", 10]; 
 >strNumTuple : [string, number]
->["foo", 10] : ["foo", 10]
+>["foo", 10] : [string, number]
 >"foo" : "foo"
 >10 : 10
 
 var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];
 >numTupleTuple : [number, [string, number]]
->[10, ["bar", 20]] : [10, ["bar", 20]]
+>[10, ["bar", 20]] : [number, [string, number]]
 >10 : 10
->["bar", 20] : ["bar", 20]
+>["bar", 20] : [string, number]
 >"bar" : "bar"
 >20 : 20
 
 var unionTuple1: [number, string| number] = [10, "foo"]; 
 >unionTuple1 : [number, string | number]
->[10, "foo"] : [10, "foo"]
+>[10, "foo"] : [number, string]
 >10 : 10
 >"foo" : "foo"
 
 var unionTuple2: [boolean, string| number] = [true, "foo"]; 
 >unionTuple2 : [boolean, string | number]
->[true, "foo"] : [true, "foo"]
+>[true, "foo"] : [true, string]
 >true : true
 >"foo" : "foo"
 

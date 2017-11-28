@@ -7,13 +7,13 @@
 var r: { a: string } = { a: '', b: 123 } || { a: '', b: true };
 >r : { a: string; }
 >a : string
->{ a: '', b: 123 } || { a: '', b: true } : { a: ""; b: number; } | { a: ""; b: boolean; }
->{ a: '', b: 123 } : { a: ""; b: number; }
+>{ a: '', b: 123 } || { a: '', b: true } : { a: string; b: number; } | { a: string; b: boolean; }
+>{ a: '', b: 123 } : { a: string; b: number; }
 >a : string
 >'' : ""
 >b : number
 >123 : 123
->{ a: '', b: true } : { a: ""; b: boolean; }
+>{ a: '', b: true } : { a: string; b: boolean; }
 >a : string
 >'' : ""
 >b : boolean

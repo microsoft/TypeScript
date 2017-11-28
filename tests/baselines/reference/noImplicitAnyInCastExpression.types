@@ -25,7 +25,7 @@ interface IFoo {
 >(<IFoo>{ a: 2, b: undefined }) : IFoo
 ><IFoo>{ a: 2, b: undefined } : IFoo
 >IFoo : IFoo
->{ a: 2, b: undefined } : { a: 2; b: undefined; }
+>{ a: 2, b: undefined } : { a: number; b: undefined; }
 >a : number
 >2 : 2
 >b : undefined

@@ -222,7 +222,7 @@ function f0(s1: Shape, s2: Shape) {
 >assign(s1, { name: "circle" }) : void
 >assign : <T>(obj: T, props: Partial<T>) => void
 >s1 : Shape
->{ name: "circle" } : { name: "circle"; }
+>{ name: "circle" } : { name: string; }
 >name : string
 >"circle" : "circle"
 
@@ -230,7 +230,7 @@ function f0(s1: Shape, s2: Shape) {
 >assign(s2, { width: 10, height: 20 }) : void
 >assign : <T>(obj: T, props: Partial<T>) => void
 >s2 : Shape
->{ width: 10, height: 20 } : { width: 10; height: 20; }
+>{ width: 10, height: 20 } : { width: number; height: number; }
 >width : number
 >10 : 10
 >height : number

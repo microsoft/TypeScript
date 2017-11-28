@@ -31,7 +31,7 @@ let x2 = 1;
 let { a = "foo" } = { a: "foo" };
 >a : string
 >"foo" : "foo"
->{ a: "foo" } : { a?: "foo"; }
+>{ a: "foo" } : { a?: string; }
 >a : string
 >"foo" : "foo"
 

@@ -50,7 +50,7 @@ module M2 {
 >Point : Point
 
             return { x: 0, y: 0 };
->{ x: 0, y: 0 } : { x: 0; y: 0; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
 >y : number

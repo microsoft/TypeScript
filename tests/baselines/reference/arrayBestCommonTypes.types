@@ -236,14 +236,14 @@ module EmptyTypes {
 >x : number
 >y : base
 >base : base
->[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : ({ x: 7; y: derived; } | { x: 5; y: base; })[]
->{ x: 7, y: new derived() } : { x: 7; y: derived; }
+>[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: derived; }[]
+>{ x: 7, y: new derived() } : { x: number; y: derived; }
 >x : number
 >7 : 7
 >y : derived
 >new derived() : derived
 >derived : typeof derived
->{ x: 5, y: new base() } : { x: 5; y: base; }
+>{ x: 5, y: new base() } : { x: number; y: base; }
 >x : number
 >5 : 5
 >y : base
@@ -274,14 +274,14 @@ module EmptyTypes {
 >x : string
 >y : base
 >base : base
->[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: ""; y: derived; }[]
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: derived; }[]
 >{ x: undefined, y: new base() } : { x: undefined; y: base; }
 >x : undefined
 >undefined : undefined
 >y : base
 >new base() : base
 >base : typeof base
->{ x: '', y: new derived() } : { x: ""; y: derived; }
+>{ x: '', y: new derived() } : { x: string; y: derived; }
 >x : string
 >'' : ""
 >y : derived
@@ -639,14 +639,14 @@ module NonEmptyTypes {
 >x : number
 >y : base
 >base : base
->[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : ({ x: 7; y: derived; } | { x: 5; y: base; })[]
->{ x: 7, y: new derived() } : { x: 7; y: derived; }
+>[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: base; }[]
+>{ x: 7, y: new derived() } : { x: number; y: derived; }
 >x : number
 >7 : 7
 >y : derived
 >new derived() : derived
 >derived : typeof derived
->{ x: 5, y: new base() } : { x: 5; y: base; }
+>{ x: 5, y: new base() } : { x: number; y: base; }
 >x : number
 >5 : 5
 >y : base
@@ -677,14 +677,14 @@ module NonEmptyTypes {
 >x : string
 >y : base
 >base : base
->[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : ({ x: undefined; y: base; } | { x: ""; y: derived; })[]
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : ({ x: undefined; y: base; } | { x: string; y: derived; })[]
 >{ x: undefined, y: new base() } : { x: undefined; y: base; }
 >x : undefined
 >undefined : undefined
 >y : base
 >new base() : base
 >base : typeof base
->{ x: '', y: new derived() } : { x: ""; y: derived; }
+>{ x: '', y: new derived() } : { x: string; y: derived; }
 >x : string
 >'' : ""
 >y : derived

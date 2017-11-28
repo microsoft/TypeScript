@@ -38,7 +38,7 @@ export class Test {
     private pt: I1 = { item: 1 };
 >pt : I1
 >I1 : I1
->{ item: 1 } : { item: 1; }
+>{ item: 1 } : { item: number; }
 >item : number
 >1 : 1
 }

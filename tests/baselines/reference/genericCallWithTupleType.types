@@ -20,11 +20,11 @@ var i2: I<{}, {}>;
 
 // no error
 i1.tuple1 = ["foo", 5];
->i1.tuple1 = ["foo", 5] : ["foo", 5]
+>i1.tuple1 = ["foo", 5] : [string, number]
 >i1.tuple1 : [string, number]
 >i1 : I<string, number>
 >tuple1 : [string, number]
->["foo", 5] : ["foo", 5]
+>["foo", 5] : [string, number]
 >"foo" : "foo"
 >5 : 5
 
@@ -45,11 +45,11 @@ var e2 = i1.tuple1[1];  // number
 >1 : 1
 
 i1.tuple1 = ["foo", 5, false, true];
->i1.tuple1 = ["foo", 5, false, true] : ["foo", 5, boolean, boolean]
+>i1.tuple1 = ["foo", 5, false, true] : [string, number, boolean, boolean]
 >i1.tuple1 : [string, number]
 >i1 : I<string, number>
 >tuple1 : [string, number]
->["foo", 5, false, true] : ["foo", 5, boolean, boolean]
+>["foo", 5, false, true] : [string, number, boolean, boolean]
 >"foo" : "foo"
 >5 : 5
 >false : false

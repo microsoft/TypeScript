@@ -21,7 +21,7 @@ module M {
     f({salt:2,pepper:0});
 >f({salt:2,pepper:0}) : void
 >f : (i: I) => void
->{salt:2,pepper:0} : { salt: 2; pepper: 0; }
+>{salt:2,pepper:0} : { salt: number; pepper: number; }
 >salt : number
 >2 : 2
 >pepper : number

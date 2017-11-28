@@ -82,7 +82,7 @@ function f3(a: { a: number; b: number; }) { }
 f3({ a: 0, b: 0 });
 >f3({ a: 0, b: 0 }) : void
 >f3 : (a: { a: number; b: number; }) => void
->{ a: 0, b: 0 } : { a: 0; b: 0; }
+>{ a: 0, b: 0 } : { a: number; b: number; }
 >a : number
 >0 : 0
 >b : number

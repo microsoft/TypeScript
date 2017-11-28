@@ -5,7 +5,7 @@ var a: string, b: number;
 
 var tuple: [number, string] = [2, "3"];
 >tuple : [number, string]
->[2, "3"] : [2, "3"]
+>[2, "3"] : [number, string]
 >2 : 2
 >"3" : "3"
 

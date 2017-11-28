@@ -43,10 +43,10 @@ var x = extend({ a: "hello" }, { b: 42 });
 >x : { a: string; } & { b: number; }
 >extend({ a: "hello" }, { b: 42 }) : { a: string; } & { b: number; }
 >extend : <T, U>(obj1: T, obj2: U) => T & U
->{ a: "hello" } : { a: "hello"; }
+>{ a: "hello" } : { a: string; }
 >a : string
 >"hello" : "hello"
->{ b: 42 } : { b: 42; }
+>{ b: 42 } : { b: number; }
 >b : number
 >42 : 42
 
@@ -100,7 +100,7 @@ var z = foo({ a: "hello", b: 42 });
 >z : string | number
 >foo({ a: "hello", b: 42 }) : string | number
 >foo : <T, U>(obj: A<T> & B<U>) => T | U
->{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
+>{ a: "hello", b: 42 } : { a: string; b: number; }
 >a : string
 >"hello" : "hello"
 >b : number

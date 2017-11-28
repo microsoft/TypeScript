@@ -82,15 +82,15 @@ var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '
 >n : number
 >a : string
 >b : number
->[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: ""; b: 0; c: string; } | { a: ""; b: 3; c: number; })[]
->{ a: '', b: 0, c: '' } : { a: ""; b: 0; c: string; }
+>[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
+>{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
 >a : string
 >'' : ""
 >b : number
 >0 : 0
 >c : string
 >'' : ""
->{ a: "", b: 3, c: 0 } : { a: ""; b: 3; c: number; }
+>{ a: "", b: 3, c: 0 } : { a: string; b: number; c: number; }
 >a : string
 >"" : ""
 >b : number

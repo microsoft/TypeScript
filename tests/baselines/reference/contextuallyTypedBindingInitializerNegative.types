@@ -80,8 +80,8 @@ interface Tuples {
 }
 function g({ prop = [101, 1234] }: Tuples) {}
 >g : ({ prop }: Tuples) => void
->prop : [string, number] | [number, 1234]
->[101, 1234] : [number, 1234]
+>prop : [string, number] | [number, number]
+>[101, 1234] : [number, number]
 >101 : 101
 >1234 : 1234
 >Tuples : Tuples

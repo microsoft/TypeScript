@@ -28,9 +28,9 @@ let map: StringMap;
 >StringMap : StringMap
 
 map = { x: "xxx", y: "yyy" };
->map = { x: "xxx", y: "yyy" } : { x: "xxx"; y: "yyy"; }
+>map = { x: "xxx", y: "yyy" } : { x: string; y: string; }
 >map : StringMap
->{ x: "xxx", y: "yyy" } : { x: "xxx"; y: "yyy"; }
+>{ x: "xxx", y: "yyy" } : { x: string; y: string; }
 >x : string
 >"xxx" : "xxx"
 >y : string

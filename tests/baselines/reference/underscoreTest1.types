@@ -13,7 +13,7 @@ _.each([1, 2, 3], (num) => alert(num.toString()));
 >_.each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
 >_ : Underscore.Static
 >each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -31,7 +31,7 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >_.each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
 >_ : Underscore.Static
 >each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
->{ one: 1, two: 2, three: 3 } : { one: 1; two: 2; three: 3; }
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
 >one : number
 >1 : 1
 >two : number
@@ -53,7 +53,7 @@ _.map([1, 2, 3], (num) => num * 3);
 >_.map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
 >_ : Underscore.Static
 >map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -68,7 +68,7 @@ _.map({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => value * 3);
 >_.map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
 >_ : Underscore.Static
 >map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
->{ one: 1, two: 2, three: 3 } : { one: 1; two: 2; three: 3; }
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
 >one : number
 >1 : 1
 >two : number
@@ -88,7 +88,7 @@ var sum = _.reduce([1, 2, 3], (memo, num) => memo + num, 0);
 >_.reduce : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
 >_ : Underscore.Static
 >reduce : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -136,7 +136,7 @@ var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >_.find : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
 >_ : Underscore.Static
 >find : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
->[1, 2, 3, 4, 5, 6] : (1 | 2 | 3 | 4 | 5 | 6)[]
+>[1, 2, 3, 4, 5, 6] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -157,7 +157,7 @@ var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >_.filter : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
 >_ : Underscore.Static
 >filter : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
->[1, 2, 3, 4, 5, 6] : (1 | 2 | 3 | 4 | 5 | 6)[]
+>[1, 2, 3, 4, 5, 6] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -215,7 +215,7 @@ var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >_.reject : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
 >_ : Underscore.Static
 >reject : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
->[1, 2, 3, 4, 5, 6] : (1 | 2 | 3 | 4 | 5 | 6)[]
+>[1, 2, 3, 4, 5, 6] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -249,7 +249,7 @@ _.any([null, 0, 'yes', false]);
 >_.any : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >any : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
->[null, 0, 'yes', false] : (false | 0 | "yes")[]
+>[null, 0, 'yes', false] : (string | number | false)[]
 >null : null
 >0 : 0
 >'yes' : "yes"
@@ -260,7 +260,7 @@ _.contains([1, 2, 3], 3);
 >_.contains : { <T>(list: T[], value: T): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
 >_ : Underscore.Static
 >contains : { <T>(list: T[], value: T): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -342,7 +342,7 @@ _.sortBy([1, 2, 3, 4, 5, 6], (num) => Math.sin(num));
 >_.sortBy : { <T>(list: T[], iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: T[], propertyName: string): T[]; <T>(list: Dictionary<T>, propertyName: string): T[]; }
 >_ : Underscore.Static
 >sortBy : { <T>(list: T[], iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: T[], propertyName: string): T[]; <T>(list: Dictionary<T>, propertyName: string): T[]; }
->[1, 2, 3, 4, 5, 6] : (1 | 2 | 3 | 4 | 5 | 6)[]
+>[1, 2, 3, 4, 5, 6] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -364,7 +364,7 @@ _([1.3, 2.1, 2.4]).groupBy((e: number, i?: number, list?: number[]) => Math.floo
 >_([1.3, 2.1, 2.4]).groupBy : { (iterator?: Iterator_<number, any>, context?: any): Dictionary<number[]>; (propertyName: string): Dictionary<number[]>; }
 >_([1.3, 2.1, 2.4]) : Underscore.WrappedArray<number>
 >_ : Underscore.Static
->[1.3, 2.1, 2.4] : (1.3 | 2.1 | 2.4)[]
+>[1.3, 2.1, 2.4] : number[]
 >1.3 : 1.3
 >2.1 : 2.1
 >2.4 : 2.4
@@ -384,7 +384,7 @@ _.groupBy([1.3, 2.1, 2.4], (num: number) => Math.floor(num));
 >_.groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
 >_ : Underscore.Static
 >groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
->[1.3, 2.1, 2.4] : (1.3 | 2.1 | 2.4)[]
+>[1.3, 2.1, 2.4] : number[]
 >1.3 : 1.3
 >2.1 : 2.1
 >2.4 : 2.4
@@ -401,7 +401,7 @@ _.groupBy(['one', 'two', 'three'], 'length');
 >_.groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
 >_ : Underscore.Static
 >groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
->['one', 'two', 'three'] : ("one" | "two" | "three")[]
+>['one', 'two', 'three'] : string[]
 >'one' : "one"
 >'two' : "two"
 >'three' : "three"
@@ -412,7 +412,7 @@ _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >_.countBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: T[], propertyName: string): Dictionary<number>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
 >_ : Underscore.Static
 >countBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: T[], propertyName: string): Dictionary<number>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
->[1, 2, 3, 4, 5] : (1 | 2 | 3 | 4 | 5)[]
+>[1, 2, 3, 4, 5] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -434,7 +434,7 @@ _.shuffle([1, 2, 3, 4, 5, 6]);
 >_.shuffle : { <T>(list: T[]): T[]; <T>(list: Dictionary<T>): T[]; }
 >_ : Underscore.Static
 >shuffle : { <T>(list: T[]): T[]; <T>(list: Dictionary<T>): T[]; }
->[1, 2, 3, 4, 5, 6] : (1 | 2 | 3 | 4 | 5 | 6)[]
+>[1, 2, 3, 4, 5, 6] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -449,7 +449,7 @@ _.size({ one: 1, two: 2, three: 3 });
 >_.size : { <T>(list: T[]): number; <T>(list: Dictionary<T>): number; }
 >_ : Underscore.Static
 >size : { <T>(list: T[]): number; <T>(list: Dictionary<T>): number; }
->{ one: 1, two: 2, three: 3 } : { one: 1; two: 2; three: 3; }
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
 >one : number
 >1 : 1
 >two : number
@@ -464,7 +464,7 @@ _.first([5, 4, 3, 2, 1]);
 >_.first : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
 >_ : Underscore.Static
 >first : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
->[5, 4, 3, 2, 1] : (1 | 2 | 3 | 4 | 5)[]
+>[5, 4, 3, 2, 1] : number[]
 >5 : 5
 >4 : 4
 >3 : 3
@@ -476,7 +476,7 @@ _.initial([5, 4, 3, 2, 1]);
 >_.initial : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
 >_ : Underscore.Static
 >initial : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
->[5, 4, 3, 2, 1] : (1 | 2 | 3 | 4 | 5)[]
+>[5, 4, 3, 2, 1] : number[]
 >5 : 5
 >4 : 4
 >3 : 3
@@ -488,7 +488,7 @@ _.last([5, 4, 3, 2, 1]);
 >_.last : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
 >_ : Underscore.Static
 >last : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
->[5, 4, 3, 2, 1] : (1 | 2 | 3 | 4 | 5)[]
+>[5, 4, 3, 2, 1] : number[]
 >5 : 5
 >4 : 4
 >3 : 3
@@ -500,7 +500,7 @@ _.rest([5, 4, 3, 2, 1]);
 >_.rest : <T>(list: T[], index?: number) => T[]
 >_ : Underscore.Static
 >rest : <T>(list: T[], index?: number) => T[]
->[5, 4, 3, 2, 1] : (1 | 2 | 3 | 4 | 5)[]
+>[5, 4, 3, 2, 1] : number[]
 >5 : 5
 >4 : 4
 >3 : 3
@@ -512,7 +512,7 @@ _.compact([0, 1, false, 2, '', 3]);
 >_.compact : <T>(list: T[]) => T[]
 >_ : Underscore.Static
 >compact : <T>(list: T[]) => T[]
->[0, 1, false, 2, '', 3] : (false | 1 | 2 | 3 | 0 | "")[]
+>[0, 1, false, 2, '', 3] : (string | number | false)[]
 >0 : 0
 >1 : 1
 >false : false
@@ -578,7 +578,7 @@ _.without([1, 2, 1, 0, 3, 1, 4], 0, 1);
 >_.without : <T>(list: T[], ...values: T[]) => T[]
 >_ : Underscore.Static
 >without : <T>(list: T[], ...values: T[]) => T[]
->[1, 2, 1, 0, 3, 1, 4] : (1 | 2 | 3 | 0 | 4)[]
+>[1, 2, 1, 0, 3, 1, 4] : number[]
 >1 : 1
 >2 : 2
 >1 : 1
@@ -594,16 +594,16 @@ _.union([1, 2, 3], [101, 2, 1, 10], [2, 1]);
 >_.union : <T>(...arrays: T[][]) => T[]
 >_ : Underscore.Static
 >union : <T>(...arrays: T[][]) => T[]
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
->[101, 2, 1, 10] : (1 | 2 | 10 | 101)[]
+>[101, 2, 1, 10] : number[]
 >101 : 101
 >2 : 2
 >1 : 1
 >10 : 10
->[2, 1] : (1 | 2)[]
+>[2, 1] : number[]
 >2 : 2
 >1 : 1
 
@@ -612,16 +612,16 @@ _.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]);
 >_.intersection : <T>(...arrays: T[][]) => T[]
 >_ : Underscore.Static
 >intersection : <T>(...arrays: T[][]) => T[]
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
->[101, 2, 1, 10] : (1 | 2 | 10 | 101)[]
+>[101, 2, 1, 10] : number[]
 >101 : 101
 >2 : 2
 >1 : 1
 >10 : 10
->[2, 1] : (1 | 2)[]
+>[2, 1] : number[]
 >2 : 2
 >1 : 1
 
@@ -630,13 +630,13 @@ _.difference([1, 2, 3, 4, 5], [5, 2, 10]);
 >_.difference : <T>(list: T[], ...others: T[][]) => T[]
 >_ : Underscore.Static
 >difference : <T>(list: T[], ...others: T[][]) => T[]
->[1, 2, 3, 4, 5] : (1 | 2 | 3 | 4 | 5)[]
+>[1, 2, 3, 4, 5] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
 >4 : 4
 >5 : 5
->[5, 2, 10] : (2 | 5 | 10)[]
+>[5, 2, 10] : number[]
 >5 : 5
 >2 : 2
 >10 : 10
@@ -646,7 +646,7 @@ _.uniq([1, 2, 1, 3, 1, 4]);
 >_.uniq : { <T>(list: T[], isSorted?: boolean): T[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
 >_ : Underscore.Static
 >uniq : { <T>(list: T[], isSorted?: boolean): T[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
->[1, 2, 1, 3, 1, 4] : (1 | 2 | 3 | 4)[]
+>[1, 2, 1, 3, 1, 4] : number[]
 >1 : 1
 >2 : 2
 >1 : 1
@@ -659,11 +659,11 @@ _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);
 >_.zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
 >_ : Underscore.Static
 >zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
->['moe', 'larry', 'curly'] : ("moe" | "larry" | "curly")[]
+>['moe', 'larry', 'curly'] : string[]
 >'moe' : "moe"
 >'larry' : "larry"
 >'curly' : "curly"
->[30, 40, 50] : (40 | 50 | 30)[]
+>[30, 40, 50] : number[]
 >30 : 30
 >40 : 40
 >50 : 50
@@ -677,7 +677,7 @@ _.object(['moe', 'larry', 'curly'], [30, 40, 50]);
 >_.object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
 >_ : Underscore.Static
 >object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
->['moe', 'larry', 'curly'] : ("moe" | "larry" | "curly")[]
+>['moe', 'larry', 'curly'] : string[]
 >'moe' : "moe"
 >'larry' : "larry"
 >'curly' : "curly"
@@ -707,7 +707,7 @@ _.indexOf([1, 2, 3], 2);
 >_.indexOf : <T>(list: T[], value: T, isSorted?: boolean) => number
 >_ : Underscore.Static
 >indexOf : <T>(list: T[], value: T, isSorted?: boolean) => number
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -718,7 +718,7 @@ _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);
 >_.lastIndexOf : <T>(list: T[], value: T, fromIndex?: number) => number
 >_ : Underscore.Static
 >lastIndexOf : <T>(list: T[], value: T, fromIndex?: number) => number
->[1, 2, 3, 1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3, 1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -732,7 +732,7 @@ _.sortedIndex([10, 20, 30, 40, 50], 35);
 >_.sortedIndex : { <T>(list: T[], obj: T, propertyName: string): number; <T>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
 >_ : Underscore.Static
 >sortedIndex : { <T>(list: T[], obj: T, propertyName: string): number; <T>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
->[10, 20, 30, 40, 50] : (40 | 50 | 10 | 30 | 20)[]
+>[10, 20, 30, 40, 50] : number[]
 >10 : 10
 >20 : 20
 >30 : 30
@@ -1159,7 +1159,7 @@ _.extend({ name: 'moe' }, { age: 50 });
 >_.extend : <T>(destination: T, ...sources: any[]) => T
 >_ : Underscore.Static
 >extend : <T>(destination: T, ...sources: any[]) => T
->{ name: 'moe' } : { name: "moe"; }
+>{ name: 'moe' } : { name: string; }
 >name : string
 >'moe' : "moe"
 >{ age: 50 } : { age: number; }
@@ -1171,7 +1171,7 @@ _.pick({ name: 'moe', age: 50, userid: 'moe1' }, 'name', 'age');
 >_.pick : <T>(object: T, ...keys: string[]) => T
 >_ : Underscore.Static
 >pick : <T>(object: T, ...keys: string[]) => T
->{ name: 'moe', age: 50, userid: 'moe1' } : { name: "moe"; age: 50; userid: "moe1"; }
+>{ name: 'moe', age: 50, userid: 'moe1' } : { name: string; age: number; userid: string; }
 >name : string
 >'moe' : "moe"
 >age : number
@@ -1186,7 +1186,7 @@ _.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid');
 >_.omit : <T>(object: T, ...keys: string[]) => T
 >_ : Underscore.Static
 >omit : <T>(object: T, ...keys: string[]) => T
->{ name: 'moe', age: 50, userid: 'moe1' } : { name: "moe"; age: 50; userid: "moe1"; }
+>{ name: 'moe', age: 50, userid: 'moe1' } : { name: string; age: number; userid: string; }
 >name : string
 >'moe' : "moe"
 >age : number
@@ -1218,7 +1218,7 @@ _.clone({ name: 'moe' });
 >_.clone : <T>(object: T) => T
 >_ : Underscore.Static
 >clone : <T>(object: T) => T
->{ name: 'moe' } : { name: "moe"; }
+>{ name: 'moe' } : { name: string; }
 >name : string
 >'moe' : "moe"
 
@@ -1235,7 +1235,7 @@ _.chain([1, 2, 3, 200])
 >_.chain : { <T>(list: T[]): Underscore.ChainedArray<T>; <T>(list: Dictionary<T>): Underscore.ChainedDictionary<T>; <T>(obj: T): Underscore.ChainedObject<T>; }
 >_ : Underscore.Static
 >chain : { <T>(list: T[]): Underscore.ChainedArray<T>; <T>(list: Dictionary<T>): Underscore.ChainedDictionary<T>; <T>(obj: T): Underscore.ChainedObject<T>; }
->[1, 2, 3, 200] : (1 | 2 | 3 | 200)[]
+>[1, 2, 3, 200] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -1723,7 +1723,7 @@ _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'da
 >{ answer: 'no' } : { answer: string; }
 >answer : string
 >'no' : "no"
->{ variable: 'data' } : { variable: "data"; }
+>{ variable: 'data' } : { variable: string; }
 >variable : string
 >'data' : "data"
 

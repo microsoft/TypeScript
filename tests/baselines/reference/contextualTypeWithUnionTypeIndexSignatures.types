@@ -89,7 +89,7 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: "hello"
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
 >IWithNoStringIndexSignature : IWithNoStringIndexSignature
 >IWithStringIndexSignature1 : IWithStringIndexSignature1
->{ foo: "hello" } : { foo: "hello"; }
+>{ foo: "hello" } : { foo: string; }
 >foo : string
 >"hello" : "hello"
 
@@ -142,7 +142,7 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: "hello" 
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
 >IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
->{ 0: "hello" } : { 0: "hello"; }
+>{ 0: "hello" } : { 0: string; }
 >"hello" : "hello"
 
 var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.toString() }; // a should be number

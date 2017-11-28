@@ -20,7 +20,7 @@ import zzz from "./b";
 const x: zzz = { x: "" };
 >x : zzz
 >zzz : zzz
->{ x: "" } : { x: ""; }
+>{ x: "" } : { x: string; }
 >x : string
 >"" : ""
 
@@ -38,7 +38,7 @@ import zzz from "./a";
 const x: zzz = { x: "" };
 >x : zzz
 >zzz : zzz
->{ x: "" } : { x: ""; }
+>{ x: "" } : { x: string; }
 >x : string
 >"" : ""
 

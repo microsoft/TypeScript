@@ -21,7 +21,7 @@ var x: B.A1.I = { x: 1 };
 >B : any
 >A1 : any
 >I : A.I
->{ x: 1 } : { x: 1; }
+>{ x: 1 } : { x: number; }
 >x : number
 >1 : 1
 

@@ -138,15 +138,15 @@ const de: D & E = {
 >de : D & E
 >D : D
 >E : E
->{    nested: {        doublyNested: {            d: 'yes',            f: 'no'        },        different: { e: 12 },        other: { g: 101 }    }} : { nested: { doublyNested: { d: "yes"; f: "no"; }; different: { e: 12; }; other: { g: 101; }; }; }
+>{    nested: {        doublyNested: {            d: 'yes',            f: 'no'        },        different: { e: 12 },        other: { g: 101 }    }} : { nested: { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }; }
 
     nested: {
->nested : { doublyNested: { d: "yes"; f: "no"; }; different: { e: 12; }; other: { g: 101; }; }
->{        doublyNested: {            d: 'yes',            f: 'no'        },        different: { e: 12 },        other: { g: 101 }    } : { doublyNested: { d: "yes"; f: "no"; }; different: { e: 12; }; other: { g: 101; }; }
+>nested : { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }
+>{        doublyNested: {            d: 'yes',            f: 'no'        },        different: { e: 12 },        other: { g: 101 }    } : { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }
 
         doublyNested: {
->doublyNested : { d: "yes"; f: "no"; }
->{            d: 'yes',            f: 'no'        } : { d: "yes"; f: "no"; }
+>doublyNested : { d: string; f: string; }
+>{            d: 'yes',            f: 'no'        } : { d: string; f: string; }
 
             d: 'yes',
 >d : string
@@ -158,14 +158,14 @@ const de: D & E = {
 
         },
         different: { e: 12 },
->different : { e: 12; }
->{ e: 12 } : { e: 12; }
+>different : { e: number; }
+>{ e: 12 } : { e: number; }
 >e : number
 >12 : 12
 
         other: { g: 101 }
->other : { g: 101; }
->{ g: 101 } : { g: 101; }
+>other : { g: number; }
+>{ g: 101 } : { g: number; }
 >g : number
 >101 : 101
     }

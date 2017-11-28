@@ -376,7 +376,7 @@ class FileService {
 >this : this
 >requestService : Services.IRequestService
 >makeRequest : (options: WinJS.IXHROptions) => WinJS.Promise
->{            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        } : { url: string; type: "POST"; headers: {}; data: string; }
+>{            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        } : { url: string; type: string; headers: {}; data: string; }
 
             url: this.requestService.getRequestUrl('root', path),
 >url : string

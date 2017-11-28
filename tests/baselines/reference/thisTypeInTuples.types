@@ -9,7 +9,7 @@ interface Array<T> {
 
 let t: [number, string] = [42, "hello"];
 >t : [number, string]
->[42, "hello"] : [42, "hello"]
+>[42, "hello"] : [number, string]
 >42 : 42
 >"hello" : "hello"
 

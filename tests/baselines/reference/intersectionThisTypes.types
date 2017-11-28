@@ -124,11 +124,11 @@ function test(label: Label) {
 >label.extend : <T>(props: T) => Label & T
 >label : Label
 >extend : <T>(props: T) => Label & T
->{ id: 67 } : { id: 67; }
+>{ id: 67 } : { id: number; }
 >id : number
 >67 : 67
 >extend : <T>(props: T) => Label & { id: number; } & T
->{ tag: "hello" } : { tag: "hello"; }
+>{ tag: "hello" } : { tag: string; }
 >tag : string
 >"hello" : "hello"
 

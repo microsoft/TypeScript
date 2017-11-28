@@ -117,12 +117,12 @@ var { x, ...fresh } = { x: 1, y: 2 };
 >2 : 2
 
 ({ x, ...fresh } = { x: 1, y: 2 });
->({ x, ...fresh } = { x: 1, y: 2 }) : { x: 1; y: 2; }
->{ x, ...fresh } = { x: 1, y: 2 } : { x: 1; y: 2; }
+>({ x, ...fresh } = { x: 1, y: 2 }) : { x: number; y: number; }
+>{ x, ...fresh } = { x: 1, y: 2 } : { x: number; y: number; }
 >{ x, ...fresh } : { y: number; x: number; }
 >x : number
 >fresh : { y: number; }
->{ x: 1, y: 2 } : { x: 1; y: 2; }
+>{ x: 1, y: 2 } : { x: number; y: number; }
 >x : number
 >1 : 1
 >y : number

@@ -18,13 +18,13 @@ var arr2 = ["hello", true]; // (string | number)[]
 
 var arr3Tuple: [number, string] = [3, "three"]; // [number, string]
 >arr3Tuple : [number, string]
->[3, "three"] : [3, "three"]
+>[3, "three"] : [number, string]
 >3 : 3
 >"three" : "three"
 
 var arr4Tuple: [number, string] = [3, "three", "hello"]; // [number, string, string]
 >arr4Tuple : [number, string]
->[3, "three", "hello"] : [3, "three", "hello"]
+>[3, "three", "hello"] : [number, string, string]
 >3 : 3
 >"three" : "three"
 >"hello" : "hello"
@@ -39,7 +39,7 @@ var arr5Tuple: {
     0: string;
     5: number;
 } = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
->["hello", true, false, " hello", true, 10, "any"] : ["hello", boolean, boolean, string, boolean, 10, string]
+>["hello", true, false, " hello", true, 10, "any"] : [string, boolean, boolean, string, boolean, number, string]
 >"hello" : "hello"
 >true : true
 >false : false

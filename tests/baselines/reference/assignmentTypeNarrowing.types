@@ -46,12 +46,12 @@ x; // boolean
 >x : true
 
 ({y: x} = {y: 1});
->({y: x} = {y: 1}) : { y: 1; }
->{y: x} = {y: 1} : { y: 1; }
+>({y: x} = {y: 1}) : { y: number; }
+>{y: x} = {y: 1} : { y: number; }
 >{y: x} : { y: string | number | boolean | RegExp; }
 >y : string | number | boolean | RegExp
 >x : string | number | boolean | RegExp
->{y: 1} : { y: 1; }
+>{y: 1} : { y: number; }
 >y : number
 >1 : 1
 

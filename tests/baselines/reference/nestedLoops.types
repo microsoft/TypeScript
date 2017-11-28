@@ -7,7 +7,7 @@ export class Test  {
         let outerArray: Array<number> = [1, 2, 3];
 >outerArray : number[]
 >Array : T[]
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -15,7 +15,7 @@ export class Test  {
         let innerArray: Array<number> = [1, 2, 3];
 >innerArray : number[]
 >Array : T[]
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3

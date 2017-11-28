@@ -28,8 +28,8 @@ var x11 = foo([{a:0}]); // works
 >x11 : string
 >foo([{a:0}]) : string
 >foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
->[{a:0}] : { a: 0; }[]
->{a:0} : { a: 0; }
+>[{a:0}] : { a: number; }[]
+>{a:0} : { a: number; }
 >a : number
 >0 : 0
 
@@ -73,7 +73,7 @@ var x2 = foo2({a:0}); // works
 >x2 : string
 >foo2({a:0}) : string
 >foo2 : { (bar: { a: number; }): string; (bar: { a: boolean; }): number; }
->{a:0} : { a: 0; }
+>{a:0} : { a: number; }
 >a : number
 >0 : 0
 

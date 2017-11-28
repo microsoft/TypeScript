@@ -15,7 +15,7 @@ const t = 0;
 /** @type Person */
 const person = { name: "" };
 >person : { name: string; }
->{ name: "" } : { name: ""; }
+>{ name: "" } : { name: string; }
 >name : string
 >"" : ""
 

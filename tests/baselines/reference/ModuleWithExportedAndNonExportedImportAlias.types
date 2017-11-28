@@ -52,7 +52,7 @@ module Geometry {
 >Origin : Points.Point
 >Points : any
 >Point : Points.Point
->{ x: 0, y: 0 } : { x: 0; y: 0; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
 >y : number
@@ -68,7 +68,7 @@ module Geometry {
 >Lines : typeof Lines
 >Line : typeof Lines.Line
 >Origin : Points.Point
->{ x: 1, y: 0 } : { x: 1; y: 0; }
+>{ x: 1, y: 0 } : { x: number; y: number; }
 >x : number
 >1 : 1
 >y : number

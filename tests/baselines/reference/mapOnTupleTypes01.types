@@ -19,7 +19,7 @@ export let mapOnLooseArrayLiteral = [1, 2, 3, 4].map(n => n * n);
 
 let numTuple: [number] = [1];
 >numTuple : [number]
->[1] : [1]
+>[1] : [number]
 >1 : 1
 
 export let a = numTuple.map(x => x * x);
@@ -38,19 +38,19 @@ export let a = numTuple.map(x => x * x);
 
 let numNum: [number, number] = [    100,     100];
 >numNum : [number, number]
->[    100,     100] : [100, 100]
+>[    100,     100] : [number, number]
 >100 : 100
 >100 : 100
 
 let strStr: [string, string] = ["hello", "hello"];
 >strStr : [string, string]
->["hello", "hello"] : ["hello", "hello"]
+>["hello", "hello"] : [string, string]
 >"hello" : "hello"
 >"hello" : "hello"
 
 let numStr: [number, string] = [    100, "hello"];
 >numStr : [number, string]
->[    100, "hello"] : [100, "hello"]
+>[    100, "hello"] : [number, string]
 >100 : 100
 >"hello" : "hello"
 
@@ -94,7 +94,7 @@ export let d = numStr.map(x => x);
 
 let numNumNum: [number, number, number] = [1, 2, 3];
 >numNumNum : [number, number, number]
->[1, 2, 3] : [1, 2, 3]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -115,7 +115,7 @@ export let e = numNumNum.map(n => n * n);
 
 let numNumNumNum: [number, number, number, number] = [1, 2, 3, 4];
 >numNumNumNum : [number, number, number, number]
->[1, 2, 3, 4] : [1, 2, 3, 4]
+>[1, 2, 3, 4] : [number, number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -137,7 +137,7 @@ export let f = numNumNumNum.map(n => n * n);
 
 let numNumNumNumNum: [number, number, number, number, number] = [1, 2, 3, 4, 5];
 >numNumNumNumNum : [number, number, number, number, number]
->[1, 2, 3, 4, 5] : [1, 2, 3, 4, 5]
+>[1, 2, 3, 4, 5] : [number, number, number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -161,7 +161,7 @@ export let g = numNumNumNumNum.map(n => n * n);
 
 let numNumNumNumNumNum: [number, number, number, number, number, number] = [1, 2, 3, 4, 5, 6];
 >numNumNumNumNumNum : [number, number, number, number, number, number]
->[1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5, 6]
+>[1, 2, 3, 4, 5, 6] : [number, number, number, number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3

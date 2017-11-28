@@ -46,7 +46,7 @@ const {combined, literal} = flowtypes<{a: string}>({b: 'b-value'})
 >flowtypes<{a: string}>({b: 'b-value'}) : { combined: (fn: (combined: { a: string; } & B) => void) => any; literal: (fn: (aPlusB: { a: string; } & B) => void) => any; }
 >flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
 >a : string
->{b: 'b-value'} : { b: "b-value"; }
+>{b: 'b-value'} : { b: string; }
 >b : string
 >'b-value' : "b-value"
 

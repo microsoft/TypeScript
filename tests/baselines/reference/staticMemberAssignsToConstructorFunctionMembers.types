@@ -34,11 +34,11 @@ class C {
 >x : number
 
         C.bar = (x: number) => 1; // ok
->C.bar = (x: number) => 1 : (x: number) => 1
+>C.bar = (x: number) => 1 : (x: number) => number
 >C.bar : (x: number) => number
 >C : typeof C
 >bar : (x: number) => number
->(x: number) => 1 : (x: number) => 1
+>(x: number) => 1 : (x: number) => number
 >x : number
 >1 : 1
 

@@ -27,7 +27,7 @@ var x = foo({ name: "Sprocket" });
 >x : string
 >foo({ name: "Sprocket" }) : string
 >foo : { (item: Item): string; (item: any): number; }
->{ name: "Sprocket" } : { name: "Sprocket"; }
+>{ name: "Sprocket" } : { name: string; }
 >name : string
 >"Sprocket" : "Sprocket"
 
@@ -38,7 +38,7 @@ var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
 >y : string
 >foo({ name: "Sprocket", description: "Bumpy wheel" }) : string
 >foo : { (item: Item): string; (item: any): number; }
->{ name: "Sprocket", description: "Bumpy wheel" } : { name: "Sprocket"; description: "Bumpy wheel"; }
+>{ name: "Sprocket", description: "Bumpy wheel" } : { name: string; description: string; }
 >name : string
 >"Sprocket" : "Sprocket"
 >description : string

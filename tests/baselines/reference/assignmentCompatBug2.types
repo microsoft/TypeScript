@@ -14,9 +14,9 @@ b2 = { a: 0 }; // error
 >0 : 0
 
 b2 = {b: 0, a: 0 };
->b2 = {b: 0, a: 0 } : { b: 0; a: number; }
+>b2 = {b: 0, a: 0 } : { b: number; a: number; }
 >b2 : { b: number; }
->{b: 0, a: 0 } : { b: 0; a: number; }
+>{b: 0, a: 0 } : { b: number; a: number; }
 >b : number
 >0 : 0
 >a : number
@@ -34,19 +34,19 @@ var b3: { f(n: number): number; g(s: string): number; m: number; n?: number; k?(
 >a : any
 
 b3 = {
->b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,} : { f: (n: number) => 0; g: (s: string) => 0; m: 0; }
+>b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,} : { f: (n: number) => number; g: (s: string) => number; m: number; }
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
->{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,} : { f: (n: number) => 0; g: (s: string) => 0; m: 0; }
+>{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,} : { f: (n: number) => number; g: (s: string) => number; m: number; }
 
     f: (n) => { return 0; },
->f : (n: number) => 0
->(n) => { return 0; } : (n: number) => 0
+>f : (n: number) => number
+>(n) => { return 0; } : (n: number) => number
 >n : number
 >0 : 0
 
     g: (s) => { return 0; },
->g : (s: string) => 0
->(s) => { return 0; } : (s: string) => 0
+>g : (s: string) => number
+>(s) => { return 0; } : (s: string) => number
 >s : string
 >0 : 0
 
@@ -57,32 +57,32 @@ b3 = {
 }; // ok
 
 b3 = {
->b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },} : { f: (n: number) => 0; g: (s: string) => 0; }
+>b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },} : { f: (n: number) => number; g: (s: string) => number; }
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
->{    f: (n) => { return 0; },    g: (s) => { return 0; },} : { f: (n: number) => 0; g: (s: string) => 0; }
+>{    f: (n) => { return 0; },    g: (s) => { return 0; },} : { f: (n: number) => number; g: (s: string) => number; }
 
     f: (n) => { return 0; },
->f : (n: number) => 0
->(n) => { return 0; } : (n: number) => 0
+>f : (n: number) => number
+>(n) => { return 0; } : (n: number) => number
 >n : number
 >0 : 0
 
     g: (s) => { return 0; },
->g : (s: string) => 0
->(s) => { return 0; } : (s: string) => 0
+>g : (s: string) => number
+>(s) => { return 0; } : (s: string) => number
 >s : string
 >0 : 0
 
 }; // error
 
 b3 = {
->b3 = {    f: (n) => { return 0; },    m: 0,} : { f: (n: number) => 0; m: 0; }
+>b3 = {    f: (n) => { return 0; },    m: 0,} : { f: (n: number) => number; m: number; }
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
->{    f: (n) => { return 0; },    m: 0,} : { f: (n: number) => 0; m: 0; }
+>{    f: (n) => { return 0; },    m: 0,} : { f: (n: number) => number; m: number; }
 
     f: (n) => { return 0; },
->f : (n: number) => 0
->(n) => { return 0; } : (n: number) => 0
+>f : (n: number) => number
+>(n) => { return 0; } : (n: number) => number
 >n : number
 >0 : 0
 
@@ -93,19 +93,19 @@ b3 = {
 }; // error
 
 b3 = {
->b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => 0; g: (s: string) => 0; m: 0; n: 0; k: (a: any) => any; }
+>b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => any; }
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
->{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => 0; g: (s: string) => 0; m: 0; n: 0; k: (a: any) => any; }
+>{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => any; }
 
     f: (n) => { return 0; },
->f : (n: number) => 0
->(n) => { return 0; } : (n: number) => 0
+>f : (n: number) => number
+>(n) => { return 0; } : (n: number) => number
 >n : number
 >0 : 0
 
     g: (s) => { return 0; },
->g : (s: string) => 0
->(s) => { return 0; } : (s: string) => 0
+>g : (s: string) => number
+>(s) => { return 0; } : (s: string) => number
 >s : string
 >0 : 0
 
@@ -126,19 +126,19 @@ b3 = {
 }; // ok
 
 b3 = {
->b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => 0; g: (s: string) => 0; n: 0; k: (a: any) => any; }
+>b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
->{    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => 0; g: (s: string) => 0; n: 0; k: (a: any) => any; }
+>{    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }
 
     f: (n) => { return 0; },
->f : (n: number) => 0
->(n) => { return 0; } : (n: number) => 0
+>f : (n: number) => number
+>(n) => { return 0; } : (n: number) => number
 >n : number
 >0 : 0
 
     g: (s) => { return 0; },
->g : (s: string) => 0
->(s) => { return 0; } : (s: string) => 0
+>g : (s: string) => number
+>(s) => { return 0; } : (s: string) => number
 >s : string
 >0 : 0
 

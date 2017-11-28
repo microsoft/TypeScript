@@ -47,7 +47,7 @@ const v = chain({a: 1, b: 2}).mapValues(square).value();
 >chain({a: 1, b: 2}).mapValues : <U>(func: (v: number) => U) => Chainable<{ a: U; b: U; }>
 >chain({a: 1, b: 2}) : Chainable<{ a: number; b: number; }>
 >chain : <T>(t: T) => Chainable<T>
->{a: 1, b: 2} : { a: 1; b: 2; }
+>{a: 1, b: 2} : { a: number; b: number; }
 >a : number
 >1 : 1
 >b : number

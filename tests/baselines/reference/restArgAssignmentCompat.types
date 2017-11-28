@@ -38,7 +38,7 @@ n = f;
 n([4], 'foo');
 >n([4], 'foo') : void
 >n : (x: number[], y: string) => void
->[4] : 4[]
+>[4] : number[]
 >4 : 4
 >'foo' : "foo"
 

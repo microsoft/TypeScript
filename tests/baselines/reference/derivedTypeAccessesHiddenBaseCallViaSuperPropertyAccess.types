@@ -38,7 +38,7 @@ class Derived extends Base {
 >super.foo : (x: { a: number; }) => { a: number; }
 >super : Base
 >foo : (x: { a: number; }) => { a: number; }
->{ a: 1 } : { a: 1; }
+>{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
 
@@ -60,7 +60,7 @@ class Derived extends Base {
 >this.foo : (x: { a: number; b: number; }) => { a: number; b: number; }
 >this : this
 >foo : (x: { a: number; b: number; }) => { a: number; b: number; }
->{ a: 1, b: 2 } : { a: 1; b: 2; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
 >1 : 1
 >b : number

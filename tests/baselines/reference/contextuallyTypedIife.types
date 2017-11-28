@@ -179,7 +179,7 @@
 >({ q }) => q : ({ q }: { q: number; }) => number
 >q : number
 >q : number
->{ q : 13 } : { q: 13; }
+>{ q : 13 } : { q: number; }
 >q : number
 >13 : 13
 
@@ -190,7 +190,7 @@
 >p : number
 >14 : 14
 >p : number
->{ p : 15 } : { p: 15; }
+>{ p : 15 } : { p: number; }
 >p : number
 >15 : 15
 
@@ -200,21 +200,21 @@
 >({ r = 17 } = { r: 18 }) => r : ({ r }?: { r: number; }) => number
 >r : number
 >17 : 17
->{ r: 18 } : { r: 18; }
+>{ r: 18 } : { r: number; }
 >r : number
 >18 : 18
 >r : number
->{r : 19} : { r: 19; }
+>{r : 19} : { r: number; }
 >r : number
 >19 : 19
 
 (({ u = 22 } = { u: 23 }) => u)();
 >(({ u = 22 } = { u: 23 }) => u)() : number
->(({ u = 22 } = { u: 23 }) => u) : ({ u }?: { u?: 23; }) => number
->({ u = 22 } = { u: 23 }) => u : ({ u }?: { u?: 23; }) => number
+>(({ u = 22 } = { u: 23 }) => u) : ({ u }?: { u?: number; }) => number
+>({ u = 22 } = { u: 23 }) => u : ({ u }?: { u?: number; }) => number
 >u : number
 >22 : 22
->{ u: 23 } : { u?: 23; }
+>{ u: 23 } : { u?: number; }
 >u : number
 >23 : 23
 >u : number

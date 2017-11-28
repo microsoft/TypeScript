@@ -61,16 +61,16 @@ t2 = [E1.one, E2.two];
 >two : E2
 
 t3 = [5, undefined];
->t3 = [5, undefined] : [5, undefined]
+>t3 = [5, undefined] : [number, undefined]
 >t3 : [number, any]
->[5, undefined] : [5, undefined]
+>[5, undefined] : [number, undefined]
 >5 : 5
 >undefined : undefined
 
 t4 = [E1.one, E2.two, 20];
->t4 = [E1.one, E2.two, 20] : [E1, E2, 20]
+>t4 = [E1.one, E2.two, 20] : [E1, E2, number]
 >t4 : [E1, E2, number]
->[E1.one, E2.two, 20] : [E1, E2, 20]
+>[E1.one, E2.two, 20] : [E1, E2, number]
 >E1.one : E1
 >E1 : typeof E1
 >one : E1

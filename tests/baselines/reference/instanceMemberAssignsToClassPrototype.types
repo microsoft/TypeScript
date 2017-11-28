@@ -40,13 +40,13 @@ class C {
 >x : number
 
         C.prototype.bar = (x: number) => 1; // ok
->C.prototype.bar = (x: number) => 1 : (x: number) => 1
+>C.prototype.bar = (x: number) => 1 : (x: number) => number
 >C.prototype.bar : (x: number) => number
 >C.prototype : C
 >C : typeof C
 >prototype : C
 >bar : (x: number) => number
->(x: number) => 1 : (x: number) => 1
+>(x: number) => 1 : (x: number) => number
 >x : number
 >1 : 1
 

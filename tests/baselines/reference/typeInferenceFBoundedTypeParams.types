@@ -60,7 +60,7 @@ fold(
 >fold : <a, r>(values: a[], result: r, fold: (result: r, value: a) => r) => r
 
     [1, 2, 3],
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -80,7 +80,7 @@ fold(
 >result : [string, string][]
 
         ["", ""]
->["", ""] : ["", ""]
+>["", ""] : [string, string]
 >"" : ""
 >"" : ""
 

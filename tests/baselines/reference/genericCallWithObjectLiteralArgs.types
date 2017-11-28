@@ -26,7 +26,7 @@ var r2 = foo({ bar: 1, baz: 1 }); // T = number
 >r2 : { bar: number; baz: number; }
 >foo({ bar: 1, baz: 1 }) : { bar: number; baz: number; }
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
->{ bar: 1, baz: 1 } : { bar: 1; baz: 1; }
+>{ bar: 1, baz: 1 } : { bar: number; baz: number; }
 >bar : number
 >1 : 1
 >baz : number

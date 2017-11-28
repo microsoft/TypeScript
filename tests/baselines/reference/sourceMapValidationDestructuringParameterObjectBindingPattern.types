@@ -22,7 +22,7 @@ var hello = "hello";
 var robotA: Robot = { name: "mower", skill: "mowing" };
 >robotA : Robot
 >Robot : Robot
->{ name: "mower", skill: "mowing" } : { name: "mower"; skill: "mowing"; }
+>{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
 >"mower" : "mower"
 >skill : string
@@ -77,7 +77,7 @@ foo1(robotA);
 foo1({ name: "Edger", skill: "cutting edges" });
 >foo1({ name: "Edger", skill: "cutting edges" }) : void
 >foo1 : ({ name: nameA }: Robot) => void
->{ name: "Edger", skill: "cutting edges" } : { name: "Edger"; skill: "cutting edges"; }
+>{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
 >"Edger" : "Edger"
 >skill : string
@@ -91,7 +91,7 @@ foo2(robotA);
 foo2({ name: "Edger", skill: "cutting edges" });
 >foo2({ name: "Edger", skill: "cutting edges" }) : void
 >foo2 : ({ name: nameB, skill: skillB }: Robot) => void
->{ name: "Edger", skill: "cutting edges" } : { name: "Edger"; skill: "cutting edges"; }
+>{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
 >"Edger" : "Edger"
 >skill : string
@@ -105,7 +105,7 @@ foo3(robotA);
 foo3({ name: "Edger", skill: "cutting edges" });
 >foo3({ name: "Edger", skill: "cutting edges" }) : void
 >foo3 : ({ name }: Robot) => void
->{ name: "Edger", skill: "cutting edges" } : { name: "Edger"; skill: "cutting edges"; }
+>{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
 >"Edger" : "Edger"
 >skill : string

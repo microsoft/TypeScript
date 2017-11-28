@@ -42,7 +42,7 @@ const a = Object.freeze([1, 2, 3]);
 >Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
 >freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
->[1, 2, 3] : (1 | 2 | 3)[]
+>[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -65,7 +65,7 @@ const o = Object.freeze({ a: 1, b: "string" });
 >Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
 >freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
->{ a: 1, b: "string" } : { a: 1; b: "string"; }
+>{ a: 1, b: "string" } : { a: number; b: string; }
 >a : number
 >1 : 1
 >b : string

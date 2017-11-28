@@ -18908,13 +18908,20 @@ namespace ts {
                 }
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-                    return isLiteralOfContextualType(candidateLiteral, constraint);
+                    // A constraint of a literal domain causes the inference of literal types, ie `T extends string` contextually typing a `"foo"` causes `"foo"` to be the type
+                    return !!((constraint.flags & TypeFlags.String && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
+                        (constraint.flags & TypeFlags.Number && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
+                        (constraint.flags & TypeFlags.Boolean && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)) ||
+                        (constraint.flags & TypeFlags.ESSymbol && maybeTypeOfKind(candidateLiteral, TypeFlags.ESSymbolLike)) ||
+                        isLiteralOfContextualType(candidateLiteral, constraint)
+                    );
                 }
                 // No need to `maybeTypeOfKind` on the contextual type, as it can't be a union, _however_, `candidateLiteral` might still be one!
-                return !!((contextualType.flags & TypeFlags.StringLike && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
-                    (contextualType.flags & TypeFlags.NumberLike && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
-                    (contextualType.flags & TypeFlags.BooleanLike && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)) ||
-                    (contextualType.flags & TypeFlags.ESSymbolLike && maybeTypeOfKind(candidateLiteral, TypeFlags.ESSymbolLike))
+                // Please note: Only another literal in the same domain _and not the domain itself_ causes a literal type to be produced
+                return !!((contextualType.flags & TypeFlags.StringLike && !(contextualType.flags & TypeFlags.String) && maybeTypeOfKind(candidateLiteral, TypeFlags.StringLike)) ||
+                    (contextualType.flags & TypeFlags.NumberLike && !(contextualType.flags & TypeFlags.Number) && maybeTypeOfKind(candidateLiteral, TypeFlags.NumberLike)) ||
+                    (contextualType.flags & TypeFlags.BooleanLike && !(contextualType.flags & TypeFlags.Boolean) && maybeTypeOfKind(candidateLiteral, TypeFlags.BooleanLike)) ||
+                    (contextualType.flags & TypeFlags.ESSymbolLike && !(contextualType.flags & TypeFlags.ESSymbol) && maybeTypeOfKind(candidateLiteral, TypeFlags.ESSymbolLike))
                 );
             }
             return false;

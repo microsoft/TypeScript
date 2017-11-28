@@ -25,7 +25,7 @@ f2({ hello: 1 }) // error
 f2({ value: '' }) // missing toString satisfied by Object's member
 >f2({ value: '' }) : void
 >f2 : (args: I) => void
->{ value: '' } : { value: ""; }
+>{ value: '' } : { value: string; }
 >value : string
 >'' : ""
 
@@ -59,7 +59,7 @@ f2({ toString: (s: string) => s }) // error, missing property value from ArgsStr
 f2({ value: '', toString: (s) => s.uhhh }) // error
 >f2({ value: '', toString: (s) => s.uhhh }) : void
 >f2 : (args: I) => void
->{ value: '', toString: (s) => s.uhhh } : { value: ""; toString: (s: string) => any; }
+>{ value: '', toString: (s) => s.uhhh } : { value: string; toString: (s: string) => any; }
 >value : string
 >'' : ""
 >toString : (s: string) => any

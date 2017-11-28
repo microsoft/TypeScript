@@ -13,7 +13,7 @@ var r = foo([1, 2]); // number[]
 >r : number[]
 >foo([1, 2]) : number[]
 >foo : <T>(t: T) => T
->[1, 2] : (1 | 2)[]
+>[1, 2] : number[]
 >1 : 1
 >2 : 2
 
@@ -21,7 +21,7 @@ var r = foo<number[]>([1, 2]); // number[]
 >r : number[]
 >foo<number[]>([1, 2]) : number[]
 >foo : <T>(t: T) => T
->[1, 2] : (1 | 2)[]
+>[1, 2] : number[]
 >1 : 1
 >2 : 2
 
@@ -49,7 +49,7 @@ var r4 = foo([1, '']); // {}[]
 >r4 : (string | number)[]
 >foo([1, '']) : (string | number)[]
 >foo : <T>(t: T) => T
->[1, ''] : (1 | "")[]
+>[1, ''] : (string | number)[]
 >1 : 1
 >'' : ""
 

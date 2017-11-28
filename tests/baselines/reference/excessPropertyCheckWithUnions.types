@@ -77,27 +77,27 @@ let amb: Ambiguous
 
 // no error for ambiguous tag, even when it could satisfy both constituents at once
 amb = { tag: "A", x: "hi" }
->amb = { tag: "A", x: "hi" } : { tag: "A"; x: "hi"; }
+>amb = { tag: "A", x: "hi" } : { tag: "A"; x: string; }
 >amb : Ambiguous
->{ tag: "A", x: "hi" } : { tag: "A"; x: "hi"; }
+>{ tag: "A", x: "hi" } : { tag: "A"; x: string; }
 >tag : string
 >"A" : "A"
 >x : string
 >"hi" : "hi"
 
 amb = { tag: "A", y: 12 }
->amb = { tag: "A", y: 12 } : { tag: "A"; y: 12; }
+>amb = { tag: "A", y: 12 } : { tag: "A"; y: number; }
 >amb : Ambiguous
->{ tag: "A", y: 12 } : { tag: "A"; y: 12; }
+>{ tag: "A", y: 12 } : { tag: "A"; y: number; }
 >tag : string
 >"A" : "A"
 >y : number
 >12 : 12
 
 amb = { tag: "A", x: "hi", y: 12 }
->amb = { tag: "A", x: "hi", y: 12 } : { tag: "A"; x: "hi"; y: 12; }
+>amb = { tag: "A", x: "hi", y: 12 } : { tag: "A"; x: string; y: number; }
 >amb : Ambiguous
->{ tag: "A", x: "hi", y: 12 } : { tag: "A"; x: "hi"; y: 12; }
+>{ tag: "A", x: "hi", y: 12 } : { tag: "A"; x: string; y: number; }
 >tag : string
 >"A" : "A"
 >x : string
@@ -107,9 +107,9 @@ amb = { tag: "A", x: "hi", y: 12 }
 
 // correctly error on excess property 'extra', even when ambiguous
 amb = { tag: "A", x: "hi", extra: 12 }
->amb = { tag: "A", x: "hi", extra: 12 } : { tag: "A"; x: "hi"; extra: number; }
+>amb = { tag: "A", x: "hi", extra: 12 } : { tag: "A"; x: string; extra: number; }
 >amb : Ambiguous
->{ tag: "A", x: "hi", extra: 12 } : { tag: "A"; x: "hi"; extra: number; }
+>{ tag: "A", x: "hi", extra: 12 } : { tag: "A"; x: string; extra: number; }
 >tag : string
 >"A" : "A"
 >x : string
@@ -118,9 +118,9 @@ amb = { tag: "A", x: "hi", extra: 12 }
 >12 : 12
 
 amb = { tag: "A", y: 12, extra: 12 }
->amb = { tag: "A", y: 12, extra: 12 } : { tag: "A"; y: 12; extra: number; }
+>amb = { tag: "A", y: 12, extra: 12 } : { tag: "A"; y: number; extra: number; }
 >amb : Ambiguous
->{ tag: "A", y: 12, extra: 12 } : { tag: "A"; y: 12; extra: number; }
+>{ tag: "A", y: 12, extra: 12 } : { tag: "A"; y: number; extra: number; }
 >tag : string
 >"A" : "A"
 >y : number
@@ -169,9 +169,9 @@ let over: Overlapping
 
 // these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" }
->over = { a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: "ok"; second: string; }
+>over = { a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: string; second: string; }
 >over : Overlapping
->{ a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: "ok"; second: string; }
+>{ a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: string; second: string; }
 >a : number
 >1 : 1
 >b : number
@@ -182,9 +182,9 @@ over = { a: 1, b: 1, first: "ok", second: "error" }
 >"error" : "error"
 
 over = { a: 1, b: 1, first: "ok", third: "error" }
->over = { a: 1, b: 1, first: "ok", third: "error" } : { a: 1; b: 1; first: "ok"; third: string; }
+>over = { a: 1, b: 1, first: "ok", third: "error" } : { a: 1; b: 1; first: string; third: string; }
 >over : Overlapping
->{ a: 1, b: 1, first: "ok", third: "error" } : { a: 1; b: 1; first: "ok"; third: string; }
+>{ a: 1, b: 1, first: "ok", third: "error" } : { a: 1; b: 1; first: string; third: string; }
 >a : number
 >1 : 1
 >b : number

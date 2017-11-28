@@ -36,7 +36,7 @@ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo'
 >12 : 12
 >nested : { ka: any; }
 >rest : { y: string; }
->{ x: { z: 1, ka: 1 }, y: 'noo' } : { x: { z: number; ka: number; }; y: "noo"; }
+>{ x: { z: 1, ka: 1 }, y: 'noo' } : { x: { z: number; ka: number; }; y: string; }
 >x : { z: number; ka: number; }
 >{ z: 1, ka: 1 } : { z: number; ka: number; }
 >z : number

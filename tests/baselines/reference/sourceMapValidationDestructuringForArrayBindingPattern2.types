@@ -15,7 +15,7 @@ type MultiSkilledRobot = [string, [string, string]];
 let robotA: Robot = [1, "mower", "mowing"];
 >robotA : [number, string, string]
 >Robot : [number, string, string]
->[1, "mower", "mowing"] : [1, "mower", "mowing"]
+>[1, "mower", "mowing"] : [number, string, string]
 >1 : 1
 >"mower" : "mower"
 >"mowing" : "mowing"
@@ -30,18 +30,18 @@ function getRobot() {
 let multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >multiRobotA : [string, [string, string]]
 >MultiSkilledRobot : [string, [string, string]]
->["mower", ["mowing", ""]] : ["mower", ["mowing", ""]]
+>["mower", ["mowing", ""]] : [string, [string, string]]
 >"mower" : "mower"
->["mowing", ""] : ["mowing", ""]
+>["mowing", ""] : [string, string]
 >"mowing" : "mowing"
 >"" : ""
 
 let multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : [string, [string, string]]
 >MultiSkilledRobot : [string, [string, string]]
->["trimmer", ["trimming", "edging"]] : ["trimmer", ["trimming", "edging"]]
+>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >"trimmer" : "trimmer"
->["trimming", "edging"] : ["trimming", "edging"]
+>["trimming", "edging"] : [string, string]
 >"trimming" : "trimming"
 >"edging" : "edging"
 
@@ -124,11 +124,11 @@ for ([, nameA] = getRobot(), i = 0; i < 1; i++) {
 }
 for ([, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[, nameA] = [2, "trimmer", "trimming"], i = 0 : 0
->[, nameA] = [2, "trimmer", "trimming"] : [number, "trimmer", "trimming"]
+>[, nameA] = [2, "trimmer", "trimming"] : [number, string, string]
 >[, nameA] : [undefined, string]
 > : undefined
 >nameA : string
->[2, "trimmer", "trimming"] : [number, "trimmer", "trimming"]
+>[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"
@@ -201,15 +201,15 @@ for ([, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) 
 }
 for ([, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >[, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0 : 0
->[, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]] : [string, ["trimming", "edging"]]
+>[, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 > : undefined
 >[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
->["trimmer", ["trimming", "edging"]] : [string, ["trimming", "edging"]]
+>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >"trimmer" : "trimmer"
->["trimming", "edging"] : ["trimming", "edging"]
+>["trimming", "edging"] : [string, string]
 >"trimming" : "trimming"
 >"edging" : "edging"
 >i = 0 : 0
@@ -276,10 +276,10 @@ for ([numberB] = getRobot(), i = 0; i < 1; i++) {
 }
 for ([numberB] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[numberB] = [2, "trimmer", "trimming"], i = 0 : 0
->[numberB] = [2, "trimmer", "trimming"] : [2, string, string]
+>[numberB] = [2, "trimmer", "trimming"] : [number, string, string]
 >[numberB] : [number]
 >numberB : number
->[2, "trimmer", "trimming"] : [2, string, string]
+>[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"
@@ -346,12 +346,12 @@ for ([nameB] = getMultiRobot(), i = 0; i < 1; i++) {
 }
 for ([nameB] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >[nameB] = ["trimmer", ["trimming", "edging"]], i = 0 : 0
->[nameB] = ["trimmer", ["trimming", "edging"]] : ["trimmer", ("trimming" | "edging")[]]
+>[nameB] = ["trimmer", ["trimming", "edging"]] : [string, string[]]
 >[nameB] : [string]
 >nameB : string
->["trimmer", ["trimming", "edging"]] : ["trimmer", ("trimming" | "edging")[]]
+>["trimmer", ["trimming", "edging"]] : [string, string[]]
 >"trimmer" : "trimmer"
->["trimming", "edging"] : ("trimming" | "edging")[]
+>["trimming", "edging"] : string[]
 >"trimming" : "trimming"
 >"edging" : "edging"
 >i = 0 : 0
@@ -422,12 +422,12 @@ for ([numberA2, nameA2, skillA2] = getRobot(), i = 0; i < 1; i++) {
 }
 for ([numberA2, nameA2, skillA2] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[numberA2, nameA2, skillA2] = [2, "trimmer", "trimming"], i = 0 : 0
->[numberA2, nameA2, skillA2] = [2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
+>[numberA2, nameA2, skillA2] = [2, "trimmer", "trimming"] : [number, string, string]
 >[numberA2, nameA2, skillA2] : [number, string, string]
 >numberA2 : number
 >nameA2 : string
 >skillA2 : string
->[2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
+>[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"
@@ -500,15 +500,15 @@ for ([nameMA, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1;
 }
 for ([nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >[nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0 : 0
->[nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]] : ["trimmer", ["trimming", "edging"]]
+>[nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >[nameMA, [primarySkillA, secondarySkillA]] : [string, [string, string]]
 >nameMA : string
 >[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
->["trimmer", ["trimming", "edging"]] : ["trimmer", ["trimming", "edging"]]
+>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >"trimmer" : "trimmer"
->["trimming", "edging"] : ["trimming", "edging"]
+>["trimming", "edging"] : [string, string]
 >"trimming" : "trimming"
 >"edging" : "edging"
 >i = 0 : 0
@@ -586,7 +586,7 @@ for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1
 >robotAInfo : (string | number)[]
 ><Robot>[2, "trimmer", "trimming"] : [number, string, string]
 >Robot : [number, string, string]
->[2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
+>[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"
@@ -661,9 +661,9 @@ for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"
 >multiRobotAInfo : (string | [string, string])[]
 ><MultiSkilledRobot>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >MultiSkilledRobot : [string, [string, string]]
->["trimmer", ["trimming", "edging"]] : ["trimmer", ["trimming", "edging"]]
+>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >"trimmer" : "trimmer"
->["trimming", "edging"] : ["trimming", "edging"]
+>["trimming", "edging"] : [string, string]
 >"trimming" : "trimming"
 >"edging" : "edging"
 >i = 0 : 0

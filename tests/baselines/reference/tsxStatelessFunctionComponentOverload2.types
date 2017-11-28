@@ -84,7 +84,7 @@ const c5 = <OneThing {...obj1} yy={42} {...{yy1: "hi"}}/>
 >obj1 : { yy: boolean; }
 >yy : number
 >42 : 42
->{yy1: "hi"} : { yy1: "hi"; }
+>{yy1: "hi"} : { yy1: string; }
 >yy1 : string
 >"hi" : "hi"
 
@@ -93,7 +93,7 @@ const c6 = <OneThing {...obj1} {...{yy: 10000, yy1: "true"}} />
 ><OneThing {...obj1} {...{yy: 10000, yy1: "true"}} /> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >obj1 : { yy: boolean; }
->{yy: 10000, yy1: "true"} : { yy: 10000; yy1: "true"; }
+>{yy: 10000, yy1: "true"} : { yy: number; yy1: string; }
 >yy : number
 >10000 : 10000
 >yy1 : string

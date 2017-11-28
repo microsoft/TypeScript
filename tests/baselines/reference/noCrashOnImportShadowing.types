@@ -17,7 +17,7 @@ interface B {
 const x: B = { x: "" };
 >x : B
 >B : B
->{ x: "" } : { x: ""; }
+>{ x: "" } : { x: string; }
 >x : string
 >"" : ""
 
@@ -36,7 +36,7 @@ import { B } from "./a";
 const x: B = { x: "" };
 >x : B
 >B : B
->{ x: "" } : { x: ""; }
+>{ x: "" } : { x: string; }
 >x : string
 >"" : ""
 

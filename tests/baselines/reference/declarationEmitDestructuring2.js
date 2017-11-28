@@ -21,8 +21,8 @@ function h1(_a) {
 
 //// [declarationEmitDestructuring2.d.ts]
 declare function f({x, y: [a, b, c, d]}?: {
-    x?: 10;
-    y?: [2, 4, 6, 8];
+    x?: number;
+    y?: [number, number, number, number];
 }): void;
 declare function g([a, b, c, d]?: [number, number, number, number]): void;
 declare function h([a, [b], [[c]], {x, y: [a, b, c], z: {a1, b1}}]: [any, [any], [[any]], {

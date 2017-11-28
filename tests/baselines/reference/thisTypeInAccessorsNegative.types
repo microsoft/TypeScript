@@ -44,7 +44,7 @@ const mismatch = {
 const contextual: Foo = {
 >contextual : Foo
 >Foo : Foo
->{    n: 16,    get x() { return this.n; }} : { n: 16; readonly x: number; }
+>{    n: 16,    get x() { return this.n; }} : { n: number; readonly x: number; }
 
     n: 16,
 >n : number

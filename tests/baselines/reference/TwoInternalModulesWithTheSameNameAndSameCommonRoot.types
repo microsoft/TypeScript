@@ -43,7 +43,7 @@ module A {
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
 >Point : Point
->{ x: 0, y: 0 } : { x: 0; y: 0; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
 >y : number
@@ -117,7 +117,7 @@ var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 >Utils : typeof A.Utils
 >Plane : typeof A.Utils.Plane
 >o : { x: number; y: number; }
->{ x: 1, y: 1 } : { x: 1; y: 1; }
+>{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
 >1 : 1
 >y : number

@@ -41,7 +41,7 @@ for (var p = { x: 1, y: 2 }; ;) { }
 for (var p: Point = { x: 0, y: undefined }; ;) { }
 >p : Point
 >Point : Point
->{ x: 0, y: undefined } : { x: 0; y: undefined; }
+>{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
 >0 : 0
 >y : undefined
@@ -60,7 +60,7 @@ for (var p: { x: number; y: number; } = { x: 1, y: 2 }; ;) { }
 >p : Point
 >x : number
 >y : number
->{ x: 1, y: 2 } : { x: 1; y: 2; }
+>{ x: 1, y: 2 } : { x: number; y: number; }
 >x : number
 >1 : 1
 >y : number
@@ -71,7 +71,7 @@ for (var p = <{ x: number; y: number; }>{ x: 0, y: undefined }; ;) { }
 ><{ x: number; y: number; }>{ x: 0, y: undefined } : { x: number; y: number; }
 >x : number
 >y : number
->{ x: 0, y: undefined } : { x: 0; y: undefined; }
+>{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
 >0 : 0
 >y : undefined

@@ -12,7 +12,7 @@ type Robot = [number, string, string];
 var robotA: Robot = [1, "mower", "mowing"];
 >robotA : [number, string, string]
 >Robot : [number, string, string]
->[1, "mower", "mowing"] : [1, "mower", "mowing"]
+>[1, "mower", "mowing"] : [number, string, string]
 >1 : 1
 >"mower" : "mower"
 >"mowing" : "mowing"
@@ -20,7 +20,7 @@ var robotA: Robot = [1, "mower", "mowing"];
 var robotB: Robot = [2, "trimmer", "trimming"];
 >robotB : [number, string, string]
 >Robot : [number, string, string]
->[2, "trimmer", "trimming"] : [2, "trimmer", "trimming"]
+>[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
 >"trimmer" : "trimmer"
 >"trimming" : "trimming"

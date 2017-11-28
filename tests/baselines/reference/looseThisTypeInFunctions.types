@@ -109,7 +109,7 @@ let i: I = o;
 let o2: I = {
 >o2 : I
 >I : I
->{    n: 1001,    explicitThis: function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    },} : { n: 1001; explicitThis: (this: I, m: number) => any; }
+>{    n: 1001,    explicitThis: function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    },} : { n: number; explicitThis: (this: I, m: number) => any; }
 
     n: 1001,
 >n : number

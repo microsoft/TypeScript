@@ -69,7 +69,7 @@ interface Tuples {
 function g({ prop = ["hello", 1234] }: Tuples) {}
 >g : ({ prop }: Tuples) => void
 >prop : [string, number]
->["hello", 1234] : ["hello", 1234]
+>["hello", 1234] : [string, number]
 >"hello" : "hello"
 >1234 : 1234
 >Tuples : Tuples

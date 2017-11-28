@@ -77,9 +77,9 @@ let spread = { ...{ b: true }, ...{s: "foo" } };
 >"foo" : "foo"
 
 spread = { s: "foo" };  // error, missing 'b'
->spread = { s: "foo" } : { s: "foo"; }
+>spread = { s: "foo" } : { s: string; }
 >spread : { s: string; b: boolean; }
->{ s: "foo" } : { s: "foo"; }
+>{ s: "foo" } : { s: string; }
 >s : string
 >"foo" : "foo"
 
@@ -273,12 +273,12 @@ let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
     f({ a: 1, b: 'yes' }, { c: 'no', d: false })
 >f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : any
 >f : <T, U>(t: T, u: U) => any
->{ a: 1, b: 'yes' } : { a: 1; b: "yes"; }
+>{ a: 1, b: 'yes' } : { a: number; b: string; }
 >a : number
 >1 : 1
 >b : string
 >'yes' : "yes"
->{ c: 'no', d: false } : { c: "no"; d: false; }
+>{ c: 'no', d: false } : { c: string; d: false; }
 >c : string
 >'no' : "no"
 >d : boolean
@@ -293,10 +293,10 @@ let overlap: { id: string, a: number, b: string } =
     f({ a: 1 }, { a: 2, b: 'extra' })
 >f({ a: 1 }, { a: 2, b: 'extra' }) : any
 >f : <T, U>(t: T, u: U) => any
->{ a: 1 } : { a: 1; }
+>{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
->{ a: 2, b: 'extra' } : { a: 2; b: "extra"; }
+>{ a: 2, b: 'extra' } : { a: number; b: string; }
 >a : number
 >2 : 2
 >b : string
@@ -310,10 +310,10 @@ let overlapConflict: { id:string, a: string } =
     f({ a: 1 }, { a: 'mismatch' })
 >f({ a: 1 }, { a: 'mismatch' }) : any
 >f : <T, U>(t: T, u: U) => any
->{ a: 1 } : { a: 1; }
+>{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
->{ a: 'mismatch' } : { a: "mismatch"; }
+>{ a: 'mismatch' } : { a: string; }
 >a : string
 >'mismatch' : "mismatch"
 
@@ -327,12 +327,12 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
     f({ a: 1, id: true }, { c: 1, d: 'no' })
 >f({ a: 1, id: true }, { c: 1, d: 'no' }) : any
 >f : <T, U>(t: T, u: U) => any
->{ a: 1, id: true } : { a: 1; id: true; }
+>{ a: 1, id: true } : { a: number; id: true; }
 >a : number
 >1 : 1
 >id : boolean
 >true : true
->{ c: 1, d: 'no' } : { c: 1; d: "no"; }
+>{ c: 1, d: 'no' } : { c: number; d: string; }
 >c : number
 >1 : 1
 >d : string
@@ -353,7 +353,7 @@ type Extra = { a: string, b: string, extra: string };
 const extra1: A = { a: "a", b: "b", extra: "extra" };
 >extra1 : A
 >A : A
->{ a: "a", b: "b", extra: "extra" } : { a: "a"; b: "b"; extra: string; }
+>{ a: "a", b: "b", extra: "extra" } : { a: string; b: string; extra: string; }
 >a : string
 >"a" : "a"
 >b : string
@@ -386,7 +386,7 @@ const a2: A = { ...extra2 }; // not on the symbol declarations above
 const extra3: Extra = { a: "a", b: "b", extra: "extra" };
 >extra3 : Extra
 >Extra : Extra
->{ a: "a", b: "b", extra: "extra" } : { a: "a"; b: "b"; extra: "extra"; }
+>{ a: "a", b: "b", extra: "extra" } : { a: string; b: string; extra: string; }
 >a : string
 >"a" : "a"
 >b : string

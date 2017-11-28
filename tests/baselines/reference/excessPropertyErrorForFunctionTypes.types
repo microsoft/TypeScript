@@ -11,7 +11,7 @@ type DoesntWork = { a: number, c: number } | FunctionType;
 let doesntWork: DoesntWork = { a: 1, c: 2, d: 3 }
 >doesntWork : DoesntWork
 >DoesntWork : DoesntWork
->{ a: 1, c: 2, d: 3 } : { a: 1; c: 2; d: number; }
+>{ a: 1, c: 2, d: 3 } : { a: number; c: number; d: number; }
 >a : number
 >1 : 1
 >c : number

@@ -18,7 +18,7 @@ var array1 = [true, 2, 3];  // Contextual type by the numeric index type of the 
 
 var tup: [number, number, number] = [1, 2, 3, 4];
 >tup : [number, number, number]
->[1, 2, 3, 4] : [1, 2, 3, 4]
+>[1, 2, 3, 4] : [number, number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -26,7 +26,7 @@ var tup: [number, number, number] = [1, 2, 3, 4];
 
 var tup1: [number|string, number|string, number|string] = [1, 2, 3, "string"];
 >tup1 : [string | number, string | number, string | number]
->[1, 2, 3, "string"] : [1, 2, 3, "string"]
+>[1, 2, 3, "string"] : [number, number, number, string]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -34,7 +34,7 @@ var tup1: [number|string, number|string, number|string] = [1, 2, 3, "string"];
 
 var tup2: [number, number, number] = [1, 2, 3, "string"];  // Error
 >tup2 : [number, number, number]
->[1, 2, 3, "string"] : [1, 2, 3, string]
+>[1, 2, 3, "string"] : [number, number, number, string]
 >1 : 1
 >2 : 2
 >3 : 3

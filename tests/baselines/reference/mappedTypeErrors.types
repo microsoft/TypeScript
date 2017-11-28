@@ -270,12 +270,12 @@ function f20() {
 >x2 : { x: number; y: number; }
 >objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 }) : { x: number; y: number; }
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
->{ x: 0, y: 0 } : { x: 0; y: 0; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
 >y : number
 >0 : 0
->{ x: 1, y: 1 } : { x: 1; y: 1; }
+>{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
 >1 : 1
 >y : number
@@ -306,12 +306,12 @@ function f21() {
 >x1 : { x: number; y: number; }
 >objAndPartial({ x: 0, y: 0 }, { x: 1 }) : { x: number; y: number; }
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
->{ x: 0, y: 0 } : { x: 0; y: 0; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
 >y : number
 >0 : 0
->{ x: 1 } : { x: 1; }
+>{ x: 1 } : { x: number; }
 >x : number
 >1 : 1
 
@@ -319,12 +319,12 @@ function f21() {
 >x2 : { x: number; y: number; }
 >objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 }) : { x: number; y: number; }
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
->{ x: 0, y: 0 } : { x: 0; y: 0; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
 >y : number
 >0 : 0
->{ x: 1, y: 1 } : { x: 1; y: 1; }
+>{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
 >1 : 1
 >y : number
@@ -390,7 +390,7 @@ function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
 let foo: Foo = { a: "hello", b: 42 };
 >foo : Foo
 >Foo : Foo
->{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
+>{ a: "hello", b: 42 } : { a: string; b: number; }
 >a : string
 >"hello" : "hello"
 >b : number
@@ -400,7 +400,7 @@ setState(foo, { a: "test", b: 43 })
 >setState(foo, { a: "test", b: 43 }) : void
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
 >foo : Foo
->{ a: "test", b: 43 } : { a: "test"; b: 43; }
+>{ a: "test", b: 43 } : { a: string; b: number; }
 >a : string
 >"test" : "test"
 >b : number
@@ -410,7 +410,7 @@ setState(foo, { a: "hi" });
 >setState(foo, { a: "hi" }) : void
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
 >foo : Foo
->{ a: "hi" } : { a: "hi"; }
+>{ a: "hi" } : { a: string; }
 >a : string
 >"hi" : "hi"
 
@@ -496,7 +496,7 @@ c.setState({ a: "test", b: 43 });
 >c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
 >c : C<Foo>
 >setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
->{ a: "test", b: 43 } : { a: "test"; b: 43; }
+>{ a: "test", b: 43 } : { a: string; b: number; }
 >a : string
 >"test" : "test"
 >b : number
@@ -507,7 +507,7 @@ c.setState({ a: "hi" });
 >c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
 >c : C<Foo>
 >setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
->{ a: "hi" } : { a: "hi"; }
+>{ a: "hi" } : { a: string; }
 >a : string
 >"hi" : "hi"
 
@@ -613,7 +613,7 @@ type O = {x: number, y: boolean};
 let o: O = {x: 5, y: false};
 >o : O
 >O : O
->{x: 5, y: false} : { x: 5; y: false; }
+>{x: 5, y: false} : { x: number; y: false; }
 >x : number
 >5 : 5
 >y : boolean
@@ -623,11 +623,11 @@ let f: Foo2<O, 'x'> = {
 >f : Foo2<O, "x">
 >Foo2 : Foo2<T, F>
 >O : O
->{    pf: {x: 7},    pt: {x: 7, y: false},} : { pf: { x: 7; }; pt: { x: number; y: boolean; }; }
+>{    pf: {x: 7},    pt: {x: 7, y: false},} : { pf: { x: number; }; pt: { x: number; y: boolean; }; }
 
     pf: {x: 7},
->pf : { x: 7; }
->{x: 7} : { x: 7; }
+>pf : { x: number; }
+>{x: 7} : { x: number; }
 >x : number
 >7 : 7
 

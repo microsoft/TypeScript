@@ -51,7 +51,7 @@ ssk.m(); // error
 let i: I = { p: 12, m() { } };
 >i : I
 >I : I
->{ p: 12, m() { } } : { p: 12; m(): void; }
+>{ p: 12, m() { } } : { p: number; m(): void; }
 >p : number
 >12 : 12
 >m : () => void

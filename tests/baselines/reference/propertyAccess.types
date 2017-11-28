@@ -25,7 +25,7 @@ enum Compass {
 var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
 >numIndex : { [n: number]: string; }
 >n : number
->{ 3: 'three', 'three': 'three' } : { 3: "three"; 'three': string; }
+>{ 3: 'three', 'three': 'three' } : { 3: string; 'three': string; }
 >'three' : "three"
 >'three' : "three"
 

@@ -71,8 +71,8 @@ var c3t2 = <IFoo>({
 >c3t2 : IFoo
 ><IFoo>({    n: 1}) : IFoo
 >IFoo : IFoo
->({    n: 1}) : { n: 1; }
->{    n: 1} : { n: 1; }
+>({    n: 1}) : { n: number; }
+>{    n: 1} : { n: number; }
 
     n: 1
 >n : number
@@ -284,8 +284,8 @@ c7t2[0] = <IFoo>({n: 1});
 >0 : 0
 ><IFoo>({n: 1}) : IFoo
 >IFoo : IFoo
->({n: 1}) : { n: 1; }
->{n: 1} : { n: 1; }
+>({n: 1}) : { n: number; }
+>{n: 1} : { n: number; }
 >n : number
 >1 : 1
 
@@ -448,8 +448,8 @@ objc8.t2 = <IFoo>({
 >t2 : IFoo
 ><IFoo>({    n: 1}) : IFoo
 >IFoo : IFoo
->({    n: 1}) : { n: 1; }
->{    n: 1} : { n: 1; }
+>({    n: 1}) : { n: number; }
+>{    n: 1} : { n: number; }
 
     n: 1
 >n : number
@@ -665,8 +665,8 @@ var c12t2 = <IFoo> ({
 >c12t2 : IFoo
 ><IFoo> ({    n: 1}) : IFoo
 >IFoo : IFoo
->({    n: 1}) : { n: 1; }
->{    n: 1} : { n: 1; }
+>({    n: 1}) : { n: number; }
+>{    n: 1} : { n: number; }
 
     n: 1
 >n : number
@@ -921,11 +921,11 @@ Point.prototype.add = function(dx, dy) {
 };
 
 Point.prototype = {
->Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: 0; y: 0; add: (dx: number, dy: number) => Point; }
+>Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
 >Point.prototype : Point
 >Point : typeof Point
 >prototype : Point
->{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: 0; y: 0; add: (dx: number, dy: number) => Point; }
+>{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
 
     x: 0,
 >x : number

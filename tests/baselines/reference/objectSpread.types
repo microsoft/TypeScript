@@ -66,7 +66,7 @@ let override: { a: number, b: string } =
 >b : string
 
     { ...o, b: 'override' }
->{ ...o, b: 'override' } : { b: "override"; a: number; }
+>{ ...o, b: 'override' } : { b: string; a: number; }
 >o : { a: number; b: string; }
 >b : string
 >'override' : "override"
@@ -78,11 +78,11 @@ let nested: { a: number, b: boolean, c: string } =
 >c : string
 
     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
->{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: "whatever"; b: false; a: 3; }
->{ a: 3, ...{ b: false, c: 'overriden' } } : { b: false; c: "overriden"; a: 3; }
+>{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: false; a: number; }
+>{ a: 3, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
 >a : number
 >3 : 3
->{ b: false, c: 'overriden' } : { b: false; c: "overriden"; }
+>{ b: false, c: 'overriden' } : { b: false; c: string; }
 >b : boolean
 >false : false
 >c : string
@@ -134,7 +134,7 @@ let combinedAfter: { a: number, b: string, c: boolean } =
 >c : boolean
 
     { ...o, ...o2, b: 'ok' }
->{ ...o, ...o2, b: 'ok' } : { b: "ok"; c: boolean; a: number; }
+>{ ...o, ...o2, b: 'ok' } : { b: string; c: boolean; a: number; }
 >o : { a: number; b: string; }
 >o2 : { b: string; c: boolean; }
 >b : string
@@ -148,18 +148,18 @@ let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >d : string
 
     { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
->{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: 5; d: "maybe new"; b: false; c: "overriden"; }
->{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: "overriden"; a: 4; }
+>{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
+>{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
 >a : number
 >4 : 4
->{ b: false, c: 'overriden' } : { b: false; c: "overriden"; }
+>{ b: false, c: 'overriden' } : { b: false; c: string; }
 >b : boolean
 >false : false
 >c : string
 >'overriden' : "overriden"
 >d : string
 >'actually new' : "actually new"
->{ a: 5, d: 'maybe new' } : { a: 5; d: "maybe new"; }
+>{ a: 5, d: 'maybe new' } : { a: number; d: string; }
 >a : number
 >5 : 5
 >d : string
@@ -172,8 +172,8 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >c : number
 
     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
->{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: -1; b: false; a: 1; }
->{ a: 1, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: 1; }
+>{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: false; a: number; }
+>{ a: 1, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
 >a : number
 >1 : 1
 >{ b: false, c: 'overriden' } : { b: false; c: string; }
@@ -211,7 +211,7 @@ let getter: { a: number, c: number } =
 >c : number
 
     { ...op, c: 7 }
->{ ...op, c: 7 } : { c: 7; a: number; }
+>{ ...op, c: 7 } : { c: number; a: number; }
 >op : { readonly a: number; }
 >c : number
 >7 : 7
@@ -280,17 +280,17 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
 >13 : 13
 
     o = {
->o = {        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: 14; y: number; }
+>o = {        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: number; y: number; }
 >o : { x: number; y: number; }
->{        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: 14; y: number; }
+>{        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: number; y: number; }
 
         ...o,
 >o : { x: number; y: number; }
 
         ...b && { x: 14 }
->b && { x: 14 } : false | { x: 14; }
+>b && { x: 14 } : false | { x: number; }
 >b : boolean
->{ x: 14 } : { x: 14; }
+>{ x: 14 } : { x: number; }
 >x : number
 >14 : 14
     }
@@ -444,7 +444,7 @@ let changeTypeAfter: { a: string, b: string } =
 >b : string
 
     { ...o, a: 'wrong type?' }
->{ ...o, a: 'wrong type?' } : { a: "wrong type?"; b: string; }
+>{ ...o, a: 'wrong type?' } : { a: string; b: string; }
 >o : { a: number; b: string; }
 >a : string
 >'wrong type?' : "wrong type?"
@@ -521,7 +521,7 @@ function container(
 >b : string
 
         { ['before everything']: 12, ...o, b: 'yes' }
->{ ['before everything']: 12, ...o, b: 'yes' } : { b: "yes"; a: number; ['before everything']: 12; }
+>{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; ['before everything']: number; }
 >'before everything' : "before everything"
 >12 : 12
 >o : { a: number; b: string; }
@@ -535,7 +535,7 @@ function container(
 >c : boolean
 
         { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
->{ ...o, ['in the middle']: 13, b: 'maybe?', ...o2 } : { b: string; c: boolean; ['in the middle']: 13; a: number; }
+>{ ...o, ['in the middle']: 13, b: 'maybe?', ...o2 } : { b: string; c: boolean; ['in the middle']: number; a: number; }
 >o : { a: number; b: string; }
 >'in the middle' : "in the middle"
 >13 : 13
@@ -549,7 +549,7 @@ function container(
 >b : string
 
         { ...o, b: 'yeah', ['at the end']: 14 }
->{ ...o, b: 'yeah', ['at the end']: 14 } : { b: "yeah"; ['at the end']: 14; a: number; }
+>{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; ['at the end']: number; a: number; }
 >o : { a: number; b: string; }
 >b : string
 >'yeah' : "yeah"

@@ -37,25 +37,25 @@ a1.c;  // boolean | undefined
 >c : boolean | undefined
 
 a1 = { a: 1 };
->a1 = { a: 1 } : { a: 1; }
+>a1 = { a: 1 } : { a: number; }
 >a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
->{ a: 1 } : { a: 1; }
+>{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
 
 a1 = { a: 0, b: 0 };  // Error
->a1 = { a: 0, b: 0 } : { a: 0; b: number; }
+>a1 = { a: 0, b: 0 } : { a: number; b: number; }
 >a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
->{ a: 0, b: 0 } : { a: 0; b: number; }
+>{ a: 0, b: 0 } : { a: number; b: number; }
 >a : number
 >0 : 0
 >b : number
 >0 : 0
 
 a1 = { b: "y" };  // Error
->a1 = { b: "y" } : { b: "y"; }
+>a1 = { b: "y" } : { b: string; }
 >a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
->{ b: "y" } : { b: "y"; }
+>{ b: "y" } : { b: string; }
 >b : string
 >"y" : "y"
 
@@ -92,18 +92,18 @@ a2.b;  // number | undefined
 >b : number | undefined
 
 a2 = { a: 10, b: 20 };
->a2 = { a: 10, b: 20 } : { a: 10; b: 20; }
+>a2 = { a: 10, b: 20 } : { a: number; b: number; }
 >a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
->{ a: 10, b: 20 } : { a: 10; b: 20; }
+>{ a: 10, b: 20 } : { a: number; b: number; }
 >a : number
 >10 : 10
 >b : number
 >20 : 20
 
 a2 = { a: "def" };
->a2 = { a: "def" } : { a: "def"; }
+>a2 = { a: "def" } : { a: string; }
 >a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
->{ a: "def" } : { a: "def"; }
+>{ a: "def" } : { a: string; }
 >a : string
 >"def" : "def"
 
@@ -113,18 +113,18 @@ a2 = {};
 >{} : {}
 
 a2 = { a: "def", b: 20 };  // Error
->a2 = { a: "def", b: 20 } : { a: "def"; b: 20; }
+>a2 = { a: "def", b: 20 } : { a: string; b: number; }
 >a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
->{ a: "def", b: 20 } : { a: "def"; b: 20; }
+>{ a: "def", b: 20 } : { a: string; b: number; }
 >a : string
 >"def" : "def"
 >b : number
 >20 : 20
 
 a2 = { a: 1 };  // Error
->a2 = { a: 1 } : { a: 1; }
+>a2 = { a: 1 } : { a: number; }
 >a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
->{ a: 1 } : { a: 1; }
+>{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
 
@@ -282,12 +282,12 @@ let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
 >e1 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >f({ a: 1, b: 2 }, { a: "abc" }, {}) : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >f : <T>(...items: T[]) => T
->{ a: 1, b: 2 } : { a: 1; b: 2; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
 >1 : 1
 >b : number
 >2 : 2
->{ a: "abc" } : { a: "abc"; }
+>{ a: "abc" } : { a: string; }
 >a : string
 >"abc" : "abc"
 >{} : {}
@@ -297,10 +297,10 @@ let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
 >f({}, { a: "abc" }, { a: 1, b: 2 }) : { a?: undefined; b?: undefined; } | { a: string; b?: undefined; } | { a: number; b: number; }
 >f : <T>(...items: T[]) => T
 >{} : {}
->{ a: "abc" } : { a: "abc"; }
+>{ a: "abc" } : { a: string; }
 >a : string
 >"abc" : "abc"
->{ a: 1, b: 2 } : { a: 1; b: 2; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
 >1 : 1
 >b : number
@@ -311,7 +311,7 @@ let e3 = f(data, { a: 2 });
 >f(data, { a: 2 }) : { a: number; }
 >f : <T>(...items: T[]) => T
 >data : { a: 1; b: "abc"; c: true; }
->{ a: 2 } : { a: 2; }
+>{ a: 2 } : { a: number; }
 >a : number
 >2 : 2
 
@@ -319,7 +319,7 @@ let e4 = f({ a: 2 }, data);
 >e4 : { a: number; }
 >f({ a: 2 }, data) : { a: number; }
 >f : <T>(...items: T[]) => T
->{ a: 2 } : { a: 2; }
+>{ a: 2 } : { a: number; }
 >a : number
 >2 : 2
 >data : { a: 1; b: "abc"; c: true; }

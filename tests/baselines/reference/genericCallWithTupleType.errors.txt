@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(12,1): error TS2322: Type '["foo", 5, boolean, boolean]' is not assignable to type '[string, number]'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(12,1): error TS2322: Type '[string, number, boolean, boolean]' is not assignable to type '[string, number]'.
   Types of property 'length' are incompatible.
     Type '4' is not assignable to type '2'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(14,1): error TS2322: Type '{ a: string; }' is not assignable to type 'string | number'.
@@ -25,7 +25,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTup
     var e2 = i1.tuple1[1];  // number
     i1.tuple1 = ["foo", 5, false, true];
     ~~~~~~~~~
-!!! error TS2322: Type '["foo", 5, boolean, boolean]' is not assignable to type '[string, number]'.
+!!! error TS2322: Type '[string, number, boolean, boolean]' is not assignable to type '[string, number]'.
 !!! error TS2322:   Types of property 'length' are incompatible.
 !!! error TS2322:     Type '4' is not assignable to type '2'.
     var e3 = i1.tuple1[2];  // {}

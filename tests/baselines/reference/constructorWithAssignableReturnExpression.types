@@ -30,7 +30,7 @@ class E {
 
     constructor() {
         return { x: 1 };
->{ x: 1 } : { x: 1; }
+>{ x: 1 } : { x: number; }
 >x : number
 >1 : 1
     }

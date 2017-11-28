@@ -24,10 +24,10 @@ func(s => ({})); // Error for no applicable overload (object type is missing a a
 func(s => ({ a: blah, b: 3 })); // Only error inside the function, but not outside (since it would be applicable if not for the provisional error)
 >func(s => ({ a: blah, b: 3 })) : string
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
->s => ({ a: blah, b: 3 }) : (s: string) => { a: any; b: 3; }
+>s => ({ a: blah, b: 3 }) : (s: string) => { a: any; b: number; }
 >s : string
->({ a: blah, b: 3 }) : { a: any; b: 3; }
->{ a: blah, b: 3 } : { a: any; b: 3; }
+>({ a: blah, b: 3 }) : { a: any; b: number; }
+>{ a: blah, b: 3 } : { a: any; b: number; }
 >a : any
 >blah : any
 >b : number

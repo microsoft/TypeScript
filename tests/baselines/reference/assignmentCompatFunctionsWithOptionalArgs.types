@@ -8,14 +8,14 @@ function foo(x: { id: number; name?: string; }): void;
 foo({ id: 1234 });                 // Ok
 >foo({ id: 1234 }) : void
 >foo : (x: { id: number; name?: string; }) => void
->{ id: 1234 } : { id: 1234; }
+>{ id: 1234 } : { id: number; }
 >id : number
 >1234 : 1234
 
 foo({ id: 1234, name: "hello" });  // Ok
 >foo({ id: 1234, name: "hello" }) : void
 >foo : (x: { id: number; name?: string; }) => void
->{ id: 1234, name: "hello" } : { id: 1234; name: "hello"; }
+>{ id: 1234, name: "hello" } : { id: number; name: string; }
 >id : number
 >1234 : 1234
 >name : string

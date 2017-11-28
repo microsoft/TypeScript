@@ -47,15 +47,15 @@ t = [];               // Error
 >[] : undefined[]
 
 t = [1];              // Error
->t = [1] : [1]
+>t = [1] : [number]
 >t : [number, string]
->[1] : [1]
+>[1] : [number]
 >1 : 1
 
 t = [1, "hello"];     // Ok
->t = [1, "hello"] : [1, "hello"]
+>t = [1, "hello"] : [number, string]
 >t : [number, string]
->[1, "hello"] : [1, "hello"]
+>[1, "hello"] : [number, string]
 >1 : 1
 >"hello" : "hello"
 
@@ -67,9 +67,9 @@ t = ["hello", 1];     // Error
 >1 : 1
 
 t = [1, "hello", 2];  // Error
->t = [1, "hello", 2] : [1, "hello", 2]
+>t = [1, "hello", 2] : [number, string, number]
 >t : [number, string]
->[1, "hello", 2] : [1, "hello", 2]
+>[1, "hello", 2] : [number, string, number]
 >1 : 1
 >"hello" : "hello"
 >2 : 2
@@ -77,7 +77,7 @@ t = [1, "hello", 2];  // Error
 var tf: [string, (x: string) => number] = ["hello", x => x.length];
 >tf : [string, (x: string) => number]
 >x : string
->["hello", x => x.length] : ["hello", (x: string) => number]
+>["hello", x => x.length] : [string, (x: string) => number]
 >"hello" : "hello"
 >x => x.length : (x: string) => number
 >x : string
@@ -103,7 +103,7 @@ var ff1 = ff("hello", ["foo", x => x.length]);
 >ff("hello", ["foo", x => x.length]) : number
 >ff : <T, U>(a: T, b: [T, (x: T) => U]) => U
 >"hello" : "hello"
->["foo", x => x.length] : ["foo", (x: string) => number]
+>["foo", x => x.length] : [string, (x: string) => number]
 >"foo" : "foo"
 >x => x.length : (x: string) => number
 >x : string
@@ -174,9 +174,9 @@ tt = tuple2(1, undefined);
 >undefined : undefined
 
 tt = [1, undefined];
->tt = [1, undefined] : [1, undefined]
+>tt = [1, undefined] : [number, undefined]
 >tt : [number, string]
->[1, undefined] : [1, undefined]
+>[1, undefined] : [number, undefined]
 >1 : 1
 >undefined : undefined
 

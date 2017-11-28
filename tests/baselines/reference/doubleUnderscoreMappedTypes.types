@@ -13,7 +13,7 @@ interface Properties {
 const ok: Properties = {
 >ok : Properties
 >Properties : Properties
->{    property1: "",    __property2: ""} : { property1: ""; __property2: ""; }
+>{    property1: "",    __property2: ""} : { property1: string; __property2: string; }
 
     property1: "",
 >property1 : string
@@ -45,7 +45,7 @@ const partial: Partial<Properties> = {
 >partial : Partial<Properties>
 >Partial : Partial<T>
 >Properties : Properties
->{    property1: "",    __property2: ""} : { property1: ""; __property2: ""; }
+>{    property1: "",    __property2: ""} : { property1: string; __property2: string; }
 
     property1: "",
 >property1 : string

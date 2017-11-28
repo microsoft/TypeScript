@@ -2,20 +2,20 @@
 // no error
 var numStrTuple: [number, string] = [5, "hello"];
 >numStrTuple : [number, string]
->[5, "hello"] : [5, "hello"]
+>[5, "hello"] : [number, string]
 >5 : 5
 >"hello" : "hello"
 
 var numStrTuple2: [number, string] = [5, "foo", true];
 >numStrTuple2 : [number, string]
->[5, "foo", true] : [5, "foo", boolean]
+>[5, "foo", true] : [number, string, boolean]
 >5 : 5
 >"foo" : "foo"
 >true : true
 
 var numStrBoolTuple: [number, string, boolean] = [5, "foo", true];
 >numStrBoolTuple : [number, string, boolean]
->[5, "foo", true] : [5, "foo", true]
+>[5, "foo", true] : [number, string, true]
 >5 : 5
 >"foo" : "foo"
 >true : true
@@ -23,17 +23,17 @@ var numStrBoolTuple: [number, string, boolean] = [5, "foo", true];
 var objNumTuple: [{ a: string }, number] = [{ a: "world" }, 5];
 >objNumTuple : [{ a: string; }, number]
 >a : string
->[{ a: "world" }, 5] : [{ a: "world"; }, 5]
->{ a: "world" } : { a: "world"; }
+>[{ a: "world" }, 5] : [{ a: string; }, number]
+>{ a: "world" } : { a: string; }
 >a : string
 >"world" : "world"
 >5 : 5
 
 var strTupleTuple: [string, [number, {}]] = ["bar", [5, { x: 1, y: 1 }]];
 >strTupleTuple : [string, [number, {}]]
->["bar", [5, { x: 1, y: 1 }]] : ["bar", [5, { x: number; y: number; }]]
+>["bar", [5, { x: 1, y: 1 }]] : [string, [number, { x: number; y: number; }]]
 >"bar" : "bar"
->[5, { x: 1, y: 1 }] : [5, { x: number; y: number; }]
+>[5, { x: 1, y: 1 }] : [number, { x: number; y: number; }]
 >5 : 5
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
@@ -50,7 +50,7 @@ class D { }
 var unionTuple: [C, string | number] = [new C(), "foo"];
 >unionTuple : [C, string | number]
 >C : C
->[new C(), "foo"] : [C, "foo"]
+>[new C(), "foo"] : [C, string]
 >new C() : C
 >C : typeof C
 >"foo" : "foo"
@@ -58,7 +58,7 @@ var unionTuple: [C, string | number] = [new C(), "foo"];
 var unionTuple1: [C, string | number] = [new C(), "foo"];
 >unionTuple1 : [C, string | number]
 >C : C
->[new C(), "foo"] : [C, "foo"]
+>[new C(), "foo"] : [C, string]
 >new C() : C
 >C : typeof C
 >"foo" : "foo"
@@ -67,7 +67,7 @@ var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 >unionTuple2 : [C, string | number, D]
 >C : C
 >D : D
->[new C(), "foo", new D()] : [C, "foo", D]
+>[new C(), "foo", new D()] : [C, string, D]
 >new C() : C
 >C : typeof C
 >"foo" : "foo"
@@ -76,7 +76,7 @@ var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 
 var unionTuple3: [number, string| number] = [10, "foo"]; 
 >unionTuple3 : [number, string | number]
->[10, "foo"] : [10, "foo"]
+>[10, "foo"] : [number, string]
 >10 : 10
 >"foo" : "foo"
 
@@ -92,9 +92,9 @@ numStrTuple = numStrBoolTuple;
 
 // error
 objNumTuple = [ {}, 5];
->objNumTuple = [ {}, 5] : [{}, 5]
+>objNumTuple = [ {}, 5] : [{}, number]
 >objNumTuple : [{ a: string; }, number]
->[ {}, 5] : [{}, 5]
+>[ {}, 5] : [{}, number]
 >{} : {}
 >5 : 5
 
@@ -105,7 +105,7 @@ numStrBoolTuple = numStrTuple;
 
 var strStrTuple: [string, string] = ["foo", "bar", 5];
 >strStrTuple : [string, string]
->["foo", "bar", 5] : ["foo", "bar", number]
+>["foo", "bar", 5] : [string, string, number]
 >"foo" : "foo"
 >"bar" : "bar"
 >5 : 5

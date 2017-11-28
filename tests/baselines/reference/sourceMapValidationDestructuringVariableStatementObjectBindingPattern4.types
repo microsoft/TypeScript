@@ -5,7 +5,7 @@ var {x = 500,
 
      y} = { x: 20, y: "hi" };
 >y : string
->{ x: 20, y: "hi" } : { x?: 20; y: string; }
+>{ x: 20, y: "hi" } : { x?: number; y: string; }
 >x : number
 >20 : 20
 >y : string

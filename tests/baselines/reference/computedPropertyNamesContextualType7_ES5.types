@@ -35,7 +35,7 @@ declare function g<T>(obj: J<T>): T;
 foo({
 >foo({    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : number | (() => void) | number[]
 >foo : <T>(obj: I<T>) => T
->{    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: boolean | (() => void) | 0 | 0[]; [x: number]: (() => void) | 0 | 0[]; 0: () => void; }
+>{    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: number | boolean | (() => void) | number[]; [x: number]: number | (() => void) | number[]; 0: () => void; }
 
     0: () => { },
 >() => { } : () => void
@@ -55,7 +55,7 @@ foo({
     [+"hi"]: [0]
 >+"hi" : number
 >"hi" : "hi"
->[0] : 0[]
+>[0] : number[]
 >0 : 0
 
 });
@@ -63,7 +63,7 @@ foo({
 g({ p: "" });
 >g({ p: "" }) : string
 >g : <T>(obj: J<T>) => T
->{ p: "" } : { p: ""; }
+>{ p: "" } : { p: string; }
 >p : string
 >"" : ""
 
