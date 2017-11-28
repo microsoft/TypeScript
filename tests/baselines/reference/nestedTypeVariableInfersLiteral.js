@@ -18,6 +18,7 @@ hasZField(nestedSingle) // ok
 hasZField(nestedUnionSingle) // ok
 hasZField(nestedUnionArray) // ok
 
+
 //// [nestedTypeVariableInfersLiteral.js]
 var directUnionSingle = direct("z");
 var directUnionArray = direct(["z", "y"]);

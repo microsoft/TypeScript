@@ -97,7 +97,7 @@ function foo2(bar: X2 | Y2) { }
 foo2({
 >foo2({    type2: 'y',    value: 'done',    method() {        this;        this.value;    }}) : void
 >foo2 : (bar: X2 | Y2) => void
->{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: string; value: string; method(): void; }
+>{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method(): void; }
 
     type2: 'y',
 >type2 : string
@@ -111,12 +111,12 @@ foo2({
 >method : () => void
 
         this;
->this : any
+>this : X2 | Y2
 
         this.value;
->this.value : any
->this : any
->value : any
+>this.value : string
+>this : X2 | Y2
+>value : string
     }
 });
 

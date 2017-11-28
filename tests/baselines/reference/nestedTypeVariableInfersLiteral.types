@@ -35,10 +35,10 @@ const directUnionSingle = direct("z")
 >"z" : "z"
 
 const directUnionArray = direct(["z", "y"])
->directUnionArray : any
->direct(["z", "y"]) : any
+>directUnionArray : Record<"z" | "y", string>
+>direct(["z", "y"]) : Record<"z" | "y", string>
 >direct : <A extends string>(a: A | A[]) => Record<A, string>
->["z", "y"] : string[]
+>["z", "y"] : ("z" | "y")[]
 >"z" : "z"
 >"y" : "y"
 
@@ -59,12 +59,12 @@ const nestedUnionSingle = nestedUnion({fields: "z"})
 >"z" : "z"
 
 const nestedUnionArray = nestedUnion({fields: ["z", "y"]})
->nestedUnionArray : any
->nestedUnion({fields: ["z", "y"]}) : any
+>nestedUnionArray : Record<"z" | "y", string>
+>nestedUnion({fields: ["z", "y"]}) : Record<"z" | "y", string>
 >nestedUnion : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
->{fields: ["z", "y"]} : { fields: string[]; }
->fields : string[]
->["z", "y"] : string[]
+>{fields: ["z", "y"]} : { fields: ("z" | "y")[]; }
+>fields : ("z" | "y")[]
+>["z", "y"] : ("z" | "y")[]
 >"z" : "z"
 >"y" : "y"
 
@@ -81,7 +81,7 @@ hasZField(directUnionSingle) // ok
 hasZField(directUnionArray) // ok
 >hasZField(directUnionArray) : void
 >hasZField : (arg: { z: string; }) => void
->directUnionArray : any
+>directUnionArray : Record<"z" | "y", string>
 
 hasZField(nestedSingle) // ok
 >hasZField(nestedSingle) : void
@@ -96,5 +96,5 @@ hasZField(nestedUnionSingle) // ok
 hasZField(nestedUnionArray) // ok
 >hasZField(nestedUnionArray) : void
 >hasZField : (arg: { z: string; }) => void
->nestedUnionArray : any
+>nestedUnionArray : Record<"z" | "y", string>
 

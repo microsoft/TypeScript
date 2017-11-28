@@ -7777,7 +7777,7 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[], noReductions?: boolean): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -7789,11 +7789,13 @@ namespace ts {
             if (typeSet.containsAny) {
                 return anyType;
             }
-            if (subtypeReduction) {
-                removeSubtypes(typeSet);
-            }
-            else if (typeSet.containsLiteralOrUniqueESSymbol) {
-                removeRedundantLiteralTypes(typeSet);
+            if (!noReductions) {
+                if (subtypeReduction) {
+                    removeSubtypes(typeSet);
+                }
+                else if (typeSet.containsLiteralOrUniqueESSymbol) {
+                    removeRedundantLiteralTypes(typeSet);
+                }
             }
             if (typeSet.length === 0) {
                 return typeSet.containsNull ? typeSet.containsNonWideningType ? nullType : nullWideningType :
@@ -12104,7 +12106,7 @@ namespace ts {
         // Apply a mapping function to a type and return the resulting type. If the source type
         // is a union type, the mapping function is applied to each constituent type and a union
         // of the resulting types is returned.
-        function mapType(type: Type, mapper: (t: Type) => Type): Type {
+        function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type {
             if (!(type.flags & TypeFlags.Union)) {
                 return mapper(type);
             }
@@ -12125,7 +12127,7 @@ namespace ts {
                     }
                 }
             }
-            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
+            return mappedTypes ? getUnionType(mappedTypes, /*subtypeReduction*/ undefined, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, noReductions) : mappedType;
         }
 
         function extractTypesOfKind(type: Type, kind: TypeFlags) {
@@ -13911,11 +13913,11 @@ namespace ts {
             return mapType(type, t => {
                 const prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
                 return prop ? getTypeOfSymbol(prop) : undefined;
-            });
+            }, /*noReductions*/ true);
         }
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
-            return mapType(type, t => getIndexTypeOfStructuredType(t, kind));
+            return mapType(type, t => getIndexTypeOfStructuredType(t, kind), /*noReductions*/ true);
         }
 
         // Return true if the given contextual type is a tuple-like type
