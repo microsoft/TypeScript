@@ -488,7 +488,7 @@ namespace ts.Completions {
         const moduleSymbols = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
         Debug.assert(contains(moduleSymbols, moduleSymbol));
 
-        const sourceDisplay = [textPart(codefix.getModuleSpecifierForNewImport(sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host))];
+        const sourceDisplay = [textPart(first(codefix.getModuleSpecifiersForNewImport(sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host)))];
         const codeActions = codefix.getCodeActionForImport(moduleSymbols, {
             host,
             checker,
