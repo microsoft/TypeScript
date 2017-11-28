@@ -6,8 +6,6 @@
 
 namespace ts.projectSystem {
     const nullCancellationToken = server.nullCancellationToken;
-    import libFile = ts.TestFSWithWatch.libFile;
-    import FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
 
     function createTestTypingsInstaller(host: server.ServerHost) {
         return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
@@ -16,7 +14,7 @@ namespace ts.projectSystem {
     describe("CompileOnSave affected list", () => {
         interface ProjectFileList {
             projectFileName: string;
-            files: (string | FileOrFolder | vfs.VirtualFile)[];
+            files: (string | vfs.VirtualFile)[];
         }
 
         function sendAffectedFileRequestAndCheckResult(session: server.Session, args: server.protocol.FileRequestArgs, expectedFileList: ProjectFileList | ProjectFileList[]) {
@@ -64,14 +62,13 @@ namespace ts.projectSystem {
 
         describe("for configured projects", () => {
             it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
                 const file1Consumer2 = host.vfs.addFile("/a/b/file1Consumer2.ts", `import {Foo} from "./moduleFile1"; let z = 10;`);
                 host.vfs.addFile("/a/b/globalFile3.ts", `interface GlobalFoo { age: number }`);
                 host.vfs.addFile("/a/b/moduleFile2.ts", `export var Foo4 = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -111,14 +108,13 @@ namespace ts.projectSystem {
             });
 
             it("should be up-to-date with the reference map changes", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
                 const file1Consumer2 = host.vfs.addFile("/a/b/file1Consumer2.ts", `import {Foo} from "./moduleFile1"; let z = 10;`);
                 host.vfs.addFile("/a/b/globalFile3.ts", `interface GlobalFoo { age: number }`);
                 host.vfs.addFile("/a/b/moduleFile2.ts", `export var Foo4 = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -178,14 +174,13 @@ namespace ts.projectSystem {
             });
 
             it("should be up-to-date with changes made in non-open files", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
                 const file1Consumer2 = host.vfs.addFile("/a/b/file1Consumer2.ts", `import {Foo} from "./moduleFile1"; let z = 10;`);
                 host.vfs.addFile("/a/b/globalFile3.ts", `interface GlobalFoo { age: number }`);
                 host.vfs.addFile("/a/b/moduleFile2.ts", `export var Foo4 = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -213,14 +208,13 @@ namespace ts.projectSystem {
             });
 
             it("should be up-to-date with deleted files", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
                 const file1Consumer2 = host.vfs.addFile("/a/b/file1Consumer2.ts", `import {Foo} from "./moduleFile1"; let z = 10;`);
                 host.vfs.addFile("/a/b/globalFile3.ts", `interface GlobalFoo { age: number }`);
                 host.vfs.addFile("/a/b/moduleFile2.ts", `export var Foo4 = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -247,14 +241,13 @@ namespace ts.projectSystem {
             });
 
             it("should be up-to-date with newly created files", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
                 const file1Consumer2 = host.vfs.addFile("/a/b/file1Consumer2.ts", `import {Foo} from "./moduleFile1"; let z = 10;`);
                 host.vfs.addFile("/a/b/globalFile3.ts", `interface GlobalFoo { age: number }`);
                 host.vfs.addFile("/a/b/moduleFile2.ts", `export var Foo4 = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -281,11 +274,10 @@ namespace ts.projectSystem {
             });
 
             it("should detect changes in non-root files", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json",  `{ "compileOnSave": true, "files": ["${file1Consumer1.path}"] }`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -325,14 +317,13 @@ namespace ts.projectSystem {
             });
 
             it("should return all files if a global file changed shape", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
                 const file1Consumer2 = host.vfs.addFile("/a/b/file1Consumer2.ts", `import {Foo} from "./moduleFile1"; let z = 10;`);
                 const globalFile3 = host.vfs.addFile("/a/b/globalFile3.ts", `interface GlobalFoo { age: number }`);
                 const moduleFile2 = host.vfs.addFile("/a/b/moduleFile2.ts", `export var Foo4 = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -354,14 +345,13 @@ namespace ts.projectSystem {
             });
 
             it("should return empty array if CompileOnSave is not enabled", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{}`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
                 host.vfs.addFile("/a/b/file1Consumer2.ts", `import {Foo} from "./moduleFile1"; let z = 10;`);
                 host.vfs.addFile("/a/b/globalFile3.ts", `interface GlobalFoo { age: number }`);
                 host.vfs.addFile("/a/b/moduleFile2.ts", `export var Foo4 = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -373,14 +363,13 @@ namespace ts.projectSystem {
             });
 
             it("should save when compileOnSave is enabled in base tsconfig.json", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ "extends": "/a/tsconfig.json" }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
                 const file1Consumer2 = host.vfs.addFile("/a/b/file1Consumer2.ts", `import {Foo} from "./moduleFile1"; let z = 10;`);
                 host.vfs.addFile("/a/b/globalFile3.ts", `interface GlobalFoo { age: number }`);
                 host.vfs.addFile("/a/b/moduleFile2.ts", `export var Foo4 = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
                 host.vfs.addFile("/a/tsconfig.json", `{ "compileOnSave": true }`);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
@@ -393,11 +382,10 @@ namespace ts.projectSystem {
             });
 
             it("should always return the file itself if '--isolatedModules' is specified", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ "compileOnSave": true, "compilerOptions": { "isolatedModules": true } }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -418,11 +406,10 @@ namespace ts.projectSystem {
             });
 
             it("should always return the file itself if '--out' or '--outFile' is specified", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ "compileOnSave": true, "compilerOptions": { "module": "system", "outFile": "/a/b/out.js" } }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -443,13 +430,12 @@ namespace ts.projectSystem {
             });
 
             it("should return cascaded affected file list", () => {
-                const host = new fakes.FakeServerHost();
+                const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ compileOnSave": true }`);
                 const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
                 const file1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
                 const file1Consumer1Consumer1 = host.vfs.addFile("/a/b/file1Consumer1Consumer1.ts", `import {y} from "./file1Consumer1";`);
                 host.vfs.addFile("/a/b/globalFile3.ts", `interface GlobalFoo { age: number }`);
-                host.vfs.addFile(libFile.path, libFile.content);
 
                 const session = createSession(host, createTestTypingsInstaller(host));
 
@@ -574,11 +560,10 @@ namespace ts.projectSystem {
         });
 
         it("should emit specified file", () => {
-            const host = new fakes.FakeServerHost({ newLine: "\r\n" });
+            const host = new fakes.FakeServerHost({ lib: true, newLine: "\r\n" });
             const file1 = host.vfs.addFile("/a/b/f1.ts", `export function Foo() { return 10; }`);
             const file2 = host.vfs.addFile("/a/b/f2.ts", `import {Foo} from "./f1"; let y = Foo();`);
             const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{}`);
-            host.vfs.addFile(libFile.path, libFile.content);
 
             const typingsInstaller = createTestTypingsInstaller(host);
             const session = createSession(host, { typingsInstaller });
@@ -595,12 +580,11 @@ namespace ts.projectSystem {
         it("shoud not emit js files in external projects", () => {
             const externalProjectName = "/a/b/externalproject";
 
-            const host = new fakes.FakeServerHost();
+            const host = new fakes.FakeServerHost({ lib: true });
             const file1 = host.vfs.addFile("/a/b/file1.ts", `consonle.log('file1');`);
             // file2 has errors. The emit should not be blocked.
             const file2 = host.vfs.addFile("/a/b/file2.js", `console.log'file2');`);
             const file3 = host.vfs.addFile("/a/b/file3.js", `console.log('file3');`);
-            host.vfs.addFile(libFile.path, libFile.content);
 
             const session = createSession(host);
             const projectService = session.getProjectService();
@@ -628,9 +612,8 @@ namespace ts.projectSystem {
         it("should use project root as current directory so that compile on save results in correct file mapping", () => {
             const externalProjectName = "/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
 
-            const host = new fakes.FakeServerHost();
+            const host = new fakes.FakeServerHost({ lib: true });
             const file1 = host.vfs.addFile("/root/TypeScriptProject3/TypeScriptProject3/Foo.ts", `consonle.log('file1');`);
-            host.vfs.addFile(libFile.path, libFile.content);
 
             const session = createSession(host);
             const projectService = session.getProjectService();

@@ -13,7 +13,6 @@ namespace ts.projectSystem {
     import TI = server.typingsInstaller;
     import validatePackageName = JsTyping.validatePackageName;
     import PackageNameValidationResult = JsTyping.PackageNameValidationResult;
-    import FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
 
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
@@ -45,15 +44,10 @@ namespace ts.projectSystem {
         }
     }
 
-    function executeCommand(self: Installer, host: fakes.FakeServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
+    function executeCommand(self: Installer, host: fakes.FakeServerHost, installedTypings: string[] | string, typingFiles: { path: string, content: string }[], cb: TI.RequestCompletedAction): void {
         self.addPostExecAction(installedTypings, success => {
             for (const file of typingFiles) {
-                if (typeof file.content === "string") {
-                    host.vfs.addFile(file.path, file.content, { overwrite: true });
-                }
-                else {
-                    host.vfs.addDirectory(file.path);
-                }
+                host.vfs.writeFile(file.path, file.content);
             }
             cb(success);
         });
@@ -629,7 +623,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
-            ts.TestFSWithWatch.checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", "/.ts/lib.d.ts"]);
+            host.checkWatchedFiles([jsconfig.path, "/bower_components", "/node_modules", "/.ts/lib.d.ts"]);
 
             installer.installAll(/*expectedCount*/ 1);
 

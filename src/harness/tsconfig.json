@@ -84,7 +84,6 @@
         "compiler.ts",
         "fakes.ts",
 
-        "virtualFileSystemWithWatch.ts",
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",
         "fourslash.ts",

@@ -1,5 +1,4 @@
-/// <reference path="..\harness.ts" />
-/// <reference path="..\virtualFileSystemWithWatch.ts" />
+/// <reference path="../harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 /// <reference path="../utils.ts" />
 /// <reference path="../fakes.ts" />
@@ -12,12 +11,14 @@ namespace ts.projectSystem {
     import protocol = server.protocol;
     import CommandNames = server.CommandNames;
 
-    import FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
-    import checkFileNames = ts.TestFSWithWatch.checkFileNames;
-    import libFile = ts.TestFSWithWatch.libFile;
-    import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
-    import safeList = ts.TestFSWithWatch.safeList;
+    interface FileOrFolder {
+        path: string;
+        content?: string;
+    }
+
+    import checkFileNames = utils.checkFileNames;
+
+    const libFile = { path: fakes.FakeServerHost.libPath, content: fakes.FakeServerHost.libContent };
 
     export const customTypesMap = {
         path: <Path>"/typesMap.json",
@@ -68,7 +69,7 @@ namespace ts.projectSystem {
             installTypingHost: server.ServerHost,
             readonly typesRegistry = createMap<void>(),
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, safeList.path, customTypesMap.path, throttleLimit, log);
+            super(installTypingHost, globalTypingsCacheLocation, <Path>fakes.FakeServerHost.safeListPath, customTypesMap.path, throttleLimit, log);
         }
 
         protected postExecActions: PostExecAction[] = [];
@@ -146,8 +147,8 @@ namespace ts.projectSystem {
         readonly session: TestSession;
         readonly service: server.ProjectService;
         readonly host: fakes.FakeServerHost;
-        constructor(files: FileOrFolder[]) {
-            this.host = createServerHost(files);
+        constructor(host: fakes.FakeServerHost) {
+            this.host = host;
             this.session = createSession(this.host, {
                 canUseEvents: true,
                 eventHandler: event => this.events.push(event),
@@ -189,7 +190,7 @@ namespace ts.projectSystem {
 
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
             assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
-                projectId: Harness.mockHash(configFile || "/tsconfig.json"),
+                projectId: core.sha1(configFile || "/tsconfig.json"),
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {},
                 extends: false,
@@ -517,6 +518,37 @@ namespace ts.projectSystem {
         return host;
     }
 
+    function getDiffInKeys<T>(map: Map<T>, expectedKeys: ReadonlyArray<string>) {
+        if (map.size === expectedKeys.length) {
+            return "";
+        }
+        const notInActual: string[] = [];
+        const duplicates: string[] = [];
+        const seen = createMap<true>();
+        forEach(expectedKeys, expectedKey => {
+            if (seen.has(expectedKey)) {
+                duplicates.push(expectedKey);
+                return;
+            }
+            seen.set(expectedKey, true);
+            if (!map.has(expectedKey)) {
+                notInActual.push(expectedKey);
+            }
+        });
+        const inActualNotExpected: string[] = [];
+        map.forEach((_value, key) => {
+            if (!seen.has(key)) {
+                inActualNotExpected.push(key);
+            }
+            seen.set(key, true);
+        });
+        return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
+    }
+
+    function verifyMapSize(caption: string, map: Map<any>, expectedKeys: ReadonlyArray<string>) {
+        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
+    }
+
     describe("tsserverProjectSystem", () => {
         describe("general", () => {
             const commonFile1: FileOrFolder = {
@@ -545,9 +577,9 @@ namespace ts.projectSystem {
                 checkFileNames("inferred project", project.getFileNames(), ["/a/b/c/app.ts", fakes.FakeServerHost.libPath, "/a/b/c/module.d.ts"]);
                 const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
                 const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
-                checkWatchedFiles(host, configFiles.concat(fakes.FakeServerHost.libPath, "/a/b/c/module.d.ts"));
-                checkWatchedDirectories(host, [], /*recursive*/ false);
-                checkWatchedDirectories(host, ["/a/b/c", combinePaths("/a/b/c/", nodeModulesAtTypes)], /*recursive*/ true);
+                host.checkWatchedFiles(configFiles.concat(fakes.FakeServerHost.libPath, "/a/b/c/module.d.ts"));
+                host.checkWatchedDirectories([], /*recursive*/ false);
+                host.checkWatchedDirectories(["/a/b/c", combinePaths("/a/b/c/", nodeModulesAtTypes)], /*recursive*/ true);
             });
 
             it("can handle tsconfig file name with difference casing", () => {
@@ -608,9 +640,9 @@ namespace ts.projectSystem {
                 checkProjectActualFiles(project, [file1.path, fakes.FakeServerHost.libPath, file2.path, configFile.path]);
                 checkProjectRootFiles(project, [file1.path, file2.path]);
                 // watching all files except one that was open
-                checkWatchedFiles(host, [configFile.path, file2.path, fakes.FakeServerHost.libPath]);
+                host.checkWatchedFiles([configFile.path, file2.path, fakes.FakeServerHost.libPath]);
                 const configFileDirectory = getDirectoryPath(configFile.path);
-                checkWatchedDirectories(host, [configFileDirectory, combinePaths(configFileDirectory, nodeModulesAtTypes)], /*recursive*/ true);
+                host.checkWatchedDirectories([configFileDirectory, combinePaths(configFileDirectory, nodeModulesAtTypes)], /*recursive*/ true);
             });
 
             it("create configured project with the file list", () => {
@@ -648,8 +680,8 @@ namespace ts.projectSystem {
                 checkProjectActualFiles(project, [file1.path, fakes.FakeServerHost.libPath, file2.path, configFile.path]);
                 checkProjectRootFiles(project, [file1.path, file2.path]);
                 // watching all files except one that was open
-                checkWatchedFiles(host, [configFile.path, file2.path, fakes.FakeServerHost.libPath]);
-                checkWatchedDirectories(host, [getDirectoryPath(configFile.path)], /*recursive*/ false);
+                host.checkWatchedFiles([configFile.path, file2.path, fakes.FakeServerHost.libPath]);
+                host.checkWatchedDirectories([getDirectoryPath(configFile.path)], /*recursive*/ false);
             });
 
             it("add and then remove a config file in a folder with loose files", () => {
@@ -670,14 +702,14 @@ namespace ts.projectSystem {
                 checkNumberOfInferredProjects(projectService, 2);
                 const configFileLocations = ["/", "/a/", "/a/b/"];
                 const watchedFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]).concat(fakes.FakeServerHost.libPath);
-                checkWatchedFiles(host, watchedFiles);
+                host.checkWatchedFiles(watchedFiles);
 
                 // Add a tsconfig file
                 host.vfs.addFile(configFile.path, configFile.content);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkNumberOfInferredProjects(projectService, 1);
                 checkNumberOfConfiguredProjects(projectService, 1);
-                checkWatchedFiles(host, watchedFiles);
+                host.checkWatchedFiles(watchedFiles);
 
                 // remove the tsconfig file
                 host.vfs.removeFile(configFile.path);
@@ -687,7 +719,7 @@ namespace ts.projectSystem {
 
                 checkNumberOfInferredProjects(projectService, 2);
                 checkNumberOfConfiguredProjects(projectService, 0);
-                checkWatchedFiles(host, watchedFiles);
+                host.checkWatchedFiles(watchedFiles);
             });
 
             it("add new files to a configured project without file list", () => {
@@ -699,7 +731,7 @@ namespace ts.projectSystem {
                 const projectService = createProjectService(host);
                 projectService.openClientFile(commonFile1.path);
                 const configFileDir = getDirectoryPath(configFile.path);
-                checkWatchedDirectories(host, [configFileDir, combinePaths(configFileDir, nodeModulesAtTypes)], /*recursive*/ true);
+                host.checkWatchedDirectories([configFileDir, combinePaths(configFileDir, nodeModulesAtTypes)], /*recursive*/ true);
                 checkNumberOfConfiguredProjects(projectService, 1);
 
                 const project = configuredProjectAt(projectService, 0);
@@ -2118,7 +2150,7 @@ namespace ts.projectSystem {
                 projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
 
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
-                checkWatchedFiles(host, [fakes.FakeServerHost.libPath]); // watching the "missing" lib file
+                host.checkWatchedFiles([fakes.FakeServerHost.libPath]); // watching the "missing" lib file
 
                 const project = projectService.externalProjects[0];
 
@@ -2762,11 +2794,11 @@ namespace ts.projectSystem {
                 const project = projectService.configuredProjects.get(configFile.path);
                 assert.isDefined(project);
                 checkProjectActualFiles(project, map(files, file => file.path));
-                checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
-                checkWatchedDirectories(host, [], /*recursive*/ false);
+                host.checkWatchedFiles(mapDefined(files, file => file === file1 ? undefined : file.path));
+                host.checkWatchedDirectories([], /*recursive*/ false);
                 const watchedRecursiveDirectories = ["/a/b/node_modules/@types"];
                 watchedRecursiveDirectories.push("/a/b");
-                checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+                host.checkWatchedDirectories(watchedRecursiveDirectories, /*recursive*/ true);
 
                 files.push(file2);
                 host.vfs.writeFile(file2.path, file2.content);
@@ -2775,18 +2807,18 @@ namespace ts.projectSystem {
                 checkNumberOfProjects(projectService, { configuredProjects: 1 });
                 assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
                 checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
-                checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
-                checkWatchedDirectories(host, [], /*recursive*/ false);
-                checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+                host.checkWatchedFiles(mapDefined(files, file => file === file1 ? undefined : file.path));
+                host.checkWatchedDirectories([], /*recursive*/ false);
+                host.checkWatchedDirectories(watchedRecursiveDirectories, /*recursive*/ true);
 
                 // On next file open the files file2a should be closed and not watched any more
                 projectService.openClientFile(file2.path);
                 checkNumberOfProjects(projectService, { configuredProjects: 1 });
                 assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
                 checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
-                checkWatchedFiles(host, [fakes.FakeServerHost.libPath, configFile.path]);
-                checkWatchedDirectories(host, [], /*recursive*/ false);
-                checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+                host.checkWatchedFiles([fakes.FakeServerHost.libPath, configFile.path]);
+                host.checkWatchedDirectories([], /*recursive*/ false);
+                host.checkWatchedDirectories(watchedRecursiveDirectories, /*recursive*/ true);
 
             });
 
@@ -2823,11 +2855,11 @@ namespace ts.projectSystem {
                 const project = projectService.configuredProjects.get(configFile.path);
                 assert.isDefined(project);
                 checkProjectActualFiles(project, [file1.path, fakes.FakeServerHost.libPath, module1.path, module2.path, configFile.path]);
-                checkWatchedFiles(host, [fakes.FakeServerHost.libPath, module1.path, module2.path, configFile.path]);
-                checkWatchedDirectories(host, [], /*recursive*/ false);
+                host.checkWatchedFiles([fakes.FakeServerHost.libPath, module1.path, module2.path, configFile.path]);
+                host.checkWatchedDirectories([], /*recursive*/ false);
                 const watchedRecursiveDirectories = getTypeRootsFromLocation(root + "/a/b/src");
                 watchedRecursiveDirectories.push(`${root}/a/b/src`, `${root}/a/b/node_modules`);
-                checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+                host.checkWatchedDirectories(watchedRecursiveDirectories, /*recursive*/ true);
             });
 
         });
@@ -3632,10 +3664,9 @@ namespace ts.projectSystem {
                     path: "/a/b/node_modules/@types/node/index.d.ts",
                     content: "declare var process: any"
                 };
-                const cwd = {
-                    path: "/a/c"
-                };
-                const host = createServerHost([f1, config, node, cwd], { vfs: { currentDirectory: cwd.path } });
+                const host = createServerHost([f1, config, node], { vfs: { currentDirectory: "/a/c" } });
+                host.vfs.addDirectory("/a/c");
+
                 const projectService = createProjectService(host);
                 projectService.openClientFile(f1.path);
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
@@ -3769,7 +3800,8 @@ namespace ts.projectSystem {
                         }
                     }`
                 };
-                const serverEventManager = new TestServerEventManager([file, configFile]);
+                const host = createServerHost([file, configFile]);
+                const serverEventManager = new TestServerEventManager(host);
                 openFilesForSession([file], serverEventManager.session);
                 serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
             });
@@ -3785,7 +3817,8 @@ namespace ts.projectSystem {
                         "compilerOptions": {}
                     }`
                 };
-                const serverEventManager = new TestServerEventManager([file, configFile]);
+                const host = createServerHost([file, configFile]);
+                const serverEventManager = new TestServerEventManager(host);
                 openFilesForSession([file], serverEventManager.session);
                 serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
             });
@@ -3802,7 +3835,8 @@ namespace ts.projectSystem {
                     }`
                 };
 
-                const serverEventManager = new TestServerEventManager([file, configFile]);
+                const host = createServerHost([file, configFile]);
+                const serverEventManager = new TestServerEventManager(host);
                 openFilesForSession([file], serverEventManager.session);
                 serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path);
 
@@ -3842,7 +3876,8 @@ namespace ts.projectSystem {
                         "files": ["app.ts"]
                     }`
                 };
-                const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+                const host = createServerHost([file, file2, libFile, configFile]);
+                const serverEventManager = new TestServerEventManager(host);
                 openFilesForSession([file2], serverEventManager.session);
                 serverEventManager.hasZeroEvent("configFileDiag");
             });
@@ -3863,7 +3898,8 @@ namespace ts.projectSystem {
                     }`
                 };
 
-                const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+                const host = createServerHost([file, file2, libFile, configFile]);
+                const serverEventManager = new TestServerEventManager(host);
                 openFilesForSession([file2], serverEventManager.session);
                 serverEventManager.hasZeroEvent("configFileDiag");
             });
@@ -4710,18 +4746,18 @@ namespace ts.projectSystem {
                 service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
                 checkNumberOfProjects(service, { configuredProjects: 1 });
                 assert.isDefined(service.configuredProjects.get(configFile.path));
-                checkWatchedFiles(host, [fakes.FakeServerHost.libPath, configFile.path]);
-                checkWatchedDirectories(host, [], /*recursive*/ false);
+                host.checkWatchedFiles([fakes.FakeServerHost.libPath, configFile.path]);
+                host.checkWatchedDirectories([], /*recursive*/ false);
                 const typeRootLocations = getTypeRootsFromLocation(configFileLocation);
-                checkWatchedDirectories(host, typeRootLocations.concat(configFileLocation), /*recursive*/ true);
+                host.checkWatchedDirectories(typeRootLocations.concat(configFileLocation), /*recursive*/ true);
 
                 // Delete config file - should create inferred project and not configured project
                 host.vfs.removeFile(configFile.path);
                 host.runQueuedTimeoutCallbacks();
                 checkNumberOfProjects(service, { inferredProjects: 1 });
-                checkWatchedFiles(host, [fakes.FakeServerHost.libPath, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
-                checkWatchedDirectories(host, [], /*recursive*/ false);
-                checkWatchedDirectories(host, typeRootLocations, /*recursive*/ true);
+                host.checkWatchedFiles([fakes.FakeServerHost.libPath, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
+                host.checkWatchedDirectories([], /*recursive*/ false);
+                host.checkWatchedDirectories(typeRootLocations, /*recursive*/ true);
             });
 
             it("should use projectRootPath when searching for inferred project again 2", () => {
@@ -4744,18 +4780,18 @@ namespace ts.projectSystem {
                 service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
                 checkNumberOfProjects(service, { configuredProjects: 1 });
                 assert.isDefined(service.configuredProjects.get(configFile.path));
-                checkWatchedFiles(host, [fakes.FakeServerHost.libPath, configFile.path]);
-                checkWatchedDirectories(host, [], /*recursive*/ false);
-                checkWatchedDirectories(host, getTypeRootsFromLocation(configFileLocation).concat(configFileLocation), /*recursive*/ true);
+                host.checkWatchedFiles([fakes.FakeServerHost.libPath, configFile.path]);
+                host.checkWatchedDirectories([], /*recursive*/ false);
+                host.checkWatchedDirectories(getTypeRootsFromLocation(configFileLocation).concat(configFileLocation), /*recursive*/ true);
 
                 // Delete config file - should create inferred project with project root path set
                 host.vfs.removeFile(configFile.path);
                 host.runQueuedTimeoutCallbacks();
                 checkNumberOfProjects(service, { inferredProjects: 1 });
                 assert.equal(service.inferredProjects[0].projectRootPath, projectDir);
-                checkWatchedFiles(host, [fakes.FakeServerHost.libPath, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
-                checkWatchedDirectories(host, [], /*recursive*/ false);
-                checkWatchedDirectories(host, getTypeRootsFromLocation(projectDir), /*recursive*/ true);
+                host.checkWatchedFiles([fakes.FakeServerHost.libPath, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
+                host.checkWatchedDirectories([], /*recursive*/ false);
+                host.checkWatchedDirectories(getTypeRootsFromLocation(projectDir), /*recursive*/ true);
             });
         });
 
@@ -5305,7 +5341,7 @@ namespace ts.projectSystem {
 
                 function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
                     const calledMap = calledMaps[callback];
-                    ts.TestFSWithWatch.verifyMapSize(callback, calledMap, arrayFrom(expectedKeys.keys()));
+                    verifyMapSize(callback, calledMap, arrayFrom(expectedKeys.keys()));
                     expectedKeys.forEach((called, name) => {
                         assert.isTrue(calledMap.has(name), `${callback} is expected to contain ${name}, actual keys: ${arrayFrom(calledMap.keys())}`);
                         assert.equal(calledMap.get(name).length, called, `${callback} is expected to be called ${called} times with ${name}. Actual entry: ${calledMap.get(name)}`);
@@ -5676,9 +5712,9 @@ namespace ts.projectSystem {
 
                     function verifyProjectAndWatchedDirectories() {
                         checkProjectActualFiles(project, map(projectFiles, f => f.path));
-                        checkWatchedFiles(host, mapDefined(projectFiles, getFilePathIfNotOpen));
-                        checkWatchedDirectories(host, watchingRecursiveDirectories, /*recursive*/ true);
-                        checkWatchedDirectories(host, [], /*recursive*/ false);
+                        host.checkWatchedFiles(mapDefined(projectFiles, getFilePathIfNotOpen));
+                        host.checkWatchedDirectories(watchingRecursiveDirectories, /*recursive*/ true);
+                        host.checkWatchedDirectories([], /*recursive*/ false);
                     }
                 }
 
@@ -5867,9 +5903,9 @@ namespace ts.projectSystem {
                         checkProjectActualFiles(project, projectFilePaths);
 
                         const filesWatched = filter(projectFilePaths, p => p !== app.path);
-                        checkWatchedFiles(host, filesWatched);
-                        checkWatchedDirectories(host, typeRootDirectories.concat(recursiveWatchedDirectories), /*recursive*/ true);
-                        checkWatchedDirectories(host, [], /*recursive*/ false);
+                        host.checkWatchedFiles(filesWatched);
+                        host.checkWatchedDirectories(typeRootDirectories.concat(recursiveWatchedDirectories), /*recursive*/ true);
+                        host.checkWatchedDirectories([], /*recursive*/ false);
                     }
                 }
 
@@ -6398,8 +6434,8 @@ namespace ts.projectSystem {
 
                         function verifyProject() {
                             checkProjectActualFiles(project, map(projectFiles, file => file.path));
-                            checkWatchedDirectories(host, [], /*recursive*/ false);
-                            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+                            host.checkWatchedDirectories([], /*recursive*/ false);
+                            host.checkWatchedDirectories(watchedRecursiveDirectories, /*recursive*/ true);
                         }
                     }
 
@@ -6526,9 +6562,9 @@ namespace ts.projectSystem {
                 const project = projectService.configuredProjects.get(configFile.path);
                 assert.isDefined(project);
                 checkProjectActualFiles(project, files.map(f => f.path));
-                checkWatchedFiles(host, mapDefined(files, f => f === libFile ? windowsStyleLibFilePath : f === file1 ? undefined : f.path));
-                checkWatchedDirectories(host, [], /*recursive*/ false);
-                checkWatchedDirectories(host, [
+                host.checkWatchedFiles(mapDefined(files, f => f === libFile ? windowsStyleLibFilePath : f === file1 ? undefined : f.path));
+                host.checkWatchedDirectories([], /*recursive*/ false);
+                host.checkWatchedDirectories([
                     root + "project",
                     root + "project/node_modules/@types"
                 ].concat(useProjectAtRoot ? [] : [root + nodeModulesAtTypes]), /*recursive*/ true);

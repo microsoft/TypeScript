@@ -1,8 +1,8 @@
-/// <reference path="..\harness.ts" />
-/// <reference path="..\..\compiler\watch.ts" />
-/// <reference path="..\virtualFileSystemWithWatch.ts" />
+/// <reference path="../harness.ts" />
+/// <reference path="../../compiler/watch.ts" />
 /// <reference path="../fakes.ts" />
 /// <reference path="../vpath.ts" />
+/// <reference path="../utils.ts" />
 
 namespace ts.tscWatch {
     import theory = utils.theory;
@@ -10,11 +10,7 @@ namespace ts.tscWatch {
     import Arg = typemock.Arg;
     import Times = typemock.Times;
 
-    import checkFileNames = ts.TestFSWithWatch.checkFileNames;
-    import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
-    import checkOutputContains = ts.TestFSWithWatch.checkOutputContains;
-    import checkOutputDoesNotContain = ts.TestFSWithWatch.checkOutputDoesNotContain;
+    import checkFileNames = utils.checkFileNames;
 
     export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
         checkFileNames(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
@@ -197,8 +193,8 @@ namespace ts.tscWatch {
 
                 checkProgramActualFiles(watch(), ["/a/b/c/f1.ts", fakes.FakeServerHost.libPath, "/a/b/d/f2.ts"]);
                 checkProgramRootFiles(watch(), ["/a/b/c/f1.ts", "/a/b/d/f2.ts"]);
-                checkWatchedFiles(host, ["/a/b/tsconfig.json", "/a/b/c/f1.ts", "/a/b/d/f2.ts", fakes.FakeServerHost.libPath]);
-                checkWatchedDirectories(host, ["/a/b", "/a/b/node_modules/@types"], /*recursive*/ true);
+                host.checkWatchedFiles(["/a/b/tsconfig.json", "/a/b/c/f1.ts", "/a/b/d/f2.ts", fakes.FakeServerHost.libPath]);
+                host.checkWatchedDirectories(["/a/b", "/a/b/node_modules/@types"], /*recursive*/ true);
             });
 
             // TODO: if watching for config file creation
@@ -211,7 +207,7 @@ namespace ts.tscWatch {
                 host.vfs.addFile("/a/b/tsconfig.json", `{}`);
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
-                checkWatchedDirectories(host, ["/a/b", "/a/b/node_modules/@types"], /*recursive*/ true);
+                host.checkWatchedDirectories(["/a/b", "/a/b/node_modules/@types"], /*recursive*/ true);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
 
                 // add a new ts file
@@ -767,11 +763,11 @@ namespace ts.tscWatch {
 
             function checkAffectedFiles(host: fakes.FakeServerHost, affectedFiles: ReadonlyArray<string>, unaffectedFiles?: ReadonlyArray<string>) {
                 affectedFiles = getEmittedLines(affectedFiles, host, formatOutputFile);
-                checkOutputContains(host, affectedFiles);
+                host.checkOutputContains(affectedFiles);
                 if (unaffectedFiles) {
                     unaffectedFiles = getEmittedLines(unaffectedFiles, host, formatOutputFile);
                     unaffectedFiles = mapDefined(unaffectedFiles, line => contains(affectedFiles, line) ? undefined : line);
-                    checkOutputDoesNotContain(host, unaffectedFiles);
+                    host.checkOutputDoesNotContain(unaffectedFiles);
                 }
                 host.clearOutput();
             }

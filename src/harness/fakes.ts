@@ -99,6 +99,12 @@ namespace fakes {
                 ? _vfs
                 : new vfs.VirtualFileSystem(currentDirectory, useCaseSensitiveFileNames);
 
+            if (this.vfs.isReadOnly) {
+                this.vfs = this.vfs.shadow();
+            }
+
+            this.vfs.addDirectory(this.vfs.currentDirectory);
+
             this.useCaseSensitiveFileNames = this.vfs.useCaseSensitiveFileNames;
             this.newLine = newLine;
             this._executingFilePath = executingFilePath;
@@ -115,6 +121,7 @@ namespace fakes {
                     dos ? FakeServerHost.dosLibPath : FakeServerHost.libPath,
                     FakeServerHost.libContent);
             }
+
         }
 
         // #region DirectoryStructureHost members
@@ -292,6 +299,43 @@ namespace fakes {
                     throw e;
                 }
             }
+        }
+
+        // expectations
+        public checkOutputContains(expected: Iterable<string>) {
+            const mapExpected = new Set(expected);
+            const mapSeen = new Set<string>();
+            for (const f of this._output) {
+                assert.isFalse(mapSeen.has(f), `Already found ${f} in ${JSON.stringify(this._output)}`);
+                if (mapExpected.has(f)) {
+                    mapExpected.delete(f);
+                    mapSeen.add(f);
+                }
+            }
+            assert.equal(mapExpected.size, 0, `Output is missing ${JSON.stringify(ts.flatMap(Array.from(mapExpected.keys()), key => key))} in ${JSON.stringify(this._output)}`);
+        }
+
+        public checkOutputDoesNotContain(notExpected: Iterable<string>) {
+            const mapExpectedToBeAbsent = new Set(notExpected);
+            for (const f of this._output) {
+                assert.isFalse(mapExpectedToBeAbsent.has(f), `Contains ${f} in ${JSON.stringify(this._output)}`);
+            }
+        }
+
+        public checkWatchedFiles(expected: Iterable<string>) {
+            return checkSortedSet(this.vfs.watchedFiles, expected);
+        }
+
+        public checkWatchedDirectories(expected: Iterable<string>, recursive = false) {
+            return checkSortedSet(recursive ? this.vfs.watchedRecursiveDirectories : this.vfs.watchedNonRecursiveDirectories, expected);
+        }
+    }
+
+    function checkSortedSet<T>(set: ReadonlySet<T>, values: Iterable<T>) {
+        const array = Array.from(values);
+        assert.strictEqual(set.size, array.length, `Actual: ${Array.from(set)}, expected: ${array}.`);
+        for (const value of array) {
+            assert.isTrue(set.has(value));
         }
     }
 }

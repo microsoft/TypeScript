@@ -872,8 +872,6 @@ namespace ts {
         });
     });
 
-    import libFile = ts.TestFSWithWatch.libFile;
-
     describe("isProgramUptoDate should return true when there is no change in compiler options and", () => {
         function verifyProgramIsUptoDate(
             program: Program,
@@ -926,7 +924,7 @@ namespace ts {
             const file1 = fs.addFile("/a/b/file1.ts", "let x = 1");
             const file2 = fs.addFile("/a/b/file2.ts", "let y = 1");
             const configFile = fs.addFile("/a/b/tsconfig.json", "{}");
-            fs.addFile(libFile.path, libFile.content);
+            fs.addFile(fakes.FakeServerHost.libPath, fakes.FakeServerHost.libContent);
             verifyProgram(fs, [file1.path, file2.path], {}, configFile.path);
         });
 

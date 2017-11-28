@@ -99,19 +99,6 @@ namespace ts {
         getCurrentDirectory: notImplemented,
     };
 
-    function createServerHost(files: ts.TestFSWithWatch.FileOrFolder[], options?: Partial<fakes.FakeServerHostOptions>) {
-        const host = new fakes.FakeServerHost(options);
-        for (const file of files) {
-            if (isString(file.content)) {
-                host.vfs.writeFile(file.path, file.content);
-            }
-            else {
-                host.vfs.addDirectory(file.path);
-            }
-        }
-        return host;
-    }
-
     export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection");
@@ -168,7 +155,8 @@ namespace ts {
         }
 
         function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
-            const host = createServerHost(includeLib ? [f, ts.TestFSWithWatch.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
+            const host = new fakes.FakeServerHost({ lib: includeLib }); // libFile is expensive to parse repeatedly - only test when required
+            host.vfs.writeFile(f.path, f.content);
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
@@ -188,15 +176,12 @@ namespace ts {
             if (!selectionRange) {
                 throw new Error(`Test ${caption} does not specify selection range`);
             }
-            const f = {
-                path: "/a.ts",
-                content: t.source
-            };
-            const host = ts.TestFSWithWatch.createServerHost([f, ts.TestFSWithWatch.libFile]);
+            const host = new fakes.FakeServerHost({ lib: true });
+            host.vfs.writeFile("/a.ts", t.source);
             const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(f.path);
+            projectService.openClientFile("/a.ts");
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
-            const sourceFile = program.getSourceFile(f.path);
+            const sourceFile = program.getSourceFile("/a.ts");
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 newLineCharacter,

@@ -103,4 +103,11 @@ namespace utils {
         }
         return indentation;
     }
+
+    export function checkFileNames(caption: string, actualFileNames: ReadonlyArray<string>, expectedFileNames: string[]) {
+        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${expectedFileNames}, got ${actualFileNames}`);
+        for (const f of expectedFileNames) {
+            assert.isTrue(actualFileNames.indexOf(f) >= 0, `${caption}: expected to find ${f} in ${actualFileNames}`);
+        }
+    }
 }
