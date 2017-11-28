@@ -13,6 +13,9 @@ class Foo {
     constructor(...args: any[]) {
 >args : Symbol(args, Decl(collisionRestParameterUnderscoreIUsage.ts, 3, 16))
 
+        args;
+>args : Symbol(args, Decl(collisionRestParameterUnderscoreIUsage.ts, 3, 16))
+
         console.log(_i); // This should result in error
 >console.log : Symbol(log, Decl(collisionRestParameterUnderscoreIUsage.ts, 0, 22))
 >console : Symbol(console, Decl(collisionRestParameterUnderscoreIUsage.ts, 0, 11))

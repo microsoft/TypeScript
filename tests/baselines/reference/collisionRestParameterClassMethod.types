@@ -7,6 +7,9 @@ class c1 {
 >_i : number
 >restParameters : any[]
 
+        restParameters;
+>restParameters : any[]
+
         var _i = 10; // no error
 >_i : number
 >10 : 10
@@ -32,6 +35,9 @@ class c1 {
     public f4(_i: any, ...rest) { // error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
 >_i : any
+>rest : any[]
+
+        rest;
 >rest : any[]
 
         var _i: any; // no error
@@ -91,6 +97,9 @@ class c3 {
 
     public foo(...restParameters) {
 >foo : (...restParameters: any[]) => void
+>restParameters : any[]
+
+        restParameters;
 >restParameters : any[]
 
         var _i = 10; // no error

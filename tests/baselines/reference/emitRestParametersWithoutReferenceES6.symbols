@@ -1,0 +1,164 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersWithoutReferenceES6.ts ===
+function foo1(x: number, ...rest) {
+>foo1 : Symbol(foo1, Decl(emitRestParametersWithoutReferenceES6.ts, 0, 0))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 0, 14))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 0, 24))
+
+    return x;
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 0, 14))
+}
+
+const foo2 = (x: number, ...rest) => x;
+>foo2 : Symbol(foo2, Decl(emitRestParametersWithoutReferenceES6.ts, 4, 5))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 4, 14))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 4, 24))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 4, 14))
+
+const foo3 = function(x: number, ...rest) {
+>foo3 : Symbol(foo3, Decl(emitRestParametersWithoutReferenceES6.ts, 6, 5))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 6, 22))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 6, 32))
+
+    return x;
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 6, 22))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(emitRestParametersWithoutReferenceES6.ts, 8, 1))
+
+    constructor(...rest){}
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 11, 16))
+
+    public foo4(x: number, ...rest) {
+>foo4 : Symbol(Foo.foo4, Decl(emitRestParametersWithoutReferenceES6.ts, 11, 26))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 13, 16))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 13, 26))
+
+        return x;
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 13, 16))
+    }
+}
+
+const fooObj = {
+>fooObj : Symbol(fooObj, Decl(emitRestParametersWithoutReferenceES6.ts, 18, 5))
+
+    foo5: (x: number, ...rest) => x
+>foo5 : Symbol(foo5, Decl(emitRestParametersWithoutReferenceES6.ts, 18, 16))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 19, 11))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 19, 21))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 19, 11))
+}
+
+function bar1(x: number, ...rest) {
+>bar1 : Symbol(bar1, Decl(emitRestParametersWithoutReferenceES6.ts, 20, 1))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 22, 14))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 22, 24))
+
+    function inner1(rest) {
+>inner1 : Symbol(inner1, Decl(emitRestParametersWithoutReferenceES6.ts, 22, 35))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 23, 20))
+
+        return rest;
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 23, 20))
+    }
+
+    return inner1(x);
+>inner1 : Symbol(inner1, Decl(emitRestParametersWithoutReferenceES6.ts, 22, 35))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 22, 14))
+}
+
+const bar2 = (x: number, ...rest) => {
+>bar2 : Symbol(bar2, Decl(emitRestParametersWithoutReferenceES6.ts, 30, 5))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 30, 14))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 30, 24))
+
+    function inner2(rest) {
+>inner2 : Symbol(inner2, Decl(emitRestParametersWithoutReferenceES6.ts, 30, 38))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 31, 20))
+
+        return rest;
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 31, 20))
+    }
+
+    return inner2(x);
+>inner2 : Symbol(inner2, Decl(emitRestParametersWithoutReferenceES6.ts, 30, 38))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 30, 14))
+}
+
+const bar3 = function(x: number, ...rest) {
+>bar3 : Symbol(bar3, Decl(emitRestParametersWithoutReferenceES6.ts, 38, 5))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 38, 22))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 38, 32))
+
+    function inner3(rest) {
+>inner3 : Symbol(inner3, Decl(emitRestParametersWithoutReferenceES6.ts, 38, 43))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 39, 20))
+
+        return rest;
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 39, 20))
+    }
+
+    return inner3(x);
+>inner3 : Symbol(inner3, Decl(emitRestParametersWithoutReferenceES6.ts, 38, 43))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 38, 22))
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(emitRestParametersWithoutReferenceES6.ts, 44, 1))
+
+    constructor(...rest) {
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 47, 16))
+
+        function innerC(rest) {
+>innerC : Symbol(innerC, Decl(emitRestParametersWithoutReferenceES6.ts, 47, 26))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 48, 24))
+
+            return rest;
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 48, 24))
+        }
+
+        innerC(0);
+>innerC : Symbol(innerC, Decl(emitRestParametersWithoutReferenceES6.ts, 47, 26))
+    }
+
+    public foo4(x: number, ...rest) {
+>foo4 : Symbol(Bar.foo4, Decl(emitRestParametersWithoutReferenceES6.ts, 53, 5))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 55, 16))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 55, 26))
+
+        function inner4(rest) {
+>inner4 : Symbol(inner4, Decl(emitRestParametersWithoutReferenceES6.ts, 55, 37))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 56, 24))
+
+            return rest;
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 56, 24))
+        }
+
+        return inner4(x);
+>inner4 : Symbol(inner4, Decl(emitRestParametersWithoutReferenceES6.ts, 55, 37))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 55, 16))
+    }
+}
+
+const barObj = {
+>barObj : Symbol(barObj, Decl(emitRestParametersWithoutReferenceES6.ts, 64, 5))
+
+    bar5: (x: number, ...rest) => {
+>bar5 : Symbol(bar5, Decl(emitRestParametersWithoutReferenceES6.ts, 64, 16))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 65, 11))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 65, 21))
+
+        function inner5(rest) {
+>inner5 : Symbol(inner5, Decl(emitRestParametersWithoutReferenceES6.ts, 65, 35))
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 66, 24))
+
+            return rest;
+>rest : Symbol(rest, Decl(emitRestParametersWithoutReferenceES6.ts, 66, 24))
+        }
+
+        return inner5(x);
+>inner5 : Symbol(inner5, Decl(emitRestParametersWithoutReferenceES6.ts, 65, 35))
+>x : Symbol(x, Decl(emitRestParametersWithoutReferenceES6.ts, 65, 11))
+    }
+}
+

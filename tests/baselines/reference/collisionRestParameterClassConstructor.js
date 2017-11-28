@@ -2,6 +2,7 @@
 // Constructors
 class c1 {
     constructor(_i: number, ...restParameters) { //_i is error
+        restParameters;
         var _i = 10; // no error
     }
 }
@@ -13,6 +14,7 @@ class c1NoError {
 
 class c2 {
     constructor(...restParameters) {
+        restParameters;
         var _i = 10; // no error
     }
 }
@@ -24,6 +26,7 @@ class c2NoError {
 
 class c3 {
     constructor(public _i: number, ...restParameters) { //_i is error
+        restParameters;
         var _i = 10; // no error
     }
 }
@@ -44,6 +47,7 @@ class c5 {
     constructor(_i: number, ...rest); // no codegen no error
     constructor(_i: string, ...rest); // no codegen no error
     constructor(_i: any, ...rest) { // error
+        rest;
         var _i: any; // no error
     }
 }
@@ -74,6 +78,7 @@ var c1 = /** @class */ (function () {
         for (var _a = 1; _a < arguments.length; _a++) {
             restParameters[_a - 1] = arguments[_a];
         }
+        restParameters;
         var _i = 10; // no error
     }
     return c1;
@@ -90,6 +95,7 @@ var c2 = /** @class */ (function () {
         for (var _a = 0; _a < arguments.length; _a++) {
             restParameters[_a] = arguments[_a];
         }
+        restParameters;
         var _i = 10; // no error
     }
     return c2;
@@ -102,11 +108,12 @@ var c2NoError = /** @class */ (function () {
 }());
 var c3 = /** @class */ (function () {
     function c3(_i) {
+        this._i = _i;
         var restParameters = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             restParameters[_a - 1] = arguments[_a];
         }
-        this._i = _i;
+        restParameters;
         var _i = 10; // no error
     }
     return c3;
@@ -124,6 +131,7 @@ var c5 = /** @class */ (function () {
         for (var _a = 1; _a < arguments.length; _a++) {
             rest[_a - 1] = arguments[_a];
         }
+        rest;
         var _i; // no error
     }
     return c5;

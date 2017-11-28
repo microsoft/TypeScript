@@ -10,7 +10,8 @@ var obj: {
 var obj2 = {
 >obj2 : Symbol(obj2, Decl(emitRestParametersFunctionProperty.ts, 4, 3))
 
-    func(...rest) { }
+    func(...rest) { rest; }
 >func : Symbol(func, Decl(emitRestParametersFunctionProperty.ts, 4, 12))
+>rest : Symbol(rest, Decl(emitRestParametersFunctionProperty.ts, 5, 9))
 >rest : Symbol(rest, Decl(emitRestParametersFunctionProperty.ts, 5, 9))
 }

@@ -1,0 +1,124 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersPositionES6.ts ===
+function foo1(x: number, ...rest) {
+>foo1 : (x: number, ...rest: any[]) => true | any[]
+>x : number
+>rest : any[]
+
+    if (x > 0) {
+>x > 0 : boolean
+>x : number
+>0 : 0
+
+        return true;
+>true : true
+    }
+
+    return rest;
+>rest : any[]
+}
+
+function foo2(x: number, ...rest) {
+>foo2 : (x: number, ...rest: any[]) => any
+>x : number
+>rest : any[]
+
+    if (x > 0) {
+>x > 0 : boolean
+>x : number
+>0 : 0
+
+        return true;
+>true : true
+    }
+    else if (x < 0) {
+>x < 0 : boolean
+>x : number
+>0 : 0
+
+        return rest[0];
+>rest[0] : any
+>rest : any[]
+>0 : 0
+    }
+
+    return rest;
+>rest : any[]
+}
+
+function foo3(x: number, ...rest) {
+>foo3 : (x: number, ...rest: any[]) => boolean | any[]
+>x : number
+>rest : any[]
+
+    if (x > 0) {
+>x > 0 : boolean
+>x : number
+>0 : 0
+
+        return true;
+>true : true
+    }
+    else if (x < 0) {
+>x < 0 : boolean
+>x : number
+>0 : 0
+
+        return false;
+>false : false
+    }
+
+    return rest;
+>rest : any[]
+}
+
+function foo4(s: string, ...rest) {
+>foo4 : (s: string, ...rest: any[]) => any
+>s : string
+>rest : any[]
+
+    if (s === "hello world") {
+>s === "hello world" : boolean
+>s : string
+>"hello world" : "hello world"
+
+        return true;
+>true : true
+    }
+
+    if (s) {
+>s : string
+
+        for (let i = 0; i < s.length; i++) {
+>i : number
+>0 : 0
+>i < s.length : boolean
+>i : number
+>s.length : number
+>s : string
+>length : number
+>i++ : number
+>i : number
+
+            if (s.charAt(i) === "1") {
+>s.charAt(i) === "1" : boolean
+>s.charAt(i) : string
+>s.charAt : (pos: number) => string
+>s : string
+>charAt : (pos: number) => string
+>i : number
+>"1" : "1"
+
+                return rest[0];
+>rest[0] : any
+>rest : any[]
+>0 : 0
+            }
+        }
+    }
+
+    return rest[1];
+>rest[1] : any
+>rest : any[]
+>1 : 1
+}
+

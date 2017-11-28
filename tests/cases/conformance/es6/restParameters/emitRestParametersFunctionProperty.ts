@@ -4,5 +4,5 @@ var obj: {
 }
 
 var obj2 = {
-    func(...rest) { }
+    func(...rest) { rest; }
 }

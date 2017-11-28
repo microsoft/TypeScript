@@ -1,0 +1,179 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersWithoutReferenceES6.ts ===
+function foo1(x: number, ...rest) {
+>foo1 : (x: number, ...rest: any[]) => number
+>x : number
+>rest : any[]
+
+    return x;
+>x : number
+}
+
+const foo2 = (x: number, ...rest) => x;
+>foo2 : (x: number, ...rest: any[]) => number
+>(x: number, ...rest) => x : (x: number, ...rest: any[]) => number
+>x : number
+>rest : any[]
+>x : number
+
+const foo3 = function(x: number, ...rest) {
+>foo3 : (x: number, ...rest: any[]) => number
+>function(x: number, ...rest) {    return x;} : (x: number, ...rest: any[]) => number
+>x : number
+>rest : any[]
+
+    return x;
+>x : number
+}
+
+class Foo {
+>Foo : Foo
+
+    constructor(...rest){}
+>rest : any[]
+
+    public foo4(x: number, ...rest) {
+>foo4 : (x: number, ...rest: any[]) => number
+>x : number
+>rest : any[]
+
+        return x;
+>x : number
+    }
+}
+
+const fooObj = {
+>fooObj : { foo5: (x: number, ...rest: any[]) => number; }
+>{    foo5: (x: number, ...rest) => x} : { foo5: (x: number, ...rest: any[]) => number; }
+
+    foo5: (x: number, ...rest) => x
+>foo5 : (x: number, ...rest: any[]) => number
+>(x: number, ...rest) => x : (x: number, ...rest: any[]) => number
+>x : number
+>rest : any[]
+>x : number
+}
+
+function bar1(x: number, ...rest) {
+>bar1 : (x: number, ...rest: any[]) => any
+>x : number
+>rest : any[]
+
+    function inner1(rest) {
+>inner1 : (rest: any) => any
+>rest : any
+
+        return rest;
+>rest : any
+    }
+
+    return inner1(x);
+>inner1(x) : any
+>inner1 : (rest: any) => any
+>x : number
+}
+
+const bar2 = (x: number, ...rest) => {
+>bar2 : (x: number, ...rest: any[]) => any
+>(x: number, ...rest) => {    function inner2(rest) {        return rest;    }    return inner2(x);} : (x: number, ...rest: any[]) => any
+>x : number
+>rest : any[]
+
+    function inner2(rest) {
+>inner2 : (rest: any) => any
+>rest : any
+
+        return rest;
+>rest : any
+    }
+
+    return inner2(x);
+>inner2(x) : any
+>inner2 : (rest: any) => any
+>x : number
+}
+
+const bar3 = function(x: number, ...rest) {
+>bar3 : (x: number, ...rest: any[]) => any
+>function(x: number, ...rest) {    function inner3(rest) {        return rest;    }    return inner3(x);} : (x: number, ...rest: any[]) => any
+>x : number
+>rest : any[]
+
+    function inner3(rest) {
+>inner3 : (rest: any) => any
+>rest : any
+
+        return rest;
+>rest : any
+    }
+
+    return inner3(x);
+>inner3(x) : any
+>inner3 : (rest: any) => any
+>x : number
+}
+
+class Bar {
+>Bar : Bar
+
+    constructor(...rest) {
+>rest : any[]
+
+        function innerC(rest) {
+>innerC : (rest: any) => any
+>rest : any
+
+            return rest;
+>rest : any
+        }
+
+        innerC(0);
+>innerC(0) : any
+>innerC : (rest: any) => any
+>0 : 0
+    }
+
+    public foo4(x: number, ...rest) {
+>foo4 : (x: number, ...rest: any[]) => any
+>x : number
+>rest : any[]
+
+        function inner4(rest) {
+>inner4 : (rest: any) => any
+>rest : any
+
+            return rest;
+>rest : any
+        }
+
+        return inner4(x);
+>inner4(x) : any
+>inner4 : (rest: any) => any
+>x : number
+    }
+}
+
+const barObj = {
+>barObj : { bar5: (x: number, ...rest: any[]) => any; }
+>{    bar5: (x: number, ...rest) => {        function inner5(rest) {            return rest;        }        return inner5(x);    }} : { bar5: (x: number, ...rest: any[]) => any; }
+
+    bar5: (x: number, ...rest) => {
+>bar5 : (x: number, ...rest: any[]) => any
+>(x: number, ...rest) => {        function inner5(rest) {            return rest;        }        return inner5(x);    } : (x: number, ...rest: any[]) => any
+>x : number
+>rest : any[]
+
+        function inner5(rest) {
+>inner5 : (rest: any) => any
+>rest : any
+
+            return rest;
+>rest : any
+        }
+
+        return inner5(x);
+>inner5(x) : any
+>inner5 : (rest: any) => any
+>x : number
+    }
+}
+

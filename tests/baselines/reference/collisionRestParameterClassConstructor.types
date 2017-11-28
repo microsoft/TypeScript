@@ -7,6 +7,9 @@ class c1 {
 >_i : number
 >restParameters : any[]
 
+        restParameters;
+>restParameters : any[]
+
         var _i = 10; // no error
 >_i : number
 >10 : 10
@@ -30,6 +33,9 @@ class c2 {
     constructor(...restParameters) {
 >restParameters : any[]
 
+        restParameters;
+>restParameters : any[]
+
         var _i = 10; // no error
 >_i : number
 >10 : 10
@@ -50,6 +56,9 @@ class c3 {
 
     constructor(public _i: number, ...restParameters) { //_i is error
 >_i : number
+>restParameters : any[]
+
+        restParameters;
 >restParameters : any[]
 
         var _i = 10; // no error
@@ -96,6 +105,9 @@ class c5 {
 
     constructor(_i: any, ...rest) { // error
 >_i : any
+>rest : any[]
+
+        rest;
 >rest : any[]
 
         var _i: any; // no error

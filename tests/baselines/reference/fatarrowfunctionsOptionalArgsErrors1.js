@@ -9,27 +9,9 @@
 
 //// [fatarrowfunctionsOptionalArgsErrors1.js]
 (function (arg1, arg2) { return 101; });
-(function () {
-    var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
-    }
-    return 102;
-});
-(function () {
-    var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
-    }
-    return 103;
-});
-(function () {
-    var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
-    }
-    return 104;
-});
+(function () { return 102; });
+(function () { return 103; });
+(function () { return 104; });
 // Uninitialized parameter makes the initialized one required
 (function (arg1, arg2) {
     if (arg1 === void 0) { arg1 = 1; }

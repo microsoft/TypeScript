@@ -1,5 +1,6 @@
 class c1 {
     public foo(_i: number, ...restParameters) { //_i is error
+        restParameters;
         var _i = 10; // no error
     }
     public fooNoError(_i: number) { // no error
@@ -8,6 +9,7 @@ class c1 {
     public f4(_i: number, ...rest); // no codegen no error
     public f4(_i: string, ...rest); // no codegen no error
     public f4(_i: any, ...rest) { // error
+        rest;
         var _i: any; // no error
     }
 
@@ -30,6 +32,7 @@ declare class c2 {
 
 class c3 {
     public foo(...restParameters) {
+        restParameters;
         var _i = 10; // no error
     }
     public fooNoError() {

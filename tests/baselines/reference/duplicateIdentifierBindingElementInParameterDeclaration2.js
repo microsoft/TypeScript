@@ -32,10 +32,6 @@ function f5(_a, _b, _c) {
     var e = _a.e, e = _a.e.e;
     var e = _b.e;
     var d = _c[0], e = _c[1], e = _c[2][0][0];
-    var e = [];
-    for (var _i = 3; _i < arguments.length; _i++) {
-        e[_i - 3] = arguments[_i];
-    }
 }
 function f6(_a) {
     var f = _a[0], f = _a.slice(1);

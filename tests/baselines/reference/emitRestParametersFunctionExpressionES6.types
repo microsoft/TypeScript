@@ -22,3 +22,9 @@ var funcExp3 = (function (...rest) { })()
 >function (...rest) { } : (...rest: any[]) => void
 >rest : any[]
 
+var funcExp4 = (...rest) => rest;
+>funcExp4 : (...rest: any[]) => any[]
+>(...rest) => rest : (...rest: any[]) => any[]
+>rest : any[]
+>rest : any[]
+

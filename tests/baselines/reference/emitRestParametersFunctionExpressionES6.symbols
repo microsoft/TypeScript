@@ -16,3 +16,8 @@ var funcExp3 = (function (...rest) { })()
 >funcExp3 : Symbol(funcExp3, Decl(emitRestParametersFunctionExpressionES6.ts, 3, 3))
 >rest : Symbol(rest, Decl(emitRestParametersFunctionExpressionES6.ts, 3, 26))
 
+var funcExp4 = (...rest) => rest;
+>funcExp4 : Symbol(funcExp4, Decl(emitRestParametersFunctionExpressionES6.ts, 4, 3))
+>rest : Symbol(rest, Decl(emitRestParametersFunctionExpressionES6.ts, 4, 16))
+>rest : Symbol(rest, Decl(emitRestParametersFunctionExpressionES6.ts, 4, 16))
+

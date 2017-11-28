@@ -4,7 +4,7 @@ var obj: {
 }
 
 var obj2 = {
-    func(...rest) { }
+    func(...rest) { rest; }
 }
 
 //// [emitRestParametersFunctionProperty.js]
@@ -15,5 +15,6 @@ var obj2 = {
         for (var _i = 0; _i < arguments.length; _i++) {
             rest[_i] = arguments[_i];
         }
+        rest;
     }
 };

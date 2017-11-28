@@ -1,0 +1,91 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersArgumentsCollision.ts ===
+function foo1(...rest) {
+>foo1 : (...rest: any[]) => void
+>rest : any[]
+
+    var arguments;
+>arguments : any
+}
+function foo2(...rest) {
+>foo2 : (...rest: any[]) => void
+>rest : any[]
+
+    var arguments = 0;
+>arguments : number
+>0 : 0
+}
+function foo3(...rest) {
+>foo3 : (...rest: any[]) => any[]
+>rest : any[]
+
+    var arguments;
+>arguments : any
+
+    return rest;
+>rest : any[]
+}
+function foo4(...rest) {
+>foo4 : (...rest: any[]) => any[]
+>rest : any[]
+
+    var arguments = 0;
+>arguments : number
+>0 : 0
+
+    return rest;
+>rest : any[]
+}
+function foo5(...rest) {
+>foo5 : (...rest: any[]) => any[]
+>rest : any[]
+
+    var arguments;
+>arguments : any
+
+    arguments = 0;
+>arguments = 0 : 0
+>arguments : any
+>0 : 0
+
+    return rest;
+>rest : any[]
+}
+function foo6(...rest) {
+>foo6 : (...rest: any[]) => any[]
+>rest : any[]
+
+    var notUsed, arguments;
+>notUsed : any
+>arguments : any
+
+    return rest;
+>rest : any[]
+}
+function foo7(...rest) {
+>foo7 : (...rest: any[]) => any[]
+>rest : any[]
+
+    var notUsed, arguments;
+>notUsed : any
+>arguments : any
+
+    arguments = 0;
+>arguments = 0 : 0
+>arguments : any
+>0 : 0
+
+    return rest;
+>rest : any[]
+}
+function foo8(...rest) {
+>foo8 : (...rest: any[]) => any[]
+>rest : any[]
+
+    var notUsed, arguments = 0;
+>notUsed : any
+>arguments : number
+>0 : 0
+
+    return rest;
+>rest : any[]
+}

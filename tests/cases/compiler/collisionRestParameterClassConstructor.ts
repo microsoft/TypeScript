@@ -1,6 +1,7 @@
 // Constructors
 class c1 {
     constructor(_i: number, ...restParameters) { //_i is error
+        restParameters;
         var _i = 10; // no error
     }
 }
@@ -12,6 +13,7 @@ class c1NoError {
 
 class c2 {
     constructor(...restParameters) {
+        restParameters;
         var _i = 10; // no error
     }
 }
@@ -23,6 +25,7 @@ class c2NoError {
 
 class c3 {
     constructor(public _i: number, ...restParameters) { //_i is error
+        restParameters;
         var _i = 10; // no error
     }
 }
@@ -43,6 +46,7 @@ class c5 {
     constructor(_i: number, ...rest); // no codegen no error
     constructor(_i: string, ...rest); // no codegen no error
     constructor(_i: any, ...rest) { // error
+        rest;
         var _i: any; // no error
     }
 }

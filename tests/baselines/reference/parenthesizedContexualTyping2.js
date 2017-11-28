@@ -43,10 +43,6 @@ var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 // Since 'any' cannot be invoked with type arguments, we should get errors
 // back if contextual typing is not taking effect.
 function fun() {
-    var rest = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        rest[_i] = arguments[_i];
-    }
     return undefined;
 }
 var a = fun(function (x) { x(undefined); return x; }, 10);
