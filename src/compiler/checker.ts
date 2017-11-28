@@ -18314,6 +18314,12 @@ namespace ts {
                 (kind & TypeFlags.NonPrimitive && isTypeAssignableTo(source, nonPrimitiveType));
         }
 
+        function allTypesAssignableToKind(source: Type, kind: TypeFlags, strict?: boolean): boolean {
+            return source.flags & TypeFlags.Union ?
+                every((source as UnionType).types, subType => allTypesAssignableToKind(subType, kind, strict)) :
+                isTypeAssignableToKind(source, kind, strict);
+        }
+
         function isConstEnumObjectType(type: Type): boolean {
             return getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && isConstEnumSymbol(type.symbol);
         }
@@ -18331,7 +18337,8 @@ namespace ts {
             // and the right operand to be of type Any, a subtype of the 'Function' interface type, or have a call or construct signature.
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (!isTypeAny(leftType) && isTypeAssignableToKind(leftType, TypeFlags.Primitive)) {
+            if (!isTypeAny(leftType) &&
+                allTypesAssignableToKind(leftType, TypeFlags.Primitive)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
