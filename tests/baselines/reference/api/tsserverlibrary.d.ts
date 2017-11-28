@@ -1783,6 +1783,8 @@ declare namespace ts {
         getApparentType(type: Type): Type;
         getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
+        getBaseConstraintOfType(type: Type): Type | undefined;
+        getDefaultFromTypeParameter(type: Type): Type | undefined;
     }
     enum NodeBuilderFlags {
         None = 0,
@@ -2119,9 +2121,6 @@ declare namespace ts {
     interface TypeVariable extends Type {
     }
     interface TypeParameter extends TypeVariable {
-        /** Retrieve using getConstraintFromTypeParameter */
-        constraint: Type;
-        default?: Type;
     }
     interface IndexedAccessType extends TypeVariable {
         objectType: Type;
@@ -3843,6 +3842,8 @@ declare namespace ts {
         getNumberIndexType(): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
         getNonNullableType(): Type;
+        getConstraint(): Type | undefined;
+        getDefault(): Type | undefined;
     }
     interface Signature {
         getDeclaration(): SignatureDeclaration;
