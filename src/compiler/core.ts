@@ -2486,7 +2486,7 @@ namespace ts {
      * Safer version of `Function` which should not be called.
      * Every function should be assignable to this, but this should not be assignable to every function.
      */
-    export type AnyFunction = (...args: never[]) => {} | null | undefined | void;
+    export type AnyFunction = (...args: never[]) => void;
 
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
