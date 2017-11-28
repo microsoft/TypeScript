@@ -9,4 +9,8 @@
 //// declare var x: MyStatic;
 //// export = x;
 
-verify.not.codeFixAvailable(); // See GH#20191
+-verify.importFixAtPosition([
+`import { bar } from "./foo";
+
+bar();`
+]);
