@@ -106,6 +106,7 @@
         "./unittests/convertToBase64.ts",
         "./unittests/transpile.ts",
         "./unittests/reuseProgramStructure.ts",
+        "./unittests/checkerPublicRelationships.ts",
         "./unittests/moduleResolution.ts",
         "./unittests/tsconfigParsing.ts",
         "./unittests/builder.ts",

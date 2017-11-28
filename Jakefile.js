@@ -128,6 +128,7 @@ var harnessSources = harnessCoreSources.concat([
     "transpile.ts",
     "reuseProgramStructure.ts",
     "textStorage.ts",
+    "checkerPublicRelationships.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",
     "builder.ts",

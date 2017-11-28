@@ -255,6 +255,50 @@ namespace ts {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
             },
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
+
+            isIdenticalTo: (a, b) => checkTypeRelatedTo(a, b, identityRelation, /*errorNode*/ undefined),
+            isSubtypeOf: (a, b) => checkTypeRelatedTo(a, b, subtypeRelation, /*errorNode*/ undefined),
+            isAssignableTo: (a, b) => checkTypeRelatedTo(a, b, assignableRelation, /*errorNode*/ undefined),
+            isComparableTo: areTypesComparable,
+            isInstantiationOf: (a, b) => {
+                return a && b && (a.target === b);
+            },
+
+            lookupGlobalType: name => {
+                const symbol = getSymbol(globals, escapeLeadingUnderscores(name), SymbolFlags.Type);
+                return symbol ? getDeclaredTypeOfSymbol(symbol) : unknownType;
+            },
+            lookupGlobalValueType: name => {
+                const symbol = getSymbol(globals, escapeLeadingUnderscores(name), SymbolFlags.Value);
+                return symbol ? getTypeOfSymbol(symbol) : unknownType;
+            },
+            lookupTypeAt: (name, node) => {
+                const symbol = resolveName(node, escapeLeadingUnderscores(name), SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined, /*isUse*/ false);
+                return symbol ? getDeclaredTypeOfSymbol(symbol) : unknownType;
+            },
+            lookupValueTypeAt: (name, node) => {
+                const symbol = resolveName(node, escapeLeadingUnderscores(name), SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined, /*isUse*/ false);
+                return symbol ? getTypeOfSymbol(symbol) : unknownType;
+            },
+            getTypeOfSymbol,
+            getUnknownType: () => unknownType,
+            getStringLiteralType: (text: string) => {
+                /* tslint:disable:no-null-keyword */
+                Debug.assert(text !== undefined && text !== null, "Argument to getStringLiteralType was null or undefined");
+                /* tslint:enable:no-null-keyword */
+                Debug.assert(typeof text === "string", "Argument to getStringLiteralType not a string");
+                return getLiteralType(text);
+            },
+            getNumberLiteralType: (num: number) => {
+                /* tslint:disable:no-null-keyword */
+                Debug.assert(num !== undefined && num !== null, "Argument to getNumberLiteralType was null or undefined");
+                /* tslint:enable:no-null-keyword */
+                Debug.assert(typeof num === "number", "Argument to getStringLiteralType not a number");
+                return getLiteralType(num);
+            },
+            getFalseType: () => falseType,
+            getTrueType: () => trueType,
+            getNonPrimitiveType: () => nonPrimitiveType,
         };
 
         const tupleTypes: GenericType[] = [];
