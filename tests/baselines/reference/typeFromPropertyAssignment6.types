@@ -1,14 +1,15 @@
-=== tests/cases/conformance/salsa/a.js ===
-var Outer = class { }
->Outer : typeof Outer
->class { } : typeof Outer
+=== tests/cases/conformance/salsa/def.js ===
+class Outer {}
+>Outer : Outer
 
-Outer.Inner = class {
->Outer.Inner = class {    messages() { return [] }} : typeof (Anonymous class)
->Outer.Inner : typeof (Anonymous class)
+=== tests/cases/conformance/salsa/a.js ===
+Outer.Inner = class I {
+>Outer.Inner = class I {    messages() { return [] }} : typeof I
+>Outer.Inner : typeof I
 >Outer : typeof Outer
->Inner : typeof (Anonymous class)
->class {    messages() { return [] }} : typeof (Anonymous class)
+>Inner : typeof I
+>class I {    messages() { return [] }} : typeof I
+>I : typeof I
 
     messages() { return [] }
 >messages : () => any[]
@@ -16,17 +17,23 @@ Outer.Inner = class {
 }
 /** @type {!Outer.Inner} */
 Outer.i
->Outer.i : (Anonymous class)
+>Outer.i : I
 >Outer : typeof Outer
->i : (Anonymous class)
+>i : I
 
 === tests/cases/conformance/salsa/b.js ===
 var msgs = Outer.i.messages()
 >msgs : any[]
 >Outer.i.messages() : any[]
 >Outer.i.messages : () => any[]
->Outer.i : (Anonymous class)
+>Outer.i : I
 >Outer : typeof Outer
->i : (Anonymous class)
+>i : I
 >messages : () => any[]
+
+/** @param {Outer.Inner} inner */
+function x(inner) {
+>x : (inner: I) => void
+>inner : I
+}
 

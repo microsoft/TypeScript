@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/a.js ===
 function Outer() {
->Outer : { (): void; Inner: typeof I; }
+>Outer : typeof Outer
 
     this.y = 2
 >this.y = 2 : 2
@@ -12,7 +12,7 @@ function Outer() {
 Outer.Inner = class I {
 >Outer.Inner = class I {    constructor() {        this.x = 1    }} : typeof I
 >Outer.Inner : typeof I
->Outer : { (): void; Inner: typeof I; }
+>Outer : typeof Outer
 >Inner : typeof I
 >class I {    constructor() {        this.x = 1    }} : typeof I
 >I : typeof I
@@ -28,11 +28,11 @@ Outer.Inner = class I {
 }
 /** @type {Outer} */
 var ok
->ok : { y: number; }
+>ok : typeof Outer
 
 ok.y
 >ok.y : number
->ok : { y: number; }
+>ok : typeof Outer
 >y : number
 
 /** @type {Outer.Inner} */

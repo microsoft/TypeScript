@@ -1,10 +1,12 @@
 // @noEmit: true
 // @allowJs: true
 // @checkJs: true
-// @Filename: a.js
 // @target: es6
-var Outer = class { }
-Outer.Inner = class {
+// @Filename: def.js
+class Outer {}
+
+// @Filename: a.js
+Outer.Inner = class I {
     messages() { return [] }
 }
 /** @type {!Outer.Inner} */
@@ -12,3 +14,7 @@ Outer.i
 
 // @Filename: b.js
 var msgs = Outer.i.messages()
+
+/** @param {Outer.Inner} inner */
+function x(inner) {
+}

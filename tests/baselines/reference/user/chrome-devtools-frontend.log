@@ -14,6 +14,83 @@ Standard output:
 ../../../../built/local/lib.dom.d.ts(13700,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1321,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1350,6): error TS2300: Duplicate identifier 'Record'.
+definitions.js(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Accessibility' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'AccessibilityTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/accessibility_test_runner/AccessibilityPaneTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(3,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Animation' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(4,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ApplicationTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/application_test_runner/AppcacheTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Audits' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/audits/AuditCategory.js 30:0, but here has type '{ [x: string]: any; }'.
+definitions.js(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Audits2' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js 8:0, but here has type '{ [x: string]: any; }'.
+definitions.js(7,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'AuditsTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/audits_test_runner/AuditsTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(8,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Bindings' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js 7:0, but here has type '{ [x: string]: any; }'.
+definitions.js(9,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'BindingsTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/AutomappingTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'CPUProfilerTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/cpu_profiler_test_runner/ProfilerTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Changes' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js 14:0, but here has type '{ [x: string]: any; }'.
+definitions.js(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'CmModes' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/cm_modes/DefaultCodeMirrorMimeMode.js 8:0, but here has type '{ [x: string]: any; }'.
+definitions.js(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ColorPicker' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js 4:0, but here has type '{ [x: string]: any; }'.
+definitions.js(14,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Common' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/common/CharacterIdMap.js 7:0, but here has type '{ [x: string]: any; }'.
+definitions.js(15,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Components' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/components/DOMBreakpointsSidebarPane.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(16,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ConsoleCounters' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/console_counters/WarningErrorCounter.js 8:0, but here has type '{ [x: string]: any; }'.
+definitions.js(17,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ConsoleModel' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/console_model/ConsoleModel.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(18,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ConsoleTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/console_test_runner/ConsoleTestRunner.js 17:0, but here has type '{ [x: string]: any; }'.
+definitions.js(19,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'CookieTable' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(20,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Coverage' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js 14:0, but here has type '{ [x: string]: any; }'.
+definitions.js(21,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'CoverageTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'DataGrid' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js 29:0, but here has type '{ [x: string]: any; }'.
+definitions.js(23,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'DataGridTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/data_grid_test_runner/DataGridTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(24,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'DeviceModeTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/device_mode_test_runner/DeviceModeTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(25,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Devices' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js 4:0, but here has type '{ [x: string]: any; }'.
+definitions.js(27,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Elements' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/elements/ClassesPaneWidget.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(28,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ElementsTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/elements_test_runner/EditDOMTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Emulation' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js 7:0, but here has type '{ [x: string]: any; }'.
+definitions.js(30,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'EventListeners' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js 13:0, but here has type '{ [x: string]: any; }'.
+definitions.js(31,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Extensions' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAuditCategory.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(32,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ExtensionsTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/extensions_test_runner/ExtensionsAuditsTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Formatter' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter/FormatterWorkerPool.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(34,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'FormatterWorker' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/AcornTokenizer.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(35,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'HARImporter' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/har_importer/HARFormat.js 4:0, but here has type '{ [x: string]: any; }'.
+definitions.js(36,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'HeapProfilerTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'HeapSnapshotModel' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/heap_snapshot_model/HeapSnapshotModel.js 40:0, but here has type '{ [x: string]: any; }'.
+definitions.js(38,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'HeapSnapshotWorker' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/AllocationProfile.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Help' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/help/Help.js 7:0, but here has type '{ [x: string]: any; }'.
+definitions.js(40,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Host' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(41,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'InlineEditor' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/inline_editor/BezierEditor.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(42,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'LayerViewer' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerDetailsView.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Layers' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/layers/LayerPaintProfilerView.js 4:0, but here has type '{ [x: string]: any; }'.
+definitions.js(44,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'LayersTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/layers_test_runner/LayersTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(45,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Main' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/main/ExecutionContextSelector.js 7:0, but here has type '{ [x: string]: any; }'.
+definitions.js(46,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'MobileThrottling' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/mobile_throttling/MobileThrottlingSelector.js 4:0, but here has type '{ [x: string]: any; }'.
+definitions.js(47,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Network' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/network/BlockedURLsPane.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(48,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'NetworkLog' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/network_log/HAREntry.js 38:0, but here has type '{ [x: string]: any; }'.
+definitions.js(49,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'NetworkPriorities' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/network_priorities/NetworkPriorities.js 8:0, but here has type '{ [x: string]: any; }'.
+definitions.js(50,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'NetworkTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/network_test_runner/NetworkTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(51,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ObjectUI' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/object_ui/CustomPreviewComponent.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(52,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'PerfUI' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js 7:0, but here has type '{ [x: string]: any; }'.
+definitions.js(53,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'PerformanceTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineDataTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(54,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Persistence' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js 8:0, but here has type '{ [x: string]: any; }'.
+definitions.js(55,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ProductRegistry' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/product_registry/BadgePool.js 4:0, but here has type '{ [x: string]: any; }'.
+definitions.js(56,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ProductRegistryImpl' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryImpl.js 7:0, but here has type '{ [x: string]: any; }'.
+definitions.js(57,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Profiler' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/profiler/BottomUpProfileDataGrid.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(58,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Protocol' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js 36:0, but here has type '{ [x: string]: any; }'.
+definitions.js(59,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'QuickOpen' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/quick_open/CommandMenu.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(60,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Resources' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/resources/AppManifestView.js 7:0, but here has type '{ [x: string]: any; }'.
+definitions.js(61,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'SDK' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/sdk/CPUProfileDataModel.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(62,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'SDKTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js 15:0, but here has type '{ [x: string]: any; }'.
+definitions.js(63,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Screencast' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/screencast/InputModel.js 4:0, but here has type '{ [x: string]: any; }'.
+definitions.js(64,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Security' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/security/SecurityModel.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(65,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Services' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/services/ServiceManager.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(66,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Settings' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/settings/FrameworkBlackboxSettingsTab.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(67,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Snippets' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/snippets/ScriptSnippetModel.js 34:0, but here has type '{ [x: string]: any; }'.
+definitions.js(68,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'SourceFrame' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js 31:0, but here has type '{ [x: string]: any; }'.
+definitions.js(69,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Sources' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/sources/AddSourceMapURLDialog.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(70,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'SourcesTestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/sources_test_runner/AutocompleteTestRunner.js 9:0, but here has type '{ [x: string]: any; }'.
+definitions.js(71,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'TestRunner' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js 14:0, but here has type '{ [x: string]: any; }'.
+definitions.js(72,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'TextEditor' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(73,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'TextUtils' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/text_utils/Text.js 7:0, but here has type '{ [x: string]: any; }'.
+definitions.js(74,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Timeline' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/timeline/CountersGraph.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(75,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'TimelineModel' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineFrameModel.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(76,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'UI' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/ui/ActionRegistry.js 6:0, but here has type '{ [x: string]: any; }'.
+definitions.js(77,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Workspace' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js 33:0, but here has type '{ [x: string]: any; }'.
+definitions.js(78,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'WorkspaceDiff' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js 5:0, but here has type '{ [x: string]: any; }'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(147,37): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
@@ -60,7 +137,6 @@ node_modules/chrome-devtools-frontend/front_end/Tests.js(739,5): error TS2554: E
 node_modules/chrome-devtools-frontend/front_end/Tests.js(820,7): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(851,9): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(852,9): error TS2554: Expected 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/Tests.js(890,29): error TS2339: Property 'getPreferences' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(897,7): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(898,7): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(899,7): error TS2554: Expected 3 arguments, but got 2.
@@ -541,7 +617,6 @@ node_modules/chrome-devtools-frontend/front_end/audits/AuditsPanel.js(488,18): e
 node_modules/chrome-devtools-frontend/front_end/audits/AuditsPanel.js(513,28): error TS1005: '>' expected.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(11,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(96,30): error TS2495: Type 'IterableIterator<(Anonymous class)>' is not an array type or a string type.
-node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(190,46): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(247,40): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(263,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(287,31): error TS2339: Property 'singleton' does not exist on type 'Window'.
@@ -712,32 +787,10 @@ node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/repo
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/util.js(92,39): error TS2322: Type '{}' is not assignable to type '{ numPathParts: number; preserveQuery: boolean; preserveHost: boolean; }'.
   Property 'numPathParts' is missing in type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/util.js(170,8): error TS2339: Property 'Util' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(13,1): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(20,1): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(21,10): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(27,1): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(28,10): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(34,1): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(35,16): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(42,1): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(43,16): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(47,1): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(48,24): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(55,1): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(62,1): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(72,1): error TS2304: Cannot find name 'Audits2TestRunner'.
 node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(76,33): error TS2339: Property 'textElement' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(77,40): error TS2339: Property 'checkboxElement' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(85,1): error TS2304: Cannot find name 'Audits2TestRunner'.
 node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(89,29): error TS2339: Property 'disabled' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(94,1): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(96,16): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(101,23): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(104,26): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(111,24): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(111,60): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(112,24): error TS2304: Cannot find name 'Audits2TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(112,60): error TS2304: Cannot find name 'Audits2TestRunner'.
+node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(102,24): error TS2461: Type 'NodeListOf<Element>' is not an array type.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker.js(5,11): error TS2339: Property 'Runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker.js(6,8): error TS2339: Property 'importScripts' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/Audits2Service.js(33,31): error TS1003: Identifier expected.
@@ -1808,7 +1861,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(37559,32): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(37567,32): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(37586,46): error TS2304: Cannot find name 'WebInspector'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(37630,23): error TS2339: Property 'inspectedURLChanged' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(37631,46): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(37642,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(37644,1): error TS2304: Cannot find name 'WebInspector'.
@@ -3494,13 +3546,7 @@ node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/BindingsTes
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/BindingsTestRunner.js(48,5): error TS2304: Cannot find name 'addedLines'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/BindingsTestRunner.js(108,11): error TS2339: Property 'src' does not exist on type 'HTMLElement'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/BindingsTestRunner.js(169,25): error TS2495: Type 'IterableIterator<any>' is not an array type or a string type.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(10,23): error TS2339: Property 'isolatedFileSystem' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(45,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(66,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(113,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(134,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(159,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(172,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/OverridesTestRunner.js(7,13): error TS1055: Type '() => void' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/OverridesTestRunner.js(7,24): error TS2694: Namespace 'Workspace' has no exported member 'Project'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/PersistenceTestRunner.js(84,25): error TS2495: Type 'Set<any>' is not an array type or a string type.
@@ -3865,11 +3911,7 @@ node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(492,41)
 node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(499,43): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(507,44): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(596,35): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(677,27): error TS2339: Property 'setEyeDropperActive' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(679,29): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(682,29): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(688,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(697,27): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Contrast.js(727,41): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(38,32): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(46,5): error TS2346: Call target does not contain any signatures.
@@ -3925,11 +3967,7 @@ node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(747,20)
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(748,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(758,28): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(793,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(799,27): error TS2339: Property 'setEyeDropperActive' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(801,29): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(804,29): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(810,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(817,27): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(836,77): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(842,36): error TS2694: Namespace 'ColorPicker' has no exported member 'Spectrum'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(853,37): error TS2339: Property 'catchException' does not exist on type 'Promise<any[]>'.
@@ -3937,7 +3975,6 @@ node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(890,37)
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(905,29): error TS2339: Property 'keysArray' does not exist on type 'Map<string, (Anonymous class)>'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(912,15): error TS1055: Type 'Promise<any>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(981,39): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(1010,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(36,22): error TS2694: Namespace 'Common' has no exported member 'Color'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(106,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'rgba' has type 'any[]' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/common/Color.js 95:12, but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(194,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -4119,10 +4156,8 @@ node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.
 node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(238,13): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(621,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(39,5): error TS2346: Call target does not contain any signatures.
-node_modules/chrome-devtools-frontend/front_end/components/DockController.js(44,62): error TS2339: Property 'closeWindow' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(116,33): error TS2339: Property 'deepActiveElement' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(119,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
-node_modules/chrome-devtools-frontend/front_end/components/DockController.js(122,27): error TS2339: Property 'setIsDocked' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(42,26): error TS2694: Namespace 'SDK' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(44,26): error TS2694: Namespace 'SDK' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(52,26): error TS2694: Namespace 'Components' has no exported member 'LinkDecorator'.
@@ -4160,8 +4195,6 @@ node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(493,71):
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(513,26): error TS2694: Namespace 'Components' has no exported member 'Linkifier'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(517,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(525,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(601,46): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(604,105): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(621,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(636,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(655,2): error TS1003: Identifier expected.
@@ -4174,11 +4207,8 @@ node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(722,19):
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(729,30): error TS2339: Property 'value' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(754,46): error TS2694: Namespace 'Common' has no exported member 'ContentProvider'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(755,26): error TS2339: Property 'contentURL' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(759,67): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(759,96): error TS2339: Property 'contentURL' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(769,64): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(769,89): error TS2339: Property 'contentURL' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/components/Reload.js(7,27): error TS2339: Property 'setIsDocked' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(8,9): error TS2339: Property 'ConsoleContextSelector' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(10,17): error TS2315: Type '(Anonymous class)' is not generic.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(12,17): error TS2315: Type '(Anonymous class)' is not generic.
@@ -4362,7 +4392,6 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1451,9): 
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1460,38): error TS2339: Property 'collapsed' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1467,24): error TS2339: Property 'ConsoleGroup' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1495,9): error TS2339: Property 'ConsoleView' does not exist on type '{ new (): Console; prototype: Console; }'.
-node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1505,31): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1509,17): error TS2339: Property 'ConsoleView' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1512,17): error TS2339: Property 'ConsoleView' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1521,2): error TS1003: Identifier expected.
@@ -5019,9 +5048,6 @@ node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(7,5): err
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(23,38): error TS2694: Namespace 'Devices' has no exported member 'DevicesView'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(25,24): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(31,20): error TS2694: Namespace 'UI' has no exported member 'Widget'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(46,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(48,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(50,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(69,18): error TS2694: Namespace 'UI' has no exported member 'Widget'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(87,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(91,29): error TS2503: Cannot find namespace 'Adb'.
@@ -5041,14 +5067,8 @@ node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(161,22): 
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(164,30): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(170,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'deviceId' has type 'string' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js 164:13, but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(170,26): error TS2495: Type 'IterableIterator<string>' is not an array type or a string type.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(191,29): error TS2339: Property 'setDevicesUpdatesEnabled' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(192,27): error TS2339: Property 'setDevicesUpdatesEnabled' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(201,29): error TS2339: Property 'setDevicesUpdatesEnabled' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(207,5): error TS2346: Call target does not contain any signatures.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(220,29): error TS2339: Property 'setDevicesDiscoveryConfig' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(229,17): error TS2503: Cannot find namespace 'Adb'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(237,29): error TS2339: Property 'setDevicesDiscoveryConfig' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(244,29): error TS2339: Property 'setDevicesDiscoveryConfig' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(250,15): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(265,40): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(268,5): error TS2346: Call target does not contain any signatures.
@@ -5074,7 +5094,6 @@ node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(398,17): 
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(420,17): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(441,33): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(444,5): error TS2346: Call target does not contain any signatures.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(464,66): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(469,17): error TS2315: Type '(Anonymous class)' is not generic.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(469,32): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(478,20): error TS2694: Namespace 'UI' has no exported member 'ListWidget'.
@@ -5103,25 +5122,19 @@ node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(691,25): 
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(693,28): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(723,17): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(724,15): error TS2339: Property 'consume' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(731,31): error TS2339: Property 'openRemotePage' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(738,23): error TS2694: Namespace 'Devices' has no exported member 'DevicesView'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(739,15): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(745,44): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(783,24): error TS2694: Namespace 'Devices' has no exported member 'DevicesView'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(788,28): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(797,23): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(815,31): error TS2339: Property 'performActionOnRemotePage' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(820,23): error TS2694: Namespace 'Devices' has no exported member 'DevicesView'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(821,15): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(838,15): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(890,194): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(893,105): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(899,5): error TS2346: Call target does not contain any signatures.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(908,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(911,17): error TS2503: Cannot find namespace 'Adb'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(918,27): error TS2339: Property 'setDevicesUpdatesEnabled' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(919,27): error TS2339: Property 'setDevicesUpdatesEnabled' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(924,29): error TS2339: Property 'setDevicesDiscoveryConfig' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(930,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(933,32): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(20,34): error TS1005: '>' expected.
@@ -5429,7 +5442,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(629,15
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(638,15): error TS2339: Property 'handled' does not exist on type 'KeyboardEvent'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(655,17): error TS2339: Property 'handled' does not exist on type 'KeyboardEvent'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(662,15): error TS2339: Property 'handled' does not exist on type 'KeyboardEvent'.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(717,31): error TS2339: Property 'inspectElementCompleted' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(775,24): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(834,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsPanel.js(837,39): error TS2694: Namespace 'Extensions' has no exported member 'ExtensionSidebarPane'.
@@ -5500,8 +5512,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1534,40): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1538,18): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1578,26): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1604,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1608,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1654,100): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElementHighlighter.js(24,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElementHighlighter.js(77,38): error TS2345: Argument of type '(Anonymous class)' is not assignable to parameter of type '(Anonymous class)'.
@@ -5794,7 +5804,6 @@ node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(105,22)
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(124,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(169,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(180,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
-node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(181,27): error TS2339: Property 'setInspectedPageBounds' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(196,23): error TS2694: Namespace 'Common' has no exported member 'App'.
 node_modules/chrome-devtools-frontend/front_end/emulation/DeviceModeModel.js(9,1): error TS8022: JSDoc '@extends' is not attached to a class.
 node_modules/chrome-devtools-frontend/front_end/emulation/DeviceModeModel.js(11,5): error TS2346: Call target does not contain any signatures.
@@ -6051,8 +6060,6 @@ node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(39
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(50,35): error TS2694: Namespace 'Extensions' has no exported member 'ExtensionSidebarPane'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(51,5): error TS2502: '_sidebarPanes' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(56,41): error TS2694: Namespace 'Extensions' has no exported member 'TracingSession'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(91,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(93,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(135,5): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(142,5): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(155,26): error TS2694: Namespace 'Extensions' has no exported member 'ExtensionAuditCategoryResults'.
@@ -6089,7 +6096,6 @@ node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(71
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(730,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(734,14): error TS2339: Property 'buildPlatformExtensionAPI' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(744,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(771,31): error TS2339: Property 'setInjectedScriptForOrigin' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(775,14): error TS2339: Property 'src' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(776,14): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(828,31): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -6616,7 +6622,6 @@ node_modules/chrome-devtools-frontend/front_end/help/Help.js(57,2): error TS1131
 node_modules/chrome-devtools-frontend/front_end/help/ReleaseNoteView.js(7,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/help/ReleaseNoteView.js(16,20): error TS2694: Namespace 'Help' has no exported member 'ReleaseNote'.
 node_modules/chrome-devtools-frontend/front_end/help/ReleaseNoteView.js(21,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/help/ReleaseNoteView.js(36,29): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(44,47): error TS2339: Property 'metaKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(44,63): error TS2339: Property 'ctrlKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(45,34): error TS2339: Property 'keyCode' does not exist on type 'Event'.
@@ -6627,16 +6632,12 @@ node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(22
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(378,15): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(416,23): error TS2503: Cannot find namespace 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(442,12): error TS2538: Type 'string[]' cannot be used as an index type.
-node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(462,33): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(472,31): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(489,12): error TS2304: Cannot find name 'InspectorFrontendHostAPI'.
+node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(491,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'InspectorFrontendHost' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js 9:0, but here has type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(491,36): error TS2339: Property 'InspectorFrontendHost' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(492,8): error TS2339: Property 'InspectorFrontendHost' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(498,14): error TS2339: Property 'InspectorFrontendHost' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(522,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(528,10): error TS2339: Property 'InspectorFrontendAPI' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(534,23): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(541,29): error TS2339: Property 'isUnderTest' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHostAPI.js(7,8): error TS2339: Property 'InspectorFrontendHostAPI' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHostAPI.js(16,4): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHostAPI.js(17,26): error TS2300: Duplicate identifier 'ContextMenuDescriptor'.
@@ -6653,16 +6654,12 @@ node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHostAPI.js
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHostAPI.js(299,23): error TS2503: Cannot find namespace 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHostAPI.js(310,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHostAPI.js(317,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-node_modules/chrome-devtools-frontend/front_end/host/Platform.js(33,44): error TS2339: Property 'platform' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/host/ResourceLoader.js(11,20): error TS2694: Namespace 'Common' has no exported member 'OutputStream'.
 node_modules/chrome-devtools-frontend/front_end/host/ResourceLoader.js(56,20): error TS2694: Namespace 'Common' has no exported member 'OutputStream'.
-node_modules/chrome-devtools-frontend/front_end/host/ResourceLoader.js(72,25): error TS2339: Property 'loadNetworkResource' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/host/ResourceLoader.js(75,15): error TS2503: Cannot find namespace 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/host/ResourceLoader.js(88,34): error TS2503: Cannot find namespace 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/host/ResourceLoader.js(92,34): error TS2503: Cannot find namespace 'InspectorFrontendHostAPI'.
-node_modules/chrome-devtools-frontend/front_end/host/UserMetrics.js(41,27): error TS2339: Property 'recordEnumeratedHistogram' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/host/UserMetrics.js(52,20): error TS2694: Namespace 'Host' has no exported member 'UserMetrics'.
-node_modules/chrome-devtools-frontend/front_end/host/UserMetrics.js(56,27): error TS2339: Property 'recordEnumeratedHistogram' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/BezierEditor.js(9,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/BezierEditor.js(47,18): error TS2694: Namespace 'UI' has no exported member 'Geometry'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/BezierEditor.js(57,19): error TS2694: Namespace 'UI' has no exported member 'Geometry'.
@@ -7020,25 +7017,15 @@ node_modules/chrome-devtools-frontend/front_end/main/ExecutionContextSelector.js
 node_modules/chrome-devtools-frontend/front_end/main/ExecutionContextSelector.js(147,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/main/ExecutionContextSelector.js(156,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(69,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(71,27): error TS2339: Property 'getPreferences' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(78,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(80,12): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(100,38): error TS2339: Property 'setPreference' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(100,75): error TS2339: Property 'removePreference' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(101,31): error TS2339: Property 'clearPreferences' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(237,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(247,34): error TS2694: Namespace 'Common' has no exported member 'AppProvider'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(247,64): error TS2339: Property 'createApp' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(255,29): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(259,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(263,27): error TS2339: Property 'loadCompleted' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(265,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(268,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(277,24): error TS2694: Namespace 'Common' has no exported member 'QueryParamHandler'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(280,15): error TS2339: Property 'handleQueryParam' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(292,27): error TS2339: Property 'readyForTest' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(304,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(318,27): error TS2339: Property 'setWhitelistedShortcuts' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(325,24): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(328,40): error TS2694: Namespace 'Common' has no exported member 'Console'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(335,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -7048,15 +7035,9 @@ node_modules/chrome-devtools-frontend/front_end/main/Main.js(432,19): error TS23
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(454,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(472,19): error TS2694: Namespace 'SDK' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(475,5): error TS2346: Call target does not contain any signatures.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(540,31): error TS2339: Property 'isHostedMode' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(545,31): error TS2339: Property 'zoomIn' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(548,31): error TS2339: Property 'zoomOut' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(551,31): error TS2339: Property 'resetZoom' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(571,65): error TS2339: Property 'deepActiveElement' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(612,42): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(661,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(675,54): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(687,67): error TS2339: Property 'openNodeFrontend' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(768,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(790,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(821,5): error TS2346: Call target does not contain any signatures.
@@ -7215,7 +7196,6 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(5
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(673,20): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(723,13): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(724,13): error TS2339: Property 'title' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(823,27): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(838,10): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(861,10): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(863,10): error TS2339: Property 'title' does not exist on type 'Element'.
@@ -7279,11 +7259,8 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(383,19
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(391,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(401,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(413,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(416,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(420,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(423,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(427,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(436,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(486,31): error TS2339: Property 'reset' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(500,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(585,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -7320,14 +7297,9 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1074,2
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1077,35): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1082,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1146,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1154,60): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1226,16): error TS1251: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1236,16): error TS1251: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1251,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1255,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1259,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1271,29): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1273,29): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1303,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1371,18): error TS2694: Namespace 'UI' has no exported member 'SearchableView'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogView.js(1471,64): error TS2694: Namespace 'Network' has no exported member 'NetworkLogView'.
@@ -7551,7 +7523,6 @@ node_modules/chrome-devtools-frontend/front_end/network/ResourceWebSocketFrameVi
 node_modules/chrome-devtools-frontend/front_end/network/ResourceWebSocketFrameView.js(27,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/network/ResourceWebSocketFrameView.js(35,47): error TS2694: Namespace 'DataGrid' has no exported member 'DataGrid'.
 node_modules/chrome-devtools-frontend/front_end/network/ResourceWebSocketFrameView.js(94,26): error TS2694: Namespace 'DataGrid' has no exported member 'DataGridNode'.
-node_modules/chrome-devtools-frontend/front_end/network/ResourceWebSocketFrameView.js(99,66): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/network/ResourceWebSocketFrameView.js(131,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/network/ResourceWebSocketFrameView.js(134,33): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/ResourceWebSocketFrameView.js(141,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
@@ -7696,7 +7667,6 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSectio
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(762,18): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(784,30): error TS2339: Property 'getter' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(786,25): error TS2339: Property 'parentObject' does not exist on type '(Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(829,49): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(894,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(898,15): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(899,13): error TS2339: Property 'consume' does not exist on type 'Event'.
@@ -8075,7 +8045,6 @@ node_modules/chrome-devtools-frontend/front_end/persistence/FileSystemWorkspaceB
 node_modules/chrome-devtools-frontend/front_end/persistence/FileSystemWorkspaceBinding.js(435,14): error TS2339: Property 'done' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/persistence/FileSystemWorkspaceBinding.js(441,22): error TS2694: Namespace 'Common' has no exported member 'Progress'.
 node_modules/chrome-devtools-frontend/front_end/persistence/FileSystemWorkspaceBinding.js(499,15): error TS1055: Type 'Promise<(Anonymous class)>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(68,47): error TS2339: Property 'isolatedFileSystem' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(83,59): error TS2339: Property 'message' does not exist on type 'DOMError'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(97,17): error TS2304: Cannot find name 'FileEntry'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(104,17): error TS2304: Cannot find name 'FileError'.
@@ -8102,27 +8071,14 @@ node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.j
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(529,54): error TS2339: Property 'valuesArray' does not exist on type 'Set<string>'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(564,70): error TS2339: Property 'asRegExp' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(577,22): error TS2694: Namespace 'Common' has no exported member 'Progress'.
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(583,29): error TS2339: Property 'searchInPath' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(590,18): error TS2339: Property 'worked' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(596,22): error TS2694: Namespace 'Common' has no exported member 'Progress'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(599,14): error TS2339: Property 'setTotalWork' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(601,27): error TS2339: Property 'indexPath' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(36,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(40,29): error TS1005: '>' expected.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(42,37): error TS2694: Namespace 'Common' has no exported member 'Progress'.
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(45,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(47,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(49,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(51,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(53,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(55,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(57,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(73,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(75,27): error TS2339: Property 'requestFileSystems' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(79,24): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(83,57): error TS2694: Namespace 'Persistence' has no exported member 'IsolatedFileSystemManager'.
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(105,29): error TS2339: Property 'addFileSystem' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(113,27): error TS2339: Property 'removeFileSystem' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(124,27): error TS2694: Namespace 'Persistence' has no exported member 'IsolatedFileSystemManager'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(150,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(154,46): error TS2694: Namespace 'Persistence' has no exported member 'IsolatedFileSystemManager'.
@@ -8136,7 +8092,6 @@ node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemMa
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(275,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(284,14): error TS2339: Property 'worked' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(285,18): error TS2339: Property 'isCanceled' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(286,29): error TS2339: Property 'stopIndexing' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(292,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(300,14): error TS2339: Property 'done' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(305,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -8848,7 +8803,6 @@ node_modules/chrome-devtools-frontend/front_end/quick_open/CommandMenu.js(202,18
 node_modules/chrome-devtools-frontend/front_end/quick_open/CommandMenu.js(203,35): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/quick_open/CommandMenu.js(204,24): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/quick_open/CommandMenu.js(207,18): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/quick_open/CommandMenu.js(315,27): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/quick_open/FilteredListWidget.js(12,25): error TS2694: Namespace 'QuickOpen' has no exported member 'FilteredListWidget'.
 node_modules/chrome-devtools-frontend/front_end/quick_open/FilteredListWidget.js(17,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/quick_open/FilteredListWidget.js(37,17): error TS2315: Type '(Anonymous class)' is not generic.
@@ -9134,7 +9088,6 @@ node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(24
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(250,29): error TS2694: Namespace 'UI' has no exported member 'Widget'.
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(268,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(273,28): error TS2694: Namespace 'UI' has no exported member 'Widget'.
-node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(302,27): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(321,11): error TS2339: Property 'dataTransfer' does not exist on type 'MouseEvent'.
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(322,11): error TS2339: Property 'dataTransfer' does not exist on type 'MouseEvent'.
 node_modules/chrome-devtools-frontend/front_end/resources/ServiceWorkerCacheViews.js(8,19): error TS2694: Namespace 'SDK' has no exported member 'ServiceWorkerCacheModel'.
@@ -9252,7 +9205,6 @@ node_modules/chrome-devtools-frontend/front_end/screencast/ScreencastView.js(564
 node_modules/chrome-devtools-frontend/front_end/screencast/ScreencastView.js(565,24): error TS2694: Namespace 'Protocol' has no exported member 'Overlay'.
 node_modules/chrome-devtools-frontend/front_end/screencast/ScreencastView.js(575,24): error TS2694: Namespace 'Protocol' has no exported member 'Page'.
 node_modules/chrome-devtools-frontend/front_end/screencast/ScreencastView.js(644,15): error TS2339: Property 'key' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/screencast/ScreencastView.js(670,27): error TS2339: Property 'inspectedURLChanged' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/screencast/ScreencastView.js(735,35): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/screencast/ScreencastView.js(746,35): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/screencast/ScreencastView.js(766,19): error TS2339: Property 'style' does not exist on type 'Element'.
@@ -9415,16 +9367,11 @@ node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleSheetHeader.js(32,23
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleSheetHeader.js(139,15): error TS1055: Type 'Promise<any[]>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleSheetHeader.js(139,39): error TS2694: Namespace 'Common' has no exported member 'ContentProvider'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(10,24): error TS2694: Namespace 'Protocol' has no exported member 'InspectorBackend'.
-node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(17,29): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(19,29): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(21,29): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(32,29): error TS2339: Property 'sendMessageToBackend' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(36,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(43,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(61,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(75,9): error TS2322: Type 'string' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(76,16): error TS2339: Property 'eval' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(98,27): error TS2339: Property 'reattach' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(114,24): error TS2694: Namespace 'Protocol' has no exported member 'InspectorBackend'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(195,24): error TS2694: Namespace 'Protocol' has no exported member 'InspectorBackend'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ContentProviders.js(102,15): error TS1055: Type 'Promise<any[]>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
@@ -9489,7 +9436,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(481,15): error T
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(497,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(509,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(521,15): error TS1055: Type 'Promise<string>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(526,29): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(544,31): error TS2339: Property 'index' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(545,16): error TS2339: Property 'index' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(580,25): error TS2694: Namespace 'Protocol' has no exported member 'Page'.
@@ -10236,8 +10182,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(301,15): err
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(301,29): error TS2694: Namespace 'SDK' has no exported member 'RuntimeModel'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(317,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(344,21): error TS2694: Namespace 'SDK' has no exported member 'DebuggerModel'.
-node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(360,29): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(364,80): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(398,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(414,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(430,32): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
@@ -10430,7 +10374,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(146,48): error TS2
 node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(151,35): error TS2694: Namespace 'SDK' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(171,20): error TS1005: '>' expected.
 node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(189,34): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
-node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(192,29): error TS2339: Property 'inspectedURLChanged' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(227,19): error TS2694: Namespace 'SDK' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(230,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(235,20): error TS2694: Namespace 'SDK' has no exported member 'Target'.
@@ -10473,20 +10416,15 @@ node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(302,20): er
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(314,20): error TS2694: Namespace 'SDK' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(358,24): error TS2694: Namespace 'Protocol' has no exported member 'InspectorBackend'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(359,25): error TS2694: Namespace 'Protocol' has no exported member 'InspectorBackend'.
-node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(367,38): error TS2339: Property 'isHostedMode' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(384,34): error TS2694: Namespace 'Protocol' has no exported member 'InspectorBackend'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(397,19): error TS2694: Namespace 'SDK' has no exported member 'TargetManager'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(398,19): error TS2694: Namespace 'SDK' has no exported member 'Target'.
-node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(416,31): error TS2339: Property 'setDevicesUpdatesEnabled' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(417,31): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(426,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(429,30): error TS2503: Cannot find namespace 'Adb'.
-node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(456,29): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(460,27): error TS2495: Type 'IterableIterator<string>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(485,24): error TS2694: Namespace 'Protocol' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(503,24): error TS2694: Namespace 'Protocol' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(532,24): error TS2694: Namespace 'Protocol' has no exported member 'Target'.
-node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(557,29): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(583,24): error TS2694: Namespace 'Protocol' has no exported member 'TargetAgent'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(585,24): error TS2694: Namespace 'Protocol' has no exported member 'InspectorBackend'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TargetManager.js(586,25): error TS2694: Namespace 'Protocol' has no exported member 'InspectorBackend'.
@@ -10607,8 +10545,6 @@ node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(23,31)
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(23,63): error TS2694: Namespace 'Security' has no exported member 'SecurityPanel'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(26,30): error TS2694: Namespace 'Network' has no exported member 'NetworkLogView'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(36,57): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(48,29): error TS2339: Property 'showCertificateViewer' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(60,29): error TS2339: Property 'showCertificateViewer' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(65,24): error TS2694: Namespace 'Protocol' has no exported member 'Security'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(72,24): error TS2694: Namespace 'Protocol' has no exported member 'Security'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(79,24): error TS2694: Namespace 'Protocol' has no exported member 'Security'.
@@ -10672,8 +10608,6 @@ node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(883,41
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(886,18): error TS1251: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(903,24): error TS2694: Namespace 'Protocol' has no exported member 'Security'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(936,29): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/security_test_runner/SecurityTestRunner.js(10,1): error TS2304: Cannot find name 'SecurityTestRunner'.
-node_modules/chrome-devtools-frontend/front_end/security_test_runner/SecurityTestRunner.js(26,1): error TS2304: Cannot find name 'SecurityTestRunner'.
 node_modules/chrome-devtools-frontend/front_end/services/ServiceManager.js(10,34): error TS2694: Namespace 'Services' has no exported member 'ServiceManager'.
 node_modules/chrome-devtools-frontend/front_end/services/ServiceManager.js(17,46): error TS2694: Namespace 'Services' has no exported member 'ServiceManager'.
 node_modules/chrome-devtools-frontend/front_end/services/ServiceManager.js(28,34): error TS2694: Namespace 'Services' has no exported member 'ServiceManager'.
@@ -10714,14 +10648,10 @@ node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(229,5
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(245,30): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(247,16): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(248,30): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(286,31): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(311,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(312,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(313,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(315,42): error TS2554: Expected 1 arguments, but got 0.
-node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(324,31): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(336,31): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/settings/SettingsScreen.js(351,31): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/snippets/ScriptSnippetModel.js(40,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/snippets/ScriptSnippetModel.js(70,35): error TS2339: Property 'remove' does not exist on type 'Map<(Anonymous class), (Anonymous class)>'.
 node_modules/chrome-devtools-frontend/front_end/snippets/ScriptSnippetModel.js(75,19): error TS2694: Namespace 'SDK' has no exported member 'DebuggerModel'.
@@ -10803,12 +10733,9 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(46,13)
 node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(95,47): error TS2339: Property 'requestContent' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(99,54): error TS2339: Property 'contentEncoded' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(105,36): error TS2339: Property 'bytesToString' does not exist on type 'NumberConstructor'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(140,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(144,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(149,10): error TS2339: Property 'download' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(150,10): error TS2339: Property 'href' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(151,10): error TS2339: Property 'click' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(155,27): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/JSONView.js(39,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/source_frame/JSONView.js(164,28): error TS2339: Property 'setSearchRegex' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/JSONView.js(169,23): error TS2339: Property 'setSearchRegex' does not exist on type '(Anonymous class)'.
@@ -10955,7 +10882,6 @@ node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(293,23): error TS2694: Namespace 'Sources' has no exported member 'CallStackSidebarPane'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(315,32): error TS2339: Property 'type' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(319,50): error TS2339: Property 'type' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(368,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(372,35): error TS2694: Namespace 'UI' has no exported member 'KeyboardShortcut'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(372,65): error TS1138: Parameter declaration expected.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(372,65): error TS8024: JSDoc '@param' tag has name 'function', but there is no parameter with that name.
@@ -11318,7 +11244,6 @@ node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(206,22):
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(209,34): error TS2694: Namespace 'SDK' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(249,19): error TS2694: Namespace 'UI' has no exported member 'ViewLocation'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(287,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(311,27): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(328,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(339,19): error TS2694: Namespace 'UI' has no exported member 'Widget'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(341,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -11344,7 +11269,6 @@ node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(1026,41)
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(1074,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(1077,39): error TS2694: Namespace 'Extensions' has no exported member 'ExtensionSidebarPane'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(1082,26): error TS2694: Namespace 'Extensions' has no exported member 'ExtensionSidebarPane'.
-node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(1106,27): error TS2339: Property 'upgradeDraggedFileSystemPermissions' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesPanel.js(1266,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesSearchScope.js(54,19): error TS2339: Property 'naturalOrderComparator' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/sources/SourcesSearchScope.js(59,22): error TS2694: Namespace 'Common' has no exported member 'Progress'.
@@ -11513,7 +11437,6 @@ node_modules/chrome-devtools-frontend/front_end/sources/WatchExpressionsSidebarP
 node_modules/chrome-devtools-frontend/front_end/sources/WatchExpressionsSidebarPane.js(383,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/WatchExpressionsSidebarPane.js(384,15): error TS2339: Property 'detail' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/WatchExpressionsSidebarPane.js(428,24): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/sources/WatchExpressionsSidebarPane.js(434,27): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/sources/WorkspaceMappingTip.js(28,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/WorkspaceMappingTip.js(39,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/WorkspaceMappingTip.js(61,32): error TS2339: Property 'type' does not exist on type '() => void'.
@@ -11985,8 +11908,6 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(4
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(49,70): error TS2339: Property 'ch' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(53,24): error TS2694: Namespace 'CodeMirror' has no exported member 'ChangeObject'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(80,14): error TS2339: Property 'eachLine' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(97,47): error TS2339: Property 'getSelectionBackgroundColor' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(100,47): error TS2339: Property 'getSelectionForegroundColor' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(125,32): error TS1138: Parameter declaration expected.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(132,22): error TS2339: Property 'eol' does not exist on type '{ pos: number; start: number; }'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(133,26): error TS2339: Property 'token' does not exist on type 'void'.
@@ -12881,23 +12802,16 @@ node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(333,46): error
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(339,39): error TS2339: Property 'x' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(340,39): error TS2339: Property 'y' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(344,24): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(350,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(352,24): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(386,36): error TS2694: Namespace 'UI' has no exported member 'ContextMenu'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(399,41): error TS2694: Namespace 'UI' has no exported member 'ContextMenu'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(408,17): error TS2339: Property 'consume' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(418,83): error TS2339: Property 'isHostedMode' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(420,46): error TS2339: Property 'ownerDocument' does not exist on type 'EventTarget'.
-node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(422,29): error TS2339: Property 'showContextMenuAtPoint' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(422,101): error TS2339: Property 'ownerDocument' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(427,16): error TS1251: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.
-node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(428,31): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(430,31): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(450,24): error TS2503: Cannot find namespace 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(453,32): error TS2503: Cannot find namespace 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(457,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(473,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(475,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(483,37): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(491,32): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/ui/Dialog.js(33,5): error TS2346: Call target does not contain any signatures.
@@ -12947,7 +12861,6 @@ node_modules/chrome-devtools-frontend/front_end/ui/FilterBar.js(374,73): error T
 node_modules/chrome-devtools-frontend/front_end/ui/FilterBar.js(375,24): error TS2300: Duplicate identifier 'Item'.
 node_modules/chrome-devtools-frontend/front_end/ui/FilterBar.js(391,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/ui/FilterSuggestionBuilder.js(21,28): error TS2694: Namespace 'UI' has no exported member 'SuggestBox'.
-node_modules/chrome-devtools-frontend/front_end/ui/ForwardedInputEventHandler.js(9,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/ui/ForwardedInputEventHandler.js(14,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/Geometry.js(84,18): error TS2694: Namespace 'UI' has no exported member 'Geometry'.
 node_modules/chrome-devtools-frontend/front_end/ui/Geometry.js(92,18): error TS2694: Namespace 'UI' has no exported member 'Geometry'.
@@ -13008,8 +12921,6 @@ node_modules/chrome-devtools-frontend/front_end/ui/InplaceEditor.js(133,22): err
 node_modules/chrome-devtools-frontend/front_end/ui/InplaceEditor.js(134,33): error TS2339: Property 'shiftKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/InplaceEditor.js(184,2): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(36,5): error TS2346: Call target does not contain any signatures.
-node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(61,31): error TS2339: Property 'bringToFront' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
-node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(75,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(79,24): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(91,51): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/ui/InspectorView.js(111,19): error TS2694: Namespace 'UI' has no exported member 'ViewLocation'.
@@ -13536,16 +13447,12 @@ node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1912,22): error TS
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1939,5): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1947,7): error TS2339: Property 'href' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1951,15): error TS2339: Property 'consume' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1952,31): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1955,19): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1957,15): error TS2339: Property 'consume' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1958,31): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1966,7): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1989,31): error TS2339: Property 'parentNodeOrShadowHost' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1990,36): error TS2339: Property 'href' does not exist on type 'Node'.
-node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1993,67): error TS2339: Property 'openInNewTab' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1993,91): error TS2339: Property 'href' does not exist on type 'Node'.
-node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1995,64): error TS2339: Property 'copyText' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1995,84): error TS2339: Property 'href' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(2011,23): error TS2304: Cannot find name 'Image'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(2016,50): error TS2345: Argument of type 'HTMLImageElement' is not assignable to parameter of type '(new (width?: number, height?: number) => HTMLImageElement) | PromiseLike<new (width?: number, he...'.
@@ -13789,13 +13696,8 @@ node_modules/chrome-devtools-frontend/front_end/worker_service/ServiceDispatcher
   Property 'prototype' is missing in type 'WorkerServicePort'.
 node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(36,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(37,29): error TS1005: '>' expected.
-node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(39,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(40,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(42,27): error TS2551: Property 'events' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'. Did you mean 'Events'?
-node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(54,27): error TS2339: Property 'save' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(59,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(70,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(85,27): error TS2339: Property 'append' does not exist on type '{ (): void; Events: { [x: string]: any; AddExtensions: symbol; AppendedToURL: symbol; CanceledSav...'.
 node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(96,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/workspace/SearchConfig.js(76,34): error TS2694: Namespace 'Workspace' has no exported member 'SearchConfig'.
 node_modules/chrome-devtools-frontend/front_end/workspace/SearchConfig.js(92,39): error TS2694: Namespace 'Workspace' has no exported member 'SearchConfig'.

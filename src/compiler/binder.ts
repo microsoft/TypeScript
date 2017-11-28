@@ -2407,6 +2407,14 @@ namespace ts {
             return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || (container.locals && container.locals.get(name));
         }
 
+        function reallyLookup(name: __String) {
+            const local = container.locals.get(name)
+            if (local) {
+                return local.exportSymbol || local;
+            }
+            return container.symbol && container.symbol.exports.get(name);
+        }
+
         function bindPropertyAssignment(functionName: __String, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
             let targetSymbol = lookupSymbolForName(functionName);
             targetSymbol = targetSymbol && targetSymbol.exportSymbol || targetSymbol;
@@ -2425,12 +2433,20 @@ namespace ts {
             }
             if (!isPrototypeProperty && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
                 // TODO: Update refactoring to understand that ES5 classes now have statics in a namespace instead
-                const hasExportModifier = targetSymbol && getCombinedModifierFlags(targetSymbol.valueDeclaration) & ModifierFlags.Export;
+                // const hasExportModifier = targetSymbol && getCombinedModifierFlags(targetSymbol.valueDeclaration) & ModifierFlags.Export;
                 Debug.assert(isIdentifier(propertyAccessExpression.expression));
                 Debug.assertEqual(propertyAccessExpression.expression.kind, SyntaxKind.Identifier);
-                targetSymbol = declareModuleMember(propertyAccessExpression.expression as Identifier, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, hasExportModifier);
+                // targetSymbol = declareSymbol(symbolTable, targetSymbol.parent, propertyAccessExpression.expression as Identifier, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+
+                const symbol = reallyLookup(functionName);
+                if (symbol) {
+                    addDeclarationToSymbol(symbol, propertyAccessExpression.expression as Identifier, SymbolFlags.ValueModule | SymbolFlags.NamespaceModule);
+                }
+                else if (!targetSymbol) {
+                    targetSymbol = declareSymbol(container.locals, undefined, propertyAccessExpression.expression as Identifier, SymbolFlags.ValueModule | SymbolFlags.NamespaceModule, SymbolFlags.ValueModuleExcludes | SymbolFlags.NamespaceModuleExcludes);
+                }
             }
-            if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
+            if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) { // TODO: Probably can move inside the preceding if
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }
             if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ExportValue))) {

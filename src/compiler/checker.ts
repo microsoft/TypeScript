@@ -631,7 +631,10 @@ namespace ts {
         }
 
         function mergeSymbol(target: Symbol, source: Symbol) {
-            if (!(target.flags & getExcludedSymbolFlags(source.flags))) {
+            if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
+                source.valueDeclaration && source.valueDeclaration.kind === SyntaxKind.Identifier ||
+                target.valueDeclaration && target.valueDeclaration.kind === SyntaxKind.Identifier) {
+                // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
                     target.constEnumOnlyModule = false;
