@@ -1344,7 +1344,7 @@
         "category": "Error",
         "code": 2402
     },
-    "Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.": {
+    "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.": {
         "category": "Error",
         "code": 2403
     },
@@ -2264,7 +2264,7 @@
         "category": "Error",
         "code": 2716
     },
-    "Subsequent property declarations must have the same type.  Property '{0}' has type '{1}' at {2}, but here has type '{3}'.": {
+    "Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.": {
         "category": "Error",
         "code": 2717
     },
@@ -2606,7 +2606,7 @@
         "category": "Error",
         "code": 4102
     },
-    
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
