@@ -1218,8 +1218,16 @@ namespace ts {
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
             // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
             let numberOfDigits = 0;
+            let noSeperatorAllowed = true;
             while (true) {
                 const ch = text.charCodeAt(pos);
+                // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another seperator
+                if (!noSeperatorAllowed && ch === CharacterCodes._) {
+                    noSeperatorAllowed = true;
+                    pos++;
+                    continue;
+                }
+                noSeperatorAllowed = false;
                 const valueOfCh = ch - CharacterCodes._0;
                 if (!isDigit(ch) || valueOfCh >= base) {
                     break;
@@ -1231,6 +1239,13 @@ namespace ts {
             // Invalid binaryIntegerLiteral or octalIntegerLiteral
             if (numberOfDigits === 0) {
                 return -1;
+            }
+            if (text.charCodeAt(pos - 1) === CharacterCodes._) {
+                // Literal ends with underscore - not allowed
+                pos--;
+                error(Diagnostics.Numeric_seperators_are_not_allowed_at_the_end_of_a_literal, 1);
+                pos++; // Consume character anyway to reduce followon errors from a single erroneous trailing `_`, like `Cannot find name '_'`
+                return value;
             }
             return value;
         }
