@@ -561,9 +561,9 @@ namespace ts {
         return false;
     }
 
-    function scanConflictMarkerTrivia(text: string, pos: number, error?: ErrorCallback) {
+    function scanConflictMarkerTrivia(text: string, pos: number, error?: (diag: DiagnosticMessage, pos?: number, len?: number) => void) {
         if (error) {
-            error(Diagnostics.Merge_conflict_marker_encountered, mergeConflictMarkerLength);
+            error(Diagnostics.Merge_conflict_marker_encountered, pos, mergeConflictMarkerLength);
         }
 
         const ch = text.charCodeAt(pos);
@@ -852,10 +852,9 @@ namespace ts {
             scanRange,
         };
 
-        
         function error(message: DiagnosticMessage): void;
         function error(message: DiagnosticMessage, errPos: number, length: number): void;
-        function error(message: DiagnosticMessage, errPos?: number, length?: number): void {
+        function error(message: DiagnosticMessage, errPos: number = pos, length?: number): void {
             if (onError) {
                 const oldPos = pos;
                 pos = errPos;
@@ -866,12 +865,12 @@ namespace ts {
 
         function scanNumberFragment(): string {
             let start = pos;
-            let allowSeperator = false;
+            let allowSeparator = false;
             let result: string;
             while (true) {
                 const ch = text.charCodeAt(pos);
-                if (allowSeperator && ch === CharacterCodes._) {
-                    allowSeperator = false;
+                if (allowSeparator && ch === CharacterCodes._) {
+                    allowSeparator = false;
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     result = (result || "") + text.substring(start, pos);
                     pos++;
@@ -879,7 +878,7 @@ namespace ts {
                     continue;
                 }
                 if (isDigit(ch)) {
-                    allowSeperator = true;
+                    allowSeparator = true;
                     pos++;
                     continue;
                 }
@@ -916,18 +915,14 @@ namespace ts {
                 }
             }
             if (tokenFlags & TokenFlags.ContainsSeparator) {
-                if (decimalFragment && scientificFragment) {
-                    return "" + +(mainFragment + "." + decimalFragment + scientificFragment);
+                let result = mainFragment;
+                if (decimalFragment) {
+                    result += "." + decimalFragment;
                 }
-                else if (decimalFragment) {
-                    return "" + +(mainFragment + "." + decimalFragment);
+                if (scientificFragment) {
+                    result += scientificFragment;
                 }
-                else if (scientificFragment) {
-                    return "" + +(mainFragment + scientificFragment);
-                }
-                else {
-                    return "" + +mainFragment;
-                }
+                return "" + +result;
             }
             else {
                 return "" + +(text.substring(start, end)); // No need to use all the fragments; no _ removal needed
@@ -946,31 +941,31 @@ namespace ts {
          * Scans the given number of hexadecimal digits in the text,
          * returning -1 if the given number is unavailable.
          */
-        function scanExactNumberOfHexDigits(count: number): number {
-            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false);
+        function scanExactNumberOfHexDigits(count: number, canHaveSeparators: boolean): number {
+            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false, canHaveSeparators);
         }
 
         /**
          * Scans as many hexadecimal digits as are available in the text,
          * returning -1 if the given number of digits was unavailable.
          */
-        function scanMinimumNumberOfHexDigits(count: number): number {
-            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ true);
+        function scanMinimumNumberOfHexDigits(count: number, canHaveSeparators: boolean): number {
+            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ true, canHaveSeparators);
         }
 
-        function scanHexDigits(minCount: number, scanAsManyAsPossible: boolean): number {
+        function scanHexDigits(minCount: number, scanAsManyAsPossible: boolean, canHaveSeparators: boolean): number {
             let digits = 0;
             let value = 0;
-            let seperatorAllowed = false;
+            let allowSeparator = false;
             while (digits < minCount || scanAsManyAsPossible) {
                 const ch = text.charCodeAt(pos);
-                if (seperatorAllowed && ch === CharacterCodes._) {
-                    seperatorAllowed = false;
+                if (allowSeparator && ch === CharacterCodes._) {
+                    allowSeparator = false;
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     pos++;
                     continue;
                 }
-                seperatorAllowed = true;
+                allowSeparator = canHaveSeparators;
                 if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
                     value = value * 16 + ch - CharacterCodes._0;
                 }
@@ -1160,7 +1155,7 @@ namespace ts {
         }
 
         function scanHexadecimalEscape(numDigits: number): string {
-            const escapedValue = scanExactNumberOfHexDigits(numDigits);
+            const escapedValue = scanExactNumberOfHexDigits(numDigits, /*canHaveSeparators*/ false);
 
             if (escapedValue >= 0) {
                 return String.fromCharCode(escapedValue);
@@ -1172,7 +1167,7 @@ namespace ts {
         }
 
         function scanExtendedUnicodeEscape(): string {
-            const escapedValue = scanMinimumNumberOfHexDigits(1);
+            const escapedValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
             let isInvalidExtendedEscape = false;
 
             // Validate the value of the digit
@@ -1225,7 +1220,7 @@ namespace ts {
             if (pos + 5 < end && text.charCodeAt(pos + 1) === CharacterCodes.u) {
                 const start = pos;
                 pos += 2;
-                const value = scanExactNumberOfHexDigits(4);
+                const value = scanExactNumberOfHexDigits(4, /*canHaveSeparators*/ false);
                 pos = start;
                 return value;
             }
@@ -1281,17 +1276,17 @@ namespace ts {
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
             // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
             let numberOfDigits = 0;
-            let seperatorAllowed = false;
+            let separatorAllowed = false;
             while (true) {
                 const ch = text.charCodeAt(pos);
-                // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another seperator
-                if (seperatorAllowed && ch === CharacterCodes._) {
-                    seperatorAllowed = false;
+                // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another separator
+                if (separatorAllowed && ch === CharacterCodes._) {
+                    separatorAllowed = false;
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     pos++;
                     continue;
                 }
-                seperatorAllowed = true;
+                separatorAllowed = true;
                 const valueOfCh = ch - CharacterCodes._0;
                 if (!isDigit(ch) || valueOfCh >= base) {
                     break;
@@ -1512,7 +1507,7 @@ namespace ts {
                     case CharacterCodes._0:
                         if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
-                            let value = scanMinimumNumberOfHexDigits(1);
+                            let value = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
                             if (value < 0) {
                                 error(Diagnostics.Hexadecimal_digit_expected);
                                 value = 0;
