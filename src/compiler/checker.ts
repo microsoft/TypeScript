@@ -251,6 +251,7 @@ namespace ts {
             getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
             getBaseConstraintOfType,
+            getDefaultFromTypeParameter: type => type && type.flags & TypeFlags.TypeParameter ? getDefaultFromTypeParameter(type as TypeParameter) : undefined,
             resolveName(name, location, meaning) {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
             },
@@ -1897,13 +1898,17 @@ namespace ts {
 
         function tryGetMemberInModuleExportsAndProperties(memberName: __String, moduleSymbol: Symbol): Symbol | undefined {
             const symbol = tryGetMemberInModuleExports(memberName, moduleSymbol);
-            if (!symbol) {
-                const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
-                if (exportEquals !== moduleSymbol) {
-                    return getPropertyOfType(getTypeOfSymbol(exportEquals), memberName);
-                }
+            if (symbol) {
+                return symbol;
             }
-            return symbol;
+
+            const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
+            if (exportEquals === moduleSymbol) {
+                return undefined;
+            }
+
+            const type = getTypeOfSymbol(exportEquals);
+            return type.flags & TypeFlags.Primitive ? undefined : getPropertyOfType(type, memberName);
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
@@ -4229,7 +4234,7 @@ namespace ts {
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type {
             const pattern = declaration.parent;
-            const parentType = getTypeForBindingElementParent(pattern.parent);
+            let parentType = getTypeForBindingElementParent(pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -4271,6 +4276,10 @@ namespace ts {
                     // or otherwise the type of the string index signature.
                     const text = getTextOfPropertyName(name);
 
+                    // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
+                    if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
+                        parentType = getNonNullableType(parentType);
+                    }
                     const declaredType = getTypeOfPropertyOfType(parentType, text);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
@@ -4470,7 +4479,7 @@ namespace ts {
                         jsDocType = declarationType;
                     }
                     else if (jsDocType !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(jsDocType, declarationType)) {
-                        errorNextVariableOrPropertyDeclarationMustHaveSameType(symbol.valueDeclaration, jsDocType, declaration, declarationType);
+                        errorNextVariableOrPropertyDeclarationMustHaveSameType(jsDocType, declaration, declarationType);
                     }
                 }
                 else if (!jsDocType) {
@@ -13039,7 +13048,7 @@ namespace ts {
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
                 if (declaration.kind === SyntaxKind.ClassDeclaration
-                    && nodeIsDecorated(declaration)) {
+                    && nodeIsDecorated(declaration as ClassDeclaration)) {
                     let container = getContainingClass(node);
                     while (container !== undefined) {
                         if (container === declaration && container.name !== node) {
@@ -15744,59 +15753,93 @@ namespace ts {
          *    except for candidates:
          *      * With no name
          *      * Whose meaning doesn't match the `meaning` parameter.
-         *      * Whose length differs from the target name by more than 0.3 of the length of the name.
+         *      * Whose length differs from the target name by more than 0.34 of the length of the name.
          *      * Whose levenshtein distance is more than 0.4 of the length of the name
          *        (0.4 allows 1 substitution/transposition for every 5 characters,
          *         and 1 insertion/deletion at 3 characters)
-         * Names longer than 30 characters don't get suggestions because Levenshtein distance is an n**2 algorithm.
          */
         function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
-            const worstDistance = name.length * 0.4;
-            const maximumLengthDifference = Math.min(3, name.length * 0.34);
-            let bestDistance = Number.MAX_VALUE;
-            let bestCandidate = undefined;
+            const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
+            let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result isn't better than this, don't bother.
+            let bestCandidate: Symbol | undefined;
             let justCheckExactMatches = false;
-            if (name.length > 30) {
-                return undefined;
-            }
-            name = name.toLowerCase();
+            const nameLowerCase = name.toLowerCase();
             for (const candidate of symbols) {
-                let candidateName = symbolName(candidate);
-                if (candidate.flags & meaning &&
-                    candidateName &&
-                    Math.abs(candidateName.length - name.length) < maximumLengthDifference) {
-                    candidateName = candidateName.toLowerCase();
-                    if (candidateName === name) {
-                        return candidate;
-                    }
-                    if (justCheckExactMatches) {
-                        continue;
-                    }
-                    if (candidateName.length < 3 ||
-                        name.length < 3 ||
-                        candidateName === "eval" ||
-                        candidateName === "intl" ||
-                        candidateName === "undefined" ||
-                        candidateName === "map" ||
-                        candidateName === "nan" ||
-                        candidateName === "set") {
-                        continue;
-                    }
-                    const distance = levenshtein(name, candidateName);
-                    if (distance > worstDistance) {
-                        continue;
-                    }
-                    if (distance < 3) {
-                        justCheckExactMatches = true;
-                        bestCandidate = candidate;
-                    }
-                    else if (distance < bestDistance) {
-                        bestDistance = distance;
-                        bestCandidate = candidate;
-                    }
+                const candidateName = symbolName(candidate);
+                if (!(candidate.flags & meaning && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference)) {
+                    continue;
+                }
+                const candidateNameLowerCase = candidateName.toLowerCase();
+                if (candidateNameLowerCase === nameLowerCase) {
+                    return candidate;
+                }
+                if (justCheckExactMatches) {
+                    continue;
+                }
+                if (candidateName.length < 3) {
+                    // Don't bother, user would have noticed a 2-character name having an extra character
+                    continue;
+                }
+                // Only care about a result better than the best so far.
+                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance - 1);
+                if (distance === undefined) {
+                    continue;
+                }
+                if (distance < 3) {
+                    justCheckExactMatches = true;
+                    bestCandidate = candidate;
+                }
+                else {
+                    Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
+                    bestDistance = distance;
+                    bestCandidate = candidate;
                 }
             }
             return bestCandidate;
+        }
+
+        function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
+            let previous = new Array(s2.length + 1);
+            let current = new Array(s2.length + 1);
+            /** Represents any value > max. We don't care about the particular value. */
+            const big = max + 1;
+
+            for (let i = 0; i <= s2.length; i++) {
+                previous[i] = i;
+            }
+
+            for (let i = 1; i <= s1.length; i++) {
+                const c1 = s1.charCodeAt(i - 1);
+                const minJ = i > max ? i - max : 1;
+                const maxJ = s2.length > max + i ? max + i : s2.length;
+                current[0] = i;
+                /** Smallest value of the matrix in the ith column. */
+                let colMin = i;
+                for (let j = 1; j < minJ; j++) {
+                    current[j] = big;
+                }
+                for (let j = minJ; j <= maxJ; j++) {
+                    const dist = c1 === s2.charCodeAt(j - 1)
+                        ? previous[j - 1]
+                        : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ previous[j - 1] + 2);
+                    current[j] = dist;
+                    colMin = Math.min(colMin, dist);
+                }
+                for (let j = maxJ + 1; j <= s2.length; j++) {
+                    current[j] = big;
+                }
+                if (colMin > max) {
+                    // Give up -- everything in this column is > max and it can't get better in future columns.
+                    return undefined;
+                }
+
+                const temp = previous;
+                previous = current;
+                current = temp;
+            }
+
+            const res = previous[s2.length];
+            return res > max ? undefined : res;
         }
 
         function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
@@ -18271,6 +18314,12 @@ namespace ts {
                 (kind & TypeFlags.NonPrimitive && isTypeAssignableTo(source, nonPrimitiveType));
         }
 
+        function allTypesAssignableToKind(source: Type, kind: TypeFlags, strict?: boolean): boolean {
+            return source.flags & TypeFlags.Union ?
+                every((source as UnionType).types, subType => allTypesAssignableToKind(subType, kind, strict)) :
+                isTypeAssignableToKind(source, kind, strict);
+        }
+
         function isConstEnumObjectType(type: Type): boolean {
             return getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && isConstEnumSymbol(type.symbol);
         }
@@ -18288,7 +18337,8 @@ namespace ts {
             // and the right operand to be of type Any, a subtype of the 'Function' interface type, or have a call or construct signature.
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (!isTypeAny(leftType) && isTypeAssignableToKind(leftType, TypeFlags.Primitive)) {
+            if (!isTypeAny(leftType) &&
+                allTypesAssignableToKind(leftType, TypeFlags.Primitive)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -20647,7 +20697,7 @@ namespace ts {
 
             // skip this check for nodes that cannot have decorators. These should have already had an error reported by
             // checkGrammarDecorators.
-            if (!nodeCanBeDecorated(node)) {
+            if (!nodeCanBeDecorated(node, node.parent, node.parent.parent)) {
                 return;
             }
 
@@ -21391,7 +21441,7 @@ namespace ts {
                 // initializer is consistent with type associated with the node
                 const declarationType = convertAutoToAny(getWidenedTypeForVariableLikeDeclaration(node));
                 if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
-                    errorNextVariableOrPropertyDeclarationMustHaveSameType(symbol.valueDeclaration, type, node, declarationType);
+                    errorNextVariableOrPropertyDeclarationMustHaveSameType(type, node, declarationType);
                 }
                 if (node.initializer) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, /*headMessage*/ undefined);
@@ -21415,21 +21465,16 @@ namespace ts {
             }
         }
 
-        function errorNextVariableOrPropertyDeclarationMustHaveSameType(firstDeclaration: Declaration, firstType: Type, nextDeclaration: Declaration, nextType: Type): void {
-            const firstSourceFile = getSourceFileOfNode(firstDeclaration);
-            const firstSpan = getErrorSpanForNode(firstSourceFile, getNameOfDeclaration(firstDeclaration) || firstDeclaration);
-            const firstLocation = getLineAndCharacterOfPosition(firstSourceFile, firstSpan.start);
-            const firstLocationDescription = firstSourceFile.fileName + " " + firstLocation.line + ":" + firstLocation.character;
+        function errorNextVariableOrPropertyDeclarationMustHaveSameType(firstType: Type, nextDeclaration: Declaration, nextType: Type): void {
             const nextDeclarationName = getNameOfDeclaration(nextDeclaration);
             const message = nextDeclaration.kind === SyntaxKind.PropertyDeclaration || nextDeclaration.kind === SyntaxKind.PropertySignature
-                ? Diagnostics.Subsequent_property_declarations_must_have_the_same_type_Property_0_has_type_1_at_2_but_here_has_type_3
-                : Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_has_type_1_at_2_but_here_has_type_3;
+                ? Diagnostics.Subsequent_property_declarations_must_have_the_same_type_Property_0_must_be_of_type_1_but_here_has_type_2
+                : Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2;
             error(
                 nextDeclarationName,
                 message,
                 declarationNameToString(nextDeclarationName),
                 typeToString(firstType),
-                firstLocationDescription,
                 typeToString(nextType));
         }
 
@@ -25153,7 +25198,7 @@ namespace ts {
             if (!node.decorators) {
                 return false;
             }
-            if (!nodeCanBeDecorated(node)) {
+            if (!nodeCanBeDecorated(node, node.parent, node.parent.parent)) {
                 if (node.kind === SyntaxKind.MethodDeclaration && !nodeIsPresent((<MethodDeclaration>node).body)) {
                     return grammarErrorOnFirstToken(node, Diagnostics.A_decorator_can_only_decorate_a_method_implementation_not_an_overload);
                 }
