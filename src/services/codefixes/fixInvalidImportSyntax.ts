@@ -12,6 +12,10 @@ namespace ts.codefix {
         // import * as Bluebird from 'bluebird';
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         const node = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false).parent as ImportDeclaration;
+        if (!isImportDeclaration(node)) {
+            // No import quick fix for import calls
+            return [];
+        }
         return getCodeFixesForImportDeclaration(context, node);
     }
 
@@ -20,22 +24,6 @@ namespace ts.codefix {
         const namespace = getNamespaceDeclarationNode(node) as NamespaceImport;
         const opts = context.program.getCompilerOptions();
         const variations: CodeAction[] = [];
-        if (opts.module === ModuleKind.CommonJS || (!opts.module && opts.target < ScriptTarget.ES2015)) {
-            // import Bluebird = require("bluebird");
-            const replacement = createImportEqualsDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                namespace.name,
-                createExternalModuleReference(node.moduleSpecifier)
-            );
-            const changeTracker = textChanges.ChangeTracker.fromContext(context);
-            changeTracker.replaceNode(sourceFile, node, replacement, { useNonAdjustedEndPosition: true });
-            const changes = changeTracker.getChanges();
-            variations.push({
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Replace_import_with_0), [changes[0].textChanges[0].newText]),
-                changes
-            });
-        }
 
         // import Bluebird from "bluebird";
         const replacement = createImportDeclaration(
@@ -52,6 +40,23 @@ namespace ts.codefix {
             changes
         });
 
+        if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
+            // import Bluebird = require("bluebird");
+            const replacement = createImportEqualsDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                namespace.name,
+                createExternalModuleReference(node.moduleSpecifier)
+            );
+            const changeTracker = textChanges.ChangeTracker.fromContext(context);
+            changeTracker.replaceNode(sourceFile, node, replacement, { useNonAdjustedEndPosition: true });
+            const changes = changeTracker.getChanges();
+            variations.push({
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Replace_import_with_0), [changes[0].textChanges[0].newText]),
+                changes
+            });
+        }
+
         return variations;
     }
 
@@ -66,7 +71,7 @@ namespace ts.codefix {
     function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeAction[] | undefined {
         const sourceFile = context.sourceFile;
         const targetKind = Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
-        let node = findAncestor(getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
+        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
         if (!node) {
             return [];
         }
@@ -87,7 +92,7 @@ namespace ts.codefix {
         fixes.push({
             description: getLocaleSpecificMessage(Diagnostics.Use_synthetic_default_member),
             changes
-        })
+        });
         return fixes;
     }
 }

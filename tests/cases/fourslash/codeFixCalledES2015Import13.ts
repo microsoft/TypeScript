@@ -6,12 +6,13 @@
 ////export = foo;
 
 // @Filename: index.ts
-////[|import * as foo from "./foo";|]
-////foo();
+////import * as Foo from "./foo";
+////[|new Foo()|];
 
 goTo.file(1);
 verify.codeFix({
-    description: `Replace import with 'import foo from "./foo";'.`,
-    newRangeContent: `import foo from "./foo";`,
-    index: 0,
+    description: `Use synthetic 'default' member.`,
+    newFileContent: `import * as Foo from "./foo";
+new Foo.default();`,
+    index: 2,
 });

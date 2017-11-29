@@ -13,5 +13,5 @@ goTo.file(1);
 verify.codeFix({
     description: `Replace import with 'import foo = require("./foo");'.`,
     newRangeContent: `import foo = require("./foo");`,
-    index: 0,
+    index: 1,
 });

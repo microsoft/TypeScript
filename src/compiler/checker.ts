@@ -1924,6 +1924,7 @@ namespace ts {
                             sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
                         }
                         if (sigs && sigs.length) {
+                            const moduleType = getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol);
                             // Create a new symbol which has the module's type less the call and construct signatures
                             const result = createSymbol(symbol.flags, symbol.escapedName);
                             result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
@@ -1934,8 +1935,8 @@ namespace ts {
                             if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
                             if (symbol.members) result.members = cloneMap(symbol.members);
                             if (symbol.exports) result.exports = cloneMap(symbol.exports);
-                            const moduleType = resolveStructuredTypeMembers(type as StructuredType); // Should already be resolved from the signature checks above
-                            result.type = createAnonymousType(result, moduleType.members, emptyArray, emptyArray, moduleType.stringIndexInfo, moduleType.numberIndexInfo);
+                            const resolvedModuleType = resolveStructuredTypeMembers(moduleType as StructuredType); // Should already be resolved from the signature checks above
+                            result.type = createAnonymousType(result, resolvedModuleType.members, emptyArray, emptyArray, resolvedModuleType.stringIndexInfo, resolvedModuleType.numberIndexInfo);
                             return result;
                         }
                     }
