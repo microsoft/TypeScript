@@ -4,8 +4,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/2.ts ===
 0x_110
->0x : 0
->_110 : any
+>0x_110 : 272
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/3.ts ===
 0_X0101
@@ -14,16 +13,13 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/4.ts ===
 0x01__11
->0x01_ : 1
->_11 : any
+>0x01__11 : 273
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/5.ts ===
 0X0110_0110__
->0X0110_0110_ : 17826064
->_ : any
+>0X0110_0110__ : 17826064
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/6.ts ===
 0x___0111010_0101_1
->0x : 0
->___0111010_0101_1 : any
+>0x___0111010_0101_1 : 1172542853137
 

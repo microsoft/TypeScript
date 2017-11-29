@@ -869,10 +869,15 @@ namespace ts {
             let result: string;
             while (true) {
                 const ch = text.charCodeAt(pos);
-                if (allowSeparator && ch === CharacterCodes._) {
-                    allowSeparator = false;
+                if (ch === CharacterCodes._) {
                     tokenFlags |= TokenFlags.ContainsSeparator;
-                    result = (result || "") + text.substring(start, pos);
+                    if (allowSeparator) {
+                        allowSeparator = false;
+                        result = (result || "") + text.substring(start, pos);
+                    }
+                    else {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    }
                     pos++;
                     start = pos;
                     continue;
@@ -959,9 +964,14 @@ namespace ts {
             let allowSeparator = false;
             while (digits < minCount || scanAsManyAsPossible) {
                 const ch = text.charCodeAt(pos);
-                if (allowSeparator && ch === CharacterCodes._) {
-                    allowSeparator = false;
+                if (canHaveSeparators && ch === CharacterCodes._) {
                     tokenFlags |= TokenFlags.ContainsSeparator;
+                    if (allowSeparator) {
+                        allowSeparator = false;
+                    }
+                    else {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    }
                     pos++;
                     continue;
                 }
@@ -1280,9 +1290,14 @@ namespace ts {
             while (true) {
                 const ch = text.charCodeAt(pos);
                 // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another separator
-                if (separatorAllowed && ch === CharacterCodes._) {
-                    separatorAllowed = false;
+                if (ch === CharacterCodes._) {
                     tokenFlags |= TokenFlags.ContainsSeparator;
+                    if (separatorAllowed) {
+                        separatorAllowed = false;
+                    }
+                    else {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    }
                     pos++;
                     continue;
                 }

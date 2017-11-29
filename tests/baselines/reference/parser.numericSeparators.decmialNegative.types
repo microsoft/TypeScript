@@ -8,8 +8,7 @@ _10
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/3.ts ===
 1__0
->1_ : 1
->_0 : any
+>1__0 : 10
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/4.ts ===
 0_.0
@@ -17,18 +16,15 @@ _10
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/5.ts ===
 0._0
->0. : 0
->_0 : any
+>0._0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/6.ts ===
 0.0__0
->0.0_ : 0
->_0 : any
+>0.0__0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/7.ts ===
 0.0__
->0.0_ : 0
->_ : any
+>0.0__ : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/8.ts ===
 0_e0
@@ -36,8 +32,7 @@ _10
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/9.ts ===
 0e_0
->0e : 0
->_0 : any
+>0e_0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/10.ts ===
 0e0_
@@ -45,8 +40,7 @@ _10
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/11.ts ===
 0e0__0
->0e0_ : 0
->_0 : any
+>0e0__0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/12.ts ===
 0_.0e0
@@ -54,8 +48,7 @@ _10
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/13.ts ===
 0._0e0
->0. : 0
->_0e0 : any
+>0._0e0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/14.ts ===
 0.0_e0
@@ -63,8 +56,7 @@ _10
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/15.ts ===
 0.0e_0
->0.0e : 0
->_0 : any
+>0.0e_0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/16.ts ===
 _0.0e0
@@ -77,19 +69,15 @@ _0.0e0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/18.ts ===
 0__0.0e0
->0_ : 0
->_0 : any
->.0e0 : 0
+>0__0.0e0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/19.ts ===
 0.0__0e0
->0.0_ : 0
->_0e0 : any
+>0.0__0e0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/20.ts ===
 0.00e0__0
->0.00e0_ : 0
->_0 : any
+>0.00e0__0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/21.ts ===
 0_e+0
@@ -97,8 +85,7 @@ _0.0e0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/22.ts ===
 0e+_0
->0e+ : 0
->_0 : any
+>0e+_0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/23.ts ===
 0e+0_
@@ -106,8 +93,7 @@ _0.0e0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/24.ts ===
 0e+0__0
->0e+0_ : 0
->_0 : any
+>0e+0__0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/25.ts ===
 0_.0e+0
@@ -115,10 +101,7 @@ _0.0e0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/26.ts ===
 0._0e+0
->0. : 0
->_0e+0 : any
->_0e : any
->0 : 0
+>0._0e+0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/27.ts ===
 0.0_e+0
@@ -126,8 +109,7 @@ _0.0e0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/28.ts ===
 0.0e+_0
->0.0e+ : 0
->_0 : any
+>0.0e+_0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/29.ts ===
 _0.0e+0
@@ -140,21 +122,15 @@ _0.0e+0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/31.ts ===
 0__0.0e+0
->0_ : 0
->_0 : any
->.0e+0 : 0
+>0__0.0e+0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/32.ts ===
 0.0__0e+0
->0.0_ : 0
->_0e+0 : any
->_0e : any
->0 : 0
+>0.0__0e+0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/33.ts ===
 0.00e+0__0
->0.00e+0_ : 0
->_0 : any
+>0.00e+0__0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/34.ts ===
 0_e+0
@@ -162,8 +138,7 @@ _0.0e+0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/35.ts ===
 0e-_0
->0e- : 0
->_0 : any
+>0e-_0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/36.ts ===
 0e-0_
@@ -171,8 +146,7 @@ _0.0e+0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/37.ts ===
 0e-0__0
->0e-0_ : 0
->_0 : any
+>0e-0__0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/38.ts ===
 0_.0e-0
@@ -180,10 +154,7 @@ _0.0e+0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/39.ts ===
 0._0e-0
->0. : 0
->_0e-0 : number
->_0e : any
->0 : 0
+>0._0e-0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/40.ts ===
 0.0_e-0
@@ -191,8 +162,7 @@ _0.0e+0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/41.ts ===
 0.0e-_0
->0.0e- : 0
->_0 : any
+>0.0e-_0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/42.ts ===
 _0.0e-0
@@ -205,21 +175,15 @@ _0.0e-0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/44.ts ===
 0__0.0e-0
->0_ : 0
->_0 : any
->.0e-0 : 0
+>0__0.0e-0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/45.ts ===
 0.0__0e-0
->0.0_ : 0
->_0e-0 : number
->_0e : any
->0 : 0
+>0.0__0e-0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/46.ts ===
 0.00e-0__0
->0.00e-0_ : 0
->_0 : any
+>0.00e-0__0 : 0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/47.ts ===
 ._
@@ -232,20 +196,17 @@ _0.0e-0
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/49.ts ===
 1.0e_+10
->1.0e : 1
->_+10 : any
->_ : any
+>1.0e_+10 : number
+>1.0e_ : 1
 >10 : 10
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/50.ts ===
 1.0e_-10
->1.0e : 1
->_-10 : number
->_ : any
+>1.0e_-10 : number
+>1.0e_ : 1
 >10 : 10
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/51.ts ===
 0._
->0. : 0
->_ : any
+>0._ : 0
 
