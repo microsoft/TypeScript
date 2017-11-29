@@ -3523,7 +3523,7 @@
         "category": "Message",
         "code": 7037
     },
-    "Import is called or constructed, which is not valid ES2015 module usage, and will fail at runtime.": {
+    "A namespace-style import cannot be called or constructed, and will cause a failure at runtime.": {
         "category": "Error",
         "code": 7038
     },

@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.codefix {
     registerCodeFix({
-        errorCodes: [Diagnostics.Import_is_called_or_constructed_which_is_not_valid_ES2015_module_usage_and_will_fail_at_runtime.code],
+        errorCodes: [Diagnostics.A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime.code],
         getCodeActions: getActionsForInvalidImport
     });
 

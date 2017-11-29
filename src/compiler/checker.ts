@@ -9355,7 +9355,7 @@ namespace ts {
                     const helpfulRetry = checkTypeRelatedTo(getTypeOfSymbol(links.target), target, relation, /*errorNode*/ undefined);
                     if (helpfulRetry) {
                         // Likely an incorrect import. Issue a helpful diagnostic to produce a quickfix to change the import
-                        diagnostics.add(createDiagnosticForNode(links.originatingImport, Diagnostics.Import_is_called_or_constructed_which_is_not_valid_ES2015_module_usage_and_will_fail_at_runtime));
+                        diagnostics.add(createDiagnosticForNode(links.originatingImport, Diagnostics.A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime));
                     }
                 }
             }
@@ -17321,7 +17321,7 @@ namespace ts {
             if (importNode && !isImportCall(importNode)) {
                 const sigs = getSignaturesOfType(getTypeOfSymbol(getSymbolLinks(apparentType.symbol).target), kind);
                 if (!sigs || !sigs.length) return;
-                error(importNode, Diagnostics.Import_is_called_or_constructed_which_is_not_valid_ES2015_module_usage_and_will_fail_at_runtime);
+                error(importNode, Diagnostics.A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime);
             }
         }
 
