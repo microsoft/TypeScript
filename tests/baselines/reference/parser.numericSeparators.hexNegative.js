@@ -1,38 +1,38 @@
-//// [tests/cases/conformance/parser/ecmascriptnext/numericSeperators/parser.numericSeperators.binaryNegative.ts] ////
+//// [tests/cases/conformance/parser/ecmascriptnext/numericSeparators/parser.numericSeparators.hexNegative.ts] ////
 
 //// [1.ts]
-0b00_
+0x00_
 
 //// [2.ts]
-0b_110
+0x_110
 
 //// [3.ts]
-0_B0101
+0_X0101
 
 //// [4.ts]
-0b01__11
+0x01__11
 
 //// [5.ts]
-0B0110_0110__
+0X0110_0110__
 
 //// [6.ts]
-0b___0111010_0101_1
+0x___0111010_0101_1
 
 
 //// [1.js]
 0;
 //// [2.js]
-0;
+0x;
 _110;
 //// [3.js]
 0;
-_B0101;
+X0101;
 //// [4.js]
 1;
 _11;
 //// [5.js]
-102;
+17826064;
 _;
 //// [6.js]
-0;
+0x;
 ___0111010_0101_1;

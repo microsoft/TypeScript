@@ -1,4 +1,4 @@
-=== tests/cases/conformance/parser/ecmascriptnext/numericSeperators/parser.numericSeperators.hex.ts ===
+=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/parser.numericSeparators.hex.ts ===
 0x00_11;
 >0x00_11 : 17
 

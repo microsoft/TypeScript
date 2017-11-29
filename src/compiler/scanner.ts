@@ -858,28 +858,76 @@ namespace ts {
             }
         }
 
+        function scanNumberFragment(): string {
+            let start = pos;
+            let allowSeperator = false;
+            let result: string;
+            while (true) {
+                const ch = text.charCodeAt(pos);
+                if (allowSeperator && ch === CharacterCodes._) {
+                    allowSeperator = false;
+                    tokenFlags |= TokenFlags.ContainsSeparator;
+                    result = (result || "") + text.substring(start, pos);
+                    pos++;
+                    start = pos;
+                    continue;
+                }
+                if (isDigit(ch)) {
+                    allowSeperator = true;
+                    pos++;
+                    continue;
+                }
+                break;
+            }
+            if (text.charCodeAt(pos - 1) === CharacterCodes._) {
+                pos--;
+                error(Diagnostics.Numeric_seperators_are_not_allowed_at_the_end_of_a_literal, 1);
+                pos++;
+            }
+            return result = (result || "") + text.substring(start, pos);
+        }
+
         function scanNumber(): string {
             const start = pos;
-            while (isDigit(text.charCodeAt(pos))) pos++;
+            const mainFragment = scanNumberFragment();
+            let decimalFragment: string;
+            let scientificFragment: string;
             if (text.charCodeAt(pos) === CharacterCodes.dot) {
                 pos++;
-                while (isDigit(text.charCodeAt(pos))) pos++;
+                decimalFragment = scanNumberFragment();
             }
             let end = pos;
             if (text.charCodeAt(pos) === CharacterCodes.E || text.charCodeAt(pos) === CharacterCodes.e) {
                 pos++;
                 tokenFlags |= TokenFlags.Scientific;
                 if (text.charCodeAt(pos) === CharacterCodes.plus || text.charCodeAt(pos) === CharacterCodes.minus) pos++;
-                if (isDigit(text.charCodeAt(pos))) {
-                    pos++;
-                    while (isDigit(text.charCodeAt(pos))) pos++;
-                    end = pos;
-                }
-                else {
+                const preNumericPart = pos;
+                const finalFragment = scanNumberFragment();
+                if (!finalFragment) {
                     error(Diagnostics.Digit_expected);
                 }
+                else {
+                    scientificFragment = text.substring(end, preNumericPart) + finalFragment;
+                    end = pos;
+                }
             }
-            return "" + +(text.substring(start, end));
+            if (tokenFlags & TokenFlags.ContainsSeparator) {
+                if (decimalFragment && scientificFragment) {
+                    return "" + +(mainFragment + "." + decimalFragment + scientificFragment);
+                }
+                else if (decimalFragment) {
+                    return "" + +(mainFragment + "." + decimalFragment);
+                }
+                else if (scientificFragment) {
+                    return "" + +(mainFragment + scientificFragment);
+                }
+                else {
+                    return "" + +mainFragment;
+                }
+            }
+            else {
+                return "" + +(text.substring(start, end)); // No need to use all the fragments; no _ removal needed
+            }
         }
 
         function scanOctalDigits(): number {
@@ -914,7 +962,7 @@ namespace ts {
                 const ch = text.charCodeAt(pos);
                 if (seperatorAllowed && ch === CharacterCodes._) {
                     seperatorAllowed = false;
-                    tokenFlags |= TokenFlags.ContainsSeperator;
+                    tokenFlags |= TokenFlags.ContainsSeparator;
                     pos++;
                     continue;
                 }
@@ -1237,7 +1285,7 @@ namespace ts {
                 // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another seperator
                 if (seperatorAllowed && ch === CharacterCodes._) {
                     seperatorAllowed = false;
-                    tokenFlags |= TokenFlags.ContainsSeperator;
+                    tokenFlags |= TokenFlags.ContainsSeparator;
                     pos++;
                     continue;
                 }
