@@ -22049,17 +22049,16 @@ namespace ts {
             if (func) {
                 const signature = getSignatureFromDeclaration(func);
                 const returnType = getReturnTypeOfSignature(signature);
+                const functionFlags = getFunctionFlags(func);
+                if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
+                    // A generator does not need its return expressions checked against its return type.
+                    // Instead, the yield expressions are checked against the element type.
+                    // TODO: Check return expressions of generators when return type tracking is added
+                    // for generators.
+                    return;
+                }
                 if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
                     const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
-                    const functionFlags = getFunctionFlags(func);
-                    if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
-                        // A generator does not need its return expressions checked against its return type.
-                        // Instead, the yield expressions are checked against the element type.
-                        // TODO: Check return expressions of generators when return type tracking is added
-                        // for generators.
-                        return;
-                    }
-
                     if (func.kind === SyntaxKind.SetAccessor) {
                         if (node.expression) {
                             error(node, Diagnostics.Setters_cannot_return_a_value);
