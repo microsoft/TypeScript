@@ -14431,6 +14431,10 @@ namespace ts {
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
             const isInJSFile = isInJavaScriptFile(node);
+            if (isInJSFile && node.symbol && node.symbol.exports) {
+                mergeSymbolTable(propertiesTable, node.symbol.exports);
+                node.symbol.exports.forEach(symbol => propertiesArray.push(symbol));
+            }
 
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {

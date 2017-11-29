@@ -1441,7 +1441,24 @@ namespace ts {
     export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
         if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
             const declaration = s.valueDeclaration as VariableDeclaration;
-            return declaration.initializer && (declaration.initializer.kind === SyntaxKind.FunctionExpression || declaration.initializer.kind === SyntaxKind.ClassExpression);
+            return declaration.initializer &&
+                (declaration.initializer.kind === SyntaxKind.FunctionExpression || declaration.initializer.kind === SyntaxKind.ClassExpression);
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the node is a variable declaration whose initializer is a function or class expression, or an empty object literal.
+     * This function does not test if the node is in a JavaScript file or not.
+     */
+    export function isDeclarationOfJavascriptExpression(s: Symbol) {
+        if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+            const declaration = s.valueDeclaration as VariableDeclaration;
+            return declaration.initializer &&
+                (declaration.initializer.kind === SyntaxKind.FunctionExpression ||
+                 declaration.initializer.kind === SyntaxKind.ClassExpression ||
+                 (declaration.initializer.kind === SyntaxKind.ObjectLiteralExpression &&
+                  (declaration.initializer as ObjectLiteralExpression).properties.length === 0));
         }
         return false;
     }

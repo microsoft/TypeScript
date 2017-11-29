@@ -2409,7 +2409,7 @@ namespace ts {
 
         function bindPropertyAssignment(functionName: __String, propertyAccess: PropertyAccessExpression, isPrototypeProperty: boolean) {
             const symbol = lookupSymbolForName(functionName);
-            let targetSymbol = symbol && isDeclarationOfFunctionOrClassExpression(symbol) ?
+            let targetSymbol = symbol && isDeclarationOfJavascriptExpression(symbol) ?
                 (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
                 symbol;
             Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression || propertyAccess.parent.kind === SyntaxKind.ExpressionStatement);
@@ -2432,7 +2432,7 @@ namespace ts {
                     targetSymbol = declareSymbol(container.locals, /*parent*/ undefined, identifier, SymbolFlags.Module, SymbolFlags.ValueModuleExcludes);
                 }
             }
-            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule))) {
+            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ObjectLiteral))) {
                 return;
             }
 
