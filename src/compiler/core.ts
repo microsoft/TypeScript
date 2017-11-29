@@ -1967,7 +1967,7 @@ namespace ts {
         return compilerOptions.allowSyntheticDefaultImports !== undefined
             ? compilerOptions.allowSyntheticDefaultImports
             : compilerOptions.ESModuleInterop
-                ? !!moduleKind && moduleKind < ModuleKind.ES2015
+                ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
                 : moduleKind === ModuleKind.System;
     }
 
