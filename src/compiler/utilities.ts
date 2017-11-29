@@ -345,7 +345,7 @@ namespace ts {
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent) {
+        if (!nodeIsSynthesized(node) && node.parent && !(isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeperator)) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 

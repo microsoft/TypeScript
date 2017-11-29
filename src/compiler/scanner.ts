@@ -909,8 +909,16 @@ namespace ts {
         function scanHexDigits(minCount: number, scanAsManyAsPossible: boolean): number {
             let digits = 0;
             let value = 0;
+            let seperatorAllowed = false;
             while (digits < minCount || scanAsManyAsPossible) {
                 const ch = text.charCodeAt(pos);
+                if (seperatorAllowed && ch === CharacterCodes._) {
+                    seperatorAllowed = false;
+                    tokenFlags |= TokenFlags.ContainsSeperator;
+                    pos++;
+                    continue;
+                }
+                seperatorAllowed = true;
                 if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
                     value = value * 16 + ch - CharacterCodes._0;
                 }
@@ -928,6 +936,11 @@ namespace ts {
             }
             if (digits < minCount) {
                 value = -1;
+            }
+            if (text.charCodeAt(pos - 1) === CharacterCodes._) {
+                pos--;
+                error(Diagnostics.Numeric_seperators_are_not_allowed_at_the_end_of_a_literal, 1);
+                pos++;
             }
             return value;
         }
@@ -1218,16 +1231,17 @@ namespace ts {
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
             // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
             let numberOfDigits = 0;
-            let noSeperatorAllowed = true;
+            let seperatorAllowed = false;
             while (true) {
                 const ch = text.charCodeAt(pos);
                 // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another seperator
-                if (!noSeperatorAllowed && ch === CharacterCodes._) {
-                    noSeperatorAllowed = true;
+                if (seperatorAllowed && ch === CharacterCodes._) {
+                    seperatorAllowed = false;
+                    tokenFlags |= TokenFlags.ContainsSeperator;
                     pos++;
                     continue;
                 }
-                noSeperatorAllowed = false;
+                seperatorAllowed = true;
                 const valueOfCh = ch - CharacterCodes._0;
                 if (!isDigit(ch) || valueOfCh >= base) {
                     break;
