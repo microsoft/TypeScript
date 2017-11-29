@@ -25135,7 +25135,12 @@ namespace ts {
             globalBooleanType = getGlobalType("Boolean" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalRegExpType = getGlobalType("RegExp" as __String, /*arity*/ 0, /*reportErrors*/ true);
             anyArrayType = createArrayType(anyType);
+
             autoArrayType = createArrayType(autoType);
+            if (autoArrayType === emptyObjectType) {
+                // autoArrayType is used as a marker, so even if global Array type is not defined, it needs ot be a unique type
+                autoArrayType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+            }
 
             globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as __String, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
