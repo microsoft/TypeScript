@@ -3519,7 +3519,7 @@
         "category": "Error",
         "code": 7036
     },
-    "Create namespace objects for ECMAScript imports which are neither callable nor constructable, implies `allowSyntheticDefaultImports`.": {
+    "Enables emit interoperability bewteen commonjs and ES Modules via creation of namespace objects for all imports. Implies `allowSyntheticDefaultImports`.": {
         "category": "Message",
         "code": 7037
     },

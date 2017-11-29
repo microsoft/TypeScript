@@ -401,8 +401,9 @@ namespace ts {
         {
             name: "ESModuleInterop",
             type: "boolean",
+            showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
-            description: Diagnostics.Create_namespace_objects_for_ECMAScript_imports_which_are_neither_callable_nor_constructable_implies_allowSyntheticDefaultImports
+            description: Diagnostics.Enables_emit_interoperability_bewteen_commonjs_and_ES_Modules_via_creation_of_namespace_objects_for_all_imports_Implies_allowSyntheticDefaultImports
         },
         {
             name: "preserveSymlinks",
