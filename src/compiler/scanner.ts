@@ -892,7 +892,7 @@ namespace ts {
             if (text.charCodeAt(pos - 1) === CharacterCodes._) {
                 error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
             }
-            return result = (result || "") + text.substring(start, pos);
+            return (result || "") + text.substring(start, pos);
         }
 
         function scanNumber(): string {
