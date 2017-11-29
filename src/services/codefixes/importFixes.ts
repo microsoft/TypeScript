@@ -814,7 +814,6 @@ namespace ts.codefix {
             lastCharWasValid = isValid;
         }
         // Need `|| "_"` to ensure result isn't empty.
-        const token = stringToToken(res);
-        return token === undefined || !isNonContextualKeyword(token) ? res || "_" : `_${res}`;
+        return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 }
