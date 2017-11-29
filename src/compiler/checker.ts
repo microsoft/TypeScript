@@ -113,7 +113,6 @@ namespace ts {
             getPropertyOfType: (type, name) => getPropertyOfType(type, escapeLeadingUnderscores(name)),
             getIndexInfoOfType,
             getSignaturesOfType,
-            typeHasCallOrConstructSignatures,
             getIndexTypeOfType,
             getBaseTypes,
             getBaseTypeOfLiteralType,
@@ -24429,7 +24428,7 @@ namespace ts {
         }
 
         function typeHasCallOrConstructSignatures(type: Type): boolean {
-            return getSignaturesOfType(type, SignatureKind.Call).length !== 0 || getSignaturesOfType(type, SignatureKind.Construct).length !== 0;
+            return ts.typeHasCallOrConstructSignatures(type, checker);
         }
 
         function getRootSymbols(symbol: Symbol): Symbol[] {

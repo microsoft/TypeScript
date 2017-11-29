@@ -3669,6 +3669,10 @@ namespace ts {
             directory = parentPath;
         }
     }
+
+    export function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker) {
+        return checker.getSignaturesOfType(type, SignatureKind.Call).length !== 0 || checker.getSignaturesOfType(type, SignatureKind.Construct).length !== 0;
+    }
 }
 
 namespace ts {

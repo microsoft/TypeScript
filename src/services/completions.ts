@@ -2056,7 +2056,7 @@ namespace ts.Completions {
         const { types } = type as UnionType;
         // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
         const filteredTypes = isForAccess ? types : types.filter(memberType =>
-            !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType) || checker.typeHasCallOrConstructSignatures(memberType)));
+            !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType) || typeHasCallOrConstructSignatures(memberType, checker)));
         return checker.getAllPossiblePropertiesOfTypes(filteredTypes);
     }
 }
