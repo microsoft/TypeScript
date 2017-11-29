@@ -881,7 +881,7 @@ namespace ts {
             }
             if (text.charCodeAt(pos - 1) === CharacterCodes._) {
                 pos--;
-                error(Diagnostics.Numeric_seperators_are_not_allowed_at_the_end_of_a_literal, 1);
+                error(Diagnostics.Numeric_separators_are_not_allowed_here, 1);
                 pos++;
             }
             return result = (result || "") + text.substring(start, pos);
@@ -987,7 +987,7 @@ namespace ts {
             }
             if (text.charCodeAt(pos - 1) === CharacterCodes._) {
                 pos--;
-                error(Diagnostics.Numeric_seperators_are_not_allowed_at_the_end_of_a_literal, 1);
+                error(Diagnostics.Numeric_separators_are_not_allowed_here, 1);
                 pos++;
             }
             return value;
@@ -1305,7 +1305,7 @@ namespace ts {
             if (text.charCodeAt(pos - 1) === CharacterCodes._) {
                 // Literal ends with underscore - not allowed
                 pos--;
-                error(Diagnostics.Numeric_seperators_are_not_allowed_at_the_end_of_a_literal, 1);
+                error(Diagnostics.Numeric_separators_are_not_allowed_here, 1);
                 pos++; // Consume character anyway to reduce followon errors from a single erroneous trailing `_`, like `Cannot find name '_'`
                 return value;
             }

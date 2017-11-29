@@ -3407,7 +3407,7 @@
         "category": "Message",
         "code": 6187
     },
-    "Numeric seperators are not allowed at the end of a literal.": {
+    "Numeric separators are not allowed here.": {
         "category": "Error",
         "code": 6188
     },
