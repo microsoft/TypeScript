@@ -3898,5 +3898,9 @@
     "Replace import with '{0}'.": {
         "category": "Message",
         "code": 95015
+    },
+    "Use synthetic 'default' member.": {
+        "category": "Message",
+        "code": 95016
     }
 }

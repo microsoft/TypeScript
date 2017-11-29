@@ -12,6 +12,11 @@ namespace ts.codefix {
         // import * as Bluebird from 'bluebird';
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         const node = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false).parent as ImportDeclaration;
+        return getCodeFixesForImportDeclaration(context, node);
+    }
+
+    function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportDeclaration) {
+        const sourceFile = getSourceFileOfNode(node);
         const namespace = getNamespaceDeclarationNode(node) as NamespaceImport;
         const opts = context.program.getCompilerOptions();
         const variations: CodeAction[] = [];
@@ -48,5 +53,41 @@ namespace ts.codefix {
         });
 
         return variations;
+    }
+
+    registerCodeFix({
+        errorCodes: [
+            Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures.code,
+            Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature.code,
+        ],
+        getCodeActions: getActionsForUsageOfInvalidImport
+    });
+
+    function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeAction[] | undefined {
+        const sourceFile = context.sourceFile;
+        const targetKind = Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
+        let node = findAncestor(getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
+        if (!node) {
+            return [];
+        }
+        const expr = node.expression;
+        const type = context.program.getTypeChecker().getTypeAtLocation(expr);
+        if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
+            return [];
+        }
+        const fixes: CodeAction[] = [];
+        const relatedImport = (type.symbol as TransientSymbol).originatingImport;
+        if (!isImportCall(relatedImport)) {
+            addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
+        }
+        const propertyAccess = createPropertyAccess(expr, "default");
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
+        changeTracker.replaceNode(sourceFile, expr, propertyAccess, {});
+        const changes = changeTracker.getChanges();
+        fixes.push({
+            description: getLocaleSpecificMessage(Diagnostics.Use_synthetic_default_member),
+            changes
+        })
+        return fixes;
     }
 }
