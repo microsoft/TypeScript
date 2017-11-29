@@ -3,7 +3,9 @@ var variable = {};
 >variable : Symbol(variable, Decl(a.js, 0, 3))
 
 variable.a = 0;
+>variable.a : Symbol(a, Decl(a.js, 0, 18))
 >variable : Symbol(variable, Decl(a.js, 0, 3))
+>a : Symbol(a, Decl(a.js, 0, 18))
 
 class C {
 >C : Symbol(C, Decl(a.js, 1, 15))
@@ -49,7 +51,9 @@ function getObj() {
 
 === tests/cases/conformance/salsa/b.ts ===
 variable.a = 1;
+>variable.a : Symbol(a, Decl(a.js, 0, 18))
 >variable : Symbol(variable, Decl(a.js, 0, 3))
+>a : Symbol(a, Decl(a.js, 0, 18))
 
 (new C()).member.a = 1;
 >(new C()).member : Symbol(C.member, Decl(a.js, 5, 19))
