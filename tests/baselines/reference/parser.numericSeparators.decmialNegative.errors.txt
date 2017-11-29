@@ -79,8 +79,18 @@ tests/cases/conformance/parser/ecmascriptnext/numericSeparators/45.ts(1,5): erro
 tests/cases/conformance/parser/ecmascriptnext/numericSeparators/46.ts(1,8): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascriptnext/numericSeparators/46.ts(1,9): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascriptnext/numericSeparators/46.ts(1,9): error TS2304: Cannot find name '_0'.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/47.ts(1,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/47.ts(1,2): error TS2304: Cannot find name '_'.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/48.ts(1,2): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/48.ts(1,2): error TS2304: Cannot find name '\u005F01234'.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/49.ts(1,5): error TS1124: Digit expected.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/49.ts(1,5): error TS2304: Cannot find name '_'.
 tests/cases/conformance/parser/ecmascriptnext/numericSeparators/5.ts(1,3): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascriptnext/numericSeparators/5.ts(1,3): error TS2304: Cannot find name '_0'.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/50.ts(1,5): error TS1124: Digit expected.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/50.ts(1,5): error TS2304: Cannot find name '_'.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/51.ts(1,3): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascriptnext/numericSeparators/51.ts(1,3): error TS2304: Cannot find name '_'.
 tests/cases/conformance/parser/ecmascriptnext/numericSeparators/6.ts(1,4): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascriptnext/numericSeparators/6.ts(1,5): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascriptnext/numericSeparators/6.ts(1,5): error TS2304: Cannot find name '_0'.
@@ -413,4 +423,39 @@ tests/cases/conformance/parser/ecmascriptnext/numericSeparators/9.ts(1,3): error
 !!! error TS1005: ';' expected.
             ~~
 !!! error TS2304: Cannot find name '_0'.
+    
+==== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/47.ts (2 errors) ====
+    ._
+    ~
+!!! error TS1128: Declaration or statement expected.
+     ~
+!!! error TS2304: Cannot find name '_'.
+    
+==== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/48.ts (2 errors) ====
+    1\u005F01234
+     ~~~~~~~~~~~
+!!! error TS1005: ';' expected.
+     ~~~~~~~~~~~
+!!! error TS2304: Cannot find name '\u005F01234'.
+    
+==== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/49.ts (2 errors) ====
+    1.0e_+10
+        
+!!! error TS1124: Digit expected.
+        ~
+!!! error TS2304: Cannot find name '_'.
+    
+==== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/50.ts (2 errors) ====
+    1.0e_-10
+        
+!!! error TS1124: Digit expected.
+        ~
+!!! error TS2304: Cannot find name '_'.
+    
+==== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/51.ts (2 errors) ====
+    0._
+      ~
+!!! error TS1005: ';' expected.
+      ~
+!!! error TS2304: Cannot find name '_'.
     

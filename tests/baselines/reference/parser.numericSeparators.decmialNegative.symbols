@@ -136,4 +136,19 @@ No type information for this code.
 No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/46.ts ===
 0.00e-0__0
 No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/47.ts ===
+._
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/48.ts ===
+1\u005F01234
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/49.ts ===
+1.0e_+10
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/50.ts ===
+1.0e_-10
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/51.ts ===
+0._
+No type information for this code.
 No type information for this code.

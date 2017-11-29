@@ -221,3 +221,31 @@ _0.0e-0
 >0.00e-0_ : 0
 >_0 : any
 
+=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/47.ts ===
+._
+>_ : any
+
+=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/48.ts ===
+1\u005F01234
+>1 : 1
+>\u005F01234 : any
+
+=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/49.ts ===
+1.0e_+10
+>1.0e : 1
+>_+10 : any
+>_ : any
+>10 : 10
+
+=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/50.ts ===
+1.0e_-10
+>1.0e : 1
+>_-10 : number
+>_ : any
+>10 : 10
+
+=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/51.ts ===
+0._
+>0. : 0
+>_ : any
+

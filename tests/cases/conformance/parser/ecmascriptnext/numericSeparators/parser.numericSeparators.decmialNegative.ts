@@ -135,3 +135,18 @@ _0.0e-0
 
 // @filename: 46.ts
 0.00e-0__0
+
+// @filename: 47.ts
+._
+
+// @filename: 48.ts
+1\u005F01234
+
+// @filename: 49.ts
+1.0e_+10
+
+// @filename: 50.ts
+1.0e_-10
+
+// @filename: 51.ts
+0._
