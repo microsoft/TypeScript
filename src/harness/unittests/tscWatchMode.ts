@@ -2176,49 +2176,64 @@ declare module "fs" {
             }
         });
 
-        it("watchingDirectories with watchFile", () => {
-            const projectFolder = "/a/username/project";
-            const projectSrcFolder = `${projectFolder}/src`;
-            const configFile: FileOrFolder = {
-                path: `${projectFolder}/tsconfig.json`,
-                content: "{}"
-            };
-            const file: FileOrFolder = {
-                path: `${projectSrcFolder}/file1.ts`,
-                content: ""
-            };
-            const programFiles = [file, libFile];
-            const files = [file, configFile, libFile];
-            const environmentVariables = createMap<string>();
-            environmentVariables.set("TSC_WATCHDIRECTORY", "RecursiveDirectoryUsingFsWatchFile");
-            const host = createWatchedSystem(files, { environmentVariables });
-            const watch = createWatchModeWithConfigFile(configFile.path, host);
-            // Watching config file, file, lib file and directories
-            const expectedWatchedFiles = files.map(f => f.path).concat(projectFolder, projectSrcFolder, `${projectFolder}/node_modules/@types`);
+        describe("tsc-watch when watchDirectories implementation", () => {
+            function verifyRenamingFileInSubFolder(usesWatchFile: boolean) {
+                const projectFolder = "/a/username/project";
+                const projectSrcFolder = `${projectFolder}/src`;
+                const configFile: FileOrFolder = {
+                    path: `${projectFolder}/tsconfig.json`,
+                    content: "{}"
+                };
+                const file: FileOrFolder = {
+                    path: `${projectSrcFolder}/file1.ts`,
+                    content: ""
+                };
+                const programFiles = [file, libFile];
+                const files = [file, configFile, libFile];
+                const environmentVariables = createMap<string>();
+                environmentVariables.set("TSC_WATCHDIRECTORY", usesWatchFile ? "RecursiveDirectoryUsingFsWatchFile" : "RecursiveDirectoryUsingNonRecursiveWatchDirectory");
+                const host = createWatchedSystem(files, { environmentVariables });
+                const watch = createWatchModeWithConfigFile(configFile.path, host);
+                const projectFolders = [projectFolder, projectSrcFolder, `${projectFolder}/node_modules/@types`];
+                // Watching files config file, file, lib file
+                const expectedWatchedFiles = files.map(f => f.path);
+                const expectedWatchedDirectories = usesWatchFile ? [] : projectFolders;
+                if (usesWatchFile) {
+                    expectedWatchedFiles.push(...projectFolders);
+                }
 
-            verifyProgram(checkOutputErrorsInitial);
+                verifyProgram(checkOutputErrorsInitial);
 
-            // Rename the file:
-            file.path = file.path.replace("file1.ts", "file2.ts");
-            expectedWatchedFiles[0] = file.path;
-            host.reloadFS(files);
-            host.runQueuedTimeoutCallbacks();
-            verifyProgram(checkOutputErrorsIncremental);
+                // Rename the file:
+                file.path = file.path.replace("file1.ts", "file2.ts");
+                expectedWatchedFiles[0] = file.path;
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+                verifyProgram(checkOutputErrorsIncremental);
 
-            function verifyProgram(checkOutputErrors: (host: WatchedSystem, errors: ReadonlyArray<Diagnostic>) => void) {
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+                function verifyProgram(checkOutputErrors: (host: WatchedSystem, errors: ReadonlyArray<Diagnostic>) => void) {
+                    checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
 
-                // Watching config file, file, lib file and directories
-                ts.TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedFiles", host.watchedFiles, expectedWatchedFiles, 1);
+                    // Watching config file, file, lib file and directories
+                    ts.TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedFiles", host.watchedFiles, expectedWatchedFiles, 1);
+                    ts.TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedDirectories", host.watchedDirectories, expectedWatchedDirectories, 1);
 
-                checkProgramActualFiles(watch(), programFiles.map(f => f.path));
-                checkOutputErrors(host, emptyArray);
+                    checkProgramActualFiles(watch(), programFiles.map(f => f.path));
+                    checkOutputErrors(host, emptyArray);
 
-                const outputFile = changeExtension(file.path, ".js");
-                assert(host.fileExists(outputFile));
-                assert.equal(host.readFile(outputFile), file.content);
+                    const outputFile = changeExtension(file.path, ".js");
+                    assert(host.fileExists(outputFile));
+                    assert.equal(host.readFile(outputFile), file.content);
+                }
             }
+
+            it("uses watchFile when renaming file in subfolder", () => {
+                verifyRenamingFileInSubFolder(/*usesWatchFile*/ true);
+            });
+
+            it("uses non recursive watchDirectory when renaming file in subfolder", () => {
+                verifyRenamingFileInSubFolder(/*usesWatchFile*/ false);
+            });
         });
     });
 }
