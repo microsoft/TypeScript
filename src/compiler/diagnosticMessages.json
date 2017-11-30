@@ -831,6 +831,10 @@
         "category": "Error",
         "code": 1254
     },
+    "A definite assignment assertion '!' is not permitted in this context.": {
+        "category": "Error",
+        "code": 1255
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -1340,7 +1344,7 @@
         "category": "Error",
         "code": 2402
     },
-    "Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.": {
+    "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.": {
         "category": "Error",
         "code": 2403
     },
@@ -1952,6 +1956,14 @@
         "category": "Error",
         "code": 2563
     },
+    "Property '{0}' has no initializer and is not definitely assigned in the constructor.": {
+        "category": "Error",
+        "code": 2564
+    },
+    "Property '{0}' is used before being assigned.": {
+        "category": "Error",
+        "code": 2565
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2252,7 +2264,7 @@
         "category": "Error",
         "code": 2716
     },
-    "Subsequent property declarations must have the same type.  Property '{0}' has type '{1}' at {2}, but here has type '{3}'.": {
+    "Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.": {
         "category": "Error",
         "code": 2717
     },
@@ -2594,7 +2606,7 @@
         "category": "Error",
         "code": 4102
     },
-    
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -3391,6 +3403,10 @@
         "category": "Message",
         "code": 6186
     },
+    "Enable strict checking of property initialization in classes.": {
+        "category": "Message",
+        "code": 6187
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3750,7 +3766,7 @@
         "category": "Error",
         "code": 90010
     },
-    "Import '{0}' from \"{1}\".": {
+    "Import '{0}' from module \"{1}\".": {
         "category": "Message",
         "code": 90013
     },
@@ -3870,13 +3886,5 @@
     "Install '{0}'": {
         "category": "Message",
         "code": 95014
-    },
-    "Import '{0}' = require(\"{1}\").": {
-        "category": "Message",
-        "code": 95015
-    },
-    "Import * as '{0}' from \"{1}\".": {
-        "category": "Message",
-        "code": 95016
     }
 }

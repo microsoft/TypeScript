@@ -112,7 +112,7 @@ namespace ts.Completions {
             }
             const realName = unescapeLeadingUnderscores(name);
 
-            if (uniqueNames.has(realName)) {
+            if (uniqueNames.has(realName) || isStringANonContextualKeyword(realName)) {
                 return;
             }
 
@@ -500,7 +500,7 @@ namespace ts.Completions {
         const moduleSymbols = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
         Debug.assert(contains(moduleSymbols, moduleSymbol));
 
-        const sourceDisplay = [textPart(codefix.getModuleSpecifierForNewImport(sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host))];
+        const sourceDisplay = [textPart(first(codefix.getModuleSpecifiersForNewImport(sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host)))];
         const codeActions = codefix.getCodeActionForImport(moduleSymbols, {
             host,
             checker,
@@ -584,8 +584,6 @@ namespace ts.Completions {
         options: GetCompletionsAtPositionOptions,
         target: ScriptTarget,
     ): CompletionData | undefined {
-        const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
-
         let request: Request | undefined;
 
         let start = timestamp();
@@ -866,23 +864,21 @@ namespace ts.Completions {
             }
         }
 
-        function addTypeProperties(type: Type) {
-            // Filter private properties
-            for (const symbol of type.getApparentProperties()) {
-                if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
-                    symbols.push(symbol);
-                }
-            }
-
-            if (isJavaScriptFile && type.flags & TypeFlags.Union) {
+        function addTypeProperties(type: Type): void {
+            if (isSourceFileJavaScript(sourceFile)) {
                 // In javascript files, for union types, we don't just get the members that
                 // the individual types have in common, we also include all the members that
-                // each individual type has.  This is because we're going to add all identifiers
-                // anyways.  So we might as well elevate the members that were at least part
+                // each individual type has. This is because we're going to add all identifiers
+                // anyways. So we might as well elevate the members that were at least part
                 // of the individual types to a higher status since we know what they are.
-                const unionType = <UnionType>type;
-                for (const elementType of unionType.types) {
-                    addTypeProperties(elementType);
+                symbols.push(...getPropertiesForCompletion(type, typeChecker, /*isForAccess*/ true));
+            }
+            else {
+                // Filter private properties
+                for (const symbol of type.getApparentProperties()) {
+                    if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                        symbols.push(symbol);
+                    }
                 }
             }
         }
@@ -976,6 +972,7 @@ namespace ts.Completions {
                     scopeNode.kind === SyntaxKind.SourceFile ||
                     scopeNode.kind === SyntaxKind.TemplateExpression ||
                     scopeNode.kind === SyntaxKind.JsxExpression ||
+                    scopeNode.kind === SyntaxKind.Block || // Some blocks aren't statements, but all get global completions
                     isStatement(scopeNode);
             }
 
@@ -1068,11 +1065,7 @@ namespace ts.Completions {
         function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
 
-            codefix.forEachExternalModule(typeChecker, allSourceFiles, moduleSymbol => {
-                if (moduleSymbol === sourceFile.symbol) {
-                    return;
-                }
-
+            codefix.forEachExternalModuleToImportFrom(typeChecker, sourceFile, allSourceFiles, moduleSymbol => {
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     let { name } = symbol;
 
@@ -1272,7 +1265,7 @@ namespace ts.Completions {
                 isNewIdentifierLocation = true;
                 const typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
                 if (!typeForObject) return false;
-                typeMembers = getPropertiesForCompletion(typeForObject, typeChecker);
+                typeMembers = getPropertiesForCompletion(typeForObject, typeChecker, /*isForAccess*/ false);
                 existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
             }
             else {
@@ -1985,6 +1978,8 @@ namespace ts.Completions {
         function getAllKeywordCompletions() {
             const allKeywordsCompletions: CompletionEntry[] = [];
             for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
+                // "undefined" is a global variable, so don't need a keyword completion for it.
+                if (i === SyntaxKind.UndefinedKeyword) continue;
                 allKeywordsCompletions.push({
                     name: tokenToString(i),
                     kind: ScriptElementKind.keyword,
@@ -2083,14 +2078,15 @@ namespace ts.Completions {
      * tries to only include those types which declare properties, not methods.
      * This ensures that we don't try providing completions for all the methods on e.g. Array.
      */
-    function getPropertiesForCompletion(type: Type, checker: TypeChecker): Symbol[] {
+    function getPropertiesForCompletion(type: Type, checker: TypeChecker, isForAccess: boolean): Symbol[] {
         if (!(type.flags & TypeFlags.Union)) {
-            return checker.getPropertiesOfType(type);
+            return type.getApparentProperties();
         }
 
         const { types } = type as UnionType;
-        const filteredTypes = types.filter(memberType => !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType)));
-        // If there are no property-only types, just provide completions for every type as usual.
+        // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
+        const filteredTypes = isForAccess ? types : types.filter(memberType =>
+            !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType) || typeHasCallOrConstructSignatures(memberType, checker)));
         return checker.getAllPossiblePropertiesOfTypes(filteredTypes);
     }
 }

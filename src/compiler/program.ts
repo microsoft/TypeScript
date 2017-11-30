@@ -1227,9 +1227,6 @@ namespace ts {
             if (isSourceFileJavaScript(sourceFile)) {
                 if (!sourceFile.additionalSyntacticDiagnostics) {
                     sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
-                    if (isCheckJsEnabledForFile(sourceFile, options)) {
-                        sourceFile.additionalSyntacticDiagnostics = concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.jsDocDiagnostics);
-                    }
                 }
                 return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
@@ -1276,15 +1273,18 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
+                const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
                 // By default, only type-check .ts, .tsx, and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
-                    sourceFile.scriptKind === ScriptKind.External || isCheckJsEnabledForFile(sourceFile, options);
+                    sourceFile.scriptKind === ScriptKind.External || isCheckJs;
                 const bindDiagnostics = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
-
-                const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                let diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                if (isCheckJs) {
+                    diagnostics = concatenate(diagnostics, sourceFile.jsDocDiagnostics);
+                }
                 return filter(diagnostics, shouldReportDiagnostic);
             });
         }

@@ -19,8 +19,8 @@
             "exclude": [["^", 1, "/.*"]],
             "types": ["office"]
         },
-        "Minified files": {
-            "match": "^(.+\\.min\\.js)$",
+        "References": {
+            "match": "^(.*\\/_references\\.js)$",
             "exclude": [["^", 1, "$"]]
         }
     },
