@@ -54,7 +54,7 @@ namespace ts.refactor.installTypesForPackage {
         // Still offer to install types if it resolved to e.g. a ".js" file.
         // `tryGetCodeActionForInstallPackageTypes` will verify that we're looking for a valid package name,
         // so the fix won't trigger for imports of ".js" files that couldn't be better replaced by typings.
-        if (resolvedTo && resolvedTo.extension === Extension.Dts) {
+        if (resolvedTo && extensionIsTypeScript(resolvedTo.extension)) {
             return undefined;
         }
 
