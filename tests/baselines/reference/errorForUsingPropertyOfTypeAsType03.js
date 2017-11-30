@@ -17,12 +17,12 @@ namespace Test1 {
     //let b2: (typeof Color).Red["toString"];
     let b3: (typeof Color)["Red"]["toString"];
 
-    let c1: T1.Red.toString;
-    let c2: T1.Red["toString"];
+    let c1: C1.Red.toString;
+    let c2: C1.Red["toString"];
     let c3: C1["Red"]["toString"];
 
-    let d1: T2.Red.toString;
-    let d2: T2.Red["toString"];
+    let d1: C2.Red.toString;
+    let d2: C2.Red["toString"];
     let d3: C2["Red"]["toString"];
 }
 
