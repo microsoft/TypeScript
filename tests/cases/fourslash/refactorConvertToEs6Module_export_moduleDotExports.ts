@@ -8,8 +8,8 @@
 ////module.exports = class {}
 ////module.exports = class C {}
 ////module.exports = 0;
-////
-////module.exports = require("./b");
+
+// See also `refactorConvertToEs6Module_export_moduleDotExportsEqualsRequire.ts`
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -23,7 +23,4 @@ export default class {
 export default class C {
 }
 export default 0;
-
-export * from "./b";
-export { default } from "./b";`,
 });

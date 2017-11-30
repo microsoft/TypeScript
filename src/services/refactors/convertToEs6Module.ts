@@ -187,7 +187,7 @@ namespace ts.refactor {
                     }
                     case SyntaxKind.BinaryExpression: {
                         const { left, operatorToken, right } = expression as BinaryExpression;
-                        return operatorToken.kind === SyntaxKind.EqualsToken && convertAssignment(sourceFile, statement as ExpressionStatement, left, right, changes, newLine, exports);
+                        return operatorToken.kind === SyntaxKind.EqualsToken && convertAssignment(sourceFile, checker, statement as ExpressionStatement, left, right, changes, newLine, exports);
                     }
                 }
             }
@@ -248,6 +248,7 @@ namespace ts.refactor {
 
     function convertAssignment(
         sourceFile: SourceFile,
+        checker: TypeChecker,
         statement: ExpressionStatement,
         left: Expression,
         right: Expression,
@@ -268,7 +269,7 @@ namespace ts.refactor {
                 let newNodes = isObjectLiteralExpression(right) ? tryChangeModuleExportsObject(right) : undefined;
                 let changedToDefaultExport = false;
                 if (!newNodes) {
-                    ([newNodes, changedToDefaultExport] = convertModuleExportsToExportDefault(right));
+                    ([newNodes, changedToDefaultExport] = convertModuleExportsToExportDefault(right, checker));
                 }
                 changes.replaceNodeWithNodes(sourceFile, statement, newNodes, { nodeSeparator: newLine, useNonAdjustedEndPosition: true });
                 return changedToDefaultExport;
@@ -336,7 +337,7 @@ namespace ts.refactor {
         }
     }
 
-    function convertModuleExportsToExportDefault(exported: Expression): [ReadonlyArray<Statement>, ModuleExportsChanged] {
+    function convertModuleExportsToExportDefault(exported: Expression, checker: TypeChecker): [ReadonlyArray<Statement>, ModuleExportsChanged] {
         const modifiers = [createToken(SyntaxKind.ExportKeyword), createToken(SyntaxKind.DefaultKeyword)];
         switch (exported.kind) {
             case SyntaxKind.FunctionExpression:
@@ -351,20 +352,33 @@ namespace ts.refactor {
                 return [[classExpressionToDeclaration(cls.name && cls.name.text, modifiers, cls)], true];
             }
             case SyntaxKind.CallExpression:
-                if (isRequireCall(exported, /*checkArguementIsStringLiteral*/ true)) {
-                    // `module.exports = require("x");` ==> `export * from "x"; export { default } from "x";`
-                    const moduleSpecifier = exported.arguments[0].text;
-                    const newNodes = [
-                        makeExportDeclaration(/*exportClause*/ undefined, moduleSpecifier),
-                        makeExportDeclaration([createExportSpecifier(/*propertyName*/ undefined, "default")], moduleSpecifier),
-                    ];
-                    return [newNodes, false];
+                if (isRequireCall(exported, /*checkArgumentIsStringLiteral*/ true)) {
+                    return convertReExportAll(exported.arguments[0], checker);
                 }
                 // falls through
             default:
                 // `module.exports = 0;` --> `export default 0;`
                 return [[createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportEquals*/ false, exported)], true];
         }
+    }
+
+    function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker): [ReadonlyArray<Statement>, ModuleExportsChanged] {
+        // `module.exports = require("x");` ==> `export * from "x"; export { default } from "x";`
+        const moduleSpecifier = reExported.text;
+        const moduleSymbol = checker.getSymbolAtLocation(reExported);
+        const exports = moduleSymbol ? moduleSymbol.exports : emptyUnderscoreEscapedMap;
+        return exports.has("export=" as __String)
+            ? [[reExportDefault(moduleSpecifier)], true]
+            : !exports.has("default" as __String)
+            ? [[reExportStar(moduleSpecifier)], false]
+            // If there's some non-default export, must include both `export *` and `export default`.
+            : exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true] : [[reExportDefault(moduleSpecifier)], true];
+    }
+    function reExportStar(moduleSpecifier: string): ExportDeclaration {
+        return makeExportDeclaration(/*exportClause*/ undefined, moduleSpecifier);
+    }
+    function reExportDefault(moduleSpecifier: string): ExportDeclaration {
+        return makeExportDeclaration([createExportSpecifier(/*propertyName*/ undefined, "default")], moduleSpecifier);
     }
 
     function convertExportsDotXEquals(name: string | undefined, exported: Expression): Statement {
