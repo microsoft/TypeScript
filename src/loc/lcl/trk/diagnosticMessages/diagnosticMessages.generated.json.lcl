@@ -6572,20 +6572,17 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_has_type_1_at_2_but_here_has_typ_2717" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_must_be_of_type_1_but_here_has_t_2717" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' has type '{1}' at {2}, but here has type '{3}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sonraki özellik bildirimleri aynı türe sahip olmalıdır. '{0}' özelliği {2} konumunda '{1}' türüne sahip, ancak burada '{3}' türüne sahip.]]></Val>
-          </Tgt>
+          <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_has_type_1_at_2_but_here_has_typ_2403" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_t_2403" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.]]></Val>
+          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ardışık değişken bildirimleri aynı türe sahip olmalıdır.  '{0}' değişkeni {2} konumunda '{1}' türüne sahip olmasına rağmen burada '{3}' türüne sahip.]]></Val>
+            <Val><![CDATA[Ardışık değişken bildirimleri aynı türe sahip olmalıdır. '{0}' değişkeni '{1}' türünde olmalıdır, ancak burada '{2}' türüne sahip.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
