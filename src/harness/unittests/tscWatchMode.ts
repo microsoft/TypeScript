@@ -2210,7 +2210,7 @@ declare module "fs" {
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
 
                 // Watching config file, file, lib file and directories
-                checkWatchedFiles(host, expectedWatchedFiles);
+                ts.TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedFiles", host.watchedFiles, expectedWatchedFiles, 1);
 
                 checkProgramActualFiles(watch(), programFiles.map(f => f.path));
                 checkOutputErrors(host, emptyArray);

@@ -147,6 +147,18 @@ interface Array<T> {}`
         }
     }
 
+    export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeys: Map<number>) {
+        verifyMapSize(caption, actual, arrayFrom(expectedKeys.keys()));
+        expectedKeys.forEach((count, name) => {
+            assert.isTrue(actual.has(name), `${caption}: expected to contain ${name}, actual keys: ${arrayFrom(actual.keys())}`);
+            assert.equal(actual.get(name).length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
+        });
+    }
+
+    export function checkMultiMapEachKeyWithCount(caption: string, actual: MultiMap<any>, expectedKeys: ReadonlyArray<string>, count: number) {
+        return checkMultiMapKeyCount(caption, actual, arrayToMap(expectedKeys, s => s, () => count));
+    }
+
     export function checkArray(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
         assert.equal(actual.length, expected.length, `${caption}: incorrect actual number of files, expected:\r\n${expected.join("\r\n")}\r\ngot: ${actual.join("\r\n")}`);
         for (const f of expected) {

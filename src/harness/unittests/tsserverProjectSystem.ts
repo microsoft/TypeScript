@@ -5322,16 +5322,11 @@ namespace ts.projectSystem {
             }
 
             function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
-                const calledMap = calledMaps[callback];
-                ts.TestFSWithWatch.verifyMapSize(callback, calledMap, arrayFrom(expectedKeys.keys()));
-                expectedKeys.forEach((called, name) => {
-                    assert.isTrue(calledMap.has(name), `${callback} is expected to contain ${name}, actual keys: ${arrayFrom(calledMap.keys())}`);
-                    assert.equal(calledMap.get(name).length, called, `${callback} is expected to be called ${called} times with ${name}. Actual entry: ${calledMap.get(name)}`);
-                });
+                ts.TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys);
             }
 
             function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: string[], nTimes: number) {
-                return verifyCalledOnEachEntry(callback, zipToMap(expectedKeys, expectedKeys.map(() => nTimes)));
+                ts.TestFSWithWatch.checkMultiMapEachKeyWithCount(callback, calledMaps[callback], expectedKeys, nTimes);
             }
 
             function verifyNoHostCalls() {
@@ -6605,7 +6600,11 @@ namespace ts.projectSystem {
             const files = [index, file1, configFile, libFile];
             const fileNames = files.map(file => file.path);
             // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
-            const expectedWatchedFiles = fileNames.slice(1).concat(projectFolder, projectSrcFolder, `${projectFolder}/${nodeModulesAtTypes}`);
+            const expectedWatchedFiles = arrayToMap(fileNames.slice(1).concat(`${projectFolder}/${nodeModulesAtTypes}`), s => s, () => 1);
+            // For failed resolution lookup and tsconfig files
+            expectedWatchedFiles.set(projectFolder, 2);
+            // Through above recursive watches
+            expectedWatchedFiles.set(projectSrcFolder, 2);
             const expectedCompletions = ["file1"];
             const completionPosition = index.content.lastIndexOf('"');
             const environmentVariables = createMap<string>();
@@ -6625,7 +6624,7 @@ namespace ts.projectSystem {
             };
             files.push(file2);
             fileNames.push(file2.path);
-            expectedWatchedFiles.push(file2.path);
+            expectedWatchedFiles.set(file2.path, 1);
             expectedCompletions.push("file2");
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
@@ -6635,7 +6634,8 @@ namespace ts.projectSystem {
             function verifyProjectAndCompletions() {
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
-                checkWatchedFiles(host, expectedWatchedFiles);
+
+                ts.TestFSWithWatch.checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedWatchedFiles);
                 checkProjectActualFiles(project, fileNames);
 
                 const completions = project.getLanguageService().getCompletionsAtPosition(index.path, completionPosition, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
