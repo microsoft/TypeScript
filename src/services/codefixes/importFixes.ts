@@ -743,11 +743,7 @@ namespace ts.codefix {
         const symbolIdActionMap = new ImportCodeActionMap();
         const currentTokenMeaning = getMeaningFromLocation(symbolToken);
 
-        forEachExternalModule(checker, allSourceFiles, moduleSymbol => {
-            if (moduleSymbol === sourceFile.symbol) {
-                return;
-            }
-
+        forEachExternalModuleToImportFrom(checker, sourceFile, allSourceFiles, moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
             // check the default export
             const defaultExport = checker.tryGetMemberInModuleExports("default", moduleSymbol);
@@ -776,15 +772,33 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
+    export function forEachExternalModuleToImportFrom(checker: TypeChecker, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
+        forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
+            if (sourceFile === undefined || sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
+                cb(module);
+            }
+        });
+    }
+
+    export function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
         for (const ambient of checker.getAmbientModules()) {
-            cb(ambient);
+            cb(ambient, /*sourceFile*/ undefined);
         }
         for (const sourceFile of allSourceFiles) {
             if (isExternalOrCommonJsModule(sourceFile)) {
-                cb(sourceFile.symbol);
+                cb(sourceFile.symbol, sourceFile);
             }
         }
+    }
+
+    /**
+     * Don't include something from a `node_modules` that isn't actually reachable by a global import.
+     * A relative import to node_modules is usually a bad idea.
+     */
+    function isImportablePath(fromPath: string, toPath: string): boolean {
+        // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
+        const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
+        return toNodeModules === undefined || startsWith(fromPath, getDirectoryPath(toNodeModules));
     }
 
     export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
