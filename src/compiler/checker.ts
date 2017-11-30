@@ -25000,10 +25000,11 @@ namespace ts {
                 // populate reverse mapping: file path -> type reference directive that was resolved to this file
                 fileToDirective = createMap<string>();
                 resolvedTypeReferenceDirectives.forEach((resolvedDirective, key) => {
-                    if (!resolvedDirective) {
+                    if (!resolvedDirective || !resolvedDirective.resolvedFileName) {
                         return;
                     }
                     const file = host.getSourceFile(resolvedDirective.resolvedFileName);
+                    Debug.assert(!!file, `Resolved filename ${resolvedDirective.resolvedFileName} did not map to existing source file. Consider enabling --preserveSymlinks if appropriate`); // tslint:disable-line
                     fileToDirective.set(file.path, key);
                 });
             }
