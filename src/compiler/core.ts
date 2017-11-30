@@ -191,6 +191,19 @@ namespace ts {
         return undefined;
     }
 
+    export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) {
+                return undefined;
+            }
+            const result = callback(value);
+            if (result !== undefined) {
+                return result;
+            }
+        }
+    }
+
     /**
      * Iterates through the parent chain of a node and performs the callback on each parent until the callback
      * returns a truthy value, then returns that value.

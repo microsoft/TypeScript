@@ -32,6 +32,7 @@ namespace ts.codefix {
 
     interface ImportCodeFixContext extends SymbolAndTokenContext {
         host: LanguageServiceHost;
+        program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
         getCanonicalFileName: GetCanonicalFileName;
@@ -161,15 +162,17 @@ namespace ts.codefix {
 
     function convertToImportCodeFixContext(context: CodeFixContext): ImportCodeFixContext {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
-        const checker = context.program.getTypeChecker();
+        const { program } = context;
+        const checker = program.getTypeChecker();
         const symbolToken = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
         return {
             host: context.host,
             newLineCharacter: context.newLineCharacter,
             formatContext: context.formatContext,
             sourceFile: context.sourceFile,
+            program,
             checker,
-            compilerOptions: context.program.getCompilerOptions(),
+            compilerOptions: program.getCompilerOptions(),
             cachedImportDeclarations: [],
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
             symbolName: symbolToken.getText(),
@@ -309,6 +312,7 @@ namespace ts.codefix {
     }
 
     export function getModuleSpecifiersForNewImport(
+        program: Program,
         sourceFile: SourceFile,
         moduleSymbols: ReadonlyArray<Symbol>,
         options: CompilerOptions,
@@ -317,7 +321,7 @@ namespace ts.codefix {
     ): string[] {
         const { baseUrl, paths, rootDirs } = options;
         const choicesForEachExportingModule = mapIterator(arrayIterator(moduleSymbols), moduleSymbol => {
-            const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
+            const moduleFileName = getOriginalModulePath(program, moduleSymbol.valueDeclaration.getSourceFile());
             const sourceDirectory = getDirectoryPath(sourceFile.fileName);
             const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
                 || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName)
@@ -378,6 +382,13 @@ namespace ts.codefix {
         });
         // Only return results for the re-export with the shortest possible path (and also give the other path even if that's long.)
         return best(choicesForEachExportingModule, (a, b) => a[0].length < b[0].length);
+    }
+
+    /** Looks for a an existing import of something that links to this module, and prefers the symlink. */
+    function getOriginalModulePath(program: Program, { fileName }: SourceFile): string {
+        return firstDefined(program.getSourceFiles(), sf =>
+            sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
+                res && res.resolvedFileName === fileName ? res.originalPath : undefined)) || fileName;
     }
 
     function getRelativePathNParents(relativePath: string): number {
@@ -613,7 +624,7 @@ namespace ts.codefix {
         }
 
         const existingDeclaration = firstDefined(declarations, moduleSpecifierFromAnyImport);
-        const moduleSpecifiers = existingDeclaration ? [existingDeclaration] : getModuleSpecifiersForNewImport(ctx.sourceFile, moduleSymbols, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
+        const moduleSpecifiers = existingDeclaration ? [existingDeclaration] : getModuleSpecifiersForNewImport(ctx.program, ctx.sourceFile, moduleSymbols, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
         return moduleSpecifiers.map(spec => getCodeActionForNewImport(ctx, spec));
     }
 

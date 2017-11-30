@@ -241,7 +241,7 @@ interface Array<T> {}`
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
     }
 
-    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
+    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
         private readonly output: string[] = [];

@@ -1268,6 +1268,7 @@ namespace ts {
                     }
                     return host.readFile && host.readFile(fileName);
                 },
+                realpath: host.realpath && (path => host.realpath(path)), //was parse error without parens?
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
                 },
@@ -1446,7 +1447,7 @@ namespace ts {
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
-                program.getTypeChecker(),
+                program,
                 log,
                 program.getCompilerOptions(),
                 getValidSourceFile(fileName),
