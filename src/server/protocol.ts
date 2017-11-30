@@ -542,7 +542,7 @@ namespace ts.server.protocol {
     }
 
     export interface GetCombinedCodeFixResponse  extends Response {
-        body: CodeActionAll;
+        body: CombinedCodeActions;
     }
 
     export interface ApplyCodeActionCommandRequest extends Request {
@@ -1596,7 +1596,7 @@ namespace ts.server.protocol {
         commands?: {}[];
     }
 
-    export interface CodeActionAll {
+    export interface CombinedCodeActions {
         changes: FileCodeEdits[];
         commands?: {}[];
     }

@@ -1567,7 +1567,7 @@ namespace ts.server {
             }
         }
 
-        private getCombinedCodeFix(args: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeActionAll | CodeActionAll {
+        private getCombinedCodeFix(args: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CodeActionAll {
             const { file, project } = this.getFileAndProject(args);
             const formatOptions = this.projectService.getFormatCodeOptions(file);
             const res = project.getLanguageService().getCombinedCodeFix(file, args.actionId, formatOptions);

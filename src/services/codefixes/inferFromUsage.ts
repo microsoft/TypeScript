@@ -41,7 +41,7 @@ namespace ts.codefix {
         actionIds: [actionId],
         getAllCodeActions(context) {
             const { sourceFile, program, cancellationToken } = context;
-            const seenFunctions: true[] = [];
+            const seenFunctions = createMap<true>();
             return codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
                 const fix = getFix(sourceFile, getTokenAtPosition(err.file!, err.start!, /*includeJsDocComment*/ false), err.code, program, cancellationToken, seenFunctions);
                 if (fix) changes.push(...fix.textChanges);
@@ -65,7 +65,7 @@ namespace ts.codefix {
         readonly textChanges: TextChange[];
     }
 
-    function getFix(sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, seenFunctions?: true[]): Fix | undefined {
+    function getFix(sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, seenFunctions?: Map<true>): Fix | undefined {
         if (!isAllowedTokenKind(token.kind)) {
             return undefined;
         }
@@ -89,7 +89,7 @@ namespace ts.codefix {
                 }
                 // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
-                return !seenFunctions || addToSeenIds(seenFunctions, getNodeId(containingFunction))
+                return !seenFunctions || addToSeen(seenFunctions, getNodeId(containingFunction))
                     ? getCodeActionForParameters(<ParameterDeclaration>token.parent, containingFunction, sourceFile, program, cancellationToken)
                     : undefined;
 

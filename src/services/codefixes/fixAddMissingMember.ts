@@ -25,7 +25,7 @@ namespace ts.codefix {
                 const info = getInfo(diag.file!, diag.start!, context.program.getTypeChecker());
                 if (!info) return;
                 const { classDeclaration, classDeclarationSourceFile, classOpenBrace, inJs, makeStatic, token, call } = info;
-                if (!addToSeenStrings(seenNames, token.text)) {
+                if (!addToSeen(seenNames, token.text)) {
                     return;
                 }
 

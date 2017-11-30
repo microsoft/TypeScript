@@ -1101,16 +1101,8 @@ namespace ts {
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeenIds(seen: true[], key: number): boolean {
-        if (seen[key]) {
-            return false;
-        }
-        seen[key] = true;
-        return true;
-    }
-
-    /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeenStrings(seen: Map<true>, key: string): boolean {
+    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+        key = String(key);
         if (seen.has(key)) {
             return false;
         }

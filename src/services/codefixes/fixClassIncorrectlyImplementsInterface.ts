@@ -17,10 +17,10 @@ namespace ts.codefix {
         },
         actionIds: [actionId],
         getAllCodeActions(context) {
-            const seenClassDeclarations: true[] = [];
+            const seenClassDeclarations = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file!, diag.start!);
-                if (addToSeenIds(seenClassDeclarations, getNodeId(classDeclaration))) {
+                if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
                     for (const implementedTypeNode of getClassImplementsHeritageClauseElements(classDeclaration)) {
                         addMissingDeclarations(context.program.getTypeChecker(), implementedTypeNode, diag.file!, classDeclaration, context.newLineCharacter, changes);
                     }

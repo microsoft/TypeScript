@@ -3,8 +3,8 @@ namespace ts {
     export interface CodeFixRegistration {
         errorCodes: number[];
         getCodeActions(context: CodeFixContext): CodeFix[] | undefined;
-        actionIds: string[];
-        getAllCodeActions(context: CodeFixAllContext): CodeActionAll;
+        actionIds?: string[];
+        getAllCodeActions?(context: CodeFixAllContext): CodeActionAll;
     }
 
     export interface CodeFixContextBase extends textChanges.TextChangesContext {
