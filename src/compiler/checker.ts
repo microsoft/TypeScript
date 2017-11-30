@@ -11395,7 +11395,7 @@ namespace ts {
                         // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                         const inference = getInferenceInfoForType((<IndexType>constraintType).type);
                         if (inference && !inference.isFixed) {
-                            if (contains(mappedTypeStack, [source, target.symbol], ([s1,t1],[s2,t2]) => s1 === s2 && t1 === t2)) {
+                            if (contains(mappedTypeStack, [source, target.symbol], ([s1, t1], [s2, t2]) => s1 === s2 && t1 === t2)) {
                                 return;
                             }
                             (mappedTypeStack || (mappedTypeStack = [])).push([source, target.symbol]);
