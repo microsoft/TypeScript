@@ -24,4 +24,4 @@ foo;`
 ]);
 
 goTo.file("/c.ts");
-// TODO: GH#20050 verify.not.codeFixAvailable();
+verify.not.codeFixAvailable();
