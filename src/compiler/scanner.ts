@@ -932,7 +932,7 @@ namespace ts {
             return value;
         }
 
-        function scanString(allowEscapes = true): string {
+        function scanString(jsxAttributeString = false): string {
             const quote = text.charCodeAt(pos);
             pos++;
             let result = "";
@@ -950,13 +950,13 @@ namespace ts {
                     pos++;
                     break;
                 }
-                if (ch === CharacterCodes.backslash && allowEscapes) {
+                if (ch === CharacterCodes.backslash && !jsxAttributeString) {
                     result += text.substring(start, pos);
                     result += scanEscapeSequence();
                     start = pos;
                     continue;
                 }
-                if (isLineBreak(ch)) {
+                if (isLineBreak(ch) && !jsxAttributeString) {
                     result += text.substring(start, pos);
                     tokenFlags |= TokenFlags.Unterminated;
                     error(Diagnostics.Unterminated_string_literal);
@@ -1811,7 +1811,7 @@ namespace ts {
             switch (text.charCodeAt(pos)) {
                 case CharacterCodes.doubleQuote:
                 case CharacterCodes.singleQuote:
-                    tokenValue = scanString(/*allowEscapes*/ false);
+                    tokenValue = scanString(/*jsxAttributeString*/ true);
                     return token = SyntaxKind.StringLiteral;
                 default:
                     // If this scans anything other than `{`, it's a parse error.
