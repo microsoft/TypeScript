@@ -633,8 +633,7 @@ namespace ts {
 
         function mergeSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
-                source.valueDeclaration && source.valueDeclaration.kind === SyntaxKind.Identifier ||
-                target.valueDeclaration && target.valueDeclaration.kind === SyntaxKind.Identifier) {
+                source.flags & SymbolFlags.JSContainer || target.flags & SymbolFlags.JSContainer) {
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -4480,7 +4479,9 @@ namespace ts {
                     if (!jsDocType) {
                         jsDocType = declarationType;
                     }
-                    else if (jsDocType !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(jsDocType, declarationType)) {
+                    else if (jsDocType !== unknownType && declarationType !== unknownType &&
+                             !isTypeIdenticalTo(jsDocType, declarationType) &&
+                             !(symbol.flags & SymbolFlags.JSContainer)) {
                         errorNextVariableOrPropertyDeclarationMustHaveSameType(symbol.valueDeclaration, jsDocType, declaration, declarationType);
                     }
                 }
@@ -21435,7 +21436,10 @@ namespace ts {
                 // Node is a secondary declaration, check that type is identical to primary declaration and check that
                 // initializer is consistent with type associated with the node
                 const declarationType = convertAutoToAny(getWidenedTypeForVariableLikeDeclaration(node));
-                if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
+
+                if (type !== unknownType && declarationType !== unknownType &&
+                    !isTypeIdenticalTo(type, declarationType) &&
+                    !(symbol.flags & SymbolFlags.JSContainer)) {
                     errorNextVariableOrPropertyDeclarationMustHaveSameType(symbol.valueDeclaration, type, node, declarationType);
                 }
                 if (node.initializer) {
@@ -21461,10 +21465,6 @@ namespace ts {
         }
 
         function errorNextVariableOrPropertyDeclarationMustHaveSameType(firstDeclaration: Declaration, firstType: Type, nextDeclaration: Declaration, nextType: Type): void {
-            if (isIdentifier(firstDeclaration) || isIdentifier(nextDeclaration)) {
-                // js static assignment declarations don't have a type, so don't have to be consistent
-                return;
-            }
             const firstSourceFile = getSourceFileOfNode(firstDeclaration);
             const firstSpan = getErrorSpanForNode(firstSourceFile, getNameOfDeclaration(firstDeclaration) || firstDeclaration);
             const firstLocation = getLineAndCharacterOfPosition(firstSourceFile, firstSpan.start);

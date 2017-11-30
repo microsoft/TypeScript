@@ -2355,7 +2355,7 @@ namespace ts {
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
-            // We saw a node of the form 'x.prototype.y = z'. Declare a 'member' y on x if x was a function.
+            // We saw a node of the form 'x.prototype.y = z'. Declare a 'member' y on x if x is a function or class, or not declared.
 
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
@@ -2372,7 +2372,7 @@ namespace ts {
         }
 
         /**
-         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x was a function.
+         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function or class, or not declared.
          * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
          */
         function bindStaticPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
@@ -2427,9 +2427,11 @@ namespace ts {
                 const identifier = propertyAccess.expression as Identifier;
                 if (targetSymbol) {
                     addDeclarationToSymbol(symbol, identifier, SymbolFlags.Module);
+                    symbol.flags |= SymbolFlags.JSContainer;
                 }
                 else {
                     targetSymbol = declareSymbol(container.locals, /*parent*/ undefined, identifier, SymbolFlags.Module, SymbolFlags.ValueModuleExcludes);
+                    targetSymbol.flags |= SymbolFlags.JSContainer;
                 }
             }
             if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule))) {
