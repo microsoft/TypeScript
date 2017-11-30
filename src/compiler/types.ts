@@ -2783,7 +2783,7 @@ namespace ts {
          */
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
-        /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags, includeGlobals: boolean): Symbol | undefined;
+        /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
     }
 

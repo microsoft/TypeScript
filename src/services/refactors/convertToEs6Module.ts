@@ -139,7 +139,7 @@ namespace ts.refactor {
         forEachExportReference(sourceFile, node => {
             const { text, originalKeywordKind } = node.name;
             if (!res.has(text) && (originalKeywordKind !== undefined && isNonContextualKeyword(originalKeywordKind)
-                || checker.resolveName(node.name.text, node, SymbolFlags.Value, /*includeGlobals*/ false))) {
+                || checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ true))) {
                 // Unconditionally add an underscore in case `text` is a keyword.
                 res.set(text, makeUniqueName(`_${text}`, identifiers));
             }
