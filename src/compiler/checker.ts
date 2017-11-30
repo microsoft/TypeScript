@@ -632,7 +632,9 @@ namespace ts {
         }
 
         function mergeSymbol(target: Symbol, source: Symbol) {
-            if (!(target.flags & getExcludedSymbolFlags(source.flags))) {
+            if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
+                source.flags & SymbolFlags.JSContainer || target.flags & SymbolFlags.JSContainer) {
+                // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
                     target.constEnumOnlyModule = false;
@@ -1735,12 +1737,15 @@ namespace ts {
                     return undefined;
                 }
                 const right = name.kind === SyntaxKind.QualifiedName ? name.right : name.name;
-                const namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, /*dontResolveAlias*/ false, location);
+                let namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, /*dontResolveAlias*/ false, location);
                 if (!namespace || nodeIsMissing(right)) {
                     return undefined;
                 }
                 else if (namespace === unknownSymbol) {
                     return namespace;
+                }
+                if (isInJavaScriptFile(name) && isDeclarationOfFunctionOrClassExpression(namespace)) {
+                    namespace = getSymbolOfNode((namespace.valueDeclaration as VariableDeclaration).initializer);
                 }
                 symbol = getSymbol(getExportsOfSymbol(namespace), right.escapedText, meaning);
                 if (!symbol) {
@@ -4478,7 +4483,9 @@ namespace ts {
                     if (!jsDocType) {
                         jsDocType = declarationType;
                     }
-                    else if (jsDocType !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(jsDocType, declarationType)) {
+                    else if (jsDocType !== unknownType && declarationType !== unknownType &&
+                             !isTypeIdenticalTo(jsDocType, declarationType) &&
+                             !(symbol.flags & SymbolFlags.JSContainer)) {
                         errorNextVariableOrPropertyDeclarationMustHaveSameType(jsDocType, declaration, declarationType);
                     }
                 }
@@ -21443,7 +21450,10 @@ namespace ts {
                 // Node is a secondary declaration, check that type is identical to primary declaration and check that
                 // initializer is consistent with type associated with the node
                 const declarationType = convertAutoToAny(getWidenedTypeForVariableLikeDeclaration(node));
-                if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
+
+                if (type !== unknownType && declarationType !== unknownType &&
+                    !isTypeIdenticalTo(type, declarationType) &&
+                    !(symbol.flags & SymbolFlags.JSContainer)) {
                     errorNextVariableOrPropertyDeclarationMustHaveSameType(type, node, declarationType);
                 }
                 if (node.initializer) {

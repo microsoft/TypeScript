@@ -1446,7 +1446,7 @@ namespace ts {
     }
 
     /**
-     * Returns true if the node is a variable declaration whose initializer is a function expression.
+     * Returns true if the node is a variable declaration whose initializer is a function or class expression.
      * This function does not test if the node is in a JavaScript file or not.
      */
     export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
@@ -1517,6 +1517,12 @@ namespace ts {
 
 
         return SpecialPropertyAssignmentKind.None;
+    }
+
+    export function isSpecialPropertyDeclaration(expr: ts.PropertyAccessExpression): boolean {
+        return isInJavaScriptFile(expr) &&
+            expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
+            !!getJSDocTypeTag(expr.parent);
     }
 
     export function getExternalModuleName(node: Node): Expression {
@@ -1636,7 +1642,8 @@ namespace ts {
             if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatement(parent.parent.parent, node)) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
-            if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None) {
+            if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
+                node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
 
@@ -4203,6 +4210,8 @@ namespace ts {
             return undefined;
         }
         switch (declaration.kind) {
+            case SyntaxKind.Identifier:
+                return declaration as Identifier;
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag: {
                 const { name } = declaration as JSDocPropertyLikeTag;

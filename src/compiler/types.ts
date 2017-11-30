@@ -633,7 +633,7 @@ namespace ts {
         Node,   // Unique name based on the node in the 'original' property.
     }
 
-    export interface Identifier extends PrimaryExpression {
+    export interface Identifier extends PrimaryExpression, Declaration {
         kind: SyntaxKind.Identifier;
         /**
          * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
@@ -3062,6 +3062,7 @@ namespace ts {
         ExportStar              = 1 << 23,  // Export * declaration
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
+        JSContainer             = 1 << 26,  // Contains Javascript special declarations
 
         /* @internal */
         All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
