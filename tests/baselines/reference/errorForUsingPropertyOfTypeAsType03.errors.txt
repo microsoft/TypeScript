@@ -1,0 +1,50 @@
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(11,19): error TS2694: Namespace 'Color' has no exported member 'Red'.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(13,19): error TS2339: Property 'Red' does not exist on type 'Color'.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(19,13): error TS2503: Cannot find namespace 'T1'.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(20,13): error TS2503: Cannot find namespace 'T1'.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(21,16): error TS2339: Property 'Red' does not exist on type 'Color'.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(23,13): error TS2503: Cannot find namespace 'T2'.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(24,13): error TS2503: Cannot find namespace 'T2'.
+
+
+==== tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts (7 errors) ====
+    namespace Test1 {
+        enum Color {
+            Red,
+            Green,
+            Blue
+        }
+    
+        type C1 = Color;
+        type C2 = typeof Color;
+    
+        let a1: Color.Red.toString;
+                      ~~~
+!!! error TS2694: Namespace 'Color' has no exported member 'Red'.
+        let a2: Color.Red["toString"];
+        let a3: Color["Red"]["toString"];
+                      ~~~~~
+!!! error TS2339: Property 'Red' does not exist on type 'Color'.
+    
+        //let b1: (typeof Color).Red.toString;
+        //let b2: (typeof Color).Red["toString"];
+        let b3: (typeof Color)["Red"]["toString"];
+    
+        let c1: T1.Red.toString;
+                ~~
+!!! error TS2503: Cannot find namespace 'T1'.
+        let c2: T1.Red["toString"];
+                ~~
+!!! error TS2503: Cannot find namespace 'T1'.
+        let c3: C1["Red"]["toString"];
+                   ~~~~~
+!!! error TS2339: Property 'Red' does not exist on type 'Color'.
+    
+        let d1: T2.Red.toString;
+                ~~
+!!! error TS2503: Cannot find namespace 'T2'.
+        let d2: T2.Red["toString"];
+                ~~
+!!! error TS2503: Cannot find namespace 'T2'.
+        let d3: C2["Red"]["toString"];
+    }
