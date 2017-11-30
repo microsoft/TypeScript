@@ -2425,13 +2425,13 @@ namespace ts {
             if (!isPrototypeProperty && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
                 Debug.assert(isIdentifier(propertyAccess.expression));
                 const identifier = propertyAccess.expression as Identifier;
+                const flags =  SymbolFlags.Module | SymbolFlags.JSContainer;
+                const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
                 if (targetSymbol) {
-                    addDeclarationToSymbol(symbol, identifier, SymbolFlags.Module);
-                    symbol.flags |= SymbolFlags.JSContainer;
+                    addDeclarationToSymbol(symbol, identifier, flags);
                 }
                 else {
-                    targetSymbol = declareSymbol(container.locals, /*parent*/ undefined, identifier, SymbolFlags.Module, SymbolFlags.ValueModuleExcludes);
-                    targetSymbol.flags |= SymbolFlags.JSContainer;
+                    targetSymbol = declareSymbol(container.locals, /*parent*/ undefined, identifier, flags, excludeFlags);
                 }
             }
             if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule))) {
