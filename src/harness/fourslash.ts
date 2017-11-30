@@ -2540,6 +2540,11 @@ Actual: ${stringify(fullActual)}`);
             const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(codeFixes[0].changes[0].fileName);
             const originalContent = scriptInfo.content;
             for (const codeFix of codeFixes) {
+                if (!/^(Import|Change|Add)/.test(codeFix.description)) {
+                    // Ignore other fixes
+                    continue;
+                }
+
                 this.applyEdits(codeFix.changes[0].fileName, codeFix.changes[0].textChanges, /*isFormattingEdit*/ false);
                 let text = this.rangeText(ranges[0]);
                 // TODO:GH#18445 (remove this line to see errors in many `importNameCodeFix` tests)
