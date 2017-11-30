@@ -42,20 +42,20 @@ namespace Test1 {
 >b3 : Symbol(b3, Decl(errorForUsingPropertyOfTypeAsType03.ts, 16, 7))
 >Color : Symbol(Color, Decl(errorForUsingPropertyOfTypeAsType03.ts, 0, 17))
 
-    let c1: T1.Red.toString;
+    let c1: C1.Red.toString;
 >c1 : Symbol(c1, Decl(errorForUsingPropertyOfTypeAsType03.ts, 18, 7))
 
-    let c2: T1.Red["toString"];
+    let c2: C1.Red["toString"];
 >c2 : Symbol(c2, Decl(errorForUsingPropertyOfTypeAsType03.ts, 19, 7))
 
     let c3: C1["Red"]["toString"];
 >c3 : Symbol(c3, Decl(errorForUsingPropertyOfTypeAsType03.ts, 20, 7))
 >C1 : Symbol(C1, Decl(errorForUsingPropertyOfTypeAsType03.ts, 5, 5))
 
-    let d1: T2.Red.toString;
+    let d1: C2.Red.toString;
 >d1 : Symbol(d1, Decl(errorForUsingPropertyOfTypeAsType03.ts, 22, 7))
 
-    let d2: T2.Red["toString"];
+    let d2: C2.Red["toString"];
 >d2 : Symbol(d2, Decl(errorForUsingPropertyOfTypeAsType03.ts, 23, 7))
 
     let d3: C2["Red"]["toString"];

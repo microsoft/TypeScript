@@ -44,30 +44,30 @@ namespace Test1 {
 >b3 : (radix?: number) => string
 >Color : typeof Color
 
-    let c1: T1.Red.toString;
+    let c1: C1.Red.toString;
 >c1 : any
->T1 : any
+>C1 : any
 >Red : any
 >toString : No type information available!
 
-    let c2: T1.Red["toString"];
+    let c2: C1.Red["toString"];
 >c2 : any
->T1 : any
+>C1 : any
 >Red : No type information available!
 
     let c3: C1["Red"]["toString"];
 >c3 : any
 >C1 : Color
 
-    let d1: T2.Red.toString;
+    let d1: C2.Red.toString;
 >d1 : any
->T2 : any
+>C2 : any
 >Red : any
 >toString : No type information available!
 
-    let d2: T2.Red["toString"];
+    let d2: C2.Red["toString"];
 >d2 : any
->T2 : any
+>C2 : any
 >Red : No type information available!
 
     let d3: C2["Red"]["toString"];
