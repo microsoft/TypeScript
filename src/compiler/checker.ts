@@ -15581,6 +15581,8 @@ namespace ts {
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             let propType: Type;
+            let leftSymbol = getNodeLinks(left) && getNodeLinks(left).resolvedSymbol;
+            const leftWasReferenced = leftSymbol && getSymbolLinks(leftSymbol).referenced;
             const leftType = checkNonNullExpression(left);
             const apparentType = getApparentType(getWidenedType(leftType));
             if (isTypeAny(apparentType) || apparentType === silentNeverType) {
@@ -15604,6 +15606,13 @@ namespace ts {
             else {
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
+                // Reset the referenced-ness of the LHS expression if this access refers to a const enum or const enum only module
+                leftSymbol = getNodeLinks(left) && getNodeLinks(left).resolvedSymbol;
+                if (leftSymbol && !leftWasReferenced && getSymbolLinks(leftSymbol).referenced &&
+                    !(isNonLocalAlias(leftSymbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(prop))
+                ) {
+                    getSymbolLinks(leftSymbol).referenced = undefined;
+                }
                 getNodeLinks(node).resolvedSymbol = prop;
                 checkPropertyAccessibility(node, left, apparentType, prop);
                 if (assignmentKind) {
@@ -24689,6 +24698,11 @@ namespace ts {
             if (isAliasSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
                 if (symbol && getSymbolLinks(symbol).referenced) {
+                    return true;
+                }
+                const target = getSymbolLinks(symbol).target;
+                if (target && getModifierFlags(node) & ModifierFlags.Export && target.flags & SymbolFlags.Value) {
+                    // An `export import ... =` of a value symbol is always considered referenced
                     return true;
                 }
             }
