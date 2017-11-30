@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
+// @noUnusedParameters: true
 ////class C1 {
-////    constructor(private p1: string, public p2: boolean, public p3: any, p5) { p5; }
+////    constructor(p1: string, public p2: boolean, public p3: any, p5) { p5; }
 ////}
 
 verify.codeFix({
@@ -10,6 +10,6 @@ verify.codeFix({
     index: 1,
     newFileContent:
 `class C1 {
-    constructor(private _p1: string, public p2: boolean, public p3: any, p5) { p5; }
+    constructor(_p1: string, public p2: boolean, public p3: any, p5) { p5; }
 }`,
 });

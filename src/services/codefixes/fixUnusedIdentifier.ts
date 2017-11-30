@@ -19,7 +19,7 @@ namespace ts.codefix {
                 result.push({ description, changes: deletion, actionId: actionIdDelete });
             }
 
-            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, sourceFile, token));
+            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, context.errorCode, sourceFile, token));
             if (prefix.length) {
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Prefix_0_with_an_underscore), [token.getText()]);
                 result.push({ description, changes: prefix, actionId: actionIdPrefix });
@@ -34,7 +34,7 @@ namespace ts.codefix {
             switch (context.actionId) {
                 case actionIdPrefix:
                     if (isIdentifier(token) && canPrefix(token)) {
-                        tryPrefixDeclaration(changes, sourceFile, token);
+                        tryPrefixDeclaration(changes, diag.code, sourceFile, token);
                     }
                     break;
                 case actionIdDelete:
@@ -52,8 +52,9 @@ namespace ts.codefix {
         return token.kind === SyntaxKind.OpenBracketToken ? getTokenAtPosition(sourceFile, pos + 1, /*includeJsDocComment*/ false) : token;
     }
 
-    function tryPrefixDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-        if (isIdentifier(token) && canPrefix(token)) {
+    function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
+        // Don't offer to prefix a property.
+        if (errorCode !== Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code && isIdentifier(token) && canPrefix(token)) {
             changes.replaceNode(sourceFile, token, createIdentifier(`_${token.text}`));
         }
     }

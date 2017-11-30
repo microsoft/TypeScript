@@ -3093,7 +3093,7 @@ Actual: ${stringify(fullActual)}`);
                 const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
                 this.raiseError(`Expected "${stringify({ entryId, text, documentation, kind })}" to be in list [${itemsString}]`);
             }
-            else if (matchingItems.length > 1 && !(options && options.allowDuplicate)) {
+            else if (matchingItems.length > 1) {
                 this.raiseError(`Found duplicate completion items for ${stringify(entryId)}`);
             }
             const item = matchingItems[0];
@@ -4574,7 +4574,6 @@ namespace FourSlashInterface {
 
     export interface VerifyCompletionListContainsOptions extends ts.GetCompletionsAtPositionOptions {
         sourceDisplay: string;
-        allowDuplicate: boolean; // TODO: GH#20042
     }
 
     export interface NewContentOptions {
