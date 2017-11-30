@@ -2758,6 +2758,12 @@ namespace ts {
         VeryAggressive = 3,
     }
 
+    /**
+     * Safer version of `Function` which should not be called.
+     * Every function should be assignable to this, but this should not be assignable to every function.
+     */
+    export type AnyFunction = (...args: never[]) => void;
+
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
         export let isDebugging = false;
@@ -2766,7 +2772,7 @@ namespace ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: Function): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): void {
             if (!expression) {
                 if (verboseDebugInfo) {
                     message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
@@ -2800,7 +2806,7 @@ namespace ts {
             }
         }
 
-        export function fail(message?: string, stackCrawlMark?: Function): never {
+        export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
@@ -2809,11 +2815,11 @@ namespace ts {
             throw e;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: Function): never {
+        export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
             return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
 
-        export function getFunctionName(func: Function) {
+        export function getFunctionName(func: AnyFunction) {
             if (typeof func !== "function") {
                 return "";
             }

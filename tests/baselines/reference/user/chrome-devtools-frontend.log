@@ -581,7 +581,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/cate
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(115,15): error TS2503: Cannot find namespace 'ReportRenderer'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(122,50): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(146,15): error TS2503: Cannot find namespace 'ReportRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(151,38): error TS2503: Cannot find namespace 'CategoryRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(151,38): error TS2702: 'CategoryRenderer' only refers to a type, but is being used as a namespace here.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(157,24): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(182,29): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/category-renderer.js(186,31): error TS2304: Cannot find name 'Util'.
@@ -636,30 +636,30 @@ node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/crc-
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/crc-details-renderer.js(220,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/crc-details-renderer.js(228,30): error TS2339: Property 'CRCSegment' does not exist on type 'typeof CriticalRequestChainRenderer'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(12,15): error TS2304: Cannot find name 'DOM'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(29,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(39,45): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(41,50): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(43,50): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(45,46): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(47,46): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(51,44): error TS2503: Cannot find namespace 'DetailsRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(29,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(39,45): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(41,50): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(43,50): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(45,46): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(47,46): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(51,44): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(53,16): error TS2304: Cannot find name 'CriticalRequestChainRenderer'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(54,25): error TS2503: Cannot find namespace 'CriticalRequestChainRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(56,45): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(63,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(56,45): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(63,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(72,22): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(88,15): error TS2339: Property 'title' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(95,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(116,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(128,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(144,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(167,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(201,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(217,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(248,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(95,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(116,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(128,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(144,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(167,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(201,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(217,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(248,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(257,20): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(259,18): error TS2304: Cannot find name 'Util'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(276,15): error TS2503: Cannot find namespace 'DetailsRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(276,15): error TS2702: 'DetailsRenderer' only refers to a type, but is being used as a namespace here.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(289,8): error TS2339: Property 'DetailsRenderer' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(294,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/details-renderer.js(298,17): error TS2339: Property 'DetailsJSON' does not exist on type 'typeof DetailsRenderer'.
@@ -690,14 +690,14 @@ node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/dom.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/dom.js(177,8): error TS2339: Property 'DOM' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(19,15): error TS2304: Cannot find name 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(20,15): error TS2304: Cannot find name 'CategoryRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(32,15): error TS2503: Cannot find namespace 'ReportRenderer'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(53,15): error TS2503: Cannot find namespace 'ReportRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(32,15): error TS2702: 'ReportRenderer' only refers to a type, but is being used as a namespace here.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(53,15): error TS2702: 'ReportRenderer' only refers to a type, but is being used as a namespace here.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(59,9): error TS2304: Cannot find name 'Util'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(80,15): error TS2503: Cannot find namespace 'ReportRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(80,15): error TS2702: 'ReportRenderer' only refers to a type, but is being used as a namespace here.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(87,9): error TS2304: Cannot find name 'Util'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(92,15): error TS2503: Cannot find namespace 'ReportRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(92,15): error TS2702: 'ReportRenderer' only refers to a type, but is being used as a namespace here.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(110,47): error TS2304: Cannot find name 'Util'.
-node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(118,15): error TS2503: Cannot find namespace 'ReportRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(118,15): error TS2702: 'ReportRenderer' only refers to a type, but is being used as a namespace here.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(150,8): error TS2339: Property 'ReportRenderer' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(155,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(175,16): error TS2339: Property 'AuditJSON' does not exist on type 'typeof ReportRenderer'.
@@ -1160,7 +1160,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26088,6): error TS2339: Property 'emit' does not exist on type '{ _writableState: { objectMode: any; highWaterMark: any; needDrain: boolean; ending: boolean; end...'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26110,1): error TS2322: Type 'TypeError' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26112,1): error TS2322: Type 'TypeError' is not assignable to type 'boolean'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26629,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'end' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js 26619:4, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26629,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'end' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26780,21): error TS2304: Cannot find name 'global'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26780,42): error TS2304: Cannot find name 'global'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26826,40): error TS2345: Argument of type '(x: string) => string | number' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
@@ -3055,12 +3055,12 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48927,7): error TS2339: Property 'componentsOrder' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48928,7): error TS2339: Property 'components' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48968,17): error TS2339: Property 'components' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48999,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js 48835:4, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48999,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49000,18): error TS2339: Property 'components' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49001,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'j' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js 48835:6, but here has type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49001,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'j' must be of type 'any', but here has type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49007,18): error TS2339: Property 'samplesPerLine' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49008,19): error TS2339: Property 'scanLines' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49012,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js 48835:4, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49012,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49012,21): error TS2339: Property 'componentsOrder' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49013,21): error TS2339: Property 'components' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49013,38): error TS2339: Property 'componentsOrder' does not exist on type '{}'.
@@ -3711,7 +3711,7 @@ node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(15,17): error TS23
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(17,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(30,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ok' has type 'boolean' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js 28:38, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(30,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ok' must be of type 'boolean', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(87,12): error TS2339: Property 'resolveMode' does not exist on type '{ (element: any, config: any): void; on: (obj: any, type: any, handler: any) => void; prototype: ...'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(97,21): error TS2339: Property 'resolveMode' does not exist on type '{ (element: any, config: any): void; on: (obj: any, type: any, handler: any) => void; prototype: ...'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(102,12): error TS2339: Property 'registerHelper' does not exist on type '{ (element: any, config: any): void; on: (obj: any, type: any, handler: any) => void; prototype: ...'.
@@ -3767,8 +3767,8 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,85): error TS2
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(172,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' has type 'string' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js 168:14, but here has type 'any'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(174,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' has type 'string' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js 168:14, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(172,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' must be of type 'string', but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(174,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' must be of type 'string', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(6,9): error TS2304: Cannot find name 'require'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(7,19): error TS2304: Cannot find name 'define'.
@@ -3899,7 +3899,7 @@ node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(905,29)
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(912,15): error TS1055: Type 'Promise<any>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(981,39): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(36,22): error TS2694: Namespace 'Common' has no exported member 'Color'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(106,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'rgba' has type 'any[]' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/common/Color.js 95:12, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/common/Color.js(106,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'rgba' must be of type 'any[]', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(194,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(210,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(373,23): error TS2694: Namespace 'Common' has no exported member 'Color'.
@@ -4323,16 +4323,16 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1525,9): 
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(34,9): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(49,26): error TS2694: Namespace 'DataGrid' has no exported member 'DataGrid'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(86,48): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(171,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'rowValue' has type '{ [x: string]: any; }' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js 146:10, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(171,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'rowValue' must be of type '{ [x: string]: any; }', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(184,42): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(211,26): error TS2339: Property 'title' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(233,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'args' has type 'any[]' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js 214:14, but here has type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(233,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'args' must be of type 'any[]', but here has type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(241,26): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(244,28): error TS2339: Property 'createTextChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(246,28): error TS2339: Property 'createTextChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(249,34): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(252,35): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
-node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(267,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'args' has type 'any[]' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js 214:14, but here has type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(267,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'args' must be of type 'any[]', but here has type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(304,82): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(311,28): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(332,23): error TS2551: Property '_url' does not exist on type '(Anonymous class)'. Did you mean 'url'?
@@ -4643,9 +4643,9 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(160,15
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(170,31): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(175,64): error TS2694: Namespace 'Coverage' has no exported member 'RangeUseCount'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(188,23): error TS2495: Type 'Map<(Anonymous class), any[]>' is not an array type or a string type.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(189,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'styleSheetHeader' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js 177:10, but here has type '(Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(189,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'styleSheetHeader' must be of type 'any', but here has type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(190,48): error TS2694: Namespace 'Coverage' has no exported member 'RangeUseCount'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(191,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js 187:13, but here has type '(Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(191,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type 'any', but here has type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(201,31): error TS2694: Namespace 'Coverage' has no exported member 'RangeUseCount'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(202,32): error TS2694: Namespace 'Coverage' has no exported member 'CoverageSegment'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(210,23): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
@@ -4988,7 +4988,7 @@ node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(153,22): 
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(156,30): error TS2503: Cannot find namespace 'Adb'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(161,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(164,30): error TS2503: Cannot find namespace 'Adb'.
-node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(170,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'deviceId' has type 'string' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js 164:13, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(170,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'deviceId' must be of type 'string', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(170,26): error TS2495: Type 'IterableIterator<string>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(207,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(229,17): error TS2503: Cannot find namespace 'Adb'.
@@ -5108,24 +5108,24 @@ node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,375):
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,379): error TS2365: Operator '+' cannot be applied to types '{ [x: string]: any; chars1: string; chars2: string; lineArray: string[]; }' and 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,388): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,476): error TS2322: Type '0' is not assignable to type '{ [x: string]: any; chars1: string; chars2: string; lineArray: string[]; }'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(13,201): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js 12:76, but here has type 'number'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(15,142): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js 14:4, but here has type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(13,201): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' must be of type 'any', but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(15,142): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' must be of type 'any', but here has type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(17,82): error TS2339: Property 'length' does not exist on type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(17,153): error TS2339: Property 'substring' does not exist on type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(17,167): error TS2339: Property 'length' does not exist on type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(17,219): error TS2339: Property 'length' does not exist on type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(17,261): error TS2339: Property 'substring' does not exist on type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(17,351): error TS2339: Property 'substring' does not exist on type 'boolean'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(19,282): error TS2403: Subsequent variable declarations must have the same type.  Variable 'g' has type 'number' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js 18:144, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(19,282): error TS2403: Subsequent variable declarations must have the same type.  Variable 'g' must be of type 'number', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(21,314): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(23,258): error TS2322: Type 'boolean' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(23,494): error TS2322: Type 'true' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(24,123): error TS2322: Type 'true' is not assignable to type 'number'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(30,429): error TS2403: Subsequent variable declarations must have the same type.  Variable 'h' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js 29:297, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(30,429): error TS2403: Subsequent variable declarations must have the same type.  Variable 'h' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(34,12): error TS2339: Property 'length' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(34,41): error TS2339: Property 'length' does not exist on type 'number'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(39,396): error TS2403: Subsequent variable declarations must have the same type.  Variable 'h' has type 'string' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js 37:225, but here has type 'number'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(41,186): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' has type 'number' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js 40:89, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(39,396): error TS2403: Subsequent variable declarations must have the same type.  Variable 'h' must be of type 'string', but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(41,186): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' must be of type 'number', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(41,197): error TS2339: Property 'diffs' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(41,249): error TS2339: Property 'start1' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(41,261): error TS2339: Property 'start2' does not exist on type 'number'.
@@ -5140,7 +5140,7 @@ node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,7): 
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,20): error TS2339: Property 'length2' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,125): error TS2339: Property 'length1' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,138): error TS2339: Property 'length2' does not exist on type 'number'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,411): error TS2403: Subsequent variable declarations must have the same type.  Variable 'g' has type 'string' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js 42:182, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,411): error TS2403: Subsequent variable declarations must have the same type.  Variable 'g' must be of type 'string', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,443): error TS2365: Operator '===' cannot be applied to types 'number' and 'string'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,7): error TS2365: Operator '===' cannot be applied to types 'number' and 'string'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,220): error TS2365: Operator '===' cannot be applied to types 'number' and 'string'.
@@ -5556,7 +5556,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(29
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(369,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(372,54): error TS2694: Namespace 'SDK' has no exported member 'CSSModel'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(420,43): error TS2339: Property 'valuesArray' does not exist on type 'Set<any>'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(439,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'block' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js 421:10, but here has type '(Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(439,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'block' must be of type 'any', but here has type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(489,14): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(612,18): error TS2694: Namespace 'UI' has no exported member 'Widget'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(630,18): error TS2694: Namespace 'UI' has no exported member 'Widget'.
@@ -6327,7 +6327,7 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONPars
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js(44,47): error TS2694: Namespace 'FormatterWorker' has no exported member 'RelaxedJSONParser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js(57,31): error TS2694: Namespace 'FormatterWorker' has no exported member 'RelaxedJSONParser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js(89,47): error TS2694: Namespace 'FormatterWorker' has no exported member 'RelaxedJSONParser'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js(93,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'newTip' has type '{ [x: string]: any; }' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js 85:12, but here has type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js(93,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'newTip' must be of type '{ [x: string]: any; }', but here has type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js(96,47): error TS2694: Namespace 'FormatterWorker' has no exported member 'RelaxedJSONParser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js(104,32): error TS2339: Property 'value' does not exist on type '{ start: number; end: number; type: string; body: any; declarations: any[]; properties: any[]; in...'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONParser.js(159,20): error TS2339: Property 'value' does not exist on type '{ start: number; end: number; type: string; body: any; declarations: any[]; properties: any[]; in...'.
@@ -6410,7 +6410,7 @@ node_modules/chrome-devtools-frontend/front_end/har_importer/HARFormat.js(286,5)
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARFormat.js(301,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(8,27): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(20,28): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
-node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(26,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'page' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js 12:13, but here has type '(Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(26,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'page' must be of type 'any', but here has type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(41,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(53,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(117,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
@@ -6528,7 +6528,7 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2527,30): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2541,17): error TS2339: Property 'isUserRoot' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2541,38): error TS2339: Property 'isDocumentDOMTreesRoot' does not exist on type '(Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2587,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'iter' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js 2580:15, but here has type '(Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2587,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'iter' must be of type 'any', but here has type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2835,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(3020,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(3039,27): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
@@ -6855,7 +6855,7 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(114
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(1175,15): error TS1055: Type 'Promise<any>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(39,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(158,24): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(242,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'categoryName' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js 212:10, but here has type 'string'.
+node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(242,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'categoryName' must be of type 'any', but here has type 'string'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(300,19): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(314,27): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(315,28): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
@@ -7297,7 +7297,7 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(425,35):
 node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(430,19): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(458,18): error TS2694: Namespace 'UI' has no exported member 'SearchableView'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(525,22): error TS2339: Property 'isSelfOrDescendant' does not exist on type 'EventTarget'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(536,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'resource' has type '(Anonymous class)' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js 528:10, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(536,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'resource' must be of type '(Anonymous class)', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(544,35): error TS2694: Namespace 'SDK' has no exported member 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(552,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkPanel.js(560,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -7345,9 +7345,9 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.j
 node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(180,69): error TS2339: Property 'offsetY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(180,85): error TS2339: Property 'shiftKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(185,19): error TS2694: Namespace 'UI' has no exported member 'PopoverRequest'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(200,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'range' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js 194:10, but here has type '{ start: number; mid: number; end: number; }'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(201,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'start' has type 'number' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js 196:10, but here has type 'any'.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(202,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'end' has type 'number' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js 197:10, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(200,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'range' must be of type 'any', but here has type '{ start: number; mid: number; end: number; }'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(201,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'start' must be of type 'number', but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(202,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'end' must be of type 'number', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(211,15): error TS2339: Property 'clientX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(211,68): error TS2339: Property 'clientX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkWaterfallColumn.js(218,15): error TS2339: Property 'clientY' does not exist on type 'Event'.
@@ -7597,8 +7597,8 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSectio
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(973,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(973,18): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1053,23): error TS2495: Type 'IterableIterator<number>' is not an array type or a string type.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1065,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js 1052:17, but here has type 'number'.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1074,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'groupStart' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js 1065:14, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1065,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1074,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'groupStart' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1076,23): error TS2495: Type 'IterableIterator<number>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1156,23): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1217,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -7720,14 +7720,14 @@ node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(485,11): e
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(485,41): error TS2339: Property 'keyCode' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(486,9): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(488,18): error TS2339: Property 'keyCode' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(494,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'indexOnLevel' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js 477:10, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(494,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'indexOnLevel' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(517,49): error TS2339: Property 'upperBound' does not exist on type 'Uint32Array'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(580,36): error TS2339: Property 'upperBound' does not exist on type 'Uint32Array'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(656,65): error TS2339: Property 'upperBound' does not exist on type 'Uint32Array'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(660,69): error TS2339: Property 'maxStackDepth' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(684,40): error TS2339: Property 'entryColor' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(694,31): error TS2339: Property 'keysArray' does not exist on type 'Map<string, number[]>'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(701,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entryIndex' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js 671:12, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(701,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entryIndex' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(718,59): error TS2339: Property 'forceDecoration' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(749,37): error TS2339: Property 'entryTitle' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(751,43): error TS2339: Property 'entryFont' does not exist on type '() => void'.
@@ -8041,7 +8041,7 @@ node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceMa
 node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(303,25): error TS2339: Property 'createFile' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(319,102): error TS2339: Property 'id' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(334,32): error TS2339: Property 'type' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(351,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'url' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js 334:10, but here has type 'string'.
+node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(351,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'url' must be of type 'any', but here has type 'string'.
 node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(379,32): error TS2339: Property 'type' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(400,25): error TS2694: Namespace 'Workspace' has no exported member 'Project'.
 node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(403,17): error TS2339: Property 'type' does not exist on type '() => void'.
@@ -9282,7 +9282,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js(9,19)
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js(35,19): error TS2694: Namespace 'SDK' has no exported member 'CSSModel'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js(41,47): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js(50,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
-node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js(75,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'property' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js 66:10, but here has type '(Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js(75,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'property' must be of type 'any', but here has type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js(161,20): error TS2694: Namespace 'SDK' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleSheetHeader.js(11,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleSheetHeader.js(32,23): error TS2694: Namespace 'Common' has no exported member 'ContentProvider'.
@@ -10200,7 +10200,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js(80,3
 node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js(101,25): error TS2495: Type 'IterableIterator<(Anonymous class)>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js(177,32): error TS2694: Namespace 'Protocol' has no exported member 'ServiceWorker'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js(200,32): error TS2694: Namespace 'Protocol' has no exported member 'ServiceWorker'.
-node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js(212,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'registration' has type '(Anonymous class)' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js 205:10, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js(212,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'registration' must be of type '(Anonymous class)', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js(212,30): error TS2495: Type 'Set<(Anonymous class)>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js(223,24): error TS2694: Namespace 'Protocol' has no exported member 'ServiceWorker'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerManager.js(269,32): error TS2694: Namespace 'Protocol' has no exported member 'ServiceWorker'.
@@ -10681,7 +10681,7 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(1
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(177,15): error TS2503: Cannot find namespace 'Diff'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(186,42): error TS2694: Namespace 'SourceFrame' has no exported member 'SourceCodeDiff'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(198,70): error TS2694: Namespace 'SourceFrame' has no exported member 'SourceCodeDiff'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(202,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'lineNumber' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js 189:10, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(202,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'lineNumber' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(206,41): error TS2339: Property 'diff' does not exist on type 'Map<number, any>'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(216,68): error TS2694: Namespace 'SourceFrame' has no exported member 'SourceCodeDiff'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(244,27): error TS2694: Namespace 'SourceFrame' has no exported member 'SourceCodeDiff'.
@@ -10702,7 +10702,7 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(475,
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(9,27): error TS2694: Namespace 'SourceFrame' has no exported member 'SourcesTextEditorDelegate'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(12,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(54,20): error TS2694: Namespace 'UI' has no exported member 'AutocompleteConfig'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(90,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' has type 'number' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js 78:10, but here has type 'string'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(90,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'string'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(93,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(313,32): error TS2339: Property 'populateLineGutterContextMenu' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(317,26): error TS2339: Property 'populateTextAreaContextMenu' does not exist on type '() => void'.
@@ -10926,7 +10926,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1225,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1231,43): error TS2694: Namespace 'Bindings' has no exported member 'BreakpointManager'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1237,24): error TS2694: Namespace 'Bindings' has no exported member 'BreakpointManager'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1285,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'location' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js 1279:12, but here has type '(Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1285,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'location' must be of type 'any', but here has type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1301,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1307,43): error TS2694: Namespace 'Bindings' has no exported member 'BreakpointManager'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1341,60): error TS2339: Property 'valuesArray' does not exist on type 'Set<any>'.
@@ -11496,8 +11496,8 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2574,25): error TS2339: Property '_array' does not exist on type 'PropertyDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2587,35): error TS2339: Property 'maxLength' does not exist on type '{ _array: any[]; _startIndex: number; _length: number; get: (index: any) => any; set: (index: any...'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2589,43): error TS2339: Property 'maxLength' does not exist on type '{ _array: any[]; _startIndex: number; _length: number; get: (index: any) => any; set: (index: any...'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2612,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js 2605:21, but here has type 'number'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2615,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js 2605:21, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2612,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2615,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2618,52): error TS2339: Property 'maxLength' does not exist on type '{ _array: any[]; _startIndex: number; _length: number; get: (index: any) => any; set: (index: any...'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2619,74): error TS2339: Property 'maxLength' does not exist on type '{ _array: any[]; _startIndex: number; _length: number; get: (index: any) => any; set: (index: any...'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2620,37): error TS2339: Property 'maxLength' does not exist on type '{ _array: any[]; _startIndex: number; _length: number; get: (index: any) => any; set: (index: any...'.
@@ -11603,7 +11603,7 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3307,18): error TS2339: Property 'decLocator' does not exist on type '{ colors: any; options: any; parent: any; cols: any; rows: any; geometry: any[]; ybase: number; y...'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3332,18): error TS2339: Property 'urxvtMouse' does not exist on type '{ colors: any; options: any; parent: any; cols: any; rows: any; geometry: any[]; ybase: number; y...'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3340,18): error TS2339: Property 'sgrMouse' does not exist on type '{ colors: any; options: any; parent: any; cols: any; rows: any; geometry: any[]; ybase: number; y...'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3352,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'data' has type 'string' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js 3291:16, but here has type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3352,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'data' must be of type 'string', but here has type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3367,26): error TS2339: Property 'browser' does not exist on type '{ colors: any; options: any; parent: any; cols: any; rows: any; geometry: any[]; ybase: number; y...'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3389,18): error TS2339: Property 'vt200Mouse' does not exist on type '{ colors: any; options: any; parent: any; cols: any; rows: any; geometry: any[]; ybase: number; y...'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3392,24): error TS2339: Property 'normalMouse' does not exist on type '{ colors: any; options: any; parent: any; cols: any; rows: any; geometry: any[]; ybase: number; y...'.
@@ -12060,7 +12060,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataP
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(598,35): error TS2694: Namespace 'SDK' has no exported member 'TracingModel'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(621,36): error TS2339: Property 'preciseMillisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(638,38): error TS2694: Namespace 'SDK' has no exported member 'FilmStripModel'.
-node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(648,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'image' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js 641:10, but here has type 'new (width?: number, height?: number) => HTMLImageElement'.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(648,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'image' must be of type 'any', but here has type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(696,37): error TS2694: Namespace 'TimelineModel' has no exported member 'TimelineIRModel'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(705,35): error TS2694: Namespace 'SDK' has no exported member 'TracingModel'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(754,35): error TS2694: Namespace 'SDK' has no exported member 'TracingModel'.
@@ -12322,7 +12322,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1391
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1397,19): error TS2694: Namespace 'SDK' has no exported member 'TracingModel'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1404,21): error TS2694: Namespace 'SDK' has no exported member 'TracingModel'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1410,24): error TS2339: Property 'binaryIndexOf' does not exist on type 'any[]'.
-node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1434,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'categoryName' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js 1426:12, but here has type 'string'.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1434,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'categoryName' must be of type 'any', but here has type 'string'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1444,19): error TS2694: Namespace 'SDK' has no exported member 'TracingModel'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1445,19): error TS2694: Namespace 'SDK' has no exported member 'Target'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1446,15): error TS1055: Type 'Promise<Element>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
@@ -12814,8 +12814,8 @@ node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(80,18): error TS
 node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(108,18): error TS2694: Namespace 'UI' has no exported member 'GlassPane'.
 node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(150,22): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(252,27): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
-node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(263,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arrowX' has type 'number' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js 250:14, but here has type 'any'.
-node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(305,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arrowY' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js 208:12, but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(263,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arrowX' must be of type 'number', but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(305,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arrowY' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(306,27): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/GlassPane.js(330,19): error TS2694: Namespace 'UI' has no exported member 'Widget'.
 node_modules/chrome-devtools-frontend/front_end/ui/HistoryInput.js(44,15): error TS2339: Property 'keyCode' does not exist on type 'Event'.
@@ -12912,13 +12912,13 @@ node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(443,20): error
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(462,26): error TS2339: Property 'isItemSelectable' does not exist on type '<T>() => void'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(478,39): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(480,26): error TS2339: Property 'isItemSelectable' does not exist on type '<T>() => void'.
-node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(500,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'variableOffsets' has type 'any' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js 495:10, but here has type 'Int32Array'.
+node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(500,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'variableOffsets' must be of type 'any', but here has type 'Int32Array'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(520,82): error TS2339: Property 'heightForItem' does not exist on type '<T>() => void'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(523,39): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(529,35): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(557,33): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(592,18): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(637,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'index' has type 'number' at /home/nathansa/ts/tests/cases/user/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js 632:13, but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(637,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'index' must be of type 'number', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListModel.js(14,5): error TS2346: Call target does not contain any signatures.
 node_modules/chrome-devtools-frontend/front_end/ui/ListModel.js(28,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(9,18): error TS2694: Namespace 'UI' has no exported member 'ListWidget'.
