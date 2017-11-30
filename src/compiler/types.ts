@@ -170,6 +170,7 @@ namespace ts {
         SuperKeyword,
         SwitchKeyword,
         ThisKeyword,
+        ThisType, // Same as ThisKeyword, but parsed from a type context.
         ThrowKeyword,
         TrueKeyword,
         TryKeyword,
@@ -249,7 +250,6 @@ namespace ts {
         UnionType,
         IntersectionType,
         ParenthesizedType,
-        ThisType,
         TypeOperator,
         IndexedAccessType,
         MappedType,
@@ -996,7 +996,6 @@ namespace ts {
             | SyntaxKind.BooleanKeyword
             | SyntaxKind.StringKeyword
             | SyntaxKind.SymbolKeyword
-            | SyntaxKind.ThisKeyword
             | SyntaxKind.VoidKeyword
             | SyntaxKind.UndefinedKeyword
             | SyntaxKind.NullKeyword
@@ -1187,7 +1186,7 @@ namespace ts {
         kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword;
     }
 
-    export interface ThisExpression extends PrimaryExpression, KeywordTypeNode {
+    export interface ThisExpression extends PrimaryExpression {
         kind: SyntaxKind.ThisKeyword;
     }
 

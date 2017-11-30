@@ -2570,7 +2570,7 @@ namespace ts {
                             context.encounteredError = true;
                         }
                     }
-                    return createThis();
+                    return createThisTypeNode();
                 }
 
                 const objectFlags = getObjectFlags(type);
@@ -8432,7 +8432,6 @@ namespace ts {
                 case SyntaxKind.ObjectKeyword:
                     return node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
                 case SyntaxKind.ThisType:
-                case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);

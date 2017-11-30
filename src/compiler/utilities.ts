@@ -5227,7 +5227,7 @@ namespace ts {
             || kind === SyntaxKind.BooleanKeyword
             || kind === SyntaxKind.StringKeyword
             || kind === SyntaxKind.SymbolKeyword
-            || kind === SyntaxKind.ThisKeyword
+            || kind === SyntaxKind.ThisType
             || kind === SyntaxKind.VoidKeyword
             || kind === SyntaxKind.UndefinedKeyword
             || kind === SyntaxKind.NullKeyword

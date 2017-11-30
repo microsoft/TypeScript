@@ -1952,6 +1952,10 @@ namespace ts.Completions {
         function getAllKeywordCompletions() {
             const allKeywordsCompletions: CompletionEntry[] = [];
             for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
+                if (i === SyntaxKind.ThisType) {
+                    // handled by SyntaxKind.ThisKeyword
+                    continue;
+                }
                 allKeywordsCompletions.push({
                     name: tokenToString(i),
                     kind: ScriptElementKind.keyword,
