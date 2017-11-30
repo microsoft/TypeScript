@@ -14,7 +14,7 @@
 ////}
 
 verify.codeFixAll({
-    groupId: "addMissingMember",
+    actionId: "addMissingMember",
     newFileContent:
     // TODO: GH#18445 GH#20073
 `class C {

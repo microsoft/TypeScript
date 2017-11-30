@@ -3981,7 +3981,7 @@ declare namespace ts {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeFix[];
-        getCombinedCodeFix(fileName: string, groupId: {}, formatOptions: FormatCodeSettings): CodeActionAll;
+        getCombinedCodeFix(fileName: string, actionId: {}, formatOptions: FormatCodeSettings): CodeActionAll;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -4074,8 +4074,8 @@ declare namespace ts {
         commands?: CodeActionCommand[];
     }
     interface CodeFix extends CodeAction {
-        /** If present, one may call 'applyAllCodeFixesInGroup' with this groupId. */
-        groupId: {} | undefined;
+        /** If present, one may call 'applyAllCodeFixesInGroup' with this actionId. */
+        actionId: {} | undefined;
     }
     interface CodeActionAll {
         changes: FileTextChanges[];
@@ -5273,6 +5273,9 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetCombinedCodeFix;
         arguments: GetCombinedCodeFixRequestArgs;
     }
+    interface GetCombinedCodeFixResponse extends Response {
+        body: CodeActionAll;
+    }
     interface ApplyCodeActionCommandRequest extends Request {
         command: CommandTypes.ApplyCodeActionCommand;
         arguments: ApplyCodeActionCommandRequestArgs;
@@ -5307,7 +5310,7 @@ declare namespace ts.server.protocol {
         errorCodes?: number[];
     }
     interface GetCombinedCodeFixRequestArgs extends FileRequestArgs {
-        groupId: {};
+        actionId: {};
     }
     interface ApplyCodeActionCommandRequestArgs {
         /** May also be an array of commands. */
@@ -6063,11 +6066,11 @@ declare namespace ts.server.protocol {
     }
     interface CodeActionAll {
         changes: FileCodeEdits[];
-        commands: {}[] | undefined;
+        commands?: {}[];
     }
     interface CodeFix extends CodeAction {
-        /** If present, one may call 'getAllCodeFixesInGroup' with this groupId. */
-        groupId: {} | undefined;
+        /** If present, one may call 'getAllCodeFixesInGroup' with this actionId. */
+        actionId?: {};
     }
     /**
      * Format and format on key response message.

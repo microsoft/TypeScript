@@ -8,7 +8,7 @@
 ////}
 
 verify.codeFixAll({
-    groupId: "unusedIdentifier_delete",
+    actionId: "unusedIdentifier_delete",
     newFileContent:
 `function f() {
 }`,

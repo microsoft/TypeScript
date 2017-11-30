@@ -7,7 +7,7 @@
 ////class C extends A {}
 
 verify.codeFixAll({
-    groupId: "fixClassDoesntImplementInheritedAbstractMember",
+    actionId: "fixClassDoesntImplementInheritedAbstractMember",
     // TODO: GH#20073 GH#18445
     newFileContent:
 `abstract class A {

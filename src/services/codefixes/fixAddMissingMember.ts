@@ -4,7 +4,7 @@ namespace ts.codefix {
         Diagnostics.Property_0_does_not_exist_on_type_1.code,
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
     ];
-    const groupId = "addMissingMember";
+    const actionId = "addMissingMember";
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
@@ -17,8 +17,8 @@ namespace ts.codefix {
                 getActionsForAddMissingMemberInTypeScriptFile(context, classDeclarationSourceFile, classOpenBrace, token, classDeclaration, makeStatic);
             return concatenate(singleElementArray(methodCodeAction), addMember);
         },
-        groupIds: [groupId],
-        fixAllInGroup: context => {
+        actionIds: [actionId],
+        getAllCodeActions: context => {
             const seenNames = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const { newLineCharacter, program } = context;
@@ -100,7 +100,7 @@ namespace ts.codefix {
         const changes = textChanges.ChangeTracker.with(context, t => addMissingMemberInJs(t, classDeclarationSourceFile, classDeclaration, tokenName, makeStatic, context.newLineCharacter));
         if (changes.length === 0) return undefined;
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Initialize_static_property_0 : Diagnostics.Initialize_property_0_in_the_constructor), [tokenName]);
-        return { description, changes, groupId };
+        return { description, changes, actionId };
     }
 
     function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean, newLineCharacter: string): void {
@@ -146,7 +146,7 @@ namespace ts.codefix {
     function createAddPropertyDeclarationAction(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classOpenBrace: Node, makeStatic: boolean, tokenName: string, typeNode: TypeNode): CodeFix {
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0), [tokenName]);
         const changes = textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, classDeclarationSourceFile, classOpenBrace, tokenName, typeNode, makeStatic, context.newLineCharacter));
-        return { description, changes, groupId };
+        return { description, changes, actionId };
     }
 
     function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classOpenBrace: Node, tokenName: string, typeNode: TypeNode, makeStatic: boolean, newLineCharacter: string): void {
@@ -178,14 +178,14 @@ namespace ts.codefix {
             typeNode);
 
         const changes = textChanges.ChangeTracker.with(context, t => t.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, indexSignature, { suffix: context.newLineCharacter }));
-        // No groupId here because code-fix-all currently only works on adding individual named properties.
-        return { description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_property_0), [tokenName]), changes, groupId: undefined };
+        // No actionId here because code-fix-all currently only works on adding individual named properties.
+        return { description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_property_0), [tokenName]), changes, actionId: undefined };
     }
 
     function getActionForMethodDeclaration(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classOpenBrace: Node, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean): CodeFix | undefined {
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0), [token.text]);
         const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classOpenBrace, token, callExpression, context.newLineCharacter, makeStatic, inJs));
-        return { description, changes, groupId };
+        return { description, changes, actionId };
     }
 
     function addMethodDeclaration(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classOpenBrace: Node, token: Identifier, callExpression: CallExpression, newLineCharacter: string, makeStatic: boolean, inJs: boolean) {

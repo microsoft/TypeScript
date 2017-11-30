@@ -11,8 +11,8 @@ namespace ts.codefix {
         ],
         getCodeActions: getImportCodeActions,
         // TODO: GH#20315
-        groupIds: [],
-        fixAllInGroup: notImplemented,
+        actionIds: [],
+        getAllCodeActions: notImplemented,
     });
 
     type ImportCodeActionKind = "CodeChange" | "InsertingIntoExistingImport" | "NewImport";
@@ -158,7 +158,7 @@ namespace ts.codefix {
             description: formatMessage.apply(undefined, [undefined, description].concat(<any[]>diagnosticArgs)),
             changes,
             // TODO: GH#20315
-            groupId: undefined,
+            actionId: undefined,
             kind,
             moduleSpecifier
         };

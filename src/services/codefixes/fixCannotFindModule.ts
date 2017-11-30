@@ -1,14 +1,14 @@
 /* @internal */
 namespace ts.codefix {
-    const groupId = "fixCannotFindModule";
+    const actionId = "fixCannotFindModule";
     const errorCodes = [Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type.code];
     registerCodeFix({
         errorCodes,
         getCodeActions: context => [
-            { groupId, ...tryGetCodeActionForInstallPackageTypes(context.host, context.sourceFile.fileName, getModuleName(context.sourceFile, context.span.start)) }
+            { actionId, ...tryGetCodeActionForInstallPackageTypes(context.host, context.sourceFile.fileName, getModuleName(context.sourceFile, context.span.start)) }
         ],
-        groupIds: [groupId],
-        fixAllInGroup: context => codeFixAll(context, errorCodes, (_, diag, commands) => {
+        actionIds: [actionId],
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (_, diag, commands) => {
             const pkg = getTypesPackageNameToInstall(context.host, getModuleName(diag.file, diag.start));
             if (pkg) {
                 commands.push(getCommand(diag.file.fileName, pkg));

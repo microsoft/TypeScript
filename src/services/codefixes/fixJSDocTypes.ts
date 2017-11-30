@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.codefix {
-    const groupIdPlain = "fixJSDocTypes_plain";
-    const groupIdNullable = "fixJSDocTypes_nullable";
+    const actionIdPlain = "fixJSDocTypes_plain";
+    const actionIdNullable = "fixJSDocTypes_nullable";
     const errorCodes = [Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code];
     registerCodeFix({
         errorCodes,
@@ -12,32 +12,32 @@ namespace ts.codefix {
             if (!info) return undefined;
             const { typeNode, type } = info;
             const original = typeNode.getText(sourceFile);
-            const actions = [fix(type, groupIdPlain)];
+            const actions = [fix(type, actionIdPlain)];
             if (typeNode.kind === SyntaxKind.JSDocNullableType) {
                 // for nullable types, suggest the flow-compatible `T | null | undefined`
                 // in addition to the jsdoc/closure-compatible `T | null`
-                actions.push(fix(checker.getNullableType(type, TypeFlags.Undefined), groupIdNullable));
+                actions.push(fix(checker.getNullableType(type, TypeFlags.Undefined), actionIdNullable));
             }
             return actions;
 
-            function fix(type: Type, groupId: string): CodeFix {
+            function fix(type: Type, actionId: string): CodeFix {
                 const newText = typeString(type, checker);
                 return {
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_0_to_1), [original, newText]),
                     changes: [createFileTextChanges(sourceFile.fileName, [createChange(typeNode, sourceFile, newText)])],
-                    groupId,
+                    actionId,
                 };
             }
         },
-        groupIds: [groupIdPlain, groupIdNullable],
-        fixAllInGroup(context) {
-            const { groupId, program, sourceFile } = context;
+        actionIds: [actionIdPlain, actionIdNullable],
+        getAllCodeActions(context) {
+            const { actionId, program, sourceFile } = context;
             const checker = program.getTypeChecker();
             return codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
                 const info = getInfo(err.file, err.start!, checker);
                 if (!info) return;
                 const { typeNode, type } = info;
-                const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && groupId === groupIdNullable ? checker.getNullableType(type, TypeFlags.Undefined) : type;
+                const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && actionId === actionIdNullable ? checker.getNullableType(type, TypeFlags.Undefined) : type;
                 changes.push(createChange(typeNode, sourceFile, typeString(fixedType, checker)));
             });
         }

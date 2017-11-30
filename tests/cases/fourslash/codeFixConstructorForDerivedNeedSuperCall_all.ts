@@ -8,7 +8,7 @@
 ////}
 
 verify.codeFixAll({
-    groupId: "constructorForDerivedNeedSuperCall",
+    actionId: "constructorForDerivedNeedSuperCall",
     // TODO: GH#18445 GH#20073
     newFileContent: `class C extends Object {
     constructor() {super();\r

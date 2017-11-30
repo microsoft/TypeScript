@@ -6,7 +6,7 @@
 ////class D implements J {}
 
 verify.codeFixAll({
-    groupId: "fixClassIncorrectlyImplementsInterface",
+    actionId: "fixClassIncorrectlyImplementsInterface",
     // TODO: GH#20073 GH#18445
     newFileContent:
 `interface I { i(): void; }

@@ -6,7 +6,7 @@
 ////}
 
 verify.codeFixAll({
-    groupId: "fixSpelling",
+    actionId: "fixSpelling",
     newFileContent:
 `function f(s: string) {
     s.toString();

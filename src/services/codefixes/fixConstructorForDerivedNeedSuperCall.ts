@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const groupId = "constructorForDerivedNeedSuperCall";
+    const actionId = "constructorForDerivedNeedSuperCall";
     const errorCodes = [Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call.code];
     registerCodeFix({
         errorCodes,
@@ -8,10 +8,10 @@ namespace ts.codefix {
             const { sourceFile } = context;
             const ctr = getNode(sourceFile, context.span.start);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, ctr, context.newLineCharacter));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call), changes, groupId }];
+            return [{ description: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call), changes, actionId }];
         },
-        groupIds: [groupId],
-        fixAllInGroup: context => codeFixAll(context, errorCodes, (changes, diag) =>
+        actionIds: [actionId],
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
             doChange(changes, context.sourceFile, getNode(diag.file, diag.start!), context.newLineCharacter)),
     });
 

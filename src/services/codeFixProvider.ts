@@ -3,8 +3,8 @@ namespace ts {
     export interface CodeFixRegistration {
         errorCodes: number[];
         getCodeActions(context: CodeFixContext): CodeFix[] | undefined;
-        groupIds: string[];
-        fixAllInGroup(context: CodeFixAllContext): CodeActionAll;
+        actionIds: string[];
+        getAllCodeActions(context: CodeFixAllContext): CodeActionAll;
     }
 
     export interface CodeFixContextBase extends textChanges.TextChangesContext {
@@ -15,7 +15,7 @@ namespace ts {
     }
 
     export interface CodeFixAllContext extends CodeFixContextBase {
-        groupId: {};
+        actionId: {};
     }
 
     export interface CodeFixContext extends CodeFixContextBase {
@@ -36,8 +36,8 @@ namespace ts {
                 }
                 fixes.push(codeFix);
             }
-            if (codeFix.groupIds) {
-                for (const gid of codeFix.groupIds) {
+            if (codeFix.actionIds) {
+                for (const gid of codeFix.actionIds) {
                     Debug.assert(!groups.has(gid));
                     groups.set(gid, codeFix);
                 }
@@ -70,8 +70,8 @@ namespace ts {
         }
 
         export function getAllFixes(context: CodeFixAllContext): CodeActionAll {
-            // Currently groupId is always a string.
-            return groups.get(cast(context.groupId, isString)).fixAllInGroup!(context);
+            // Currently actionId is always a string.
+            return groups.get(cast(context.actionId, isString)).getAllCodeActions!(context);
         }
 
         function createCodeActionAll(changes: FileTextChanges[], commands?: CodeActionCommand[]): CodeActionAll {

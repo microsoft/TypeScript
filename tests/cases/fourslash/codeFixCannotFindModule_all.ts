@@ -21,7 +21,7 @@ test.setTypesRegistry({
 goTo.marker();
 
 verify.codeFixAll({
-    groupId: "fixCannotFindModule",
+    actionId: "fixCannotFindModule",
     commands: [
         { packageName: "@types/abs", file: "/a.ts", type: "install package" },
         { packageName: "@types/zap", file: "/a.ts", type: "install package" },

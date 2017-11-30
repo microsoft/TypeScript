@@ -103,7 +103,7 @@ namespace ts.server.protocol {
         GetCodeFixesFull = "getCodeFixes-full",
         GetCombinedCodeFix = "getCombinedCodeFix",
         /* @internal */
-        GetCombinedCodeFixFull = "getCombinedCodeFix",
+        GetCombinedCodeFixFull = "getCombinedCodeFix-full",
         ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
 
@@ -541,6 +541,10 @@ namespace ts.server.protocol {
         arguments: GetCombinedCodeFixRequestArgs;
     }
 
+    export interface GetCombinedCodeFixResponse  extends Response {
+        body: CodeActionAll;
+    }
+
     export interface ApplyCodeActionCommandRequest extends Request {
         command: CommandTypes.ApplyCodeActionCommand;
         arguments: ApplyCodeActionCommandRequestArgs;
@@ -594,7 +598,7 @@ namespace ts.server.protocol {
     }
 
     export interface GetCombinedCodeFixRequestArgs extends FileRequestArgs {
-        groupId: {};
+        actionId: {};
     }
 
     export interface ApplyCodeActionCommandRequestArgs {
@@ -1594,12 +1598,12 @@ namespace ts.server.protocol {
 
     export interface CodeActionAll {
         changes: FileCodeEdits[];
-        commands: {}[] | undefined;
+        commands?: {}[];
     }
 
     export interface CodeFix extends CodeAction {
-        /** If present, one may call 'getAllCodeFixesInGroup' with this groupId. */
-        groupId: {} | undefined;
+        /** If present, one may call 'getAllCodeFixesInGroup' with this actionId. */
+        actionId?: {};
     }
 
     /**

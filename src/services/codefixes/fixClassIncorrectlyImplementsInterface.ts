@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.codefix {
     const errorCodes = [Diagnostics.Class_0_incorrectly_implements_interface_1.code];
-    const groupId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
+    const actionId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
@@ -12,11 +12,11 @@ namespace ts.codefix {
                 const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(checker, implementedTypeNode, sourceFile, classDeclaration, newLineCharacter, t));
                 if (changes.length === 0) return undefined;
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
-                return { description, changes, groupId };
+                return { description, changes, actionId };
             });
         },
-        groupIds: [groupId],
-        fixAllInGroup(context) {
+        actionIds: [actionId],
+        getAllCodeActions(context) {
             const seenClassDeclarations: true[] = [];
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file!, diag.start!);

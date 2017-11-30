@@ -2425,10 +2425,10 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyCodeFixAll(options: FourSlashInterface.VerifyCodeFixAllOptions): void {
-            const { groupId, newFileContent } = options;
-            const groupIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.groupId);
-            ts.Debug.assert(ts.contains(groupIds, groupId), "No available code fix has that group id.", () => `Expected '${groupId}'. Available group ids: ${groupIds}`);
-            const { changes, commands } = this.languageService.getCombinedCodeFix(this.activeFile.fileName, groupId, this.formatCodeSettings);
+            const { actionId, newFileContent } = options;
+            const actionIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.actionId);
+            ts.Debug.assert(ts.contains(actionIds, actionId), "No available code fix has that group id.", () => `Expected '${actionId}'. Available action ids: ${actionIds}`);
+            const { changes, commands } = this.languageService.getCombinedCodeFix(this.activeFile.fileName, actionId, this.formatCodeSettings);
             assert.deepEqual(commands, options.commands);
             this.applyChanges(changes);
             this.verifyCurrentFileContent(newFileContent);
@@ -4595,7 +4595,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixAllOptions {
-        groupId: string;
+        actionId: string;
         newFileContent: string;
         commands: ReadonlyArray<{}>;
     }

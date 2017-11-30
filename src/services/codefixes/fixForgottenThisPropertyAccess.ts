@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const groupId = "forgottenThisPropertyAccess";
+    const actionId = "forgottenThisPropertyAccess";
     const errorCodes = [Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code];
     registerCodeFix({
         errorCodes,
@@ -8,10 +8,10 @@ namespace ts.codefix {
             const { sourceFile } = context;
             const token = getNode(sourceFile, context.span.start);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, token));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Add_this_to_unresolved_variable), changes, groupId }];
+            return [{ description: getLocaleSpecificMessage(Diagnostics.Add_this_to_unresolved_variable), changes, actionId }];
         },
-        groupIds: [groupId],
-        fixAllInGroup: context => codeFixAll(context, errorCodes, (changes, diag) => {
+        actionIds: [actionId],
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             doChange(changes, context.sourceFile, getNode(diag.file, diag.start!));
         }),
     });

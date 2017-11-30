@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const groupId = "extendsInterfaceBecomesImplements";
+    const actionId = "extendsInterfaceBecomesImplements";
     const errorCodes = [Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code];
     registerCodeFix({
         errorCodes,
@@ -10,10 +10,10 @@ namespace ts.codefix {
             if (!nodes) return undefined;
             const { extendsToken, heritageClauses } = nodes;
             const changes = textChanges.ChangeTracker.with(context, t => doChanges(t, sourceFile, extendsToken, heritageClauses));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements), changes, groupId }];
+            return [{ description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements), changes, actionId }];
         },
-        groupIds: [groupId],
-        fixAllInGroup: context => codeFixAll(context, errorCodes, (changes, diag) => {
+        actionIds: [actionId],
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const nodes = getNodes(diag.file, diag.start!);
             if (nodes) doChanges(changes, diag.file, nodes.extendsToken, nodes.heritageClauses);
         }),

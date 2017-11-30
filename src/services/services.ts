@@ -1893,13 +1893,13 @@ namespace ts {
             });
         }
 
-        function getCombinedCodeFix(fileName: string, groupId: {}, formatOptions: FormatCodeSettings): CodeActionAll {
+        function getCombinedCodeFix(fileName: string, actionId: {}, formatOptions: FormatCodeSettings): CodeActionAll {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return codefix.getAllFixes({ groupId, sourceFile, program, newLineCharacter, host, cancellationToken, formatContext });
+            return codefix.getAllFixes({ actionId, sourceFile, program, newLineCharacter, host, cancellationToken, formatContext });
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;

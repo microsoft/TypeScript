@@ -1570,7 +1570,7 @@ namespace ts.server {
         private getCombinedCodeFix(args: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeActionAll | CodeActionAll {
             const { file, project } = this.getFileAndProject(args);
             const formatOptions = this.projectService.getFormatCodeOptions(file);
-            const res = project.getLanguageService().getCombinedCodeFix(file, args.groupId, formatOptions);
+            const res = project.getLanguageService().getCombinedCodeFix(file, args.actionId, formatOptions);
             if (simplifiedResult) {
                 return { changes: this.mapTextChangesToCodeEdits(project, res.changes), commands: res.commands };
             }
