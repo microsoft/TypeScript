@@ -866,14 +866,14 @@ namespace ts {
         function scanNumberFragment(): string {
             let start = pos;
             let allowSeparator = false;
-            let result: string;
+            let result = "";
             while (true) {
                 const ch = text.charCodeAt(pos);
                 if (ch === CharacterCodes._) {
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     if (allowSeparator) {
                         allowSeparator = false;
-                        result = (result || "") + text.substring(start, pos);
+                        result += text.substring(start, pos);
                     }
                     else {
                         error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
@@ -892,7 +892,7 @@ namespace ts {
             if (text.charCodeAt(pos - 1) === CharacterCodes._) {
                 error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
             }
-            return (result || "") + text.substring(start, pos);
+            return result + text.substring(start, pos);
         }
 
         function scanNumber(): string {
