@@ -3,7 +3,7 @@ tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericString
 tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(12,5): error TS2300: Duplicate identifier '1'.
 tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(16,5): error TS2300: Duplicate identifier '1'.
 tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(17,5): error TS2300: Duplicate identifier '1'.
-tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(17,5): error TS2403: Subsequent variable declarations must have the same type.  Variable '1.0' has type 'number' at tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts 15:4, but here has type 'string'.
+tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(17,5): error TS2717: Subsequent property declarations must have the same type.  Property '1.0' must be of type 'number', but here has type 'string'.
 tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts(22,5): error TS2300: Duplicate identifier '0'.
 
 
@@ -36,7 +36,7 @@ tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericString
         ~~~
 !!! error TS2300: Duplicate identifier '1'.
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable '1.0' has type 'number' at tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts 15:4, but here has type 'string'.
+!!! error TS2717: Subsequent property declarations must have the same type.  Property '1.0' must be of type 'number', but here has type 'string'.
     }
     
     var b = {

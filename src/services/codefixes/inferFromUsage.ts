@@ -255,6 +255,7 @@ namespace ts.codefix {
                     },
                     reportInaccessibleThisError: () => { typeIsAccessible = false; },
                     reportPrivateInBaseOfClassExpression: () => { typeIsAccessible = false; },
+                    reportInaccessibleUniqueSymbolError: () => { typeIsAccessible = false; }
                 };
             }
             writer.clear();

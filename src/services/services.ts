@@ -472,6 +472,12 @@ namespace ts {
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
         }
+        getConstraint(): Type | undefined {
+            return this.checker.getBaseConstraintOfType(this);
+        }
+        getDefault(): Type | undefined {
+            return this.checker.getDefaultFromTypeParameter(this);
+        }
     }
 
     class SignatureObject implements Signature {
@@ -939,7 +945,7 @@ namespace ts {
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
             this.fileNameToEntry = createMap<CachedHostFileInformation>();
@@ -1448,7 +1454,8 @@ namespace ts {
                 { name, source },
                 program.getSourceFiles(),
                 host,
-                formattingOptions && formatting.getFormatContext(formattingOptions));
+                formattingOptions && formatting.getFormatContext(formattingOptions),
+                getCanonicalFileName);
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
@@ -1887,18 +1894,21 @@ namespace ts {
             });
         }
 
+        function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
+        function applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(path, a))) : applySingleCodeActionCommand(path, action);
+        function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrUndefined?: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
+            const action = typeof fileName === "string" ? actionOrUndefined! : fileName as CodeActionCommand[];
+            return isArray(action) ? Promise.all(action.map(applySingleCodeActionCommand)) : applySingleCodeActionCommand(action);
         }
 
-        function applySingleCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
+        function applySingleCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
             switch (action.type) {
                 case "install package":
                     return host.installPackage
-                        ? host.installPackage({ fileName, packageName: action.packageName })
+                        ? host.installPackage({ fileName: toPath(action.file, currentDirectory, getCanonicalFileName), packageName: action.packageName })
                         : Promise.reject("Host does not implement `installPackage`");
                 default:
                     Debug.fail();
