@@ -3756,7 +3756,8 @@ declare var External: {
 };
 
 interface File extends Blob {
-    readonly lastModifiedDate: any;
+    readonly lastModifiedDate: Date;
+    readonly lastModified: number;
     readonly name: string;
     readonly webkitRelativePath: string;
 }
