@@ -134,8 +134,6 @@ namespace ts {
     }
 
     function reportWatchModeWithoutSysSupport() {
-        sys.clearScreen();
-
         if (!sys.watchFile || !sys.watchDirectory) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
             sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
