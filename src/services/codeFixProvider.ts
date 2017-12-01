@@ -24,32 +24,32 @@ namespace ts {
     }
 
     export namespace codefix {
-        const codeFixes: CodeFixRegistration[][] = [];
-        const groups = createMap<CodeFixRegistration>();
+        const codeFixRegistrations: CodeFixRegistration[][] = [];
+        const actionIdToRegistration = createMap<CodeFixRegistration>();
 
-        export function registerCodeFix(codeFix: CodeFixRegistration) {
-            for (const error of codeFix.errorCodes) {
-                let fixes = codeFixes[error];
-                if (!fixes) {
-                    fixes = [];
-                    codeFixes[error] = fixes;
+        export function registerCodeFix(reg: CodeFixRegistration) {
+            for (const error of reg.errorCodes) {
+                let registrations = codeFixRegistrations[error];
+                if (!registrations) {
+                    registrations = [];
+                    codeFixRegistrations[error] = registrations;
                 }
-                fixes.push(codeFix);
+                registrations.push(reg);
             }
-            if (codeFix.actionIds) {
-                for (const gid of codeFix.actionIds) {
-                    Debug.assert(!groups.has(gid));
-                    groups.set(gid, codeFix);
+            if (reg.actionIds) {
+                for (const actionId of reg.actionIds) {
+                    Debug.assert(!actionIdToRegistration.has(actionId));
+                    actionIdToRegistration.set(actionId, reg);
                 }
             }
         }
 
         export function getSupportedErrorCodes() {
-            return Object.keys(codeFixes);
+            return Object.keys(codeFixRegistrations);
         }
 
         export function getFixes(context: CodeFixContext): CodeFix[] {
-            const fixes = codeFixes[context.errorCode];
+            const fixes = codeFixRegistrations[context.errorCode];
             const allActions: CodeFix[] = [];
 
             forEach(fixes, f => {
@@ -71,7 +71,7 @@ namespace ts {
 
         export function getAllFixes(context: CodeFixAllContext): CodeActionAll {
             // Currently actionId is always a string.
-            return groups.get(cast(context.actionId, isString)).getAllCodeActions!(context);
+            return actionIdToRegistration.get(cast(context.actionId, isString))!.getAllCodeActions!(context);
         }
 
         function createCodeActionAll(changes: FileTextChanges[], commands?: CodeActionCommand[]): CodeActionAll {
