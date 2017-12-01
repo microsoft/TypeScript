@@ -295,7 +295,7 @@ namespace ts {
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeFix[];
-        getCombinedCodeFix(fileName: string, actionId: {}, formatOptions: FormatCodeSettings): CodeActionAll;
+        getCombinedCodeFix(fileName: string, actionId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -415,7 +415,7 @@ namespace ts {
         actionId?: {};
     }
 
-    export interface CodeActionAll {
+    export interface CombinedCodeActions {
         changes: FileTextChanges[];
         commands: CodeActionCommand[] | undefined;
     }

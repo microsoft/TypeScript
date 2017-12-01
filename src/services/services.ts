@@ -1894,7 +1894,7 @@ namespace ts {
             });
         }
 
-        function getCombinedCodeFix(fileName: string, actionId: {}, formatOptions: FormatCodeSettings): CodeActionAll {
+        function getCombinedCodeFix(fileName: string, actionId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);

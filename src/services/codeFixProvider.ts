@@ -4,7 +4,7 @@ namespace ts {
         errorCodes: number[];
         getCodeActions(context: CodeFixContext): CodeFix[] | undefined;
         actionIds?: string[];
-        getAllCodeActions?(context: CodeFixAllContext): CodeActionAll;
+        getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
     }
 
     export interface CodeFixContextBase extends textChanges.TextChangesContext {
@@ -69,12 +69,12 @@ namespace ts {
             return allActions;
         }
 
-        export function getAllFixes(context: CodeFixAllContext): CodeActionAll {
+        export function getAllFixes(context: CodeFixAllContext): CombinedCodeActions {
             // Currently actionId is always a string.
             return actionIdToRegistration.get(cast(context.actionId, isString))!.getAllCodeActions!(context);
         }
 
-        function createCodeActionAll(changes: FileTextChanges[], commands?: CodeActionCommand[]): CodeActionAll {
+        function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions {
             return { changes, commands };
         }
 
@@ -82,18 +82,18 @@ namespace ts {
             return { fileName, textChanges };
         }
 
-        export function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: Diagnostic, commands: Push<CodeActionCommand>) => void): CodeActionAll {
+        export function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: Diagnostic, commands: Push<CodeActionCommand>) => void): CombinedCodeActions {
             const commands: CodeActionCommand[] = [];
             const changes = textChanges.ChangeTracker.with(context, t =>
                 eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
-            return createCodeActionAll(changes, commands.length === 0 ? undefined : commands);
+            return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
         }
 
-        export function codeFixAllWithTextChanges(context: CodeFixAllContext, errorCodes: number[], use: (changes: Push<TextChange>, error: Diagnostic) => void): CodeActionAll {
+        export function codeFixAllWithTextChanges(context: CodeFixAllContext, errorCodes: number[], use: (changes: Push<TextChange>, error: Diagnostic) => void): CombinedCodeActions {
             const changes: TextChange[] = [];
             eachDiagnostic(context, errorCodes, diag => use(changes, diag));
             changes.sort((a, b) => b.span.start - a.span.start);
-            return createCodeActionAll([createFileTextChanges(context.sourceFile.fileName, changes)]);
+            return createCombinedCodeActions([createFileTextChanges(context.sourceFile.fileName, changes)]);
         }
 
         function eachDiagnostic({ program, sourceFile }: CodeFixAllContext, errorCodes: number[], cb: (diag: Diagnostic) => void): void {
