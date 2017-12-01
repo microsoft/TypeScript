@@ -3961,7 +3961,8 @@ namespace ts {
         ES2015 = 2,
         ES2016 = 3,
         ES2017 = 4,
-        ESNext = 5,
+        ES2018 = 5,
+        ESNext = 6,
         Latest = ESNext,
     }
 
