@@ -1,5 +1,4 @@
 //// [destructuringArrayBindingPatternAndAssignment1ES6.ts]
-
 /* AssignmentPattern:
  *      ObjectAssignmentPattern
  *      ArrayAssignmentPattern

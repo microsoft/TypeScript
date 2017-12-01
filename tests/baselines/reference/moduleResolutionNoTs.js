@@ -31,3 +31,4 @@ exports.__esModule = true;
 exports["default"] = 0;
 //// [user.js]
 "use strict";
+exports.__esModule = true;

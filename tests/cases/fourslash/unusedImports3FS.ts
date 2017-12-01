@@ -2,7 +2,7 @@
 
 // @noUnusedLocals: true
 // @Filename: file2.ts
-////[| import {Calculator, test, test2} from "./file1" |]
+////[| import {Calculator, /*some comments*/ test, test2} from "./file1" |]
 
 //// test();
 //// test2();
@@ -20,5 +20,5 @@
 ////
 //// }
 
-verify.rangeAfterCodeFix(`import {test, test2} from "./file1"`);
+verify.rangeAfterCodeFix(`import {/*some comments*/ test, test2} from "./file1"`);
 

@@ -32,7 +32,7 @@
 ////var f_/*a1*/r4 = f.ofFooT;
 ////var f_/*a2*/r7 = f.ofFooFooNum;
 ////var f_/*a3*/r9 = f.ofIG;
-////var f_/*a5*/r13 = f.ofIG5; 
+////var f_/*a5*/r13 = f.ofIG5;
 ////var f_/*a7*/r17 = f.ofC1;
 ////
 ////// T is number
@@ -60,10 +60,10 @@
 ////var f5_/*e1*/r4 = f5.ofFooT;
 ////var f5_/*e2*/r7 = f5.ofFooFooNum;
 ////var f5_/*e3*/r9 = f5.ofIG;
-////var f5_/*e5*/r13 = f5.ofIG5; 
+////var f5_/*e5*/r13 = f5.ofIG5;
 ////var f5_/*e7*/r17 = f5.ofC1;
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 
 verify.quickInfos({
     a1: "var f_r4: Foo<any>",

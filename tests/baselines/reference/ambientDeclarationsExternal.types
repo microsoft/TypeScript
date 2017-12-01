@@ -18,7 +18,6 @@ var n: number;
 >n : number
 
 === tests/cases/conformance/ambient/decls.ts ===
-
 // Ambient external module with export assignment
 declare module 'equ' {
     var x;

@@ -1,5 +1,4 @@
 //// [emitExponentiationOperator3.ts]
-
 var temp = 10;
 
 (-++temp) ** 3;

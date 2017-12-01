@@ -1,5 +1,4 @@
 //// [literalTypes1.ts]
-
 let zero: 0 = 0;
 let one: 1 = 1;
 let two: 2 = 2;

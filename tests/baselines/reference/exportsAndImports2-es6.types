@@ -1,5 +1,4 @@
 === tests/cases/conformance/es6/modules/t1.ts ===
-
 export var x = "x";
 >x : string
 >"x" : "x"

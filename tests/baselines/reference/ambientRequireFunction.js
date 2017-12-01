@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/ambientRequireFunction.ts] ////
 
 //// [node.d.ts]
-
-
 declare function require(moduleName: string): any;
 
 declare module "fs" {

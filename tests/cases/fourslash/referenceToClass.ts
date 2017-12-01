@@ -3,7 +3,7 @@
 // Class references should work across file and not find local variables.
 
 // @Filename: referenceToClass_1.ts
-////class [|foo|] {
+////class [|{| "isWriteAccess": true, "isDefinition": true |}foo|] {
 ////    public n: [|foo|];
 ////    public foo: number;
 ////}
@@ -20,4 +20,7 @@
 // @Filename: referenceToClass_2.ts
 ////var k: [|foo|];
 
-verify.rangesReferenceEachOther();
+const ranges = test.ranges();
+const [r0, r1, r2, r3, r4, r5] = ranges;
+verify.referenceGroups([r0, r1, r2, r4, r5], [{ definition: "class foo", ranges }]);
+verify.referenceGroups(r3, [{ definition: "constructor foo(): foo", ranges }]);

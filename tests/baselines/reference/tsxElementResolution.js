@@ -1,5 +1,4 @@
 //// [tsxElementResolution.tsx]
-
 declare namespace JSX {
 	interface IntrinsicElements {
 		foundFirst: { x: string };
@@ -26,19 +25,19 @@ var e = <Dotted.Name />;
 
 
 //// [tsxElementResolution.jsx]
-var foundFirst = (function () {
+var foundFirst = /** @class */ (function () {
     function foundFirst() {
     }
     return foundFirst;
 }());
-var Other = (function () {
+var Other = /** @class */ (function () {
     function Other() {
     }
     return Other;
 }());
 var Dotted;
 (function (Dotted) {
-    var Name = (function () {
+    var Name = /** @class */ (function () {
         function Name() {
         }
         return Name;

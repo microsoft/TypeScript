@@ -220,15 +220,15 @@ export class HTMLtoJSX {
       // wrapping newlines and sequences of two or more spaces in variables.
       text = text
 >text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
->text        .replace(/\r/g, '')        .replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->text        .replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>text        .replace(/\r/g, '')        .replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>text        .replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
 
         .replace(/\r/g, '')
->replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
->replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >whitespace : Symbol(whitespace, Decl(controlFlowPropertyDeclarations.ts, 121, 50))
 
           return '{' + JSON.stringify(whitespace) + '}';

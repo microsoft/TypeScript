@@ -1,0 +1,18 @@
+=== tests/cases/compiler/index.tsx ===
+declare global {
+>global : Symbol(global, Decl(index.tsx, 0, 0))
+
+    function __make (params: object): any;
+>__make : Symbol(__make, Decl(index.tsx, 0, 16))
+>params : Symbol(params, Decl(index.tsx, 1, 21))
+}
+
+declare var __foot: any;
+>__foot : Symbol(__foot, Decl(index.tsx, 4, 11))
+
+const thing = <__foot />;
+>thing : Symbol(thing, Decl(index.tsx, 6, 5))
+>__foot : Symbol(__foot, Decl(index.tsx, 4, 11))
+
+export {}
+

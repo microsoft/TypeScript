@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives2.ts] ////
 
 //// [index.d.ts]
-
 interface $ { x }
 
 //// [app.ts]

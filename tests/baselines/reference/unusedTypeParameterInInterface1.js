@@ -1,5 +1,4 @@
 //// [unusedTypeParameterInInterface1.ts]
-
 interface int<T> {
 
 }

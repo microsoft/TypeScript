@@ -1,10 +1,14 @@
+// @noImplicitAny: true
+// @noImplicitThis: true
+
 class MyClass {
     t: number;
 
     fn() {
+        type ContainingThis = this;
         //type of 'this' in an object literal is the containing scope's this
         var t = { x: this, y: this.t };
-        var t: { x: MyClass; y: number };
+        var t: { x: ContainingThis; y: number };
     }
 }
 

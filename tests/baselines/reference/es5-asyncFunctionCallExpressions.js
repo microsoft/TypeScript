@@ -113,14 +113,14 @@ function callExpression1() {
 }
 function callExpression2() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     _a = x;
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.apply(void 0, [_c.sent(), z]);
+                    _a.apply(void 0, [_b.sent(), z]);
                     return [2 /*return*/];
             }
         });
@@ -184,16 +184,16 @@ function callExpression6() {
 }
 function callExpression7() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e, _f, _g;
-        return __generator(this, function (_h) {
-            switch (_h.label) {
+        var _a, _b, _c, _d, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
                     _b = (_a = x).apply;
                     _c = [void 0];
                     _e = (_d = y).concat;
                     return [4 /*yield*/, z];
                 case 1:
-                    _b.apply(_a, _c.concat([_e.apply(_d, [[_h.sent()]])]));
+                    _b.apply(_a, _c.concat([_e.apply(_d, [[_f.sent()]])]));
                     return [2 /*return*/];
             }
         });
@@ -201,15 +201,15 @@ function callExpression7() {
 }
 function callExpression8() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
+        var _a, _b, _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
                     _b = (_a = x).apply;
                     _c = [void 0];
                     return [4 /*yield*/, y];
                 case 1:
-                    _b.apply(_a, _c.concat([[_e.sent()].concat(z)]));
+                    _b.apply(_a, _c.concat([[_d.sent()].concat(z)]));
                     return [2 /*return*/];
             }
         });
@@ -217,16 +217,16 @@ function callExpression8() {
 }
 function callExpression9() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e, _f;
-        return __generator(this, function (_g) {
-            switch (_g.label) {
+        var _a, _b, _c, _d, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
                     _b = (_a = x).apply;
                     _c = [void 0];
                     _e = (_d = [y]).concat;
                     return [4 /*yield*/, z];
                 case 1:
-                    _b.apply(_a, _c.concat([_e.apply(_d, [(_g.sent())])]));
+                    _b.apply(_a, _c.concat([_e.apply(_d, [(_f.sent())])]));
                     return [2 /*return*/];
             }
         });
@@ -270,14 +270,14 @@ function callExpression12() {
 }
 function callExpression13() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     _b = (_a = x).a;
                     return [4 /*yield*/, y];
                 case 1:
-                    _b.apply(_a, [_d.sent(), z]);
+                    _b.apply(_a, [_c.sent(), z]);
                     return [2 /*return*/];
             }
         });
@@ -352,14 +352,14 @@ function callExpression18() {
 }
 function callExpression19() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     _b = (_a = x)[a];
                     return [4 /*yield*/, y];
                 case 1:
-                    _b.apply(_a, [_d.sent(), z]);
+                    _b.apply(_a, [_c.sent(), z]);
                     return [2 /*return*/];
             }
         });

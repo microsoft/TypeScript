@@ -1,5 +1,4 @@
 === tests/cases/compiler/foo.js ===
-
 export class StackOverflowTest {
 >StackOverflowTest : StackOverflowTest
 

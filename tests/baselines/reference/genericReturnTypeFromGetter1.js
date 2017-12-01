@@ -11,7 +11,8 @@ export class DbSet<T> {
 //// [genericReturnTypeFromGetter1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var DbSet = (function () {
+    exports.__esModule = true;
+    var DbSet = /** @class */ (function () {
         function DbSet() {
         }
         Object.defineProperty(DbSet.prototype, "entityType", {

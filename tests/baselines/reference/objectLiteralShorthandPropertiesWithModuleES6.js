@@ -1,5 +1,4 @@
 //// [objectLiteralShorthandPropertiesWithModuleES6.ts]
-
 module m {
     export var x;
 }

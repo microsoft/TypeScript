@@ -1,5 +1,4 @@
 //// [declarationEmitIndexTypeNotFound.ts]
-
 export interface Test {
     [index: TypeNotFound]: any;
 }
@@ -7,3 +6,4 @@ export interface Test {
 
 //// [declarationEmitIndexTypeNotFound.js]
 "use strict";
+exports.__esModule = true;

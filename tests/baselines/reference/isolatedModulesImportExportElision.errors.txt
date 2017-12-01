@@ -1,11 +1,10 @@
-tests/cases/compiler/file1.ts(2,17): error TS2307: Cannot find module 'module'.
-tests/cases/compiler/file1.ts(3,18): error TS2307: Cannot find module 'module'.
-tests/cases/compiler/file1.ts(4,21): error TS2307: Cannot find module 'module'.
-tests/cases/compiler/file1.ts(12,18): error TS2307: Cannot find module 'module'.
+tests/cases/compiler/file1.ts(1,17): error TS2307: Cannot find module 'module'.
+tests/cases/compiler/file1.ts(2,18): error TS2307: Cannot find module 'module'.
+tests/cases/compiler/file1.ts(3,21): error TS2307: Cannot find module 'module'.
+tests/cases/compiler/file1.ts(11,18): error TS2307: Cannot find module 'module'.
 
 
 ==== tests/cases/compiler/file1.ts (4 errors) ====
-    
     import {c} from "module"
                     ~~~~~~~~
 !!! error TS2307: Cannot find module 'module'.

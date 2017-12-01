@@ -149,8 +149,9 @@ export class StyleParser {
 }
 
 //// [controlFlowPropertyDeclarations.js]
-// Repro from ##8913
 "use strict";
+// Repro from ##8913
+exports.__esModule = true;
 var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');
 // Populate property map with ReactJS's attribute and property mappings
 // TODO handle/use .Properties value eg: MUST_USE_PROPERTY is not HTML attr
@@ -234,7 +235,7 @@ function isEmpty(string) {
 function isConvertiblePixelValue(value) {
     return /^\d+px$/.test(value);
 }
-var HTMLtoJSX = (function () {
+var HTMLtoJSX = /** @class */ (function () {
     function HTMLtoJSX() {
         var _this = this;
         /**
@@ -275,7 +276,7 @@ exports.HTMLtoJSX = HTMLtoJSX;
 /**
  * Handles parsing of inline styles
  */
-var StyleParser = (function () {
+var StyleParser = /** @class */ (function () {
     function StyleParser() {
         var _this = this;
         this.styles = {};

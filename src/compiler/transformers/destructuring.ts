@@ -6,6 +6,7 @@ namespace ts {
     interface FlattenContext {
         context: TransformationContext;
         level: FlattenLevel;
+        downlevelIteration: boolean;
         hoistTempVariables: boolean;
         emitExpression: (value: Expression) => void;
         emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) => void;
@@ -42,7 +43,7 @@ namespace ts {
         let value: Expression;
         if (isDestructuringAssignment(node)) {
             value = node.right;
-            while (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
+            while (isEmptyArrayLiteral(node.left) || isEmptyObjectLiteral(node.left)) {
                 if (isDestructuringAssignment(value)) {
                     location = node = value;
                     value = node.right;
@@ -57,6 +58,7 @@ namespace ts {
         const flattenContext: FlattenContext = {
             context,
             level,
+            downlevelIteration: context.getCompilerOptions().downlevelIteration,
             hoistTempVariables: true,
             emitExpression,
             emitBindingOrAssignment,
@@ -112,7 +114,10 @@ namespace ts {
             Debug.assertNode(target, createAssignmentCallback ? isIdentifier : isExpression);
             const expression = createAssignmentCallback
                 ? createAssignmentCallback(<Identifier>target, value, location)
-                : createAssignment(visitNode(<Expression>target, visitor, isExpression), value, location);
+                : setTextRange(
+                    createAssignment(visitNode(<Expression>target, visitor, isExpression), value),
+                    location
+                );
             expression.original = original;
             emitExpression(expression);
         }
@@ -143,6 +148,7 @@ namespace ts {
         const flattenContext: FlattenContext = {
             context,
             level,
+            downlevelIteration: context.getCompilerOptions().downlevelIteration,
             hoistTempVariables,
             emitExpression,
             emitBindingOrAssignment,
@@ -174,9 +180,10 @@ namespace ts {
             const variable = createVariableDeclaration(
                 name,
                 /*type*/ undefined,
-                pendingExpressions ? inlineExpressions(append(pendingExpressions, value)) : value,
-                location);
+                pendingExpressions ? inlineExpressions(append(pendingExpressions, value)) : value
+            );
             variable.original = original;
+            setTextRange(variable, location);
             if (isIdentifier(name)) {
                 setEmitFlags(variable, EmitFlags.NoNestedSourceMaps);
             }
@@ -308,11 +315,30 @@ namespace ts {
     function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ArrayBindingOrAssignmentPattern, value: Expression, location: TextRange) {
         const elements = getElementsOfBindingOrAssignmentPattern(pattern);
         const numElements = elements.length;
-        if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)) {
+        if (flattenContext.level < FlattenLevel.ObjectRest && flattenContext.downlevelIteration) {
+            // Read the elements of the iterable into an array
+            value = ensureIdentifier(
+                flattenContext,
+                createReadHelper(
+                    flattenContext.context,
+                    value,
+                    numElements > 0 && getRestIndicatorOfBindingOrAssignmentElement(elements[numElements - 1])
+                        ? undefined
+                        : numElements,
+                    location
+                ),
+                /*reuseIdentifierExpressions*/ false,
+                location
+            );
+        }
+        else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)
+            || every(elements, isOmittedExpression)) {
             // For anything other than a single-element destructuring we need to generate a temporary
             // to ensure value is evaluated exactly once. Additionally, if we have zero elements
             // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
             // so in that case, we'll intentionally create that temporary.
+            // Or all the elements of the binding pattern are omitted expression such as "var [,] = [1,2]",
+            // then we will create temporary variable.
             const reuseIdentifierExpressions = !isDeclarationBindingElement(parent) || numElements !== 0;
             value = ensureIdentifier(flattenContext, value, reuseIdentifierExpressions, location);
         }
@@ -383,16 +409,16 @@ namespace ts {
      */
     function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
         if (isComputedPropertyName(propertyName)) {
-            const argumentExpression = ensureIdentifier(flattenContext, propertyName.expression, /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
+            const argumentExpression = ensureIdentifier(flattenContext, visitNode(propertyName.expression, flattenContext.visitor), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
             return createElementAccess(value, argumentExpression);
         }
         else if (isStringOrNumericLiteral(propertyName)) {
             const argumentExpression = getSynthesizedClone(propertyName);
-            argumentExpression.text = unescapeIdentifier(argumentExpression.text);
+            argumentExpression.text = argumentExpression.text;
             return createElementAccess(value, argumentExpression);
         }
         else {
-            const name = createIdentifier(unescapeIdentifier(propertyName.text));
+            const name = createIdentifier(idText(propertyName));
             return createPropertyAccess(value, name);
         }
     }
@@ -416,7 +442,7 @@ namespace ts {
             const temp = createTempVariable(/*recordTempVariable*/ undefined);
             if (flattenContext.hoistTempVariables) {
                 flattenContext.context.hoistVariableDeclaration(temp);
-                flattenContext.emitExpression(createAssignment(temp, value, location));
+                flattenContext.emitExpression(setTextRange(createAssignment(temp, value), location));
             }
             else {
                 flattenContext.emitBindingOrAssignment(temp, value, location, /*original*/ undefined);
@@ -444,7 +470,7 @@ namespace ts {
     }
 
     function makeBindingElement(name: Identifier) {
-        return createBindingElement(/*propertyName*/ undefined, /*dotDotDotToken*/ undefined, name);
+        return createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name);
     }
 
     function makeAssignmentElement(name: Identifier) {
@@ -467,8 +493,9 @@ namespace ts {
     };
 
     /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
-     * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`*/
-    function createRestCall(context: TransformationContext, value: Expression, elements: BindingOrAssignmentElement[], computedTempVariables: Expression[], location: TextRange): Expression {
+     * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`
+     */
+    function createRestCall(context: TransformationContext, value: Expression, elements: ReadonlyArray<BindingOrAssignmentElement>, computedTempVariables: ReadonlyArray<Expression>, location: TextRange): Expression {
         context.requestEmitHelper(restHelper);
         const propertyNames: Expression[] = [];
         let computedTempVariableOffset = 0;
@@ -492,6 +519,15 @@ namespace ts {
                 }
             }
         }
-        return createCall(getHelperName("__rest"), undefined, [value, createArrayLiteral(propertyNames, location)]);
+        return createCall(
+            getHelperName("__rest"),
+            /*typeArguments*/ undefined,
+            [
+                value,
+                setTextRange(
+                    createArrayLiteral(propertyNames),
+                    location
+                )
+            ]);
     }
 }

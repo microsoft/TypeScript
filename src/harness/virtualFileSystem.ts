@@ -98,7 +98,7 @@ namespace Utils {
         useCaseSensitiveFileNames: boolean;
 
         constructor(currentDirectory: string, useCaseSensitiveFileNames: boolean) {
-            super(undefined, "");
+            super(/*fileSystem*/ undefined, "");
             this.fileSystem = this;
             this.root = new VirtualDirectory(this, "");
             this.currentDirectory = currentDirectory;
@@ -195,23 +195,29 @@ namespace Utils {
     }
 
     export class MockParseConfigHost extends VirtualFileSystem implements ts.ParseConfigHost {
-        constructor(currentDirectory: string, ignoreCase: boolean, files: ts.MapLike<string> | string[]) {
+        constructor(currentDirectory: string, ignoreCase: boolean, files: ts.Map<string> | string[]) {
             super(currentDirectory, ignoreCase);
-            const fileNames = (files instanceof Array) ? files : ts.getOwnKeys(files);
-            for (const file of fileNames) {
-                this.addFile(file, new  Harness.LanguageService.ScriptInfo(file, (files as ts.MapLike<string>)[file], /*isRootFile*/false));
+            if (files instanceof Array) {
+                for (const file of files) {
+                    this.addFile(file, new Harness.LanguageService.ScriptInfo(file, undefined, /*isRootFile*/false));
+                }
+            }
+            else {
+                files.forEach((fileContent, fileName) => {
+                    this.addFile(fileName, new Harness.LanguageService.ScriptInfo(fileName, fileContent, /*isRootFile*/false));
+                });
             }
         }
 
-        readFile(path: string): string {
+        readFile(path: string): string | undefined {
             const value = this.traversePath(path);
             if (value && value.isFile()) {
                 return value.content.content;
             }
         }
 
-        readDirectory(path: string, extensions: string[], excludes: string[], includes: string[]) {
-            return ts.matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, (path: string) => this.getAccessibleFileSystemEntries(path));
+        readDirectory(path: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth: number) {
+            return ts.matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, depth, (path: string) => this.getAccessibleFileSystemEntries(path));
         }
     }
 }

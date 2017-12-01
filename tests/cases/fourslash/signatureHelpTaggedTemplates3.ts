@@ -2,12 +2,10 @@
 
 //// function f(templateStrings, x, y, z) { return 10; }
 //// function g(templateStrings, x, y, z) { return ""; }
-//// 
+////
 //// f ` qwerty ${/*1*/ /*2*/123/*3*/ /*4*/} asdf ${   41234   }  zxcvb ${ g `    ` }    `
 
-test.markers().forEach(m => {
-    goTo.position(m.position);
-
+goTo.eachMarker(() => {
     verify.signatureHelpCountIs(1);
     verify.signatureHelpArgumentCountIs(4);
 

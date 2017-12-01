@@ -1,0 +1,22 @@
+=== tests/cases/compiler/commentsAfterCaseClauses3.ts ===
+function getSecurity(level) {
+>getSecurity : Symbol(getSecurity, Decl(commentsAfterCaseClauses3.ts, 0, 0))
+>level : Symbol(level, Decl(commentsAfterCaseClauses3.ts, 0, 21))
+
+    switch(level){
+>level : Symbol(level, Decl(commentsAfterCaseClauses3.ts, 0, 21))
+
+        case 0: /*Zero*/
+        case 1: /*One*/ 
+        case 2: /*two*/
+            // Leading comments
+            return "Hi";
+        case 3: /*three*/
+        case 4: /*four*/
+            return "hello";
+        case 5: /*five*/
+        default:  /*six*/
+            return "world";
+    }
+    
+}

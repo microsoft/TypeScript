@@ -10,7 +10,6 @@ tests/cases/compiler/externalModuleExportingGenericClass_file1.ts(2,8): error TS
     var v3: number = (new a<number>()).foo;
     
 ==== tests/cases/compiler/externalModuleExportingGenericClass_file0.ts (0 errors) ====
-    
     class C<T> {
         foo: T;
     }

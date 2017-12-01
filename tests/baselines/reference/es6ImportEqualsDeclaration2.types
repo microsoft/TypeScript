@@ -1,5 +1,4 @@
 === tests/cases/compiler/server.d.ts ===
-
 declare module "other" {
     export class C { }
 >C : C

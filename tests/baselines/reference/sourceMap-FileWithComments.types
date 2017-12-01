@@ -1,5 +1,4 @@
 === tests/cases/compiler/sourceMap-FileWithComments.ts ===
-
 // Interface
 interface IPoint {
 >IPoint : IPoint

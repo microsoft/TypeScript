@@ -1,28 +1,24 @@
 === tests/cases/conformance/es6/spread/iteratorSpreadInCall11.ts ===
-foo(...new SymbolIterator);
->foo : Symbol(foo, Decl(iteratorSpreadInCall11.ts, 0, 27))
->SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInCall11.ts, 2, 42))
-
 function foo<T>(...s: T[]) { return s[0] }
->foo : Symbol(foo, Decl(iteratorSpreadInCall11.ts, 0, 27))
->T : Symbol(T, Decl(iteratorSpreadInCall11.ts, 2, 13))
->s : Symbol(s, Decl(iteratorSpreadInCall11.ts, 2, 16))
->T : Symbol(T, Decl(iteratorSpreadInCall11.ts, 2, 13))
->s : Symbol(s, Decl(iteratorSpreadInCall11.ts, 2, 16))
+>foo : Symbol(foo, Decl(iteratorSpreadInCall11.ts, 0, 0))
+>T : Symbol(T, Decl(iteratorSpreadInCall11.ts, 0, 13))
+>s : Symbol(s, Decl(iteratorSpreadInCall11.ts, 0, 16))
+>T : Symbol(T, Decl(iteratorSpreadInCall11.ts, 0, 13))
+>s : Symbol(s, Decl(iteratorSpreadInCall11.ts, 0, 16))
 
 class SymbolIterator {
->SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInCall11.ts, 2, 42))
+>SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInCall11.ts, 0, 42))
 
     next() {
->next : Symbol(SymbolIterator.next, Decl(iteratorSpreadInCall11.ts, 4, 22))
+>next : Symbol(SymbolIterator.next, Decl(iteratorSpreadInCall11.ts, 1, 22))
 
         return {
             value: Symbol(),
->value : Symbol(value, Decl(iteratorSpreadInCall11.ts, 6, 16))
+>value : Symbol(value, Decl(iteratorSpreadInCall11.ts, 3, 16))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
             done: false
->done : Symbol(done, Decl(iteratorSpreadInCall11.ts, 7, 28))
+>done : Symbol(done, Decl(iteratorSpreadInCall11.ts, 4, 28))
 
         };
     }
@@ -33,6 +29,11 @@ class SymbolIterator {
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
->this : Symbol(SymbolIterator, Decl(iteratorSpreadInCall11.ts, 2, 42))
+>this : Symbol(SymbolIterator, Decl(iteratorSpreadInCall11.ts, 0, 42))
     }
 }
+
+foo(...new SymbolIterator);
+>foo : Symbol(foo, Decl(iteratorSpreadInCall11.ts, 0, 0))
+>SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInCall11.ts, 0, 42))
+

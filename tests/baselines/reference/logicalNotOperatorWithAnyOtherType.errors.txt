@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(45,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(45,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
 tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(47,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(57,1): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -51,7 +51,7 @@ tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNot
     var ResultIsBoolean16 = !(ANY + ANY1);
     var ResultIsBoolean17 = !(null + undefined);
                               ~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
     var ResultIsBoolean18 = !(null + null);
                               ~~~~~~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.

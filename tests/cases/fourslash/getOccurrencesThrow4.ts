@@ -3,7 +3,7 @@
 ////function f(a: number) {
 ////    try {
 ////        throw "Hello";
-////        
+////
 ////        try {
 ////            throw 10;
 ////        }
@@ -42,17 +42,9 @@
 ////    throw false;
 ////}
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-
-    test.ranges().forEach(range => {
-        verify.occurrencesAtPositionContains(range, false);
-    });
-
-    verify.occurrencesAtPositionCount(test.ranges().length);
-});
+verify.rangesAreOccurrences(false);
 
 goTo.marker();
-test.ranges().forEach(range => {
+for (const range of test.ranges()) {
     verify.occurrencesAtPositionContains(range, false);
-});
+}

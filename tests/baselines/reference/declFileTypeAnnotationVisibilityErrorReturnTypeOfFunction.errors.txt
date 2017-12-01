@@ -1,11 +1,10 @@
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(17,29): error TS4060: Return type of exported function has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(20,21): error TS4060: Return type of exported function has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(50,31): error TS4060: Return type of exported function has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(53,21): error TS4059: Return type of exported function has or is using name 'm2.public2' from private module 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(16,29): error TS4060: Return type of exported function has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(19,21): error TS4060: Return type of exported function has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(49,31): error TS4060: Return type of exported function has or is using private name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(52,21): error TS4059: Return type of exported function has or is using name 'm2.public2' from private module 'm2'.
 
 
 ==== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts (4 errors) ====
-    
     module m {
         class private1 {
         }

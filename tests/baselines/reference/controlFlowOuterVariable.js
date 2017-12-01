@@ -1,5 +1,4 @@
 //// [controlFlowOuterVariable.ts]
-
 // Repros from #10641
 
 const CONFIG = {

@@ -1,5 +1,4 @@
 //// [emitArrowFunctionWhenUsingArguments19_ES6.ts]
-
 function f() {
     function g() {
         var _arguments = 10;                // No capture in 'g', so no conflict.

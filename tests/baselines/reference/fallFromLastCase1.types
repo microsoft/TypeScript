@@ -1,5 +1,4 @@
 === tests/cases/compiler/fallFromLastCase1.ts ===
-
 declare function use(a: string);
 >use : (a: string) => any
 >a : string

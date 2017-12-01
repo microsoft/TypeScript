@@ -16,6 +16,7 @@ var happyFriday = c.b.Friday;
 
 //// [internalAliasEnumInsideLocalModuleWithoutExportAccessError.js]
 "use strict";
+exports.__esModule = true;
 var a;
 (function (a) {
     var weekend;

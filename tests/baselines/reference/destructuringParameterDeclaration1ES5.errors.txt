@@ -1,8 +1,14 @@
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(12,4): error TS2345: Argument of type '[number, number, string[][], number]' is not assignable to parameter of type '[number, number, string[][]]'.
+  Types of property 'length' are incompatible.
+    Type '4' is not assignable to type '3'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(57,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
+  Types of property 'length' are incompatible.
+    Type '5' is not assignable to type '3'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(62,10): error TS2393: Duplicate function implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(63,10): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts (2 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts (4 errors) ====
     // A parameter declaration may specify either an identifier or a binding pattern.
     // The identifiers specified in parameter declarations and binding patterns
     // in a parameter list must be unique within that parameter list.
@@ -15,6 +21,10 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.
     
     a1([1, 2, [["world"]]]);
     a1([1, 2, [["world"]], 3]);
+       ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[number, number, string[][], number]' is not assignable to parameter of type '[number, number, string[][]]'.
+!!! error TS2345:   Types of property 'length' are incompatible.
+!!! error TS2345:     Type '4' is not assignable to type '3'.
     
     // If the declaration includes an initializer expression (which is permitted only
     // when the parameter list occurs in conjunction with a function body),
@@ -60,6 +70,10 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.
     
     c5([1, 2, [["string"]]]);               // Implied type is is [any, any, [[any]]]
     c5([1, 2, [["string"]], false, true]);  // Implied type is is [any, any, [[any]]]
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
+!!! error TS2345:   Types of property 'length' are incompatible.
+!!! error TS2345:     Type '5' is not assignable to type '3'.
     
     // A parameter can be marked optional by following its name or binding pattern with a question mark (?)
     // or by including an initializer.

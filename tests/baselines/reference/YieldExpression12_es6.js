@@ -6,9 +6,8 @@ class C {
 }
 
 //// [YieldExpression12_es6.js]
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         yield foo;
     }
-    return C;
-}());
+}

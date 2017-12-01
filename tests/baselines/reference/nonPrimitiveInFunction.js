@@ -34,3 +34,11 @@ function returnError() {
     var ret = 123;
     return ret; // expect error
 }
+
+
+//// [nonPrimitiveInFunction.d.ts]
+declare function takeObject(o: object): void;
+declare function returnObject(): object;
+declare var nonPrimitive: object;
+declare var primitive: boolean;
+declare function returnError(): object;

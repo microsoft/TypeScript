@@ -1,6 +1,4 @@
 //// [letDeclarations-scopes.ts]
-
-
 // global
 let l = "string";
 

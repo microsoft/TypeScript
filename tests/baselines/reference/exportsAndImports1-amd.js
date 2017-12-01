@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports1-amd.ts] ////
 
 //// [t1.ts]
-
 var v = 1;
 function f() { }
 class C {
@@ -37,11 +36,12 @@ export { v, f, C, I, E, D, M, N, T, a };
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var v = 1;
     exports.v = v;
     function f() { }
     exports.f = f;
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
@@ -64,6 +64,7 @@ define(["require", "exports"], function (require, exports) {
 //// [t2.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.v = t1_1.v;
     exports.f = t1_1.f;
     exports.C = t1_1.C;
@@ -74,6 +75,7 @@ define(["require", "exports", "./t1"], function (require, exports, t1_1) {
 //// [t3.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.v = t1_1.v;
     exports.f = t1_1.f;
     exports.C = t1_1.C;

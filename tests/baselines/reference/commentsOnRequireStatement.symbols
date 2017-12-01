@@ -1,7 +1,6 @@
 === tests/cases/compiler/0.ts ===
-
 export var subject = 10;
->subject : Symbol(subject, Decl(0.ts, 1, 10))
+>subject : Symbol(subject, Decl(0.ts, 0, 10))
 
 === tests/cases/compiler/1.ts ===
 export var subject1 = 10;

@@ -1,5 +1,4 @@
 === tests/cases/conformance/es6/modules/t1.ts ===
-
 var v = 1;
 >v : number
 >1 : 1

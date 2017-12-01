@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/mapped/mappedTypes3.ts ===
-
 class Box<P> {
 >Box : Box<P>
 >P : P

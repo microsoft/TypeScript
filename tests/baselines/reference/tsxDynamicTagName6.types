@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/tsxDynamicTagName6.tsx ===
-
 declare module JSX {
 >JSX : any
 

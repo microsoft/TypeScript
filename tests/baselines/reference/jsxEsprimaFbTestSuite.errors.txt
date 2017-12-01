@@ -5,7 +5,7 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,29): error TS1005: '{' 
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,57): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,58): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,1): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,12): error TS2657: JSX expressions must have one parent element
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,12): error TS2657: JSX expressions must have one parent element.
 
 
 ==== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx (8 errors) ====
@@ -65,7 +65,7 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,12): error TS2657: JSX 
     ~
 !!! error TS1003: Identifier expected.
                ~
-!!! error TS2657: JSX expressions must have one parent element
+!!! error TS2657: JSX expressions must have one parent element.
     
     <a.b.c></a.b.c>;
     

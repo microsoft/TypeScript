@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(46,32): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(46,32): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(47,32): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
 tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(48,32): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(58,1): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -59,7 +59,7 @@ tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperator
     var ResultIsString16 = typeof (ANY + ANY1);
     var ResultIsString17 = typeof (null + undefined);
                                    ~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
     var ResultIsString18 = typeof (null + null);
                                    ~~~~~~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.

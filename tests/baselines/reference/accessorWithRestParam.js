@@ -1,12 +1,11 @@
 //// [accessorWithRestParam.ts]
-
 class C {
     set X(...v) { }
     static set X(...v2) { }
 }
 
 //// [accessorWithRestParam.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "X", {

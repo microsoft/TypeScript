@@ -50,11 +50,11 @@ namespace Harness.SourceMapRecorder {
                 return true;
             }
 
-            if (sourceMapMappings.charAt(decodingIndex) == ",") {
+            if (sourceMapMappings.charAt(decodingIndex) === ",") {
                 return true;
             }
 
-            if (sourceMapMappings.charAt(decodingIndex) == ";") {
+            if (sourceMapMappings.charAt(decodingIndex) === ";") {
                 return true;
             }
 
@@ -117,7 +117,7 @@ namespace Harness.SourceMapRecorder {
             }
 
             while (decodingIndex < sourceMapMappings.length) {
-                if (sourceMapMappings.charAt(decodingIndex) == ";") {
+                if (sourceMapMappings.charAt(decodingIndex) === ";") {
                     // New line
                     decodeOfEncodedMapping.emittedLine++;
                     decodeOfEncodedMapping.emittedColumn = 1;
@@ -125,7 +125,7 @@ namespace Harness.SourceMapRecorder {
                     continue;
                 }
 
-                if (sourceMapMappings.charAt(decodingIndex) == ",") {
+                if (sourceMapMappings.charAt(decodingIndex) === ",") {
                     // Next entry is on same line - no action needed
                     decodingIndex++;
                     continue;
@@ -259,7 +259,7 @@ namespace Harness.SourceMapRecorder {
         export function recordSourceMapSpan(sourceMapSpan: ts.SourceMapSpan) {
             // verify the decoded span is same as the new span
             const decodeResult = SourceMapDecoder.decodeNextEncodedSourceMapSpan();
-            let decodedErrors: string[];
+            let decodeErrors: string[];
             if (decodeResult.error
                 || decodeResult.sourceMapSpan.emittedLine   !== sourceMapSpan.emittedLine
                 || decodeResult.sourceMapSpan.emittedColumn !== sourceMapSpan.emittedColumn
@@ -268,22 +268,20 @@ namespace Harness.SourceMapRecorder {
                 || decodeResult.sourceMapSpan.sourceIndex   !== sourceMapSpan.sourceIndex
                 || decodeResult.sourceMapSpan.nameIndex     !== sourceMapSpan.nameIndex) {
                 if (decodeResult.error) {
-                    decodedErrors = ["!!^^ !!^^ There was decoding error in the sourcemap at this location: " + decodeResult.error];
+                    decodeErrors = ["!!^^ !!^^ There was decoding error in the sourcemap at this location: " + decodeResult.error];
                 }
                 else {
-                    decodedErrors = ["!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:"];
+                    decodeErrors = ["!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:"];
                 }
-                decodedErrors.push("!!^^ !!^^ Decoded span from sourcemap's mappings entry: " + getSourceMapSpanString(decodeResult.sourceMapSpan, /*getAbsentNameIndex*/ true) + " Span encoded by the emitter:" + getSourceMapSpanString(sourceMapSpan, /*getAbsentNameIndex*/ true));
+                decodeErrors.push("!!^^ !!^^ Decoded span from sourcemap's mappings entry: " + getSourceMapSpanString(decodeResult.sourceMapSpan, /*getAbsentNameIndex*/ true) + " Span encoded by the emitter:" + getSourceMapSpanString(sourceMapSpan, /*getAbsentNameIndex*/ true));
             }
 
             if (spansOnSingleLine.length && spansOnSingleLine[0].sourceMapSpan.emittedLine !== sourceMapSpan.emittedLine) {
                 // On different line from the one that we have been recording till now,
                 writeRecordedSpans();
-                spansOnSingleLine = [{ sourceMapSpan: sourceMapSpan, decodeErrors: decodedErrors }];
+                spansOnSingleLine = [];
             }
-            else {
-                spansOnSingleLine.push({ sourceMapSpan: sourceMapSpan, decodeErrors: decodedErrors });
-            }
+            spansOnSingleLine.push({ sourceMapSpan, decodeErrors });
         }
 
         export function recordNewSourceFileSpan(sourceMapSpan: ts.SourceMapSpan, newSourceFileCode: string) {
@@ -388,9 +386,9 @@ namespace Harness.SourceMapRecorder {
 
                 if (currentSpan.decodeErrors) {
                     // If there are decode errors, write
-                    for (let i = 0; i < currentSpan.decodeErrors.length; i++) {
+                    for (const decodeError of currentSpan.decodeErrors) {
                         writeSourceMapIndent(prevEmittedCol, markerIds[index]);
-                        sourceMapRecorder.WriteLine(currentSpan.decodeErrors[i]);
+                        sourceMapRecorder.WriteLine(decodeError);
                     }
                 }
 
@@ -422,7 +420,7 @@ namespace Harness.SourceMapRecorder {
                 const jsFileText = getTextOfLine(currentJsLine, jsLineMap, jsFile.code);
                 if (prevEmittedCol < jsFileText.length) {
                     // There is remaining text on this line that will be part of next source span so write marker that continues
-                    writeSourceMapMarker(undefined, spansOnSingleLine.length, /*endColumn*/ jsFileText.length, /*endContinues*/ true);
+                    writeSourceMapMarker(/*currentSpan*/ undefined, spansOnSingleLine.length, /*endColumn*/ jsFileText.length, /*endContinues*/ true);
                 }
 
                 // Emit Source text
@@ -444,8 +442,7 @@ namespace Harness.SourceMapRecorder {
             let prevSourceFile: ts.SourceFile;
 
             SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMapData, jsFiles[i]);
-            for (let j = 0; j < sourceMapData.sourceMapDecodedMappings.length; j++) {
-                const decodedSourceMapping = sourceMapData.sourceMapDecodedMappings[j];
+            for (const decodedSourceMapping of sourceMapData.sourceMapDecodedMappings) {
                 const currentSourceFile = program.getSourceFile(sourceMapData.inputSourceFileNames[decodedSourceMapping.sourceIndex]);
                 if (currentSourceFile !== prevSourceFile) {
                     SourceMapSpanWriter.recordNewSourceFileSpan(decodedSourceMapping, currentSourceFile.text);

@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target7.ts]
-
 export namespace N {
     var x = 0;
 }

@@ -4,7 +4,8 @@ Diagnostics:
 FileName : /tests/cases/fourslash/inputFile.js
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var C = (function () {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

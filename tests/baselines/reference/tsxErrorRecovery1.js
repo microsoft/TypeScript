@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 declare namespace JSX { interface Element { } }
 
 function foo() {

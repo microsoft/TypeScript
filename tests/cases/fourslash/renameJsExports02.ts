@@ -2,11 +2,15 @@
 
 // @allowJs: true
 // @Filename: a.js
-////exports./**/[|area|] = function (r) { return r * r; }
+////module.exports = class [|{| "isWriteAccess": true, "isDefinition": true |}A|] {}
 
 // @Filename: b.js
-////var mod = require('./a');
-////var t = mod.[|area|](10);
+////const [|{| "isWriteAccess": true, "isDefinition": true |}A|] = require("./a");
 
-goTo.marker();
-verify.renameLocations( /*findInStrings*/ false, /*findInComments*/ false);
+const [r0, r1] = test.ranges();
+verify.referenceGroups(r0, [
+    { definition: "(local class) A", ranges: [r0] },
+    { definition: "const A: typeof A", ranges: [r1] }
+]);
+
+verify.singleReferenceGroup("const A: typeof A", [r1]);

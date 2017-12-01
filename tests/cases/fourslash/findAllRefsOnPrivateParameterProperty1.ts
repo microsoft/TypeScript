@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 ////class ABCD {
-////    constructor(private x: number, public y: number, private [|z|]: number) {
+////    constructor(private x: number, public y: number, private [|{| "isWriteAccess": true, "isDefinition": true |}z|]: number) {
 ////    }
 ////
 ////    func() {
@@ -9,4 +9,4 @@
 ////    }
 ////}
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) ABCD.z: number");

@@ -6,15 +6,11 @@
 ////let a2: A2;
 ////let a12 = { ...a1, ...a2 };
 ////a12.[|a|];
-const ranges = test.ranges();
-verify.assertHasRanges(ranges);
 
+const [r0, r1, r2] = test.ranges();
 // A1 unions with A2, so rename A1.a and a12.a
-goTo.position(ranges[0].start);
-verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [ranges[0], ranges[2]]);
+verify.renameLocations(r0, [r0, r2]);
 // A1 unions with A2, so rename A2.a and a12.a
-goTo.position(ranges[1].start);
-verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [ranges[1], ranges[2]]);
+verify.renameLocations(r1, [r1, r2]);
 // a12.a unions A1.a and A2.a, so rename A1.a, A2.a and a12.a
-goTo.position(ranges[2].start);
-verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [ranges[0], ranges[1], ranges[2]]);
+verify.renameLocations(r2, [r0, r1, r2]);

@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////type [|{| "isDefinition": true |}Alias|]= number;
-////let n: [|{| "isDefinition": false |}Alias|] = 12;
+////type [|{| "isWriteAccess": true, "isDefinition": true |}Alias|]= number;
+////let n: [|Alias|] = 12;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("type Alias = number");

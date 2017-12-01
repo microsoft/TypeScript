@@ -1,5 +1,4 @@
 //// [unusedTypeParameters2.ts]
-
 class greeter<typeparameter1, typeparameter2> {
     private x: typeparameter2;
 
@@ -9,7 +8,7 @@ class greeter<typeparameter1, typeparameter2> {
 }
 
 //// [unusedTypeParameters2.js]
-var greeter = (function () {
+var greeter = /** @class */ (function () {
     function greeter() {
     }
     greeter.prototype.function1 = function () {

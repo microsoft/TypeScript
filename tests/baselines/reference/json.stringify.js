@@ -1,5 +1,4 @@
 //// [json.stringify.ts]
-
 var value = null;
 JSON.stringify(value, undefined, 2);
 JSON.stringify(value, null, 2);

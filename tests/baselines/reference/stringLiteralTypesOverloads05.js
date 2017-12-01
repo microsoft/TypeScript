@@ -1,5 +1,4 @@
 //// [stringLiteralTypesOverloads05.ts]
-
 interface Animal { animal: {} };
 interface Dog extends Animal { dog: {} }
 interface Cat extends Animal { cat: {} }

@@ -2,7 +2,6 @@ tests/cases/conformance/jsx/app.tsx(8,8): error TS2604: JSX element type 'this' 
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
-    
     declare module 'react' {
     	class Component<T, U> { }
     }

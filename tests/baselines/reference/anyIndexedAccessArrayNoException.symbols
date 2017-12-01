@@ -1,0 +1,4 @@
+=== tests/cases/compiler/anyIndexedAccessArrayNoException.ts ===
+var x: any[[]];
+>x : Symbol(x, Decl(anyIndexedAccessArrayNoException.ts, 0, 3))
+

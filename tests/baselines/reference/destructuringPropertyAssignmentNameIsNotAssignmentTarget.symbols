@@ -1,0 +1,21 @@
+=== tests/cases/compiler/destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts ===
+// test for #10668
+function qux(bar: { value: number }) {
+>qux : Symbol(qux, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 0, 0))
+>bar : Symbol(bar, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 1, 13))
+>value : Symbol(value, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 1, 19))
+
+    let foo: number;
+>foo : Symbol(foo, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 2, 7))
+
+    ({ value: foo } = bar);
+>value : Symbol(value, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 3, 6))
+>foo : Symbol(foo, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 2, 7))
+>bar : Symbol(bar, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 1, 13))
+
+    let x = () => bar;
+>x : Symbol(x, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 4, 7))
+>bar : Symbol(bar, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 1, 13))
+}
+
+

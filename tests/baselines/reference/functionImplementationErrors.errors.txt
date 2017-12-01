@@ -1,10 +1,9 @@
-tests/cases/conformance/functions/functionImplementationErrors.ts(26,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/functions/functionImplementationErrors.ts(31,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
-tests/cases/conformance/functions/functionImplementationErrors.ts(36,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
+tests/cases/conformance/functions/functionImplementationErrors.ts(25,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/functions/functionImplementationErrors.ts(30,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
+tests/cases/conformance/functions/functionImplementationErrors.ts(35,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
 
 
 ==== tests/cases/conformance/functions/functionImplementationErrors.ts (3 errors) ====
-    
     // FunctionExpression with no return type annotation with multiple return statements with unrelated types
     var f1 = function () {
         return '';

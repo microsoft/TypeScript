@@ -1,5 +1,4 @@
 //// [breakTarget5.ts]
-
 target:
 while (true) {
   function f() {

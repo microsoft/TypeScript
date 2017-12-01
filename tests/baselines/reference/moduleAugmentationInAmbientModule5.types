@@ -17,7 +17,6 @@ let y = x.getA().x;
 >x : number
 
 === tests/cases/compiler/array.d.ts ===
-
 declare module "A" {
     class A { x: number; }
 >A : A

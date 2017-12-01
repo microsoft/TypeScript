@@ -1,19 +1,18 @@
 //// [unusedPrivateVariableInClass5.ts]
-
 class greeter {
     private x: string;
     private y: string;
     public  z: string;
 
     constructor() {
-        this.x = "dummy value";
+        this.x;
     }
 }
 
 //// [unusedPrivateVariableInClass5.js]
-var greeter = (function () {
+var greeter = /** @class */ (function () {
     function greeter() {
-        this.x = "dummy value";
+        this.x;
     }
     return greeter;
 }());

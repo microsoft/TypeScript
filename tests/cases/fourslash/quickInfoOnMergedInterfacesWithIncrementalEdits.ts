@@ -23,4 +23,4 @@ edit.insert('a');
 verify.quickInfoIs("(property) B<string>.bar: string");
 goTo.marker('2');
 verify.quickInfoIs("var r4: string");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

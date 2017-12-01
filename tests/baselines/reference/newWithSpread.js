@@ -1,5 +1,4 @@
 //// [newWithSpread.ts]
-
 function f(x: number, y: number, ...z: string[]) {
 }
 
@@ -110,7 +109,7 @@ function f2() {
         x[_i] = arguments[_i];
     }
 }
-var B = (function () {
+var B = /** @class */ (function () {
     function B(x, y) {
         var z = [];
         for (var _i = 2; _i < arguments.length; _i++) {

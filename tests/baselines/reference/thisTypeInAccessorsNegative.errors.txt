@@ -1,9 +1,8 @@
 tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(10,9): error TS2682: 'get' and 'set' accessor must have the same 'this' type.
 tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(11,9): error TS2682: 'get' and 'set' accessor must have the same 'this' type.
-tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(16,22): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts (3 errors) ====
+==== tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts (2 errors) ====
     interface Foo {
         n: number;
         x: number;
@@ -22,9 +21,6 @@ tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(16,22): er
     }
     const contextual: Foo = {
         n: 16,
-        // there is no contextual this type from an Foo.x.
         get x() { return this.n; }
-                         ~~~~
-!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     

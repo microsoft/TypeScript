@@ -1,5 +1,4 @@
 === tests/cases/conformance/statements/forStatements/forStatements.ts ===
-
 interface I {
 >I : I
 

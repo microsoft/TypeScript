@@ -1,5 +1,4 @@
 === tests/cases/compiler/unusedInterfaceinNamespace4.ts ===
-
 namespace Validation {
 >Validation : typeof Validation
 

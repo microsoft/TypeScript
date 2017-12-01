@@ -1,10 +1,10 @@
 tests/cases/compiler/newOperator.ts(3,13): error TS2693: 'ifc' only refers to a type, but is being used as a value here.
 tests/cases/compiler/newOperator.ts(10,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/newOperator.ts(11,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/newOperator.ts(12,5): error TS2304: Cannot find name 'string'.
-tests/cases/compiler/newOperator.ts(18,14): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/newOperator.ts(12,5): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/compiler/newOperator.ts(18,14): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/newOperator.ts(18,20): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/compiler/newOperator.ts(21,1): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/newOperator.ts(21,1): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/newOperator.ts(22,1): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/compiler/newOperator.ts(28,13): error TS2304: Cannot find name 'q'.
 tests/cases/compiler/newOperator.ts(31,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -32,7 +32,7 @@ tests/cases/compiler/newOperator.ts(45,23): error TS1150: 'new T[]' cannot be us
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     new string;
         ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
     
     // Use in LHS of expression?
     (new Date()).toString();
@@ -40,14 +40,14 @@ tests/cases/compiler/newOperator.ts(45,23): error TS1150: 'new T[]' cannot be us
     // Various spacing
     var t3 = new string[]( );
                  ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                        ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     var t4 =
     new
     string
     ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
     [
     ~
         ]

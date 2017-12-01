@@ -1,5 +1,4 @@
 === tests/cases/compiler/sourceMap-StringLiteralWithNewLine.ts ===
-
 interface Document {
 >Document : Document
 }

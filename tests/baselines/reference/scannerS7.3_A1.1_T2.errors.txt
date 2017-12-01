@@ -1,4 +1,4 @@
-tests/cases/conformance/scanner/ecmascript5/scannerS7.3_A1.1_T2.ts(17,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/scanner/ecmascript5/scannerS7.3_A1.1_T2.ts(17,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 
 
 ==== tests/cases/conformance/scanner/ecmascript5/scannerS7.3_A1.1_T2.ts (1 errors) ====
@@ -20,7 +20,7 @@ tests/cases/conformance/scanner/ecmascript5/scannerS7.3_A1.1_T2.ts(17,3): error 
     if (x !== 1) {
       $ERROR('#1: var\\nx\\n=\\n1\\n; x === 1. Actual: ' + (x));
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     
     

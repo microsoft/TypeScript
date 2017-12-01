@@ -1,5 +1,4 @@
 === tests/cases/conformance/es6/modules/m1.ts ===
-
 export default function f1() {
 >f1 : () => void
 }

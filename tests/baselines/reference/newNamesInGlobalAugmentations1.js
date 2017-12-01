@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/newNamesInGlobalAugmentations1.ts] ////
 
 //// [f1.d.ts]
-
 export {};
 
 declare module M.M1 {
@@ -17,7 +16,6 @@ declare global {
 }
 
 //// [main.ts]
-
 Symbol.observable;
 new Cls().x
 let c = a + b + X;

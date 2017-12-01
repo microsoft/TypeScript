@@ -1,5 +1,4 @@
 === tests/cases/compiler/fatarrowfunctions.ts ===
-
 function foo(x:any) {
 >foo : (x: any) => any
 >x : any

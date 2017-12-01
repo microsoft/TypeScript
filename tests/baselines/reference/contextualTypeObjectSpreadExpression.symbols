@@ -1,0 +1,15 @@
+=== tests/cases/compiler/contextualTypeObjectSpreadExpression.ts ===
+interface I {
+>I : Symbol(I, Decl(contextualTypeObjectSpreadExpression.ts, 0, 0))
+
+    a: "a";
+>a : Symbol(I.a, Decl(contextualTypeObjectSpreadExpression.ts, 0, 13))
+}
+let i: I;
+>i : Symbol(i, Decl(contextualTypeObjectSpreadExpression.ts, 3, 3))
+>I : Symbol(I, Decl(contextualTypeObjectSpreadExpression.ts, 0, 0))
+
+i = { ...{ a: "a" } };
+>i : Symbol(i, Decl(contextualTypeObjectSpreadExpression.ts, 3, 3))
+>a : Symbol(a, Decl(contextualTypeObjectSpreadExpression.ts, 4, 10))
+

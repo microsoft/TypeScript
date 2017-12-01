@@ -1,5 +1,4 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardFunctionGenerics.ts ===
-
 class A {
 >A : A
 

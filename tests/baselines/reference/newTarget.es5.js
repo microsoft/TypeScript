@@ -43,17 +43,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
         var _newTarget = this.constructor;
         this.d = function _a() { var _newTarget = this && this instanceof _a ? this.constructor : void 0; return _newTarget; };
         var a = _newTarget;
         var b = function () { return _newTarget; };
     }
+    A.c = function _a() { var _newTarget = this && this instanceof _a ? this.constructor : void 0; return _newTarget; };
     return A;
 }());
-A.c = function _a() { var _newTarget = this && this instanceof _a ? this.constructor : void 0; return _newTarget; };
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         var _newTarget = this.constructor;

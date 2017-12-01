@@ -1,5 +1,4 @@
 === tests/cases/compiler/controlFlowJavascript.js ===
-
 let cond = true;
 >cond : boolean
 >true : true

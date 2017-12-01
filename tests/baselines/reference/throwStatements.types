@@ -1,5 +1,4 @@
 === tests/cases/conformance/statements/throwStatements/throwStatements.ts ===
-
 // all legal
 
 interface I {
@@ -174,7 +173,7 @@ throw aModule;
 >aModule : typeof M
 
 throw typeof M;
->typeof M : string
+>typeof M : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >M : typeof M
 
 var aClassInModule = new M.A();

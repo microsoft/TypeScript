@@ -32,7 +32,7 @@ var e2;
     e2[e2["One"] = 0] = "One";
 })(e2 || (e2 = {}));
 ; // error
-var e2 = (function () {
+var e2 = /** @class */ (function () {
     function e2() {
     }
     e2.prototype.foo = function () {
@@ -41,4 +41,4 @@ var e2 = (function () {
     return e2;
 }());
 //enum then enum - covered
-//enum then import - covered 
+//enum then import - covered

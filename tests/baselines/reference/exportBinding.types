@@ -1,0 +1,37 @@
+=== tests/cases/conformance/es6/modules/exportConsts.ts ===
+export { x }
+>x : "x"
+
+export { x as xx }
+>x : "x"
+>xx : "x"
+
+export default x;
+>x : "x"
+
+const x = 'x'
+>x : "x"
+>'x' : "x"
+
+export { Y as Z }
+>Y : typeof Y
+>Z : typeof Y
+
+class Y {}
+>Y : Y
+
+=== tests/cases/conformance/es6/modules/exportVars.ts ===
+export { y }
+>y : string
+
+export { y as yy }
+>y : string
+>yy : string
+
+export default y;
+>y : string
+
+var y = 'y'
+>y : string
+>'y' : "y"
+

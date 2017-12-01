@@ -1,5 +1,4 @@
 //// [modifierOnClassExpressionMemberInFunction.ts]
-
 function g() {
     var x = class C {
         public prop1 = 1;
@@ -10,7 +9,7 @@ function g() {
 
 //// [modifierOnClassExpressionMemberInFunction.js]
 function g() {
-    var x = (_a = (function () {
+    var x = (_a = /** @class */ (function () {
             function C() {
                 this.prop1 = 1;
             }

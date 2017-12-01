@@ -1,5 +1,4 @@
 //// [computedPropertyNames50_ES5.ts]
-
 var x = {
     p1: 10,
     get foo() {

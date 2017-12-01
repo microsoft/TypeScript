@@ -1,0 +1,21 @@
+tests/cases/compiler/discriminatedUnionErrorMessage.ts(10,5): error TS2322: Type '{ kind: "sq"; x: number; y: number; }' is not assignable to type 'Shape'.
+  Object literal may only specify known properties, and 'x' does not exist in type 'Square'.
+
+
+==== tests/cases/compiler/discriminatedUnionErrorMessage.ts (1 errors) ====
+    type Square = { kind: "sq", size: number }
+    type Rectangle = { kind: "rt", x: number, y: number }
+    type Circle = { kind: "cr", radius: number }
+    type Shape =
+        | Square
+        | Rectangle
+        | Circle;
+    let shape: Shape = {
+        kind: "sq",
+        x: 12,
+        ~~~~~
+!!! error TS2322: Type '{ kind: "sq"; x: number; y: number; }' is not assignable to type 'Shape'.
+!!! error TS2322:   Object literal may only specify known properties, and 'x' does not exist in type 'Square'.
+        y: 13,
+    }
+    

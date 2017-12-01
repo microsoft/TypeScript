@@ -7,6 +7,6 @@
 ////            break labelc;
 ////}
 
-const [a, b, useB] = test.ranges();
-verify.referencesOf(a, [a]);
-verify.rangesReferenceEachOther([b, useB]);
+const ranges = test.rangesByText();
+verify.singleReferenceGroup("labela", ranges.get("labela"));
+verify.singleReferenceGroup("labelb", ranges.get("labelb"));

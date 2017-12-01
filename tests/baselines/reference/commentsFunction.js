@@ -1,5 +1,4 @@
 //// [commentsFunction.ts]
-
 /** This comment should appear for foo*/
 function foo() {
 } /* trailing comment of function */

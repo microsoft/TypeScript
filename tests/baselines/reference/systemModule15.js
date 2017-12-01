@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/systemModule15.ts] ////
 
 //// [file1.ts]
-
-
 import * as moduleB from "./file2"
 
 declare function use(v: any): void;
@@ -12,7 +10,6 @@ use(moduleB.moduleC);
 use(moduleB.moduleCStar);
 
 //// [file2.ts]
-
 import * as moduleCStar from "./file3"
 import {value2} from "./file4"
 import moduleC from "./file3"
@@ -25,12 +22,10 @@ export {
 }
 
 //// [file3.ts]
-
 export var value = "youpi";
 export default value;
 
 //// [file4.ts]
-
 export var value2 = "v";
 
 //// [file3.js]

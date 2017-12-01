@@ -1,5 +1,4 @@
 === tests/cases/compiler/file0.ts ===
-
 export var v = 1;
 >v : number
 >1 : 1

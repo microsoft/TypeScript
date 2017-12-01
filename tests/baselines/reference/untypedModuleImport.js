@@ -23,14 +23,17 @@ foo(bar());
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var foo = require("foo");
 foo.bar();
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var foo = require("foo");
 foo();
 //// [c.js]
 "use strict";
+exports.__esModule = true;
 var foo_1 = require("foo");
 require("./a");
 require("./b");

@@ -1,0 +1,23 @@
+tests/cases/compiler/baseConstraintOfDecorator.ts(2,5): error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
+tests/cases/compiler/baseConstraintOfDecorator.ts(2,40): error TS2507: Type 'TFunction' is not a constructor function type.
+
+
+==== tests/cases/compiler/baseConstraintOfDecorator.ts (2 errors) ====
+    export function classExtender<TFunction>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
+        return class decoratorFunc extends superClass {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                           ~~~~~~~~~~
+!!! error TS2507: Type 'TFunction' is not a constructor function type.
+            constructor(...args: any[]) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                super(...args);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                _instanceModifier(this, args);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+    ~~~~~~~~~
+        };
+    ~~~~~~
+!!! error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
+    }
+    

@@ -1,5 +1,4 @@
 === tests/cases/compiler/asyncawait.ts ===
-
 export function async<T>(...args: any[]): any { }
 >async : <T>(...args: any[]) => any
 >T : T

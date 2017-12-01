@@ -18,6 +18,7 @@ module Query {
 
 //// [privacyCheckAnonymousFunctionParameter.js]
 "use strict";
+exports.__esModule = true;
 exports.x = 1; // Makes this an external module
 var Query;
 (function (Query) {

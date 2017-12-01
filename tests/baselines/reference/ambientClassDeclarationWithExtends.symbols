@@ -26,25 +26,23 @@ var d: C = new D();
 >D : Symbol(D, Decl(ambientClassDeclarationExtends_singleFile.ts, 5, 1), Decl(ambientClassDeclarationExtends_singleFile.ts, 6, 22))
 
 === tests/cases/compiler/ambientClassDeclarationExtends_file1.ts ===
-
 declare class E {
 >E : Symbol(E, Decl(ambientClassDeclarationExtends_file1.ts, 0, 0))
 
     public bar;
->bar : Symbol(E.bar, Decl(ambientClassDeclarationExtends_file1.ts, 1, 17))
+>bar : Symbol(E.bar, Decl(ambientClassDeclarationExtends_file1.ts, 0, 17))
 }
 namespace F { var y; }
->F : Symbol(F, Decl(ambientClassDeclarationExtends_file1.ts, 3, 1), Decl(ambientClassDeclarationExtends_file2.ts, 0, 0))
->y : Symbol(y, Decl(ambientClassDeclarationExtends_file1.ts, 4, 17))
+>F : Symbol(F, Decl(ambientClassDeclarationExtends_file1.ts, 2, 1), Decl(ambientClassDeclarationExtends_file2.ts, 0, 0))
+>y : Symbol(y, Decl(ambientClassDeclarationExtends_file1.ts, 3, 17))
 
 === tests/cases/compiler/ambientClassDeclarationExtends_file2.ts ===
-
 declare class F extends E { }
->F : Symbol(F, Decl(ambientClassDeclarationExtends_file1.ts, 3, 1), Decl(ambientClassDeclarationExtends_file2.ts, 0, 0))
+>F : Symbol(F, Decl(ambientClassDeclarationExtends_file1.ts, 2, 1), Decl(ambientClassDeclarationExtends_file2.ts, 0, 0))
 >E : Symbol(E, Decl(ambientClassDeclarationExtends_file1.ts, 0, 0))
 
 var f: E = new F();
->f : Symbol(f, Decl(ambientClassDeclarationExtends_file2.ts, 2, 3))
+>f : Symbol(f, Decl(ambientClassDeclarationExtends_file2.ts, 1, 3))
 >E : Symbol(E, Decl(ambientClassDeclarationExtends_file1.ts, 0, 0))
->F : Symbol(F, Decl(ambientClassDeclarationExtends_file1.ts, 3, 1), Decl(ambientClassDeclarationExtends_file2.ts, 0, 0))
+>F : Symbol(F, Decl(ambientClassDeclarationExtends_file1.ts, 2, 1), Decl(ambientClassDeclarationExtends_file2.ts, 0, 0))
 

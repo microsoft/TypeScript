@@ -1,6 +1,4 @@
 //// [shorthandPropertyAssignmentsInDestructuring_ES6.ts]
-
-
 (function() {
 	var s0;
 	for ({ s0 = 5 } of [{ s0: 1 }]) {

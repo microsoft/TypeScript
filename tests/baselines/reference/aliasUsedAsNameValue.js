@@ -20,12 +20,15 @@ export var a = function () {
 
 //// [aliasUsedAsNameValue_0.js]
 "use strict";
+exports.__esModule = true;
 //// [aliasUsedAsNameValue_1.js]
 "use strict";
+exports.__esModule = true;
 function b(a) { return null; }
 exports.b = b;
 //// [aliasUsedAsNameValue_2.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='aliasUsedAsNameValue_0.ts' />
 ///<reference path='aliasUsedAsNameValue_1.ts' />
 var mod = require("./aliasUsedAsNameValue_0");

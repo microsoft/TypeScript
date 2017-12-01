@@ -1,6 +1,4 @@
 //@target: ES6
-function fun(...[[a = new Foo], b = [new Foo]]: Bar[][]) { }
-fun(...new FooArrayIterator);
 class Bar { x }
 class Foo extends Bar { y }
 class FooArrayIterator {
@@ -15,3 +13,6 @@ class FooArrayIterator {
         return this;
     }
 }
+
+function fun(...[[a = new Foo], b = [new Foo]]: Bar[][]) { }
+fun(...new FooArrayIterator);

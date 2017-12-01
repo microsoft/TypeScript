@@ -1,5 +1,4 @@
 === tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator3.ts ===
-
 var temp = 10;
 >temp : number
 >10 : 10
@@ -114,32 +113,32 @@ var temp = 10;
 
 (+3) ** temp++;
 >(+3) ** temp++ : number
->(+3) : number
->+3 : number
+>(+3) : 3
+>+3 : 3
 >3 : 3
 >temp++ : number
 >temp : number
 
 (+3) ** temp--;
 >(+3) ** temp-- : number
->(+3) : number
->+3 : number
+>(+3) : 3
+>+3 : 3
 >3 : 3
 >temp-- : number
 >temp : number
 
 (+3) ** ++temp;
 >(+3) ** ++temp : number
->(+3) : number
->+3 : number
+>(+3) : 3
+>+3 : 3
 >3 : 3
 >++temp : number
 >temp : number
 
 (+3) ** --temp;
 >(+3) ** --temp : number
->(+3) : number
->+3 : number
+>(+3) : 3
+>+3 : 3
 >3 : 3
 >--temp : number
 >temp : number
@@ -186,8 +185,8 @@ var temp = 10;
 
 (+3) ** temp++ ** 2;
 >(+3) ** temp++ ** 2 : number
->(+3) : number
->+3 : number
+>(+3) : 3
+>+3 : 3
 >3 : 3
 >temp++ ** 2 : number
 >temp++ : number
@@ -196,8 +195,8 @@ var temp = 10;
 
 (+3) ** temp-- ** 2;
 >(+3) ** temp-- ** 2 : number
->(+3) : number
->+3 : number
+>(+3) : 3
+>+3 : 3
 >3 : 3
 >temp-- ** 2 : number
 >temp-- : number
@@ -206,8 +205,8 @@ var temp = 10;
 
 (+3) ** ++temp ** 2;
 >(+3) ** ++temp ** 2 : number
->(+3) : number
->+3 : number
+>(+3) : 3
+>+3 : 3
 >3 : 3
 >++temp ** 2 : number
 >++temp : number
@@ -216,8 +215,8 @@ var temp = 10;
 
 (+3) ** --temp ** 2;
 >(+3) ** --temp ** 2 : number
->(+3) : number
->+3 : number
+>(+3) : 3
+>+3 : 3
 >3 : 3
 >--temp ** 2 : number
 >--temp : number

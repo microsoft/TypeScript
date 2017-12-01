@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/literal/literalTypes3.ts ===
-
 function f1(s: string) {
 >f1 : (s: string) => void
 >s : string

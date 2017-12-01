@@ -73,3 +73,21 @@ var x; // error
 var y; // ok
 var z; // ok
 var u; // ok
+
+
+//// [nonPrimitiveInGeneric.d.ts]
+declare function generic<T>(t: T): void;
+declare var a: {};
+declare var b: string;
+declare function bound<T extends object>(t: T): void;
+declare function bound2<T extends object>(): void;
+declare function bound3<T extends {}>(t: T): void;
+interface Proxy<T extends object> {
+}
+declare var x: Proxy<number>;
+declare var y: Proxy<null>;
+declare var z: Proxy<undefined>;
+interface Blah {
+    foo: number;
+}
+declare var u: Proxy<Blah>;

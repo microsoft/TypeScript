@@ -12,10 +12,9 @@ export interface A {
 }
 
 === /ref.d.ts ===
-
 export interface $ { x }
 >$ : Symbol($, Decl(ref.d.ts, 0, 0))
->x : Symbol($.x, Decl(ref.d.ts, 1, 20))
+>x : Symbol($.x, Decl(ref.d.ts, 0, 20))
 
 === /types/lib/index.d.ts ===
 declare let $: { x: number }

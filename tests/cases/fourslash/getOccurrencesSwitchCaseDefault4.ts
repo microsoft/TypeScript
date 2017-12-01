@@ -10,16 +10,5 @@
 ////        contin/*2*/ue foo;
 ////}
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-    verify.occurrencesAtPositionCount(test.ranges().length);
-
-    test.ranges().forEach(range => {
-        verify.occurrencesAtPositionContains(range, false);
-    });
-});
-
-test.markers().forEach(m => {
-    goTo.position(m.position);
-    verify.occurrencesAtPositionCount(0);
-});
+verify.rangesAreOccurrences(false);
+goTo.eachMarker(() => verify.occurrencesAtPositionCount(0));

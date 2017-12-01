@@ -1,5 +1,4 @@
 //// [systemModule6.ts]
-
 export class C {}
 function foo() {
     new C();
@@ -17,7 +16,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = (function () {
+            C = /** @class */ (function () {
                 function C() {
                 }
                 return C;

@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/localTypes/localTypes1.ts ===
-
 function f1() {
 >f1 : () => I[]
 

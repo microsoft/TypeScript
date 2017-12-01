@@ -1,0 +1,7 @@
+=== tests/cases/compiler/errorForConflictingExportEqualsValue.ts ===
+export var x;
+>x : any
+
+export = {};
+>{} : {}
+

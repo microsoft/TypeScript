@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/mergedInterfaceFromMultipleFiles1.ts] ////
 
 //// [mergedInterfaceFromMultipleFiles1_0.ts]
-
 interface I { foo(): string; }
 
 interface C extends I {

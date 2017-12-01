@@ -1,5 +1,4 @@
 //// [overloadAssignmentCompat.ts]
-
 // ok - overload signatures are assignment compatible with their implementation
 class Accessor {}
 
@@ -40,7 +39,7 @@ function foo():string { return "a" };
 
 //// [overloadAssignmentCompat.js]
 // ok - overload signatures are assignment compatible with their implementation
-var Accessor = (function () {
+var Accessor = /** @class */ (function () {
     function Accessor() {
     }
     return Accessor;

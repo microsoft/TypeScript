@@ -1,5 +1,4 @@
 //// [asyncFunctionsAndStrictNullChecks.ts]
-
 declare namespace Windows.Foundation {
     interface IPromise<TResult> {
         then<U>(success?: (value: TResult) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>;

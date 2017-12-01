@@ -1,5 +1,4 @@
 //// [privacyTopLevelInternalReferenceImportWithoutExport.ts]
-
 // private elements
 module m_private {
     export class c_private {
@@ -103,10 +102,11 @@ export var publicUse_im_private_mu_public: im_private_mu_public.i;
 //// [privacyTopLevelInternalReferenceImportWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     // private elements
     var m_private;
     (function (m_private) {
-        var c_private = (function () {
+        var c_private = /** @class */ (function () {
             function c_private() {
             }
             return c_private;
@@ -124,7 +124,7 @@ define(["require", "exports"], function (require, exports) {
         m_private.v_private = new c_private();
         var mi_private;
         (function (mi_private) {
-            var c = (function () {
+            var c = /** @class */ (function () {
                 function c() {
                 }
                 return c;
@@ -135,7 +135,7 @@ define(["require", "exports"], function (require, exports) {
     // Public elements
     var m_public;
     (function (m_public) {
-        var c_public = (function () {
+        var c_public = /** @class */ (function () {
             function c_public() {
             }
             return c_public;
@@ -153,7 +153,7 @@ define(["require", "exports"], function (require, exports) {
         m_public.v_public = 10;
         var mi_public;
         (function (mi_public) {
-            var c = (function () {
+            var c = /** @class */ (function () {
                 function c() {
                 }
                 return c;

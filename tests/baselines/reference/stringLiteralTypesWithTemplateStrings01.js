@@ -1,5 +1,4 @@
 //// [stringLiteralTypesWithTemplateStrings01.ts]
-
 let ABC: "ABC" = `ABC`;
 let DE_NEWLINE_F: "DE\nF" = `DE
 F`;

@@ -1,0 +1,32 @@
+=== tests/cases/compiler/SystemModuleForStatementNoInitializer.ts ===
+export { };
+
+let i = 0;
+>i : number
+>0 : 0
+
+let limit = 10;
+>limit : number
+>10 : 10
+
+for (; i < limit; ++i) {
+>i < limit : boolean
+>i : number
+>limit : number
+>++i : number
+>i : number
+
+    break;
+}
+
+for (; ; ++i) {
+>++i : number
+>i : number
+
+    break;
+}
+
+for (; ;) {
+    break;
+}
+

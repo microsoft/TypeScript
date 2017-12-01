@@ -1,8 +1,7 @@
-tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments12_ES6.ts(3,7): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments12_ES6.ts(2,7): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 
 
 ==== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments12_ES6.ts (1 errors) ====
-    
     class C {
         f(arguments) {
           ~~~~~~~~~

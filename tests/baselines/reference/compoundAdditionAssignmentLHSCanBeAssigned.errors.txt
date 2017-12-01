@@ -1,0 +1,65 @@
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(32,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(33,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'undefined'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(39,1): error TS2365: Operator '+=' cannot be applied to types 'E' and 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(40,1): error TS2365: Operator '+=' cannot be applied to types 'E' and 'undefined'.
+
+
+==== tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts (4 errors) ====
+    enum E { a, b }
+    
+    var a: any;
+    var b: void;
+    
+    var x1: any;
+    x1 += a;
+    x1 += b;
+    x1 += true;
+    x1 += 0;
+    x1 += '';
+    x1 += E.a;
+    x1 += {};
+    x1 += null;
+    x1 += undefined;
+    
+    var x2: string;
+    x2 += a;
+    x2 += b;
+    x2 += true;
+    x2 += 0;
+    x2 += '';
+    x2 += E.a;
+    x2 += {};
+    x2 += null;
+    x2 += undefined;
+    
+    var x3: number;
+    x3 += a;
+    x3 += 0;
+    x3 += E.a;
+    x3 += null;
+    ~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'null'.
+    x3 += undefined;
+    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'undefined'.
+    
+    var x4: E;
+    x4 += a;
+    x4 += 0;
+    x4 += E.a;
+    x4 += null;
+    ~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'E' and 'null'.
+    x4 += undefined;
+    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'E' and 'undefined'.
+    
+    var x5: boolean;
+    x5 += a;
+    
+    var x6: {};
+    x6 += a;
+    x6 += '';
+    
+    var x7: void;
+    x7 += a;

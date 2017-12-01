@@ -4,8 +4,8 @@
 ////    public abstract x: number;
 //// }
 ////
-//// class C extends A {[|
-//// |]}
+//// class C extends A {[| |]}
+
 
 verify.rangeAfterCodeFix(`
 public x: number;

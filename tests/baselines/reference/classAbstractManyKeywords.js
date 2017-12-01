@@ -7,25 +7,24 @@ import abstract class D {}
 //// [classAbstractManyKeywords.js]
 "use strict";
 exports.__esModule = true;
-exports["default"] = abstract;
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+exports["default"] = A;
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
 exports.B = B;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var abstract = ;
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;

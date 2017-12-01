@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 declare var vdom: any;
 declare var ctrl: any;
 declare var model: any;

@@ -47,6 +47,7 @@ var Foo;
 module.exports = Foo;
 //// [foo_1.js]
 "use strict";
+exports.__esModule = true;
 var foo = require("./foo_0");
 var a = foo.a();
 if (!!foo.b) {

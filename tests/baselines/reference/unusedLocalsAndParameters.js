@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParameters.ts]
-
 export { };
 
 // function declaration paramter
@@ -86,6 +85,7 @@ namespace N {
 
 //// [unusedLocalsAndParameters.js]
 "use strict";
+exports.__esModule = true;
 // function declaration paramter
 function f(a) {
 }
@@ -97,7 +97,7 @@ fexp(0);
 // arrow function paramter
 var farrow = function (a) {
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     // Method declaration paramter
@@ -112,7 +112,7 @@ var C = (function () {
     });
     return C;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function class_1() {
     }
     // Method declaration paramter

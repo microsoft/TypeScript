@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/umd-augmentation-2.ts] ////
 
 //// [index.d.ts]
-
 export as namespace Math2d;
 
 export interface Point {

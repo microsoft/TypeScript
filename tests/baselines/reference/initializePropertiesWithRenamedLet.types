@@ -1,5 +1,4 @@
 === tests/cases/compiler/initializePropertiesWithRenamedLet.ts ===
-
 var x0;
 >x0 : any
 

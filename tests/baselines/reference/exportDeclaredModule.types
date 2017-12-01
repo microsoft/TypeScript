@@ -10,7 +10,6 @@ var x: number = foo1.b();
 >b : () => number
 
 === tests/cases/conformance/externalModules/foo1.ts ===
-
 declare module M1 {
 >M1 : typeof M1
 

@@ -85,8 +85,6 @@ tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(38,12): error 
     var privateVarWithPrivateModulePropertyTypes= exporter.createExportedWidget2();
     var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4();
 ==== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts (0 errors) ====
-    
-    
     declare module "GlobalWidgets" {
         export class Widget3 {
             name: string;

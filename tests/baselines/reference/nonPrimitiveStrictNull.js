@@ -1,5 +1,4 @@
 //// [nonPrimitiveStrictNull.ts]
-
 var a: object
 declare var b: object | null
 declare var c: object | undefined

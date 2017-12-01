@@ -1,5 +1,4 @@
 === tests/cases/compiler/map1.ts ===
-
 import { Observable } from "./observable"
 >Observable : typeof Observable
 

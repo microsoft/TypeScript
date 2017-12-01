@@ -1,0 +1,8 @@
+tests/cases/compiler/classWithEmptyTypeParameter.ts(1,8): error TS1098: Type parameter list cannot be empty.
+
+
+==== tests/cases/compiler/classWithEmptyTypeParameter.ts (1 errors) ====
+    class C<> {
+           ~~
+!!! error TS1098: Type parameter list cannot be empty.
+    }

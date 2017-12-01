@@ -1,5 +1,4 @@
 === tests/cases/compiler/systemModule13.ts ===
-
 export let [x,y,z] = [1, 2, 3];
 >x : number
 >y : number

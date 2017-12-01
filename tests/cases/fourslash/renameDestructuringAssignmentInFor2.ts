@@ -13,8 +13,4 @@
 ////for ({ property1: p2 } = elems[0]; p2 < 100; p2++) {
 ////}
 
-let ranges = test.ranges()
-for (let range of ranges) {
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+verify.rangesAreRenameLocations();

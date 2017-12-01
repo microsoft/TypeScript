@@ -17,6 +17,7 @@ export {};
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     let { toString } = 1;
     {
         let { toFixed } = 1;

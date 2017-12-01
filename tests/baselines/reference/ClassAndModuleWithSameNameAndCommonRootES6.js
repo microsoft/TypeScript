@@ -59,7 +59,7 @@ var X;
 (function (X) {
     var Y;
     (function (Y) {
-        var Point;
+        let Point;
         (function (Point) {
             Point.Origin = new Point(0, 0);
         })(Point = Y.Point || (Y.Point = {}));

@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImportsWithContextualKeywordNames01.ts] ////
 
 //// [t1.ts]
-
 let set = {
     set foo(x: number) {
     }
@@ -21,6 +20,7 @@ import { get } from "./t1";
 
 //// [t1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var set = {
     set foo(x) {
     }
@@ -30,7 +30,10 @@ var get = 10;
 exports.get = get;
 //// [t2.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t3.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t4.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,13 +1,10 @@
 //// [tests/cases/compiler/systemModule17.ts] ////
 
 //// [f1.ts]
-
-
 export class A {}
 export interface I {}
 
 //// [f2.ts]
-
 var x = 1;
 interface I { }
 
@@ -49,7 +46,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            A = (function () {
+            A = /** @class */ (function () {
                 function A() {
                 }
                 return A;

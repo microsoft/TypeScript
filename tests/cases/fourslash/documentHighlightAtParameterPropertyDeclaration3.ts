@@ -2,23 +2,20 @@
 
 // @Filename: file1.ts
 //// class Foo {
-////     constructor(private [/*0*/privateParam]: number,
-////         public [/*1*/publicParam]: string,
-////         protected [/*2*/protectedParam]: boolean) {
-//// 
-////         let localPrivate = /*3*/privateParam;
-////         this.privateParam += 10;  // this is not valid syntax
-//// 
-////         let localPublic = /*4*/publicParam;
-////         this.publicParam += " Hello!";  // this is not valid syntax
-//// 
-////         let localProtected = /*5*/protectedParam;
-////         this.protectedParam = false;  // this is not valid syntax
+////     // This is not valid syntax: parameter property can't be binding pattern
+////     constructor(private [[|privateParam|]]: number,
+////         public [[|publicParam|]]: string,
+////         protected [[|protectedParam|]]: boolean) {
+////
+////         let localPrivate = [|privateParam|];
+////         this.privateParam += 10;
+////
+////         let localPublic = [|publicParam|];
+////         this.publicParam += " Hello!";
+////
+////         let localProtected = [|protectedParam|];
+////         this.protectedParam = false;
 ////     }
 //// }
 
-let markers = test.markers()
-for (let marker of markers) {
-    goTo.position(marker.position);
-    verify.documentHighlightsAtPositionCount(2, ["file1.ts"]);
-}
+verify.rangesWithSameTextAreDocumentHighlights();

@@ -5,14 +5,14 @@
 
 // @Filename: user.ts
 ///////<reference path="declarations.d.ts"/>
-////import /*importFoo*/foo, {bar} from "jquery";
-////import * as /*importBaz*/baz from "jquery";
-////import /*importBang*/bang = require("jquery");
-////foo/*useFoo*/(bar/*useBar*/, baz/*useBaz*/, bang/*useBang*/);
+////import [|/*importFoo*/foo|], {bar} from "jquery";
+////import * as [|/*importBaz*/baz|] from "jquery";
+////import [|/*importBang*/bang|] = require("jquery");
+////[|foo/*useFoo*/|]([|bar/*useBar*/|], [|baz/*useBaz*/|], [|bang/*useBang*/|]);
 
 verify.quickInfoAt("useFoo", "import foo");
 verify.goToDefinition({
-    useFoo: "importFoo",
+    useFoo: "module",
     importFoo: "module"
 });
 
@@ -27,6 +27,6 @@ verify.goToDefinition({
 
 verify.quickInfoAt("useBang", "import bang = require(\"jquery\")");
 verify.goToDefinition({
-    useBang: "importBang",
+    useBang: "module",
     importBang: "module"
 });

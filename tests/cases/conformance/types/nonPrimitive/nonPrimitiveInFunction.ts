@@ -1,3 +1,4 @@
+// @declaration: true
 function takeObject(o: object) {}
 function returnObject(): object {
     return {};

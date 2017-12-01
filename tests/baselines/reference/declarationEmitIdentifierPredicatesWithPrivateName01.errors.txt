@@ -1,8 +1,7 @@
-tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts(6,33): error TS4060: Return type of exported function has or is using private name 'I'.
+tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts(5,33): error TS4060: Return type of exported function has or is using private name 'I'.
 
 
 ==== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts (1 errors) ====
-    
     interface I {
         a: number;
     }

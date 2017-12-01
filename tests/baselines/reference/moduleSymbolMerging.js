@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleSymbolMerging.ts] ////
 
 //// [A.ts]
-
 module A { export interface I {} }
 
 //// [B.ts]

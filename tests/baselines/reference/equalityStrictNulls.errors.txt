@@ -1,11 +1,10 @@
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(60,9): error TS2365: Operator '>' cannot be applied to types 'number' and 'undefined'.
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(62,9): error TS2365: Operator '<' cannot be applied to types 'number' and 'undefined'.
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(64,9): error TS2365: Operator '>=' cannot be applied to types 'number' and 'undefined'.
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(66,9): error TS2365: Operator '<=' cannot be applied to types 'number' and 'undefined'.
+tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(59,13): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(61,13): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(63,14): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(65,14): error TS2532: Object is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts (4 errors) ====
-    
     function f1(x: string) {
         if (x == undefined) {
         }
@@ -65,20 +64,20 @@ tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.t
     
     function f4(x: number) {
         if (x > undefined) {
-            ~~~~~~~~~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'undefined'.
+                ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
         }
         if (x < undefined) {
-            ~~~~~~~~~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'undefined'.
+                ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
         }
         if (x >= undefined) {
-            ~~~~~~~~~~~~~~
-!!! error TS2365: Operator '>=' cannot be applied to types 'number' and 'undefined'.
+                 ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
         }
         if (x <= undefined) {
-            ~~~~~~~~~~~~~~
-!!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'undefined'.
+                 ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
         }
     }
     function f5(x: string) {

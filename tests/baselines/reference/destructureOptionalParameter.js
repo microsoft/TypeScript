@@ -1,5 +1,4 @@
 //// [destructureOptionalParameter.ts]
-
 declare function f1({ a, b }?: { a: number, b: string }): void;
 
 function f2({ a, b }: { a: number, b: number } = { a: 0, b: 0 }) {

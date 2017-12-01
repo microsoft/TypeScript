@@ -7,7 +7,7 @@ interface Show {
 >x : number
 }
 function f({ show = v => v.toString() }: Show) {}
->f : ({show}: Show) => void
+>f : ({ show }: Show) => void
 >show : (x: number) => string
 >v => v.toString() : (v: number) => string
 >v : number
@@ -18,7 +18,7 @@ function f({ show = v => v.toString() }: Show) {}
 >Show : Show
 
 function f2({ "show": showRename = v => v.toString() }: Show) {}
->f2 : ({"show": showRename}: Show) => void
+>f2 : ({ "show": showRename }: Show) => void
 >showRename : (x: number) => string
 >v => v.toString() : (v: number) => string
 >v : number
@@ -29,7 +29,7 @@ function f2({ "show": showRename = v => v.toString() }: Show) {}
 >Show : Show
 
 function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
->f3 : ({["show"]: showRename}: Show) => void
+>f3 : ({ ["show"]: showRename }: Show) => void
 >"show" : "show"
 >showRename : (x: number) => string
 >v => v.toString() : (v: number) => string
@@ -48,7 +48,7 @@ interface Nested {
 >Show : Show
 }
 function ff({ nested = { show: v => v.toString() } }: Nested) {}
->ff : ({nested}: Nested) => void
+>ff : ({ nested }: Nested) => void
 >nested : Show
 >{ show: v => v.toString() } : { show: (v: number) => string; }
 >show : (v: number) => string
@@ -67,7 +67,7 @@ interface Tuples {
 >prop : [string, number]
 }
 function g({ prop = ["hello", 1234] }: Tuples) {}
->g : ({prop}: Tuples) => void
+>g : ({ prop }: Tuples) => void
 >prop : [string, number]
 >["hello", 1234] : [string, number]
 >"hello" : "hello"
@@ -81,7 +81,7 @@ interface StringUnion {
 >prop : "foo" | "bar"
 }
 function h({ prop = "foo" }: StringUnion) {}
->h : ({prop}: StringUnion) => void
+>h : ({ prop }: StringUnion) => void
 >prop : "foo" | "bar"
 >"foo" : "foo"
 >StringUnion : StringUnion

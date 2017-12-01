@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6-amd.ts ===
-
 class A
 >A : A
 {

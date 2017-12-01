@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileTypeofEnum.ts ===
-
 enum days {
 >days : days
 

@@ -1,5 +1,4 @@
 //// [noImplicitAnyInCastExpression.ts]
-
 // verify no noImplictAny errors reported with cast expression
 
 interface IFoo {

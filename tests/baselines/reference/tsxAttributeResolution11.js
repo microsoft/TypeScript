@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution11.tsx] ////
 
 //// [react.d.ts]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -30,7 +29,7 @@ var x = <MyComponent bar='world' />;
 
 
 //// [file.jsx]
-var MyComponent = (function () {
+var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }
     MyComponent.prototype.render = function () {

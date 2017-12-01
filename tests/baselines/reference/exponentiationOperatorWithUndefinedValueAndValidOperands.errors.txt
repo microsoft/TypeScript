@@ -1,0 +1,47 @@
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(13,11): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(14,11): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(15,11): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(16,11): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(17,16): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(18,16): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(19,16): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(20,18): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts (8 errors) ====
+    // If one operand is the undefined or undefined value, it is treated as having the type of the
+    // other operand.
+    
+    enum E {
+        a,
+        b
+    }
+    
+    var a: any;
+    var b: number;
+    
+    // operator *
+    var rk1 = undefined ** a;
+              ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    var rk2 = undefined ** b;
+              ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    var rk3 = undefined ** 1;
+              ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    var rk4 = undefined ** E.a;
+              ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    var rk5 = a ** undefined;
+                   ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    var rk6 = b ** undefined;
+                   ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    var rk7 = 0 ** undefined;
+                   ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    var rk8 = E.b ** undefined;
+                     ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.

@@ -1,5 +1,4 @@
 //// [asyncIIFE.ts]
-
 function f1() {
     (async () => {
         await 10

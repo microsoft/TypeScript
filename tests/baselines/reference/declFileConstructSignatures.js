@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileConstructSignatures.ts] ////
 
 //// [declFileConstructSignatures_0.ts]
-
 export interface IConstructSignature {
     /** This comment should appear for foo*/
     new (): string;
@@ -67,6 +66,7 @@ interface IGlobalConstructSignatureWithOwnTypeParametes {
 
 //// [declFileConstructSignatures_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileConstructSignatures_1.js]
 
 

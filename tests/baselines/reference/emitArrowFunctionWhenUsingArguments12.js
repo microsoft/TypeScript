@@ -1,5 +1,4 @@
 //// [emitArrowFunctionWhenUsingArguments12.ts]
-
 class C {
     f(arguments) {
         var a = () => arguments;
@@ -7,7 +6,7 @@ class C {
 }
 
 //// [emitArrowFunctionWhenUsingArguments12.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.f = function (arguments) {

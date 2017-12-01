@@ -1,5 +1,4 @@
 //// [unusedTypeParameterInFunction1.ts]
-
 function f1<T>() {
 
 }

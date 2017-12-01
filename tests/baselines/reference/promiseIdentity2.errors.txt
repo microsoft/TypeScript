@@ -2,10 +2,10 @@ tests/cases/compiler/promiseIdentity2.ts(11,5): error TS2403: Subsequent variabl
 
 
 ==== tests/cases/compiler/promiseIdentity2.ts (1 errors) ====
-    interface IPromise<T, V> {
+    export interface IPromise<T, V> {
         then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
     }
-    interface Promise<T, V> {
+    export interface Promise<T, V> {
         then<U, W>(callback: (x: T) => Promise<T, U>): Promise<T, W>;
     }
     

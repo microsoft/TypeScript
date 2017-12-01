@@ -1,5 +1,4 @@
 //// [commentsVarDecl.ts]
-
 /** Variable comments*/
 var myVariable = 10; // This trailing Comment1
 

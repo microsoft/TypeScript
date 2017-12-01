@@ -11,7 +11,6 @@ export var x: c.b1.a.m2.c1;
 >c1 : c.b1.a.m2.c1
 
 === tests/cases/compiler/declFileExportImportChain_a.ts ===
-
 module m1 {
 >m1 : typeof m1
 

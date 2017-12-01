@@ -1,13 +1,12 @@
-tests/cases/compiler/es6modulekindWithES5Target10.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
-tests/cases/compiler/es6modulekindWithES5Target10.ts(2,20): error TS2307: Cannot find module 'mod'.
-tests/cases/compiler/es6modulekindWithES5Target10.ts(7,1): error TS1203: Export assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'export default' or another module format instead.
+tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target10.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target10.ts(1,20): error TS2307: Cannot find module 'mod'.
+tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target10.ts(6,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== tests/cases/compiler/es6modulekindWithES5Target10.ts (3 errors) ====
-    
+==== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target10.ts (3 errors) ====
     import i = require("mod"); // Error;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1202: Import assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
                        ~~~~~
 !!! error TS2307: Cannot find module 'mod'.
     
@@ -16,4 +15,4 @@ tests/cases/compiler/es6modulekindWithES5Target10.ts(7,1): error TS1203: Export 
     }
     export = N; // Error
     ~~~~~~~~~~~
-!!! error TS1203: Export assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'export default' or another module format instead.
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

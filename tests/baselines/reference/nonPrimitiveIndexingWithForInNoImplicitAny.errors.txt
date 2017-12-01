@@ -1,0 +1,12 @@
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts(4,17): error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
+
+
+==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts (1 errors) ====
+    var a: object;
+    
+    for (var key in a) {
+        var value = a[key]; // error
+                    ~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
+    }
+    

@@ -12,7 +12,6 @@ tests/cases/conformance/externalModules/a.ts(2,8): error TS2503: Cannot find nam
     let y: number = x.n;
     
 ==== tests/cases/conformance/externalModules/foo.d.ts (0 errors) ====
-    
     export var x: number;
     export function fn(): void;
     export as namespace Foo;

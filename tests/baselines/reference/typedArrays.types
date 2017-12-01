@@ -1,5 +1,4 @@
 === tests/cases/compiler/typedArrays.ts ===
-
 function CreateTypedArrayTypes() {
 >CreateTypedArrayTypes : () => any[]
 

@@ -1,5 +1,4 @@
 //// [unusedSetterInClass.ts]
-
 class Employee {
     private _fullName: string;
 
@@ -9,7 +8,7 @@ class Employee {
 }
 
 //// [unusedSetterInClass.js]
-var Employee = (function () {
+var Employee = /** @class */ (function () {
     function Employee() {
     }
     Object.defineProperty(Employee.prototype, "fullName", {

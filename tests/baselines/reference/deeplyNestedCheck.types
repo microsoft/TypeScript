@@ -1,0 +1,29 @@
+=== tests/cases/compiler/deeplyNestedCheck.ts ===
+// Repro from #14794
+
+interface DataSnapshot<X = {}> {
+>DataSnapshot : DataSnapshot<X>
+>X : X
+
+  child(path: string): DataSnapshot;
+>child : (path: string) => DataSnapshot<{}>
+>path : string
+>DataSnapshot : DataSnapshot<X>
+}
+
+interface Snapshot<T> extends DataSnapshot {
+>Snapshot : Snapshot<T>
+>T : T
+>DataSnapshot : DataSnapshot<X>
+
+  child<U extends keyof T>(path: U): Snapshot<T[U]>;
+>child : <U extends keyof T>(path: U) => Snapshot<T[U]>
+>U : U
+>T : T
+>path : U
+>U : U
+>Snapshot : Snapshot<T>
+>T : T
+>U : U
+}
+

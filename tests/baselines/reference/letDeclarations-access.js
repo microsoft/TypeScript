@@ -1,5 +1,4 @@
 //// [letDeclarations-access.ts]
-
 let x = 0
 
 // No errors

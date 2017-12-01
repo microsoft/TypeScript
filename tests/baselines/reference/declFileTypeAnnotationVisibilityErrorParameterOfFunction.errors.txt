@@ -1,11 +1,10 @@
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(15,34): error TS4078: Parameter 'param' of exported function has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(17,26): error TS4078: Parameter 'param' of exported function has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(40,35): error TS4078: Parameter 'param' of exported function has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(42,28): error TS4077: Parameter 'param' of exported function has or is using name 'm2.public2' from private module 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(14,34): error TS4078: Parameter 'param' of exported function has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(16,26): error TS4078: Parameter 'param' of exported function has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(39,35): error TS4078: Parameter 'param' of exported function has or is using private name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(41,28): error TS4077: Parameter 'param' of exported function has or is using name 'm2.public2' from private module 'm2'.
 
 
 ==== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts (4 errors) ====
-    
     module m {
         class private1 {
         }

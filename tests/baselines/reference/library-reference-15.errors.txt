@@ -7,7 +7,6 @@
     ~~
 !!! error TS2304: Cannot find name '$2'.
 ==== /a/types/jquery/index.d.ts (0 errors) ====
-    
     declare var $: { foo(): void };
     
 ==== /a/types/jquery2/index.d.ts (0 errors) ====

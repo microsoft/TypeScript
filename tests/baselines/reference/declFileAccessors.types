@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileAccessors_0.ts ===
-
 /** This is comment for c1*/
 export class c1 {
 >c1 : c1

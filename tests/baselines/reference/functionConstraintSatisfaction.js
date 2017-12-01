@@ -65,7 +65,7 @@ function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
 // satisfaction of a constraint to Function, no errors expected
 function foo(x) { return x; }
 var i;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
@@ -83,7 +83,7 @@ var r6 = foo(C);
 var r7 = foo(b);
 var r8 = foo(c);
 var i2;
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
@@ -108,4 +108,4 @@ function foo2(x, y) {
 //function foo2<T extends { (): void }, U extends T>(x: T, y: U) {
 //    foo(x);
 //    foo(y);
-//} 
+//}

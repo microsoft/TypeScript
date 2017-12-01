@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declarationEmitExportAssignment.ts] ////
 
 //// [utils.ts]
-
 export function foo() { }
 export function bar() { }
 export interface Buzz { }
@@ -12,6 +11,7 @@ export = foo;
 
 //// [utils.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function foo() { }
 exports.foo = foo;
 function bar() { }

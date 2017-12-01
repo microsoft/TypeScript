@@ -14,15 +14,12 @@ namespace ts {
         const {
             startLexicalEnvironment,
             resumeLexicalEnvironment,
-            endLexicalEnvironment,
+            endLexicalEnvironment
         } = context;
 
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
-
-        // These variables contain state that changes as we descend into the tree.
-        let currentSourceFile: SourceFile;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -34,7 +31,7 @@ namespace ts {
          * This keeps track of containers where `super` is valid, for use with
          * just-in-time substitution for `super` expressions inside of async methods.
          */
-        let currentSuperContainer: SuperContainer;
+        let enclosingSuperContainerFlags: NodeCheckFlags = 0;
 
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
@@ -47,16 +44,12 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (node.isDeclarationFile) {
                 return node;
             }
 
-            currentSourceFile = node;
-
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
-
-            currentSourceFile = undefined;
             return visited;
         }
 
@@ -71,23 +64,18 @@ namespace ts {
                     return undefined;
 
                 case SyntaxKind.AwaitExpression:
-                    // ES2017 'await' expressions must be transformed for targets < ES2017.
                     return visitAwaitExpression(<AwaitExpression>node);
 
                 case SyntaxKind.MethodDeclaration:
-                    // ES2017 method declarations may be 'async'
                     return visitMethodDeclaration(<MethodDeclaration>node);
 
                 case SyntaxKind.FunctionDeclaration:
-                    // ES2017 function declarations may be 'async'
                     return visitFunctionDeclaration(<FunctionDeclaration>node);
 
                 case SyntaxKind.FunctionExpression:
-                    // ES2017 function expressions may be 'async'
                     return visitFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.ArrowFunction:
-                    // ES2017 arrow functions may be 'async'
                     return visitArrowFunction(<ArrowFunction>node);
 
                 default:
@@ -104,10 +92,12 @@ namespace ts {
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
             return setOriginalNode(
-                createYield(
-                    /*asteriskToken*/ undefined,
-                    visitNode(node.expression, visitor, isExpression),
-                    /*location*/ node
+                setTextRange(
+                    createYield(
+                        /*asteriskToken*/ undefined,
+                        visitNode(node.expression, visitor, isExpression)
+                    ),
+                    node
                 ),
                 node
             );
@@ -126,11 +116,13 @@ namespace ts {
                 node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
+                node.asteriskToken,
                 node.name,
+                /*questionToken*/ undefined,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                isAsyncFunctionLike(node)
+                getFunctionFlags(node) & FunctionFlags.Async
                     ? transformAsyncFunctionBody(node)
                     : visitFunctionBody(node.body, visitor, context)
             );
@@ -149,11 +141,12 @@ namespace ts {
                 node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
+                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                isAsyncFunctionLike(node)
+                getFunctionFlags(node) & FunctionFlags.Async
                     ? transformAsyncFunctionBody(node)
                     : visitFunctionBody(node.body, visitor, context)
             );
@@ -168,17 +161,15 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            if (nodeIsMissing(node.body)) {
-                return createOmittedExpression();
-            }
             return updateFunctionExpression(
                 node,
-                /*modifiers*/ undefined,
+                visitNodes(node.modifiers, visitor, isModifier),
+                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                isAsyncFunctionLike(node)
+                getFunctionFlags(node) & FunctionFlags.Async
                     ? transformAsyncFunctionBody(node)
                     : visitFunctionBody(node.body, visitor, context)
             );
@@ -199,9 +190,10 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                isAsyncFunctionLike(node)
+                node.equalsGreaterThanToken,
+                getFunctionFlags(node) & FunctionFlags.Async
                     ? transformAsyncFunctionBody(node)
-                    : visitFunctionBody(node.body, visitor, context)
+                    : visitFunctionBody(node.body, visitor, context),
             );
         }
 
@@ -224,7 +216,7 @@ namespace ts {
 
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
-                const statementOffset = addPrologueDirectives(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, visitor);
+                const statementOffset = addPrologue(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, visitor);
                 statements.push(
                     createReturn(
                         createAwaiterHelper(
@@ -238,7 +230,8 @@ namespace ts {
 
                 addRange(statements, endLexicalEnvironment());
 
-                const block = createBlock(statements, /*location*/ node.body, /*multiLine*/ true);
+                const block = createBlock(statements, /*multiLine*/ true);
+                setTextRange(block, node.body);
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
@@ -266,7 +259,7 @@ namespace ts {
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
                     const block = convertToFunctionBody(expression);
-                    return updateBlock(block, createNodeArray(concatenate(block.statements, declarations), block.statements));
+                    return updateBlock(block, setTextRange(createNodeArray(concatenate(block.statements, declarations)), block.statements));
                 }
 
                 return expression;
@@ -281,7 +274,7 @@ namespace ts {
                 startLexicalEnvironment();
                 const visited = convertToFunctionBody(visitNode(body, visitor, isConciseBody));
                 const declarations = endLexicalEnvironment();
-                return updateBlock(visited, createNodeArray(concatenate(visited.statements, declarations), visited.statements));
+                return updateBlock(visited, setTextRange(createNodeArray(concatenate(visited.statements, declarations)), visited.statements));
             }
         }
 
@@ -317,6 +310,44 @@ namespace ts {
             }
         }
 
+        /**
+         * Hook for node emit.
+         *
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to emit.
+         * @param emit A callback used to emit the node in the printer.
+         */
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
+            // If we need to support substitutions for `super` in an async method,
+            // we should track it here.
+            if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
+                const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
+                if (superContainerFlags !== enclosingSuperContainerFlags) {
+                    const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
+                    enclosingSuperContainerFlags = superContainerFlags;
+                    previousOnEmitNode(hint, node, emitCallback);
+                    enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
+                    return;
+                }
+            }
+            previousOnEmitNode(hint, node, emitCallback);
+        }
+
+        /**
+         * Hooks node substitutions.
+         *
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to substitute.
+         */
+        function onSubstituteNode(hint: EmitHint, node: Node) {
+            node = previousOnSubstituteNode(hint, node);
+            if (hint === EmitHint.Expression && enclosingSuperContainerFlags) {
+                return substituteExpression(<Expression>node);
+            }
+
+            return node;
+        }
+
         function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.PropertyAccessExpression:
@@ -324,62 +355,45 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                     return substituteElementAccessExpression(<ElementAccessExpression>node);
                 case SyntaxKind.CallExpression:
-                    if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper) {
-                        return substituteCallExpression(<CallExpression>node);
-                    }
-                    break;
+                    return substituteCallExpression(<CallExpression>node);
             }
-
             return node;
         }
 
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
-            if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && node.expression.kind === SyntaxKind.SuperKeyword) {
-                const flags = getSuperContainerAsyncMethodFlags();
-                if (flags) {
-                    return createSuperAccessInAsyncMethod(
-                        createLiteral(node.name.text),
-                        flags,
-                        node
-                    );
-                }
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                return createSuperAccessInAsyncMethod(
+                    createLiteral(idText(node.name)),
+                    node
+                );
             }
-
             return node;
         }
 
         function substituteElementAccessExpression(node: ElementAccessExpression) {
-            if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && node.expression.kind === SyntaxKind.SuperKeyword) {
-                const flags = getSuperContainerAsyncMethodFlags();
-                if (flags) {
-                    return createSuperAccessInAsyncMethod(
-                        node.argumentExpression,
-                        flags,
-                        node
-                    );
-                }
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                return createSuperAccessInAsyncMethod(
+                    node.argumentExpression,
+                    node
+                );
             }
-
             return node;
         }
 
         function substituteCallExpression(node: CallExpression): Expression {
             const expression = node.expression;
             if (isSuperProperty(expression)) {
-                const flags = getSuperContainerAsyncMethodFlags();
-                if (flags) {
-                    const argumentExpression = isPropertyAccessExpression(expression)
-                        ? substitutePropertyAccessExpression(expression)
-                        : substituteElementAccessExpression(expression);
-                    return createCall(
-                        createPropertyAccess(argumentExpression, "call"),
-                        /*typeArguments*/ undefined,
-                        [
-                            createThis(),
-                            ...node.arguments
-                        ]
-                    );
-                }
+                const argumentExpression = isPropertyAccessExpression(expression)
+                    ? substitutePropertyAccessExpression(expression)
+                    : substituteElementAccessExpression(expression);
+                return createCall(
+                    createPropertyAccess(argumentExpression, "call"),
+                    /*typeArguments*/ undefined,
+                    [
+                        createThis(),
+                        ...node.arguments
+                    ]
+                );
             }
             return node;
         }
@@ -393,95 +407,31 @@ namespace ts {
                 || kind === SyntaxKind.SetAccessor;
         }
 
-        /**
-         * Hook for node emit.
-         *
-         * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
-         */
-        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
-            // If we need to support substitutions for `super` in an async method,
-            // we should track it here.
-            if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
-                const savedCurrentSuperContainer = currentSuperContainer;
-                currentSuperContainer = node;
-                previousOnEmitNode(emitContext, node, emitCallback);
-                currentSuperContainer = savedCurrentSuperContainer;
+        function createSuperAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
+            if (enclosingSuperContainerFlags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
+                return setTextRange(
+                    createPropertyAccess(
+                        createCall(
+                            createIdentifier("_super"),
+                            /*typeArguments*/ undefined,
+                            [argumentExpression]
+                        ),
+                        "value"
+                    ),
+                    location
+                );
             }
             else {
-                previousOnEmitNode(emitContext, node, emitCallback);
-            }
-        }
-
-        /**
-         * Hooks node substitutions.
-         *
-         * @param node The node to substitute.
-         * @param isExpression A value indicating whether the node is to be used in an expression
-         *                     position.
-         */
-        function onSubstituteNode(emitContext: EmitContext, node: Node) {
-            node = previousOnSubstituteNode(emitContext, node);
-            if (emitContext === EmitContext.Expression) {
-                return substituteExpression(<Expression>node);
-            }
-
-            return node;
-        }
-
-        function createSuperAccessInAsyncMethod(argumentExpression: Expression, flags: NodeCheckFlags, location: TextRange): LeftHandSideExpression {
-            if (flags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
-                return createPropertyAccess(
+                return setTextRange(
                     createCall(
                         createIdentifier("_super"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
-                    "value",
-                    location
-                );
-            }
-            else {
-                return createCall(
-                    createIdentifier("_super"),
-                    /*typeArguments*/ undefined,
-                    [argumentExpression],
                     location
                 );
             }
         }
-
-        function getSuperContainerAsyncMethodFlags() {
-            return currentSuperContainer !== undefined
-                && resolver.getNodeCheckFlags(currentSuperContainer) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
-        }
-    }
-
-    function createAwaiterHelper(context: TransformationContext, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
-        context.requestEmitHelper(awaiterHelper);
-        const generatorFunc = createFunctionExpression(
-            /*modifiers*/ undefined,
-            createToken(SyntaxKind.AsteriskToken),
-            /*name*/ undefined,
-            /*typeParameters*/ undefined,
-            /*parameters*/ [],
-            /*type*/ undefined,
-            body
-        );
-
-        // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody;
-
-        return createCall(
-            getHelperName("__awaiter"),
-            /*typeArguments*/ undefined,
-            [
-                createThis(),
-                hasLexicalArguments ? createIdentifier("arguments") : createVoidZero(),
-                promiseConstructor ? createExpressionFromEntityName(promiseConstructor) : createVoidZero(),
-                generatorFunc
-            ]
-        );
     }
 
     const awaiterHelper: EmitHelper = {
@@ -499,20 +449,50 @@ namespace ts {
             };`
     };
 
-    const asyncSuperHelper: EmitHelper = {
+    function createAwaiterHelper(context: TransformationContext, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
+        context.requestEmitHelper(awaiterHelper);
+
+        const generatorFunc = createFunctionExpression(
+            /*modifiers*/ undefined,
+            createToken(SyntaxKind.AsteriskToken),
+            /*name*/ undefined,
+            /*typeParameters*/ undefined,
+            /*parameters*/ [],
+            /*type*/ undefined,
+            body
+        );
+
+        // Mark this node as originally an async function
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+
+        return createCall(
+            getHelperName("__awaiter"),
+            /*typeArguments*/ undefined,
+            [
+                createThis(),
+                hasLexicalArguments ? createIdentifier("arguments") : createVoidZero(),
+                promiseConstructor ? createExpressionFromEntityName(promiseConstructor) : createVoidZero(),
+                generatorFunc
+            ]
+        );
+    }
+
+    export const asyncSuperHelper: EmitHelper = {
         name: "typescript:async-super",
         scoped: true,
         text: `
-            const _super = name => super[name];`
+            const _super = name => super[name];
+        `
     };
 
-    const advancedAsyncSuperHelper: EmitHelper = {
+    export const advancedAsyncSuperHelper: EmitHelper = {
         name: "typescript:advanced-async-super",
         scoped: true,
         text: `
             const _super = (function (geti, seti) {
                 const cache = Object.create(null);
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-            })(name => super[name], (name, value) => super[name] = value);`
+            })(name => super[name], (name, value) => super[name] = value);
+        `
     };
 }

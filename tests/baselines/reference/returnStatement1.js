@@ -1,5 +1,4 @@
 //// [returnStatement1.ts]
-
 function f() {
     return function (s) {
         var x = s;

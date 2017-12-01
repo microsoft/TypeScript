@@ -18,6 +18,4 @@
 //// var x = <MyClass {...[|n/*src*/n|]}></MyClass>;
 
 verify.goToDefinition("src", "dst");
-
-goTo.marker('src');
-verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
+verify.rangesAreRenameLocations();

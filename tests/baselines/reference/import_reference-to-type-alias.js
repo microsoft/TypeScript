@@ -20,11 +20,12 @@ var x = new Services.UserServices().getUserName();
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var App;
     (function (App) {
         var Services;
         (function (Services) {
-            var UserServices = (function () {
+            var UserServices = /** @class */ (function () {
                 function UserServices() {
                 }
                 UserServices.prototype.getUserName = function () {
@@ -39,6 +40,7 @@ define(["require", "exports"], function (require, exports) {
 //// [file2.js]
 define(["require", "exports", "file1"], function (require, exports, appJs) {
     "use strict";
+    exports.__esModule = true;
     var Services = appJs.App.Services;
     var x = new Services.UserServices().getUserName();
 });

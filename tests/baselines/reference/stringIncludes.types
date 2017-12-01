@@ -1,5 +1,4 @@
 === tests/cases/compiler/stringIncludes.ts ===
-
 var includes: boolean;
 >includes : boolean
 

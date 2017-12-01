@@ -1,5 +1,4 @@
 //// [destructuringCatch.ts]
-
 try {
     throw [0, 1];
 }

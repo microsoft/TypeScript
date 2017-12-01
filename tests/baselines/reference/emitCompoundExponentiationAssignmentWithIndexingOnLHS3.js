@@ -1,5 +1,4 @@
 //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts]
-
 var object = {
     _0: 2,
     get 0() {

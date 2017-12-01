@@ -1,0 +1,47 @@
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts(13,10): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts(14,10): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts(15,10): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts(16,10): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts(17,15): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts(18,15): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts(19,15): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts(20,17): error TS2531: Object is possibly 'null'.
+
+
+==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts (8 errors) ====
+    // If one operand is the null or undefined value, it is treated as having the type of the
+    // other operand.
+    
+    enum E {
+        a,
+        b
+    }
+    
+    var a: any;
+    var b: number;
+    
+    // operator **
+    var r1 = null ** a;
+             ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r2 = null ** b;
+             ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r3 = null ** 1;
+             ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r4 = null ** E.a;
+             ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r5 = a ** null;
+                  ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r6 = b ** null;
+                  ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r7 = 0 ** null;
+                  ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r8 = E.b ** null;
+                    ~~~~
+!!! error TS2531: Object is possibly 'null'.

@@ -1,13 +1,12 @@
-tests/cases/compiler/file1.ts(7,15): error TS2307: Cannot find module 'bar'.
-tests/cases/compiler/file2.ts(7,15): error TS2307: Cannot find module 'bar'.
-tests/cases/compiler/file3.ts(2,25): error TS2307: Cannot find module 'a'.
-tests/cases/compiler/file3.ts(4,15): error TS2307: Cannot find module 'bar'.
-tests/cases/compiler/file4.ts(9,27): error TS2307: Cannot find module 'a'.
-tests/cases/compiler/file5.ts(3,15): error TS2307: Cannot find module 'a'.
+tests/cases/compiler/file1.ts(6,15): error TS2307: Cannot find module 'bar'.
+tests/cases/compiler/file2.ts(6,15): error TS2307: Cannot find module 'bar'.
+tests/cases/compiler/file3.ts(1,25): error TS2307: Cannot find module 'a'.
+tests/cases/compiler/file3.ts(3,15): error TS2307: Cannot find module 'bar'.
+tests/cases/compiler/file4.ts(8,27): error TS2307: Cannot find module 'a'.
+tests/cases/compiler/file5.ts(2,15): error TS2307: Cannot find module 'a'.
 
 
 ==== tests/cases/compiler/file1.ts (1 errors) ====
-    
     // set of tests cases that checks generation of local storage for exported names
     
     
@@ -18,7 +17,6 @@ tests/cases/compiler/file5.ts(3,15): error TS2307: Cannot find module 'a'.
 !!! error TS2307: Cannot find module 'bar'.
     
 ==== tests/cases/compiler/file2.ts (1 errors) ====
-    
     var x;
     var y;
     export {x};
@@ -29,7 +27,6 @@ tests/cases/compiler/file5.ts(3,15): error TS2307: Cannot find module 'a'.
 !!! error TS2307: Cannot find module 'bar'.
     
 ==== tests/cases/compiler/file3.ts (2 errors) ====
-    
     export {x, y as z} from 'a';
                             ~~~
 !!! error TS2307: Cannot find module 'a'.
@@ -39,7 +36,6 @@ tests/cases/compiler/file5.ts(3,15): error TS2307: Cannot find module 'a'.
 !!! error TS2307: Cannot find module 'bar'.
     
 ==== tests/cases/compiler/file4.ts (1 errors) ====
-    
     export var x;
     export function foo() {}
     export default function (){}
@@ -52,7 +48,6 @@ tests/cases/compiler/file5.ts(3,15): error TS2307: Cannot find module 'a'.
 !!! error TS2307: Cannot find module 'a'.
     
 ==== tests/cases/compiler/file5.ts (1 errors) ====
-    
     function foo() {}
     export * from 'a';
                   ~~~

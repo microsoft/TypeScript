@@ -1,5 +1,4 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardOfFormIsTypeOnInterfaces.ts ===
-
 interface C1 {
 >C1 : C1
 

@@ -1,5 +1,4 @@
 //// [errorWithTruncatedType.ts]
-
 var x: {
     propertyWithAnExceedinglyLongName1: string;
     propertyWithAnExceedinglyLongName2: string;

@@ -14,7 +14,4 @@
 ////    [x/*5*/yz: number]: boolean;
 ////    [/*6*/
 
-for (let marker of test.markers()) {
-    goTo.position(marker.position);
-    verify.completionListAllowsNewIdentifier();
-}
+goTo.eachMarker(() => verify.completionListAllowsNewIdentifier());

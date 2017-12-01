@@ -3,8 +3,7 @@
     "compilerOptions": {
         "removeComments": true,
         "outFile": "../../built/local/tsc.js",
-        "declaration": true,
-        "types": [ ]
+        "declaration": true
     },
     "files": [
         "core.ts",
@@ -15,9 +14,11 @@
         "parser.ts",
         "utilities.ts",
         "binder.ts",
+        "symbolWalker.ts",
         "checker.ts",
         "factory.ts",
         "visitor.ts",
+        "transformers/utilities.ts",
         "transformers/ts.ts",
         "transformers/jsx.ts",
         "transformers/esnext.ts",
@@ -26,7 +27,6 @@
         "transformers/es2015.ts",
         "transformers/es5.ts",
         "transformers/generators.ts",
-        "transformers/es5.ts",
         "transformers/destructuring.ts",
         "transformers/module/module.ts",
         "transformers/module/system.ts",
@@ -36,7 +36,11 @@
         "sourcemap.ts",
         "declarationEmitter.ts",
         "emitter.ts",
+        "watchUtilities.ts",
         "program.ts",
+        "builder.ts",
+        "resolutionCache.ts",
+        "watch.ts",
         "commandLineParser.ts",
         "tsc.ts",
         "diagnosticInformationMap.generated.ts"

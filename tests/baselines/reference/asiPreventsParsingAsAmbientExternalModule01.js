@@ -1,5 +1,4 @@
 //// [asiPreventsParsingAsAmbientExternalModule01.ts]
-
 var declare: number;
 var module: string;
 

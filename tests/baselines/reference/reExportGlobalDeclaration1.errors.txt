@@ -13,7 +13,6 @@ tests/cases/compiler/file2.ts(11,9): error TS2661: Cannot export 'b'. Only local
 
 
 ==== tests/cases/compiler/file1.d.ts (0 errors) ====
-    
     declare var x: number;
     declare var x1: number;
     declare let {a, b}: {a: number, b: number};

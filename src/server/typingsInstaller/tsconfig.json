@@ -5,6 +5,10 @@
         "outFile": "../../../built/local/typingsInstaller.js",
         "types": [
             "node"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
         ]
     },
     "files": [

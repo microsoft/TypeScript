@@ -29,4 +29,4 @@ verify.completionListContains("name");
 edit.insert("name;\nsausages.");
 verify.completionListContains("eggs");
 edit.insert("eggs;");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

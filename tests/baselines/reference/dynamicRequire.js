@@ -1,5 +1,4 @@
 //// [a.js]
-
 function foo(name) {
     var s = require("t/" + name)
 }

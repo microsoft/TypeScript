@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/outModuleConcatAmd.ts] ////
 
 //// [a.ts]
-
 export class A { }
 
 //// [b.ts]
@@ -21,7 +20,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define("ref/a", ["require", "exports"], function (require, exports) {
     "use strict";
-    var A = (function () {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
@@ -30,7 +30,8 @@ define("ref/a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
     "use strict";
-    var B = (function (_super) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;

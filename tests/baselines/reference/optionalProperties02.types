@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/typeRelationships/comparable/optionalProperties02.ts ===
-
 interface Foo {
 >Foo : Foo
 

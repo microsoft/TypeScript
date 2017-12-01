@@ -14,7 +14,11 @@ class C {
         // actually, never mind, don't clone
     }
 }
-
+function foobar({ bar={}, ...opts }: any = {}) {
+}
+foobar();
+foobar({ baz: 'hello' });
+foobar({ bar: { greeting: 'hello' } });
 
 
 //// [objectRestParameter.js]
@@ -48,3 +52,9 @@ class C {
         // actually, never mind, don't clone
     }
 }
+function foobar(_a = {}) {
+    var { bar = {} } = _a, opts = __rest(_a, ["bar"]);
+}
+foobar();
+foobar({ baz: 'hello' });
+foobar({ bar: { greeting: 'hello' } });

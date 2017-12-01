@@ -11,7 +11,6 @@
 ////         span: { n: string; };
 ////     }
 //// }
-//// var x = <div [|na/**/me|]="hello" />;
+//// var x = <div [|name|]="hello" />;
 
-goTo.marker();
-verify.renameLocations(false, false);
+verify.rangesAreRenameLocations();

@@ -1,5 +1,4 @@
 === A:/bar.ts ===
-
 import {z} from "./foo";
 >z : number
 

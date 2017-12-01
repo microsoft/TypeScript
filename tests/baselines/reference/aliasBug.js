@@ -1,5 +1,4 @@
 //// [aliasBug.ts]
-
 module foo {    
     export class Provide {
     }
@@ -23,7 +22,7 @@ function use() {
 //// [aliasBug.js]
 var foo;
 (function (foo) {
-    var Provide = (function () {
+    var Provide = /** @class */ (function () {
         function Provide() {
         }
         return Provide;
@@ -33,7 +32,7 @@ var foo;
     (function (bar) {
         var baz;
         (function (baz) {
-            var boo = (function () {
+            var boo = /** @class */ (function () {
                 function boo() {
                 }
                 return boo;

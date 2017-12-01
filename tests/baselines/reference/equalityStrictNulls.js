@@ -1,5 +1,4 @@
 //// [equalityStrictNulls.ts]
-
 function f1(x: string) {
     if (x == undefined) {
     }

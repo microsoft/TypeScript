@@ -1,5 +1,4 @@
 //// [multipleDefaultExports03.ts]
-
 export default class C {
 }
 
@@ -8,17 +7,16 @@ export default class C {
 
 //// [multipleDefaultExports03.js]
 "use strict";
-var C = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = C;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = C;

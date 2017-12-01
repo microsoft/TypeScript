@@ -1,5 +1,4 @@
 //// [systemModule2.ts]
-
 var x = 1;
 export = x;
 

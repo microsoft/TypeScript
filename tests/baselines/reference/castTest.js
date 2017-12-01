@@ -1,5 +1,4 @@
 //// [castTest.ts]
-
 var x : any = 0;
 var z = <number> x;
 var y = x + z;

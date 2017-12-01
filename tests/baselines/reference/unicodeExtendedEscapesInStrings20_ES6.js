@@ -1,5 +1,4 @@
 //// [unicodeExtendedEscapesInStrings20_ES6.ts]
-
 var x = "\u{";
 
 

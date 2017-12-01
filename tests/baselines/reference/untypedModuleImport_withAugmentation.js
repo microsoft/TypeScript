@@ -15,5 +15,6 @@ x;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var foo_1 = require("foo");
 foo_1.x;

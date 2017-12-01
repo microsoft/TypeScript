@@ -1,5 +1,4 @@
 === tests/cases/compiler/emitDecoratorMetadata_restArgs.ts ===
-
 declare const MyClassDecorator: ClassDecorator;
 >MyClassDecorator : ClassDecorator
 >ClassDecorator : ClassDecorator

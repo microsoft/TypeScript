@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/commentsMultiModuleMultiFile.ts] ////
 
 //// [commentsMultiModuleMultiFile_0.ts]
-
 /** this is multi declare module*/
 export module multiM {
     /// class b comment
@@ -39,11 +38,12 @@ new multiM.d();
 //// [commentsMultiModuleMultiFile_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi declare module*/
     var multiM;
     (function (multiM) {
         /// class b comment
-        var b = (function () {
+        var b = /** @class */ (function () {
             function b() {
             }
             return b;
@@ -53,14 +53,14 @@ define(["require", "exports"], function (require, exports) {
     /** thi is multi module 2*/
     (function (multiM) {
         /** class c comment*/
-        var c = (function () {
+        var c = /** @class */ (function () {
             function c() {
             }
             return c;
         }());
         multiM.c = c;
         // class e comment
-        var e = (function () {
+        var e = /** @class */ (function () {
             function e() {
             }
             return e;
@@ -73,18 +73,19 @@ define(["require", "exports"], function (require, exports) {
 //// [commentsMultiModuleMultiFile_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi module 3 comment*/
     var multiM;
     (function (multiM) {
         /** class d comment*/
-        var d = (function () {
+        var d = /** @class */ (function () {
             function d() {
             }
             return d;
         }());
         multiM.d = d;
         /// class f comment
-        var f = (function () {
+        var f = /** @class */ (function () {
             function f() {
             }
             return f;

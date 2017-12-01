@@ -1,5 +1,4 @@
 //// [es6modulekind.ts]
-
 export default class A
 {
     constructor ()

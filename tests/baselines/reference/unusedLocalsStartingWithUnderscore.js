@@ -1,5 +1,4 @@
 //// [unusedLocalsStartingWithUnderscore.ts]
-
 for (const _ of []) { }
 
 for (const _ in []) { }

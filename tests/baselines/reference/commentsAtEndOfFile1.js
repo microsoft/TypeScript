@@ -1,5 +1,4 @@
 //// [commentsAtEndOfFile1.ts]
-
 Input:
 ;
 //Testing two

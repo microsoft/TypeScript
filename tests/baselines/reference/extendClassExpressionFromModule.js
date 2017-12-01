@@ -13,7 +13,7 @@ class y extends x {}
 
 //// [foo1.js]
 "use strict";
-var x = (function () {
+var x = /** @class */ (function () {
     function x() {
     }
     return x;
@@ -31,9 +31,10 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var foo1 = require("./foo1");
 var x = foo1;
-var y = (function (_super) {
+var y = /** @class */ (function (_super) {
     __extends(y, _super);
     function y() {
         return _super !== null && _super.apply(this, arguments) || this;

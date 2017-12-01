@@ -1,5 +1,4 @@
 //// [constDeclarations-scopes2.ts]
-
 // global
 const c = "string";
 

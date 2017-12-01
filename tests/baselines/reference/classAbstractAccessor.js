@@ -1,5 +1,4 @@
 //// [classAbstractAccessor.ts]
-
 abstract class A {
    abstract get a();
    abstract get aa() { return 1; } // error
@@ -9,7 +8,7 @@ abstract class A {
 
 
 //// [classAbstractAccessor.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     Object.defineProperty(A.prototype, "aa", {

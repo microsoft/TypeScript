@@ -39,4 +39,4 @@ verify.completionListContains('x');
 verify.completionListContains('foo');
 verify.completionListContains('boo');
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

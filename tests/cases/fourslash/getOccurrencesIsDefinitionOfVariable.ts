@@ -1,20 +1,20 @@
 /// <reference path='fourslash.ts' />
-////var [|{| "isDefinition": true |}x|] = 0;
-////var assignmentRightHandSide = [|{| "isDefinition": false |}x|];
-////var assignmentRightHandSide2 = 1 + [|{| "isDefinition": false |}x|];
+////var [|{| "isWriteAccess": true, "isDefinition": true |}x|] = 0;
+////var assignmentRightHandSide = [|x|];
+////var assignmentRightHandSide2 = 1 + [|x|];
 ////
-////[|{| "isDefinition": false |}x|] = 1;
-////[|{| "isDefinition": false |}x|] = [|{| "isDefinition": false |}x|] + [|{| "isDefinition": false |}x|];
+////[|{| "isWriteAccess": true |}x|] = 1;
+////[|{| "isWriteAccess": true |}x|] = [|x|] + [|x|];
 ////
-////[|{| "isDefinition": false |}x|] == 1;
-////[|{| "isDefinition": false |}x|] <= 1;
+////[|x|] == 1;
+////[|x|] <= 1;
 ////
-////var preIncrement = ++[|{| "isDefinition": false |}x|];
-////var postIncrement = [|{| "isDefinition": false |}x|]++;
-////var preDecrement = --[|{| "isDefinition": false |}x|];
-////var postDecrement = [|{| "isDefinition": false |}x|]--;
+////var preIncrement = ++[|{| "isWriteAccess": true |}x|];
+////var postIncrement = [|{| "isWriteAccess": true |}x|]++;
+////var preDecrement = --[|{| "isWriteAccess": true |}x|];
+////var postDecrement = [|{| "isWriteAccess": true |}x|]--;
 ////
-////[|{| "isDefinition": false |}x|] += 1;
-////[|{| "isDefinition": false |}x|] <<= 1;
+////[|{| "isWriteAccess": true |}x|] += 1;
+////[|{| "isWriteAccess": true |}x|] <<= 1;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("var x: number");

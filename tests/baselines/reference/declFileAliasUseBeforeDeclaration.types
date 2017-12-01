@@ -9,7 +9,6 @@ import foo = require("./declFileAliasUseBeforeDeclaration_foo");
 >foo : typeof foo
 
 === tests/cases/compiler/declFileAliasUseBeforeDeclaration_foo.ts ===
-
 export class Foo { }
 >Foo : Foo
 

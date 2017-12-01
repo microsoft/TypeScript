@@ -1,5 +1,4 @@
 //// [commentsdoNotEmitComments.ts]
-
 /** Variable comments*/
 var myVariable = 10;
 

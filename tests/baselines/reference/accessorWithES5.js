@@ -1,5 +1,4 @@
 //// [accessorWithES5.ts]
-
 class C {
     get x() {
         return 1;
@@ -20,7 +19,7 @@ var y = {
 }
 
 //// [accessorWithES5.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {
@@ -32,7 +31,7 @@ var C = (function () {
     });
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     Object.defineProperty(D.prototype, "x", {

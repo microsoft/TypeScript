@@ -1,29 +1,28 @@
-tests/cases/compiler/errorsInGenericTypeReference.ts(12,17): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(18,31): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(23,29): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(24,36): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(25,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/errorsInGenericTypeReference.ts(25,27): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(26,24): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(31,36): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(35,36): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(39,17): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(43,33): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(45,41): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(48,27): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(52,25): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(57,35): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(61,39): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(66,22): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(66,38): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(67,27): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(11,17): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(17,31): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(22,29): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(23,36): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(24,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/errorsInGenericTypeReference.ts(24,27): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(25,24): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(30,36): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(34,36): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(38,17): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(42,33): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(44,41): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(47,27): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(51,25): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(56,35): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(60,39): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(65,22): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(65,38): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(66,27): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(67,24): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(67,40): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(68,24): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(68,40): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(69,24): error TS2304: Cannot find name 'V'.
 
 
 ==== tests/cases/compiler/errorsInGenericTypeReference.ts (22 errors) ====
-    
     interface IFoo<T> { }
     
     class Foo<T> { }

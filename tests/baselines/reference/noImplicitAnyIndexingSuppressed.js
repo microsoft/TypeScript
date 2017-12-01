@@ -1,5 +1,4 @@
 //// [noImplicitAnyIndexingSuppressed.ts]
-
 enum MyEmusEnum {
     emu
 }

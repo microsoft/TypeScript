@@ -1,11 +1,10 @@
 === tests/cases/compiler/ref/a.ts ===
-
 /// <reference path="./b.ts" />
 export class A {
 >A : Symbol(A, Decl(a.ts, 0, 0))
 
 	member: typeof GlobalFoo;
->member : Symbol(A.member, Decl(a.ts, 2, 16))
+>member : Symbol(A.member, Decl(a.ts, 1, 16))
 >GlobalFoo : Symbol(GlobalFoo, Decl(b.ts, 4, 11))
 }
 

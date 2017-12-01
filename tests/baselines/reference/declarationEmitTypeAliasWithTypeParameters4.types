@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters4.ts ===
-
 type Foo<T, Y> = {
 >Foo : Foo<T, Y>
 >T : T

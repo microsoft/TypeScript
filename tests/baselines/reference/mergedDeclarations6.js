@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/mergedDeclarations6.ts] ////
 
 //// [a.ts]
-
 export class A {
     protected protected: any;
 
@@ -26,7 +25,8 @@ export class B extends A {
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var A = (function () {
+    exports.__esModule = true;
+    var A = /** @class */ (function () {
         function A() {
         }
         A.prototype.setProtected = function (val) {
@@ -49,7 +49,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports", "./a"], function (require, exports, a_1) {
     "use strict";
-    var B = (function (_super) {
+    exports.__esModule = true;
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;

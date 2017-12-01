@@ -42,7 +42,6 @@ var newVar2 = new extMod.m4.m2.c();
 >c : typeof extMod.m4.m2.c
 
 === tests/cases/compiler/commentsExternalModules_0.ts ===
-
 /** Module comment*/
 export module m1 {
 >m1 : typeof m1

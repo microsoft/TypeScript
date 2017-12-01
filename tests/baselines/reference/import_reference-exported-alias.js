@@ -28,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
     (function (App) {
         var Services;
         (function (Services) {
-            var UserServices = (function () {
+            var UserServices = /** @class */ (function () {
                 function UserServices() {
                 }
                 UserServices.prototype.getUserName = function () {
@@ -45,6 +45,7 @@ define(["require", "exports"], function (require, exports) {
 //// [file2.js]
 define(["require", "exports", "file1"], function (require, exports, appJs) {
     "use strict";
+    exports.__esModule = true;
     var Services = appJs.Services;
     var UserServices = Services.UserServices;
     var x = new UserServices().getUserName();

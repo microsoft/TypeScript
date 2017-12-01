@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/systemModuleWithSuperClass.ts] ////
 
 //// [foo.ts]
-
 export class Foo {
     a: string;
 }
@@ -20,7 +19,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            Foo = (function () {
+            Foo = /** @class */ (function () {
                 function Foo() {
                 }
                 return Foo;
@@ -51,7 +50,7 @@ System.register(["./foo"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            Bar = (function (_super) {
+            Bar = /** @class */ (function (_super) {
                 __extends(Bar, _super);
                 function Bar() {
                     return _super !== null && _super.apply(this, arguments) || this;

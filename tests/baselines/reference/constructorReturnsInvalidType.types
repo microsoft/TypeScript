@@ -1,0 +1,17 @@
+=== tests/cases/compiler/constructorReturnsInvalidType.ts ===
+class X {
+>X : X
+
+    constructor() {
+        return 1;
+>1 : 1
+    }
+    foo() { }
+>foo : () => void
+}
+ 
+var x = new X();
+>x : X
+>new X() : X
+>X : typeof X
+

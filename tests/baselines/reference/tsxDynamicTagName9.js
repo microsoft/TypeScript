@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxDynamicTagName9.tsx] ////
 
 //// [react.d.ts]
-
 declare module 'react' {
 	class Component<T, U> { }
 }
@@ -31,8 +30,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var React = require("react");
-var Text = (function (_super) {
+var Text = /** @class */ (function (_super) {
     __extends(Text, _super);
     function Text() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

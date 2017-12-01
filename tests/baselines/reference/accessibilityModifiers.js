@@ -1,5 +1,4 @@
 //// [accessibilityModifiers.ts]
-
 // No errors
 class C {
     private static privateProperty;
@@ -47,7 +46,7 @@ class E {
 
 //// [accessibilityModifiers.js]
 // No errors
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.privateMethod = function () { };
@@ -86,7 +85,7 @@ var C = (function () {
     return C;
 }());
 // Errors, accessibility modifiers must precede static
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.privateMethod = function () { };
@@ -125,7 +124,7 @@ var D = (function () {
     return D;
 }());
 // Errors, multiple accessibility modifier
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     E.prototype.method = function () { };

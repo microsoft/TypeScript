@@ -11,16 +11,7 @@
 ////    abstract bar(): void;
 ////}
 
-const ranges = test.ranges();
-
-for (let r of ranges) {
-    goTo.position(r.start);
-    verify.occurrencesAtPositionCount(ranges.length);
-
-    for (let range of ranges) {
-        verify.occurrencesAtPositionContains(range, false);
-    }
-}
+verify.rangesAreOccurrences(false);
 
 goTo.marker("1");
 verify.occurrencesAtPositionCount(0);

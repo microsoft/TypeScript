@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/tsxNoJsx.tsx ===
-
 <nope />;
 >nope : Symbol(unknown)
 

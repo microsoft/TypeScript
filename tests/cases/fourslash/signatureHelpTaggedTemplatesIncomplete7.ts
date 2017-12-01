@@ -2,15 +2,13 @@
 
 //// function f(templateStrings, x, y, z) { return 10; }
 //// function g(templateStrings, x, y, z) { return ""; }
-//// 
+////
 //// f `   ${  123 } /*1*/${  }   /*2*/\/*3*/
 //// /*4*/\\/*5*/
 //// /*6*/\\\/*7*/
 //// /*8*/
 
-test.markers().forEach(m => {
-    goTo.position(m.position);
-
+goTo.eachMarker(() => {
     verify.signatureHelpCountIs(1);
     verify.signatureHelpArgumentCountIs(3);
 

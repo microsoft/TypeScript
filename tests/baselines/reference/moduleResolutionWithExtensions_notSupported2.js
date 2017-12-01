@@ -10,3 +10,4 @@ import jsx from "./jsx";
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;

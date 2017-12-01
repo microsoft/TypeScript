@@ -1,3 +1,4 @@
+// @declaration: true
 interface WithNonPrimitive {
     foo: object
 }

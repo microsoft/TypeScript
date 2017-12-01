@@ -1,5 +1,4 @@
 //// [es5ExportDefaultClassDeclaration4.ts]
-
 declare module "foo" {
     export var before: C;
 

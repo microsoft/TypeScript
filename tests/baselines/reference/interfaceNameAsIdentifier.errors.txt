@@ -1,5 +1,5 @@
 tests/cases/compiler/interfaceNameAsIdentifier.ts(4,1): error TS2693: 'C' only refers to a type, but is being used as a value here.
-tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2304: Cannot find name 'm2'.
+tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2708: Cannot use namespace 'm2' as a value.
 
 
 ==== tests/cases/compiler/interfaceNameAsIdentifier.ts (2 errors) ====
@@ -18,5 +18,5 @@ tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2304: Cannot fi
     
     m2.C();
     ~~
-!!! error TS2304: Cannot find name 'm2'.
+!!! error TS2708: Cannot use namespace 'm2' as a value.
     

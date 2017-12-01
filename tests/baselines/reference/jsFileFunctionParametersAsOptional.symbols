@@ -1,0 +1,21 @@
+=== tests/cases/compiler/foo.js ===
+function f(a, b, c) { }
+>f : Symbol(f, Decl(foo.js, 0, 0))
+>a : Symbol(a, Decl(foo.js, 0, 11))
+>b : Symbol(b, Decl(foo.js, 0, 13))
+>c : Symbol(c, Decl(foo.js, 0, 16))
+
+
+=== tests/cases/compiler/bar.ts ===
+f();
+>f : Symbol(f, Decl(foo.js, 0, 0))
+
+f(1);
+>f : Symbol(f, Decl(foo.js, 0, 0))
+
+f(1, 2);
+>f : Symbol(f, Decl(foo.js, 0, 0))
+
+f(1, 2, 3);
+>f : Symbol(f, Decl(foo.js, 0, 0))
+

@@ -37,7 +37,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -102,7 +103,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -231,7 +233,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -280,7 +283,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -409,7 +413,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -458,7 +463,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -523,7 +529,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -652,7 +659,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -773,7 +781,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -822,7 +831,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -943,7 +953,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -992,7 +1003,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1057,7 +1069,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1178,7 +1191,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1307,7 +1321,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1452,7 +1467,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1501,7 +1517,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1646,7 +1663,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1695,7 +1713,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1760,7 +1779,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1905,7 +1925,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1958,7 +1979,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -1999,7 +2021,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2036,16 +2059,20 @@
           "kind": "space"
         },
         {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
           "text": "new",
           "kind": "keyword"
         },
         {
           "text": " ",
           "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
         },
         {
           "text": "<",
@@ -2124,7 +2151,8 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2165,6 +2193,10 @@
           "kind": "interfaceName"
         },
         {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
           "text": "<",
           "kind": "punctuation"
         },
@@ -2241,7 +2273,8 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2294,7 +2327,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2423,7 +2457,8 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2492,7 +2527,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2585,7 +2621,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2626,7 +2663,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2783,7 +2821,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2824,7 +2863,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -2901,7 +2941,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3058,7 +3099,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3135,7 +3177,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3228,7 +3271,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3385,7 +3429,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3534,7 +3579,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3575,7 +3621,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3652,7 +3699,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3801,7 +3849,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3878,7 +3927,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -3971,7 +4021,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -4120,7 +4171,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -4305,7 +4357,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -4506,7 +4559,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -4547,7 +4601,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -4624,7 +4679,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -4825,7 +4881,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -4902,7 +4959,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -4995,7 +5053,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5196,7 +5255,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5261,7 +5321,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5330,7 +5391,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5371,7 +5433,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5408,16 +5471,20 @@
           "kind": "space"
         },
         {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
           "text": "new",
           "kind": "keyword"
         },
         {
           "text": " ",
           "kind": "space"
-        },
-        {
-          "text": "I1",
-          "kind": "interfaceName"
         },
         {
           "text": "<",
@@ -5544,7 +5611,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5597,7 +5665,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5650,7 +5719,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5689,6 +5759,10 @@
         {
           "text": "I1",
           "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
         },
         {
           "text": "<",
@@ -5815,7 +5889,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5868,7 +5943,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5921,7 +5997,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -5986,7 +6063,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -6175,7 +6253,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -6228,7 +6307,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -6281,7 +6361,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   }
 ]

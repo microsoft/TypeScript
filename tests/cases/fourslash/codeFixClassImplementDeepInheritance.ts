@@ -24,8 +24,7 @@
 //// }
 //// 
 //// interface I6 extends C4 {}
-//// class C5 implements I6 {[|
-//// |]}
+//// class C5 implements I6 {[| |]}
 
 
 /**

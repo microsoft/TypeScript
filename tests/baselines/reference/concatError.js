@@ -1,5 +1,4 @@
 //// [concatError.ts]
-
 var n1: number[];
 /*
 interface Array<T> {

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6UseOfTopLevelRequire.ts] ////
 
 //// [b.ts]
-
 export default function require(s: string): void {
 }
 

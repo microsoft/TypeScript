@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName31.ts ===
+class C {
+>C : Symbol(C, Decl(parserComputedPropertyName31.ts, 0, 0))
+
+    // yes ASI
+    [e]: number
+    [e2]: number
+}

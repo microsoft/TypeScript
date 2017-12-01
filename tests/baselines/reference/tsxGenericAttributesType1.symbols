@@ -1,0 +1,66 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+const decorator = function <T>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
+>decorator : Symbol(decorator, Decl(file.tsx, 2, 5))
+>T : Symbol(T, Decl(file.tsx, 2, 28))
+>Component : Symbol(Component, Decl(file.tsx, 2, 31))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
+>T : Symbol(T, Decl(file.tsx, 2, 28))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
+>T : Symbol(T, Decl(file.tsx, 2, 28))
+
+    return (props) => <Component {...props}></Component>
+>props : Symbol(props, Decl(file.tsx, 3, 12))
+>Component : Symbol(Component, Decl(file.tsx, 2, 31))
+>props : Symbol(props, Decl(file.tsx, 3, 12))
+>Component : Symbol(Component, Decl(file.tsx, 2, 31))
+
+};
+
+const decorator2 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
+>decorator2 : Symbol(decorator2, Decl(file.tsx, 6, 5))
+>T : Symbol(T, Decl(file.tsx, 6, 29))
+>x : Symbol(x, Decl(file.tsx, 6, 40))
+>Component : Symbol(Component, Decl(file.tsx, 6, 54))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
+>T : Symbol(T, Decl(file.tsx, 6, 29))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
+>T : Symbol(T, Decl(file.tsx, 6, 29))
+
+    return (props) => <Component {...props} x={2} ></Component>
+>props : Symbol(props, Decl(file.tsx, 7, 12))
+>Component : Symbol(Component, Decl(file.tsx, 6, 54))
+>props : Symbol(props, Decl(file.tsx, 7, 12))
+>x : Symbol(x, Decl(file.tsx, 7, 43))
+>Component : Symbol(Component, Decl(file.tsx, 6, 54))
+
+};
+
+const decorator3 = function <T extends { x: number }, U extends { x: number } >(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
+>decorator3 : Symbol(decorator3, Decl(file.tsx, 10, 5))
+>T : Symbol(T, Decl(file.tsx, 10, 29))
+>x : Symbol(x, Decl(file.tsx, 10, 40))
+>U : Symbol(U, Decl(file.tsx, 10, 53))
+>x : Symbol(x, Decl(file.tsx, 10, 65))
+>Component : Symbol(Component, Decl(file.tsx, 10, 80))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
+>T : Symbol(T, Decl(file.tsx, 10, 29))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
+>T : Symbol(T, Decl(file.tsx, 10, 29))
+
+    return (props) => <Component x={2} {...props} ></Component>
+>props : Symbol(props, Decl(file.tsx, 11, 12))
+>Component : Symbol(Component, Decl(file.tsx, 10, 80))
+>x : Symbol(x, Decl(file.tsx, 11, 32))
+>props : Symbol(props, Decl(file.tsx, 11, 12))
+>Component : Symbol(Component, Decl(file.tsx, 10, 80))
+
+};

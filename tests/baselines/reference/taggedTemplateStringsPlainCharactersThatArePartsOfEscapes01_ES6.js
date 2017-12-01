@@ -1,5 +1,4 @@
 //// [taggedTemplateStringsPlainCharactersThatArePartsOfEscapes01_ES6.ts]
-
 function f(...x: any[]) {
 
 }

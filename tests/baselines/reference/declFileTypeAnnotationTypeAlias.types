@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileTypeAnnotationTypeAlias.ts ===
-
 module M {
 >M : typeof M
 

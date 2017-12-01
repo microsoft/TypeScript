@@ -14,7 +14,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            toString = (1).toString;
+            toString = 1..toString;
             {
                 let { toFixed } = 1;
             }

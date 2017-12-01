@@ -19,7 +19,7 @@
 // If we do not, an error will be raised claiming
 // that foo's return type is not assignable with
 // it's signature return type
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 goTo.marker('1');
 edit.insert('D = C << 1,');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

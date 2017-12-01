@@ -1,5 +1,4 @@
 //// [derivedClassOverridesProtectedMembers.ts]
-
 var x: { foo: string; }
 var y: { foo: string; bar: string; }
 
@@ -49,7 +48,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var x;
 var y;
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base(a) {
     }
     Base.prototype.b = function (a) { };
@@ -68,7 +67,7 @@ var Base = (function () {
     });
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived(a) {
         return _super.call(this, x) || this;

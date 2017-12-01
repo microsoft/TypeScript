@@ -1,5 +1,5 @@
 //// [promiseIdentity.ts]
-interface IPromise<T> {
+export interface IPromise<T> {
     then<U>(callback: (x: T) => IPromise<U>): IPromise<U>;
 }
 interface Promise<T> {
@@ -22,6 +22,8 @@ var y: IPromise2<string, number>;
 var y: Promise2<any, string>;
 
 //// [promiseIdentity.js]
+"use strict";
+exports.__esModule = true;
 var x;
 var x;
 // Ok because T in this particular Promise2 is any, as are all the U and W references.

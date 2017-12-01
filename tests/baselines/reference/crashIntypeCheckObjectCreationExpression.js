@@ -11,7 +11,8 @@ export class BuildWorkspaceService {
 //// [crashIntypeCheckObjectCreationExpression.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var BuildWorkspaceService = (function () {
+    exports.__esModule = true;
+    var BuildWorkspaceService = /** @class */ (function () {
         function BuildWorkspaceService() {
         }
         BuildWorkspaceService.prototype.injectRequestService = function (service) {

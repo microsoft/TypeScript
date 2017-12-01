@@ -14,7 +14,8 @@ export class A
 //// [es5ModuleWithModuleGenAmd.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var A = (function () {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var A = /** @class */ (function () {
         function A() {
         }
         A.prototype.B = function () {

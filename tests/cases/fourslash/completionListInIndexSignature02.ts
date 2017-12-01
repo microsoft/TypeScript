@@ -13,7 +13,4 @@
 ////type T = {
 ////    [xyz: /*5*/
 
-for (let marker of test.markers()) {
-    goTo.position(marker.position);
-    verify.not.completionListAllowsNewIdentifier();
-}
+goTo.eachMarker(() => verify.not.completionListAllowsNewIdentifier());

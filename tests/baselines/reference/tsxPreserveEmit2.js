@@ -1,6 +1,4 @@
 //// [test.tsx]
-
-
 var Route: any;
 var routes1 = <Route />;
 

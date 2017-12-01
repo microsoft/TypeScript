@@ -1,6 +1,6 @@
 tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(16,7): error TS2304: Cannot find name 'NotEarlyError'.
 tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(17,1): error TS7027: Unreachable code detected.
-tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(17,5): error TS1212: Identifier expected. 'public' is a reserved word in strict mode
+tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(17,5): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
 
 
 ==== tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts (3 errors) ====
@@ -26,5 +26,5 @@ tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(17,5): error TS
     ~~~
 !!! error TS7027: Unreachable code detected.
         ~~~~~~
-!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode
+!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
     

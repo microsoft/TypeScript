@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(9,41): error TS2304: Cannot find name 'ScopeChain'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(10,39): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(11,43): error TS2304: Cannot find name 'ModuleDeclaration'.
@@ -139,7 +139,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {

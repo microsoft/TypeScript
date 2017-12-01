@@ -15,9 +15,8 @@ use(x);
 >x : Symbol(x, Decl(f.ts, 5, 8))
 
 === tests/cases/compiler/f.d.ts ===
-
 declare module "test" {
     let x: number;
->x : Symbol(x, Decl(f.d.ts, 2, 7))
+>x : Symbol(x, Decl(f.d.ts, 1, 7))
 }
 

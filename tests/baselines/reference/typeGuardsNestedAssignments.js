@@ -1,5 +1,4 @@
 //// [typeGuardsNestedAssignments.ts]
-
 class Foo {
     x: string;
 }
@@ -47,7 +46,7 @@ while ((match = re.exec("xxx")) != null) {
 }
 
 //// [typeGuardsNestedAssignments.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;

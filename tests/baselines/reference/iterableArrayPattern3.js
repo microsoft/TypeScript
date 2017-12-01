@@ -1,6 +1,4 @@
 //// [iterableArrayPattern3.ts]
-var a: Bar, b: Bar;
-[a, b] = new FooIterator;
 class Bar { x }
 class Foo extends Bar { y }
 class FooIterator {
@@ -16,9 +14,10 @@ class FooIterator {
     }
 }
 
-//// [iterableArrayPattern3.js]
-var a, b;
+var a: Bar, b: Bar;
 [a, b] = new FooIterator;
+
+//// [iterableArrayPattern3.js]
 class Bar {
 }
 class Foo extends Bar {
@@ -34,3 +33,5 @@ class FooIterator {
         return this;
     }
 }
+var a, b;
+[a, b] = new FooIterator;

@@ -1,5 +1,4 @@
 //// [unusedInterfaceinNamespace4.ts]
-
 namespace Validation {
     interface i1 {
 
@@ -21,7 +20,7 @@ namespace Validation {
 //// [unusedInterfaceinNamespace4.js]
 var Validation;
 (function (Validation) {
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;

@@ -1,5 +1,4 @@
 //// [missingFunctionImplementation.ts]
-
 export class C1 {
   m(): void;
 }
@@ -82,51 +81,52 @@ namespace N12 {
 
 //// [missingFunctionImplementation.js]
 "use strict";
-var C1 = (function () {
+exports.__esModule = true;
+var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;
 }());
 exports.C1 = C1;
 // merged with a namespace
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
 }());
 exports.C2 = C2;
 // merged with a namespace, multiple overloads
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
 // static methods, multiple overloads
-var C4 = (function () {
+var C4 = /** @class */ (function () {
     function C4() {
     }
     return C4;
 }());
 // static methods, multiple overloads
-var C5 = (function () {
+var C5 = /** @class */ (function () {
     function C5() {
     }
     return C5;
 }());
 // merged with namespace, static methods
-var C6 = (function () {
+var C6 = /** @class */ (function () {
     function C6() {
     }
     return C6;
 }());
 // merged with namespace, static methods, multiple overloads
-var C7 = (function () {
+var C7 = /** @class */ (function () {
     function C7() {
     }
     return C7;
 }());
 // merged with namespace, static methods, duplicate declarations
-var C8 = (function () {
+var C8 = /** @class */ (function () {
     function C8() {
     }
     return C8;
@@ -136,7 +136,7 @@ var C8 = (function () {
     C8.m = m;
 })(C8 || (C8 = {}));
 // merged with namespace, static methods, duplicate declarations
-var C9 = (function () {
+var C9 = /** @class */ (function () {
     function C9() {
     }
     C9.m = function (a) { };

@@ -3,6 +3,7 @@
     "compilerOptions": {
         "removeComments": true,
         "outFile": "../../built/local/tsserver.js",
+        "preserveConstEnums": true,
         "types": [
             "node"
         ]
@@ -14,7 +15,6 @@
         "utilities.ts",
         "scriptVersionCache.ts",
         "scriptInfo.ts",
-        "lsHost.ts",
         "typingsCache.ts",
         "project.ts",
         "editorServices.ts",

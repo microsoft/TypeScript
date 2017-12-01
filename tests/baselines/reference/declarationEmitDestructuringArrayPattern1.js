@@ -1,5 +1,4 @@
 //// [declarationEmitDestructuringArrayPattern1.ts]
-
 var [] = [1, "hello"]; // Dont emit anything
 var [x] = [1, "hello"]; // emit x: number
 var [x1, y1] = [1, "hello"]; // emit x1: number, y1: string

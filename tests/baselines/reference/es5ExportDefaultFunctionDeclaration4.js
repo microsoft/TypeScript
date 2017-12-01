@@ -1,5 +1,4 @@
 //// [es5ExportDefaultFunctionDeclaration4.ts]
-
 declare module "bar" {
     var before: typeof func;
 

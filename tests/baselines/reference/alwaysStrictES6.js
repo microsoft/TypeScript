@@ -1,5 +1,4 @@
 //// [alwaysStrictES6.ts]
-
 function f() {
     var arguments = [];
 }

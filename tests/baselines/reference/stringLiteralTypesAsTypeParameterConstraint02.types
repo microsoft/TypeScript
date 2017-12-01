@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint02.ts ===
-
 function foo<T extends "foo">(f: (x: T) => T) {
 >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
 >T : T

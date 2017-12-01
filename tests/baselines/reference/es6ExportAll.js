@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ExportAll.ts] ////
 
 //// [server.ts]
-
 export class c {
 }
 export interface i {

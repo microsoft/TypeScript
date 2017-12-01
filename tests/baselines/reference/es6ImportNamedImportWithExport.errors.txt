@@ -23,7 +23,6 @@ tests/cases/compiler/client.ts(26,1): error TS1191: An import declaration cannot
 
 
 ==== tests/cases/compiler/server.ts (0 errors) ====
-    
     export var a = 10;
     export var x = a;
     export var m = a;

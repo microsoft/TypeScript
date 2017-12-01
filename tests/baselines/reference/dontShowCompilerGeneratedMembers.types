@@ -1,0 +1,13 @@
+=== tests/cases/compiler/dontShowCompilerGeneratedMembers.ts ===
+var f: {
+>f : { (): any; x: number; }
+
+    x: number;
+>x : number
+
+    <-
+>- : number
+
+};
+> : any
+

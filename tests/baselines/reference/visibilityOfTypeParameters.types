@@ -1,5 +1,4 @@
 === tests/cases/compiler/visibilityOfTypeParameters.ts ===
-
 export class MyClass {
 >MyClass : MyClass
 

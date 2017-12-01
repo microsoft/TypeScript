@@ -1,5 +1,4 @@
 //// [implicitConstParameters.ts]
-
 function doSomething(cb: () => void) {
     cb();
 }

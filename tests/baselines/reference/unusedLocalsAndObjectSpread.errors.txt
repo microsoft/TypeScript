@@ -1,9 +1,8 @@
-tests/cases/compiler/unusedLocalsAndObjectSpread.ts(21,18): error TS6133: 'bar' is declared but never used.
-tests/cases/compiler/unusedLocalsAndObjectSpread.ts(28,21): error TS6133: 'bar' is declared but never used.
+tests/cases/compiler/unusedLocalsAndObjectSpread.ts(20,18): error TS6133: 'bar' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndObjectSpread.ts(27,21): error TS6133: 'bar' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedLocalsAndObjectSpread.ts (2 errors) ====
-    
     declare var console: { log(a: any): void };
     
     function one() {
@@ -25,7 +24,7 @@ tests/cases/compiler/unusedLocalsAndObjectSpread.ts(28,21): error TS6133: 'bar' 
         // 'a' is declared but never used
         const {a, ...bar} = foo; // bar should be unused
                      ~~~
-!!! error TS6133: 'bar' is declared but never used.
+!!! error TS6133: 'bar' is declared but its value is never read.
         //console.log(bar);
     }
     
@@ -34,7 +33,7 @@ tests/cases/compiler/unusedLocalsAndObjectSpread.ts(28,21): error TS6133: 'bar' 
         // '_' is declared but never used
         const {a: _, ...bar} = foo; // bar should be unused
                         ~~~
-!!! error TS6133: 'bar' is declared but never used.
+!!! error TS6133: 'bar' is declared but its value is never read.
         //console.log(bar);
     }
     

@@ -1,30 +1,40 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class class1 extends class1 {
-////    [|doStuff|]() { }
-////    [|propName|]: string;
+////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|]() { }
+////    [|{| "isWriteAccess": true, "isDefinition": true |}propName|]: string;
 //// }
 //// interface interface1 extends interface1 {
-////    [|doStuff|](): void;
-////    [|propName|]: string;
+////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|](): void;
+////    [|{| "isWriteAccess": true, "isDefinition": true |}propName|]: string;
 //// }
 //// class class2 extends class1 implements interface1 {
-////    [|doStuff|]() { }
-////    [|propName|]: string;
+////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|]() { }
+////    [|{| "isWriteAccess": true, "isDefinition": true |}propName|]: string;
 //// }
 ////
 //// var v: class2;
-//// v.[|propName|];
 //// v.[|doStuff|]();
+//// v.[|propName|];
 
 const [r0, r1, r2, r3, r4, r5, r6, r7] = test.ranges();
-verify.referencesOf(r0, [r0, r4, r7]);
-verify.referencesOf(r1, [r1, r5, r6]);
-verify.referencesOf(r2, [r2, r4, r7]);
-verify.referencesOf(r3, [r3, r5, r6]);
-const allDoStuff = [r0, r2, r4, r7];
-verify.referencesOf(r4, allDoStuff);
-const allPropName = [r1, r3, r5, r6];
-verify.referencesOf(r5, allPropName);
-verify.referencesOf(r6, allPropName);
-verify.referencesOf(r7, allDoStuff);
+verify.referenceGroups(r0, [{ definition: "(method) class1.doStuff(): void", ranges: [r0, r4, r6] }]);
+verify.referenceGroups(r1, [{ definition: "(property) class1.propName: string", ranges: [r1, r5, r7] }]);
+verify.referenceGroups(r2, [{ definition: "(method) interface1.doStuff(): void", ranges: [r2, r4, r6] }]);
+verify.referenceGroups(r3, [{ definition: "(property) interface1.propName: string", ranges: [r3, r5, r7] }]);
+verify.referenceGroups(r4, [
+    { definition: "(method) class1.doStuff(): void", ranges: [r0] },
+    { definition: "(method) interface1.doStuff(): void", ranges: [r2] },
+    { definition: "(method) class2.doStuff(): void", ranges: [r4, r6] }
+]);
+verify.referenceGroups([r5, r7], [
+    { definition: "(property) class1.propName: string", ranges: [r1] },
+    { definition: "(property) interface1.propName: string", ranges: [r3] },
+    { definition: "(property) class2.propName: string", ranges: [r5, r7] }
+]);
+verify.referenceGroups(r6, [
+    { definition: "(method) class1.doStuff(): void", ranges: [r0] },
+    { definition: "(method) interface1.doStuff(): void", ranges: [r2] },
+    { definition: "(method) class2.doStuff(): void", ranges: [r4] },
+    { definition: "(method) class2.doStuff(): void", ranges: [r6] }
+]);

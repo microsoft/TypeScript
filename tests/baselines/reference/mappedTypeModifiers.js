@@ -1,5 +1,4 @@
 //// [mappedTypeModifiers.ts]
-
 type T = { a: number, b: string };
 type TP = { a?: number, b?: string };
 type TR = { readonly a: number, readonly b: string };

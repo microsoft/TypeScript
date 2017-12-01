@@ -1,0 +1,50 @@
+=== tests/cases/conformance/emitter/es2017/forAwait/file1.ts ===
+async function f1() {
+>f1 : Symbol(f1, Decl(file1.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(file1.ts, 1, 7))
+
+    for await (const x of y) {
+>x : Symbol(x, Decl(file1.ts, 2, 20))
+>y : Symbol(y, Decl(file1.ts, 1, 7))
+    }
+}
+=== tests/cases/conformance/emitter/es2017/forAwait/file2.ts ===
+async function f2() {
+>f2 : Symbol(f2, Decl(file2.ts, 0, 0))
+
+    let x: any, y: any;
+>x : Symbol(x, Decl(file2.ts, 1, 7))
+>y : Symbol(y, Decl(file2.ts, 1, 15))
+
+    for await (x of y) {
+>x : Symbol(x, Decl(file2.ts, 1, 7))
+>y : Symbol(y, Decl(file2.ts, 1, 15))
+    }
+}
+=== tests/cases/conformance/emitter/es2017/forAwait/file3.ts ===
+async function* f3() {
+>f3 : Symbol(f3, Decl(file3.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(file3.ts, 1, 7))
+
+    for await (const x of y) {
+>x : Symbol(x, Decl(file3.ts, 2, 20))
+>y : Symbol(y, Decl(file3.ts, 1, 7))
+    }
+}
+=== tests/cases/conformance/emitter/es2017/forAwait/file4.ts ===
+async function* f4() {
+>f4 : Symbol(f4, Decl(file4.ts, 0, 0))
+
+    let x: any, y: any;
+>x : Symbol(x, Decl(file4.ts, 1, 7))
+>y : Symbol(y, Decl(file4.ts, 1, 15))
+
+    for await (x of y) {
+>x : Symbol(x, Decl(file4.ts, 1, 7))
+>y : Symbol(y, Decl(file4.ts, 1, 15))
+    }
+}

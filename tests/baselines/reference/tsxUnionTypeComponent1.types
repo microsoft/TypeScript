@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 import React = require('react');
 >React : typeof React
 
@@ -26,9 +25,9 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 
         const { AnyComponent } = this.props;
 >AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
->this.props : ComponentProps
+>this.props : ComponentProps & { children?: React.ReactNode; }
 >this : this
->props : ComponentProps
+>props : ComponentProps & { children?: React.ReactNode; }
 
         return (<AnyComponent />);
 >(<AnyComponent />) : JSX.Element
@@ -41,7 +40,7 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 <MyComponent AnyComponent={() => <button>test</button>}/>
 ><MyComponent AnyComponent={() => <button>test</button>}/> : JSX.Element
 >MyComponent : typeof MyComponent
->AnyComponent : any
+>AnyComponent : () => JSX.Element
 >() => <button>test</button> : () => JSX.Element
 ><button>test</button> : JSX.Element
 >button : any
@@ -58,7 +57,7 @@ class MyButtonComponent extends React.Component<{},{}> {
 <MyComponent AnyComponent={MyButtonComponent} />
 ><MyComponent AnyComponent={MyButtonComponent} /> : JSX.Element
 >MyComponent : typeof MyComponent
->AnyComponent : any
+>AnyComponent : typeof MyButtonComponent
 >MyButtonComponent : typeof MyButtonComponent
 
 

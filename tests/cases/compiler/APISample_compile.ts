@@ -1,10 +1,11 @@
 ﻿// @module: commonjs
+// @skipLibCheck: true
 // @includebuiltfile: typescript_standalone.d.ts
 // @noImplicitAny:true
 // @strictNullChecks:true
 
 /*
- * Note: This test is a public API sample. The sample sources can be found 
+ * Note: This test is a public API sample. The sample sources can be found
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
@@ -22,8 +23,12 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
     var allDiagnostics = ts.getPreEmitDiagnostics(program);
 
     allDiagnostics.forEach(diagnostic => {
-        var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
         var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+        if (!diagnostic.file) {
+            console.log(message);
+            return;
+        }
+        var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
         console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
     });
 

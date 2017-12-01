@@ -1,5 +1,4 @@
 //// [defaultOfAnyInStrictNullChecks.ts]
-
 // Regression test for #8295
 
 function foo() {

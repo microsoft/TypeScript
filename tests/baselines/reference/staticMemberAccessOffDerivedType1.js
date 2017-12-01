@@ -20,7 +20,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var SomeBase = (function () {
+var SomeBase = /** @class */ (function () {
     function SomeBase() {
     }
     SomeBase.GetNumber = function () {
@@ -28,11 +28,11 @@ var SomeBase = (function () {
     };
     return SomeBase;
 }());
-var P = (function (_super) {
+var P = /** @class */ (function (_super) {
     __extends(P, _super);
     function P() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    P.SomeNumber = P.GetNumber();
     return P;
 }(SomeBase));
-P.SomeNumber = P.GetNumber();

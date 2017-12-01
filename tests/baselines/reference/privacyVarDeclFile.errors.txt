@@ -8,30 +8,29 @@ tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(162,40): error TS4028: Pub
 tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(163,27): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
 tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(165,57): error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
 tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(166,72): error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(9,17): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(25,36): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(27,23): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(52,47): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(57,62): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(63,17): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(66,36): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(67,23): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(69,53): error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(70,68): error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(90,21): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(106,40): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(108,27): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(133,51): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(138,66): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(144,21): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(147,40): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(148,27): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(150,57): error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(8,17): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(24,36): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(26,23): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(51,47): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(56,62): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(62,17): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(65,36): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(66,23): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(68,53): error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(69,68): error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(89,21): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(105,40): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(107,27): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(132,51): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(137,66): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(143,21): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(146,40): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(147,27): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(149,57): error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(150,72): error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
 
 
 ==== tests/cases/compiler/privacyVarDeclFile_externalModule.ts (20 errors) ====
-    
     class privateClass {
     }
     

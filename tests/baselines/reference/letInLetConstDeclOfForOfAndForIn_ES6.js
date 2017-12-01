@@ -1,5 +1,4 @@
 //// [letInLetConstDeclOfForOfAndForIn_ES6.ts]
-
 // Should be an error
 for (let let of [1,2,3]) {}
 

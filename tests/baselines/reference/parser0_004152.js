@@ -6,7 +6,8 @@ export class Game {
 
 //// [parser0_004152.js]
 "use strict";
-var Game = (function () {
+exports.__esModule = true;
+var Game = /** @class */ (function () {
     function Game() {
         this.position = new DisplayPosition([]);
     }

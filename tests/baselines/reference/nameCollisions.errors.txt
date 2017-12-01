@@ -2,7 +2,7 @@ tests/cases/compiler/nameCollisions.ts(2,9): error TS2300: Duplicate identifier 
 tests/cases/compiler/nameCollisions.ts(4,12): error TS2300: Duplicate identifier 'x'.
 tests/cases/compiler/nameCollisions.ts(10,12): error TS2300: Duplicate identifier 'z'.
 tests/cases/compiler/nameCollisions.ts(13,9): error TS2300: Duplicate identifier 'z'.
-tests/cases/compiler/nameCollisions.ts(15,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged
+tests/cases/compiler/nameCollisions.ts(15,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 tests/cases/compiler/nameCollisions.ts(24,9): error TS2300: Duplicate identifier 'f'.
 tests/cases/compiler/nameCollisions.ts(25,14): error TS2300: Duplicate identifier 'f'.
 tests/cases/compiler/nameCollisions.ts(27,14): error TS2300: Duplicate identifier 'f2'.
@@ -38,7 +38,7 @@ tests/cases/compiler/nameCollisions.ts(37,11): error TS2300: Duplicate identifie
     
         module y {
                ~
-!!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged
+!!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
             var b;
         }
     

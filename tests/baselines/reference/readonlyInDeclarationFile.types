@@ -1,5 +1,4 @@
 === tests/cases/compiler/readonlyInDeclarationFile.ts ===
-
 interface Foo {
 >Foo : Foo
 

@@ -1,5 +1,6 @@
 /// <reference path="../factory.ts" />
 /// <reference path="../visitor.ts" />
+/// <reference path="./destructuring.ts" />
 
 /*@internal*/
 namespace ts {
@@ -69,7 +70,7 @@ namespace ts {
          * set of labels that occurred inside the converted loop
          * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
          */
-        labels?: Map<string>;
+        labels?: Map<boolean>;
         /*
          * collection of labeled jumps that transfer control outside the converted loop.
          * maps store association 'label -> labelMarker' where
@@ -268,6 +269,7 @@ namespace ts {
             hoistVariableDeclaration,
         } = context;
 
+        const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
         const previousOnSubstituteNode = context.onSubstituteNode;
         const previousOnEmitNode = context.onEmitNode;
@@ -277,6 +279,13 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let currentText: string;
         let hierarchyFacts: HierarchyFacts;
+        let taggedTemplateStringDeclarations: VariableDeclaration[];
+
+        function recordTaggedTemplateString(temp: Identifier) {
+            taggedTemplateStringDeclarations = append(
+                taggedTemplateStringDeclarations,
+                createVariableDeclaration(temp));
+        }
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -293,7 +302,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (node.isDeclarationFile) {
                 return node;
             }
 
@@ -305,6 +314,7 @@ namespace ts {
 
             currentSourceFile = undefined;
             currentText = undefined;
+            taggedTemplateStringDeclarations = undefined;
             hierarchyFacts = HierarchyFacts.None;
             return visited;
         }
@@ -313,7 +323,7 @@ namespace ts {
          * Sets the `HierarchyFacts` for this node prior to visiting this node's subtree, returning the facts set prior to modification.
          * @param excludeFacts The existing `HierarchyFacts` to reset before visiting the subtree.
          * @param includeFacts The new `HierarchyFacts` to set before visiting the subtree.
-         **/
+         */
         function enterSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             const ancestorFacts = hierarchyFacts;
             hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.AncestorFactsMask;
@@ -326,7 +336,7 @@ namespace ts {
          * @param ancestorFacts The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
          * @param excludeFacts The existing `HierarchyFacts` of the subtree that should not be propagated.
          * @param includeFacts The new `HierarchyFacts` of the subtree that should be propagated.
-         **/
+         */
         function exitSubtree(ancestorFacts: HierarchyFacts, excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.SubtreeFactsMask | ancestorFacts;
         }
@@ -340,8 +350,9 @@ namespace ts {
         function shouldVisitNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
-                || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && isStatement(node))
-                || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node));
+                || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && (isStatement(node) || (node.kind === SyntaxKind.Block)))
+                || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node))
+                || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -464,6 +475,12 @@ namespace ts {
                 case SyntaxKind.TemplateTail:
                     return visitTemplateLiteral(<LiteralExpression>node);
 
+                case SyntaxKind.StringLiteral:
+                    return visitStringLiteral(<StringLiteral>node);
+
+                case SyntaxKind.NumericLiteral:
+                    return visitNumericLiteral(<NumericLiteral>node);
+
                 case SyntaxKind.TaggedTemplateExpression:
                     return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
 
@@ -507,14 +524,20 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.SourceFileExcludes, HierarchyFacts.SourceFileIncludes);
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
+            let statementOffset = addStandardPrologue(statements, node.statements, /*ensureUseStrict*/ false);
             addCaptureThisForNodeIfNeeded(statements, node);
+            statementOffset = addCustomPrologue(statements, node.statements, statementOffset, visitor);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+            if (taggedTemplateStringDeclarations) {
+                statements.push(
+                    createVariableStatement(/*modifiers*/ undefined,
+                        createVariableDeclarationList(taggedTemplateStringDeclarations)));
+            }
             addRange(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
                 node,
-                createNodeArray(statements, node.statements)
+                setTextRange(createNodeArray(statements), node.statements)
             );
         }
 
@@ -585,7 +608,7 @@ namespace ts {
             if (isGeneratedIdentifier(node)) {
                 return node;
             }
-            if (node.text !== "arguments" && !resolver.isArgumentsLocalBinding(node)) {
+            if (node.escapedText !== "arguments" || !resolver.isArgumentsLocalBinding(node)) {
                 return node;
             }
             return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
@@ -599,7 +622,7 @@ namespace ts {
                 //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
-                    (node.label && convertedLoopState.labels && convertedLoopState.labels[node.label.text]) ||
+                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(idText(node.label))) ||
                     (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
 
                 if (!canUseBreakOrContinue) {
@@ -617,12 +640,12 @@ namespace ts {
                     }
                     else {
                         if (node.kind === SyntaxKind.BreakStatement) {
-                            labelMarker = `break-${node.label.text}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ true, node.label.text, labelMarker);
+                            labelMarker = `break-${node.label.escapedText}`;
+                            setLabeledJump(convertedLoopState, /*isBreak*/ true, idText(node.label), labelMarker);
                         }
                         else {
-                            labelMarker = `continue-${node.label.text}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ false, node.label.text, labelMarker);
+                            labelMarker = `continue-${node.label.escapedText}`;
+                            setLabeledJump(convertedLoopState, /*isBreak*/ false, idText(node.label), labelMarker);
                         }
                     }
                     let returnExpression: Expression = createLiteral(labelMarker);
@@ -671,9 +694,10 @@ namespace ts {
             setOriginalNode(variable, node);
 
             const statements: Statement[] = [];
-            const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([variable]), /*location*/ node);
+            const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([variable]));
 
             setOriginalNode(statement, node);
+            setTextRange(statement, node);
             startOnNewLine(statement);
             statements.push(statement);
 
@@ -763,9 +787,7 @@ namespace ts {
             // To preserve the behavior of the old emitter, we explicitly indent
             // the body of the function here if it was requested in an earlier
             // transformation.
-            if (getEmitFlags(node) & EmitFlags.Indented) {
-                setEmitFlags(classFunction, EmitFlags.Indented);
-            }
+            setEmitFlags(classFunction, (getEmitFlags(node) & EmitFlags.Indented) | EmitFlags.ReuseTempVariableScope);
 
             // "inner" and "outer" below are added purely to preserve source map locations from
             // the old emitter
@@ -777,7 +799,7 @@ namespace ts {
             outer.end = skipTrivia(currentText, node.pos);
             setEmitFlags(outer, EmitFlags.NoComments);
 
-            return createParen(
+            const result = createParen(
                 createCall(
                     outer,
                     /*typeArguments*/ undefined,
@@ -786,6 +808,8 @@ namespace ts {
                         : []
                 )
             );
+            addSyntheticLeadingComment(result, SyntaxKind.MultiLineCommentTrivia, "* @class ");
+            return result;
         }
 
         /**
@@ -803,7 +827,7 @@ namespace ts {
 
             // Create a synthetic text range for the return statement.
             const closingBraceLocation = createTokenRange(skipTrivia(currentText, node.members.end), SyntaxKind.CloseBraceToken);
-            const localName = getLocalName(node);
+            const localName = getInternalName(node);
 
             // The following partially-emitted expression exists purely to align our sourcemap
             // emit with the original emitter.
@@ -818,7 +842,7 @@ namespace ts {
 
             addRange(statements, endLexicalEnvironment());
 
-            const block = createBlock(createNodeArray(statements, /*location*/ node.members), /*location*/ undefined, /*multiLine*/ true);
+            const block = createBlock(setTextRange(createNodeArray(statements), /*location*/ node.members), /*multiLine*/ true);
             setEmitFlags(block, EmitFlags.NoComments);
             return block;
         }
@@ -833,8 +857,10 @@ namespace ts {
         function addExtendsHelperIfNeeded(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
             if (extendsClauseElement) {
                 statements.push(
-                    createStatement(
-                        createExtendsHelper(context, getLocalName(node)),
+                    setTextRange(
+                        createStatement(
+                            createExtendsHelper(context, getLocalName(node))
+                        ),
                         /*location*/ extendsClauseElement
                     )
                 );
@@ -854,19 +880,18 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.ConstructorExcludes, HierarchyFacts.ConstructorIncludes);
             const constructor = getFirstConstructorWithBody(node);
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
-            const constructorFunction =
-                createFunctionDeclaration(
-                    /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
-                    /*asteriskToken*/ undefined,
-                    getDeclarationName(node),
-                    /*typeParameters*/ undefined,
-                    transformConstructorParameters(constructor, hasSynthesizedSuper),
-                    /*type*/ undefined,
-                    transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper),
-                    /*location*/ constructor || node
-                );
+            const constructorFunction = createFunctionDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                getInternalName(node),
+                /*typeParameters*/ undefined,
+                transformConstructorParameters(constructor, hasSynthesizedSuper),
+                /*type*/ undefined,
+                transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper)
+            );
 
+            setTextRange(constructorFunction, constructor || node);
             if (extendsClauseElement) {
                 setEmitFlags(constructorFunction, EmitFlags.CapturesThis);
             }
@@ -914,13 +939,16 @@ namespace ts {
                 statementOffset = 0;
             }
             else if (constructor) {
-                // Otherwise, try to emit all potential prologue directives first.
-                statementOffset = addPrologueDirectives(statements, constructor.body.statements, /*ensureUseStrict*/ false, visitor);
+                statementOffset = addStandardPrologue(statements, constructor.body.statements, /*ensureUseStrict*/ false);
             }
 
             if (constructor) {
                 addDefaultValueAssignmentsIfNeeded(statements, constructor);
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+                if (!hasSynthesizedSuper) {
+                    // If no super call has been synthesized, emit custom prologue directives.
+                    statementOffset = addCustomPrologue(statements, constructor.body.statements, statementOffset, visitor);
+                }
                 Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
 
             }
@@ -962,14 +990,16 @@ namespace ts {
             }
 
             const block = createBlock(
-                createNodeArray(
-                    statements,
+                setTextRange(
+                    createNodeArray(
+                        statements
+                    ),
                     /*location*/ constructor ? constructor.body.statements : node.members
                 ),
-                /*location*/ constructor ? constructor.body : node,
                 /*multiLine*/ true
             );
 
+            setTextRange(block, constructor ? constructor.body : node);
             if (!constructor) {
                 setEmitFlags(block, EmitFlags.NoComments);
             }
@@ -1139,14 +1169,16 @@ namespace ts {
                 // Binding patterns are converted into a generated name and are
                 // evaluated inside the function body.
                 return setOriginalNode(
-                    createParameter(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        /*dotDotDotToken*/ undefined,
-                        getGeneratedNameForNode(node),
-                        /*questionToken*/ undefined,
-                        /*type*/ undefined,
-                        /*initializer*/ undefined,
+                    setTextRange(
+                        createParameter(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
+                            getGeneratedNameForNode(node),
+                            /*questionToken*/ undefined,
+                            /*type*/ undefined,
+                            /*initializer*/ undefined
+                        ),
                         /*location*/ node
                     ),
                     /*original*/ node
@@ -1155,14 +1187,16 @@ namespace ts {
             else if (node.initializer) {
                 // Initializers are elided
                 return setOriginalNode(
-                    createParameter(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        /*dotDotDotToken*/ undefined,
-                        node.name,
-                        /*questionToken*/ undefined,
-                        /*type*/ undefined,
-                        /*initializer*/ undefined,
+                    setTextRange(
+                        createParameter(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
+                            node.name,
+                            /*questionToken*/ undefined,
+                            /*type*/ undefined,
+                            /*initializer*/ undefined
+                        ),
                         /*location*/ node
                     ),
                     /*original*/ node
@@ -1274,21 +1308,26 @@ namespace ts {
             const statement = createIf(
                 createTypeCheck(getSynthesizedClone(name), "undefined"),
                 setEmitFlags(
-                    createBlock([
-                        createStatement(
-                            createAssignment(
-                                setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
-                                setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer)),
-                                /*location*/ parameter
+                    setTextRange(
+                        createBlock([
+                            createStatement(
+                                setTextRange(
+                                    createAssignment(
+                                        setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
+                                        setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer))
+                                    ),
+                                    parameter
+                                )
                             )
-                        )
-                    ], /*location*/ parameter),
+                        ]),
+                        parameter
+                    ),
                     EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps
-                ),
-                /*elseStatement*/ undefined,
-                /*location*/ parameter
+                )
             );
-            statement.startsOnNewLine = true;
+
+            startOnNewLine(statement);
+            setTextRange(statement, parameter);
             setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue);
             statements.push(statement);
         }
@@ -1332,15 +1371,17 @@ namespace ts {
             // var param = [];
             statements.push(
                 setEmitFlags(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList([
-                            createVariableDeclaration(
-                                declarationName,
-                                /*type*/ undefined,
-                                createArrayLiteral([])
-                            )
-                        ]),
+                    setTextRange(
+                        createVariableStatement(
+                            /*modifiers*/ undefined,
+                            createVariableDeclarationList([
+                                createVariableDeclaration(
+                                    declarationName,
+                                    /*type*/ undefined,
+                                    createArrayLiteral([])
+                                )
+                            ])
+                        ),
                         /*location*/ parameter
                     ),
                     EmitFlags.CustomPrologue
@@ -1351,26 +1392,33 @@ namespace ts {
             //   param[_i - restIndex] = arguments[_i];
             // }
             const forStatement = createFor(
-                createVariableDeclarationList([
-                    createVariableDeclaration(temp, /*type*/ undefined, createLiteral(restIndex))
-                ], /*location*/ parameter),
-                createLessThan(
-                    temp,
-                    createPropertyAccess(createIdentifier("arguments"), "length"),
-                    /*location*/ parameter
+                setTextRange(
+                    createVariableDeclarationList([
+                        createVariableDeclaration(temp, /*type*/ undefined, createLiteral(restIndex))
+                    ]),
+                    parameter
                 ),
-                createPostfixIncrement(temp, /*location*/ parameter),
+                setTextRange(
+                    createLessThan(
+                        temp,
+                        createPropertyAccess(createIdentifier("arguments"), "length")
+                    ),
+                    parameter
+                ),
+                setTextRange(createPostfixIncrement(temp), parameter),
                 createBlock([
                     startOnNewLine(
-                        createStatement(
-                            createAssignment(
-                                createElementAccess(
-                                    expressionName,
-                                    restIndex === 0
-                                        ? temp
-                                        : createSubtract(temp, createLiteral(restIndex))
-                                ),
-                                createElementAccess(createIdentifier("arguments"), temp)
+                        setTextRange(
+                            createStatement(
+                                createAssignment(
+                                    createElementAccess(
+                                        expressionName,
+                                        restIndex === 0
+                                            ? temp
+                                            : createSubtract(temp, createLiteral(restIndex))
+                                    ),
+                                    createElementAccess(createIdentifier("arguments"), temp)
+                                )
                             ),
                             /*location*/ parameter
                         )
@@ -1405,11 +1453,10 @@ namespace ts {
                         /*type*/ undefined,
                         initializer
                     )
-                ]),
-                originalStatement
+                ])
             );
-
             setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
+            setTextRange(captureThisStatement, originalStatement);
             setSourceMapRange(captureThisStatement, node);
             statements.push(captureThisStatement);
         }
@@ -1529,7 +1576,7 @@ namespace ts {
          * @param member The SemicolonClassElement node.
          */
         function transformSemicolonClassElementToStatement(member: SemicolonClassElement) {
-            return createEmptyStatement(/*location*/ member);
+            return setTextRange(createEmptyStatement(), member);
         }
 
         /**
@@ -1547,8 +1594,10 @@ namespace ts {
             setEmitFlags(memberFunction, EmitFlags.NoComments);
             setSourceMapRange(memberFunction, sourceMapRange);
 
-            const statement = createStatement(
-                createAssignment(memberName, memberFunction),
+            const statement = setTextRange(
+                createStatement(
+                    createAssignment(memberName, memberFunction)
+                ),
                 /*location*/ member
             );
 
@@ -1571,15 +1620,12 @@ namespace ts {
          * @param accessors The set of related get/set accessors.
          */
         function transformAccessorsToStatement(receiver: LeftHandSideExpression, accessors: AllAccessorDeclarations, container: Node): Statement {
-            const statement = createStatement(
-                transformAccessorsToExpression(receiver, accessors, container, /*startsOnNewLine*/ false),
-                /*location*/ getSourceMapRange(accessors.firstAccessor)
-            );
-
+            const statement = createStatement(transformAccessorsToExpression(receiver, accessors, container, /*startsOnNewLine*/ false));
             // The location for the statement is used to emit source maps only.
             // No comments should be emitted for this statement to align with the
             // old emitter.
             setEmitFlags(statement, EmitFlags.NoComments);
+            setSourceMapRange(statement, getSourceMapRange(accessors.firstAccessor));
             return statement;
         }
 
@@ -1622,8 +1668,8 @@ namespace ts {
             }
 
             properties.push(
-                createPropertyAssignment("enumerable", createLiteral(true)),
-                createPropertyAssignment("configurable", createLiteral(true))
+                createPropertyAssignment("enumerable", createTrue()),
+                createPropertyAssignment("configurable", createTrue())
             );
 
             const call = createCall(
@@ -1632,11 +1678,11 @@ namespace ts {
                 [
                     target,
                     propertyName,
-                    createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)
+                    createObjectLiteral(properties, /*multiLine*/ true)
                 ]
             );
             if (startsOnNewLine) {
-                call.startsOnNewLine = true;
+                startOnNewLine(call);
             }
 
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
@@ -1662,9 +1708,9 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node),
-                node
+                transformFunctionBody(node)
             );
+            setTextRange(func, node);
             setOriginalNode(func, node);
             setEmitFlags(func, EmitFlags.CapturesThis);
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
@@ -1697,6 +1743,7 @@ namespace ts {
             return updateFunctionExpression(
                 node,
                 /*modifiers*/ undefined,
+                node.asteriskToken,
                 name,
                 /*typeParameters*/ undefined,
                 parameters,
@@ -1728,6 +1775,7 @@ namespace ts {
                 node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
+                node.asteriskToken,
                 name,
                 /*typeParameters*/ undefined,
                 parameters,
@@ -1758,14 +1806,16 @@ namespace ts {
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return setOriginalNode(
-                createFunctionExpression(
-                    /*modifiers*/ undefined,
-                    node.asteriskToken,
-                    name,
-                    /*typeParameters*/ undefined,
-                    parameters,
-                    /*type*/ undefined,
-                    body,
+                setTextRange(
+                    createFunctionExpression(
+                        /*modifiers*/ undefined,
+                        node.asteriskToken,
+                        name,
+                        /*typeParameters*/ undefined,
+                        parameters,
+                        /*type*/ undefined,
+                        body
+                    ),
                     location
                 ),
                 /*original*/ node
@@ -1790,8 +1840,8 @@ namespace ts {
             resumeLexicalEnvironment();
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
-                // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
-                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+                // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
+                statementOffset = addStandardPrologue(statements, body.statements, /*ensureUseStrict*/ false);
             }
 
             addCaptureThisForNodeIfNeeded(statements, node);
@@ -1804,6 +1854,9 @@ namespace ts {
             }
 
             if (isBlock(body)) {
+                // addCustomPrologue puts already-existing directives at the beginning of the target statement-array
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor);
+
                 statementsLocation = body.statements;
                 addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
 
@@ -1832,7 +1885,8 @@ namespace ts {
                 }
 
                 const expression = visitNode(body, visitor, isExpression);
-                const returnStatement = createReturn(expression, /*location*/ body);
+                const returnStatement = createReturn(expression);
+                setTextRange(returnStatement, body);
                 setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);
                 statements.push(returnStatement);
 
@@ -1851,7 +1905,8 @@ namespace ts {
                 multiLine = true;
             }
 
-            const block = createBlock(createNodeArray(statements, statementsLocation), node.body, multiLine);
+            const block = createBlock(setTextRange(createNodeArray(statements), statementsLocation), multiLine);
+            setTextRange(block, node.body);
             if (!multiLine && singleLine) {
                 setEmitFlags(block, EmitFlags.SingleLine);
             }
@@ -1868,8 +1923,10 @@ namespace ts {
             const updated = visitFunctionBody(node.body, functionBodyVisitor, context);
             return updateBlock(
                 updated,
-                createNodeArray(
-                    prependCaptureNewTargetIfNeeded(updated.statements, node, /*copyOnWrite*/ true),
+                setTextRange(
+                    createNodeArray(
+                        prependCaptureNewTargetIfNeeded(updated.statements as MutableNodeArray<Statement>, node, /*copyOnWrite*/ true)
+                    ),
                     /*location*/ updated.statements
                 )
             );
@@ -1914,6 +1971,9 @@ namespace ts {
         function visitParenthesizedExpression(node: ParenthesizedExpression, needsDestructuringValue: boolean): ParenthesizedExpression {
             // If we are here it is most likely because our expression is a destructuring assignment.
             if (!needsDestructuringValue) {
+                // By default we always emit the RHS at the end of a flattened destructuring
+                // expression. If we are in a state where we do not need the destructuring value,
+                // we pass that information along to the children that care about it.
                 switch (node.expression.kind) {
                     case SyntaxKind.ParenthesizedExpression:
                         return updateParen(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
@@ -1964,12 +2024,14 @@ namespace ts {
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
+                            setTextRange(assignment, decl);
                         }
-                        (assignments || (assignments = [])).push(assignment);
+
+                        assignments = append(assignments, assignment);
                     }
                 }
                 if (assignments) {
-                    updated = createStatement(reduceLeft(assignments, (acc, v) => createBinary(v, SyntaxKind.CommaToken, acc)), node);
+                    updated = setTextRange(createStatement(inlineExpressions(assignments)), node);
                 }
                 else {
                     // none of declarations has initializer - the entire variable statement can be deleted
@@ -1995,22 +2057,24 @@ namespace ts {
                     enableSubstitutionsForBlockScopedBindings();
                 }
 
-                const declarations = flatten(map(node.declarations, node.flags & NodeFlags.Let
+                const declarations = flatMap(node.declarations, node.flags & NodeFlags.Let
                     ? visitVariableDeclarationInLetDeclarationList
-                    : visitVariableDeclaration));
+                    : visitVariableDeclaration);
 
-                const declarationList = createVariableDeclarationList(declarations, /*location*/ node);
+                const declarationList = createVariableDeclarationList(declarations);
                 setOriginalNode(declarationList, node);
+                setTextRange(declarationList, node);
                 setCommentRange(declarationList, node);
 
                 if (node.transformFlags & TransformFlags.ContainsBindingPattern
-                    && (isBindingPattern(node.declarations[0].name)
-                        || isBindingPattern(lastOrUndefined(node.declarations).name))) {
+                    && (isBindingPattern(node.declarations[0].name) || isBindingPattern(lastOrUndefined(node.declarations).name))) {
                     // If the first or last declaration is a binding pattern, we need to modify
                     // the source map range for the declaration list.
                     const firstDeclaration = firstOrUndefined(declarations);
-                    const lastDeclaration = lastOrUndefined(declarations);
-                    setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+                    if (firstDeclaration) {
+                        const lastDeclaration = lastOrUndefined(declarations);
+                        setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+                    }
                 }
 
                 return declarationList;
@@ -2135,21 +2199,35 @@ namespace ts {
         }
 
         function recordLabel(node: LabeledStatement) {
-            convertedLoopState.labels[node.label.text] = node.label.text;
+            convertedLoopState.labels.set(idText(node.label), true);
         }
 
         function resetLabel(node: LabeledStatement) {
-            convertedLoopState.labels[node.label.text] = undefined;
+            convertedLoopState.labels.set(idText(node.label), false);
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
             if (convertedLoopState && !convertedLoopState.labels) {
-                convertedLoopState.labels = createMap<string>();
+                convertedLoopState.labels = createMap<boolean>();
             }
-            const statement = unwrapInnermostStatmentOfLabel(node, convertedLoopState && recordLabel);
-            return isIterationStatement(statement, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(statement)
+            const statement = unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
+            return isIterationStatement(statement, /*lookInLabeledStatements*/ false)
                 ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
                 : restoreEnclosingLabel(visitNode(statement, visitor, isStatement), node, convertedLoopState && resetLabel);
+        }
+
+        function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {
+            switch (node.kind) {
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                    return visitDoOrWhileStatement(<DoStatement | WhileStatement>node, outermostLabeledStatement);
+                case SyntaxKind.ForStatement:
+                    return visitForStatement(<ForStatement>node, outermostLabeledStatement);
+                case SyntaxKind.ForInStatement:
+                    return visitForInStatement(<ForInStatement>node, outermostLabeledStatement);
+                case SyntaxKind.ForOfStatement:
+                    return visitForOfStatement(<ForOfStatement>node, outermostLabeledStatement);
+            }
         }
 
         function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement, convert?: LoopConverter) {
@@ -2189,10 +2267,116 @@ namespace ts {
                 HierarchyFacts.ForInOrForOfStatementIncludes,
                 node,
                 outermostLabeledStatement,
-                convertForOfToFor);
+                compilerOptions.downlevelIteration ? convertForOfStatementForIterable : convertForOfStatementForArray);
         }
 
-        function convertForOfToFor(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
+        function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
+            const statements: Statement[] = [];
+            if (isVariableDeclarationList(node.initializer)) {
+                if (node.initializer.flags & NodeFlags.BlockScoped) {
+                    enableSubstitutionsForBlockScopedBindings();
+                }
+
+                const firstOriginalDeclaration = firstOrUndefined(node.initializer.declarations);
+                if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
+                    // This works whether the declaration is a var, let, or const.
+                    // It will use rhsIterationValue _a[_i] as the initializer.
+                    const declarations = flattenDestructuringBinding(
+                        firstOriginalDeclaration,
+                        visitor,
+                        context,
+                        FlattenLevel.All,
+                        boundValue
+                    );
+
+                    const declarationList = setTextRange(createVariableDeclarationList(declarations), node.initializer);
+                    setOriginalNode(declarationList, node.initializer);
+
+                    // Adjust the source map range for the first declaration to align with the old
+                    // emitter.
+                    const firstDeclaration = declarations[0];
+                    const lastDeclaration = lastOrUndefined(declarations);
+                    setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+
+                    statements.push(
+                        createVariableStatement(
+                            /*modifiers*/ undefined,
+                            declarationList
+                        )
+                    );
+                }
+                else {
+                    // The following call does not include the initializer, so we have
+                    // to emit it separately.
+                    statements.push(
+                        setTextRange(
+                            createVariableStatement(
+                                /*modifiers*/ undefined,
+                                setOriginalNode(
+                                    setTextRange(
+                                        createVariableDeclarationList([
+                                            createVariableDeclaration(
+                                                firstOriginalDeclaration ? firstOriginalDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
+                                                /*type*/ undefined,
+                                                boundValue
+                                            )
+                                        ]),
+                                        moveRangePos(node.initializer, -1)
+                                    ),
+                                    node.initializer
+                                )
+                            ),
+                            moveRangeEnd(node.initializer, -1)
+                        )
+                    );
+                }
+            }
+            else {
+                // Initializer is an expression. Emit the expression in the body, so that it's
+                // evaluated on every iteration.
+                const assignment = createAssignment(node.initializer, boundValue);
+                if (isDestructuringAssignment(assignment)) {
+                    aggregateTransformFlags(assignment);
+                    statements.push(createStatement(visitBinaryExpression(assignment, /*needsDestructuringValue*/ false)));
+                }
+                else {
+                    assignment.end = node.initializer.end;
+                    statements.push(setTextRange(createStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(node.initializer, -1)));
+                }
+            }
+
+            let bodyLocation: TextRange;
+            let statementsLocation: TextRange;
+            if (convertedLoopBodyStatements) {
+                addRange(statements, convertedLoopBodyStatements);
+            }
+            else {
+                const statement = visitNode(node.statement, visitor, isStatement, liftToBlock);
+                if (isBlock(statement)) {
+                    addRange(statements, statement.statements);
+                    bodyLocation = statement;
+                    statementsLocation = statement.statements;
+                }
+                else {
+                    statements.push(statement);
+                }
+            }
+
+            // The old emitter does not emit source maps for the block.
+            // We add the location to preserve comments.
+            return setEmitFlags(
+                setTextRange(
+                    createBlock(
+                        setTextRange(createNodeArray(statements), statementsLocation),
+                        /*multiLine*/ true
+                    ),
+                    bodyLocation,
+                ),
+                EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
+            );
+        }
+
+        function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
             // The following ES6 code:
             //
             //    for (let v of expr) { }
@@ -2215,8 +2399,6 @@ namespace ts {
             // for-of bodies are always emitted as blocks.
 
             const expression = visitNode(node.expression, visitor, isExpression);
-            const initializer = node.initializer;
-            const statements: Statement[] = [];
 
             // In the case where the user wrote an identifier as the RHS, like this:
             //
@@ -2224,156 +2406,150 @@ namespace ts {
             //
             // we don't want to emit a temporary variable for the RHS, just use it directly.
             const counter = createLoopVariable();
-            const rhsReference = expression.kind === SyntaxKind.Identifier
-                ? createUniqueName((<Identifier>expression).text)
-                : createTempVariable(/*recordTempVariable*/ undefined);
-            const elementAccess = createElementAccess(rhsReference, counter);
-
-            // Initialize LHS
-            // var v = _a[_i];
-            if (isVariableDeclarationList(initializer)) {
-                if (initializer.flags & NodeFlags.BlockScoped) {
-                    enableSubstitutionsForBlockScopedBindings();
-                }
-
-                const firstOriginalDeclaration = firstOrUndefined(initializer.declarations);
-                if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
-                    // This works whether the declaration is a var, let, or const.
-                    // It will use rhsIterationValue _a[_i] as the initializer.
-                    const declarations = flattenDestructuringBinding(
-                        firstOriginalDeclaration,
-                        visitor,
-                        context,
-                        FlattenLevel.All,
-                        elementAccess
-                    );
-
-                    const declarationList = createVariableDeclarationList(declarations, /*location*/ initializer);
-                    setOriginalNode(declarationList, initializer);
-
-                    // Adjust the source map range for the first declaration to align with the old
-                    // emitter.
-                    const firstDeclaration = declarations[0];
-                    const lastDeclaration = lastOrUndefined(declarations);
-                    setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
-
-                    statements.push(
-                        createVariableStatement(
-                            /*modifiers*/ undefined,
-                            declarationList
-                        )
-                    );
-                }
-                else {
-                    // The following call does not include the initializer, so we have
-                    // to emit it separately.
-                    statements.push(
-                        createVariableStatement(
-                            /*modifiers*/ undefined,
-                            setOriginalNode(
-                                createVariableDeclarationList([
-                                    createVariableDeclaration(
-                                        firstOriginalDeclaration ? firstOriginalDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
-                                        /*type*/ undefined,
-                                        createElementAccess(rhsReference, counter)
-                                    )
-                                ], /*location*/ moveRangePos(initializer, -1)),
-                                initializer
-                            ),
-                            /*location*/ moveRangeEnd(initializer, -1)
-                        )
-                    );
-                }
-            }
-            else {
-                // Initializer is an expression. Emit the expression in the body, so that it's
-                // evaluated on every iteration.
-                const assignment = createAssignment(initializer, elementAccess);
-                if (isDestructuringAssignment(assignment)) {
-                    // This is a destructuring pattern, so we flatten the destructuring instead.
-                    statements.push(
-                        createStatement(
-                            flattenDestructuringAssignment(
-                                assignment,
-                                visitor,
-                                context,
-                                FlattenLevel.All
-                            )
-                        )
-                    );
-                }
-                else {
-                    // Currently there is not way to check that assignment is binary expression of destructing assignment
-                    // so we have to cast never type to binaryExpression
-                    (<BinaryExpression>assignment).end = initializer.end;
-                    statements.push(createStatement(assignment, /*location*/ moveRangeEnd(initializer, -1)));
-                }
-            }
-
-            let bodyLocation: TextRange;
-            let statementsLocation: TextRange;
-            if (convertedLoopBodyStatements) {
-                addRange(statements, convertedLoopBodyStatements);
-            }
-            else {
-                const statement = visitNode(node.statement, visitor, isStatement);
-                if (isBlock(statement)) {
-                    addRange(statements, statement.statements);
-                    bodyLocation = statement;
-                    statementsLocation = statement.statements;
-                }
-                else {
-                    statements.push(statement);
-                }
-            }
+            const rhsReference = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
 
             // The old emitter does not emit source maps for the expression
             setEmitFlags(expression, EmitFlags.NoSourceMap | getEmitFlags(expression));
 
-            // The old emitter does not emit source maps for the block.
-            // We add the location to preserve comments.
-            const body = createBlock(
-                createNodeArray(statements, /*location*/ statementsLocation),
-                /*location*/ bodyLocation
-            );
-
-            setEmitFlags(body, EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps);
-
-            const forStatement = createFor(
-                setEmitFlags(
-                    createVariableDeclarationList([
-                        createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
-                        createVariableDeclaration(rhsReference, /*type*/ undefined, expression, /*location*/ node.expression)
-                    ], /*location*/ node.expression),
-                    EmitFlags.NoHoisting
+            const forStatement = setTextRange(
+                createFor(
+                    /*initializer*/ setEmitFlags(
+                        setTextRange(
+                            createVariableDeclarationList([
+                                setTextRange(createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0)), moveRangePos(node.expression, -1)),
+                                setTextRange(createVariableDeclaration(rhsReference, /*type*/ undefined, expression), node.expression)
+                            ]),
+                            node.expression
+                        ),
+                        EmitFlags.NoHoisting
+                    ),
+                    /*condition*/ setTextRange(
+                        createLessThan(
+                            counter,
+                            createPropertyAccess(rhsReference, "length")
+                        ),
+                        node.expression
+                    ),
+                    /*incrementor*/ setTextRange(createPostfixIncrement(counter), node.expression),
+                    /*statement*/ convertForOfStatementHead(
+                        node,
+                        createElementAccess(rhsReference, counter),
+                        convertedLoopBodyStatements
+                    )
                 ),
-                createLessThan(
-                    counter,
-                    createPropertyAccess(rhsReference, "length"),
-                    /*location*/ node.expression
-                ),
-                createPostfixIncrement(counter, /*location*/ node.expression),
-                body,
                 /*location*/ node
             );
 
             // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
             setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
+            setTextRange(forStatement, node);
             return restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
         }
 
-        function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {
-            switch (node.kind) {
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                    return visitDoOrWhileStatement(<DoStatement | WhileStatement>node, outermostLabeledStatement);
-                case SyntaxKind.ForStatement:
-                    return visitForStatement(<ForStatement>node, outermostLabeledStatement);
-                case SyntaxKind.ForInStatement:
-                    return visitForInStatement(<ForInStatement>node, outermostLabeledStatement);
-                case SyntaxKind.ForOfStatement:
-                    return visitForOfStatement(<ForOfStatement>node, outermostLabeledStatement);
-            }
+        function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
+            const expression = visitNode(node.expression, visitor, isExpression);
+            const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
+            const result = isIdentifier(expression) ? getGeneratedNameForNode(iterator) : createTempVariable(/*recordTempVariable*/ undefined);
+            const errorRecord = createUniqueName("e");
+            const catchVariable = getGeneratedNameForNode(errorRecord);
+            const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
+            const values = createValuesHelper(context, expression, node.expression);
+            const next = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
+
+            hoistVariableDeclaration(errorRecord);
+            hoistVariableDeclaration(returnMethod);
+
+            const forStatement = setEmitFlags(
+                setTextRange(
+                    createFor(
+                        /*initializer*/ setEmitFlags(
+                            setTextRange(
+                                createVariableDeclarationList([
+                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, values), node.expression),
+                                    createVariableDeclaration(result, /*type*/ undefined, next)
+                                ]),
+                                node.expression
+                            ),
+                            EmitFlags.NoHoisting
+                        ),
+                        /*condition*/ createLogicalNot(createPropertyAccess(result, "done")),
+                        /*incrementor*/ createAssignment(result, next),
+                        /*statement*/ convertForOfStatementHead(
+                            node,
+                            createPropertyAccess(result, "value"),
+                            convertedLoopBodyStatements
+                        )
+                    ),
+                    /*location*/ node
+                ),
+                EmitFlags.NoTokenTrailingSourceMaps
+            );
+
+            return createTry(
+                createBlock([
+                    restoreEnclosingLabel(
+                        forStatement,
+                        outermostLabeledStatement,
+                        convertedLoopState && resetLabel
+                    )
+                ]),
+                createCatchClause(createVariableDeclaration(catchVariable),
+                    setEmitFlags(
+                        createBlock([
+                            createStatement(
+                                createAssignment(
+                                    errorRecord,
+                                    createObjectLiteral([
+                                        createPropertyAssignment("error", catchVariable)
+                                    ])
+                                )
+                            )
+                        ]),
+                        EmitFlags.SingleLine
+                    )
+                ),
+                createBlock([
+                    createTry(
+                        /*tryBlock*/ createBlock([
+                            setEmitFlags(
+                                createIf(
+                                    createLogicalAnd(
+                                        createLogicalAnd(
+                                            result,
+                                            createLogicalNot(
+                                                createPropertyAccess(result, "done")
+                                            )
+                                        ),
+                                        createAssignment(
+                                            returnMethod,
+                                            createPropertyAccess(iterator, "return")
+                                        )
+                                    ),
+                                    createStatement(
+                                        createFunctionCall(returnMethod, iterator, [])
+                                    )
+                                ),
+                                EmitFlags.SingleLine
+                            ),
+                        ]),
+                        /*catchClause*/ undefined,
+                        /*finallyBlock*/ setEmitFlags(
+                            createBlock([
+                                setEmitFlags(
+                                    createIf(
+                                        errorRecord,
+                                        createThrow(
+                                            createPropertyAccess(errorRecord, "error")
+                                        )
+                                    ),
+                                    EmitFlags.SingleLine
+                                )
+                            ]),
+                            EmitFlags.SingleLine
+                        )
+                    )
+                ])
+            );
         }
 
         /**
@@ -2418,7 +2594,6 @@ namespace ts {
                     setEmitFlags(
                         createObjectLiteral(
                             visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
-                            /*location*/ undefined,
                             node.multiLine
                         ),
                         EmitFlags.Indented
@@ -2426,7 +2601,7 @@ namespace ts {
                 );
 
                 if (node.multiLine) {
-                    assignment.startsOnNewLine = true;
+                    startOnNewLine(assignment);
                 }
 
                 expressions.push(assignment);
@@ -2534,7 +2709,7 @@ namespace ts {
             }
 
             startLexicalEnvironment();
-            let loopBody = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
+            let loopBody = visitNode(node.statement, visitor, isStatement, liftToBlock);
             const lexicalEnvironment = endLexicalEnvironment();
 
             const currentState = convertedLoopState;
@@ -2545,20 +2720,19 @@ namespace ts {
                 if (loopOutParameters.length) {
                     copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
                 }
-                addRange(statements, lexicalEnvironment)
-                loopBody = createBlock(statements, /*location*/ undefined, /*multiline*/ true);
+                addRange(statements, lexicalEnvironment);
+                loopBody = createBlock(statements, /*multiline*/ true);
             }
 
             if (isBlock(loopBody)) {
                 loopBody.multiLine = true;
             }
             else {
-                loopBody = createBlock([loopBody], /*location*/ undefined, /*multiline*/ true);
+                loopBody = createBlock([loopBody], /*multiline*/ true);
             }
 
-            const isAsyncBlockContainingAwait =
-                hierarchyFacts & HierarchyFacts.AsyncFunctionBody
-                && (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
+            const containsYield = (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
+            const isAsyncBlockContainingAwait = containsYield && (hierarchyFacts & HierarchyFacts.AsyncFunctionBody) !== 0;
 
             let loopBodyFlags: EmitFlags = 0;
             if (currentState.containsLexicalThis) {
@@ -2581,7 +2755,7 @@ namespace ts {
                                     setEmitFlags(
                                         createFunctionExpression(
                                             /*modifiers*/ undefined,
-                                            isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
+                                            containsYield ? createToken(SyntaxKind.AsteriskToken) : undefined,
                                             /*name*/ undefined,
                                             /*typeParameters*/ undefined,
                                             loopParameters,
@@ -2675,7 +2849,8 @@ namespace ts {
                 ));
             }
 
-            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState, isAsyncBlockContainingAwait);
+            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState, containsYield);
+
             let loop: Statement;
             if (convert) {
                 loop = convert(node, outermostLabeledStatement, convertedLoopBodyStatements);
@@ -2687,12 +2862,7 @@ namespace ts {
                 // visit childnodes to transform initializer/condition/incrementor parts
                 clone = visitEachChild(clone, visitor, context);
                 // set loop statement
-                clone.statement = createBlock(
-                    convertedLoopBodyStatements,
-                    /*location*/ undefined,
-                    /*multiline*/ true
-                );
-
+                clone.statement = createBlock(convertedLoopBodyStatements, /*multiline*/ true);
                 // reset and re-aggregate the transform flags
                 clone.transformFlags = 0;
                 aggregateTransformFlags(clone);
@@ -2728,7 +2898,12 @@ namespace ts {
                 !state.labeledNonLocalContinues;
 
             const call = createCall(loopFunctionExpressionName, /*typeArguments*/ undefined, map(parameters, p => <Identifier>p.name));
-            const callResult = isAsyncBlockContainingAwait ? createYield(createToken(SyntaxKind.AsteriskToken), call) : call;
+            const callResult = isAsyncBlockContainingAwait
+                ? createYield(
+                    createToken(SyntaxKind.AsteriskToken),
+                    setEmitFlags(call, EmitFlags.Iterator)
+                )
+                : call;
             if (isSimpleLoop) {
                 statements.push(createStatement(callResult));
                 copyOutParameters(state.loopOutParameters, CopyDirection.ToOriginal, statements);
@@ -2798,13 +2973,13 @@ namespace ts {
                 if (!state.labeledNonLocalBreaks) {
                     state.labeledNonLocalBreaks = createMap<string>();
                 }
-                state.labeledNonLocalBreaks[labelText] = labelMarker;
+                state.labeledNonLocalBreaks.set(labelText, labelMarker);
             }
             else {
                 if (!state.labeledNonLocalContinues) {
                     state.labeledNonLocalContinues = createMap<string>();
                 }
-                state.labeledNonLocalContinues[labelText] = labelMarker;
+                state.labeledNonLocalContinues.set(labelText, labelMarker);
             }
         }
 
@@ -2812,13 +2987,12 @@ namespace ts {
             if (!table) {
                 return;
             }
-            for (const labelText in table) {
-                const labelMarker = table[labelText];
+            table.forEach((labelMarker, labelText) => {
                 const statements: Statement[] = [];
                 // if there are no outer converted loop or outer label in question is located inside outer converted loop
                 // then emit labeled break\continue
                 // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do
-                if (!outerLoop || (outerLoop.labels && outerLoop.labels[labelText])) {
+                if (!outerLoop || (outerLoop.labels && outerLoop.labels.get(labelText))) {
                     const label = createIdentifier(labelText);
                     statements.push(isBreak ? createBreak(label) : createContinue(label));
                 }
@@ -2827,7 +3001,7 @@ namespace ts {
                     statements.push(createReturn(loopResultName));
                 }
                 caseClauses.push(createCaseClause(createLiteral(labelMarker), statements));
-            }
+            });
         }
 
         function processLoopVariableDeclaration(decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[]) {
@@ -2842,7 +3016,7 @@ namespace ts {
             else {
                 loopParameters.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
-                    const outParamName = createUniqueName("out_" + name.text);
+                    const outParamName = createUniqueName("out_" + idText(name));
                     loopOutParameters.push({ originalName: name, outParamName });
                 }
             }
@@ -2904,11 +3078,11 @@ namespace ts {
                     receiver,
                     visitNode(property.name, visitor, isPropertyName)
                 ),
-                visitNode(property.initializer, visitor, isExpression),
-                /*location*/ property
+                visitNode(property.initializer, visitor, isExpression)
             );
+            setTextRange(expression, property);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             return expression;
         }
@@ -2926,11 +3100,11 @@ namespace ts {
                     receiver,
                     visitNode(property.name, visitor, isPropertyName)
                 ),
-                getSynthesizedClone(property.name),
-                /*location*/ property
+                getSynthesizedClone(property.name)
             );
+            setTextRange(expression, property);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             return expression;
         }
@@ -2949,11 +3123,11 @@ namespace ts {
                     receiver,
                     visitNode(method.name, visitor, isPropertyName)
                 ),
-                transformFunctionLikeToExpression(method, /*location*/ method, /*name*/ undefined, container),
-                /*location*/ method
+                transformFunctionLikeToExpression(method, /*location*/ method, /*name*/ undefined, container)
             );
+            setTextRange(expression, method);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return expression;
@@ -2962,9 +3136,11 @@ namespace ts {
         function visitCatchClause(node: CatchClause): CatchClause {
             const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             let updated: CatchClause;
+            Debug.assert(!!node.variableDeclaration, "Catch clause variable should always be present when downleveling ES2015.");
             if (isBindingPattern(node.variableDeclaration.name)) {
-                const temp = createTempVariable(undefined);
-                const newVariableDeclaration = createVariableDeclaration(temp, undefined, undefined, node.variableDeclaration);
+                const temp = createTempVariable(/*recordTempVariable*/ undefined);
+                const newVariableDeclaration = createVariableDeclaration(temp);
+                setTextRange(newVariableDeclaration, node.variableDeclaration);
                 const vars = flattenDestructuringBinding(
                     node.variableDeclaration,
                     visitor,
@@ -2972,8 +3148,9 @@ namespace ts {
                     FlattenLevel.All,
                     temp
                 );
-                const list = createVariableDeclarationList(vars, /*location*/node.variableDeclaration, /*flags*/node.variableDeclaration.flags);
-                const destructure = createVariableStatement(undefined, list);
+                const list = createVariableDeclarationList(vars);
+                setTextRange(list, node.variableDeclaration);
+                const destructure = createVariableStatement(/*modifiers*/ undefined, list);
                 updated = updateCatchClause(node, newVariableDeclaration, addStatementToStartOfBlock(node.block, destructure));
             }
             else {
@@ -2986,7 +3163,7 @@ namespace ts {
 
         function addStatementToStartOfBlock(block: Block, statement: Statement): Block {
             const transformedStatements = visitNodes(block.statements, visitor, isStatement);
-            return updateBlock(block, [statement].concat(transformedStatements));
+            return updateBlock(block, [statement, ...transformedStatements]);
         }
 
         /**
@@ -3002,9 +3179,11 @@ namespace ts {
             Debug.assert(!isComputedPropertyName(node.name));
             const functionExpression = transformFunctionLikeToExpression(node, /*location*/ moveRangePos(node, -1), /*name*/ undefined, /*container*/ undefined);
             setEmitFlags(functionExpression, EmitFlags.NoLeadingComments | getEmitFlags(functionExpression));
-            return createPropertyAssignment(
-                node.name,
-                functionExpression,
+            return setTextRange(
+                createPropertyAssignment(
+                    node.name,
+                    functionExpression
+                ),
                 /*location*/ node
             );
         }
@@ -3019,7 +3198,20 @@ namespace ts {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
-            const updated = visitEachChild(node, visitor, context);
+            let updated: AccessorDeclaration;
+            if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis) {
+                const parameters = visitParameterList(node.parameters, visitor, context);
+                const body = transformFunctionBody(node);
+                if (node.kind === SyntaxKind.GetAccessor) {
+                    updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
+                }
+                else {
+                    updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
+                }
+            }
+            else {
+                updated = visitEachChild(node, visitor, context);
+            }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updated;
@@ -3031,9 +3223,11 @@ namespace ts {
          * @param node A ShorthandPropertyAssignment node.
          */
         function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
-            return createPropertyAssignment(
-                node.name,
-                getSynthesizedClone(node.name),
+            return setTextRange(
+                createPropertyAssignment(
+                    node.name,
+                    getSynthesizedClone(node.name)
+                ),
                 /*location*/ node
             );
         }
@@ -3074,14 +3268,167 @@ namespace ts {
          * @param node a CallExpression.
          */
         function visitCallExpression(node: CallExpression) {
+            if (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) {
+                return visitTypeScriptClassWrapper(node);
+            }
+
             if (node.transformFlags & TransformFlags.ES2015) {
                 return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
             }
+
             return updateCall(
                 node,
                 visitNode(node.expression, callExpressionVisitor, isExpression),
                 /*typeArguments*/ undefined,
                 visitNodes(node.arguments, visitor, isExpression)
+            );
+        }
+
+        function visitTypeScriptClassWrapper(node: CallExpression) {
+            // This is a call to a class wrapper function (an IIFE) created by the 'ts' transformer.
+            // The wrapper has a form similar to:
+            //
+            //  (function() {
+            //      class C { // 1
+            //      }
+            //      C.x = 1; // 2
+            //      return C;
+            //  }())
+            //
+            // When we transform the class, we end up with something like this:
+            //
+            //  (function () {
+            //      var C = (function () { // 3
+            //          function C() {
+            //          }
+            //          return C; // 4
+            //      }());
+            //      C.x = 1;
+            //      return C;
+            //  }())
+            //
+            // We want to simplify the two nested IIFEs to end up with something like this:
+            //
+            //  (function () {
+            //      function C() {
+            //      }
+            //      C.x = 1;
+            //      return C;
+            //  }())
+
+            // We skip any outer expressions in a number of places to get to the innermost
+            // expression, but we will restore them later to preserve comments and source maps.
+            const body = cast(cast(skipOuterExpressions(node.expression), isArrowFunction).body, isBlock);
+
+            // The class statements are the statements generated by visiting the first statement of the
+            // body (1), while all other statements are added to remainingStatements (2)
+            const classStatements = visitNodes(body.statements, visitor, isStatement, 0, 1);
+            const remainingStatements = visitNodes(body.statements, visitor, isStatement, 1, body.statements.length - 1);
+            const varStatement = cast(firstOrUndefined(classStatements), isVariableStatement);
+
+            // We know there is only one variable declaration here as we verified this in an
+            // earlier call to isTypeScriptClassWrapper
+            const variable = varStatement.declarationList.declarations[0];
+            const initializer = skipOuterExpressions(variable.initializer);
+
+            // Under certain conditions, the 'ts' transformer may introduce a class alias, which
+            // we see as an assignment, for example:
+            //
+            //  (function () {
+            //      var C = C_1 = (function () {
+            //          function C() {
+            //          }
+            //          C.x = function () { return C_1; }
+            //          return C;
+            //      }());
+            //      C = C_1 = __decorate([dec], C);
+            //      return C;
+            //      var C_1;
+            //  }())
+            //
+            const aliasAssignment = tryCast(initializer, isAssignmentExpression);
+
+            // The underlying call (3) is another IIFE that may contain a '_super' argument.
+            const call = cast(aliasAssignment ? skipOuterExpressions(aliasAssignment.right) : initializer, isCallExpression);
+            const func = cast(skipOuterExpressions(call.expression), isFunctionExpression);
+
+            const funcStatements = func.body.statements;
+            let classBodyStart = 0;
+            let classBodyEnd = -1;
+
+            const statements: Statement[] = [];
+            if (aliasAssignment) {
+                // If we have a class alias assignment, we need to move it to the down-level constructor
+                // function we generated for the class.
+                const extendsCall = tryCast(funcStatements[classBodyStart], isExpressionStatement);
+                if (extendsCall) {
+                    statements.push(extendsCall);
+                    classBodyStart++;
+                }
+
+                // The next statement is the function declaration.
+                statements.push(funcStatements[classBodyStart]);
+                classBodyStart++;
+
+                // Add the class alias following the declaration.
+                statements.push(
+                    createStatement(
+                        createAssignment(
+                            aliasAssignment.left,
+                            cast(variable.name, isIdentifier)
+                        )
+                    )
+                );
+            }
+
+            // Find the trailing 'return' statement (4)
+            while (!isReturnStatement(elementAt(funcStatements, classBodyEnd))) {
+                classBodyEnd--;
+            }
+
+            // When we extract the statements of the inner IIFE, we exclude the 'return' statement (4)
+            // as we already have one that has been introduced by the 'ts' transformer.
+            addRange(statements, funcStatements, classBodyStart, classBodyEnd);
+
+            if (classBodyEnd < -1) {
+                // If there were any hoisted declarations following the return statement, we should
+                // append them.
+                addRange(statements, funcStatements, classBodyEnd + 1);
+            }
+
+            // Add the remaining statements of the outer wrapper.
+            addRange(statements, remainingStatements);
+
+            // The 'es2015' class transform may add an end-of-declaration marker. If so we will add it
+            // after the remaining statements from the 'ts' transformer.
+            addRange(statements, classStatements, /*start*/ 1);
+
+            // Recreate any outer parentheses or partially-emitted expressions to preserve source map
+            // and comment locations.
+            return recreateOuterExpressions(node.expression,
+                recreateOuterExpressions(variable.initializer,
+                    recreateOuterExpressions(aliasAssignment && aliasAssignment.right,
+                        updateCall(call,
+                            recreateOuterExpressions(call.expression,
+                                updateFunctionExpression(
+                                    func,
+                                    /*modifiers*/ undefined,
+                                    /*asteriskToken*/ undefined,
+                                    /*name*/ undefined,
+                                    /*typeParameters*/ undefined,
+                                    func.parameters,
+                                    /*type*/ undefined,
+                                    updateBlock(
+                                        func.body,
+                                        statements
+                                    )
+                                )
+                            ),
+                            /*typeArguments*/ undefined,
+                            call.arguments
+                        )
+                    )
+                )
             );
         }
 
@@ -3197,25 +3544,40 @@ namespace ts {
             // Map spans of spread expressions into their expressions and spans of other
             // expressions into an array literal.
             const numElements = elements.length;
-            const segments = flatten(
+            const segments = flatten<Expression>(
                 spanMap(elements, partitionSpread, (partition, visitPartition, _start, end) =>
                     visitPartition(partition, multiLine, hasTrailingComma && end === numElements)
                 )
             );
 
-            if (segments.length === 1) {
-                const firstElement = elements[0];
-                return needsUniqueCopy && isSpreadExpression(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
-                    ? createArraySlice(segments[0])
-                    : segments[0];
-            }
+            if (compilerOptions.downlevelIteration) {
+                if (segments.length === 1) {
+                    const firstSegment = segments[0];
+                    if (isCallExpression(firstSegment)
+                        && isIdentifier(firstSegment.expression)
+                        && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
+                        && firstSegment.expression.escapedText === "___spread") {
+                        return segments[0];
+                    }
+                }
 
-            // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
-            return createArrayConcat(segments.shift(), segments);
+                return createSpreadHelper(context, segments);
+            }
+            else {
+                if (segments.length === 1) {
+                    const firstElement = elements[0];
+                    return needsUniqueCopy && isSpreadElement(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
+                        ? createArraySlice(segments[0])
+                        : segments[0];
+                }
+
+                // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
+                return createArrayConcat(segments.shift(), segments);
+            }
         }
 
         function partitionSpread(node: Expression) {
-            return isSpreadExpression(node)
+            return isSpreadElement(node)
                 ? visitSpanOfSpreads
                 : visitSpanOfNonSpreads;
         }
@@ -3226,8 +3588,7 @@ namespace ts {
 
         function visitSpanOfNonSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
             return createArrayLiteral(
-                visitNodes(createNodeArray(chunk, /*location*/ undefined, hasTrailingComma), visitor, isExpression),
-                /*location*/ undefined,
+                visitNodes(createNodeArray(chunk, hasTrailingComma), visitor, isExpression),
                 multiLine
             );
         }
@@ -3251,7 +3612,31 @@ namespace ts {
          * @param node A template literal.
          */
         function visitTemplateLiteral(node: LiteralExpression): LeftHandSideExpression {
-            return createLiteral(node.text, /*location*/ node);
+            return setTextRange(createLiteral(node.text), node);
+        }
+
+        /**
+         * Visits a string literal with an extended unicode escape.
+         *
+         * @param node A string literal.
+         */
+        function visitStringLiteral(node: StringLiteral) {
+            if (node.hasExtendedUnicodeEscape) {
+                return setTextRange(createLiteral(node.text), node);
+            }
+            return node;
+        }
+
+        /**
+         * Visits a binary or octal (ES6) numeric literal.
+         *
+         * @param node A string literal.
+         */
+        function visitNumericLiteral(node: NumericLiteral) {
+            if (node.numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
+                return setTextRange(createNumericLiteral(node.text), node);
+            }
+            return node;
         }
 
         /**
@@ -3263,11 +3648,10 @@ namespace ts {
             // Visit the tag expression
             const tag = visitNode(node.tag, visitor, isExpression);
 
-            // Allocate storage for the template site object
-            const temp = createTempVariable(hoistVariableDeclaration);
-
             // Build up the template arguments and the raw and cooked strings for the template.
-            const templateArguments: Expression[] = [temp];
+            // We start out with 'undefined' for the first argument and revisit later
+            // to avoid walking over the template string twice and shifting all our arguments over after the fact.
+            const templateArguments: Expression[] = [undefined];
             const cookedStrings: Expression[] = [];
             const rawStrings: Expression[] = [];
             const template = node.template;
@@ -3285,16 +3669,26 @@ namespace ts {
                 }
             }
 
-            // NOTE: The parentheses here is entirely optional as we are now able to auto-
-            //       parenthesize when rebuilding the tree. This should be removed in a
-            //       future version. It is here for now to match our existing emit.
-            return createParen(
-                inlineExpressions([
-                    createAssignment(temp, createArrayLiteral(cookedStrings)),
-                    createAssignment(createPropertyAccess(temp, "raw"), createArrayLiteral(rawStrings)),
-                    createCall(tag, /*typeArguments*/ undefined, templateArguments)
-                ])
-            );
+            const helperCall = createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings));
+
+            // Create a variable to cache the template object if we're in a module.
+            // Do not do this in the global scope, as any variable we currently generate could conflict with
+            // variables from outside of the current compilation. In the future, we can revisit this behavior.
+            if (isExternalModule(currentSourceFile)) {
+                const tempVar = createUniqueName("templateObject");
+                recordTaggedTemplateString(tempVar);
+                templateArguments[0] = createLogicalOr(
+                    tempVar,
+                    createAssignment(
+                        tempVar,
+                        helperCall)
+                );
+            }
+            else {
+                templateArguments[0] = helperCall;
+            }
+
+            return createCall(tag, /*typeArguments*/ undefined, templateArguments);
         }
 
         /**
@@ -3319,7 +3713,7 @@ namespace ts {
             // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
             // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
             text = text.replace(/\r\n?/g, "\n");
-            return createLiteral(text, /*location*/ node);
+            return setTextRange(createLiteral(text), node);
         }
 
         /**
@@ -3343,7 +3737,8 @@ namespace ts {
             //    "abc" + (1 << 2) + ""
             const expression = reduceLeft(expressions, createAdd);
             if (nodeIsSynthesized(expression)) {
-                setTextRange(expression, node);
+                expression.pos = node.pos;
+                expression.end = node.end;
             }
 
             return expression;
@@ -3421,7 +3816,7 @@ namespace ts {
         }
 
         function visitMetaProperty(node: MetaProperty) {
-            if (node.keywordToken === SyntaxKind.NewKeyword && node.name.text === "target") {
+            if (node.keywordToken === SyntaxKind.NewKeyword && node.name.escapedText === "target") {
                 if (hierarchyFacts & HierarchyFacts.ComputedPropertyName) {
                     hierarchyFacts |= HierarchyFacts.NewTargetInComputedPropertyName;
                 }
@@ -3436,9 +3831,11 @@ namespace ts {
         /**
          * Called by the printer just before a node is printed.
          *
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to be printed.
+         * @param emitCallback The callback used to emit the node.
          */
-        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, keep track of the enclosing function.
                 const ancestorFacts = enterSubtree(
@@ -3446,11 +3843,11 @@ namespace ts {
                     getEmitFlags(node) & EmitFlags.CapturesThis
                         ? HierarchyFacts.FunctionIncludes | HierarchyFacts.CapturesThis
                         : HierarchyFacts.FunctionIncludes);
-                previousOnEmitNode(emitContext, node, emitCallback);
+                previousOnEmitNode(hint, node, emitCallback);
                 exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
                 return;
             }
-            previousOnEmitNode(emitContext, node, emitCallback);
+            previousOnEmitNode(hint, node, emitCallback);
         }
 
         /**
@@ -3485,13 +3882,13 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param emitContext The context for the emitter.
+         * @param hint The context for the emitter.
          * @param node The node to substitute.
          */
-        function onSubstituteNode(emitContext: EmitContext, node: Node) {
-            node = previousOnSubstituteNode(emitContext, node);
+        function onSubstituteNode(hint: EmitHint, node: Node) {
+            node = previousOnSubstituteNode(hint, node);
 
-            if (emitContext === EmitContext.Expression) {
+            if (hint === EmitHint.Expression) {
                 return substituteExpression(node);
             }
 
@@ -3508,10 +3905,10 @@ namespace ts {
         function substituteIdentifier(node: Identifier) {
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
-            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
                 const original = getParseTreeNode(node, isIdentifier);
                 if (original && isNameOfDeclarationWithCollidingName(original)) {
-                    return getGeneratedNameForNode(original);
+                    return setTextRange(getGeneratedNameForNode(original), node);
                 }
             }
 
@@ -3531,7 +3928,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.VariableDeclaration:
-                    return (<Declaration>parent).name === node
+                    return (<NamedDeclaration>parent).name === node
                         && resolver.isDeclarationWithCollidingName(<Declaration>parent);
             }
 
@@ -3561,14 +3958,38 @@ namespace ts {
          * @param node An Identifier node.
          */
         function substituteExpressionIdentifier(node: Identifier): Identifier {
-            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
                 const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
-                if (declaration) {
-                    return getGeneratedNameForNode(declaration.name);
+                if (declaration && !(isClassLike(declaration) && isPartOfClassBody(declaration, node))) {
+                    return setTextRange(getGeneratedNameForNode(getNameOfDeclaration(declaration)), node);
                 }
             }
 
             return node;
+        }
+
+        function isPartOfClassBody(declaration: ClassLikeDeclaration, node: Identifier) {
+            let currentNode = getParseTreeNode(node);
+            if (!currentNode || currentNode === declaration || currentNode.end <= declaration.pos || currentNode.pos >= declaration.end) {
+                // if the node has no correlation to a parse tree node, its definitely not
+                // part of the body.
+                // if the node is outside of the document range of the declaration, its
+                // definitely not part of the body.
+                return false;
+            }
+            const blockScope = getEnclosingBlockScopeContainer(declaration);
+            while (currentNode) {
+                if (currentNode === blockScope || currentNode === declaration) {
+                    // if we are in the enclosing block scope of the declaration, we are definitely
+                    // not inside the class body.
+                    return false;
+                }
+                if (isClassElement(currentNode) && currentNode.parent === declaration) {
+                    return true;
+                }
+                currentNode = currentNode.parent;
+            }
+            return false;
         }
 
         /**
@@ -3579,14 +4000,15 @@ namespace ts {
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
                 && hierarchyFacts & HierarchyFacts.CapturesThis) {
-                return createIdentifier("_this", /*location*/ node);
+                return setTextRange(createIdentifier("_this"), node);
             }
             return node;
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            const expression = getLocalName(node);
-            return hasModifier(member, ModifierFlags.Static) ? expression : createPropertyAccess(expression, "prototype");
+            return hasModifier(member, ModifierFlags.Static)
+                ? getInternalName(node)
+                : createPropertyAccess(getInternalName(node), "prototype");
         }
 
         function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
@@ -3619,7 +4041,7 @@ namespace ts {
             }
 
             const expression = (<SpreadElement>callArgument).expression;
-            return isIdentifier(expression) && expression.text === "arguments";
+            return isIdentifier(expression) && expression.escapedText === "arguments";
         }
     }
 
@@ -3631,6 +4053,18 @@ namespace ts {
             [
                 name,
                 createIdentifier("_super")
+            ]
+        );
+    }
+
+    function createTemplateObjectHelper(context: TransformationContext, cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression) {
+        context.requestEmitHelper(templateObjectHelper);
+        return createCall(
+            getHelperName("__makeTemplateObject"),
+            /*typeArguments*/ undefined,
+            [
+                cooked,
+                raw
             ]
         );
     }
@@ -3651,4 +4085,16 @@ namespace ts {
                 };
             })();`
     };
+
+    const templateObjectHelper: EmitHelper = {
+        name: "typescript:makeTemplateObject",
+        scoped: false,
+        priority: 0,
+        text: `
+            var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+                if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+                return cooked;
+            };`
+    };
+
 }

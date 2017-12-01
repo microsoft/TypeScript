@@ -1,0 +1,101 @@
+=== tests/cases/compiler/assignmentToExpandingArrayType.ts ===
+// Fixes exponential time/space in #14628
+let x = []
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 2, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 3, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 4, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 5, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 6, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 7, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 8, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 9, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 10, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 11, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 12, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 13, 8))
+
+x[0] = { foo: 'hi' } // previously ran out of memory here
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 14, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 15, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 16, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 17, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 18, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 19, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 20, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 21, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 22, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 23, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 24, 8))
+
+x[0] = { foo: 'hi' }
+>x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))
+>foo : Symbol(foo, Decl(assignmentToExpandingArrayType.ts, 25, 8))
+

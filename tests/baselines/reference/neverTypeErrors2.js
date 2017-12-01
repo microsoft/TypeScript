@@ -1,5 +1,4 @@
 //// [neverTypeErrors2.ts]
-
 function f1() {
     let x: never;
     x = 1;
@@ -8,6 +7,7 @@ function f1() {
     x = undefined;
     x = null;
     x = {};
+    x();
 }
 
 function f2(): never {
@@ -30,6 +30,7 @@ function f1() {
     x = undefined;
     x = null;
     x = {};
+    x();
 }
 function f2() {
     return;

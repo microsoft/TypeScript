@@ -1,5 +1,4 @@
 //// [reachabilityChecks4.ts]
-
 function foo(x, y) {
     switch (x) {
         case 1:

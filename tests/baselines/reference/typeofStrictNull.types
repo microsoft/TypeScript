@@ -1,5 +1,4 @@
 === tests/cases/compiler/typeofStrictNull.ts ===
-
 let a: number;
 >a : number
 

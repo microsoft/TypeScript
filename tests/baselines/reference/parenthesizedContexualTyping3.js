@@ -1,5 +1,4 @@
 //// [parenthesizedContexualTyping3.ts]
-
 // Contextual typing for parenthesized substitution expressions in tagged templates.
 
 /**

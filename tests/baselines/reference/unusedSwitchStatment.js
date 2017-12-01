@@ -1,5 +1,4 @@
 //// [unusedSwitchStatment.ts]
-
 switch (1) {
     case 0:
         let x;

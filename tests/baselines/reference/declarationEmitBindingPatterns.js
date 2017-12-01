@@ -1,5 +1,4 @@
 //// [declarationEmitBindingPatterns.ts]
-
 const k = ({x: z = 'y'}) => { }
 
 var a;

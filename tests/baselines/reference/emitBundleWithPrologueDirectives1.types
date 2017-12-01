@@ -1,0 +1,11 @@
+=== tests/cases/compiler/test.ts ===
+/* Detached Comment */
+
+// Class Doo Comment
+export class Doo {}
+>Doo : Doo
+
+class Scooby extends Doo {}
+>Scooby : Scooby
+>Doo : Doo
+

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportDts.ts] ////
 
 //// [server.ts]
-
 export class a { }
 export class x { }
 export class m { }
@@ -26,37 +25,38 @@ export var x6 = new m();
 
 //// [server.js]
 "use strict";
-var a = (function () {
+exports.__esModule = true;
+var a = /** @class */ (function () {
     function a() {
     }
     return a;
 }());
 exports.a = a;
-var x = (function () {
+var x = /** @class */ (function () {
     function x() {
     }
     return x;
 }());
 exports.x = x;
-var m = (function () {
+var m = /** @class */ (function () {
     function m() {
     }
     return m;
 }());
 exports.m = m;
-var a11 = (function () {
+var a11 = /** @class */ (function () {
     function a11() {
     }
     return a11;
 }());
 exports.a11 = a11;
-var a12 = (function () {
+var a12 = /** @class */ (function () {
     function a12() {
     }
     return a12;
 }());
 exports.a12 = a12;
-var x11 = (function () {
+var x11 = /** @class */ (function () {
     function x11() {
     }
     return x11;
@@ -64,6 +64,7 @@ var x11 = (function () {
 exports.x11 = x11;
 //// [client.js]
 "use strict";
+exports.__esModule = true;
 var server_1 = require("./server");
 exports.x1 = new server_1.a();
 var server_2 = require("./server");

@@ -29,7 +29,7 @@ verify.currentSignatureHelpIs('foo3<T>(x: number, callback: (y3: T) => number): 
 // verify.currentSignatureHelpIs('foo4(x: number, callback: (y4: string) => number): void');
 
 goTo.marker('5');
-verify.currentSignatureHelpIs('foo5<T>(x: number, callback: (y5: T) => number): void');
+verify.currentSignatureHelpIs('foo5(x: number, callback: (y5: string) => number): void');
 
 goTo.marker('6');
 // verify.currentSignatureHelpIs('foo6(x: number, callback: (y6: {}) => number): void');

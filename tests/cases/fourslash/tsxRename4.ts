@@ -12,9 +12,8 @@
 ////     name?: string;
 ////     size?: number;
 //// }
-//// 
-//// 
-//// var x = <[|MyC/**/lass|] name='hello'></[|MyClass|]>;
+////
+////
+//// var x = <[|MyClass|] name='hello'></[|MyClass|]>;
 
-goTo.marker();
-verify.renameLocations(false, false);
+verify.rangesAreRenameLocations();

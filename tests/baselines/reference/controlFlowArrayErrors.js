@@ -1,5 +1,4 @@
 //// [controlFlowArrayErrors.ts]
-
 declare function cond(): boolean;
 
 function f1() {

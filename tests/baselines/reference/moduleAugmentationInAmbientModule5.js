@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationInAmbientModule5.ts] ////
 
 //// [array.d.ts]
-
 declare module "A" {
     class A { x: number; }
 }
@@ -25,6 +24,7 @@ let y = x.getA().x;
 
 //// [f.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="array.d.ts"/>
 require("array");
 var x = [1];

@@ -1,5 +1,4 @@
 //// [stringLiteralTypesAndLogicalOrExpressions01.ts]
-
 declare function myRandBool(): boolean;
 
 let a: "foo" = "foo";

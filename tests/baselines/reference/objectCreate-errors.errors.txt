@@ -1,0 +1,37 @@
+tests/cases/compiler/objectCreate-errors.ts(1,24): error TS2345: Argument of type '1' is not assignable to parameter of type 'object | null'.
+tests/cases/compiler/objectCreate-errors.ts(2,24): error TS2345: Argument of type '"string"' is not assignable to parameter of type 'object | null'.
+tests/cases/compiler/objectCreate-errors.ts(3,24): error TS2345: Argument of type 'false' is not assignable to parameter of type 'object | null'.
+tests/cases/compiler/objectCreate-errors.ts(4,24): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.
+tests/cases/compiler/objectCreate-errors.ts(7,24): error TS2345: Argument of type '1' is not assignable to parameter of type 'object | null'.
+tests/cases/compiler/objectCreate-errors.ts(8,24): error TS2345: Argument of type '"string"' is not assignable to parameter of type 'object | null'.
+tests/cases/compiler/objectCreate-errors.ts(9,24): error TS2345: Argument of type 'false' is not assignable to parameter of type 'object | null'.
+tests/cases/compiler/objectCreate-errors.ts(10,24): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.
+
+
+==== tests/cases/compiler/objectCreate-errors.ts (8 errors) ====
+    var e1 = Object.create(1);               // Error
+                           ~
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'object | null'.
+    var e2 = Object.create("string");        // Error
+                           ~~~~~~~~
+!!! error TS2345: Argument of type '"string"' is not assignable to parameter of type 'object | null'.
+    var e3 = Object.create(false);           // Error
+                           ~~~~~
+!!! error TS2345: Argument of type 'false' is not assignable to parameter of type 'object | null'.
+    var e4 = Object.create(undefined);       // Error
+                           ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.
+    
+     
+    var e5 = Object.create(1, {});           // Error
+                           ~
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'object | null'.
+    var e6 = Object.create("string", {});    // Error
+                           ~~~~~~~~
+!!! error TS2345: Argument of type '"string"' is not assignable to parameter of type 'object | null'.
+    var e7 = Object.create(false, {});       // Error
+                           ~~~~~
+!!! error TS2345: Argument of type 'false' is not assignable to parameter of type 'object | null'.
+    var e8 = Object.create(undefined, {});   // Error
+                           ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.

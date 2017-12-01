@@ -1,5 +1,4 @@
 //// [emitExponentiationOperator1.ts]
-
 1 ** -2;
 1 ** 2;
 (-1) ** 2

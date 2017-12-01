@@ -1,10 +1,9 @@
 //// [unusedParameterUsedInTypeOf.ts]
-
 function f1 (a: number, b: typeof a) {
-    b++;
+    return b;
 }
 
 //// [unusedParameterUsedInTypeOf.js]
 function f1(a, b) {
-    b++;
+    return b;
 }

@@ -6,7 +6,6 @@ import { bar } from "bar";
 >bar : () => void
 
 === /foo/foo.ts ===
-
 export function foo() {}
 >foo : () => void
 

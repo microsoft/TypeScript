@@ -1,0 +1,35 @@
+=== tests/cases/compiler/typeofUsedBeforeBlockScoped.ts ===
+type T = typeof C & typeof C.s & typeof o & typeof o.n;
+>T : T
+>C : typeof C
+>C.s : number
+>C : typeof C
+>s : number
+>o : { n: number; }
+>o.n : number
+>o : { n: number; }
+>n : number
+
+class C {
+>C : C
+
+    static s = 2;
+>s : number
+>2 : 2
+}
+type W = typeof o.n;
+>W : number
+>o.n : number
+>o : { n: number; }
+>n : number
+
+let o2: typeof o;
+>o2 : { n: number; }
+>o : { n: number; }
+
+let o = { n: 12 };
+>o : { n: number; }
+>{ n: 12 } : { n: number; }
+>n : number
+>12 : 12
+

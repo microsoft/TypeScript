@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility.ts]
-
 class C {
     public constructor(public x: number) { }
 }
@@ -36,19 +35,19 @@ module Generic {
 
 
 //// [classConstructorAccessibility.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         this.x = x;
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D(x) {
         this.x = x;
     }
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E(x) {
         this.x = x;
     }
@@ -59,19 +58,19 @@ var d = new D(1); // error
 var e = new E(1); // error
 var Generic;
 (function (Generic) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C(x) {
             this.x = x;
         }
         return C;
     }());
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D(x) {
             this.x = x;
         }
         return D;
     }());
-    var E = (function () {
+    var E = /** @class */ (function () {
         function E(x) {
             this.x = x;
         }
@@ -90,7 +89,7 @@ declare class C {
 }
 declare class D {
     x: number;
-    private constructor(x);
+    private constructor();
 }
 declare class E {
     x: number;

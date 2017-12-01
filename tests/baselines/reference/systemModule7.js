@@ -1,5 +1,4 @@
 //// [systemModule7.ts]
-
 // filename: instantiatedModule.ts
 export module M {
     var x = 1;

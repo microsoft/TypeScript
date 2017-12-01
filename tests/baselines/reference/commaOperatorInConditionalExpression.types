@@ -5,12 +5,12 @@ function f (m: string) {
 
     [1, 2, 3].map(i => {
 >[1, 2, 3].map(i => {        return true? { [m]: i } : { [m]: i + 1 }    }) : { [x: string]: number; }[]
->[1, 2, 3].map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
+>[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
->map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >i => {        return true? { [m]: i } : { [m]: i + 1 }    } : (i: number) => { [x: string]: number; }
 >i : number
 

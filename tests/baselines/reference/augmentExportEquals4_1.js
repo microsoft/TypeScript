@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/augmentExportEquals4_1.ts] ////
 
 //// [file1.d.ts]
-
 declare module "file1" {
     class foo {}
     namespace foo {
@@ -31,11 +30,13 @@ let b = x.b;
 //// [file2.js]
 define(["require", "exports", "file1"], function (require, exports, x) {
     "use strict";
+    exports.__esModule = true;
     x.b = 1;
 });
 //// [file3.js]
 define(["require", "exports", "file1", "file2"], function (require, exports, x) {
     "use strict";
+    exports.__esModule = true;
     var a;
     var b = x.b;
 });

@@ -1,11 +1,10 @@
-tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(27,16): error TS1005: ',' expected.
-tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(27,16): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(32,23): error TS1005: '(' expected.
-tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(37,9): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(26,16): error TS1005: ',' expected.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(26,16): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(31,23): error TS1005: '(' expected.
+tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(36,9): error TS2350: Only a void function can be called with the 'new' keyword.
 
 
 ==== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts (4 errors) ====
-    
     class C0 {
     
     }

@@ -46,7 +46,7 @@
 ////                        default:
 ////                            continue;
 ////                    }
-////                    
+////
 ////                    // these cross function boundaries
 ////                    break label1;
 ////                    continue label1;
@@ -63,16 +63,9 @@
 ////
 ////label7: while (true) continue label5;
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-    verify.occurrencesAtPositionCount(test.ranges().length);
-
-    test.ranges().forEach(range => {
-        verify.occurrencesAtPositionContains(range, false);
-    });
-});
+verify.rangesAreOccurrences(false);
 
 goTo.marker();
-test.ranges().forEach(range => {
+for (const range of test.ranges()) {
     verify.occurrencesAtPositionContains(range, false);
-});
+}

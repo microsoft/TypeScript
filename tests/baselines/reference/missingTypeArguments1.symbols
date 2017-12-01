@@ -1,0 +1,135 @@
+=== tests/cases/compiler/missingTypeArguments1.ts ===
+interface I<T> { }
+>I : Symbol(I, Decl(missingTypeArguments1.ts, 0, 0))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 0, 12))
+
+class Y<T> {}
+>Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 1, 8))
+
+class X<T> {
+>X : Symbol(X, Decl(missingTypeArguments1.ts, 1, 13))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 2, 8))
+
+    p1: () => X;
+>p1 : Symbol(X.p1, Decl(missingTypeArguments1.ts, 2, 12))
+>X : Symbol(X, Decl(missingTypeArguments1.ts, 1, 13))
+}
+var a: X<number>;
+>a : Symbol(a, Decl(missingTypeArguments1.ts, 5, 3))
+>X : Symbol(X, Decl(missingTypeArguments1.ts, 1, 13))
+
+class X2<T> {
+>X2 : Symbol(X2, Decl(missingTypeArguments1.ts, 5, 17))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 7, 9))
+
+    p2: { [idx: number]: X2 } 
+>p2 : Symbol(X2.p2, Decl(missingTypeArguments1.ts, 7, 13))
+>idx : Symbol(idx, Decl(missingTypeArguments1.ts, 8, 11))
+>X2 : Symbol(X2, Decl(missingTypeArguments1.ts, 5, 17))
+}
+var a2: X2<number>;
+>a2 : Symbol(a2, Decl(missingTypeArguments1.ts, 10, 3))
+>X2 : Symbol(X2, Decl(missingTypeArguments1.ts, 5, 17))
+
+class X3<T> {
+>X3 : Symbol(X3, Decl(missingTypeArguments1.ts, 10, 19))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 12, 9))
+
+    p3: X3[]
+>p3 : Symbol(X3.p3, Decl(missingTypeArguments1.ts, 12, 13))
+>X3 : Symbol(X3, Decl(missingTypeArguments1.ts, 10, 19))
+}
+var a3: X3<number>;
+>a3 : Symbol(a3, Decl(missingTypeArguments1.ts, 15, 3))
+>X3 : Symbol(X3, Decl(missingTypeArguments1.ts, 10, 19))
+
+class X4<T> {
+>X4 : Symbol(X4, Decl(missingTypeArguments1.ts, 15, 19))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 17, 9))
+
+    p4: I<X4>
+>p4 : Symbol(X4.p4, Decl(missingTypeArguments1.ts, 17, 13))
+>I : Symbol(I, Decl(missingTypeArguments1.ts, 0, 0))
+>X4 : Symbol(X4, Decl(missingTypeArguments1.ts, 15, 19))
+}
+var a4: X4<number>;
+>a4 : Symbol(a4, Decl(missingTypeArguments1.ts, 20, 3))
+>X4 : Symbol(X4, Decl(missingTypeArguments1.ts, 15, 19))
+
+class X5<T> {
+>X5 : Symbol(X5, Decl(missingTypeArguments1.ts, 20, 19))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 22, 9))
+
+    p5: X5
+>p5 : Symbol(X5.p5, Decl(missingTypeArguments1.ts, 22, 13))
+>X5 : Symbol(X5, Decl(missingTypeArguments1.ts, 20, 19))
+}
+var a5: X5<number>;
+>a5 : Symbol(a5, Decl(missingTypeArguments1.ts, 25, 3))
+>X5 : Symbol(X5, Decl(missingTypeArguments1.ts, 20, 19))
+
+class X6<T> {
+>X6 : Symbol(X6, Decl(missingTypeArguments1.ts, 25, 19))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 27, 9))
+
+    p6: () => Y;
+>p6 : Symbol(X6.p6, Decl(missingTypeArguments1.ts, 27, 13))
+>Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+}
+var a6: X6<number>;
+>a6 : Symbol(a6, Decl(missingTypeArguments1.ts, 30, 3))
+>X6 : Symbol(X6, Decl(missingTypeArguments1.ts, 25, 19))
+
+class X7<T> {
+>X7 : Symbol(X7, Decl(missingTypeArguments1.ts, 30, 19))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 32, 9))
+
+    p7: { [idx: number]: Y } 
+>p7 : Symbol(X7.p7, Decl(missingTypeArguments1.ts, 32, 13))
+>idx : Symbol(idx, Decl(missingTypeArguments1.ts, 33, 11))
+>Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+}
+var a7: X7<number>;
+>a7 : Symbol(a7, Decl(missingTypeArguments1.ts, 35, 3))
+>X7 : Symbol(X7, Decl(missingTypeArguments1.ts, 30, 19))
+
+class X8<T> {
+>X8 : Symbol(X8, Decl(missingTypeArguments1.ts, 35, 19))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 37, 9))
+
+    p8: Y[]
+>p8 : Symbol(X8.p8, Decl(missingTypeArguments1.ts, 37, 13))
+>Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+}
+var a8: X8<number>;
+>a8 : Symbol(a8, Decl(missingTypeArguments1.ts, 40, 3))
+>X8 : Symbol(X8, Decl(missingTypeArguments1.ts, 35, 19))
+
+class X9<T> {
+>X9 : Symbol(X9, Decl(missingTypeArguments1.ts, 40, 19))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 42, 9))
+
+    p9: I<Y>
+>p9 : Symbol(X9.p9, Decl(missingTypeArguments1.ts, 42, 13))
+>I : Symbol(I, Decl(missingTypeArguments1.ts, 0, 0))
+>Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+}
+var a9: X9<number>;
+>a9 : Symbol(a9, Decl(missingTypeArguments1.ts, 45, 3))
+>X9 : Symbol(X9, Decl(missingTypeArguments1.ts, 40, 19))
+
+class X10<T> {
+>X10 : Symbol(X10, Decl(missingTypeArguments1.ts, 45, 19))
+>T : Symbol(T, Decl(missingTypeArguments1.ts, 47, 10))
+
+    pa: Y
+>pa : Symbol(X10.pa, Decl(missingTypeArguments1.ts, 47, 14))
+>Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+}
+var a10: X10<number>;
+>a10 : Symbol(a10, Decl(missingTypeArguments1.ts, 50, 3))
+>X10 : Symbol(X10, Decl(missingTypeArguments1.ts, 45, 19))
+
+ 
+

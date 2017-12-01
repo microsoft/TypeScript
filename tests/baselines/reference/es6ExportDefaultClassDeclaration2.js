@@ -1,5 +1,4 @@
 //// [es6ExportDefaultClassDeclaration2.ts]
-
 export default class {
     method() { }
 }

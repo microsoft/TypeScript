@@ -1,11 +1,10 @@
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts(10,23): error TS4025: Exported variable 'p' has or is using private name 'W'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts(33,22): error TS4081: Exported type alias 't2' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts(36,23): error TS4081: Exported type alias 't12' has or is using private name 'public1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts(39,24): error TS4081: Exported type alias 't112' has or is using private name 'm3'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts(9,23): error TS4025: Exported variable 'p' has or is using private name 'W'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts(32,22): error TS4081: Exported type alias 't2' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts(35,23): error TS4081: Exported type alias 't12' has or is using private name 'public1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts(38,24): error TS4081: Exported type alias 't112' has or is using private name 'm3'.
 
 
 ==== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts (4 errors) ====
-    
     interface Window {
         someMethod();
     }

@@ -1,5 +1,4 @@
 //// [declFileEnums.ts]
-
 enum e1 {
     a,
     b,

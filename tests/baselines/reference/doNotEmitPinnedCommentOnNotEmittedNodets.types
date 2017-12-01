@@ -1,5 +1,4 @@
 === tests/cases/compiler/doNotEmitPinnedCommentOnNotEmittedNodets.ts ===
-
 class C {
 >C : C
 

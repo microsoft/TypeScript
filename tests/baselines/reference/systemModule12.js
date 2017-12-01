@@ -1,5 +1,4 @@
 //// [systemModule12.ts]
-
 ///<amd-module name='NamedModule'/>
 import n from 'file1'
 

@@ -8,12 +8,11 @@
 //// }
 ////
 //// class C implements I1,I2 {[|
-////     y: number;
-//// |]}
+////     |]y: number;
+//// }
 
 verify.rangeAfterCodeFix(`
 x: number;
-y: number;
 `);
 
 verify.not.codeFixAvailable();

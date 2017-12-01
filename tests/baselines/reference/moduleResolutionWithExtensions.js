@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/moduleResolutionWithExtensions.ts] ////
 
 //// [a.ts]
-
 export default 0;
 
 // No extension: '.ts' added
@@ -29,11 +28,14 @@ import j from "./jquery.js"
 "use strict";
 exports.__esModule = true;
 exports["default"] = 0;
-// No extension: '.ts' added 
+// No extension: '.ts' added
 //// [b.js]
 "use strict";
-// '.js' extension: stripped and replaced with '.ts' 
+exports.__esModule = true;
+// '.js' extension: stripped and replaced with '.ts'
 //// [d.js]
 "use strict";
+exports.__esModule = true;
 //// [jquery_user_1.js]
 "use strict";
+exports.__esModule = true;

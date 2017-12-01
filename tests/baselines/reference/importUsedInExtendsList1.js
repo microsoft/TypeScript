@@ -13,7 +13,8 @@ var r: string = s.foo;
 
 //// [importUsedInExtendsList1_require.js]
 "use strict";
-var Super = (function () {
+exports.__esModule = true;
+var Super = /** @class */ (function () {
     function Super() {
     }
     return Super;
@@ -31,9 +32,10 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 ///<reference path='importUsedInExtendsList1_require.ts'/>
 var foo = require("./importUsedInExtendsList1_require");
-var Sub = (function (_super) {
+var Sub = /** @class */ (function (_super) {
     __extends(Sub, _super);
     function Sub() {
         return _super !== null && _super.apply(this, arguments) || this;

@@ -1,5 +1,4 @@
 === tests/cases/compiler/es5ExportDefaultClassDeclaration.ts ===
-
 export default class C {
 >C : C
 

@@ -19,7 +19,6 @@ tests/cases/compiler/client.ts(12,12): error TS2323: Cannot redeclare exported v
 
 
 ==== tests/cases/compiler/server.ts (0 errors) ====
-    
     var a = 10;
     export default a;
     

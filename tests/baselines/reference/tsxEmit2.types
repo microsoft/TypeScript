@@ -13,7 +13,7 @@ declare module JSX {
 	}
 }
 
-var p1, p2, p3;
+var p1: any, p2: any, p3: any;
 >p1 : any
 >p2 : any
 >p3 : any

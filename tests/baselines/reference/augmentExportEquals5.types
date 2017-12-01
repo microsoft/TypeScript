@@ -1,6 +1,4 @@
 === tests/cases/compiler/express.d.ts ===
-
-
 declare module Express {
 >Express : any
 

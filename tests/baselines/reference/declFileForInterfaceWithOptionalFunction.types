@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileForInterfaceWithOptionalFunction.ts ===
-
 interface I {
 >I : I
 

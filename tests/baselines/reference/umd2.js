@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/umd2.ts] ////
 
 //// [foo.d.ts]
-
 export var x: number;
 export function fn(): void;
 export as namespace Foo;

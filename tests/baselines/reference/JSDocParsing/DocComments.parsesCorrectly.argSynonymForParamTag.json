@@ -1,0 +1,45 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 44,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 28,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 12,
+                "escapedText": "arg"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 13,
+                "end": 21,
+                "type": {
+                    "kind": "NumberKeyword",
+                    "pos": 14,
+                    "end": 20
+                }
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 22,
+                "end": 27,
+                "escapedText": "name1"
+            },
+            "isNameFirst": false,
+            "isBracketed": false,
+            "comment": "Description"
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 28
+    }
+}

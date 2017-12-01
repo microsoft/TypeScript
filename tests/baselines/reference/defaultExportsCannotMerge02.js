@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/defaultExportsCannotMerge02.ts] ////
 
 //// [m1.ts]
-
 export default class Decl {
 }
 
@@ -27,15 +26,16 @@ var sum = z.p1 + z.p2
 
 //// [m1.js]
 "use strict";
-var Decl = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var Decl = /** @class */ (function () {
     function Decl() {
     }
     return Decl;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Decl;
 //// [m2.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("m1");
 m1_1.default();
 var x;

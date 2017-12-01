@@ -1,5 +1,4 @@
 === tests/cases/compiler/trailingCommasES5.ts ===
-
 var o1 = { a: 1, b: 2 };
 >o1 : { a: number; b: number; }
 >{ a: 1, b: 2 } : { a: number; b: number; }

@@ -1,5 +1,4 @@
 //// [typedArraysCrossAssignability01.ts]
-
 function CheckAssignability() {
     let arr_Int8Array           = new Int8Array(1);
     let arr_Uint8Array          = new Uint8Array(1);

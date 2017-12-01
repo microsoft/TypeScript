@@ -1,5 +1,4 @@
 //// [controlFlowNoImplicitAny.ts]
-
 declare let cond: boolean;
 
 // CFA for 'let' with no type annotation and initializer

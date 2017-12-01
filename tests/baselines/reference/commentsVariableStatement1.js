@@ -1,5 +1,4 @@
 //// [commentsVariableStatement1.ts]
-
 /** Comment */
 var v = 1;
 

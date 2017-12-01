@@ -1,5 +1,4 @@
 === tests/cases/compiler/unusedLocalsAndParametersTypeAliases.ts ===
-
 // used in a declaration
 type handler1 = () => void;
 >handler1 : () => void

@@ -1,0 +1,37 @@
+=== tests/cases/compiler/a.js ===
+var x = 0;
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+
+/// @ts-ignore
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+/// @ts-ignore
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+/// @ts-ignore
+x(
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+    2,
+    3);
+
+
+
+// @ts-ignore
+// come comment
+// some other comment
+
+// @anohter
+
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+
+
+// @ts-ignore: no call signature
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+

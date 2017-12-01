@@ -1,0 +1,158 @@
+===================================================================
+JsFile: ES5For-of36.js
+mapUrl: ES5For-of36.js.map
+sourceRoot: 
+sources: ES5For-of36.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of36.js
+sourceFile:ES5For-of36.ts
+-------------------------------------------------------------------
+>>>var __values = (this && this.__values) || function (o) {
+>>>    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+>>>    if (m) return m.call(o);
+>>>    return {
+>>>        next: function () {
+>>>            if (o && i >= o.length) o = void 0;
+>>>            return { value: o && o[i++], done: !o };
+>>>        }
+>>>    };
+>>>};
+>>>var __read = (this && this.__read) || function (o, n) {
+>>>    var m = typeof Symbol === "function" && o[Symbol.iterator];
+>>>    if (!m) return o;
+>>>    var i = m.call(o), r, ar = [], e;
+>>>    try {
+>>>        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+>>>    }
+>>>    catch (error) { e = { error: error }; }
+>>>    finally {
+>>>        try {
+>>>            if (r && !r.done && (m = i["return"])) m.call(i);
+>>>        }
+>>>        finally { if (e) throw e.error; }
+>>>    }
+>>>    return ar;
+>>>};
+>>>try {
+>>>    for (var _a = __values([2, 3]), _b = _a.next(); !_b.done; _b = _a.next()) {
+1 >^^^^
+2 >    ^^^
+3 >       ^
+4 >        ^
+5 >         ^^^^
+6 >             ^^^^^
+7 >                  ^^^^^^^^^
+8 >                           ^
+9 >                            ^
+10>                             ^^
+11>                               ^
+12>                                ^
+13>                                 ^
+14>                                  ^^^^^^^^^^^^^^^^
+15>                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    for
+3 >        
+4 >        (let [a = 0, b = 1] of 
+5 >         
+6 >             
+7 >                  
+8 >                           [
+9 >                            2
+10>                             , 
+11>                               3
+12>                                ]
+13>                                 
+14>                                  
+1 >Emitted(28, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(28, 8) Source(1, 4) + SourceIndex(0)
+3 >Emitted(28, 9) Source(1, 5) + SourceIndex(0)
+4 >Emitted(28, 10) Source(1, 28) + SourceIndex(0)
+5 >Emitted(28, 14) Source(1, 28) + SourceIndex(0)
+6 >Emitted(28, 19) Source(1, 28) + SourceIndex(0)
+7 >Emitted(28, 28) Source(1, 28) + SourceIndex(0)
+8 >Emitted(28, 29) Source(1, 29) + SourceIndex(0)
+9 >Emitted(28, 30) Source(1, 30) + SourceIndex(0)
+10>Emitted(28, 32) Source(1, 32) + SourceIndex(0)
+11>Emitted(28, 33) Source(1, 33) + SourceIndex(0)
+12>Emitted(28, 34) Source(1, 34) + SourceIndex(0)
+13>Emitted(28, 35) Source(1, 34) + SourceIndex(0)
+14>Emitted(28, 51) Source(1, 34) + SourceIndex(0)
+---
+>>>        var _c = __read(_b.value, 2), _d = _c[0], a = _d === void 0 ? 0 : _d, _e = _c[1], b = _e === void 0 ? 1 : _e;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                    ^^
+5 >                                      ^^^^^^^^^^
+6 >                                                ^^
+7 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                            ^^
+9 >                                                                              ^^^^^^^^^^
+10>                                                                                        ^^
+11>                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >        
+3 >            [a = 0, b = 1]
+4 >                                    
+5 >                                      a = 0
+6 >                                                
+7 >                                                  a = 0
+8 >                                                                            , 
+9 >                                                                              b = 1
+10>                                                                                        
+11>                                                                                          b = 1
+1->Emitted(29, 9) Source(1, 10) + SourceIndex(0)
+2 >Emitted(29, 13) Source(1, 10) + SourceIndex(0)
+3 >Emitted(29, 37) Source(1, 24) + SourceIndex(0)
+4 >Emitted(29, 39) Source(1, 11) + SourceIndex(0)
+5 >Emitted(29, 49) Source(1, 16) + SourceIndex(0)
+6 >Emitted(29, 51) Source(1, 11) + SourceIndex(0)
+7 >Emitted(29, 77) Source(1, 16) + SourceIndex(0)
+8 >Emitted(29, 79) Source(1, 18) + SourceIndex(0)
+9 >Emitted(29, 89) Source(1, 23) + SourceIndex(0)
+10>Emitted(29, 91) Source(1, 18) + SourceIndex(0)
+11>Emitted(29, 117) Source(1, 23) + SourceIndex(0)
+---
+>>>        a;
+1 >^^^^^^^^
+2 >        ^
+3 >         ^
+4 >          ^->
+1 >] of [2, 3]) {
+  >    
+2 >        a
+3 >         ;
+1 >Emitted(30, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(30, 10) Source(2, 6) + SourceIndex(0)
+3 >Emitted(30, 11) Source(2, 7) + SourceIndex(0)
+---
+>>>        b;
+1->^^^^^^^^
+2 >        ^
+3 >         ^
+1->
+  >    
+2 >        b
+3 >         ;
+1->Emitted(31, 9) Source(3, 5) + SourceIndex(0)
+2 >Emitted(31, 10) Source(3, 6) + SourceIndex(0)
+3 >Emitted(31, 11) Source(3, 7) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^^
+1 >
+  >}
+1 >Emitted(32, 6) Source(4, 2) + SourceIndex(0)
+---
+>>>}
+>>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
+>>>finally {
+>>>    try {
+>>>        if (_b && !_b.done && (_f = _a["return"])) _f.call(_a);
+>>>    }
+>>>    finally { if (e_1) throw e_1.error; }
+>>>}
+>>>var e_1, _f;
+>>>//# sourceMappingURL=ES5For-of36.js.map

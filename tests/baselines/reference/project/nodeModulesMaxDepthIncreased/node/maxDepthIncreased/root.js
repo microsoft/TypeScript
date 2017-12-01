@@ -1,4 +1,5 @@
 "use strict";
+exports.__esModule = true;
 var m1 = require("m1");
 var m4 = require("m4");
 m1.f1("test");

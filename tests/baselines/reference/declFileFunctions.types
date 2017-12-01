@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileFunctions_0.ts ===
-
 /** This comment should appear for foo*/
 export function foo() {
 >foo : () => void

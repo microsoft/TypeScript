@@ -1,5 +1,4 @@
 //// [initializePropertiesWithRenamedLet.ts]
-
 var x0;
 if (true) {
     let x0;

@@ -4,8 +4,4 @@
 //// /*4*/   \\\/*5*/
 //// /*6*/
 
-test.markers().forEach(marker => {
-    goTo.position(marker.position);
-
-    verify.completionListIsEmpty()
-});
+goTo.eachMarker(() => verify.completionListIsEmpty());

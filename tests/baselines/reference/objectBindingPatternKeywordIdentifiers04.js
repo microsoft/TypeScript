@@ -1,5 +1,4 @@
 //// [objectBindingPatternKeywordIdentifiers04.ts]
-
 var { "while": while } = { while: 1 }
 
 //// [objectBindingPatternKeywordIdentifiers04.js]

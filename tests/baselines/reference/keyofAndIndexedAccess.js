@@ -1,5 +1,4 @@
 //// [keyofAndIndexedAccess.ts]
-
 class Shape {
     name: string;
     width: number;
@@ -501,6 +500,59 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
     stringMap[x]; // Should be OK.
 }
 
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+
+// Repro from #13604
+
+class A<T> {
+	props: T & { foo: string };
+}
+
+class B extends A<{ x: number}> {
+	f(p: this["props"]) {
+		p.x;
+	}
+}
+
+// Repro from #13749
+
+class Form<T> {
+    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+
+    public set<K extends keyof T>(prop: K, value: T[K]) {
+        this.childFormFactories[prop](value)
+    }
+}
+
+// Repro from #13787
+
+class SampleClass<P> {
+    public props: Readonly<P>;
+    constructor(props: P) {
+        this.props = Object.freeze(props);
+    }
+}
+
+interface Foo {
+    foo: string;
+}
+
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+
+class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+    constructor(props: T) {
+        const foo: Foo = { foo: "bar" };
+        super(merge(props, foo));
+    }
+
+    public brokenMethod() {
+        this.props.foo.concat;
+    }
+}
+new AnotherSampleClass({});
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -513,24 +565,24 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Shape = (function () {
+var Shape = /** @class */ (function () {
     function Shape() {
     }
     return Shape;
 }());
-var TaggedShape = (function (_super) {
+var TaggedShape = /** @class */ (function (_super) {
     __extends(TaggedShape, _super);
     function TaggedShape() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return TaggedShape;
 }(Shape));
-var Item = (function () {
+var Item = /** @class */ (function () {
     function Item() {
     }
     return Item;
 }());
-var Options = (function () {
+var Options = /** @class */ (function () {
     function Options() {
     }
     return Options;
@@ -563,7 +615,7 @@ function f13(foo, bar) {
     var y = getProperty(foo, "100"); // any
     var z = getProperty(foo, bar); // any
 }
-var Component = (function () {
+var Component = /** @class */ (function () {
     function Component() {
     }
     Component.prototype.getProperty = function (key) {
@@ -607,7 +659,7 @@ function f34(ts) {
     var tag1 = f33(ts, "tag");
     var tag2 = getProperty(ts, "tag");
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
@@ -699,7 +751,7 @@ function f84() {
     var x1 = f83({ foo: { x: "hello" } }, "foo"); // string
     var x2 = f83({ bar: { x: 42 } }, "bar"); // number
 }
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     C1.prototype.get = function (key) {
@@ -739,7 +791,7 @@ function f90(x1, x2, x3, x4) {
     x4.length;
 }
 // Repros from #12011
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     Base.prototype.get = function (prop) {
@@ -750,7 +802,7 @@ var Base = (function () {
     };
     return Base;
 }());
-var Person = (function (_super) {
+var Person = /** @class */ (function (_super) {
     __extends(Person, _super);
     function Person(parts) {
         var _this = _super.call(this) || this;
@@ -762,7 +814,7 @@ var Person = (function (_super) {
     };
     return Person;
 }(Base));
-var OtherPerson = (function () {
+var OtherPerson = /** @class */ (function () {
     function OtherPerson(parts) {
         setProperty(this, "parts", parts);
     }
@@ -830,6 +882,52 @@ function updateIds2(obj, key, stringMap) {
     var x = obj[key];
     stringMap[x]; // Should be OK.
 }
+// Repro from #13604
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
+var B = /** @class */ (function (_super) {
+    __extends(B, _super);
+    function B() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    B.prototype.f = function (p) {
+        p.x;
+    };
+    return B;
+}(A));
+// Repro from #13749
+var Form = /** @class */ (function () {
+    function Form() {
+    }
+    Form.prototype.set = function (prop, value) {
+        this.childFormFactories[prop](value);
+    };
+    return Form;
+}());
+// Repro from #13787
+var SampleClass = /** @class */ (function () {
+    function SampleClass(props) {
+        this.props = Object.freeze(props);
+    }
+    return SampleClass;
+}());
+var AnotherSampleClass = /** @class */ (function (_super) {
+    __extends(AnotherSampleClass, _super);
+    function AnotherSampleClass(props) {
+        var _this = this;
+        var foo = { foo: "bar" };
+        _this = _super.call(this, merge(props, foo)) || this;
+        return _this;
+    }
+    AnotherSampleClass.prototype.brokenMethod = function () {
+        this.props.foo.concat;
+    };
+    return AnotherSampleClass;
+}(SampleClass));
+new AnotherSampleClass({});
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1003,7 +1101,9 @@ declare type Handlers<T> = {
     [K in keyof T]: (t: T[K]) => void;
 };
 declare function on<T>(handlerHash: Handlers<T>): T;
-declare var hashOfEmpty1: {};
+declare var hashOfEmpty1: {
+    test: {};
+};
 declare var hashOfEmpty2: {
     test: boolean;
 };
@@ -1061,3 +1161,30 @@ declare function updateIds2<T extends {
 }, K extends keyof T>(obj: T, key: K, stringMap: {
     [oldId: string]: string;
 }): void;
+declare function head<T extends Array<any>>(list: T): T[0];
+declare class A<T> {
+    props: T & {
+        foo: string;
+    };
+}
+declare class B extends A<{
+    x: number;
+}> {
+    f(p: this["props"]): void;
+}
+declare class Form<T> {
+    private childFormFactories;
+    set<K extends keyof T>(prop: K, value: T[K]): void;
+}
+declare class SampleClass<P> {
+    props: Readonly<P>;
+    constructor(props: P);
+}
+interface Foo {
+    foo: string;
+}
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+declare class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+    constructor(props: T);
+    brokenMethod(): void;
+}

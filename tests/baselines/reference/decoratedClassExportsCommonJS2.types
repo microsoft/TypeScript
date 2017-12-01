@@ -1,5 +1,4 @@
 === tests/cases/conformance/decorators/class/a.ts ===
-
 declare function forwardRef(x: any): any;
 >forwardRef : (x: any) => any
 >x : any

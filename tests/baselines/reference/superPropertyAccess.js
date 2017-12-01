@@ -1,5 +1,4 @@
 //// [superPropertyAccess.ts]
-
 class MyBase {
     m1(a: string) { return a; }
     private p1() { }
@@ -47,7 +46,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var MyBase = (function () {
+var MyBase = /** @class */ (function () {
     function MyBase() {
         this.m2 = function () { };
         this.d1 = 42;
@@ -63,7 +62,7 @@ var MyBase = (function () {
     });
     return MyBase;
 }());
-var MyDerived = (function (_super) {
+var MyDerived = /** @class */ (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
         return _super !== null && _super.apply(this, arguments) || this;

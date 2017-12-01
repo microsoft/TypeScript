@@ -14,7 +14,7 @@ namespace ts.BreakpointResolver {
             return undefined;
         }
 
-        let tokenAtLocation = getTokenAtPosition(sourceFile, position);
+        let tokenAtLocation = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         const lineOfPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
         if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart(sourceFile)).line > lineOfPosition) {
             // Get previous token if the token is returned starts on new line
@@ -31,7 +31,7 @@ namespace ts.BreakpointResolver {
         }
 
         // Cannot set breakpoint in ambient declarations
-        if (isInAmbientContext(tokenAtLocation)) {
+        if (tokenAtLocation.flags & NodeFlags.Ambient) {
             return undefined;
         }
 
@@ -97,7 +97,7 @@ namespace ts.BreakpointResolver {
                         if (isFunctionBlock(node)) {
                             return spanInFunctionBlock(<Block>node);
                         }
-                    // Fall through
+                        // falls through
                     case SyntaxKind.ModuleBlock:
                         return spanInBlock(<Block>node);
 
@@ -146,7 +146,7 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.ForOfStatement:
                         // span in initializer
-                        return spanInInitializerOfForLike(<ForOfStatement | ForInStatement>node);
+                        return spanInInitializerOfForLike(<ForOfStatement>node);
 
                     case SyntaxKind.SwitchStatement:
                         // span on switch(...)
@@ -183,9 +183,10 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.ModuleDeclaration:
                         // span on complete module if it is instantiated
-                        if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(node as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
+                        // falls through
 
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
@@ -264,7 +265,7 @@ namespace ts.BreakpointResolver {
                         // a or ...c  or d: x from
                         // [a, b, ...c] or { a, b } or { d: x } from destructuring pattern
                         if ((node.kind === SyntaxKind.Identifier ||
-                            node.kind == SyntaxKind.SpreadElement ||
+                            node.kind === SyntaxKind.SpreadElement ||
                             node.kind === SyntaxKind.PropertyAssignment ||
                             node.kind === SyntaxKind.ShorthandPropertyAssignment) &&
                             isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
@@ -296,7 +297,7 @@ namespace ts.BreakpointResolver {
                             }
                         }
 
-                        if (isPartOfExpression(node)) {
+                        if (isExpressionNode(node)) {
                             switch (node.parent.kind) {
                                 case SyntaxKind.DoStatement:
                                     // Set span as if on while keyword
@@ -370,8 +371,8 @@ namespace ts.BreakpointResolver {
             }
 
             function textSpanFromVariableDeclaration(variableDeclaration: VariableDeclaration): TextSpan {
-                const declarations = variableDeclaration.parent.declarations;
-                if (declarations && declarations[0] === variableDeclaration) {
+                if (variableDeclaration.parent.kind === SyntaxKind.VariableDeclarationList &&
+                    variableDeclaration.parent.declarations[0] === variableDeclaration) {
                     // First declaration - include let keyword
                     return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent), variableDeclaration);
                 }
@@ -400,8 +401,8 @@ namespace ts.BreakpointResolver {
                     return textSpanFromVariableDeclaration(variableDeclaration);
                 }
 
-                const declarations = variableDeclaration.parent.declarations;
-                if (declarations && declarations[0] !== variableDeclaration) {
+                if (variableDeclaration.parent.kind === SyntaxKind.VariableDeclarationList &&
+                    variableDeclaration.parent.declarations[0] !== variableDeclaration) {
                     // If we cannot set breakpoint on this declaration, set it on previous one
                     // Because the variable declaration may be binding pattern and
                     // we would like to set breakpoint in last binding element if that's the case,
@@ -470,9 +471,10 @@ namespace ts.BreakpointResolver {
             function spanInBlock(block: Block): TextSpan {
                 switch (block.parent.kind) {
                     case SyntaxKind.ModuleDeclaration:
-                        if (getModuleInstanceState(block.parent) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(block.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
+                        // falls through
 
                     // Set on parent if on same line otherwise on first statement
                     case SyntaxKind.WhileStatement:
@@ -579,9 +581,10 @@ namespace ts.BreakpointResolver {
                 switch (node.parent.kind) {
                     case SyntaxKind.ModuleBlock:
                         // If this is not an instantiated module block, no bp span
-                        if (getModuleInstanceState(node.parent.parent) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(node.parent.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
+                        // falls through
 
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ClassDeclaration:
@@ -593,7 +596,7 @@ namespace ts.BreakpointResolver {
                             // Span on close brace token
                             return textSpan(node);
                         }
-                        // fall through
+                        // falls through
 
                     case SyntaxKind.CatchClause:
                         return spanInNode(lastOrUndefined((<Block>node.parent).statements));

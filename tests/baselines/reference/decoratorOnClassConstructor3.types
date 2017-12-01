@@ -1,5 +1,4 @@
 === tests/cases/conformance/decorators/class/constructor/0.ts ===
-
 export class base { }
 >base : base
 

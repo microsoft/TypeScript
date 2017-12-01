@@ -1,5 +1,4 @@
 === tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts ===
-
 var results: string[];
 >results : string[]
 

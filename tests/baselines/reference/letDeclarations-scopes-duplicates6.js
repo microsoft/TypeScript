@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/letDeclarations-scopes-duplicates6.ts] ////
 
 //// [file1.ts]
-
 var var1 = 0;
 
 //// [file2.ts]

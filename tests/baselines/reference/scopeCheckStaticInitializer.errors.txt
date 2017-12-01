@@ -1,0 +1,30 @@
+tests/cases/compiler/scopeCheckStaticInitializer.ts(2,38): error TS2448: Block-scoped variable 'data' used before its declaration.
+tests/cases/compiler/scopeCheckStaticInitializer.ts(5,23): error TS2449: Class 'After' used before its declaration.
+tests/cases/compiler/scopeCheckStaticInitializer.ts(5,29): error TS2448: Block-scoped variable 'data' used before its declaration.
+tests/cases/compiler/scopeCheckStaticInitializer.ts(6,23): error TS2449: Class 'After' used before its declaration.
+
+
+==== tests/cases/compiler/scopeCheckStaticInitializer.ts (4 errors) ====
+    class X {
+        static illegalBeforeProperty = X.data;
+                                         ~~~~
+!!! error TS2448: Block-scoped variable 'data' used before its declaration.
+        static okBeforeMethod = X.method;
+    
+        static illegal2 = After.data;
+                          ~~~~~
+!!! error TS2449: Class 'After' used before its declaration.
+                                ~~~~
+!!! error TS2448: Block-scoped variable 'data' used before its declaration.
+        static illegal3 = After.method;
+                          ~~~~~
+!!! error TS2449: Class 'After' used before its declaration.
+        static data = 13;
+        static method() { }
+    }
+    class After {
+        static data = 12;
+        static method() { };
+    }
+    
+    

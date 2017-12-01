@@ -1,5 +1,4 @@
 === tests/cases/compiler/a.d.ts ===
-
 declare var a: number;
 >a : number
 

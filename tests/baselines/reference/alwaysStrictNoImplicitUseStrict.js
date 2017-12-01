@@ -1,5 +1,4 @@
 //// [alwaysStrictNoImplicitUseStrict.ts]
-
 module M {
     export function f() {
         var arguments = [];

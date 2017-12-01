@@ -58,29 +58,30 @@ interface I2 extends I1 { item:string; }
 //// [interfaceDeclaration3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var M1;
     (function (M1) {
-        var C1 = (function () {
+        var C1 = /** @class */ (function () {
             function C1() {
             }
             return C1;
         }());
-        var C2 = (function () {
+        var C2 = /** @class */ (function () {
             function C2() {
             }
             return C2;
         }());
-        var C3 = (function () {
+        var C3 = /** @class */ (function () {
             function C3() {
             }
             return C3;
         }());
-        var C4 = (function () {
+        var C4 = /** @class */ (function () {
             function C4() {
             }
             return C4;
         }());
-        var C5 = (function () {
+        var C5 = /** @class */ (function () {
             function C5() {
             }
             return C5;
@@ -88,33 +89,33 @@ define(["require", "exports"], function (require, exports) {
     })(M1 || (M1 = {}));
     var M2;
     (function (M2) {
-        var C1 = (function () {
+        var C1 = /** @class */ (function () {
             function C1() {
             }
             return C1;
         }());
-        var C2 = (function () {
+        var C2 = /** @class */ (function () {
             function C2() {
             }
             return C2;
         }());
-        var C3 = (function () {
+        var C3 = /** @class */ (function () {
             function C3() {
             }
             return C3;
         }());
     })(M2 = exports.M2 || (exports.M2 = {}));
-    var C1 = (function () {
+    var C1 = /** @class */ (function () {
         function C1() {
         }
         return C1;
     }());
-    var C2 = (function () {
+    var C2 = /** @class */ (function () {
         function C2() {
         }
         return C2;
     }());
-    var C3 = (function () {
+    var C3 = /** @class */ (function () {
         function C3() {
         }
         return C3;

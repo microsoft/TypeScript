@@ -1,3 +1,6 @@
+// @noImplicitAny: true
+// @noImplicitThis: true
+
 let o = {
     d: "bar",
     m() {

@@ -1,5 +1,4 @@
 //// [a.js]
-
 function foo() {
     var a = 10;
     var b = "Hello";

@@ -3,12 +3,14 @@
 // References a class property using string index access
 
 ////class Foo {
-////    [|property|]: number;
-////    [|method|](): void { }
+////    [|{| "isWriteAccess": true, "isDefinition": true |}property|]: number;
+////    [|{| "isWriteAccess": true, "isDefinition": true |}method|](): void { }
 ////}
 ////
 ////var f: Foo;
 ////f["[|property|]"];
 ////f["[|method|]"];
 
-verify.rangesWithSameTextReferenceEachOther();
+const ranges = test.rangesByText();
+verify.singleReferenceGroup("(property) Foo.property: number", ranges.get("property"));
+verify.singleReferenceGroup("(method) Foo.method(): void", ranges.get("method"));

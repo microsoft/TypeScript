@@ -1,7 +1,0 @@
-tests/cases/conformance/es6/functionExpressions/FunctionExpression1_es6.ts(1,18): error TS1220: Generators are only available when targeting ECMAScript 2015 or higher.
-
-
-==== tests/cases/conformance/es6/functionExpressions/FunctionExpression1_es6.ts (1 errors) ====
-    var v = function * () { }
-                     ~
-!!! error TS1220: Generators are only available when targeting ECMAScript 2015 or higher.

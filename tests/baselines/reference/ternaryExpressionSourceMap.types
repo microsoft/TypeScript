@@ -1,5 +1,4 @@
 === tests/cases/compiler/ternaryExpressionSourceMap.ts ===
-
 var x = 1;
 >x : number
 >1 : 1

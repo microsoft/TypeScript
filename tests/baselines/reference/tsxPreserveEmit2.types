@@ -1,6 +1,4 @@
 === tests/cases/conformance/jsx/test.tsx ===
-
-
 var Route: any;
 >Route : any
 

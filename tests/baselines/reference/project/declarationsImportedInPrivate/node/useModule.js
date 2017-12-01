@@ -1,4 +1,5 @@
 "use strict";
+exports.__esModule = true;
 // only used privately no need to emit
 var private_m4 = require("private_m4");
 var usePrivate_m4_m1;

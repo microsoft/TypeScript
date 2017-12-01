@@ -1,8 +1,7 @@
-tests/cases/compiler/unusedFunctionsinNamespaces6.ts(14,14): error TS6133: 'function4' is declared but never used.
+tests/cases/compiler/unusedFunctionsinNamespaces6.ts(13,14): error TS6133: 'function4' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedFunctionsinNamespaces6.ts (1 errors) ====
-    
     namespace Validation {
         var function1 = function() {
         }
@@ -17,7 +16,7 @@ tests/cases/compiler/unusedFunctionsinNamespaces6.ts(14,14): error TS6133: 'func
     
         function function4() {
                  ~~~~~~~~~
-!!! error TS6133: 'function4' is declared but never used.
+!!! error TS6133: 'function4' is declared but its value is never read.
     
         }
     

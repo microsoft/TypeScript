@@ -1,5 +1,4 @@
 === tests/cases/compiler/innerOverloads.ts ===
-
 function outer() {
 >outer : () => any
 

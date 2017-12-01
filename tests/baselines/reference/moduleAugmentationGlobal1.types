@@ -1,5 +1,4 @@
 === tests/cases/compiler/f1.ts ===
-
 export class A {x: number;}
 >A : A
 >x : number

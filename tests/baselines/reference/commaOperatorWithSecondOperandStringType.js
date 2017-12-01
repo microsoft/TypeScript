@@ -1,5 +1,4 @@
 //// [commaOperatorWithSecondOperandStringType.ts]
-
 var ANY: any;
 var BOOLEAN: boolean;
 var NUMBER: number;

@@ -1,5 +1,4 @@
 //// [controlFlowDestructuringDeclaration.ts]
-
 function f1() {
     let x: string | number = 1;
     x;

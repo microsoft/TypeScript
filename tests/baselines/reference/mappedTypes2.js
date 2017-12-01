@@ -1,5 +1,4 @@
 //// [mappedTypes2.ts]
-
 function verifyLibTypes<T, K extends keyof T, U>() {
     var x1: Partial<T>;
     var x1: { [P in keyof T]?: T[P] };

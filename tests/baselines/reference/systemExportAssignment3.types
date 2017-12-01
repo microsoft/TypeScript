@@ -1,5 +1,4 @@
 === tests/cases/compiler/modules.d.ts ===
-
 declare module "a" {
     var a: number;
 >a : number

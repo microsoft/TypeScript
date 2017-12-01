@@ -1,5 +1,4 @@
 //// [unusedPrivateVariableInClass3.ts]
-
 class greeter {
     private x: string;
     private y: string;
@@ -7,7 +6,7 @@ class greeter {
 }
 
 //// [unusedPrivateVariableInClass3.js]
-var greeter = (function () {
+var greeter = /** @class */ (function () {
     function greeter() {
     }
     return greeter;

@@ -4,12 +4,10 @@
 //// function f(templateStrings: TemplateStringsArray, p1_o2: number, p2_o2: number, p3_o2: number): string;
 //// function f(templateStrings: TemplateStringsArray, p1_o3: string, p2_o3: boolean, p3_o3: number): boolean;
 //// function f(...foo[]: any) { return ""; }
-//// 
+////
 //// f `${ }   ${/*1*/ fa/*2*/lse /*3*/}
 
-test.markers().forEach(m => {
-    goTo.position(m.position);
-
+goTo.eachMarker(() => {
     verify.signatureHelpCountIs(3);
     verify.signatureHelpArgumentCountIs(3);
 

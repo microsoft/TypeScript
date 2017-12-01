@@ -20,9 +20,10 @@ y = x;
 
 
 //// [/src/bin/library-a/index.js]
-// Same as moduleResolutionWithSymlinks.ts, but with outDir
 "use strict";
-var MyClass = (function () {
+// Same as moduleResolutionWithSymlinks.ts, but with outDir
+exports.__esModule = true;
+var MyClass = /** @class */ (function () {
     function MyClass() {
     }
     return MyClass;
@@ -30,10 +31,12 @@ var MyClass = (function () {
 exports.MyClass = MyClass;
 //// [/src/bin/library-b/index.js]
 "use strict";
+exports.__esModule = true;
 var library_a_1 = require("library-a");
 exports.MyClass2 = library_a_1.MyClass;
 //// [/src/bin/app.js]
 "use strict";
+exports.__esModule = true;
 var x;
 var y;
 x = y;

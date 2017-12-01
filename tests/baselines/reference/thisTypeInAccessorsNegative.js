@@ -13,7 +13,6 @@ const mismatch = {
 }
 const contextual: Foo = {
     n: 16,
-    // there is no contextual this type from an Foo.x.
     get x() { return this.n; }
 }
 
@@ -26,6 +25,5 @@ var mismatch = {
 };
 var contextual = {
     n: 16,
-    // there is no contextual this type from an Foo.x.
     get x() { return this.n; }
 };

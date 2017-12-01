@@ -1,5 +1,4 @@
 //// [stringLiteralTypesAsTypeParameterConstraint01.ts]
-
 function foo<T extends "foo">(f: (x: T) => T) {
     return f;
 }

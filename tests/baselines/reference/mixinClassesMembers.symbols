@@ -1,0 +1,308 @@
+=== tests/cases/conformance/classes/mixinClassesMembers.ts ===
+declare class C1 {
+>C1 : Symbol(C1, Decl(mixinClassesMembers.ts, 0, 0))
+
+    public a: number;
+>a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+
+    protected b: number;
+>b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
+
+    private c: number;
+>c : Symbol(C1.c, Decl(mixinClassesMembers.ts, 2, 24))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(mixinClassesMembers.ts, 4, 16))
+
+    constructor(n: number);
+>n : Symbol(n, Decl(mixinClassesMembers.ts, 5, 16))
+}
+
+declare class M1 {
+>M1 : Symbol(M1, Decl(mixinClassesMembers.ts, 6, 1))
+
+    constructor(...args: any[]);
+>args : Symbol(args, Decl(mixinClassesMembers.ts, 9, 16))
+
+    p: number;
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+
+    static p: number;
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+}
+
+declare class M2 {
+>M2 : Symbol(M2, Decl(mixinClassesMembers.ts, 12, 1))
+
+    constructor(...args: any[]);
+>args : Symbol(args, Decl(mixinClassesMembers.ts, 15, 16))
+
+    f(): number;
+>f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+
+    static f(): number;
+>f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
+}
+
+declare const Mixed1: typeof M1 & typeof C1;
+>Mixed1 : Symbol(Mixed1, Decl(mixinClassesMembers.ts, 20, 13))
+>M1 : Symbol(M1, Decl(mixinClassesMembers.ts, 6, 1))
+>C1 : Symbol(C1, Decl(mixinClassesMembers.ts, 0, 0))
+
+declare const Mixed2: typeof C1 & typeof M1;
+>Mixed2 : Symbol(Mixed2, Decl(mixinClassesMembers.ts, 21, 13))
+>C1 : Symbol(C1, Decl(mixinClassesMembers.ts, 0, 0))
+>M1 : Symbol(M1, Decl(mixinClassesMembers.ts, 6, 1))
+
+declare const Mixed3: typeof M2 & typeof M1 & typeof C1;
+>Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+>M2 : Symbol(M2, Decl(mixinClassesMembers.ts, 12, 1))
+>M1 : Symbol(M1, Decl(mixinClassesMembers.ts, 6, 1))
+>C1 : Symbol(C1, Decl(mixinClassesMembers.ts, 0, 0))
+
+declare const Mixed4: typeof C1 & typeof M1 & typeof M2;
+>Mixed4 : Symbol(Mixed4, Decl(mixinClassesMembers.ts, 23, 13))
+>C1 : Symbol(C1, Decl(mixinClassesMembers.ts, 0, 0))
+>M1 : Symbol(M1, Decl(mixinClassesMembers.ts, 6, 1))
+>M2 : Symbol(M2, Decl(mixinClassesMembers.ts, 12, 1))
+
+declare const Mixed5: typeof M1 & typeof M2;
+>Mixed5 : Symbol(Mixed5, Decl(mixinClassesMembers.ts, 24, 13))
+>M1 : Symbol(M1, Decl(mixinClassesMembers.ts, 6, 1))
+>M2 : Symbol(M2, Decl(mixinClassesMembers.ts, 12, 1))
+
+function f1() {
+>f1 : Symbol(f1, Decl(mixinClassesMembers.ts, 24, 44))
+
+    let x1 = new Mixed1("hello");
+>x1 : Symbol(x1, Decl(mixinClassesMembers.ts, 27, 7))
+>Mixed1 : Symbol(Mixed1, Decl(mixinClassesMembers.ts, 20, 13))
+
+    let x2 = new Mixed1(42);
+>x2 : Symbol(x2, Decl(mixinClassesMembers.ts, 28, 7))
+>Mixed1 : Symbol(Mixed1, Decl(mixinClassesMembers.ts, 20, 13))
+
+    let x3 = new Mixed2("hello");
+>x3 : Symbol(x3, Decl(mixinClassesMembers.ts, 29, 7))
+>Mixed2 : Symbol(Mixed2, Decl(mixinClassesMembers.ts, 21, 13))
+
+    let x4 = new Mixed2(42);
+>x4 : Symbol(x4, Decl(mixinClassesMembers.ts, 30, 7))
+>Mixed2 : Symbol(Mixed2, Decl(mixinClassesMembers.ts, 21, 13))
+
+    let x5 = new Mixed3("hello");
+>x5 : Symbol(x5, Decl(mixinClassesMembers.ts, 31, 7))
+>Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+
+    let x6 = new Mixed3(42);
+>x6 : Symbol(x6, Decl(mixinClassesMembers.ts, 32, 7))
+>Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+
+    let x7 = new Mixed4("hello");
+>x7 : Symbol(x7, Decl(mixinClassesMembers.ts, 33, 7))
+>Mixed4 : Symbol(Mixed4, Decl(mixinClassesMembers.ts, 23, 13))
+
+    let x8 = new Mixed4(42);
+>x8 : Symbol(x8, Decl(mixinClassesMembers.ts, 34, 7))
+>Mixed4 : Symbol(Mixed4, Decl(mixinClassesMembers.ts, 23, 13))
+
+    let x9 = new Mixed5();
+>x9 : Symbol(x9, Decl(mixinClassesMembers.ts, 35, 7))
+>Mixed5 : Symbol(Mixed5, Decl(mixinClassesMembers.ts, 24, 13))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(mixinClassesMembers.ts, 36, 1))
+
+    let x = new Mixed1("hello");
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 39, 7))
+>Mixed1 : Symbol(Mixed1, Decl(mixinClassesMembers.ts, 20, 13))
+
+    x.a;
+>x.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 39, 7))
+>a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+
+    x.p;
+>x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 39, 7))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+
+    Mixed1.p;
+>Mixed1.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+>Mixed1 : Symbol(Mixed1, Decl(mixinClassesMembers.ts, 20, 13))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(mixinClassesMembers.ts, 43, 1))
+
+    let x = new Mixed2("hello");
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 46, 7))
+>Mixed2 : Symbol(Mixed2, Decl(mixinClassesMembers.ts, 21, 13))
+
+    x.a;
+>x.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 46, 7))
+>a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+
+    x.p;
+>x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 46, 7))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+
+    Mixed2.p;
+>Mixed2.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+>Mixed2 : Symbol(Mixed2, Decl(mixinClassesMembers.ts, 21, 13))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(mixinClassesMembers.ts, 50, 1))
+
+    let x = new Mixed3("hello");
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 53, 7))
+>Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+
+    x.a;
+>x.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 53, 7))
+>a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+
+    x.p;
+>x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 53, 7))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+
+    x.f();
+>x.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 53, 7))
+>f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+
+    Mixed3.p;
+>Mixed3.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+>Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+
+    Mixed3.f();
+>Mixed3.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
+>Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+>f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(mixinClassesMembers.ts, 59, 1))
+
+    let x = new Mixed4("hello");
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 62, 7))
+>Mixed4 : Symbol(Mixed4, Decl(mixinClassesMembers.ts, 23, 13))
+
+    x.a;
+>x.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 62, 7))
+>a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+
+    x.p;
+>x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 62, 7))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+
+    x.f();
+>x.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 62, 7))
+>f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+
+    Mixed4.p;
+>Mixed4.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+>Mixed4 : Symbol(Mixed4, Decl(mixinClassesMembers.ts, 23, 13))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+
+    Mixed4.f();
+>Mixed4.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
+>Mixed4 : Symbol(Mixed4, Decl(mixinClassesMembers.ts, 23, 13))
+>f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(mixinClassesMembers.ts, 68, 1))
+
+    let x = new Mixed5();
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 71, 7))
+>Mixed5 : Symbol(Mixed5, Decl(mixinClassesMembers.ts, 24, 13))
+
+    x.p;
+>x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 71, 7))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+
+    x.f();
+>x.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+>x : Symbol(x, Decl(mixinClassesMembers.ts, 71, 7))
+>f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+
+    Mixed5.p;
+>Mixed5.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+>Mixed5 : Symbol(Mixed5, Decl(mixinClassesMembers.ts, 24, 13))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
+
+    Mixed5.f();
+>Mixed5.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
+>Mixed5 : Symbol(Mixed5, Decl(mixinClassesMembers.ts, 24, 13))
+>f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
+}
+
+class C2 extends Mixed1 {
+>C2 : Symbol(C2, Decl(mixinClassesMembers.ts, 76, 1))
+>Mixed1 : Symbol(Mixed1, Decl(mixinClassesMembers.ts, 20, 13))
+
+    constructor() {
+        super("hello");
+        this.a;
+>this.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+>this : Symbol(C2, Decl(mixinClassesMembers.ts, 76, 1))
+>a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+
+        this.b;
+>this.b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
+>this : Symbol(C2, Decl(mixinClassesMembers.ts, 76, 1))
+>b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
+
+        this.p;
+>this.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+>this : Symbol(C2, Decl(mixinClassesMembers.ts, 76, 1))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+    }
+}
+
+class C3 extends Mixed3 {
+>C3 : Symbol(C3, Decl(mixinClassesMembers.ts, 85, 1))
+>Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+
+    constructor() {
+        super(42);
+        this.a;
+>this.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+>this : Symbol(C3, Decl(mixinClassesMembers.ts, 85, 1))
+>a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
+
+        this.b;
+>this.b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
+>this : Symbol(C3, Decl(mixinClassesMembers.ts, 85, 1))
+>b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
+
+        this.p;
+>this.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+>this : Symbol(C3, Decl(mixinClassesMembers.ts, 85, 1))
+>p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
+
+        this.f();
+>this.f : Symbol(C3.f, Decl(mixinClassesMembers.ts, 94, 5))
+>this : Symbol(C3, Decl(mixinClassesMembers.ts, 85, 1))
+>f : Symbol(C3.f, Decl(mixinClassesMembers.ts, 94, 5))
+    }
+    f() { return super.f(); }
+>f : Symbol(C3.f, Decl(mixinClassesMembers.ts, 94, 5))
+>super.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+>f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+}
+

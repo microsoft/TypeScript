@@ -1,5 +1,4 @@
 === tests/cases/compiler/letDeclarations-access.ts ===
-
 let x = 0
 >x : number
 >0 : 0

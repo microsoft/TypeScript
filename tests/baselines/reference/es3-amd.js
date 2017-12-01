@@ -1,5 +1,4 @@
 //// [es3-amd.ts]
-
 class A
 {
     constructor ()
@@ -14,7 +13,7 @@ class A
 }
 
 //// [es3-amd.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.B = function () {

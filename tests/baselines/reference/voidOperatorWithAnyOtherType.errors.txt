@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithAnyOtherType.ts(47,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
 tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithAnyOtherType.ts(48,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
 
@@ -51,7 +51,7 @@ tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWith
     var ResultIsAny16 = void (ANY + ANY1);
     var ResultIsAny17 = void (null + undefined);
                               ~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
     var ResultIsAny18 = void (null + null);
                               ~~~~~~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.

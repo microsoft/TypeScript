@@ -1,17 +1,16 @@
 === tests/cases/compiler/properties.ts ===
-
 class MyClass
 >MyClass : Symbol(MyClass, Decl(properties.ts, 0, 0))
 {
     public get Count(): number
->Count : Symbol(MyClass.Count, Decl(properties.ts, 2, 1), Decl(properties.ts, 6, 5))
+>Count : Symbol(MyClass.Count, Decl(properties.ts, 1, 1), Decl(properties.ts, 5, 5))
     {
         return 42;
     }
 
     public set Count(value: number)
->Count : Symbol(MyClass.Count, Decl(properties.ts, 2, 1), Decl(properties.ts, 6, 5))
->value : Symbol(value, Decl(properties.ts, 8, 21))
+>Count : Symbol(MyClass.Count, Decl(properties.ts, 1, 1), Decl(properties.ts, 5, 5))
+>value : Symbol(value, Decl(properties.ts, 7, 21))
     {
         //
     }

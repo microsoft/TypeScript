@@ -11,7 +11,8 @@
 
 //// [parserClass1.js]
 "use strict";
-var NullLogger = (function () {
+exports.__esModule = true;
+var NullLogger = /** @class */ (function () {
     function NullLogger() {
     }
     NullLogger.prototype.information = function () { return false; };

@@ -6,10 +6,6 @@
 //// .a = function() { };
 //// })();
 
-function navExact(name: string, kind: string) {
-	return;
-}
-
 verify.navigationTree(
 {
   "text": "<global>",

@@ -1,5 +1,4 @@
 === tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace02.ts ===
-
 var module: number;
 >module : number
 

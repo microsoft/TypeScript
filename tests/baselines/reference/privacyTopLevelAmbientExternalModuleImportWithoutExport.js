@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport.ts] ////
 
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require.ts]
-
 // Public elements
 export class c_public {
     foo: string;
@@ -53,8 +52,9 @@ export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     // Public elements
-    var c_public = (function () {
+    var c_public = /** @class */ (function () {
         function c_public() {
         }
         return c_public;
@@ -64,7 +64,8 @@ define(["require", "exports"], function (require, exports) {
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var c_public = (function () {
+    exports.__esModule = true;
+    var c_public = /** @class */ (function () {
         function c_public() {
         }
         return c_public;
@@ -74,6 +75,7 @@ define(["require", "exports"], function (require, exports) {
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.js]
 define(["require", "exports", "m", "m2", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require"], function (require, exports, im_private_mi_private, im_private_mu_private, im_private_mi_public) {
     "use strict";
+    exports.__esModule = true;
     // Usage of privacy error imports
     var privateUse_im_private_mi_private = new im_private_mi_private.c_private();
     exports.publicUse_im_private_mi_private = new im_private_mi_private.c_private();

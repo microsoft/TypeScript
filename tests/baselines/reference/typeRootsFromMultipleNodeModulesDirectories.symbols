@@ -14,10 +14,9 @@ x + y + z;
 >z : Symbol(z, Decl(a.ts, 2, 8))
 
 === /node_modules/@types/dopey/index.d.ts ===
-
 declare module "xyz" {
     export const x: number;
->x : Symbol(x, Decl(index.d.ts, 2, 16))
+>x : Symbol(x, Decl(index.d.ts, 1, 16))
 }
 
 === /foo/node_modules/@types/grumpy/index.d.ts ===

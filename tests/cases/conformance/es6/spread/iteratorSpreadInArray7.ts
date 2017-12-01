@@ -1,7 +1,4 @@
 //@target: ES6
-var array: symbol[];
-array.concat([...new SymbolIterator]);
-
 class SymbolIterator {
     next() {
         return {
@@ -14,3 +11,6 @@ class SymbolIterator {
         return this;
     }
 }
+
+var array: symbol[];
+array.concat([...new SymbolIterator]);

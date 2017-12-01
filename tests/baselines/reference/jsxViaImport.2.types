@@ -19,7 +19,6 @@ class TestComponent extends React.Component<any, {}> {
 }
 
 === tests/cases/compiler/component.d.ts ===
-
 declare module JSX {
 >JSX : any
 

@@ -4,8 +4,4 @@
 ////
 /////*6*/`asdasd${/*7*/ 2 + 1.1 /*8*/} 12312 {
 
-test.markers().forEach(marker => {
-    goTo.position(marker.position);
-
-    verify.completionListItemsCountIsGreaterThan(0)
-});
+goTo.eachMarker(() => verify.completionListItemsCountIsGreaterThan(0));

@@ -13,7 +13,6 @@ export function w(): e.w { // Should be OK
 >'value' : "value"
 }
 === tests/cases/compiler/w1.ts ===
-
 export = Widget1
 >Widget1 : Widget1
 

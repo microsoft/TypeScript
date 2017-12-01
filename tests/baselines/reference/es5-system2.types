@@ -1,0 +1,5 @@
+=== tests/cases/compiler/es5-system2.ts ===
+export var __esModule = 1;
+>__esModule : number
+>1 : 1
+

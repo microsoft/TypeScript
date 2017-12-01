@@ -1,5 +1,4 @@
 //// [asyncArrowFunction8_es6.ts]
-
 var foo = async (): Promise<void> => {
   var v = { [await]: foo }
 }

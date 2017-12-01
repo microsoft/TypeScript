@@ -1,5 +1,4 @@
 //// [recursiveInheritance.ts]
-
 interface I5 extends I5 { // error
     foo():void;
 } 

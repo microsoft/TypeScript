@@ -2,6 +2,7 @@
 import * as cp from "child_process";
 import * as path from "path";
 import * as fs from "fs";
+import child_process = require("child_process");
 import originalGulp = require("gulp");
 import helpMaker = require("gulp-help");
 import runSequence = require("run-sequence");
@@ -21,52 +22,60 @@ declare module "gulp-typescript" {
 import * as insert from "gulp-insert";
 import * as sourcemaps from "gulp-sourcemaps";
 import Q = require("q");
-declare global {
-    // `del` further depends on `Promise` (and is also not included), so we just, patch the global scope's Promise to Q's (which we already include in our deps because gulp depends on it)
-    type Promise<T> = Q.Promise<T>;
-}
 import del = require("del");
 import mkdirP = require("mkdirp");
 import minimist = require("minimist");
 import browserify = require("browserify");
 import through2 = require("through2");
 import merge2 = require("merge2");
-import intoStream = require("into-stream");
 import * as os from "os";
 import fold = require("travis-fold");
 const gulp = helpMaker(originalGulp);
-const mochaParallel = require("./scripts/mocha-parallel.js");
-const {runTestsInParallel} = mochaParallel;
 
 Error.stackTraceLimit = 1000;
 
+/**
+ * This regexp exists to capture our const enums and replace them with normal enums in our public API
+ *   - this is fine since we compile with preserveConstEnums, and ensures our consumers are not locked
+ *     to the TS version they compile with.
+ */
+const constEnumCaptureRegexp = /^(\s*)(export )?const enum (\S+) {(\s*)$/gm;
+const constEnumReplacement = "$1$2enum $3 {$4";
+
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "light", "colors", "lint", "soft"],
-    string: ["browser", "tests", "host", "reporter", "stackTraceLimit"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
+    string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
-        d: "debug",
-        t: "tests",
-        test: "tests",
-        r: "reporter",
-        color: "colors",
-        f: "files",
-        file: "files"
+        "b": "browser",
+        "d": "debug", "debug-brk": "debug",
+        "i": "inspect", "inspect-brk": "inspect",
+        "t": "tests", "test": "tests",
+        "ru": "runners", "runner": "runners",
+        "r": "reporter",
+        "c": "colors", "color": "colors",
+        "f": "files", "file": "files",
+        "w": "workers",
     },
     default: {
         soft: false,
         colors: process.env.colors || process.env.color || true,
-        debug: process.env.debug || process.env.d,
+        debug: process.env.debug || process.env["debug-brk"] || process.env.d,
+        inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
         browser: process.env.browser || process.env.b || "IE",
+        timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
-        light: process.env.light || false,
+        runners: process.env.runners || process.env.runner || process.env.ru,
+        light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
+        workers: process.env.workerCount || os.cpus().length,
     }
 });
 
-function exec(cmd: string, args: string[], complete: () => void = (() => { }), error: (e: any, status: number) => void = (() => { })) {
+const noop = () => {}; // tslint:disable-line no-empty
+function exec(cmd: string, args: string[], complete: () => void = noop, error: (e: any, status: number) => void = noop) {
     console.log(`${cmd} ${args.join(" ")}`);
     // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
     const subshellFlag = isWin ? "/c" : "-c";
@@ -81,7 +90,7 @@ function possiblyQuote(cmd: string) {
 }
 
 let useDebugMode = true;
-let host = cmdLineOptions["host"];
+let host = cmdLineOptions.host;
 
 // Constants
 const compilerDirectory = "src/compiler/";
@@ -89,15 +98,16 @@ const harnessDirectory = "src/harness/";
 const libraryDirectory = "src/lib/";
 const scriptsDirectory = "scripts/";
 const docDirectory = "doc/";
+const lclDirectory = "src/loc/lcl";
 
 const builtDirectory = "built/";
 const builtLocalDirectory = "built/local/";
-const LKGDirectory = "lib/";
+const lkgDirectory = "lib/";
 
 const copyright = "CopyrightNotice.txt";
 
 const compilerFilename = "tsc.js";
-const LKGCompiler = path.join(LKGDirectory, compilerFilename);
+const lkgCompiler = path.join(lkgDirectory, compilerFilename);
 const builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 
 const nodeModulesPathPrefix = path.resolve("./node_modules/.bin/");
@@ -116,25 +126,31 @@ const es2015LibrarySources = [
     "es2015.symbol.wellknown.d.ts"
 ];
 
-const es2015LibrarySourceMap = es2015LibrarySources.map(function(source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
+const es2015LibrarySourceMap = es2015LibrarySources.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
 const es2016LibrarySource = ["es2016.array.include.d.ts"];
 
-const es2016LibrarySourceMap = es2016LibrarySource.map(function(source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
+const es2016LibrarySourceMap = es2016LibrarySource.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
 const es2017LibrarySource = [
     "es2017.object.d.ts",
     "es2017.sharedmemory.d.ts",
     "es2017.string.d.ts",
+    "es2017.intl.d.ts",
+    "es2017.typedarrays.d.ts",
 ];
 
-const es2017LibrarySourceMap = es2017LibrarySource.map(function(source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
+const es2017LibrarySourceMap = es2017LibrarySource.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
+
+const esnextLibrarySource = [
+    "esnext.asynciterable.d.ts"
+];
+
+const esnextLibrarySourceMap = esnextLibrarySource.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
 const hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
 
@@ -150,28 +166,45 @@ const librarySourceMap = [
     { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
     { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
     { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
+    { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
 
     // JavaScript + all host library
     { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
-    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") }
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap);
+    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
 
-const libraryTargets = librarySourceMap.map(function(f) {
-    return path.join(builtLocalDirectory, f.target);
-});
+const libraryTargets = librarySourceMap.map(f =>
+    path.join(builtLocalDirectory, f.target));
+
+/**
+ * .lcg file is what localization team uses to know what messages to localize.
+ * The file is always generated in 'enu\diagnosticMessages.generated.json.lcg'
+ */
+const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
+
+/**
+ * The localization target produces the two following transformations:
+ *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
+ *       convert localized resources into a .json file the compiler can understand
+ *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
+ *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
+ */
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
+    .map(f => path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json"))
+    .concat(generatedLCGFile);
 
 for (const i in libraryTargets) {
     const entry = librarySourceMap[i];
     const target = libraryTargets[i];
-    const sources = [copyright].concat(entry.sources.map(function(s) {
-        return path.join(libraryDirectory, s);
-    }));
-    gulp.task(target, false, [], function() {
-        return gulp.src(sources)
+    const sources = [copyright].concat(entry.sources.map(s => path.join(libraryDirectory, s)));
+    gulp.task(target, /*help*/ false, [], () =>
+        gulp.src(sources)
             .pipe(newer(target))
             .pipe(concat(target, { newLine: "\n\n" }))
-            .pipe(gulp.dest("."));
-    });
+            .pipe(gulp.dest(".")));
 }
 
 const configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
@@ -242,21 +275,15 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
     return true;
 }
 
-// Doing tsconfig inheritance manually. https://github.com/ivogabe/gulp-typescript/issues/459
-const tsconfigBase = JSON.parse(fs.readFileSync("src/tsconfig-base.json", "utf-8")).compilerOptions;
-
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
-    for (const key in tsconfigBase) {
-        copy[key] = tsconfigBase[key];
-    }
     for (const key in base) {
         copy[key] = base[key];
     }
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
-        copy.newLine = "lf";
     }
+    copy.newLine = "lf";
     if (useBuiltCompiler === true) {
         copy.typescript = require("./built/local/typescript.js");
     }
@@ -266,7 +293,7 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     return copy;
 }
 
-gulp.task(configureNightlyJs, false, [], () => {
+gulp.task(configureNightlyJs, /*help*/ false, [], () => {
     const settings: tsc.Settings = {
         declaration: false,
         removeComments: true,
@@ -286,7 +313,7 @@ gulp.task("configure-nightly", "Runs scripts/configureNightly.ts to prepare a bu
     exec(host, [configureNightlyJs, packageJson, versionFile], done, done);
 });
 gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nightly build on npm", ["LKG"], () => {
-    return runSequence("clean", "useDebugMode", "runtests", (done) => {
+    return runSequence("clean", "useDebugMode", "runtests-parallel", (done) => {
         exec("npm", ["publish", "--tag", "next"], done, done);
     });
 });
@@ -295,7 +322,7 @@ const importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importD
 const importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
 const importDefinitelyTypedTestsTs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.ts");
 
-gulp.task(importDefinitelyTypedTestsJs, false, [], () => {
+gulp.task(importDefinitelyTypedTestsJs, /*help*/ false, [], () => {
     const settings: tsc.Settings = getCompilerSettings({
         declaration: false,
         removeComments: true,
@@ -326,8 +353,9 @@ const generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnostic
 const builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "diagnosticMessages.generated.json");
 
 // processDiagnosticMessages script
-gulp.task(processDiagnosticMessagesJs, false, [], () => {
+gulp.task(processDiagnosticMessagesJs, /*help*/ false, [], () => {
     const settings: tsc.Settings = getCompilerSettings({
+        target: "es5",
         declaration: false,
         removeComments: true,
         noResolve: false,
@@ -361,6 +389,35 @@ gulp.task(builtGeneratedDiagnosticMessagesJSON, [diagnosticInfoMapTs], (done) =>
 
 gulp.task("generate-diagnostics", "Generates a diagnostic file in TypeScript based on an input JSON file", [diagnosticInfoMapTs]);
 
+//  Localize diagnostics script
+const generateLocalizedDiagnosticMessagesJs = path.join(scriptsDirectory, "generateLocalizedDiagnosticMessages.js");
+const generateLocalizedDiagnosticMessagesTs = path.join(scriptsDirectory, "generateLocalizedDiagnosticMessages.ts");
+
+gulp.task(generateLocalizedDiagnosticMessagesJs, /*help*/ false, [], () => {
+    const settings: tsc.Settings = getCompilerSettings({
+        target: "es5",
+        declaration: false,
+        removeComments: true,
+        noResolve: false,
+        stripInternal: false,
+        types: ["node", "xml2js"]
+    }, /*useBuiltCompiler*/ false);
+    return gulp.src(generateLocalizedDiagnosticMessagesTs)
+        .pipe(newer(generateLocalizedDiagnosticMessagesJs))
+        .pipe(sourcemaps.init())
+        .pipe(tsc(settings))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(scriptsDirectory));
+});
+
+// Localize diagnostics
+gulp.task(generatedLCGFile, [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs], (done) => {
+    if (fs.existsSync(builtLocalDirectory) && needsUpdate(generatedDiagnosticMessagesJSON, generatedLCGFile)) {
+        exec(host, [generateLocalizedDiagnosticMessagesJs, lclDirectory, builtLocalDirectory, generatedDiagnosticMessagesJSON], done, done);
+    }
+});
+
+gulp.task("localize", [generatedLCGFile]);
 
 const servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 const standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -373,29 +430,29 @@ function prependCopyright(outputCopyright: boolean = !useDebugMode) {
     return insert.prepend(outputCopyright ? (copyrightContent || (copyrightContent = fs.readFileSync(copyright).toString())) : "");
 }
 
-gulp.task(builtLocalCompiler, false, [servicesFile], () => {
-    const localCompilerProject = tsc.createProject("src/compiler/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+gulp.task(builtLocalCompiler, /*help*/ false, [servicesFile], () => {
+    const localCompilerProject = tsc.createProject("src/compiler/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return localCompilerProject.src()
         .pipe(newer(builtLocalCompiler))
         .pipe(sourcemaps.init())
         .pipe(localCompilerProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest("src/compiler"));
 });
 
-gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
-    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/false));
+gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
+    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ false));
     const {js, dts} = servicesProject.src()
         .pipe(newer(servicesFile))
         .pipe(sourcemaps.init())
         .pipe(servicesProject());
     const completedJs = js.pipe(prependCopyright())
         .pipe(sourcemaps.write("."));
-    const completedDts = dts.pipe(prependCopyright(/*outputCopyright*/true))
+    const completedDts = dts.pipe(prependCopyright(/*outputCopyright*/ true))
         .pipe(insert.transform((contents, file) => {
             file.path = standaloneDefinitionsFile;
-            return contents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4");
+            return contents.replace(constEnumCaptureRegexp, constEnumReplacement);
         }));
     return merge2([
         completedJs,
@@ -405,21 +462,21 @@ gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {
                 file.path = nodeDefinitionsFile;
-                return content + "\r\nexport = ts;";
+                return content + "\nexport = ts;";
             }))
-            .pipe(gulp.dest(".")),
+            .pipe(gulp.dest("src/services")),
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {
                 file.path = nodeStandaloneDefinitionsFile;
                 return content.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
             }))
-    ]).pipe(gulp.dest("."));
+    ]).pipe(gulp.dest("src/services"));
 });
 
 // cancellationToken.js
 const cancellationTokenJs = path.join(builtLocalDirectory, "cancellationToken.js");
-gulp.task(cancellationTokenJs, false, [servicesFile], () => {
-    const cancellationTokenProject = tsc.createProject("src/server/cancellationToken/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+gulp.task(cancellationTokenJs, /*help*/ false, [servicesFile], () => {
+    const cancellationTokenProject = tsc.createProject("src/server/cancellationToken/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return cancellationTokenProject.src()
         .pipe(newer(cancellationTokenJs))
         .pipe(sourcemaps.init())
@@ -431,35 +488,36 @@ gulp.task(cancellationTokenJs, false, [servicesFile], () => {
 
 // typingsInstallerFile.js
 const typingsInstallerJs = path.join(builtLocalDirectory, "typingsInstaller.js");
-gulp.task(typingsInstallerJs, false, [servicesFile], () => {
-    const cancellationTokenProject = tsc.createProject("src/server/typingsInstaller/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+gulp.task(typingsInstallerJs, /*help*/ false, [servicesFile], () => {
+    const cancellationTokenProject = tsc.createProject("src/server/typingsInstaller/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return cancellationTokenProject.src()
         .pipe(newer(typingsInstallerJs))
         .pipe(sourcemaps.init())
         .pipe(cancellationTokenProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest("src/server/typingsInstaller"));
 });
 
 const serverFile = path.join(builtLocalDirectory, "tsserver.js");
 
-gulp.task(serverFile, false, [servicesFile, typingsInstallerJs, cancellationTokenJs], () => {
-    const serverProject = tsc.createProject("src/server/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+gulp.task(serverFile, /*help*/ false, [servicesFile, typingsInstallerJs, cancellationTokenJs], () => {
+    const serverProject = tsc.createProject("src/server/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return serverProject.src()
         .pipe(newer(serverFile))
         .pipe(sourcemaps.init())
         .pipe(serverProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest("src/server"));
 });
 
+const typesMapJson = path.join(builtLocalDirectory, "typesMap.json");
 const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 
-gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
-    const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
+gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (done) => {
+    const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ true));
     const {js, dts}: { js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream } = serverLibraryProject.src()
         .pipe(sourcemaps.init())
         .pipe(newer(tsserverLibraryFile))
@@ -468,17 +526,26 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
     return merge2([
         js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."))
-            .pipe(gulp.dest(".")),
-        dts.pipe(prependCopyright(/*outputCopyright*/true))
+            .pipe(gulp.dest("src/server")),
+        dts.pipe(prependCopyright(/*outputCopyright*/ true))
             .pipe(insert.transform((content) => {
-                return content + "\r\nexport = ts;\r\nexport as namespace ts;";
+                return content.replace(constEnumCaptureRegexp, constEnumReplacement) + "\nexport = ts;\nexport as namespace ts;";
             }))
-            .pipe(gulp.dest("."))
+            .pipe(gulp.dest("src/server"))
     ]);
 });
 
+gulp.task(typesMapJson, /*help*/ false, [], () => {
+    return gulp.src("src/server/typesMap.json")
+        .pipe(insert.transform((contents, file) => {
+            JSON.parse(contents);
+            return contents;
+        }))
+        .pipe(gulp.dest(builtLocalDirectory));
+});
+
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
-gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile]);
+gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile, "localize"]);
 gulp.task("tsc", "Builds only the compiler", [builtLocalCompiler]);
 
 // Generate Markdown spec
@@ -487,7 +554,7 @@ const word2mdTs = path.join(scriptsDirectory, "word2md.ts");
 const specWord = path.join(docDirectory, "TypeScript Language Specification.docx");
 const specMd = path.join(docDirectory, "spec.md");
 
-gulp.task(word2mdJs, false, [], () => {
+gulp.task(word2mdJs, /*help*/ false, [], () => {
     const settings: tsc.Settings = getCompilerSettings({
         outFile: word2mdJs
     }, /*useBuiltCompiler*/ false);
@@ -499,14 +566,12 @@ gulp.task(word2mdJs, false, [], () => {
         .pipe(gulp.dest("."));
 });
 
-gulp.task(specMd, false, [word2mdJs], (done) => {
+gulp.task(specMd, /*help*/ false, [word2mdJs], (done) => {
     const specWordFullPath = path.resolve(specWord);
     const specMDFullPath = path.resolve(specMd);
     const cmd = "cscript //nologo " + word2mdJs + " \"" + specWordFullPath + "\" " + "\"" + specMDFullPath + "\"";
     console.log(cmd);
-    cp.exec(cmd, function() {
-        done();
-    });
+    cp.exec(cmd, done);
 });
 
 gulp.task("generate-spec", "Generates a Markdown version of the Language Specification", [specMd]);
@@ -515,23 +580,23 @@ gulp.task("clean", "Cleans the compiler output, declare files, and tests", [], (
     return del([builtDirectory]);
 });
 
-gulp.task("useDebugMode", false, [], (done) => { useDebugMode = true; done(); });
-gulp.task("dontUseDebugMode", false, [], (done) => { useDebugMode = false; done(); });
+gulp.task("useDebugMode", /*help*/ false, [], (done) => { useDebugMode = true; done(); });
+gulp.task("dontUseDebugMode", /*help*/ false, [], (done) => { useDebugMode = false; done(); });
 
-gulp.task("VerifyLKG", false, [], () => {
+gulp.task("VerifyLKG", /*help*/ false, [], () => {
     const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, typingsInstallerJs, cancellationTokenJs].concat(libraryTargets);
-    const missingFiles = expectedFiles.filter(function(f) {
-        return !fs.existsSync(f);
-    });
+    const missingFiles = expectedFiles.
+        concat(localizationTargets).
+        filter(f => !fs.existsSync(f));
     if (missingFiles.length > 0) {
         throw new Error("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
             ". The following files are missing:\n" + missingFiles.join("\n"));
     }
     // Copy all the targets into the LKG directory
-    return gulp.src(expectedFiles).pipe(gulp.dest(LKGDirectory));
+    return gulp.src([...expectedFiles, path.join(builtLocalDirectory, "**"), `!${path.join(builtLocalDirectory, "tslint")}`, `!${path.join(builtLocalDirectory, "*.*")}`]).pipe(gulp.dest(lkgDirectory));
 });
 
-gulp.task("LKGInternal", false, ["lib", "local"]);
+gulp.task("LKGInternal", /*help*/ false, ["lib", "local"]);
 
 gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
     return runSequence("LKGInternal", "VerifyLKG");
@@ -540,14 +605,14 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
-gulp.task(run, false, [servicesFile], () => {
-    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile], () => {
+    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return testProject.src()
         .pipe(newer(run))
         .pipe(sourcemaps.init())
         .pipe(testProject())
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
-        .pipe(gulp.dest("."));
+        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "." }))
+        .pipe(gulp.dest("src/harness"));
 });
 
 const internalTests = "internal/";
@@ -579,15 +644,17 @@ function restoreSavedNodeEnv() {
     process.env.NODE_ENV = savedNodeEnv;
 }
 
-let testTimeout = 40000;
 function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void) {
-    const lintFlag = cmdLineOptions["lint"];
+    const lintFlag = cmdLineOptions.lint;
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
-        const debug = cmdLineOptions["debug"];
-        const tests = cmdLineOptions["tests"];
-        const light = cmdLineOptions["light"];
-        const stackTraceLimit = cmdLineOptions["stackTraceLimit"];
+        let testTimeout = cmdLineOptions.timeout;
+        const debug = cmdLineOptions.debug;
+        const inspect = cmdLineOptions.inspect;
+        const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
+        const light = cmdLineOptions.light;
+        const stackTraceLimit = cmdLineOptions.stackTraceLimit;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
@@ -603,27 +670,24 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             } while (fs.existsSync(taskConfigsFolder));
             fs.mkdirSync(taskConfigsFolder);
 
-            workerCount = process.env.workerCount || os.cpus().length;
+            workerCount = cmdLineOptions.workers;
         }
 
-        if (tests || light || taskConfigsFolder) {
-            writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
+        if (tests || runners || light || taskConfigsFolder) {
+            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit);
         }
 
         if (tests && tests.toLocaleLowerCase() === "rwc") {
             testTimeout = 400000;
         }
 
-        const colors = cmdLineOptions["colors"];
-        const reporter = cmdLineOptions["reporter"] || defaultReporter;
+        const colors = cmdLineOptions.colors;
+        const reporter = cmdLineOptions.reporter || defaultReporter;
 
         // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
         if (!runInParallel) {
             const args = [];
-            if (debug) {
-                args.push("--debug-brk");
-            }
             args.push("-R", reporter);
             if (tests) {
                 args.push("-g", `"${tests}"`);
@@ -634,46 +698,32 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             else {
                 args.push("--no-colors");
             }
-            args.push("-t", testTimeout);
+            if (inspect) {
+                args.unshift("--inspect-brk");
+            }
+            else if (debug) {
+                args.unshift("--debug-brk");
+            }
+            else {
+                args.push("-t", testTimeout);
+            }
             args.push(run);
             setNodeEnvToDevelopment();
-            exec(mocha, args, lintThenFinish, function(e, status) {
-                finish(e, status);
-            });
+            exec(mocha, args, lintThenFinish, finish);
 
         }
         else {
             // run task to load all tests and partition them between workers
-            const args = [];
-            args.push("-R", "min");
-            if (colors) {
-                args.push("--colors");
-            }
-            else {
-                args.push("--no-colors");
-            }
-            args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function(err) {
-                // last worker clean everything and runs linter in case if there were no errors
-                del(taskConfigsFolder).then(() => {
-                    if (!err) {
-                        lintThenFinish();
-                    }
-                    else {
-                        finish(err);
-                    }
-                });
-            });
+            exec(host, [run], lintThenFinish, finish);
         }
     });
 
     function failWithStatus(err?: any, status?: number) {
-        if (err) {
-            console.log(err);
+        if (err || status) {
+            process.exit(typeof status === "number" ? status : 2);
         }
-        done(err || status);
-        process.exit(status);
+        done();
     }
 
     function lintThenFinish() {
@@ -687,7 +737,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
 
     function finish(error?: any, errorStatus?: number) {
         restoreSavedNodeEnv();
-        deleteTemporaryProjectOutput().then(() => {
+        deleteTestConfig().then(deleteTemporaryProjectOutput).then(() => {
             if (error !== undefined || errorStatus !== undefined) {
                 failWithStatus(error, errorStatus);
             }
@@ -695,6 +745,10 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
                 done();
             }
         });
+    }
+
+    function deleteTestConfig() {
+        return del("test.config");
     }
 }
 
@@ -710,7 +764,7 @@ gulp.task("runtests",
 
 const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
-gulp.task(nodeServerOutFile, false, [servicesFile], () => {
+gulp.task(nodeServerOutFile, /*help*/ false, [servicesFile], () => {
     const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ true);
     return gulp.src(nodeServerInFile)
         .pipe(newer(nodeServerOutFile))
@@ -722,50 +776,75 @@ gulp.task(nodeServerOutFile, false, [servicesFile], () => {
 
 import convertMap = require("convert-source-map");
 import sorcery = require("sorcery");
-declare module "convert-source-map" {
-    export function fromSource(source: string, largeSource?: boolean): SourceMapConverter;
-}
+import Vinyl = require("vinyl");
+
+const bundlePath = path.resolve("built/local/bundle.js");
 
 gulp.task("browserify", "Runs browserify on run.js to produce a file suitable for running tests in the browser", [servicesFile], (done) => {
-    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({ outFile: "../../built/local/bundle.js" }, /*useBuiltCompiler*/ true));
-    return testProject.src()
-        .pipe(newer("built/local/bundle.js"))
+    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({ outFile: bundlePath, inlineSourceMap: true }, /*useBuiltCompiler*/ true));
+    let originalMap: any;
+    let prebundledContent: string;
+    browserify(testProject.src()
+        .pipe(newer(bundlePath))
         .pipe(sourcemaps.init())
         .pipe(testProject())
         .pipe(through2.obj((file, enc, next) => {
-            const originalMap = file.sourceMap;
-            const prebundledContent = file.contents.toString();
+            if (originalMap) {
+                throw new Error("Should only recieve one file!");
+            }
+            console.log(`Saving sourcemaps for ${file.path}`);
+            originalMap = file.sourceMap;
+            prebundledContent = file.contents.toString();
             // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
-            originalMap.sources = originalMap.sources.map(s => path.resolve(s));
-            // intoStream (below) makes browserify think the input file is named this, so this is what it puts in the sourcemap
+            originalMap.sources = originalMap.sources.map(s => path.resolve(path.join("src/harness", s)));
+            // browserify names input files this when they are streamed in, so this is what it puts in the sourcemap
             originalMap.file = "built/local/_stream_0.js";
 
-            browserify(intoStream(file.contents), { debug: true })
-                .bundle((err, res) => {
-                    // assumes file.contents is a Buffer
-                    const maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/true).toJSON());
-                    delete maps.sourceRoot;
-                    maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
-                    // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
-                    file.contents = new Buffer(convertMap.removeComments(res.toString()));
-                    const chain = sorcery.loadSync("built/local/bundle.js", {
-                        content: {
-                            "built/local/_stream_0.js": prebundledContent,
-                            "built/local/bundle.js": file.contents.toString()
-                        },
-                        sourcemaps: {
-                            "built/local/_stream_0.js": originalMap,
-                            "built/local/bundle.js": maps,
-                            "node_modules/source-map-support/source-map-support.js": undefined,
-                        }
-                    });
-                    const finalMap = chain.apply();
-                    file.sourceMap = finalMap;
-                    next(undefined, file);
-                });
+            next(/*err*/ undefined, file.contents);
         }))
-        .pipe(sourcemaps.write(".", { includeContent: false }))
-        .pipe(gulp.dest("."));
+        .on("error", err => {
+            return done(err);
+        }), { debug: true, basedir: __dirname }) // Attach error handler to inner stream
+        .bundle((err, contents) => {
+            if (err) {
+                if (err.message.match(/Cannot find module '.*_stream_0.js'/)) {
+                    return done(); // Browserify errors when we pass in no files when `newer` filters the input, we should count that as a success, though
+                }
+                return done(err);
+            }
+            const stringContent = contents.toString();
+            const file = new Vinyl({ contents, path: bundlePath });
+            console.log(`Fixing sourcemaps for ${file.path}`);
+            // assumes contents is a Buffer, since that's what browserify yields
+            const maps = convertMap.fromSource(stringContent).toObject();
+            delete maps.sourceRoot;
+            maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
+            // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
+            file.contents = new Buffer(convertMap.removeComments(stringContent));
+            const chain = sorcery.loadSync(bundlePath, {
+                content: {
+                    "built/local/_stream_0.js": prebundledContent,
+                    [bundlePath]: stringContent
+                },
+                sourcemaps: {
+                    "built/local/_stream_0.js": originalMap,
+                    [bundlePath]: maps,
+                    "node_modules/source-map-support/source-map-support.js": undefined,
+                }
+            });
+            const finalMap = chain.apply();
+            file.sourceMap = finalMap;
+
+            const stream = through2.obj((file, enc, callback) => {
+                return callback(/*err*/ undefined, file);
+            });
+            stream.pipe(sourcemaps.write(".", { includeContent: false }))
+                .pipe(gulp.dest("."))
+                .on("end", done)
+                .on("error", done);
+            stream.write(file);
+            stream.end();
+        });
 });
 
 
@@ -786,8 +865,8 @@ function cleanTestDirs(done: (e?: any) => void) {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder });
+function writeTestConfigFile(tests: string, runners: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
+    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, runner: runners ? runners.split(",") : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
@@ -797,19 +876,20 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
     cleanTestDirs((err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
-        const tests = cmdLineOptions["tests"];
-        const light = cmdLineOptions["light"];
+        const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
+        const light = cmdLineOptions.light;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
         }
-        if (tests || light) {
-            writeTestConfigFile(tests, light);
+        if (tests || runners || light) {
+            writeTestConfigFile(tests, runners, light);
         }
 
         const args = [nodeServerOutFile];
-        if (cmdLineOptions["browser"]) {
-            args.push(cmdLineOptions["browser"]);
+        if (cmdLineOptions.browser) {
+            args.push(cmdLineOptions.browser);
         }
         if (tests) {
             args.push(JSON.stringify(tests));
@@ -819,12 +899,13 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
 });
 
 gulp.task("generate-code-coverage", "Generates code coverage data via istanbul", ["tests"], (done) => {
+    const testTimeout = cmdLineOptions.timeout;
     exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", testTimeout.toString(), run], done, done);
 });
 
 
 function getDiffTool() {
-    const program = process.env["DIFF"];
+    const program = process.env.DIFF;
     if (!program) {
         console.error("Add the 'DIFF' environment variable to the path of the program you want to use.");
         process.exit(1);
@@ -875,7 +956,7 @@ gulp.task("baseline-accept-test262", "Makes the most recent test262 test results
 // Webhost
 const webhostPath = "tests/webhost/webtsc.ts";
 const webhostJsPath = "tests/webhost/webtsc.js";
-gulp.task(webhostJsPath, false, [servicesFile], () => {
+gulp.task(webhostJsPath, /*help*/ false, [servicesFile], () => {
     const settings: tsc.Settings = getCompilerSettings({
         outFile: webhostJsPath
     }, /*useBuiltCompiler*/ true);
@@ -895,7 +976,7 @@ gulp.task("webhost", "Builds the tsc web host", [webhostJsPath], () => {
 // Perf compiler
 const perftscPath = "tests/perftsc.ts";
 const perftscJsPath = "built/local/perftsc.js";
-gulp.task(perftscJsPath, false, [servicesFile], () => {
+gulp.task(perftscJsPath, /*help*/ false, [servicesFile], () => {
     const settings: tsc.Settings = getCompilerSettings({
         outFile: perftscJsPath
     }, /*useBuiltCompiler*/ true);
@@ -913,11 +994,11 @@ gulp.task("perftsc", "Builds augmented version of the compiler for perf tests", 
 // Instrumented compiler
 const loggedIOpath = path.join(harnessDirectory, "loggedIO.ts");
 const loggedIOJsPath = path.join(builtLocalDirectory, "loggedIO.js");
-gulp.task(loggedIOJsPath, false, [], (done) => {
+gulp.task(loggedIOJsPath, /*help*/ false, [], (done) => {
     const temp = path.join(builtLocalDirectory, "temp");
     mkdirP(temp, (err) => {
-        if (err) { console.error(err); done(err); process.exit(1); };
-        exec(host, [LKGCompiler, "--types --outdir", temp, loggedIOpath], () => {
+        if (err) { console.error(err); done(err); process.exit(1); }
+        exec(host, [lkgCompiler, "--types", "--target es5", "--lib es5", "--outdir", temp, loggedIOpath], () => {
             fs.renameSync(path.join(temp, "/harness/loggedIO.js"), loggedIOJsPath);
             del(temp).then(() => done(), done);
         }, done);
@@ -926,20 +1007,27 @@ gulp.task(loggedIOJsPath, false, [], (done) => {
 
 const instrumenterPath = path.join(harnessDirectory, "instrumenter.ts");
 const instrumenterJsPath = path.join(builtLocalDirectory, "instrumenter.js");
-gulp.task(instrumenterJsPath, false, [servicesFile], () => {
+gulp.task(instrumenterJsPath, /*help*/ false, [servicesFile], () => {
     const settings: tsc.Settings = getCompilerSettings({
-        outFile: instrumenterJsPath
+        module: "commonjs",
+        target: "es5",
+        lib: [
+            "es6",
+            "dom",
+            "scripthost"
+        ]
     }, /*useBuiltCompiler*/ true);
     return gulp.src(instrumenterPath)
         .pipe(newer(instrumenterJsPath))
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(sourcemaps.write(builtLocalDirectory))
+        .pipe(gulp.dest(builtLocalDirectory));
 });
 
-gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
-    exec(host, [instrumenterJsPath, "record", "iocapture", builtLocalCompiler], done, done);
+gulp.task("tsc-instrumented", "Builds an instrumented tsc.js - run with --test=[testname]", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
+    const test = cmdLineOptions.tests || "iocapture";
+    exec(host, [instrumenterJsPath, "record", test, builtLocalCompiler], done, done);
 });
 
 gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", serverFile], () => {
@@ -947,7 +1035,7 @@ gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", s
 });
 
 gulp.task("build-rules", "Compiles tslint rules to js", () => {
-    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ false);
+    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs", lib: ["es6"] }, /*useBuiltCompiler*/ false);
     const dest = path.join(builtLocalDirectory, "tslint");
     return gulp.src("scripts/tslint/**/*.ts")
         .pipe(newer({
@@ -986,7 +1074,7 @@ function sendNextFile(files: {path: string}[], child: cp.ChildProcess, callback:
 function spawnLintWorker(files: {path: string}[], callback: (failures: number) => void) {
     const child = cp.fork("./scripts/parallel-lint");
     let failures = 0;
-    child.on("message", function(data) {
+    child.on("message", data => {
         switch (data.kind) {
             case "result":
                 if (data.failures > 0) {
@@ -1006,39 +1094,16 @@ function spawnLintWorker(files: {path: string}[], callback: (failures: number) =
 }
 
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
-    const fileMatcher = RegExp(cmdLineOptions["files"]);
     if (fold.isTravis()) console.log(fold.start("lint"));
-
-    let files: {stat: fs.Stats, path: string}[] = [];
-    return gulp.src(lintTargets, { read: false })
-        .pipe(through2.obj((chunk, enc, cb) => {
-            files.push(chunk);
-            cb();
-        }, (cb) => {
-            files = files.filter(file =>  fileMatcher.test(file.path)).sort((filea, fileb) => filea.stat.size - fileb.stat.size);
-            const workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
-            for (let i = 0; i < workerCount; i++) {
-                spawnLintWorker(files, finished);
-            }
-
-            let completed = 0;
-            let failures = 0;
-            function finished(fails) {
-                completed++;
-                failures += fails;
-                if (completed === workerCount) {
-                    if (fold.isTravis()) console.log(fold.end("lint"));
-                    if (failures > 0) {
-                        throw new Error(`Linter errors: ${failures}`);
-                    }
-                    else {
-                        cb();
-                    }
-                }
-            }
-        }));
+    const fileMatcher = cmdLineOptions.files;
+    const files = fileMatcher
+        ? `src/**/${fileMatcher}`
+        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude 'src/lib/*.d.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+    console.log("Linting: " + cmd);
+    child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    if (fold.isTravis()) console.log(fold.end("lint"));
 });
-
 
 gulp.task("default", "Runs 'local'", ["local"]);
 

@@ -4,6 +4,4 @@
 // @Filename: File.d.ts
 //// declare var v: string;
 
-verify.numberOfErrorsInCurrentFile(0);
-
-
+verify.noErrors();

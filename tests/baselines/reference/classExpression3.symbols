@@ -3,7 +3,7 @@ let C = class extends class extends class { a = 1 } { b = 2 } { c = 3 };
 >C : Symbol(C, Decl(classExpression3.ts, 0, 3))
 >a : Symbol((Anonymous class).a, Decl(classExpression3.ts, 0, 43))
 >b : Symbol((Anonymous class).b, Decl(classExpression3.ts, 0, 53))
->c : Symbol((Anonymous class).c, Decl(classExpression3.ts, 0, 63))
+>c : Symbol(C.c, Decl(classExpression3.ts, 0, 63))
 
 let c = new C();
 >c : Symbol(c, Decl(classExpression3.ts, 1, 3))
@@ -20,7 +20,7 @@ c.b;
 >b : Symbol((Anonymous class).b, Decl(classExpression3.ts, 0, 53))
 
 c.c;
->c.c : Symbol((Anonymous class).c, Decl(classExpression3.ts, 0, 63))
+>c.c : Symbol(C.c, Decl(classExpression3.ts, 0, 63))
 >c : Symbol(c, Decl(classExpression3.ts, 1, 3))
->c : Symbol((Anonymous class).c, Decl(classExpression3.ts, 0, 63))
+>c : Symbol(C.c, Decl(classExpression3.ts, 0, 63))
 

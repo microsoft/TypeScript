@@ -1,0 +1,21 @@
+tests/cases/conformance/jsdoc/badTypeArguments.js(1,15): error TS1099: Type argument list cannot be empty.
+tests/cases/conformance/jsdoc/badTypeArguments.js(2,22): error TS1009: Trailing comma not allowed.
+
+
+==== tests/cases/conformance/jsdoc/dummyType.d.ts (0 errors) ====
+    declare class C<T> { t: T }
+    
+==== tests/cases/conformance/jsdoc/badTypeArguments.js (2 errors) ====
+    /** @param {C.<>} x */
+                  ~~
+!!! error TS1099: Type argument list cannot be empty.
+    /** @param {C.<number,>} y */
+                         ~
+!!! error TS1009: Trailing comma not allowed.
+    // @ts-ignore
+    /** @param {C.<number,>} skipped */
+    function f(x, y, skipped) {
+        return x.t + y.t;
+    }
+    var x = f({ t: 1000 }, { t: 3000 }, { t: 5000 });
+    

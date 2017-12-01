@@ -1,5 +1,4 @@
 //// [emitCommentsOnlyFile.ts]
-
 /**
 * @name Foo
 * @class

@@ -1,5 +1,4 @@
 //// [unusedLocalsAndObjectSpread2.ts]
-
 declare let props: any;
 const {
     children, // here!
@@ -28,6 +27,7 @@ var __rest = (this && this.__rest) || function (s, e) {
             t[p[i]] = s[p[i]];
     return t;
 };
+exports.__esModule = true;
 var children = props.children, // here!
 _a = props.active, // here!
 rest = __rest(props, ["children", "active"]);

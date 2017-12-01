@@ -1,5 +1,4 @@
 //// [accessorWithMismatchedAccessibilityModifiers.ts]
-
 class C {
     get x() {
         return 1;
@@ -33,7 +32,7 @@ class F {
 }
 
 //// [accessorWithMismatchedAccessibilityModifiers.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {
@@ -47,7 +46,7 @@ var C = (function () {
     });
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     Object.defineProperty(D.prototype, "x", {
@@ -61,7 +60,7 @@ var D = (function () {
     });
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     Object.defineProperty(E.prototype, "x", {
@@ -75,7 +74,7 @@ var E = (function () {
     });
     return E;
 }());
-var F = (function () {
+var F = /** @class */ (function () {
     function F() {
     }
     Object.defineProperty(F, "x", {

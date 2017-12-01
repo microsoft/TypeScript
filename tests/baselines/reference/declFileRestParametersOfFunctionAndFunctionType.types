@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileRestParametersOfFunctionAndFunctionType.ts ===
-
 function f1(...args) { }
 >f1 : (...args: any[]) => void
 >args : any[]

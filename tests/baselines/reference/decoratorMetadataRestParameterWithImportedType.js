@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/decoratorMetadataRestParameterWithImportedType.ts] ////
 
 //// [aux.ts]
-
 export class SomeClass {
     field: string;
 }
@@ -42,7 +41,8 @@ export class ClassA {
 
 //// [aux.js]
 "use strict";
-var SomeClass = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
     return SomeClass;
@@ -50,7 +50,8 @@ var SomeClass = (function () {
 exports.SomeClass = SomeClass;
 //// [aux1.js]
 "use strict";
-var SomeClass1 = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var SomeClass1 = /** @class */ (function () {
     function SomeClass1() {
     }
     return SomeClass1;
@@ -58,7 +59,8 @@ var SomeClass1 = (function () {
 exports.SomeClass1 = SomeClass1;
 //// [aux2.js]
 "use strict";
-var SomeClass2 = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var SomeClass2 = /** @class */ (function () {
     function SomeClass2() {
     }
     return SomeClass2;
@@ -75,6 +77,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var aux_1 = require("./aux");
 var aux1_1 = require("./aux1");
 function annotation() {
@@ -83,7 +86,7 @@ function annotation() {
 function annotation1() {
     return function (target) { };
 }
-var ClassA = (function () {
+var ClassA = /** @class */ (function () {
     function ClassA() {
         var init = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -97,16 +100,16 @@ var ClassA = (function () {
             args[_i] = arguments[_i];
         }
     };
+    __decorate([
+        annotation1(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [aux1_1.SomeClass1]),
+        __metadata("design:returntype", void 0)
+    ], ClassA.prototype, "foo", null);
+    ClassA = __decorate([
+        annotation(),
+        __metadata("design:paramtypes", [aux_1.SomeClass])
+    ], ClassA);
     return ClassA;
 }());
-__decorate([
-    annotation1(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [aux1_1.SomeClass1]),
-    __metadata("design:returntype", void 0)
-], ClassA.prototype, "foo", null);
-ClassA = __decorate([
-    annotation(),
-    __metadata("design:paramtypes", [aux_1.SomeClass])
-], ClassA);
 exports.ClassA = ClassA;

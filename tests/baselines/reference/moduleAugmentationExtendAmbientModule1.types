@@ -1,5 +1,4 @@
 === tests/cases/compiler/main.ts ===
-
 /// <reference path="observable.d.ts"/>
 import { Observable } from "observable"
 >Observable : typeof Observable
@@ -23,7 +22,6 @@ let y = x.map(x => x + 1);
 >1 : 1
 
 === tests/cases/compiler/map.ts ===
-
 import { Observable } from "observable"
 >Observable : typeof Observable
 

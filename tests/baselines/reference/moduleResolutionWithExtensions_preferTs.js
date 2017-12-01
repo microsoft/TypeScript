@@ -2,7 +2,6 @@
 
 //// [b.js]
 
-
 //// [index.ts]
 export default 0;
 
@@ -16,3 +15,4 @@ exports.__esModule = true;
 exports["default"] = 0;
 //// [a.js]
 "use strict";
+exports.__esModule = true;

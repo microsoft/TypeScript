@@ -1,0 +1,18 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveRhsSideOfInExpression.ts ===
+let o: object = {};
+>o : Symbol(o, Decl(nonPrimitiveRhsSideOfInExpression.ts, 0, 3))
+
+function f(): object {
+>f : Symbol(f, Decl(nonPrimitiveRhsSideOfInExpression.ts, 0, 19))
+
+	return {};
+}
+
+const b1 = "foo" in o;
+>b1 : Symbol(b1, Decl(nonPrimitiveRhsSideOfInExpression.ts, 6, 5))
+>o : Symbol(o, Decl(nonPrimitiveRhsSideOfInExpression.ts, 0, 3))
+
+const b2 = "bar" in f();
+>b2 : Symbol(b2, Decl(nonPrimitiveRhsSideOfInExpression.ts, 7, 5))
+>f : Symbol(f, Decl(nonPrimitiveRhsSideOfInExpression.ts, 0, 19))
+

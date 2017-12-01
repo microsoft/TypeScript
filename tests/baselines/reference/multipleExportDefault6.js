@@ -13,7 +13,6 @@ exports.__esModule = true;
 exports["default"] = {
     lol: 1
 };
-exports.__esModule = true;
 exports["default"] = {
     lol: 2
 };

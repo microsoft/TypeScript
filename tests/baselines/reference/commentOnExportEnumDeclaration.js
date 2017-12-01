@@ -8,6 +8,7 @@ export enum Color {
 
 //// [commentOnExportEnumDeclaration.js]
 "use strict";
+exports.__esModule = true;
 /**
  * comment
  */

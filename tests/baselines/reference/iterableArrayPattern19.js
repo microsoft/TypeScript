@@ -1,6 +1,4 @@
 //// [iterableArrayPattern19.ts]
-function fun([[a], b]: Bar[][]) { }
-fun(new FooArrayIterator);
 class Bar { x }
 class Foo extends Bar { y }
 class FooArrayIterator {
@@ -16,9 +14,10 @@ class FooArrayIterator {
     }
 }
 
-//// [iterableArrayPattern19.js]
-function fun([[a], b]) { }
+function fun([[a], b]: Bar[][]) { }
 fun(new FooArrayIterator);
+
+//// [iterableArrayPattern19.js]
 class Bar {
 }
 class Foo extends Bar {
@@ -34,3 +33,5 @@ class FooArrayIterator {
         return this;
     }
 }
+function fun([[a], b]) { }
+fun(new FooArrayIterator);

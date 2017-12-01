@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/tsxInArrowFunction.tsx ===
-
 declare namespace JSX {
 >JSX : any
 
@@ -26,7 +25,7 @@ declare namespace JSX {
 >() => <div text="wat" /> : () => JSX.Element
 ><div text="wat" /> : JSX.Element
 >div : any
->text : any
+>text : string
 >div : any
 
 // didn't work
@@ -37,7 +36,7 @@ declare namespace JSX {
 >x : any
 ><div text="wat" /> : JSX.Element
 >div : any
->text : any
+>text : string
 >div : any
 
 // worked
@@ -48,7 +47,7 @@ declare namespace JSX {
 >(<div text="wat" />) : JSX.Element
 ><div text="wat" /> : JSX.Element
 >div : any
->text : any
+>text : string
 >div : any
 
 // worked (!)
@@ -58,7 +57,7 @@ declare namespace JSX {
 >() => <div text="wat"></div> : () => JSX.Element
 ><div text="wat"></div> : JSX.Element
 >div : any
->text : any
+>text : string
 >div : any
 >div : any
 

@@ -1,5 +1,4 @@
 //// [declFileGenericType2.ts]
-
 declare module templa.mvc {
     interface IModel {
     }
@@ -60,7 +59,7 @@ var templa;
     (function (dom) {
         var mvc;
         (function (mvc) {
-            var AbstractElementController = (function (_super) {
+            var AbstractElementController = /** @class */ (function (_super) {
                 __extends(AbstractElementController, _super);
                 function AbstractElementController() {
                     return _super.call(this) || this;
@@ -79,7 +78,7 @@ var templa;
         (function (mvc) {
             var composite;
             (function (composite) {
-                var AbstractCompositeElementController = (function (_super) {
+                var AbstractCompositeElementController = /** @class */ (function (_super) {
                     __extends(AbstractCompositeElementController, _super);
                     function AbstractCompositeElementController() {
                         var _this = _super.call(this) || this;

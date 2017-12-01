@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/spread/objectSpreadStrictNull.ts ===
-
 function f(
 >f : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string | undefined; }, optionalNumber: { sn?: number | undefined; }, undefinedString: { sn: string | undefined; }, undefinedNumber: { sn: number | undefined; }) => void
 
@@ -56,7 +55,7 @@ function f(
     let undefinedUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
 >undefinedUnionStops : { sn: string | number; }
 >sn : string | number
->{ ...definiteBoolean, ...definiteString, ...undefinedNumber } : { sn: string | number; }
+>{ ...definiteBoolean, ...definiteString, ...undefinedNumber } : { sn: number | undefined; }
 >definiteBoolean : { sn: boolean; }
 >definiteString : { sn: string; }
 >undefinedNumber : { sn: number | undefined; }
@@ -64,7 +63,7 @@ function f(
     let undefinedUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber };
 >undefinedUnionDuplicates : { sn: string | number; }
 >sn : string | number
->{ ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber } : { sn: string | number; }
+>{ ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber } : { sn: number | undefined; }
 >definiteBoolean : { sn: boolean; }
 >definiteString : { sn: string; }
 >undefinedString : { sn: string | undefined; }
@@ -73,16 +72,88 @@ function f(
     let allUndefined: { sn: string | number | undefined } = { ...undefinedString, ...undefinedNumber };
 >allUndefined : { sn: string | number | undefined; }
 >sn : string | number | undefined
->{ ...undefinedString, ...undefinedNumber } : { sn: string | number | undefined; }
+>{ ...undefinedString, ...undefinedNumber } : { sn: number | undefined; }
 >undefinedString : { sn: string | undefined; }
 >undefinedNumber : { sn: number | undefined; }
 
     let undefinedWithOptionalContinues: { sn: string | number | boolean } = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
 >undefinedWithOptionalContinues : { sn: string | number | boolean; }
 >sn : string | number | boolean
->{ ...definiteBoolean, ...undefinedString, ...optionalNumber } : { sn: string | number | boolean; }
+>{ ...definiteBoolean, ...undefinedString, ...optionalNumber } : { sn: string | number | undefined; }
 >definiteBoolean : { sn: boolean; }
 >undefinedString : { sn: string | undefined; }
 >optionalNumber : { sn?: number | undefined; }
+}
+
+type Movie = {
+>Movie : Movie
+
+    title: string;
+>title : string
+
+    yearReleased: number;
+>yearReleased : number
+}
+
+const m = { title: "The Matrix", yearReleased: 1999 };
+>m : { title: string; yearReleased: number; }
+>{ title: "The Matrix", yearReleased: 1999 } : { title: string; yearReleased: number; }
+>title : string
+>"The Matrix" : "The Matrix"
+>yearReleased : number
+>1999 : 1999
+
+// should error here because title: undefined is not assignable to string
+const x: Movie = { ...m, title: undefined };
+>x : Movie
+>Movie : Movie
+>{ ...m, title: undefined } : { title: undefined; yearReleased: number; }
+>m : { title: string; yearReleased: number; }
+>title : undefined
+>undefined : undefined
+
+interface Fields {
+>Fields : Fields
+
+    foo: number;
+>foo : number
+
+    bar: string;
+>bar : string
+}
+interface NearlyPartialFields {
+>NearlyPartialFields : NearlyPartialFields
+
+    foo: number | undefined;
+>foo : number | undefined
+
+    bar: string | undefined;
+>bar : string | undefined
+}
+function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: NearlyPartialFields) {
+>g : (fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: NearlyPartialFields) => void
+>fields : Fields
+>Fields : Fields
+>partialFields : Partial<Fields>
+>Partial : Partial<T>
+>Fields : Fields
+>nearlyPartialFields : NearlyPartialFields
+>NearlyPartialFields : NearlyPartialFields
+
+    // ok, undefined is stripped from optional properties when spread
+    fields = { ...fields, ...partialFields };
+>fields = { ...fields, ...partialFields } : { foo: number; bar: string; }
+>fields : Fields
+>{ ...fields, ...partialFields } : { foo: number; bar: string; }
+>fields : Fields
+>partialFields : Partial<Fields>
+
+    // error: not optional, undefined remains
+    fields = { ...fields, ...nearlyPartialFields };
+>fields = { ...fields, ...nearlyPartialFields } : { foo: number | undefined; bar: string | undefined; }
+>fields : Fields
+>{ ...fields, ...nearlyPartialFields } : { foo: number | undefined; bar: string | undefined; }
+>fields : Fields
+>nearlyPartialFields : NearlyPartialFields
 }
 

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
-////namespace [|{| "isDefinition": true |}Numbers|] {
+////namespace [|{| "isWriteAccess": true, "isDefinition": true |}Numbers|] {
 ////    export var n = 12;
 ////}
-////let x = [|{| "isDefinition": false |}Numbers|].n + 1;
+////let x = [|Numbers|].n + 1;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("namespace Numbers");

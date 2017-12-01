@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reExportGlobalDeclaration2.ts] ////
 
 //// [file1.d.ts]
-
 declare interface I1 {
     x: number
 }
@@ -18,3 +17,4 @@ export {I2 as III2};
 
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

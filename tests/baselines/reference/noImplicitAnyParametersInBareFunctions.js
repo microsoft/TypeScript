@@ -1,5 +1,4 @@
 //// [noImplicitAnyParametersInBareFunctions.ts]
-
 // No implicit-'any' errors.
 function f1(): void { }
 

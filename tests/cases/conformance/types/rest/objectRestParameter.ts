@@ -14,4 +14,8 @@ class C {
         // actually, never mind, don't clone
     }
 }
-
+function foobar({ bar={}, ...opts }: any = {}) {
+}
+foobar();
+foobar({ baz: 'hello' });
+foobar({ bar: { greeting: 'hello' } });

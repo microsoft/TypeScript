@@ -1,5 +1,4 @@
 //// [stringLiteralMatchedInSwitch01.ts]
-
 type S = "a" | "b";
 type T = S[] | S;
 

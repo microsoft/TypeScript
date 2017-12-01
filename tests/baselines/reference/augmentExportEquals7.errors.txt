@@ -1,0 +1,16 @@
+/node_modules/@types/lib-extender/index.d.ts(2,16): error TS2649: Cannot augment module 'lib' with value exports because it resolves to a non-module entity.
+
+
+==== /node_modules/lib/index.d.ts (0 errors) ====
+    declare var lib: () => void;
+    declare namespace lib {}
+    export = lib;
+    
+==== /node_modules/@types/lib-extender/index.d.ts (1 errors) ====
+    import * as lib from "lib";
+    declare module "lib" {
+                   ~~~~~
+!!! error TS2649: Cannot augment module 'lib' with value exports because it resolves to a non-module entity.
+        export function fn(): void;
+    }
+    

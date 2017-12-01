@@ -1,0 +1,62 @@
+=== tests/cases/compiler/typePredicateWithThisParameter.ts ===
+// Repro from #15310
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(typePredicateWithThisParameter.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+}
+interface Bar {
+>Bar : Symbol(Bar, Decl(typePredicateWithThisParameter.ts, 4, 1))
+
+    bar: string;
+>bar : Symbol(Bar.bar, Decl(typePredicateWithThisParameter.ts, 5, 15))
+}
+
+function isFoo1(object: {}): object is Foo {
+>isFoo1 : Symbol(isFoo1, Decl(typePredicateWithThisParameter.ts, 7, 1))
+>object : Symbol(object, Decl(typePredicateWithThisParameter.ts, 9, 16))
+>object : Symbol(object, Decl(typePredicateWithThisParameter.ts, 9, 16))
+>Foo : Symbol(Foo, Decl(typePredicateWithThisParameter.ts, 0, 0))
+
+    return 'foo' in object;
+>object : Symbol(object, Decl(typePredicateWithThisParameter.ts, 9, 16))
+}
+
+function isFoo2(this: void, object: {}): object is Foo {
+>isFoo2 : Symbol(isFoo2, Decl(typePredicateWithThisParameter.ts, 11, 1))
+>this : Symbol(this, Decl(typePredicateWithThisParameter.ts, 13, 16))
+>object : Symbol(object, Decl(typePredicateWithThisParameter.ts, 13, 27))
+>object : Symbol(object, Decl(typePredicateWithThisParameter.ts, 13, 27))
+>Foo : Symbol(Foo, Decl(typePredicateWithThisParameter.ts, 0, 0))
+
+    return 'foo' in object;
+>object : Symbol(object, Decl(typePredicateWithThisParameter.ts, 13, 27))
+}
+
+declare let test: Foo | Bar;
+>test : Symbol(test, Decl(typePredicateWithThisParameter.ts, 17, 11))
+>Foo : Symbol(Foo, Decl(typePredicateWithThisParameter.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(typePredicateWithThisParameter.ts, 4, 1))
+
+if (isFoo1(test)) {
+>isFoo1 : Symbol(isFoo1, Decl(typePredicateWithThisParameter.ts, 7, 1))
+>test : Symbol(test, Decl(typePredicateWithThisParameter.ts, 17, 11))
+
+    test.foo = 'hi';
+>test.foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+>test : Symbol(test, Decl(typePredicateWithThisParameter.ts, 17, 11))
+>foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+}
+
+if (isFoo2(test)) {
+>isFoo2 : Symbol(isFoo2, Decl(typePredicateWithThisParameter.ts, 11, 1))
+>test : Symbol(test, Decl(typePredicateWithThisParameter.ts, 17, 11))
+
+    test.foo = 'hi';
+>test.foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+>test : Symbol(test, Decl(typePredicateWithThisParameter.ts, 17, 11))
+>foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+}
+

@@ -1,6 +1,5 @@
 === tests/cases/conformance/jsx/react.d.ts ===
-
-No type information for this code.declare module "react" {
+declare module "react" {
 No type information for this code.
 No type information for this code.}
 No type information for this code.
@@ -15,14 +14,13 @@ export class MyClass { }
 >MyClass : Symbol(MyClass, Decl(file1.tsx, 2, 1))
 
 === tests/cases/conformance/jsx/file2.tsx ===
-
 // Should not elide React import
 import * as React from 'react';
->React : Symbol(React, Decl(file2.tsx, 2, 6))
+>React : Symbol(React, Decl(file2.tsx, 1, 6))
 
 import {MyClass} from './file1';
->MyClass : Symbol(MyClass, Decl(file2.tsx, 3, 8))
+>MyClass : Symbol(MyClass, Decl(file2.tsx, 2, 8))
 
 <MyClass />;
->MyClass : Symbol(MyClass, Decl(file2.tsx, 3, 8))
+>MyClass : Symbol(MyClass, Decl(file2.tsx, 2, 8))
 

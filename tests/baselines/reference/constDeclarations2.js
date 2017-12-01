@@ -1,5 +1,4 @@
 //// [constDeclarations2.ts]
-
 // No error
 module M {
     export const c1 = false;

@@ -10,11 +10,10 @@ let x = Test; // emit test_1.default
 <anything attr={Test} />; // ?
 ><anything attr={Test} /> : any
 >anything : any
->attr : any
+>attr : typeof Test
 >Test : typeof Test
 
 === tests/cases/compiler/component.d.ts ===
-
 declare module "Test" {
 	export default class Text { }
 >Text : Text

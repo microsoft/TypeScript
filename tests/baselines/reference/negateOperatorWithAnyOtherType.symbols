@@ -4,7 +4,7 @@
 var ANY: any;
 >ANY : Symbol(ANY, Decl(negateOperatorWithAnyOtherType.ts, 2, 3))
 
-var ANY1;
+var ANY1: any;
 >ANY1 : Symbol(ANY1, Decl(negateOperatorWithAnyOtherType.ts, 3, 3))
 
 var ANY2: any[] = ["", ""];
@@ -33,7 +33,7 @@ class A {
     public a: any;
 >a : Symbol(A.a, Decl(negateOperatorWithAnyOtherType.ts, 12, 9))
 
-    static foo() {
+    static foo(): any {
 >foo : Symbol(A.foo, Decl(negateOperatorWithAnyOtherType.ts, 13, 18))
 
         var a;

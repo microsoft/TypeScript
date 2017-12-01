@@ -1,5 +1,4 @@
 //// [templateStringsArrayTypeRedefinedInES6Mode.ts]
-
 class TemplateStringsArray {
 }
 

@@ -1,5 +1,4 @@
 //// [protoAssignment.ts]
-
 interface Number extends Comparable<number> {
 
     compareTo(other: number);

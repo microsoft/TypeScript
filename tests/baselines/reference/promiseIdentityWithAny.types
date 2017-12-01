@@ -1,5 +1,5 @@
 === tests/cases/compiler/promiseIdentityWithAny.ts ===
-interface IPromise<T, V> {
+export interface IPromise<T, V> {
 >IPromise : IPromise<T, V>
 >T : T
 >V : V
@@ -18,7 +18,7 @@ interface IPromise<T, V> {
 >U : U
 >W : W
 }
-interface Promise<T, V> {
+export interface Promise<T, V> {
 >Promise : Promise<T, V>
 >T : T
 >V : V

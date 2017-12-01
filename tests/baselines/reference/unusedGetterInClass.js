@@ -1,5 +1,4 @@
 //// [unusedGetterInClass.ts]
-
 class Employee {
     private _fullName: string;
 
@@ -9,7 +8,7 @@ class Employee {
 }
 
 //// [unusedGetterInClass.js]
-var Employee = (function () {
+var Employee = /** @class */ (function () {
     function Employee() {
     }
     Object.defineProperty(Employee.prototype, "fullName", {

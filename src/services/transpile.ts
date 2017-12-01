@@ -5,6 +5,7 @@ namespace ts {
         reportDiagnostics?: boolean;
         moduleName?: string;
         renamedDependencies?: MapLike<string>;
+        transformers?: CustomTransformers;
     }
 
     export interface TranspileOutput {
@@ -63,7 +64,7 @@ namespace ts {
         }
 
         if (transpileOptions.renamedDependencies) {
-            sourceFile.renamedDependencies = createMap(transpileOptions.renamedDependencies);
+            sourceFile.renamedDependencies = createMapFromTemplate(transpileOptions.renamedDependencies);
         }
 
         const newLine = getNewLineCharacter(options);
@@ -77,11 +78,11 @@ namespace ts {
             getSourceFile: (fileName) => fileName === normalizePath(inputFileName) ? sourceFile : undefined,
             writeFile: (name, text) => {
                 if (fileExtensionIs(name, ".map")) {
-                    Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
+                    Debug.assertEqual(sourceMapText, undefined, "Unexpected multiple source map outputs, file:", name);
                     sourceMapText = text;
                 }
                 else {
-                    Debug.assert(outputText === undefined, `Unexpected multiple outputs for the file: '${name}'`);
+                    Debug.assertEqual(outputText, undefined, "Unexpected multiple outputs, file:", name);
                     outputText = text;
                 }
             },
@@ -103,7 +104,7 @@ namespace ts {
             addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
         }
         // Emit
-        program.emit();
+        program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers);
 
         Debug.assert(outputText !== undefined, "Output generation failed");
 
@@ -123,12 +124,13 @@ namespace ts {
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
     /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
-    function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
+    /*@internal*/
+    export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachProperty(o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number"));
 
-        options = clone(options);
+        options = cloneCompilerOptions(options);
 
         for (const opt of commandLineOptionsStringToEnum) {
             if (!hasProperty(options, opt.name)) {
@@ -137,12 +139,12 @@ namespace ts {
 
             const value = options[opt.name];
             // Value should be a key of opt.type
-            if (typeof value === "string") {
+            if (isString(value)) {
                 // If value is not a string, this will fail
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }
             else {
-                if (!forEachProperty(opt.type, v => v === value)) {
+                if (!forEachEntry(opt.type, v => v === value)) {
                     // Supplied value isn't a valid enum value.
                     diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
                 }

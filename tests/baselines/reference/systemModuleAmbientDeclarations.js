@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/systemModuleAmbientDeclarations.ts] ////
 
 //// [file1.ts]
-
 declare class Promise { }
 declare function Foo(): void;
 declare class C {}

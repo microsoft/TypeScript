@@ -23,12 +23,4 @@
 ////    }
 ////}
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-
-    test.ranges().forEach(range => {
-        verify.occurrencesAtPositionContains(range, false);
-    });
-
-    verify.occurrencesAtPositionCount(test.ranges().length);
-});
+verify.rangesAreOccurrences(false);

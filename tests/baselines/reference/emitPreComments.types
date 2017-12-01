@@ -1,5 +1,4 @@
 === tests/cases/compiler/emitPreComments.ts ===
-
 // This is pre comment
 var y = 10;
 >y : number

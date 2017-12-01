@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility2.ts]
-
 class BaseA {
     public constructor(public x: number) { }
     createInstance() { new BaseA(1); }
@@ -57,21 +56,21 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var BaseA = (function () {
+var BaseA = /** @class */ (function () {
     function BaseA(x) {
         this.x = x;
     }
     BaseA.prototype.createInstance = function () { new BaseA(1); };
     return BaseA;
 }());
-var BaseB = (function () {
+var BaseB = /** @class */ (function () {
     function BaseB(x) {
         this.x = x;
     }
     BaseB.prototype.createInstance = function () { new BaseB(2); };
     return BaseB;
 }());
-var BaseC = (function () {
+var BaseC = /** @class */ (function () {
     function BaseC(x) {
         this.x = x;
     }
@@ -79,7 +78,7 @@ var BaseC = (function () {
     BaseC.staticInstance = function () { new BaseC(4); };
     return BaseC;
 }());
-var DerivedA = (function (_super) {
+var DerivedA = /** @class */ (function (_super) {
     __extends(DerivedA, _super);
     function DerivedA(x) {
         var _this = _super.call(this, x) || this;
@@ -91,7 +90,7 @@ var DerivedA = (function (_super) {
     DerivedA.staticBaseInstance = function () { new BaseA(7); };
     return DerivedA;
 }(BaseA));
-var DerivedB = (function (_super) {
+var DerivedB = /** @class */ (function (_super) {
     __extends(DerivedB, _super);
     function DerivedB(x) {
         var _this = _super.call(this, x) || this;
@@ -103,7 +102,7 @@ var DerivedB = (function (_super) {
     DerivedB.staticBaseInstance = function () { new BaseB(9); }; // ok
     return DerivedB;
 }(BaseB));
-var DerivedC = (function (_super) {
+var DerivedC = /** @class */ (function (_super) {
     __extends(DerivedC, _super);
     function DerivedC(x) {
         var _this = _super.call(this, x) || this;
@@ -136,7 +135,7 @@ declare class BaseB {
 }
 declare class BaseC {
     x: number;
-    private constructor(x);
+    private constructor();
     createInstance(): void;
     static staticInstance(): void;
 }

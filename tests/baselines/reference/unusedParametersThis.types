@@ -1,5 +1,4 @@
 === tests/cases/compiler/unusedParametersThis.ts ===
-
 class A {
 >A : A
 

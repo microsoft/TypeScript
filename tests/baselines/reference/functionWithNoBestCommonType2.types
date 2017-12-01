@@ -1,5 +1,4 @@
 === tests/cases/compiler/functionWithNoBestCommonType2.ts ===
-
 var v = function () {
 >v : () => true | void
 >function () {   return true;   return bar();} : () => true | void

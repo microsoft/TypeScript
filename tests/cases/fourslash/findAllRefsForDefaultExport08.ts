@@ -7,10 +7,11 @@
 ////
 ////var y = new DefaultExportedClass;
 ////
-////namespace [|DefaultExportedClass|] {
+////namespace [|{| "isWriteAccess": true, "isDefinition": true |}DefaultExportedClass|] {
 ////}
+
+verify.noErrors();
 
 // The namespace and class do not merge,
 // so the namespace should be all alone.
-
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("class DefaultExportedClass\nnamespace DefaultExportedClass");

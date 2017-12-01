@@ -3,7 +3,6 @@ import y = require("b");
 >y : Symbol(y, Decl(a.ts, 0, 0))
 
 === tests/cases/compiler/node_modules/b/index.d.ts ===
-
 export var x: number;
->x : Symbol(x, Decl(index.d.ts, 1, 10))
+>x : Symbol(x, Decl(index.d.ts, 0, 10))
 

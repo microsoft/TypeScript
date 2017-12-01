@@ -11,11 +11,12 @@ export var x: b.c = new b.c();
 
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.js]
 "use strict";
+exports.__esModule = true;
 var a;
 (function (a) {
     var b;
     (function (b) {
-        var c = (function () {
+        var c = /** @class */ (function () {
             function c() {
             }
             return c;

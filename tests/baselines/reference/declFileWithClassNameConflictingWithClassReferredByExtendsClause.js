@@ -1,5 +1,4 @@
 //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts]
-
 declare module A.B.Base {
     export class W {
         id: number;
@@ -37,7 +36,7 @@ var X;
     (function (Y) {
         var base;
         (function (base) {
-            var W = (function (_super) {
+            var W = /** @class */ (function (_super) {
                 __extends(W, _super);
                 function W() {
                     return _super !== null && _super.apply(this, arguments) || this;
@@ -55,7 +54,7 @@ var X;
         (function (base) {
             var Z;
             (function (Z) {
-                var W = (function (_super) {
+                var W = /** @class */ (function (_super) {
                     __extends(W, _super);
                     function W() {
                         return _super !== null && _super.apply(this, arguments) || this;

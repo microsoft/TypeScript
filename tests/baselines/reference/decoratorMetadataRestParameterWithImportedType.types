@@ -1,5 +1,4 @@
 === tests/cases/compiler/aux.ts ===
-
 export class SomeClass {
 >SomeClass : SomeClass
 

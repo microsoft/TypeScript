@@ -1,5 +1,4 @@
 === tests/cases/compiler/main.ts ===
-
 /// <reference path="observable.d.ts"/>
 import { Observable } from "observable"
 >Observable : typeof Observable
@@ -41,7 +40,6 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 >toLowerCase : () => string
 
 === tests/cases/compiler/map.ts ===
-
 import { Observable } from "observable"
 >Observable : typeof Observable
 

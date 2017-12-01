@@ -1,5 +1,4 @@
 //// [verifyDefaultLib_dom.ts]
-
 var x: HTMLElement;
 
 //// [verifyDefaultLib_dom.js]

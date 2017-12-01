@@ -42,4 +42,4 @@ verify.completionListContains('baz');
 verify.completionListContains('x');
 edit.insert('bar()');
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

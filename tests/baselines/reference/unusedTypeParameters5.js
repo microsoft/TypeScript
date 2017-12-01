@@ -1,5 +1,4 @@
 //// [unusedTypeParameters5.ts]
-
 class A<Dummy> {
     public x: Dummy;
 }
@@ -9,7 +8,7 @@ var x: {
 }
 
 //// [unusedTypeParameters5.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;

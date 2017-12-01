@@ -1,8 +1,9 @@
-tests/cases/conformance/jsx/file.tsx(9,14): error TS2322: Type '0' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(9,14): error TS2322: Type '{ foo: 0; }' is not assignable to type '{ foo: string; }'.
+  Types of property 'foo' are incompatible.
+    Type '0' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
-    
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -27,5 +28,7 @@ tests/cases/conformance/jsx/file.tsx(9,14): error TS2322: Type '0' is not assign
     <MyComponent foo="bar" />; // ok  
     <MyComponent foo={0} />; // should be an error
                  ~~~~~~~
-!!! error TS2322: Type '0' is not assignable to type 'string'.
+!!! error TS2322: Type '{ foo: 0; }' is not assignable to type '{ foo: string; }'.
+!!! error TS2322:   Types of property 'foo' are incompatible.
+!!! error TS2322:     Type '0' is not assignable to type 'string'.
     

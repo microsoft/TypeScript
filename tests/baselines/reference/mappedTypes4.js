@@ -1,5 +1,4 @@
 //// [mappedTypes4.ts]
-
 type Box<T> = {
 };
 

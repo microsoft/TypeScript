@@ -1,5 +1,4 @@
 //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts]
-
 var globalCounter = 0;
 function incrementIdx(max: number) {
     globalCounter += 1;

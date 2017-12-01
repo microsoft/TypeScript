@@ -1,5 +1,4 @@
 //// [typeGuardIntersectionTypes.ts]
-
 interface X {
     x: string;
 }

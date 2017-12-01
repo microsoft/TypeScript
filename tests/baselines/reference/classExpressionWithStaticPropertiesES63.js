@@ -1,5 +1,4 @@
 //// [classExpressionWithStaticPropertiesES63.ts]
-
 declare var console: any;
 const arr: {y(): number}[] = [];
 for (let i = 0; i < 3; i++) {

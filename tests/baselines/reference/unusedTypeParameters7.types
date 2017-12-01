@@ -1,5 +1,4 @@
 === tests/cases/compiler/a.ts ===
-
 class C<T> { a: T; }
 >C : C<T>
 >T : T

@@ -1,3 +1,6 @@
+// @noImplicitAny: true
+// @noImplicitThis: true
+
 class C {
  x: number;
     constructor() {

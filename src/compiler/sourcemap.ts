@@ -8,10 +8,9 @@ namespace ts {
          *
          * @param filePath The path to the generated output file.
          * @param sourceMapFilePath The path to the output source map file.
-         * @param sourceFiles The input source files for the program.
-         * @param isBundledEmit A value indicating whether the generated output file is a bundle.
+         * @param sourceFileOrBundle The input source file or bundle for the program.
          */
-        initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
+        initialize(filePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle): void;
 
         /**
          * Reset the SourceMapWriter to an empty state.
@@ -23,7 +22,7 @@ namespace ts {
          *
          * @param sourceFile The source file.
          */
-        setSourceFile(sourceFile: SourceFile): void;
+        setSourceFile(sourceFile: SourceMapSource): void;
 
         /**
          * Emits a mapping.
@@ -38,11 +37,11 @@ namespace ts {
         /**
          * Emits a node with possible leading and trailing source maps.
          *
-         * @param emitContext The current emit context
+         * @param hint The current emit context
          * @param node The node to emit.
          * @param emitCallback The callback used to emit the node.
          */
-        emitNodeWithSourceMap(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+        emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
 
         /**
          * Emits a token of a node node with possible leading and trailing source maps.
@@ -82,7 +81,7 @@ namespace ts {
     export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
         const extendedDiagnostics = compilerOptions.extendedDiagnostics;
-        let currentSourceFile: SourceFile;
+        let currentSource: SourceMapSource;
         let currentSourceText: string;
         let sourceMapDir: string; // The directory in which sourcemap will be
 
@@ -111,14 +110,20 @@ namespace ts {
         };
 
         /**
+         * Skips trivia such as comments and white-space that can optionally overriden by the source map source
+         */
+        function skipSourceTrivia(pos: number): number {
+            return currentSource.skipTrivia ? currentSource.skipTrivia(pos) : skipTrivia(currentSourceText, pos);
+        }
+
+        /**
          * Initialize the SourceMapWriter for a new output file.
          *
          * @param filePath The path to the generated output file.
          * @param sourceMapFilePath The path to the output source map file.
-         * @param sourceFiles The input source files for the program.
-         * @param isBundledEmit A value indicating whether the generated output file is a bundle.
+         * @param sourceFileOrBundle The input source file or bundle for the program.
          */
-        function initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+        function initialize(filePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle) {
             if (disabled) {
                 return;
             }
@@ -127,7 +132,7 @@ namespace ts {
                 reset();
             }
 
-            currentSourceFile = undefined;
+            currentSource = undefined;
             currentSourceText = undefined;
 
             // Current source map file and its index in the sources list
@@ -140,7 +145,7 @@ namespace ts {
 
             // Initialize source map data
             sourceMapData = {
-                sourceMapFilePath: sourceMapFilePath,
+                sourceMapFilePath,
                 jsSourceMappingURL: !compilerOptions.inlineSourceMap ? getBaseFileName(normalizeSlashes(sourceMapFilePath)) : undefined,
                 sourceMapFile: getBaseFileName(normalizeSlashes(filePath)),
                 sourceMapSourceRoot: compilerOptions.sourceRoot || "",
@@ -161,11 +166,10 @@ namespace ts {
 
             if (compilerOptions.mapRoot) {
                 sourceMapDir = normalizeSlashes(compilerOptions.mapRoot);
-                if (!isBundledEmit) { // emitting single module file
-                    Debug.assert(sourceFiles.length === 1);
+                if (sourceFileOrBundle.kind === SyntaxKind.SourceFile) { // emitting single module file
                     // For modules or multiple emit files the mapRoot will have directory structure like the sources
                     // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFiles[0], host, sourceMapDir));
+                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFileOrBundle, host, sourceMapDir));
                 }
 
                 if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
@@ -195,7 +199,7 @@ namespace ts {
                 return;
             }
 
-            currentSourceFile = undefined;
+            currentSource = undefined;
             sourceMapDir = undefined;
             sourceMapSourceIndex = undefined;
             lastRecordedSourceMapSpan = undefined;
@@ -266,7 +270,7 @@ namespace ts {
                 performance.mark("beforeSourcemap");
             }
 
-            const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
+            const sourceLinePos = getLineAndCharacterOfPosition(currentSource, pos);
 
             // Convert the location to be one-based.
             sourceLinePos.line++;
@@ -288,8 +292,8 @@ namespace ts {
 
                 // New span
                 lastRecordedSourceMapSpan = {
-                    emittedLine: emittedLine,
-                    emittedColumn: emittedColumn,
+                    emittedLine,
+                    emittedColumn,
                     sourceLine: sourceLinePos.line,
                     sourceColumn: sourceLinePos.character,
                     sourceIndex: sourceMapSourceIndex
@@ -311,39 +315,52 @@ namespace ts {
         /**
          * Emits a node with possible leading and trailing source maps.
          *
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
          * @param emitCallback The callback used to emit the node.
          */
-        function emitNodeWithSourceMap(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
+        function emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             if (disabled) {
-                return emitCallback(emitContext, node);
+                return emitCallback(hint, node);
             }
 
             if (node) {
                 const emitNode = node.emitNode;
                 const emitFlags = emitNode && emitNode.flags;
-                const { pos, end } = emitNode && emitNode.sourceMapRange || node;
+                const range = emitNode && emitNode.sourceMapRange;
+                const { pos, end } = range || node;
+                let source = range && range.source;
+                const oldSource = currentSource;
+                if (source === oldSource) source = undefined;
+
+                if (source) setSourceFile(source);
 
                 if (node.kind !== SyntaxKind.NotEmittedStatement
                     && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
                     && pos >= 0) {
-                    emitPos(skipTrivia(currentSourceText, pos));
+                    emitPos(skipSourceTrivia(pos));
                 }
+
+                if (source) setSourceFile(oldSource);
 
                 if (emitFlags & EmitFlags.NoNestedSourceMaps) {
                     disabled = true;
-                    emitCallback(emitContext, node);
+                    emitCallback(hint, node);
                     disabled = false;
                 }
                 else {
-                    emitCallback(emitContext, node);
+                    emitCallback(hint, node);
                 }
+
+                if (source) setSourceFile(source);
 
                 if (node.kind !== SyntaxKind.NotEmittedStatement
                     && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
                     && end >= 0) {
                     emitPos(end);
                 }
+
+                if (source) setSourceFile(oldSource);
             }
         }
 
@@ -364,7 +381,7 @@ namespace ts {
             const emitFlags = emitNode && emitNode.flags;
             const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges[token];
 
-            tokenPos = skipTrivia(currentSourceText, range ? range.pos : tokenPos);
+            tokenPos = skipSourceTrivia(range ? range.pos : tokenPos);
             if ((emitFlags & EmitFlags.NoTokenLeadingSourceMaps) === 0 && tokenPos >= 0) {
                 emitPos(tokenPos);
             }
@@ -384,13 +401,13 @@ namespace ts {
          *
          * @param sourceFile The source file.
          */
-        function setSourceFile(sourceFile: SourceFile) {
+        function setSourceFile(sourceFile: SourceMapSource) {
             if (disabled) {
                 return;
             }
 
-            currentSourceFile = sourceFile;
-            currentSourceText = currentSourceFile.text;
+            currentSource = sourceFile;
+            currentSourceText = currentSource.text;
 
             // Add the file to tsFilePaths
             // If sourceroot option: Use the relative path corresponding to the common directory path
@@ -398,7 +415,7 @@ namespace ts {
             const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
 
             const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-                currentSourceFile.fileName,
+                currentSource.fileName,
                 host.getCurrentDirectory(),
                 host.getCanonicalFileName,
                 /*isAbsolutePathAnUrl*/ true);
@@ -409,10 +426,10 @@ namespace ts {
                 sourceMapData.sourceMapSources.push(source);
 
                 // The one that can be used from program to get the actual source file
-                sourceMapData.inputSourceFileNames.push(currentSourceFile.fileName);
+                sourceMapData.inputSourceFileNames.push(currentSource.fileName);
 
                 if (compilerOptions.inlineSources) {
-                    sourceMapData.sourceMapSourcesContent.push(currentSourceFile.text);
+                    sourceMapData.sourceMapSourcesContent.push(currentSource.text);
                 }
             }
         }

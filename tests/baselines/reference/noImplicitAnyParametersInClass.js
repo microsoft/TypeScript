@@ -1,5 +1,4 @@
 //// [noImplicitAnyParametersInClass.ts]
-
 class C {
     // No implicit-'any' errors.
     public pub_f1(): void { }
@@ -93,7 +92,7 @@ class C {
 }
 
 //// [noImplicitAnyParametersInClass.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         // No implicit-'any' errors.
         this.pub_f9 = function () { return ""; };

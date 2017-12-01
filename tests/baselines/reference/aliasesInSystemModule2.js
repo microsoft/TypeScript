@@ -1,5 +1,4 @@
 //// [aliasesInSystemModule2.ts]
-
 import {alias} from "foo";
 import cls = alias.Class;
 export import cls2 = alias.Class;

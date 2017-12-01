@@ -16,7 +16,4 @@
 
 //// function func2({ a, b/*parameter2*/
 
-test.markers().forEach(m => {
-    goTo.position(m.position, m.fileName);
-    verify.completionListIsEmpty();
-});
+goTo.eachMarker(() => verify.completionListIsEmpty());

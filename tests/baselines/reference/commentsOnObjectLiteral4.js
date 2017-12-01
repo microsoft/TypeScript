@@ -1,5 +1,4 @@
 //// [commentsOnObjectLiteral4.ts]
-
 var v = {
  /**
   * @type {number}

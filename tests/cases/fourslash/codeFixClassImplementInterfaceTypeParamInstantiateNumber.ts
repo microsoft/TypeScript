@@ -4,7 +4,7 @@
 ////    x: T;
 //// }
 ////
-//// class C implements I<number> {[|  |]} 
+//// class C implements I<number> {[| |]} 
 
 verify.rangeAfterCodeFix(`
     x: number;

@@ -1,9 +1,8 @@
-tests/cases/compiler/discriminantPropertyCheck.ts(30,9): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/discriminantPropertyCheck.ts(66,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/discriminantPropertyCheck.ts(29,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/discriminantPropertyCheck.ts(65,9): error TS2532: Object is possibly 'undefined'.
 
 
 ==== tests/cases/compiler/discriminantPropertyCheck.ts (2 errors) ====
-    
     type Item = Item1 | Item2;
     
     interface Base {

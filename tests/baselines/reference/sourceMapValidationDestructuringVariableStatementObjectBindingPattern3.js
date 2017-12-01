@@ -1,5 +1,4 @@
 //// [sourceMapValidationDestructuringVariableStatementObjectBindingPattern3.ts]
-
 var {x = 500} = { x: 20 };
 
 //// [sourceMapValidationDestructuringVariableStatementObjectBindingPattern3.js]

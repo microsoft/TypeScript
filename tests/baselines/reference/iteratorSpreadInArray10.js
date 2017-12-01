@@ -1,16 +1,16 @@
 //// [iteratorSpreadInArray10.ts]
-var array = [...new SymbolIterator];
-
 class SymbolIterator {
     [Symbol.iterator]() {
         return this;
     }
 }
+
+var array = [...new SymbolIterator];
 
 //// [iteratorSpreadInArray10.js]
-var array = [...new SymbolIterator];
 class SymbolIterator {
     [Symbol.iterator]() {
         return this;
     }
 }
+var array = [...new SymbolIterator];

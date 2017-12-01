@@ -1,5 +1,4 @@
 //// [stringLiteralTypesWithVariousOperators01.ts]
-
 let abc: "ABC" = "ABC";
 let xyz: "XYZ" = "XYZ";
 let abcOrXyz: "ABC" | "XYZ" = abc || xyz;

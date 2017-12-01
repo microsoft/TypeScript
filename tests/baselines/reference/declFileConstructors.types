@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileConstructors_0.ts ===
-
 export class SimpleConstructor {
 >SimpleConstructor : SimpleConstructor
 

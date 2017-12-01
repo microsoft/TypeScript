@@ -14,7 +14,8 @@ function IsFoo(value: any): boolean {
 //// [instanceOfInExternalModules_require.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Foo = (function () {
+    exports.__esModule = true;
+    var Foo = /** @class */ (function () {
         function Foo() {
         }
         return Foo;
@@ -24,6 +25,7 @@ define(["require", "exports"], function (require, exports) {
 //// [instanceOfInExternalModules_1.js]
 define(["require", "exports", "instanceOfInExternalModules_require"], function (require, exports, Bar) {
     "use strict";
+    exports.__esModule = true;
     function IsFoo(value) {
         return value instanceof Bar.Foo;
     }

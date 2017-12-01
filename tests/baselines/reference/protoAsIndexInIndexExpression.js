@@ -21,6 +21,7 @@ class C {
 
 //// [protoAsIndexInIndexExpression_0.js]
 "use strict";
+exports.__esModule = true;
 //// [protoAsIndexInIndexExpression_1.js]
 ///<reference path='protoAsIndexInIndexExpression_0.ts'/>
 var EntityPrototype = undefined;
@@ -32,7 +33,7 @@ WorkspacePrototype['__proto__'] = EntityPrototype;
 var o = {
     "__proto__": 0
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this["__proto__"] = 0;
     }

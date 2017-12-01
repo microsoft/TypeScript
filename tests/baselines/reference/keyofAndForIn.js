@@ -1,5 +1,4 @@
 //// [keyofAndForIn.ts]
-
 // Repro from #12513
 
 function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {

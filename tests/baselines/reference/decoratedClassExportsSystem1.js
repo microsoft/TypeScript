@@ -1,5 +1,4 @@
 //// [a.ts]
-
 declare function forwardRef(x: any): any;
 declare var Something: any;
 @Something({ v: () => Testing123 })

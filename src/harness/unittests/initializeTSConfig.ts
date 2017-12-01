@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 /// <reference path="..\..\compiler\commandLineParser.ts" />
 
 namespace ts {
@@ -6,21 +6,11 @@ namespace ts {
         function initTSConfigCorrectly(name: string, commandLinesArgs: string[]) {
             describe(name, () => {
                 const commandLine = parseCommandLine(commandLinesArgs);
-                const initResult = generateTSConfig(commandLine.options, commandLine.fileNames);
+                const initResult = generateTSConfig(commandLine.options, commandLine.fileNames, "\n");
                 const outputFileName = `tsConfig/${name.replace(/[^a-z0-9\-. ]/ig, "")}/tsconfig.json`;
 
                 it(`Correct output for ${outputFileName}`, () => {
-                    Harness.Baseline.runBaseline(outputFileName, () => {
-                        if (initResult) {
-                            return JSON.stringify(initResult, undefined, 4);
-                        }
-                        else {
-                            // This can happen if compiler recieve invalid compiler-options
-                            /* tslint:disable:no-null-keyword */
-                            return null;
-                            /* tslint:enable:no-null-keyword */
-                        }
-                    });
+                    Harness.Baseline.runBaseline(outputFileName, () => initResult);
                 });
             });
         }

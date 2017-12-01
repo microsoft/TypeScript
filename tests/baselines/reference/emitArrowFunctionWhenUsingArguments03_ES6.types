@@ -1,5 +1,4 @@
 === tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments03_ES6.ts ===
-
 var arguments;
 >arguments : any
 

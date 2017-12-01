@@ -1,5 +1,6 @@
 "use strict";
-var C = (function () {
+exports.__esModule = true;
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

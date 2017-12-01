@@ -13,15 +13,16 @@ class NavigateAction {
 
 //// [externalModuleQualification.js]
 "use strict";
+exports.__esModule = true;
 exports.ID = "test";
-var DiffEditor = (function () {
+var DiffEditor = /** @class */ (function () {
     function DiffEditor(id) {
         if (id === void 0) { id = exports.ID; }
     }
     return DiffEditor;
 }());
 exports.DiffEditor = DiffEditor;
-var NavigateAction = (function () {
+var NavigateAction = /** @class */ (function () {
     function NavigateAction() {
     }
     NavigateAction.prototype.f = function (editor) {

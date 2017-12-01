@@ -1,8 +1,7 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts(7,10): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts(6,10): error TS2394: Overload signature is not compatible with function implementation.
 
 
 ==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts (1 errors) ====
-    
     interface Animal { animal: {} };
     interface Dog extends Animal { dog: {} }
     interface Cat extends Animal { cat: {} }

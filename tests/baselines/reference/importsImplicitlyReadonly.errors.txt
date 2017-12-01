@@ -27,7 +27,6 @@ tests/cases/conformance/externalModules/b.ts(9,4): error TS2540: Cannot assign t
     a3.x = 1;
     a3.y = 1;
 ==== tests/cases/conformance/externalModules/a.ts (0 errors) ====
-    
     export var x = 1;
     var y = 1;
     export { y };

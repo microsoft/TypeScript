@@ -1,5 +1,4 @@
 === tests/cases/conformance/controlFlow/typeGuardsNestedAssignments.ts ===
-
 class Foo {
 >Foo : Foo
 
@@ -103,7 +102,7 @@ function f4() {
 
     if (typeof (x = getStringOrNumberOrNull()) === "number") {
 >typeof (x = getStringOrNumberOrNull()) === "number" : boolean
->typeof (x = getStringOrNumberOrNull()) : string
+>typeof (x = getStringOrNumberOrNull()) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(x = getStringOrNumberOrNull()) : string | number | null
 >x = getStringOrNumberOrNull() : string | number | null
 >x : string | number | null

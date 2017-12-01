@@ -1,5 +1,4 @@
 //// [derivedClassConstructorWithExplicitReturns01.ts]
-
 class C {
     cProp = 10;
 
@@ -45,7 +44,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var C = (function () {
+var C = /** @class */ (function () {
     function C(value) {
         this.cProp = 10;
         return {
@@ -58,7 +57,7 @@ var C = (function () {
     C.prototype.foo = function () { return "this never gets used."; };
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D(a) {
         if (a === void 0) { a = 100; }

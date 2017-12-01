@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution14.tsx] ////
 
 //// [react.d.ts]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -11,7 +10,6 @@ declare module JSX {
 }
 
 //// [file.tsx]
-
 interface IProps {
   primaryText: string,
   [propName: string]: string | number

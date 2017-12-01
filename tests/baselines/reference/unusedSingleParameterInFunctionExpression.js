@@ -1,5 +1,4 @@
 //// [unusedSingleParameterInFunctionExpression.ts]
-
 var func = function(person: string) {
     var unused = 20;
 }

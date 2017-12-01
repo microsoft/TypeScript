@@ -12,12 +12,12 @@ module M {
    public foo() { [1,2,3].map((x) => { return this.n * x; })}
 >foo : () => void
 >[1,2,3].map((x) => { return this.n * x; }) : number[]
->[1,2,3].map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
+>[1,2,3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >[1,2,3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
->map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >(x) => { return this.n * x; } : (x: number) => number
 >x : number
 >this.n * x : number

@@ -1,0 +1,15 @@
+=== tests/cases/compiler/overloadsInDifferentContainersDisagreeOnAmbient.ts ===
+declare module M {
+>M : typeof M
+
+    // Error because body is not ambient and this overload is
+    export function f();
+>f : { (): any; (): void; }
+}
+
+module M {
+>M : typeof M
+
+    export function f() { }
+>f : { (): any; (): void; }
+}

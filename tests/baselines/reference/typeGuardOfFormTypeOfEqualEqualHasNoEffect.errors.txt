@@ -1,10 +1,11 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(13,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r1' must be of type 'string', but here has type 'number'.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(20,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'boolean', but here has type 'string'.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(27,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r3' must be of type 'number', but here has type 'boolean'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(30,5): error TS2365: Operator '==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(34,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'C', but here has type 'string'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts (4 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts (5 errors) ====
     class C { private p: string };
     
     var strOrNum: string | number;
@@ -41,6 +42,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHa
     }
     
     if (typeof strOrC == "Object") {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '==' cannot be applied to types '"string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"'.
         var r4 = strOrC; // string | C
     }
     else {

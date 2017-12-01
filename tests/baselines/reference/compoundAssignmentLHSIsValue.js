@@ -1,5 +1,4 @@
 //// [compoundAssignmentLHSIsValue.ts]
-
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value: any;
 
@@ -137,7 +136,7 @@ var __extends = (this && this.__extends) || (function () {
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value;
 // this
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this *= value;
         this += value;
@@ -199,7 +198,7 @@ value;
 ['', ''] *= value;
 ['', ''] += value;
 // super
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         var _this = _super.call(this) || this;

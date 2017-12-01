@@ -3,7 +3,6 @@ tests/cases/compiler/es6ImportNamedImport_1.ts(2,10): error TS2305: Module '"tes
 
 
 ==== tests/cases/compiler/es6ImportNamedImportNoExportMember_0.ts (0 errors) ====
-    
     export var a = 10;
     export var x = a;
     

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationCollidingNamesInAugmentation1.ts] ////
 
 //// [map1.ts]
-
 import { Observable } from "./observable"
 
 (<any>Observable.prototype).map = function() { }
@@ -36,20 +35,24 @@ let x: Observable<number>;
 //// [observable.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 //// [map1.js]
 define(["require", "exports", "./observable"], function (require, exports, observable_1) {
     "use strict";
+    exports.__esModule = true;
     observable_1.Observable.prototype.map = function () { };
 });
 //// [map2.js]
 define(["require", "exports", "./observable"], function (require, exports, observable_1) {
     "use strict";
+    exports.__esModule = true;
     observable_1.Observable.prototype.map = function () { };
 });
 //// [main.js]
 define(["require", "exports", "./map1", "./map2"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var x;
 });
 

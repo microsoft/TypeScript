@@ -10,9 +10,10 @@ var y = new b();
 
 //// [sourceMapValidationImport.js]
 "use strict";
+exports.__esModule = true;
 var m;
 (function (m) {
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         return c;

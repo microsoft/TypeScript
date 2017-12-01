@@ -12,7 +12,6 @@ export var x: SubModule.m.m3.c;
 
 
 === tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_0.ts ===
-
 declare module "SubModule" {
     export module m {
 >m : any

@@ -10,4 +10,4 @@
 ////}
 
 verify.quickInfoAt("", "var M.C.C: typeof M.C");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

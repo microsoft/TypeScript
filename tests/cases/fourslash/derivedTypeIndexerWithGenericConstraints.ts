@@ -25,4 +25,4 @@
 ////var result2 = r2.x;
 
 verify.quickInfoAt("", "var r: CollectionItem");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

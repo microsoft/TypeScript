@@ -1,34 +1,34 @@
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(9,43): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(10,29): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(15,29): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(16,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(19,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(20,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(21,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(24,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(24,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(26,36): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(29,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(30,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(31,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(36,49): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(37,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(40,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(37,12): error TS2554: Expected 1-2 arguments, but got 0.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(40,12): error TS2554: Expected 2 arguments, but got 1.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(42,49): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(43,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(47,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(48,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(49,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(43,12): error TS2554: Expected 2 arguments, but got 0.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(47,12): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(48,12): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(49,12): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(55,45): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(56,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(59,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(61,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(56,12): error TS2555: Expected at least 1 arguments, but got 0.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(59,12): error TS2554: Expected 2 arguments, but got 1.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(61,12): error TS2554: Expected 2 arguments, but got 3.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(62,45): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(63,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(67,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(68,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(69,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(63,12): error TS2554: Expected 2 arguments, but got 0.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(67,12): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(68,12): error TS2554: Expected 1 arguments, but got 3.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(69,12): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1.
 
 
 ==== tests/cases/conformance/types/union/unionTypeCallSignatures.ts (31 errors) ====
@@ -55,7 +55,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
 !!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
     unionOfDifferentReturnType1(); // error missing parameter
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     
     var unionOfDifferentParameterTypes: { (a: number): number; } | { (a: string): Date; };
     unionOfDifferentParameterTypes(10);// error - no call signatures
@@ -71,7 +71,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     var unionOfDifferentNumberOfSignatures: { (a: number): number; } | { (a: number): Date; (a: string): boolean; };
     unionOfDifferentNumberOfSignatures(); // error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     unionOfDifferentNumberOfSignatures(10); // error - no call signatures
     unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
                                        ~~~~~~~
@@ -96,31 +96,31 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = unionWithOptionalParameter1(); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     
     var unionWithOptionalParameter2: { (a: string, b?: number): string; } | { (a: string, b: number): number };
     strOrNum = unionWithOptionalParameter2('hello'); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 1.
     strOrNum = unionWithOptionalParameter2('hello', 10); // error no call signature
     strOrNum = unionWithOptionalParameter2('hello', "hello"); // error no call signature
                                                     ~~~~~~~
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = unionWithOptionalParameter2(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 0.
     
     var unionWithOptionalParameter3: { (a: string, b?: number): string; } | { (a: string): number; };
     strOrNum = unionWithOptionalParameter3('hello');
     strOrNum = unionWithOptionalParameter3('hello', 10); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     strOrNum = unionWithOptionalParameter3('hello', "hello"); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     strOrNum = unionWithOptionalParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     
     var unionWithRestParameter1: { (a: string, ...b: number[]): string; } | { (a: string, ...b: number[]): number };
     strOrNum = unionWithRestParameter1('hello');
@@ -131,41 +131,41 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = unionWithRestParameter1(); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2555: Expected at least 1 arguments, but got 0.
     
     var unionWithRestParameter2: { (a: string, ...b: number[]): string; } | { (a: string, b: number): number };
     strOrNum = unionWithRestParameter2('hello'); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 1.
     strOrNum = unionWithRestParameter2('hello', 10); // error no call signature
     strOrNum = unionWithRestParameter2('hello', 10, 11); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 3.
     strOrNum = unionWithRestParameter2('hello', "hello"); // error no call signature
                                                 ~~~~~~~
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = unionWithRestParameter2(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 0.
     
     var unionWithRestParameter3: { (a: string, ...b: number[]): string; } | { (a: string): number };
     strOrNum = unionWithRestParameter3('hello');
     strOrNum = unionWithRestParameter3('hello', 10); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 3.
     strOrNum = unionWithRestParameter3('hello', "hello"); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     strOrNum = unionWithRestParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     
     var unionWithRestParameter4: { (...a: string[]): string; } | { (a: string, b: string): number; };
     strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 1.
     strOrNum = unionWithRestParameter4("hello", "world");
     

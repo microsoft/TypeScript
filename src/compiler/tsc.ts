@@ -1,46 +1,11 @@
 /// <reference path="program.ts"/>
+/// <reference path="watch.ts"/>
 /// <reference path="commandLineParser.ts"/>
 
 namespace ts {
-    export interface SourceFile {
-        fileWatcher?: FileWatcher;
-    }
-
     interface Statistic {
         name: string;
         value: string;
-    }
-
-    const defaultFormatDiagnosticsHost: FormatDiagnosticsHost = {
-        getCurrentDirectory: () => sys.getCurrentDirectory(),
-        getNewLine: () => sys.newLine,
-        getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames)
-    };
-
-    let reportDiagnosticWorker = reportDiagnosticSimply;
-
-    function reportDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost) {
-        reportDiagnosticWorker(diagnostic, host || defaultFormatDiagnosticsHost);
-    }
-
-    function reportDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): void {
-        for (const diagnostic of diagnostics) {
-            reportDiagnostic(diagnostic, host);
-        }
-    }
-
-    function reportEmittedFiles(files: string[]): void {
-        if (!files || files.length == 0) {
-            return;
-        }
-
-        const currentDir = sys.getCurrentDirectory();
-
-        for (const file of files) {
-            const filepath = getNormalizedAbsolutePath(file, currentDir);
-
-            sys.write(`TSFILE: ${filepath}${sys.newLine}`);
-        }
     }
 
     function countLines(program: Program): number {
@@ -56,108 +21,11 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    function reportDiagnosticSimply(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
-        sys.write(ts.formatDiagnostics([diagnostic], host));
-    }
-
-    const redForegroundEscapeSequence = "\u001b[91m";
-    const yellowForegroundEscapeSequence = "\u001b[93m";
-    const blueForegroundEscapeSequence = "\u001b[93m";
-    const gutterStyleSequence = "\u001b[100;30m";
-    const gutterSeparator = " ";
-    const resetEscapeSequence = "\u001b[0m";
-    const ellipsis = "...";
-    const categoryFormatMap = createMap<string>({
-        [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
-        [DiagnosticCategory.Error]: redForegroundEscapeSequence,
-        [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
-    });
-
-    function formatAndReset(text: string, formatStyle: string) {
-        return formatStyle + text + resetEscapeSequence;
-    }
-
-    function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
-        let output = "";
-
-        if (diagnostic.file) {
-            const { start, length, file } = diagnostic;
-            const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
-            const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
-            const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
-            const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
-
-            const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
-            let gutterWidth = (lastLine + 1 + "").length;
-            if (hasMoreThanFiveLines) {
-                gutterWidth = Math.max(ellipsis.length, gutterWidth);
-            }
-
-            output += sys.newLine;
-            for (let i = firstLine; i <= lastLine; i++) {
-                // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
-                // so we'll skip ahead to the second-to-last line.
-                if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                    output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
-                    i = lastLine - 1;
-                }
-
-                const lineStart = getPositionOfLineAndCharacter(file, i, 0);
-                const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
-                let lineContent = file.text.slice(lineStart, lineEnd);
-                lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
-                lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
-
-                // Output the gutter and the actual contents of the line.
-                output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                output += lineContent + sys.newLine;
-
-                // Output the gutter and the error span for the line using tildes.
-                output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                output += redForegroundEscapeSequence;
-                if (i === firstLine) {
-                    // If we're on the last line, then limit it to the last character of the last line.
-                    // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
-                    const lastCharForLine = i === lastLine ? lastLineChar : undefined;
-
-                    output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
-                    output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
-                }
-                else if (i === lastLine) {
-                    output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
-                }
-                else {
-                    // Squiggle the entire line.
-                    output += lineContent.replace(/./g, "~");
-                }
-                output += resetEscapeSequence;
-
-                output += sys.newLine;
-            }
-
-            output += sys.newLine;
-            output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+    let reportDiagnostic = createDiagnosticReporter(sys, reportDiagnosticSimply);
+    function udpateReportDiagnostic(options: CompilerOptions) {
+        if (options.pretty) {
+            reportDiagnostic = createDiagnosticReporter(sys, reportDiagnosticWithColorAndContext);
         }
-
-        const categoryColor = categoryFormatMap[diagnostic.category];
-        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
-        output += sys.newLine + sys.newLine;
-
-        sys.write(output);
-    }
-
-    function reportWatchDiagnostic(diagnostic: Diagnostic) {
-        let output = new Date().toLocaleTimeString() + " - ";
-
-        if (diagnostic.file) {
-            const loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
-        }
-
-        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
-
-        sys.write(output);
     }
 
     function padLeft(s: string, length: number) {
@@ -175,41 +43,19 @@ namespace ts {
         return s;
     }
 
-    function isJSONSupported() {
-        return typeof JSON === "object" && typeof JSON.parse === "function";
-    }
-
     export function executeCommandLine(args: string[]): void {
         const commandLine = parseCommandLine(args);
-        let configFileName: string;                                 // Configuration file name (if any)
-        let cachedConfigFileText: string;                           // Cached configuration file text, used for reparsing (if any)
-        let configFileWatcher: FileWatcher;                         // Configuration file watcher
-        let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
-        let cachedProgram: Program;                                 // Program cached from last compilation
-        let rootFileNames: string[];                                // Root fileNames for compilation
-        let compilerOptions: CompilerOptions;                       // Compiler options for compilation
-        let compilerHost: CompilerHost;                             // Compiler host
-        let hostGetSourceFile: typeof compilerHost.getSourceFile;   // getSourceFile method from default host
-        let timerHandleForRecompilation: any;                    // Handle for 0.25s wait timer to trigger recompilation
-        let timerHandleForDirectoryChanges: any;                 // Handle for 0.25s wait timer to trigger directory change handler
 
-        // This map stores and reuses results of fileExists check that happen inside 'createProgram'
-        // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
-        let cachedExistingFiles: Map<boolean>;
-        let hostFileExists: typeof compilerHost.fileExists;
-
+        // Configuration file name (if any)
+        let configFileName: string;
         if (commandLine.options.locale) {
-            if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"), /* host */ undefined);
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
             validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
         }
 
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
-            reportDiagnostics(commandLine.errors, compilerHost);
+            reportDiagnostics(commandLine.errors, reportDiagnostic);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
@@ -223,19 +69,15 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        if (commandLine.options.help) {
+        if (commandLine.options.help || commandLine.options.all) {
             printVersion();
-            printHelp();
+            printHelp(commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.project) {
-            if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"), /* host */ undefined);
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
             if (commandLine.fileNames.length !== 0) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line), /* host */ undefined);
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
 
@@ -243,267 +85,117 @@ namespace ts {
             if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
                 configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
                 if (!sys.fileExists(configFileName)) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project), /* host */ undefined);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project));
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
             }
             else {
                 configFileName = fileOrDirectory;
                 if (!sys.fileExists(configFileName)) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project), /* host */ undefined);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project));
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
             }
         }
-        else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
+        else if (commandLine.fileNames.length === 0) {
             const searchPath = normalizePath(sys.getCurrentDirectory());
             configFileName = findConfigFile(searchPath, sys.fileExists);
         }
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
-            printHelp();
+            printHelp(commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
-        if (isWatchSet(commandLine.options)) {
-            if (!sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
-            if (configFileName) {
-                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
-            }
-            if (sys.watchDirectory && configFileName) {
-                const directory = ts.getDirectoryPath(configFileName);
-                directoryWatcher = sys.watchDirectory(
-                    // When the configFileName is just "tsconfig.json", the watched directory should be
-                    // the current directory; if there is a given "project" parameter, then the configFileName
-                    // is an absolute file name.
-                    directory == "" ? "." : directory,
-                    watchedDirectoryChanged, /*recursive*/ true);
-            }
-        }
-
-        performCompilation();
-
-        function parseConfigFile(): ParsedCommandLine {
-            if (!cachedConfigFileText) {
-                try {
-                    cachedConfigFileText = sys.readFile(configFileName);
-                }
-                catch (e) {
-                    const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
-                    reportWatchDiagnostic(error);
-                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                    return;
-                }
-            }
-            if (!cachedConfigFileText) {
-                const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
-                reportDiagnostics([error], /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
-
-            const result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
-            const configObject = result.config;
-            if (!configObject) {
-                reportDiagnostics([result.error], /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
-            const cwd = sys.getCurrentDirectory();
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
-            if (configParseResult.errors.length > 0) {
-                reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
+        const commandLineOptions = commandLine.options;
+        if (configFileName) {
+            const reportWatchDiagnostic = createWatchDiagnosticReporter();
+            const configParseResult = parseConfigFile(configFileName, commandLineOptions, sys, reportDiagnostic, reportWatchDiagnostic);
+            udpateReportDiagnostic(configParseResult.options);
             if (isWatchSet(configParseResult.options)) {
-                if (!sys.watchFile) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
-                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                }
-
-                if (!directoryWatcher && sys.watchDirectory && configFileName) {
-                    const directory = ts.getDirectoryPath(configFileName);
-                    directoryWatcher = sys.watchDirectory(
-                        // When the configFileName is just "tsconfig.json", the watched directory should be
-                        // the current directory; if there is a given "project" parameter, then the configFileName
-                        // is an absolute file name.
-                        directory == "" ? "." : directory,
-                        watchedDirectoryChanged, /*recursive*/ true);
-                };
+                reportWatchModeWithoutSysSupport();
+                createWatchModeWithConfigFile(configParseResult, commandLineOptions, createWatchingSystemHost(reportWatchDiagnostic));
             }
-            return configParseResult;
-        }
-
-        // Invoked to perform initial compilation or re-compilation in watch mode
-        function performCompilation() {
-
-            if (!cachedProgram) {
-                if (configFileName) {
-                    const configParseResult = parseConfigFile();
-                    rootFileNames = configParseResult.fileNames;
-                    compilerOptions = configParseResult.options;
-                }
-                else {
-                    rootFileNames = commandLine.fileNames;
-                    compilerOptions = commandLine.options;
-                }
-                compilerHost = createCompilerHost(compilerOptions);
-                hostGetSourceFile = compilerHost.getSourceFile;
-                compilerHost.getSourceFile = getSourceFile;
-
-                hostFileExists = compilerHost.fileExists;
-                compilerHost.fileExists = cachedFileExists;
-            }
-
-            if (compilerOptions.pretty) {
-                reportDiagnosticWorker = reportDiagnosticWithColorAndContext;
-            }
-
-            // reset the cache of existing files
-            cachedExistingFiles = createMap<boolean>();
-
-            const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
-
-            if (!isWatchSet(compilerOptions)) {
-                return sys.exit(compileResult.exitStatus);
-            }
-
-            setCachedProgram(compileResult.program);
-            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
-        }
-
-        function cachedFileExists(fileName: string): boolean {
-            return fileName in cachedExistingFiles
-                ? cachedExistingFiles[fileName]
-                : cachedExistingFiles[fileName] = hostFileExists(fileName);
-        }
-
-        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
-            // Return existing SourceFile object if one is available
-            if (cachedProgram) {
-                const sourceFile = cachedProgram.getSourceFile(fileName);
-                // A modified source file has no watcher and should not be reused
-                if (sourceFile && sourceFile.fileWatcher) {
-                    return sourceFile;
-                }
-            }
-            // Use default host function
-            const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
-            if (sourceFile && isWatchSet(compilerOptions) && sys.watchFile) {
-                // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (_fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
-            }
-            return sourceFile;
-        }
-
-        // Change cached program to the given program
-        function setCachedProgram(program: Program) {
-            if (cachedProgram) {
-                const newSourceFiles = program ? program.getSourceFiles() : undefined;
-                forEach(cachedProgram.getSourceFiles(), sourceFile => {
-                    if (!(newSourceFiles && contains(newSourceFiles, sourceFile))) {
-                        if (sourceFile.fileWatcher) {
-                            sourceFile.fileWatcher.close();
-                            sourceFile.fileWatcher = undefined;
-                        }
-                    }
-                });
-            }
-            cachedProgram = program;
-        }
-
-        // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile, removed?: boolean) {
-            sourceFile.fileWatcher.close();
-            sourceFile.fileWatcher = undefined;
-            if (removed) {
-                unorderedRemoveItem(rootFileNames, sourceFile.fileName);
-            }
-            startTimerForRecompilation();
-        }
-
-        // If the configuration file changes, forget cached program and start the recompilation timer
-        function configFileChanged() {
-            setCachedProgram(undefined);
-            cachedConfigFileText = undefined;
-            startTimerForRecompilation();
-        }
-
-        function watchedDirectoryChanged(fileName: string) {
-            if (fileName && !ts.isSupportedSourceFileName(fileName, compilerOptions)) {
-                return;
-            }
-
-            startTimerForHandlingDirectoryChanges();
-        }
-
-        function startTimerForHandlingDirectoryChanges() {
-            if (!sys.setTimeout || !sys.clearTimeout) {
-                return;
-            }
-
-            if (timerHandleForDirectoryChanges) {
-                sys.clearTimeout(timerHandleForDirectoryChanges);
-            }
-            timerHandleForDirectoryChanges = sys.setTimeout(directoryChangeHandler, 250);
-        }
-
-        function directoryChangeHandler() {
-            const parsedCommandLine = parseConfigFile();
-            const newFileNames = ts.map(parsedCommandLine.fileNames, compilerHost.getCanonicalFileName);
-            const canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
-
-            // We check if the project file list has changed. If so, we just throw away the old program and start fresh.
-            if (!arrayIsEqualTo(newFileNames && newFileNames.sort(), canonicalRootFileNames && canonicalRootFileNames.sort())) {
-                setCachedProgram(undefined);
-                startTimerForRecompilation();
+            else {
+                performCompilation(configParseResult.fileNames, configParseResult.options);
             }
         }
-
-        // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
-        // operations (such as saving all modified files in an editor) a chance to complete before we kick
-        // off a new compilation.
-        function startTimerForRecompilation() {
-            if (!sys.setTimeout || !sys.clearTimeout) {
-                return;
+        else {
+            udpateReportDiagnostic(commandLineOptions);
+            if (isWatchSet(commandLineOptions)) {
+                reportWatchModeWithoutSysSupport();
+                createWatchModeWithoutConfigFile(commandLine.fileNames, commandLineOptions, createWatchingSystemHost());
             }
-
-            if (timerHandleForRecompilation) {
-                sys.clearTimeout(timerHandleForRecompilation);
+            else {
+                performCompilation(commandLine.fileNames, commandLineOptions);
             }
-            timerHandleForRecompilation = sys.setTimeout(recompile, 250);
-        }
-
-        function recompile() {
-            timerHandleForRecompilation = undefined;
-            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
-            performCompilation();
         }
     }
 
-    function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        const hasDiagnostics = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
-        let statistics: Statistic[];
-        if (hasDiagnostics) {
+    function reportWatchModeWithoutSysSupport() {
+        if (!sys.watchFile || !sys.watchDirectory) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
+            sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        }
+    }
+
+    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions) {
+        const compilerHost = createCompilerHost(compilerOptions);
+        enableStatistics(compilerOptions);
+
+        const program = createProgram(rootFileNames, compilerOptions, compilerHost);
+        const exitStatus = compileProgram(program);
+
+        reportStatistics(program);
+        return sys.exit(exitStatus);
+    }
+
+    function createWatchingSystemHost(reportWatchDiagnostic?: DiagnosticReporter) {
+        const watchingHost = ts.createWatchingSystemHost(/*pretty*/ undefined, sys, parseConfigFile, reportDiagnostic, reportWatchDiagnostic);
+        watchingHost.beforeCompile = enableStatistics;
+        const afterCompile = watchingHost.afterCompile;
+        watchingHost.afterCompile = (host, program, builder) => {
+            afterCompile(host, program, builder);
+            reportStatistics(program);
+        };
+        return watchingHost;
+    }
+
+    function compileProgram(program: Program): ExitStatus {
+        let diagnostics: Diagnostic[];
+
+        // First get and report any syntactic errors.
+        diagnostics = program.getSyntacticDiagnostics().slice();
+
+        // If we didn't have any syntactic errors, then also try getting the global and
+        // semantic errors.
+        if (diagnostics.length === 0) {
+            diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+
+            if (diagnostics.length === 0) {
+                diagnostics = program.getSemanticDiagnostics().slice();
+            }
+        }
+
+        // Emit and report any errors we ran into.
+        const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit();
+        addRange(diagnostics, emitDiagnostics);
+
+        return handleEmitOutputAndReportErrors(sys, program, emittedFiles, emitSkipped, diagnostics, reportDiagnostic);
+    }
+
+    function enableStatistics(compilerOptions: CompilerOptions) {
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             performance.enable();
+        }
+    }
+
+    function reportStatistics(program: Program) {
+        let statistics: Statistic[];
+        const compilerOptions = program.getCompilerOptions();
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             statistics = [];
-        }
-
-        const program = createProgram(fileNames, compilerOptions, compilerHost);
-        const exitStatus = compileProgram();
-
-        if (compilerOptions.listFiles) {
-            forEach(program.getSourceFiles(), file => {
-                sys.write(file.fileName + sys.newLine);
-            });
-        }
-
-        if (hasDiagnostics) {
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
@@ -541,44 +233,6 @@ namespace ts {
             performance.disable();
         }
 
-        return { program, exitStatus };
-
-        function compileProgram(): ExitStatus {
-            let diagnostics: Diagnostic[];
-
-            // First get and report any syntactic errors.
-            diagnostics = program.getSyntacticDiagnostics();
-
-            // If we didn't have any syntactic errors, then also try getting the global and
-            // semantic errors.
-            if (diagnostics.length === 0) {
-                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
-
-                if (diagnostics.length === 0) {
-                    diagnostics = program.getSemanticDiagnostics();
-                }
-            }
-
-            // Otherwise, emit and report any errors we ran into.
-            const emitOutput = program.emit();
-            diagnostics = diagnostics.concat(emitOutput.diagnostics);
-
-            reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
-
-            reportEmittedFiles(emitOutput.emittedFiles);
-
-            if (emitOutput.emitSkipped && diagnostics.length > 0) {
-                // If the emitter didn't emit anything, then pass that value along.
-                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-            }
-            else if (diagnostics.length > 0) {
-                // The emitter emitted something, inform the caller if that happened in the presence
-                // of diagnostics or not.
-                return ExitStatus.DiagnosticsPresent_OutputsGenerated;
-            }
-            return ExitStatus.Success;
-        }
-
         function reportStatistics() {
             let nameSize = 0;
             let valueSize = 0;
@@ -614,7 +268,7 @@ namespace ts {
         sys.write(getDiagnosticText(Diagnostics.Version_0, ts.version) + sys.newLine);
     }
 
-    function printHelp() {
+    function printHelp(showAllOptions: boolean) {
         const output: string[] = [];
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
@@ -639,8 +293,9 @@ namespace ts {
         output.push(getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine);
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-        const optsList = filter(optionDeclarations.slice(), v => !v.experimental);
-        optsList.sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase()));
+        const optsList = showAllOptions ?
+            sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
+            filter(optionDeclarations.slice(), v => v.showInSimplifiedHelpView);
 
         // We want our descriptions to align at the same column in our output,
         // so we keep track of the longest option usage string.
@@ -650,9 +305,7 @@ namespace ts {
 
         const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
-        for (let i = 0; i < optsList.length; i++) {
-            const option = optsList[i];
-
+        for (const option of optsList) {
             // If an option lacks a description,
             // it is not officially supported.
             if (!option.description) {
@@ -674,13 +327,9 @@ namespace ts {
 
             if (option.name === "lib") {
                 description = getDiagnosticText(option.description);
-                const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
                 const typeMap = <Map<number | string>>element.type;
-                for (const key in typeMap) {
-                    options.push(`'${key}'`);
-                }
-                optionsDescriptionMap[description] = options;
+                optionsDescriptionMap.set(description, arrayFrom(typeMap.keys()).map(key => `'${key}'`));
             }
             else {
                 description = getDiagnosticText(option.description);
@@ -702,7 +351,7 @@ namespace ts {
         for (let i = 0; i < usageColumn.length; i++) {
             const usage = usageColumn[i];
             const description = descriptionColumn[i];
-            const kindsList = optionsDescriptionMap[description];
+            const kindsList = optionsDescriptionMap.get(description);
             output.push(usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine);
 
             if (kindsList) {
@@ -735,19 +384,22 @@ namespace ts {
         const currentDirectory = sys.getCurrentDirectory();
         const file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
         if (sys.fileExists(file)) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
         }
         else {
-            sys.writeFile(file, JSON.stringify(generateTSConfig(options, fileNames), undefined, 4));
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
+            sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
         }
 
         return;
     }
 }
 
+if (ts.Debug.isDebugging) {
+    ts.Debug.enableDebugInfo();
+}
+
 if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
     ts.sys.tryEnableSourceMapsForHost();
 }
-
 ts.executeCommandLine(ts.sys.args);

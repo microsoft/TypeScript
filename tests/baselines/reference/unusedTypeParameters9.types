@@ -1,5 +1,4 @@
 === tests/cases/compiler/unusedTypeParameters9.ts ===
-
 // clas + interface
 class C1<T> { }
 >C1 : C1<T>

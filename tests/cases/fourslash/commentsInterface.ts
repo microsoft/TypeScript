@@ -113,7 +113,7 @@ goTo.marker('16');
 verify.currentSignatureHelpDocCommentIs("new method");
 verify.currentParameterHelpArgumentDocCommentIs("param");
 verify.quickInfos({
-    "16q": ["var i2_i: new i2(i: i1) => any", "new method"],
+    "16q": ["var i2_i: i2\nnew (i: i1) => any", "new method"],
 
     17: "var i2_i_nc_x: number",
     18: "(property) i2.nc_x: number",
@@ -133,7 +133,7 @@ verify.quickInfos({
 goTo.marker('24');
 verify.currentSignatureHelpDocCommentIs("this is call signature");
 verify.currentParameterHelpArgumentDocCommentIs("paramhelp a");
-verify.quickInfoAt("24q", "var i2_i: i2(a: number, b: number) => number", "this is call signature");
+verify.quickInfoAt("24q", "var i2_i: i2\n(a: number, b: number) => number", "this is call signature");
 
 goTo.marker('25');
 verify.currentSignatureHelpDocCommentIs("this is call signature");
@@ -163,11 +163,11 @@ verify.currentParameterHelpArgumentDocCommentIs("");
 verify.quickInfoAt("33q", "(method) i2.nc_fnfoo(b: number): string");
 
 goTo.marker('34');
-verify.completionListContains("i1", "interface i1", "this is interface 1");
+verify.not.completionListContains("i1", "interface i1", "this is interface 1");
 verify.completionListContains("i1_i", "var i1_i: i1", "");
-verify.completionListContains("nc_i1", "interface nc_i1", "");
+verify.not.completionListContains("nc_i1", "interface nc_i1", "");
 verify.completionListContains("nc_i1_i", "var nc_i1_i: nc_i1", "");
-verify.completionListContains("i2", "interface i2", "this is interface 2 with memebers");
+verify.not.completionListContains("i2", "interface i2", "this is interface 2 with memebers");
 verify.completionListContains("i2_i", "var i2_i: i2", "");
 verify.completionListContains("i2_i_x", "var i2_i_x: number", "");
 verify.completionListContains("i2_i_foo", "var i2_i_foo: (b: number) => string", "");
@@ -194,7 +194,7 @@ verify.completionListContains("a", "(parameter) a: number", "i3_i a");
 
 verify.quickInfoAt("40q", "var i3_i: i3");
 goTo.marker('40');
-verify.completionListContains("i3", "interface i3", "");
+verify.not.completionListContains("i3", "interface i3", "");
 verify.completionListContains("i3_i", "var i3_i: i3", "");
 
 goTo.marker('41');

@@ -31,7 +31,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var ShortDetails = (function (_super) {
+exports.__esModule = true;
+var ShortDetails = /** @class */ (function (_super) {
     __extends(ShortDetails, _super);
     function ShortDetails() {
         return _super !== null && _super.apply(this, arguments) || this;

@@ -9,7 +9,6 @@ interface A {
 >$ : $
 }
 === /ref.d.ts ===
-
 // $ comes from d.ts file - no need to add type reference directive
 
 interface $ { x }

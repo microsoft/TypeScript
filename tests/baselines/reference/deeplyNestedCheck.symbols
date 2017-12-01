@@ -1,0 +1,29 @@
+=== tests/cases/compiler/deeplyNestedCheck.ts ===
+// Repro from #14794
+
+interface DataSnapshot<X = {}> {
+>DataSnapshot : Symbol(DataSnapshot, Decl(deeplyNestedCheck.ts, 0, 0))
+>X : Symbol(X, Decl(deeplyNestedCheck.ts, 2, 23))
+
+  child(path: string): DataSnapshot;
+>child : Symbol(DataSnapshot.child, Decl(deeplyNestedCheck.ts, 2, 32))
+>path : Symbol(path, Decl(deeplyNestedCheck.ts, 3, 8))
+>DataSnapshot : Symbol(DataSnapshot, Decl(deeplyNestedCheck.ts, 0, 0))
+}
+
+interface Snapshot<T> extends DataSnapshot {
+>Snapshot : Symbol(Snapshot, Decl(deeplyNestedCheck.ts, 4, 1))
+>T : Symbol(T, Decl(deeplyNestedCheck.ts, 6, 19))
+>DataSnapshot : Symbol(DataSnapshot, Decl(deeplyNestedCheck.ts, 0, 0))
+
+  child<U extends keyof T>(path: U): Snapshot<T[U]>;
+>child : Symbol(Snapshot.child, Decl(deeplyNestedCheck.ts, 6, 44))
+>U : Symbol(U, Decl(deeplyNestedCheck.ts, 7, 8))
+>T : Symbol(T, Decl(deeplyNestedCheck.ts, 6, 19))
+>path : Symbol(path, Decl(deeplyNestedCheck.ts, 7, 27))
+>U : Symbol(U, Decl(deeplyNestedCheck.ts, 7, 8))
+>Snapshot : Symbol(Snapshot, Decl(deeplyNestedCheck.ts, 4, 1))
+>T : Symbol(T, Decl(deeplyNestedCheck.ts, 6, 19))
+>U : Symbol(U, Decl(deeplyNestedCheck.ts, 7, 8))
+}
+

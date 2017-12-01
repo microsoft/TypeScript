@@ -1,0 +1,6 @@
+=== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement14.ts ===
+for (let [a, b] of X) {
+>a : any
+>b : any
+>X : any
+}

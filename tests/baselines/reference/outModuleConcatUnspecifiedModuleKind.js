@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/outModuleConcatUnspecifiedModuleKind.ts] ////
 
 //// [a.ts]
-
 export class A { } // module
 
 //// [b.ts]

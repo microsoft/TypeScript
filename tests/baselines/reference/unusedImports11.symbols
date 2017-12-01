@@ -33,7 +33,6 @@ new r.Member();
 >Member : Symbol(Member, Decl(b.ts, 0, 0))
 
 === tests/cases/compiler/b.ts ===
-
 export class Member {}
 >Member : Symbol(Member, Decl(b.ts, 0, 0))
 

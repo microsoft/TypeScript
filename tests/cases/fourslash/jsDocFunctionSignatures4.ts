@@ -7,5 +7,4 @@
 ////   * @param {function (string):void} y */
 //// function fn(x, y) { }
 
-verify.numberOfErrorsInCurrentFile(0);
-
+verify.noErrors();

@@ -1,5 +1,4 @@
 //// [argumentsObjectIterator01_ES6.ts]
-
 function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
     let result = [];
     for (let arg of arguments) {

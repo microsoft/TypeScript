@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileEnums.ts ===
-
 enum e1 {
 >e1 : e1
 

@@ -1,5 +1,4 @@
 === tests/cases/compiler/abstractInterfaceIdentifierName.ts ===
-
 interface abstract {
 >abstract : abstract
 

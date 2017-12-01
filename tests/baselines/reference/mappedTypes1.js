@@ -1,5 +1,4 @@
 //// [mappedTypes1.ts]
-
 type Item = { a: string, b: number, c: boolean };
 
 type T00 = { [P in "x" | "y"]: number };
@@ -139,9 +138,9 @@ declare let x2: string;
 declare let x3: number;
 declare let x4: {
     toString: void;
-    valueOf: void;
     toFixed: void;
     toExponential: void;
     toPrecision: void;
+    valueOf: void;
     toLocaleString: void;
 };

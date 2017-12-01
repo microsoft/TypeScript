@@ -6,7 +6,6 @@ let y: number = Foo();
 >Foo : () => number
 
 === tests/cases/conformance/externalModules/foo.d.ts ===
-
 declare function Thing(): number;
 >Thing : () => number
 

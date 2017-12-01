@@ -1,0 +1,19 @@
+tests/cases/conformance/jsx/file.tsx(9,13): error TS2605: JSX element type 'undefined' is not a constructor function for JSX elements.
+tests/cases/conformance/jsx/file.tsx(10,11): error TS2605: JSX element type 'undefined' is not a constructor function for JSX elements.
+
+
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    import React = require('react');
+    
+    const Foo = (props: any) => undefined;
+    function Greet(x: {name?: string}) {
+    	return undefined;
+    }
+    
+    // Error
+    const foo = <Foo />;
+                ~~~~~~~
+!!! error TS2605: JSX element type 'undefined' is not a constructor function for JSX elements.
+    const G = <Greet />;
+              ~~~~~~~~~
+!!! error TS2605: JSX element type 'undefined' is not a constructor function for JSX elements.

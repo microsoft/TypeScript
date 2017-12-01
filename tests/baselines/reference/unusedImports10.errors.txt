@@ -1,8 +1,7 @@
-tests/cases/compiler/unusedImports10.ts(10,12): error TS6133: 'a' is declared but never used.
+tests/cases/compiler/unusedImports10.ts(9,12): error TS6133: 'a' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedImports10.ts (1 errors) ====
-    
     module A {
         export class Calculator {
             public handelChar() {
@@ -13,5 +12,5 @@ tests/cases/compiler/unusedImports10.ts(10,12): error TS6133: 'a' is declared bu
     module B {
         import a = A;
                ~
-!!! error TS6133: 'a' is declared but never used.
+!!! error TS6133: 'a' is declared but its value is never read.
     }

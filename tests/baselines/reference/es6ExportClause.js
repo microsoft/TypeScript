@@ -1,5 +1,4 @@
 //// [server.ts]
-
 class c {
 }
 interface i {

@@ -1,5 +1,4 @@
 //// [declFileTypeofEnum.ts]
-
 enum days {
     monday,
     tuesday,

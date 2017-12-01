@@ -1,4 +1,4 @@
-tests/cases/compiler/emptyTypeArgumentList.ts(2,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/emptyTypeArgumentList.ts(2,1): error TS2558: Expected 1 type arguments, but got 0.
 tests/cases/compiler/emptyTypeArgumentList.ts(2,4): error TS1099: Type argument list cannot be empty.
 
 
@@ -6,6 +6,6 @@ tests/cases/compiler/emptyTypeArgumentList.ts(2,4): error TS1099: Type argument 
     function foo<T>() { }
     foo<>();
     ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 1 type arguments, but got 0.
        ~~
 !!! error TS1099: Type argument list cannot be empty.

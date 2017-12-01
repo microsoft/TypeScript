@@ -1,5 +1,4 @@
 //// [systemModuleConstEnumsSeparateCompilation.ts]
-
 declare function use(a: any);
 const enum TopLevelConstEnum { X }
 

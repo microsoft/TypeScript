@@ -113,13 +113,14 @@ module TopLevelModule2 {
 //// [typeResolution.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var TopLevelModule1;
     (function (TopLevelModule1) {
         var SubModule1;
         (function (SubModule1) {
             var SubSubModule1;
             (function (SubSubModule1) {
-                var ClassA = (function () {
+                var ClassA = /** @class */ (function () {
                     function ClassA() {
                     }
                     ClassA.prototype.AisIn1_1_1 = function () {
@@ -149,7 +150,7 @@ define(["require", "exports"], function (require, exports) {
                     return ClassA;
                 }());
                 SubSubModule1.ClassA = ClassA;
-                var ClassB = (function () {
+                var ClassB = /** @class */ (function () {
                     function ClassB() {
                     }
                     ClassB.prototype.BisIn1_1_1 = function () {
@@ -182,7 +183,7 @@ define(["require", "exports"], function (require, exports) {
                     return ClassB;
                 }());
                 SubSubModule1.ClassB = ClassB;
-                var NonExportedClassQ = (function () {
+                var NonExportedClassQ = /** @class */ (function () {
                     function NonExportedClassQ() {
                         function QQ() {
                             /* Sampling of stuff from AisIn1_1_1 */
@@ -200,7 +201,7 @@ define(["require", "exports"], function (require, exports) {
                 }());
             })(SubSubModule1 = SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {}));
             // Should have no effect on S1.SS1.ClassA above because it is not exported
-            var ClassA = (function () {
+            var ClassA = /** @class */ (function () {
                 function ClassA() {
                     function AA() {
                         var a2;
@@ -222,21 +223,21 @@ define(["require", "exports"], function (require, exports) {
             var SubSubModule2;
             (function (SubSubModule2) {
                 // No code here since these are the mirror of the above calls
-                var ClassA = (function () {
+                var ClassA = /** @class */ (function () {
                     function ClassA() {
                     }
                     ClassA.prototype.AisIn1_2_2 = function () { };
                     return ClassA;
                 }());
                 SubSubModule2.ClassA = ClassA;
-                var ClassB = (function () {
+                var ClassB = /** @class */ (function () {
                     function ClassB() {
                     }
                     ClassB.prototype.BisIn1_2_2 = function () { };
                     return ClassB;
                 }());
                 SubSubModule2.ClassB = ClassB;
-                var ClassC = (function () {
+                var ClassC = /** @class */ (function () {
                     function ClassC() {
                     }
                     ClassC.prototype.CisIn1_2_2 = function () { };
@@ -245,7 +246,7 @@ define(["require", "exports"], function (require, exports) {
                 SubSubModule2.ClassC = ClassC;
             })(SubSubModule2 = SubModule2.SubSubModule2 || (SubModule2.SubSubModule2 = {}));
         })(SubModule2 = TopLevelModule1.SubModule2 || (TopLevelModule1.SubModule2 = {}));
-        var ClassA = (function () {
+        var ClassA = /** @class */ (function () {
             function ClassA() {
             }
             ClassA.prototype.AisIn1 = function () { };
@@ -253,7 +254,7 @@ define(["require", "exports"], function (require, exports) {
         }());
         var NotExportedModule;
         (function (NotExportedModule) {
-            var ClassA = (function () {
+            var ClassA = /** @class */ (function () {
                 function ClassA() {
                 }
                 return ClassA;
@@ -265,7 +266,7 @@ define(["require", "exports"], function (require, exports) {
     (function (TopLevelModule2) {
         var SubModule3;
         (function (SubModule3) {
-            var ClassA = (function () {
+            var ClassA = /** @class */ (function () {
                 function ClassA() {
                 }
                 ClassA.prototype.AisIn2_3 = function () { };

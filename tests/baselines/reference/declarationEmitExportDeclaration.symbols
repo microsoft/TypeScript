@@ -1,13 +1,12 @@
 === tests/cases/compiler/utils.ts ===
-
 export function foo() { }
 >foo : Symbol(foo, Decl(utils.ts, 0, 0))
 
 export function bar() { }
->bar : Symbol(bar, Decl(utils.ts, 1, 25))
+>bar : Symbol(bar, Decl(utils.ts, 0, 25))
 
 export interface Buzz { }
->Buzz : Symbol(Buzz, Decl(utils.ts, 2, 25))
+>Buzz : Symbol(Buzz, Decl(utils.ts, 1, 25))
 
 === tests/cases/compiler/index.ts ===
 import {foo, bar, Buzz} from "./utils";

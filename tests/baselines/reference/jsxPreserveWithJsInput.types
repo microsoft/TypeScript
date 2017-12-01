@@ -1,5 +1,4 @@
 === tests/cases/compiler/a.js ===
-
 var elemA = 42;
 >elemA : number
 >42 : 42

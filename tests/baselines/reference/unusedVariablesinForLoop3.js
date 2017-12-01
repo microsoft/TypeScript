@@ -1,5 +1,4 @@
 //// [unusedVariablesinForLoop3.ts]
-
 function f1 () {
     for (const elem of ["a", "b", "c"]) {
 

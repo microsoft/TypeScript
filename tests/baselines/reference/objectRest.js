@@ -44,7 +44,7 @@ let computed2 = 'a';
 var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 ({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
 
-var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject['anythingGoes'];
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
 
 
 //// [objectRest.js]
@@ -89,6 +89,6 @@ var _g = computed, stillNotGreat = o[_g], _h = computed2, soSo = o[_h], o = __re
 (_j = computed, stillNotGreat = o[_j], _k = computed2, soSo = o[_k], o = __rest(o, [typeof _j === "symbol" ? _j : _j + "", typeof _k === "symbol" ? _k : _k + ""]));
 var noContextualType = (_a) => {
     var { aNumber = 12 } = _a, notEmptyObject = __rest(_a, ["aNumber"]);
-    return aNumber + notEmptyObject['anythingGoes'];
+    return aNumber + notEmptyObject.anythingGoes;
 };
 var _d, _f, _j, _k;

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding1.ts] ////
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_0.ts]
-
 var a = 10;
 export default a;
 

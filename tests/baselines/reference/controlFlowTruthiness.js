@@ -1,5 +1,4 @@
 //// [controlFlowTruthiness.ts]
-
 declare function foo(): string | undefined;
 
 function f1() {

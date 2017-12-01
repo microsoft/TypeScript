@@ -1,5 +1,4 @@
 //// [functionCalls.ts]
-
 // Invoke function call on value of type 'any' with no type arguments
 var anyVar: any;
 anyVar(0);

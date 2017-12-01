@@ -1,5 +1,4 @@
 === tests/cases/compiler/properties.ts ===
-
 class MyClass
 >MyClass : MyClass
 {

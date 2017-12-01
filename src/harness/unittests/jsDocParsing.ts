@@ -44,8 +44,8 @@ namespace ts {
                 parsesCorrectly("functionType1", "{function()}");
                 parsesCorrectly("functionType2", "{function(string, boolean)}");
                 parsesCorrectly("functionReturnType1", "{function(string, boolean)}");
-                parsesCorrectly("thisType1", "{this:a.b}");
-                parsesCorrectly("newType1", "{new:a.b}");
+                parsesCorrectly("thisType1", "{function(this:a.b)}");
+                parsesCorrectly("newType1", "{function(new:a.b)}");
                 parsesCorrectly("variadicType", "{...number}");
                 parsesCorrectly("optionalType", "{number=}");
                 parsesCorrectly("optionalNullable", "{?=}");
@@ -54,7 +54,7 @@ namespace ts {
                 parsesCorrectly("typeReference3", "{a.function}");
                 parsesCorrectly("arrayType1", "{a[]}");
                 parsesCorrectly("arrayType2", "{a[][]}");
-                parsesCorrectly("arrayType3", "{a[][]=}");
+                parsesCorrectly("arrayType3", "{(a[][])=}");
                 parsesCorrectly("keyword1", "{var}");
                 parsesCorrectly("keyword2", "{null}");
                 parsesCorrectly("keyword3", "{undefined}");
@@ -62,6 +62,12 @@ namespace ts {
                 parsesCorrectly("tupleType1", "{[number]}");
                 parsesCorrectly("tupleType2", "{[number,string]}");
                 parsesCorrectly("tupleType3", "{[number,string,boolean]}");
+                parsesCorrectly("tupleTypeWithTrailingComma", "{[number,]}");
+                parsesCorrectly("typeOfType", "{typeof M}");
+                parsesCorrectly("tsConstructorType", "{new () => string}");
+                parsesCorrectly("tsFunctionType", "{() => string}");
+                parsesCorrectly("typeArgumentsNotFollowingDot", "{a<>}");
+                parsesCorrectly("functionTypeWithTrailingComma", "{function(a,)}");
            });
 
             describe("parsesIncorrectly", () => {
@@ -69,21 +75,13 @@ namespace ts {
                 parsesIncorrectly("unionTypeWithTrailingBar", "{(a|)}");
                 parsesIncorrectly("unionTypeWithoutTypes", "{()}");
                 parsesIncorrectly("nullableTypeWithoutType", "{!}");
-                parsesIncorrectly("functionTypeWithTrailingComma", "{function(a,)}");
                 parsesIncorrectly("thisWithoutType", "{this:}");
                 parsesIncorrectly("newWithoutType", "{new:}");
                 parsesIncorrectly("variadicWithoutType", "{...}");
                 parsesIncorrectly("optionalWithoutType", "{=}");
                 parsesIncorrectly("allWithType", "{*foo}");
-                parsesIncorrectly("typeArgumentsNotFollowingDot", "{a<>}");
-                parsesIncorrectly("emptyTypeArguments", "{a.<>}");
-                parsesIncorrectly("typeArgumentsWithTrailingComma", "{a.<a,>}");
-                parsesIncorrectly("tsFunctionType", "{() => string}");
-                parsesIncorrectly("tsConstructoType", "{new () => string}");
-                parsesIncorrectly("typeOfType", "{typeof M}");
                 parsesIncorrectly("namedParameter", "{function(a: number)}");
                 parsesIncorrectly("tupleTypeWithComma", "{[,]}");
-                parsesIncorrectly("tupleTypeWithTrailingComma", "{[number,]}");
                 parsesIncorrectly("tupleTypeWithLeadingComma", "{[,number]}");
             });
         });
@@ -141,18 +139,22 @@ namespace ts {
                         `/**
   * @param
   */`);
+
+                parsesIncorrectly("noType",
+`/**
+* @type
+*/`);
+
+                parsesIncorrectly("@augments with no type",
+`/**
+ * @augments
+ */`);
             });
 
             describe("parsesCorrectly", () => {
                 parsesCorrectly("noLeadingAsterisk",
 `/**
     @type {number}
-  */`);
-
-
-                parsesCorrectly("noType",
-`/**
-  * @type
   */`);
 
 
@@ -241,6 +243,18 @@ namespace ts {
   */`);
 
 
+                parsesCorrectly("argSynonymForParamTag",
+`/**
+  * @arg {number} name1 Description
+  */`);
+
+
+                parsesCorrectly("argumentSynonymForParamTag",
+`/**
+  * @argument {number} name1 Description
+  */`);
+
+
                 parsesCorrectly("templateTag",
 `/**
   * @template T
@@ -286,6 +300,30 @@ namespace ts {
   * @property {number} age
   * @property {string} name
   */`);
+                parsesCorrectly("less-than and greater-than characters",
+`/**
+ * @param x hi
+< > still part of the previous comment
+ */`);
+            });
+        });
+        describe("getFirstToken", () => {
+            it("gets jsdoc", () => {
+                const root = ts.createSourceFile("foo.ts", "/** comment */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+                assert.isDefined(root);
+                assert.equal(root.kind, ts.SyntaxKind.SourceFile);
+                const first = root.getFirstToken();
+                assert.isDefined(first);
+                assert.equal(first.kind, ts.SyntaxKind.VarKeyword);
+            });
+        });
+        describe("getLastToken", () => {
+            it("gets jsdoc", () => {
+                const root = ts.createSourceFile("foo.ts", "var a = true;/** comment */", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+                assert.isDefined(root);
+                const last = root.getLastToken();
+                assert.isDefined(last);
+                assert.equal(last.kind, ts.SyntaxKind.EndOfFileToken);
             });
         });
     });

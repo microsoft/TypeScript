@@ -1,6 +1,4 @@
 === tests/cases/compiler/f1.ts ===
-
-
 export class A {}
 >A : A
 
@@ -8,7 +6,6 @@ export interface I {}
 >I : I
 
 === tests/cases/compiler/f2.ts ===
-
 var x = 1;
 >x : number
 >1 : 1

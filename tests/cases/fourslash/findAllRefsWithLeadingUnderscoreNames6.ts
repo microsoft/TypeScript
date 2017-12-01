@@ -2,7 +2,7 @@
 
 ////class Foo {
 ////    public _bar;
-////    public [|__bar|];
+////    public [|{| "isWriteAccess": true, "isDefinition": true |}__bar|];
 ////    public ___bar;
 ////    public ____bar;
 ////}
@@ -13,4 +13,4 @@
 ////x.___bar;
 ////x.____bar;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) Foo.__bar: any");

@@ -1,4 +1,4 @@
-tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts(4,14): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts(4,14): error TS2554: Expected 1 arguments, but got 0.
 
 
 ==== tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts(4,14): error T
     function f() {
         var d1 = new derived();
                  ~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
         var d2 = new derived(4);
     }
     

@@ -13,13 +13,12 @@ export function w(): e.w { // Should be OK
 >w : Symbol(e.w, Decl(exporter.ts, 0, 0))
 }
 === tests/cases/compiler/w1.ts ===
-
 export = Widget1
->Widget1 : Symbol(Widget1, Decl(w1.ts, 1, 16))
+>Widget1 : Symbol(Widget1, Decl(w1.ts, 0, 16))
 
 class Widget1 { name = 'one'; }
->Widget1 : Symbol(Widget1, Decl(w1.ts, 1, 16))
->name : Symbol(Widget1.name, Decl(w1.ts, 2, 15))
+>Widget1 : Symbol(Widget1, Decl(w1.ts, 0, 16))
+>name : Symbol(Widget1.name, Decl(w1.ts, 1, 15))
 
 === tests/cases/compiler/exporter.ts ===
 export import w = require('./w1');

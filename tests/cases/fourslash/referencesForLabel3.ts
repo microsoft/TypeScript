@@ -6,5 +6,4 @@
 ////    var label = "label";
 ////}
 
-const [label] = test.ranges();
-verify.referencesOf(label, [label]);
+verify.singleReferenceGroup("label");

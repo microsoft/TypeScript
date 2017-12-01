@@ -2,4 +2,7 @@
 var v = async function await(): Promise<void> { }
 
 //// [asyncFunctionDeclaration12_es6.js]
-var v = , await = () => { };
+var v = function () {
+    return __awaiter(this, void 0, void 0, function* () { });
+}, await;
+() => { };

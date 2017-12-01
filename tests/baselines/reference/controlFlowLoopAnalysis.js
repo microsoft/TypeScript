@@ -1,5 +1,4 @@
 //// [controlFlowLoopAnalysis.ts]
-
 // Repro from #8418
 
 let cond: boolean;

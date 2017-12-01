@@ -1,5 +1,4 @@
 //// [constDeclarations.ts]
-
 // No error
 const c1 = false;
 const c2: number = 23;

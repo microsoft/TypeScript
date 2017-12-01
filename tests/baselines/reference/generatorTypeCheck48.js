@@ -1,5 +1,4 @@
 //// [generatorTypeCheck48.ts]
-
 function* g() {
     yield;
 }

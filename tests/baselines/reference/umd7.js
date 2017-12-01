@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/umd7.ts] ////
 
 //// [foo.d.ts]
-
 declare function Thing(): number;
 export = Thing;
 export as namespace Foo;

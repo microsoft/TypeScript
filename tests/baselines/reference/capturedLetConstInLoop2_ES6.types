@@ -1,5 +1,4 @@
 === tests/cases/compiler/capturedLetConstInLoop2_ES6.ts ===
-
 // ========let
 function foo0(x) {
 >foo0 : (x: any) => void

@@ -1,5 +1,4 @@
 === tests/cases/conformance/statements/continueStatements/forContinueStatements.ts ===
-
 for (; ;) {
     continue;
 }

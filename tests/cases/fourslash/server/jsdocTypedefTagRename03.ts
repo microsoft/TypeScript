@@ -3,7 +3,7 @@
 // @allowNonTsExtensions: true
 // @Filename: jsDocTypedef_form3.js
 ////
-//// /** 
+//// /**
 ////  * @typedef /*1*/[|Person|]
 ////  * @type {Object}
 ////  * @property {number} age
@@ -14,7 +14,4 @@
 //// var person;
 
 goTo.file('jsDocTypedef_form3.js')
-goTo.marker('1');
-verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ true);
-goTo.marker('2');
-verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ true);
+verify.rangesAreRenameLocations({ findInComments: true });

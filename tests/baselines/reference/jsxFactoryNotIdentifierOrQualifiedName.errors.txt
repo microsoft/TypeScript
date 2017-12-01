@@ -5,7 +5,6 @@ tests/cases/compiler/test.tsx(13,5): error TS2304: Cannot find name 'React'.
 
 !!! error TS5067: Invalid value for 'jsxFactory'. 'Element.createElement=' is not a valid identifier or qualified-name.
 ==== tests/cases/compiler/Element.ts (0 errors) ====
-    
     declare namespace JSX {
         interface Element {
             name: string;

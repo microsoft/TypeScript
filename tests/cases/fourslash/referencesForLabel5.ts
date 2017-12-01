@@ -13,5 +13,5 @@
 ////        }
 
 const [outer1, outer2, inner1, inner2, outer3] = test.ranges();
-verify.rangesReferenceEachOther([outer1, outer2, outer3]);
-verify.rangesReferenceEachOther([inner1, inner2]);
+verify.singleReferenceGroup("label", [outer1, outer2, outer3]);
+verify.singleReferenceGroup("label", [inner1, inner2]);

@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParametersTypeAliases.ts]
-
 // used in a declaration
 type handler1 = () => void;
 export interface I1 {
@@ -29,6 +28,7 @@ y[0]();
 
 //// [unusedLocalsAndParametersTypeAliases.js]
 "use strict";
+exports.__esModule = true;
 var x;
 x();
 var y;

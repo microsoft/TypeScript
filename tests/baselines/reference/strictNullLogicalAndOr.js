@@ -1,5 +1,4 @@
 //// [strictNullLogicalAndOr.ts]
-
 // Repro from #9113
 
 let sinOrCos = Math.random() < .5;

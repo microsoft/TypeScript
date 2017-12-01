@@ -4,6 +4,7 @@
 
 namespace ts.projectSystem {
     import CommandNames = server.CommandNames;
+    const nullCancellationToken = server.nullCancellationToken;
 
     function createTestTypingsInstaller(host: server.ServerHost) {
         return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
@@ -11,9 +12,9 @@ namespace ts.projectSystem {
 
     describe("CompileOnSave affected list", () => {
         function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: FileOrFolder[] }[]) {
-            const response: server.protocol.CompileOnSaveAffectedFileListSingleProject[] = session.executeCommand(request).response;
-            const actualResult = response.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
-            expectedFileList = expectedFileList.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
+            const response = session.executeCommand(request).response as server.protocol.CompileOnSaveAffectedFileListSingleProject[];
+            const actualResult = response.sort((list1, list2) => ts.compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
+            expectedFileList = expectedFileList.sort((list1, list2) => ts.compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
 
             assert.equal(actualResult.length, expectedFileList.length, `Actual result project number is different from the expected project number`);
 
@@ -30,6 +31,21 @@ namespace ts.projectSystem {
             }
         }
 
+        function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller): server.Session {
+            const opts: server.SessionOptions = {
+                host,
+                cancellationToken: nullCancellationToken,
+                useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
+                typingsInstaller: typingsInstaller || server.nullTypingsInstaller,
+                byteLength: Utils.byteLength,
+                hrtime: process.hrtime,
+                logger: nullLogger,
+                canUseEvents: false
+            };
+            return new server.Session(opts);
+        }
+
         describe("for configured projects", () => {
             let moduleFile1: FileOrFolder;
             let file1Consumer1: FileOrFolder;
@@ -39,7 +55,6 @@ namespace ts.projectSystem {
             let configFile: FileOrFolder;
             let changeModuleFile1ShapeRequest1: server.protocol.Request;
             let changeModuleFile1InternalRequest1: server.protocol.Request;
-            let changeModuleFile1ShapeRequest2: server.protocol.Request;
             // A compile on save affected file request using file1
             let moduleFile1FileListRequest: server.protocol.Request;
 
@@ -96,23 +111,13 @@ namespace ts.projectSystem {
                     insertString: `var T1: number;`
                 });
 
-                // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `export var T2: number;`
-                });
-
                 moduleFile1FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path, projectFileName: configFile.path });
             });
 
             it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
 
@@ -137,7 +142,7 @@ namespace ts.projectSystem {
             it("should be up-to-date with the reference map changes", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
 
@@ -184,7 +189,7 @@ namespace ts.projectSystem {
             it("should be up-to-date with changes made in non-open files", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1], session);
 
@@ -193,7 +198,6 @@ namespace ts.projectSystem {
 
                 file1Consumer1.content = `let y = 10;`;
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer1.path, /*removed*/ false);
 
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
@@ -202,7 +206,7 @@ namespace ts.projectSystem {
             it("should be up-to-date with deleted files", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
@@ -210,14 +214,13 @@ namespace ts.projectSystem {
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 // Delete file1Consumer2
                 host.reloadFS([moduleFile1, file1Consumer1, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer2.path, /*removed*/ true);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
             });
 
             it("should be up-to-date with newly created files", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
@@ -227,7 +230,6 @@ namespace ts.projectSystem {
                     content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3, globalFile3, configFile, libFile]);
-                host.triggerDirectoryWatcherCallback(ts.getDirectoryPath(file1Consumer3.path), file1Consumer3.path);
                 host.runQueuedTimeoutCallbacks();
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3] }]);
@@ -254,7 +256,7 @@ namespace ts.projectSystem {
 
                 const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
@@ -271,7 +273,7 @@ namespace ts.projectSystem {
             it("should return all files if a global file changed shape", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([globalFile3], session);
                 const changeGlobalFile3ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
@@ -297,9 +299,32 @@ namespace ts.projectSystem {
 
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
                 openFilesForSession([moduleFile1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
+            });
+
+            it("should save when compileOnSave is enabled in base tsconfig.json", () => {
+                configFile = {
+                    path: "/a/b/tsconfig.json",
+                    content: `{
+                        "extends": "/a/tsconfig.json"
+                    }`
+                };
+
+                const configFile2: FileOrFolder = {
+                    path: "/a/tsconfig.json",
+                    content: `{
+                        "compileOnSave": true
+                    }`
+                };
+
+                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile2, configFile, libFile]);
+                const typingsInstaller = createTestTypingsInstaller(host);
+                const session = createSession(host, typingsInstaller);
+
+                openFilesForSession([moduleFile1, file1Consumer1], session);
+                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
             });
 
             it("should always return the file itself if '--isolatedModules' is specified", () => {
@@ -315,7 +340,7 @@ namespace ts.projectSystem {
 
                 const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
                 openFilesForSession([moduleFile1], session);
 
                 const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
@@ -344,7 +369,7 @@ namespace ts.projectSystem {
 
                 const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
                 openFilesForSession([moduleFile1], session);
 
                 const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
@@ -366,7 +391,7 @@ namespace ts.projectSystem {
                 };
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer1Consumer1] }]);
@@ -399,7 +424,7 @@ namespace ts.projectSystem {
                 };
                 const host = createServerHost([file1, file2, configFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([file1, file2], session);
                 const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
@@ -437,7 +462,6 @@ namespace ts.projectSystem {
 
                 openFilesForSession([referenceFile1], session);
                 host.reloadFS([referenceFile1, configFile]);
-                host.triggerFileWatcherCallback(moduleFile1.path, /*removed*/ true);
 
                 const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, request, [
@@ -475,27 +499,29 @@ namespace ts.projectSystem {
                 const lines = ["var x = 1;", "var y = 2;"];
                 const path = "/a/app";
                 const f = {
-                    path: path + ".ts",
+                    path: path + ts.Extension.Ts,
                     content: lines.join(newLine)
                 };
                 const host = createServerHost([f], { newLine });
                 const session = createSession(host);
-                session.executeCommand(<server.protocol.OpenRequest>{
+                const openRequest: server.protocol.OpenRequest = {
                     seq: 1,
                     type: "request",
-                    command: "open",
+                    command: server.protocol.CommandTypes.Open,
                     arguments: { file: f.path }
-                });
-                session.executeCommand(<server.protocol.CompileOnSaveEmitFileRequest>{
+                };
+                session.executeCommand(openRequest);
+                const emitFileRequest: server.protocol.CompileOnSaveEmitFileRequest = {
                     seq: 2,
                     type: "request",
-                    command: "compileOnSaveEmitFile",
+                    command: server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: f.path }
-                });
-                const emitOutput = host.readFile(path + ".js");
+                };
+                session.executeCommand(emitFileRequest);
+                const emitOutput = host.readFile(path + ts.Extension.Js);
                 assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
             }
-        })
+        });
 
         it("should emit specified file", () => {
             const file1 = {
@@ -512,7 +538,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+            const session = createSession(host, { typingsInstaller });
 
             openFilesForSession([file1, file2], session);
             const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: configFile.path });
@@ -520,7 +546,7 @@ namespace ts.projectSystem {
 
             const expectedEmittedFileName = "/a/b/f1.js";
             assert.isTrue(host.fileExists(expectedEmittedFileName));
-            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
         it("shoud not emit js files in external projects", () => {
@@ -537,7 +563,7 @@ namespace ts.projectSystem {
                 path: "/a/b/file3.js",
                 content: "console.log('file3');"
             };
-            const externalProjectName = "externalproject";
+            const externalProjectName = "/a/b/externalproject";
             const host = createServerHost([file1, file2, file3, libFile]);
             const session = createSession(host);
             const projectService = session.getProjectService();
@@ -561,6 +587,49 @@ namespace ts.projectSystem {
             assert.isTrue(outFileContent.indexOf(file1.content) !== -1);
             assert.isTrue(outFileContent.indexOf(file2.content) === -1);
             assert.isTrue(outFileContent.indexOf(file3.content) === -1);
+        });
+
+        it("should use project root as current directory so that compile on save results in correct file mapping", () => {
+            const inputFileName = "Foo.ts";
+            const file1 = {
+                path: `/root/TypeScriptProject3/TypeScriptProject3/${inputFileName}`,
+                content: "consonle.log('file1');"
+            };
+            const externalProjectName = "/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
+            const host = createServerHost([file1, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+
+            const outFileName = "bar.js";
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([file1.path]),
+                options: {
+                    outFile: outFileName,
+                    sourceMap: true,
+                    compileOnSave: true
+                },
+                projectFileName: externalProjectName
+            });
+
+            const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path });
+            session.executeCommand(emitRequest);
+
+            // Verify js file
+            const expectedOutFileName = "/root/TypeScriptProject3/TypeScriptProject3/" + outFileName;
+            assert.isTrue(host.fileExists(expectedOutFileName));
+            const outFileContent = host.readFile(expectedOutFileName);
+            verifyContentHasString(outFileContent, file1.content);
+            verifyContentHasString(outFileContent, `//# ${"sourceMappingURL"}=${outFileName}.map`); // Sometimes tools can sometimes see this line as a source mapping url comment, so we obfuscate it a little
+
+            // Verify map file
+            const expectedMapFileName = expectedOutFileName + ".map";
+            assert.isTrue(host.fileExists(expectedMapFileName));
+            const mapFileContent = host.readFile(expectedMapFileName);
+            verifyContentHasString(mapFileContent, `"sources":["${inputFileName}"]`);
+
+            function verifyContentHasString(content: string, str: string) {
+                assert.isTrue(stringContains(content, str), `Expected "${content}" to have "${str}"`);
+            }
         });
     });
 }

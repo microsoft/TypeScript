@@ -21,6 +21,7 @@ export function baz3(func = class { x = foo }) {
 
 //// [functionLikeInParameterInitializer.js]
 "use strict";
+exports.__esModule = true;
 // error
 function bar(func) {
     if (func === void 0) { func = function () { return foo; }; }
@@ -41,7 +42,7 @@ function baz2(func) {
 exports.baz2 = baz2;
 // error
 function baz3(func) {
-    if (func === void 0) { func = (function () {
+    if (func === void 0) { func = /** @class */ (function () {
         function class_1() {
             this.x = foo;
         }

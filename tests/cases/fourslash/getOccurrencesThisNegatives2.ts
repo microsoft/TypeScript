@@ -89,7 +89,7 @@
 ////    }
 ////
 ////    public static staticB = this.staticMethod1;
-////    
+////
 ////    public static staticMethod1() {
 ////        this;
 ////        this;
@@ -140,8 +140,4 @@
 ////    }
 ////}
 
-
-test.markers().forEach(m => {
-    goTo.position(m.position, m.fileName)
-    verify.occurrencesAtPositionCount(0);
-});
+goTo.eachMarker(() => verify.occurrencesAtPositionCount(0));

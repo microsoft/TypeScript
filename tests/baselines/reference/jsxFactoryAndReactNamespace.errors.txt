@@ -3,7 +3,6 @@ error TS5053: Option 'reactNamespace' cannot be specified with option 'jsxFactor
 
 !!! error TS5053: Option 'reactNamespace' cannot be specified with option 'jsxFactory'.
 ==== tests/cases/compiler/Element.ts (0 errors) ====
-    
     declare namespace JSX {
         interface Element {
             name: string;

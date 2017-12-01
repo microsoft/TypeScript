@@ -17,9 +17,9 @@ export default function() {}
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     class default_1 {
     }
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = default_1;
 });
 //// [b.js]
@@ -33,7 +33,7 @@ export default function() {}
     }
 })(function (require, exports) {
     "use strict";
-    function default_1() { }
     Object.defineProperty(exports, "__esModule", { value: true });
+    function default_1() { }
     exports.default = default_1;
 });

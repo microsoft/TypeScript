@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/mapped/mappedTypes2.ts ===
-
 function verifyLibTypes<T, K extends keyof T, U>() {
 >verifyLibTypes : <T, K extends keyof T, U>() => void
 >T : T

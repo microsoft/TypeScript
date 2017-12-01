@@ -1,17 +1,17 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(5,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(6,11): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(9,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(10,11): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(13,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(14,11): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(21,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(22,11): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(28,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(29,11): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(36,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(37,11): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(43,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(44,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(5,10): error TS2558: Expected 2 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(6,11): error TS2558: Expected 2 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(9,10): error TS2558: Expected 2 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(10,11): error TS2558: Expected 2 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(13,10): error TS2558: Expected 2 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(14,11): error TS2558: Expected 2 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(21,10): error TS2558: Expected 2 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(22,11): error TS2558: Expected 2 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(28,10): error TS2558: Expected 2 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(29,11): error TS2558: Expected 2 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(36,10): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(37,11): error TS2558: Expected 0 type arguments, but got 3.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(43,10): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(44,11): error TS2558: Expected 0 type arguments, but got 3.
 
 
 ==== tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts (14 errors) ====
@@ -21,26 +21,26 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFuncti
     function f<T, U>(x: T, y: U): T { return null; }
     var r1 = f<number>(1, '');
              ~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 1.
     var r1b = f<number, string, number>(1, '');
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 3.
     
     var f2 = <T, U>(x: T, y: U): T => { return null; }
     var r2 = f2<number>(1, '');
              ~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 1.
     var r2b = f2<number, string, number>(1, '');
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 3.
     
     var f3: { <T, U>(x: T, y: U): T; }
     var r3 = f3<number>(1, '');
              ~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 1.
     var r3b = f3<number, string, number>(1, '');
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 3.
     
     class C {
         f<T, U>(x: T, y: U): T {
@@ -49,10 +49,10 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFuncti
     }
     var r4 = (new C()).f<number>(1, '');
              ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 1.
     var r4b = (new C()).f<number, string, number>(1, '');
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 3.
     
     interface I {
         f<T, U>(x: T, y: U): T;
@@ -60,10 +60,10 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFuncti
     var i: I;
     var r5 = i.f<number>(1, '');
              ~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 1.
     var r5b = i.f<number, string, number>(1, '');
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 3.
     
     class C2<T, U> {
         f(x: T, y: U): T {
@@ -72,10 +72,10 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFuncti
     }
     var r6 = (new C2()).f<number>(1, '');
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
     var r6b = (new C2()).f<number, string, number>(1, '');
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 3.
     
     interface I2<T, U> {
         f(x: T, y: U): T;
@@ -83,7 +83,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFuncti
     var i2: I2<number, string>;
     var r7 = i2.f<number>(1, '');
              ~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
     var r7b = i2.f<number, string, number>(1, '');
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 3.

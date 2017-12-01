@@ -1,33 +1,33 @@
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(2,14): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(2,14): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(3,16): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(4,14): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(8,15): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(9,15): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(4,14): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(8,15): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(9,15): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(12,17): error TS2345: Argument of type 'U' is not assignable to parameter of type 'T'.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(13,15): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,15): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(13,15): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,15): error TS2558: Expected 0 type arguments, but got 1.
 
 
 ==== tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts (8 errors) ====
     function foo<T, U>(x:T, y:U, f: (v: T) => U) {
         var r1 = f<number>(1);
                  ~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
         var r2 = f(1);
                    ~
 !!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
         var r3 = f<any>(null);
                  ~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
         var r4 = f(null);
     
         var r11 = f(x);
         var r21 = f<number>(x);
                   ~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
         var r31 = f<any>(null);
                   ~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
         var r41 = f(null);
     
         var r12 = f(y);
@@ -35,9 +35,9 @@ tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,15
 !!! error TS2345: Argument of type 'U' is not assignable to parameter of type 'T'.
         var r22 = f<number>(y);
                   ~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
         var r32 = f<any>(null);
                   ~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
         var r42 = f(null);
     }

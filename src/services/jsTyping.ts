@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
 // See LICENSE.txt in the project root for complete license information.
 
 /// <reference path='../compiler/types.ts' />
@@ -9,27 +9,22 @@
 namespace ts.JsTyping {
 
     export interface TypingResolutionHost {
-        directoryExists: (path: string) => boolean;
-        fileExists: (fileName: string) => boolean;
-        readFile: (path: string, encoding?: string) => string;
-        readDirectory: (rootDir: string, extensions: string[], excludes: string[], includes: string[], depth?: number) => string[];
-    };
+        directoryExists(path: string): boolean;
+        fileExists(fileName: string): boolean;
+        readFile(path: string, encoding?: string): string | undefined;
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth?: number): string[];
+    }
 
     interface PackageJson {
         _requiredBy?: string[];
-        dependencies?: Map<string>;
-        devDependencies?: Map<string>;
+        dependencies?: MapLike<string>;
+        devDependencies?: MapLike<string>;
         name?: string;
-        optionalDependencies?: Map<string>;
-        peerDependencies?: Map<string>;
+        optionalDependencies?: MapLike<string>;
+        peerDependencies?: MapLike<string>;
+        types?: string;
         typings?: string;
-    };
-
-    // A map of loose file names to library names
-    // that we are confident require typings
-    let safeList: Map<string>;
-
-    const EmptySafeList: Map<string> = createMap<string>();
+    }
 
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
@@ -40,7 +35,25 @@ namespace ts.JsTyping {
         "crypto", "stream", "util", "assert", "tty", "domain",
         "constants", "process", "v8", "timers", "console"];
 
-    const nodeCoreModules = arrayToMap(<string[]>nodeCoreModuleList, x => x);
+    const nodeCoreModules = arrayToSet(nodeCoreModuleList);
+
+    /**
+     * A map of loose file names to library names that we are confident require typings
+     */
+    export type SafeList = ReadonlyMap<string>;
+
+    export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
+        const result = readConfigFile(safeListPath, path => host.readFile(path));
+        return createMapFromTemplate<string>(result.config);
+    }
+
+    export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
+        const result = readConfigFile(typesMapPath, path => host.readFile(path));
+        if (result.config) {
+            return createMapFromTemplate<string>(result.config.simpleMap);
+        }
+        return undefined;
+    }
 
     /**
      * @param host is the object providing I/O related operations.
@@ -53,128 +66,110 @@ namespace ts.JsTyping {
      */
     export function discoverTypings(
         host: TypingResolutionHost,
+        log: ((message: string) => void) | undefined,
         fileNames: string[],
         projectRootPath: Path,
-        safeListPath: Path,
-        packageNameToTypingLocation: Map<string>,
+        safeList: SafeList,
+        packageNameToTypingLocation: ReadonlyMap<string>,
         typeAcquisition: TypeAcquisition,
         unresolvedImports: ReadonlyArray<string>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
-
-        // A typing name to typing file path mapping
-        const inferredTypings = createMap<string>();
 
         if (!typeAcquisition || !typeAcquisition.enable) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 
+        // A typing name to typing file path mapping
+        const inferredTypings = createMap<string>();
+
         // Only infer typings for .js and .jsx files
-        fileNames = filter(map(fileNames, normalizePath), f => {
-            const kind = ensureScriptKind(f, getScriptKindFromFileName(f));
-            return kind === ScriptKind.JS || kind === ScriptKind.JSX;
+        fileNames = mapDefined(fileNames, fileName => {
+            const path = normalizePath(fileName);
+            if (hasJavaScriptFileExtension(path)) {
+                return path;
+            }
         });
 
-        if (!safeList) {
-            const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            safeList = result.config ? createMap<string>(result.config) : EmptySafeList;
-        }
-
         const filesToWatch: string[] = [];
+
+        if (typeAcquisition.include) addInferredTypings(typeAcquisition.include, "Explicitly included types");
+        const exclude = typeAcquisition.exclude || [];
+
         // Directories to search for package.json, bower.json and other typing information
-        let searchDirs: string[] = [];
-        let exclude: string[] = [];
-
-        mergeTypings(typeAcquisition.include);
-        exclude = typeAcquisition.exclude || [];
-
-        const possibleSearchDirs = map(fileNames, getDirectoryPath);
-        if (projectRootPath) {
-            possibleSearchDirs.push(projectRootPath);
-        }
-        searchDirs = deduplicate(possibleSearchDirs);
-        for (const searchDir of searchDirs) {
+        const possibleSearchDirs = arrayToSet(fileNames, getDirectoryPath);
+        possibleSearchDirs.set(projectRootPath, true);
+        possibleSearchDirs.forEach((_true, searchDir) => {
             const packageJsonPath = combinePaths(searchDir, "package.json");
             getTypingNamesFromJson(packageJsonPath, filesToWatch);
 
             const bowerJsonPath = combinePaths(searchDir, "bower.json");
             getTypingNamesFromJson(bowerJsonPath, filesToWatch);
 
+            const bowerComponentsPath = combinePaths(searchDir, "bower_components");
+            getTypingNamesFromPackagesFolder(bowerComponentsPath, filesToWatch);
+
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
-            getTypingNamesFromNodeModuleFolder(nodeModulesPath);
-        }
+            getTypingNamesFromPackagesFolder(nodeModulesPath, filesToWatch);
+        });
         getTypingNamesFromSourceFileNames(fileNames);
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            for (const moduleId of unresolvedImports) {
-                const typingName = moduleId in nodeCoreModules ? "node" : moduleId;
-                if (!(typingName in inferredTypings)) {
-                    inferredTypings[typingName] = undefined;
-                }
-            }
+            const module = deduplicate(
+                unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
+                equateStringsCaseSensitive,
+                compareStringsCaseSensitive);
+            addInferredTypings(module, "Inferred typings from unresolved imports");
         }
         // Add the cached typing locations for inferred typings that are already installed
-        for (const name in packageNameToTypingLocation) {
-            if (name in inferredTypings && !inferredTypings[name]) {
-                inferredTypings[name] = packageNameToTypingLocation[name];
+        packageNameToTypingLocation.forEach((typingLocation, name) => {
+            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined) {
+                inferredTypings.set(name, typingLocation);
             }
-        }
+        });
 
         // Remove typings that the user has added to the exclude list
         for (const excludeTypingName of exclude) {
-            delete inferredTypings[excludeTypingName];
+            const didDelete = inferredTypings.delete(excludeTypingName);
+            if (didDelete && log) log(`Typing for ${excludeTypingName} is in exclude list, will be ignored.`);
         }
 
         const newTypingNames: string[] = [];
         const cachedTypingPaths: string[] = [];
-        for (const typing in inferredTypings) {
-            if (inferredTypings[typing] !== undefined) {
-                cachedTypingPaths.push(inferredTypings[typing]);
+        inferredTypings.forEach((inferred, typing) => {
+            if (inferred !== undefined) {
+                cachedTypingPaths.push(inferred);
             }
             else {
                 newTypingNames.push(typing);
             }
+        });
+        const result = { cachedTypingPaths, newTypingNames, filesToWatch };
+        if (log) log(`Result: ${JSON.stringify(result)}`);
+        return result;
+
+        function addInferredTyping(typingName: string) {
+            if (!inferredTypings.has(typingName)) {
+                inferredTypings.set(typingName, undefined);
+            }
         }
-        return { cachedTypingPaths, newTypingNames, filesToWatch };
-
-        /**
-         * Merge a given list of typingNames to the inferredTypings map
-         */
-        function mergeTypings(typingNames: string[]) {
-            if (!typingNames) {
-                return;
-            }
-
-            for (const typing of typingNames) {
-                if (!(typing in inferredTypings)) {
-                    inferredTypings[typing] = undefined;
-                }
-            }
+        function addInferredTypings(typingNames: ReadonlyArray<string>, message: string) {
+            if (log) log(`${message}: ${JSON.stringify(typingNames)}`);
+            forEach(typingNames, addInferredTyping);
         }
 
         /**
          * Get the typing info from common package manager json files like package.json or bower.json
          */
-        function getTypingNamesFromJson(jsonPath: string, filesToWatch: string[]) {
-            if (host.fileExists(jsonPath)) {
-                filesToWatch.push(jsonPath);
+        function getTypingNamesFromJson(jsonPath: string, filesToWatch: Push<string>) {
+            if (!host.fileExists(jsonPath)) {
+                return;
             }
-            const result = readConfigFile(jsonPath, (path: string) => host.readFile(path));
-            if (result.config) {
-                const jsonConfig: PackageJson = result.config;
-                if (jsonConfig.dependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.dependencies));
-                }
-                if (jsonConfig.devDependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.devDependencies));
-                }
-                if (jsonConfig.optionalDependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.optionalDependencies));
-                }
-                if (jsonConfig.peerDependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.peerDependencies));
-                }
-            }
+
+            filesToWatch.push(jsonPath);
+            const jsonConfig: PackageJson = readConfigFile(jsonPath, path => host.readFile(path)).config;
+            const jsonTypingNames = flatMap([jsonConfig.dependencies, jsonConfig.devDependencies, jsonConfig.optionalDependencies, jsonConfig.peerDependencies], getOwnKeys);
+            addInferredTypings(jsonTypingNames, `Typing names in '${jsonPath}' dependencies`);
         }
 
         /**
@@ -184,47 +179,53 @@ namespace ts.JsTyping {
          * @param fileNames are the names for source files in the project
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
-            const jsFileNames = filter(fileNames, hasJavaScriptFileExtension);
-            const inferredTypingNames = map(jsFileNames, f => removeFileExtension(getBaseFileName(f.toLowerCase())));
-            const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
+            const fromFileNames = mapDefined(fileNames, j => {
+                if (!hasJavaScriptFileExtension(j)) return undefined;
 
-            if (safeList !== EmptySafeList) {
-                mergeTypings(filter(cleanedTypingNames, f => f in safeList));
+                const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
+                const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
+                return safeList.get(cleanedTypingName);
+            });
+            if (fromFileNames.length) {
+                addInferredTypings(fromFileNames, "Inferred typings from file names");
             }
 
-            const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
+            const hasJsxFile = some(fileNames, f => fileExtensionIs(f, Extension.Jsx));
             if (hasJsxFile) {
-                mergeTypings(["react"]);
+                if (log) log(`Inferred 'react' typings due to presence of '.jsx' extension`);
+                addInferredTyping("react");
             }
         }
 
         /**
-         * Infer typing names from node_module folder
-         * @param nodeModulesPath is the path to the "node_modules" folder
+         * Infer typing names from packages folder (ex: node_module, bower_components)
+         * @param packagesFolderPath is the path to the packages folder
          */
-        function getTypingNamesFromNodeModuleFolder(nodeModulesPath: string) {
+        function getTypingNamesFromPackagesFolder(packagesFolderPath: string, filesToWatch: Push<string>) {
+            filesToWatch.push(packagesFolderPath);
+
             // Todo: add support for ModuleResolutionHost too
-            if (!host.directoryExists(nodeModulesPath)) {
+            if (!host.directoryExists(packagesFolderPath)) {
                 return;
             }
 
-            const typingNames: string[] = [];
-            const fileNames = host.readDirectory(nodeModulesPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
+            // depth of 2, so we access `node_modules/foo` but not `node_modules/foo/bar`
+            const fileNames = host.readDirectory(packagesFolderPath, [Extension.Json], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
+            if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(fileNames)}`);
+            const packageNames: string[] = [];
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
-                if (getBaseFileName(normalizedFileName) !== "package.json") {
+                const baseFileName = getBaseFileName(normalizedFileName);
+                if (baseFileName !== "package.json" && baseFileName !== "bower.json") {
                     continue;
                 }
                 const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
-                if (!result.config) {
-                    continue;
-                }
                 const packageJson: PackageJson = result.config;
 
                 // npm 3's package.json contains a "_requiredBy" field
                 // we should include all the top level module names for npm 2, and only module names whose
                 // "_requiredBy" field starts with "#" or equals "/" for npm 3.
-                if (packageJson._requiredBy &&
+                if (baseFileName === "package.json" && packageJson._requiredBy &&
                     filter(packageJson._requiredBy, (r: string) => r[0] === "#" || r === "/").length === 0) {
                     continue;
                 }
@@ -234,16 +235,79 @@ namespace ts.JsTyping {
                 if (!packageJson.name) {
                     continue;
                 }
-                if (packageJson.typings) {
-                    const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
-                    inferredTypings[packageJson.name] = absolutePath;
+                const ownTypes = packageJson.types || packageJson.typings;
+                if (ownTypes) {
+                    const absolutePath = getNormalizedAbsolutePath(ownTypes, getDirectoryPath(normalizedFileName));
+                    if (log) log(`    Package '${packageJson.name}' provides its own types.`);
+                    inferredTypings.set(packageJson.name, absolutePath);
                 }
                 else {
-                    typingNames.push(packageJson.name);
+                    packageNames.push(packageJson.name);
                 }
             }
-            mergeTypings(typingNames);
+            addInferredTypings(packageNames, "    Found package names");
         }
 
+    }
+
+    export const enum PackageNameValidationResult {
+        Ok,
+        ScopedPackagesNotSupported,
+        EmptyName,
+        NameTooLong,
+        NameStartsWithDot,
+        NameStartsWithUnderscore,
+        NameContainsNonURISafeCharacters
+    }
+
+    const maxPackageNameLength = 214;
+
+    /**
+     * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
+     */
+    export function validatePackageName(packageName: string): PackageNameValidationResult {
+        if (!packageName) {
+            return PackageNameValidationResult.EmptyName;
+        }
+        if (packageName.length > maxPackageNameLength) {
+            return PackageNameValidationResult.NameTooLong;
+        }
+        if (packageName.charCodeAt(0) === CharacterCodes.dot) {
+            return PackageNameValidationResult.NameStartsWithDot;
+        }
+        if (packageName.charCodeAt(0) === CharacterCodes._) {
+            return PackageNameValidationResult.NameStartsWithUnderscore;
+        }
+        // check if name is scope package like: starts with @ and has one '/' in the middle
+        // scoped packages are not currently supported
+        // TODO: when support will be added we'll need to split and check both scope and package name
+        if (/^@[^/]+\/[^/]+$/.test(packageName)) {
+            return PackageNameValidationResult.ScopedPackagesNotSupported;
+        }
+        if (encodeURIComponent(packageName) !== packageName) {
+            return PackageNameValidationResult.NameContainsNonURISafeCharacters;
+        }
+        return PackageNameValidationResult.Ok;
+    }
+
+    export function renderPackageNameValidationFailure(result: PackageNameValidationResult, typing: string): string {
+        switch (result) {
+            case PackageNameValidationResult.EmptyName:
+                return `Package name '${typing}' cannot be empty`;
+            case PackageNameValidationResult.NameTooLong:
+                return `Package name '${typing}' should be less than ${maxPackageNameLength} characters`;
+            case PackageNameValidationResult.NameStartsWithDot:
+                return `Package name '${typing}' cannot start with '.'`;
+            case PackageNameValidationResult.NameStartsWithUnderscore:
+                return `Package name '${typing}' cannot start with '_'`;
+            case PackageNameValidationResult.ScopedPackagesNotSupported:
+                return `Package '${typing}' is scoped and currently is not supported`;
+            case PackageNameValidationResult.NameContainsNonURISafeCharacters:
+                return `Package name '${typing}' contains non URI safe characters`;
+            case PackageNameValidationResult.Ok:
+                throw Debug.fail(); // Shouldn't have called this.
+            default:
+                Debug.assertNever(result);
+        }
     }
 }

@@ -30,7 +30,7 @@ function verifyImport(name: string, assigningDisplay:ts.SymbolDisplayPart[], opt
     verify.verifyQuickInfoDisplayParts("alias", optionalParentName ? "export" : "", { start: test.markerByName(marker.toString()).position, length: name.length },
         [{ text: "import", kind: "keyword" }, { text: " ", kind: "space" }].concat(moduleNameDisplay).concat(
             { text: " ", kind: "space" }, { text: "=", kind: "operator" }, { text: " ", kind: "space" }).concat(assigningDisplay),
-        []);
+        [], []);
 }
 
 var moduleMDisplay = [{ text: "m", kind: "moduleName" }];

@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileTypeofFunction.ts ===
-
 function f(n: typeof f): string;
 >f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
 >n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }

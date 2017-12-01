@@ -1,5 +1,4 @@
 //// [destructuringInFunctionType.ts]
-
 interface a { a }
 interface b { b }
 interface c { c }

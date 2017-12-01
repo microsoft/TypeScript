@@ -1,5 +1,4 @@
 === tests/cases/compiler/ref/a.ts ===
-
 /// <reference path="./b.ts" />
 export class A {
 >A : A

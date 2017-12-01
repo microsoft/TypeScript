@@ -1,5 +1,4 @@
 //// [commaOperatorWithSecondOperandObjectType.ts]
-
 var ANY: any;
 var BOOLEAN: boolean;
 var NUMBER: number;
@@ -46,7 +45,7 @@ var BOOLEAN;
 var NUMBER;
 var STRING;
 var OBJECT;
-var CLASS = (function () {
+var CLASS = /** @class */ (function () {
     function CLASS() {
     }
     return CLASS;

@@ -1,5 +1,4 @@
 //// [systemModule14.ts]
-
 function foo() {
     return a;
 }

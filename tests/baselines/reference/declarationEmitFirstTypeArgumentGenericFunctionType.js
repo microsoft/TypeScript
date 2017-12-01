@@ -1,5 +1,4 @@
 //// [declarationEmitFirstTypeArgumentGenericFunctionType.ts]
-
 class X<A> {
 }
 var prop11: X< <Tany>() => Tany >; // spaces before the first type argument

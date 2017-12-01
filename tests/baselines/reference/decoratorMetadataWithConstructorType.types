@@ -1,5 +1,4 @@
 === tests/cases/compiler/decoratorMetadataWithConstructorType.ts ===
-
 declare var console: {
 >console : { log(msg: string): void; }
 

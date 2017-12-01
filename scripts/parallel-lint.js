@@ -1,5 +1,6 @@
 var tslint = require("tslint");
 var fs = require("fs");
+var path = require("path");
 
 function getLinterOptions() {
     return {
@@ -9,7 +10,7 @@ function getLinterOptions() {
     };
 }
 function getLinterConfiguration() {
-    return require("../tslint.json");
+    return tslint.Configuration.loadConfigurationFromPath(path.join(__dirname, "../tslint.json"));
 }
 
 function lintFileContents(options, configuration, path, contents) {

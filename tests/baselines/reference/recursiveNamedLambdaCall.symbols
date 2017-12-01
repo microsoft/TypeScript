@@ -1,0 +1,27 @@
+=== tests/cases/compiler/recursiveNamedLambdaCall.ts ===
+var promise = function( obj ) {
+>promise : Symbol(promise, Decl(recursiveNamedLambdaCall.ts, 0, 3))
+>obj : Symbol(obj, Decl(recursiveNamedLambdaCall.ts, 0, 23))
+	
+		if ( top && top.doScroll ) {
+			(function doScrollCheck() {
+>doScrollCheck : Symbol(doScrollCheck, Decl(recursiveNamedLambdaCall.ts, 3, 4))
+
+				if ( false ) {
+
+					try {
+						top.doScroll("left");
+					} catch(e) {
+>e : Symbol(e, Decl(recursiveNamedLambdaCall.ts, 8, 13))
+
+						return setTimeout( doScrollCheck, 50 );
+>doScrollCheck : Symbol(doScrollCheck, Decl(recursiveNamedLambdaCall.ts, 3, 4))
+					}
+
+					// detach all dom ready events
+					detach();
+
+				}
+			})();
+		}
+};

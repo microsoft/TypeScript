@@ -53,7 +53,7 @@ export module M.Q {
 "use strict";
 var f;
 (function (f) {
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         return c;
@@ -63,12 +63,13 @@ var f;
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
 "use strict";
+exports.__esModule = true;
 var im = require("./declarationEmit_nameConflicts_1");
 var M;
 (function (M) {
     function f() { }
     M.f = f;
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
@@ -90,7 +91,7 @@ var M;
     (function (P) {
         function f() { }
         P.f = f;
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
@@ -115,7 +116,7 @@ var M;
     (function (Q) {
         function f() { }
         Q.f = f;
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;

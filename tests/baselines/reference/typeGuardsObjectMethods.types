@@ -1,5 +1,4 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardsObjectMethods.ts ===
-
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 
@@ -28,7 +27,7 @@ var obj1 = {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
 >"string" : "string"
 >var1.length : number
@@ -44,7 +43,7 @@ var obj1 = {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
 >"string" : "string"
 >var2.length : number
@@ -57,7 +56,7 @@ var obj1 = {
 >num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
->typeof param : string
+>typeof param : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >param : string | number
 >"string" : "string"
 >param.length : number
@@ -77,7 +76,7 @@ var obj1 = {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
 >"string" : "string"
 >var1.length : number
@@ -93,7 +92,7 @@ var obj1 = {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
 >"string" : "string"
 >var2.length : number
@@ -114,7 +113,7 @@ var obj1 = {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
 >"string" : "string"
 >var1.length : number
@@ -130,7 +129,7 @@ var obj1 = {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
 >"string" : "string"
 >var2.length : number
@@ -143,7 +142,7 @@ var obj1 = {
 >num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
->typeof param : string
+>typeof param : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >param : string | number
 >"string" : "string"
 >param.length : number
@@ -157,7 +156,7 @@ strOrNum = typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum);
 >strOrNum : string | number
 >typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum) : string | number
 >typeof obj1.method(strOrNum) === "string" : boolean
->typeof obj1.method(strOrNum) : string
+>typeof obj1.method(strOrNum) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >obj1.method(strOrNum) : string | number
 >obj1.method : (param: string | number) => string | number
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
@@ -176,7 +175,7 @@ strOrNum = typeof obj1.prop === "string" && obj1.prop;
 >strOrNum : string | number
 >typeof obj1.prop === "string" && obj1.prop : string
 >typeof obj1.prop === "string" : boolean
->typeof obj1.prop : string
+>typeof obj1.prop : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >obj1.prop : string | number
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
 >prop : string | number

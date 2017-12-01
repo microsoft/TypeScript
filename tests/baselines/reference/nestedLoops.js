@@ -19,7 +19,8 @@ export class Test  {
 
 //// [nestedLoops.js]
 "use strict";
-var Test = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var Test = /** @class */ (function () {
     function Test() {
         var outerArray = [1, 2, 3];
         var innerArray = [1, 2, 3];

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/useBeforeDeclaration.ts] ////
 
 //// [A.ts]
-
 namespace ts {
     export function printVersion():void {
         log("Version: " + sys.version);  // the call of sys.version is deferred, should not report an error.

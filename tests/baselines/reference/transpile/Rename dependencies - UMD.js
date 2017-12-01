@@ -8,6 +8,7 @@
     }
 })(function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var SomeName_1 = require("SomeOtherName");
     use(SomeName_1.foo);
 });
