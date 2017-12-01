@@ -11127,7 +11127,7 @@ namespace ts {
          * property is computed by inferring from the source property type to X for the type
          * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
          */
-        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, mappedTypeStack: [Type, Symbol][]): Type {
+        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, mappedTypeStack: string[]): Type {
             const properties = getPropertiesOfType(source);
             let indexInfo = getIndexInfoOfType(source, IndexKind.String);
             if (properties.length === 0 && !indexInfo) {
@@ -11178,7 +11178,7 @@ namespace ts {
             return undefined;
         }
 
-        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, mappedTypeStack?: [Type, Symbol][]) {
+        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, mappedTypeStack?: string[]) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
             inferFromTypes(originalSource, originalTarget);
@@ -11395,10 +11395,11 @@ namespace ts {
                         // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                         const inference = getInferenceInfoForType((<IndexType>constraintType).type);
                         if (inference && !inference.isFixed) {
-                            if (contains(mappedTypeStack, [source, target.symbol], ([s1, t1], [s2, t2]) => s1 === s2 && t1 === t2)) {
+                            const key = (source.symbol ? getSymbolId(source.symbol) : "no symbol") + "," + getSymbolId(target.symbol);
+                            if (contains(mappedTypeStack, key)) {
                                 return;
                             }
-                            (mappedTypeStack || (mappedTypeStack = [])).push([source, target.symbol]);
+                            (mappedTypeStack || (mappedTypeStack = [])).push(key);
                             const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target, mappedTypeStack);
                             mappedTypeStack.pop();
                             if (inferredType) {
