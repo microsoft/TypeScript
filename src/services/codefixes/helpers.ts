@@ -4,7 +4,7 @@ namespace ts.codefix {
     export function newNodesToChanges(newNodes: Node[], insertAfter: Node, context: CodeFixContext) {
         const sourceFile = context.sourceFile;
 
-        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         for (const newNode of newNodes) {
             changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { suffix: context.newLineCharacter });
@@ -104,8 +104,7 @@ namespace ts.codefix {
                 }
 
                 const signatureDeclarations: MethodDeclaration[] = [];
-                for (let i = 0; i < signatures.length; i++) {
-                    const signature = signatures[i];
+                for (const signature of signatures) {
                     const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration);
                     if (methodDeclaration) {
                         signatureDeclarations.push(methodDeclaration);
@@ -194,8 +193,7 @@ namespace ts.codefix {
         let maxArgsSignature = signatures[0];
         let minArgumentCount = signatures[0].minArgumentCount;
         let someSigHasRestParameter = false;
-        for (let i = 0; i < signatures.length; i++) {
-            const sig = signatures[i];
+        for (const sig of signatures) {
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
             if (sig.hasRestParameter) {
                 someSigHasRestParameter = true;

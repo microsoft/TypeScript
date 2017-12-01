@@ -2,8 +2,8 @@
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
-            Diagnostics._0_is_declared_but_never_used.code,
-            Diagnostics.Property_0_is_declared_but_never_used.code
+            Diagnostics._0_is_declared_but_its_value_is_never_read.code,
+            Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code
         ],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
@@ -18,7 +18,7 @@ namespace ts.codefix {
 
             switch (token.kind) {
                 case ts.SyntaxKind.Identifier:
-                    return deleteIdentifierOrPrefixWithUnderscore(<Identifier>token);
+                    return deleteIdentifierOrPrefixWithUnderscore(<Identifier>token, context.errorCode);
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.NamespaceImport:
@@ -54,7 +54,7 @@ namespace ts.codefix {
                 };
             }
 
-            function deleteIdentifierOrPrefixWithUnderscore(identifier: Identifier): CodeAction[] | undefined {
+            function deleteIdentifierOrPrefixWithUnderscore(identifier: Identifier, errorCode: number): CodeAction[] | undefined {
                 const parent = identifier.parent;
                 switch (parent.kind) {
                     case ts.SyntaxKind.VariableDeclaration:
@@ -76,8 +76,10 @@ namespace ts.codefix {
 
                     case ts.SyntaxKind.Parameter:
                         const functionDeclaration = <FunctionDeclaration>parent.parent;
-                        return [functionDeclaration.parameters.length === 1 ? deleteNode(parent) : deleteNodeInList(parent),
-                            prefixIdentifierWithUnderscore(identifier)];
+                        const deleteAction = functionDeclaration.parameters.length === 1 ? deleteNode(parent) : deleteNodeInList(parent);
+                        return errorCode === Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code
+                            ? [deleteAction]
+                            : [deleteAction, prefixIdentifierWithUnderscore(identifier)];
 
                     // handle case where 'import a = A;'
                     case SyntaxKind.ImportEqualsDeclaration:
@@ -175,23 +177,23 @@ namespace ts.codefix {
             }
 
             function deleteNode(n: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNode(sourceFile, n));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteNode(sourceFile, n));
             }
 
             function deleteRange(range: TextRange) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteRange(sourceFile, range));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteRange(sourceFile, range));
             }
 
             function deleteNodeInList(n: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNodeInList(sourceFile, n));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteNodeInList(sourceFile, n));
             }
 
             function deleteNodeRange(start: Node, end: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNodeRange(sourceFile, start, end));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteNodeRange(sourceFile, start, end));
             }
 
             function replaceNode(n: Node, newNode: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).replaceNode(sourceFile, n, newNode));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).replaceNode(sourceFile, n, newNode));
             }
 
             function makeChange(changeTracker: textChanges.ChangeTracker): CodeAction {

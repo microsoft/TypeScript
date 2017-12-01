@@ -1,0 +1,52 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters.ts ===
+// Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
+
+class C {
+>C : Symbol(C, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 0, 0))
+
+    constructor(public x, private y) { }
+>x : Symbol(C.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 3, 16))
+>y : Symbol(C.y, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 3, 25))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 4, 1))
+
+    constructor(public x) { }
+>x : Symbol(C2.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 7, 16))
+}
+
+class C3 {
+>C3 : Symbol(C3, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 8, 1))
+
+    constructor(private x) { }
+>x : Symbol(C3.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 11, 16))
+}
+
+interface I {
+>I : Symbol(I, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 12, 1))
+
+    new (public x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 15, 9))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 16, 1))
+
+    new (private x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 19, 9))
+}
+
+var a: {
+>a : Symbol(a, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 22, 3))
+
+    new (public x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 23, 9))
+}
+
+var b: {
+>b : Symbol(b, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 26, 3))
+
+    new (private x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters.ts, 27, 9))
+}

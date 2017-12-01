@@ -21,7 +21,7 @@ namespace ts {
         let declarationListContainerEnd = -1;
         let currentSourceFile: SourceFile;
         let currentText: string;
-        let currentLineMap: number[];
+        let currentLineMap: ReadonlyArray<number>;
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
         let hasWrittenComment = false;
         let disabled: boolean = printerOptions.removeComments;
@@ -260,7 +260,7 @@ namespace ts {
             }
         }
 
-        function emitLeadingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+        function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
             if (!hasWrittenComment) {
                 emitNewLineBeforeLeadingCommentOfPosition(currentLineMap, writer, rangePos, commentPos);
                 hasWrittenComment = true;
@@ -274,7 +274,7 @@ namespace ts {
             if (hasTrailingNewLine) {
                 writer.writeLine();
             }
-            else {
+            else if (kind === SyntaxKind.MultiLineCommentTrivia) {
                 writer.write(" ");
             }
         }

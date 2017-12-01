@@ -178,17 +178,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -253,10 +253,8 @@ assign3 = function (p1, p2, p3) {
     return true;
 };
 // Type predicates in non-return type positions
-var b1 = is, A;
-function b2(a, A) {
-    if (a === void 0) { a = is; }
-}
+var b1, is, A;
+function b2(a, is, A) { }
 ;
 is;
 A;
@@ -265,7 +263,7 @@ A;
 }
 ;
 // Non-compatiable type predicate positions for signature declarations
-var D = (function () {
+var D = /** @class */ (function () {
     function D(p1) {
         return true;
     }

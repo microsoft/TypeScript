@@ -1,0 +1,4 @@
+=== tests/cases/compiler/downlevelLetConst2.ts ===
+const a
+>a : any
+

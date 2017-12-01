@@ -106,13 +106,13 @@ function foo2(x: C1 | C2 | C3): string {
 
         return x.item;
 >x.item : string
->x : C1
+>x : C1 | C3
 >item : string
     }
     else if (isC2(x)) {
 >isC2(x) : boolean
 >isC2 : (c: C1 | C2 | C3) => c is C2
->x : C2 | C3
+>x : C2
 
         return x.item[0];
 >x.item[0] : string
@@ -124,12 +124,12 @@ function foo2(x: C1 | C2 | C3): string {
     else if (isC3(x)) {
 >isC3(x) : boolean
 >isC3 : (c: C1 | C2 | C3) => c is C3
->x : C3
+>x : never
 
         return x.item;
->x.item : string
->x : C3
->item : string
+>x.item : any
+>x : never
+>item : any
     }
     return "error";
 >"error" : "error"

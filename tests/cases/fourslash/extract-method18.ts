@@ -9,13 +9,18 @@
 //// }
 
 goTo.select('a', 'b')
-verify.refactorAvailable('Extract Method');
-edit.applyRefactor('Extract Method', "scope_1");
-verify.currentFileContentIs(`function fn() {
+edit.applyRefactor({
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_1",
+    actionDescription: "Extract to function in global scope",
+    newContent:
+`function fn() {
     const x = { m: 1 };
-    newFunction(x);
+    /*RENAME*/newFunction(x);
 }
+
 function newFunction(x: { m: number; }) {
     x.m = 3;
 }
-`);
+`
+});

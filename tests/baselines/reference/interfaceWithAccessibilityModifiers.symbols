@@ -1,0 +1,14 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithAccessibilityModifiers.ts ===
+// Errors
+interface Foo {
+>Foo : Symbol(Foo, Decl(interfaceWithAccessibilityModifiers.ts, 0, 0))
+
+    public a: any;
+>a : Symbol(Foo.a, Decl(interfaceWithAccessibilityModifiers.ts, 1, 15))
+
+    private b: any;
+>b : Symbol(Foo.b, Decl(interfaceWithAccessibilityModifiers.ts, 2, 18))
+
+    protected c: any;
+>c : Symbol(Foo.c, Decl(interfaceWithAccessibilityModifiers.ts, 3, 19))
+}

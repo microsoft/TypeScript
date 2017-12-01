@@ -12,6 +12,8 @@ enum E2 { one }
 var numStrTuple: [number, string] = [5, "foo"];
 var emptyObjTuple = <[{}, {}]>numStrTuple;
 var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
+var shorter = numStrBoolTuple as [number, string]
+var longer = numStrTuple as [number, string, boolean]
 var classCDTuple: [C, D] = [new C(), new D()];
 var interfaceIITuple = <[I, I]>classCDTuple;
 var classCDATuple = <[C, D, A]>classCDTuple;
@@ -43,25 +45,25 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
         this.a = 10;
     }
     return A;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 ;
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
 }());
 ;
-var E = (function (_super) {
+var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -69,7 +71,7 @@ var E = (function (_super) {
     return E;
 }(A));
 ;
-var F = (function (_super) {
+var F = /** @class */ (function (_super) {
     __extends(F, _super);
     function F() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -89,6 +91,8 @@ var E2;
 var numStrTuple = [5, "foo"];
 var emptyObjTuple = numStrTuple;
 var numStrBoolTuple = numStrTuple;
+var shorter = numStrBoolTuple;
+var longer = numStrTuple;
 var classCDTuple = [new C(), new D()];
 var interfaceIITuple = classCDTuple;
 var classCDATuple = classCDTuple;

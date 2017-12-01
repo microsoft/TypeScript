@@ -244,7 +244,6 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
-        let currentSourceFile: SourceFile;
         let renamedCatchVariables: Map<boolean>;
         let renamedCatchVariableDeclarations: Identifier[];
 
@@ -300,12 +299,9 @@ namespace ts {
                 return node;
             }
 
-            currentSourceFile = node;
 
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
-
-            currentSourceFile = undefined;
             return visited;
         }
 
@@ -1081,7 +1077,7 @@ namespace ts {
                 const visited = visitNode(expression, visitor, isExpression);
                 if (visited) {
                     if (multiLine) {
-                        visited.startsOnNewLine = true;
+                        startOnNewLine(visited);
                     }
                     expressions.push(visited);
                 }
@@ -1116,7 +1112,7 @@ namespace ts {
         }
 
         function visitCallExpression(node: CallExpression) {
-            if (forEach(node.arguments, containsYield)) {
+            if (!isImportCall(node) && forEach(node.arguments, containsYield)) {
                 // [source]
                 //      a.b(1, yield, 2);
                 //
@@ -1127,7 +1123,6 @@ namespace ts {
                 //  .yield resumeLabel
                 //  .mark resumeLabel
                 //      _b.apply(_a, _c.concat([%sent%, 2]));
-
                 const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
                 return setOriginalNode(
                     createFunctionApply(
@@ -1638,14 +1633,19 @@ namespace ts {
         }
 
         function transformAndEmitContinueStatement(node: ContinueStatement): void {
-            const label = findContinueTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
-            Debug.assert(label > 0, "Expected continue statment to point to a valid Label.");
-            emitBreak(label, /*location*/ node);
+            const label = findContinueTarget(node.label ? idText(node.label) : undefined);
+            if (label > 0) {
+                emitBreak(label, /*location*/ node);
+            }
+            else {
+                // invalid continue without a containing loop. Leave the node as is, per #17875.
+                emitStatement(node);
+            }
         }
 
         function visitContinueStatement(node: ContinueStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findContinueTarget(node.label && unescapeLeadingUnderscores(node.label.escapedText));
+                const label = findContinueTarget(node.label && idText(node.label));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1655,14 +1655,19 @@ namespace ts {
         }
 
         function transformAndEmitBreakStatement(node: BreakStatement): void {
-            const label = findBreakTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
-            Debug.assert(label > 0, "Expected break statment to point to a valid Label.");
-            emitBreak(label, /*location*/ node);
+            const label = findBreakTarget(node.label ? idText(node.label) : undefined);
+            if (label > 0) {
+                emitBreak(label, /*location*/ node);
+            }
+            else {
+                // invalid break without a containing loop, switch, or labeled statement. Leave the node as is, per #17875.
+                emitStatement(node);
+            }
         }
 
         function visitBreakStatement(node: BreakStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findBreakTarget(node.label && unescapeLeadingUnderscores(node.label.escapedText));
+                const label = findBreakTarget(node.label && idText(node.label));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1841,7 +1846,7 @@ namespace ts {
                 //      /*body*/
                 //  .endlabeled
                 //  .mark endLabel
-                beginLabeledBlock(unescapeLeadingUnderscores(node.label.escapedText));
+                beginLabeledBlock(idText(node.label));
                 transformAndEmitEmbeddedStatement(node.statement);
                 endLabeledBlock();
             }
@@ -1852,7 +1857,7 @@ namespace ts {
 
         function visitLabeledStatement(node: LabeledStatement) {
             if (inStatementContainingYield) {
-                beginScriptLabeledBlock(unescapeLeadingUnderscores(node.label.escapedText));
+                beginScriptLabeledBlock(idText(node.label));
             }
 
             node = visitEachChild(node, visitor, context);
@@ -1953,7 +1958,7 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier) {
-            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(unescapeLeadingUnderscores(node.escapedText))) {
+            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(idText(node))) {
                 const original = getOriginalNode(node);
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
@@ -2122,7 +2127,7 @@ namespace ts {
                 hoistVariableDeclaration(variable.name);
             }
             else {
-                const text = unescapeLeadingUnderscores((<Identifier>variable.name).escapedText);
+                const text = idText(<Identifier>variable.name);
                 name = declareLocal(text);
                 if (!renamedCatchVariables) {
                     renamedCatchVariables = createMap<boolean>();
@@ -2351,27 +2356,27 @@ namespace ts {
          * @param labelText An optional name of a containing labeled statement.
          */
         function findBreakTarget(labelText?: string): Label {
-            Debug.assert(blocks !== undefined);
-            if (labelText) {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsLabeledBreakOrContinue(block) && block.labelText === labelText) {
-                        return block.breakLabel;
+            if (blockStack) {
+                if (labelText) {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsLabeledBreakOrContinue(block) && block.labelText === labelText) {
+                            return block.breakLabel;
+                        }
+                        else if (supportsUnlabeledBreak(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
+                            return block.breakLabel;
+                        }
                     }
-                    else if (supportsUnlabeledBreak(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
-                        return block.breakLabel;
+                }
+                else {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsUnlabeledBreak(block)) {
+                            return block.breakLabel;
+                        }
                     }
                 }
             }
-            else {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsUnlabeledBreak(block)) {
-                        return block.breakLabel;
-                    }
-                }
-            }
-
             return 0;
         }
 
@@ -2381,24 +2386,24 @@ namespace ts {
          * @param labelText An optional name of a containing labeled statement.
          */
         function findContinueTarget(labelText?: string): Label {
-            Debug.assert(blocks !== undefined);
-            if (labelText) {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsUnlabeledContinue(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
-                        return block.continueLabel;
+            if (blockStack) {
+                if (labelText) {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsUnlabeledContinue(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
+                            return block.continueLabel;
+                        }
+                    }
+                }
+                else {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsUnlabeledContinue(block)) {
+                            return block.continueLabel;
+                        }
                     }
                 }
             }
-            else {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsUnlabeledContinue(block)) {
-                        return block.continueLabel;
-                    }
-                }
-            }
-
             return 0;
         }
 
@@ -2678,8 +2683,7 @@ namespace ts {
             if (clauses) {
                 const labelExpression = createPropertyAccess(state, "label");
                 const switchStatement = createSwitch(labelExpression, createCaseBlock(clauses));
-                switchStatement.startsOnNewLine = true;
-                return [switchStatement];
+                return [startOnNewLine(switchStatement)];
             }
 
             if (statements) {

@@ -157,19 +157,19 @@ var k = [function () { return 1; }, function () { return 1; }]; // { (): number 
 var l = [function () { return 1; }, function () { return null; }]; // { (): any }[]
 var m = [function () { return 1; }, function () { return ''; }, function () { return null; }]; // { (): any }[]
 var n = [[function () { return 1; }], [function () { return ''; }]]; // {}[]
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -268,4 +268,4 @@ function foo4(t, u) {
 //    var i = [u, base]; // Base[]
 //    var j = [u, derived]; // Derived[]
 //    var k: Base[] = [t, u];
-//} 
+//}

@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.Rename {
-    export function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: (fileName: string) => string, sourceFile: SourceFile, position: number): RenameInfo {
+    export function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: GetCanonicalFileName, sourceFile: SourceFile, position: number): RenameInfo {
         const getCanonicalDefaultLibName = memoize(() => getCanonicalFileName(ts.normalizePath(defaultLibFileName)));
         const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
         const renameInfo = node && nodeIsEligibleForRename(node)
@@ -89,9 +89,15 @@ namespace ts.Rename {
     }
 
     function nodeIsEligibleForRename(node: Node): boolean {
-        return node.kind === ts.SyntaxKind.Identifier ||
-            node.kind === SyntaxKind.StringLiteral ||
-            isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
-            isThis(node);
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.ThisKeyword:
+                return true;
+            case SyntaxKind.NumericLiteral:
+                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral);
+            default:
+                return false;
+        }
     }
 }

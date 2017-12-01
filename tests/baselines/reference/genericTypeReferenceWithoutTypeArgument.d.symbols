@@ -1,0 +1,79 @@
+=== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts ===
+// it is an error to use a generic type without type arguments
+// all of these are errors 
+
+declare class C<T> {
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 3, 16))
+
+    foo: T;
+>foo : Symbol(C.foo, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 3, 20))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 3, 16))
+}
+
+declare var c: C;
+>c : Symbol(c, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 7, 11))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+
+declare var a: { x: C };
+>a : Symbol(a, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 9, 11))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 9, 16))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+
+declare var b: { (x: C): C };
+>b : Symbol(b, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 10, 11))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 10, 18))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+
+declare var d: { [x: C]: C };
+>d : Symbol(d, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 11, 11))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 11, 18))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+
+declare function f(x: C): C;
+>f : Symbol(f, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 11, 29))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 13, 19))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+
+declare class D extends C {}
+>D : Symbol(D, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 13, 28))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+
+declare module M {
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 15, 28))
+
+    export class E<T> { foo: T }
+>E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 17, 18))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 18, 19))
+>foo : Symbol(E.foo, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 18, 23))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 18, 19))
+}
+
+declare class D2 extends M.C { }
+>D2 : Symbol(D2, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 19, 1))
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 15, 28))
+
+declare class D3<T extends M.E> { }
+>D3 : Symbol(D3, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 21, 32))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 22, 17))
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 15, 28))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 17, 18))
+
+declare function h<T extends C>(x: T);
+>h : Symbol(h, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 22, 35))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 24, 19))
+>C : Symbol(C, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 0, 0))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 24, 32))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 24, 19))
+
+declare function i<T extends M.E>(x: T);
+>i : Symbol(i, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 24, 38))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 25, 19))
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 15, 28))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 17, 18))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 25, 34))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 25, 19))
+

@@ -1,3 +1,13 @@
+/* @internal */ // Don't expose that we use this
+// Based on lib.es6.d.ts
+interface PromiseConstructor {
+    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    reject(reason: any): Promise<never>;
+    all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
+}
+/* @internal */
+declare var Promise: PromiseConstructor;
+
 // These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
@@ -50,7 +60,7 @@ namespace ts {
                 if (isAmbientModule(<ModuleDeclaration>node)) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
-                else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
+                else if (getModuleInstanceState(node as ModuleDeclaration) === ModuleInstanceState.Instantiated) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
                 else {
@@ -169,7 +179,7 @@ namespace ts {
 
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
-                return !isPartOfExpression(node);
+                return !isExpressionNode(node);
             case SyntaxKind.ThisType:
                 return true;
         }
@@ -244,27 +254,25 @@ namespace ts {
             isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
-    export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
-        if (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) {
-            switch (node.parent.kind) {
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.ModuleDeclaration:
-                    return getNameOfDeclaration(<Declaration>node.parent) === node;
-                case SyntaxKind.ElementAccessExpression:
-                    return (<ElementAccessExpression>node.parent).argumentExpression === node;
-                case SyntaxKind.ComputedPropertyName:
-                    return true;
-            }
+    export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLiteral | NumericLiteral): boolean {
+        switch (node.parent.kind) {
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ModuleDeclaration:
+                return getNameOfDeclaration(<Declaration>node.parent) === node;
+            case SyntaxKind.ElementAccessExpression:
+                return (<ElementAccessExpression>node.parent).argumentExpression === node;
+            case SyntaxKind.ComputedPropertyName:
+                return true;
+            case SyntaxKind.LiteralType:
+                return node.parent.parent.kind === SyntaxKind.IndexedAccessType;
         }
-
-        return false;
     }
 
     export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
@@ -345,6 +353,28 @@ namespace ts {
                 return ScriptElementKind.alias;
             case SyntaxKind.JSDocTypedefTag:
                 return ScriptElementKind.typeElement;
+            case SyntaxKind.BinaryExpression:
+                const kind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                const { right } = node as BinaryExpression;
+                switch (kind) {
+                    case SpecialPropertyAssignmentKind.None:
+                        return ScriptElementKind.unknown;
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                        const rightKind = getNodeKind(right);
+                        return rightKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : rightKind;
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                        return ScriptElementKind.memberVariableElement; // property
+                    case SpecialPropertyAssignmentKind.Property:
+                        // static method / property
+                        return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
+                    default: {
+                        assertTypeIsNever(kind);
+                        return ScriptElementKind.unknown;
+                    }
+                }
             default:
                 return ScriptElementKind.unknown;
         }
@@ -407,8 +437,12 @@ namespace ts {
         return start < end;
     }
 
+    /**
+     * Assumes `candidate.start <= position` holds.
+     */
     export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
-        return candidate.end > position || !isCompletedNode(candidate, sourceFile);
+        Debug.assert(candidate.pos <= position);
+        return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
     export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
@@ -577,7 +611,7 @@ namespace ts {
         }
 
         const children = list.getChildren();
-        const listItemIndex = indexOf(children, node);
+        const listItemIndex = indexOfNode(children, node);
 
         return {
             listItemIndex,
@@ -720,8 +754,14 @@ namespace ts {
         }
     }
 
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node {
-        return find(startNode || sourceFile);
+    /**
+     * Finds the rightmost token satisfying `token.end <= position`,
+     * excluding `JsxText` tokens containing only whitespace.
+     */
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node | undefined {
+        const result = find(startNode || sourceFile);
+        Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
+        return result;
 
         function findRightmostToken(n: Node): Node {
             if (isToken(n)) {
@@ -742,19 +782,17 @@ namespace ts {
             const children = n.getChildren();
             for (let i = 0; i < children.length; i++) {
                 const child = children[i];
-                // condition 'position < child.end' checks if child node end after the position
-                // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
-                // aaaa___bbbb___$__ccc
-                // after we found child node with end after the position we check if start of the node is after the position.
-                // if yes - then position is in the trivia and we need to look into the previous child to find the token in question.
-                // if no - position is in the node itself so we should recurse in it.
-                // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
-                // if this is the case - then we should assume that token in question is located in previous child.
-                if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
+                // Note that the span of a node's tokens is [node.getStart(...), node.end).
+                // Given that `position < child.end` and child has constituent tokens, we distinguish these cases:
+                // 1) `position` precedes `child`'s tokens or `child` has no tokens (ie: in a comment or whitespace preceding `child`):
+                // we need to find the last token in a previous child.
+                // 2) `position` is within the same span: we recurse on `child`.
+                if (position < child.end) {
                     const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
-                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
+                        !nodeHasTokens(child) ||
+                        isWhiteSpaceOnlyJsxText(child);
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
@@ -780,10 +818,17 @@ namespace ts {
             }
         }
 
-        /// finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
+        /**
+         * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
+         */
         function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
             for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
-                if (nodeHasTokens(children[i])) {
+                const child = children[i];
+
+                if (isWhiteSpaceOnlyJsxText(child)) {
+                    Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+                }
+                else if (nodeHasTokens(children[i])) {
                     return children[i];
                 }
             }
@@ -851,6 +896,10 @@ namespace ts {
         return false;
     }
 
+    export function isWhiteSpaceOnlyJsxText(node: Node): node is JsxText {
+        return isJsxText(node) && node.containsOnlyWhiteSpaces;
+    }
+
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
         const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
@@ -863,41 +912,11 @@ namespace ts {
      * @param predicate Additional predicate to test on the comment range.
      */
     export function isInComment(
-            sourceFile: SourceFile,
-            position: number,
-            tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
-            predicate?: (c: CommentRange) => boolean): boolean {
-        return position <= tokenAtPosition.getStart(sourceFile) &&
-            (isInCommentRange(getLeadingCommentRanges(sourceFile.text, tokenAtPosition.pos)) ||
-                isInCommentRange(getTrailingCommentRanges(sourceFile.text, tokenAtPosition.pos)));
-
-        function isInCommentRange(commentRanges: CommentRange[]): boolean {
-            return forEach(commentRanges, c => isPositionInCommentRange(c, position, sourceFile.text) && (!predicate || predicate(c)));
-        }
-    }
-
-    function isPositionInCommentRange({ pos, end, kind }: ts.CommentRange, position: number, text: string): boolean {
-        if (pos < position && position < end) {
-            return true;
-        }
-        else if (position === end) {
-            // The end marker of a single-line comment does not include the newline character.
-            // In the following case, we are inside a comment (^ denotes the cursor position):
-            //
-            //    // asdf   ^\n
-            //
-            // But for multi-line comments, we don't want to be inside the comment in the following case:
-            //
-            //    /* asdf */^
-            //
-            // Internally, we represent the end of the comment at the newline and closing '/', respectively.
-            return kind === SyntaxKind.SingleLineCommentTrivia ||
-                // true for unterminated multi-line comment
-                !(text.charCodeAt(end - 1) === CharacterCodes.slash && text.charCodeAt(end - 2) === CharacterCodes.asterisk);
-        }
-        else {
-            return false;
-        }
+        sourceFile: SourceFile,
+        position: number,
+        tokenAtPosition?: Node,
+        predicate?: (c: CommentRange) => boolean): boolean {
+        return !!formatting.getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ false, /*precedingToken*/ undefined, tokenAtPosition, predicate);
     }
 
     export function hasDocComment(sourceFile: SourceFile, position: number) {
@@ -916,7 +935,7 @@ namespace ts {
 
     function nodeHasTokens(n: Node): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
-        // Note, that getWidth() does not take trivia into account.
+        // Note: getWidth() does not take trivia into account.
         return n.getWidth() !== 0;
     }
 
@@ -930,7 +949,7 @@ namespace ts {
         if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+        if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
 
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }
@@ -994,26 +1013,6 @@ namespace ts {
         return result;
     }
 
-    export function compareDataObjects(dst: any, src: any): boolean {
-        if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
-            return false;
-        }
-
-        for (const e in dst) {
-            if (typeof dst[e] === "object") {
-                if (!compareDataObjects(dst[e], src[e])) {
-                    return false;
-                }
-            }
-            else if (typeof dst[e] !== "function") {
-                if (dst[e] !== src[e]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node) {
         if (node.kind === SyntaxKind.ArrayLiteralExpression ||
             node.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -1071,20 +1070,19 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export const typeKeywords: ReadonlyArray<SyntaxKind> = [
+        SyntaxKind.AnyKeyword,
+        SyntaxKind.BooleanKeyword,
+        SyntaxKind.NeverKeyword,
+        SyntaxKind.NumberKeyword,
+        SyntaxKind.ObjectKeyword,
+        SyntaxKind.StringKeyword,
+        SyntaxKind.SymbolKeyword,
+        SyntaxKind.VoidKeyword,
+    ];
+
     export function isTypeKeyword(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.NeverKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.ObjectKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.SymbolKeyword:
-            case SyntaxKind.VoidKeyword:
-                return true;
-            default:
-                return false;
-        }
+        return contains(typeKeywords, kind);
     }
 
     /** True if the symbol is for an external module, as opposed to a namespace. */
@@ -1095,7 +1093,7 @@ namespace ts {
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
     export function nodeSeenTracker<T extends Node>(): (node: T) => boolean {
-        const seen: Array<true> = [];
+        const seen: true[] = [];
         return node => {
             const id = getNodeId(node);
             return !seen[id] && (seen[id] = true);
@@ -1133,6 +1131,7 @@ namespace ts {
             clear: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
+            reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
 
@@ -1261,6 +1260,7 @@ namespace ts {
     }
 
     export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
         return mapToDisplayParts(writer => {
             typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
         });
@@ -1292,9 +1292,7 @@ namespace ts {
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 &&
-            name.charCodeAt(0) === name.charCodeAt(length - 1) &&
-            (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isSingleOrDoubleQuote(name.charCodeAt(0))) {
             return name.substring(1, length - 1);
         }
         return name;
@@ -1311,6 +1309,10 @@ namespace ts {
         return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
     }
 
+    export function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker) {
+        return getSymbolId(skipAlias(symbol, checker));
+    }
+
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
         while (isWhiteSpaceLike(text.charCodeAt(position))) {
             position += 1;
@@ -1325,5 +1327,121 @@ namespace ts {
 
     export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
         return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
+    }
+
+    export function getSourceFileImportLocation({ text }: SourceFile) {
+        const shebang = getShebang(text);
+        let position = 0;
+        if (shebang !== undefined) {
+            position = shebang.length;
+            advancePastLineBreak();
+        }
+
+        // For a source file, it is possible there are detached comments we should not skip
+        let ranges = getLeadingCommentRanges(text, position);
+        if (!ranges) return position;
+        // However we should still skip a pinned comment at the top
+        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+            position = ranges[0].end;
+            advancePastLineBreak();
+            ranges = ranges.slice(1);
+        }
+        // As well as any triple slash references
+        for (const range of ranges) {
+            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(text, range.pos, range.end)) {
+                position = range.end;
+                advancePastLineBreak();
+                continue;
+            }
+            break;
+        }
+        return position;
+
+        function advancePastLineBreak() {
+            if (position < text.length) {
+                const charCode = text.charCodeAt(position);
+                if (isLineBreak(charCode)) {
+                    position++;
+
+                    if (position < text.length && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
+                        position++;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates a deep, memberwise clone of a node with no source map location.
+     *
+     * WARNING: This is an expensive operation and is only intended to be used in refactorings
+     * and code fixes (because those are triggered by explicit user actions).
+     */
+    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
+        if (node === undefined) {
+            return undefined;
+        }
+
+        const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+        if (visited === node) {
+            // This only happens for leaf nodes - internal nodes always see their children change.
+            const clone = getSynthesizedClone(node);
+            if (isStringLiteral(clone)) {
+                clone.textSourceNode = node as any;
+            }
+            else if (isNumericLiteral(clone)) {
+                clone.numericLiteralFlags = (node as any).numericLiteralFlags;
+            }
+            clone.pos = node.pos;
+            clone.end = node.end;
+            return clone;
+        }
+
+        // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
+        // the new node created by visitEachChild with the extra changes getSynthesizedClone
+        // would have made.
+
+        visited.parent = undefined;
+
+        return visited;
+    }
+
+    /**
+     * Sets EmitFlags to suppress leading and trailing trivia on the node.
+     */
+    /* @internal */
+    export function suppressLeadingAndTrailingTrivia(node: Node) {
+        Debug.assert(node !== undefined);
+
+        suppressLeading(node);
+        suppressTrailing(node);
+
+        function suppressLeading(node: Node) {
+            addEmitFlags(node, EmitFlags.NoLeadingComments);
+
+            const firstChild = forEachChild(node, child => child);
+            if (firstChild) {
+                suppressLeading(firstChild);
+            }
+        }
+
+        function suppressTrailing(node: Node) {
+            addEmitFlags(node, EmitFlags.NoTrailingComments);
+
+            let lastChild: Node = undefined;
+            forEachChild(
+                node,
+                child => (lastChild = child, undefined),
+                children => {
+                    // As an optimization, jump straight to the end of the list.
+                    if (children.length) {
+                        lastChild = last(children);
+                    }
+                    return undefined;
+                });
+            if (lastChild) {
+                suppressTrailing(lastChild);
+            }
+        }
     }
 }

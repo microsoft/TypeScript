@@ -35,7 +35,7 @@ var y = {
 }
 
 //// [twoAccessorsWithSameName.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {
@@ -45,7 +45,7 @@ var C = (function () {
     });
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     Object.defineProperty(D.prototype, "x", {
@@ -55,7 +55,7 @@ var D = (function () {
     });
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     Object.defineProperty(E.prototype, "x", {

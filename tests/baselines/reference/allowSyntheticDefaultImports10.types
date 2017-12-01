@@ -1,0 +1,29 @@
+=== tests/cases/compiler/a.ts ===
+import Foo = require("./b");
+>Foo : typeof Foo
+
+Foo.default.bar();
+>Foo.default.bar() : any
+>Foo.default.bar : any
+>Foo.default : any
+>Foo : typeof Foo
+>default : any
+>bar : any
+
+Foo.default.default.foo();
+>Foo.default.default.foo() : any
+>Foo.default.default.foo : any
+>Foo.default.default : any
+>Foo.default : any
+>Foo : typeof Foo
+>default : any
+>default : any
+>foo : any
+
+=== tests/cases/compiler/b.d.ts ===
+export function foo();
+>foo : () => any
+
+export function bar();
+>bar : () => any
+

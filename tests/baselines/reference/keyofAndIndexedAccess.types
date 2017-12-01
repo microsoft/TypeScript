@@ -205,7 +205,7 @@ type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 >Options : Options
 
 type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
->Q41 : (true & "yes") | (true & "no") | (false & "yes") | (false & "no")
+>Q41 : never
 >Shape : Shape
 >Options : Options
 
@@ -352,8 +352,8 @@ function f12(t: [Shape, boolean]) {
 >Shape : Shape
 
     let len = getProperty(t, "length");
->len : number
->getProperty(t, "length") : number
+>len : 2
+>getProperty(t, "length") : 2
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >t : [Shape, boolean]
 >"length" : "length"
@@ -1793,8 +1793,8 @@ declare function on<T>(handlerHash: Handlers<T>): T
 >T : T
 
 var hashOfEmpty1 = on({ test: () => {} });  // {}
->hashOfEmpty1 : {}
->on({ test: () => {} }) : {}
+>hashOfEmpty1 : { test: {}; }
+>on({ test: () => {} }) : { test: {}; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: () => {} } : { test: () => void; }
 >test : () => void
@@ -2194,7 +2194,7 @@ class Form<T> {
 
         this.childFormFactories[prop](value)
 >this.childFormFactories[prop](value) : Form<T[K]>
->this.childFormFactories[prop] : (v: T[K]) => Form<T[K]>
+>this.childFormFactories[prop] : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }[K]
 >this.childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
 >this : this
 >childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }

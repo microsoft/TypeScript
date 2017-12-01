@@ -1,0 +1,17 @@
+=== tests/cases/compiler/blockScopedFunctionDeclarationInStrictClass.ts ===
+class c {
+>c : Symbol(c, Decl(blockScopedFunctionDeclarationInStrictClass.ts, 0, 0))
+
+    method() {
+>method : Symbol(c.method, Decl(blockScopedFunctionDeclarationInStrictClass.ts, 0, 9))
+
+        if (true) {
+            function foo() { }
+>foo : Symbol(foo, Decl(blockScopedFunctionDeclarationInStrictClass.ts, 2, 19))
+
+            foo(); // ok
+>foo : Symbol(foo, Decl(blockScopedFunctionDeclarationInStrictClass.ts, 2, 19))
+        }
+        foo(); // not ok
+    }
+}

@@ -47,7 +47,7 @@ namespace ts {
         // Fully checks a candidate, with an dotted container, against the search pattern.
         // The candidate must match the last part of the search pattern, and the dotted container
         // must match the preceding segments of the pattern.
-        getMatches(candidateContainers: string[], candidate: string): PatternMatch[];
+        getMatches(candidateContainers: string[], candidate: string): PatternMatch[] | undefined;
 
         // Whether or not the pattern contained dots or not.  Clients can use this to determine
         // If they should call getMatches, or if getMatchesForLastSegmentOfPattern is sufficient.
@@ -139,7 +139,7 @@ namespace ts {
             return matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
         }
 
-        function getMatches(candidateContainers: string[], candidate: string): PatternMatch[] {
+        function getMatches(candidateContainers: string[], candidate: string): PatternMatch[] | undefined {
             if (skipMatch(candidate)) {
                 return undefined;
             }
@@ -515,10 +515,10 @@ namespace ts {
     }
 
     // Assumes 'value' is already lowercase.
-    function indexOfIgnoringCase(string: string, value: string): number {
-        const n = string.length - value.length;
+    function indexOfIgnoringCase(str: string, value: string): number {
+        const n = str.length - value.length;
         for (let i = 0; i <= n; i++) {
-            if (startsWithIgnoringCase(string, value, i)) {
+            if (startsWithIgnoringCase(str, value, i)) {
                 return i;
             }
         }
@@ -527,9 +527,9 @@ namespace ts {
     }
 
     // Assumes 'value' is already lowercase.
-    function startsWithIgnoringCase(string: string, value: string, start: number): boolean {
+    function startsWithIgnoringCase(str: string, value: string, start: number): boolean {
         for (let i = 0; i < value.length; i++) {
-            const ch1 = toLowerCase(string.charCodeAt(i + start));
+            const ch1 = toLowerCase(str.charCodeAt(i + start));
             const ch2 = value.charCodeAt(i);
 
             if (ch1 !== ch2) {

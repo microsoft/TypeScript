@@ -1,0 +1,37 @@
+=== tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts ===
+declare function getSpecifier(): boolean;
+>getSpecifier : Symbol(getSpecifier, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 0, 0))
+
+declare var whatToLoad: boolean;
+>whatToLoad : Symbol(whatToLoad, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 1, 11))
+
+// Error specifier is not assignable to string
+import(getSpecifier());
+>getSpecifier : Symbol(getSpecifier, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 0, 0))
+
+var p1 = import(getSpecifier());
+>p1 : Symbol(p1, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 5, 3))
+>getSpecifier : Symbol(getSpecifier, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 0, 0))
+
+const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
+>p2 : Symbol(p2, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 6, 5))
+>whatToLoad : Symbol(whatToLoad, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 1, 11))
+>getSpecifier : Symbol(getSpecifier, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 0, 0))
+
+p1.then(zero => {
+>p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p1 : Symbol(p1, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 5, 3))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>zero : Symbol(zero, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 7, 8))
+
+    return zero.foo();  // ok, zero is any
+>zero : Symbol(zero, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 7, 8))
+
+});
+
+var p3 = import(["path1", "path2"]);
+>p3 : Symbol(p3, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 11, 3))
+
+var p4 = import(()=>"PathToModule");
+>p4 : Symbol(p4, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 12, 3))
+

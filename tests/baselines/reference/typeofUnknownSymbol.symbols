@@ -1,0 +1,5 @@
+=== tests/cases/compiler/typeofUnknownSymbol.ts ===
+// previously gave no error here
+var x = typeof whatsthis
+>x : Symbol(x, Decl(typeofUnknownSymbol.ts, 1, 3))
+

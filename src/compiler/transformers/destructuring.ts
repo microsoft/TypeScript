@@ -409,7 +409,7 @@ namespace ts {
      */
     function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
         if (isComputedPropertyName(propertyName)) {
-            const argumentExpression = ensureIdentifier(flattenContext, propertyName.expression, /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
+            const argumentExpression = ensureIdentifier(flattenContext, visitNode(propertyName.expression, flattenContext.visitor), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
             return createElementAccess(value, argumentExpression);
         }
         else if (isStringOrNumericLiteral(propertyName)) {
@@ -418,7 +418,7 @@ namespace ts {
             return createElementAccess(value, argumentExpression);
         }
         else {
-            const name = createIdentifier(unescapeLeadingUnderscores(propertyName.escapedText));
+            const name = createIdentifier(idText(propertyName));
             return createPropertyAccess(value, name);
         }
     }

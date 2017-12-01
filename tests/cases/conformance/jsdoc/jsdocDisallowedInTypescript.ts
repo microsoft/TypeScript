@@ -19,3 +19,9 @@ var variadic: ...boolean = [true, false, true];
 var most: !string = 'definite';
 var postfixdef: number! = 101;
 var postfixopt: number? = undefined;
+
+var nns: Array<?number>;
+var dns: Array<!number>;
+var anys: Array<*>;
+var vars: Array<...number>;
+

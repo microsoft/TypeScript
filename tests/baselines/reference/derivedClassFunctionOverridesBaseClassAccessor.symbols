@@ -1,0 +1,26 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassFunctionOverridesBaseClassAccessor.ts ===
+class Base {
+>Base : Symbol(Base, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 0))
+
+    get x() {
+>x : Symbol(Base.x, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 12), Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 3, 5))
+
+        return 1;
+    }
+    set x(v) {
+>x : Symbol(Base.x, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 12), Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 3, 5))
+>v : Symbol(v, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 4, 10))
+    }
+}
+
+// error
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 6, 1))
+>Base : Symbol(Base, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 0))
+
+    x() {
+>x : Symbol(Derived.x, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 9, 28))
+
+        return 1;
+    }
+}

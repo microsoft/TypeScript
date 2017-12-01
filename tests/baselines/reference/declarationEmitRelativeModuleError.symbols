@@ -1,0 +1,9 @@
+=== tests/cases/compiler/declarationEmitRelativeModuleError.ts ===
+declare module "b:block" { // <-- no error anymore
+No type information for this code.    
+No type information for this code.}
+No type information for this code.
+No type information for this code.declare module "b:/block" { // <-- still an error
+No type information for this code.    
+No type information for this code.}
+No type information for this code.

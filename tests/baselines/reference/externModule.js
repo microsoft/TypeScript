@@ -43,7 +43,7 @@ n=XDate.UTC(1964,2,1);
 declare;
 module;
 {
-    var XDate = (function () {
+    var XDate = /** @class */ (function () {
         function XDate() {
         }
         return XDate;

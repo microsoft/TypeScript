@@ -1,0 +1,26 @@
+=== tests/cases/compiler/errorWithTruncatedType.ts ===
+var x: {
+>x : Symbol(x, Decl(errorWithTruncatedType.ts, 0, 3))
+
+    propertyWithAnExceedinglyLongName1: string;
+>propertyWithAnExceedinglyLongName1 : Symbol(propertyWithAnExceedinglyLongName1, Decl(errorWithTruncatedType.ts, 0, 8))
+
+    propertyWithAnExceedinglyLongName2: string;
+>propertyWithAnExceedinglyLongName2 : Symbol(propertyWithAnExceedinglyLongName2, Decl(errorWithTruncatedType.ts, 1, 47))
+
+    propertyWithAnExceedinglyLongName3: string;
+>propertyWithAnExceedinglyLongName3 : Symbol(propertyWithAnExceedinglyLongName3, Decl(errorWithTruncatedType.ts, 2, 47))
+
+    propertyWithAnExceedinglyLongName4: string;
+>propertyWithAnExceedinglyLongName4 : Symbol(propertyWithAnExceedinglyLongName4, Decl(errorWithTruncatedType.ts, 3, 47))
+
+    propertyWithAnExceedinglyLongName5: string;
+>propertyWithAnExceedinglyLongName5 : Symbol(propertyWithAnExceedinglyLongName5, Decl(errorWithTruncatedType.ts, 4, 47))
+
+};
+
+// String representation of type of 'x' should be truncated in error message
+var s: string = x;
+>s : Symbol(s, Decl(errorWithTruncatedType.ts, 9, 3))
+>x : Symbol(x, Decl(errorWithTruncatedType.ts, 0, 3))
+

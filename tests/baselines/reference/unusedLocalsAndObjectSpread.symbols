@@ -1,0 +1,84 @@
+=== tests/cases/compiler/unusedLocalsAndObjectSpread.ts ===
+declare var console: { log(a: any): void };
+>console : Symbol(console, Decl(unusedLocalsAndObjectSpread.ts, 0, 11))
+>log : Symbol(log, Decl(unusedLocalsAndObjectSpread.ts, 0, 22))
+>a : Symbol(a, Decl(unusedLocalsAndObjectSpread.ts, 0, 27))
+
+function one() {
+>one : Symbol(one, Decl(unusedLocalsAndObjectSpread.ts, 0, 43))
+
+    const foo = { a: 1, b: 2 };
+>foo : Symbol(foo, Decl(unusedLocalsAndObjectSpread.ts, 3, 9))
+>a : Symbol(a, Decl(unusedLocalsAndObjectSpread.ts, 3, 17))
+>b : Symbol(b, Decl(unusedLocalsAndObjectSpread.ts, 3, 23))
+
+    // 'a' is declared but never used
+    const {a, ...bar} = foo;
+>a : Symbol(a, Decl(unusedLocalsAndObjectSpread.ts, 5, 11))
+>bar : Symbol(bar, Decl(unusedLocalsAndObjectSpread.ts, 5, 13))
+>foo : Symbol(foo, Decl(unusedLocalsAndObjectSpread.ts, 3, 9))
+
+    console.log(bar);
+>console.log : Symbol(log, Decl(unusedLocalsAndObjectSpread.ts, 0, 22))
+>console : Symbol(console, Decl(unusedLocalsAndObjectSpread.ts, 0, 11))
+>log : Symbol(log, Decl(unusedLocalsAndObjectSpread.ts, 0, 22))
+>bar : Symbol(bar, Decl(unusedLocalsAndObjectSpread.ts, 5, 13))
+}
+
+function two() {
+>two : Symbol(two, Decl(unusedLocalsAndObjectSpread.ts, 7, 1))
+
+    const foo = { a: 1, b: 2 };
+>foo : Symbol(foo, Decl(unusedLocalsAndObjectSpread.ts, 10, 9))
+>a : Symbol(a, Decl(unusedLocalsAndObjectSpread.ts, 10, 17))
+>b : Symbol(b, Decl(unusedLocalsAndObjectSpread.ts, 10, 23))
+
+    // '_' is declared but never used
+    const {a: _, ...bar} = foo;
+>a : Symbol(a, Decl(unusedLocalsAndObjectSpread.ts, 10, 17))
+>_ : Symbol(_, Decl(unusedLocalsAndObjectSpread.ts, 12, 11))
+>bar : Symbol(bar, Decl(unusedLocalsAndObjectSpread.ts, 12, 16))
+>foo : Symbol(foo, Decl(unusedLocalsAndObjectSpread.ts, 10, 9))
+
+    console.log(bar);
+>console.log : Symbol(log, Decl(unusedLocalsAndObjectSpread.ts, 0, 22))
+>console : Symbol(console, Decl(unusedLocalsAndObjectSpread.ts, 0, 11))
+>log : Symbol(log, Decl(unusedLocalsAndObjectSpread.ts, 0, 22))
+>bar : Symbol(bar, Decl(unusedLocalsAndObjectSpread.ts, 12, 16))
+}
+
+function three() {
+>three : Symbol(three, Decl(unusedLocalsAndObjectSpread.ts, 14, 1))
+
+    const foo = { a: 1, b: 2 };
+>foo : Symbol(foo, Decl(unusedLocalsAndObjectSpread.ts, 17, 9))
+>a : Symbol(a, Decl(unusedLocalsAndObjectSpread.ts, 17, 17))
+>b : Symbol(b, Decl(unusedLocalsAndObjectSpread.ts, 17, 23))
+
+    // 'a' is declared but never used
+    const {a, ...bar} = foo; // bar should be unused
+>a : Symbol(a, Decl(unusedLocalsAndObjectSpread.ts, 19, 11))
+>bar : Symbol(bar, Decl(unusedLocalsAndObjectSpread.ts, 19, 13))
+>foo : Symbol(foo, Decl(unusedLocalsAndObjectSpread.ts, 17, 9))
+
+    //console.log(bar);
+}
+
+function four() {
+>four : Symbol(four, Decl(unusedLocalsAndObjectSpread.ts, 21, 1))
+
+    const foo = { a: 1, b: 2 };
+>foo : Symbol(foo, Decl(unusedLocalsAndObjectSpread.ts, 24, 9))
+>a : Symbol(a, Decl(unusedLocalsAndObjectSpread.ts, 24, 17))
+>b : Symbol(b, Decl(unusedLocalsAndObjectSpread.ts, 24, 23))
+
+    // '_' is declared but never used
+    const {a: _, ...bar} = foo; // bar should be unused
+>a : Symbol(a, Decl(unusedLocalsAndObjectSpread.ts, 24, 17))
+>_ : Symbol(_, Decl(unusedLocalsAndObjectSpread.ts, 26, 11))
+>bar : Symbol(bar, Decl(unusedLocalsAndObjectSpread.ts, 26, 16))
+>foo : Symbol(foo, Decl(unusedLocalsAndObjectSpread.ts, 24, 9))
+
+    //console.log(bar);
+}
+

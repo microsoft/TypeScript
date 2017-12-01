@@ -42,7 +42,7 @@ function baz2(func) {
 exports.baz2 = baz2;
 // error
 function baz3(func) {
-    if (func === void 0) { func = (function () {
+    if (func === void 0) { func = /** @class */ (function () {
         function class_1() {
             this.x = foo;
         }

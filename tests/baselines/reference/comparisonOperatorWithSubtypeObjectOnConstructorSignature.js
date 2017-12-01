@@ -232,12 +232,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -431,4 +431,4 @@ var r8b6 = b6 !== a6;
 var r8b7 = b7 !== a7;
 var r8b8 = b8 !== a8;
 var r8b9 = b9 !== a9;
-//var r8b10 = b10 !== a10; 
+//var r8b10 = b10 !== a10;
