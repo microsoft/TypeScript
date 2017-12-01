@@ -18,7 +18,7 @@ var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
 >b0 : number
 >b1 : boolean
 >b2 : string
->[1, 2, "string"] : [number, 2, string]
+>[1, 2, "string"] : [number, number, string]
 >1 : 1
 >2 : 2
 >"string" : "string"
@@ -86,7 +86,7 @@ function foo(idx: number): F {
 >F : F
 
     return {
->{        2: true    } : { 2: true; }
+>{        2: true    } : { 2: boolean; }
 
         2: true
 >true : true

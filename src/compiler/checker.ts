@@ -10677,7 +10677,7 @@ namespace ts {
         }
 
         function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type) {
-            if (!isLiteralLikeContextualType(contextualType)) {
+            if (!isLiteralOfContextualType(type, contextualType)) {
                 type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
             }
             return type;
@@ -18960,19 +18960,33 @@ namespace ts {
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
         }
 
-        function isLiteralLikeContextualType(contextualType: Type) {
+        function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {
             if (contextualType) {
-                if (contextualType.flags & TypeFlags.TypeVariable) {
-                    const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-                    // If the type parameter is constrained to the base primitive type we're checking for,
-                    // consider this a literal context. For example, given a type parameter 'T extends string',
-                    // this causes us to infer string literal types for T.
-                    if (constraint.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum | TypeFlags.ESSymbol)) {
-                        return true;
-                    }
-                    contextualType = constraint;
+                if (contextualType.flags & TypeFlags.Union && !(contextualType.flags & TypeFlags.Boolean)) {
+                    // If the contextual type is a union containing both of the 'true' and 'false' types we
+                    // don't consider it a literal context for boolean literals.
+                    const types = (<UnionType>contextualType).types;
+                    return some(types, t =>
+                        !(t.flags & TypeFlags.BooleanLiteral && containsType(types, trueType) && containsType(types, falseType)) &&
+                        isLiteralOfContextualType(candidateType, t));
                 }
-                return maybeTypeOfKind(contextualType, (TypeFlags.Literal | TypeFlags.Index | TypeFlags.UniqueESSymbol));
+                if (contextualType.flags & TypeFlags.TypeVariable) {
+                    // If the contextual type is a type variable constrained to a primitive type, consider
+                    // this a literal context for literals of that primitive type. For example, given a
+                    // type parameter 'T extends string', infer string literal types for T.
+                    const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
+                    return constraint.flags & TypeFlags.String && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+                        constraint.flags & TypeFlags.Number && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
+                        constraint.flags & TypeFlags.Boolean && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
+                        constraint.flags & TypeFlags.ESSymbol && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol) ||
+                        isLiteralOfContextualType(candidateType, constraint);
+                }
+                // If the contextual type is a literal of a particular primitive type, we consider this a
+                // literal context for all literals of that primitive type.
+                return contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+                    contextualType.flags & TypeFlags.NumberLiteral && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
+                    contextualType.flags & TypeFlags.BooleanLiteral && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
+                    contextualType.flags & TypeFlags.UniqueESSymbol && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol);
             }
             return false;
         }
