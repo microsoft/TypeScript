@@ -256,6 +256,7 @@ namespace ts {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
             },
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
+            getAccessibleSymbolChain,
         };
 
         const tupleTypes: GenericType[] = [];
@@ -761,10 +762,6 @@ namespace ts {
         function getNodeLinks(node: Node): NodeLinks {
             const nodeId = getNodeId(node);
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = { flags: 0 });
-        }
-
-        function getObjectFlags(type: Type): ObjectFlags {
-            return type.flags & TypeFlags.Object ? (<ObjectType>type).objectFlags : 0;
         }
 
         function isGlobalSourceFile(node: Node) {
@@ -10452,20 +10449,6 @@ namespace ts {
                 !hasBaseType(checkClass, getDeclaringClass(p)) : false) ? undefined : checkClass;
         }
 
-        // Return true if the given type is the constructor type for an abstract class
-        function isAbstractConstructorType(type: Type) {
-            if (getObjectFlags(type) & ObjectFlags.Anonymous) {
-                const symbol = type.symbol;
-                if (symbol && symbol.flags & SymbolFlags.Class) {
-                    const declaration = getClassLikeDeclarationOfSymbol(symbol);
-                    if (declaration && hasModifier(declaration, ModifierFlags.Abstract)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
         // Return true if the given type is deeply nested. We consider this to be the case when structural type comparisons
         // for 5 or more occurrences or instantiations of the type have been recorded on the given stack. It is possible,
         // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely
@@ -13767,7 +13750,7 @@ namespace ts {
         //   the contextual type of an initializer expression is the type annotation of the containing declaration, if present.
         function getContextualTypeForInitializerExpression(node: Expression): Type {
             const declaration = <VariableLikeDeclaration>node.parent;
-            if (node === declaration.initializer) {
+            if (node === declaration.initializer || node.kind === SyntaxKind.EqualsToken) {
                 const typeNode = getEffectiveTypeAnnotationNode(declaration);
                 if (typeNode) {
                     return getTypeFromTypeNode(typeNode);
@@ -13899,6 +13882,12 @@ namespace ts {
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
                     return node === right ? getContextualType(binaryExpression) : undefined;
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                    // For completions after `x === `
+                    return node === operatorToken ? getTypeOfExpression(binaryExpression.left) : undefined;
                 default:
                     return undefined;
             }
@@ -14114,9 +14103,13 @@ namespace ts {
                     return getContextualTypeForReturnExpression(node);
                 case SyntaxKind.YieldExpression:
                     return getContextualTypeForYieldOperand(<YieldExpression>parent);
-                case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    return getContextualTypeForArgument(<CallExpression>parent, node);
+                    if (node.kind === SyntaxKind.NewKeyword) { // for completions after `new `
+                        return getContextualType(parent as NewExpression);
+                    }
+                    // falls through
+                case SyntaxKind.CallExpression:
+                    return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
                     return getTypeFromTypeNode((<AssertionExpression>parent).type);
@@ -14150,6 +14143,12 @@ namespace ts {
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     return getAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>parent);
+                case SyntaxKind.CaseClause: {
+                    if (node.kind === SyntaxKind.CaseKeyword) { // for completions after `case `
+                        const switchStatement = (parent as CaseClause).parent.parent;
+                        return getTypeOfExpression(switchStatement.expression);
+                    }
+                }
             }
             return undefined;
         }
@@ -22576,10 +22575,6 @@ namespace ts {
             // if symbol is instantiated its flags are not copied from the 'target'
             // so we'll need to get back original 'target' symbol to work with correct set of flags
             return getCheckFlags(s) & CheckFlags.Instantiated ? (<TransientSymbol>s).target : s;
-        }
-
-        function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration {
-            return forEach(symbol.declarations, d => isClassLike(d) ? d : undefined);
         }
 
         function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {

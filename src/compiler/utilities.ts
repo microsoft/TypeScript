@@ -465,7 +465,6 @@ namespace ts {
         return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
     }
 
-    /* @internal */
     export function isBlockScope(node: Node, parentNode: Node) {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
@@ -493,7 +492,6 @@ namespace ts {
         return false;
     }
 
-    /* @internal */
     export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
     export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
         switch (node.kind) {
@@ -523,7 +521,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function isAnyImportSyntax(node: Node): node is AnyImportSyntax {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
@@ -1805,7 +1802,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     // See GH#16030
     export function isAnyDeclarationName(name: Node): boolean {
         switch (name.kind) {
@@ -3115,7 +3111,6 @@ namespace ts {
         return flags;
     }
 
-    /* @internal */
     export function getModifierFlagsNoCache(node: Node): ModifierFlags {
 
         let flags = ModifierFlags.None;
@@ -3675,6 +3670,27 @@ namespace ts {
 
             directory = parentPath;
         }
+    }
+
+    // Return true if the given type is the constructor type for an abstract class
+    export function isAbstractConstructorType(type: Type): boolean {
+        return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && !!type.symbol && isAbstractConstructorSymbol(type.symbol);
+    }
+
+    export function isAbstractConstructorSymbol(symbol: Symbol): boolean {
+        if (symbol.flags & SymbolFlags.Class) {
+            const declaration = getClassLikeDeclarationOfSymbol(symbol);
+            return !!declaration && hasModifier(declaration, ModifierFlags.Abstract);
+        }
+        return false;
+    }
+
+    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration | undefined {
+        return find(symbol.declarations, isClassLike);
+    }
+
+    export function getObjectFlags(type: Type): ObjectFlags {
+        return type.flags & TypeFlags.Object ? (<ObjectType>type).objectFlags : 0;
     }
 
     export function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker) {
