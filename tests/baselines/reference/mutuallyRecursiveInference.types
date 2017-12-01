@@ -1,0 +1,18 @@
+=== tests/cases/compiler/mutuallyRecursiveInference.ts ===
+interface T<A> { a: A }
+>T : T<A>
+>A : A
+>a : A
+>A : A
+
+interface L<RT> extends T<RT['a']> {}
+>L : L<RT>
+>RT : RT
+>T : T<A>
+>RT : RT
+
+interface X extends L<X> {}
+>X : X
+>L : L<RT>
+>X : X
+

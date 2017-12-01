@@ -1,0 +1,18 @@
+=== tests/cases/compiler/mutuallyRecursiveInference.ts ===
+interface T<A> { a: A }
+>T : Symbol(T, Decl(mutuallyRecursiveInference.ts, 0, 0))
+>A : Symbol(A, Decl(mutuallyRecursiveInference.ts, 0, 12))
+>a : Symbol(T.a, Decl(mutuallyRecursiveInference.ts, 0, 16))
+>A : Symbol(A, Decl(mutuallyRecursiveInference.ts, 0, 12))
+
+interface L<RT> extends T<RT['a']> {}
+>L : Symbol(L, Decl(mutuallyRecursiveInference.ts, 0, 23))
+>RT : Symbol(RT, Decl(mutuallyRecursiveInference.ts, 1, 12))
+>T : Symbol(T, Decl(mutuallyRecursiveInference.ts, 0, 0))
+>RT : Symbol(RT, Decl(mutuallyRecursiveInference.ts, 1, 12))
+
+interface X extends L<X> {}
+>X : Symbol(X, Decl(mutuallyRecursiveInference.ts, 1, 37))
+>L : Symbol(L, Decl(mutuallyRecursiveInference.ts, 0, 23))
+>X : Symbol(X, Decl(mutuallyRecursiveInference.ts, 1, 37))
+
