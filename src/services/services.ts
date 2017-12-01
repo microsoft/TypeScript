@@ -1268,7 +1268,7 @@ namespace ts {
                     }
                     return host.readFile && host.readFile(fileName);
                 },
-                realpath: host.realpath && (path => host.realpath(path)), //was parse error without parens?
+                realpath: host.realpath && (path => host.realpath(path)),
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
                 },

@@ -4229,7 +4229,7 @@ namespace ts {
      */
     export interface ResolvedModuleFull extends ResolvedModule {
         /* @internal */
-        readonly originalPath: string | undefined;
+        readonly originalPath?: string;
         /**
          * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
          * This is optional for backwards-compatibility, but will be added if not provided.
