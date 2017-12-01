@@ -10,7 +10,7 @@ tests/cases/compiler/missingArgument1.ts(1,8): error TS2304: Cannot find name 'b
 !!! error TS2304: Cannot find name 'foo'.
         ~
 !!! error TS2304: Cannot find name 'a'.
-          
+          ~
 !!! error TS1135: Argument expression expected.
            ~
 !!! error TS2304: Cannot find name 'b'.

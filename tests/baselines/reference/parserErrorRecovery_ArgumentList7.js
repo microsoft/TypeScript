@@ -2,4 +2,4 @@
 Foo(a,,
 
 //// [parserErrorRecovery_ArgumentList7.js]
-Foo(a, );
+Foo(a);
