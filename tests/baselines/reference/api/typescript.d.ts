@@ -2762,6 +2762,7 @@ declare namespace ts {
         realpath?(path: string): string;
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout?(timeoutId: any): void;
+        clearScreen?(): void;
     }
     interface FileWatcher {
         close(): void;

@@ -493,8 +493,8 @@ namespace ts {
         }
 
         function updateProgram() {
-            if (sys.clearScreen()) {
-                sys.clearScreen();
+            if (watchingHost.system.clearScreen) {
+                watchingHost.system.clearScreen();
             }
 
             timerToUpdateProgram = undefined;
