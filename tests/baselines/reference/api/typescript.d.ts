@@ -4076,7 +4076,7 @@ declare namespace ts {
     }
     interface CodeFix extends CodeAction {
         /** If present, one may call 'getCombinedCodeFix' with this actionId. */
-        actionId: {} | undefined;
+        actionId?: {};
     }
     interface CodeActionAll {
         changes: FileTextChanges[];

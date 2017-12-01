@@ -4075,8 +4075,8 @@ declare namespace ts {
         commands?: CodeActionCommand[];
     }
     interface CodeFix extends CodeAction {
-        /** If present, one may call 'applyAllCodeFixesInGroup' with this actionId. */
-        actionId: {} | undefined;
+        /** If present, one may call 'getCombinedCodeFix' with this actionId. */
+        actionId?: {};
     }
     interface CodeActionAll {
         changes: FileTextChanges[];
@@ -5275,7 +5275,7 @@ declare namespace ts.server.protocol {
         arguments: GetCombinedCodeFixRequestArgs;
     }
     interface GetCombinedCodeFixResponse extends Response {
-        body: CodeActionAll;
+        body: CombinedCodeActions;
     }
     interface ApplyCodeActionCommandRequest extends Request {
         command: CommandTypes.ApplyCodeActionCommand;
@@ -6065,7 +6065,7 @@ declare namespace ts.server.protocol {
         /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
         commands?: {}[];
     }
-    interface CodeActionAll {
+    interface CombinedCodeActions {
         changes: FileCodeEdits[];
         commands?: {}[];
     }
