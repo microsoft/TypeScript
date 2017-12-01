@@ -6171,6 +6171,7 @@ namespace ts {
 
         function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
             if (!(<ResolvedType>type).members) {
+                setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
                 if (type.flags & TypeFlags.Object) {
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
                         resolveTypeReferenceMembers(<TypeReference>type);
