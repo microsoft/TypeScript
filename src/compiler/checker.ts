@@ -11686,7 +11686,38 @@ namespace ts {
             if (!inferredType) {
                 if (inference.indexes) {
                     // Build a candidate from all indexes
-                    (inference.candidates || (inference.candidates = [])).push(getIntersectionType(inference.indexes));
+                    let aggregateInference = getIntersectionType(inference.indexes);
+                    const constraint = getConstraintOfTypeParameter(context.signature.typeParameters[index]);
+                    if (constraint) {
+                        const instantiatedConstraint = instantiateType(constraint, context);
+                        if (!context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference))) {
+                            if (instantiatedConstraint.flags & TypeFlags.Union) {
+                                const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), instantiatedConstraint);
+                                if (discriminantProps) {
+                                    let match: Type;
+                                    findDiscriminant: for (const p of discriminantProps) {
+                                        const candidatePropType = getTypeOfPropertyOfType(aggregateInference, p.escapedName);
+                                        for (const type of (instantiatedConstraint as UnionType).types) {
+                                            const propType = getTypeOfPropertyOfType(type, p.escapedName);
+                                            if (propType && checkTypeAssignableTo(candidatePropType, propType, /*errorNode*/ undefined)) {
+                                                if (match && match !== type) {
+                                                    match = undefined;
+                                                    break findDiscriminant;
+                                                }
+                                                else {
+                                                    match = type;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (match) {
+                                        aggregateInference = getSpreadType(match, aggregateInference, /*symbol*/ undefined, /*propegatedFlags*/ 0);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    (inference.candidates || (inference.candidates = [])).push(aggregateInference);
                 }
                 if (inference.candidates) {
                     // Extract all object literal types and replace them with a single widened and normalized type.
