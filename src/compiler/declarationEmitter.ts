@@ -768,6 +768,9 @@ namespace ts {
             if (flags & ModifierFlags.Static) {
                 write("static ");
             }
+            if (flags & ModifierFlags.Override) {
+                write("override ");
+            }
             if (flags & ModifierFlags.Readonly) {
                 write("readonly ");
             }

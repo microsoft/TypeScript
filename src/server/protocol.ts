@@ -2518,6 +2518,7 @@ namespace ts.server.protocol {
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;
+        noImplicitOverride?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
         noUnusedLocals?: boolean;

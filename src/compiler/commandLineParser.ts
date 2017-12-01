@@ -264,6 +264,13 @@ namespace ts {
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
         },
         {
+            name: "noImplicitOverride",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Raise_an_error_when_inherited_Slashoverridden_class_members_are_not_explicitly_marked_override,
+        },
+        {
             name: "strictNullChecks",
             type: "boolean",
             showInSimplifiedHelpView: true,

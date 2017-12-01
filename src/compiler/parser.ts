@@ -4934,6 +4934,7 @@ namespace ts {
                     case SyntaxKind.PrivateKeyword:
                     case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.OverrideKeyword:
                     case SyntaxKind.ReadonlyKeyword:
                         nextToken();
                         // ASI takes effect for this modifier.
@@ -5020,6 +5021,7 @@ namespace ts {
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.ReadonlyKeyword:
                     // When these don't start a declaration, they may be the start of a class member if an identifier
@@ -5101,6 +5103,7 @@ namespace ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
+                case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.AbstractKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.ReadonlyKeyword:
@@ -5403,6 +5406,7 @@ namespace ts {
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.ReadonlyKeyword:
                     return true;

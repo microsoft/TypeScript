@@ -779,7 +779,7 @@
         "category": "Error",
         "code": 1241
     },
-    "'abstract' modifier can only appear on a class, method, or property declaration.": {
+    "'{0}' modifier can only appear on a class, method, or property declaration.": {
         "category": "Error",
         "code": 1242
     },
@@ -1963,6 +1963,38 @@
     "Property '{0}' is used before being assigned.": {
         "category": "Error",
         "code": 2565
+    },
+    "Overload signatures must all be override or non-override.": {
+        "category": "Error",
+        "code": 2566
+    },
+    "Accessors must both be override or non-override.": {
+        "category": "Error",
+        "code": 2567
+    },
+    "Raise an error when inherited/overridden class members are not explicitly marked 'override'": {
+        "category": "Error",
+        "code": 2568
+    },
+    "Class member '{0}' was marked 'override', but no matching declaration was found in any supertype of '{1}'": {
+        "category": "Error",
+        "code": 2569
+    },
+    "Class member '{0}' must be marked 'override' when noImplicitOverride is enabled (inherited from {1})": {
+        "category": "Error",
+        "code": 2570
+    },
+    "Class member '{0}' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.{1})": {
+        "category": "Error",
+        "code": 2571
+    },
+    "Override modifier cannot be used with an optional property declaration": {
+        "category": "Error",
+        "code": 2572
+    },
+    "All declarations of an override method must be consecutive.": {
+        "category": "Error",
+        "code": 2573
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -3786,7 +3818,6 @@
         "category": "Message",
         "code": 90017
     },
-
     "Disable checking for this file.": {
         "category": "Message",
         "code": 90018

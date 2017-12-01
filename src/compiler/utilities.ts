@@ -3145,6 +3145,7 @@ namespace ts {
             case SyntaxKind.DefaultKeyword: return ModifierFlags.Default;
             case SyntaxKind.AsyncKeyword: return ModifierFlags.Async;
             case SyntaxKind.ReadonlyKeyword: return ModifierFlags.Readonly;
+            case SyntaxKind.OverrideKeyword: return ModifierFlags.Override;
         }
         return ModifierFlags.None;
     }
@@ -5113,6 +5114,7 @@ namespace ts {
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.ReadonlyKeyword:
+            case SyntaxKind.OverrideKeyword:
             case SyntaxKind.StaticKeyword:
                 return true;
         }
