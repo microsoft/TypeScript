@@ -112,7 +112,7 @@ namespace ts.Completions {
             }
             const realName = unescapeLeadingUnderscores(name);
 
-            if (uniqueNames.has(realName)) {
+            if (uniqueNames.has(realName) || isStringANonContextualKeyword(realName)) {
                 return;
             }
 
@@ -422,8 +422,9 @@ namespace ts.Completions {
         allSourceFiles: ReadonlyArray<SourceFile>,
         host: LanguageServiceHost,
         formatContext: formatting.FormatContext,
+        getCanonicalFileName: GetCanonicalFileName,
     ): CompletionEntryDetails {
-        const { name, source } = entryId;
+        const { name } = entryId;
         // Compute all the completion symbols again.
         const symbolCompletion = getSymbolCompletionFromEntryId(typeChecker, log, compilerOptions, sourceFile, position, entryId, allSourceFiles);
         switch (symbolCompletion.type) {
@@ -442,10 +443,10 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, symbolToOriginInfoMap } = symbolCompletion;
-                const codeActions = getCompletionEntryCodeActions(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, formatContext);
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, formatContext, getCanonicalFileName, allSourceFiles);
                 const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
-                return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: source === undefined ? undefined : [textPart(source)] };
+                return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: sourceDisplay };
             }
             case "none": {
                 // Didn't find a symbol with this name.  See if we can find a keyword instead.
@@ -466,7 +467,7 @@ namespace ts.Completions {
         }
     }
 
-    function  getCompletionEntryCodeActions(
+    function getCompletionEntryCodeActionsAndSourceDisplay(
         symbolToOriginInfoMap: SymbolOriginInfoMap,
         symbol: Symbol,
         checker: TypeChecker,
@@ -474,14 +475,21 @@ namespace ts.Completions {
         compilerOptions: CompilerOptions,
         sourceFile: SourceFile,
         formatContext: formatting.FormatContext,
-    ): CodeAction[] | undefined {
+        getCanonicalFileName: GetCanonicalFileName,
+        allSourceFiles: ReadonlyArray<SourceFile>,
+    ): { codeActions: CodeAction[] | undefined, sourceDisplay: SymbolDisplayPart[] | undefined } {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
         if (!symbolOriginInfo) {
-            return undefined;
+            return { codeActions: undefined, sourceDisplay: undefined };
         }
 
         const { moduleSymbol, isDefaultExport } = symbolOriginInfo;
-        return codefix.getCodeActionForImport(moduleSymbol, {
+        const exportedSymbol = skipAlias(symbol.exportSymbol || symbol, checker);
+        const moduleSymbols = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
+        Debug.assert(contains(moduleSymbols, moduleSymbol));
+
+        const sourceDisplay = [textPart(first(codefix.getModuleSpecifiersForNewImport(sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host)))];
+        const codeActions = codefix.getCodeActionForImport(moduleSymbols, {
             host,
             checker,
             newLineCharacter: host.getNewLine(),
@@ -489,10 +497,23 @@ namespace ts.Completions {
             sourceFile,
             formatContext,
             symbolName: getSymbolName(symbol, symbolOriginInfo, compilerOptions.target),
-            getCanonicalFileName: createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false),
+            getCanonicalFileName,
             symbolToken: undefined,
             kind: isDefaultExport ? codefix.ImportKind.Default : codefix.ImportKind.Named,
         });
+        return { sourceDisplay, codeActions };
+    }
+
+    function getAllReExportingModules(exportedSymbol: Symbol, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<Symbol> {
+        const result: Symbol[] = [];
+        codefix.forEachExternalModule(checker, allSourceFiles, module => {
+            for (const exported of checker.getExportsOfModule(module)) {
+                if (skipAlias(exported, checker) === exportedSymbol) {
+                    result.push(module);
+                }
+            }
+        });
+        return result;
     }
 
     export function getCompletionEntrySymbol(
@@ -531,8 +552,6 @@ namespace ts.Completions {
         options: GetCompletionsAtPositionOptions,
         target: ScriptTarget,
     ): CompletionData | undefined {
-        const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
-
         let request: Request | undefined;
 
         let start = timestamp();
@@ -811,23 +830,21 @@ namespace ts.Completions {
             }
         }
 
-        function addTypeProperties(type: Type) {
-            // Filter private properties
-            for (const symbol of type.getApparentProperties()) {
-                if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
-                    symbols.push(symbol);
-                }
-            }
-
-            if (isJavaScriptFile && type.flags & TypeFlags.Union) {
+        function addTypeProperties(type: Type): void {
+            if (isSourceFileJavaScript(sourceFile)) {
                 // In javascript files, for union types, we don't just get the members that
                 // the individual types have in common, we also include all the members that
-                // each individual type has.  This is because we're going to add all identifiers
-                // anyways.  So we might as well elevate the members that were at least part
+                // each individual type has. This is because we're going to add all identifiers
+                // anyways. So we might as well elevate the members that were at least part
                 // of the individual types to a higher status since we know what they are.
-                const unionType = <UnionType>type;
-                for (const elementType of unionType.types) {
-                    addTypeProperties(elementType);
+                symbols.push(...getPropertiesForCompletion(type, typeChecker, /*isForAccess*/ true));
+            }
+            else {
+                // Filter private properties
+                for (const symbol of type.getApparentProperties()) {
+                    if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                        symbols.push(symbol);
+                    }
                 }
             }
         }
@@ -921,6 +938,7 @@ namespace ts.Completions {
                     scopeNode.kind === SyntaxKind.SourceFile ||
                     scopeNode.kind === SyntaxKind.TemplateExpression ||
                     scopeNode.kind === SyntaxKind.JsxExpression ||
+                    scopeNode.kind === SyntaxKind.Block || // Some blocks aren't statements, but all get global completions
                     isStatement(scopeNode);
             }
 
@@ -1013,13 +1031,17 @@ namespace ts.Completions {
         function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
 
-            codefix.forEachExternalModule(typeChecker, allSourceFiles, moduleSymbol => {
-                if (moduleSymbol === sourceFile.symbol) {
-                    return;
-                }
-
+            codefix.forEachExternalModuleToImportFrom(typeChecker, sourceFile, allSourceFiles, moduleSymbol => {
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     let { name } = symbol;
+
+                    // Don't add a completion for a re-export, only for the original.
+                    // If `symbol.parent !== moduleSymbol`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
+                    // If `some(...)`, this comes from an `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
+                    if (symbol.parent !== moduleSymbol || some(symbol.declarations, d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
+                        continue;
+                    }
+
                     const isDefaultExport = name === "default";
                     if (isDefaultExport) {
                         const localSymbol = getLocalSymbolForExportDefault(symbol);
@@ -1030,11 +1052,6 @@ namespace ts.Completions {
                         else {
                             name = codefix.moduleSymbolToValidIdentifier(moduleSymbol, target);
                         }
-                    }
-
-                    if (symbol.declarations && symbol.declarations.some(d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
-                        // Don't add a completion for a re-export, only for the original.
-                        continue;
                     }
 
                     if (stringContainsCharactersInOrder(name.toLowerCase(), tokenTextLowerCase)) {
@@ -1214,7 +1231,7 @@ namespace ts.Completions {
                 isNewIdentifierLocation = true;
                 const typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
                 if (!typeForObject) return false;
-                typeMembers = getPropertiesForCompletion(typeForObject, typeChecker);
+                typeMembers = getPropertiesForCompletion(typeForObject, typeChecker, /*isForAccess*/ false);
                 existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
             }
             else {
@@ -1927,6 +1944,8 @@ namespace ts.Completions {
         function getAllKeywordCompletions() {
             const allKeywordsCompletions: CompletionEntry[] = [];
             for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
+                // "undefined" is a global variable, so don't need a keyword completion for it.
+                if (i === SyntaxKind.UndefinedKeyword) continue;
                 allKeywordsCompletions.push({
                     name: tokenToString(i),
                     kind: ScriptElementKind.keyword,
@@ -2025,14 +2044,15 @@ namespace ts.Completions {
      * tries to only include those types which declare properties, not methods.
      * This ensures that we don't try providing completions for all the methods on e.g. Array.
      */
-    function getPropertiesForCompletion(type: Type, checker: TypeChecker): Symbol[] {
+    function getPropertiesForCompletion(type: Type, checker: TypeChecker, isForAccess: boolean): Symbol[] {
         if (!(type.flags & TypeFlags.Union)) {
-            return checker.getPropertiesOfType(type);
+            return type.getApparentProperties();
         }
 
         const { types } = type as UnionType;
-        const filteredTypes = types.filter(memberType => !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType)));
-        // If there are no property-only types, just provide completions for every type as usual.
+        // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
+        const filteredTypes = isForAccess ? types : types.filter(memberType =>
+            !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType) || typeHasCallOrConstructSignatures(memberType, checker)));
         return checker.getAllPossiblePropertiesOfTypes(filteredTypes);
     }
 }

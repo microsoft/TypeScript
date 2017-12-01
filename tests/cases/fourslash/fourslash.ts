@@ -149,7 +149,7 @@ declare namespace FourSlashInterface {
             kind?: string,
             spanIndex?: number,
             hasAction?: boolean,
-            options?: { includeExternalModuleExports: boolean },
+            options?: { includeExternalModuleExports?: boolean, sourceDisplay?: string },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
@@ -359,7 +359,7 @@ declare namespace FourSlashInterface {
         printCurrentFileStateWithoutCaret(): void;
         printCurrentQuickInfo(): void;
         printCurrentSignatureHelp(): void;
-        printCompletionListMembers(): void;
+        printCompletionListMembers(options?: { includeExternalModuleExports: boolean }): void;
         printAvailableCodeFixes(): void;
         printBreakpointLocation(pos: number): void;
         printBreakpointAtCurrentLocation(): void;

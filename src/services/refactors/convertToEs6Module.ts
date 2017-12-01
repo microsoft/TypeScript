@@ -473,7 +473,7 @@ namespace ts.refactor {
             }
         }
 
-        const namedBindings = namedBindingsNames.size === 0 ? undefined : arrayFrom(mapIter(namedBindingsNames.entries(), ([propertyName, idName]) =>
+        const namedBindings = namedBindingsNames.size === 0 ? undefined : arrayFrom(mapIterator(namedBindingsNames.entries(), ([propertyName, idName]) =>
             createImportSpecifier(propertyName === idName ? undefined : createIdentifier(propertyName), createIdentifier(idName))));
         if (!namedBindings) {
             // If it was unused, ensure that we at least import *something*.

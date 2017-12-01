@@ -183,7 +183,7 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.ModuleDeclaration:
                         // span on complete module if it is instantiated
-                        if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(node as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
                         // falls through
@@ -471,7 +471,7 @@ namespace ts.BreakpointResolver {
             function spanInBlock(block: Block): TextSpan {
                 switch (block.parent.kind) {
                     case SyntaxKind.ModuleDeclaration:
-                        if (getModuleInstanceState(block.parent) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(block.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
                         // falls through
@@ -581,7 +581,7 @@ namespace ts.BreakpointResolver {
                 switch (node.parent.kind) {
                     case SyntaxKind.ModuleBlock:
                         // If this is not an instantiated module block, no bp span
-                        if (getModuleInstanceState(node.parent.parent) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(node.parent.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
                         // falls through

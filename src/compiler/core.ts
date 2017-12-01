@@ -68,13 +68,13 @@ namespace ts {
     }
 
     // The global Map object. This may not be available, so we must test for it.
-    declare const Map: { new<T>(): Map<T> } | undefined;
+    declare const Map: { new <T>(): Map<T> } | undefined;
     // Internet Explorer's Map doesn't support iteration, so don't use it.
     // tslint:disable-next-line no-in-operator variable-name
     const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
 
     // Keep the class inside a function so it doesn't get compiled if it's not used.
-    function shimMap(): { new<T>(): Map<T> } {
+    function shimMap(): { new <T>(): Map<T> } {
 
         class MapIterator<T, U extends (string | T | [string, T])> {
             private data: MapLike<T>;
@@ -97,7 +97,7 @@ namespace ts {
             }
         }
 
-        return class<T> implements Map<T> {
+        return class <T> implements Map<T> {
             private data = createDictionaryObject<T>();
             public size = 0;
 
@@ -394,12 +394,14 @@ namespace ts {
         return result;
     }
 
-    export function mapIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
-        return { next };
-        function  next(): { value: U, done: false } | { value: never, done: true } {
-            const iterRes = iter.next();
-            return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
-        }
+
+    export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
+        return {
+            next() {
+                const iterRes = iter.next();
+                return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+            }
+        };
     }
 
     // Maps from T to T and avoids allocation if all elements map to themselves
@@ -936,6 +938,36 @@ namespace ts {
         return array.slice().sort(comparer);
     }
 
+    export function best<T>(iter: Iterator<T>, isBetter: (a: T, b: T) => boolean): T | undefined {
+        const x = iter.next();
+        if (x.done) {
+            return undefined;
+        }
+        let best = x.value;
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) {
+                return best;
+            }
+            if (isBetter(value, best)) {
+                best = value;
+            }
+        }
+    }
+
+    export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
+        let i = 0;
+        return { next: () => {
+            if (i === array.length) {
+                return { value: undefined as never, done: true };
+            }
+            else {
+                i++;
+                return { value: array[i - 1], done: false };
+            }
+        }};
+    }
+
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
@@ -1241,10 +1273,12 @@ namespace ts {
         return result;
     }
 
-    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[] {
-        const result: T[] = [];
+    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[];
+    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => V): V[];
+    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue?: (value: T) => V): V[] {
+        const result: V[] = [];
         for (const value of array) {
-            result[makeKey(value)] = value;
+            result[makeKey(value)] = makeValue ? makeValue(value) : value as any as V;
         }
         return result;
     }
@@ -1341,6 +1375,12 @@ namespace ts {
      */
     export function isArray(value: any): value is ReadonlyArray<any> {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
+    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
+    export function toArray<T>(value: T | T[]): T[];
+    export function toArray<T>(value: T | T[]): T[] {
+        return isArray(value) ? value : [value];
     }
 
     /**
@@ -1942,7 +1982,7 @@ namespace ts {
             : moduleKind === ModuleKind.System;
     }
 
-    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict";
+    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? compilerOptions.strict : compilerOptions[flag];
@@ -2052,7 +2092,7 @@ namespace ts {
         }
     }
 
-    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean) {
+    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, isAbsolutePathAnUrl: boolean) {
         const pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         const directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
@@ -2186,6 +2226,10 @@ namespace ts {
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
+    export function removeSuffix(str: string, suffix: string): string {
+        return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
     }
 
     export function stringContains(str: string, substring: string): boolean {
@@ -2654,6 +2698,17 @@ namespace ts {
         return <T>(removeFileExtension(path) + newExtension);
     }
 
+    /**
+     * Takes a string like "jquery-min.4.2.3" and returns "jquery"
+     */
+    export function removeMinAndVersionNumbers(fileName: string) {
+        // Match a "." or "-" followed by a version number or 'min' at the end of the name
+        const trailingMinOrVersion = /[.-]((min)|(\d+(\.\d+)*))$/;
+
+        // The "min" or version may both be present, in either order, so try applying the above twice.
+        return fileName.replace(trailingMinOrVersion, "").replace(trailingMinOrVersion, "");
+    }
+
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
@@ -2716,6 +2771,12 @@ namespace ts {
         VeryAggressive = 3,
     }
 
+    /**
+     * Safer version of `Function` which should not be called.
+     * Every function should be assignable to this, but this should not be assignable to every function.
+     */
+    export type AnyFunction = (...args: never[]) => void;
+
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
         export let isDebugging = false;
@@ -2724,7 +2785,7 @@ namespace ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: Function): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): void {
             if (!expression) {
                 if (verboseDebugInfo) {
                     message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
@@ -2758,7 +2819,7 @@ namespace ts {
             }
         }
 
-        export function fail(message?: string, stackCrawlMark?: Function): never {
+        export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
@@ -2767,11 +2828,11 @@ namespace ts {
             throw e;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: Function): never {
+        export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
             return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
 
-        export function getFunctionName(func: Function) {
+        export function getFunctionName(func: AnyFunction) {
             if (typeof func !== "function") {
                 return "";
             }
@@ -2827,7 +2888,8 @@ namespace ts {
         }
     }
 
-    export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): (fileName: string) => string {
+    export type GetCanonicalFileName = (fileName: string) => string;
+    export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
         return useCaseSensitiveFileNames
             ? ((fileName) => fileName)
             : ((fileName) => fileName.toLowerCase());
@@ -2854,7 +2916,7 @@ namespace ts {
         return findBestPatternMatch(patterns, _ => _, candidate);
     }
 
-    export function patternText({prefix, suffix}: Pattern): string {
+    export function patternText({ prefix, suffix }: Pattern): string {
         return `${prefix}*${suffix}`;
     }
 
@@ -2884,7 +2946,7 @@ namespace ts {
         return matchedValue;
     }
 
-    function isPatternMatch({prefix, suffix}: Pattern, candidate: string) {
+    function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
         return candidate.length >= prefix.length + suffix.length &&
             startsWith(candidate, prefix) &&
             endsWith(candidate, suffix);

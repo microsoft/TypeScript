@@ -82,8 +82,8 @@ interface ConstrainVideoFacingModeParameters {
     ideal?: VideoFacingModeEnum | VideoFacingModeEnum[];
 }
 
-interface CustomEventInit extends EventInit {
-    detail?: any;
+interface CustomEventInit<T = any> extends EventInit {
+    detail?: T;
 }
 
 interface DeviceAccelerationDict {
@@ -696,7 +696,7 @@ interface PaymentDetails {
 interface PaymentDetailsModifier {
     additionalDisplayItems?: PaymentItem[];
     data?: any;
-    supportedMethods: string[];
+    supportedMethods: string | string[];
     total?: PaymentItem;
 }
 
@@ -708,7 +708,7 @@ interface PaymentItem {
 
 interface PaymentMethodData {
     data?: any;
-    supportedMethods: string[];
+    supportedMethods: string | string[];
 }
 
 interface PaymentOptions {
@@ -1597,6 +1597,7 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     beginPath(): void;
     clearRect(x: number, y: number, w: number, h: number): void;
     clip(fillRule?: CanvasFillRule): void;
+    clip(path: Path2D, fillRule?: CanvasFillRule): void;
     createImageData(imageDataOrSw: number | ImageData, sh?: number): ImageData;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
     createPattern(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, repetition: string): CanvasPattern;
@@ -1606,11 +1607,13 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, dstX: number, dstY: number, dstW: number, dstH: number): void;
     drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, srcX: number, srcY: number, srcW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void;
     fill(fillRule?: CanvasFillRule): void;
+    fill(path: Path2D, fillRule?: CanvasFillRule): void;
     fillRect(x: number, y: number, w: number, h: number): void;
     fillText(text: string, x: number, y: number, maxWidth?: number): void;
     getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
     getLineDash(): number[];
     isPointInPath(x: number, y: number, fillRule?: CanvasFillRule): boolean;
+    isPointInPath(path: Path2D, x: number, y: number, fillRule?: CanvasFillRule): boolean;
     measureText(text: string): TextMetrics;
     putImageData(imagedata: ImageData, dx: number, dy: number, dirtyX?: number, dirtyY?: number, dirtyWidth?: number, dirtyHeight?: number): void;
     restore(): void;
@@ -2374,14 +2377,14 @@ declare var CSSSupportsRule: {
     new(): CSSSupportsRule;
 };
 
-interface CustomEvent extends Event {
-    readonly detail: any;
-    initCustomEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: any): void;
+interface CustomEvent<T = any> extends Event {
+    readonly detail: T;
+    initCustomEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: T): void;
 }
 
 declare var CustomEvent: {
     prototype: CustomEvent;
-    new(typeArg: string, eventInitDict?: CustomEventInit): CustomEvent;
+    new<T>(typeArg: string, eventInitDict?: CustomEventInit<T>): CustomEvent<T>;
 };
 
 interface DataCue extends TextTrackCue {
@@ -3240,7 +3243,8 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
      * Retrieves a collection of objects based on the specified element name.
      * @param name Specifies the name of an element.
      */
-    getElementsByTagName<K extends keyof ElementListTagNameMap>(tagname: K): ElementListTagNameMap[K];
+    getElementsByTagName<K extends keyof HTMLElementTagNameMap>(tagname: K): NodeListOf<HTMLElementTagNameMap[K]>;
+    getElementsByTagName<K extends keyof SVGElementTagNameMap>(tagname: K): NodeListOf<SVGElementTagNameMap[K]>;
     getElementsByTagName(tagname: string): NodeListOf<Element>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
@@ -3597,7 +3601,8 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     getAttributeNS(namespaceURI: string, localName: string): string;
     getBoundingClientRect(): ClientRect;
     getClientRects(): ClientRectList;
-    getElementsByTagName<K extends keyof ElementListTagNameMap>(name: K): ElementListTagNameMap[K];
+    getElementsByTagName<K extends keyof HTMLElementTagNameMap>(name: K): NodeListOf<HTMLElementTagNameMap[K]>;
+    getElementsByTagName<K extends keyof SVGElementTagNameMap>(name: K): NodeListOf<SVGElementTagNameMap[K]>;
     getElementsByTagName(name: string): NodeListOf<Element>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
@@ -3626,6 +3631,8 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     webkitRequestFullScreen(): void;
     getElementsByClassName(classNames: string): NodeListOf<Element>;
     matches(selector: string): boolean;
+    closest<K extends keyof HTMLElementTagNameMap>(selector: K): HTMLElementTagNameMap[K] | null;
+    closest<K extends keyof SVGElementTagNameMap>(selector: K): SVGElementTagNameMap[K] | null;
     closest(selector: string): Element | null;
     scrollIntoView(arg?: boolean | ScrollIntoViewOptions): void;
     scroll(options?: ScrollToOptions): void;
@@ -5520,6 +5527,7 @@ interface HTMLLabelElement extends HTMLElement {
      * Sets or retrieves the object to which the given label object is assigned.
      */
     htmlFor: string;
+    readonly control: HTMLInputElement | null;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLabelElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLabelElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -9711,7 +9719,7 @@ interface ServiceWorkerContainer extends EventTarget {
     oncontrollerchange: (this: ServiceWorkerContainer, ev: Event) => any;
     onmessage: (this: ServiceWorkerContainer, ev: ServiceWorkerMessageEvent) => any;
     readonly ready: Promise<ServiceWorkerRegistration>;
-    getRegistration(): Promise<ServiceWorkerRegistration | undefined>;
+    getRegistration(clientURL?: USVString): Promise<ServiceWorkerRegistration | undefined>;
     getRegistrations(): Promise<ServiceWorkerRegistration[]>;
     register(scriptURL: USVString, options?: RegistrationOptions): Promise<ServiceWorkerRegistration>;
     addEventListener<K extends keyof ServiceWorkerContainerEventMap>(type: K, listener: (this: ServiceWorkerContainer, ev: ServiceWorkerContainerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -12477,7 +12485,29 @@ interface WebGLRenderingContext {
     getBufferParameter(target: number, pname: number): any;
     getContextAttributes(): WebGLContextAttributes;
     getError(): number;
-    getExtension(name: string): any;
+    getExtension(extensionName: "EXT_blend_minmax"): EXT_blend_minmax | null;
+    getExtension(extensionName: "EXT_texture_filter_anisotropic"): EXT_texture_filter_anisotropic | null;
+    getExtension(extensionName: "EXT_frag_depth"): EXT_frag_depth | null;
+    getExtension(extensionName: "EXT_shader_texture_lod"): EXT_shader_texture_lod | null;
+    getExtension(extensionName: "EXT_sRGB"): EXT_sRGB | null;
+    getExtension(extensionName: "OES_vertex_array_object"): OES_vertex_array_object | null;
+    getExtension(extensionName: "WEBGL_color_buffer_float"): WEBGL_color_buffer_float | null;
+    getExtension(extensionName: "WEBGL_compressed_texture_astc"): WEBGL_compressed_texture_astc | null;
+    getExtension(extensionName: "WEBGL_compressed_texture_s3tc_srgb"): WEBGL_compressed_texture_s3tc_srgb | null;
+    getExtension(extensionName: "WEBGL_debug_shaders"): WEBGL_debug_shaders | null;
+    getExtension(extensionName: "WEBGL_draw_buffers"): WEBGL_draw_buffers | null;
+    getExtension(extensionName: "WEBGL_lose_context"): WEBGL_lose_context | null;
+    getExtension(extensionName: "WEBGL_depth_texture"): WEBGL_depth_texture | null;
+    getExtension(extensionName: "WEBGL_debug_renderer_info"): WEBGL_debug_renderer_info | null;
+    getExtension(extensionName: "WEBGL_compressed_texture_s3tc"): WEBGL_compressed_texture_s3tc | null;
+    getExtension(extensionName: "OES_texture_half_float_linear"): OES_texture_half_float_linear | null;
+    getExtension(extensionName: "OES_texture_half_float"): OES_texture_half_float | null;
+    getExtension(extensionName: "OES_texture_float_linear"): OES_texture_float_linear | null;
+    getExtension(extensionName: "OES_texture_float"): OES_texture_float | null;
+    getExtension(extensionName: "OES_standard_derivatives"): OES_standard_derivatives | null;
+    getExtension(extensionName: "OES_element_index_uint"): OES_element_index_uint | null;
+    getExtension(extensionName: "ANGLE_instanced_arrays"): ANGLE_instanced_arrays | null;
+    getExtension(extensionName: string): any;
     getFramebufferAttachmentParameter(target: number, attachment: number, pname: number): any;
     getParameter(pname: number): any;
     getProgramInfoLog(program: WebGLProgram | null): string | null;
@@ -14104,9 +14134,11 @@ interface NavigatorUserMedia {
 }
 
 interface NodeSelector {
-    querySelector<K extends keyof ElementTagNameMap>(selectors: K): ElementTagNameMap[K] | null;
+    querySelector<K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null;
+    querySelector<K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null;
     querySelector<E extends Element = Element>(selectors: string): E | null;
-    querySelectorAll<K extends keyof ElementListTagNameMap>(selectors: K): ElementListTagNameMap[K];
+    querySelectorAll<K extends keyof HTMLElementTagNameMap>(selectors: K): NodeListOf<HTMLElementTagNameMap[K]>;
+    querySelectorAll<K extends keyof SVGElementTagNameMap>(selectors: K): NodeListOf<SVGElementTagNameMap[K]>;
     querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E>;
 }
 
@@ -14625,6 +14657,128 @@ declare var HTMLSummaryElement: {
     new(): HTMLSummaryElement;
 };
 
+interface EXT_blend_minmax {
+    readonly MIN_EXT: number;
+    readonly MAX_EXT: number;
+}
+
+interface EXT_frag_depth {
+}
+
+interface EXT_shader_texture_lod {
+}
+
+interface EXT_sRGB {
+    readonly SRGB_EXT: number;
+    readonly SRGB_ALPHA_EXT: number;
+    readonly SRGB8_ALPHA8_EXT: number;
+    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT: number;
+}
+
+interface OES_vertex_array_object {
+    readonly VERTEX_ARRAY_BINDING_OES: number;
+    createVertexArrayOES(): WebGLVertexArrayObjectOES;
+    deleteVertexArrayOES(arrayObject: WebGLVertexArrayObjectOES): void;
+    isVertexArrayOES(value: any): value is WebGLVertexArrayObjectOES;
+    bindVertexArrayOES(arrayObject: WebGLVertexArrayObjectOES): void;
+}
+
+interface WebGLVertexArrayObjectOES {
+}
+
+interface WEBGL_color_buffer_float {
+    readonly RGBA32F_EXT: number;
+    readonly RGB32F_EXT: number;
+    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: number;
+    readonly UNSIGNED_NORMALIZED_EXT: number;
+}
+
+interface WEBGL_compressed_texture_astc {
+    readonly COMPRESSED_RGBA_ASTC_4x4_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_5x4_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_5x5_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_6x5_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_6x6_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_8x5_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_8x6_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_8x8_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_10x5_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_10x6_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_10x8_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_10x10_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_12x10_KHR: number;
+    readonly COMPRESSED_RGBA_ASTC_12x12_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR: number;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR: number;
+    getSupportedProfiles(): string[];
+}
+
+interface WEBGL_compressed_texture_s3tc_srgb {
+    readonly COMPRESSED_SRGB_S3TC_DXT1_EXT: number;
+    readonly COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT: number;
+    readonly COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT: number;
+    readonly COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT: number;
+}
+
+interface WEBGL_debug_shaders {
+    getTranslatedShaderSource(shader: WebGLShader): string;
+}
+
+interface WEBGL_draw_buffers {
+    readonly COLOR_ATTACHMENT0_WEBGL: number;
+    readonly COLOR_ATTACHMENT1_WEBGL: number;
+    readonly COLOR_ATTACHMENT2_WEBGL: number;
+    readonly COLOR_ATTACHMENT3_WEBGL: number;
+    readonly COLOR_ATTACHMENT4_WEBGL: number;
+    readonly COLOR_ATTACHMENT5_WEBGL: number;
+    readonly COLOR_ATTACHMENT6_WEBGL: number;
+    readonly COLOR_ATTACHMENT7_WEBGL: number;
+    readonly COLOR_ATTACHMENT8_WEBGL: number;
+    readonly COLOR_ATTACHMENT9_WEBGL: number;
+    readonly COLOR_ATTACHMENT10_WEBGL: number;
+    readonly COLOR_ATTACHMENT11_WEBGL: number;
+    readonly COLOR_ATTACHMENT12_WEBGL: number;
+    readonly COLOR_ATTACHMENT13_WEBGL: number;
+    readonly COLOR_ATTACHMENT14_WEBGL: number;
+    readonly COLOR_ATTACHMENT15_WEBGL: number;
+    readonly DRAW_BUFFER0_WEBGL: number;
+    readonly DRAW_BUFFER1_WEBGL: number;
+    readonly DRAW_BUFFER2_WEBGL: number;
+    readonly DRAW_BUFFER3_WEBGL: number;
+    readonly DRAW_BUFFER4_WEBGL: number;
+    readonly DRAW_BUFFER5_WEBGL: number;
+    readonly DRAW_BUFFER6_WEBGL: number;
+    readonly DRAW_BUFFER7_WEBGL: number;
+    readonly DRAW_BUFFER8_WEBGL: number;
+    readonly DRAW_BUFFER9_WEBGL: number;
+    readonly DRAW_BUFFER10_WEBGL: number;
+    readonly DRAW_BUFFER11_WEBGL: number;
+    readonly DRAW_BUFFER12_WEBGL: number;
+    readonly DRAW_BUFFER13_WEBGL: number;
+    readonly DRAW_BUFFER14_WEBGL: number;
+    readonly DRAW_BUFFER15_WEBGL: number;
+    readonly MAX_COLOR_ATTACHMENTS_WEBGL: number;
+    readonly MAX_DRAW_BUFFERS_WEBGL: number;
+    drawBuffersWEBGL(buffers: number[]): void;
+}
+
+interface WEBGL_lose_context {
+    loseContext(): void;
+    restoreContext(): void;
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface DecodeErrorCallback {
@@ -14692,28 +14846,46 @@ interface VoidFunction {
 }
 interface HTMLElementTagNameMap {
     "a": HTMLAnchorElement;
+    "abbr": HTMLElement;
+    "acronym": HTMLElement;
+    "address": HTMLElement;
     "applet": HTMLAppletElement;
     "area": HTMLAreaElement;
+    "article": HTMLElement;
+    "aside": HTMLElement;
     "audio": HTMLAudioElement;
+    "b": HTMLElement;
     "base": HTMLBaseElement;
     "basefont": HTMLBaseFontElement;
+    "bdo": HTMLElement;
+    "big": HTMLElement;
     "blockquote": HTMLQuoteElement;
     "body": HTMLBodyElement;
     "br": HTMLBRElement;
     "button": HTMLButtonElement;
     "canvas": HTMLCanvasElement;
     "caption": HTMLTableCaptionElement;
+    "center": HTMLElement;
+    "cite": HTMLElement;
+    "code": HTMLElement;
     "col": HTMLTableColElement;
     "colgroup": HTMLTableColElement;
     "data": HTMLDataElement;
     "datalist": HTMLDataListElement;
+    "dd": HTMLElement;
     "del": HTMLModElement;
+    "dfn": HTMLElement;
     "dir": HTMLDirectoryElement;
     "div": HTMLDivElement;
     "dl": HTMLDListElement;
+    "dt": HTMLElement;
+    "em": HTMLElement;
     "embed": HTMLEmbedElement;
     "fieldset": HTMLFieldSetElement;
+    "figcaption": HTMLElement;
+    "figure": HTMLElement;
     "font": HTMLFontElement;
+    "footer": HTMLElement;
     "form": HTMLFormElement;
     "frame": HTMLFrameElement;
     "frameset": HTMLFrameSetElement;
@@ -14724,24 +14896,34 @@ interface HTMLElementTagNameMap {
     "h5": HTMLHeadingElement;
     "h6": HTMLHeadingElement;
     "head": HTMLHeadElement;
+    "header": HTMLElement;
+    "hgroup": HTMLElement;
     "hr": HTMLHRElement;
     "html": HTMLHtmlElement;
+    "i": HTMLElement;
     "iframe": HTMLIFrameElement;
     "img": HTMLImageElement;
     "input": HTMLInputElement;
     "ins": HTMLModElement;
     "isindex": HTMLUnknownElement;
+    "kbd": HTMLElement;
+    "keygen": HTMLElement;
     "label": HTMLLabelElement;
     "legend": HTMLLegendElement;
     "li": HTMLLIElement;
     "link": HTMLLinkElement;
     "listing": HTMLPreElement;
     "map": HTMLMapElement;
+    "mark": HTMLElement;
     "marquee": HTMLMarqueeElement;
     "menu": HTMLMenuElement;
     "meta": HTMLMetaElement;
     "meter": HTMLMeterElement;
+    "nav": HTMLElement;
     "nextid": HTMLUnknownElement;
+    "nobr": HTMLElement;
+    "noframes": HTMLElement;
+    "noscript": HTMLElement;
     "object": HTMLObjectElement;
     "ol": HTMLOListElement;
     "optgroup": HTMLOptGroupElement;
@@ -14750,14 +14932,25 @@ interface HTMLElementTagNameMap {
     "p": HTMLParagraphElement;
     "param": HTMLParamElement;
     "picture": HTMLPictureElement;
+    "plaintext": HTMLElement;
     "pre": HTMLPreElement;
     "progress": HTMLProgressElement;
     "q": HTMLQuoteElement;
+    "rt": HTMLElement;
+    "ruby": HTMLElement;
+    "s": HTMLElement;
+    "samp": HTMLElement;
     "script": HTMLScriptElement;
+    "section": HTMLElement;
     "select": HTMLSelectElement;
+    "small": HTMLElement;
     "source": HTMLSourceElement;
     "span": HTMLSpanElement;
+    "strike": HTMLElement;
+    "strong": HTMLElement;
     "style": HTMLStyleElement;
+    "sub": HTMLElement;
+    "sup": HTMLElement;
     "table": HTMLTableElement;
     "tbody": HTMLTableSectionElement;
     "td": HTMLTableDataCellElement;
@@ -14770,33 +14963,22 @@ interface HTMLElementTagNameMap {
     "title": HTMLTitleElement;
     "tr": HTMLTableRowElement;
     "track": HTMLTrackElement;
+    "tt": HTMLElement;
+    "u": HTMLElement;
     "ul": HTMLUListElement;
+    "var": HTMLElement;
     "video": HTMLVideoElement;
+    "wbr": HTMLElement;
     "x-ms-webview": MSHTMLWebViewElement;
     "xmp": HTMLPreElement;
 }
 
-interface ElementTagNameMap extends HTMLElementTagNameMap {
-    "abbr": HTMLElement;
-    "acronym": HTMLElement;
-    "address": HTMLElement;
-    "article": HTMLElement;
-    "aside": HTMLElement;
-    "b": HTMLElement;
-    "bdo": HTMLElement;
-    "big": HTMLElement;
-    "center": HTMLElement;
+interface SVGElementTagNameMap {
     "circle": SVGCircleElement;
-    "cite": HTMLElement;
     "clippath": SVGClipPathElement;
-    "code": HTMLElement;
-    "dd": HTMLElement;
     "defs": SVGDefsElement;
     "desc": SVGDescElement;
-    "dfn": HTMLElement;
-    "dt": HTMLElement;
     "ellipse": SVGEllipseElement;
-    "em": HTMLElement;
     "feblend": SVGFEBlendElement;
     "fecolormatrix": SVGFEColorMatrixElement;
     "fecomponenttransfer": SVGFEComponentTransferElement;
@@ -14821,63 +15003,33 @@ interface ElementTagNameMap extends HTMLElementTagNameMap {
     "fespotlight": SVGFESpotLightElement;
     "fetile": SVGFETileElement;
     "feturbulence": SVGFETurbulenceElement;
-    "figcaption": HTMLElement;
-    "figure": HTMLElement;
     "filter": SVGFilterElement;
-    "footer": HTMLElement;
     "foreignobject": SVGForeignObjectElement;
     "g": SVGGElement;
-    "header": HTMLElement;
-    "hgroup": HTMLElement;
-    "i": HTMLElement;
     "image": SVGImageElement;
-    "kbd": HTMLElement;
-    "keygen": HTMLElement;
     "line": SVGLineElement;
     "lineargradient": SVGLinearGradientElement;
-    "mark": HTMLElement;
     "marker": SVGMarkerElement;
     "mask": SVGMaskElement;
     "metadata": SVGMetadataElement;
-    "nav": HTMLElement;
-    "nobr": HTMLElement;
-    "noframes": HTMLElement;
-    "noscript": HTMLElement;
     "path": SVGPathElement;
     "pattern": SVGPatternElement;
-    "plaintext": HTMLElement;
     "polygon": SVGPolygonElement;
     "polyline": SVGPolylineElement;
     "radialgradient": SVGRadialGradientElement;
     "rect": SVGRectElement;
-    "rt": HTMLElement;
-    "ruby": HTMLElement;
-    "s": HTMLElement;
-    "samp": HTMLElement;
-    "section": HTMLElement;
-    "small": HTMLElement;
     "stop": SVGStopElement;
-    "strike": HTMLElement;
-    "strong": HTMLElement;
-    "sub": HTMLElement;
-    "sup": HTMLElement;
     "svg": SVGSVGElement;
     "switch": SVGSwitchElement;
     "symbol": SVGSymbolElement;
     "text": SVGTextElement;
     "textpath": SVGTextPathElement;
     "tspan": SVGTSpanElement;
-    "tt": HTMLElement;
-    "u": HTMLElement;
     "use": SVGUseElement;
-    "var": HTMLElement;
     "view": SVGViewElement;
-    "wbr": HTMLElement;
 }
 
-type ElementListTagNameMap = {
-    [key in keyof ElementTagNameMap]: NodeListOf<ElementTagNameMap[key]>
-};
+interface ElementTagNameMap extends HTMLElementTagNameMap, SVGElementTagNameMap { }
 
 declare var Audio: { new(src?: string): HTMLAudioElement; };
 declare var Image: { new(width?: number, height?: number): HTMLImageElement; };

@@ -278,6 +278,13 @@ namespace ts {
             description: Diagnostics.Enable_strict_checking_of_function_types
         },
         {
+            name: "strictPropertyInitialization",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_checking_of_property_initialization_in_classes
+        },
+        {
             name: "noImplicitThis",
             type: "boolean",
             showInSimplifiedHelpView: true,
@@ -1540,7 +1547,7 @@ namespace ts {
             host: ParseConfigHost,
             basePath: string,
             configFileName: string,
-            getCanonicalFileName: (fileName: string) => string,
+            getCanonicalFileName: GetCanonicalFileName,
             resolutionStack: Path[],
             errors: Push<Diagnostic>,
     ): ParsedTsconfig {
@@ -1588,7 +1595,7 @@ namespace ts {
         json: any,
         host: ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         configFileName: string | undefined,
         errors: Push<Diagnostic>
     ): ParsedTsconfig {
@@ -1619,7 +1626,7 @@ namespace ts {
         sourceFile: JsonSourceFile,
         host: ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         configFileName: string | undefined,
         errors: Push<Diagnostic>
     ): ParsedTsconfig {
@@ -1688,7 +1695,7 @@ namespace ts {
         extendedConfig: string,
         host: ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         errors: Push<Diagnostic>,
         createDiagnostic: (message: DiagnosticMessage, arg1?: string) => Diagnostic) {
         extendedConfig = normalizeSlashes(extendedConfig);
@@ -1713,7 +1720,7 @@ namespace ts {
         extendedConfigPath: Path,
         host: ts.ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         resolutionStack: Path[],
         errors: Push<Diagnostic>,
     ): ParsedTsconfig | undefined {

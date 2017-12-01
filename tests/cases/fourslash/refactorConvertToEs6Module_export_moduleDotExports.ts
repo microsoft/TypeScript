@@ -22,5 +22,5 @@ export default class {
 }
 export default class C {
 }
-export default 0;
+export default 0;`
 });

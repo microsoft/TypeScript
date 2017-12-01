@@ -62,39 +62,52 @@ namespace ts {
             this.kind = kind;
         }
 
+        private assertHasRealPosition(message?: string) {
+            // tslint:disable-next-line:debug-assert
+            Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
+        }
+
         public getSourceFile(): SourceFile {
             return getSourceFileOfNode(this);
         }
 
         public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
+            this.assertHasRealPosition();
             return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
         }
 
         public getFullStart(): number {
+            this.assertHasRealPosition();
             return this.pos;
         }
 
         public getEnd(): number {
+            this.assertHasRealPosition();
             return this.end;
         }
 
         public getWidth(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
             return this.getEnd() - this.getStart(sourceFile);
         }
 
         public getFullWidth(): number {
+            this.assertHasRealPosition();
             return this.end - this.pos;
         }
 
         public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
             return this.getStart(sourceFile) - this.pos;
         }
 
         public getFullText(sourceFile?: SourceFile): string {
+            this.assertHasRealPosition();
             return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
         }
 
         public getText(sourceFile?: SourceFile): string {
+            this.assertHasRealPosition();
             if (!sourceFile) {
                 sourceFile = this.getSourceFile();
             }
@@ -183,21 +196,25 @@ namespace ts {
         }
 
         public getChildCount(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
             if (!this._children) this.createChildren(sourceFile);
             return this._children.length;
         }
 
         public getChildAt(index: number, sourceFile?: SourceFile): Node {
+            this.assertHasRealPosition();
             if (!this._children) this.createChildren(sourceFile);
             return this._children[index];
         }
 
         public getChildren(sourceFile?: SourceFileLike): Node[] {
+            this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
             if (!this._children) this.createChildren(sourceFile);
             return this._children;
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
+            this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
             if (!children.length) {
                 return undefined;
@@ -210,6 +227,7 @@ namespace ts {
         }
 
         public getLastToken(sourceFile?: SourceFile): Node {
+            this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
 
             const child = lastOrUndefined(children);
@@ -398,6 +416,7 @@ namespace ts {
         _updateExpressionBrand: any;
         _unaryExpressionBrand: any;
         _expressionBrand: any;
+        _declarationBrand: any;
         /*@internal*/typeArguments: NodeArray<TypeNode>;
         constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
@@ -453,6 +472,12 @@ namespace ts {
         }
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
+        }
+        getConstraint(): Type | undefined {
+            return this.checker.getBaseConstraintOfType(this);
+        }
+        getDefault(): Type | undefined {
+            return this.checker.getDefaultFromTypeParameter(this);
         }
     }
 
@@ -920,7 +945,7 @@ namespace ts {
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
             this.fileNameToEntry = createMap<CachedHostFileInformation>();
@@ -1429,7 +1454,8 @@ namespace ts {
                 { name, source },
                 program.getSourceFiles(),
                 host,
-                formattingOptions && formatting.getFormatContext(formattingOptions));
+                formattingOptions && formatting.getFormatContext(formattingOptions),
+                getCanonicalFileName);
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
@@ -1868,18 +1894,21 @@ namespace ts {
             });
         }
 
+        function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
+        function applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(path, a))) : applySingleCodeActionCommand(path, action);
+        function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrUndefined?: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
+            const action = typeof fileName === "string" ? actionOrUndefined! : fileName as CodeActionCommand[];
+            return isArray(action) ? Promise.all(action.map(applySingleCodeActionCommand)) : applySingleCodeActionCommand(action);
         }
 
-        function applySingleCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
+        function applySingleCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
             switch (action.type) {
                 case "install package":
                     return host.installPackage
-                        ? host.installPackage({ fileName, packageName: action.packageName })
+                        ? host.installPackage({ fileName: toPath(action.file, currentDirectory, getCanonicalFileName), packageName: action.packageName })
                         : Promise.reject("Host does not implement `installPackage`");
                 default:
                     Debug.fail();
