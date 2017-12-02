@@ -17115,7 +17115,7 @@ namespace ts {
         function isUntypedFunctionCall(funcType: Type, apparentFuncType: Type, numCallSignatures: number, numConstructSignatures: number) {
             // We exclude union types because we may have a union of function types that happen to have no common signatures.
             return isTypeAny(funcType) || isTypeAny(apparentFuncType) && funcType.flags & TypeFlags.TypeParameter ||
-                !numCallSignatures && !numConstructSignatures && !(funcType.flags & (TypeFlags.Union | TypeFlags.Never)) && isTypeAssignableTo(funcType, globalFunctionType);
+                !numCallSignatures && !numConstructSignatures && !(apparentFuncType.flags & (TypeFlags.Union | TypeFlags.Never)) && isTypeAssignableTo(funcType, globalFunctionType);
         }
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
