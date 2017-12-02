@@ -1984,10 +1984,6 @@
         "category": "Error",
         "code": 2570
     },
-    "Class member '{0}' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.{1})": {
-        "category": "Error",
-        "code": 2571
-    },
     "Override modifier cannot be used with an optional property declaration": {
         "category": "Error",
         "code": 2572

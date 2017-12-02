@@ -101,6 +101,18 @@ class RejectWhenOverrideIsOnAParameter {
     public sayHello(override name: string) { return 'hi'; }
 }
 
+// But can be be used on parameter properties
+
+abstract class AbstractPropertyBase {
+	abstract x: number;
+}
+class ConcretePropertyClass extends AbstractPropertyBase {
+	constructor(override x: number) {
+        super();
+    }
+}
+
+
 // Override is not used on class...
 override class RejectWhenOverrideIsOnClassDeclaration { public sayHello(name: string) { return ''; } }
 override interface RejectWhenOverrideIsOnInterfaceDeclaration { sayHello(name: string); }
@@ -110,7 +122,7 @@ interface RejectWhenOverrideInAnInterface {
     override sayHello(name: string);
 }
 
-/* @mhegazy: is this an appropriate test for consecutive declarations? */
+/* Override method should be grouped as consecutive declarations */
 class RejectWhenOverrideDeclarationsAreNotConsecutive extends Base {
     override hasOwnProperty(prop: string): boolean {
         return super.hasOwnProperty(prop);

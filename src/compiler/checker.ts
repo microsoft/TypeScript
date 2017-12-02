@@ -19765,6 +19765,7 @@ namespace ts {
 
                 checkDecorators(node);
 
+                // TODO(pcj): @andy-ms says remove this
                 if (getModifierFlags(node) & ModifierFlags.Override) {
                     checkOverrideDeclaration(node);
                 }
@@ -22655,9 +22656,9 @@ namespace ts {
                         const foundSymbol = getTargetSymbol(found);
                         let errorInfo = chainDiagnosticMessages(
                             undefined,
-                            Diagnostics.Class_member_0_must_be_marked_override_when_noImplicitOverride_is_enabled_augmented_from_Object_1,
+                            Diagnostics.Class_member_0_must_be_marked_override_when_noImplicitOverride_is_enabled_inherited_from_1,
                             symbolToString(derived),
-                            symbolToString(found)
+                            symbolToString(objectType)
                         );
                         if (!isPropertyIdenticalTo(derived, foundSymbol)) {
                             errorInfo = chainDiagnosticMessages(
@@ -22771,7 +22772,7 @@ namespace ts {
                                 && !(derivedDeclarationFlags & ModifierFlags.Abstract)
                                 && !(derivedDeclarationFlags & ModifierFlags.Override)) {
                                 error(getDeclarationName(derived.valueDeclaration),
-                                      Diagnostics.Class_member_0_must_be_marked_override_when_noImplicitOverride_is_enabled_augmented_from_Object_1,
+                                      Diagnostics.Class_member_0_must_be_marked_override_when_noImplicitOverride_is_enabled_inherited_from_1,
                                       symbolToString(derived),
                                       typeToString(baseType));
                             }
