@@ -23,3 +23,4 @@ and limitations under the License.
 /// <reference path="lib.es2017.sharedmemory.d.ts" />
 /// <reference path="lib.es2017.string.d.ts" />
 /// <reference path="lib.es2017.intl.d.ts" />
+/// <reference path="lib.es2017.typedarrays.d.ts" />
