@@ -7,7 +7,7 @@ namespace ts.tscWatch {
     import WatchedSystem = ts.TestFSWithWatch.TestServerHost;
     type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
     import createWatchedSystem = ts.TestFSWithWatch.createWatchedSystem;
-    import checkFileNames = ts.TestFSWithWatch.checkFileNames;
+    import checkArray = ts.TestFSWithWatch.checkArray;
     import libFile = ts.TestFSWithWatch.libFile;
     import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
     import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
@@ -15,11 +15,11 @@ namespace ts.tscWatch {
     import checkOutputDoesNotContain = ts.TestFSWithWatch.checkOutputDoesNotContain;
 
     export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
-        checkFileNames(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
+        checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
     }
 
     export function checkProgramRootFiles(program: Program, expectedFiles: string[]) {
-        checkFileNames(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
+        checkArray(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 
     function createWatchingSystemHost(system: WatchedSystem) {
@@ -2025,6 +2025,52 @@ declare module "fs" {
             const outputFile1 = changeExtension((outputFolder + getBaseFileName(file1.path)), ".js");
             assert.isTrue(host.fileExists(outputFile1));
             assert.equal(host.readFile(outputFile1), file1.content + host.newLine);
+        });
+    });
+
+    describe("tsc-watch when watchingDirectories with polling", () => {
+        it("when renaming file in subfolder", () => {
+            const projectFolder = "/a/username/project";
+            const projectSrcFolder = `${projectFolder}/src`;
+            const configFile: FileOrFolder = {
+                path: `${projectFolder}/tsconfig.json`,
+                content: "{}"
+            };
+            const file: FileOrFolder = {
+                path: `${projectSrcFolder}/file1.ts`,
+                content: ""
+            };
+            const programFiles = [file, libFile];
+            const files = [file, configFile, libFile];
+            const host = createWatchedSystem(files);
+            host.setWatchDirectoryWithPolling();
+            const watch = createWatchModeWithConfigFile(configFile.path, host);
+            // Watching config file, file, lib file and directories
+            const expectedWatchedFiles = files.map(f => f.path).concat(projectFolder, projectSrcFolder, `${projectFolder}/node_modules/@types`);
+
+            verifyProgram(/*isInitial*/ true);
+
+            // Rename the file:
+            file.path = file.path.replace("file1.ts", "file2.ts");
+            expectedWatchedFiles[0] = file.path;
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            verifyProgram();
+
+            function verifyProgram(isInitial?: true) {
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+
+                // Watching config file, file, lib file and directories
+                checkWatchedFiles(host, expectedWatchedFiles);
+
+                checkProgramActualFiles(watch(), programFiles.map(f => f.path));
+                checkOutputErrors(host, emptyArray, isInitial);
+
+                const outputFile = changeExtension(file.path, ".js");
+                assert.isTrue(host.fileExists(outputFile));
+                assert.equal(host.readFile(outputFile), file.content);
+            }
         });
     });
 }

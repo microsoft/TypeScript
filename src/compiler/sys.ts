@@ -124,6 +124,114 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
+    /*@internal*/
+    export interface PollingWatchDirectoryHost {
+        watchFile: System["watchFile"];
+        getAccessileSortedChildDirectories(path: string): ReadonlyArray<string>;
+        directoryExists(path: string): boolean;
+        filePathComparer: Comparer<string>;
+    }
+
+    /**
+     * Watch the directory using polling watchFile
+     * that means if this is recursive watcher, watch the children directories as well
+     * (eg on OS that dont support recursive watch using fs.watch use fs.watchFile)
+     */
+    /*@internal*/
+    export function watchDirectoryWithPolling(directoryName: string, recursive: boolean | undefined, host: PollingWatchDirectoryHost,
+        onChangedPollingDirectory: () => void, onDeletedPollingDirectory?: () => void): FileWatcher {
+        type ChildWatches = ReadonlyArray<ChildDirectoryWatcher>;
+        interface DirectoryWatcher extends FileWatcher {
+            childWatches: ChildWatches;
+        }
+        interface ChildDirectoryWatcher extends DirectoryWatcher {
+            childName: string;
+        }
+
+        return createDirectoryWatcher(directoryName);
+
+        /**
+         * Create the directory watcher for the dirPath.
+         * If not watching recursively just return FileWatcher,
+         * otherwise create DirectoryWatcher that watches child directories as well
+         */
+        function createDirectoryWatcher(dirPath: string): DirectoryWatcher | FileWatcher {
+            const dirWatcher = host.watchFile(dirPath, (_fileName, eventKind) => {
+                if (dirPath === directoryName) {
+                    if (onDeletedPollingDirectory && eventKind === FileWatcherEventKind.Deleted) {
+                        // Watch missing directory hence forward
+                        onDeletedPollingDirectory();
+                        return;
+                    }
+                }
+                // Create and delete should be handled by parent, no special action needed
+                else if (eventKind !== FileWatcherEventKind.Changed) {
+                    return;
+                }
+
+                // For now just call the rename on current directory
+                onChangedPollingDirectory();
+
+                // Iterate through existing children and update the watches if needed
+                if (result) {
+                    result.childWatches = watchChildDirectoriesWithPolling(dirPath, result.childWatches);
+                }
+            });
+
+            // If not recursive just use this watcher, no need to iterate through children
+            if (!recursive) {
+                return dirWatcher;
+            }
+
+            let result: DirectoryWatcher = {
+                close: () => {
+                    dirWatcher.close();
+                    result.childWatches.forEach(closeFileWatcher);
+                    result = undefined;
+                },
+                childWatches: watchChildDirectoriesWithPolling(dirPath, emptyArray)
+            };
+            return result;
+        }
+
+        /**
+         * Watch the directories in the parentDir
+         */
+        function watchChildDirectoriesWithPolling(parentDir: string, existingChildWatches: ChildWatches): ChildWatches {
+            if (!host.directoryExists(parentDir)) {
+                return emptyArray;
+            }
+
+            let newChildWatches: ChildDirectoryWatcher[] | undefined;
+            enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
+                host.getAccessileSortedChildDirectories(parentDir),
+                existingChildWatches,
+                (child, childWatcher) => host.filePathComparer(child, childWatcher.childName),
+                createAndAddChildDirectoryWatcher,
+                closeFileWatcher,
+                addChildDirectoryWatcher
+            );
+            return newChildWatches || emptyArray;
+
+            /**
+             * Create new childDirectoryWatcher and add it to the new ChildDirectoryWatcher list
+             */
+            function createAndAddChildDirectoryWatcher(childName: string) {
+                const childPath = ts.getNormalizedAbsolutePath(childName, parentDir);
+                const result = createDirectoryWatcher(childPath) as ChildDirectoryWatcher;
+                result.childName = childName;
+                addChildDirectoryWatcher(result);
+            }
+
+            /**
+             * Add child directory watcher to the new ChildDirectoryWatcher list
+             */
+            function addChildDirectoryWatcher(childWatcher: ChildDirectoryWatcher) {
+                (newChildWatches || (newChildWatches = [])).push(childWatcher);
+            }
+        }
+    }
+
     export let sys: System = (() => {
         const utf8ByteOrderMark = "\u00EF\u00BB\u00BF";
 
@@ -133,307 +241,24 @@ namespace ts {
             const _os = require("os");
             const _crypto = require("crypto");
 
-            const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
-
-            function createWatchedFileSet() {
-                const dirWatchers = createMap<DirectoryWatcher>();
-                // One file can have multiple watchers
-                const fileWatcherCallbacks = createMultiMap<FileWatcherCallback>();
-                return { addFile, removeFile };
-
-                function reduceDirWatcherRefCountForFile(fileName: string) {
-                    const dirName = getDirectoryPath(fileName);
-                    const watcher = dirWatchers.get(dirName);
-                    if (watcher) {
-                        watcher.referenceCount -= 1;
-                        if (watcher.referenceCount <= 0) {
-                            watcher.close();
-                            dirWatchers.delete(dirName);
-                        }
-                    }
-                }
-
-                function addDirWatcher(dirPath: string): void {
-                    let watcher = dirWatchers.get(dirPath);
-                    if (watcher) {
-                        watcher.referenceCount += 1;
-                        return;
-                    }
-                    watcher = fsWatchDirectory(
-                        dirPath || ".",
-                        (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
-                    ) as DirectoryWatcher;
-                    watcher.referenceCount = 1;
-                    dirWatchers.set(dirPath, watcher);
-                    return;
-                }
-
-                function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
-                    fileWatcherCallbacks.add(filePath, callback);
-                }
-
-                function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
-                    addFileWatcherCallback(fileName, callback);
-                    addDirWatcher(getDirectoryPath(fileName));
-
-                    return { fileName, callback };
-                }
-
-                function removeFile(watchedFile: WatchedFile) {
-                    removeFileWatcherCallback(watchedFile.fileName, watchedFile.callback);
-                    reduceDirWatcherRefCountForFile(watchedFile.fileName);
-                }
-
-                function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
-                    fileWatcherCallbacks.remove(filePath, callback);
-                }
-
-                function fileEventHandler(eventName: string, relativeFileName: string | undefined, baseDirPath: string) {
-                    // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                    const fileName = !isString(relativeFileName)
-                        ? undefined
-                        : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
-                    // Some applications save a working file via rename operations
-                    if ((eventName === "change" || eventName === "rename")) {
-                        const callbacks = fileWatcherCallbacks.get(fileName);
-                        if (callbacks) {
-                            for (const fileCallback of callbacks) {
-                                fileCallback(fileName, FileWatcherEventKind.Changed);
-                            }
-                        }
-                    }
-                }
-            }
-            const watchedFileSet = createWatchedFileSet();
-
             const nodeVersion = getNodeMajorVersion();
             const isNode4OrLater = nodeVersion >= 4;
 
-            function isFileSystemCaseSensitive(): boolean {
-                // win32\win64 are case insensitive platforms
-                if (platform === "win32" || platform === "win64") {
-                    return false;
-                }
-                // If this file exists under a different case, we must be case-insensitve.
-                return !fileExists(swapCase(__filename));
-            }
-
-            /** Convert all lowercase chars to uppercase, and vice-versa */
-            function swapCase(s: string): string {
-                return s.replace(/\w/g, (ch) => {
-                    const up = ch.toUpperCase();
-                    return ch === up ? ch.toLowerCase() : up;
-                });
-            }
-
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-
-            function fsWatchFile(fileName: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher {
-                _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
-                return {
-                    close: () => _fs.unwatchFile(fileName, fileChanged)
-                };
-
-                function fileChanged(curr: any, prev: any) {
-                    const isCurrZero = +curr.mtime === 0;
-                    const isPrevZero = +prev.mtime === 0;
-                    const created = !isCurrZero && isPrevZero;
-                    const deleted = isCurrZero && !isPrevZero;
-
-                    const eventKind = created
-                        ? FileWatcherEventKind.Created
-                        : deleted
-                            ? FileWatcherEventKind.Deleted
-                            : FileWatcherEventKind.Changed;
-
-                    if (eventKind === FileWatcherEventKind.Changed && +curr.mtime <= +prev.mtime) {
-                        return;
-                    }
-
-                    callback(fileName, eventKind);
-                }
-            }
-
-            function fsWatchDirectory(directoryName: string, callback: (eventName: string, relativeFileName: string) => void, recursive?: boolean): FileWatcher {
-                let options: any;
-                /** Watcher for the directory depending on whether it is missing or present */
-                let watcher = !directoryExists(directoryName) ?
-                    watchMissingDirectory() :
-                    watchPresentDirectory();
-                return {
-                    close: () => {
-                        // Close the watcher (either existing directory watcher or missing directory watcher)
-                        watcher.close();
-                    }
-                };
-
-                /**
-                 * Watch the directory that is currently present
-                 * and when the watched directory is deleted, switch to missing directory watcher
-                 */
-                function watchPresentDirectory(): FileWatcher {
-                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
-                    // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
-                    if (options === undefined) {
-                        if (isNode4OrLater && (process.platform === "win32" || process.platform === "darwin")) {
-                            options = { persistent: true, recursive: !!recursive };
-                        }
-                        else {
-                            options = { persistent: true };
-                        }
-                    }
-
-                    const dirWatcher = _fs.watch(
-                        directoryName,
-                        options,
-                        callback
-                    );
-                    dirWatcher.on("error", () => {
-                        if (!directoryExists(directoryName)) {
-                            // Deleting directory
-                            watcher = watchMissingDirectory();
-                            // Call the callback for current directory
-                            callback("rename", "");
-                        }
-                    });
-                    return dirWatcher;
-                }
-
-                /**
-                 * Watch the directory that is missing
-                 * and switch to existing directory when the directory is created
-                 */
-                function watchMissingDirectory(): FileWatcher {
-                    return fsWatchFile(directoryName, (_fileName, eventKind) => {
-                        if (eventKind === FileWatcherEventKind.Created && directoryExists(directoryName)) {
-                            watcher.close();
-                            watcher = watchPresentDirectory();
-                            // Call the callback for current directory
-                            // For now it could be callback for the inner directory creation,
-                            // but just return current directory, better than current no-op
-                            callback("rename", "");
-                        }
-                    });
-                }
-            }
-
-            function readFile(fileName: string, _encoding?: string): string | undefined {
-                if (!fileExists(fileName)) {
-                    return undefined;
-                }
-                const buffer = _fs.readFileSync(fileName);
-                let len = buffer.length;
-                if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
-                    // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
-                    // flip all byte pairs and treat as little endian.
-                    len &= ~1; // Round down to a multiple of 2
-                    for (let i = 0; i < len; i += 2) {
-                        const temp = buffer[i];
-                        buffer[i] = buffer[i + 1];
-                        buffer[i + 1] = temp;
-                    }
-                    return buffer.toString("utf16le", 2);
-                }
-                if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
-                    // Little endian UTF-16 byte order mark detected
-                    return buffer.toString("utf16le", 2);
-                }
-                if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
-                    // UTF-8 byte order mark detected
-                    return buffer.toString("utf8", 3);
-                }
-                // Default is UTF-8 with no byte order mark
-                return buffer.toString("utf8");
-            }
-
-            function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-                // If a BOM is required, emit one
-                if (writeByteOrderMark) {
-                    data = utf8ByteOrderMark + data;
-                }
-
-                let fd: number;
-
-                try {
-                    fd = _fs.openSync(fileName, "w");
-                    _fs.writeSync(fd, data, /*position*/ undefined, "utf8");
-                }
-                finally {
-                    if (fd !== undefined) {
-                        _fs.closeSync(fd);
-                    }
-                }
-            }
-
-            function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-                try {
-                    const entries = _fs.readdirSync(path || ".").sort();
-                    const files: string[] = [];
-                    const directories: string[] = [];
-                    for (const entry of entries) {
-                        // This is necessary because on some file system node fails to exclude
-                        // "." and "..". See https://github.com/nodejs/node/issues/4002
-                        if (entry === "." || entry === "..") {
-                            continue;
-                        }
-                        const name = combinePaths(path, entry);
-
-                        let stat: any;
-                        try {
-                            stat = _fs.statSync(name);
-                        }
-                        catch (e) {
-                            continue;
-                        }
-
-                        if (stat.isFile()) {
-                            files.push(entry);
-                        }
-                        else if (stat.isDirectory()) {
-                            directories.push(entry);
-                        }
-                    }
-                    return { files, directories };
-                }
-                catch (e) {
-                    return { files: [], directories: [] };
-                }
-            }
-
-            function readDirectory(path: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries);
-            }
 
             const enum FileSystemEntryKind {
                 File,
                 Directory
             }
 
-            function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
-                try {
-                    const stat = _fs.statSync(path);
-                    switch (entryKind) {
-                        case FileSystemEntryKind.File: return stat.isFile();
-                        case FileSystemEntryKind.Directory: return stat.isDirectory();
-                    }
-                }
-                catch (e) {
-                    return false;
-                }
-            }
-
-            function fileExists(path: string): boolean {
-                return fileSystemEntryExists(path, FileSystemEntryKind.File);
-            }
-
-            function directoryExists(path: string): boolean {
-                return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
-            }
-
-            function getDirectories(path: string): string[] {
-                return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
-            }
+            const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
+            // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
+            // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
+            const fsSupportsRecursiveWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
+            const filePathComparer = useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
+            let pollingWatchPresentDirectoryHost: PollingWatchDirectoryHost | undefined;
+            let pollingWatchPresentOrMissingDirectoryHost: PollingWatchDirectoryHost | undefined;
 
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -444,17 +269,7 @@ namespace ts {
                 },
                 readFile,
                 writeFile,
-                watchFile: (fileName, callback, pollingInterval) => {
-                    if (useNonPollingWatchers) {
-                        const watchedFile = watchedFileSet.addFile(fileName, callback);
-                        return {
-                            close: () => watchedFileSet.removeFile(watchedFile)
-                        };
-                    }
-                    else {
-                        return fsWatchFile(fileName, callback, pollingInterval);
-                    }
-                },
+                watchFile: useNonPollingWatchers ? createNonPollingWatchFile() : fsWatchFile,
                 watchDirectory: (directoryName, callback, recursive) => {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
@@ -535,6 +350,314 @@ namespace ts {
                 clearTimeout
             };
             return nodeSystem;
+
+            function isFileSystemCaseSensitive(): boolean {
+                // win32\win64 are case insensitive platforms
+                if (platform === "win32" || platform === "win64") {
+                    return false;
+                }
+                // If this file exists under a different case, we must be case-insensitve.
+                return !fileExists(swapCase(__filename));
+            }
+
+            /** Convert all lowercase chars to uppercase, and vice-versa */
+            function swapCase(s: string): string {
+                return s.replace(/\w/g, (ch) => {
+                    const up = ch.toUpperCase();
+                    return ch === up ? ch.toLowerCase() : up;
+                });
+            }
+
+            function createNonPollingWatchFile() {
+                // One file can have multiple watchers
+                const fileWatcherCallbacks = createMultiMap<FileWatcherCallback>();
+                const dirWatchers = createMap<DirectoryWatcher>();
+                const toCanonicalName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+                return nonPollingWatchFile;
+
+                function nonPollingWatchFile(fileName: string, callback: FileWatcherCallback): FileWatcher {
+                    const filePath = toCanonicalName(fileName);
+                    fileWatcherCallbacks.add(filePath, callback);
+                    const dirPath = getDirectoryPath(filePath) || ".";
+                    const watcher = dirWatchers.get(dirPath) || createDirectoryWatcher(getDirectoryPath(fileName) || ".", dirPath);
+                    watcher.referenceCount++;
+                    return {
+                        close: () => {
+                            if (watcher.referenceCount === 1) {
+                                watcher.close();
+                                dirWatchers.delete(dirPath);
+                            }
+                            else {
+                                watcher.referenceCount--;
+                            }
+                            fileWatcherCallbacks.remove(filePath, callback);
+                        }
+                    };
+                }
+
+                function createDirectoryWatcher(dirName: string, dirPath: string) {
+                    const watcher = fsWatchDirectory(
+                        dirName,
+                        (_eventName: string, relativeFileName) => {
+                            // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
+                            const fileName = !isString(relativeFileName)
+                                ? undefined
+                                : ts.getNormalizedAbsolutePath(relativeFileName, dirName);
+                            // Some applications save a working file via rename operations
+                            const callbacks = fileWatcherCallbacks.get(toCanonicalName(fileName));
+                            if (callbacks) {
+                                for (const fileCallback of callbacks) {
+                                    fileCallback(fileName, FileWatcherEventKind.Changed);
+                                }
+                            }
+                        }
+                    ) as DirectoryWatcher;
+                    watcher.referenceCount = 0;
+                    dirWatchers.set(dirPath, watcher);
+                    return watcher;
+                }
+            }
+
+            function fsWatchFile(fileName: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher {
+                _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
+                let eventKind: FileWatcherEventKind;
+                return {
+                    close: () => _fs.unwatchFile(fileName, fileChanged)
+                };
+
+                function fileChanged(curr: any, prev: any) {
+                    if (+curr.mtime === 0) {
+                        eventKind = FileWatcherEventKind.Deleted;
+                    }
+                    // previous event kind check is to ensure we send created event when file is restored or renamed twice (that is it disappears and reappears)
+                    // since in that case the prevTime returned is same as prev time of event when file was deleted as per node documentation
+                    else if (+prev.mtime === 0 || eventKind === FileWatcherEventKind.Deleted) {
+                        eventKind = FileWatcherEventKind.Created;
+                    }
+                    // If there is no change in modified time, ignore the event
+                    else if (+curr.mtime === +prev.mtime) {
+                        return;
+                    }
+                    else {
+                        // File changed
+                        eventKind = FileWatcherEventKind.Changed;
+                    }
+                    callback(fileName, eventKind);
+                }
+            }
+
+            function fsWatchDirectory(directoryName: string, callback: (eventName: string, relativeFileName: string) => void, recursive?: boolean): FileWatcher {
+                // When doing recursive watch on non supported system, just use polling watcher
+                if (recursive && !fsSupportsRecursiveWatch) {
+                    return watchPresentOrMissingDirectoryWithPolling();
+                }
+
+                /**
+                 * Watcher for the directory depending on whether it is missing or present
+                 */
+                let watcher = !directoryExists(directoryName) ? watchMissingDirectoryWithPolling() : fsWatchPresentDirectory();
+                return {
+                    close: () => {
+                        // Close the watcher (either existing directory watcher or missing directory watcher)
+                        watcher.close();
+                        watcher = undefined;
+                    }
+                };
+
+                function invokeCallbackAndUpdateWatcher(createWatcher: () => FileWatcher) {
+                    // Call the callback for current directory
+                    callback("rename", "");
+
+                    // If watcher is not closed, update it
+                    if (watcher) {
+                        watcher.close();
+                        watcher = createWatcher();
+                    }
+                }
+
+                /**
+                 * Watch the present directory through fs.watch and if that results in exception use polling directory watching
+                 * when directory goes missing use switch to missing directory watcher
+                 */
+                function fsWatchPresentDirectory(): FileWatcher {
+                    try {
+                        const dirWatcher = _fs.watch(
+                            directoryName,
+                            { persistent: true, recursive: !!recursive },
+                            callback
+                        );
+                        // Watch the missing directory on error (eg. directory deleted)
+                        dirWatcher.on("error", () => invokeCallbackAndUpdateWatcher(watchMissingDirectoryWithPolling));
+                        return dirWatcher;
+                    }
+                    catch (e) {
+                        // Catch the exception and use polling instead
+                        // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
+                        // so instead of throwing error, use polling directory watcher
+                        return watchPresentDirectoryWithPolling();
+                    }
+                }
+
+                /**
+                 * Watch the existing directory using polling,
+                 * that means if this is recursive watcher, watch the children directories as well
+                 * (eg on OS that dont support recursive watch using fs.watch)
+                 */
+                function watchPresentDirectoryWithPolling(): FileWatcher {
+                    return watchDirectoryWithPolling(directoryName, recursive,
+                        pollingWatchPresentDirectoryHost || (pollingWatchPresentDirectoryHost = {
+                            filePathComparer,
+                            watchFile: fsWatchFile,
+                            // Since we are watching present directory, it would always be present
+                            directoryExists: returnTrue,
+                            getAccessileSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories
+                        }),
+                        () => callback("rename", ""),
+                        () => invokeCallbackAndUpdateWatcher(watchMissingDirectoryWithPolling));
+                }
+
+                /**
+                 * Watch missing or present directory with polling,
+                 * this is invoked when recursive is not supported through fs.watch
+                 * which means we would always need to poll, so no need to handle missing directory separately
+                 */
+                function watchPresentOrMissingDirectoryWithPolling(): FileWatcher {
+                    return watchDirectoryWithPolling(directoryName, recursive,
+                        pollingWatchPresentOrMissingDirectoryHost || (pollingWatchPresentOrMissingDirectoryHost = {
+                            filePathComparer,
+                            watchFile: fsWatchFile,
+                            directoryExists,
+                            getAccessileSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories
+                        }),
+                        () => callback("rename", ""));
+                }
+
+                /**
+                 * Watch the directory that is missing
+                 * and switch to existing directory when the directory is created
+                 */
+                function watchMissingDirectoryWithPolling(): FileWatcher {
+                    return fsWatchFile(directoryName, (_fileName, eventKind) => {
+                        if (eventKind === FileWatcherEventKind.Created && directoryExists(directoryName)) {
+                            // This could be resulted as part of creating another directory or file
+                            // but instead of spending time to detect that invoke callback on current directory
+                            invokeCallbackAndUpdateWatcher(fsWatchPresentDirectory);
+                        }
+                    });
+                }
+            }
+
+            function readFile(fileName: string, _encoding?: string): string | undefined {
+                if (!fileExists(fileName)) {
+                    return undefined;
+                }
+                const buffer = _fs.readFileSync(fileName);
+                let len = buffer.length;
+                if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
+                    // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
+                    // flip all byte pairs and treat as little endian.
+                    len &= ~1; // Round down to a multiple of 2
+                    for (let i = 0; i < len; i += 2) {
+                        const temp = buffer[i];
+                        buffer[i] = buffer[i + 1];
+                        buffer[i + 1] = temp;
+                    }
+                    return buffer.toString("utf16le", 2);
+                }
+                if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
+                    // Little endian UTF-16 byte order mark detected
+                    return buffer.toString("utf16le", 2);
+                }
+                if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
+                    // UTF-8 byte order mark detected
+                    return buffer.toString("utf8", 3);
+                }
+                // Default is UTF-8 with no byte order mark
+                return buffer.toString("utf8");
+            }
+
+            function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
+                // If a BOM is required, emit one
+                if (writeByteOrderMark) {
+                    data = utf8ByteOrderMark + data;
+                }
+
+                let fd: number;
+
+                try {
+                    fd = _fs.openSync(fileName, "w");
+                    _fs.writeSync(fd, data, /*position*/ undefined, "utf8");
+                }
+                finally {
+                    if (fd !== undefined) {
+                        _fs.closeSync(fd);
+                    }
+                }
+            }
+
+            function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
+                try {
+                    const entries = _fs.readdirSync(path || ".").sort(filePathComparer);
+                    const files: string[] = [];
+                    const directories: string[] = [];
+                    for (const entry of entries) {
+                        // This is necessary because on some file system node fails to exclude
+                        // "." and "..". See https://github.com/nodejs/node/issues/4002
+                        if (entry === "." || entry === "..") {
+                            continue;
+                        }
+                        const name = combinePaths(path, entry);
+
+                        let stat: any;
+                        try {
+                            stat = _fs.statSync(name);
+                        }
+                        catch (e) {
+                            continue;
+                        }
+
+                        if (stat.isFile()) {
+                            files.push(entry);
+                        }
+                        else if (stat.isDirectory()) {
+                            directories.push(entry);
+                        }
+                    }
+                    return { files, directories };
+                }
+                catch (e) {
+                    return { files: [], directories: [] };
+                }
+            }
+
+            function readDirectory(path: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries);
+            }
+
+            function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
+                try {
+                    const stat = _fs.statSync(path);
+                    switch (entryKind) {
+                        case FileSystemEntryKind.File: return stat.isFile();
+                        case FileSystemEntryKind.Directory: return stat.isDirectory();
+                    }
+                }
+                catch (e) {
+                    return false;
+                }
+            }
+
+            function fileExists(path: string): boolean {
+                return fileSystemEntryExists(path, FileSystemEntryKind.File);
+            }
+
+            function directoryExists(path: string): boolean {
+                return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
+            }
+
+            function getDirectories(path: string): string[] {
+                return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
+            }
         }
 
         function getChakraSystem(): System {

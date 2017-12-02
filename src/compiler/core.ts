@@ -20,6 +20,12 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    export const emptyArray: never[] = [] as never[];
+
+    export function closeFileWatcher(watcher: FileWatcher) {
+        watcher.close();
+    }
+
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
         const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
@@ -832,6 +838,44 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Enumreates on two sorted arrays newItems and oldItems by invoking
+     * - inserted on items that are present in newItems but not in oldItems
+     * - deleted on items that are present in oldItems but not in newIterms
+     * - unchanged if provided on items that are present in both newItems and oldItems
+     */
+    export function enumerateInsertsAndDeletes<T, U>(newItems: ReadonlyArray<T>, oldItems: ReadonlyArray<U>, comparer: (a: T, b: U) => Comparison, inserted: (newItem: T) => void, deleted: (oldItem: U) => void, unchanged?: (oldItem: U, newItem: T) => void) {
+        unchanged = unchanged || noop;
+        let newIndex = 0;
+        let oldIndex = 0;
+        const newLen = newItems.length;
+        const oldLen = oldItems.length;
+        while (newIndex < newLen && oldIndex < oldLen) {
+            const newItem = newItems[newIndex];
+            const oldItem = oldItems[oldIndex];
+            const compareResult = comparer(newItem, oldItem);
+            if (compareResult === Comparison.LessThan) {
+                inserted(newItem);
+                newIndex++;
+            }
+            else if (compareResult === Comparison.GreaterThan) {
+                deleted(oldItem);
+                oldIndex++;
+            }
+            else {
+                unchanged(oldItem, newItem);
+                newIndex++;
+                oldIndex++;
+            }
+        }
+        while (newIndex < newLen) {
+            inserted(newItems[newIndex++]);
+        }
+        while (oldIndex < oldLen) {
+            deleted(oldItems[oldIndex++]);
+        }
+    }
+
     export function sum<T extends Record<K, number>, K extends string>(array: ReadonlyArray<T>, prop: K): number {
         let result = 0;
         for (const v of array) {
@@ -1397,6 +1441,9 @@ namespace ts {
 
     /** Returns its argument. */
     export function identity<T>(x: T) { return x; }
+
+    /** Returns the lower case string */
+    export function toLowerCase(x: string) { return x.toLowerCase(); }
 
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
@@ -2877,9 +2924,7 @@ namespace ts {
 
     export type GetCanonicalFileName = (fileName: string) => string;
     export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
-        return useCaseSensitiveFileNames
-            ? ((fileName) => fileName)
-            : ((fileName) => fileName.toLowerCase());
+        return useCaseSensitiveFileNames ? identity : toLowerCase;
     }
 
     /**
