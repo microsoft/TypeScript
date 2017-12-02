@@ -2994,7 +2994,11 @@ namespace ts {
                 function cloneBindingName(node: BindingName): BindingName {
                     return <BindingName>elideInitializerAndSetEmitFlags(node);
                     function elideInitializerAndSetEmitFlags(node: Node): Node {
-                        const visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags);
+                        const visited = visitEachChild(node, 
+                            elideInitializerAndSetEmitFlags, 
+                            nullTransformationContext, 
+                            /*nodesVisitor*/ undefined, 
+                            elideInitializerAndSetEmitFlags);
                         const clone = nodeIsSynthesized(visited) ? visited : getSynthesizedClone(visited);
                         if (clone.kind === SyntaxKind.BindingElement) {
                             (<BindingElement>clone).initializer = undefined;
@@ -19652,7 +19656,7 @@ namespace ts {
 
         function checkOverrideDeclaration(node: MethodDeclaration | PropertyDeclaration | AccessorDeclaration) {
             if (node.questionToken) {
-                error(node, Diagnostics.override_modifier_cannot_be_used_with_an_optional_property_declaration);
+                error(node, Diagnostics.Override_modifier_cannot_be_used_with_an_optional_property_declaration);
             }
         }
 
@@ -20025,7 +20029,7 @@ namespace ts {
                             error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
                         }
                         else if (deviation & ModifierFlags.Override) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_override_or_non_override);
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_override_or_non_override);
                         }
                     });
                 }
@@ -22564,9 +22568,9 @@ namespace ts {
                 }
             }
             else {
-                const properties = createMap<Symbol>();
+                const properties = createUnderscoreEscapedMap<Symbol>();
                 for (const prop of getPropertiesOfObjectType(type)) {
-                    properties[prop.name] = prop;
+                    properties.set(prop.escapedName, prop);
                 }
                 checkAugmentedPropertyMemberOverrides(type, properties);
             }
@@ -22622,25 +22626,26 @@ namespace ts {
             return forEach(symbol.declarations, d => isClassLike(d) ? d : undefined);
         }
 
-        function checkAugmentedPropertyMemberOverrides(type: InterfaceType, propertiesToCheck: Map<Symbol>): void {
+        function checkAugmentedPropertyMemberOverrides(type: InterfaceType, propertiesToCheck: UnderscoreEscapedMap<Symbol>): void {
             // If the class does not explicitly declare 'extends Object',
             // declarations that mask 'Object' members ('toString()', 'hasOwnProperty()', etc...)
             // are considered here.
 
             // check is disabled in ambient contexts
-            if (isInAmbientContext(type.symbol.valueDeclaration)) {
+            if (type.symbol.valueDeclaration.flags & NodeFlags.Ambient) {
                 return;
             }
 
-            const objectType = getSymbol(globals, "Object", SymbolFlags.Type);
+            // Use escapeLeadingUnderscores here to get a '__String' instance (rather than 'string')
+            const objectType = getSymbol(globals, escapeLeadingUnderscores("Object"), SymbolFlags.Type);
             if (!objectType) {
                 return;
             }
 
-            for (const name in propertiesToCheck) {
-                const derived = getTargetSymbol(propertiesToCheck[name]);
+            propertiesToCheck.forEach((symbol: Symbol, name: __String) => {
+                const derived = getTargetSymbol(symbol);
                 const derivedDeclarationFlags = getDeclarationModifierFlagsFromSymbol(derived);
-                const found = objectType.members[name];
+                const found = objectType.members.get(name);
                 if (found) {
                     if (compilerOptions.noImplicitOverride) {
                         const foundSymbol = getTargetSymbol(found);
@@ -22658,21 +22663,21 @@ namespace ts {
                                 typeToString(getTypeOfSymbol(foundSymbol))
                             );
                         }
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(derived.valueDeclaration.name, errorInfo));
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(getDeclarationName(derived.valueDeclaration), errorInfo));
                     }
                 }
                 // No matching property found on the object type.  It
                 // is an error for the derived property to falsely
                 // claim 'override'.
                 else if (derivedDeclarationFlags & ModifierFlags.Override) {
-                    error(derived.valueDeclaration.name,
+                    error(getDeclarationName(derived.valueDeclaration),
                           Diagnostics.Class_member_0_was_marked_override_but_no_matching_declaration_was_found_in_any_supertype_of_1,
                           symbolToString(derived),
                           typeToString(type));
                 }
-            }
+            });
         }
-
+        
         function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {
             return filter(symbol.declarations, (d: Declaration): d is ClassDeclaration | InterfaceDeclaration =>
                 d.kind === SyntaxKind.ClassDeclaration || d.kind === SyntaxKind.InterfaceDeclaration);
@@ -22698,18 +22703,18 @@ namespace ts {
             // NOTE: assignability is checked in checkClassDeclaration
 
             // Track which symbols in the derived class have not been seen.
-            const onlyInDerived = createMap<Symbol>();
+            const onlyInDerived = createUnderscoreEscapedMap<Symbol>();
             // TODO(pcj): Should this be getPropertiesOfType or getPropertiesOfObjectType?
             for (const prop of getPropertiesOfType(type)) {
-                onlyInDerived[prop.name] = prop;
+                onlyInDerived.set(prop.escapedName, prop);
             }
 
-            const ambient = isInAmbientContext(type.symbol.valueDeclaration);
+            const ambient = type.symbol.valueDeclaration.flags & NodeFlags.Ambient;
 
             const baseProperties = getPropertiesOfType(baseType);
             for (const baseProperty of baseProperties) {
                 const base = getTargetSymbol(baseProperty);
-                delete onlyInDerived[base.name];
+                onlyInDerived.delete(base.escapedName);
 
                 if (base.flags & SymbolFlags.Prototype) {
                     continue;
@@ -22761,7 +22766,7 @@ namespace ts {
                                 && !ambient
                                 && !(derivedDeclarationFlags & ModifierFlags.Abstract)
                                 && !(derivedDeclarationFlags & ModifierFlags.Override)) {
-                                error(derived.valueDeclaration.name,
+                                error(getDeclarationName(derived.valueDeclaration),
                                       Diagnostics.Class_member_0_must_be_marked_override_when_noImplicitOverride_is_enabled_augmented_from_Object_1,
                                       symbolToString(derived),
                                       typeToString(baseType));
