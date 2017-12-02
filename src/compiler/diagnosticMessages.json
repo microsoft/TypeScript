@@ -1972,7 +1972,7 @@
         "category": "Error",
         "code": 2567
     },
-    "Raise an error when inherited/overridden class members are not explicitly marked 'override'": {
+    "Raise error when inherited/overridden class members are not explicitly marked 'override'": {
         "category": "Error",
         "code": 2568
     },

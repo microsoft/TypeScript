@@ -1,0 +1,317 @@
+=== tests/cases/compiler/overrideKeywordEs5.ts ===
+abstract class AbstractBase {
+>AbstractBase : AbstractBase
+
+    readonly id: string;
+>id : string
+
+    public wasDisposed?: boolean;
+>wasDisposed : boolean
+
+    private name_: string;
+>name_ : string
+
+    get name() { return this.name_; }
+>name : string
+>this.name_ : string
+>this : this
+>name_ : string
+
+    set name(name: string) { this.name_ = name; }
+>name : string
+>name : string
+>this.name_ = name : string
+>this.name_ : string
+>this : this
+>name_ : string
+>name : string
+
+    static toStringStatic(): string { return 'static'; }
+>toStringStatic : () => string
+>'static' : "static"
+
+    public toStringPublic(): string { return 'public'; };
+>toStringPublic : () => string
+>'public' : "public"
+
+    protected toStringProtected(): string { return 'protected'; }
+>toStringProtected : () => string
+>'protected' : "protected"
+
+    private toStringPrivate(): string { return 'private'; }
+>toStringPrivate : () => string
+>'private' : "private"
+
+    private toStringPrivate2(): string { return 'private2'; }
+>toStringPrivate2 : () => string
+>'private2' : "private2"
+
+    abstract toStringAbstract(): string;
+>toStringAbstract : () => string
+
+    abstract toStringAbstract2(): string;
+>toStringAbstract2 : () => string
+
+    getMeaningOfLife(): number { return 42; }
+>getMeaningOfLife : () => number
+>42 : 42
+}
+
+class Base extends AbstractBase {
+>Base : Base
+>AbstractBase : AbstractBase
+
+    override toStringAbstract(): string { return 'implemented'; }
+>toStringAbstract : () => string
+>'implemented' : "implemented"
+
+    override toStringAbstract2(): string { return 'implemented2'; }
+>toStringAbstract2 : () => string
+>'implemented2' : "implemented2"
+}
+
+// The expected order of modifiers:
+//
+// [public | protected | private] [abstract | override] [static] [readonly | async] [get | set] identifier
+//
+class RejectWhenOverridePrecedesPublicModifier extends Base { override public toStringPublic() { return ''; }; }
+>RejectWhenOverridePrecedesPublicModifier : RejectWhenOverridePrecedesPublicModifier
+>Base : Base
+>toStringPublic : () => string
+>'' : ""
+
+class RejectWhenOverridePrecedesProtectedModifier extends Base { override protected toStringProtected() { return ''; }; }
+>RejectWhenOverridePrecedesProtectedModifier : RejectWhenOverridePrecedesProtectedModifier
+>Base : Base
+>toStringProtected : () => string
+>'' : ""
+
+class RejectWhenStaticPrecedesOverrideModifier extends Base { static override toStringStatic() { return ''; }; }
+>RejectWhenStaticPrecedesOverrideModifier : RejectWhenStaticPrecedesOverrideModifier
+>Base : Base
+>toStringStatic : () => string
+>'' : ""
+
+class AcceptWhenOverrideFollowsAccessModifier extends Base { public override toStringPublic() { return ''; } }
+>AcceptWhenOverrideFollowsAccessModifier : AcceptWhenOverrideFollowsAccessModifier
+>Base : Base
+>toStringPublic : () => string
+>'' : ""
+
+class RejectWhenReadonlyPrecedesOverrideModifier extends Base { readonly override id: string; }
+>RejectWhenReadonlyPrecedesOverrideModifier : RejectWhenReadonlyPrecedesOverrideModifier
+>Base : Base
+>id : string
+
+// Modifiers should never be repeated
+class RejectWhenOverrideIsRepeated extends Base {
+>RejectWhenOverrideIsRepeated : RejectWhenOverrideIsRepeated
+>Base : Base
+
+    public override override toStringPublic() { return ''; }
+>toStringPublic : () => string
+>'' : ""
+}
+
+// You cannot override a private method
+class RejectWhenOverridePrivateMethod extends Base {
+>RejectWhenOverridePrivateMethod : RejectWhenOverridePrivateMethod
+>Base : Base
+
+    private override toStringPrivate() { return ''; }
+>toStringPrivate : () => string
+>'' : ""
+
+    override private toStringPrivate2() { return ''; }
+>toStringPrivate2 : () => string
+>'' : ""
+}
+
+// Override and abstract on methods are orthogonal, should never be used together
+abstract class RejectWhenOverrideAbstractMethod extends AbstractBase {
+>RejectWhenOverrideAbstractMethod : RejectWhenOverrideAbstractMethod
+>AbstractBase : AbstractBase
+
+    abstract override toStringAbstract(): string;
+>toStringAbstract : () => string
+
+    override abstract toStringAbstract2(): string;
+>toStringAbstract2 : () => string
+}
+
+// Acceptable to provide an override implementation in an abstract class however
+abstract class AcceptWhenOverrideInAbstractClass extends AbstractBase {
+>AcceptWhenOverrideInAbstractClass : AcceptWhenOverrideInAbstractClass
+>AbstractBase : AbstractBase
+
+    override toStringAbstract(): string { return 'implemented in abstract class'; }
+>toStringAbstract : () => string
+>'implemented in abstract class' : "implemented in abstract class"
+}
+
+// Override checks are allowed on static methods
+class AcceptWhenOverrideStaticMethod extends Base {
+>AcceptWhenOverrideStaticMethod : AcceptWhenOverrideStaticMethod
+>Base : Base
+
+    override static toStringStatic() { return 'static'; }
+>toStringStatic : () => string
+>'static' : "static"
+}
+
+// Compiler already checks for access modifier narrowing,
+// override does not alter these semantics.
+class RejectWhenOverrideChangesAccessModifier extends Base {
+>RejectWhenOverrideChangesAccessModifier : RejectWhenOverrideChangesAccessModifier
+>Base : Base
+
+    protected override static toStringStatic() { return 'member is now protected'; }
+>toStringStatic : () => string
+>'member is now protected' : "member is now protected"
+}
+
+// Compiler should be able to traverse multiple levels of inheritance
+// to assess for overriden members (already does this).
+class AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass extends Base {
+>AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass : AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass
+>Base : Base
+
+    override getMeaningOfLife(): number { return 12; }
+>getMeaningOfLife : () => number
+>12 : 12
+}
+
+// Override cannot be used with optional property.
+class RejectWhenOverrideOptionalProperty extends Base {
+>RejectWhenOverrideOptionalProperty : RejectWhenOverrideOptionalProperty
+>Base : Base
+
+    public override wasDisposed?: boolean;
+>wasDisposed : boolean
+}
+
+// If one accessor is marked override, they both should be.
+class RejectWhenAccessorNotBothOverride extends Base {
+>RejectWhenAccessorNotBothOverride : RejectWhenAccessorNotBothOverride
+>Base : Base
+
+    override get name() { return ''; }
+>name : string
+>'' : ""
+
+    /*    */ set name(n: string) {}
+>name : string
+>n : string
+}
+
+// Compiler should detect when override member is not inherited or augmented
+class RejectWhenOverrideMarkedOnNonInheritedMember extends Base {
+>RejectWhenOverrideMarkedOnNonInheritedMember : RejectWhenOverrideMarkedOnNonInheritedMember
+>Base : Base
+
+    public override iDontExist() { return ''; }
+>iDontExist : () => string
+>'' : ""
+}
+
+// Compiler already detects overriden assignability mismatches,
+// override keyword does not change these semantics
+class RejectWhenOverrideHasMismatchedType extends Base {
+>RejectWhenOverrideHasMismatchedType : RejectWhenOverrideHasMismatchedType
+>Base : Base
+
+    override getMeaningOfLife(): string { return 'the meaning of life is a number, not a string'; }
+>getMeaningOfLife : () => string
+>'the meaning of life is a number, not a string' : "the meaning of life is a number, not a string"
+}
+
+// Override is not be used on parameters
+class RejectWhenOverrideIsOnAParameter {
+>RejectWhenOverrideIsOnAParameter : RejectWhenOverrideIsOnAParameter
+
+    public sayHello(override name: string) { return 'hi'; }
+>sayHello : (override name: string) => string
+>name : string
+>'hi' : "hi"
+}
+
+// But can be be used on parameter properties
+
+abstract class AbstractPropertyBase {
+>AbstractPropertyBase : AbstractPropertyBase
+
+	abstract x: number;
+>x : number
+}
+class ConcretePropertyClass extends AbstractPropertyBase {
+>ConcretePropertyClass : ConcretePropertyClass
+>AbstractPropertyBase : AbstractPropertyBase
+
+	constructor(override x: number) {
+>x : number
+
+        super();
+>super() : void
+>super : typeof AbstractPropertyBase
+    }
+}
+
+
+// Override is not used on class...
+override class RejectWhenOverrideIsOnClassDeclaration { public sayHello(name: string) { return ''; } }
+>RejectWhenOverrideIsOnClassDeclaration : RejectWhenOverrideIsOnClassDeclaration
+>sayHello : (name: string) => string
+>name : string
+>'' : ""
+
+override interface RejectWhenOverrideIsOnInterfaceDeclaration { sayHello(name: string); }
+>RejectWhenOverrideIsOnInterfaceDeclaration : RejectWhenOverrideIsOnInterfaceDeclaration
+>sayHello : (name: string) => any
+>name : string
+
+//... or interface declarations
+interface RejectWhenOverrideInAnInterface {
+>RejectWhenOverrideInAnInterface : RejectWhenOverrideInAnInterface
+
+    override sayHello(name: string);
+>sayHello : (name: string) => any
+>name : string
+}
+
+/* Override method should be grouped as consecutive declarations */
+class RejectWhenOverrideDeclarationsAreNotConsecutive extends Base {
+>RejectWhenOverrideDeclarationsAreNotConsecutive : RejectWhenOverrideDeclarationsAreNotConsecutive
+>Base : Base
+
+    override hasOwnProperty(prop: string): boolean {
+>hasOwnProperty : (prop: string) => boolean
+>prop : string
+
+        return super.hasOwnProperty(prop);
+>super.hasOwnProperty(prop) : boolean
+>super.hasOwnProperty : (v: string) => boolean
+>super : Base
+>hasOwnProperty : (v: string) => boolean
+>prop : string
+    }
+
+    public getMeaningOfLife(): number {
+>getMeaningOfLife : () => number
+
+        return 42;
+>42 : 42
+    }
+
+    override propertyIsEnumerable(prop: string): boolean {
+>propertyIsEnumerable : (prop: string) => boolean
+>prop : string
+
+        return super.propertyIsEnumerable(prop);
+>super.propertyIsEnumerable(prop) : boolean
+>super.propertyIsEnumerable : (v: string) => boolean
+>super : Base
+>propertyIsEnumerable : (v: string) => boolean
+>prop : string
+    }
+}
+

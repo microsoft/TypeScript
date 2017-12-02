@@ -268,7 +268,7 @@ namespace ts {
             type: "boolean",
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
-            description: Diagnostics.Raise_an_error_when_inherited_Slashoverridden_class_members_are_not_explicitly_marked_override,
+            description: Diagnostics.Raise_error_when_inherited_Slashoverridden_class_members_are_not_explicitly_marked_override,
         },
         {
             name: "strictNullChecks",

@@ -1,60 +1,147 @@
 //// [noImplicitOverride.ts]
+// ******************************************************
+// First set of cases deal with inheritance from Object. 
+// ******************************************************
 
-class Base {
-    get name(): string {
-        return 'Base';
-    }
-    getMeaningOfLife(): number { return 42; }
-    public userId: number = 1;
-}
-
-class RejectWhenOverrideMissingOnInheritedMethod extends Object {
+class RejectWhenOverrideAbsentOnInheritedMethod extends Object {
     toString(): string { return 'foo'; };
-    hasOwnProperty(prop: string): boolean {
-        return super.hasOwnProperty(prop);
-    }
+}
+class AcceptWhenOverridePresentOnInheritedMethod extends Object {
+    override toString(): string { return 'foo'; };
 }
 
-class RejectWhenOverrideMissingOnAugmentedProperty {
+// Similar to previous cases where augmentation from Object is implicit
+class RejectWhenOverrideAbsentOnAugmentedProperty {
     toString(): string { return 'foo'; };
-    hasOwnProperty(prop: string): boolean {
-        return false;
-    }
+}
+class AcceptWhenOverridePresentOnAugumentedProperty extends Object {
+    override toString(): string { return 'foo'; };
 }
 
+// This should fail via type mismatch of the return value.
+// (test is not specific to the override checking code)
 class RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember {
-    hasOwnProperty(prop: string): number {
+    toString(): number {
         return -1;
     }
 }
 
-class RejectWhenOverrideMissingOnInheritedProperty extends Base {
-    public userId = 2;
+// ******************************************************
+// Next set of cases deal with inheritance derived from 
+// an explicitly defined class. 
+// ******************************************************
+
+class Base {
+    // Public property
+    public userId: number = 1;
+    // Accessor
+    get name(): string { return 'Base'; }
+    // Typical public method
+    getMeaningOfLife(): number { return 42; }
+    // Private method
+    private processInternal(): void { }
 }
 
-class RejectWhenOverrideMissingOnInheritedAccessor extends Base {
+class RejectWhenOverrideAbsentOnInheritedProperty extends Base {
+    public userId = 2;
+}
+class AcceptWhenOverridePresentOnInheritedProperty extends Base {
+    public override userId = 2;
+}
+
+class RejectWhenOverrideAbsentOnInheritedAccessor extends Base {
     get name(): string { return 'foo'; };
 }
+class AcceptWhenOverridePresentOnInheritedAccessor extends Base {
+    override get name(): string { return 'foo'; };
+}
+
+class RejectWhenOverrideAbsentOnInheritedMethod extends Base {
+    getMeaningOfLife(): number { return 24; };
+}
+class AcceptWhenOverridePresentOnInheritedMethod extends Base {
+    override getMeaningOfLife(): number { return 24; };
+}
+
+class RejectWhenOverridePresentWithPrivateModifier extends Base {
+    private override processInternal() { }
+}
+
+// ******************************************************
+// Next set of cases deal with override within interfaces
+// and abstract classes (where is should not be present). 
+// ******************************************************
 
 interface Shape {
     getWidth(): number;
 }
 
-interface RejectWhenOverrideOnAbstractDeclaration_Line extends Shape {
+interface RejectWhenOverridePresentOnInterfaceDeclaration extends Shape {
     override getWidth(): number;
 }
 
-interface AcceptWhenOverrideNotOnAbstractDeclaration_Line extends Shape {
-    // abstract members don't need to be declared override
+interface AcceptWhenOverrideAbsentOnInterfaceDeclaration extends Shape {
     getWidth(): number;
 }
 
-class FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Base {
-    /** @override */ public userId: number = 2;
+// ******************************************************
+// Next set of cases deal with override with abstract 
+// classes. 
+// ******************************************************
+
+abstract class Animal {
+    protected readonly name: string
+
+    constructor(name: string) {
+        this.name = name;
+    }
+
+    abstract speak(): string;
 }
+
+abstract class RejectWhenOverridePresentWithAbstractModifier extends Animal {
+    abstract override speak(): string;
+}
+
+abstract class AcceptWhenOverridePresentOnConcreteDeclaration extends Animal {
+    override speak(): string { return "Woof!"; }
+}
+
+// ******************************************************
+// Next set of cases deal with override with mixins 
+// ******************************************************
+
+const mixin = <BC extends new (...args: any[]) => {}>(Base: BC) => class extends Base {
+    mixedIn() {}
+};
+
+class A {
+    normal() {}
+}
+
+class RejectWhenOverrideAbsentOnInheritedMethodMixin extends mixin(A) {
+    normal() {} 
+    mixedIn() {} 
+}
+
+class AcceptWhenOverridePresentOnInheritedMethodMixin extends mixin(A) {
+    override normal() {} 
+    override mixedIn() {} 
+}
+
+// ********************************************************
+// Next set of cases deal with override specified via JsDoc
+// ********************************************************
+
+//class AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Animal {
+//    /** @override */ public speak(): string { return "Woof!" }
+//}
 
 
 //// [noImplicitOverride.js]
+// ******************************************************
+// First set of cases deal with inheritance from Object. 
+// ******************************************************
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -65,78 +152,205 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Base = (function () {
-    function Base() {
-        this.userId = 1;
-    }
-    Object.defineProperty(Base.prototype, "name", {
-        get: function () {
-            return 'Base';
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Base.prototype.getMeaningOfLife = function () { return 42; };
-    return Base;
-}());
-var RejectWhenOverrideMissingOnInheritedMethod = (function (_super) {
-    __extends(RejectWhenOverrideMissingOnInheritedMethod, _super);
-    function RejectWhenOverrideMissingOnInheritedMethod() {
+var RejectWhenOverrideAbsentOnInheritedMethod = /** @class */ (function (_super) {
+    __extends(RejectWhenOverrideAbsentOnInheritedMethod, _super);
+    function RejectWhenOverrideAbsentOnInheritedMethod() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    RejectWhenOverrideMissingOnInheritedMethod.prototype.toString = function () { return 'foo'; };
+    RejectWhenOverrideAbsentOnInheritedMethod.prototype.toString = function () { return 'foo'; };
     ;
-    RejectWhenOverrideMissingOnInheritedMethod.prototype.hasOwnProperty = function (prop) {
-        return _super.prototype.hasOwnProperty.call(this, prop);
-    };
-    return RejectWhenOverrideMissingOnInheritedMethod;
+    return RejectWhenOverrideAbsentOnInheritedMethod;
 }(Object));
-var RejectWhenOverrideMissingOnAugmentedProperty = (function () {
-    function RejectWhenOverrideMissingOnAugmentedProperty() {
+var AcceptWhenOverridePresentOnInheritedMethod = /** @class */ (function (_super) {
+    __extends(AcceptWhenOverridePresentOnInheritedMethod, _super);
+    function AcceptWhenOverridePresentOnInheritedMethod() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    RejectWhenOverrideMissingOnAugmentedProperty.prototype.toString = function () { return 'foo'; };
+    AcceptWhenOverridePresentOnInheritedMethod.prototype.toString = function () { return 'foo'; };
     ;
-    RejectWhenOverrideMissingOnAugmentedProperty.prototype.hasOwnProperty = function (prop) {
-        return false;
-    };
-    return RejectWhenOverrideMissingOnAugmentedProperty;
+    return AcceptWhenOverridePresentOnInheritedMethod;
+}(Object));
+// Similar to previous cases where augmentation from Object is implicit
+var RejectWhenOverrideAbsentOnAugmentedProperty = /** @class */ (function () {
+    function RejectWhenOverrideAbsentOnAugmentedProperty() {
+    }
+    RejectWhenOverrideAbsentOnAugmentedProperty.prototype.toString = function () { return 'foo'; };
+    ;
+    return RejectWhenOverrideAbsentOnAugmentedProperty;
 }());
-var RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember = (function () {
+var AcceptWhenOverridePresentOnAugumentedProperty = /** @class */ (function (_super) {
+    __extends(AcceptWhenOverridePresentOnAugumentedProperty, _super);
+    function AcceptWhenOverridePresentOnAugumentedProperty() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    AcceptWhenOverridePresentOnAugumentedProperty.prototype.toString = function () { return 'foo'; };
+    ;
+    return AcceptWhenOverridePresentOnAugumentedProperty;
+}(Object));
+// This should fail via type mismatch of the return value.
+// (test is not specific to the override checking code)
+var RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember = /** @class */ (function () {
     function RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember() {
     }
-    RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember.prototype.hasOwnProperty = function (prop) {
+    RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember.prototype.toString = function () {
         return -1;
     };
     return RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember;
 }());
-var RejectWhenOverrideMissingOnInheritedProperty = (function (_super) {
-    __extends(RejectWhenOverrideMissingOnInheritedProperty, _super);
-    function RejectWhenOverrideMissingOnInheritedProperty() {
+// ******************************************************
+// Next set of cases deal with inheritance derived from 
+// an explicitly defined class. 
+// ******************************************************
+var Base = /** @class */ (function () {
+    function Base() {
+        // Public property
+        this.userId = 1;
+    }
+    Object.defineProperty(Base.prototype, "name", {
+        // Accessor
+        get: function () { return 'Base'; },
+        enumerable: true,
+        configurable: true
+    });
+    // Typical public method
+    Base.prototype.getMeaningOfLife = function () { return 42; };
+    // Private method
+    Base.prototype.processInternal = function () { };
+    return Base;
+}());
+var RejectWhenOverrideAbsentOnInheritedProperty = /** @class */ (function (_super) {
+    __extends(RejectWhenOverrideAbsentOnInheritedProperty, _super);
+    function RejectWhenOverrideAbsentOnInheritedProperty() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.userId = 2;
         return _this;
     }
-    return RejectWhenOverrideMissingOnInheritedProperty;
+    return RejectWhenOverrideAbsentOnInheritedProperty;
 }(Base));
-var RejectWhenOverrideMissingOnInheritedAccessor = (function (_super) {
-    __extends(RejectWhenOverrideMissingOnInheritedAccessor, _super);
-    function RejectWhenOverrideMissingOnInheritedAccessor() {
+var AcceptWhenOverridePresentOnInheritedProperty = /** @class */ (function (_super) {
+    __extends(AcceptWhenOverridePresentOnInheritedProperty, _super);
+    function AcceptWhenOverridePresentOnInheritedProperty() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.userId = 2;
+        return _this;
+    }
+    return AcceptWhenOverridePresentOnInheritedProperty;
+}(Base));
+var RejectWhenOverrideAbsentOnInheritedAccessor = /** @class */ (function (_super) {
+    __extends(RejectWhenOverrideAbsentOnInheritedAccessor, _super);
+    function RejectWhenOverrideAbsentOnInheritedAccessor() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(RejectWhenOverrideMissingOnInheritedAccessor.prototype, "name", {
+    Object.defineProperty(RejectWhenOverrideAbsentOnInheritedAccessor.prototype, "name", {
         get: function () { return 'foo'; },
         enumerable: true,
         configurable: true
     });
     ;
-    return RejectWhenOverrideMissingOnInheritedAccessor;
+    return RejectWhenOverrideAbsentOnInheritedAccessor;
 }(Base));
-var FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation = (function (_super) {
-    __extends(FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation, _super);
-    function FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        /** @override */ _this.userId = 2;
-        return _this;
+var AcceptWhenOverridePresentOnInheritedAccessor = /** @class */ (function (_super) {
+    __extends(AcceptWhenOverridePresentOnInheritedAccessor, _super);
+    function AcceptWhenOverridePresentOnInheritedAccessor() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    return FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation;
+    Object.defineProperty(AcceptWhenOverridePresentOnInheritedAccessor.prototype, "name", {
+        get: function () { return 'foo'; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    return AcceptWhenOverridePresentOnInheritedAccessor;
 }(Base));
+var RejectWhenOverrideAbsentOnInheritedMethod = /** @class */ (function (_super) {
+    __extends(RejectWhenOverrideAbsentOnInheritedMethod, _super);
+    function RejectWhenOverrideAbsentOnInheritedMethod() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RejectWhenOverrideAbsentOnInheritedMethod.prototype.getMeaningOfLife = function () { return 24; };
+    ;
+    return RejectWhenOverrideAbsentOnInheritedMethod;
+}(Base));
+var AcceptWhenOverridePresentOnInheritedMethod = /** @class */ (function (_super) {
+    __extends(AcceptWhenOverridePresentOnInheritedMethod, _super);
+    function AcceptWhenOverridePresentOnInheritedMethod() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    AcceptWhenOverridePresentOnInheritedMethod.prototype.getMeaningOfLife = function () { return 24; };
+    ;
+    return AcceptWhenOverridePresentOnInheritedMethod;
+}(Base));
+var RejectWhenOverridePresentWithPrivateModifier = /** @class */ (function (_super) {
+    __extends(RejectWhenOverridePresentWithPrivateModifier, _super);
+    function RejectWhenOverridePresentWithPrivateModifier() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RejectWhenOverridePresentWithPrivateModifier.prototype.processInternal = function () { };
+    return RejectWhenOverridePresentWithPrivateModifier;
+}(Base));
+// ******************************************************
+// Next set of cases deal with override with abstract 
+// classes. 
+// ******************************************************
+var Animal = /** @class */ (function () {
+    function Animal(name) {
+        this.name = name;
+    }
+    return Animal;
+}());
+var RejectWhenOverridePresentWithAbstractModifier = /** @class */ (function (_super) {
+    __extends(RejectWhenOverridePresentWithAbstractModifier, _super);
+    function RejectWhenOverridePresentWithAbstractModifier() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return RejectWhenOverridePresentWithAbstractModifier;
+}(Animal));
+var AcceptWhenOverridePresentOnConcreteDeclaration = /** @class */ (function (_super) {
+    __extends(AcceptWhenOverridePresentOnConcreteDeclaration, _super);
+    function AcceptWhenOverridePresentOnConcreteDeclaration() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    AcceptWhenOverridePresentOnConcreteDeclaration.prototype.speak = function () { return "Woof!"; };
+    return AcceptWhenOverridePresentOnConcreteDeclaration;
+}(Animal));
+// ******************************************************
+// Next set of cases deal with override with mixins 
+// ******************************************************
+var mixin = function (Base) { return /** @class */ (function (_super) {
+    __extends(class_1, _super);
+    function class_1() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    class_1.prototype.mixedIn = function () { };
+    return class_1;
+}(Base)); };
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.prototype.normal = function () { };
+    return A;
+}());
+var RejectWhenOverrideAbsentOnInheritedMethodMixin = /** @class */ (function (_super) {
+    __extends(RejectWhenOverrideAbsentOnInheritedMethodMixin, _super);
+    function RejectWhenOverrideAbsentOnInheritedMethodMixin() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RejectWhenOverrideAbsentOnInheritedMethodMixin.prototype.normal = function () { };
+    RejectWhenOverrideAbsentOnInheritedMethodMixin.prototype.mixedIn = function () { };
+    return RejectWhenOverrideAbsentOnInheritedMethodMixin;
+}(mixin(A)));
+var AcceptWhenOverridePresentOnInheritedMethodMixin = /** @class */ (function (_super) {
+    __extends(AcceptWhenOverridePresentOnInheritedMethodMixin, _super);
+    function AcceptWhenOverridePresentOnInheritedMethodMixin() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    AcceptWhenOverridePresentOnInheritedMethodMixin.prototype.normal = function () { };
+    AcceptWhenOverridePresentOnInheritedMethodMixin.prototype.mixedIn = function () { };
+    return AcceptWhenOverridePresentOnInheritedMethodMixin;
+}(mixin(A)));
+// ********************************************************
+// Next set of cases deal with override specified via JsDoc
+// ********************************************************
+//class AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Animal {
+//    /** @override */ public speak(): string { return "Woof!" }
+//}

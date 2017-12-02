@@ -1,0 +1,271 @@
+=== tests/cases/compiler/noImplicitOverride.ts ===
+// ******************************************************
+// First set of cases deal with inheritance from Object. 
+// ******************************************************
+
+class RejectWhenOverrideAbsentOnInheritedMethod extends Object {
+>RejectWhenOverrideAbsentOnInheritedMethod : RejectWhenOverrideAbsentOnInheritedMethod
+>Object : Object
+
+    toString(): string { return 'foo'; };
+>toString : () => string
+>'foo' : "foo"
+}
+class AcceptWhenOverridePresentOnInheritedMethod extends Object {
+>AcceptWhenOverridePresentOnInheritedMethod : AcceptWhenOverridePresentOnInheritedMethod
+>Object : Object
+
+    override toString(): string { return 'foo'; };
+>toString : () => string
+>'foo' : "foo"
+}
+
+// Similar to previous cases where augmentation from Object is implicit
+class RejectWhenOverrideAbsentOnAugmentedProperty {
+>RejectWhenOverrideAbsentOnAugmentedProperty : RejectWhenOverrideAbsentOnAugmentedProperty
+
+    toString(): string { return 'foo'; };
+>toString : () => string
+>'foo' : "foo"
+}
+class AcceptWhenOverridePresentOnAugumentedProperty extends Object {
+>AcceptWhenOverridePresentOnAugumentedProperty : AcceptWhenOverridePresentOnAugumentedProperty
+>Object : Object
+
+    override toString(): string { return 'foo'; };
+>toString : () => string
+>'foo' : "foo"
+}
+
+// This should fail via type mismatch of the return value.
+// (test is not specific to the override checking code)
+class RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember {
+>RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember : RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember
+
+    toString(): number {
+>toString : () => number
+
+        return -1;
+>-1 : -1
+>1 : 1
+    }
+}
+
+// ******************************************************
+// Next set of cases deal with inheritance derived from 
+// an explicitly defined class. 
+// ******************************************************
+
+class Base {
+>Base : Base
+
+    // Public property
+    public userId: number = 1;
+>userId : number
+>1 : 1
+
+    // Accessor
+    get name(): string { return 'Base'; }
+>name : string
+>'Base' : "Base"
+
+    // Typical public method
+    getMeaningOfLife(): number { return 42; }
+>getMeaningOfLife : () => number
+>42 : 42
+
+    // Private method
+    private processInternal(): void { }
+>processInternal : () => void
+}
+
+class RejectWhenOverrideAbsentOnInheritedProperty extends Base {
+>RejectWhenOverrideAbsentOnInheritedProperty : RejectWhenOverrideAbsentOnInheritedProperty
+>Base : Base
+
+    public userId = 2;
+>userId : number
+>2 : 2
+}
+class AcceptWhenOverridePresentOnInheritedProperty extends Base {
+>AcceptWhenOverridePresentOnInheritedProperty : AcceptWhenOverridePresentOnInheritedProperty
+>Base : Base
+
+    public override userId = 2;
+>userId : number
+>2 : 2
+}
+
+class RejectWhenOverrideAbsentOnInheritedAccessor extends Base {
+>RejectWhenOverrideAbsentOnInheritedAccessor : RejectWhenOverrideAbsentOnInheritedAccessor
+>Base : Base
+
+    get name(): string { return 'foo'; };
+>name : string
+>'foo' : "foo"
+}
+class AcceptWhenOverridePresentOnInheritedAccessor extends Base {
+>AcceptWhenOverridePresentOnInheritedAccessor : AcceptWhenOverridePresentOnInheritedAccessor
+>Base : Base
+
+    override get name(): string { return 'foo'; };
+>name : string
+>'foo' : "foo"
+}
+
+class RejectWhenOverrideAbsentOnInheritedMethod extends Base {
+>RejectWhenOverrideAbsentOnInheritedMethod : RejectWhenOverrideAbsentOnInheritedMethod
+>Base : Base
+
+    getMeaningOfLife(): number { return 24; };
+>getMeaningOfLife : () => number
+>24 : 24
+}
+class AcceptWhenOverridePresentOnInheritedMethod extends Base {
+>AcceptWhenOverridePresentOnInheritedMethod : AcceptWhenOverridePresentOnInheritedMethod
+>Base : Base
+
+    override getMeaningOfLife(): number { return 24; };
+>getMeaningOfLife : () => number
+>24 : 24
+}
+
+class RejectWhenOverridePresentWithPrivateModifier extends Base {
+>RejectWhenOverridePresentWithPrivateModifier : RejectWhenOverridePresentWithPrivateModifier
+>Base : Base
+
+    private override processInternal() { }
+>processInternal : () => void
+}
+
+// ******************************************************
+// Next set of cases deal with override within interfaces
+// and abstract classes (where is should not be present). 
+// ******************************************************
+
+interface Shape {
+>Shape : Shape
+
+    getWidth(): number;
+>getWidth : () => number
+}
+
+interface RejectWhenOverridePresentOnInterfaceDeclaration extends Shape {
+>RejectWhenOverridePresentOnInterfaceDeclaration : RejectWhenOverridePresentOnInterfaceDeclaration
+>Shape : Shape
+
+    override getWidth(): number;
+>getWidth : () => number
+}
+
+interface AcceptWhenOverrideAbsentOnInterfaceDeclaration extends Shape {
+>AcceptWhenOverrideAbsentOnInterfaceDeclaration : AcceptWhenOverrideAbsentOnInterfaceDeclaration
+>Shape : Shape
+
+    getWidth(): number;
+>getWidth : () => number
+}
+
+// ******************************************************
+// Next set of cases deal with override with abstract 
+// classes. 
+// ******************************************************
+
+abstract class Animal {
+>Animal : Animal
+
+    protected readonly name: string
+>name : string
+
+    constructor(name: string) {
+>name : string
+
+        this.name = name;
+>this.name = name : string
+>this.name : string
+>this : this
+>name : string
+>name : string
+    }
+
+    abstract speak(): string;
+>speak : () => string
+}
+
+abstract class RejectWhenOverridePresentWithAbstractModifier extends Animal {
+>RejectWhenOverridePresentWithAbstractModifier : RejectWhenOverridePresentWithAbstractModifier
+>Animal : Animal
+
+    abstract override speak(): string;
+>speak : () => string
+}
+
+abstract class AcceptWhenOverridePresentOnConcreteDeclaration extends Animal {
+>AcceptWhenOverridePresentOnConcreteDeclaration : AcceptWhenOverridePresentOnConcreteDeclaration
+>Animal : Animal
+
+    override speak(): string { return "Woof!"; }
+>speak : () => string
+>"Woof!" : "Woof!"
+}
+
+// ******************************************************
+// Next set of cases deal with override with mixins 
+// ******************************************************
+
+const mixin = <BC extends new (...args: any[]) => {}>(Base: BC) => class extends Base {
+>mixin : <BC extends new (...args: any[]) => {}>(Base: BC) => { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & BC
+><BC extends new (...args: any[]) => {}>(Base: BC) => class extends Base {    mixedIn() {}} : <BC extends new (...args: any[]) => {}>(Base: BC) => { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & BC
+>BC : BC
+>args : any[]
+>Base : BC
+>BC : BC
+>class extends Base {    mixedIn() {}} : { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & BC
+>Base : {}
+
+    mixedIn() {}
+>mixedIn : () => void
+
+};
+
+class A {
+>A : A
+
+    normal() {}
+>normal : () => void
+}
+
+class RejectWhenOverrideAbsentOnInheritedMethodMixin extends mixin(A) {
+>RejectWhenOverrideAbsentOnInheritedMethodMixin : RejectWhenOverrideAbsentOnInheritedMethodMixin
+>mixin(A) : <typeof A>.(Anonymous class) & A
+>mixin : <BC extends new (...args: any[]) => {}>(Base: BC) => { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & BC
+>A : typeof A
+
+    normal() {} 
+>normal : () => void
+
+    mixedIn() {} 
+>mixedIn : () => void
+}
+
+class AcceptWhenOverridePresentOnInheritedMethodMixin extends mixin(A) {
+>AcceptWhenOverridePresentOnInheritedMethodMixin : AcceptWhenOverridePresentOnInheritedMethodMixin
+>mixin(A) : <typeof A>.(Anonymous class) & A
+>mixin : <BC extends new (...args: any[]) => {}>(Base: BC) => { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & BC
+>A : typeof A
+
+    override normal() {} 
+>normal : () => void
+
+    override mixedIn() {} 
+>mixedIn : () => void
+}
+
+// ********************************************************
+// Next set of cases deal with override specified via JsDoc
+// ********************************************************
+
+//class AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Animal {
+//    /** @override */ public speak(): string { return "Woof!" }
+//}
+

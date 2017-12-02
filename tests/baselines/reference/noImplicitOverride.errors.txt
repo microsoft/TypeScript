@@ -1,86 +1,193 @@
-tests/cases/compiler/noImplicitOverride.ts(11,5): error TS90034: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Object)
-tests/cases/compiler/noImplicitOverride.ts(12,5): error TS90034: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Object)
-tests/cases/compiler/noImplicitOverride.ts(18,5): error TS90034: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.toString)
-tests/cases/compiler/noImplicitOverride.ts(19,5): error TS90034: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.hasOwnProperty)
-tests/cases/compiler/noImplicitOverride.ts(25,5): error TS2322: Type '(prop: string) => number' is not assignable to type '(v: string) => boolean'.
-  Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.hasOwnProperty)
-tests/cases/compiler/noImplicitOverride.ts(31,12): error TS90034: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Base)
-tests/cases/compiler/noImplicitOverride.ts(35,9): error TS90034: Class member 'name' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Base)
-tests/cases/compiler/noImplicitOverride.ts(43,5): error TS1070: 'override' modifier cannot appear on a type member.
-tests/cases/compiler/noImplicitOverride.ts(52,29): error TS90034: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Base)
+tests/cases/compiler/noImplicitOverride.ts(5,7): error TS2300: Duplicate identifier 'RejectWhenOverrideAbsentOnInheritedMethod'.
+tests/cases/compiler/noImplicitOverride.ts(6,5): error TS2570: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
+tests/cases/compiler/noImplicitOverride.ts(8,7): error TS2300: Duplicate identifier 'AcceptWhenOverridePresentOnInheritedMethod'.
+tests/cases/compiler/noImplicitOverride.ts(14,5): error TS2570: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
+tests/cases/compiler/noImplicitOverride.ts(23,5): error TS2322: Type '() => number' is not assignable to type '() => string'.
+  Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
+tests/cases/compiler/noImplicitOverride.ts(45,12): error TS2570: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+tests/cases/compiler/noImplicitOverride.ts(52,9): error TS2570: Class member 'name' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+tests/cases/compiler/noImplicitOverride.ts(58,7): error TS2300: Duplicate identifier 'RejectWhenOverrideAbsentOnInheritedMethod'.
+tests/cases/compiler/noImplicitOverride.ts(59,5): error TS2570: Class member 'getMeaningOfLife' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+tests/cases/compiler/noImplicitOverride.ts(61,7): error TS2300: Duplicate identifier 'AcceptWhenOverridePresentOnInheritedMethod'.
+tests/cases/compiler/noImplicitOverride.ts(65,7): error TS2415: Class 'RejectWhenOverridePresentWithPrivateModifier' incorrectly extends base class 'Base'.
+  Types have separate declarations of a private property 'processInternal'.
+tests/cases/compiler/noImplicitOverride.ts(66,13): error TS1243: 'private' modifier cannot be used with 'override' modifier.
+tests/cases/compiler/noImplicitOverride.ts(79,5): error TS1070: 'override' modifier cannot appear on a type member.
+tests/cases/compiler/noImplicitOverride.ts(102,14): error TS1243: 'abstract' modifier cannot be used with 'override' modifier.
+tests/cases/compiler/noImplicitOverride.ts(122,5): error TS2570: Class member 'normal' must be marked 'override' when noImplicitOverride is enabled (inherited from <typeof A>.(Anonymous class) & A)
+tests/cases/compiler/noImplicitOverride.ts(123,5): error TS2570: Class member 'mixedIn' must be marked 'override' when noImplicitOverride is enabled (inherited from <typeof A>.(Anonymous class) & A)
 
 
-==== tests/cases/compiler/noImplicitOverride.ts (9 errors) ====
+==== tests/cases/compiler/noImplicitOverride.ts (16 errors) ====
+    // ******************************************************
+    // First set of cases deal with inheritance from Object. 
+    // ******************************************************
     
-    class Base {
-        get name(): string {
-            return 'Base';
-        }
-        getMeaningOfLife(): number { return 42; }
-        public userId: number = 1;
-    }
-    
-    class RejectWhenOverrideMissingOnInheritedMethod extends Object {
+    class RejectWhenOverrideAbsentOnInheritedMethod extends Object {
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'RejectWhenOverrideAbsentOnInheritedMethod'.
         toString(): string { return 'foo'; };
         ~~~~~~~~
-!!! error TS90034: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Object)
-        hasOwnProperty(prop: string): boolean {
-        ~~~~~~~~~~~~~~
-!!! error TS90034: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Object)
-            return super.hasOwnProperty(prop);
-        }
+!!! error TS2570: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
+    }
+    class AcceptWhenOverridePresentOnInheritedMethod extends Object {
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'AcceptWhenOverridePresentOnInheritedMethod'.
+        override toString(): string { return 'foo'; };
     }
     
-    class RejectWhenOverrideMissingOnAugmentedProperty {
+    // Similar to previous cases where augmentation from Object is implicit
+    class RejectWhenOverrideAbsentOnAugmentedProperty {
         toString(): string { return 'foo'; };
         ~~~~~~~~
-!!! error TS90034: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.toString)
-        hasOwnProperty(prop: string): boolean {
-        ~~~~~~~~~~~~~~
-!!! error TS90034: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.hasOwnProperty)
-            return false;
-        }
+!!! error TS2570: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
+    }
+    class AcceptWhenOverridePresentOnAugumentedProperty extends Object {
+        override toString(): string { return 'foo'; };
     }
     
+    // This should fail via type mismatch of the return value.
+    // (test is not specific to the override checking code)
     class RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember {
-        hasOwnProperty(prop: string): number {
-        ~~~~~~~~~~~~~~
-!!! error TS2322: Type '(prop: string) => number' is not assignable to type '(v: string) => boolean'.
-!!! error TS2322:   Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.hasOwnProperty)
+        toString(): number {
+        ~~~~~~~~
+!!! error TS2322: Type '() => number' is not assignable to type '() => string'.
+!!! error TS2322:   Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
             return -1;
         }
     }
     
-    class RejectWhenOverrideMissingOnInheritedProperty extends Base {
-        public userId = 2;
-               ~~~~~~
-!!! error TS90034: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Base)
+    // ******************************************************
+    // Next set of cases deal with inheritance derived from 
+    // an explicitly defined class. 
+    // ******************************************************
+    
+    class Base {
+        // Public property
+        public userId: number = 1;
+        // Accessor
+        get name(): string { return 'Base'; }
+        // Typical public method
+        getMeaningOfLife(): number { return 42; }
+        // Private method
+        private processInternal(): void { }
     }
     
-    class RejectWhenOverrideMissingOnInheritedAccessor extends Base {
+    class RejectWhenOverrideAbsentOnInheritedProperty extends Base {
+        public userId = 2;
+               ~~~~~~
+!!! error TS2570: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+    }
+    class AcceptWhenOverridePresentOnInheritedProperty extends Base {
+        public override userId = 2;
+    }
+    
+    class RejectWhenOverrideAbsentOnInheritedAccessor extends Base {
         get name(): string { return 'foo'; };
             ~~~~
-!!! error TS90034: Class member 'name' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Base)
+!!! error TS2570: Class member 'name' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
     }
+    class AcceptWhenOverridePresentOnInheritedAccessor extends Base {
+        override get name(): string { return 'foo'; };
+    }
+    
+    class RejectWhenOverrideAbsentOnInheritedMethod extends Base {
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'RejectWhenOverrideAbsentOnInheritedMethod'.
+        getMeaningOfLife(): number { return 24; };
+        ~~~~~~~~~~~~~~~~
+!!! error TS2570: Class member 'getMeaningOfLife' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+    }
+    class AcceptWhenOverridePresentOnInheritedMethod extends Base {
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'AcceptWhenOverridePresentOnInheritedMethod'.
+        override getMeaningOfLife(): number { return 24; };
+    }
+    
+    class RejectWhenOverridePresentWithPrivateModifier extends Base {
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2415: Class 'RejectWhenOverridePresentWithPrivateModifier' incorrectly extends base class 'Base'.
+!!! error TS2415:   Types have separate declarations of a private property 'processInternal'.
+        private override processInternal() { }
+                ~~~~~~~~
+!!! error TS1243: 'private' modifier cannot be used with 'override' modifier.
+    }
+    
+    // ******************************************************
+    // Next set of cases deal with override within interfaces
+    // and abstract classes (where is should not be present). 
+    // ******************************************************
     
     interface Shape {
         getWidth(): number;
     }
     
-    interface RejectWhenOverrideOnAbstractDeclaration_Line extends Shape {
+    interface RejectWhenOverridePresentOnInterfaceDeclaration extends Shape {
         override getWidth(): number;
         ~~~~~~~~
 !!! error TS1070: 'override' modifier cannot appear on a type member.
     }
     
-    interface AcceptWhenOverrideNotOnAbstractDeclaration_Line extends Shape {
-        // abstract members don't need to be declared override
+    interface AcceptWhenOverrideAbsentOnInterfaceDeclaration extends Shape {
         getWidth(): number;
     }
     
-    class FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Base {
-        /** @override */ public userId: number = 2;
-                                ~~~~~~
-!!! error TS90034: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.Base)
+    // ******************************************************
+    // Next set of cases deal with override with abstract 
+    // classes. 
+    // ******************************************************
+    
+    abstract class Animal {
+        protected readonly name: string
+    
+        constructor(name: string) {
+            this.name = name;
+        }
+    
+        abstract speak(): string;
     }
+    
+    abstract class RejectWhenOverridePresentWithAbstractModifier extends Animal {
+        abstract override speak(): string;
+                 ~~~~~~~~
+!!! error TS1243: 'abstract' modifier cannot be used with 'override' modifier.
+    }
+    
+    abstract class AcceptWhenOverridePresentOnConcreteDeclaration extends Animal {
+        override speak(): string { return "Woof!"; }
+    }
+    
+    // ******************************************************
+    // Next set of cases deal with override with mixins 
+    // ******************************************************
+    
+    const mixin = <BC extends new (...args: any[]) => {}>(Base: BC) => class extends Base {
+        mixedIn() {}
+    };
+    
+    class A {
+        normal() {}
+    }
+    
+    class RejectWhenOverrideAbsentOnInheritedMethodMixin extends mixin(A) {
+        normal() {} 
+        ~~~~~~
+!!! error TS2570: Class member 'normal' must be marked 'override' when noImplicitOverride is enabled (inherited from <typeof A>.(Anonymous class) & A)
+        mixedIn() {} 
+        ~~~~~~~
+!!! error TS2570: Class member 'mixedIn' must be marked 'override' when noImplicitOverride is enabled (inherited from <typeof A>.(Anonymous class) & A)
+    }
+    
+    class AcceptWhenOverridePresentOnInheritedMethodMixin extends mixin(A) {
+        override normal() {} 
+        override mixedIn() {} 
+    }
+    
+    // ********************************************************
+    // Next set of cases deal with override specified via JsDoc
+    // ********************************************************
+    
+    //class AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Animal {
+    //    /** @override */ public speak(): string { return "Woof!" }
+    //}
     

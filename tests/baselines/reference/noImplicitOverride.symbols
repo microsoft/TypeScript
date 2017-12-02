@@ -1,0 +1,250 @@
+=== tests/cases/compiler/noImplicitOverride.ts ===
+// ******************************************************
+// First set of cases deal with inheritance from Object. 
+// ******************************************************
+
+class RejectWhenOverrideAbsentOnInheritedMethod extends Object {
+>RejectWhenOverrideAbsentOnInheritedMethod : Symbol(RejectWhenOverrideAbsentOnInheritedMethod, Decl(noImplicitOverride.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    toString(): string { return 'foo'; };
+>toString : Symbol(RejectWhenOverrideAbsentOnInheritedMethod.toString, Decl(noImplicitOverride.ts, 4, 64))
+}
+class AcceptWhenOverridePresentOnInheritedMethod extends Object {
+>AcceptWhenOverridePresentOnInheritedMethod : Symbol(AcceptWhenOverridePresentOnInheritedMethod, Decl(noImplicitOverride.ts, 6, 1))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    override toString(): string { return 'foo'; };
+>toString : Symbol(AcceptWhenOverridePresentOnInheritedMethod.toString, Decl(noImplicitOverride.ts, 7, 65))
+}
+
+// Similar to previous cases where augmentation from Object is implicit
+class RejectWhenOverrideAbsentOnAugmentedProperty {
+>RejectWhenOverrideAbsentOnAugmentedProperty : Symbol(RejectWhenOverrideAbsentOnAugmentedProperty, Decl(noImplicitOverride.ts, 9, 1))
+
+    toString(): string { return 'foo'; };
+>toString : Symbol(RejectWhenOverrideAbsentOnAugmentedProperty.toString, Decl(noImplicitOverride.ts, 12, 51))
+}
+class AcceptWhenOverridePresentOnAugumentedProperty extends Object {
+>AcceptWhenOverridePresentOnAugumentedProperty : Symbol(AcceptWhenOverridePresentOnAugumentedProperty, Decl(noImplicitOverride.ts, 14, 1))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    override toString(): string { return 'foo'; };
+>toString : Symbol(AcceptWhenOverridePresentOnAugumentedProperty.toString, Decl(noImplicitOverride.ts, 15, 68))
+}
+
+// This should fail via type mismatch of the return value.
+// (test is not specific to the override checking code)
+class RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember {
+>RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember : Symbol(RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember, Decl(noImplicitOverride.ts, 17, 1))
+
+    toString(): number {
+>toString : Symbol(RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember.toString, Decl(noImplicitOverride.ts, 21, 71))
+
+        return -1;
+    }
+}
+
+// ******************************************************
+// Next set of cases deal with inheritance derived from 
+// an explicitly defined class. 
+// ******************************************************
+
+class Base {
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 25, 1))
+
+    // Public property
+    public userId: number = 1;
+>userId : Symbol(Base.userId, Decl(noImplicitOverride.ts, 32, 12))
+
+    // Accessor
+    get name(): string { return 'Base'; }
+>name : Symbol(Base.name, Decl(noImplicitOverride.ts, 34, 30))
+
+    // Typical public method
+    getMeaningOfLife(): number { return 42; }
+>getMeaningOfLife : Symbol(Base.getMeaningOfLife, Decl(noImplicitOverride.ts, 36, 41))
+
+    // Private method
+    private processInternal(): void { }
+>processInternal : Symbol(Base.processInternal, Decl(noImplicitOverride.ts, 38, 45))
+}
+
+class RejectWhenOverrideAbsentOnInheritedProperty extends Base {
+>RejectWhenOverrideAbsentOnInheritedProperty : Symbol(RejectWhenOverrideAbsentOnInheritedProperty, Decl(noImplicitOverride.ts, 41, 1))
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 25, 1))
+
+    public userId = 2;
+>userId : Symbol(RejectWhenOverrideAbsentOnInheritedProperty.userId, Decl(noImplicitOverride.ts, 43, 64))
+}
+class AcceptWhenOverridePresentOnInheritedProperty extends Base {
+>AcceptWhenOverridePresentOnInheritedProperty : Symbol(AcceptWhenOverridePresentOnInheritedProperty, Decl(noImplicitOverride.ts, 45, 1))
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 25, 1))
+
+    public override userId = 2;
+>userId : Symbol(AcceptWhenOverridePresentOnInheritedProperty.userId, Decl(noImplicitOverride.ts, 46, 65))
+}
+
+class RejectWhenOverrideAbsentOnInheritedAccessor extends Base {
+>RejectWhenOverrideAbsentOnInheritedAccessor : Symbol(RejectWhenOverrideAbsentOnInheritedAccessor, Decl(noImplicitOverride.ts, 48, 1))
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 25, 1))
+
+    get name(): string { return 'foo'; };
+>name : Symbol(RejectWhenOverrideAbsentOnInheritedAccessor.name, Decl(noImplicitOverride.ts, 50, 64))
+}
+class AcceptWhenOverridePresentOnInheritedAccessor extends Base {
+>AcceptWhenOverridePresentOnInheritedAccessor : Symbol(AcceptWhenOverridePresentOnInheritedAccessor, Decl(noImplicitOverride.ts, 52, 1))
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 25, 1))
+
+    override get name(): string { return 'foo'; };
+>name : Symbol(AcceptWhenOverridePresentOnInheritedAccessor.name, Decl(noImplicitOverride.ts, 53, 65))
+}
+
+class RejectWhenOverrideAbsentOnInheritedMethod extends Base {
+>RejectWhenOverrideAbsentOnInheritedMethod : Symbol(RejectWhenOverrideAbsentOnInheritedMethod, Decl(noImplicitOverride.ts, 55, 1))
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 25, 1))
+
+    getMeaningOfLife(): number { return 24; };
+>getMeaningOfLife : Symbol(RejectWhenOverrideAbsentOnInheritedMethod.getMeaningOfLife, Decl(noImplicitOverride.ts, 57, 62))
+}
+class AcceptWhenOverridePresentOnInheritedMethod extends Base {
+>AcceptWhenOverridePresentOnInheritedMethod : Symbol(AcceptWhenOverridePresentOnInheritedMethod, Decl(noImplicitOverride.ts, 59, 1))
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 25, 1))
+
+    override getMeaningOfLife(): number { return 24; };
+>getMeaningOfLife : Symbol(AcceptWhenOverridePresentOnInheritedMethod.getMeaningOfLife, Decl(noImplicitOverride.ts, 60, 63))
+}
+
+class RejectWhenOverridePresentWithPrivateModifier extends Base {
+>RejectWhenOverridePresentWithPrivateModifier : Symbol(RejectWhenOverridePresentWithPrivateModifier, Decl(noImplicitOverride.ts, 62, 1))
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 25, 1))
+
+    private override processInternal() { }
+>processInternal : Symbol(RejectWhenOverridePresentWithPrivateModifier.processInternal, Decl(noImplicitOverride.ts, 64, 65))
+}
+
+// ******************************************************
+// Next set of cases deal with override within interfaces
+// and abstract classes (where is should not be present). 
+// ******************************************************
+
+interface Shape {
+>Shape : Symbol(Shape, Decl(noImplicitOverride.ts, 66, 1))
+
+    getWidth(): number;
+>getWidth : Symbol(Shape.getWidth, Decl(noImplicitOverride.ts, 73, 17))
+}
+
+interface RejectWhenOverridePresentOnInterfaceDeclaration extends Shape {
+>RejectWhenOverridePresentOnInterfaceDeclaration : Symbol(RejectWhenOverridePresentOnInterfaceDeclaration, Decl(noImplicitOverride.ts, 75, 1))
+>Shape : Symbol(Shape, Decl(noImplicitOverride.ts, 66, 1))
+
+    override getWidth(): number;
+>getWidth : Symbol(RejectWhenOverridePresentOnInterfaceDeclaration.getWidth, Decl(noImplicitOverride.ts, 77, 73))
+}
+
+interface AcceptWhenOverrideAbsentOnInterfaceDeclaration extends Shape {
+>AcceptWhenOverrideAbsentOnInterfaceDeclaration : Symbol(AcceptWhenOverrideAbsentOnInterfaceDeclaration, Decl(noImplicitOverride.ts, 79, 1))
+>Shape : Symbol(Shape, Decl(noImplicitOverride.ts, 66, 1))
+
+    getWidth(): number;
+>getWidth : Symbol(AcceptWhenOverrideAbsentOnInterfaceDeclaration.getWidth, Decl(noImplicitOverride.ts, 81, 72))
+}
+
+// ******************************************************
+// Next set of cases deal with override with abstract 
+// classes. 
+// ******************************************************
+
+abstract class Animal {
+>Animal : Symbol(Animal, Decl(noImplicitOverride.ts, 83, 1))
+
+    protected readonly name: string
+>name : Symbol(Animal.name, Decl(noImplicitOverride.ts, 90, 23))
+
+    constructor(name: string) {
+>name : Symbol(name, Decl(noImplicitOverride.ts, 93, 16))
+
+        this.name = name;
+>this.name : Symbol(Animal.name, Decl(noImplicitOverride.ts, 90, 23))
+>this : Symbol(Animal, Decl(noImplicitOverride.ts, 83, 1))
+>name : Symbol(Animal.name, Decl(noImplicitOverride.ts, 90, 23))
+>name : Symbol(name, Decl(noImplicitOverride.ts, 93, 16))
+    }
+
+    abstract speak(): string;
+>speak : Symbol(Animal.speak, Decl(noImplicitOverride.ts, 95, 5))
+}
+
+abstract class RejectWhenOverridePresentWithAbstractModifier extends Animal {
+>RejectWhenOverridePresentWithAbstractModifier : Symbol(RejectWhenOverridePresentWithAbstractModifier, Decl(noImplicitOverride.ts, 98, 1))
+>Animal : Symbol(Animal, Decl(noImplicitOverride.ts, 83, 1))
+
+    abstract override speak(): string;
+>speak : Symbol(RejectWhenOverridePresentWithAbstractModifier.speak, Decl(noImplicitOverride.ts, 100, 77))
+}
+
+abstract class AcceptWhenOverridePresentOnConcreteDeclaration extends Animal {
+>AcceptWhenOverridePresentOnConcreteDeclaration : Symbol(AcceptWhenOverridePresentOnConcreteDeclaration, Decl(noImplicitOverride.ts, 102, 1))
+>Animal : Symbol(Animal, Decl(noImplicitOverride.ts, 83, 1))
+
+    override speak(): string { return "Woof!"; }
+>speak : Symbol(AcceptWhenOverridePresentOnConcreteDeclaration.speak, Decl(noImplicitOverride.ts, 104, 78))
+}
+
+// ******************************************************
+// Next set of cases deal with override with mixins 
+// ******************************************************
+
+const mixin = <BC extends new (...args: any[]) => {}>(Base: BC) => class extends Base {
+>mixin : Symbol(mixin, Decl(noImplicitOverride.ts, 112, 5))
+>BC : Symbol(BC, Decl(noImplicitOverride.ts, 112, 15))
+>args : Symbol(args, Decl(noImplicitOverride.ts, 112, 31))
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 112, 54))
+>BC : Symbol(BC, Decl(noImplicitOverride.ts, 112, 15))
+>Base : Symbol(Base, Decl(noImplicitOverride.ts, 112, 54))
+
+    mixedIn() {}
+>mixedIn : Symbol((Anonymous class).mixedIn, Decl(noImplicitOverride.ts, 112, 87))
+
+};
+
+class A {
+>A : Symbol(A, Decl(noImplicitOverride.ts, 114, 2))
+
+    normal() {}
+>normal : Symbol(A.normal, Decl(noImplicitOverride.ts, 116, 9))
+}
+
+class RejectWhenOverrideAbsentOnInheritedMethodMixin extends mixin(A) {
+>RejectWhenOverrideAbsentOnInheritedMethodMixin : Symbol(RejectWhenOverrideAbsentOnInheritedMethodMixin, Decl(noImplicitOverride.ts, 118, 1))
+>mixin : Symbol(mixin, Decl(noImplicitOverride.ts, 112, 5))
+>A : Symbol(A, Decl(noImplicitOverride.ts, 114, 2))
+
+    normal() {} 
+>normal : Symbol(RejectWhenOverrideAbsentOnInheritedMethodMixin.normal, Decl(noImplicitOverride.ts, 120, 71))
+
+    mixedIn() {} 
+>mixedIn : Symbol(RejectWhenOverrideAbsentOnInheritedMethodMixin.mixedIn, Decl(noImplicitOverride.ts, 121, 15))
+}
+
+class AcceptWhenOverridePresentOnInheritedMethodMixin extends mixin(A) {
+>AcceptWhenOverridePresentOnInheritedMethodMixin : Symbol(AcceptWhenOverridePresentOnInheritedMethodMixin, Decl(noImplicitOverride.ts, 123, 1))
+>mixin : Symbol(mixin, Decl(noImplicitOverride.ts, 112, 5))
+>A : Symbol(A, Decl(noImplicitOverride.ts, 114, 2))
+
+    override normal() {} 
+>normal : Symbol(AcceptWhenOverridePresentOnInheritedMethodMixin.normal, Decl(noImplicitOverride.ts, 125, 72))
+
+    override mixedIn() {} 
+>mixedIn : Symbol(AcceptWhenOverridePresentOnInheritedMethodMixin.mixedIn, Decl(noImplicitOverride.ts, 126, 24))
+}
+
+// ********************************************************
+// Next set of cases deal with override specified via JsDoc
+// ********************************************************
+
+//class AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Animal {
+//    /** @override */ public speak(): string { return "Woof!" }
+//}
+

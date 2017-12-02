@@ -1,5 +1,4 @@
 //// [overrideKeywordEs6.ts]
-
 class Base {
     async getMeaningOfLife1(): Promise<number> { return Promise.resolve(42); }
     async getMeaningOfLife2(): Promise<number> { return Promise.reject(42); }

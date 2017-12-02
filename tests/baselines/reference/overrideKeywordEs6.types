@@ -1,0 +1,49 @@
+=== tests/cases/compiler/overrideKeywordEs6.ts ===
+class Base {
+>Base : Base
+
+    async getMeaningOfLife1(): Promise<number> { return Promise.resolve(42); }
+>getMeaningOfLife1 : () => Promise<number>
+>Promise : Promise<T>
+>Promise.resolve(42) : Promise<number>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>42 : 42
+
+    async getMeaningOfLife2(): Promise<number> { return Promise.reject(42); }
+>getMeaningOfLife2 : () => Promise<number>
+>Promise : Promise<T>
+>Promise.reject(42) : Promise<never>
+>Promise.reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Promise : PromiseConstructor
+>reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>42 : 42
+}
+
+// The expected order of modifiers:
+//
+// [public | protected | private] [abstract | override] [static] [readonly | async] [get | set] identifier
+//
+class RejectWhenAsyncPrecedesOverrideModifier extends Base { async override getMeaningOfLife1(): Promise<number> { return Promise.reject(42); }; }
+>RejectWhenAsyncPrecedesOverrideModifier : RejectWhenAsyncPrecedesOverrideModifier
+>Base : Base
+>getMeaningOfLife1 : () => Promise<number>
+>Promise : Promise<T>
+>Promise.reject(42) : Promise<never>
+>Promise.reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Promise : PromiseConstructor
+>reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>42 : 42
+
+class AcceptWhenOverridePrecedesAsyncModifier extends Base { override async getMeaningOfLife2(): Promise<number> { return Promise.resolve(42); }; }
+>AcceptWhenOverridePrecedesAsyncModifier : AcceptWhenOverridePrecedesAsyncModifier
+>Base : Base
+>getMeaningOfLife2 : () => Promise<number>
+>Promise : Promise<T>
+>Promise.resolve(42) : Promise<number>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>42 : 42
+

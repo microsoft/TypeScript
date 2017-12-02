@@ -1,0 +1,288 @@
+=== tests/cases/compiler/overrideKeywordEs5.ts ===
+abstract class AbstractBase {
+>AbstractBase : Symbol(AbstractBase, Decl(overrideKeywordEs5.ts, 0, 0))
+
+    readonly id: string;
+>id : Symbol(AbstractBase.id, Decl(overrideKeywordEs5.ts, 0, 29))
+
+    public wasDisposed?: boolean;
+>wasDisposed : Symbol(AbstractBase.wasDisposed, Decl(overrideKeywordEs5.ts, 1, 24))
+
+    private name_: string;
+>name_ : Symbol(AbstractBase.name_, Decl(overrideKeywordEs5.ts, 2, 33))
+
+    get name() { return this.name_; }
+>name : Symbol(AbstractBase.name, Decl(overrideKeywordEs5.ts, 3, 26), Decl(overrideKeywordEs5.ts, 4, 37))
+>this.name_ : Symbol(AbstractBase.name_, Decl(overrideKeywordEs5.ts, 2, 33))
+>this : Symbol(AbstractBase, Decl(overrideKeywordEs5.ts, 0, 0))
+>name_ : Symbol(AbstractBase.name_, Decl(overrideKeywordEs5.ts, 2, 33))
+
+    set name(name: string) { this.name_ = name; }
+>name : Symbol(AbstractBase.name, Decl(overrideKeywordEs5.ts, 3, 26), Decl(overrideKeywordEs5.ts, 4, 37))
+>name : Symbol(name, Decl(overrideKeywordEs5.ts, 5, 13))
+>this.name_ : Symbol(AbstractBase.name_, Decl(overrideKeywordEs5.ts, 2, 33))
+>this : Symbol(AbstractBase, Decl(overrideKeywordEs5.ts, 0, 0))
+>name_ : Symbol(AbstractBase.name_, Decl(overrideKeywordEs5.ts, 2, 33))
+>name : Symbol(name, Decl(overrideKeywordEs5.ts, 5, 13))
+
+    static toStringStatic(): string { return 'static'; }
+>toStringStatic : Symbol(AbstractBase.toStringStatic, Decl(overrideKeywordEs5.ts, 5, 49))
+
+    public toStringPublic(): string { return 'public'; };
+>toStringPublic : Symbol(AbstractBase.toStringPublic, Decl(overrideKeywordEs5.ts, 7, 56))
+
+    protected toStringProtected(): string { return 'protected'; }
+>toStringProtected : Symbol(AbstractBase.toStringProtected, Decl(overrideKeywordEs5.ts, 8, 57))
+
+    private toStringPrivate(): string { return 'private'; }
+>toStringPrivate : Symbol(AbstractBase.toStringPrivate, Decl(overrideKeywordEs5.ts, 9, 65))
+
+    private toStringPrivate2(): string { return 'private2'; }
+>toStringPrivate2 : Symbol(AbstractBase.toStringPrivate2, Decl(overrideKeywordEs5.ts, 10, 59))
+
+    abstract toStringAbstract(): string;
+>toStringAbstract : Symbol(AbstractBase.toStringAbstract, Decl(overrideKeywordEs5.ts, 11, 61))
+
+    abstract toStringAbstract2(): string;
+>toStringAbstract2 : Symbol(AbstractBase.toStringAbstract2, Decl(overrideKeywordEs5.ts, 12, 40))
+
+    getMeaningOfLife(): number { return 42; }
+>getMeaningOfLife : Symbol(AbstractBase.getMeaningOfLife, Decl(overrideKeywordEs5.ts, 13, 41))
+}
+
+class Base extends AbstractBase {
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+>AbstractBase : Symbol(AbstractBase, Decl(overrideKeywordEs5.ts, 0, 0))
+
+    override toStringAbstract(): string { return 'implemented'; }
+>toStringAbstract : Symbol(Base.toStringAbstract, Decl(overrideKeywordEs5.ts, 18, 33))
+
+    override toStringAbstract2(): string { return 'implemented2'; }
+>toStringAbstract2 : Symbol(Base.toStringAbstract2, Decl(overrideKeywordEs5.ts, 19, 65))
+}
+
+// The expected order of modifiers:
+//
+// [public | protected | private] [abstract | override] [static] [readonly | async] [get | set] identifier
+//
+class RejectWhenOverridePrecedesPublicModifier extends Base { override public toStringPublic() { return ''; }; }
+>RejectWhenOverridePrecedesPublicModifier : Symbol(RejectWhenOverridePrecedesPublicModifier, Decl(overrideKeywordEs5.ts, 21, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+>toStringPublic : Symbol(RejectWhenOverridePrecedesPublicModifier.toStringPublic, Decl(overrideKeywordEs5.ts, 27, 61))
+
+class RejectWhenOverridePrecedesProtectedModifier extends Base { override protected toStringProtected() { return ''; }; }
+>RejectWhenOverridePrecedesProtectedModifier : Symbol(RejectWhenOverridePrecedesProtectedModifier, Decl(overrideKeywordEs5.ts, 27, 112))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+>toStringProtected : Symbol(RejectWhenOverridePrecedesProtectedModifier.toStringProtected, Decl(overrideKeywordEs5.ts, 28, 64))
+
+class RejectWhenStaticPrecedesOverrideModifier extends Base { static override toStringStatic() { return ''; }; }
+>RejectWhenStaticPrecedesOverrideModifier : Symbol(RejectWhenStaticPrecedesOverrideModifier, Decl(overrideKeywordEs5.ts, 28, 121))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+>toStringStatic : Symbol(RejectWhenStaticPrecedesOverrideModifier.toStringStatic, Decl(overrideKeywordEs5.ts, 29, 61))
+
+class AcceptWhenOverrideFollowsAccessModifier extends Base { public override toStringPublic() { return ''; } }
+>AcceptWhenOverrideFollowsAccessModifier : Symbol(AcceptWhenOverrideFollowsAccessModifier, Decl(overrideKeywordEs5.ts, 29, 112))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+>toStringPublic : Symbol(AcceptWhenOverrideFollowsAccessModifier.toStringPublic, Decl(overrideKeywordEs5.ts, 30, 60))
+
+class RejectWhenReadonlyPrecedesOverrideModifier extends Base { readonly override id: string; }
+>RejectWhenReadonlyPrecedesOverrideModifier : Symbol(RejectWhenReadonlyPrecedesOverrideModifier, Decl(overrideKeywordEs5.ts, 30, 110))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+>id : Symbol(RejectWhenReadonlyPrecedesOverrideModifier.id, Decl(overrideKeywordEs5.ts, 31, 63))
+
+// Modifiers should never be repeated
+class RejectWhenOverrideIsRepeated extends Base {
+>RejectWhenOverrideIsRepeated : Symbol(RejectWhenOverrideIsRepeated, Decl(overrideKeywordEs5.ts, 31, 95))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    public override override toStringPublic() { return ''; }
+>toStringPublic : Symbol(RejectWhenOverrideIsRepeated.toStringPublic, Decl(overrideKeywordEs5.ts, 34, 49))
+}
+
+// You cannot override a private method
+class RejectWhenOverridePrivateMethod extends Base {
+>RejectWhenOverridePrivateMethod : Symbol(RejectWhenOverridePrivateMethod, Decl(overrideKeywordEs5.ts, 36, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    private override toStringPrivate() { return ''; }
+>toStringPrivate : Symbol(RejectWhenOverridePrivateMethod.toStringPrivate, Decl(overrideKeywordEs5.ts, 39, 52))
+
+    override private toStringPrivate2() { return ''; }
+>toStringPrivate2 : Symbol(RejectWhenOverridePrivateMethod.toStringPrivate2, Decl(overrideKeywordEs5.ts, 40, 53))
+}
+
+// Override and abstract on methods are orthogonal, should never be used together
+abstract class RejectWhenOverrideAbstractMethod extends AbstractBase {
+>RejectWhenOverrideAbstractMethod : Symbol(RejectWhenOverrideAbstractMethod, Decl(overrideKeywordEs5.ts, 42, 1))
+>AbstractBase : Symbol(AbstractBase, Decl(overrideKeywordEs5.ts, 0, 0))
+
+    abstract override toStringAbstract(): string;
+>toStringAbstract : Symbol(RejectWhenOverrideAbstractMethod.toStringAbstract, Decl(overrideKeywordEs5.ts, 45, 70))
+
+    override abstract toStringAbstract2(): string;
+>toStringAbstract2 : Symbol(RejectWhenOverrideAbstractMethod.toStringAbstract2, Decl(overrideKeywordEs5.ts, 46, 49))
+}
+
+// Acceptable to provide an override implementation in an abstract class however
+abstract class AcceptWhenOverrideInAbstractClass extends AbstractBase {
+>AcceptWhenOverrideInAbstractClass : Symbol(AcceptWhenOverrideInAbstractClass, Decl(overrideKeywordEs5.ts, 48, 1))
+>AbstractBase : Symbol(AbstractBase, Decl(overrideKeywordEs5.ts, 0, 0))
+
+    override toStringAbstract(): string { return 'implemented in abstract class'; }
+>toStringAbstract : Symbol(AcceptWhenOverrideInAbstractClass.toStringAbstract, Decl(overrideKeywordEs5.ts, 51, 71))
+}
+
+// Override checks are allowed on static methods
+class AcceptWhenOverrideStaticMethod extends Base {
+>AcceptWhenOverrideStaticMethod : Symbol(AcceptWhenOverrideStaticMethod, Decl(overrideKeywordEs5.ts, 53, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    override static toStringStatic() { return 'static'; }
+>toStringStatic : Symbol(AcceptWhenOverrideStaticMethod.toStringStatic, Decl(overrideKeywordEs5.ts, 56, 51))
+}
+
+// Compiler already checks for access modifier narrowing,
+// override does not alter these semantics.
+class RejectWhenOverrideChangesAccessModifier extends Base {
+>RejectWhenOverrideChangesAccessModifier : Symbol(RejectWhenOverrideChangesAccessModifier, Decl(overrideKeywordEs5.ts, 58, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    protected override static toStringStatic() { return 'member is now protected'; }
+>toStringStatic : Symbol(RejectWhenOverrideChangesAccessModifier.toStringStatic, Decl(overrideKeywordEs5.ts, 62, 60))
+}
+
+// Compiler should be able to traverse multiple levels of inheritance
+// to assess for overriden members (already does this).
+class AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass extends Base {
+>AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass : Symbol(AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass, Decl(overrideKeywordEs5.ts, 64, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    override getMeaningOfLife(): number { return 12; }
+>getMeaningOfLife : Symbol(AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass.getMeaningOfLife, Decl(overrideKeywordEs5.ts, 68, 75))
+}
+
+// Override cannot be used with optional property.
+class RejectWhenOverrideOptionalProperty extends Base {
+>RejectWhenOverrideOptionalProperty : Symbol(RejectWhenOverrideOptionalProperty, Decl(overrideKeywordEs5.ts, 70, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    public override wasDisposed?: boolean;
+>wasDisposed : Symbol(RejectWhenOverrideOptionalProperty.wasDisposed, Decl(overrideKeywordEs5.ts, 73, 55))
+}
+
+// If one accessor is marked override, they both should be.
+class RejectWhenAccessorNotBothOverride extends Base {
+>RejectWhenAccessorNotBothOverride : Symbol(RejectWhenAccessorNotBothOverride, Decl(overrideKeywordEs5.ts, 75, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    override get name() { return ''; }
+>name : Symbol(RejectWhenAccessorNotBothOverride.name, Decl(overrideKeywordEs5.ts, 78, 54), Decl(overrideKeywordEs5.ts, 79, 38))
+
+    /*    */ set name(n: string) {}
+>name : Symbol(RejectWhenAccessorNotBothOverride.name, Decl(overrideKeywordEs5.ts, 78, 54), Decl(overrideKeywordEs5.ts, 79, 38))
+>n : Symbol(n, Decl(overrideKeywordEs5.ts, 80, 22))
+}
+
+// Compiler should detect when override member is not inherited or augmented
+class RejectWhenOverrideMarkedOnNonInheritedMember extends Base {
+>RejectWhenOverrideMarkedOnNonInheritedMember : Symbol(RejectWhenOverrideMarkedOnNonInheritedMember, Decl(overrideKeywordEs5.ts, 81, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    public override iDontExist() { return ''; }
+>iDontExist : Symbol(RejectWhenOverrideMarkedOnNonInheritedMember.iDontExist, Decl(overrideKeywordEs5.ts, 84, 65))
+}
+
+// Compiler already detects overriden assignability mismatches,
+// override keyword does not change these semantics
+class RejectWhenOverrideHasMismatchedType extends Base {
+>RejectWhenOverrideHasMismatchedType : Symbol(RejectWhenOverrideHasMismatchedType, Decl(overrideKeywordEs5.ts, 86, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    override getMeaningOfLife(): string { return 'the meaning of life is a number, not a string'; }
+>getMeaningOfLife : Symbol(RejectWhenOverrideHasMismatchedType.getMeaningOfLife, Decl(overrideKeywordEs5.ts, 90, 56))
+}
+
+// Override is not be used on parameters
+class RejectWhenOverrideIsOnAParameter {
+>RejectWhenOverrideIsOnAParameter : Symbol(RejectWhenOverrideIsOnAParameter, Decl(overrideKeywordEs5.ts, 92, 1))
+
+    public sayHello(override name: string) { return 'hi'; }
+>sayHello : Symbol(RejectWhenOverrideIsOnAParameter.sayHello, Decl(overrideKeywordEs5.ts, 95, 40))
+>name : Symbol(name, Decl(overrideKeywordEs5.ts, 96, 20))
+}
+
+// But can be be used on parameter properties
+
+abstract class AbstractPropertyBase {
+>AbstractPropertyBase : Symbol(AbstractPropertyBase, Decl(overrideKeywordEs5.ts, 97, 1))
+
+	abstract x: number;
+>x : Symbol(AbstractPropertyBase.x, Decl(overrideKeywordEs5.ts, 101, 37))
+}
+class ConcretePropertyClass extends AbstractPropertyBase {
+>ConcretePropertyClass : Symbol(ConcretePropertyClass, Decl(overrideKeywordEs5.ts, 103, 1))
+>AbstractPropertyBase : Symbol(AbstractPropertyBase, Decl(overrideKeywordEs5.ts, 97, 1))
+
+	constructor(override x: number) {
+>x : Symbol(x, Decl(overrideKeywordEs5.ts, 105, 13))
+
+        super();
+>super : Symbol(AbstractPropertyBase, Decl(overrideKeywordEs5.ts, 97, 1))
+    }
+}
+
+
+// Override is not used on class...
+override class RejectWhenOverrideIsOnClassDeclaration { public sayHello(name: string) { return ''; } }
+>RejectWhenOverrideIsOnClassDeclaration : Symbol(RejectWhenOverrideIsOnClassDeclaration, Decl(overrideKeywordEs5.ts, 108, 1))
+>sayHello : Symbol(RejectWhenOverrideIsOnClassDeclaration.sayHello, Decl(overrideKeywordEs5.ts, 112, 55))
+>name : Symbol(name, Decl(overrideKeywordEs5.ts, 112, 72))
+
+override interface RejectWhenOverrideIsOnInterfaceDeclaration { sayHello(name: string); }
+>RejectWhenOverrideIsOnInterfaceDeclaration : Symbol(RejectWhenOverrideIsOnInterfaceDeclaration, Decl(overrideKeywordEs5.ts, 112, 102))
+>sayHello : Symbol(RejectWhenOverrideIsOnInterfaceDeclaration.sayHello, Decl(overrideKeywordEs5.ts, 113, 63))
+>name : Symbol(name, Decl(overrideKeywordEs5.ts, 113, 73))
+
+//... or interface declarations
+interface RejectWhenOverrideInAnInterface {
+>RejectWhenOverrideInAnInterface : Symbol(RejectWhenOverrideInAnInterface, Decl(overrideKeywordEs5.ts, 113, 89))
+
+    override sayHello(name: string);
+>sayHello : Symbol(RejectWhenOverrideInAnInterface.sayHello, Decl(overrideKeywordEs5.ts, 116, 43))
+>name : Symbol(name, Decl(overrideKeywordEs5.ts, 117, 22))
+}
+
+/* Override method should be grouped as consecutive declarations */
+class RejectWhenOverrideDeclarationsAreNotConsecutive extends Base {
+>RejectWhenOverrideDeclarationsAreNotConsecutive : Symbol(RejectWhenOverrideDeclarationsAreNotConsecutive, Decl(overrideKeywordEs5.ts, 118, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+
+    override hasOwnProperty(prop: string): boolean {
+>hasOwnProperty : Symbol(RejectWhenOverrideDeclarationsAreNotConsecutive.hasOwnProperty, Decl(overrideKeywordEs5.ts, 121, 68))
+>prop : Symbol(prop, Decl(overrideKeywordEs5.ts, 122, 28))
+
+        return super.hasOwnProperty(prop);
+>super.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>super : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>prop : Symbol(prop, Decl(overrideKeywordEs5.ts, 122, 28))
+    }
+
+    public getMeaningOfLife(): number {
+>getMeaningOfLife : Symbol(RejectWhenOverrideDeclarationsAreNotConsecutive.getMeaningOfLife, Decl(overrideKeywordEs5.ts, 124, 5))
+
+        return 42;
+    }
+
+    override propertyIsEnumerable(prop: string): boolean {
+>propertyIsEnumerable : Symbol(RejectWhenOverrideDeclarationsAreNotConsecutive.propertyIsEnumerable, Decl(overrideKeywordEs5.ts, 128, 5))
+>prop : Symbol(prop, Decl(overrideKeywordEs5.ts, 130, 34))
+
+        return super.propertyIsEnumerable(prop);
+>super.propertyIsEnumerable : Symbol(Object.propertyIsEnumerable, Decl(lib.d.ts, --, --))
+>super : Symbol(Base, Decl(overrideKeywordEs5.ts, 16, 1))
+>propertyIsEnumerable : Symbol(Object.propertyIsEnumerable, Decl(lib.d.ts, --, --))
+>prop : Symbol(prop, Decl(overrideKeywordEs5.ts, 130, 34))
+    }
+}
+

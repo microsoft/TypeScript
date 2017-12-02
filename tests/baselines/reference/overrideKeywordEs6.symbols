@@ -1,0 +1,41 @@
+=== tests/cases/compiler/overrideKeywordEs6.ts ===
+class Base {
+>Base : Symbol(Base, Decl(overrideKeywordEs6.ts, 0, 0))
+
+    async getMeaningOfLife1(): Promise<number> { return Promise.resolve(42); }
+>getMeaningOfLife1 : Symbol(Base.getMeaningOfLife1, Decl(overrideKeywordEs6.ts, 0, 12))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    async getMeaningOfLife2(): Promise<number> { return Promise.reject(42); }
+>getMeaningOfLife2 : Symbol(Base.getMeaningOfLife2, Decl(overrideKeywordEs6.ts, 1, 78))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+}
+
+// The expected order of modifiers:
+//
+// [public | protected | private] [abstract | override] [static] [readonly | async] [get | set] identifier
+//
+class RejectWhenAsyncPrecedesOverrideModifier extends Base { async override getMeaningOfLife1(): Promise<number> { return Promise.reject(42); }; }
+>RejectWhenAsyncPrecedesOverrideModifier : Symbol(RejectWhenAsyncPrecedesOverrideModifier, Decl(overrideKeywordEs6.ts, 3, 1))
+>Base : Symbol(Base, Decl(overrideKeywordEs6.ts, 0, 0))
+>getMeaningOfLife1 : Symbol(RejectWhenAsyncPrecedesOverrideModifier.getMeaningOfLife1, Decl(overrideKeywordEs6.ts, 9, 60))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+class AcceptWhenOverridePrecedesAsyncModifier extends Base { override async getMeaningOfLife2(): Promise<number> { return Promise.resolve(42); }; }
+>AcceptWhenOverridePrecedesAsyncModifier : Symbol(AcceptWhenOverridePrecedesAsyncModifier, Decl(overrideKeywordEs6.ts, 9, 146))
+>Base : Symbol(Base, Decl(overrideKeywordEs6.ts, 0, 0))
+>getMeaningOfLife2 : Symbol(AcceptWhenOverridePrecedesAsyncModifier.getMeaningOfLife2, Decl(overrideKeywordEs6.ts, 10, 60))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+

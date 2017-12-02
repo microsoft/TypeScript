@@ -1,5 +1,4 @@
 //// [overrideKeywordEs5.ts]
-
 abstract class AbstractBase {
     readonly id: string;
     public wasDisposed?: boolean;
@@ -99,6 +98,18 @@ class RejectWhenOverrideIsOnAParameter {
     public sayHello(override name: string) { return 'hi'; }
 }
 
+// But can be be used on parameter properties
+
+abstract class AbstractPropertyBase {
+	abstract x: number;
+}
+class ConcretePropertyClass extends AbstractPropertyBase {
+	constructor(override x: number) {
+        super();
+    }
+}
+
+
 // Override is not used on class...
 override class RejectWhenOverrideIsOnClassDeclaration { public sayHello(name: string) { return ''; } }
 override interface RejectWhenOverrideIsOnInterfaceDeclaration { sayHello(name: string); }
@@ -108,7 +119,7 @@ interface RejectWhenOverrideInAnInterface {
     override sayHello(name: string);
 }
 
-/* @mhegazy: is this an appropriate test for consecutive declarations? */
+/* Override method should be grouped as consecutive declarations */
 class RejectWhenOverrideDeclarationsAreNotConsecutive extends Base {
     override hasOwnProperty(prop: string): boolean {
         return super.hasOwnProperty(prop);
@@ -135,7 +146,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var AbstractBase = (function () {
+var AbstractBase = /** @class */ (function () {
     function AbstractBase() {
     }
     Object.defineProperty(AbstractBase.prototype, "name", {
@@ -153,7 +164,7 @@ var AbstractBase = (function () {
     AbstractBase.prototype.getMeaningOfLife = function () { return 42; };
     return AbstractBase;
 }());
-var Base = (function (_super) {
+var Base = /** @class */ (function (_super) {
     __extends(Base, _super);
     function Base() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -166,7 +177,7 @@ var Base = (function (_super) {
 //
 // [public | protected | private] [abstract | override] [static] [readonly | async] [get | set] identifier
 //
-var RejectWhenOverridePrecedesPublicModifier = (function (_super) {
+var RejectWhenOverridePrecedesPublicModifier = /** @class */ (function (_super) {
     __extends(RejectWhenOverridePrecedesPublicModifier, _super);
     function RejectWhenOverridePrecedesPublicModifier() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -175,7 +186,7 @@ var RejectWhenOverridePrecedesPublicModifier = (function (_super) {
     ;
     return RejectWhenOverridePrecedesPublicModifier;
 }(Base));
-var RejectWhenOverridePrecedesProtectedModifier = (function (_super) {
+var RejectWhenOverridePrecedesProtectedModifier = /** @class */ (function (_super) {
     __extends(RejectWhenOverridePrecedesProtectedModifier, _super);
     function RejectWhenOverridePrecedesProtectedModifier() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -184,7 +195,7 @@ var RejectWhenOverridePrecedesProtectedModifier = (function (_super) {
     ;
     return RejectWhenOverridePrecedesProtectedModifier;
 }(Base));
-var RejectWhenStaticPrecedesOverrideModifier = (function (_super) {
+var RejectWhenStaticPrecedesOverrideModifier = /** @class */ (function (_super) {
     __extends(RejectWhenStaticPrecedesOverrideModifier, _super);
     function RejectWhenStaticPrecedesOverrideModifier() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -193,7 +204,7 @@ var RejectWhenStaticPrecedesOverrideModifier = (function (_super) {
     ;
     return RejectWhenStaticPrecedesOverrideModifier;
 }(Base));
-var AcceptWhenOverrideFollowsAccessModifier = (function (_super) {
+var AcceptWhenOverrideFollowsAccessModifier = /** @class */ (function (_super) {
     __extends(AcceptWhenOverrideFollowsAccessModifier, _super);
     function AcceptWhenOverrideFollowsAccessModifier() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -201,7 +212,7 @@ var AcceptWhenOverrideFollowsAccessModifier = (function (_super) {
     AcceptWhenOverrideFollowsAccessModifier.prototype.toStringPublic = function () { return ''; };
     return AcceptWhenOverrideFollowsAccessModifier;
 }(Base));
-var RejectWhenReadonlyPrecedesOverrideModifier = (function (_super) {
+var RejectWhenReadonlyPrecedesOverrideModifier = /** @class */ (function (_super) {
     __extends(RejectWhenReadonlyPrecedesOverrideModifier, _super);
     function RejectWhenReadonlyPrecedesOverrideModifier() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -209,7 +220,7 @@ var RejectWhenReadonlyPrecedesOverrideModifier = (function (_super) {
     return RejectWhenReadonlyPrecedesOverrideModifier;
 }(Base));
 // Modifiers should never be repeated
-var RejectWhenOverrideIsRepeated = (function (_super) {
+var RejectWhenOverrideIsRepeated = /** @class */ (function (_super) {
     __extends(RejectWhenOverrideIsRepeated, _super);
     function RejectWhenOverrideIsRepeated() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -218,7 +229,7 @@ var RejectWhenOverrideIsRepeated = (function (_super) {
     return RejectWhenOverrideIsRepeated;
 }(Base));
 // You cannot override a private method
-var RejectWhenOverridePrivateMethod = (function (_super) {
+var RejectWhenOverridePrivateMethod = /** @class */ (function (_super) {
     __extends(RejectWhenOverridePrivateMethod, _super);
     function RejectWhenOverridePrivateMethod() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -228,7 +239,7 @@ var RejectWhenOverridePrivateMethod = (function (_super) {
     return RejectWhenOverridePrivateMethod;
 }(Base));
 // Override and abstract on methods are orthogonal, should never be used together
-var RejectWhenOverrideAbstractMethod = (function (_super) {
+var RejectWhenOverrideAbstractMethod = /** @class */ (function (_super) {
     __extends(RejectWhenOverrideAbstractMethod, _super);
     function RejectWhenOverrideAbstractMethod() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -236,7 +247,7 @@ var RejectWhenOverrideAbstractMethod = (function (_super) {
     return RejectWhenOverrideAbstractMethod;
 }(AbstractBase));
 // Acceptable to provide an override implementation in an abstract class however
-var AcceptWhenOverrideInAbstractClass = (function (_super) {
+var AcceptWhenOverrideInAbstractClass = /** @class */ (function (_super) {
     __extends(AcceptWhenOverrideInAbstractClass, _super);
     function AcceptWhenOverrideInAbstractClass() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -245,7 +256,7 @@ var AcceptWhenOverrideInAbstractClass = (function (_super) {
     return AcceptWhenOverrideInAbstractClass;
 }(AbstractBase));
 // Override checks are allowed on static methods
-var AcceptWhenOverrideStaticMethod = (function (_super) {
+var AcceptWhenOverrideStaticMethod = /** @class */ (function (_super) {
     __extends(AcceptWhenOverrideStaticMethod, _super);
     function AcceptWhenOverrideStaticMethod() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -255,7 +266,7 @@ var AcceptWhenOverrideStaticMethod = (function (_super) {
 }(Base));
 // Compiler already checks for access modifier narrowing,
 // override does not alter these semantics.
-var RejectWhenOverrideChangesAccessModifier = (function (_super) {
+var RejectWhenOverrideChangesAccessModifier = /** @class */ (function (_super) {
     __extends(RejectWhenOverrideChangesAccessModifier, _super);
     function RejectWhenOverrideChangesAccessModifier() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -265,7 +276,7 @@ var RejectWhenOverrideChangesAccessModifier = (function (_super) {
 }(Base));
 // Compiler should be able to traverse multiple levels of inheritance
 // to assess for overriden members (already does this).
-var AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass = (function (_super) {
+var AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass = /** @class */ (function (_super) {
     __extends(AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass, _super);
     function AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -274,7 +285,7 @@ var AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass = (function (_super) 
     return AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass;
 }(Base));
 // Override cannot be used with optional property.
-var RejectWhenOverrideOptionalProperty = (function (_super) {
+var RejectWhenOverrideOptionalProperty = /** @class */ (function (_super) {
     __extends(RejectWhenOverrideOptionalProperty, _super);
     function RejectWhenOverrideOptionalProperty() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -282,7 +293,7 @@ var RejectWhenOverrideOptionalProperty = (function (_super) {
     return RejectWhenOverrideOptionalProperty;
 }(Base));
 // If one accessor is marked override, they both should be.
-var RejectWhenAccessorNotBothOverride = (function (_super) {
+var RejectWhenAccessorNotBothOverride = /** @class */ (function (_super) {
     __extends(RejectWhenAccessorNotBothOverride, _super);
     function RejectWhenAccessorNotBothOverride() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -296,7 +307,7 @@ var RejectWhenAccessorNotBothOverride = (function (_super) {
     return RejectWhenAccessorNotBothOverride;
 }(Base));
 // Compiler should detect when override member is not inherited or augmented
-var RejectWhenOverrideMarkedOnNonInheritedMember = (function (_super) {
+var RejectWhenOverrideMarkedOnNonInheritedMember = /** @class */ (function (_super) {
     __extends(RejectWhenOverrideMarkedOnNonInheritedMember, _super);
     function RejectWhenOverrideMarkedOnNonInheritedMember() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -306,7 +317,7 @@ var RejectWhenOverrideMarkedOnNonInheritedMember = (function (_super) {
 }(Base));
 // Compiler already detects overriden assignability mismatches,
 // override keyword does not change these semantics
-var RejectWhenOverrideHasMismatchedType = (function (_super) {
+var RejectWhenOverrideHasMismatchedType = /** @class */ (function (_super) {
     __extends(RejectWhenOverrideHasMismatchedType, _super);
     function RejectWhenOverrideHasMismatchedType() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -315,21 +326,34 @@ var RejectWhenOverrideHasMismatchedType = (function (_super) {
     return RejectWhenOverrideHasMismatchedType;
 }(Base));
 // Override is not be used on parameters
-var RejectWhenOverrideIsOnAParameter = (function () {
+var RejectWhenOverrideIsOnAParameter = /** @class */ (function () {
     function RejectWhenOverrideIsOnAParameter() {
     }
     RejectWhenOverrideIsOnAParameter.prototype.sayHello = function (name) { return 'hi'; };
     return RejectWhenOverrideIsOnAParameter;
 }());
+// But can be be used on parameter properties
+var AbstractPropertyBase = /** @class */ (function () {
+    function AbstractPropertyBase() {
+    }
+    return AbstractPropertyBase;
+}());
+var ConcretePropertyClass = /** @class */ (function (_super) {
+    __extends(ConcretePropertyClass, _super);
+    function ConcretePropertyClass(x) {
+        return _super.call(this) || this;
+    }
+    return ConcretePropertyClass;
+}(AbstractPropertyBase));
 // Override is not used on class...
-var RejectWhenOverrideIsOnClassDeclaration = (function () {
+var RejectWhenOverrideIsOnClassDeclaration = /** @class */ (function () {
     function RejectWhenOverrideIsOnClassDeclaration() {
     }
     RejectWhenOverrideIsOnClassDeclaration.prototype.sayHello = function (name) { return ''; };
     return RejectWhenOverrideIsOnClassDeclaration;
 }());
-/* @mhegazy: is this an appropriate test for consecutive declarations? */
-var RejectWhenOverrideDeclarationsAreNotConsecutive = (function (_super) {
+/* Override method should be grouped as consecutive declarations */
+var RejectWhenOverrideDeclarationsAreNotConsecutive = /** @class */ (function (_super) {
     __extends(RejectWhenOverrideDeclarationsAreNotConsecutive, _super);
     function RejectWhenOverrideDeclarationsAreNotConsecutive() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -418,6 +442,12 @@ declare class RejectWhenOverrideHasMismatchedType extends Base {
 }
 declare class RejectWhenOverrideIsOnAParameter {
     sayHello(name: string): string;
+}
+declare abstract class AbstractPropertyBase {
+    abstract x: number;
+}
+declare class ConcretePropertyClass extends AbstractPropertyBase {
+    constructor(x: number);
 }
 declare class RejectWhenOverrideIsOnClassDeclaration {
     sayHello(name: string): string;
