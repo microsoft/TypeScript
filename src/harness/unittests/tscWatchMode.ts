@@ -2027,4 +2027,37 @@ declare module "fs" {
             assert.equal(host.readFile(outputFile1), file1.content + host.newLine);
         });
     });
+
+    describe("tsc-watch console clearing", () => {
+        it("doesn't clear the console when it starts", () => {
+            const file = {
+                path: "f.ts",
+                content: ""
+            };
+            const host = createWatchedSystem([file]);
+
+            createWatchModeWithoutConfigFile([file.path], host);
+            host.runQueuedTimeoutCallbacks();
+
+            host.checkScreenClears(0);
+        });
+
+        it("clears the console on recompile", () => {
+            const file = {
+                path: "f.ts",
+                content: ""
+            };
+            const host = createWatchedSystem([file]);
+            createWatchModeWithoutConfigFile([file.path], host);
+
+            const modifiedFile = {
+                ...file,
+                content: "//"
+            };
+            host.reloadFS([modifiedFile]);
+            host.runQueuedTimeoutCallbacks();
+
+            host.checkScreenClears(1);
+        });
+    });
 }
