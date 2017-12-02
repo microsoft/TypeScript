@@ -25138,7 +25138,7 @@ namespace ts {
 
             autoArrayType = createArrayType(autoType);
             if (autoArrayType === emptyObjectType) {
-                // autoArrayType is used as a marker, so even if global Array type is not defined, it needs ot be a unique type
+                // autoArrayType is used as a marker, so even if global Array type is not defined, it needs to be a unique type
                 autoArrayType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
             }
 
