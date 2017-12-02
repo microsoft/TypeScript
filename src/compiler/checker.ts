@@ -19813,6 +19813,10 @@ namespace ts {
                 }
             }
 
+            checkSourceElement(node.body);
+            registerForUnusedIdentifiersCheck(node);
+
+/*                         
             // TODO(pcj): Document what this is doing
             if (node.parent.kind !== SyntaxKind.ObjectLiteralExpression) {
                 checkSourceElement(node.body);
@@ -19821,7 +19825,7 @@ namespace ts {
             else {
                 checkNodeDeferred(node);
             }
-
+ */
         }
 
         function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type, message: DiagnosticMessage) {
