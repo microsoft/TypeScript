@@ -302,6 +302,10 @@ namespace ts {
         // There is no extra check needed since we can just rely on the program to decide emit
         const builder = createBuilder({ getCanonicalFileName, computeHash });
 
+        if (watchingHost.system.clearScreen) {
+            watchingHost.system.clearScreen();
+        }
+        reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode));
         synchronizeProgram();
 
         // Update the wild card directory watch
