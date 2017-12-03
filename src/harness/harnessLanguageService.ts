@@ -174,8 +174,7 @@ namespace Harness.LanguageService {
          */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.getScriptInfo(fileName);
-            assert.isOk(script);
-
+            assert(!!script);
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
     }
@@ -360,7 +359,7 @@ namespace Harness.LanguageService {
                     classification: parseInt(result[i + 1])
                 };
 
-                assert.isTrue(t.length > 0, "Result length should be greater than 0, got :" + t.length);
+                assert(t.length > 0, "Result length should be greater than 0, got :" + t.length);
                 position += t.length;
             }
             const finalLexState = parseInt(result[result.length - 1]);
