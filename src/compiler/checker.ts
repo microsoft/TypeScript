@@ -19765,11 +19765,6 @@ namespace ts {
 
                 checkDecorators(node);
 
-                // TODO(pcj): @andy-ms says remove this
-                if (getModifierFlags(node) & ModifierFlags.Override) {
-                    checkOverrideDeclaration(node);
-                }
-
                 checkSignatureDeclaration(node);
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!(node.flags & NodeFlags.Ambient) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
@@ -19816,17 +19811,6 @@ namespace ts {
 
             checkSourceElement(node.body);
             registerForUnusedIdentifiersCheck(node);
-
-/*                         
-            // TODO(pcj): Document what this is doing
-            if (node.parent.kind !== SyntaxKind.ObjectLiteralExpression) {
-                checkSourceElement(node.body);
-                registerForUnusedIdentifiersCheck(node);
-            }
-            else {
-                checkNodeDeferred(node);
-            }
- */
         }
 
         function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type, message: DiagnosticMessage) {
@@ -22668,7 +22652,7 @@ namespace ts {
                                 typeToString(getTypeOfSymbol(foundSymbol))
                             );
                         }
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(getDeclarationName(derived.valueDeclaration), errorInfo));
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(symbol.valueDeclaration, errorInfo));
                     }
                 }
                 // No matching property found on the object type.  It
@@ -25371,7 +25355,7 @@ namespace ts {
                 return quickResult;
             }
 
-            let lastStatic: Node, lastDeclare: Node, lastAsync: Node, lastReadonly: Node;
+            let lastStatic: Node, lastDeclare: Node, lastAsync: Node, lastReadonly: Node, lastOverride: Node;
             let flags = ModifierFlags.None;
             for (const modifier of node.modifiers) {
                 if (modifier.kind !== SyntaxKind.ReadonlyKeyword) {
@@ -25539,40 +25523,46 @@ namespace ts {
                         flags |= ModifierFlags.Abstract;
                         break;
 
-                   case SyntaxKind.OverrideKeyword:
-                       if (flags & ModifierFlags.Override) {
-                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
-                       }
-                       else if (flags & ModifierFlags.Static) {
-                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "static");
-                       }
-                       else if (flags & ModifierFlags.Async) {
-                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "async");
-                       }
-                       else if (flags & ModifierFlags.Readonly) {
-                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
-                       }
-                       else if (flags & ModifierFlags.Abstract) {
-                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "abstract", "override");
-                       }
-                       else if (flags & ModifierFlags.Private) {
-                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "override");
-                       }
-                       else if (node.kind === SyntaxKind.Parameter) {
-                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "override");
-                       }
-                       else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
-                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, "override");
-                       }
-                       else if (node.kind !== SyntaxKind.MethodDeclaration &&
-                               node.kind !== SyntaxKind.PropertyDeclaration &&
-                               node.kind !== SyntaxKind.GetAccessor &&
-                               node.kind !== SyntaxKind.SetAccessor) {
-                               return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_class_method_or_property_declaration, "override");
-                       }
+                    case SyntaxKind.OverrideKeyword:
+                        if (flags & ModifierFlags.Override) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
+                        }
+                        else if (flags & ModifierFlags.Static) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "static");
+                        }
+                        else if (flags & ModifierFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "async");
+                        }
+                        else if (flags & ModifierFlags.Readonly) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
+                        }
+                        else if (flags & ModifierFlags.Abstract) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "abstract", "override");
+                        }
+                        else if (flags & ModifierFlags.Private) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "override");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            // Reject override for all non-parameter properties.  Additional validation of 
+                            // parameter properties exists elsewhere in the codebase.
+                            if (node.parent.kind !== SyntaxKind.Constructor) {
+                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "override");
+                            } 
+                        }
 
-                       flags |= ModifierFlags.Override;
-                       break;
+                        else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, "override");
+                        }
+                        else if (node.kind !== SyntaxKind.MethodDeclaration &&
+                            node.kind !== SyntaxKind.PropertyDeclaration &&
+                            node.kind !== SyntaxKind.GetAccessor &&
+                            node.kind !== SyntaxKind.SetAccessor) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_class_method_or_property_declaration, "override");
+                        }
+
+                        flags |= ModifierFlags.Override;
+                        lastOverride = modifier;
+                        break;
 
                     case SyntaxKind.AsyncKeyword:
                         if (flags & ModifierFlags.Async) {
@@ -25601,7 +25591,7 @@ namespace ts {
                     return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
                 }
                 else if (flags & ModifierFlags.Override) {
-                    return grammarErrorOnNode(lastReadonly, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "override");
+                    return grammarErrorOnNode(lastOverride, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "override");
                 }
                 else if (flags & ModifierFlags.Readonly) {
                     return grammarErrorOnNode(lastReadonly, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "readonly");

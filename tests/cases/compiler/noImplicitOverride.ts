@@ -1,140 +1,176 @@
 // @noImplicitOverride: true
 // @target: es5
 
-// ******************************************************
-// First set of cases deal with inheritance from Object. 
-// ******************************************************
+// ==============================================================
+// Utility classes used in later test sections
+// ==============================================================
 
-class RejectWhenOverrideAbsentOnInheritedMethod extends Object {
-    toString(): string { return 'foo'; };
-}
-class AcceptWhenOverridePresentOnInheritedMethod extends Object {
-    override toString(): string { return 'foo'; };
-}
+class StaticBase {
+    static id: number = 1;
 
-// Similar to previous cases where augmentation from Object is implicit
-class RejectWhenOverrideAbsentOnAugmentedProperty {
-    toString(): string { return 'foo'; };
-}
-class AcceptWhenOverridePresentOnAugumentedProperty extends Object {
-    override toString(): string { return 'foo'; };
-}
-
-// This should fail via type mismatch of the return value.
-// (test is not specific to the override checking code)
-class RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember {
-    toString(): number {
-        return -1;
+    static toStringStatic(): string { 
+        return ''; 
     }
 }
 
-// ******************************************************
-// Next set of cases deal with inheritance derived from 
-// an explicitly defined class. 
-// ******************************************************
+class InstanceBase {
+    public publicId: number = 1;
+    protected protectedId: number = 1;
+    private privateId: number = 1;
 
-class Base {
-    // Public property
-    public userId: number = 1;
-    // Accessor
-    get name(): string { return 'Base'; }
-    // Typical public method
-    getMeaningOfLife(): number { return 42; }
-    // Private method
-    private processInternal(): void { }
-}
-
-class RejectWhenOverrideAbsentOnInheritedProperty extends Base {
-    public userId = 2;
-}
-class AcceptWhenOverridePresentOnInheritedProperty extends Base {
-    public override userId = 2;
-}
-
-class RejectWhenOverrideAbsentOnInheritedAccessor extends Base {
-    get name(): string { return 'foo'; };
-}
-class AcceptWhenOverridePresentOnInheritedAccessor extends Base {
-    override get name(): string { return 'foo'; };
-}
-
-class RejectWhenOverrideAbsentOnInheritedMethod extends Base {
-    getMeaningOfLife(): number { return 24; };
-}
-class AcceptWhenOverridePresentOnInheritedMethod extends Base {
-    override getMeaningOfLife(): number { return 24; };
-}
-
-class RejectWhenOverridePresentWithPrivateModifier extends Base {
-    private override processInternal() { }
-}
-
-// ******************************************************
-// Next set of cases deal with override within interfaces
-// and abstract classes (where is should not be present). 
-// ******************************************************
-
-interface Shape {
-    getWidth(): number;
-}
-
-interface RejectWhenOverridePresentOnInterfaceDeclaration extends Shape {
-    override getWidth(): number;
-}
-
-interface AcceptWhenOverrideAbsentOnInterfaceDeclaration extends Shape {
-    getWidth(): number;
-}
-
-// ******************************************************
-// Next set of cases deal with override with abstract 
-// classes. 
-// ******************************************************
-
-abstract class Animal {
-    protected readonly name: string
-
-    constructor(name: string) {
-        this.name = name;
+    public toStringPublic(): string { 
+        return ''; 
     }
 
-    abstract speak(): string;
+    protected toStringProtected(): string { 
+        return ''; 
+    }
+
+    private toStringPrivate(): string { 
+        return ''; 
+    }
 }
 
-abstract class RejectWhenOverridePresentWithAbstractModifier extends Animal {
-    abstract override speak(): string;
+class ReadonlyBase {
+    readonly id: number;
 }
 
-abstract class AcceptWhenOverridePresentOnConcreteDeclaration extends Animal {
-    override speak(): string { return "Woof!"; }
+class OptionalBase {
+    readonly id?: number;
 }
 
-// ******************************************************
-// Next set of cases deal with override with mixins 
-// ******************************************************
+class AccessorBase {
+    get id(): number { return 1; }
+    set id(id: number) {}
+}
+
+abstract class AbstractBase {
+    abstract id: number;
+    abstract toStringAbstract(): string;
+}
 
 const mixin = <BC extends new (...args: any[]) => {}>(Base: BC) => class extends Base {
     mixedIn() {}
 };
 
-class A {
+class MixinBase {
     normal() {}
 }
 
-class RejectWhenOverrideAbsentOnInheritedMethodMixin extends mixin(A) {
+class DerivedBase extends InstanceBase {
+}
+
+interface InterfaceBase {
+    id: number;
+    toStringInterface(): string;
+}
+
+interface IndexSignature {
+    [key: string]: string
+}
+
+// Override must be marked for properties augmented from Object, either
+// implicitly, explicity, or though a derived class
+class RejectWhenOverrideAbsentOnAugmentedPropertyImplicit {
+    toString(): string { return ''; }
+}
+class RejectWhenOverrideAbsentOnAugmentedPropertyExplicit extends Object {
+    toString(): string { return ''; }
+}
+class RejectWhenOverrideAbsentOnAugmentedPropertyDerived extends DerivedBase {
+    toString(): string { return ''; }
+}
+
+// Override must be marked for properties inherited from base class,
+class RejectWhenOverrideAbsentOnInheritedMember extends InstanceBase {
+    protected protectedId: number;
+    public publicId: number;
+    protected toStringProtected(): string { return ''; }
+    public toStringPublic(): string { return ''; }
+}
+
+// Override must be marked for properties inherited from base class (accessor
+// variant)
+class RejectWhenOverrideAbsentOnInheritedAccessorMember extends AccessorBase {
+    get id(): number { return 2; }
+    set id(id: number) {}
+}
+
+// Override must be marked for properties inherited from base class (static
+// variant)
+class RejectWhenOverrideAbsentOnInheritedStaticMember extends StaticBase {
+    static id: number = 2;
+    static toStringStatic(): string { return ''; }
+}
+
+// Override must be marked for properties inherited from base class (readonly
+// variant)
+class RejectWhenOverrideAbsentOnInheritedReadonlyMember extends ReadonlyBase {
+    readonly id: number = 2;
+    toStringReadonly(): string { return ''; }
+}
+
+// Override must be marked for a things that implement an abstract superclass
+// member
+class RejectWhenOverrideAbsentOnImplementationOfAbstractMember extends AbstractBase {
+    id: number = 1;
+    toStringAbstract(): string { return ''; }
+}
+
+// Override must be marked on a method that implements an abstract method, even
+// if that class is itself abstract.
+abstract class RejectWhenOverrideAbsentOnImplementationOfAbstractMemberInAbstractClass extends AbstractBase {
+    toStringAbstract(): string { return ''; }
+}
+
+// Override must be marked on methods inherited via normal semantics and via the
+// mixin class.
+class RejectWhenOverrideAbsentOnInheritedMethodMixin extends mixin(MixinBase) {
     normal() {} 
     mixedIn() {} 
 }
 
-class AcceptWhenOverridePresentOnInheritedMethodMixin extends mixin(A) {
-    override normal() {} 
-    override mixedIn() {} 
+// Override must be marked on parameter properties that implement an abstract
+// property. In this case, the 'public' modifier informs the compiler that 'id'
+// is a parameter property.  This puts the 'id' symbol in the instance member
+// symbol table and thus exposes it to the codepath that checks for missing
+// override members.
+class RejectWhenOverrideAbsentOnParameterPropertyThatImplementsSuperclassMember extends AbstractBase {
+	constructor(public id: number) {
+        super();
+    }
+    override toStringAbstract(): string { return 'concrete'; }
 }
 
-// ********************************************************
-// Next set of cases deal with override specified via JsDoc
-// ********************************************************
 
-//class AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Animal {
-//    /** @override */ public speak(): string { return "Woof!" }
-//}
+// Override *should* be marked on all parameter properties that implement some
+// an abstract member. In this case, there is no additional modifier on the 'id'
+// symbol that flags it as a parameter property (i.e., the symbol is considered
+// to be a local to the scope of the constructor function). In this case, it is
+// correct for the compiler *not* to raise an error (otherwise a user would
+// never be able to name a constructor parameter as that of an abstract
+// superclass member!). 
+class AcceptWhenOverrideAbsentOnConstructorParameterThatIsNotAParameterProperty extends AbstractBase {
+	constructor(id: number) {
+        super();
+    }
+    override id: number = 2;
+    override toStringAbstract(): string { return 'concrete'; }
+}
+
+class A {
+    "constructor": typeof A;  // Explicitly declare constructor property
+    protected static type: string;
+
+    public log() {
+        console.log(this.constructor.type);  // Access actual constructor object
+    }
+}
+
+class B extends A {
+    protected static type: string = 'B';
+}
+
+class C extends A {
+    protected static type: string = 'C';
+}

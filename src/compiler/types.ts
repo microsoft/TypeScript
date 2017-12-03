@@ -504,7 +504,7 @@ namespace ts {
 
         AccessibilityModifier = Public | Private | Protected,
         // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
-        ParameterPropertyModifier = AccessibilityModifier | Readonly,
+        ParameterPropertyModifier = AccessibilityModifier | Readonly | Override,
         NonPublicAccessibilityModifier = Private | Protected,
 
         TypeScriptModifier = Ambient | Public | Private | Protected | Override | Readonly | Abstract | Const,

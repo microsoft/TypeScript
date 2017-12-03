@@ -666,7 +666,7 @@ namespace ts {
             // construct.
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
-
+        
         const pos = nodeIsMissing(errorNode)
             ? errorNode.pos
             : skipTrivia(sourceFile.text, errorNode.pos);
