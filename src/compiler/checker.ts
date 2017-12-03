@@ -22915,6 +22915,7 @@ namespace ts {
                                 case SyntaxKind.PlusToken: return left + right;
                                 case SyntaxKind.MinusToken: return left - right;
                                 case SyntaxKind.PercentToken: return left % right;
+                                case SyntaxKind.AsteriskAsteriskToken: return left ** right;
                             }
                         }
                         break;
