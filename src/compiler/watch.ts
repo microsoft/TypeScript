@@ -212,8 +212,8 @@ namespace ts {
     }
 
     export interface Watch {
-        /** Synchronize the program with the changes */
-        synchronizeProgram(): void;
+        /** Synchronize with host and get updated program */
+        getProgram(): Program;
         /** Gets the existing program without synchronizing with changes on host */
         /*@internal*/
         getExistingProgram(): Program;
@@ -360,10 +360,10 @@ namespace ts {
         watchConfigFileWildCardDirectories();
 
         return configFileName ?
-            { getExistingProgram: () => program, synchronizeProgram } :
-            { getExistingProgram: () => program, synchronizeProgram, updateRootFileNames };
+            { getExistingProgram: () => program, getProgram: synchronizeProgram } :
+            { getExistingProgram: () => program, getProgram: synchronizeProgram, updateRootFileNames };
 
-        function synchronizeProgram() {
+        function synchronizeProgram(): Program {
             writeLog(`Synchronizing program`);
 
             if (hasChangedCompilerOptions) {
@@ -375,7 +375,7 @@ namespace ts {
 
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution();
             if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames)) {
-                return;
+                return program;
             }
 
             beforeProgramCreate(compilerOptions);
@@ -411,6 +411,7 @@ namespace ts {
 
             afterProgramCreate(directoryStructureHost, program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            return program;
         }
 
         function updateRootFileNames(files: string[]) {
@@ -569,7 +570,8 @@ namespace ts {
                 case ConfigFileProgramReloadLevel.Full:
                     return reloadConfigFile();
                 default:
-                    return synchronizeProgram();
+                    synchronizeProgram();
+                    return;
             }
         }
 

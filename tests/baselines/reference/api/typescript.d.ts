@@ -3850,8 +3850,8 @@ declare namespace ts {
         onConfigFileDiagnostic(diagnostic: Diagnostic): void;
     }
     interface Watch {
-        /** Synchronize the program with the changes */
-        synchronizeProgram(): void;
+        /** Synchronize with host and get updated program */
+        getProgram(): Program;
     }
     /**
      * Creates the watch what generates program using the config file
