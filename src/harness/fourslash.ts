@@ -2522,9 +2522,9 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
-            const ranges = this.getRanges();
-            if (ranges.length === 0) {
-                this.raiseError("At least one range should be specified in the testfile.");
+            const ranges = this.getRanges().filter(r => r.fileName === this.activeFile.fileName);
+            if (ranges.length !== 1) {
+                this.raiseError("Exactly one range should be specified in the testfile.");
             }
 
             const codeFixes = this.getCodeFixActions(this.activeFile.fileName, errorCode);
