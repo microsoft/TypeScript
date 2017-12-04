@@ -338,16 +338,18 @@ namespace ts.textChanges {
         }
 
         public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement, newLineCharacter: string): void {
-            if (ctr.body.statements.length === 0) {
-                this.replaceNode(sourceFile, ctr.body, createBlock([newStatement], /*multiLine*/ true), { useNonAdjustedEndPosition: true });
+            const firstStatement = firstOrUndefined(ctr.body.statements);
+            if (!firstStatement || !ctr.body.multiLine) {
+                this.replaceNode(sourceFile, ctr.body, createBlock([newStatement, ...ctr.body.statements], /*multiLine*/ true), { useNonAdjustedEndPosition: true });
             }
             else {
-                this.insertNodeAfter(sourceFile, getOpenBrace(ctr, sourceFile), newStatement, { suffix: newLineCharacter });
+                this.insertNodeBefore(sourceFile, firstStatement, newStatement, { suffix: newLineCharacter });
             }
         }
 
         public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration, newElement: ClassElement, newLineCharacter: string): void {
-            if (cls.members.length === 0) {
+            const firstMember = firstOrUndefined(cls.members);
+            if (!firstMember) {
                 const members = [newElement];
                 const newCls = cls.kind === SyntaxKind.ClassDeclaration
                     ? updateClassDeclaration(cls, cls.decorators, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members)
@@ -355,7 +357,7 @@ namespace ts.textChanges {
                 this.replaceNode(sourceFile, cls, newCls, { useNonAdjustedEndPosition: true });
             }
             else {
-                this.insertNodeAfter(sourceFile, getOpenBraceOfClassLike(cls, sourceFile), newElement, { suffix: newLineCharacter });
+                this.insertNodeBefore(sourceFile, firstMember, newElement, { suffix: newLineCharacter });
             }
         }
 
