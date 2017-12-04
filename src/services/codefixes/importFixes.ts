@@ -205,14 +205,17 @@ namespace ts.codefix {
             for (const declaration of declarations) {
                 const namespace = getNamespaceImportName(declaration);
                 if (namespace) {
-                    actions.push(getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken));
+                    const moduleSymbol = context.checker.getAliasedSymbol(context.checker.getSymbolAtLocation(namespace));
+                    if (moduleSymbol && moduleSymbol.exports.has(escapeLeadingUnderscores(context.symbolName))) {
+                        actions.push(getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken));
+                    }
                 }
             }
         }
         return [...actions, ...getCodeActionsForAddImport(moduleSymbols, context, declarations)];
     }
 
-    function getNamespaceImportName(declaration: AnyImportSyntax): Identifier {
+    function getNamespaceImportName(declaration: AnyImportSyntax): Identifier | undefined {
         if (declaration.kind === SyntaxKind.ImportDeclaration) {
             const namedBindings = declaration.importClause && isImportClause(declaration.importClause) && declaration.importClause.namedBindings;
             return namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport ? namedBindings.name : undefined;
@@ -676,13 +679,10 @@ namespace ts.codefix {
          * namespace instead of altering the import declaration. For example, "foo" would
          * become "ns.foo"
          */
-        return createCodeAction(
-            Diagnostics.Change_0_to_1,
-            [symbolName, `${namespacePrefix}.${symbolName}`],
-            ChangeTracker.with(context, tracker =>
-                tracker.replaceNode(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), symbolName))),
-            "CodeChange",
-            /*moduleSpecifier*/ undefined);
+        // Prefix the node instead of it replacing it, because this may be used for import completions and we don't want the text changes to overlap with the identifier being completed.
+        const changes = ChangeTracker.with(context, tracker =>
+            tracker.insertNodeBefore(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), "")));
+        return createCodeAction(Diagnostics.Change_0_to_1, [symbolName, `${namespacePrefix}.${symbolName}`], changes, "CodeChange", /*moduleSpecifier*/ undefined);
     }
 
     function getImportCodeActions(context: CodeFixContext): ImportCodeAction[] {
