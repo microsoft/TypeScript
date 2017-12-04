@@ -183,3 +183,8 @@ jake baseline-accept
 ```
 
 to establish the new baselines as the desired behavior. This will change the files in `tests\baselines\reference`, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
+
+## Localization
+
+All strings the user may see are stored in [`diagnosticMessages.json`](./src/compiler/diagnosticMessages.json).
+If you make changes to it, run `jake generate-diagnostics` to push them to the generated localization and definition files.
