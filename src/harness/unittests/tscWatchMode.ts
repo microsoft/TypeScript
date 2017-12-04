@@ -24,12 +24,12 @@ namespace ts.tscWatch {
 
     function createWatchOfConfigFile(configFileName: string, host: WatchedSystem) {
         const watch = ts.createWatchOfConfigFile(configFileName, {}, host);
-        return () => watch.getProgram();
+        return () => watch.getExistingProgram();
     }
 
     function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}) {
         const watch = ts.createWatchOfFilesAndCompilerOptions(rootFiles, options, host);
-        return () => watch.getProgram();
+        return () => watch.getExistingProgram();
     }
 
     function getEmittedLineForMultiFileOutput(file: FileOrFolder, host: WatchedSystem) {
@@ -237,8 +237,8 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([configFile, libFile, file1, file2, file3]);
             const watch = ts.createWatchOfConfigFile(configFile.path, {}, host, notImplemented);
 
-            checkProgramActualFiles(watch.getProgram(), [file1.path, libFile.path, file2.path]);
-            checkProgramRootFiles(watch.getProgram(), [file1.path, file2.path]);
+            checkProgramActualFiles(watch.getExistingProgram(), [file1.path, libFile.path, file2.path]);
+            checkProgramRootFiles(watch.getExistingProgram(), [file1.path, file2.path]);
             checkWatchedFiles(host, [configFile.path, file1.path, file2.path, libFile.path]);
             const configDir = getDirectoryPath(configFile.path);
             checkWatchedDirectories(host, [configDir, combinePaths(configDir, projectSystem.nodeModulesAtTypes)], /*recursive*/ true);

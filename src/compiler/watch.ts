@@ -214,9 +214,9 @@ namespace ts {
     export interface Watch {
         /** Synchronize the program with the changes */
         synchronizeProgram(): void;
-        /** Get current program */
+        /** Gets the existing program without synchronizing with changes on host */
         /*@internal*/
-        getProgram(): Program;
+        getExistingProgram(): Program;
     }
 
     /**
@@ -360,8 +360,8 @@ namespace ts {
         watchConfigFileWildCardDirectories();
 
         return configFileName ?
-            { getProgram: () => program, synchronizeProgram } :
-            { getProgram: () => program, synchronizeProgram, updateRootFileNames };
+            { getExistingProgram: () => program, synchronizeProgram } :
+            { getExistingProgram: () => program, synchronizeProgram, updateRootFileNames };
 
         function synchronizeProgram() {
             writeLog(`Synchronizing program`);

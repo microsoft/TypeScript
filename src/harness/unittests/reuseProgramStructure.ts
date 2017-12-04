@@ -897,12 +897,12 @@ namespace ts {
         }
 
         function verifyProgramWithoutConfigFile(system: System, rootFiles: string[], options: CompilerOptions) {
-            const program = createWatchOfFilesAndCompilerOptions(rootFiles, options, system).getProgram();
+            const program = createWatchOfFilesAndCompilerOptions(rootFiles, options, system).getExistingProgram();
             verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
         }
 
         function verifyProgramWithConfigFile(system: System, configFileName: string) {
-            const program = createWatchOfConfigFile(configFileName, {}, system).getProgram();
+            const program = createWatchOfConfigFile(configFileName, {}, system).getExistingProgram();
             const { fileNames, options } = parseConfigFile(configFileName, {}, system, notImplemented);
             verifyProgramIsUptoDate(program, fileNames, options);
         }
