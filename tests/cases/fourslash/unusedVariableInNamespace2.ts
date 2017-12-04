@@ -4,9 +4,11 @@
 ////namespace greeter {
 ////    [|let a = "dummy entry", b, c = 0;|]
 ////    export function function1() {
-////        a = "dummy";
-////        c++;
+////        use(a, c);
 ////    }
 ////}
 
-verify.rangeAfterCodeFix(`let a = "dummy entry", c = 0;`);
+verify.codeFix({
+    description: "Remove declaration for: 'b'",
+    newRangeContent: 'let a = "dummy entry", c = 0;',
+});

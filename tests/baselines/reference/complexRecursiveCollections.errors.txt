@@ -1,113 +1,18 @@
-tests/cases/compiler/immutable.d.ts(25,39): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(46,20): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(47,23): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(48,23): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(49,23): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(50,23): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(51,22): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(52,26): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(58,45): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(60,63): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(68,41): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(69,38): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(69,47): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(78,21): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(79,21): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(89,20): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(90,23): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(91,23): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(92,23): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(93,23): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(94,22): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(95,26): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(101,42): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(106,58): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(113,48): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(114,45): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(114,54): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(120,42): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(125,58): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(134,33): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(134,42): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(135,29): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(135,38): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(139,38): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(155,45): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(157,62): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(169,45): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(172,45): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(174,62): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(188,40): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(195,22): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(198,19): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(205,45): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(207,63): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(217,30): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(218,34): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(226,22): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(227,22): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(234,48): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(235,52): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(236,109): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(237,109): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(242,22): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(243,25): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(244,24): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(245,28): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(246,25): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(247,25): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(258,8): error TS2304: Cannot find name 'Symbol'.
-tests/cases/compiler/immutable.d.ts(258,28): error TS2304: Cannot find name 'IterableIterator'.
-tests/cases/compiler/immutable.d.ts(266,45): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(274,44): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(279,60): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(288,44): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(293,47): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(295,65): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(304,40): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(309,47): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(311,64): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(320,38): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(329,58): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(339,45): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
+tests/cases/compiler/immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
   Types of property 'toSeq' are incompatible.
     Type '() => Keyed<K, V>' is not assignable to type '() => this'.
       Type 'Keyed<K, V>' is not assignable to type 'this'.
-tests/cases/compiler/immutable.d.ts(347,44): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(352,60): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(355,8): error TS2304: Cannot find name 'Symbol'.
-tests/cases/compiler/immutable.d.ts(355,28): error TS2304: Cannot find name 'IterableIterator'.
-tests/cases/compiler/immutable.d.ts(358,44): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(359,22): error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
+tests/cases/compiler/immutable.ts(359,22): error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
   Types of property 'toSeq' are incompatible.
     Type '() => Indexed<T>' is not assignable to type '() => this'.
       Type 'Indexed<T>' is not assignable to type 'this'.
-tests/cases/compiler/immutable.d.ts(382,47): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(384,65): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(387,8): error TS2304: Cannot find name 'Symbol'.
-tests/cases/compiler/immutable.d.ts(387,28): error TS2304: Cannot find name 'IterableIterator'.
-tests/cases/compiler/immutable.d.ts(390,40): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
+tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
   Types of property 'toSeq' are incompatible.
     Type '() => Set<T>' is not assignable to type '() => this'.
       Type 'Set<T>' is not assignable to type 'this'.
-tests/cases/compiler/immutable.d.ts(396,47): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(398,64): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(401,8): error TS2304: Cannot find name 'Symbol'.
-tests/cases/compiler/immutable.d.ts(401,28): error TS2304: Cannot find name 'IterableIterator'.
-tests/cases/compiler/immutable.d.ts(405,45): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(420,26): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(421,26): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(442,13): error TS2304: Cannot find name 'IterableIterator'.
-tests/cases/compiler/immutable.d.ts(443,15): error TS2304: Cannot find name 'IterableIterator'.
-tests/cases/compiler/immutable.d.ts(444,16): error TS2304: Cannot find name 'IterableIterator'.
-tests/cases/compiler/immutable.d.ts(476,58): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(503,20): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Iterable'.
 
 
-==== tests/cases/compiler/complex.d.ts (0 errors) ====
+==== tests/cases/compiler/complex.ts (0 errors) ====
     interface Ara<T> { t: T }
     interface Collection<K, V> {
         map<M>(mapper: (value: V, key: K, iter: this) => M): Collection<K, M>;
@@ -128,7 +33,7 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N2<M>;
         toSeq(): N2<T>;
     }
-==== tests/cases/compiler/immutable.d.ts (98 errors) ====
+==== tests/cases/compiler/immutable.ts (3 errors) ====
     // Test that complex recursive collections can pass the `extends` assignability check without
     // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
     // started being checked.
@@ -154,8 +59,6 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
       export function List(): List<any>;
       export function List<T>(): List<T>;
       export function List<T>(collection: Iterable<T>): List<T>;
-                                          ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export interface List<T> extends Collection.Indexed<T> {
         // Persistent changes
         set(index: number, value: T): List<T>;
@@ -177,38 +80,20 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         setSize(size: number): List<T>;
         // Deep persistent changes
         setIn(keyPath: Iterable<any>, value: any): this;
-                       ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         deleteIn(keyPath: Iterable<any>): this;
-                          ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         removeIn(keyPath: Iterable<any>): this;
-                          ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         updateIn(keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this;
-                          ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         updateIn(keyPath: Iterable<any>, updater: (value: any) => any): this;
-                          ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         mergeIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
-                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         mergeDeepIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
-                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         // Transient changes
         withMutations(mutator: (mutable: this) => any): this;
         asMutable(): this;
         asImmutable(): this;
         // Sequence algorithms
         concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): List<T | C>;
-                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         map<M>(mapper: (value: T, key: number, iter: this) => M, context?: any): List<M>;
         flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): List<M>;
-                                                                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>;
         filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
       }
@@ -217,13 +102,7 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         function of(...keyValues: Array<any>): Map<any, any>;
       }
       export function Map<K, V>(collection: Iterable<[K, V]>): Map<K, V>;
-                                            ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export function Map<T>(collection: Iterable<Iterable<T>>): Map<T, T>;
-                                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
-                                                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export function Map<V>(obj: {[key: string]: V}): Map<string, V>;
       export function Map<K, V>(): Map<K, V>;
       export function Map(): Map<any, any>;
@@ -233,11 +112,7 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         delete(key: K): this;
         remove(key: K): this;
         deleteAll(keys: Iterable<K>): this;
-                        ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         removeAll(keys: Iterable<K>): this;
-                        ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         clear(): this;
         update(key: K, notSetValue: V, updater: (value: V) => V): this;
         update(key: K, updater: (value: V) => V): this;
@@ -248,41 +123,23 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         mergeDeepWith(merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
         // Deep persistent changes
         setIn(keyPath: Iterable<any>, value: any): this;
-                       ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         deleteIn(keyPath: Iterable<any>): this;
-                          ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         removeIn(keyPath: Iterable<any>): this;
-                          ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         updateIn(keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this;
-                          ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         updateIn(keyPath: Iterable<any>, updater: (value: any) => any): this;
-                          ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         mergeIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
-                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         mergeDeepIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
-                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         // Transient changes
         withMutations(mutator: (mutable: this) => any): this;
         asMutable(): this;
         asImmutable(): this;
         // Sequence algorithms
         concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>;
-                                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         concat<C>(...collections: Array<{[key: string]: C}>): Map<K | string, V | C>;
         map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): Map<K, M>;
         mapKeys<M>(mapper: (key: K, value: V, iter: this) => M, context?: any): Map<M, V>;
         mapEntries<KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any): Map<KM, VM>;
         flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Map<any, any>;
-                                                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>;
         filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       }
@@ -290,28 +147,18 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         function isOrderedMap(maybeOrderedMap: any): maybeOrderedMap is OrderedMap<any, any>;
       }
       export function OrderedMap<K, V>(collection: Iterable<[K, V]>): OrderedMap<K, V>;
-                                                   ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export function OrderedMap<T>(collection: Iterable<Iterable<T>>): OrderedMap<T, T>;
-                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
-                                                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export function OrderedMap<V>(obj: {[key: string]: V}): OrderedMap<string, V>;
       export function OrderedMap<K, V>(): OrderedMap<K, V>;
       export function OrderedMap(): OrderedMap<any, any>;
       export interface OrderedMap<K, V> extends Map<K, V> {
         // Sequence algorithms
         concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>;
-                                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         concat<C>(...collections: Array<{[key: string]: C}>): OrderedMap<K | string, V | C>;
         map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): OrderedMap<K, M>;
         mapKeys<M>(mapper: (key: K, value: V, iter: this) => M, context?: any): OrderedMap<M, V>;
         mapEntries<KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any): OrderedMap<KM, VM>;
         flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): OrderedMap<any, any>;
-                                                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>;
         filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       }
@@ -321,21 +168,11 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         function fromKeys<T>(iter: Collection<T, any>): Set<T>;
         function fromKeys(obj: {[key: string]: any}): Set<string>;
         function intersect<T>(sets: Iterable<Iterable<T>>): Set<T>;
-                                    ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
-                                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         function union<T>(sets: Iterable<Iterable<T>>): Set<T>;
-                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
-                                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       }
       export function Set(): Set<any>;
       export function Set<T>(): Set<T>;
       export function Set<T>(collection: Iterable<T>): Set<T>;
-                                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export interface Set<T> extends Collection.Set<T> {
         // Persistent changes
         add(value: T): this;
@@ -352,12 +189,8 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         asImmutable(): this;
         // Sequence algorithms
         concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Set<T | C>;
-                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         map<M>(mapper: (value: T, key: never, iter: this) => M, context?: any): Set<M>;
         flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any): Set<M>;
-                                                                 ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>;
         filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
       }
@@ -370,17 +203,11 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
       export function OrderedSet(): OrderedSet<any>;
       export function OrderedSet<T>(): OrderedSet<T>;
       export function OrderedSet<T>(collection: Iterable<T>): OrderedSet<T>;
-                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export interface OrderedSet<T> extends Set<T> {
         // Sequence algorithms
         concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): OrderedSet<T | C>;
-                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         map<M>(mapper: (value: T, key: never, iter: this) => M, context?: any): OrderedSet<M>;
         flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any): OrderedSet<M>;
-                                                                 ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>;
         filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
         zip(...collections: Array<Collection<any, any>>): OrderedSet<any>;
@@ -395,8 +222,6 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
       export function Stack(): Stack<any>;
       export function Stack<T>(): Stack<T>;
       export function Stack<T>(collection: Iterable<T>): Stack<T>;
-                                           ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export interface Stack<T> extends Collection.Indexed<T> {
         // Reading values
         peek(): T | undefined;
@@ -404,13 +229,9 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         clear(): Stack<T>;
         unshift(...values: Array<T>): Stack<T>;
         unshiftAll(iter: Iterable<T>): Stack<T>;
-                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         shift(): Stack<T>;
         push(...values: Array<T>): Stack<T>;
         pushAll(iter: Iterable<T>): Stack<T>;
-                      ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         pop(): Stack<T>;
         // Transient changes
         withMutations(mutator: (mutable: this) => any): this;
@@ -418,12 +239,8 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         asImmutable(): this;
         // Sequence algorithms
         concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Stack<T | C>;
-                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         map<M>(mapper: (value: T, key: number, iter: this) => M, context?: any): Stack<M>;
         flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): Stack<M>;
-                                                                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>;
         filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
       }
@@ -434,11 +251,7 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         export function getDescriptiveName(record: Instance<any>): string;
         export interface Class<T extends Object> {
           (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
-                                 ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           new (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
-                                     ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         }
         export interface Instance<T extends Object> {
           readonly size: number;
@@ -447,11 +260,7 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
           get<K extends keyof T>(key: K): T[K];
           // Reading deep values
           hasIn(keyPath: Iterable<any>): boolean;
-                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           getIn(keyPath: Iterable<any>): any;
-                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           // Value equality
           equals(other: any): boolean;
           hashCode(): number;
@@ -459,39 +268,19 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
           set<K extends keyof T>(key: K, value: T[K]): this;
           update<K extends keyof T>(key: K, updater: (value: T[K]) => T[K]): this;
           merge(...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
-                                                   ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           mergeDeep(...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
-                                                       ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           mergeWith(merger: (oldVal: any, newVal: any, key: keyof T) => any, ...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
-                                                                                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           mergeDeepWith(merger: (oldVal: any, newVal: any, key: any) => any, ...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
-                                                                                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           delete<K extends keyof T>(key: K): this;
           remove<K extends keyof T>(key: K): this;
           clear(): this;
           // Deep persistent changes
           setIn(keyPath: Iterable<any>, value: any): this;
-                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           updateIn(keyPath: Iterable<any>, updater: (value: any) => any): this;
-                            ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           mergeIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
-                           ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           mergeDeepIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
-                               ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           deleteIn(keyPath: Iterable<any>): this;
-                            ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           removeIn(keyPath: Iterable<any>): this;
-                            ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           // Conversion to JavaScript types
           toJS(): { [K in keyof T]: any };
           toJSON(): T;
@@ -503,10 +292,6 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
           // Sequence algorithms
           toSeq(): Seq.Keyed<keyof T, T[keyof T]>;
           [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
-           ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
-                               ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'IterableIterator'.
         }
       }
       export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
@@ -515,8 +300,6 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         function of<T>(...values: Array<T>): Seq.Indexed<T>;
         export module Keyed {}
         export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
-                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
         export function Keyed<K, V>(): Seq.Keyed<K, V>;
         export function Keyed(): Seq.Keyed<any, any>;
@@ -525,15 +308,11 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
           toJSON(): { [key: string]: V };
           toSeq(): this;
           concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>;
-                                               ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           concat<C>(...collections: Array<{[key: string]: C}>): Seq.Keyed<K | string, V | C>;
           map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): Seq.Keyed<K, M>;
           mapKeys<M>(mapper: (key: K, value: V, iter: this) => M, context?: any): Seq.Keyed<M, V>;
           mapEntries<KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any): Seq.Keyed<KM, VM>;
           flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Seq.Keyed<any, any>;
-                                                               ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>;
           filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
         }
@@ -543,19 +322,13 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         export function Indexed(): Seq.Indexed<any>;
         export function Indexed<T>(): Seq.Indexed<T>;
         export function Indexed<T>(collection: Iterable<T>): Seq.Indexed<T>;
-                                               ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         export interface Indexed<T> extends Seq<number, T>, Collection.Indexed<T> {
           toJS(): Array<any>;
           toJSON(): Array<T>;
           toSeq(): this;
           concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Seq.Indexed<T | C>;
-                                                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           map<M>(mapper: (value: T, key: number, iter: this) => M, context?: any): Seq.Indexed<M>;
           flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): Seq.Indexed<M>;
-                                                                    ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>;
           filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
         }
@@ -565,19 +338,13 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         export function Set(): Seq.Set<any>;
         export function Set<T>(): Seq.Set<T>;
         export function Set<T>(collection: Iterable<T>): Seq.Set<T>;
-                                           ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         export interface Set<T> extends Seq<never, T>, Collection.Set<T> {
           toJS(): Array<any>;
           toJSON(): Array<T>;
           toSeq(): this;
           concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Seq.Set<T | C>;
-                                                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           map<M>(mapper: (value: T, key: never, iter: this) => M, context?: any): Seq.Set<M>;
           flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any): Seq.Set<M>;
-                                                                   ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>;
           filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
         }
@@ -587,8 +354,6 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
       export function Seq<T>(collection: Collection.Indexed<T>): Seq.Indexed<T>;
       export function Seq<T>(collection: Collection.Set<T>): Seq.Set<T>;
       export function Seq<T>(collection: Iterable<T>): Seq.Indexed<T>;
-                                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export function Seq<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
       export function Seq(): Seq<any, any>;
       export interface Seq<K, V> extends Collection<K, V> {
@@ -598,8 +363,6 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         // Sequence algorithms
         map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): Seq<K, M>;
         flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Seq<K, M>;
-                                                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>;
         filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       }
@@ -610,8 +373,6 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         function isOrdered(maybeOrdered: any): boolean;
         export module Keyed {}
         export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
-                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
         export interface Keyed<K, V> extends Collection<K, V> {
                          ~~~~~
@@ -625,27 +386,17 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
           // Sequence functions
           flip(): this;
           concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>;
-                                               ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           concat<C>(...collections: Array<{[key: string]: C}>): Collection.Keyed<K | string, V | C>;
           map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): Collection.Keyed<K, M>;
           mapKeys<M>(mapper: (key: K, value: V, iter: this) => M, context?: any): Collection.Keyed<M, V>;
           mapEntries<KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any): Collection.Keyed<KM, VM>;
           flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Collection.Keyed<any, any>;
-                                                               ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>;
           filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
           [Symbol.iterator](): IterableIterator<[K, V]>;
-           ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
-                               ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'IterableIterator'.
         }
         export module Indexed {}
         export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
-                                               ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         export interface Indexed<T> extends Collection<number, T> {
                          ~~~~~~~
 !!! error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
@@ -675,24 +426,14 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
           findLastIndex(predicate: (value: T, index: number, iter: this) => boolean, context?: any): number;
           // Sequence algorithms
           concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Collection.Indexed<T | C>;
-                                                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           map<M>(mapper: (value: T, key: number, iter: this) => M, context?: any): Collection.Indexed<M>;
           flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): Collection.Indexed<M>;
-                                                                    ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>;
           filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
           [Symbol.iterator](): IterableIterator<T>;
-           ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
-                               ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'IterableIterator'.
         }
         export module Set {}
         export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
-                                           ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         export interface Set<T> extends Collection<never, T> {
                          ~~~
 !!! error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
@@ -704,25 +445,15 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
           toSeq(): Seq.Set<T>;
           // Sequence algorithms
           concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Collection.Set<T | C>;
-                                                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           map<M>(mapper: (value: T, key: never, iter: this) => M, context?: any): Collection.Set<M>;
           flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any):  Collection.Set<M>;
-                                                                   ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
           filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>;
           filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
           [Symbol.iterator](): IterableIterator<T>;
-           ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
-                               ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'IterableIterator'.
         }
       }
       export function Collection<I extends Collection<any, any>>(collection: I): I;
       export function Collection<T>(collection: Iterable<T>): Collection.Indexed<T>;
-                                                ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
       export function Collection<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
       export interface Collection<K, V> extends ValueObject {
         // Value equality
@@ -738,11 +469,7 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         last(): V | undefined;
         // Reading deep values
         getIn(searchKeyPath: Iterable<any>, notSetValue?: any): any;
-                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         hasIn(searchKeyPath: Iterable<any>): boolean;
-                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         // Persistent changes
         update<R>(updater: (value: this) => R): R;
         // Conversion to JavaScript types
@@ -764,14 +491,8 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         toSetSeq(): Seq.Set<V>;
         // Iterators
         keys(): IterableIterator<K>;
-                ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'IterableIterator'.
         values(): IterableIterator<V>;
-                  ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'IterableIterator'.
         entries(): IterableIterator<[K, V]>;
-                   ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'IterableIterator'.
         // Collections (Seq)
         keySeq(): Seq.Indexed<K>;
         valueSeq(): Seq.Indexed<V>;
@@ -804,8 +525,6 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         flatten(depth?: number): Collection<any, any>;
         flatten(shallow?: boolean): Collection<any, any>;
         flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Collection<K, M>;
-                                                             ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         // Reducing a value
         reduce<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
         reduce<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
@@ -833,11 +552,7 @@ tests/cases/compiler/immutable.d.ts(504,22): error TS2304: Cannot find name 'Ite
         minBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): V | undefined;
         // Comparison
         isSubset(iter: Iterable<V>): boolean;
-                       ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         isSuperset(iter: Iterable<V>): boolean;
-                         ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
         readonly size: number;
       }
     }

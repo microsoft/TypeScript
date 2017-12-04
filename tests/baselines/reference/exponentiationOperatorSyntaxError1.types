@@ -1,0 +1,248 @@
+=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts ===
+// Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
+-1 ** 2;
+>-1 ** 2 : number
+>-1 : -1
+>1 : 1
+>2 : 2
+
++1 ** 2
+>+1 ** 2 : number
+>+1 : 1
+>1 : 1
+>2 : 2
+
+1 ** -2 ** 3;
+>1 ** -2 ** 3 : number
+>1 : 1
+>-2 ** 3 : number
+>-2 : -2
+>2 : 2
+>3 : 3
+
+1 ** -2 ** -3;
+>1 ** -2 ** -3 : number
+>1 : 1
+>-2 ** -3 : number
+>-2 : -2
+>2 : 2
+>-3 : -3
+>3 : 3
+
+-1 ** -2 ** -3;
+>-1 ** -2 ** -3 : number
+>-1 : -1
+>1 : 1
+>-2 ** -3 : number
+>-2 : -2
+>2 : 2
+>-3 : -3
+>3 : 3
+
+-(1 ** 2) ** 3;
+>-(1 ** 2) ** 3 : number
+>-(1 ** 2) : number
+>(1 ** 2) : number
+>1 ** 2 : number
+>1 : 1
+>2 : 2
+>3 : 3
+
+var temp = 10;
+>temp : number
+>10 : 10
+
+-++temp ** 3;
+>-++temp ** 3 : number
+>-++temp : number
+>++temp : number
+>temp : number
+>3 : 3
+
++--temp ** 3;
+>+--temp ** 3 : number
+>+--temp : number
+>--temp : number
+>temp : number
+>3 : 3
+
+-temp++ ** 3;
+>-temp++ ** 3 : number
+>-temp++ : number
+>temp++ : number
+>temp : number
+>3 : 3
+
++temp-- ** 3;
+>+temp-- ** 3 : number
+>+temp-- : number
+>temp-- : number
+>temp : number
+>3 : 3
+
+1 ** -++temp ** 3;
+>1 ** -++temp ** 3 : number
+>1 : 1
+>-++temp ** 3 : number
+>-++temp : number
+>++temp : number
+>temp : number
+>3 : 3
+
+1 ** +--temp ** 3;
+>1 ** +--temp ** 3 : number
+>1 : 1
+>+--temp ** 3 : number
+>+--temp : number
+>--temp : number
+>temp : number
+>3 : 3
+
+1 ** -temp++ ** 3;
+>1 ** -temp++ ** 3 : number
+>1 : 1
+>-temp++ ** 3 : number
+>-temp++ : number
+>temp++ : number
+>temp : number
+>3 : 3
+
+1 ** +temp-- ** 3;
+>1 ** +temp-- ** 3 : number
+>1 : 1
+>+temp-- ** 3 : number
+>+temp-- : number
+>temp-- : number
+>temp : number
+>3 : 3
+
+-3 ** temp++;
+>-3 ** temp++ : number
+>-3 : -3
+>3 : 3
+>temp++ : number
+>temp : number
+
+-3 ** temp--;
+>-3 ** temp-- : number
+>-3 : -3
+>3 : 3
+>temp-- : number
+>temp : number
+
+-3 ** ++temp;
+>-3 ** ++temp : number
+>-3 : -3
+>3 : 3
+>++temp : number
+>temp : number
+
+-3 ** --temp;
+>-3 ** --temp : number
+>-3 : -3
+>3 : 3
+>--temp : number
+>temp : number
+
++3 ** temp++;
+>+3 ** temp++ : number
+>+3 : 3
+>3 : 3
+>temp++ : number
+>temp : number
+
++3 ** temp--;
+>+3 ** temp-- : number
+>+3 : 3
+>3 : 3
+>temp-- : number
+>temp : number
+
++3 ** ++temp;
+>+3 ** ++temp : number
+>+3 : 3
+>3 : 3
+>++temp : number
+>temp : number
+
++3 ** --temp;
+>+3 ** --temp : number
+>+3 : 3
+>3 : 3
+>--temp : number
+>temp : number
+
+-3 ** temp++ ** 2;
+>-3 ** temp++ ** 2 : number
+>-3 : -3
+>3 : 3
+>temp++ ** 2 : number
+>temp++ : number
+>temp : number
+>2 : 2
+
+-3 ** temp-- ** 2;
+>-3 ** temp-- ** 2 : number
+>-3 : -3
+>3 : 3
+>temp-- ** 2 : number
+>temp-- : number
+>temp : number
+>2 : 2
+
+-3 ** ++temp ** 2;
+>-3 ** ++temp ** 2 : number
+>-3 : -3
+>3 : 3
+>++temp ** 2 : number
+>++temp : number
+>temp : number
+>2 : 2
+
+-3 ** --temp ** 2;
+>-3 ** --temp ** 2 : number
+>-3 : -3
+>3 : 3
+>--temp ** 2 : number
+>--temp : number
+>temp : number
+>2 : 2
+
++3 ** temp++ ** 2;
+>+3 ** temp++ ** 2 : number
+>+3 : 3
+>3 : 3
+>temp++ ** 2 : number
+>temp++ : number
+>temp : number
+>2 : 2
+
++3 ** temp-- ** 2;
+>+3 ** temp-- ** 2 : number
+>+3 : 3
+>3 : 3
+>temp-- ** 2 : number
+>temp-- : number
+>temp : number
+>2 : 2
+
++3 ** ++temp ** 2;
+>+3 ** ++temp ** 2 : number
+>+3 : 3
+>3 : 3
+>++temp ** 2 : number
+>++temp : number
+>temp : number
+>2 : 2
+
++3 ** --temp ** 2;
+>+3 ** --temp ** 2 : number
+>+3 : 3
+>3 : 3
+>--temp ** 2 : number
+>--temp : number
+>temp : number
+>2 : 2
+
+
+

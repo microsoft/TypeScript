@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts' />
 
 // @noUnusedLocals: true
-//// [|namespace A {
+////namespace A {
 ////    namespace B {
-////     }
-//// }|]
+////    }
+////}
 
-verify.rangeAfterCodeFix(`
-namespace A {
-}
-`);
-
+verify.codeFix({
+    description: "Remove declaration for: 'B'",
+    newFileContent: `namespace A {
+}`,
+});

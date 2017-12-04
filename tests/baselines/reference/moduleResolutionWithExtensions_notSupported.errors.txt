@@ -1,18 +1,15 @@
 /a.ts(1,17): error TS6142: Module './tsx' was resolved to '/tsx.tsx', but '--jsx' is not set.
 /a.ts(2,17): error TS6142: Module './jsx' was resolved to '/jsx.jsx', but '--jsx' is not set.
-/a.ts(3,16): error TS6143: Module './js' was resolved to '/js.js', but '--allowJs' is not set.
 
 
-==== /a.ts (3 errors) ====
-    import tsx from "./tsx";
+==== /a.ts (2 errors) ====
+    import tsx from "./tsx"; // Not allowed.
                     ~~~~~~~
 !!! error TS6142: Module './tsx' was resolved to '/tsx.tsx', but '--jsx' is not set.
-    import jsx from "./jsx";
+    import jsx from "./jsx"; // Not allowed.
                     ~~~~~~~
 !!! error TS6142: Module './jsx' was resolved to '/jsx.jsx', but '--jsx' is not set.
-    import js from "./js";
-                   ~~~~~~
-!!! error TS6143: Module './js' was resolved to '/js.js', but '--allowJs' is not set.
+    import js from "./js"; // OK because it's an untyped module.
     
 ==== /tsx.tsx (0 errors) ====
     

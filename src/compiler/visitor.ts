@@ -488,6 +488,7 @@ namespace ts {
                     nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
+                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, isToken),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
@@ -523,7 +524,9 @@ namespace ts {
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,
                     visitNode((<ConditionalExpression>node).condition, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).questionToken, visitor, isToken),
                     visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).colonToken, visitor, isToken),
                     visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression));
 
             case SyntaxKind.TemplateExpression:
@@ -815,6 +818,12 @@ namespace ts {
             case SyntaxKind.JsxClosingElement:
                 return updateJsxClosingElement(<JsxClosingElement>node,
                     visitNode((<JsxClosingElement>node).tagName, visitor, isJsxTagNameExpression));
+
+            case SyntaxKind.JsxFragment:
+                return updateJsxFragment(<JsxFragment>node,
+                    visitNode((<JsxFragment>node).openingFragment, visitor, isJsxOpeningFragment),
+                    nodesVisitor((<JsxFragment>node).children, visitor, isJsxChild),
+                    visitNode((<JsxFragment>node).closingFragment, visitor, isJsxClosingFragment));
 
             case SyntaxKind.JsxAttribute:
                 return updateJsxAttribute(<JsxAttribute>node,
@@ -1331,6 +1340,12 @@ namespace ts {
                 result = reduceNode((<JsxElement>node).closingElement, cbNode, result);
                 break;
 
+            case SyntaxKind.JsxFragment:
+                result = reduceNode((<JsxFragment>node).openingFragment, cbNode, result);
+                result = reduceLeft((<JsxFragment>node).children, cbNode, result);
+                result = reduceNode((<JsxFragment>node).closingFragment, cbNode, result);
+                break;
+
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 result = reduceNode((<JsxSelfClosingElement | JsxOpeningElement>node).tagName, cbNode, result);
@@ -1570,13 +1585,13 @@ namespace ts {
 
             // Add additional properties in debug mode to assist with debugging.
             Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
-                "__debugFlags": { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
+                __debugFlags: { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
             });
 
             Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
-                "__debugFlags": { get(this: Type) { return formatTypeFlags(this.flags); } },
-                "__debugObjectFlags": { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
-                "__debugTypeToString": { value(this: Type) { return this.checker.typeToString(this); } },
+                __debugFlags: { get(this: Type) { return formatTypeFlags(this.flags); } },
+                __debugObjectFlags: { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
+                __debugTypeToString: { value(this: Type) { return this.checker.typeToString(this); } },
             });
 
             const nodeConstructors = [
@@ -1589,11 +1604,11 @@ namespace ts {
             for (const ctor of nodeConstructors) {
                 if (!ctor.prototype.hasOwnProperty("__debugKind")) {
                     Object.defineProperties(ctor.prototype, {
-                        "__debugKind": { get(this: Node) { return formatSyntaxKind(this.kind); } },
-                        "__debugModifierFlags": { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
-                        "__debugTransformFlags": { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
-                        "__debugEmitFlags": { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
-                        "__debugGetText": {
+                        __debugKind: { get(this: Node) { return formatSyntaxKind(this.kind); } },
+                        __debugModifierFlags: { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
+                        __debugTransformFlags: { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
+                        __debugEmitFlags: { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
+                        __debugGetText: {
                             value(this: Node, includeTrivia?: boolean) {
                                 if (nodeIsSynthesized(this)) return "";
                                 const parseNode = getParseTreeNode(this);

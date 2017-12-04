@@ -55,8 +55,8 @@ var myList: MyList<number>;
 >MyList : MyList<T>
 
 var xs = [list, myList]; // {}[]
->xs : List<number>[]
->[list, myList] : List<number>[]
+>xs : (List<number> | MyList<number>)[]
+>[list, myList] : (List<number> | MyList<number>)[]
 >list : List<number>
 >myList : MyList<number>
 

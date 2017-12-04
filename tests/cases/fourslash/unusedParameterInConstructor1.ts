@@ -5,4 +5,8 @@
 ////    [|constructor(private p1: string, public p2: boolean, public p3: any, p5)|] { p5; }
 //// }
 
-verify.rangeAfterCodeFix("constructor(public p2: boolean, public p3: any, p5)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.codeFix({
+    description: "Remove declaration for: 'p1'",
+    index: 0,
+    newRangeContent: "constructor(public p2: boolean, public p3: any, p5)",
+});

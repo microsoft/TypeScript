@@ -1,4 +1,7 @@
 /// <reference path='fourslash.ts' />
 //// var x: [|function(new: number)|] = 12;
 
-verify.rangeAfterCodeFix("new () => number");
+verify.codeFix({
+    description: "Change 'function(new: number)' to 'new () => number'",
+    newRangeContent: "new () => number",
+});

@@ -1,45 +1,53 @@
 === tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts ===
-interface Indexed {
->Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 0, 0))
+declare let indexed1: { [n: string]: number; a: number; };
+>indexed1 : Symbol(indexed1, Decl(objectSpreadIndexSignature.ts, 0, 11))
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 0, 25))
+>a : Symbol(a, Decl(objectSpreadIndexSignature.ts, 0, 44))
 
-    [n: string]: number;
->n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 1, 5))
+declare let indexed2: { [n: string]: boolean; c: boolean; };
+>indexed2 : Symbol(indexed2, Decl(objectSpreadIndexSignature.ts, 1, 11))
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 1, 25))
+>c : Symbol(c, Decl(objectSpreadIndexSignature.ts, 1, 45))
 
-    a: number;
->a : Symbol(Indexed.a, Decl(objectSpreadIndexSignature.ts, 1, 24))
-}
-interface Indexed2 {
->Indexed2 : Symbol(Indexed2, Decl(objectSpreadIndexSignature.ts, 3, 1))
+declare let indexed3: { [n: string]: number };
+>indexed3 : Symbol(indexed3, Decl(objectSpreadIndexSignature.ts, 2, 11))
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 2, 25))
 
-    [n: string]: boolean;
->n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 5, 5))
-
-    c: boolean;
->c : Symbol(Indexed2.c, Decl(objectSpreadIndexSignature.ts, 5, 25))
-}
-let indexed: Indexed;
->indexed : Symbol(indexed, Decl(objectSpreadIndexSignature.ts, 8, 3))
->Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 0, 0))
-
-let indexed2: Indexed2;
->indexed2 : Symbol(indexed2, Decl(objectSpreadIndexSignature.ts, 9, 3))
->Indexed2 : Symbol(Indexed2, Decl(objectSpreadIndexSignature.ts, 3, 1))
-
-let i = { ...indexed, b: 11 };
->i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 10, 3))
->indexed : Symbol(indexed, Decl(objectSpreadIndexSignature.ts, 8, 3))
->b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 10, 21))
+let i = { ...indexed1, b: 11 };
+>i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 3, 3))
+>indexed1 : Symbol(indexed1, Decl(objectSpreadIndexSignature.ts, 0, 11))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 3, 22))
 
 // only indexed has indexer, so i[101]: any
 i[101];
->i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 10, 3))
+>i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 3, 3))
 
-let ii = { ...indexed, ...indexed2 };
->ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 13, 3))
->indexed : Symbol(indexed, Decl(objectSpreadIndexSignature.ts, 8, 3))
->indexed2 : Symbol(indexed2, Decl(objectSpreadIndexSignature.ts, 9, 3))
+let ii = { ...indexed1, ...indexed2 };
+>ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 6, 3))
+>indexed1 : Symbol(indexed1, Decl(objectSpreadIndexSignature.ts, 0, 11))
+>indexed2 : Symbol(indexed2, Decl(objectSpreadIndexSignature.ts, 1, 11))
 
 // both have indexer, so i[1001]: number | boolean
 ii[1001];
->ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 13, 3))
+>ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 6, 3))
+
+declare const b: boolean;
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 10, 13))
+
+indexed3 = { ...b ? indexed3 : undefined };
+>indexed3 : Symbol(indexed3, Decl(objectSpreadIndexSignature.ts, 2, 11))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 10, 13))
+>indexed3 : Symbol(indexed3, Decl(objectSpreadIndexSignature.ts, 2, 11))
+>undefined : Symbol(undefined)
+
+declare var roindex: { readonly [x:string]: number };
+>roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 13, 11))
+>x : Symbol(x, Decl(objectSpreadIndexSignature.ts, 13, 33))
+
+var writable = { ...roindex };
+>writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 14, 3))
+>roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 13, 11))
+
+writable.a = 0;  // should be ok.
+>writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 14, 3))
 

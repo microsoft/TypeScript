@@ -5,4 +5,7 @@
 ////     [|public f1<X, Y, Z>(a: X)|] { a; var b: Z; b }
 //// }
 
-verify.rangeAfterCodeFix("public f1<X, Z>(a: X)");
+verify.codeFix({
+    description: "Remove declaration for: 'Y'",
+    newRangeContent: "public f1<X, Z>(a: X)",
+});

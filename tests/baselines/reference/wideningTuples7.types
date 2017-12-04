@@ -1,0 +1,16 @@
+=== tests/cases/conformance/types/tuple/wideningTuples7.ts ===
+var foo = function bar() {
+>foo : () => [any]
+>function bar() {    let intermediate: [string];    return intermediate = [undefined];} : () => [any]
+>bar : () => [any]
+
+    let intermediate: [string];
+>intermediate : [string]
+
+    return intermediate = [undefined];
+>intermediate = [undefined] : [undefined]
+>intermediate : [string]
+>[undefined] : [undefined]
+>undefined : undefined
+
+};

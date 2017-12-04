@@ -1,0 +1,89 @@
+=== tests/cases/compiler/defaultArgsInFunctionExpressions.ts ===
+var f = function (a = 3) { return a; }; // Type should be (a?: number) => number
+>f : Symbol(f, Decl(defaultArgsInFunctionExpressions.ts, 0, 3))
+>a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 0, 18))
+>a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 0, 18))
+
+var n: number = f(4);
+>n : Symbol(n, Decl(defaultArgsInFunctionExpressions.ts, 1, 3))
+>f : Symbol(f, Decl(defaultArgsInFunctionExpressions.ts, 0, 3))
+
+n = f();
+>n : Symbol(n, Decl(defaultArgsInFunctionExpressions.ts, 1, 3))
+>f : Symbol(f, Decl(defaultArgsInFunctionExpressions.ts, 0, 3))
+
+var s: string = f('');
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 3, 3))
+>f : Symbol(f, Decl(defaultArgsInFunctionExpressions.ts, 0, 3))
+
+s = f();
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 3, 3))
+>f : Symbol(f, Decl(defaultArgsInFunctionExpressions.ts, 0, 3))
+
+// Type check the default argument with the type annotation
+var f2 = function (a: string = 3) { return a; }; // Should error, but be of type (a: string) => string;
+>f2 : Symbol(f2, Decl(defaultArgsInFunctionExpressions.ts, 7, 3))
+>a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 7, 19))
+>a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 7, 19))
+
+s = f2('');
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 3, 3))
+>f2 : Symbol(f2, Decl(defaultArgsInFunctionExpressions.ts, 7, 3))
+
+s = f2();
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 3, 3))
+>f2 : Symbol(f2, Decl(defaultArgsInFunctionExpressions.ts, 7, 3))
+
+n = f2();
+>n : Symbol(n, Decl(defaultArgsInFunctionExpressions.ts, 1, 3))
+>f2 : Symbol(f2, Decl(defaultArgsInFunctionExpressions.ts, 7, 3))
+
+// Contextually type the default arg with the type annotation
+var f3 = function (a: (s: string) => any = (s) => <number>s) { };
+>f3 : Symbol(f3, Decl(defaultArgsInFunctionExpressions.ts, 13, 3))
+>a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 13, 19))
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 13, 23))
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 13, 44))
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 13, 44))
+
+// Type check using the function's contextual type
+var f4: (a: number) => void = function (a = "") { };
+>f4 : Symbol(f4, Decl(defaultArgsInFunctionExpressions.ts, 16, 3))
+>a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 16, 9))
+>a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 16, 40))
+
+// Contextually type the default arg using the function's contextual type
+var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
+>f5 : Symbol(f5, Decl(defaultArgsInFunctionExpressions.ts, 19, 3))
+>a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 19, 9))
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 19, 13))
+>a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 19, 52))
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 19, 55))
+>s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 19, 55))
+
+// Instantiated module
+module T { }
+>T : Symbol(T, Decl(defaultArgsInFunctionExpressions.ts, 19, 76))
+
+module U {
+>U : Symbol(U, Decl(defaultArgsInFunctionExpressions.ts, 22, 12))
+
+    export var x;
+>x : Symbol(x, Decl(defaultArgsInFunctionExpressions.ts, 24, 14))
+}
+
+var f6 = (t = T) => { };
+>f6 : Symbol(f6, Decl(defaultArgsInFunctionExpressions.ts, 27, 3))
+>t : Symbol(t, Decl(defaultArgsInFunctionExpressions.ts, 27, 10))
+
+var f7 = (t = U) => { return t; };
+>f7 : Symbol(f7, Decl(defaultArgsInFunctionExpressions.ts, 28, 3))
+>t : Symbol(t, Decl(defaultArgsInFunctionExpressions.ts, 28, 10))
+>U : Symbol(U, Decl(defaultArgsInFunctionExpressions.ts, 22, 12))
+>t : Symbol(t, Decl(defaultArgsInFunctionExpressions.ts, 28, 10))
+
+f7().x;
+>f7().x : Symbol(U.x, Decl(defaultArgsInFunctionExpressions.ts, 24, 14))
+>f7 : Symbol(f7, Decl(defaultArgsInFunctionExpressions.ts, 28, 3))
+>x : Symbol(U.x, Decl(defaultArgsInFunctionExpressions.ts, 24, 14))
+

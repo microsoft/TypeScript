@@ -5,4 +5,7 @@
 ////    [|f1<T extends number>()|] {}
 //// }
 
-verify.rangeAfterCodeFix("f1()");
+verify.codeFix({
+    description: "Remove declaration for: 'T'",
+    newRangeContent: "f1()",
+});

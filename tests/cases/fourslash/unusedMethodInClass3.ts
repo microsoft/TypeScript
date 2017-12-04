@@ -1,11 +1,12 @@
 /// <reference path='fourslash.ts' />
 
 // @noUnusedLocals: true
-////[|class greeter {
+////class greeter {
 ////    private function1 = function() {
 ////    }
-////} |]
+////}
 
-verify.rangeAfterCodeFix(`
-class greeter {
-}`);
+verify.codeFix({
+    description: `Remove declaration for: 'function1'`,
+    newFileContent: "class greeter {\n}",
+});

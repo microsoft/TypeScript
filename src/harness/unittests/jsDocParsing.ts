@@ -7,7 +7,7 @@ namespace ts {
             function parsesCorrectly(name: string, content: string) {
                 it(name, () => {
                     const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
-                    assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
+                    assert(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
                     Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
                         () => Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type));
@@ -17,7 +17,7 @@ namespace ts {
             function parsesIncorrectly(name: string, content: string) {
                 it(name, () => {
                     const type = ts.parseJSDocTypeExpressionForTests(content);
-                    assert.isTrue(!type || type.diagnostics.length > 0);
+                    assert(!type || type.diagnostics.length > 0);
                 });
             }
 
@@ -106,7 +106,7 @@ namespace ts {
             function parsesIncorrectly(name: string, content: string) {
                 it(name, () => {
                     const type = parseIsolatedJSDocComment(content);
-                    assert.isTrue(!type || type.diagnostics.length > 0);
+                    assert(!type || type.diagnostics.length > 0);
                 });
             }
 
@@ -139,18 +139,22 @@ namespace ts {
                         `/**
   * @param
   */`);
+
+                parsesIncorrectly("noType",
+`/**
+* @type
+*/`);
+
+                parsesIncorrectly("@augments with no type",
+`/**
+ * @augments
+ */`);
             });
 
             describe("parsesCorrectly", () => {
                 parsesCorrectly("noLeadingAsterisk",
 `/**
     @type {number}
-  */`);
-
-
-                parsesCorrectly("noType",
-`/**
-  * @type
   */`);
 
 
@@ -296,6 +300,11 @@ namespace ts {
   * @property {number} age
   * @property {string} name
   */`);
+                parsesCorrectly("less-than and greater-than characters",
+`/**
+ * @param x hi
+< > still part of the previous comment
+ */`);
             });
         });
         describe("getFirstToken", () => {

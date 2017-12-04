@@ -9,7 +9,7 @@
 ////    static [|{| "isWriteAccess": true, "isDefinition": true |}n|] = '';
 ////
 ////    public bar() {
-////        foo.[|n|] = "'";
+////        foo.[|{| "isWriteAccess": true |}n|] = "'";
 ////        if(foo.[|n|]) {
 ////            var x = foo.[|n|];
 ////        }
@@ -19,7 +19,7 @@
 ////class foo2 {
 ////    private x = foo.[|n|];
 ////    constructor() {
-////        foo.[|n|] = x;
+////        foo.[|{| "isWriteAccess": true |}n|] = x;
 ////    }
 ////
 ////    function b(n) {

@@ -1,0 +1,142 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts ===
+// Generic functions used as arguments for function typed parameters are not used to make inferences from
+// Using function arguments, no errors expected
+
+function foo<T>(x: (a: T) => T) {
+>foo : Symbol(foo, Decl(genericCallWithFunctionTypedArguments.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 3, 13))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 3, 16))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 3, 20))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 3, 13))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 3, 13))
+
+    return x(null);
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 3, 16))
+}
+
+var r = foo(<U>(x: U) => ''); // {}
+>r : Symbol(r, Decl(genericCallWithFunctionTypedArguments.ts, 7, 3))
+>foo : Symbol(foo, Decl(genericCallWithFunctionTypedArguments.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 7, 13))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 7, 16))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 7, 13))
+
+var r2 = foo<string>(<U>(x: U) => ''); // string 
+>r2 : Symbol(r2, Decl(genericCallWithFunctionTypedArguments.ts, 8, 3))
+>foo : Symbol(foo, Decl(genericCallWithFunctionTypedArguments.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 8, 22))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 8, 25))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 8, 22))
+
+var r3 = foo(x => ''); // {}
+>r3 : Symbol(r3, Decl(genericCallWithFunctionTypedArguments.ts, 9, 3))
+>foo : Symbol(foo, Decl(genericCallWithFunctionTypedArguments.ts, 0, 0))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 9, 13))
+
+function foo2<T, U>(x: T, cb: (a: T) => U) {
+>foo2 : Symbol(foo2, Decl(genericCallWithFunctionTypedArguments.ts, 9, 22))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 11, 14))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 11, 16))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 11, 20))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 11, 14))
+>cb : Symbol(cb, Decl(genericCallWithFunctionTypedArguments.ts, 11, 25))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 11, 31))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 11, 14))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 11, 16))
+
+    return cb(x);
+>cb : Symbol(cb, Decl(genericCallWithFunctionTypedArguments.ts, 11, 25))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 11, 20))
+}
+
+var r4 = foo2(1, function <Z>(a: Z) { return '' }); // string, contextual signature instantiation is applied to generic functions
+>r4 : Symbol(r4, Decl(genericCallWithFunctionTypedArguments.ts, 15, 3))
+>foo2 : Symbol(foo2, Decl(genericCallWithFunctionTypedArguments.ts, 9, 22))
+>Z : Symbol(Z, Decl(genericCallWithFunctionTypedArguments.ts, 15, 27))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 15, 30))
+>Z : Symbol(Z, Decl(genericCallWithFunctionTypedArguments.ts, 15, 27))
+
+var r5 = foo2(1, (a) => ''); // string
+>r5 : Symbol(r5, Decl(genericCallWithFunctionTypedArguments.ts, 16, 3))
+>foo2 : Symbol(foo2, Decl(genericCallWithFunctionTypedArguments.ts, 9, 22))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 16, 18))
+
+var r6 = foo2<string, number>('', <Z>(a: Z) => 1);
+>r6 : Symbol(r6, Decl(genericCallWithFunctionTypedArguments.ts, 17, 3))
+>foo2 : Symbol(foo2, Decl(genericCallWithFunctionTypedArguments.ts, 9, 22))
+>Z : Symbol(Z, Decl(genericCallWithFunctionTypedArguments.ts, 17, 35))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 17, 38))
+>Z : Symbol(Z, Decl(genericCallWithFunctionTypedArguments.ts, 17, 35))
+
+function foo3<T, U>(x: T, cb: (a: T) => U, y: U) {
+>foo3 : Symbol(foo3, Decl(genericCallWithFunctionTypedArguments.ts, 17, 50))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 19, 14))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 19, 16))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 19, 20))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 19, 14))
+>cb : Symbol(cb, Decl(genericCallWithFunctionTypedArguments.ts, 19, 25))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 19, 31))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 19, 14))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 19, 16))
+>y : Symbol(y, Decl(genericCallWithFunctionTypedArguments.ts, 19, 42))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 19, 16))
+
+    return cb(x);
+>cb : Symbol(cb, Decl(genericCallWithFunctionTypedArguments.ts, 19, 25))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 19, 20))
+}
+
+var r7 = foo3(1, <Z>(a: Z) => '', ''); // string
+>r7 : Symbol(r7, Decl(genericCallWithFunctionTypedArguments.ts, 23, 3))
+>foo3 : Symbol(foo3, Decl(genericCallWithFunctionTypedArguments.ts, 17, 50))
+>Z : Symbol(Z, Decl(genericCallWithFunctionTypedArguments.ts, 23, 18))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 23, 21))
+>Z : Symbol(Z, Decl(genericCallWithFunctionTypedArguments.ts, 23, 18))
+
+var r8 = foo3(1, function (a) { return '' }, 1); // error
+>r8 : Symbol(r8, Decl(genericCallWithFunctionTypedArguments.ts, 25, 3))
+>foo3 : Symbol(foo3, Decl(genericCallWithFunctionTypedArguments.ts, 17, 50))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 25, 27))
+
+var r9 = foo3<number, string>(1, (a) => '', ''); // string
+>r9 : Symbol(r9, Decl(genericCallWithFunctionTypedArguments.ts, 26, 3))
+>foo3 : Symbol(foo3, Decl(genericCallWithFunctionTypedArguments.ts, 17, 50))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 26, 34))
+
+function other<T, U>(t: T, u: U) {
+>other : Symbol(other, Decl(genericCallWithFunctionTypedArguments.ts, 26, 48))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 28, 15))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 28, 17))
+>t : Symbol(t, Decl(genericCallWithFunctionTypedArguments.ts, 28, 21))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 28, 15))
+>u : Symbol(u, Decl(genericCallWithFunctionTypedArguments.ts, 28, 26))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments.ts, 28, 17))
+
+    var r10 = foo2(1, (x: T) => ''); // error
+>r10 : Symbol(r10, Decl(genericCallWithFunctionTypedArguments.ts, 29, 7), Decl(genericCallWithFunctionTypedArguments.ts, 30, 7))
+>foo2 : Symbol(foo2, Decl(genericCallWithFunctionTypedArguments.ts, 9, 22))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 29, 23))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 28, 15))
+
+    var r10 = foo2(1, (x) => ''); // string
+>r10 : Symbol(r10, Decl(genericCallWithFunctionTypedArguments.ts, 29, 7), Decl(genericCallWithFunctionTypedArguments.ts, 30, 7))
+>foo2 : Symbol(foo2, Decl(genericCallWithFunctionTypedArguments.ts, 9, 22))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 30, 23))
+
+    var r11 = foo3(1, (x: T) => '', ''); // error
+>r11 : Symbol(r11, Decl(genericCallWithFunctionTypedArguments.ts, 32, 7))
+>foo3 : Symbol(foo3, Decl(genericCallWithFunctionTypedArguments.ts, 17, 50))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 32, 23))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 28, 15))
+
+    var r11b = foo3(1, (x: T) => '', 1); // error
+>r11b : Symbol(r11b, Decl(genericCallWithFunctionTypedArguments.ts, 33, 7))
+>foo3 : Symbol(foo3, Decl(genericCallWithFunctionTypedArguments.ts, 17, 50))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments.ts, 33, 24))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments.ts, 28, 15))
+
+    var r12 = foo3(1, function (a) { return '' }, 1); // error
+>r12 : Symbol(r12, Decl(genericCallWithFunctionTypedArguments.ts, 34, 7))
+>foo3 : Symbol(foo3, Decl(genericCallWithFunctionTypedArguments.ts, 17, 50))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments.ts, 34, 32))
+}

@@ -12,8 +12,8 @@
 ////    method() { return this.alpha; }
 //// }
 //// var x = new Foo();
-//// x.alpha/*src1*/;
-//// x.beta/*src2*/;
+//// x.[|alpha/*src1*/|];
+//// x.[|beta/*src2*/|];
 
 verify.goToDefinition({
     src1: "dst1",

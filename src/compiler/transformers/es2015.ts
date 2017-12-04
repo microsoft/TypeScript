@@ -279,6 +279,13 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let currentText: string;
         let hierarchyFacts: HierarchyFacts;
+        let taggedTemplateStringDeclarations: VariableDeclaration[];
+
+        function recordTaggedTemplateString(temp: Identifier) {
+            taggedTemplateStringDeclarations = append(
+                taggedTemplateStringDeclarations,
+                createVariableDeclaration(temp));
+        }
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -307,6 +314,7 @@ namespace ts {
 
             currentSourceFile = undefined;
             currentText = undefined;
+            taggedTemplateStringDeclarations = undefined;
             hierarchyFacts = HierarchyFacts.None;
             return visited;
         }
@@ -520,6 +528,11 @@ namespace ts {
             addCaptureThisForNodeIfNeeded(statements, node);
             statementOffset = addCustomPrologue(statements, node.statements, statementOffset, visitor);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+            if (taggedTemplateStringDeclarations) {
+                statements.push(
+                    createVariableStatement(/*modifiers*/ undefined,
+                        createVariableDeclarationList(taggedTemplateStringDeclarations)));
+            }
             addRange(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
@@ -609,7 +622,7 @@ namespace ts {
                 //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
-                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(unescapeLeadingUnderscores(node.label.escapedText))) ||
+                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(idText(node.label))) ||
                     (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
 
                 if (!canUseBreakOrContinue) {
@@ -628,11 +641,11 @@ namespace ts {
                     else {
                         if (node.kind === SyntaxKind.BreakStatement) {
                             labelMarker = `break-${node.label.escapedText}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ true, unescapeLeadingUnderscores(node.label.escapedText), labelMarker);
+                            setLabeledJump(convertedLoopState, /*isBreak*/ true, idText(node.label), labelMarker);
                         }
                         else {
                             labelMarker = `continue-${node.label.escapedText}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ false, unescapeLeadingUnderscores(node.label.escapedText), labelMarker);
+                            setLabeledJump(convertedLoopState, /*isBreak*/ false, idText(node.label), labelMarker);
                         }
                     }
                     let returnExpression: Expression = createLiteral(labelMarker);
@@ -774,9 +787,7 @@ namespace ts {
             // To preserve the behavior of the old emitter, we explicitly indent
             // the body of the function here if it was requested in an earlier
             // transformation.
-            if (getEmitFlags(node) & EmitFlags.Indented) {
-                setEmitFlags(classFunction, EmitFlags.Indented);
-            }
+            setEmitFlags(classFunction, (getEmitFlags(node) & EmitFlags.Indented) | EmitFlags.ReuseTempVariableScope);
 
             // "inner" and "outer" below are added purely to preserve source map locations from
             // the old emitter
@@ -1314,7 +1325,8 @@ namespace ts {
                     EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps
                 )
             );
-            statement.startsOnNewLine = true;
+
+            startOnNewLine(statement);
             setTextRange(statement, parameter);
             setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue);
             statements.push(statement);
@@ -1670,7 +1682,7 @@ namespace ts {
                 ]
             );
             if (startsOnNewLine) {
-                call.startsOnNewLine = true;
+                startOnNewLine(call);
             }
 
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
@@ -2187,11 +2199,11 @@ namespace ts {
         }
 
         function recordLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.escapedText), true);
+            convertedLoopState.labels.set(idText(node.label), true);
         }
 
         function resetLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.escapedText), false);
+            convertedLoopState.labels.set(idText(node.label), false);
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
@@ -2541,7 +2553,7 @@ namespace ts {
         }
 
         /**
-         * Visits an ObjectLiteralExpression with computed propety names.
+         * Visits an ObjectLiteralExpression with computed property names.
          *
          * @param node An ObjectLiteralExpression node.
          */
@@ -2589,7 +2601,7 @@ namespace ts {
                 );
 
                 if (node.multiLine) {
-                    assignment.startsOnNewLine = true;
+                    startOnNewLine(assignment);
                 }
 
                 expressions.push(assignment);
@@ -3004,7 +3016,7 @@ namespace ts {
             else {
                 loopParameters.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
-                    const outParamName = createUniqueName("out_" + unescapeLeadingUnderscores(name.escapedText));
+                    const outParamName = createUniqueName("out_" + idText(name));
                     loopOutParameters.push({ originalName: name, outParamName });
                 }
             }
@@ -3070,7 +3082,7 @@ namespace ts {
             );
             setTextRange(expression, property);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             return expression;
         }
@@ -3092,7 +3104,7 @@ namespace ts {
             );
             setTextRange(expression, property);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             return expression;
         }
@@ -3115,7 +3127,7 @@ namespace ts {
             );
             setTextRange(expression, method);
             if (startsOnNewLine) {
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return expression;
@@ -3621,7 +3633,7 @@ namespace ts {
          * @param node A string literal.
          */
         function visitNumericLiteral(node: NumericLiteral) {
-            if (node.numericLiteralFlags & NumericLiteralFlags.BinaryOrOctalSpecifier) {
+            if (node.numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
                 return setTextRange(createNumericLiteral(node.text), node);
             }
             return node;
@@ -3636,11 +3648,10 @@ namespace ts {
             // Visit the tag expression
             const tag = visitNode(node.tag, visitor, isExpression);
 
-            // Allocate storage for the template site object
-            const temp = createTempVariable(hoistVariableDeclaration);
-
             // Build up the template arguments and the raw and cooked strings for the template.
-            const templateArguments: Expression[] = [temp];
+            // We start out with 'undefined' for the first argument and revisit later
+            // to avoid walking over the template string twice and shifting all our arguments over after the fact.
+            const templateArguments: Expression[] = [undefined];
             const cookedStrings: Expression[] = [];
             const rawStrings: Expression[] = [];
             const template = node.template;
@@ -3658,16 +3669,26 @@ namespace ts {
                 }
             }
 
-            // NOTE: The parentheses here is entirely optional as we are now able to auto-
-            //       parenthesize when rebuilding the tree. This should be removed in a
-            //       future version. It is here for now to match our existing emit.
-            return createParen(
-                inlineExpressions([
-                    createAssignment(temp, createArrayLiteral(cookedStrings)),
-                    createAssignment(createPropertyAccess(temp, "raw"), createArrayLiteral(rawStrings)),
-                    createCall(tag, /*typeArguments*/ undefined, templateArguments)
-                ])
-            );
+            const helperCall = createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings));
+
+            // Create a variable to cache the template object if we're in a module.
+            // Do not do this in the global scope, as any variable we currently generate could conflict with
+            // variables from outside of the current compilation. In the future, we can revisit this behavior.
+            if (isExternalModule(currentSourceFile)) {
+                const tempVar = createUniqueName("templateObject");
+                recordTaggedTemplateString(tempVar);
+                templateArguments[0] = createLogicalOr(
+                    tempVar,
+                    createAssignment(
+                        tempVar,
+                        helperCall)
+                );
+            }
+            else {
+                templateArguments[0] = helperCall;
+            }
+
+            return createCall(tag, /*typeArguments*/ undefined, templateArguments);
         }
 
         /**
@@ -4036,6 +4057,18 @@ namespace ts {
         );
     }
 
+    function createTemplateObjectHelper(context: TransformationContext, cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression) {
+        context.requestEmitHelper(templateObjectHelper);
+        return createCall(
+            getHelperName("__makeTemplateObject"),
+            /*typeArguments*/ undefined,
+            [
+                cooked,
+                raw
+            ]
+        );
+    }
+
     const extendsHelper: EmitHelper = {
         name: "typescript:extends",
         scoped: false,
@@ -4052,4 +4085,16 @@ namespace ts {
                 };
             })();`
     };
+
+    const templateObjectHelper: EmitHelper = {
+        name: "typescript:makeTemplateObject",
+        scoped: false,
+        priority: 0,
+        text: `
+            var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+                if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+                return cooked;
+            };`
+    };
+
 }

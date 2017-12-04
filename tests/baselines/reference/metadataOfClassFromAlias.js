@@ -35,6 +35,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var auxiliry_1 = require("./auxiliry");
 function annotation() {
     return function (target) { };
 }
@@ -43,7 +44,7 @@ var ClassA = /** @class */ (function () {
     }
     __decorate([
         annotation(),
-        __metadata("design:type", Object)
+        __metadata("design:type", auxiliry_1.SomeClass)
     ], ClassA.prototype, "array", void 0);
     return ClassA;
 }());

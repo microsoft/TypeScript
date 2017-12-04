@@ -1,0 +1,55 @@
+=== tests/cases/compiler/collisionExportsRequireAndClass_externalmodule.ts ===
+export class require {
+>require : require
+}
+export class exports {
+>exports : exports
+}
+module m1 {
+>m1 : typeof m1
+
+    class require {
+>require : require
+    }
+    class exports {
+>exports : exports
+    }
+}
+module m2 {
+>m2 : typeof m2
+
+    export class require {
+>require : require
+    }
+    export class exports {
+>exports : exports
+    }
+}
+
+=== tests/cases/compiler/collisionExportsRequireAndClass_globalFile.ts ===
+class require {
+>require : require
+}
+class exports {
+>exports : exports
+}
+module m3 {
+>m3 : typeof m3
+
+    class require {
+>require : require
+    }
+    class exports {
+>exports : exports
+    }
+}
+module m4 {
+>m4 : typeof m4
+
+    export class require {
+>require : require
+    }
+    export class exports {
+>exports : exports
+    }
+}

@@ -1,0 +1,53 @@
+=== tests/cases/compiler/letDeclarations-invalidContexts.ts ===
+// Errors, let must be defined inside a block
+if (true) 
+    let l1 = 0;
+>l1 : Symbol(l1, Decl(letDeclarations-invalidContexts.ts, 2, 7))
+
+else 
+    let l2 = 0;
+>l2 : Symbol(l2, Decl(letDeclarations-invalidContexts.ts, 4, 7))
+
+while (true) 
+    let l3 = 0;
+>l3 : Symbol(l3, Decl(letDeclarations-invalidContexts.ts, 7, 7))
+
+do 
+    let l4 = 0;
+>l4 : Symbol(l4, Decl(letDeclarations-invalidContexts.ts, 10, 7))
+
+while (true);
+
+var obj;
+>obj : Symbol(obj, Decl(letDeclarations-invalidContexts.ts, 13, 3))
+
+with (obj) 
+>obj : Symbol(obj, Decl(letDeclarations-invalidContexts.ts, 13, 3))
+
+    let l5 = 0;
+
+for (var i = 0; i < 10; i++)
+>i : Symbol(i, Decl(letDeclarations-invalidContexts.ts, 17, 8))
+>i : Symbol(i, Decl(letDeclarations-invalidContexts.ts, 17, 8))
+>i : Symbol(i, Decl(letDeclarations-invalidContexts.ts, 17, 8))
+
+    let l6 = 0;
+>l6 : Symbol(l6, Decl(letDeclarations-invalidContexts.ts, 18, 7))
+
+for (var i2 in {}) 
+>i2 : Symbol(i2, Decl(letDeclarations-invalidContexts.ts, 20, 8))
+
+    let l7 = 0;
+>l7 : Symbol(l7, Decl(letDeclarations-invalidContexts.ts, 21, 7))
+
+if (true) 
+    label: let l8 = 0;
+>l8 : Symbol(l8, Decl(letDeclarations-invalidContexts.ts, 24, 14))
+
+while (false)
+    label2: label3: label4: let l9 = 0;
+>l9 : Symbol(l9, Decl(letDeclarations-invalidContexts.ts, 27, 31))
+
+
+
+

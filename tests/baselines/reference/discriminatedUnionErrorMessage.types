@@ -1,0 +1,47 @@
+=== tests/cases/compiler/discriminatedUnionErrorMessage.ts ===
+type Square = { kind: "sq", size: number }
+>Square : Square
+>kind : "sq"
+>size : number
+
+type Rectangle = { kind: "rt", x: number, y: number }
+>Rectangle : Rectangle
+>kind : "rt"
+>x : number
+>y : number
+
+type Circle = { kind: "cr", radius: number }
+>Circle : Circle
+>kind : "cr"
+>radius : number
+
+type Shape =
+>Shape : Shape
+
+    | Square
+>Square : Square
+
+    | Rectangle
+>Rectangle : Rectangle
+
+    | Circle;
+>Circle : Circle
+
+let shape: Shape = {
+>shape : Shape
+>Shape : Shape
+>{    kind: "sq",    x: 12,    y: 13,} : { kind: "sq"; x: number; y: number; }
+
+    kind: "sq",
+>kind : string
+>"sq" : "sq"
+
+    x: 12,
+>x : number
+>12 : 12
+
+    y: 13,
+>y : number
+>13 : 13
+}
+

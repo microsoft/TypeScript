@@ -1,0 +1,12 @@
+
+tests/cases/compiler/index.ts(2,1): [91merror[0m TS1005: '}' expected.
+
+[30;47m2[0m 
+[30;47m [0m [91m[0m
+
+
+==== tests/cases/compiler/index.ts (1 errors) ====
+    if (true) {
+    
+    
+!!! error TS1005: '}' expected.

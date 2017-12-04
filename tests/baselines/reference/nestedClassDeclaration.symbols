@@ -1,0 +1,30 @@
+=== tests/cases/conformance/classes/nestedClassDeclaration.ts ===
+// nested classes are not allowed
+
+class C {
+>C : Symbol(C, Decl(nestedClassDeclaration.ts, 0, 0))
+
+    x: string;
+>x : Symbol(C.x, Decl(nestedClassDeclaration.ts, 2, 9))
+
+    class C2 {
+>C2 : Symbol(C2, Decl(nestedClassDeclaration.ts, 3, 14))
+    }
+}
+
+function foo() {
+>foo : Symbol(foo, Decl(nestedClassDeclaration.ts, 6, 1))
+
+    class C3 {
+>C3 : Symbol(C3, Decl(nestedClassDeclaration.ts, 8, 16))
+    }
+}
+
+var x = {
+>x : Symbol(x, Decl(nestedClassDeclaration.ts, 13, 3))
+
+    class C4 {
+>class : Symbol(class, Decl(nestedClassDeclaration.ts, 13, 9))
+    }
+}
+

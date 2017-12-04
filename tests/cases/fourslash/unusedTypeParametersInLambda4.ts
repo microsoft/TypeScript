@@ -6,4 +6,7 @@
 //// }
 //// [|var y: new <T,U>(a:T)=>void;|]
 
-verify.rangeAfterCodeFix("var y: new <T>(a:T)=>void;");
+verify.codeFix({
+    description: "Remove declaration for: 'U'",
+    newRangeContent: "var y: new <T>(a:T)=>void;",
+});

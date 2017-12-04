@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserPublicBreak1.ts ===
+public break;
+No type information for this code.
+No type information for this code.
