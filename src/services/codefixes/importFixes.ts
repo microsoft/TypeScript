@@ -329,7 +329,9 @@ namespace ts.codefix {
 
             const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
             if (!baseUrl) {
-                return [relativePath];
+                // Don't use a relative path that would pass through node_modules -- should have handled that that in `tryGetModuleNameAsNodeModule`,
+                // but would do nothing there if we're in classic resolution, so return no result in that case.
+                return forEachAncestorDirectory(relativePath, p => getBaseFileName(p) === "node_modules" ? true : undefined) ? [] : [relativePath];
             }
 
             const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);
