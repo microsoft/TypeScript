@@ -171,7 +171,7 @@ namespace ts {
         afterProgramCreate(host: DirectoryStructureHost, program: Program): void;
 
         /** Optional module name resolver */
-        moduleNameResolver?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
     }
 
     /**
@@ -310,9 +310,6 @@ namespace ts {
         const getCachedDirectoryStructureHost = configFileName && (() => directoryStructureHost as CachedDirectoryStructureHost);
         const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
         let newLine = getNewLineCharacter(compilerOptions, system);
-        const resolveModuleNames: (moduleNames: string[], containingFile: string, reusedNames?: string[]) => ResolvedModule[] = host.moduleNameResolver ?
-            (moduleNames, containingFile, reusedNames) => host.moduleNameResolver(moduleNames, containingFile, reusedNames) :
-            (moduleNames, containingFile, reusedNames?) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, /*logChanges*/ false);
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
             // Members for CompilerHost
@@ -332,8 +329,6 @@ namespace ts {
             getEnvironmentVariable: name => system.getEnvironmentVariable ? system.getEnvironmentVariable(name) : "",
             getDirectories: path => directoryStructureHost.getDirectories(path),
             realpath,
-            resolveTypeReferenceDirectives: (typeDirectiveNames, containingFile) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile),
-            resolveModuleNames,
             onReleaseOldSourceFile,
             // Members for ResolutionCacheHost
             toPath,
@@ -351,8 +346,14 @@ namespace ts {
         // Cache for the module resolution
         const resolutionCache = createResolutionCache(compilerHost, configFileName ?
             getDirectoryPath(getNormalizedAbsolutePath(configFileName, getCurrentDirectory())) :
-            getCurrentDirectory()
+            getCurrentDirectory(),
+            /*logChangesWhenResolvingModule*/ false
         );
+        // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
+        compilerHost.resolveModuleNames = host.resolveModuleNames ?
+            host.resolveModuleNames.bind(host) :
+            resolutionCache.resolveModuleNames.bind(resolutionCache);
+        compilerHost.resolveTypeReferenceDirectives = resolutionCache.resolveTypeReferenceDirectives.bind(resolutionCache);
 
         synchronizeProgram();
 
