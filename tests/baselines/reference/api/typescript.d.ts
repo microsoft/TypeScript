@@ -3823,10 +3823,10 @@ declare namespace ts {
     interface WatchHost {
         /** FS system to use */
         system: System;
-        /** Custom action before creating the program */
-        beforeProgramCreate(compilerOptions: CompilerOptions): void;
-        /** Custom action after new program creation is successful */
-        afterProgramCreate(host: DirectoryStructureHost, program: Program): void;
+        /** If provided, callback to invoke before each program creation */
+        beforeProgramCreate?(compilerOptions: CompilerOptions): void;
+        /** If provided, callback to invoke after every new program creation */
+        afterProgramCreate?(host: DirectoryStructureHost, program: Program): void;
         /** Optional module name resolver */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
     }

@@ -165,10 +165,10 @@ namespace ts {
         /** FS system to use */
         system: System;
 
-        /** Custom action before creating the program */
-        beforeProgramCreate(compilerOptions: CompilerOptions): void;
-        /** Custom action after new program creation is successful */
-        afterProgramCreate(host: DirectoryStructureHost, program: Program): void;
+        /** If provided, callback to invoke before each program creation */
+        beforeProgramCreate?(compilerOptions: CompilerOptions): void;
+        /** If provided, callback to invoke after every new program creation */
+        afterProgramCreate?(host: DirectoryStructureHost, program: Program): void;
 
         /** Optional module name resolver */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
@@ -239,7 +239,6 @@ namespace ts {
     export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfConfigFile {
         return createWatch({
             system,
-            beforeProgramCreate: noop,
             afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic),
             onConfigFileDiagnostic: reportDiagnostic || createDiagnosticReporter(system),
             configFileName,
@@ -253,7 +252,6 @@ namespace ts {
     export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfFilesAndCompilerOptions {
         return createWatch({
             system,
-            beforeProgramCreate: noop,
             afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic),
             rootFiles,
             options
@@ -286,7 +284,9 @@ namespace ts {
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
         let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
-        const { system, configFileName, onConfigFileDiagnostic, afterProgramCreate, beforeProgramCreate, optionsToExtend: optionsToExtendForConfigFile = {} } = host as WatchOfConfigFileHost;
+        const { system, configFileName, onConfigFileDiagnostic, optionsToExtend: optionsToExtendForConfigFile = {} } = host as WatchOfConfigFileHost;
+        const beforeProgramCreate: WatchHost["beforeProgramCreate"] = host.beforeProgramCreate ? host.beforeProgramCreate.bind(host) : noop;
+        const afterProgramCreate: WatchHost["afterProgramCreate"] = host.afterProgramCreate ? host.afterProgramCreate.bind(host) : noop;
         let { rootFiles: rootFileNames, options: compilerOptions, configFileSpecs, configFileWildCardDirectories } = host as WatchOfConfigFileHost;
 
         // From tsc we want to get already parsed result and hence check for rootFileNames
