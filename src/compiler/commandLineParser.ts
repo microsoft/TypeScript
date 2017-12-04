@@ -144,6 +144,7 @@ namespace ts {
                     "es2017.string": "lib.es2017.string.d.ts",
                     "es2017.intl": "lib.es2017.intl.d.ts",
                     "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
+                    "esnext.array": "lib.esnext.array.d.ts",
                     "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
                 }),
             },
