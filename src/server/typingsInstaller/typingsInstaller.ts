@@ -205,35 +205,29 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet.set(cacheLocation, true);
         }
 
-        private filterTypings(typingsToInstall: string[]) {
-            if (typingsToInstall.length === 0) {
-                return typingsToInstall;
-            }
-            const result: string[] = [];
-            for (const typing of typingsToInstall) {
-                if (this.missingTypingsSet.get(typing) || this.packageNameToTypingLocation.get(typing)) {
-                    continue;
+        private filterTypings(typingsToInstall: ReadonlyArray<string>): ReadonlyArray<string> {
+            return typingsToInstall.filter(typing => {
+                if (this.missingTypingsSet.get(typing)) {
+                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}' is in missingTypingsSet - skipping...`);
+                    return false;
+                }
+                if (this.packageNameToTypingLocation.get(typing)) {
+                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}' already has a typing - skipping...`);
+                    return false;
                 }
                 const validationResult = JsTyping.validatePackageName(typing);
-                if (validationResult === JsTyping.PackageNameValidationResult.Ok) {
-                    if (this.typesRegistry.has(typing)) {
-                        result.push(typing);
-                    }
-                    else {
-                        if (this.log.isEnabled()) {
-                            this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
-                        }
-                    }
-                }
-                else {
+                if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
                     // add typing name to missing set so we won't process it again
                     this.missingTypingsSet.set(typing, true);
-                    if (this.log.isEnabled()) {
-                        this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
-                    }
+                    if (this.log.isEnabled()) this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
+                    return false;
                 }
-            }
-            return result;
+                if (!this.typesRegistry.has(typing)) {
+                    if (this.log.isEnabled()) this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
+                    return false;
+                }
+                return true;
+            });
         }
 
         protected ensurePackageDirectoryExists(directory: string) {
