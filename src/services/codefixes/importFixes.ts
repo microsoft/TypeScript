@@ -320,75 +320,77 @@ namespace ts.codefix {
         host: LanguageServiceHost,
     ): string[] {
         const { baseUrl, paths, rootDirs } = options;
-        const choicesForEachExportingModule = mapIterator(arrayIterator(moduleSymbols), moduleSymbol => {
-            const moduleFileName = getOriginalModulePath(program, moduleSymbol.valueDeclaration.getSourceFile());
-            const sourceDirectory = getDirectoryPath(sourceFile.fileName);
-            const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
-                || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName)
-                || tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory)
-                || rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName);
-            if (global) {
-                return [global];
-            }
-
-            const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
-            if (!baseUrl) {
-                return [relativePath];
-            }
-
-            const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);
-            if (!relativeToBaseUrl) {
-                return [relativePath];
-            }
-
-            const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, options);
-            if (paths) {
-                const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
-                if (fromPaths) {
-                    return [fromPaths];
+        const choicesForEachExportingModule = flatMapIterator(arrayIterator(moduleSymbols), moduleSymbol => {
+            return mapIterator(getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()), moduleFileName => {
+                const sourceDirectory = getDirectoryPath(sourceFile.fileName);
+                const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
+                    || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName)
+                    || tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory)
+                    || rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName);
+                if (global) {
+                    return [global];
                 }
-            }
 
-            /*
-            Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
+                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
+                if (!baseUrl) {
+                    return [relativePath];
+                }
 
-            Suppose we have:
-                baseUrl = /base
-                sourceDirectory = /base/a/b
-                moduleFileName = /base/foo/bar
-            Then:
-                relativePath = ../../foo/bar
-                getRelativePathNParents(relativePath) = 2
-                pathFromSourceToBaseUrl = ../../
-                getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-                2 < 2 = false
-            In this case we should prefer using the baseUrl path "/a/b" instead of the relative path "../../foo/bar".
+                const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);
+                if (!relativeToBaseUrl) {
+                    return [relativePath];
+                }
 
-            Suppose we have:
-                baseUrl = /base
-                sourceDirectory = /base/foo/a
-                moduleFileName = /base/foo/bar
-            Then:
-                relativePath = ../a
-                getRelativePathNParents(relativePath) = 1
-                pathFromSourceToBaseUrl = ../../
-                getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-                1 < 2 = true
-            In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
-            */
-            const pathFromSourceToBaseUrl = getRelativePath(baseUrl, sourceDirectory, getCanonicalFileName);
-            const relativeFirst = getRelativePathNParents(pathFromSourceToBaseUrl) < getRelativePathNParents(relativePath);
-            return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
+                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, options);
+                if (paths) {
+                    const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
+                    if (fromPaths) {
+                        return [fromPaths];
+                    }
+                }
+
+                /*
+                Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
+
+                Suppose we have:
+                    baseUrl = /base
+                    sourceDirectory = /base/a/b
+                    moduleFileName = /base/foo/bar
+                Then:
+                    relativePath = ../../foo/bar
+                    getRelativePathNParents(relativePath) = 2
+                    pathFromSourceToBaseUrl = ../../
+                    getRelativePathNParents(pathFromSourceToBaseUrl) = 2
+                    2 < 2 = false
+                In this case we should prefer using the baseUrl path "/a/b" instead of the relative path "../../foo/bar".
+
+                Suppose we have:
+                    baseUrl = /base
+                    sourceDirectory = /base/foo/a
+                    moduleFileName = /base/foo/bar
+                Then:
+                    relativePath = ../a
+                    getRelativePathNParents(relativePath) = 1
+                    pathFromSourceToBaseUrl = ../../
+                    getRelativePathNParents(pathFromSourceToBaseUrl) = 2
+                    1 < 2 = true
+                In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
+                */
+                const pathFromSourceToBaseUrl = getRelativePath(baseUrl, sourceDirectory, getCanonicalFileName);
+                const relativeFirst = getRelativePathNParents(pathFromSourceToBaseUrl) < getRelativePathNParents(relativePath);
+                return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
+            });
         });
         // Only return results for the re-export with the shortest possible path (and also give the other path even if that's long.)
         return best(choicesForEachExportingModule, (a, b) => a[0].length < b[0].length);
     }
 
     /** Looks for a an existing import of something that links to this module, and prefers the symlink. */
-    function getOriginalModulePath(program: Program, { fileName }: SourceFile): string {
-        return firstDefined(program.getSourceFiles(), sf =>
+    function getAllModulePaths(program: Program, { fileName }: SourceFile): Iterator<string> {
+        const symlinks = mapDefinedIterator(arrayIterator(program.getSourceFiles()), sf =>
             sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
-                res && res.resolvedFileName === fileName ? res.originalPath : undefined)) || fileName;
+                res && res.resolvedFileName === fileName ? res.originalPath : undefined));
+        return concatenateIterator(singleIterator(fileName), symlinks);
     }
 
     function getRelativePathNParents(relativePath: string): number {

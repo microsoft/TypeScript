@@ -659,7 +659,7 @@ namespace FourSlash {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
             else if (ts.isArray(arg0)) {
-                const pairs: ReadonlyArray<[string | string[], string | string[]]> = arg0;
+                const pairs = arg0 as ReadonlyArray<[string | string[], string | string[]]>;
                 for (const [start, end] of pairs) {
                     this.verifyGoToXPlain(start, end, getDefs);
                 }

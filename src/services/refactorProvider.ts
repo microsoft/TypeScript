@@ -33,8 +33,8 @@ namespace ts {
         }
 
         export function getApplicableRefactors(context: RefactorContext): ApplicableRefactorInfo[] {
-            return flatMapIter(refactors.values(), refactor =>
-                context.cancellationToken && context.cancellationToken.isCancellationRequested() ? undefined : refactor.getAvailableActions(context));
+            return arrayFrom(flatMapIterator(refactors.values(), refactor =>
+                context.cancellationToken && context.cancellationToken.isCancellationRequested() ? undefined : refactor.getAvailableActions(context)));
         }
 
         export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string): RefactorEditInfo | undefined {
