@@ -1,6 +1,6 @@
 tests/cases/compiler/dynamicNamesErrors.ts(5,5): error TS2718: Duplicate declaration '[c0]'.
 tests/cases/compiler/dynamicNamesErrors.ts(6,5): error TS2718: Duplicate declaration '[c0]'.
-tests/cases/compiler/dynamicNamesErrors.ts(19,5): error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' has type 'number' at tests/cases/compiler/dynamicNamesErrors.ts 17:4, but here has type 'string'.
+tests/cases/compiler/dynamicNamesErrors.ts(19,5): error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
 tests/cases/compiler/dynamicNamesErrors.ts(24,1): error TS2322: Type 'T2' is not assignable to type 'T1'.
   Types of property '[c0]' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -50,7 +50,7 @@ tests/cases/compiler/dynamicNamesErrors.ts(54,14): error TS4025: Exported variab
         [c0]: number;
         [c1]: string;
         ~~~~
-!!! error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' has type 'number' at tests/cases/compiler/dynamicNamesErrors.ts 17:4, but here has type 'string'.
+!!! error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
     }
     
     let t1: T1;

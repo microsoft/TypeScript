@@ -1,0 +1,27 @@
+=== tests/cases/conformance/salsa/def.js ===
+var Outer = {};
+>Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(a.js, 0, 0))
+
+=== tests/cases/conformance/salsa/a.js ===
+Outer.Inner = class {
+>Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(a.js, 0, 0))
+
+    constructor() {
+        /** @type {number} */
+        this.y = 12
+>this.y : Symbol((Anonymous class).y, Decl(a.js, 1, 19))
+>this : Symbol((Anonymous class), Decl(a.js, 0, 13))
+>y : Symbol((Anonymous class).y, Decl(a.js, 1, 19))
+    }
+}
+
+=== tests/cases/conformance/salsa/b.js ===
+/** @type {Outer.Inner} */
+var x;
+>x : Symbol(x, Decl(b.js, 1, 3))
+
+x.y
+>x.y : Symbol((Anonymous class).y, Decl(a.js, 1, 19))
+>x : Symbol(x, Decl(b.js, 1, 3))
+>y : Symbol((Anonymous class).y, Decl(a.js, 1, 19))
+

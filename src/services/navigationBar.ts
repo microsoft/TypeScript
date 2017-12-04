@@ -336,46 +336,53 @@ namespace ts.NavigationBar {
                 nameToItems.set(name, [itemWithSameName, child]);
                 return true;
             }
-
-            function tryMerge(a: NavigationBarNode, b: NavigationBarNode): boolean {
-                if (shouldReallyMerge(a.node, b.node)) {
-                    merge(a, b);
-                    return true;
-                }
-                return false;
-            }
         });
+    }
 
-        /** a and b have the same name, but they may not be mergeable. */
-        function shouldReallyMerge(a: Node, b: Node): boolean {
-            return a.kind === b.kind && (a.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b));
+    function tryMerge(a: NavigationBarNode, b: NavigationBarNode): boolean {
+        if (shouldReallyMerge(a.node, b.node)) {
+            merge(a, b);
+            return true;
+        }
+        return false;
+    }
 
-            // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
-            // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
-            function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
-                if (a.body.kind !== b.body.kind) {
-                    return false;
-                }
-                if (a.body.kind !== SyntaxKind.ModuleDeclaration) {
-                    return true;
-                }
-                return areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body);
-            }
+    /** a and b have the same name, but they may not be mergeable. */
+    function shouldReallyMerge(a: Node, b: Node): boolean {
+        if (a.kind !== b.kind) {
+            return false;
+        }
+        switch (a.kind) {
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return hasModifier(a, ModifierFlags.Static) === hasModifier(b, ModifierFlags.Static);
+            case SyntaxKind.ModuleDeclaration:
+                return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b);
+            default:
+                return true;
+        }
+    }
+
+    // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
+    // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
+    function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
+        return a.body.kind === b.body.kind && (a.body.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body));
+    }
+
+    /** Merge source into target. Source should be thrown away after this is called. */
+    function merge(target: NavigationBarNode, source: NavigationBarNode): void {
+        target.additionalNodes = target.additionalNodes || [];
+        target.additionalNodes.push(source.node);
+        if (source.additionalNodes) {
+            target.additionalNodes.push(...source.additionalNodes);
         }
 
-        /** Merge source into target. Source should be thrown away after this is called. */
-        function merge(target: NavigationBarNode, source: NavigationBarNode): void {
-            target.additionalNodes = target.additionalNodes || [];
-            target.additionalNodes.push(source.node);
-            if (source.additionalNodes) {
-                target.additionalNodes.push(...source.additionalNodes);
-            }
-
-            target.children = concatenate(target.children, source.children);
-            if (target.children) {
-                mergeChildren(target.children);
-                sortChildren(target.children);
-            }
+        target.children = concatenate(target.children, source.children);
+        if (target.children) {
+            mergeChildren(target.children);
+            sortChildren(target.children);
         }
     }
 

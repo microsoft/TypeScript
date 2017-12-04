@@ -239,14 +239,14 @@ namespace ts.server {
         }
     }
 
-    export type Event = <T>(body: T, eventName: string) => void;
+    export type Event = <T extends object>(body: T, eventName: string) => void;
 
     export interface EventSender {
         event: Event;
     }
 
     /** @internal */
-    export function toEvent(eventName: string, body: {}): protocol.Event {
+    export function toEvent(eventName: string, body: object): protocol.Event {
         return {
             seq: 0,
             type: "event",
@@ -409,7 +409,7 @@ namespace ts.server {
             this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }
 
-        public event<T>(body: T, eventName: string): void {
+        public event<T extends object>(body: T, eventName: string): void {
             this.send(toEvent(eventName, body));
         }
 
@@ -1207,10 +1207,10 @@ namespace ts.server {
             if (simplifiedResult) {
                 return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended } = entry;
                         const convertedSpan = replacementSpan ? this.toLocationTextSpan(replacementSpan, scriptInfo) : undefined;
                         // Use `hasAction || undefined` to avoid serializing `false`.
-                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source };
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
                     }
                 }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
             }
@@ -1245,7 +1245,7 @@ namespace ts.server {
             // if specified a project, we only return affected file list in this project
             const projectsToSearch = args.projectFileName ? [this.projectService.findProject(args.projectFileName)] : info.containingProjects;
             for (const project of projectsToSearch) {
-                if (project.compileOnSaveEnabled && project.languageServiceEnabled) {
+                if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.getCompilationSettings().noEmit) {
                     result.push({
                         projectFileName: project.getProjectName(),
                         fileNames: project.getCompileOnSaveAffectedFileList(info),

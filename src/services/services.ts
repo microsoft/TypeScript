@@ -416,6 +416,7 @@ namespace ts {
         _updateExpressionBrand: any;
         _unaryExpressionBrand: any;
         _expressionBrand: any;
+        _declarationBrand: any;
         /*@internal*/typeArguments: NodeArray<TypeNode>;
         constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
@@ -471,6 +472,12 @@ namespace ts {
         }
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
+        }
+        getConstraint(): Type | undefined {
+            return this.checker.getBaseConstraintOfType(this);
+        }
+        getDefault(): Type | undefined {
+            return this.checker.getDefaultFromTypeParameter(this);
         }
     }
 

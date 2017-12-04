@@ -11,7 +11,7 @@
 ////class C extends A {[| |]}
 
 verify.codeFix({
-    description: "Implement inherited abstract class.",
+    description: "Implement inherited abstract class",
     // TODO: GH#18795
     newRangeContent: `f(a: number, b: string): boolean;\r
 f(a: number, b: string): this;\r

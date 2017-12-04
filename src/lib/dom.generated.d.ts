@@ -15029,6 +15029,8 @@ interface SVGElementTagNameMap {
     "view": SVGViewElement;
 }
 
+interface ElementTagNameMap extends HTMLElementTagNameMap, SVGElementTagNameMap { }
+
 declare var Audio: { new(src?: string): HTMLAudioElement; };
 declare var Image: { new(width?: number, height?: number): HTMLImageElement; };
 declare var Option: { new(text?: string, value?: string, defaultSelected?: boolean, selected?: boolean): HTMLOptionElement; };

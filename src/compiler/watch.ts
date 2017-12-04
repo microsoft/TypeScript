@@ -493,6 +493,10 @@ namespace ts {
         }
 
         function updateProgram() {
+            if (watchingHost.system.clearScreen) {
+                watchingHost.system.clearScreen();
+            }
+
             timerToUpdateProgram = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
 

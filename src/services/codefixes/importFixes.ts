@@ -209,8 +209,7 @@ namespace ts.codefix {
                 }
             }
         }
-        actions.push(getCodeActionForAddImport(moduleSymbols, context, declarations));
-        return actions;
+        return [...actions, ...getCodeActionsForAddImport(moduleSymbols, context, declarations)];
     }
 
     function getNamespaceImportName(declaration: AnyImportSyntax): Identifier {
@@ -276,17 +275,11 @@ namespace ts.codefix {
             }
         });
 
-        const actionFormat = kind === ImportKind.Equals
-            ? Diagnostics.Import_0_require_1
-            : kind === ImportKind.Namespace
-                ? Diagnostics.Import_Asterisk_as_0_from_1
-                : Diagnostics.Import_0_from_1;
-
         // if this file doesn't have any import statements, insert an import statement and then insert a new line
         // between the only import statement and user code. Otherwise just insert the statement because chances
         // are there are already a new line seperating code and import statements.
         return createCodeAction(
-            actionFormat,
+            Diagnostics.Import_0_from_module_1,
             [symbolName, moduleSpecifierWithoutQuotes],
             changes,
             "NewImport",
@@ -315,19 +308,84 @@ namespace ts.codefix {
         }
     }
 
-    export function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbols: ReadonlyArray<Symbol>, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost): string | undefined {
-        const choices = mapIterator(arrayIterator(moduleSymbols), moduleSymbol => {
+    export function getModuleSpecifiersForNewImport(
+        sourceFile: SourceFile,
+        moduleSymbols: ReadonlyArray<Symbol>,
+        options: CompilerOptions,
+        getCanonicalFileName: (file: string) => string,
+        host: LanguageServiceHost,
+    ): string[] {
+        const { baseUrl, paths, rootDirs } = options;
+        const choicesForEachExportingModule = mapIterator(arrayIterator(moduleSymbols), moduleSymbol => {
             const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
             const sourceDirectory = getDirectoryPath(sourceFile.fileName);
+            const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
+                || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName)
+                || tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory)
+                || rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName);
+            if (global) {
+                return [global];
+            }
 
-            return tryGetModuleNameFromAmbientModule(moduleSymbol) ||
-                tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName) ||
-                tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
-                tryGetModuleNameFromBaseUrl(options, moduleFileName, getCanonicalFileName) ||
-                options.rootDirs && tryGetModuleNameFromRootDirs(options.rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
-                removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
+            const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
+            if (!baseUrl) {
+                return [relativePath];
+            }
+
+            const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);
+            if (!relativeToBaseUrl) {
+                return [relativePath];
+            }
+
+            const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, options);
+            if (paths) {
+                const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
+                if (fromPaths) {
+                    return [fromPaths];
+                }
+            }
+
+            /*
+            Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
+
+            Suppose we have:
+                baseUrl = /base
+                sourceDirectory = /base/a/b
+                moduleFileName = /base/foo/bar
+            Then:
+                relativePath = ../../foo/bar
+                getRelativePathNParents(relativePath) = 2
+                pathFromSourceToBaseUrl = ../../
+                getRelativePathNParents(pathFromSourceToBaseUrl) = 2
+                2 < 2 = false
+            In this case we should prefer using the baseUrl path "/a/b" instead of the relative path "../../foo/bar".
+
+            Suppose we have:
+                baseUrl = /base
+                sourceDirectory = /base/foo/a
+                moduleFileName = /base/foo/bar
+            Then:
+                relativePath = ../a
+                getRelativePathNParents(relativePath) = 1
+                pathFromSourceToBaseUrl = ../../
+                getRelativePathNParents(pathFromSourceToBaseUrl) = 2
+                1 < 2 = true
+            In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
+            */
+            const pathFromSourceToBaseUrl = getRelativePath(baseUrl, sourceDirectory, getCanonicalFileName);
+            const relativeFirst = getRelativePathNParents(pathFromSourceToBaseUrl) < getRelativePathNParents(relativePath);
+            return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
         });
-        return best(choices, (a, b) => a.length < b.length);
+        // Only return results for the re-export with the shortest possible path (and also give the other path even if that's long.)
+        return best(choicesForEachExportingModule, (a, b) => a[0].length < b[0].length);
+    }
+
+    function getRelativePathNParents(relativePath: string): number {
+        let count = 0;
+        for (let i = 0; i + 3 <= relativePath.length && relativePath.slice(i, i + 3) === "../"; i += 3) {
+            count++;
+        }
+        return count;
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
@@ -337,44 +395,28 @@ namespace ts.codefix {
         }
     }
 
-    function tryGetModuleNameFromBaseUrl(options: CompilerOptions, moduleFileName: string, getCanonicalFileName: (file: string) => string): string | undefined {
-        if (!options.baseUrl) {
-            return undefined;
-        }
-
-        let relativeName = getRelativePathIfInDirectory(moduleFileName, options.baseUrl, getCanonicalFileName);
-        if (!relativeName) {
-            return undefined;
-        }
-
-        const relativeNameWithIndex = removeFileExtension(relativeName);
-        relativeName = removeExtensionAndIndexPostFix(relativeName, options);
-
-        if (options.paths) {
-            for (const key in options.paths) {
-                for (const pattern of options.paths[key]) {
-                    const indexOfStar = pattern.indexOf("*");
-                    if (indexOfStar === 0 && pattern.length === 1) {
-                        continue;
+    function tryGetModuleNameFromPaths(relativeNameWithIndex: string, relativeName: string, paths: MapLike<ReadonlyArray<string>>): string | undefined {
+        for (const key in paths) {
+            for (const pattern of paths[key]) {
+                const indexOfStar = pattern.indexOf("*");
+                if (indexOfStar === 0 && pattern.length === 1) {
+                    continue;
+                }
+                else if (indexOfStar !== -1) {
+                    const prefix = pattern.substr(0, indexOfStar);
+                    const suffix = pattern.substr(indexOfStar + 1);
+                    if (relativeName.length >= prefix.length + suffix.length &&
+                        startsWith(relativeName, prefix) &&
+                        endsWith(relativeName, suffix)) {
+                        const matchedStar = relativeName.substr(prefix.length, relativeName.length - suffix.length);
+                        return key.replace("\*", matchedStar);
                     }
-                    else if (indexOfStar !== -1) {
-                        const prefix = pattern.substr(0, indexOfStar);
-                        const suffix = pattern.substr(indexOfStar + 1);
-                        if (relativeName.length >= prefix.length + suffix.length &&
-                            startsWith(relativeName, prefix) &&
-                            endsWith(relativeName, suffix)) {
-                            const matchedStar = relativeName.substr(prefix.length, relativeName.length - suffix.length);
-                            return key.replace("\*", matchedStar);
-                        }
-                    }
-                    else if (pattern === relativeName || pattern === relativeNameWithIndex) {
-                        return key;
-                    }
+                }
+                else if (pattern === relativeName || pattern === relativeNameWithIndex) {
+                    return key;
                 }
             }
         }
-
-        return relativeName;
     }
 
     function tryGetModuleNameFromRootDirs(rootDirs: ReadonlyArray<string>, moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string): string | undefined {
@@ -547,10 +589,11 @@ namespace ts.codefix {
         return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
     }
 
-    function getCodeActionForAddImport(
+    function getCodeActionsForAddImport(
         moduleSymbols: ReadonlyArray<Symbol>,
         ctx: ImportCodeFixOptions,
-        declarations: ReadonlyArray<AnyImportSyntax>): ImportCodeAction {
+        declarations: ReadonlyArray<AnyImportSyntax>
+    ): ImportCodeAction[] {
         const fromExistingImport = firstDefined(declarations, declaration => {
             if (declaration.kind === SyntaxKind.ImportDeclaration && declaration.importClause) {
                 const changes = tryUpdateExistingImport(ctx, isImportClause(declaration.importClause) && declaration.importClause || undefined);
@@ -566,12 +609,12 @@ namespace ts.codefix {
             }
         });
         if (fromExistingImport) {
-            return fromExistingImport;
+            return [fromExistingImport];
         }
 
-        const moduleSpecifier = firstDefined(declarations, moduleSpecifierFromAnyImport)
-            || getModuleSpecifierForNewImport(ctx.sourceFile, moduleSymbols, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
-        return getCodeActionForNewImport(ctx, moduleSpecifier);
+        const existingDeclaration = firstDefined(declarations, moduleSpecifierFromAnyImport);
+        const moduleSpecifiers = existingDeclaration ? [existingDeclaration] : getModuleSpecifiersForNewImport(ctx.sourceFile, moduleSymbols, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
+        return moduleSpecifiers.map(spec => getCodeActionForNewImport(ctx, spec));
     }
 
     function moduleSpecifierFromAnyImport(node: AnyImportSyntax): string | undefined {
@@ -700,11 +743,7 @@ namespace ts.codefix {
         const symbolIdActionMap = new ImportCodeActionMap();
         const currentTokenMeaning = getMeaningFromLocation(symbolToken);
 
-        forEachExternalModule(checker, allSourceFiles, moduleSymbol => {
-            if (moduleSymbol === sourceFile.symbol) {
-                return;
-            }
-
+        forEachExternalModuleToImportFrom(checker, sourceFile, allSourceFiles, moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
             // check the default export
             const defaultExport = checker.tryGetMemberInModuleExports("default", moduleSymbol);
@@ -733,15 +772,33 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
+    export function forEachExternalModuleToImportFrom(checker: TypeChecker, from: SourceFile, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol) => void) {
+        forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
+            if (sourceFile === undefined || sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
+                cb(module);
+            }
+        });
+    }
+
+    export function forEachExternalModule(checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
         for (const ambient of checker.getAmbientModules()) {
-            cb(ambient);
+            cb(ambient, /*sourceFile*/ undefined);
         }
         for (const sourceFile of allSourceFiles) {
             if (isExternalOrCommonJsModule(sourceFile)) {
-                cb(sourceFile.symbol);
+                cb(sourceFile.symbol, sourceFile);
             }
         }
+    }
+
+    /**
+     * Don't include something from a `node_modules` that isn't actually reachable by a global import.
+     * A relative import to node_modules is usually a bad idea.
+     */
+    function isImportablePath(fromPath: string, toPath: string): boolean {
+        // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
+        const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
+        return toNodeModules === undefined || startsWith(fromPath, getDirectoryPath(toNodeModules));
     }
 
     export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
@@ -771,7 +828,6 @@ namespace ts.codefix {
             lastCharWasValid = isValid;
         }
         // Need `|| "_"` to ensure result isn't empty.
-        const token = stringToToken(res);
-        return token === undefined || !isNonContextualKeyword(token) ? res || "_" : `_${res}`;
+        return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 }

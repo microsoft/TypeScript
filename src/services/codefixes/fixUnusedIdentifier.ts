@@ -18,7 +18,7 @@ namespace ts.codefix {
 
             switch (token.kind) {
                 case ts.SyntaxKind.Identifier:
-                    return deleteIdentifierOrPrefixWithUnderscore(<Identifier>token);
+                    return deleteIdentifierOrPrefixWithUnderscore(<Identifier>token, context.errorCode);
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.NamespaceImport:
@@ -54,7 +54,7 @@ namespace ts.codefix {
                 };
             }
 
-            function deleteIdentifierOrPrefixWithUnderscore(identifier: Identifier): CodeAction[] | undefined {
+            function deleteIdentifierOrPrefixWithUnderscore(identifier: Identifier, errorCode: number): CodeAction[] | undefined {
                 const parent = identifier.parent;
                 switch (parent.kind) {
                     case ts.SyntaxKind.VariableDeclaration:
@@ -76,8 +76,10 @@ namespace ts.codefix {
 
                     case ts.SyntaxKind.Parameter:
                         const functionDeclaration = <FunctionDeclaration>parent.parent;
-                        return [functionDeclaration.parameters.length === 1 ? deleteNode(parent) : deleteNodeInList(parent),
-                            prefixIdentifierWithUnderscore(identifier)];
+                        const deleteAction = functionDeclaration.parameters.length === 1 ? deleteNode(parent) : deleteNodeInList(parent);
+                        return errorCode === Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code
+                            ? [deleteAction]
+                            : [deleteAction, prefixIdentifierWithUnderscore(identifier)];
 
                     // handle case where 'import a = A;'
                     case SyntaxKind.ImportEqualsDeclaration:
