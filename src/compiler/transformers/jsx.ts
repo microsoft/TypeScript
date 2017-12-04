@@ -6,6 +6,7 @@
 namespace ts {
     export function transformJsx(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
+        let currentSourceFile: SourceFile;
 
         return transformSourceFile;
 
@@ -19,6 +20,7 @@ namespace ts {
                 return node;
             }
 
+            currentSourceFile = node;
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
             return visited;
@@ -167,8 +169,11 @@ namespace ts {
                 return createTrue();
             }
             else if (node.kind === SyntaxKind.StringLiteral) {
-                const decoded = tryDecodeEntities((<StringLiteral>node).text);
-                return decoded ? setTextRange(createLiteral(decoded), node) : node;
+                // Always recreate the literal to escape any escape sequences or newlines which may be in the original jsx string and which
+                // Need to be escaped to be handled correctly in a normal string
+                const literal = createLiteral(tryDecodeEntities((<StringLiteral>node).text) || (<StringLiteral>node).text);
+                literal.singleQuote = (node as StringLiteral).singleQuote !== undefined ? (node as StringLiteral).singleQuote : !isStringDoubleQuoted(node as StringLiteral, currentSourceFile);
+                return setTextRange(literal, node);
             }
             else if (node.kind === SyntaxKind.JsxExpression) {
                 if (node.expression === undefined) {

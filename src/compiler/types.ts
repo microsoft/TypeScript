@@ -633,7 +633,7 @@ namespace ts {
         Node,   // Unique name based on the node in the 'original' property.
     }
 
-    export interface Identifier extends PrimaryExpression {
+    export interface Identifier extends PrimaryExpression, Declaration {
         kind: SyntaxKind.Identifier;
         /**
          * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
@@ -966,7 +966,7 @@ namespace ts {
         kind: SyntaxKind.GetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
-        body: FunctionBody;
+        body?: FunctionBody;
     }
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
@@ -975,7 +975,7 @@ namespace ts {
         kind: SyntaxKind.SetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
-        body: FunctionBody;
+        body?: FunctionBody;
     }
 
     export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
@@ -2766,12 +2766,16 @@ namespace ts {
         getAmbientModules(): Symbol[];
 
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
-        /** Unlike `tryGetMemberInModuleExports`, this includes properties of an `export =` value. */
+        /**
+         * Unlike `tryGetMemberInModuleExports`, this includes properties of an `export =` value.
+         * Does *not* return properties of primitive types.
+         */
         /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
         getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
-        /* @internal */ getBaseConstraintOfType(type: Type): Type | undefined;
+        getBaseConstraintOfType(type: Type): Type | undefined;
+        getDefaultFromTypeParameter(type: Type): Type | undefined;
 
         /* @internal */ getAnyType(): Type;
         /* @internal */ getStringType(): Type;
@@ -2814,6 +2818,17 @@ namespace ts {
         /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
+
+        /**
+         * Note that this will return undefined in the following case:
+         *     // a.ts
+         *     export namespace N { export class C { } }
+         *     // b.ts
+         *     <<enclosingDeclaration>>
+         * Where `C` is the symbol we're looking for.
+         * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
+         */
+        /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
     }
 
     export enum NodeBuilderFlags {
@@ -3058,6 +3073,7 @@ namespace ts {
         ExportStar              = 1 << 23,  // Export * declaration
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
+        JSContainer             = 1 << 26,  // Contains Javascript special declarations
 
         /* @internal */
         All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
@@ -3575,15 +3591,17 @@ namespace ts {
 
     export interface TypeVariable extends Type {
         /* @internal */
-        resolvedBaseConstraint: Type;
+        resolvedBaseConstraint?: Type;
         /* @internal */
-        resolvedIndexType: IndexType;
+        resolvedIndexType?: IndexType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends TypeVariable {
         /** Retrieve using getConstraintFromTypeParameter */
-        constraint: Type;        // Constraint
+        /* @internal */
+        constraint?: Type;        // Constraint
+        /* @internal */
         default?: Type;
         /* @internal */
         target?: TypeParameter;  // Instantiation target
@@ -3943,7 +3961,8 @@ namespace ts {
         ES2015 = 2,
         ES2016 = 3,
         ES2017 = 4,
-        ESNext = 5,
+        ES2018 = 5,
+        ESNext = 6,
         Latest = ESNext,
     }
 

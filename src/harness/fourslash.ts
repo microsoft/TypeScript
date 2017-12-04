@@ -888,7 +888,7 @@ namespace FourSlash {
          * @param expectedKind the kind of symbol (see ScriptElementKind)
          * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
-        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number, options?: ts.GetCompletionsAtPositionOptions) {
+        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number, options?: FourSlashInterface.CompletionsAtOptions) {
             let replacementSpan: ts.TextSpan;
             if (spanIndex !== undefined) {
                 replacementSpan = this.getTextSpanForRangeAtIndex(spanIndex);
@@ -1207,7 +1207,7 @@ Actual: ${stringify(fullActual)}`);
             this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
         }
 
-        private getCompletionListAtCaret(options?: ts.GetCompletionsAtPositionOptions): ts.CompletionInfo {
+        private getCompletionListAtCaret(options?: FourSlashInterface.CompletionsAtOptions): ts.CompletionInfo {
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
 
@@ -1721,7 +1721,7 @@ Actual: ${stringify(fullActual)}`);
             const longestNameLength = max(entries, m => m.name.length);
             const longestKindLength = max(entries, m => m.kind.length);
             entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
-            const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.source === undefined ? "" : m.source}`).join("\n");
+            const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`).join("\n");
             Harness.IO.log(membersString);
         }
 
@@ -2522,9 +2522,9 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
-            const ranges = this.getRanges();
-            if (ranges.length === 0) {
-                this.raiseError("At least one range should be specified in the testfile.");
+            const ranges = this.getRanges().filter(r => r.fileName === this.activeFile.fileName);
+            if (ranges.length !== 1) {
+                this.raiseError("Exactly one range should be specified in the testfile.");
             }
 
             const codeFixes = this.getCodeFixActions(this.activeFile.fileName, errorCode);
@@ -3081,7 +3081,7 @@ Actual: ${stringify(fullActual)}`);
                 const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
                 this.raiseError(`Expected "${stringify({ entryId, text, documentation, kind })}" to be in list [${itemsString}]`);
             }
-            else if (matchingItems.length > 1 && !(options && options.allowDuplicate)) {
+            else if (matchingItems.length > 1) {
                 this.raiseError(`Found duplicate completion items for ${stringify(entryId)}`);
             }
             const item = matchingItems[0];
@@ -3114,6 +3114,7 @@ Actual: ${stringify(fullActual)}`);
             }
 
             assert.equal(item.hasAction, hasAction);
+            assert.equal(item.isRecommended, options && options.isRecommended, "isRecommended");
         }
 
         private findFile(indexOrName: string | number) {
@@ -4552,13 +4553,13 @@ namespace FourSlashInterface {
         newContent: string;
     }
 
-    export interface CompletionsAtOptions {
+    export interface CompletionsAtOptions extends ts.GetCompletionsAtPositionOptions {
         isNewIdentifierLocation?: boolean;
     }
 
     export interface VerifyCompletionListContainsOptions extends ts.GetCompletionsAtPositionOptions {
         sourceDisplay: string;
-        allowDuplicate: boolean; // TODO: GH#20042
+        isRecommended?: true;
     }
 
     export interface NewContentOptions {

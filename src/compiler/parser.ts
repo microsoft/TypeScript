@@ -3281,7 +3281,7 @@ namespace ts {
                 // Check for "(xxx yyy", where xxx is a modifier and yyy is an identifier. This
                 // isn't actually allowed, but we want to treat it as a lambda so we can provide
                 // a good error message.
-                if (isModifierKind(second) && lookAhead(nextTokenIsIdentifier)) {
+                if (isModifierKind(second) && second !== SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsIdentifier)) {
                     return Tristate.True;
                 }
 
@@ -3298,7 +3298,7 @@ namespace ts {
                         return Tristate.True;
                     case SyntaxKind.QuestionToken:
                         nextToken();
-                        // If we have "(a?:" or "(a?," or "(a?=" or "(a?)" then it is definitely a lamnda.
+                        // If we have "(a?:" or "(a?," or "(a?=" or "(a?)" then it is definitely a lambda.
                         if (token() === SyntaxKind.ColonToken || token() === SyntaxKind.CommaToken || token() === SyntaxKind.EqualsToken || token() === SyntaxKind.CloseParenToken) {
                             return Tristate.True;
                         }

@@ -143,30 +143,45 @@
       <Item ItemId=";A_computed_property_name_in_a_class_property_declaration_must_refer_to_an_expression_whose_type_is_a_1166" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Имя вычисляемого свойства в объявлении свойств класса должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";A_computed_property_name_in_a_method_overload_must_refer_to_an_expression_whose_type_is_a_literal_ty_1168" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Имя вычисляемого свойства в перегрузке метода должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";A_computed_property_name_in_a_type_literal_must_refer_to_an_expression_whose_type_is_a_literal_type__1170" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Имя вычисляемого свойства в литерале должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";A_computed_property_name_in_an_ambient_context_must_refer_to_an_expression_whose_type_is_a_literal_t_1165" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Имя вычисляемого свойства в окружающем контексте должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";A_computed_property_name_in_an_interface_must_refer_to_an_expression_whose_type_is_a_literal_type_or_1169" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Имя вычисляемого свойства в интерфейсе должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -286,6 +301,15 @@
           <Val><![CDATA[A default export can only be used in an ECMAScript-style module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Экспорт по умолчанию можно использовать только в модуле в стиле ECMAScript.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_definite_assignment_assertion_is_not_permitted_in_this_context_1255" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A definite assignment assertion '!' is not permitted in this context.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Утверждение определенного присваивания "!" запрещено в этом контексте.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -506,12 +530,18 @@
       <Item ItemId=";A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly_1331" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Свойство класса, тип которого — уникальный символ, должно быть задано как "static" и "readonly".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly_1330" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Свойство интерфейса или литерала, тип которого — уникальный символ, должно быть задано как "readonly".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -764,6 +794,9 @@
       <Item ItemId=";A_variable_whose_type_is_a_unique_symbol_type_must_be_const_1332" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Переменная типа "уникальный символ" должна быть задана как "const".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2582,6 +2615,9 @@
       <Item ItemId=";Duplicate_declaration_0_2718" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate declaration '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Дублирующееся объявление "{0}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2795,6 +2831,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enable_strict_checking_of_property_initialization_in_classes_6187" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable strict checking of property initialization in classes.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Включение строгой проверки инициализации свойств в классах.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enable_strict_null_checks_6113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable strict null checks.]]></Val>
@@ -2936,6 +2981,9 @@
       <Item ItemId=";Expected_0_arguments_but_got_1_or_more_2556" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} arguments, but got {1} or more.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ожидалось аргументов: {0}, получено: {1} или больше.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2969,6 +3017,9 @@
       <Item ItemId=";Expected_at_least_0_arguments_but_got_1_or_more_2557" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected at least {0} arguments, but got {1} or more.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ожидалось аргументов не меньше: {0}, получено: {1} или больше.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3716,32 +3767,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_0_from_1_90013" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_0_from_module_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import '{0}' from "{1}".]]></Val>
+          <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Импортируйте "{0}" из "{1}".]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Import {0} from {1}.]]></Val>
-          </Prev>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Import_0_require_1_95015" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Import '{0}' = require("{1}").]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Import "{0}" = require("{1}").]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Import_Asterisk_as_0_from_1_95016" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Import * as '{0}' from "{1}".]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Import * as "{0}" from "{1}".]]></Val>
+            <Val><![CDATA[Импорт "{0}" из модуля "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4505,12 +4535,18 @@
       <Item ItemId=";Method_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2_4101" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Method '{0}' of exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Метод "{0}" экспортированного интерфейса имеет или использует имя "{1}" из закрытого модуля "{2}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Method_0_of_exported_interface_has_or_is_using_private_name_1_4102" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Method '{0}' of exported interface has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Метод "{0}" экспортированного интерфейса имеет или использует закрытое имя "{1}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5438,6 +5474,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' has no initializer and is not definitely assigned in the constructor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Свойство "{0}" не имеет инициализатора, и ему не гарантировано присваивание в конструкторе.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation_7033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.]]></Val>
@@ -5558,6 +5603,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_is_used_before_being_assigned_2565" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' is used before being assigned.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Свойство "{0}" используется перед присваиванием значения.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property_2606" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of JSX spread attribute is not assignable to target property.]]></Val>
@@ -5660,18 +5714,27 @@
       <Item ItemId=";Public_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4098" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Открытый метод "{0}" экспортированного класса имеет или использует имя "{1}" из внешнего модуля {2}, но не может быть именован.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Public_method_0_of_exported_class_has_or_is_using_name_1_from_private_module_2_4099" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Открытый метод "{0}" экспортированного класса имеет или использует имя "{1}" из закрытого модуля "{2}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Public_method_0_of_exported_class_has_or_is_using_private_name_1_4100" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Открытый метод "{0}" экспортированного класса имеет или использует закрытое имя "{1}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5705,18 +5768,27 @@
       <Item ItemId=";Public_static_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_4095" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Открытый статический метод "{0}" экспортированного класса имеет или использует имя "{1}" из внешнего модуля {2}, но не может быть именован.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Public_static_method_0_of_exported_class_has_or_is_using_name_1_from_private_module_2_4096" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Открытый статический метод "{0}" экспортированного класса имеет или использует имя "{1}" из закрытого модуля "{2}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Public_static_method_0_of_exported_class_has_or_is_using_private_name_1_4097" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using private name '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Открытый статический метод "{0}" экспортированного класса имеет или использует закрытое имя "{1}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6506,17 +6578,17 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_has_type_1_at_2_but_here_has_typ_2717" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_must_be_of_type_1_but_here_has_t_2717" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' has type '{1}' at {2}, but here has type '{3}'.]]></Val>
+          <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_has_type_1_at_2_but_here_has_typ_2403" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_t_2403" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' has type '{1}' at {2}, but here has type '{3}'.]]></Val>
+          <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Последующие объявления переменных должны иметь тот же тип.  Переменная "{0}" должна иметь тип "{1}" в {2}, но имеет тип "{3}".]]></Val>
+            <Val><![CDATA[Последующие объявления переменных должны иметь тот же тип. Переменная "{0}" должна иметь тип "{1}", однако имеет тип "{2}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6737,6 +6809,9 @@
       <Item ItemId=";The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary_2527" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The inferred type of '{0}' references an inaccessible '{1}' type. A type annotation is necessary.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Выведенный тип "{0}" ссылается на недоступный тип "{1}". Требуется аннотация типа.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8789,18 +8864,27 @@
       <Item ItemId=";unique_symbol_types_are_not_allowed_here_1335" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Типы "уникальный символ" здесь запрещены.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";unique_symbol_types_are_only_allowed_on_variables_in_a_variable_statement_1334" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are only allowed on variables in a variable statement.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Типы "уникальный символ" разрешены только в переменных в операторе с переменной.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name_1333" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types may not be used on a variable declaration with a binding name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Типы "уникальный символ" невозможно использовать в объявлении переменной с именем привязки.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
