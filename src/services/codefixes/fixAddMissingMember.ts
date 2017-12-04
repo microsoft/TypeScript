@@ -62,7 +62,6 @@ namespace ts.codefix {
         }
 
         const classDeclarationSourceFile = getSourceFileOfNode(classDeclaration);
-        const classOpenBrace = getOpenBraceOfClassLike(classDeclaration, classDeclarationSourceFile);
 
         return isInJavaScriptFile(classDeclarationSourceFile) ?
             getActionsForAddMissingMemberInJavaScriptFile(classDeclaration, makeStatic) :
@@ -154,7 +153,7 @@ namespace ts.codefix {
                 typeNode,
                 /*initializer*/ undefined);
             const propertyChangeTracker = textChanges.ChangeTracker.fromContext(context);
-            propertyChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, property, { suffix: context.newLineCharacter });
+            propertyChangeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, property, context.newLineCharacter);
 
             const diag = makeStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0;
             actions = append(actions, {
@@ -180,7 +179,7 @@ namespace ts.codefix {
                     typeNode);
 
                 const indexSignatureChangeTracker = textChanges.ChangeTracker.fromContext(context);
-                indexSignatureChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, indexSignature, { suffix: context.newLineCharacter });
+                indexSignatureChangeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, indexSignature, context.newLineCharacter);
 
                 actions.push({
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_property_0), [tokenName]),
@@ -197,7 +196,7 @@ namespace ts.codefix {
                 const methodDeclaration = createMethodFromCallExpression(callExpression, tokenName, includeTypeScriptSyntax, makeStatic);
 
                 const methodDeclarationChangeTracker = textChanges.ChangeTracker.fromContext(context);
-                methodDeclarationChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, methodDeclaration, { suffix: context.newLineCharacter });
+                methodDeclarationChangeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration, context.newLineCharacter);
                 const diag = makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0;
                 return {
                     description: formatStringFromArgs(getLocaleSpecificMessage(diag), [tokenName]),
