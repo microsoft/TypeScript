@@ -337,8 +337,32 @@ namespace ts.textChanges {
             return this.replaceWithSingle(sourceFile, startPosition, startPosition, newNode, options);
         }
 
-        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}) {
-            if ((isStatementButNotDeclaration(after)) ||
+        public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement, newLineCharacter: string): void {
+            const firstStatement = firstOrUndefined(ctr.body.statements);
+            if (!firstStatement || !ctr.body.multiLine) {
+                this.replaceNode(sourceFile, ctr.body, createBlock([newStatement, ...ctr.body.statements], /*multiLine*/ true), { useNonAdjustedEndPosition: true });
+            }
+            else {
+                this.insertNodeBefore(sourceFile, firstStatement, newStatement, { suffix: newLineCharacter });
+            }
+        }
+
+        public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration, newElement: ClassElement, newLineCharacter: string): void {
+            const firstMember = firstOrUndefined(cls.members);
+            if (!firstMember) {
+                const members = [newElement];
+                const newCls = cls.kind === SyntaxKind.ClassDeclaration
+                    ? updateClassDeclaration(cls, cls.decorators, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members)
+                    : updateClassExpression(cls, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members);
+                this.replaceNode(sourceFile, cls, newCls, { useNonAdjustedEndPosition: true });
+            }
+            else {
+                this.insertNodeBefore(sourceFile, firstMember, newElement, { suffix: newLineCharacter });
+            }
+        }
+
+        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}): this {
+            if (isStatementButNotDeclaration(after) ||
                 after.kind === SyntaxKind.PropertyDeclaration ||
                 after.kind === SyntaxKind.PropertySignature ||
                 after.kind === SyntaxKind.MethodSignature) {

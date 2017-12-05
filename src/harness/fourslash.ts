@@ -2471,7 +2471,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private verifyNewContent(options: FourSlashInterface.NewContentOptions) {
-            if (options.newFileContent) {
+            if (options.newFileContent !== undefined) {
                 assert(!options.newRangeContent);
                 this.verifyCurrentFileContent(options.newFileContent);
             }

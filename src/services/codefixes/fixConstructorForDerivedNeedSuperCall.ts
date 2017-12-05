@@ -12,7 +12,7 @@ namespace ts.codefix {
 
             const changeTracker = textChanges.ChangeTracker.fromContext(context);
             const superCall = createStatement(createCall(createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray));
-            changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>token.parent, sourceFile), superCall, { suffix: context.newLineCharacter });
+            changeTracker.insertNodeAtConstructorStart(sourceFile, <ConstructorDeclaration>token.parent, superCall, context.newLineCharacter);
 
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),
