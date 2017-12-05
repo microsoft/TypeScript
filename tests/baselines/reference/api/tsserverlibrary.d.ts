@@ -4904,6 +4904,7 @@ declare namespace ts.server.protocol {
         Rename = "rename",
         Saveto = "saveto",
         SignatureHelp = "signatureHelp",
+        Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
         ReloadProjects = "reloadProjects",
@@ -5004,6 +5005,24 @@ declare namespace ts.server.protocol {
          */
         file: string;
         projectFileName?: string;
+    }
+    /**
+     * Requests status information from the server
+     */
+    interface StatusRequest extends Request {
+        command: CommandTypes.Status;
+    }
+    interface StatusResponseBody {
+        /**
+         * the version of the currently-running server.
+         */
+        version: string;
+    }
+    /**
+     * Response to StatusRequest
+     */
+    interface StatusResponse extends Response {
+        body: StatusResponseBody;
     }
     /**
      * Requests a JS Doc comment template for a given position
