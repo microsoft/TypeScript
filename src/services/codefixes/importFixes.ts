@@ -320,8 +320,8 @@ namespace ts.codefix {
         host: LanguageServiceHost,
     ): string[] {
         const { baseUrl, paths, rootDirs } = options;
-        const choicesForEachExportingModule = flatMapIterator(arrayIterator(moduleSymbols), moduleSymbol => {
-            return mapIterator(getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()), moduleFileName => {
+        const choicesForEachExportingModule = flatMap(moduleSymbols, moduleSymbol =>
+            getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()).map(moduleFileName => {
                 const sourceDirectory = getDirectoryPath(sourceFile.fileName);
                 const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
                     || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName)
@@ -379,18 +379,20 @@ namespace ts.codefix {
                 const pathFromSourceToBaseUrl = getRelativePath(baseUrl, sourceDirectory, getCanonicalFileName);
                 const relativeFirst = getRelativePathNParents(pathFromSourceToBaseUrl) < getRelativePathNParents(relativePath);
                 return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
-            });
-        });
+            }));
         // Only return results for the re-export with the shortest possible path (and also give the other path even if that's long.)
-        return best(choicesForEachExportingModule, (a, b) => a[0].length < b[0].length);
+        return best(arrayIterator(choicesForEachExportingModule), (a, b) => a[0].length < b[0].length);
     }
 
-    /** Looks for a an existing import of something that links to this module, and prefers the symlink. */
-    function getAllModulePaths(program: Program, { fileName }: SourceFile): Iterator<string> {
-        const symlinks = mapDefinedIterator(arrayIterator(program.getSourceFiles()), sf =>
+    /**
+     * Looks for a existing imports that use symlinks to this module.
+     * Only if no symlink is available, the real path will be used.
+     */
+    function getAllModulePaths(program: Program, { fileName }: SourceFile): ReadonlyArray<string> {
+        const symlinks = mapDefined(program.getSourceFiles(), sf =>
             sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
                 res && res.resolvedFileName === fileName ? res.originalPath : undefined));
-        return concatenateIterator(singleIterator(fileName), symlinks);
+        return symlinks.length === 0 ? [fileName] : symlinks;
     }
 
     function getRelativePathNParents(relativePath: string): number {

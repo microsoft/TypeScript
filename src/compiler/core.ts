@@ -691,26 +691,6 @@ namespace ts {
         return [...array1, ...array2];
     }
 
-    export function concatenateIterator<T>(a: Iterator<T>, b: Iterator<T>): Iterator<T> {
-        let aDone = false;
-        return {
-            next() {
-                while (true) {
-                    if (aDone) {
-                        return b.next();
-                    }
-                    else {
-                        const res = a.next();
-                        if (!res.done) {
-                            return res;
-                        }
-                        aDone = true;
-                    }
-                }
-            }
-        };
-    }
-
     function deduplicateRelational<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer: Comparer<T>) {
         // Perform a stable sort of the array. This ensures the first entry in a list of
         // duplicates remains the first entry in the result.
