@@ -2614,6 +2614,35 @@ If a get accessor is declared for a property, the return type of the get accesso
 
 ### Object literal spread assignment { #object-literal-spread-assignment }
 
+A spread assignment inserts properties into the object literal as if they all were written at the point of the spread assignment.
+Unlike normal property assignments, however, duplicates are allowed.
+In the case of duplicates, the last assignment is the one that is that in the resulting object type.
+
+The only allowed types of expressions allowed in a spread assignment are
+  * The any type.
+  * The number, boolean, string or non-primitive object types.
+  * Mapped types.
+  * Unions or intersections of the above types.
+Spreading other types results in an error.
+
+When a spread assignment in encountered in an object literal, the resulting type is defined as a combination of the type of the spread assignment and the object type built from the assignments preceding the spread assignment.
+For a preceding object type *O*, spreading:
+
+* The any type results in the any type.
+* The never type results in *O*.
+* A union type *U* results in the union of `{ O, ...u }` for all *u* in *U*.
+* The non-primitive object type results in the non-primitive object type.
+* The boolean, number or string types results in *O*.
+* An enum type results in *O*.
+* Any other type *O'* results in object type with properties:
+  * of type *T* for every required, public property of type *T* in *O'* that is not a method of a class.
+  * of type *T* for every required, public property of type *T* in *O* that is not a method of a class and is not a private property of *O'*.
+  * of type *T | U* for every optional, public property of type *T* in *O'* that has the name same in *O* with type *U* and is not a method of a class.
+  * of type *T* for every other optional, public property of the *T* in *O'* that is not a method of a class.
+
+Spreading together two object types *O* and *O'* results in an object type with an index signature if both source types have an index signature.
+The type of the index signature is the union of the source index signatures' types, and is readonly if any of the source index signatures are readonly.
+
 ### Object literal contextual typing { #object-literal-contextual-typing }
 
 When an object literal is contextually typed by a type that includes a string index signature, the resulting type of the object literal includes a string index signature with the union type of the types of the properties declared in the object literal, or the Undefined type if the object literal is empty.
