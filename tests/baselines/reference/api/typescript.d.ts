@@ -2729,9 +2729,7 @@ declare namespace ts {
      * Partial interface of the System thats needed to support the caching of directory structure
      */
     interface DirectoryStructureHost {
-        newLine: string;
         useCaseSensitiveFileNames: boolean;
-        write(s: string): void;
         readFile(path: string, encoding?: string): string | undefined;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         fileExists(path: string): boolean;
@@ -2743,7 +2741,9 @@ declare namespace ts {
         exit(exitCode?: number): void;
     }
     interface System extends DirectoryStructureHost {
+        newLine: string;
         args: string[];
+        write(s: string): void;
         getFileSize?(path: string): number;
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
@@ -3820,20 +3820,22 @@ declare namespace ts {
      * Creates the function that compiles the program by maintaining the builder for the program and reports the errors and emits files
      */
     function createProgramCompilerWithBuilderState(system?: System, reportDiagnostic?: DiagnosticReporter): (host: DirectoryStructureHost, program: Program) => void;
-    interface WatchHost {
+    interface WatchCompilerHost {
         /** FS system to use */
         system: System;
         /** If provided, callback to invoke before each program creation */
         beforeProgramCreate?(compilerOptions: CompilerOptions): void;
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(host: DirectoryStructureHost, program: Program): void;
-        /** Optional module name resolver */
+        useCaseSensitiveFileNames(): boolean;
+        getNewLine(): string;
+        /** If provided this function would be used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
     }
     /**
      * Host to create watch with root files and options
      */
-    interface WatchOfFilesAndCompilerOptionsHost extends WatchHost {
+    interface WatchCompilerHostOfFilesAndCompilerOptions extends WatchCompilerHost {
         /** root files to use to generate program */
         rootFiles: string[];
         /** Compiler options */
@@ -3842,7 +3844,7 @@ declare namespace ts {
     /**
      * Host to create watch with config file
      */
-    interface WatchOfConfigFileHost extends WatchHost {
+    interface WatchCompilerHostOfConfigFile extends WatchCompilerHost {
         /** Name of the config file to compile */
         configFileName: string;
         /** Options to extend */
@@ -3876,11 +3878,11 @@ declare namespace ts {
     /**
      * Creates the watch from the host for root files and compiler options
      */
-    function createWatch(host: WatchOfFilesAndCompilerOptionsHost): WatchOfFilesAndCompilerOptions;
+    function createWatch(host: WatchCompilerHostOfFilesAndCompilerOptions): WatchOfFilesAndCompilerOptions;
     /**
      * Creates the watch from the host for config file
      */
-    function createWatch(host: WatchOfConfigFileHost): WatchOfConfigFile;
+    function createWatch(host: WatchCompilerHostOfConfigFile): WatchOfConfigFile;
 }
 declare namespace ts {
     function parseCommandLine(commandLine: ReadonlyArray<string>, readFile?: (path: string) => string | undefined): ParsedCommandLine;

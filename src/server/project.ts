@@ -266,7 +266,7 @@ namespace ts.server {
         }
 
         getNewLine() {
-            return this.directoryStructureHost.newLine;
+            return this.projectService.host.newLine;
         }
 
         getProjectVersion() {

@@ -3023,9 +3023,7 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         return {
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames,
-            newLine: host.newLine,
             readFile: (path, encoding) => host.readFile(path, encoding),
-            write: s => host.write(s),
             writeFile,
             fileExists,
             directoryExists,

@@ -2729,9 +2729,7 @@ declare namespace ts {
      * Partial interface of the System thats needed to support the caching of directory structure
      */
     interface DirectoryStructureHost {
-        newLine: string;
         useCaseSensitiveFileNames: boolean;
-        write(s: string): void;
         readFile(path: string, encoding?: string): string | undefined;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         fileExists(path: string): boolean;
@@ -2743,7 +2741,9 @@ declare namespace ts {
         exit(exitCode?: number): void;
     }
     interface System extends DirectoryStructureHost {
+        newLine: string;
         args: string[];
+        write(s: string): void;
         getFileSize?(path: string): number;
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that

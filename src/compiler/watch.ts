@@ -161,7 +161,7 @@ namespace ts {
         };
     }
 
-    export interface WatchHost {
+    export interface WatchCompilerHost {
         /** FS system to use */
         system: System;
 
@@ -170,14 +170,18 @@ namespace ts {
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(host: DirectoryStructureHost, program: Program): void;
 
-        /** Optional module name resolver */
+        // Sub set of compiler host methods to read and generate new program
+        useCaseSensitiveFileNames(): boolean;
+        getNewLine(): string;
+
+        /** If provided this function would be used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
     }
 
     /**
      * Host to create watch with root files and options
      */
-    export interface WatchOfFilesAndCompilerOptionsHost extends WatchHost {
+    export interface WatchCompilerHostOfFilesAndCompilerOptions extends WatchCompilerHost {
         /** root files to use to generate program */
         rootFiles: string[];
 
@@ -188,7 +192,7 @@ namespace ts {
     /**
      * Host to create watch with config file
      */
-    export interface WatchOfConfigFileHost extends WatchHost {
+    export interface WatchCompilerHostOfConfigFile extends WatchCompilerHost {
         /** Name of the config file to compile */
         configFileName: string;
 
@@ -199,11 +203,11 @@ namespace ts {
         onConfigFileDiagnostic(diagnostic: Diagnostic): void;
     }
 
-    /*@internal*/
     /**
      * Host to create watch with config file that is already parsed (from tsc)
      */
-    export interface WatchOfConfigFileHost extends WatchHost {
+    /*@internal*/
+    export interface WatchCompilerHostOfConfigFile extends WatchCompilerHost {
         rootFiles?: string[];
         options?: CompilerOptions;
         optionsToExtend?: CompilerOptions;
@@ -234,39 +238,48 @@ namespace ts {
     }
 
     /**
+     * Creates the watch compiler host that can be extended with config file or root file names and options host
+     */
+    /*@internal*/
+    export function createWatchCompilerHost(system = sys, reportDiagnostic?: DiagnosticReporter): WatchCompilerHost {
+        return {
+            useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
+            getNewLine: () => system.newLine,
+            system,
+            afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic)
+        };
+    }
+
+    /**
      * Create the watched program for config file
      */
-    export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfConfigFile {
-        return createWatch({
-            system,
-            afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic),
-            onConfigFileDiagnostic: reportDiagnostic || createDiagnosticReporter(system),
-            configFileName,
-            optionsToExtend
-        });
+    export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system?: System, reportDiagnostic?: DiagnosticReporter): WatchOfConfigFile {
+        const host = createWatchCompilerHost(system) as WatchCompilerHostOfConfigFile;
+        host.onConfigFileDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
+        host.configFileName = configFileName;
+        host.optionsToExtend = optionsToExtend;
+        return createWatch(host);
     }
 
     /**
      * Create the watched program for root files and compiler options
      */
     export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfFilesAndCompilerOptions {
-        return createWatch({
-            system,
-            afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic),
-            rootFiles,
-            options
-        });
+        const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfFilesAndCompilerOptions;
+        host.rootFiles = rootFiles;
+        host.options = options;
+        return createWatch(host);
     }
 
     /**
      * Creates the watch from the host for root files and compiler options
      */
-    export function createWatch(host: WatchOfFilesAndCompilerOptionsHost): WatchOfFilesAndCompilerOptions;
+    export function createWatch(host: WatchCompilerHostOfFilesAndCompilerOptions): WatchOfFilesAndCompilerOptions;
     /**
      * Creates the watch from the host for config file
      */
-    export function createWatch(host: WatchOfConfigFileHost): WatchOfConfigFile;
-    export function createWatch(host: WatchOfFilesAndCompilerOptionsHost | WatchOfConfigFileHost): WatchOfFilesAndCompilerOptions | WatchOfConfigFile {
+    export function createWatch(host: WatchCompilerHostOfConfigFile): WatchOfConfigFile;
+    export function createWatch(host: WatchCompilerHostOfFilesAndCompilerOptions | WatchCompilerHostOfConfigFile): WatchOfFilesAndCompilerOptions | WatchOfConfigFile {
         interface HostFileInfo {
             version: number;
             sourceFile: SourceFile;
@@ -284,10 +297,10 @@ namespace ts {
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
         let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
-        const { system, configFileName, onConfigFileDiagnostic, optionsToExtend: optionsToExtendForConfigFile = {} } = host as WatchOfConfigFileHost;
-        const beforeProgramCreate: WatchHost["beforeProgramCreate"] = host.beforeProgramCreate ? host.beforeProgramCreate.bind(host) : noop;
-        const afterProgramCreate: WatchHost["afterProgramCreate"] = host.afterProgramCreate ? host.afterProgramCreate.bind(host) : noop;
-        let { rootFiles: rootFileNames, options: compilerOptions, configFileSpecs, configFileWildCardDirectories } = host as WatchOfConfigFileHost;
+        const { system, configFileName, onConfigFileDiagnostic, optionsToExtend: optionsToExtendForConfigFile = {} } = host as WatchCompilerHostOfConfigFile;
+        const beforeProgramCreate: WatchCompilerHost["beforeProgramCreate"] = host.beforeProgramCreate ? host.beforeProgramCreate.bind(host) : noop;
+        const afterProgramCreate: WatchCompilerHost["afterProgramCreate"] = host.afterProgramCreate ? host.afterProgramCreate.bind(host) : noop;
+        let { rootFiles: rootFileNames, options: compilerOptions, configFileSpecs, configFileWildCardDirectories } = host as WatchCompilerHostOfConfigFile;
 
         // From tsc we want to get already parsed result and hence check for rootFileNames
         const directoryStructureHost = configFileName ? createCachedDirectoryStructureHost(system) : system;
@@ -296,7 +309,7 @@ namespace ts {
         }
 
         const loggingEnabled = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
-        const writeLog: (s: string) => void = loggingEnabled ? s => { system.write(s); system.write(system.newLine); } : noop;
+        const writeLog: (s: string) => void = loggingEnabled ? s => { system.write(s); system.write(newLine); } : noop;
         const watchFile = compilerOptions.extendedDiagnostics ? ts.addFileWatcherWithLogging : loggingEnabled ? ts.addFileWatcherWithOnlyTriggerLogging : ts.addFileWatcher;
         const watchFilePath = compilerOptions.extendedDiagnostics ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
         const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
@@ -308,8 +321,9 @@ namespace ts {
         const getCurrentDirectory = memoize(() => directoryStructureHost.getCurrentDirectory());
         const realpath = system.realpath && ((path: string) => system.realpath(path));
         const getCachedDirectoryStructureHost = configFileName && (() => directoryStructureHost as CachedDirectoryStructureHost);
-        const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
-        let newLine = getNewLineCharacter(compilerOptions, system);
+        const useCaseSensitiveFileNames = memoize(() => host.useCaseSensitiveFileNames());
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames());
+        let newLine = updateNewLine();
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
             // Members for CompilerHost
@@ -319,7 +333,7 @@ namespace ts {
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
             writeFile: notImplemented,
             getCurrentDirectory,
-            useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
+            useCaseSensitiveFileNames,
             getCanonicalFileName,
             getNewLine: () => newLine,
             fileExists,
@@ -370,7 +384,7 @@ namespace ts {
             writeLog(`Synchronizing program`);
 
             if (hasChangedCompilerOptions) {
-                newLine = getNewLineCharacter(compilerOptions, system);
+                newLine = updateNewLine();
                 if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
                     resolutionCache.clear();
                 }
@@ -421,6 +435,10 @@ namespace ts {
             Debug.assert(!configFileName, "Cannot update root file names with config file watch mode");
             rootFileNames = files;
             scheduleProgramUpdate();
+        }
+
+        function updateNewLine() {
+            return getNewLineCharacter(compilerOptions, () => host.getNewLine());
         }
 
         function toPath(fileName: string) {

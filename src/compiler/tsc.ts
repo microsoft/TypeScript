@@ -150,37 +150,34 @@ namespace ts {
         return sys.exit(exitStatus);
     }
 
-    function createProgramCompilerWithBuilderState() {
-        const compilerWithBuilderState = ts.createProgramCompilerWithBuilderState(sys, reportDiagnostic);
-        return (host: DirectoryStructureHost, program: Program) => {
+    function createWatchCompilerHost(): WatchCompilerHost {
+        const watchCompilerHost = ts.createWatchCompilerHost(sys, reportDiagnostic);
+        const compilerWithBuilderState = watchCompilerHost.afterProgramCreate;
+        watchCompilerHost.beforeProgramCreate = enableStatistics;
+        watchCompilerHost.afterProgramCreate = (host, program) => {
             compilerWithBuilderState(host, program);
             reportStatistics(program);
         };
+        return watchCompilerHost;
     }
 
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {
-        createWatch({
-            system: sys,
-            beforeProgramCreate: enableStatistics,
-            afterProgramCreate: createProgramCompilerWithBuilderState(),
-            onConfigFileDiagnostic: reportDiagnostic,
-            rootFiles: configParseResult.fileNames,
-            options: configParseResult.options,
-            configFileName: configParseResult.options.configFilePath,
-            optionsToExtend,
-            configFileSpecs: configParseResult.configFileSpecs,
-            configFileWildCardDirectories: configParseResult.wildcardDirectories
-        });
+        const watchCompilerHost = createWatchCompilerHost() as WatchCompilerHostOfConfigFile;
+        watchCompilerHost.onConfigFileDiagnostic = reportDiagnostic;
+        watchCompilerHost.rootFiles = configParseResult.fileNames;
+        watchCompilerHost.options = configParseResult.options;
+        watchCompilerHost.configFileName = configParseResult.options.configFilePath;
+        watchCompilerHost.optionsToExtend = optionsToExtend;
+        watchCompilerHost.configFileSpecs = configParseResult.configFileSpecs;
+        watchCompilerHost.configFileWildCardDirectories = configParseResult.wildcardDirectories;
+        createWatch(watchCompilerHost);
     }
 
     function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions) {
-        createWatch({
-            system: sys,
-            beforeProgramCreate: enableStatistics,
-            afterProgramCreate: createProgramCompilerWithBuilderState(),
-            rootFiles,
-            options
-        });
+        const watchCompilerHost = createWatchCompilerHost() as WatchCompilerHostOfFilesAndCompilerOptions;
+        watchCompilerHost.rootFiles = rootFiles;
+        watchCompilerHost.options = options;
+        createWatch(watchCompilerHost);
     }
 
     function compileProgram(program: Program): ExitStatus {
