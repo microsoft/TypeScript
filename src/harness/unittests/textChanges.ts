@@ -98,7 +98,7 @@ namespace M
                         /*asteriskToken*/ undefined,
                         /*name*/ "bar",
                         /*typeParameters*/ undefined,
-                        /*parameters*/ emptyArray,
+                        /*parameters*/ [],
                         /*type*/ createKeywordTypeNode(SyntaxKind.AnyKeyword),
                         /*body */ createBlock(statements)
                 );
@@ -110,7 +110,7 @@ namespace M
                     createCall(
                         /*expression*/ newFunction.name,
                         /*typeArguments*/ undefined,
-                        /*argumentsArray*/ emptyArray
+                        /*argumentsArray*/ [],
                     ));
                 changeTracker.replaceNodeRange(sourceFile, statements[0], lastOrUndefined(statements), newStatement, { suffix: newLineCharacter });
             });
@@ -346,8 +346,8 @@ namespace M {
         function createTestSuperCall() {
             const superCall = createCall(
                 createSuper(),
-                    /*typeArguments*/ undefined,
-                    /*argumentsArray*/ emptyArray
+                /*typeArguments*/ undefined,
+                /*argumentsArray*/ [],
             );
             return createStatement(superCall);
         }

@@ -146,8 +146,12 @@ namespace ts {
         if (ensureUseStrict && !startsWithUseStrict(statements)) {
             statements = setTextRange(createNodeArray([createStatement(createLiteral("use strict")), ...statements]), statements);
         }
-        const declarations = context.endLexicalEnvironment();
-        return setTextRange(createNodeArray(concatenate(statements, declarations)), statements);
+        return concatToNodeArray(statements, context.endLexicalEnvironment());
+    }
+
+    /* @internal */
+    export function concatToNodeArray<T extends Node>(a: NodeArray<T>, b: ReadonlyArray<T> | undefined): NodeArray<T> {
+        return b === undefined ? a : setTextRange(createNodeArray(a.concat(b)), a);
     }
 
     /**
@@ -1448,7 +1452,7 @@ namespace ts {
         }
 
         return isNodeArray(statements)
-            ? setTextRange(createNodeArray(concatenate(statements, declarations)), statements)
+            ? setTextRange(createNodeArray(statements.concat(declarations)), statements)
             : addRange(statements, declarations);
     }
 

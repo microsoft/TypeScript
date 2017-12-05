@@ -2811,7 +2811,7 @@ namespace ts {
                             entityName = nameIdentifier;
                         }
 
-                        let typeArgumentNodes: ReadonlyArray<TypeNode> | undefined;
+                        let typeArgumentNodes: TypeNode[] | undefined;
                         if (typeArguments.length > 0) {
                             const typeParameterCount = (type.target.typeParameters || emptyArray).length;
                             typeArgumentNodes = mapToTypeNodes(typeArguments.slice(i, typeParameterCount), context);
@@ -3039,7 +3039,7 @@ namespace ts {
                 function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
                     Debug.assert(chain && 0 <= index && index < chain.length);
                     const symbol = chain[index];
-                    let typeParameterNodes: ReadonlyArray<TypeNode> | undefined;
+                    let typeParameterNodes: TypeNode[] | undefined;
                     if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index > 0) {
                         const parentSymbol = chain[index - 1];
                         let typeParameters: TypeParameter[];
