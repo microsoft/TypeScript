@@ -117,6 +117,10 @@ namespace ts.tscWatch {
             index++;
         });
         if (!skipWaiting) {
+            if (errorsPosition === ExpectedOutputErrorsPosition.BeforeCompilationStarts) {
+                assertWatchDiagnosticAt(host, index, ts.Diagnostics.Starting_compilation_in_watch_mode);
+                index += 1;
+            }
             assertWatchDiagnosticAt(host, index, Diagnostics.Compilation_complete_Watching_for_file_changes);
         }
         host.clearOutput();
