@@ -2554,6 +2554,7 @@ Object literals are extended to support type annotations in methods and get and 
 &emsp;&emsp;&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`  
 &emsp;&emsp;&emsp;*GetAccessor*  
 &emsp;&emsp;&emsp;*SetAccessor*
+&emsp;&emsp;&emsp;`...`*SpreadAssignment*
 
 &emsp;&emsp;*GetAccessor:*  
 &emsp;&emsp;&emsp;`get`&emsp;*PropertyName*&emsp;`(`&emsp;`)`&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
@@ -2561,7 +2562,10 @@ Object literals are extended to support type annotations in methods and get and 
 &emsp;&emsp;*SetAccessor:*  
 &emsp;&emsp;&emsp;`set`&emsp;*PropertyName*&emsp;`(`&emsp;*BindingIdentifierOrPattern*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
 
-The type of an object literal is an object type with the set of properties specified by the property assignments in the object literal. A get and set accessor may specify the same property name, but otherwise it is an error to specify multiple property assignments for the same property.
+The type of an object literal is an object type with the set of properties specified by the property assignments in the object literal, plus any properties from spread assignments.
+A get and set accessor may specify the same property name, but otherwise it is an error to specify multiple property assignments for the same property unless they come from spread assignments.
+
+### Object literal property assignment { #object-literal-property-assignment }
 
 A shorthand property assignment of the form
 
@@ -2596,7 +2600,11 @@ Each property assignment in an object literal is processed as follows:
 
 The type of a property introduced by a property assignment of the form *Name* `:` *Expr* is the type of *Expr*.
 
-A get accessor declaration is processed in the same manner as an ordinary function declaration (section [6.1](#6.1)) with no parameters. A set accessor declaration is processed in the same manner as an ordinary function declaration with a single parameter and a Void return type. When both a get and set accessor is declared for a property:
+### Object literal accessors { #object-literal-accessors }
+
+A get accessor declaration is processed in the same manner as an ordinary function declaration (section [6.1](#6.1)) with no parameters.
+A set accessor declaration is processed in the same manner as an ordinary function declaration with a single parameter and a Void return type.
+When both a get and set accessor is declared for a property:
 
 * If both accessors include type annotations, the specified types must be identical.
 * If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
@@ -2604,9 +2612,17 @@ A get accessor declaration is processed in the same manner as an ordinary functi
 
 If a get accessor is declared for a property, the return type of the get accessor becomes the type of the property. If only a set accessor is declared for a property, the parameter type (which may be type Any if no type annotation is present) of the set accessor becomes the type of the property.
 
-When an object literal is contextually typed by a type that includes a string index signature, the resulting type of the object literal includes a string index signature with the union type of the types of the properties declared in the object literal, or the Undefined type if the object literal is empty. Likewise, when an object literal is contextually typed by a type that includes a numeric index signature, the resulting type of the object literal includes a numeric index signature with the union type of the types of the numerically named properties (section [3.9.4](#3.9.4)) declared in the object literal, or the Undefined type if the object literal declares no numerically named properties.
+### Object literal spread assignment { #object-literal-spread-assignment }
 
-If the *PropertyName* of a property assignment is a computed property name that doesn't denote a well-known symbol ([2.2.3](#2.2.3)), the construct is considered a ***dynamic property assignment***. The following rules apply to dynamic property assignments:
+### Object literal contextual typing { #object-literal-contextual-typing }
+
+When an object literal is contextually typed by a type that includes a string index signature, the resulting type of the object literal includes a string index signature with the union type of the types of the properties declared in the object literal, or the Undefined type if the object literal is empty.
+Likewise, when an object literal is contextually typed by a type that includes a numeric index signature, the resulting type of the object literal includes a numeric index signature with the union type of the types of the numerically named properties (section [3.9.4](#3.9.4)) declared in the object literal, or the Undefined type if the object literal declares no numerically named properties.
+
+### Object literal computed properties { #object-literal-computed-properties }
+
+If the *PropertyName* of a property assignment is a computed property name that doesn't denote a well-known symbol ([2.2.3](#2.2.3)), the construct is considered a ***dynamic property assignment***.
+The following rules apply to dynamic property assignments:
 
 * A dynamic property assignment does not introduce a property in the type of the object literal.
 * The property name expression of a dynamic property assignment must be of type Any or the String, Number, or Symbol primitive type.
