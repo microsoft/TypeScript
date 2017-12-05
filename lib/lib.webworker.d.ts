@@ -1879,7 +1879,6 @@ declare var self: WorkerGlobalScope;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
 declare function createImageBitmap(image: ImageBitmap | ImageData | Blob, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function createImageBitmap(image: ImageBitmap | ImageData | Blob, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-declare function dispatchEvent(evt: Event): boolean;
 declare var indexedDB: IDBFactory;
 declare var msIndexedDB: IDBFactory;
 declare var navigator: WorkerNavigator;
