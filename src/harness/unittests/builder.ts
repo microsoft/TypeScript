@@ -127,7 +127,7 @@ namespace ts {
             }
             catch (e) {
                 assert.isFalse(operationWasCancelled);
-                assert.isTrue(e instanceof OperationCanceledException, e.toString());
+                assert(e instanceof OperationCanceledException, e.toString());
                 operationWasCancelled = true;
             }
             assert.equal(cancel, operationWasCancelled);

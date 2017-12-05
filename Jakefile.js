@@ -795,7 +795,7 @@ compileFile(
     /*prereqs*/[builtLocalDirectory, tscFile, tsserverLibraryFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/[],
     /*useBuiltCompiler:*/ true,
-    /*opts*/ { types: ["node", "mocha", "chai"], lib: "es6" });
+    /*opts*/ { types: ["node", "mocha"], lib: "es6" });
 
 var internalTests = "internal/";
 

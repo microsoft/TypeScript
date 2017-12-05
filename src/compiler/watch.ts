@@ -355,6 +355,8 @@ namespace ts {
             resolutionCache.resolveModuleNames.bind(resolutionCache);
         compilerHost.resolveTypeReferenceDirectives = resolutionCache.resolveTypeReferenceDirectives.bind(resolutionCache);
 
+        clearHostScreen();
+        reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode));
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -557,10 +559,14 @@ namespace ts {
             scheduleProgramUpdate();
         }
 
-        function updateProgram() {
+        function clearHostScreen() {
             if (system.clearScreen) {
                 system.clearScreen();
             }
+        }
+
+        function updateProgram() {
+            clearHostScreen();
 
             timerToUpdateProgram = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));

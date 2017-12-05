@@ -139,7 +139,7 @@ interface Array<T> {}`
     function checkMapKeys(caption: string, map: Map<any>, expectedKeys: ReadonlyArray<string>) {
         verifyMapSize(caption, map, expectedKeys);
         for (const name of expectedKeys) {
-            assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
+            assert(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
     }
 
