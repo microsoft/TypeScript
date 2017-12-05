@@ -416,7 +416,9 @@ namespace ts.Completions {
     }
 
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
-        return origin && origin.isDefaultExport && symbol.name === "default" ? codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target) : symbol.name;
+        return origin && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
+            ? codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
+            : symbol.name;
     }
 
     export interface CompletionEntryIdentifier {
@@ -1076,7 +1078,7 @@ namespace ts.Completions {
                         continue;
                     }
 
-                    const isDefaultExport = name === "default";
+                    const isDefaultExport = name === InternalSymbolName.Default;
                     if (isDefaultExport) {
                         const localSymbol = getLocalSymbolForExportDefault(symbol);
                         if (localSymbol) {
@@ -1756,10 +1758,10 @@ namespace ts.Completions {
             }
 
             if (existingImportsOrExports.size === 0) {
-                return filter(exportsOfModule, e => e.escapedName !== "default");
+                return filter(exportsOfModule, e => e.escapedName !== InternalSymbolName.Default);
             }
 
-            return filter(exportsOfModule, e => e.escapedName !== "default" && !existingImportsOrExports.get(e.escapedName));
+            return filter(exportsOfModule, e => e.escapedName !== InternalSymbolName.Default && !existingImportsOrExports.get(e.escapedName));
         }
 
         /**
