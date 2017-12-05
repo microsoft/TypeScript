@@ -1539,7 +1539,18 @@ For the key query type `keyof T`:
 * If *T* is the any type or *T* has a string index signature, the result is the type string.
 * Otherwise, the result is a union of string literal types, where each member of the union corresponds to a property of *T*.
 
-TODO: Give an example of combined keyof/indexed-access type usage.
+```ts
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+    return obj[key];
+}
+
+let x = { foo: 10, bar: "hello!" };
+
+let foo = getProperty(x, "foo"); // number
+let bar = getProperty(x, "bar"); // string
+
+let oops = getProperty(x, "wargarbl"); // Error! "wargarbl" is not "foo" | "bar"
+```
 
 ### <a name="3.6.3"/>3.6.3 This-types
 
