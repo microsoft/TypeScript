@@ -10,9 +10,22 @@ namespace ts.codefix {
                 return undefined;
             }
 
+            const body = (<ConstructorDeclaration>token.parent).body;
+
+            if (!body) {
+                return undefined;
+            }
+
+            const superCall = startOnNewLine(createStatement(createCall(createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray)));
+            const statements: Statement[] = [superCall];
+            addRange(statements, body.statements);
+
+            const fixedBody = getMutableClone(body);
+            fixedBody.multiLine = true;
+            fixedBody.statements = createNodeArray(statements);
+
             const changeTracker = textChanges.ChangeTracker.fromContext(context);
-            const superCall = createStatement(createCall(createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray));
-            changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>token.parent, sourceFile), superCall, { suffix: context.newLineCharacter });
+            changeTracker.replaceNode(sourceFile, body, fixedBody);
 
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),

@@ -3,8 +3,7 @@
 ////class Base{
 ////}
 ////class C extends Base{
-////    constructor() [|{
-////    }|]
+////    constructor() [|{}|]
 ////}
 // TODO: GH#18445
 verify.rangeAfterCodeFix(`{\r
