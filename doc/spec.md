@@ -1523,17 +1523,23 @@ Here, *this* is a generic type, but has a useful apparent type.
 
 ### Key query types { #keyof-types }
 
-A key query type represents the property names of a type. They are used in place
+A key query type represents the property names of a type, even when the type or its property names is not yet known.
+A key query of an object type *O* results in a union of string literal types, where each member of the union corresponds to a property name.
 
 &emsp;&emsp;*KeyQueryType:*  
 &emsp;&emsp;&emsp;`keyof`&emsp;*Type*
 
-Like indexed access types, a type declared as a key query type results in either a key query type, the string type, or a subtype of the string type.
+Like indexed access types, a type declared as a key query type does not necessarily result in a key query type.
+It results in either a key query type, the string type, or a subtype of the string type.
 
-TODO: List the procedure to determine whether you get an key query type or a string type.
+For the key query type `keyof T`:
+
+* If *T* is a type parameter or is a union or intersection containing a type parameter, the result is a key query type of *T*.
+* If *T* is a mapped type, the result is the *constraint type* of the mapped type (see [#mapped-types]).
+* If *T* is the any type or *T* has a string index signature, the result is the type string.
+* Otherwise, the result is a union of string literal types, where each member of the union corresponds to a property of *T*.
 
 TODO: Give an example of combined keyof/indexed-access type usage.
-
 
 ### <a name="3.6.3"/>3.6.3 This-types
 
