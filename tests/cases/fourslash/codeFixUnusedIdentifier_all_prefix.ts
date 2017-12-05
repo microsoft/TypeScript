@@ -8,7 +8,7 @@
 ////}
 
 verify.codeFixAll({
-    actionId: "unusedIdentifier_prefix",
+    fixId: "unusedIdentifier_prefix",
     newFileContent:
 `function f(_a, _b) {
     const x = 0; // Can't be prefixed, ignored

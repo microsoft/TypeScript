@@ -553,13 +553,13 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: number[]): CodeFix[] {
+        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: number[]): CodeFixAction[] {
             const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(({ description, changes, actionId }) => ({ description, changes: this.convertChanges(changes, file), actionId }));
+            return response.body.map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
         }
 
         getCombinedCodeFix = notImplemented;

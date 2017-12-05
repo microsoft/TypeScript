@@ -2,8 +2,8 @@
 namespace ts {
     export interface CodeFixRegistration {
         errorCodes: number[];
-        getCodeActions(context: CodeFixContext): CodeFix[] | undefined;
-        actionIds?: string[];
+        getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined;
+        fixIds?: string[];
         getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
     }
 
@@ -15,7 +15,7 @@ namespace ts {
     }
 
     export interface CodeFixAllContext extends CodeFixContextBase {
-        actionId: {};
+        fixId: {};
     }
 
     export interface CodeFixContext extends CodeFixContextBase {
@@ -25,7 +25,7 @@ namespace ts {
 
     export namespace codefix {
         const codeFixRegistrations: CodeFixRegistration[][] = [];
-        const actionIdToRegistration = createMap<CodeFixRegistration>();
+        const fixIdToRegistration = createMap<CodeFixRegistration>();
 
         export function registerCodeFix(reg: CodeFixRegistration) {
             for (const error of reg.errorCodes) {
@@ -36,10 +36,10 @@ namespace ts {
                 }
                 registrations.push(reg);
             }
-            if (reg.actionIds) {
-                for (const actionId of reg.actionIds) {
-                    Debug.assert(!actionIdToRegistration.has(actionId));
-                    actionIdToRegistration.set(actionId, reg);
+            if (reg.fixIds) {
+                for (const fixId of reg.fixIds) {
+                    Debug.assert(!fixIdToRegistration.has(fixId));
+                    fixIdToRegistration.set(fixId, reg);
                 }
             }
         }
@@ -48,9 +48,9 @@ namespace ts {
             return Object.keys(codeFixRegistrations);
         }
 
-        export function getFixes(context: CodeFixContext): CodeFix[] {
+        export function getFixes(context: CodeFixContext): CodeFixAction[] {
             const fixes = codeFixRegistrations[context.errorCode];
-            const allActions: CodeFix[] = [];
+            const allActions: CodeFixAction[] = [];
 
             forEach(fixes, f => {
                 const actions = f.getCodeActions(context);
@@ -70,8 +70,8 @@ namespace ts {
         }
 
         export function getAllFixes(context: CodeFixAllContext): CombinedCodeActions {
-            // Currently actionId is always a string.
-            return actionIdToRegistration.get(cast(context.actionId, isString))!.getAllCodeActions!(context);
+            // Currently fixId is always a string.
+            return fixIdToRegistration.get(cast(context.fixId, isString))!.getAllCodeActions!(context);
         }
 
         function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions {

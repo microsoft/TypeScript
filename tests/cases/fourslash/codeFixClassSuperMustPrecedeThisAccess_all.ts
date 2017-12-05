@@ -15,7 +15,7 @@
 ////}
 
 verify.codeFixAll({
-    actionId: "classSuperMustPrecedeThisAccess",
+    fixId: "classSuperMustPrecedeThisAccess",
     newFileContent: `class C extends Object {
     constructor() {
         super();\r

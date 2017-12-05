@@ -599,7 +599,7 @@ namespace ts.server.protocol {
 
     export interface GetCombinedCodeFixRequestArgs {
         scope: GetCombinedCodeFixScope;
-        actionId: {};
+        fixId: {};
     }
 
     export interface GetCombinedCodeFixScope {
@@ -1590,7 +1590,7 @@ namespace ts.server.protocol {
 
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        body?: CodeFix[];
+        body?: CodeFixAction[];
     }
 
     export interface CodeAction {
@@ -1607,9 +1607,9 @@ namespace ts.server.protocol {
         commands?: {}[];
     }
 
-    export interface CodeFix extends CodeAction {
-        /** If present, one may call 'getAllCodeFixesInGroup' with this actionId. */
-        actionId?: {};
+    export interface CodeFixAction extends CodeAction {
+        /** If present, one may call 'getCombinedCodeFix' with this fixId. */
+        fixId?: {};
     }
 
     /**

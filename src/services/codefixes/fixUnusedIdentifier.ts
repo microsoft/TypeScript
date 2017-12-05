@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.codefix {
-    const actionIdPrefix = "unusedIdentifier_prefix";
-    const actionIdDelete = "unusedIdentifier_delete";
+    const fixIdPrefix = "unusedIdentifier_prefix";
+    const fixIdDelete = "unusedIdentifier_delete";
     const errorCodes = [
         Diagnostics._0_is_declared_but_its_value_is_never_read.code,
         Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code,
@@ -11,37 +11,37 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile } = context;
             const token = getToken(sourceFile, context.span.start);
-            const result: CodeFix[] = [];
+            const result: CodeFixAction[] = [];
 
             const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(t, sourceFile, token));
             if (deletion.length) {
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_declaration_for_Colon_0), [token.getText()]);
-                result.push({ description, changes: deletion, actionId: actionIdDelete });
+                result.push({ description, changes: deletion, fixId: fixIdDelete });
             }
 
             const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, context.errorCode, sourceFile, token));
             if (prefix.length) {
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Prefix_0_with_an_underscore), [token.getText()]);
-                result.push({ description, changes: prefix, actionId: actionIdPrefix });
+                result.push({ description, changes: prefix, fixId: fixIdPrefix });
             }
 
             return result;
         },
-        actionIds: [actionIdPrefix, actionIdDelete],
+        fixIds: [fixIdPrefix, fixIdDelete],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const { sourceFile } = context;
             const token = getToken(diag.file!, diag.start!);
-            switch (context.actionId) {
-                case actionIdPrefix:
+            switch (context.fixId) {
+                case fixIdPrefix:
                     if (isIdentifier(token) && canPrefix(token)) {
                         tryPrefixDeclaration(changes, diag.code, sourceFile, token);
                     }
                     break;
-                case actionIdDelete:
+                case fixIdDelete:
                     tryDeleteDeclaration(changes, sourceFile, token);
                     break;
                 default:
-                    Debug.fail(JSON.stringify(context.actionId));
+                    Debug.fail(JSON.stringify(context.fixId));
             }
         }),
     });

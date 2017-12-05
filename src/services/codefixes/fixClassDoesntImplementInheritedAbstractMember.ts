@@ -4,16 +4,16 @@ namespace ts.codefix {
         Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
         Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1.code,
     ];
-    const actionId = "fixClassDoesntImplementInheritedAbstractMember";
+    const fixId = "fixClassDoesntImplementInheritedAbstractMember";
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
             const { program, sourceFile, span } = context;
             const changes = textChanges.ChangeTracker.with(context, t =>
                 addMissingMembers(getClass(sourceFile, span.start), sourceFile, program.getTypeChecker(), context.newLineCharacter, t));
-            return changes.length === 0 ? undefined : [{ description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class), changes, actionId }];
+            return changes.length === 0 ? undefined : [{ description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class), changes, fixId }];
         },
-        actionIds: [actionId],
+        fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             addMissingMembers(getClass(diag.file!, diag.start!), context.sourceFile, context.program.getTypeChecker(), context.newLineCharacter, changes);
         }),

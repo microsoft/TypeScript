@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const actionId = "inferFromUsage";
+    const fixId = "inferFromUsage";
     const errorCodes = [
         // Variable declarations
         Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code,
@@ -36,9 +36,9 @@ namespace ts.codefix {
             const { declaration, textChanges } = fix;
             const name = getNameOfDeclaration(declaration);
             const description = formatStringFromArgs(getLocaleSpecificMessage(getDiagnostic(errorCode, token)), [name.getText()]);
-            return [{ description, changes: [{ fileName: sourceFile.fileName, textChanges }], actionId }];
+            return [{ description, changes: [{ fileName: sourceFile.fileName, textChanges }], fixId }];
         },
-        actionIds: [actionId],
+        fixIds: [fixId],
         getAllCodeActions(context) {
             const { sourceFile, program, cancellationToken } = context;
             const seenFunctions = createMap<true>();

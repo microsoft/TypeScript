@@ -2424,10 +2424,10 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyCodeFixAll(options: FourSlashInterface.VerifyCodeFixAllOptions): void {
-            const { actionId, newFileContent } = options;
-            const actionIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.actionId);
-            ts.Debug.assert(ts.contains(actionIds, actionId), "No available code fix has that group id.", () => `Expected '${actionId}'. Available action ids: ${actionIds}`);
-            const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, actionId, this.formatCodeSettings);
+            const { fixId, newFileContent } = options;
+            const fixIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId);
+            ts.Debug.assert(ts.contains(fixIds, fixId), "No available code fix has that group id.", () => `Expected '${fixId}'. Available action ids: ${fixIds}`);
+            const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings);
             assert.deepEqual(commands, options.commands);
             this.applyChanges(changes);
             this.verifyCurrentFileContent(newFileContent);
@@ -2494,7 +2494,7 @@ Actual: ${stringify(fullActual)}`);
          * Rerieves a codefix satisfying the parameters, or undefined if no such codefix is found.
          * @param fileName Path to file where error should be retrieved from.
          */
-        private getCodeFixes(fileName: string, errorCode?: number): ts.CodeFix[] {
+        private getCodeFixes(fileName: string, errorCode?: number): ts.CodeFixAction[] {
             const diagnosticsForCodeFix = this.getDiagnostics(fileName).map(diagnostic => ({
                 start: diagnostic.start,
                 length: diagnostic.length,
@@ -4595,7 +4595,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixAllOptions {
-        actionId: string;
+        fixId: string;
         newFileContent: string;
         commands: ReadonlyArray<{}>;
     }

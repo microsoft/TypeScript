@@ -7,7 +7,7 @@
 ////const y: Foo.bar = "";
 
 verify.codeFixAll({
-    actionId: "correctQualifiedNameToIndexedAccessType",
+    fixId: "correctQualifiedNameToIndexedAccessType",
     newFileContent:
 `interface Foo {
     bar: string;

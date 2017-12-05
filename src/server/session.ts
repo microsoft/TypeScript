@@ -1567,11 +1567,11 @@ namespace ts.server {
             }
         }
 
-        private getCombinedCodeFix({ scope, actionId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
+        private getCombinedCodeFix({ scope, fixId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
             Debug.assert(scope.type === "file");
             const { file, project } = this.getFileAndProject(scope.args);
             const formatOptions = this.projectService.getFormatCodeOptions(file);
-            const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, actionId, formatOptions);
+            const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, fixId, formatOptions);
             if (simplifiedResult) {
                 return { changes: this.mapTextChangesToCodeEdits(project, res.changes), commands: res.commands };
             }

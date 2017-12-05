@@ -9,7 +9,7 @@
 ////}
 
 verify.codeFixAll({
-    actionId: "forgottenThisPropertyAccess",
+    fixId: "forgottenThisPropertyAccess",
     newFileContent:
 `class C {
     foo: number;

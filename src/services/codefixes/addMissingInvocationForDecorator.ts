@@ -1,14 +1,14 @@
 /* @internal */
 namespace ts.codefix {
-    const actionId = "addMissingInvocationForDecorator";
+    const fixId = "addMissingInvocationForDecorator";
     const errorCodes = [Diagnostics._0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0.code];
     registerCodeFix({
         errorCodes,
         getCodeActions: (context) => {
             const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Call_decorator_expression), changes, actionId }];
+            return [{ description: getLocaleSpecificMessage(Diagnostics.Call_decorator_expression), changes, fixId }];
         },
-        actionIds: [actionId],
+        fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file!, diag.start!)),
     });
 

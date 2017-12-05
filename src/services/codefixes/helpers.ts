@@ -26,7 +26,7 @@ namespace ts.codefix {
 
         const declaration = declarations[0] as Declaration;
         // Clone name to remove leading trivia.
-        const name = getSynthesizedClone(getNameOfDeclaration(declaration)) as PropertyName;
+        const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration)) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
@@ -63,17 +63,18 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
+                    outputMethod(signature, modifiers, name, createStubbedMethodBody());
                     break;
                 }
 
                 for (const signature of signatures) {
-                    signatureToMethodDeclaration(signature, enclosingDeclaration);
+                    // Need to ensure nodes are fresh each time so they can have different positions.
+                    outputMethod(signature, getSynthesizedDeepClones(modifiers), getSynthesizedDeepClone(name));
                 }
 
                 if (declarations.length > signatures.length) {
                     const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
+                    outputMethod(signature, modifiers, name, createStubbedMethodBody());
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
@@ -82,19 +83,28 @@ namespace ts.codefix {
                 break;
         }
 
-        function signatureToMethodDeclaration(signature: Signature, enclosingDeclaration: Node, body?: Block) {
-            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.SuppressAnyReturnType);
-            if (!signatureDeclaration) {
-                return;
-            }
-
-            signatureDeclaration.decorators = undefined;
-            signatureDeclaration.modifiers = modifiers;
-            signatureDeclaration.name = name;
-            signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
-            signatureDeclaration.body = body;
-            out(signatureDeclaration);
+        function outputMethod(signature: Signature, modifiers: NodeArray<Modifier>, name: PropertyName, body?: Block): void {
+            const method = signatureToMethodDeclaration(checker, signature, enclosingDeclaration, modifiers, name, optional, body);
+            if (method) out(method);
         }
+    }
+
+    function signatureToMethodDeclaration(checker: TypeChecker, signature: Signature, enclosingDeclaration: ClassLikeDeclaration, modifiers: NodeArray<Modifier>, name: PropertyName, optional: boolean, body: Block | undefined) {
+        const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.SuppressAnyReturnType);
+        if (!signatureDeclaration) {
+            return undefined;
+        }
+
+        signatureDeclaration.decorators = undefined;
+        signatureDeclaration.modifiers = modifiers;
+        signatureDeclaration.name = name;
+        signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+        signatureDeclaration.body = body;
+        return signatureDeclaration;
+    }
+
+    function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone));
     }
 
     export function createMethodFromCallExpression({ typeArguments, arguments: args }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean): MethodDeclaration {

@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const actionId = "disableJsDiagnostics";
+    const fixId = "disableJsDiagnostics";
     const errorCodes = mapDefined(Object.keys(Diagnostics), key => {
         const diag = (Diagnostics as MapLike<DiagnosticMessage>)[key];
         return diag.category === DiagnosticCategory.Error ? diag.code : undefined;
@@ -18,7 +18,7 @@ namespace ts.codefix {
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
                 changes: [createFileTextChanges(sourceFile.fileName, [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter)])],
-                actionId,
+                fixId,
             },
             {
                 description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
@@ -29,11 +29,11 @@ namespace ts.codefix {
                     },
                     newText: `// @ts-nocheck${newLineCharacter}`
                 }])],
-                // actionId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
-                actionId: undefined,
+                // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
+                fixId: undefined,
             }];
         },
-        actionIds: [actionId], // No point applying as a group, doing it once will fix all errors
+        fixIds: [fixId], // No point applying as a group, doing it once will fix all errors
         getAllCodeActions: context => codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
             if (err.start !== undefined) {
                 changes.push(getIgnoreCommentLocationForLocation(err.file!, err.start, context.newLineCharacter));

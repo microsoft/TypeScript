@@ -5,7 +5,7 @@
 ////class D extends I {}
 
 verify.codeFixAll({
-    actionId: "extendsInterfaceBecomesImplements",
+    fixId: "extendsInterfaceBecomesImplements",
     newFileContent: `interface I {}
 class C implements I {}
 class D implements I {}`,

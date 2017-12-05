@@ -1,21 +1,21 @@
 /* @internal */
 namespace ts.codefix {
     const errorCodes = [Diagnostics.Class_0_incorrectly_implements_interface_1.code];
-    const actionId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
+    const fixId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
             const { newLineCharacter, program, sourceFile, span } = context;
             const classDeclaration = getClass(sourceFile, span.start);
             const checker = program.getTypeChecker();
-            return mapDefined<ExpressionWithTypeArguments, CodeFix>(getClassImplementsHeritageClauseElements(classDeclaration), implementedTypeNode => {
+            return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getClassImplementsHeritageClauseElements(classDeclaration), implementedTypeNode => {
                 const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(checker, implementedTypeNode, sourceFile, classDeclaration, newLineCharacter, t));
                 if (changes.length === 0) return undefined;
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
-                return { description, changes, actionId };
+                return { description, changes, fixId };
             });
         },
-        actionIds: [actionId],
+        fixIds: [fixId],
         getAllCodeActions(context) {
             const seenClassDeclarations = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
@@ -63,7 +63,7 @@ namespace ts.codefix {
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
             if (indexInfoOfKind) {
-                changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration), newLineCharacter)
+                changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration), newLineCharacter);
             }
         }
     }

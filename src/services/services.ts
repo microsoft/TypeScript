@@ -1882,7 +1882,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeFix[] {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeFixAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
@@ -1895,14 +1895,14 @@ namespace ts {
             });
         }
 
-        function getCombinedCodeFix(scope: CombinedCodeFixScope, actionId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return codefix.getAllFixes({ actionId, sourceFile, program, newLineCharacter, host, cancellationToken, formatContext });
+            return codefix.getAllFixes({ fixId, sourceFile, program, newLineCharacter, host, cancellationToken, formatContext });
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;

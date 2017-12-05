@@ -10,7 +10,7 @@
 ////x = true;
 
 verify.codeFixAll({
-    actionId: "disableJsDiagnostics",
+    fixId: "disableJsDiagnostics",
     newFileContent:
 `let x = "";
 // @ts-ignore\r

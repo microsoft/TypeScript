@@ -294,8 +294,8 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeFix[];
-        getCombinedCodeFix(scope: CombinedCodeFixScope, actionId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeFixAction[];
+        getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -323,7 +323,7 @@ namespace ts {
         dispose(): void;
     }
 
-    export interface CombinedCodeFixScope { type: "file", fileName: string };
+    export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
     export interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
@@ -412,9 +412,9 @@ namespace ts {
         commands?: CodeActionCommand[];
     }
 
-    export interface CodeFix extends CodeAction {
-        /** If present, one may call 'getCombinedCodeFix' with this actionId. */
-        actionId?: {};
+    export interface CodeFixAction extends CodeAction {
+        /** If present, one may call 'getCombinedCodeFix' with this fixId. */
+        fixId?: {};
     }
 
     export interface CombinedCodeActions {

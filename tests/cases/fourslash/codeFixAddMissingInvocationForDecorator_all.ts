@@ -10,7 +10,7 @@
 ////}
 
 verify.codeFixAll({
-    actionId: "addMissingInvocationForDecorator",
+    fixId: "addMissingInvocationForDecorator",
     newFileContent:
 `declare function foo(): (...args: any[]) => void;
 class C {

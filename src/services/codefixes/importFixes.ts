@@ -11,7 +11,7 @@ namespace ts.codefix {
         ],
         getCodeActions: getImportCodeActions,
         // TODO: GH#20315
-        actionIds: [],
+        fixIds: [],
         getAllCodeActions: notImplemented,
     });
 
@@ -19,7 +19,7 @@ namespace ts.codefix {
     // Map from module Id to an array of import declarations in that module.
     type ImportDeclarationMap = AnyImportSyntax[][];
 
-    interface ImportCodeAction extends CodeFix {
+    interface ImportCodeAction extends CodeFixAction {
         kind: ImportCodeActionKind;
         moduleSpecifier?: string;
     }
@@ -158,7 +158,7 @@ namespace ts.codefix {
             description: formatMessage.apply(undefined, [undefined, description].concat(<any[]>diagnosticArgs)),
             changes,
             // TODO: GH#20315
-            actionId: undefined,
+            fixId: undefined,
             kind,
             moduleSpecifier
         };

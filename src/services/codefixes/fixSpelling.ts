@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const actionId = "fixSpelling";
+    const fixId = "fixSpelling";
     const errorCodes = [
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
@@ -14,9 +14,9 @@ namespace ts.codefix {
             const { node, suggestion } = info;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion));
             const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_spelling_to_0), [suggestion]);
-            return [{ description, changes, actionId }];
+            return [{ description, changes, fixId }];
         },
-        actionIds: [actionId],
+        fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const info = getInfo(diag.file!, diag.start!, context.program.getTypeChecker());
             if (info) doChange(changes, context.sourceFile, info.node, info.suggestion);

@@ -4,7 +4,7 @@ namespace ts.codefix {
         Diagnostics.Property_0_does_not_exist_on_type_1.code,
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
     ];
-    const actionId = "addMissingMember";
+    const fixId = "addMissingMember";
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
@@ -17,7 +17,7 @@ namespace ts.codefix {
                 getActionsForAddMissingMemberInTypeScriptFile(context, classDeclarationSourceFile, classDeclaration, token, makeStatic);
             return concatenate(singleElementArray(methodCodeAction), addMember);
         },
-        actionIds: [actionId],
+        fixIds: [fixId],
         getAllCodeActions: context => {
             const seenNames = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
@@ -95,11 +95,11 @@ namespace ts.codefix {
         }
     }
 
-    function getActionsForAddMissingMemberInJavaScriptFile(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFix | undefined {
+    function getActionsForAddMissingMemberInJavaScriptFile(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFixAction | undefined {
         const changes = textChanges.ChangeTracker.with(context, t => addMissingMemberInJs(t, classDeclarationSourceFile, classDeclaration, tokenName, makeStatic, context.newLineCharacter));
         if (changes.length === 0) return undefined;
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Initialize_static_property_0 : Diagnostics.Initialize_property_0_in_the_constructor), [tokenName]);
-        return { description, changes, actionId };
+        return { description, changes, fixId };
     }
 
     function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean, newLineCharacter: string): void {
@@ -125,7 +125,7 @@ namespace ts.codefix {
         return createStatement(createAssignment(createPropertyAccess(obj, propertyName), createIdentifier("undefined")));
     }
 
-    function getActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, makeStatic: boolean): CodeFix[] | undefined {
+    function getActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, makeStatic: boolean): CodeFixAction[] | undefined {
         const typeNode = getTypeNode(context.program.getTypeChecker(), classDeclaration, token);
         const addProp = createAddPropertyDeclarationAction(context, classDeclarationSourceFile, classDeclaration, makeStatic, token.text, typeNode);
         return makeStatic ? [addProp] : [addProp, createAddIndexSignatureAction(context, classDeclarationSourceFile, classDeclaration, token.text, typeNode)];
@@ -142,10 +142,10 @@ namespace ts.codefix {
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
-    function createAddPropertyDeclarationAction(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, makeStatic: boolean, tokenName: string, typeNode: TypeNode): CodeFix {
+    function createAddPropertyDeclarationAction(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, makeStatic: boolean, tokenName: string, typeNode: TypeNode): CodeFixAction {
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0), [tokenName]);
         const changes = textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, classDeclarationSourceFile, classDeclaration, tokenName, typeNode, makeStatic, context.newLineCharacter));
-        return { description, changes, actionId };
+        return { description, changes, fixId };
     }
 
     function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, typeNode: TypeNode, makeStatic: boolean, newLineCharacter: string): void {
@@ -159,7 +159,7 @@ namespace ts.codefix {
         changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, property, newLineCharacter);
     }
 
-    function createAddIndexSignatureAction(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, typeNode: TypeNode): CodeFix {
+    function createAddIndexSignatureAction(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, typeNode: TypeNode): CodeFixAction {
         // Index signatures cannot have the static modifier.
         const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
         const indexingParameter = createParameter(
@@ -177,14 +177,14 @@ namespace ts.codefix {
             typeNode);
 
         const changes = textChanges.ChangeTracker.with(context, t => t.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, indexSignature, context.newLineCharacter));
-        // No actionId here because code-fix-all currently only works on adding individual named properties.
-        return { description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_property_0), [tokenName]), changes, actionId: undefined };
+        // No fixId here because code-fix-all currently only works on adding individual named properties.
+        return { description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_property_0), [tokenName]), changes, fixId: undefined };
     }
 
-    function getActionForMethodDeclaration(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean): CodeFix | undefined {
+    function getActionForMethodDeclaration(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean): CodeFixAction | undefined {
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0), [token.text]);
         const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classDeclaration, token, callExpression, context.newLineCharacter, makeStatic, inJs));
-        return { description, changes, actionId };
+        return { description, changes, fixId };
     }
 
     function addMethodDeclaration(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, newLineCharacter: string, makeStatic: boolean, inJs: boolean) {

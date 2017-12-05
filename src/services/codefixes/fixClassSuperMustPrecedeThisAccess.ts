@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const actionId = "classSuperMustPrecedeThisAccess";
+    const fixId = "classSuperMustPrecedeThisAccess";
     const errorCodes = [Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];
     registerCodeFix({
         errorCodes,
@@ -10,9 +10,9 @@ namespace ts.codefix {
             if (!nodes) return undefined;
             const { constructor, superCall } = nodes;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall, context.newLineCharacter));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor), changes, actionId }];
+            return [{ description: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor), changes, fixId }];
         },
-        actionIds: [actionId],
+        fixIds: [fixId],
         getAllCodeActions(context) {
             const { newLineCharacter, sourceFile } = context;
             const seenClasses = createMap<true>(); // Ensure we only do this once per class.

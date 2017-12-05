@@ -12,7 +12,7 @@
 ////}
 
 verify.codeFixAll({
-    actionId: "inferFromUsage",
+    fixId: "inferFromUsage",
     newFileContent:
 `function f(x: number, y: string) {
     x += 0;
