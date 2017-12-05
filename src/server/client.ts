@@ -180,14 +180,15 @@ namespace ts.server {
                 isGlobalCompletion: false,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body.map(entry => {
-
+                entries: response.body.map<CompletionEntry>(entry => {
                     if (entry.replacementSpan !== undefined) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
-                        return { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName) };
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended } = entry;
+                        // TODO: GH#241
+                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, isRecommended };
+                        return res;
                     }
 
-                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string };
+                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
                 })
             };
         }

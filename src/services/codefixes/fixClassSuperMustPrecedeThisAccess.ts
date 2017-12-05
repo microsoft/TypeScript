@@ -28,7 +28,7 @@ namespace ts.codefix {
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, constructor: ConstructorDeclaration, superCall: ExpressionStatement, newLineCharacter: string): void {
-        changes.insertNodeAfter(sourceFile, getOpenBrace(constructor, sourceFile), superCall, { suffix: newLineCharacter });
+        changes.insertNodeAtConstructorStart(sourceFile, constructor, superCall, newLineCharacter);
         changes.deleteNode(sourceFile, superCall);
     }
 

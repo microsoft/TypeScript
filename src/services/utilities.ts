@@ -1338,15 +1338,6 @@ namespace ts {
         return position;
     }
 
-    export function getOpenBrace(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
-        // First token is the open curly, this is where we want to put the 'super' call.
-        return constructor.body.getFirstToken(sourceFile);
-    }
-
-    export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
-        return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
-    }
-
     export function getSourceFileImportLocation({ text }: SourceFile) {
         const shebang = getShebang(text);
         let position = 0;

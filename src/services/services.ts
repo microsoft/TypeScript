@@ -488,6 +488,7 @@ namespace ts {
         parameters: Symbol[];
         thisParameter: Symbol;
         resolvedReturnType: Type;
+        resolvedTypePredicate: TypePredicate | undefined;
         minTypeArgumentCount: number;
         minArgumentCount: number;
         hasRestParameter: boolean;

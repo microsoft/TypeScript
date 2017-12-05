@@ -195,6 +195,8 @@ namespace ts.textChanges {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
         private readonly deletedNodesInLists: true[] = []; // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
+        // Map from class id to nodes to insert at the start
+        private readonly nodesInsertedAtClassStarts = createMap<{ sourceFile: SourceFile, cls: ClassLikeDeclaration, members: ClassElement[] }>();
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
             return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.formatContext);
@@ -349,8 +351,36 @@ namespace ts.textChanges {
             return this.replaceWithSingle(sourceFile, startPosition, startPosition, newNode, options);
         }
 
-        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}) {
-            if ((isStatementButNotDeclaration(after)) ||
+        public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement, newLineCharacter: string): void {
+            const firstStatement = firstOrUndefined(ctr.body.statements);
+            if (!firstStatement || !ctr.body.multiLine) {
+                this.replaceNode(sourceFile, ctr.body, createBlock([newStatement, ...ctr.body.statements], /*multiLine*/ true), { useNonAdjustedEndPosition: true });
+            }
+            else {
+                this.insertNodeBefore(sourceFile, firstStatement, newStatement, { suffix: newLineCharacter });
+            }
+        }
+
+        public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration, newElement: ClassElement, newLineCharacter: string): void {
+            const firstMember = firstOrUndefined(cls.members);
+            if (!firstMember) {
+                const id = getNodeId(cls).toString();
+                const newMembers = this.nodesInsertedAtClassStarts.get(id);
+                if (newMembers) {
+                    Debug.assert(newMembers.sourceFile === sourceFile && newMembers.cls === cls);
+                    newMembers.members.push(newElement);
+                }
+                else {
+                    this.nodesInsertedAtClassStarts.set(id, { sourceFile, cls, members: [newElement] });
+                }
+            }
+            else {
+                this.insertNodeBefore(sourceFile, firstMember, newElement, { suffix: newLineCharacter });
+            }
+        }
+
+        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}): this {
+            if (isStatementButNotDeclaration(after) ||
                 after.kind === SyntaxKind.PropertyDeclaration ||
                 after.kind === SyntaxKind.PropertySignature ||
                 after.kind === SyntaxKind.MethodSignature) {
@@ -514,7 +544,18 @@ namespace ts.textChanges {
             return this;
         }
 
+        private finishInsertNodeAtClassStart(): void {
+            this.nodesInsertedAtClassStarts.forEach(({ sourceFile, cls, members }) => {
+                const newCls = cls.kind === SyntaxKind.ClassDeclaration
+                    ? updateClassDeclaration(cls, cls.decorators, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members)
+                    : updateClassExpression(cls, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members);
+                this.replaceNode(sourceFile, cls, newCls, { useNonAdjustedEndPosition: true });
+            });
+        }
+
         public getChanges(): FileTextChanges[] {
+            this.finishInsertNodeAtClassStart();
+
             const changesPerFile = createMap<Change[]>();
             // group changes per file
             for (const c of this.changes) {

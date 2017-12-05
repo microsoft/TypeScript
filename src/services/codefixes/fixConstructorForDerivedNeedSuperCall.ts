@@ -23,6 +23,6 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, ctr: ConstructorDeclaration, newLineCharacter: string) {
         const superCall = createStatement(createCall(createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray));
-        changes.insertNodeAfter(sourceFile, getOpenBrace(ctr, sourceFile), superCall, { suffix: newLineCharacter });
+        changes.insertNodeAtConstructorStart(sourceFile, ctr, superCall, newLineCharacter);
     }
 }

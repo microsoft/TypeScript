@@ -145,6 +145,10 @@ const es2017LibrarySource = [
 const es2017LibrarySourceMap = es2017LibrarySource.map(source =>
     ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
+const es2018LibrarySource = [];
+const es2018LibrarySourceMap = es2018LibrarySource.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
+
 const esnextLibrarySource = [
     "esnext.asynciterable.d.ts"
 ];
@@ -166,6 +170,7 @@ const librarySourceMap = [
     { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
     { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
     { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
+    { target: "lib.es2018.d.ts", sources: ["header.d.ts", "es2018.d.ts"] },
     { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
 
     // JavaScript + all host library
@@ -173,8 +178,9 @@ const librarySourceMap = [
     { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.es2018.full.d.ts", sources: ["header.d.ts", "es2018.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, es2018LibrarySourceMap, esnextLibrarySourceMap);
 
 const libraryTargets = librarySourceMap.map(f =>
     path.join(builtLocalDirectory, f.target));

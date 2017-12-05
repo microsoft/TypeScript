@@ -106,7 +106,7 @@ namespace ts.tscWatch {
 
     function assertWatchDiagnosticAt(host: WatchedSystem, outputAt: number, diagnosticMessage: DiagnosticMessage) {
         const output = host.getOutput()[outputAt];
-        assert.isTrue(endsWith(output, getWatchDiagnosticWithoutDate(host, diagnosticMessage)), "outputs[" + outputAt + "] is " + output);
+        assert(endsWith(output, getWatchDiagnosticWithoutDate(host, diagnosticMessage)), "outputs[" + outputAt + "] is " + output);
     }
 
     function getWatchDiagnosticWithoutDate(host: WatchedSystem, diagnosticMessage: DiagnosticMessage) {
@@ -1516,11 +1516,11 @@ namespace ts.tscWatch {
         function verifyEmittedFiles(host: WatchedSystem, emittedFiles: EmittedFile[]) {
             for (const { path, content, shouldBeWritten } of emittedFiles) {
                 if (shouldBeWritten) {
-                    assert.isTrue(host.fileExists(path), `Expected file ${path} to be present`);
+                    assert(host.fileExists(path), `Expected file ${path} to be present`);
                     assert.equal(host.readFile(path), content, `Contents of file ${path} do not match`);
                 }
                 else {
-                    assert.isNotTrue(host.fileExists(path), `Expected file ${path} to be absent`);
+                    assert(!host.fileExists(path), `Expected file ${path} to be absent`);
                 }
             }
         }
@@ -1696,7 +1696,7 @@ namespace ts.tscWatch {
                         return false;
                     }
                     fileExistsIsCalled = true;
-                    assert.isTrue(fileName.indexOf("/f2.") !== -1);
+                    assert(fileName.indexOf("/f2.") !== -1);
                     return originalFileExists.call(host, fileName);
                 };
 
@@ -1711,7 +1711,7 @@ namespace ts.tscWatch {
                     getDiagnosticModuleNotFoundOfFile(watch(), root, "f2")
                 ]);
 
-                assert.isTrue(fileExistsIsCalled);
+                assert(fileExistsIsCalled);
             }
             {
                 let fileExistsCalled = false;
@@ -1720,7 +1720,7 @@ namespace ts.tscWatch {
                         return false;
                     }
                     fileExistsCalled = true;
-                    assert.isTrue(fileName.indexOf("/f1.") !== -1);
+                    assert(fileName.indexOf("/f1.") !== -1);
                     return originalFileExists.call(host, fileName);
                 };
 
@@ -1731,7 +1731,7 @@ namespace ts.tscWatch {
                 host.runQueuedTimeoutCallbacks();
 
                 checkOutputErrors(host, [f1IsNotModule, cannotFindFoo]);
-                assert.isTrue(fileExistsCalled);
+                assert(fileExistsCalled);
             }
         });
 
@@ -1764,7 +1764,7 @@ namespace ts.tscWatch {
 
             const watch = createWatchModeWithoutConfigFile([root.path], host, { module: ModuleKind.AMD });
 
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
+            assert(fileExistsCalledForBar, "'fileExists' should be called");
             checkOutputErrors(host, [
                 getDiagnosticModuleNotFoundOfFile(watch(), root, "bar")
             ], /*isInitial*/ true);
@@ -1774,7 +1774,7 @@ namespace ts.tscWatch {
             host.reloadFS(files.concat(imported));
 
             host.runQueuedTimeoutCallbacks();
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            assert(fileExistsCalledForBar, "'fileExists' should be called.");
             checkOutputErrors(host, emptyArray);
         });
 
@@ -1806,13 +1806,13 @@ namespace ts.tscWatch {
 
             const watch = createWatchModeWithoutConfigFile([root.path], host, { module: ModuleKind.AMD });
 
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
+            assert(fileExistsCalledForBar, "'fileExists' should be called");
             checkOutputErrors(host, emptyArray, /*isInitial*/ true);
 
             fileExistsCalledForBar = false;
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            assert(fileExistsCalledForBar, "'fileExists' should be called.");
             checkOutputErrors(host, [
                 getDiagnosticModuleNotFoundOfFile(watch(), root, "bar")
             ]);
@@ -1820,7 +1820,7 @@ namespace ts.tscWatch {
             fileExistsCalledForBar = false;
             host.reloadFS(filesWithImported);
             host.checkTimeoutQueueLengthAndRun(1);
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            assert(fileExistsCalledForBar, "'fileExists' should be called.");
             checkOutputErrors(host, emptyArray);
         });
 
@@ -2023,8 +2023,41 @@ declare module "fs" {
 
             checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
             const outputFile1 = changeExtension((outputFolder + getBaseFileName(file1.path)), ".js");
-            assert.isTrue(host.fileExists(outputFile1));
+            assert(host.fileExists(outputFile1));
             assert.equal(host.readFile(outputFile1), file1.content + host.newLine);
+        });
+    });
+
+    describe("tsc-watch console clearing", () => {
+        it("doesn't clear the console when it starts", () => {
+            const file = {
+                path: "f.ts",
+                content: ""
+            };
+            const host = createWatchedSystem([file]);
+
+            createWatchModeWithoutConfigFile([file.path], host);
+            host.runQueuedTimeoutCallbacks();
+
+            host.checkScreenClears(0);
+        });
+
+        it("clears the console on recompile", () => {
+            const file = {
+                path: "f.ts",
+                content: ""
+            };
+            const host = createWatchedSystem([file]);
+            createWatchModeWithoutConfigFile([file.path], host);
+
+            const modifiedFile = {
+                ...file,
+                content: "//"
+            };
+            host.reloadFS([modifiedFile]);
+            host.runQueuedTimeoutCallbacks();
+
+            host.checkScreenClears(1);
         });
     });
 }

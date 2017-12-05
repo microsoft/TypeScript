@@ -6,7 +6,7 @@ namespace ts.codefix {
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, out: (node: Node) => void): void {
+    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, out: (node: ClassElement) => void): void {
         const classMembers = classDeclaration.symbol.members;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {

@@ -23,7 +23,7 @@ verify.not.completionListContains({ name: "foo", source: "/foo/index" }, undefin
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/foo/lib/foo",
-    description: `Import 'foo' from module "./foo".`,
+    description: `Import 'foo' from module "./foo"`,
     // TODO: GH#18445
     newFileContent: `import { foo } from "./foo";\r
 \r

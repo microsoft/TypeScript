@@ -9,13 +9,15 @@
 
 verify.codeFixAll({
     actionId: "constructorForDerivedNeedSuperCall",
-    // TODO: GH#18445 GH#20073
+    // TODO: GH#18445
     newFileContent: `class C extends Object {
-    constructor() {super();\r
-}
+    constructor() {\r
+        super();\r
+    }
 }
 class D extends Object {
-    constructor() {super();\r
-}
+    constructor() {\r
+        super();\r
+    }
 }`,
 });
