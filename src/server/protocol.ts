@@ -597,8 +597,14 @@ namespace ts.server.protocol {
         errorCodes?: number[];
     }
 
-    export interface GetCombinedCodeFixRequestArgs extends FileRequestArgs {
+    export interface GetCombinedCodeFixRequestArgs {
+        scope: GetCombinedCodeFixScope;
         actionId: {};
+    }
+
+    export interface GetCombinedCodeFixScope {
+        type: "file";
+        args: FileRequestArgs;
     }
 
     export interface ApplyCodeActionCommandRequestArgs {

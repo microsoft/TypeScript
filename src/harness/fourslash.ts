@@ -2427,7 +2427,7 @@ Actual: ${stringify(fullActual)}`);
             const { actionId, newFileContent } = options;
             const actionIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.actionId);
             ts.Debug.assert(ts.contains(actionIds, actionId), "No available code fix has that group id.", () => `Expected '${actionId}'. Available action ids: ${actionIds}`);
-            const { changes, commands } = this.languageService.getCombinedCodeFix(this.activeFile.fileName, actionId, this.formatCodeSettings);
+            const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, actionId, this.formatCodeSettings);
             assert.deepEqual(commands, options.commands);
             this.applyChanges(changes);
             this.verifyCurrentFileContent(newFileContent);

@@ -1895,9 +1895,10 @@ namespace ts {
             });
         }
 
-        function getCombinedCodeFix(fileName: string, actionId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, actionId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
             synchronizeHostData();
-            const sourceFile = getValidSourceFile(fileName);
+            Debug.assert(scope.type === "file");
+            const sourceFile = getValidSourceFile(scope.fileName);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
             const formatContext = formatting.getFormatContext(formatOptions);
 
