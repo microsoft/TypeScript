@@ -1,8 +1,4 @@
-/// <reference path="../../compiler/core.ts" />
-/// <reference path="../../compiler/moduleNameResolver.ts" />
 /// <reference path="../../services/jsTyping.ts"/>
-/// <reference path="../types.ts"/>
-/// <reference path="../shared.ts"/>
 
 namespace ts.server.typingsInstaller {
     interface NpmConfig {
@@ -19,17 +15,16 @@ namespace ts.server.typingsInstaller {
         writeLine: noop
     };
 
-    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string {
-        try {
-            const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
-            return result.resolvedModule && result.resolvedModule.resolvedFileName;
+    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
+        // @types packages should always use 'index.d.ts', so no need to go through full module resolution.
+        const file = [cachePath, "node_modules", "@types", packageName, "index.d.ts"].reduce(combinePaths);
+        if (installTypingHost.fileExists(file)) {
+            return file;
         }
-        catch (e) {
-            if (log.isEnabled()) {
-                log.writeLine(`Failed to resolve ${packageName} in folder '${cachePath}': ${(<Error>e).message}`);
-            }
-            return undefined;
+        if (log.isEnabled()) {
+            log.writeLine(`Failed to resolve ${packageName} in folder '${cachePath}': ${file} does not exist`);
         }
+        return undefined;
     }
 
 

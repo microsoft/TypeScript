@@ -1,10 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
 // See LICENSE.txt in the project root for complete license information.
 
-/// <reference path='../compiler/types.ts' />
-/// <reference path='../compiler/core.ts' />
-/// <reference path='../compiler/commandLineParser.ts' />
-
 /* @internal */
 namespace ts.JsTyping {
 
@@ -43,16 +39,13 @@ namespace ts.JsTyping {
     export type SafeList = ReadonlyMap<string>;
 
     export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
-        const result = readConfigFile(safeListPath, path => host.readFile(path));
-        return createMapFromTemplate<string>(result.config);
+        return createMapFromTemplate<string>(readConfig(safeListPath, host));
     }
 
     export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
-        const result = readConfigFile(typesMapPath, path => host.readFile(path));
-        if (result.config) {
-            return createMapFromTemplate<string>(result.config.simpleMap);
-        }
-        return undefined;
+        // This is a TypesMapFile but we can't access that interface from here
+        const config = readConfigOrUndefined(typesMapPath, host) as { simpleMap: { [libName: string]: string } } | undefined;
+        return config && createMapFromTemplate<string>(config.simpleMap);
     }
 
     /**
@@ -167,7 +160,7 @@ namespace ts.JsTyping {
             }
 
             filesToWatch.push(jsonPath);
-            const jsonConfig: PackageJson = readConfigFile(jsonPath, path => host.readFile(path)).config;
+            const jsonConfig = readConfig(jsonPath, host) as PackageJson;
             const jsonTypingNames = flatMap([jsonConfig.dependencies, jsonConfig.devDependencies, jsonConfig.optionalDependencies, jsonConfig.peerDependencies], getOwnKeys);
             addInferredTypings(jsonTypingNames, `Typing names in '${jsonPath}' dependencies`);
         }
@@ -219,8 +212,7 @@ namespace ts.JsTyping {
                 if (baseFileName !== "package.json" && baseFileName !== "bower.json") {
                     continue;
                 }
-                const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
-                const packageJson: PackageJson = result.config;
+                const packageJson = readConfig(normalizedFileName, host) as PackageJson;
 
                 // npm 3's package.json contains a "_requiredBy" field
                 // we should include all the top level module names for npm 2, and only module names whose
@@ -247,7 +239,19 @@ namespace ts.JsTyping {
             }
             addInferredTypings(packageNames, "    Found package names");
         }
+    }
 
+    function readConfig(jsonPath: string, host: TypingResolutionHost): {} {
+        return readConfigOrUndefined(jsonPath, host) || {};
+    }
+
+    function readConfigOrUndefined(jsonPath: string, host: TypingResolutionHost): {} | undefined {
+        try {
+            return JSON.parse(host.readFile(jsonPath));
+        }
+        catch {
+            return undefined;
+        }
     }
 
     export const enum PackageNameValidationResult {
