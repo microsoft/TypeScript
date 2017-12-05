@@ -2791,7 +2791,17 @@ namespace ts {
         /* @internal */ createPromiseType(type: Type): Type;
 
         /* @internal */ createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): Type;
-        /* @internal */ createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[], resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
+        /* @internal */ createSignature(
+            declaration: SignatureDeclaration,
+            typeParameters: TypeParameter[],
+            thisParameter: Symbol | undefined,
+            parameters: Symbol[],
+            resolvedReturnType: Type,
+            typePredicate: TypePredicate | undefined,
+            minArgumentCount: number,
+            hasRestParameter: boolean,
+            hasLiteralTypes: boolean,
+        ): Signature;
         /* @internal */ createSymbol(flags: SymbolFlags, name: __String): TransientSymbol;
         /* @internal */ createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
         /* @internal */ isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
@@ -3638,7 +3648,13 @@ namespace ts {
         /* @internal */
         thisParameter?: Symbol;             // symbol of this-type parameter
         /* @internal */
-        resolvedReturnType: Type;           // Resolved return type
+        // See comment in `instantiateSignature` for why these are set lazily.
+        resolvedReturnType: Type | undefined; // Lazily set by `getReturnTypeOfSignature`.
+        /* @internal */
+        // Lazily set by `getTypePredicateOfSignature`.
+        // `undefined` indicates a type predicate that has not yet been computed.
+        // Uses a special `noTypePredicate` sentinel value to indicate that there is no type predicate. This looks like a TypePredicate at runtime to avoid polymorphism.
+        resolvedTypePredicate: TypePredicate | undefined;
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
         /* @internal */
@@ -3657,8 +3673,6 @@ namespace ts {
         canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
-        /* @internal */
-        typePredicate?: TypePredicate;
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
     }
