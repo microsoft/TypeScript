@@ -2277,6 +2277,86 @@ namespace ts {
         }
     }
 
+    export function getTypePrecedence(node: TypeNode) {
+        return getTypeOperatorPrecedence(node.kind, getTypeOperator(node));
+    }
+
+    export function getTypeOperator(node: TypeNode) {
+        return node.kind === SyntaxKind.BinaryType ? (<BinaryTypeNode>node).operator : node.kind;
+    }
+
+    export function getTypeOperatorPrecedence(nodeKind: SyntaxKind, operatorKind?: SyntaxKind) {
+        switch (nodeKind) {
+            // non-array type
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.UndefinedKeyword:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.ObjectKeyword:
+            case SyntaxKind.VoidKeyword:
+            case SyntaxKind.NeverKeyword:
+            case SyntaxKind.TypeReference:
+            case SyntaxKind.TypeQuery:
+            case SyntaxKind.TypeLiteral:
+            case SyntaxKind.TupleType:
+            case SyntaxKind.ParenthesizedType:
+            case SyntaxKind.ThisType:
+            case SyntaxKind.MappedType:
+            case SyntaxKind.LiteralType:
+            case SyntaxKind.JSDocAllType:
+            case SyntaxKind.JSDocUnknownType:
+            case SyntaxKind.JSDocVariadicType:
+            case SyntaxKind.JSDocFunctionType:
+                return 10;
+
+            // jsdoc prefix/postfix types
+            case SyntaxKind.JSDocOptionalType:
+            case SyntaxKind.JSDocNullableType:
+            case SyntaxKind.JSDocNonNullableType:
+                return 9;
+
+            // array type
+            case SyntaxKind.IndexedAccessType:
+            case SyntaxKind.ArrayType:
+                return 8;
+
+            // unary type
+            case SyntaxKind.TypeOperator:
+                return 7;
+
+            // intersection type
+            case SyntaxKind.IntersectionType:
+                return 6;
+
+            // union type
+            case SyntaxKind.UnionType:
+                return 5;
+
+            // binary type
+            case SyntaxKind.BinaryType:
+                switch (operatorKind) {
+                    case SyntaxKind.ExtendsKeyword:
+                        return 4;
+                    case SyntaxKind.AndKeyword:
+                        return 3;
+                    case SyntaxKind.OrKeyword:
+                        return 2;
+                }
+                break;
+
+            // conditional
+            case SyntaxKind.ConditionalType:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+                return 1;
+        }
+
+        return -1;
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
         const fileDiagnostics = createMap<Diagnostic[]>();
@@ -4110,7 +4190,7 @@ namespace ts {
         return node.kind === SyntaxKind.ThisType;
     }
 
-    export function isTypeOperatorNode(node: Node): node is TypeOperatorNode {
+    export function isTypeOperatorNode(node: Node): node is UnaryTypeNode {
         return node.kind === SyntaxKind.TypeOperator;
     }
 

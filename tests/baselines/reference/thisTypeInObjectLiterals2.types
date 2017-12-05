@@ -416,7 +416,7 @@ type ObjectDescriptor<D, M> = {
 >D : D
 
     methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
->methods : (M & ThisType<D & M>) | undefined
+>methods : M & ThisType<D & M> | undefined
 >M : M
 >ThisType : ThisType<T>
 >D : D

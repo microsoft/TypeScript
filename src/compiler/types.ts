@@ -178,6 +178,7 @@ namespace ts {
         // Contextual keywords
         AbstractKeyword,
         AsKeyword,
+        AndKeyword,
         AnyKeyword,
         AsyncKeyword,
         AwaitKeyword,
@@ -192,8 +193,10 @@ namespace ts {
         NeverKeyword,
         ReadonlyKeyword,
         RequireKeyword,
+        NotKeyword,
         NumberKeyword,
         ObjectKeyword,
+        OrKeyword,
         SetKeyword,
         StringKeyword,
         SymbolKeyword,
@@ -236,9 +239,12 @@ namespace ts {
         IntersectionType,
         ParenthesizedType,
         ThisType,
-        TypeOperator,
+        UnaryType,
+        BinaryType,
+        ConditionalType,
         IndexedAccessType,
         MappedType,
+        CallType,
         LiteralType,
         // Binding patterns
         ObjectBindingPattern,
@@ -415,7 +421,9 @@ namespace ts {
         FirstJSDocNode = JSDocTypeExpression,
         LastJSDocNode = JSDocTypeLiteral,
         FirstJSDocTagNode = JSDocTag,
-        LastJSDocTagNode = JSDocTypeLiteral
+        LastJSDocTagNode = JSDocTypeLiteral,
+
+        TypeOperator = UnaryType, // backwards compatibility
     }
 
     export const enum NodeFlags {
@@ -970,10 +978,35 @@ namespace ts {
         type: TypeNode;
     }
 
-    export interface TypeOperatorNode extends TypeNode {
-        kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword;
+    export type UnaryTypeOperator =
+        | SyntaxKind.KeyOfKeyword
+        | SyntaxKind.NotKeyword;
+
+    export interface UnaryTypeNode extends TypeNode {
+        kind: SyntaxKind.UnaryType | SyntaxKind.TypeOperator; // backwards compatibility
+        operator: UnaryTypeOperator;
         type: TypeNode;
+    }
+
+    export type TypeOperatorNode = UnaryTypeNode; // backwards compatibility
+
+    export type BinaryTypeOperator =
+        | SyntaxKind.ExtendsKeyword
+        | SyntaxKind.AndKeyword
+        | SyntaxKind.OrKeyword;
+
+    export interface BinaryTypeNode extends TypeNode {
+        kind: SyntaxKind.BinaryType;
+        operator: BinaryTypeOperator;
+        left: TypeNode;
+        right: TypeNode;
+    }
+
+    export interface ConditionalTypeNode extends TypeNode {
+        kind: SyntaxKind.ConditionalType;
+        condition: TypeNode;
+        whenTrue: TypeNode;
+        whenFalse: TypeNode;
     }
 
     export interface IndexedAccessTypeNode extends TypeNode {
@@ -989,6 +1022,12 @@ namespace ts {
         typeParameter: TypeParameterDeclaration;
         questionToken?: QuestionToken;
         type?: TypeNode;
+    }
+
+    export interface CallTypeNode extends TypeNode {
+        kind: SyntaxKind.CallType;
+        target: TypeNode;
+        arguments: NodeArray<TypeNode>;
     }
 
     export interface LiteralTypeNode extends TypeNode {
@@ -1524,7 +1563,13 @@ namespace ts {
         template: TemplateLiteral;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
+    export type CallLikeExpression =
+        | CallExpression
+        | NewExpression
+        | TaggedTemplateExpression
+        | Decorator
+        | JsxOpeningLikeElement
+        | CallTypeNode;
 
     export interface AsExpression extends Expression {
         kind: SyntaxKind.AsExpression;
@@ -3141,17 +3186,21 @@ namespace ts {
         Intersection            = 1 << 17,  // Intersection (T & U)
         Index                   = 1 << 18,  // keyof T
         IndexedAccess           = 1 << 19,  // T[K]
+        Negation                = 1 << 20,  // not T
+        Binary                  = 1 << 21,  // S extends T, S and T, S or T
+        Conditional             = 1 << 22,  // T ? U : V
+        Call                    = 1 << 23,  // T()
         /* @internal */
-        FreshLiteral            = 1 << 20,  // Fresh literal type
+        FreshLiteral            = 1 << 24,  // Fresh literal type
         /* @internal */
-        ContainsWideningType    = 1 << 21,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 24,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 27,  // Type is or contains the anyFunctionType
+        NonPrimitive            = 1 << 28,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 25,  // Jsx attributes type
+        JsxAttributes           = 1 << 29,  // Jsx attributes type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3166,16 +3215,18 @@ namespace ts {
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal,
         StringLike = String | StringLiteral | Index,
         NumberLike = Number | NumberLiteral | Enum,
-        BooleanLike = Boolean | BooleanLiteral,
+        BooleanLike = Boolean | BooleanLiteral | Negation | Binary,
         EnumLike = Enum | EnumLiteral,
+        /* @internal */
+        UnionLike = Union | Conditional,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
+        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess | Negation,
         TypeVariable = TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive | Negation | Binary | Conditional | Call,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -3405,6 +3456,35 @@ namespace ts {
         type: TypeVariable | UnionOrIntersectionType;
     }
 
+    export interface NegationType extends Type {
+        type: Type;
+    }
+
+    /* @internal */
+    export interface NegatedType extends Type {
+        negationType: Type;
+    }
+
+    export interface BinaryType extends Type {
+        left: Type;
+        operator: BinaryTypeOperator;
+        right: Type;
+    }
+
+    export interface ConditionalType extends Type {
+        condition: Type;
+        whenTrue: Type;
+        whenFalse: Type;
+    }
+
+    export interface CallType extends Type {
+        declaration?: CallTypeNode;
+        /*@internal*/
+        resolvedSignature?: Signature;
+        target: Type;
+        arguments: Type[];
+    }
+
     export const enum SignatureKind {
         Call,
         Construct,
@@ -3502,6 +3582,121 @@ namespace ts {
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         flags: InferenceFlags;              // Inference flags
         compareTypes: TypeComparer;         // Type comparer function
+    }
+
+    /**
+     * Object used to bind a call-like to a signature.
+     */
+    /*@internal*/
+    export interface CallBinder<T> {
+        /**
+         * Determines whether to skip reporting argument errors.
+         */
+        doNotReportArgumentErrors?: boolean;
+        /**
+         * If defined, gets the node used to report errors for the target.
+         * If not defined, errors cannot be reported for the target.
+         */
+        getErrorNode?(target: T): Node | undefined;
+
+        /**
+         * If defined, determines whether the target was defined in a JavaScript file.
+         * If not defined, assumes the target was not defiend in JavaScript.
+         */
+        isInJavaScriptFile?(target: T): boolean;
+
+        /**
+         * If defined, gets the contextual type of the target.
+         * If not defined, it is assumed the target cannot have a contextual type.
+         */
+        getContextualType?(target: T): Type | undefined;
+
+        /**
+         * If defined, gets the contextual mapper for the target.
+         * If not defined, it is assumed the target cannot have a contextual mapper.
+         */
+        getContextualMapper?(target: T): TypeMapper | undefined;
+
+        /**
+         * If defined, gets the type argument nodes for the target.
+         * If not defined, it is assumed the target does not supply type arguments.
+         */
+        getTypeArguments?(target: T): NodeArray<TypeNode> | undefined;
+
+        /**
+         * If defined, determines whether type arguments should be checked for the target.
+         * If not defined, it is assumed type arguments should be checked.
+         */
+        shouldCheckTypeArguments?(target: T): boolean;
+
+        /**
+         * If defined, gets the `this` argument for the target.
+         * If not defined, the `this` argument is assumed to be `void`.
+         */
+        getThisArgument?(target: T): LeftHandSideExpression | undefined;
+
+        /**
+         * If defined, determines whether to check the `this` argument when checking if a signature is applicable.
+         * If not defined, assumes the `this` argument should be checked.
+         */
+        shouldCheckThisArgument?(target: T): boolean;
+
+        /**
+         * Gets the number of arguments for the target.
+         */
+        getArgumentCount(target: T, signature?: Signature): number;
+
+        /**
+         * If defined, determines whether the argument at the specified index should be checked.
+         * If not defined, assumes the argument should be checked.
+         */
+        shouldCheckArgument?(target: T, argIndex: number): boolean;
+
+        /**
+         * If defined, checks the arguments of the call.
+         */
+        checkArguments?(target: T): void;
+
+        /**
+         * Gets the effective type of an argument.
+         */
+        getArgumentType(target: T, argIndex: number, contextualType: Type, contextualMapper: TypeMapper): Type | undefined;
+
+        /**
+         * If defined, gets the node to use when reporting argument errors for the argument at the specified index.
+         * If not defined, errors are not reported for the argument.
+         */
+        getArgumentErrorNode?(target: T, argIndex: number): Node | undefined;
+
+        /**
+         * If defined, finds the index of the first matching argument.
+         * If not defined, the argument cannot be found.
+         */
+        findArgumentIndex?(target: T, cb: (arg: Expression) => boolean): number;
+
+        /**
+         * If defined, determines whether an argument is context sensitive.
+         * If undefined, arguments cannot be context sensitive.
+         */
+        isArgumentContextSensitive?(target: T, argIndex: number): boolean;
+
+        /**
+         * If defined, determines whether the target has the correct arity with respect to a call signature.
+         * If not defined, it assumed the arity is correct.
+         */
+        hasCorrectArity?(target: T, signature: Signature, signatureHelpTrailingComma?: boolean): boolean;
+
+        /**
+         * If defined, overrides the behavior of `checkApplicableSignature`.
+         * If not defined, the normal behavior of `checkApplicableSignature` is used.
+         */
+        checkApplicableSignatureOverride?(target: T, signature: Signature, relation: Map<RelationComparisonResult>): boolean;
+
+        /**
+         * If defined, determines whether the target has a trailing comma for use with signature help.
+         * If not defined, assumes no trailing comma.
+         */
+        hasTrailingComma?(target: T): boolean;
     }
 
     /* @internal */

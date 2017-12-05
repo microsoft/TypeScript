@@ -145,8 +145,15 @@ namespace ts {
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNode, cbNodes, (<UnionOrIntersectionTypeNode>node).types);
             case SyntaxKind.ParenthesizedType:
-            case SyntaxKind.TypeOperator:
-                return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+            case SyntaxKind.UnaryType:
+                return visitNode(cbNode, (<ParenthesizedTypeNode | UnaryTypeNode>node).type);
+            case SyntaxKind.BinaryType:
+                return visitNode(cbNode, (<BinaryTypeNode>node).left) ||
+                    visitNode(cbNode, (<BinaryTypeNode>node).right);
+            case SyntaxKind.ConditionalType:
+                return visitNode(cbNode, (<ConditionalTypeNode>node).condition) ||
+                    visitNode(cbNode, (<ConditionalTypeNode>node).whenTrue) ||
+                    visitNode(cbNode, (<ConditionalTypeNode>node).whenFalse);
             case SyntaxKind.IndexedAccessType:
                 return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
                     visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
@@ -155,6 +162,9 @@ namespace ts {
                     visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
                     visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
                     visitNode(cbNode, (<MappedTypeNode>node).type);
+            case SyntaxKind.CallType:
+                return visitNode(cbNode, (<CallTypeNode>node).target) ||
+                    visitNodes(cbNode, cbNodes, (<CallTypeNode>node).arguments);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
             case SyntaxKind.ObjectBindingPattern:
@@ -2757,13 +2767,12 @@ namespace ts {
                     case SyntaxKind.ExclamationToken:
                         return SyntaxKind.JSDocNonNullableType;
                     case SyntaxKind.QuestionToken:
-                        return SyntaxKind.JSDocNullableType;
+                        return contextFlags & NodeFlags.JSDoc ? SyntaxKind.JSDocNullableType : undefined;
                 }
             }
         }
 
-        function parseArrayTypeOrHigher(): TypeNode {
-            let type = parseJSDocPostfixTypeOrHigher();
+        function parseArrayOrIndexedAccessTypeRest(type: TypeNode) {
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 if (isStartOfType()) {
                     const node = <IndexedAccessTypeNode>createNode(SyntaxKind.IndexedAccessType, type.pos);
@@ -2782,18 +2791,47 @@ namespace ts {
             return type;
         }
 
-        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword) {
-            const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
+        function parseCallTypeRest(type: TypeNode) {
+            while (true) {
+                type = parseArrayOrIndexedAccessTypeRest(type);
+                if (!scanner.hasPrecedingLineBreak() && token() === SyntaxKind.OpenParenToken) {
+                    const callType = <CallTypeNode>createNode(SyntaxKind.CallType, type.pos);
+                    callType.target = type;
+                    callType.arguments = parseTypeArgumentsInCallType();
+                    type = finishNode(callType);
+                    continue;
+                }
+
+                return type;
+            }
+        }
+
+        function parseTypeArgumentsInCallType() {
+            parseExpected(SyntaxKind.OpenParenToken);
+            const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
+            parseExpected(SyntaxKind.CloseParenToken);
+            return typeArguments;
+        }
+
+        function parseArrayTypeOrHigher(): TypeNode {
+            let type = parseJSDocPostfixTypeOrHigher();
+            return parseCallTypeRest(type);
+        }
+
+        function parseUnaryType(operator: UnaryTypeOperator) {
+            const node = <UnaryTypeNode>createNode(SyntaxKind.UnaryType);
             parseExpected(operator);
             node.operator = operator;
-            node.type = parseTypeOperatorOrHigher();
+            node.type = parseUnaryTypeOrHigher();
             return finishNode(node);
         }
 
-        function parseTypeOperatorOrHigher(): TypeNode {
-            switch (token()) {
+        function parseUnaryTypeOrHigher(): TypeNode {
+            const operator = token();
+            switch (operator) {
                 case SyntaxKind.KeyOfKeyword:
-                    return parseTypeOperator(SyntaxKind.KeyOfKeyword);
+                case SyntaxKind.NotKeyword:
+                    return parseUnaryType(operator);
             }
             return parseArrayTypeOrHigher();
         }
@@ -2815,11 +2853,61 @@ namespace ts {
         }
 
         function parseIntersectionTypeOrHigher(): TypeNode {
-            return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseTypeOperatorOrHigher, SyntaxKind.AmpersandToken);
+            return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseUnaryTypeOrHigher, SyntaxKind.AmpersandToken);
         }
 
         function parseUnionTypeOrHigher(): TypeNode {
             return parseUnionOrIntersectionType(SyntaxKind.UnionType, parseIntersectionTypeOrHigher, SyntaxKind.BarToken);
+        }
+
+        function parseBinaryTypeOrHigher(precedence: number): TypeNode {
+            const leftType = parseUnionTypeOrHigher();
+            return parseBinaryTypeRest(precedence, leftType);
+        }
+
+        function parseBinaryTypeRest(precedence: number, leftType: TypeNode): TypeNode {
+            while (true) {
+                const operator = token();
+
+                let newPrecedence: number;
+                switch (operator) {
+                    case SyntaxKind.OrKeyword:
+                    case SyntaxKind.AndKeyword:
+                    case SyntaxKind.ExtendsKeyword:
+                        newPrecedence = getTypeOperatorPrecedence(SyntaxKind.BinaryType, operator);
+                        break;
+
+                    default:
+                        return leftType;
+                }
+
+                if (newPrecedence <= precedence) break;
+
+                nextToken();
+                leftType = makeBinaryTypeOperator(leftType, operator, parseBinaryTypeOrHigher(newPrecedence));
+            }
+            return leftType;
+        }
+
+        function makeBinaryTypeOperator(left: TypeNode, operator: BinaryTypeOperator, right: TypeNode) {
+            const node = <BinaryTypeNode>createNode(SyntaxKind.BinaryType, left.pos);
+            node.left = left;
+            node.operator = operator;
+            node.right = right;
+            return finishNode(node);
+        }
+
+        function parseConditionalTypeRest(leftType: TypeNode): TypeNode {
+            if (!parseOptional(SyntaxKind.QuestionToken)) {
+                return leftType;
+            }
+
+            const node = <ConditionalTypeNode>createNode(SyntaxKind.ConditionalType, leftType.pos);
+            node.condition = leftType;
+            node.whenTrue = parseTypeWorker();
+            parseExpected(SyntaxKind.ColonToken);
+            node.whenFalse = parseTypeWorker();
+            return finishNode(node);
         }
 
         function isStartOfFunctionType(): boolean {
@@ -2911,7 +2999,7 @@ namespace ts {
             if (token() === SyntaxKind.NewKeyword) {
                 return parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
             }
-            return parseUnionTypeOrHigher();
+            return parseConditionalTypeRest(parseBinaryTypeOrHigher(/*precedence*/ 0));
         }
 
         function parseTypeAnnotation(): TypeNode {

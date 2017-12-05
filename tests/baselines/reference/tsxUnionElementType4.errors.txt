@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type '{ x: true; }' is not assignable to type '(IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode; }) | (IntrinsicAttributes & IntrinsicClassAttributes<RC2> & { x: string; } & { children?: ReactNode; })'.
+tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode; } | IntrinsicAttributes & IntrinsicClassAttributes<RC2> & { x: string; } & { children?: ReactNode; }'.
   Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC2> & { x: string; } & { children?: ReactNode; }'.
     Type '{ x: true; }' is not assignable to type '{ x: string; }'.
       Types of property 'x' are incompatible.
@@ -41,7 +41,7 @@ tests/cases/conformance/jsx/file.tsx(34,22): error TS2559: Type '{ prop: true; }
     // Error
     let a = <RCComp x />;
                     ~
-!!! error TS2322: Type '{ x: true; }' is not assignable to type '(IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode; }) | (IntrinsicAttributes & IntrinsicClassAttributes<RC2> & { x: string; } & { children?: ReactNode; })'.
+!!! error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode; } | IntrinsicAttributes & IntrinsicClassAttributes<RC2> & { x: string; } & { children?: ReactNode; }'.
 !!! error TS2322:   Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC2> & { x: string; } & { children?: ReactNode; }'.
 !!! error TS2322:     Type '{ x: true; }' is not assignable to type '{ x: string; }'.
 !!! error TS2322:       Types of property 'x' are incompatible.

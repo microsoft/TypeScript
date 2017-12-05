@@ -551,12 +551,18 @@ namespace ts {
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.ThisType:
                     return emitThisType();
-                case SyntaxKind.TypeOperator:
-                    return emitTypeOperator(<TypeOperatorNode>node);
+                case SyntaxKind.UnaryType:
+                    return emitUnaryType(<UnaryTypeNode>node);
+                case SyntaxKind.BinaryType:
+                    return emitBinaryType(<BinaryTypeNode>node);
+                case SyntaxKind.ConditionalType:
+                    return emitConditionalType(<ConditionalTypeNode>node);
                 case SyntaxKind.IndexedAccessType:
                     return emitIndexedAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
                     return emitMappedType(<MappedTypeNode>node);
+                case SyntaxKind.CallType:
+                    return emitCallType(<CallTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -1071,10 +1077,26 @@ namespace ts {
             write("this");
         }
 
-        function emitTypeOperator(node: TypeOperatorNode) {
+        function emitUnaryType(node: UnaryTypeNode) {
             writeTokenText(node.operator);
             write(" ");
             emit(node.type);
+        }
+
+        function emitBinaryType(node: BinaryTypeNode) {
+            emit(node.left);
+            write(" ");
+            writeTokenText(node.operator);
+            write(" ");
+            emit(node.right);
+        }
+
+        function emitConditionalType(node: ConditionalTypeNode) {
+            emit(node.condition);
+            write(" ? ");
+            emit(node.whenTrue);
+            write(" : ");
+            emit(node.whenFalse);
         }
 
         function emitIndexedAccessType(node: IndexedAccessTypeNode) {
@@ -1112,6 +1134,13 @@ namespace ts {
                 decreaseIndent();
             }
             write("}");
+        }
+
+        function emitCallType(node: CallTypeNode) {
+            emit(node.target);
+            write("(");
+            emitList(node, node.arguments, ListFormat.Parameters);
+            write(")");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {

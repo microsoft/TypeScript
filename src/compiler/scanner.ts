@@ -60,6 +60,7 @@ namespace ts {
 
     const textToToken = createMapFromTemplate({
         "abstract": SyntaxKind.AbstractKeyword,
+        "and": SyntaxKind.AndKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
         "boolean": SyntaxKind.BooleanKeyword,
@@ -98,9 +99,11 @@ namespace ts {
         "namespace": SyntaxKind.NamespaceKeyword,
         "never": SyntaxKind.NeverKeyword,
         "new": SyntaxKind.NewKeyword,
+        "not": SyntaxKind.NotKeyword,
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,
         "object": SyntaxKind.ObjectKeyword,
+        "or": SyntaxKind.OrKeyword,
         "package": SyntaxKind.PackageKeyword,
         "private": SyntaxKind.PrivateKeyword,
         "protected": SyntaxKind.ProtectedKeyword,

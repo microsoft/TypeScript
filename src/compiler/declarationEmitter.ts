@@ -441,12 +441,18 @@ namespace ts {
                     return emitIntersectionType(<IntersectionTypeNode>type);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
-                case SyntaxKind.TypeOperator:
-                    return emitTypeOperator(<TypeOperatorNode>type);
+                case SyntaxKind.UnaryType:
+                    return emitUnaryType(<UnaryTypeNode>type);
+                case SyntaxKind.BinaryType:
+                    return emitBinaryType(<BinaryTypeNode>type);
+                case SyntaxKind.ConditionalType:
+                    return emitConditionalType(<ConditionalTypeNode>type);
                 case SyntaxKind.IndexedAccessType:
                     return emitIndexedAccessType(<IndexedAccessTypeNode>type);
                 case SyntaxKind.MappedType:
                     return emitMappedType(<MappedTypeNode>type);
+                case SyntaxKind.CallType:
+                    return emitCallType(<CallTypeNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return emitSignatureDeclarationWithJsDocComments(<FunctionOrConstructorTypeNode>type);
@@ -540,10 +546,26 @@ namespace ts {
                 write(")");
             }
 
-            function emitTypeOperator(type: TypeOperatorNode) {
+            function emitUnaryType(type: UnaryTypeNode) {
                 write(tokenToString(type.operator));
                 write(" ");
                 emitType(type.type);
+            }
+
+            function emitBinaryType(type: BinaryTypeNode) {
+                emitType(type.left);
+                write(" ");
+                write(tokenToString(type.operator));
+                write(" ");
+                emitType(type.right);
+            }
+
+            function emitConditionalType(type: ConditionalTypeNode) {
+                emitType(type.condition);
+                write(" ? ");
+                emitType(type.whenTrue);
+                write(" : ");
+                emitType(type.whenFalse);
             }
 
             function emitIndexedAccessType(node: IndexedAccessTypeNode) {
@@ -577,6 +599,13 @@ namespace ts {
                 decreaseIndent();
                 write("}");
                 enclosingDeclaration = prevEnclosingDeclaration;
+            }
+
+            function emitCallType(node: CallTypeNode) {
+                emitType(node.target);
+                write("(");
+                emitCommaList(node.arguments, emitType);
+                write(")");
             }
 
             function emitTypeLiteral(type: TypeLiteralNode) {

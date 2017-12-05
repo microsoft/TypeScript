@@ -611,7 +611,7 @@ namespace ts {
     export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: ReadonlyArray<TypeNode> | undefined) {
         const node = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
         node.typeName = asName(typeName);
-        node.typeArguments = typeArguments && parenthesizeTypeParameters(typeArguments);
+        node.typeArguments = asNodeArray(sameMap(typeArguments, parenthesizeTypeArgument));
         return node;
     }
 
@@ -664,7 +664,7 @@ namespace ts {
 
     export function createArrayTypeNode(elementType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
-        node.elementType = parenthesizeArrayTypeMember(elementType);
+        node.elementType = parenthesizeTypeNode(elementType, SyntaxKind.ArrayType);
         return node;
     }
 
@@ -704,7 +704,7 @@ namespace ts {
 
     export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: ReadonlyArray<TypeNode>) {
         const node = createSynthesizedNode(kind) as UnionTypeNode | IntersectionTypeNode;
-        node.types = parenthesizeElementTypeMembers(types);
+        node.types = createNodeArray(sameMap(types, kind === SyntaxKind.UnionType ? parenthesizeUnionTypeConstituent : parenthesizeIntersectionTypeConstituent));
         return node;
     }
 
@@ -730,20 +730,24 @@ namespace ts {
         return <ThisTypeNode>createSynthesizedNode(SyntaxKind.ThisType);
     }
 
-    export function createTypeOperatorNode(type: TypeNode) {
-        const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
-        node.operator = SyntaxKind.KeyOfKeyword;
-        node.type = parenthesizeElementTypeMember(type);
+    export function createUnaryTypeNode(operator: UnaryTypeOperator, type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.UnaryType) as UnaryTypeNode;
+        node.operator = operator;
+        node.type = parenthesizeTypeNode(type, SyntaxKind.UnaryType, operator);
         return node;
     }
 
-    export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
-        return node.type !== type ? updateNode(createTypeOperatorNode(type), node) : node;
+    export function createTypeOperatorNode(type: TypeNode) {
+        return createUnaryTypeNode(SyntaxKind.KeyOfKeyword, type); // backwards compatibility
+    }
+
+    export function updateTypeOperatorNode(node: UnaryTypeNode, type: TypeNode) {
+        return node.type !== type ? updateNode(createUnaryTypeNode(node.operator, type), node) : node;
     }
 
     export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.IndexedAccessType) as IndexedAccessTypeNode;
-        node.objectType = parenthesizeElementTypeMember(objectType);
+        node.objectType = parenthesizeTypeNode(objectType, SyntaxKind.IndexedAccessType);
         node.indexType = indexType;
         return node;
     }
@@ -753,6 +757,44 @@ namespace ts {
             || node.indexType !== indexType
             ? updateNode(createIndexedAccessTypeNode(objectType, indexType), node)
             : node;
+    }
+
+    export function createBinaryTypeNode(left: TypeNode, operator: BinaryTypeOperator, right: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.BinaryType) as BinaryTypeNode;
+        node.left = parenthesizeTypeNode(left, SyntaxKind.BinaryType, operator);
+        node.operator = operator;
+        node.right = parenthesizeTypeNode(right, SyntaxKind.BinaryType, operator);
+        return node;
+    }
+
+    export function updateBinaryTypeNode(node: BinaryTypeNode, left: TypeNode, right: TypeNode) {
+        return node.left !== left
+            || node.right !== right
+            ? updateNode(createBinaryTypeNode(left, node.operator, right), node)
+            : node;
+    }
+
+    export function createConditionalTypeNode(condition: TypeNode, whenTrue: TypeNode, whenFalse: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.ConditionalType) as ConditionalTypeNode;
+        node.condition = parenthesizeTypeNode(condition, SyntaxKind.ConditionalType, SyntaxKind.QuestionToken);
+        node.whenTrue = whenTrue;
+        node.whenFalse = whenFalse;
+        return node;
+    }
+
+    export function updateConditionalTypeNode(node: ConditionalTypeNode, condition: TypeNode, whenTrue: TypeNode, whenFalse: TypeNode) {
+        return node.condition !== condition
+            || node.whenTrue !== whenTrue
+            || node.whenFalse !== whenFalse
+            ? updateNode(createConditionalTypeNode(condition, whenTrue, whenFalse), node)
+            : node;
+    }
+
+    export function createCallTypeNode(target: TypeNode, argumentList: ReadonlyArray<TypeNode>) {
+        const node = createSynthesizedNode(SyntaxKind.CallType) as CallTypeNode;
+        node.target = parenthesizeTypeNode(target, SyntaxKind.CallType);
+        node.arguments = createNodeArray(argumentList);
+        return node;
     }
 
     export function createMappedTypeNode(readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode {
@@ -770,6 +812,20 @@ namespace ts {
             || node.questionToken !== questionToken
             || node.type !== type
             ? updateNode(createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), node)
+            : node;
+    }
+
+    export function createCallType(target: TypeNode, argumentList: ReadonlyArray<TypeNode>) {
+        const node = createSynthesizedNode(SyntaxKind.CallType) as CallTypeNode;
+        node.target = parenthesizeTypeNode(target, SyntaxKind.CallType);
+        node.arguments = createNodeArray(argumentList);
+        return node;
+    }
+
+    export function updateCallType(node: CallTypeNode, target: TypeNode, argumentList: ReadonlyArray<TypeNode>) {
+        return node.target !== target
+            || node.arguments !== argumentList
+            ? updateNode(createCallType(target, argumentList), node)
             : node;
     }
 
@@ -2757,6 +2813,26 @@ namespace ts {
         }
         return destRanges;
     }
+
+    function parenthesizeTypeNode(node: TypeNode, containerKind: SyntaxKind, operatorKind?: SyntaxKind) {
+        const operatorPrecedence = getTypeOperatorPrecedence(containerKind, operatorKind);
+        const nodePrecedence = getTypePrecedence(node);
+        return nodePrecedence < operatorPrecedence ? createParenthesizedType(node) : node;
+    }
+
+    function parenthesizeUnionTypeConstituent(node: TypeNode) {
+        return parenthesizeTypeNode(node, SyntaxKind.UnionType, SyntaxKind.BarToken);
+    }
+
+    function parenthesizeIntersectionTypeConstituent(node: TypeNode) {
+        return parenthesizeTypeNode(node, SyntaxKind.IntersectionType, SyntaxKind.AmpersandToken);
+    }
+
+    function parenthesizeTypeArgument(typeArgument: TypeNode, typeArgumentIndex: number) {
+        return typeArgumentIndex === 0 && isFunctionOrConstructorTypeNode(typeArgument) && typeArgument.typeParameters
+            ? createParenthesizedType(typeArgument)
+            : typeArgument;
+    }
 }
 
 /* @internal */
@@ -3899,44 +3975,6 @@ namespace ts {
         }
 
         return expression;
-    }
-
-    export function parenthesizeElementTypeMember(member: TypeNode) {
-        switch (member.kind) {
-            case SyntaxKind.UnionType:
-            case SyntaxKind.IntersectionType:
-            case SyntaxKind.FunctionType:
-            case SyntaxKind.ConstructorType:
-                return createParenthesizedType(member);
-        }
-        return member;
-    }
-
-    export function parenthesizeArrayTypeMember(member: TypeNode) {
-        switch (member.kind) {
-            case SyntaxKind.TypeQuery:
-            case SyntaxKind.TypeOperator:
-                return createParenthesizedType(member);
-        }
-        return parenthesizeElementTypeMember(member);
-    }
-
-    export function parenthesizeElementTypeMembers(members: ReadonlyArray<TypeNode>) {
-        return createNodeArray(sameMap(members, parenthesizeElementTypeMember));
-    }
-
-    export function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeNode>) {
-        if (some(typeParameters)) {
-            const params: TypeNode[] = [];
-            for (let i = 0; i < typeParameters.length; ++i) {
-                const entry = typeParameters[i];
-                params.push(i === 0 && isFunctionOrConstructorTypeNode(entry) && entry.typeParameters ?
-                    createParenthesizedType(entry) :
-                    entry);
-            }
-
-            return createNodeArray(params);
-        }
     }
 
     function getLeftmostExpression(node: Expression): Expression {

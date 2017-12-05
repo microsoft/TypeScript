@@ -3364,10 +3364,13 @@ namespace ts {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.ThisType:
-            case SyntaxKind.TypeOperator:
+            case SyntaxKind.UnaryType:
+            case SyntaxKind.BinaryType:
+            case SyntaxKind.ConditionalType:
             case SyntaxKind.IndexedAccessType:
             case SyntaxKind.MappedType:
             case SyntaxKind.LiteralType:
+            case SyntaxKind.CallType:
             case SyntaxKind.NamespaceExportDeclaration:
                 // Types and signatures are TypeScript syntax, and exclude all other facts.
                 transformFlags = TransformFlags.AssertTypeScript;

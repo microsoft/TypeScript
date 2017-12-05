@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type '{ x: "hi"; }' is not assignable to type '(IntrinsicAttributes & { x: number; }) | (IntrinsicAttributes & { x: boolean; })'.
+tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: number; } | IntrinsicAttributes & { x: boolean; }'.
   Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
     Type '{ x: "hi"; }' is not assignable to type '{ x: boolean; }'.
       Types of property 'x' are incompatible.
@@ -19,7 +19,7 @@ tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type '{ x: "hi"; }' i
     var SFCComp = SFC1 || SFC2;
     <SFCComp x={"hi"}/>
              ~~~~~~~~
-!!! error TS2322: Type '{ x: "hi"; }' is not assignable to type '(IntrinsicAttributes & { x: number; }) | (IntrinsicAttributes & { x: boolean; })'.
+!!! error TS2322: Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: number; } | IntrinsicAttributes & { x: boolean; }'.
 !!! error TS2322:   Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
 !!! error TS2322:     Type '{ x: "hi"; }' is not assignable to type '{ x: boolean; }'.
 !!! error TS2322:       Types of property 'x' are incompatible.

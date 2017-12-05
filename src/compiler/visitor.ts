@@ -389,9 +389,20 @@ namespace ts {
                 return updateParenthesizedType(<ParenthesizedTypeNode>node,
                     visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));
 
-            case SyntaxKind.TypeOperator:
-                return updateTypeOperatorNode(<TypeOperatorNode>node,
-                    visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));
+            case SyntaxKind.UnaryType:
+                return updateTypeOperatorNode(<UnaryTypeNode>node,
+                    visitNode((<UnaryTypeNode>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.BinaryType:
+                return updateBinaryTypeNode(<BinaryTypeNode>node,
+                    visitNode((<BinaryTypeNode>node).left, visitor, isTypeNode),
+                    visitNode((<BinaryTypeNode>node).right, visitor, isTypeNode));
+
+            case SyntaxKind.ConditionalType:
+                return updateConditionalTypeNode(<ConditionalTypeNode>node,
+                    visitNode((<ConditionalTypeNode>node).condition, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).whenTrue, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).whenFalse, visitor, isTypeNode));
 
             case SyntaxKind.IndexedAccessType:
                 return updateIndexedAccessTypeNode((<IndexedAccessTypeNode>node),
@@ -404,6 +415,11 @@ namespace ts {
                     visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration),
                     visitNode((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
                     visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.CallType:
+                return updateCallType((<CallTypeNode>node),
+                    visitNode((<CallTypeNode>node).target, visitor, isTypeNode),
+                    nodesVisitor((<CallTypeNode>node).arguments, visitor, isTypeNode));
 
             case SyntaxKind.LiteralType:
                 return updateLiteralTypeNode(<LiteralTypeNode>node,
