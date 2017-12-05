@@ -246,6 +246,7 @@ namespace ts {
         grey: "\u001b[90m",
         red: "\u001b[91m",
         yellow: "\u001b[93m",
+        blue: "\u001b[94m",
         cyan: "\u001b[96m"
     };
     const gutterStyleSequence = "\u001b[30;47m";
@@ -256,7 +257,7 @@ namespace ts {
         switch (category) {
             case DiagnosticCategory.Warning: return foregroundColorEscapeSequences.yellow;
             case DiagnosticCategory.Error: return foregroundColorEscapeSequences.red;
-            case DiagnosticCategory.Message: return foregroundColorEscapeSequences.yellow;
+            case DiagnosticCategory.Message: return foregroundColorEscapeSequences.blue;
         }
     }
 
