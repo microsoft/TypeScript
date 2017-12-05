@@ -1498,6 +1498,37 @@ a type reference of the form 'G&lt;A, B>' places no requirements on 'A' but requ
 
 The process of substituting type arguments for type parameters in a generic type or generic signature is known as ***instantiating*** the generic type or signature. Instantiation of a generic type or signature can fail if the supplied type arguments do not satisfy the constraints of their corresponding type parameters.
 
+### Indexed access types { #indexed-access-types }
+
+An indexed access type represents the type of a property, even before the type or the property name may be known.
+
+&emsp;&emsp;*IndexedAccessType:*
+&emsp;&emsp;&emsp;*Type*&emsp;`[`&emsp;*Type*&emsp;`]`
+
+Indexed access types can be created directly with the above type syntax.
+They can also be created by the following value syntactic forms: `x[y]`, ?, ??.
+The first type is called the indexed type, and the second type is called the index type.
+However, none of these forms are guaranteed to result in an indexed access type; when the indexed type is an object type and the index type is a string type, the type of the property can be determined at the point the indexed access type is requested.
+
+TODO: List the procedure to determine whether you get an indexed access type or the type of the property.
+(Can there be other types resulting from an indexed access type creation? I don't think so.)
+
+TODO: Give an example of indexed access type usage.
+
+### Key query types { #keyof-types }
+
+A key query type represents the property names of a type. They are used in place
+
+&emsp;&emsp;*KeyQueryType:*
+&emsp;&emsp;&emsp;`keyof`&emsp;*Type*
+
+Like indexed access types, a type declared as a key query type results in either a key query type, the string type, or a subtype of the string type.
+
+TODO: List the procedure to determine whether you get an key query type or a string type.
+
+TODO: Give an example of combined keyof/indexed-access type usage.
+
+
 ### <a name="3.6.3"/>3.6.3 This-types
 
 Every class and interface has a ***this-type*** that represents the actual type of instances of the class or interface within the declaration of the class or interface. The this-type is referenced using the keyword `this` in a type position. Within instance methods and constructors of a class, the type of the expression `this` (section [4.2](#4.2)) is the this-type of the class.
