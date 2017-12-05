@@ -98,12 +98,12 @@ class UnreachableCodeDetection {
 }
 
 //// [inKeywordTypeguard.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
@@ -124,12 +124,12 @@ function positiveClassesTest(x) {
         x.a = "1";
     }
 }
-var AWithOptionalProp = (function () {
+var AWithOptionalProp = /** @class */ (function () {
     function AWithOptionalProp() {
     }
     return AWithOptionalProp;
 }());
-var BWithOptionalProp = (function () {
+var BWithOptionalProp = /** @class */ (function () {
     function BWithOptionalProp() {
     }
     return BWithOptionalProp;
@@ -142,13 +142,13 @@ function positiveTestClassesWithOptionalProperties(x) {
         x.b = "1";
     }
 }
-var AWithMethod = (function () {
+var AWithMethod = /** @class */ (function () {
     function AWithMethod() {
     }
     AWithMethod.prototype.a = function () { return ""; };
     return AWithMethod;
 }());
-var BWithMethod = (function () {
+var BWithMethod = /** @class */ (function () {
     function BWithMethod() {
     }
     BWithMethod.prototype.b = function () { return ""; };
@@ -172,12 +172,12 @@ function negativeTestClassesWithMemberMissingInBothClasses(x) {
         x.b();
     }
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
@@ -190,7 +190,7 @@ function negativeMultipleClassesTest(x) {
         x.a = "1";
     }
 }
-var ClassWithUnionProp = (function () {
+var ClassWithUnionProp = /** @class */ (function () {
     function ClassWithUnionProp() {
     }
     return ClassWithUnionProp;
@@ -203,7 +203,7 @@ function negativePropTest(x) {
         var z = x.prop.a;
     }
 }
-var NegativeClassTest = (function () {
+var NegativeClassTest = /** @class */ (function () {
     function NegativeClassTest() {
     }
     NegativeClassTest.prototype.inThis = function () {
@@ -216,7 +216,7 @@ var NegativeClassTest = (function () {
     };
     return NegativeClassTest;
 }());
-var UnreachableCodeDetection = (function () {
+var UnreachableCodeDetection = /** @class */ (function () {
     function UnreachableCodeDetection() {
     }
     UnreachableCodeDetection.prototype.inThis = function () {

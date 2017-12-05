@@ -92,22 +92,22 @@ class SelfAssert {
 }
 
 //// [typeGuardOfFromPropNameInUnionType.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
@@ -136,12 +136,12 @@ function anonymousClasses(x) {
         var z = x.b;
     }
 }
-var AWithOptionalProp = (function () {
+var AWithOptionalProp = /** @class */ (function () {
     function AWithOptionalProp() {
     }
     return AWithOptionalProp;
 }());
-var BWithOptionalProp = (function () {
+var BWithOptionalProp = /** @class */ (function () {
     function BWithOptionalProp() {
     }
     return BWithOptionalProp;
@@ -164,7 +164,7 @@ function inParenthesizedExpression(x) {
         var z = x.b;
     }
 }
-var ClassWithUnionProp = (function () {
+var ClassWithUnionProp = /** @class */ (function () {
     function ClassWithUnionProp() {
     }
     return ClassWithUnionProp;
@@ -177,7 +177,7 @@ function inProperty(x) {
         var z = x.prop.b;
     }
 }
-var NestedClassWithProp = (function () {
+var NestedClassWithProp = /** @class */ (function () {
     function NestedClassWithProp() {
     }
     return NestedClassWithProp;
@@ -190,7 +190,7 @@ function innestedProperty(x) {
         var z = x.outer.prop.b;
     }
 }
-var InMemberOfClass = (function () {
+var InMemberOfClass = /** @class */ (function () {
     function InMemberOfClass() {
     }
     InMemberOfClass.prototype.inThis = function () {
@@ -204,7 +204,7 @@ var InMemberOfClass = (function () {
     return InMemberOfClass;
 }());
 // added for completeness
-var SelfAssert = (function () {
+var SelfAssert = /** @class */ (function () {
     function SelfAssert() {
     }
     SelfAssert.prototype.inThis = function () {
