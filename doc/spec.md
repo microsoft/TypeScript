@@ -1500,26 +1500,32 @@ The process of substituting type arguments for type parameters in a generic type
 
 ### Indexed access types { #indexed-access-types }
 
-An indexed access type represents the type of a property, even before the type or the property name may be known.
+An indexed access type represents the type of a property, even when the type or the property name is unknown.
 
-&emsp;&emsp;*IndexedAccessType:*
+&emsp;&emsp;*IndexedAccessType:*  
 &emsp;&emsp;&emsp;*Type*&emsp;`[`&emsp;*Type*&emsp;`]`
 
-Indexed access types can be created directly with the above type syntax.
-They can also be created by the following value syntactic forms: `x[y]`, ?, ??.
-The first type is called the indexed type, and the second type is called the index type.
-However, none of these forms are guaranteed to result in an indexed access type; when the indexed type is an object type and the index type is a string type, the type of the property can be determined at the point the indexed access type is requested.
 
-TODO: List the procedure to determine whether you get an indexed access type or the type of the property.
-(Can there be other types resulting from an indexed access type creation? I don't think so.)
+Indexed access types can be created with the above type syntax `T[K]`, as well as the expression syntax `o[k]`.
+In the preceding example, the indexed type is *T* and the access type is *K*.
+However, neither of these forms is guaranteed to result in an indexed access type; when the indexed type is an object type and the access type is a string type, the type of the property can be determined at the point the indexed access type is requested.
+The result of `T[K]` and `o[k]` in the second case is just the type of property *K* in type *T*.
 
-TODO: Give an example of indexed access type usage.
+For the indexed access type syntax `T[K]`:
+
+* If *K* is a type parameter or key query type, or is a union or intersection containing one of these types, the result is the index access type *T[K]* unless *T* is any, in which case the result is any.
+* If *T* did not originate from expression syntax and is a type parameter or key query type, or is a union or intersection containing one of these types, the result is an index access type *T[K]* unless *T* is any, in which case the result is any.
+* If *K* is a union, then the result is a the union of type of properties *k* in type *T* forall *k* in *K*.
+* Otherwise, the result is the type of property *K* in type *T*.
+
+Note that the second rule exists for backward compatibility, particularly expressions like `this["p"]`, which should produce the type of the property *p* from the containing class.
+Here, *this* is a generic type, but has a useful apparent type.
 
 ### Key query types { #keyof-types }
 
 A key query type represents the property names of a type. They are used in place
 
-&emsp;&emsp;*KeyQueryType:*
+&emsp;&emsp;*KeyQueryType:*  
 &emsp;&emsp;&emsp;`keyof`&emsp;*Type*
 
 Like indexed access types, a type declared as a key query type results in either a key query type, the string type, or a subtype of the string type.
