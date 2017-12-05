@@ -737,11 +737,11 @@ namespace ts {
         }
         return { resolvedModule: undefined, failedLookupLocations };
 
-        function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, originalPath: string | undefined, isExternalLibraryImport: boolean }> {
+        function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, originalPath?: string, isExternalLibraryImport: boolean }> {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, failedLookupLocations, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, /*considerPackageJson*/ true);
             const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, failedLookupLocations, state);
             if (resolved) {
-                return toSearchResult({ resolved, originalPath: undefined, isExternalLibraryImport: false });
+                return toSearchResult({ resolved, isExternalLibraryImport: false });
             }
 
             if (!isExternalModuleNameRelative(moduleName)) {
@@ -768,7 +768,7 @@ namespace ts {
                 const { path: candidate, parts } = normalizePathAndParts(combinePaths(containingDirectory, moduleName));
                 const resolved = nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, /*onlyRecordFailures*/ false, state, /*considerPackageJson*/ true);
                 // Treat explicit "node_modules" import as an external library import.
-                return resolved && toSearchResult({ resolved, originalPath: undefined, isExternalLibraryImport: contains(parts, "node_modules") });
+                return resolved && toSearchResult({ resolved, isExternalLibraryImport: contains(parts, "node_modules") });
             }
         }
     }

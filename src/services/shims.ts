@@ -334,7 +334,7 @@ namespace ts {
                     const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
-                        return result ? { resolvedFileName: result, originalPath: undefined, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined;
+                        return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined;
                     });
                 };
             }
