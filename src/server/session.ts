@@ -1703,6 +1703,10 @@ namespace ts.server {
         }
 
         private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
+            [CommandNames.Status]: () => {
+                const response: protocol.StatusResponseBody = { version };
+                return this.requiredResponse(response);
+            },
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
                 // TODO: report errors
