@@ -2620,6 +2620,13 @@ namespace ts {
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
+                if (type.flags & TypeFlags.Conditional) {
+                    const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
+                    const extendskTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
+                    const trueTypeNode = typeToTypeNodeHelper((<ConditionalType>type).trueType, context);
+                    const falseTypeNode = typeToTypeNodeHelper((<ConditionalType>type).falseType, context);
+                    return createConditionalTypeNode(checkTypeNode, extendskTypeNode, trueTypeNode, falseTypeNode);
+                }
 
                 Debug.fail("Should be unreachable.");
 
@@ -3387,6 +3394,15 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writeType((<IndexedAccessType>type).indexType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    }
+                    else if (type.flags & TypeFlags.Conditional) {
+                        writeType((<ConditionalType>type).checkType, TypeFormatFlags.InElementType);
+                        writer.writeKeyword("extends");
+                        writeType((<ConditionalType>type).extendsType, TypeFormatFlags.InElementType);
+                        writePunctuation(writer, SyntaxKind.QuestionToken);
+                        writeType((<ConditionalType>type).trueType, TypeFormatFlags.InElementType);
+                        writePunctuation(writer, SyntaxKind.ColonToken);
+                        writeType((<ConditionalType>type).falseType, TypeFormatFlags.InElementType);
                     }
                     else {
                         // Should never get here
@@ -8189,6 +8205,35 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getConditionalType(checkType: Type, extendsType: Type, trueType: Type, falseType: Type, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            if (checkType.flags & TypeFlags.Union) {
+                return getUnionType(map((<UnionType>checkType).types, t => getConditionalType(t, extendsType, trueType, falseType)),
+                    /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
+            }
+            if (isTypeAssignableTo(checkType, extendsType)) {
+                return trueType;
+            }
+            if (!isGenericObjectType(checkType) && !isGenericObjectType(extendsType)) {
+                return falseType;
+            }
+            const type = <ConditionalType>createType(TypeFlags.Conditional);
+            type.checkType = checkType;
+            type.extendsType = extendsType;
+            type.trueType = trueType;
+            type.falseType = falseType;
+            return type;
+        }
+
+        function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getConditionalType(getTypeFromTypeNode(node.checkType), getTypeFromTypeNode(node.extendsType),
+                    getTypeFromTypeNode(node.trueType), getTypeFromTypeNode(node.falseType),
+                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: TypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -8481,6 +8526,8 @@ namespace ts {
                     return getTypeFromIndexedAccessTypeNode(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
                     return getTypeFromMappedTypeNode(<MappedTypeNode>node);
+                case SyntaxKind.ConditionalType:
+                    return getTypeFromConditionalTypeNode(<ConditionalTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -8777,6 +8824,11 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
+                }
+                if (type.flags & TypeFlags.Conditional) {
+                    return getConditionalType(instantiateType((<ConditionalType>type).checkType, mapper), instantiateType((<ConditionalType>type).extendsType, mapper),
+                        instantiateType((<ConditionalType>type).trueType, mapper), instantiateType((<ConditionalType>type).falseType, mapper),
+                        type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
                 }
             }
             return type;

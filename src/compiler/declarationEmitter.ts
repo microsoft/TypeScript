@@ -450,6 +450,8 @@ namespace ts {
                     return emitUnionType(<UnionTypeNode>type);
                 case SyntaxKind.IntersectionType:
                     return emitIntersectionType(<IntersectionTypeNode>type);
+                case SyntaxKind.ConditionalType:
+                    return emitConditionalType(<ConditionalTypeNode>type);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.TypeOperator:
@@ -545,7 +547,17 @@ namespace ts {
                 emitSeparatedList(type.types, " & ", emitType);
             }
 
-            function emitParenType(type: ParenthesizedTypeNode) {
+            function emitConditionalType(node: ConditionalTypeNode) {
+                emitType(node.checkType);
+                write(" extends ");
+                emitType(node.extendsType);
+                write(" ? ");
+                emitType(node.trueType);
+                write(" : ");
+                emitType(node.falseType);
+            }
+
+                function emitParenType(type: ParenthesizedTypeNode) {
                 write("(");
                 emitType(type.type);
                 write(")");

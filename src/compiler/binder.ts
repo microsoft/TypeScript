@@ -3416,6 +3416,7 @@ namespace ts {
             case SyntaxKind.TupleType:
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
+            case SyntaxKind.ConditionalType:
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:

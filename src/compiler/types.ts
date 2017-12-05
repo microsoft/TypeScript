@@ -248,6 +248,7 @@ namespace ts {
         TupleType,
         UnionType,
         IntersectionType,
+        ConditionalType,
         ParenthesizedType,
         ThisType,
         TypeOperator,
@@ -1063,6 +1064,14 @@ namespace ts {
     export interface IntersectionTypeNode extends TypeNode {
         kind: SyntaxKind.IntersectionType;
         types: NodeArray<TypeNode>;
+    }
+
+    export interface ConditionalTypeNode extends TypeNode {
+        kind: SyntaxKind.ConditionalType;
+        checkType: TypeNode;
+        extendsType: TypeNode;
+        trueType: TypeNode;
+        falseType: TypeNode;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
@@ -3339,18 +3348,19 @@ namespace ts {
         Intersection            = 1 << 18,  // Intersection (T & U)
         Index                   = 1 << 19,  // keyof T
         IndexedAccess           = 1 << 20,  // T[K]
+        Conditional             = 1 << 21,  // A extends B ? T : U
         /* @internal */
-        FreshLiteral            = 1 << 21,  // Fresh literal or unique type
+        FreshLiteral            = 1 << 22,  // Fresh literal or unique type
         /* @internal */
-        ContainsWideningType    = 1 << 22,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 23,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 23,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 24,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 24,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 25,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 25,  // Type is or contains the anyFunctionType
+        NonPrimitive            = 1 << 26,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 26,  // Jsx attributes type
-        MarkerType              = 1 << 27,  // Marker type used for variance probing
+        JsxAttributes           = 1 << 27,  // Jsx attributes type
+        MarkerType              = 1 << 28,  // Marker type used for variance probing
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3373,12 +3383,12 @@ namespace ts {
         ESSymbolLike = ESSymbol | UniqueESSymbol,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
-        TypeVariable = TypeParameter | IndexedAccess,
+        TypeVariable = TypeParameter | IndexedAccess | Conditional,
+        StructuredOrTypeVariable = StructuredType | TypeVariable | Index,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredOrTypeVariable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -3624,6 +3634,13 @@ namespace ts {
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends Type {
         type: TypeVariable | UnionOrIntersectionType;
+    }
+
+    export interface ConditionalType extends TypeVariable {
+        checkType: Type;
+        extendsType: Type;
+        trueType: Type;
+        falseType: Type;
     }
 
     export const enum SignatureKind {
