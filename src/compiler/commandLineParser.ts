@@ -711,12 +711,11 @@ namespace ts {
     export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
         // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
         if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
-            const result: TypeAcquisition = {
+            return {
                 enable: typeAcquisition.enableAutoDiscovery,
                 include: typeAcquisition.include || [],
                 exclude: typeAcquisition.exclude || []
             };
-            return result;
         }
         return typeAcquisition;
     }
@@ -1799,9 +1798,8 @@ namespace ts {
         return options;
     }
 
-    function getDefaultTypeAcquisition(configFileName?: string) {
-        const options: TypeAcquisition = { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
-        return options;
+    function getDefaultTypeAcquisition(configFileName?: string): TypeAcquisition {
+        return { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
     }
 
     function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,
