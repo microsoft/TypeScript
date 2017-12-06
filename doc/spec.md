@@ -1179,6 +1179,18 @@ All string literal types are subtypes of the String primitive type.
 
 *TODO: Update to reflect [expanded support for string literal types](https://github.com/Microsoft/TypeScript/pull/5185)*.
 
+## The Non-Primitive Object Type
+
+The non-primitive object type represents any object that is not a JavaScript primitive.
+
+The `object` keyword references the non-primitive object type.
+
+The apparent type of the non-primitive object type is the empty object type.
+The non-primitive object type is assignable to some other type *T* if the empty object type is assignable to *T*.
+
+All object types are assignable to the non-primitive object type.
+Primitive types and unconstrained type parameters are not assignable to the non-primitive object type.
+
 ## <a name="3.3"/>3.3 Object Types
 
 Object types are composed from properties, call signatures, construct signatures, and index signatures, collectively called members.
