@@ -145,6 +145,7 @@ namespace ts {
                     "es2017.intl": "lib.es2017.intl.d.ts",
                     "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
                     "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
+                    "esnext.promise": "lib.esnext.promise.d.ts",
                 }),
             },
             showInSimplifiedHelpView: true,
