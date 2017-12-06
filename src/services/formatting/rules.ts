@@ -198,7 +198,7 @@ namespace ts.formatting {
                 RuleAction.Delete),
 
             // decorators
-            rule("SpaceBeforeAt", anyToken, SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
+            rule("SpaceBeforeAt", [SyntaxKind.CloseParenToken, SyntaxKind.Identifier], SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("NoSpaceAfterAt", SyntaxKind.AtToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
             // Insert space after @ in decorator
             rule("SpaceAfterDecorator",
