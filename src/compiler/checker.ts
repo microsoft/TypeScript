@@ -1022,7 +1022,7 @@ namespace ts {
 
                             // It's an external module. First see if the module has an export default and if the local
                             // name of that export default matches.
-                            if (result = moduleExports.get("default" as __String)) {
+                            if (result = moduleExports.get(InternalSymbolName.Default)) {
                                 const localSymbol = getLocalSymbolForExportDefault(result);
                                 if (localSymbol && (result.flags & meaning) && localSymbol.escapedName === name) {
                                     break loop;
@@ -1476,8 +1476,8 @@ namespace ts {
                 else {
                     const exportValue = moduleSymbol.exports.get("export=" as __String);
                     exportDefaultSymbol = exportValue
-                        ? getPropertyOfType(getTypeOfSymbol(exportValue), "default" as __String)
-                        : resolveSymbol(moduleSymbol.exports.get("default" as __String), dontResolveAlias);
+                        ? getPropertyOfType(getTypeOfSymbol(exportValue), InternalSymbolName.Default)
+                        : resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.Default), dontResolveAlias);
                 }
 
                 if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
@@ -1566,7 +1566,7 @@ namespace ts {
                     symbolFromVariable = resolveSymbol(symbolFromVariable, dontResolveAlias);
                     let symbolFromModule = getExportOfModule(targetSymbol, name.escapedText, dontResolveAlias);
                     // If the export member we're looking for is default, and there is no real default but allowSyntheticDefaultImports is on, return the entire module as the default
-                    if (!symbolFromModule && allowSyntheticDefaultImports && name.escapedText === "default") {
+                    if (!symbolFromModule && allowSyntheticDefaultImports && name.escapedText === InternalSymbolName.Default) {
                         symbolFromModule = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                     }
                     const symbol = symbolFromModule && symbolFromVariable ?
@@ -1953,7 +1953,7 @@ namespace ts {
         function extendExportSymbols(target: SymbolTable, source: SymbolTable | undefined, lookupTable?: ExportCollisionTrackerTable, exportNode?: ExportDeclaration) {
             if (!source) return;
             source.forEach((sourceSymbol, id) => {
-                if (id === "default") return;
+                if (id === InternalSymbolName.Default) return;
 
                 const targetSymbol = target.get(id);
                 if (!targetSymbol) {
@@ -3223,7 +3223,7 @@ namespace ts {
              * ensuring that any names written with literals use element accesses.
              */
             function appendPropertyOrElementAccessForSymbol(symbol: Symbol, writer: SymbolWriter): void {
-                const symbolName = symbol.escapedName === "default" ? "default" : getNameOfSymbolAsWritten(symbol);
+                const symbolName = symbol.escapedName === InternalSymbolName.Default ? InternalSymbolName.Default : getNameOfSymbolAsWritten(symbol);
                 const firstChar = symbolName.charCodeAt(0);
                 const needsElementAccess = !isIdentifierStart(firstChar, languageVersion);
 
@@ -12724,6 +12724,22 @@ namespace ts {
                 return type;
             }
 
+            function isTypePresencePossible(type: Type, propName: __String, assumeTrue: boolean) {
+                const prop = getPropertyOfType(type, propName);
+                if (prop) {
+                    return (prop.flags & SymbolFlags.Optional) ? true : assumeTrue;
+                }
+                return !assumeTrue;
+            }
+
+            function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
+                if ((type.flags & (TypeFlags.Union | TypeFlags.Object)) || (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType)) {
+                    const propName = escapeLeadingUnderscores(literal.text);
+                    return filterType(type, t => isTypePresencePossible(t, propName, /* assumeTrue */ assumeTrue));
+                }
+                return type;
+            }
+
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 switch (expr.operatorToken.kind) {
                     case SyntaxKind.EqualsToken:
@@ -12759,6 +12775,12 @@ namespace ts {
                         break;
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
+                    case SyntaxKind.InKeyword:
+                        const target = getReferenceCandidate(expr.right);
+                        if (expr.left.kind === SyntaxKind.StringLiteral && isMatchingReference(reference, target)) {
+                            return narrowByInKeyword(type, <LiteralExpression>expr.left, assumeTrue);
+                        }
+                        break;
                     case SyntaxKind.CommaToken:
                         return narrowType(type, expr.right, assumeTrue);
                 }
