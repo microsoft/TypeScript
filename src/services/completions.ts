@@ -39,6 +39,11 @@ namespace ts.Completions {
             return getStringLiteralCompletionEntries(sourceFile, position, typeChecker, compilerOptions, host, log);
         }
 
+        const contextToken = findPrecedingToken(position, sourceFile);
+        if (isInBreakOrContinue(contextToken)) {
+            return getLabelCompletionAtPosition(contextToken);
+        }
+
         const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, options, compilerOptions.target);
         if (!completionData) {
             return undefined;
@@ -223,6 +228,18 @@ namespace ts.Completions {
         return uniques;
     }
 
+    function isInBreakOrContinue(contextToken: Node): boolean {
+        return contextToken && isBreakOrContinueStatement(contextToken.parent) &&
+            (contextToken.kind === SyntaxKind.BreakKeyword || contextToken.kind === SyntaxKind.ContinueKeyword || contextToken.kind === SyntaxKind.Identifier);
+    }
+
+    function getLabelCompletionAtPosition(contextToken: Node): CompletionInfo | undefined {
+        const entries = getLabelStatementCompletions(contextToken.parent);
+        if (entries.length) {
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+        }
+    }
+
     function getStringLiteralCompletionEntries(sourceFile: SourceFile, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, log: Log): CompletionInfo | undefined {
         const node = findPrecedingToken(position, sourceFile);
         if (!node || node.kind !== SyntaxKind.StringLiteral) {
@@ -358,6 +375,32 @@ namespace ts.Completions {
         return undefined;
     }
 
+    function getLabelStatementCompletions(node: Node): CompletionEntry[] {
+        const entries: CompletionEntry[] = [];
+        const uniques = createMap<true>();
+        let current = node;
+
+        while (current) {
+            if (isFunctionLike(current)) {
+                break;
+            }
+            if (isLabeledStatement(current)) {
+                const name = current.label.text;
+                if (!uniques.has(name)) {
+                    uniques.set(name, true);
+                    entries.push({
+                        name,
+                        kindModifiers: ScriptElementKindModifier.none,
+                        kind: ScriptElementKind.label,
+                        sortText: "0"
+                    });
+                }
+            }
+            current = current.parent;
+        }
+        return entries;
+    }
+
     function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>, typeChecker: TypeChecker, uniques = createMap<true>()): void {
         if (type && type.flags & TypeFlags.TypeParameter) {
             type = typeChecker.getBaseConstraintOfType(type);
@@ -416,7 +459,9 @@ namespace ts.Completions {
     }
 
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
-        return origin && origin.isDefaultExport && symbol.name === "default" ? codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target) : symbol.name;
+        return origin && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
+            ? codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
+            : symbol.name;
     }
 
     export interface CompletionEntryIdentifier {
@@ -1076,7 +1121,7 @@ namespace ts.Completions {
                         continue;
                     }
 
-                    const isDefaultExport = name === "default";
+                    const isDefaultExport = name === InternalSymbolName.Default;
                     if (isDefaultExport) {
                         const localSymbol = getLocalSymbolForExportDefault(symbol);
                         if (localSymbol) {
@@ -1756,10 +1801,10 @@ namespace ts.Completions {
             }
 
             if (existingImportsOrExports.size === 0) {
-                return filter(exportsOfModule, e => e.escapedName !== "default");
+                return filter(exportsOfModule, e => e.escapedName !== InternalSymbolName.Default);
             }
 
-            return filter(exportsOfModule, e => e.escapedName !== "default" && !existingImportsOrExports.get(e.escapedName));
+            return filter(exportsOfModule, e => e.escapedName !== InternalSymbolName.Default && !existingImportsOrExports.get(e.escapedName));
         }
 
         /**

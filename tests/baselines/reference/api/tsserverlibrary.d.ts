@@ -7110,7 +7110,7 @@ declare namespace ts.server {
         private getEditsForRefactor(args, simplifiedResult);
         private getCodeFixes(args, simplifiedResult);
         private getCombinedCodeFix({scope, fixId}, simplifiedResult);
-        private applyCodeActionCommand(commandName, requestSeq, args);
+        private applyCodeActionCommand(args);
         private getStartAndEndPosition(args, scriptInfo);
         private mapCodeAction({description, changes: unmappedChanges, commands}, scriptInfo);
         private mapTextChangesToCodeEdits(project, textChanges);
