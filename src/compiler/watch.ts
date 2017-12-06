@@ -216,6 +216,11 @@ namespace ts {
 
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+
+        /** Used to watch changes in source files, missing files needed to update the program or config file */
+        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
+        /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
+        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
     }
 
     /**
@@ -310,6 +315,8 @@ namespace ts {
             getDirectories: getBoundFunction(system.getDirectories, system),
             readDirectory: getBoundFunction(system.readDirectory, system),
             realpath: getBoundFunction(system.realpath, system),
+            watchFile: getBoundFunction(system.watchFile, system),
+            watchDirectory: getBoundFunction(system.watchDirectory, system),
             system,
             afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic)
         };
@@ -424,7 +431,7 @@ namespace ts {
         const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
 
         if (configFileName) {
-            watchFile(system, configFileName, scheduleProgramReload, writeLog);
+            watchFile(host, configFileName, scheduleProgramReload, writeLog);
         }
 
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -581,7 +588,7 @@ namespace ts {
                         hostSourceFile.sourceFile = sourceFile;
                         sourceFile.version = hostSourceFile.version.toString();
                         if (!hostSourceFile.fileWatcher) {
-                            hostSourceFile.fileWatcher = watchFilePath(system, fileName, onSourceFileChange, path, writeLog);
+                            hostSourceFile.fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
                         }
                     }
                     else {
@@ -594,7 +601,7 @@ namespace ts {
                     let fileWatcher: FileWatcher;
                     if (sourceFile) {
                         sourceFile.version = "1";
-                        fileWatcher = watchFilePath(system, fileName, onSourceFileChange, path, writeLog);
+                        fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
                         sourceFilesCache.set(path, { sourceFile, version: 1, fileWatcher });
                     }
                     else {
@@ -773,11 +780,11 @@ namespace ts {
         }
 
         function watchDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return watchDirectoryWorker(system, directory, cb, flags, writeLog);
+            return watchDirectoryWorker(host, directory, cb, flags, writeLog);
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
-            return watchFilePath(system, missingFilePath, onMissingFileChange, missingFilePath, writeLog);
+            return watchFilePath(host, missingFilePath, onMissingFileChange, missingFilePath, writeLog);
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {

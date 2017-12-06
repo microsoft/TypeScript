@@ -2,6 +2,7 @@
 
 namespace ts.server {
     let lastWrittenToHost: string;
+    const noopFileWatcher: FileWatcher = { close: noop };
     const mockHost: ServerHost = {
         args: [],
         newLine: "\n",
@@ -24,6 +25,8 @@ namespace ts.server {
         setImmediate: () => 0,
         clearImmediate: noop,
         createHash: Harness.mockHash,
+        watchFile: () => noopFileWatcher,
+        watchDirectory: () => noopFileWatcher
     };
 
     class TestSession extends Session {
