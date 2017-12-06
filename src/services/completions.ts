@@ -40,8 +40,9 @@ namespace ts.Completions {
         }
 
         const contextToken = findPrecedingToken(position, sourceFile);
-        if (isInBreakOrContinue(contextToken)) {
-            return getLabelCompletionAtPosition(contextToken);
+        if (contextToken && isBreakOrContinueStatement(contextToken.parent)
+            && (contextToken.kind === SyntaxKind.BreakKeyword || contextToken.kind === SyntaxKind.ContinueKeyword || contextToken.kind === SyntaxKind.Identifier)) {
+            return getLabelCompletionAtPosition(contextToken.parent);
         }
 
         const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, options, compilerOptions.target);
@@ -228,13 +229,8 @@ namespace ts.Completions {
         return uniques;
     }
 
-    function isInBreakOrContinue(contextToken: Node): boolean {
-        return contextToken && isBreakOrContinueStatement(contextToken.parent) &&
-            (contextToken.kind === SyntaxKind.BreakKeyword || contextToken.kind === SyntaxKind.ContinueKeyword || contextToken.kind === SyntaxKind.Identifier);
-    }
-
-    function getLabelCompletionAtPosition(contextToken: Node): CompletionInfo | undefined {
-        const entries = getLabelStatementCompletions(contextToken.parent);
+    function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
+        const entries = getLabelStatementCompletions(node);
         if (entries.length) {
             return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
         }
