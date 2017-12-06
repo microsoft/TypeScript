@@ -1,7 +1,8 @@
 /* @internal */
 namespace ts.codefix {
     registerCodeFix({
-        errorCodes: [Diagnostics.Class_0_incorrectly_implements_interface_1.code],
+        errorCodes: [Diagnostics.Class_0_incorrectly_implements_interface_1.code,
+            Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code],
         getCodeActions: getActionForClassLikeIncorrectImplementsInterface
     });
 
