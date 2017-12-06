@@ -2736,7 +2736,7 @@ namespace ts {
         getCompilerOptions(): CompilerOptions;
 
         getSourceFiles(): ReadonlyArray<SourceFile>;
-        getSourceFile(fileName: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile | undefined;
         getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective>;
     }
 
