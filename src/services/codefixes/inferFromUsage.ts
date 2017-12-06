@@ -148,6 +148,11 @@ namespace ts.codefix {
             containingFunction.parameters.map(p => isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, sourceFile, program, cancellationToken) : undefined);
         if (!types) return undefined;
 
+        // We didn't actually find a set of type inference positions matching each parameter position
+        if (containingFunction.parameters.length !== types.length) {
+            return undefined;
+        }
+        
         const textChanges = arrayFrom(mapDefinedIterator(zipToIterator(containingFunction.parameters, types), ([parameter, type]) =>
             type && !parameter.type && !parameter.initializer ? makeChange(containingFunction, parameter.end, type, program) : undefined));
         return textChanges.length ? { declaration: parameterDeclaration, textChanges } : undefined;
