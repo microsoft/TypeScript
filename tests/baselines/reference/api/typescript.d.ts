@@ -3821,6 +3821,8 @@ declare namespace ts {
         beforeProgramCreate?(compilerOptions: CompilerOptions): void;
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(host: DirectoryStructureHost, program: Program): void;
+        /** If provided, called with Diagnostic message that informs about change in watch status */
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string): void;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         getCurrentDirectory(): string;
@@ -3848,6 +3850,10 @@ declare namespace ts {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together*/
+        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        /** If provided, will be used to reset existing delayed compilation */
+        clearTimeout?(timeoutId: any): void;
     }
     /**
      * Host to create watch with root files and options

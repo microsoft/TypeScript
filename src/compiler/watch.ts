@@ -94,15 +94,25 @@ namespace ts {
             realpath: getBoundFunction(system.realpath, system),
             watchFile: getBoundFunction(system.watchFile, system),
             watchDirectory: getBoundFunction(system.watchDirectory, system),
+            setTimeout: getBoundFunction(system.setTimeout, system),
+            clearTimeout: getBoundFunction(system.clearTimeout, system),
+            onWatchStatusChange,
             system,
             afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic)
         };
+
+        function onWatchStatusChange(diagnostic: Diagnostic, newLine: string) {
+            if (system.clearScreen && diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code) {
+                system.clearScreen();
+            }
+            system.write(`${new Date().toLocaleTimeString()} - ${flattenDiagnosticMessageText(diagnostic.messageText, newLine)}${newLine + newLine + newLine}`);
+        }
     }
 
     /**
      * Report error and exit
      */
-    export function reportUnrecoverableDiagnostic(system: System, reportDiagnostic: DiagnosticReporter, diagnostic: Diagnostic) {
+    function reportUnrecoverableDiagnostic(system: System, reportDiagnostic: DiagnosticReporter, diagnostic: Diagnostic) {
         reportDiagnostic(diagnostic);
         system.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
@@ -238,6 +248,8 @@ namespace ts {
         beforeProgramCreate?(compilerOptions: CompilerOptions): void;
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(host: DirectoryStructureHost, program: Program): void;
+        /** If provided, called with Diagnostic message that informs about change in watch status */
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string): void;
 
         // Sub set of compiler host methods to read and generate new program
         useCaseSensitiveFileNames(): boolean;
@@ -272,6 +284,10 @@ namespace ts {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together*/
+        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        /** If provided, will be used to reset existing delayed compilation */
+        clearTimeout?(timeoutId: any): void;
     }
 
     /**
@@ -399,8 +415,8 @@ namespace ts {
         const onConfigFileDiagnostic = getBoundFunction(host.onConfigFileDiagnostic, host);
         const readFile = getBoundFunction(host.readFile, host);
         const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {} } = host;
-        const beforeProgramCreate: WatchCompilerHost["beforeProgramCreate"] = getBoundFunction(host.beforeProgramCreate, host) || noop;
-        const afterProgramCreate: WatchCompilerHost["afterProgramCreate"] = getBoundFunction(host.afterProgramCreate, host) || noop;
+        const beforeProgramCreate = getBoundFunction(host.beforeProgramCreate, host) || noop;
+        const afterProgramCreate =  getBoundFunction(host.afterProgramCreate, host) || noop;
         let { rootFiles: rootFileNames, options: compilerOptions, configFileSpecs, configFileWildCardDirectories } = host;
 
         const cachedDirectoryStructureHost = configFileName && createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
@@ -476,8 +492,7 @@ namespace ts {
             resolutionCache.resolveModuleNames.bind(resolutionCache);
         compilerHost.resolveTypeReferenceDirectives = resolutionCache.resolveTypeReferenceDirectives.bind(resolutionCache);
 
-        clearHostScreen();
-        reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode));
+        reportWatchDiagnostic(Diagnostics.Starting_compilation_in_watch_mode);
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -534,7 +549,7 @@ namespace ts {
             }
 
             afterProgramCreate(directoryStructureHost, program);
-            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            reportWatchDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes);
             return program;
         }
 
@@ -660,22 +675,24 @@ namespace ts {
             }
         }
 
-        function reportWatchDiagnostic(diagnostic: Diagnostic) {
-            system.write(`${new Date().toLocaleTimeString()} - ${flattenDiagnosticMessageText(diagnostic.messageText, newLine)}${newLine + newLine + newLine}`);
+        function reportWatchDiagnostic(message: DiagnosticMessage) {
+            if (host.onWatchStatusChange) {
+                host.onWatchStatusChange(createCompilerDiagnostic(message), newLine);
+            }
         }
 
         // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
         // operations (such as saving all modified files in an editor) a chance to complete before we kick
         // off a new compilation.
         function scheduleProgramUpdate() {
-            if (!system.setTimeout || !system.clearTimeout) {
+            if (!host.setTimeout || !host.clearTimeout) {
                 return;
             }
 
             if (timerToUpdateProgram) {
-                system.clearTimeout(timerToUpdateProgram);
+                host.clearTimeout(timerToUpdateProgram);
             }
-            timerToUpdateProgram = system.setTimeout(updateProgram, 250);
+            timerToUpdateProgram = host.setTimeout(updateProgram, 250);
         }
 
         function scheduleProgramReload() {
@@ -684,17 +701,9 @@ namespace ts {
             scheduleProgramUpdate();
         }
 
-        function clearHostScreen() {
-            if (system.clearScreen) {
-                system.clearScreen();
-            }
-        }
-
         function updateProgram() {
-            clearHostScreen();
-
             timerToUpdateProgram = undefined;
-            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
 
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
