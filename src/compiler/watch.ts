@@ -2,9 +2,8 @@
 /// <reference path="builder.ts" />
 /// <reference path="resolutionCache.ts"/>
 
+/*@internal*/
 namespace ts {
-    export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
-
     const sysFormatDiagnosticsHost: FormatDiagnosticsHost = sys ? {
         getCurrentDirectory: () => sys.getCurrentDirectory(),
         getNewLine: () => sys.newLine,
@@ -14,7 +13,6 @@ namespace ts {
     /**
      * Create a function that reports error by writing to the system and handles the formating of the diagnostic
      */
-    /*@internal*/
     export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
         const host: FormatDiagnosticsHost = system === sys ? sysFormatDiagnosticsHost : {
             getCurrentDirectory: () => system.getCurrentDirectory(),
@@ -36,13 +34,11 @@ namespace ts {
     /**
      * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
      */
-    /*@internal*/
     export interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
         getCurrentDirectory(): string;
     }
 
     /** Parses config file using System interface */
-    /*@internal*/
     export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter) {
         const host: ParseConfigFileHost = <any>system;
         host.onConfigFileDiagnostic = reportDiagnostic;
@@ -56,7 +52,6 @@ namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    /*@internal*/
     export function parseConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
         let configFileText: string;
         try {
@@ -82,6 +77,62 @@ namespace ts {
 
         return configParseResult;
     }
+
+    /**
+     * Creates the watch compiler host that can be extended with config file or root file names and options host
+     */
+    function createWatchCompilerHost(system = sys, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHost {
+        return {
+            useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
+            getNewLine: () => system.newLine,
+            getCurrentDirectory: getBoundFunction(system.getCurrentDirectory, system),
+            fileExists: getBoundFunction(system.fileExists, system),
+            readFile: getBoundFunction(system.readFile, system),
+            directoryExists: getBoundFunction(system.directoryExists, system),
+            getDirectories: getBoundFunction(system.getDirectories, system),
+            readDirectory: getBoundFunction(system.readDirectory, system),
+            realpath: getBoundFunction(system.realpath, system),
+            watchFile: getBoundFunction(system.watchFile, system),
+            watchDirectory: getBoundFunction(system.watchDirectory, system),
+            system,
+            afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic)
+        };
+    }
+
+    /**
+     * Report error and exit
+     */
+    export function reportUnrecoverableDiagnostic(system: System, reportDiagnostic: DiagnosticReporter, diagnostic: Diagnostic) {
+        reportDiagnostic(diagnostic);
+        system.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+    }
+
+    /**
+     * Creates the watch compiler host from system for config file in watch mode
+     */
+    export function createWatchCompilerHostOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHostOfConfigFile {
+        reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
+        const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfConfigFile;
+        host.onConfigFileDiagnostic = reportDiagnostic;
+        host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
+        host.configFileName = configFileName;
+        host.optionsToExtend = optionsToExtend;
+        return host;
+    }
+
+    /**
+     * Creates the watch compiler host from system for compiling root files and options in watch mode
+     */
+    export function createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHostOfFilesAndCompilerOptions {
+        const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfFilesAndCompilerOptions;
+        host.rootFiles = rootFiles;
+        host.options = options;
+        return host;
+    }
+}
+
+namespace ts {
+    export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
 
     /**
      * Writes emitted files, source files depending on options
@@ -299,61 +350,6 @@ namespace ts {
     export interface WatchOfFilesAndCompilerOptions extends Watch {
         /** Updates the root files in the program, only if this is not config file compilation */
         updateRootFileNames(fileNames: string[]): void;
-    }
-
-    /**
-     * Creates the watch compiler host that can be extended with config file or root file names and options host
-     */
-    function createWatchCompilerHost(system = sys, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHost {
-        return {
-            useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
-            getNewLine: () => system.newLine,
-            getCurrentDirectory: getBoundFunction(system.getCurrentDirectory, system),
-            fileExists: getBoundFunction(system.fileExists, system),
-            readFile: getBoundFunction(system.readFile, system),
-            directoryExists: getBoundFunction(system.directoryExists, system),
-            getDirectories: getBoundFunction(system.getDirectories, system),
-            readDirectory: getBoundFunction(system.readDirectory, system),
-            realpath: getBoundFunction(system.realpath, system),
-            watchFile: getBoundFunction(system.watchFile, system),
-            watchDirectory: getBoundFunction(system.watchDirectory, system),
-            system,
-            afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic)
-        };
-    }
-
-    /**
-     * Report error and exit
-     */
-    /*@internal*/
-    export function reportUnrecoverableDiagnostic(system: System, reportDiagnostic: DiagnosticReporter, diagnostic: Diagnostic) {
-        reportDiagnostic(diagnostic);
-        system.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-    }
-
-    /**
-     * Creates the watch compiler host from system for config file in watch mode
-     */
-    /*@internal*/
-    export function createWatchCompilerHostOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHostOfConfigFile {
-        reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
-        const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfConfigFile;
-        host.onConfigFileDiagnostic = reportDiagnostic;
-        host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
-        host.configFileName = configFileName;
-        host.optionsToExtend = optionsToExtend;
-        return host;
-    }
-
-    /**
-     * Creates the watch compiler host from system for compiling root files and options in watch mode
-     */
-    /*@internal*/
-    export function createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHostOfFilesAndCompilerOptions {
-        const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfFilesAndCompilerOptions;
-        host.rootFiles = rootFiles;
-        host.options = options;
-        return host;
     }
 
     /**
