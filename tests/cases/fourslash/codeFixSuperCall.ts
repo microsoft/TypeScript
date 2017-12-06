@@ -3,10 +3,18 @@
 ////class Base{
 ////}
 ////class C extends Base{
-////    constructor() {[|
-////    |]}
+////    constructor() {}
 ////}
-// TODO: GH#18445
-verify.rangeAfterCodeFix(`
+
+verify.codeFix({
+    description: "Add missing 'super()' call",
+    // TODO: GH#18445
+    newFileContent:
+`class Base{
+}
+class C extends Base{
+    constructor() {\r
         super();\r
-    `, /*includeWhitespace*/ true);
+    }
+}`,
+});

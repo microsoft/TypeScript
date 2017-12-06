@@ -27,6 +27,7 @@ namespace FourSlash {
         // The contents of the file (with markers, etc stripped out)
         content: string;
         fileName: string;
+        symlinks?: string[];
         version: number;
         // File-specific options (name/value pairs)
         fileOptions: Harness.TestCaseParser.CompilerSettings;
@@ -106,15 +107,16 @@ namespace FourSlash {
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
     // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
-    const metadataOptionNames = {
-        baselineFile: "BaselineFile",
-        emitThisFile: "emitThisFile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
-        fileName: "Filename",
-        resolveReference: "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
-    };
+    const enum MetadataOptionNames {
+        baselineFile = "BaselineFile",
+        emitThisFile = "emitThisFile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
+        fileName = "Filename",
+        resolveReference = "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+        symlink = "Symlink",
+    }
 
     // List of allowed metadata names
-    const fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
+    const fileMetadataNames = [MetadataOptionNames.fileName, MetadataOptionNames.emitThisFile, MetadataOptionNames.resolveReference, MetadataOptionNames.symlink];
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCaseParser.CompilerSettings): ts.CompilerOptions {
         const settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
@@ -281,7 +283,7 @@ namespace FourSlash {
                     configFileName = file.fileName;
                 }
 
-                if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
+                if (!startResolveFileRef && file.fileOptions[MetadataOptionNames.resolveReference] === "true") {
                     startResolveFileRef = file;
                 }
                 else if (startResolveFileRef) {
@@ -295,7 +297,7 @@ namespace FourSlash {
                 const host = new Utils.MockParseConfigHost(baseDir, /*ignoreCase*/ false, this.inputFiles);
 
                 const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles.get(configFileName));
-                assert.isTrue(configJsonObj.config !== undefined);
+                assert(configJsonObj.config !== undefined);
 
                 const { options, errors } = ts.parseJsonConfigFileContent(configJsonObj.config, host, baseDir);
 
@@ -352,6 +354,10 @@ namespace FourSlash {
                 });
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                     Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
+            }
+
+            for (const file of testData.files) {
+                ts.forEach(file.symlinks, link => this.languageServiceAdapterHost.addSymlink(link, file.fileName));
             }
 
             this.formatCodeSettings = {
@@ -437,7 +443,7 @@ namespace FourSlash {
 
         public goToEachMarker(action: () => void) {
             const markers = this.getMarkers();
-            assert(markers.length);
+            assert(markers.length !== 0);
             for (const marker of markers) {
                 this.goToMarker(marker);
                 action();
@@ -446,7 +452,7 @@ namespace FourSlash {
 
         public goToEachRange(action: () => void) {
             const ranges = this.getRanges();
-            assert(ranges.length);
+            assert(ranges.length !== 0);
             for (const range of ranges) {
                 this.goToRangeStart(range);
                 action();
@@ -653,7 +659,7 @@ namespace FourSlash {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
             else if (ts.isArray(arg0)) {
-                const pairs: ReadonlyArray<[string | string[], string | string[]]> = arg0;
+                const pairs = arg0 as ReadonlyArray<[string | string[], string | string[]]>;
                 for (const [start, end] of pairs) {
                     this.verifyGoToXPlain(start, end, getDefs);
                 }
@@ -793,7 +799,7 @@ namespace FourSlash {
             }
 
             const entries = this.getCompletionListAtCaret().entries;
-            assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
+            assert(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
             ts.zipWith(entries, items, (entry, item) => {
                 assert.equal(entry.name, item, `Unexpected item in completion list`);
             });
@@ -947,7 +953,7 @@ namespace FourSlash {
         public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
             const details = this.getCompletionEntryDetails(entryName);
 
-            assert(details, "no completion entry available");
+            assert.isDefined(details, "no completion entry available");
 
             assert.equal(ts.displayPartsToString(details.displayParts), expectedText, this.assertionMessageAtLastKnownMarker("completion entry details text"));
 
@@ -1082,7 +1088,7 @@ namespace FourSlash {
 
         public verifyRangesReferenceEachOther(ranges?: Range[]) {
             ranges = ranges || this.getRanges();
-            assert(ranges.length);
+            assert(ranges.length !== 0);
             for (const range of ranges) {
                 this.verifyReferencesOf(range, ranges);
             }
@@ -1368,7 +1374,6 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyCurrentParameterIsVariable(isVariable: boolean) {
             const signature = this.getActiveSignatureHelpItem();
-            assert.isOk(signature);
             assert.equal(isVariable, signature.isVariadic);
         }
 
@@ -1563,7 +1568,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineCurrentFileBreakpointLocations() {
-            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            let baselineFile = this.testData.globalOptions[MetadataOptionNames.baselineFile];
             if (!baselineFile) {
                 baselineFile = this.activeFile.fileName.replace(this.basePath + "/breakpointValidation", "bpSpan");
                 baselineFile = baselineFile.replace(ts.Extension.Ts, ".baseline");
@@ -1582,7 +1587,7 @@ Actual: ${stringify(fullActual)}`);
 
             const allFourSlashFiles = this.testData.files;
             for (const file of allFourSlashFiles) {
-                if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
+                if (file.fileOptions[MetadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
                     emitFiles.push(file);
                 }
@@ -1594,7 +1599,7 @@ Actual: ${stringify(fullActual)}`);
             }
 
             Harness.Baseline.runBaseline(
-                this.testData.globalOptions[metadataOptionNames.baselineFile],
+                this.testData.globalOptions[MetadataOptionNames.baselineFile],
                 () => {
                     let resultString = "";
                     // Loop through all the emittedFiles and emit them one by one
@@ -1634,7 +1639,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineQuickInfo() {
-            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            let baselineFile = this.testData.globalOptions[MetadataOptionNames.baselineFile];
             if (!baselineFile) {
                 baselineFile = ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
             }
@@ -2019,7 +2024,7 @@ Actual: ${stringify(fullActual)}`);
             const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
 
             if (negative) {
-                assert.isTrue(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
+                assert(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
             }
             else {
                 assert.isUndefined(implementations, "Expected implementation list to be empty but implementations returned");
@@ -2244,7 +2249,7 @@ Actual: ${stringify(fullActual)}`);
 
         public baselineCurrentFileNameOrDottedNameSpans() {
             Harness.Baseline.runBaseline(
-                this.testData.globalOptions[metadataOptionNames.baselineFile],
+                this.testData.globalOptions[MetadataOptionNames.baselineFile],
                 () => {
                     return this.baselineCurrentFileLocations(pos =>
                         this.getNameOrDottedNameSpan(pos));
@@ -2472,7 +2477,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private verifyNewContent(options: FourSlashInterface.NewContentOptions) {
-            if (options.newFileContent) {
+            if (options.newFileContent !== undefined) {
                 assert(!options.newRangeContent);
                 this.verifyCurrentFileContent(options.newFileContent);
             }
@@ -3110,7 +3115,7 @@ Actual: ${stringify(fullActual)}`);
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
+                assert(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
             }
 
             assert.equal(item.hasAction, hasAction);
@@ -3270,12 +3275,21 @@ ${code}
         // Stuff related to the subfile we're parsing
         let currentFileContent: string = undefined;
         let currentFileName = fileName;
+        let currentFileSymlinks: string[] | undefined;
         let currentFileOptions: { [s: string]: string } = {};
 
-        function resetLocalData() {
+        function nextFile() {
+            const file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
+            file.fileOptions = currentFileOptions;
+            file.symlinks = currentFileSymlinks;
+
+            // Store result file
+            files.push(file);
+
             currentFileContent = undefined;
             currentFileOptions = {};
             currentFileName = fileName;
+            currentFileSymlinks = undefined;
         }
 
         for (let line of lines) {
@@ -3304,8 +3318,7 @@ ${code}
                 const match = optionRegex.exec(line.substr(2));
                 if (match) {
                     const [key, value] = match.slice(1);
-                    const fileMetadataNamesIndex = fileMetadataNames.indexOf(key);
-                    if (fileMetadataNamesIndex === -1) {
+                    if (!ts.contains(fileMetadataNames, key)) {
                         // Check if the match is already existed in the global options
                         if (globalOptions[key] !== undefined) {
                             throw new Error(`Global option '${key}' already exists`);
@@ -3313,24 +3326,22 @@ ${code}
                         globalOptions[key] = value;
                     }
                     else {
-                        if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
-                            // Found an @FileName directive, if this is not the first then create a new subfile
-                            if (currentFileContent) {
-                                const file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
-                                file.fileOptions = currentFileOptions;
+                        switch (key) {
+                            case MetadataOptionNames.fileName:
+                                // Found an @FileName directive, if this is not the first then create a new subfile
+                                if (currentFileContent) {
+                                    nextFile();
+                                }
 
-                                // Store result file
-                                files.push(file);
-
-                                resetLocalData();
-                            }
-
-                            currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
-                            currentFileOptions[key] = value;
-                        }
-                        else {
-                            // Add other fileMetadata flag
-                            currentFileOptions[key] = value;
+                                currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
+                                currentFileOptions[key] = value;
+                                break;
+                            case MetadataOptionNames.symlink:
+                                currentFileSymlinks = ts.append(currentFileSymlinks, value);
+                                break;
+                            default:
+                                // Add other fileMetadata flag
+                                currentFileOptions[key] = value;
                         }
                     }
                 }
@@ -3342,13 +3353,7 @@ ${code}
             else {
                 // Empty line or code line, terminate current subfile if there is one
                 if (currentFileContent) {
-                    const file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
-                    file.fileOptions = currentFileOptions;
-
-                    // Store result file
-                    files.push(file);
-
-                    resetLocalData();
+                    nextFile();
                 }
             }
         }
@@ -3383,7 +3388,7 @@ ${code}
 
     function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): string {
         for (const option in optionObject) {
-            if (option !== metadataOptionNames.fileName) {
+            if (option !== MetadataOptionNames.fileName) {
                 return option;
             }
         }

@@ -1571,15 +1571,15 @@ namespace ts.server {
             }
         }
 
-        private applyCodeActionCommand(commandName: string, requestSeq: number, args: protocol.ApplyCodeActionCommandRequestArgs): void {
+        private applyCodeActionCommand(args: protocol.ApplyCodeActionCommandRequestArgs): {} {
             const commands = args.command as CodeActionCommand | CodeActionCommand[]; // They should be sending back the command we sent them.
             for (const command of toArray(commands)) {
                 const { project } = this.getFileAndProject(command);
-                const output = (success: boolean, message: string) => this.doOutput({}, commandName, requestSeq, success, message);
                 project.getLanguageService().applyCodeActionCommand(command).then(
-                    result => { output(/*success*/ true, result.successMessage); },
-                    error => { output(/*success*/ false, error); });
+                    _result => { /* TODO: GH#20447 report success message? */ },
+                    _error => { /* TODO: GH#20447 report errors */ });
             }
+            return {};
         }
 
         private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {
@@ -1709,17 +1709,17 @@ namespace ts.server {
             },
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
-                // TODO: report errors
+                // TODO: GH#20447 report errors
                 return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
                 this.projectService.openExternalProjects(request.arguments.projects);
-                // TODO: report errors
+                // TODO: GH#20447 report errors
                 return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
                 this.projectService.closeExternalProject(request.arguments.projectFileName);
-                // TODO: report errors
+                // TODO: GH#20447 report errors
                 return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
@@ -1961,8 +1961,7 @@ namespace ts.server {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
-                this.applyCodeActionCommand(request.command, request.seq, request.arguments);
-                return this.notRequired(); // Response will come asynchronously.
+                return this.requiredResponse(this.applyCodeActionCommand(request.arguments));
             },
             [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());

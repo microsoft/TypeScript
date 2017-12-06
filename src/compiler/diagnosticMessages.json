@@ -2828,6 +2828,10 @@
         "category": "Message",
         "code": 6030
     },
+    "Starting compilation in watch mode...": {
+        "category": "Message",
+        "code": 6031
+    },
     "File change detected. Starting incremental compilation...": {
         "category": "Message",
         "code": 6032
