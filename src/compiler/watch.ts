@@ -86,6 +86,8 @@ namespace ts {
             useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,
             getCurrentDirectory: getBoundFunction(system.getCurrentDirectory, system),
+            getDefaultLibLocation,
+            getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
             fileExists: getBoundFunction(system.fileExists, system),
             readFile: getBoundFunction(system.readFile, system),
             directoryExists: getBoundFunction(system.directoryExists, system),
@@ -98,9 +100,12 @@ namespace ts {
             clearTimeout: getBoundFunction(system.clearTimeout, system),
             trace: getBoundFunction(system.write, system),
             onWatchStatusChange,
-            system,
             afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic)
         };
+
+        function getDefaultLibLocation() {
+            return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
+        }
 
         function onWatchStatusChange(diagnostic: Diagnostic, newLine: string) {
             if (system.clearScreen && diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code) {
@@ -242,9 +247,6 @@ namespace ts {
     }
 
     export interface WatchCompilerHost {
-        /** FS system to use */
-        system: System;
-
         /** If provided, callback to invoke before each program creation */
         beforeProgramCreate?(compilerOptions: CompilerOptions): void;
         /** If provided, callback to invoke after every new program creation */
@@ -256,6 +258,8 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         getCurrentDirectory(): string;
+        getDefaultLibFileName(options: CompilerOptions): string;
+        getDefaultLibLocation?(): string;
 
         /**
          * Use to check file presence for source files and
@@ -287,7 +291,7 @@ namespace ts {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
-        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together*/
+        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         /** If provided, will be used to reset existing delayed compilation */
         clearTimeout?(timeoutId: any): void;
@@ -411,7 +415,6 @@ namespace ts {
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
         let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
-        const system = host.system;
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const currentDirectory = host.getCurrentDirectory();
         const getCurrentDirectory = () => currentDirectory;
@@ -439,7 +442,7 @@ namespace ts {
             parseConfigFile();
         }
 
-        const trace = host.trace && ((s: string) => { host.trace(s + newLine) });
+        const trace = host.trace && ((s: string) => { host.trace(s + newLine); });
         const loggingEnabled = trace && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
         const writeLog = loggingEnabled ? trace : noop;
         const watchFile = compilerOptions.extendedDiagnostics ? ts.addFileWatcherWithLogging : loggingEnabled ? ts.addFileWatcherWithOnlyTriggerLogging : ts.addFileWatcher;
@@ -457,8 +460,8 @@ namespace ts {
             // Members for CompilerHost
             getSourceFile: (fileName, languageVersion, onError?, shouldCreateNewSourceFile?) => getVersionedSourceFileByPath(fileName, toPath(fileName), languageVersion, onError, shouldCreateNewSourceFile),
             getSourceFileByPath: getVersionedSourceFileByPath,
-            getDefaultLibLocation,
-            getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
+            getDefaultLibLocation: getBoundFunction(host.getDefaultLibLocation, host),
+            getDefaultLibFileName: getBoundFunction(host.getDefaultLibFileName, host),
             writeFile: notImplemented,
             getCurrentDirectory,
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
@@ -579,10 +582,6 @@ namespace ts {
             }
 
             return directoryStructureHost.fileExists(fileName);
-        }
-
-        function getDefaultLibLocation(): string {
-            return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
         }
 
         function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile {

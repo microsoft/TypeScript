@@ -3815,8 +3815,6 @@ declare namespace ts {
      */
     function createProgramCompilerWithBuilderState(system?: System, reportDiagnostic?: DiagnosticReporter): (host: DirectoryStructureHost, program: Program) => void;
     interface WatchCompilerHost {
-        /** FS system to use */
-        system: System;
         /** If provided, callback to invoke before each program creation */
         beforeProgramCreate?(compilerOptions: CompilerOptions): void;
         /** If provided, callback to invoke after every new program creation */
@@ -3826,6 +3824,8 @@ declare namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         getCurrentDirectory(): string;
+        getDefaultLibFileName(options: CompilerOptions): string;
+        getDefaultLibLocation?(): string;
         /**
          * Use to check file presence for source files and
          * if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
