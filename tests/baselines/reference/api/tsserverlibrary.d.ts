@@ -3772,8 +3772,14 @@ declare namespace ts {
         affected: SourceFile | Program;
     } | undefined;
     interface BuilderOptions {
-        getCanonicalFileName: (fileName: string) => string;
-        computeHash: (data: string) => string;
+        /**
+         * return true if file names are treated with case sensitivity
+         */
+        useCaseSensitiveFileNames(): boolean;
+        /**
+         * If provided this would be used this hash instead of actual file shape text for detecting changes
+         */
+        createHash?: (data: string) => string;
     }
     /**
      * Builder to manage the program state changes

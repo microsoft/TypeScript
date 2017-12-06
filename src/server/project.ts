@@ -462,8 +462,8 @@ namespace ts.server {
             this.updateGraph();
             if (!this.builder) {
                 this.builder = createInternalBuilder({
-                    getCanonicalFileName: this.projectService.toCanonicalFileName,
-                    computeHash: data => this.projectService.host.createHash(data)
+                    useCaseSensitiveFileNames: () => this.useCaseSensitiveFileNames(),
+                    createHash: data => this.projectService.host.createHash(data)
                 });
             }
             this.builder.updateProgram(this.program);

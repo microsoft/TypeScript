@@ -277,10 +277,7 @@ namespace ts {
     }
 
     function createBuilderProgram(host: BuilderEmitHost): BuilderProgram {
-        const builder = createEmitAndSemanticDiagnosticsBuilder({
-            getCanonicalFileName: createGetCanonicalFileName(host.useCaseSensitiveFileNames()),
-            computeHash: host.createHash ? host.createHash : identity
-        });
+        const builder = createEmitAndSemanticDiagnosticsBuilder(host);
         let program: Program;
         return {
             getCurrentDirectory: () => program.getCurrentDirectory(),
@@ -325,9 +322,7 @@ namespace ts {
     /**
      * Host needed to emit files and report errors using builder
      */
-    export interface BuilderEmitHost {
-        useCaseSensitiveFileNames(): boolean;
-        createHash?: (data: string) => string;
+    export interface BuilderEmitHost extends BuilderOptions {
         writeFile: WriteFileCallback;
         reportDiagnostic: DiagnosticReporter;
         writeFileName?: (s: string) => void;

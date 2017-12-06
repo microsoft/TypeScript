@@ -81,10 +81,7 @@ namespace ts {
     });
 
     function makeAssertChanges(getProgram: () => Program): (fileNames: ReadonlyArray<string>) => void {
-        const builder = createEmitAndSemanticDiagnosticsBuilder({
-            getCanonicalFileName: identity,
-            computeHash: identity
-        });
+        const builder = createEmitAndSemanticDiagnosticsBuilder({ useCaseSensitiveFileNames: returnTrue, });
         return fileNames => {
             const program = getProgram();
             builder.updateProgram(program);
@@ -97,10 +94,7 @@ namespace ts {
     }
 
     function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fileNames: ReadonlyArray<string>, cancelAfterEmitLength?: number) => void {
-        const builder = createEmitAndSemanticDiagnosticsBuilder({
-            getCanonicalFileName: identity,
-            computeHash: identity
-        });
+        const builder = createEmitAndSemanticDiagnosticsBuilder({ useCaseSensitiveFileNames: returnTrue, });
         let cancel = false;
         const cancellationToken: CancellationToken = {
             isCancellationRequested: () => cancel,

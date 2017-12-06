@@ -67,6 +67,15 @@ namespace ts {
     export function createBuilder(options: BuilderOptions, builderType: BuilderType.EmitAndSemanticDiagnosticsBuilder): EmitAndSemanticDiagnosticsBuilder;
     export function createBuilder(options: BuilderOptions, builderType: BuilderType) {
         /**
+         * Create the canonical file name for identity
+         */
+        const getCanonicalFileName = createGetCanonicalFileName(options.useCaseSensitiveFileNames());
+        /**
+         * Computing hash to for signature verification
+         */
+        const computeHash = options.createHash || identity;
+
+        /**
          * Information of the file eg. its version, signature etc
          */
         const fileInfos = createMap<FileInfo>();
@@ -572,7 +581,7 @@ namespace ts {
             else {
                 const emitOutput = getFileEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true, cancellationToken);
                 if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
-                    latestSignature = options.computeHash(emitOutput.outputFiles[0].text);
+                    latestSignature = computeHash(emitOutput.outputFiles[0].text);
                 }
                 else {
                     latestSignature = prevSignature;
@@ -609,7 +618,7 @@ namespace ts {
             // Handle triple slash references
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = toPath(referencedFile.fileName, sourceFileDirectory, options.getCanonicalFileName);
+                    const referencedPath = toPath(referencedFile.fileName, sourceFileDirectory, getCanonicalFileName);
                     addReferencedFile(referencedPath);
                 }
             }
@@ -622,7 +631,7 @@ namespace ts {
                     }
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
-                    const typeFilePath = toPath(fileName, sourceFileDirectory, options.getCanonicalFileName);
+                    const typeFilePath = toPath(fileName, sourceFileDirectory, getCanonicalFileName);
                     addReferencedFile(typeFilePath);
                 });
             }
@@ -738,8 +747,14 @@ namespace ts {
     export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
 
     export interface BuilderOptions {
-        getCanonicalFileName: (fileName: string) => string;
-        computeHash: (data: string) => string;
+        /**
+         * return true if file names are treated with case sensitivity
+         */
+        useCaseSensitiveFileNames(): boolean;
+        /**
+         * If provided this would be used this hash instead of actual file shape text for detecting changes
+         */
+        createHash?: (data: string) => string;
     }
 
     /**
