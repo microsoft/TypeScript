@@ -17128,8 +17128,6 @@ namespace ts {
             }
 
             const { min: minArgumentCount, max: maxNonRestParam } = minAndMax(candidates, getNumNonRestParameters);
-            const hasRestParameter = candidates.some(c => c.hasRestParameter);
-            const hasLiteralTypes = candidates.some(c => c.hasLiteralTypes);
             const parameters: ts.Symbol[] = [];
             for (let i = 0; i < maxNonRestParam; i++) {
                 const symbols = mapDefined(candidates, ({ parameters, hasRestParameter }) => hasRestParameter ?
@@ -17139,23 +17137,23 @@ namespace ts {
                 parameters.push(createCombinedSymbolFromTypes(symbols, mapDefined(candidates, candidate => tryGetTypeAtPosition(candidate, i))));
             }
 
+            const restParameterSymbols = mapDefined(candidates, c => c.hasRestParameter ? last(c.parameters) : undefined);
+            const hasRestParameter = restParameterSymbols.length !== 0;
             if (hasRestParameter) {
-                const symbols = mapDefined(candidates, c => c.hasRestParameter ? last(c.parameters) : undefined);
-                Debug.assert(symbols.length !== 0);
                 const type = createArrayType(getUnionType(mapDefined(candidates, tryGetRestTypeOfSignature), /*subtypeReduction*/ true));
-                parameters.push(createCombinedSymbolForOverloadFailure(symbols, type));
+                parameters.push(createCombinedSymbolForOverloadFailure(restParameterSymbols, type));
             }
 
             return createSignature(
                 candidates[0].declaration,
-                /*typeParameters*/ undefined,
+                /*typeParameters*/ undefined, // Before calling this we tested for `!candidates.some(c => !!c.typeParameters)`.
                 thisParameter,
                 parameters,
                 /*resolvedReturnType*/ unknownType,
                 /*typePredicate*/ undefined,
                 minArgumentCount,
                 hasRestParameter,
-                hasLiteralTypes);
+                /*hasLiteralTypes*/ candidates.some(c => c.hasLiteralTypes));
         }
 
         function createCombinedSymbolFromTypes(sources: ReadonlyArray<Symbol>, types: ReadonlyArray<Type>): Symbol {
