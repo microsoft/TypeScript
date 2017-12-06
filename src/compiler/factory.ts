@@ -21,11 +21,15 @@ namespace ts {
      * Make `elements` into a `NodeArray<T>`. If `elements` is `undefined`, returns an empty `NodeArray<T>`.
      */
     export function createNodeArray<T extends Node>(elements?: ReadonlyArray<T>, hasTrailingComma?: boolean): NodeArray<T> {
-        if (!elements || elements === emptyArray) {
-            elements = [];
+        if (elements) {
+            if (isNodeArray(elements)) {
+                return elements;
+            }
+            // elements is a ReadonlyArray, so create a fresh array before adding properties.
+            elements = elements.slice();
         }
-        else if (isNodeArray(elements)) {
-            return elements;
+        else {
+            elements = [];
         }
 
         const array = <NodeArray<T>>elements;
