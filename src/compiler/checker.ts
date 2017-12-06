@@ -7429,7 +7429,7 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
-        function addTypesToUnion(typeSet: TypeSet, types: Type[]) {
+        function addTypesToUnion(typeSet: TypeSet, types: ReadonlyArray<Type>) {
             for (const type of types) {
                 addTypeToUnion(typeSet, type);
             }
@@ -7504,7 +7504,7 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionType(types: ReadonlyArray<Type>, subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -10432,11 +10432,6 @@ namespace ts {
                 symbol.valueDeclaration = source.valueDeclaration;
             }
             return symbol;
-        }
-
-        function createCombinedSymbolWithType(sources: ReadonlyArray<Symbol>, type: Type): Symbol {
-            // This function is currently only used for erroneous overloads, so it's good enough to just use the first source.
-            return createSymbolWithType(first(sources), type);
         }
 
         function transformTypeOfMembers(type: Type, f: (propertyType: Type) => Type) {
@@ -16526,14 +16521,62 @@ namespace ts {
             hasCandidatesOutArray: boolean,
         ): Signature {
             Debug.assert(candidates.length > 0); // Else should not have called this.
-
             // Normally we will combine overloads. Skip this if they have type parameters since that's hard to combine.
             // Don't do this if there is a `candidatesOutArray`,
             // because then we want the chosen best candidate to be one of the overloads, not a combination.
-            if (!hasCandidatesOutArray && candidates.length > 1 && !candidates.some(c => !!c.typeParameters)) {
-                return createUnionOfSignaturesForOverloadFailure(candidates);
+            return hasCandidatesOutArray || candidates.length === 1 || candidates.some(c => !!c.typeParameters)
+                ? pickLongestCandidateSignature(node, candidates, args)
+                : createUnionOfSignaturesForOverloadFailure(candidates);
+        }
+
+        function createUnionOfSignaturesForOverloadFailure(candidates: ReadonlyArray<Signature>): Signature {
+            const thisParameters = mapDefined(candidates, c => c.thisParameter);
+            let thisParameter: Symbol | undefined;
+            if (thisParameters.length) {
+                thisParameter = createCombinedSymbolFromTypes(thisParameters, thisParameters.map(getTypeOfParameter));
             }
 
+            const { min: minArgumentCount, max: maxNonRestParam } = minAndMax(candidates, getNumNonRestParameters);
+            const hasRestParameter = candidates.some(c => c.hasRestParameter);
+            const hasLiteralTypes = candidates.some(c => c.hasLiteralTypes);
+            const parameters: ts.Symbol[] = [];
+            for (let i = 0; i < maxNonRestParam; i++) {
+                const symbols = mapDefined(candidates, ({ parameters, hasRestParameter }) => hasRestParameter ?
+                    i < parameters.length - 1 ? parameters[i] : last(parameters) :
+                    i < parameters.length ? parameters[i] : undefined);
+                Debug.assert(symbols.length !== 0);
+                parameters.push(createCombinedSymbolFromTypes(symbols, mapDefined(candidates, candidate => tryGetTypeAtPosition(candidate, i))));
+            }
+
+            if (hasRestParameter) {
+                const symbols = mapDefined(candidates, c => c.hasRestParameter ? last(c.parameters) : undefined);
+                Debug.assert(symbols.length !== 0);
+                const type = createArrayType(getUnionType(mapDefined(candidates, tryGetRestTypeOfSignature), /*subtypeReduction*/ true));
+                parameters.push(createCombinedSymbolForOverloadFailure(symbols, type));
+            }
+
+            return createSignature(
+                candidates[0].declaration,
+                /*typeParameters*/ undefined,
+                thisParameter,
+                parameters,
+                /*resolvedReturnType*/ unknownType,
+                /*typePredicate*/ undefined,
+                minArgumentCount,
+                hasRestParameter,
+                hasLiteralTypes);
+        }
+
+        function createCombinedSymbolFromTypes(sources: ReadonlyArray<Symbol>, types: ReadonlyArray<Type>): Symbol {
+            return createCombinedSymbolForOverloadFailure(sources, getUnionType(types, /*subtypeReduction*/ true));
+        }
+
+        function createCombinedSymbolForOverloadFailure(sources: ReadonlyArray<Symbol>, type: Type): Symbol {
+            // This function is currently only used for erroneous overloads, so it's good enough to just use the first source.
+            return createSymbolWithType(first(sources), type);
+        }
+
+        function pickLongestCandidateSignature(node: CallLikeExpression, candidates: Signature[], args: ReadonlyArray<Expression>): Signature {
             // Pick the longest signature. This way we can get a contextual type for cases like:
             //     declare function f(a: { xa: number; xb: number; }, b: number);
             //     f({ |
@@ -16561,46 +16604,7 @@ namespace ts {
             return candidate;
         }
 
-        function createUnionOfSignaturesForOverloadFailure(candidates: ReadonlyArray<Signature>): Signature {
-            const thisParameters = mapDefined(candidates, c => c.thisParameter);
-            let thisParameter: Symbol | undefined;
-            if (thisParameters.length) {
-                thisParameter = createCombinedSymbolWithType(thisParameters, getUnionType(thisParameters.map(getTypeOfParameter), /*subtypeReduction*/ true));
-            }
-
-            const { min: minArgumentCount, max: maxNonRestParam }  = minAndMax(candidates, getNumNonRestParameters);
-            const hasRestParameter = candidates.some(c => c.hasRestParameter);
-            const hasLiteralTypes = candidates.some(c => c.hasLiteralTypes);
-            const parameters: ts.Symbol[] = [];
-            for (let i = 0; i < maxNonRestParam; i++) {
-                const symbols = mapDefined(candidates, ({ parameters, hasRestParameter }) => hasRestParameter ?
-                    i < parameters.length - 1 ? parameters[i] : last(parameters) :
-                    i < parameters.length ? parameters[i] : undefined);
-                Debug.assert(symbols.length !== 0);
-                const types = mapDefined(candidates, candidate => tryGetTypeAtPosition(candidate, i));
-                parameters.push(createCombinedSymbolWithType(symbols, getUnionType(types, /*subtypeReduction*/ true)));
-            }
-
-            if (hasRestParameter) {
-                const symbols = mapDefined(candidates, c => c.hasRestParameter ? last(c.parameters) : undefined);
-                Debug.assert(symbols.length !== 0);
-                const type = createArrayType(getUnionType(mapDefined(candidates, tryGetRestTypeOfSignature), /*subtypeReduction*/ true));
-                parameters.push(createCombinedSymbolWithType(symbols, type));
-            }
-
-            return createSignature(
-                candidates[0].declaration,
-                /*typeParameters*/ undefined,
-                thisParameter,
-                parameters,
-                /*resolvedReturnType*/ unknownType,
-                /*typePredicate*/ undefined,
-                minArgumentCount,
-                hasRestParameter,
-                hasLiteralTypes);
-        }
-
-        function getLongestCandidateIndex(candidates: Signature[], argsCount: number): number {
+        function getLongestCandidateIndex(candidates: ReadonlyArray<Signature>, argsCount: number): number {
             let maxParamsIndex = -1;
             let maxParams = -1;
 
