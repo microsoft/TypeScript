@@ -12,6 +12,8 @@ enum E2 { one }
 var numStrTuple: [number, string] = [5, "foo"];
 var emptyObjTuple = <[{}, {}]>numStrTuple;
 var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
+var shorter = numStrBoolTuple as [number, string]
+var longer = numStrTuple as [number, string, boolean]
 var classCDTuple: [C, D] = [new C(), new D()];
 var interfaceIITuple = <[I, I]>classCDTuple;
 var classCDATuple = <[C, D, A]>classCDTuple;
@@ -89,6 +91,8 @@ var E2;
 var numStrTuple = [5, "foo"];
 var emptyObjTuple = numStrTuple;
 var numStrBoolTuple = numStrTuple;
+var shorter = numStrBoolTuple;
+var longer = numStrTuple;
 var classCDTuple = [new C(), new D()];
 var interfaceIITuple = classCDTuple;
 var classCDATuple = classCDTuple;

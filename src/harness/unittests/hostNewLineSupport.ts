@@ -5,10 +5,10 @@ namespace ts {
             function snapFor(path: string): IScriptSnapshot {
                 if (path === "lib.d.ts") {
                     return {
-                        dispose() {},
+                        dispose: noop,
                         getChangeRange() { return undefined; },
                         getLength() { return 0; },
-                        getText(_start, _end) {
+                        getText() {
                             return "";
                         }
                     };
@@ -16,7 +16,7 @@ namespace ts {
                 const result = forEach(files, f => f.unitName === path ? f : undefined);
                 if (result) {
                     return {
-                        dispose() {},
+                        dispose: noop,
                         getChangeRange() { return undefined; },
                         getLength() { return result.content.length; },
                         getText(start, end) {
@@ -47,7 +47,7 @@ namespace ts {
             assert(!result.emitSkipped, "emit was skipped");
             assert(result.outputFiles.length === 1, "a number of files other than 1 was output");
             assert(result.outputFiles[0].name === "input.js", `Expected output file name input.js, but got ${result.outputFiles[0].name}`);
-            assert(result.outputFiles[0].text.match(options.newLine === NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/), "expected to find appropriate newlines");
+            assert.isDefined(result.outputFiles[0].text.match(options.newLine === NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/), "expected to find appropriate newlines");
             assert(!result.outputFiles[0].text.match(options.newLine === NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/), "expected not to find inappropriate newlines");
         }
 

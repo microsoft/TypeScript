@@ -29,9 +29,9 @@ let wrong: ADT = { tag: "T", a1: "extra" }
 >"extra" : "extra"
 
 wrong = { tag: "A", d20: 12 }
->wrong = { tag: "A", d20: 12 } : { tag: "A"; d20: 12; }
+>wrong = { tag: "A", d20: 12 } : { tag: "A"; d20: number; }
 >wrong : ADT
->{ tag: "A", d20: 12 } : { tag: "A"; d20: 12; }
+>{ tag: "A", d20: 12 } : { tag: "A"; d20: number; }
 >tag : string
 >"A" : "A"
 >d20 : number
@@ -139,9 +139,9 @@ amb = { tag: "A" }
 >"A" : "A"
 
 amb = { tag: "A", z: true }
->amb = { tag: "A", z: true } : { tag: "A"; z: true; }
+>amb = { tag: "A", z: true } : { tag: "A"; z: boolean; }
 >amb : Ambiguous
->{ tag: "A", z: true } : { tag: "A"; z: true; }
+>{ tag: "A", z: true } : { tag: "A"; z: boolean; }
 >tag : string
 >"A" : "A"
 >z : boolean
@@ -167,7 +167,7 @@ let over: Overlapping
 >over : Overlapping
 >Overlapping : Overlapping
 
-// these two are not reported because there are two discriminant properties
+// these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" }
 >over = { a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: string; second: string; }
 >over : Overlapping

@@ -1,7 +1,5 @@
 /// <reference path="..\harness.ts" />
 
-const expect: typeof _chai.expect = _chai.expect;
-
 namespace ts.server {
     let lastWrittenToHost: string;
     const mockHost: ServerHost = {
@@ -54,7 +52,7 @@ namespace ts.server {
         }
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
-        let oldPrepare: Function;
+        let oldPrepare: AnyFunction;
         before(() => {
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
@@ -82,7 +80,7 @@ namespace ts.server {
                     }
                 };
 
-                expect(() => session.executeCommand(req)).to.throw();
+                assert.throws(() => session.executeCommand(req));
             });
             it("should output an error response when a command does not exist", () => {
                 const req: protocol.Request = {
@@ -101,7 +99,7 @@ namespace ts.server {
                     request_seq: 0,
                     success: false
                 };
-                expect(lastSent).to.deep.equal(expected);
+                assert.deepEqual(lastSent, expected);
             });
             it("should return a tuple containing the response and if a response is required on success", () => {
                 const req: protocol.ConfigureRequest = {
@@ -116,19 +114,20 @@ namespace ts.server {
                     }
                 };
 
-                expect(session.executeCommand(req)).to.deep.equal({
+                assert.deepEqual(session.executeCommand(req), {
                     responseRequired: false
                 });
-                expect(lastSent).to.deep.equal({
+                const expected: protocol.Response = {
                     command: CommandNames.Configure,
                     type: "response",
                     success: true,
                     request_seq: 0,
                     seq: 0,
                     body: undefined
-                });
+                };
+                assert.deepEqual(lastSent, expected);
             });
-            it ("should handle literal types in request", () => {
+            it("should handle literal types in request", () => {
                 const configureRequest: protocol.ConfigureRequest = {
                     command: CommandNames.Configure,
                     seq: 0,
@@ -186,6 +185,8 @@ namespace ts.server {
                 CommandNames.Configure,
                 CommandNames.Definition,
                 CommandNames.DefinitionFull,
+                CommandNames.DefinitionAndBoundSpan,
+                CommandNames.DefinitionAndBoundSpanFull,
                 CommandNames.Implementation,
                 CommandNames.ImplementationFull,
                 CommandNames.Exit,
@@ -295,14 +296,15 @@ namespace ts.server {
 
                 session.onMessage(JSON.stringify(req));
 
-                expect(lastSent).to.deep.equal(<protocol.ConfigureResponse>{
+                const expected: protocol.ConfigureResponse = {
                     command: CommandNames.Configure,
                     type: "response",
                     success: true,
                     request_seq: 0,
                     seq: 0,
                     body: undefined
-                });
+                };
+                assert.deepEqual(lastSent, expected);
             });
         });
 
@@ -314,9 +316,9 @@ namespace ts.server {
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
 
                 session.send = Session.prototype.send;
-                assert(session.send);
-                expect(session.send(msg)).to.not.exist;
-                expect(lastWrittenToHost).to.equal(resultMsg);
+                assert.isDefined(session.send);
+                session.send(msg);
+                assert.equal(lastWrittenToHost, resultMsg);
             });
         });
 
@@ -333,11 +335,7 @@ namespace ts.server {
 
                 session.addProtocolHandler(command, () => result);
 
-                expect(session.executeCommand({
-                    command,
-                    seq: 0,
-                    type: "request"
-                })).to.deep.equal(result);
+                assert.deepEqual(session.executeCommand({ command, seq: 0, type: "request" }), result);
             });
             it("throws when a duplicate handler is passed", () => {
                 const respBody = {
@@ -351,8 +349,7 @@ namespace ts.server {
 
                 session.addProtocolHandler(command, () => resp);
 
-                expect(() => session.addProtocolHandler(command, () => resp))
-                .to.throw(`Protocol handler already exists for command "${command}"`);
+                assert.throws(() => session.addProtocolHandler(command, () => resp), `Protocol handler already exists for command "${command}"`);
             });
         });
 
@@ -365,12 +362,13 @@ namespace ts.server {
 
                 session.event(info, evt);
 
-                expect(lastSent).to.deep.equal({
+                const expected: protocol.Event = {
                     type: "event",
                     seq: 0,
                     event: evt,
                     body: info
-                });
+                };
+                assert.deepEqual(lastSent, expected);
             });
         });
 
@@ -385,14 +383,15 @@ namespace ts.server {
 
                 session.output(body, command, /*reqSeq*/ 0);
 
-                expect(lastSent).to.deep.equal({
+                const expected: protocol.Response = {
                     seq: 0,
                     request_seq: 0,
                     type: "response",
                     command,
                     body,
                     success: true
-                });
+                };
+                assert.deepEqual(lastSent, expected);
             });
         });
     });
@@ -400,7 +399,7 @@ namespace ts.server {
     describe("exceptions", () => {
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
-        let oldPrepare: Function;
+        let oldPrepare: AnyFunction;
         before(() => {
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
@@ -453,14 +452,16 @@ namespace ts.server {
             session.onMessage(JSON.stringify(request));
             const lastSent = session.lastSent as protocol.Response;
 
-            expect(lastSent).to.contain({
+            assert.deepEqual({ ...lastSent, message: undefined }, {
+                request_seq: 0,
                 seq: 0,
                 type: "response",
                 command,
-                success: false
+                success: false,
+                message: undefined,
             });
 
-            expect(lastSent.message).has.string("myMessage").and.has.string("f1");
+            assert(ts.stringContains(lastSent.message, "myMessage") && ts.stringContains(lastSent.message, "f1"));
         });
     });
 
@@ -500,36 +501,36 @@ namespace ts.server {
 
             session.output(body, command, /*reqSeq*/ 0);
 
-            expect(session.lastSent).to.deep.equal({
+            const expected: protocol.Response = {
                 seq: 0,
                 request_seq: 0,
                 type: "response",
                 command,
                 body,
                 success: true
-            });
+            };
+            assert.deepEqual(session.lastSent, expected);
         });
         it("can add and respond to new protocol handlers", () => {
             const session = new TestSession();
 
-            expect(session.executeCommand({
+            assert.deepEqual(session.executeCommand({
                 seq: 0,
                 type: "request",
                 command: session.customHandler
-            })).to.deep.equal({
+            }), {
                 response: undefined,
                 responseRequired: true
             });
         });
         it("has access to the project service", () => {
-            class ServiceSession extends TestSession {
+            // tslint:disable-next-line no-unused-expression
+            new class extends TestSession {
                 constructor() {
                     super();
-                    assert(this.projectService);
-                    expect(this.projectService).to.be.instanceOf(ProjectService);
+                    assert(this.projectService instanceof ProjectService);
                 }
-            }
-            new ServiceSession();
+            }();
         });
     });
 
@@ -651,9 +652,9 @@ namespace ts.server {
 
             // Add an event handler
             cli.on("testevent", (eventinfo) => {
-                expect(eventinfo).to.equal(toEvent);
+                assert.equal(eventinfo, toEvent);
                 responses++;
-                expect(responses).to.equal(1);
+                assert.equal(responses, 1);
             });
 
             // Trigger said event from the server
@@ -663,8 +664,8 @@ namespace ts.server {
             cli.execute("echo", toEcho, (resp) => {
                 assert(resp.success, resp.message);
                 responses++;
-                expect(responses).to.equal(2);
-                expect(resp.body).to.deep.equal(toEcho);
+                assert.equal(responses, 2);
+                assert.deepEqual(resp.body, toEcho);
             });
 
             // Queue a configure command
@@ -676,7 +677,7 @@ namespace ts.server {
             }, (resp) => {
                 assert(resp.success, resp.message);
                 responses++;
-                expect(responses).to.equal(3);
+                assert.equal(responses, 3);
                 done();
             });
 

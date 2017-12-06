@@ -23,18 +23,60 @@
 /// <reference path="virtualFileSystem.ts" />
 /// <reference types="node" />
 /// <reference types="mocha" />
-/// <reference types="chai" />
-
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
 
-// this will work in the browser via browserify
-var _chai: typeof chai = require("chai");
-var assert: typeof _chai.assert = _chai.assert;
-// chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
-// so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
-assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
+function assert(expr: boolean, msg?: string | (() => string)): void {
+    if (!expr) {
+        throw new Error(typeof msg === "string" ? msg : msg());
+    }
+}
+namespace assert {
+    export function isFalse(expr: boolean, msg = "Expected value to be false."): void {
+        assert(!expr, msg);
+    }
+    export function equal<T>(a: T, b: T, msg = "Expected values to be equal."): void {
+        assert(a === b, msg);
+    }
+    export function notEqual<T>(a: T, b: T, msg = "Expected values to not be equal."): void {
+        assert(a !== b, msg);
+    }
+    export function isDefined(x: {} | null | undefined, msg = "Expected value to be defined."): void {
+        assert(x !== undefined && x !== null, msg);
+    }
+    export function isUndefined(x: {} | null | undefined, msg = "Expected value to be undefined."): void {
+        assert(x === undefined, msg);
+    }
+    export function deepEqual<T>(a: T, b: T, msg?: string): void {
+        assert(isDeepEqual(a, b), msg || (() => `Expected values to be deeply equal:\nExpected:\n${JSON.stringify(a, undefined, 4)}\nActual:\n${JSON.stringify(b, undefined, 4)}`));
+    }
+    export function lengthOf(a: ReadonlyArray<{}>, length: number, msg = "Expected length to match."): void {
+        assert(a.length === length, msg);
+    }
+    export function throws(cb: () => void, msg = "Expected callback to throw"): void {
+        let threw = false;
+        try {
+            cb();
+        }
+        catch {
+            threw = true;
+        }
+        assert(threw, msg);
+    }
+
+    function isDeepEqual<T>(a: T, b: T): boolean {
+        if (a === b) {
+            return true;
+        }
+        if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) {
+            return false;
+        }
+        const aKeys = Object.keys(a).sort();
+        const bKeys = Object.keys(b).sort();
+        return aKeys.length === bKeys.length && aKeys.every((key, i) => bKeys[i] === key && isDeepEqual((a as any)[key], (b as any)[key]));
+    }
+}
 declare var __dirname: string; // Node-specific
 var global: NodeJS.Global = <any>Function("return this").call(undefined);
 
@@ -135,7 +177,7 @@ namespace Utils {
         return content;
     }
 
-    export function memoize<T extends Function>(f: T, memoKey: (...anything: any[]) => string): T {
+    export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
         const cache = ts.createMap<any>();
 
         return <any>(function(this: any, ...args: any[]) {
@@ -347,8 +389,8 @@ namespace Utils {
             return;
         }
 
-        assert(array1, "array1");
-        assert(array2, "array2");
+        assert(!!array1, "array1");
+        assert(!!array2, "array2");
 
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
@@ -371,8 +413,8 @@ namespace Utils {
             return;
         }
 
-        assert(node1, "node1");
-        assert(node2, "node2");
+        assert(!!node1, "node1");
+        assert(!!node2, "node2");
         assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
         assert.equal(node1.end, node2.end, "node1.end !== node2.end");
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
@@ -402,8 +444,8 @@ namespace Utils {
             return;
         }
 
-        assert(array1, "array1");
-        assert(array2, "array2");
+        assert(!!array1, "array1");
+        assert(!!array2, "array2");
         assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
         assert.equal(array1.end, array2.end, "array1.end !== array2.end");
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
@@ -479,7 +521,7 @@ namespace Utils {
 }
 
 namespace Harness {
-    export interface IO {
+    export interface Io {
         newLine(): string;
         getCurrentDirectory(): string;
         useCaseSensitiveFileNames(): boolean;
@@ -502,7 +544,7 @@ namespace Harness {
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
     }
-    export let IO: IO;
+    export let IO: Io;
 
     // harness always uses one kind of new line
     // But note that `parseTestData` in `fourslash.ts` uses "\n"
@@ -555,8 +597,7 @@ namespace Harness {
                 try {
                     fs.unlinkSync(path);
                 }
-                catch (e) {
-                }
+                catch { /*ignore*/ }
             }
 
             export function directoryExists(path: string): boolean {
@@ -575,14 +616,13 @@ namespace Harness {
                 function filesInFolder(folder: string): string[] {
                     let paths: string[] = [];
 
-                    const files = fs.readdirSync(folder);
-                    for (let i = 0; i < files.length; i++) {
-                        const pathToFile = pathModule.join(folder, files[i]);
+                    for (const file of fs.readdirSync(folder)) {
+                        const pathToFile = pathModule.join(folder, file);
                         const stat = fs.statSync(pathToFile);
                         if (options.recursive && stat.isDirectory()) {
                             paths = paths.concat(filesInFolder(pathToFile));
                         }
-                        else if (stat.isFile() && (!spec || files[i].match(spec))) {
+                        else if (stat.isFile() && (!spec || file.match(spec))) {
                             paths.push(pathToFile);
                         }
                     }
@@ -616,7 +656,7 @@ namespace Harness {
 
             namespace Http {
                 function waitForXHR(xhr: XMLHttpRequest) {
-                    while (xhr.readyState !== 4) { }
+                    while (xhr.readyState !== 4) { } // tslint:disable-line no-empty
                     return { status: xhr.status, responseText: xhr.responseText };
                 }
 
@@ -784,9 +824,15 @@ namespace Harness {
         ? IO.newLine() + `//# sourceURL=${IO.resolvePath(tcServicesFileName)}`
         : "");
 
-    export interface SourceMapEmitterCallback {
-        (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
-    }
+    export type SourceMapEmitterCallback = (
+        emittedFile: string,
+        emittedLine: number,
+        emittedColumn: number,
+        sourceFile: string,
+        sourceLine: number,
+        sourceColumn: number,
+        sourceName: string,
+    ) => void;
 
     // Settings
     export let userSpecifiedRoot = "";
@@ -1108,11 +1154,11 @@ namespace Harness {
                 case "string":
                     return value;
                 case "number": {
-                    const number = parseInt(value, 10);
-                    if (isNaN(number)) {
+                    const numverValue = parseInt(value, 10);
+                    if (isNaN(numverValue)) {
                         throw new Error(`Value must be a number, got: ${JSON.stringify(value)}`);
                     }
-                    return number;
+                    return numverValue;
                 }
                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                 case "list":
@@ -1255,7 +1301,7 @@ namespace Harness {
 
             function findResultCodeFile(fileName: string) {
                 const sourceFile = result.program.getSourceFile(fileName);
-                assert(sourceFile, "Program has no source file with name '" + fileName + "'");
+                assert.isDefined(sourceFile, "Program has no source file with name '" + fileName + "'");
                 // Is this file going to be emitted separately
                 let sourceFileName: string;
                 const outFile = options.outFile || options.out;
@@ -1319,7 +1365,7 @@ namespace Harness {
         export const diagnosticSummaryMarker = "__diagnosticSummary";
         export const globalErrorsMarker = "__globalErrors";
         export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean): IterableIterator<[string, string, number]> {
-            diagnostics = diagnostics.slice().sort(ts.compareDiagnostics);
+            diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
             let totalErrorsReportedInNonLibraryFiles = 0;
@@ -1575,10 +1621,8 @@ namespace Harness {
 
                     // Preserve legacy behavior
                     if (lastIndexWritten === undefined) {
-                        for (let i = 0; i < codeLines.length; i++) {
-                            const currentCodeLine = codeLines[i];
-                            typeLines += currentCodeLine + "\r\n";
-                            typeLines += "No type information for this code.";
+                        for (const codeLine of codeLines) {
+                            typeLines += codeLine + "\r\nNo type information for this code.";
                         }
                     }
                     else {
@@ -1704,7 +1748,7 @@ namespace Harness {
 
         export function *iterateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): IterableIterator<[string, string]> {
             // Collect, test, and sort the fileNames
-            outputFiles.sort((a, b) => ts.compareStrings(cleanName(a.fileName), cleanName(b.fileName)));
+            outputFiles.sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.fileName), cleanName(b.fileName)));
             const dupeCase = ts.createMap<number>();
             // Yield them
             for (const outputFile of outputFiles) {
@@ -1864,8 +1908,7 @@ namespace Harness {
             let currentFileName: any = undefined;
             let refs: string[] = [];
 
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
+            for (const line of lines) {
                 const testMetaData = optionRegex.exec(line);
                 if (testMetaData) {
                     // Comment line, check for global/file @options and record them
@@ -1941,7 +1984,7 @@ namespace Harness {
                 const data = testUnitData[i];
                 if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
                     const configJson = ts.parseJsonText(data.name, data.content);
-                    assert.isTrue(configJson.endOfFileToken !== undefined);
+                    assert(configJson.endOfFileToken !== undefined);
                     let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
                     if (rootDir) {
                         baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
@@ -1962,7 +2005,7 @@ namespace Harness {
 
     /** Support class for baseline files */
     export namespace Baseline {
-        const NoContent = "<no content>";
+        const noContent = "<no content>";
 
         export interface BaselineOptions {
             Subfolder?: string;
@@ -2021,7 +2064,7 @@ namespace Harness {
             /* tslint:disable:no-null-keyword */
             if (actual === null) {
             /* tslint:enable:no-null-keyword */
-                actual = NoContent;
+                actual = noContent;
             }
 
             let expected = "<no content>";
@@ -2058,13 +2101,13 @@ namespace Harness {
                 IO.deleteFile(actualFileName);
             }
 
-            const encoded_actual = Utils.encodeString(actual);
-            if (expected !== encoded_actual) {
-                if (actual === NoContent) {
+            const encodedActual = Utils.encodeString(actual);
+            if (expected !== encodedActual) {
+                if (actual === noContent) {
                     IO.writeFile(actualFileName + ".delete", "");
                 }
                 else {
-                    IO.writeFile(actualFileName, encoded_actual);
+                    IO.writeFile(actualFileName, encodedActual);
                 }
                 throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }
@@ -2145,8 +2188,8 @@ namespace Harness {
         return filePath.indexOf(Harness.libFolder) === 0;
     }
 
-    export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
-        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
+    export function getDefaultLibraryFile(filePath: string, io: Harness.Io): Harness.Compiler.TestFile {
+        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + ts.getBaseFileName(ts.normalizeSlashes(filePath));
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 

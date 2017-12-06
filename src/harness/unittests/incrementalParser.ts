@@ -66,7 +66,7 @@ namespace ts {
         assertSameDiagnostics(newTree, incrementalNewTree);
 
         // There should be no reused nodes between two trees that are fully parsed.
-        assert.isTrue(reusedElements(oldTree, newTree) === 0);
+        assert(reusedElements(oldTree, newTree) === 0);
 
         assert.equal(newTree.fileName, incrementalNewTree.fileName, "newTree.fileName !== incrementalNewTree.fileName");
         assert.equal(newTree.text, incrementalNewTree.text, "newTree.text !== incrementalNewTree.text");
@@ -591,7 +591,7 @@ module m3 { }\
             const index = 0;
             const newTextAndChange = withInsert(oldText, index, "declare ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 3);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
         it("Insert function above arrow function with comment", () => {
@@ -674,7 +674,7 @@ module m3 { }\
             const oldText = ScriptSnapshot.fromString(source);
             const newTextAndChange = withInsert(oldText, 0, "{");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it("Removing block around function declarations", () => {
@@ -683,7 +683,7 @@ module m3 { }\
             const oldText = ScriptSnapshot.fromString(source);
             const newTextAndChange = withDelete(oldText, 0, "{".length);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it("Moving methods from class to object literal", () => {

@@ -108,7 +108,7 @@ namespace Harness.LanguageService {
     }
 
     class DefaultHostCancellationToken implements ts.HostCancellationToken {
-        public static readonly Instance = new DefaultHostCancellationToken();
+        public static readonly instance = new DefaultHostCancellationToken();
 
         public isCancellationRequested() {
             return false;
@@ -126,7 +126,7 @@ namespace Harness.LanguageService {
         public typesRegistry: ts.Map<void> | undefined;
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
-        constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
+        constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
             protected settings = ts.getDefaultCompilerOptions()) {
         }
 
@@ -166,8 +166,7 @@ namespace Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public openFile(_fileName: string, _content?: string, _scriptKindName?: string): void {
-        }
+        public openFile(_fileName: string, _content?: string, _scriptKindName?: string): void { /*overridden*/ }
 
         /**
          * @param line 0 based index
@@ -175,8 +174,7 @@ namespace Harness.LanguageService {
          */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.getScriptInfo(fileName);
-            assert.isOk(script);
-
+            assert(!!script);
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
     }
@@ -237,9 +235,9 @@ namespace Harness.LanguageService {
         }
 
 
-        log(_: string): void { }
-        trace(_: string): void { }
-        error(_: string): void { }
+        log = ts.noop;
+        trace = ts.noop;
+        error = ts.noop;
     }
 
     export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
@@ -361,7 +359,7 @@ namespace Harness.LanguageService {
                     classification: parseInt(result[i + 1])
                 };
 
-                assert.isTrue(t.length > 0, "Result length should be greater than 0, got :" + t.length);
+                assert(t.length > 0, "Result length should be greater than 0, got :" + t.length);
                 position += t.length;
             }
             const finalLexState = parseInt(result[result.length - 1]);
@@ -413,8 +411,8 @@ namespace Harness.LanguageService {
         getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
             return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length));
         }
-        getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
-            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
+        getCompletionsAtPosition(fileName: string, position: number, options: ts.GetCompletionsAtPositionOptions | undefined): ts.CompletionInfo {
+            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position, options));
         }
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: ts.FormatCodeOptions | undefined, source: string | undefined): ts.CompletionEntryDetails {
             return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName, JSON.stringify(options), source));
@@ -442,6 +440,9 @@ namespace Harness.LanguageService {
         }
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
+        }
+        getDefinitionAndBoundSpan(fileName: string, position: number): ts.DefinitionInfoAndBoundSpan {
+            return unwrapJSONCallResult(this.shim.getDefinitionAndBoundSpan(fileName, position));
         }
         getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getTypeDefinitionAtPosition(fileName, position));
@@ -492,7 +493,7 @@ namespace Harness.LanguageService {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
-        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
+        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion | undefined {
             return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -541,9 +542,9 @@ namespace Harness.LanguageService {
         getClassifier(): ts.Classifier { return new ClassifierShimProxy(this.factory.createClassifierShim(this.host)); }
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
             let shimResult: {
-                referencedFiles: ts.IFileReference[];
-                typeReferenceDirectives: ts.IFileReference[];
-                importedFiles: ts.IFileReference[];
+                referencedFiles: ts.ShimsFileReference[];
+                typeReferenceDirectives: ts.ShimsFileReference[];
+                importedFiles: ts.ShimsFileReference[];
                 isLibFile: boolean;
             };
 
@@ -593,13 +594,8 @@ namespace Harness.LanguageService {
             super(cancellationToken, settings);
         }
 
-        onMessage(): void {
-
-        }
-
-        writeMessage(): void {
-
-        }
+        onMessage = ts.noop;
+        writeMessage = ts.noop;
 
         setClient(client: ts.server.SessionClient) {
             this.client = client;
@@ -625,13 +621,8 @@ namespace Harness.LanguageService {
             this.newLine = this.host.getNewLine();
         }
 
-        onMessage(): void {
-
-        }
-
-        writeMessage(_message: string): void {
-        }
-
+        onMessage = ts.noop;
+        writeMessage = ts.noop; // overridden
         write(message: string): void {
             this.writeMessage(message);
         }
@@ -645,8 +636,7 @@ namespace Harness.LanguageService {
             return snapshot && snapshot.getText(0, snapshot.getLength());
         }
 
-        writeFile(): void {
-        }
+        writeFile = ts.noop;
 
         resolvePath(path: string): string {
             return path;
@@ -665,8 +655,7 @@ namespace Harness.LanguageService {
             return "";
         }
 
-        exit(): void {
-        }
+        exit = ts.noop;
 
         createDirectory(_directoryName: string): void {
             return ts.notImplemented();
@@ -694,8 +683,7 @@ namespace Harness.LanguageService {
             return { close: ts.noop };
         }
 
-        close(): void {
-        }
+        close = ts.noop;
 
         info(message: string): void {
             this.host.log(message);
@@ -754,6 +742,7 @@ namespace Harness.LanguageService {
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
                                 const langSvc: any = info.languageService;
+                                // tslint:disable-next-line only-arrow-functions
                                 proxy.getQuickInfoAtPosition = function () {
                                     const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                     if (parts.displayParts.length > 0) {
@@ -786,7 +775,7 @@ namespace Harness.LanguageService {
                         module: () => ({
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
-                                proxy.getSemanticDiagnostics = function (filename: string) {
+                                proxy.getSemanticDiagnostics = filename => {
                                     const prev = info.languageService.getSemanticDiagnostics(filename);
                                     const sourceFile: ts.SourceFile = info.languageService.getSourceFile(filename);
                                     prev.push({
@@ -812,11 +801,12 @@ namespace Harness.LanguageService {
                     };
             }
 
-            function makeDefaultProxy(info: ts.server.PluginCreateInfo) {
+            function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
                 // tslint:disable-next-line:no-null-keyword
                 const proxy = Object.create(/*prototype*/ null);
                 const langSvc: any = info.languageService;
                 for (const k of Object.keys(langSvc)) {
+                    // tslint:disable-next-line only-arrow-functions
                     proxy[k] = function () {
                         return langSvc[k].apply(langSvc, arguments);
                     };

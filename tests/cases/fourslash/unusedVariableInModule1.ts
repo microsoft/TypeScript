@@ -7,6 +7,6 @@
 //// export var y: string;|]
 
 verify.codeFix({
-    description: "Remove declaration for: 'x'.",
+    description: "Remove declaration for: 'x'",
     newRangeContent: "export var y: string;",
 });

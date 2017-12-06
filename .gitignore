@@ -59,3 +59,12 @@ internal/
 .idea
 yarn.lock
 .parallelperf.*
+tests/cases/user/*/package-lock.json
+tests/cases/user/*/node_modules/
+tests/cases/user/*/**/*.js
+tests/cases/user/*/**/*.js.map
+tests/cases/user/*/**/*.d.ts
+!tests/cases/user/zone.js/
+!tests/cases/user/bignumber.js/
+!tests/cases/user/discord.js/
+tests/baselines/reference/dt

@@ -45,7 +45,7 @@ export function Component(x: Config): any;`
                 readDirectory: noop as any,
             });
             const definitions = languageService.getDefinitionAtPosition("foo.ts", 160); // 160 is the latter `vueTemplateHtml` position
-            expect(definitions).to.exist;
+            assert.isDefined(definitions);
         });
     });
 }

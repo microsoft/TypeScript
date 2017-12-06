@@ -1,0 +1,1 @@
+import vuex = require("vuex");

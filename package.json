@@ -30,7 +30,6 @@
     },
     "devDependencies": {
         "@types/browserify": "latest",
-        "@types/chai": "latest",
         "@types/colors": "latest",
         "@types/convert-source-map": "latest",
         "@types/del": "latest",
@@ -53,7 +52,6 @@
         "xml2js": "^0.4.19",
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
-        "chai": "latest",
         "convert-source-map": "latest",
         "del": "latest",
         "gulp": "3.X",
@@ -74,10 +72,12 @@
         "q": "latest",
         "run-sequence": "latest",
         "sorcery": "latest",
+        "source-map-support": "latest",
         "through2": "latest",
         "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "latest",
+        "vinyl": "latest",
         "colors": "latest",
         "typescript": "next"
     },

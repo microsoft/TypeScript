@@ -148,6 +148,7 @@ declare namespace FourSlashInterface {
             kind?: string,
             spanIndex?: number,
             hasAction?: boolean,
+            options?: { includeExternalModuleExports?: boolean, sourceDisplay?: string, isRecommended?: true },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
@@ -221,6 +222,7 @@ declare namespace FourSlashInterface {
          * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
          */
         goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
+        goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[], range: Range): void;
         /** Performs `goToDefinition` for each pair. */
         goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
         /** Performs `goToDefinition` on each key and value. */
@@ -356,7 +358,7 @@ declare namespace FourSlashInterface {
         printCurrentFileStateWithoutCaret(): void;
         printCurrentQuickInfo(): void;
         printCurrentSignatureHelp(): void;
-        printCompletionListMembers(): void;
+        printCompletionListMembers(options?: { includeExternalModuleExports: boolean }): void;
         printAvailableCodeFixes(): void;
         printBreakpointLocation(pos: number): void;
         printBreakpointAtCurrentLocation(): void;

@@ -4,9 +4,9 @@ namespace ts {
     export function checkResolvedModule(expected: ResolvedModuleFull, actual: ResolvedModuleFull): boolean {
         if (!expected === !actual) {
             if (expected) {
-                assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.isTrue(expected.extension === actual.extension, `'ext': expected '${expected.extension}' to be equal to '${actual.extension}'`);
-                assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'isExternalLibraryImport': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
+                assert(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
+                assert(expected.extension === actual.extension, `'ext': expected '${expected.extension}' to be equal to '${actual.extension}'`);
+                assert(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'isExternalLibraryImport': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
             }
             return true;
         }
@@ -14,7 +14,7 @@ namespace ts {
     }
 
     export function checkResolvedModuleWithFailedLookupLocations(actual: ResolvedModuleWithFailedLookupLocations, expectedResolvedModule: ResolvedModuleFull, expectedFailedLookupLocations: string[]): void {
-        assert.isTrue(actual.resolvedModule !== undefined, "module should be resolved");
+        assert(actual.resolvedModule !== undefined, "module should be resolved");
         checkResolvedModule(actual.resolvedModule, expectedResolvedModule);
         assert.deepEqual(actual.failedLookupLocations, expectedFailedLookupLocations);
     }
@@ -58,7 +58,7 @@ namespace ts {
                 realpath,
                 directoryExists: path => directories.has(path),
                 fileExists: path => {
-                    assert.isTrue(directories.has(getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
+                    assert(directories.has(getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
                     return map.has(path);
                 }
             };
@@ -127,7 +127,7 @@ namespace ts {
 
             function test(hasDirectoryExists: boolean) {
                 const containingFile = { name: containingFileName };
-                const packageJson = { name: packageJsonFileName, content: JSON.stringify({ "typings": fieldRef }) };
+                const packageJson = { name: packageJsonFileName, content: JSON.stringify({ typings: fieldRef }) };
                 const moduleFile = { name: moduleFileName };
                 const resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile));
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
@@ -149,7 +149,7 @@ namespace ts {
 
             function test(hasDirectoryExists: boolean) {
                 const containingFile = { name: "/a/b.ts" };
-                const packageJson = { name: "/node_modules/b/package.json", content: JSON.stringify({ "typings": typings }) };
+                const packageJson = { name: "/node_modules/b/package.json", content: JSON.stringify({ typings }) };
                 const moduleFile = { name: "/a/b.d.ts" };
 
                 const indexPath = "/node_modules/b/index.d.ts";
@@ -163,7 +163,7 @@ namespace ts {
 
         it("module name as directory - handle invalid 'typings'", () => {
             testTypingsIgnored(["a", "b"]);
-            testTypingsIgnored({ "a": "b" });
+            testTypingsIgnored({ a: "b" });
             testTypingsIgnored(/*typings*/ true);
             testTypingsIgnored(/*typings*/ null); // tslint:disable-line no-null-keyword
             testTypingsIgnored(/*typings*/ undefined);
@@ -351,7 +351,7 @@ namespace ts {
 
             // try to get file using a relative name
             for (const relativeFileName of relativeNamesToCheck) {
-                assert.isTrue(program.getSourceFile(relativeFileName) !== undefined, `expected to get file by relative name, got undefined`);
+                assert(program.getSourceFile(relativeFileName) !== undefined, `expected to get file by relative name, got undefined`);
             }
         }
 
@@ -803,7 +803,7 @@ import b = require("./moduleB");
 
             function test(hasDirectoryExists: boolean) {
                 const file1: File = { name: "/root/folder1/file1.ts" };
-                const file1_1: File = { name: "/root/folder1/file1_1/index.d.ts" };
+                const file1_1: File = { name: "/root/folder1/file1_1/index.d.ts" }; // tslint:disable-line variable-name
                 const file2: File = { name: "/root/generated/folder1/file2.ts" };
                 const file3: File = { name: "/root/generated/folder2/file3.ts" };
                 const host = createModuleResolutionHost(hasDirectoryExists, file1, file1_1, file2, file3);
@@ -1074,7 +1074,7 @@ import b = require("./moduleB");
             assert.equal(diagnostics1.length, 1, "expected one diagnostic");
 
             createProgram(names, {}, compilerHost, program1);
-            assert.isTrue(program1.structureIsReused === StructureIsReused.Completely);
+            assert(program1.structureIsReused === StructureIsReused.Completely);
             const diagnostics2 = program1.getFileProcessingDiagnostics().getDiagnostics();
             assert.equal(diagnostics2.length, 1, "expected one diagnostic");
             assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
