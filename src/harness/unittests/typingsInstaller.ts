@@ -228,6 +228,37 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
         });
 
+        it("external project - deduplicate from local @types packages", () => {
+            const appJs = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const nodeDts = {
+                path: "/node_modules/@types/node/index.d.ts",
+                content: "declare var node;"
+            };
+            const host = createServerHost([appJs, nodeDts]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("node") });
+                }
+                installWorker() {
+                    assert(false, "nothing should get installed");
+                }
+            })();
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: {},
+                rootFiles: [toExternalFile(appJs.path)],
+                typeAcquisition: { enable: true, include: ["node"] }
+            });
+            installer.checkPendingCommands(/*expectedCount*/ 0);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+        });
+
         it("external project - no auto in typing acquisition, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
