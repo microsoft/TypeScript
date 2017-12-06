@@ -259,7 +259,7 @@ namespace ts {
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
                     const block = convertToFunctionBody(expression);
-                    return updateBlock(block, setTextRange(createNodeArray(concatenate(block.statements, declarations)), block.statements));
+                    return updateBlock(block, concatenateToNodeArray(block.statements, declarations));
                 }
 
                 return expression;
@@ -274,7 +274,7 @@ namespace ts {
                 startLexicalEnvironment();
                 const visited = convertToFunctionBody(visitNode(body, visitor, isConciseBody));
                 const declarations = endLexicalEnvironment();
-                return updateBlock(visited, setTextRange(createNodeArray(concatenate(visited.statements, declarations)), visited.statements));
+                return updateBlock(visited, concatenateToNodeArray(visited.statements, declarations));
             }
         }
 

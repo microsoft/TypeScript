@@ -962,6 +962,11 @@ namespace ts {
         return node;
     }
 
+    /* @internal */
+    export function createParenAndSetTextRange(expression: Expression): ParenthesizedExpression {
+        return setTextRange(createParen(expression), expression);
+    }
+
     export function updateParen(node: ParenthesizedExpression, expression: Expression) {
         return node.expression !== expression
             ? updateNode(createParen(expression), node)
@@ -2623,6 +2628,11 @@ namespace ts {
         return range;
     }
 
+    /* @internal */
+    export function concatenateToNodeArray<T extends Node>(a: NodeArray<T>, b: ReadonlyArray<T> | undefined): NodeArray<T> {
+        return b === undefined ? a : setTextRange(createNodeArray(a.concat(b)), a);
+    }
+
     /**
      * Sets flags that control emit behavior of a node.
      */
@@ -4017,19 +4027,15 @@ namespace ts {
             return <LeftHandSideExpression>expression;
         }
 
-        return setTextRange(createParen(expression), expression);
+        return createParenAndSetTextRange(expression);
     }
 
     export function parenthesizePostfixOperand(operand: Expression) {
-        return isLeftHandSideExpression(operand)
-            ? <LeftHandSideExpression>operand
-            : setTextRange(createParen(operand), operand);
+        return isLeftHandSideExpression(operand) ? operand : createParenAndSetTextRange(operand);
     }
 
     export function parenthesizePrefixOperand(operand: Expression) {
-        return isUnaryExpression(operand)
-            ? <UnaryExpression>operand
-            : setTextRange(createParen(operand), operand);
+        return isUnaryExpression(operand) ? operand : createParenAndSetTextRange(operand);
     }
 
     export function parenthesizeListElements(elements: NodeArray<Expression>) {
@@ -4056,9 +4062,7 @@ namespace ts {
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         const expressionPrecedence = getExpressionPrecedence(emittedExpression);
         const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
-        return expressionPrecedence > commaPrecedence
-            ? expression
-            : setTextRange(createParen(expression), expression);
+        return expressionPrecedence > commaPrecedence ? expression : createParenAndSetTextRange(expression);
     }
 
     export function parenthesizeExpressionForExpressionStatement(expression: Expression) {
@@ -4068,14 +4072,14 @@ namespace ts {
             const kind = skipPartiallyEmittedExpressions(callee).kind;
             if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
                 const mutableCall = getMutableClone(emittedExpression);
-                mutableCall.expression = setTextRange(createParen(callee), callee);
+                mutableCall.expression = createParenAndSetTextRange(callee);
                 return recreateOuterExpressions(expression, mutableCall, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
 
         const leftmostExpressionKind = getLeftmostExpression(emittedExpression, /*stopAtCallExpressions*/ false).kind;
         if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
-            return setTextRange(createParen(expression), expression);
+            return createParenAndSetTextRange(expression);
         }
 
         return expression;
@@ -4156,7 +4160,7 @@ namespace ts {
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
         if (!isBlock(body) && getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression) {
-            return setTextRange(createParen(<Expression>body), body);
+            return createParenAndSetTextRange(body);
         }
 
         return body;
