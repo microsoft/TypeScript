@@ -1020,7 +1020,7 @@ namespace ts {
 
                             // It's an external module. First see if the module has an export default and if the local
                             // name of that export default matches.
-                            if (result = moduleExports.get("default" as __String)) {
+                            if (result = moduleExports.get(InternalSymbolName.Default)) {
                                 const localSymbol = getLocalSymbolForExportDefault(result);
                                 if (localSymbol && (result.flags & meaning) && localSymbol.escapedName === name) {
                                     break loop;
@@ -1474,8 +1474,8 @@ namespace ts {
                 else {
                     const exportValue = moduleSymbol.exports.get("export=" as __String);
                     exportDefaultSymbol = exportValue
-                        ? getPropertyOfType(getTypeOfSymbol(exportValue), "default" as __String)
-                        : resolveSymbol(moduleSymbol.exports.get("default" as __String), dontResolveAlias);
+                        ? getPropertyOfType(getTypeOfSymbol(exportValue), InternalSymbolName.Default)
+                        : resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.Default), dontResolveAlias);
                 }
 
                 if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
@@ -1564,7 +1564,7 @@ namespace ts {
                     symbolFromVariable = resolveSymbol(symbolFromVariable, dontResolveAlias);
                     let symbolFromModule = getExportOfModule(targetSymbol, name.escapedText, dontResolveAlias);
                     // If the export member we're looking for is default, and there is no real default but allowSyntheticDefaultImports is on, return the entire module as the default
-                    if (!symbolFromModule && allowSyntheticDefaultImports && name.escapedText === "default") {
+                    if (!symbolFromModule && allowSyntheticDefaultImports && name.escapedText === InternalSymbolName.Default) {
                         symbolFromModule = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                     }
                     const symbol = symbolFromModule && symbolFromVariable ?
@@ -1951,7 +1951,7 @@ namespace ts {
         function extendExportSymbols(target: SymbolTable, source: SymbolTable | undefined, lookupTable?: ExportCollisionTrackerTable, exportNode?: ExportDeclaration) {
             if (!source) return;
             source.forEach((sourceSymbol, id) => {
-                if (id === "default") return;
+                if (id === InternalSymbolName.Default) return;
 
                 const targetSymbol = target.get(id);
                 if (!targetSymbol) {
@@ -3221,7 +3221,7 @@ namespace ts {
              * ensuring that any names written with literals use element accesses.
              */
             function appendPropertyOrElementAccessForSymbol(symbol: Symbol, writer: SymbolWriter): void {
-                const symbolName = symbol.escapedName === "default" ? "default" : getNameOfSymbolAsWritten(symbol);
+                const symbolName = symbol.escapedName === InternalSymbolName.Default ? InternalSymbolName.Default : getNameOfSymbolAsWritten(symbol);
                 const firstChar = symbolName.charCodeAt(0);
                 const needsElementAccess = !isIdentifierStart(firstChar, languageVersion);
 
