@@ -110,7 +110,7 @@ namespace ts {
 
         const commandLineOptions = commandLine.options;
         if (configFileName) {
-            const configParseResult = parseConfigFile(configFileName, commandLineOptions, sys, reportDiagnostic);
+            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic);
             udpateReportDiagnostic(configParseResult.options);
             if (isWatchSet(configParseResult.options)) {
                 reportWatchModeWithoutSysSupport();

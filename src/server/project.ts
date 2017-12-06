@@ -334,7 +334,7 @@ namespace ts.server {
         }
 
         useCaseSensitiveFileNames() {
-            return this.directoryStructureHost.useCaseSensitiveFileNames;
+            return this.projectService.host.useCaseSensitiveFileNames;
         }
 
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
@@ -342,7 +342,7 @@ namespace ts.server {
         }
 
         readFile(fileName: string): string | undefined {
-            return this.directoryStructureHost.readFile(fileName);
+            return this.projectService.host.readFile(fileName);
         }
 
         fileExists(file: string): boolean {
@@ -366,6 +366,11 @@ namespace ts.server {
 
         getDirectories(path: string): string[] {
             return this.directoryStructureHost.getDirectories(path);
+        }
+
+        /*@internal*/
+        getCachedDirectoryStructureHost(): CachedDirectoryStructureHost {
+            return undefined;
         }
 
         /*@internal*/
@@ -877,7 +882,7 @@ namespace ts.server {
                 missingFilePath,
                 (fileName, eventKind) => {
                     if (this.projectKind === ProjectKind.Configured) {
-                        (this.directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFile(fileName, missingFilePath, eventKind);
+                        this.getCachedDirectoryStructureHost().addOrDeleteFile(fileName, missingFilePath, eventKind);
                     }
 
                     if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {

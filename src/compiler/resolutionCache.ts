@@ -47,7 +47,7 @@ namespace ts {
         onInvalidatedResolution(): void;
         watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
         onChangedAutomaticTypeDirectiveNames(): void;
-        getCachedDirectoryStructureHost?(): CachedDirectoryStructureHost;
+        getCachedDirectoryStructureHost(): CachedDirectoryStructureHost | undefined;
         projectName?: string;
         getGlobalCache?(): string | undefined;
         writeLog(s: string): void;
@@ -87,6 +87,7 @@ namespace ts {
         const perDirectoryResolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
 
         const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory());
+        const cachedDirectoryStructureHost = resolutionHost.getCachedDirectoryStructureHost();
 
         /**
          * These are the extensions that failed lookup files will have by default,
@@ -467,9 +468,9 @@ namespace ts {
         function createDirectoryWatcher(directory: string, dirPath: Path) {
             return resolutionHost.watchDirectoryOfFailedLookupLocation(directory, fileOrDirectory => {
                 const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
-                if (resolutionHost.getCachedDirectoryStructureHost) {
+                if (cachedDirectoryStructureHost) {
                     // Since the file existance changed, update the sourceFiles cache
-                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
                 // If the files are added to project root or node_modules directory, always run through the invalidation process
@@ -596,9 +597,9 @@ namespace ts {
             // Create new watch and recursive info
             return resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrDirectory => {
                 const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
-                if (resolutionHost.getCachedDirectoryStructureHost) {
+                if (cachedDirectoryStructureHost) {
                     // Since the file existance changed, update the sourceFiles cache
-                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
                 // For now just recompile

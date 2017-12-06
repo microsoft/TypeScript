@@ -903,7 +903,7 @@ namespace ts {
 
         function verifyProgramWithConfigFile(system: System, configFileName: string) {
             const program = createWatchOfConfigFile(configFileName, {}, system).getExistingProgram();
-            const { fileNames, options } = parseConfigFile(configFileName, {}, system, notImplemented);
+            const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, system, notImplemented);
             verifyProgramIsUptoDate(program, fileNames, options);
         }
 
