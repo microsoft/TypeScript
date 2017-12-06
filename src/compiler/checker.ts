@@ -17149,7 +17149,7 @@ namespace ts {
                 /*typeParameters*/ undefined, // Before calling this we tested for `!candidates.some(c => !!c.typeParameters)`.
                 thisParameter,
                 parameters,
-                /*resolvedReturnType*/ unknownType,
+                /*resolvedReturnType*/ getIntersectionType(candidates.map(getReturnTypeOfSignature)),
                 /*typePredicate*/ undefined,
                 minArgumentCount,
                 hasRestParameter,
