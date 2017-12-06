@@ -3000,8 +3000,4 @@ namespace ts {
     }
 
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
-
-    export function getBoundFunction<T extends Function>(method: T | undefined, methodOf: {}): T | undefined {
-        return method && method.bind(methodOf);
-    }
 }

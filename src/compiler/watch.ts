@@ -79,29 +79,151 @@ namespace ts {
     }
 
     /**
+     * Program structure needed to emit the files and report diagnostics
+     */
+    export interface ProgramToEmitFilesAndReportErrors {
+        getCurrentDirectory(): string;
+        getCompilerOptions(): CompilerOptions;
+        getSourceFiles(): ReadonlyArray<SourceFile>;
+        getSyntacticDiagnostics(): ReadonlyArray<Diagnostic>;
+        getOptionsDiagnostics(): ReadonlyArray<Diagnostic>;
+        getGlobalDiagnostics(): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnostics(): ReadonlyArray<Diagnostic>;
+        emit(): EmitResult;
+    }
+
+    /**
+     * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
+     */
+    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void) {
+        // First get and report any syntactic errors.
+        const diagnostics = program.getSyntacticDiagnostics().slice();
+        let reportSemanticDiagnostics = false;
+
+        // If we didn't have any syntactic errors, then also try getting the global and
+        // semantic errors.
+        if (diagnostics.length === 0) {
+            addRange(diagnostics, program.getOptionsDiagnostics());
+            addRange(diagnostics, program.getGlobalDiagnostics());
+
+            if (diagnostics.length === 0) {
+                reportSemanticDiagnostics = true;
+            }
+        }
+
+        // Emit and report any errors we ran into.
+        const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit();
+        addRange(diagnostics, emitDiagnostics);
+
+        if (reportSemanticDiagnostics) {
+            addRange(diagnostics, program.getSemanticDiagnostics());
+        }
+
+        sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
+        if (writeFileName) {
+            const currentDir = program.getCurrentDirectory();
+            forEach(emittedFiles, file => {
+                const filepath = getNormalizedAbsolutePath(file, currentDir);
+                writeFileName(`TSFILE: ${filepath}`);
+            });
+
+            if (program.getCompilerOptions().listFiles) {
+                forEach(program.getSourceFiles(), file => {
+                    writeFileName(file.fileName);
+                });
+            }
+        }
+
+        if (emitSkipped && diagnostics.length > 0) {
+            // If the emitter didn't emit anything, then pass that value along.
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+        }
+        else if (diagnostics.length > 0) {
+            // The emitter emitted something, inform the caller if that happened in the presence
+            // of diagnostics or not.
+            return ExitStatus.DiagnosticsPresent_OutputsGenerated;
+        }
+        return ExitStatus.Success;
+    }
+
+    /**
+     * Creates the function that emits files and reports errors when called with program
+     */
+    function createEmitFilesAndReportErrorsWithBuilderUsingSystem(system: System, reportDiagnostic: DiagnosticReporter) {
+        const emitErrorsAndReportErrorsWithBuilder = createEmitFilesAndReportErrorsWithBuilder({
+            useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
+            createHash: system.createHash && (s => system.createHash(s)),
+            writeFile,
+            reportDiagnostic,
+            writeFileName: s => system.write(s + system.newLine)
+        });
+        let host: CachedDirectoryStructureHost | undefined;
+        return {
+            emitFilesAndReportError: (program: Program) => emitErrorsAndReportErrorsWithBuilder(program),
+            setHost: (cachedDirectoryStructureHost: CachedDirectoryStructureHost) => host = cachedDirectoryStructureHost
+        };
+
+        function getHost() {
+            return host || system;
+        }
+
+        function ensureDirectoriesExist(directoryPath: string) {
+            if (directoryPath.length > getRootLength(directoryPath) && !getHost().directoryExists(directoryPath)) {
+                const parentDirectory = getDirectoryPath(directoryPath);
+                ensureDirectoriesExist(parentDirectory);
+                getHost().createDirectory(directoryPath);
+            }
+        }
+
+        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
+            try {
+                performance.mark("beforeIOWrite");
+                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+
+                getHost().writeFile(fileName, text, writeByteOrderMark);
+
+                performance.mark("afterIOWrite");
+                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+            }
+            catch (e) {
+                if (onError) {
+                    onError(e.message);
+                }
+            }
+        }
+    }
+
+    const noopFileWatcher: FileWatcher = { close: noop };
+
+    /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
-    function createWatchCompilerHost(system = sys, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHost {
-        return {
+    function createWatchCompilerHost(system = sys, reportDiagnostic: DiagnosticReporter): WatchCompilerHost {
+        const { emitFilesAndReportError, setHost } = createEmitFilesAndReportErrorsWithBuilderUsingSystem(system, reportDiagnostic);
+        const host: WatchCompilerHost = {
             useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,
-            getCurrentDirectory: getBoundFunction(system.getCurrentDirectory, system),
+            getCurrentDirectory: () => system.getCurrentDirectory(),
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
-            fileExists: getBoundFunction(system.fileExists, system),
-            readFile: getBoundFunction(system.readFile, system),
-            directoryExists: getBoundFunction(system.directoryExists, system),
-            getDirectories: getBoundFunction(system.getDirectories, system),
-            readDirectory: getBoundFunction(system.readDirectory, system),
-            realpath: getBoundFunction(system.realpath, system),
-            watchFile: getBoundFunction(system.watchFile, system),
-            watchDirectory: getBoundFunction(system.watchDirectory, system),
-            setTimeout: getBoundFunction(system.setTimeout, system),
-            clearTimeout: getBoundFunction(system.clearTimeout, system),
-            trace: getBoundFunction(system.write, system),
+            fileExists: path => system.fileExists(path),
+            readFile: (path, encoding) => system.readFile(path, encoding),
+            directoryExists: path => system.directoryExists(path),
+            getDirectories: path => system.getDirectories(path),
+            readDirectory: (path, extensions, exclude, include, depth) => system.readDirectory(path, extensions, exclude, include, depth),
+            realpath: system.realpath && (path => system.realpath(path)),
+            watchFile: system.watchFile ? ((path, callback, pollingInterval) => system.watchFile(path, callback, pollingInterval)) : () => noopFileWatcher,
+            watchDirectory: system.watchDirectory ? ((path, callback, recursive) => system.watchDirectory(path, callback, recursive)) : () => noopFileWatcher,
+            setTimeout: system.setTimeout ? ((callback, ms, ...args: any[]) => system.setTimeout.call(system, callback, ms, ...args)) : noop,
+            clearTimeout: system.clearTimeout ? (timeoutId => system.clearTimeout(timeoutId)) : noop,
+            trace: s => system.write(s),
             onWatchStatusChange,
-            afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic)
+            createDirectory: path => system.createDirectory(path),
+            writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
+            onCachedDirectoryStructureHostCreate: host => setHost(host),
+            afterProgramCreate: emitFilesAndReportError,
         };
+        return host;
 
         function getDefaultLibLocation() {
             return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
@@ -140,7 +262,7 @@ namespace ts {
      * Creates the watch compiler host from system for compiling root files and options in watch mode
      */
     export function createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHostOfFilesAndCompilerOptions {
-        const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfFilesAndCompilerOptions;
+        const host = createWatchCompilerHost(system, reportDiagnostic || createDiagnosticReporter(system)) as WatchCompilerHostOfFilesAndCompilerOptions;
         host.rootFiles = rootFiles;
         host.options = options;
         return host;
@@ -150,99 +272,75 @@ namespace ts {
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
 
-    /**
-     * Writes emitted files, source files depending on options
-     */
-    /*@internal*/
-    export function writeFileAndEmittedFileList(system: System, program: Program, emittedFiles: string[]) {
-        const currentDir = system.getCurrentDirectory();
-        forEach(emittedFiles, file => {
-            const filepath = getNormalizedAbsolutePath(file, currentDir);
-            system.write(`TSFILE: ${filepath}${system.newLine}`);
-        });
+    interface BuilderProgram extends ProgramToEmitFilesAndReportErrors {
+        updateProgram(program: Program): void;
+    }
 
-        if (program.getCompilerOptions().listFiles) {
-            forEach(program.getSourceFiles(), file => {
-                system.write(file.fileName + system.newLine);
-            });
+    function createBuilderProgram(host: BuilderEmitHost): BuilderProgram {
+        const builder = createEmitAndSemanticDiagnosticsBuilder({
+            getCanonicalFileName: createGetCanonicalFileName(host.useCaseSensitiveFileNames()),
+            computeHash: host.createHash ? host.createHash : identity
+        });
+        let program: Program;
+        return {
+            getCurrentDirectory: () => program.getCurrentDirectory(),
+            getCompilerOptions: () => program.getCompilerOptions(),
+            getSourceFiles: () => program.getSourceFiles(),
+            getSyntacticDiagnostics: () => program.getSyntacticDiagnostics(),
+            getOptionsDiagnostics: () => program.getOptionsDiagnostics(),
+            getGlobalDiagnostics: () => program.getGlobalDiagnostics(),
+            getSemanticDiagnostics: () => builder.getSemanticDiagnostics(program),
+            emit,
+            updateProgram
+        };
+
+        function updateProgram(p: Program) {
+            program = p;
+            builder.updateProgram(p);
+        }
+
+        function emit(): EmitResult {
+            // Emit and report any errors we ran into.
+            let sourceMaps: SourceMapData[];
+            let emitSkipped: boolean;
+            let diagnostics: Diagnostic[];
+            let emittedFiles: string[];
+
+            let affectedEmitResult: AffectedFileResult<EmitResult>;
+            while (affectedEmitResult = builder.emitNextAffectedFile(program, host.writeFile)) {
+                emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
+                diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
+                emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
+                sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
+            }
+            return {
+                emitSkipped,
+                diagnostics,
+                emittedFiles,
+                sourceMaps
+            };
         }
     }
 
     /**
-     * Creates the function that compiles the program by maintaining the builder for the program and reports the errors and emits files
+     * Host needed to emit files and report errors using builder
      */
-    export function createProgramCompilerWithBuilderState(system = sys, reportDiagnostic?: DiagnosticReporter) {
-        reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
-        const builder = createEmitAndSemanticDiagnosticsBuilder({
-            getCanonicalFileName: createGetCanonicalFileName(system.useCaseSensitiveFileNames),
-            computeHash: getBoundFunction(system.createHash, system) || identity
-        });
+    export interface BuilderEmitHost {
+        useCaseSensitiveFileNames(): boolean;
+        createHash?: (data: string) => string;
+        writeFile: WriteFileCallback;
+        reportDiagnostic: DiagnosticReporter;
+        writeFileName?: (s: string) => void;
+    }
 
-        return (host: DirectoryStructureHost, program: Program) => {
-            builder.updateProgram(program);
-
-            // First get and report any syntactic errors.
-            const diagnostics = program.getSyntacticDiagnostics().slice();
-            let reportSemanticDiagnostics = false;
-
-            // If we didn't have any syntactic errors, then also try getting the global and
-            // semantic errors.
-            if (diagnostics.length === 0) {
-                addRange(diagnostics, program.getOptionsDiagnostics());
-                addRange(diagnostics, program.getGlobalDiagnostics());
-
-                if (diagnostics.length === 0) {
-                    reportSemanticDiagnostics = true;
-                }
-            }
-
-            // Emit and report any errors we ran into.
-            const emittedFiles: string[] = program.getCompilerOptions().listEmittedFiles ? [] : undefined;
-            let sourceMaps: SourceMapData[];
-            let emitSkipped: boolean;
-
-            let affectedEmitResult: AffectedFileResult<EmitResult>;
-            while (affectedEmitResult = builder.emitNextAffectedFile(program, writeFile)) {
-                emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
-                addRange(diagnostics, affectedEmitResult.result.diagnostics);
-                sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
-            }
-
-            if (reportSemanticDiagnostics) {
-                addRange(diagnostics, builder.getSemanticDiagnostics(program));
-            }
-
-            sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
-            writeFileAndEmittedFileList(system, program, emittedFiles);
-
-            function ensureDirectoriesExist(directoryPath: string) {
-                if (directoryPath.length > getRootLength(directoryPath) && !host.directoryExists(directoryPath)) {
-                    const parentDirectory = getDirectoryPath(directoryPath);
-                    ensureDirectoriesExist(parentDirectory);
-                    host.createDirectory(directoryPath);
-                }
-            }
-
-            function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
-                try {
-                    performance.mark("beforeIOWrite");
-                    ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-
-                    host.writeFile(fileName, text, writeByteOrderMark);
-
-                    performance.mark("afterIOWrite");
-                    performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
-
-                    if (emittedFiles) {
-                        emittedFiles.push(fileName);
-                    }
-                }
-                catch (e) {
-                    if (onError) {
-                        onError(e.message);
-                    }
-                }
-            }
+    /**
+     * Creates the function that reports the program errors and emit files every time it is called with argument as program
+     */
+    export function createEmitFilesAndReportErrorsWithBuilder(host: BuilderEmitHost) {
+        const builderProgram = createBuilderProgram(host);
+        return (program: Program) => {
+            builderProgram.updateProgram(program);
+            emitFilesAndReportErrors(builderProgram, host.reportDiagnostic, host.writeFileName);
         };
     }
 
@@ -250,7 +348,7 @@ namespace ts {
         /** If provided, callback to invoke before each program creation */
         beforeProgramCreate?(compilerOptions: CompilerOptions): void;
         /** If provided, callback to invoke after every new program creation */
-        afterProgramCreate?(host: DirectoryStructureHost, program: Program): void;
+        afterProgramCreate?(program: Program): void;
         /** If provided, called with Diagnostic message that informs about change in watch status */
         onWatchStatusChange?(diagnostic: Diagnostic, newLine: string): void;
 
@@ -297,6 +395,14 @@ namespace ts {
         clearTimeout?(timeoutId: any): void;
     }
 
+    /** Internal interface used to wire emit through same host */
+    /*@internal*/
+    export interface WatchCompilerHost {
+        createDirectory?(path: string): void;
+        writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+        onCachedDirectoryStructureHostCreate?(host: CachedDirectoryStructureHost): void;
+    }
+
     /**
      * Host to create watch with root files and options
      */
@@ -315,12 +421,12 @@ namespace ts {
         /**
          * Reports the diagnostics in reading/writing or parsing of the config file
          */
-        onConfigFileDiagnostic(diagnostic: Diagnostic): void;
+        onConfigFileDiagnostic: DiagnosticReporter;
 
         /**
          * Reports unrecoverable error when parsing config file
          */
-        onUnRecoverableConfigFileDiagnostic(diagnostic: Diagnostic): void;
+        onUnRecoverableConfigFileDiagnostic: DiagnosticReporter;
     }
 
     /**
@@ -345,7 +451,6 @@ namespace ts {
      */
     /*@internal*/
     export interface WatchCompilerHostOfConfigFile extends WatchCompilerHost {
-        cachedDirectoryStructureHost?: CachedDirectoryStructureHost;
         rootFiles?: string[];
         options?: CompilerOptions;
         optionsToExtend?: CompilerOptions;
@@ -418,23 +523,23 @@ namespace ts {
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const currentDirectory = host.getCurrentDirectory();
         const getCurrentDirectory = () => currentDirectory;
-        const onConfigFileDiagnostic = getBoundFunction(host.onConfigFileDiagnostic, host);
-        const readFile = getBoundFunction(host.readFile, host);
+        const readFile: (path: string, encoding?: string) => string | undefined = (path, encoding) => host.readFile(path, encoding);
         const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {} } = host;
-        const beforeProgramCreate = getBoundFunction(host.beforeProgramCreate, host) || noop;
-        const afterProgramCreate =  getBoundFunction(host.afterProgramCreate, host) || noop;
         let { rootFiles: rootFileNames, options: compilerOptions, configFileSpecs, configFileWildCardDirectories } = host;
 
         const cachedDirectoryStructureHost = configFileName && createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
+        if (cachedDirectoryStructureHost && host.onCachedDirectoryStructureHostCreate) {
+            host.onCachedDirectoryStructureHostCreate(cachedDirectoryStructureHost);
+        }
         const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
         const parseConfigFileHost: ParseConfigFileHost = {
             useCaseSensitiveFileNames,
-            readDirectory: getBoundFunction(directoryStructureHost.readDirectory, directoryStructureHost),
-            fileExists: getBoundFunction(directoryStructureHost.fileExists, directoryStructureHost),
+            readDirectory: (path, extensions, exclude, include, depth) => directoryStructureHost.readDirectory(path, extensions, exclude, include, depth),
+            fileExists: path => host.fileExists(path),
             readFile,
             getCurrentDirectory,
-            onConfigFileDiagnostic,
-            onUnRecoverableConfigFileDiagnostic: getBoundFunction(host.onUnRecoverableConfigFileDiagnostic, host)
+            onConfigFileDiagnostic: host.onConfigFileDiagnostic,
+            onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic
         };
 
         // From tsc we want to get already parsed result and hence check for rootFileNames
@@ -460,8 +565,8 @@ namespace ts {
             // Members for CompilerHost
             getSourceFile: (fileName, languageVersion, onError?, shouldCreateNewSourceFile?) => getVersionedSourceFileByPath(fileName, toPath(fileName), languageVersion, onError, shouldCreateNewSourceFile),
             getSourceFileByPath: getVersionedSourceFileByPath,
-            getDefaultLibLocation: getBoundFunction(host.getDefaultLibLocation, host),
-            getDefaultLibFileName: getBoundFunction(host.getDefaultLibFileName, host),
+            getDefaultLibLocation: host.getDefaultLibLocation && (() => host.getDefaultLibLocation()),
+            getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile: notImplemented,
             getCurrentDirectory,
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
@@ -470,9 +575,9 @@ namespace ts {
             fileExists,
             readFile,
             trace,
-            directoryExists: getBoundFunction(directoryStructureHost.directoryExists, directoryStructureHost),
-            getDirectories: getBoundFunction(directoryStructureHost.getDirectories, directoryStructureHost),
-            realpath: getBoundFunction(host.realpath, host),
+            directoryExists: directoryStructureHost.directoryExists && (path => directoryStructureHost.directoryExists(path)),
+            getDirectories: directoryStructureHost.getDirectories && (path => directoryStructureHost.getDirectories(path)),
+            realpath: host.realpath && (s => host.realpath(s)),
             onReleaseOldSourceFile,
             // Members for ResolutionCacheHost
             toPath,
@@ -495,8 +600,8 @@ namespace ts {
         );
         // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
         compilerHost.resolveModuleNames = host.resolveModuleNames ?
-            host.resolveModuleNames.bind(host) :
-            resolutionCache.resolveModuleNames.bind(resolutionCache);
+            ((moduleNames, containingFile, reusedNames) => host.resolveModuleNames(moduleNames, containingFile, reusedNames)) :
+            ((moduleNames, containingFile, reusedNames) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames));
         compilerHost.resolveTypeReferenceDirectives = resolutionCache.resolveTypeReferenceDirectives.bind(resolutionCache);
 
         reportWatchDiagnostic(Diagnostics.Starting_compilation_in_watch_mode);
@@ -524,7 +629,9 @@ namespace ts {
                 return program;
             }
 
-            beforeProgramCreate(compilerOptions);
+            if (host.beforeProgramCreate) {
+                host.beforeProgramCreate(compilerOptions);
+            }
 
             // Compile the program
             const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
@@ -555,7 +662,9 @@ namespace ts {
                 missingFilePathsRequestedForRelease = undefined;
             }
 
-            afterProgramCreate(directoryStructureHost, program);
+            if (host.afterProgramCreate) {
+                host.afterProgramCreate(program);
+            }
             reportWatchDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes);
             return program;
         }
@@ -722,7 +831,7 @@ namespace ts {
         function reloadFileNamesFromConfigFile() {
             const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, parseConfigFileHost);
             if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
-                onConfigFileDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
+                host.onConfigFileDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
             }
             rootFileNames = result.fileNames;
 

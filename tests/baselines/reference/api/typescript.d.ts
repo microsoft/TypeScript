@@ -3811,14 +3811,24 @@ declare namespace ts {
 declare namespace ts {
     type DiagnosticReporter = (diagnostic: Diagnostic) => void;
     /**
-     * Creates the function that compiles the program by maintaining the builder for the program and reports the errors and emits files
+     * Host needed to emit files and report errors using builder
      */
-    function createProgramCompilerWithBuilderState(system?: System, reportDiagnostic?: DiagnosticReporter): (host: DirectoryStructureHost, program: Program) => void;
+    interface BuilderEmitHost {
+        useCaseSensitiveFileNames(): boolean;
+        createHash?: (data: string) => string;
+        writeFile: WriteFileCallback;
+        reportDiagnostic: DiagnosticReporter;
+        writeFileName?: (s: string) => void;
+    }
+    /**
+     * Creates the function that reports the program errors and emit files every time it is called with argument as program
+     */
+    function createEmitFilesAndReportErrorsWithBuilder(host: BuilderEmitHost): (program: Program) => void;
     interface WatchCompilerHost {
         /** If provided, callback to invoke before each program creation */
         beforeProgramCreate?(compilerOptions: CompilerOptions): void;
         /** If provided, callback to invoke after every new program creation */
-        afterProgramCreate?(host: DirectoryStructureHost, program: Program): void;
+        afterProgramCreate?(program: Program): void;
         /** If provided, called with Diagnostic message that informs about change in watch status */
         onWatchStatusChange?(diagnostic: Diagnostic, newLine: string): void;
         useCaseSensitiveFileNames(): boolean;
@@ -3852,7 +3862,7 @@ declare namespace ts {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
-        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together*/
+        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         /** If provided, will be used to reset existing delayed compilation */
         clearTimeout?(timeoutId: any): void;
@@ -3873,11 +3883,11 @@ declare namespace ts {
         /**
          * Reports the diagnostics in reading/writing or parsing of the config file
          */
-        onConfigFileDiagnostic(diagnostic: Diagnostic): void;
+        onConfigFileDiagnostic: DiagnosticReporter;
         /**
          * Reports unrecoverable error when parsing config file
          */
-        onUnRecoverableConfigFileDiagnostic(diagnostic: Diagnostic): void;
+        onUnRecoverableConfigFileDiagnostic: DiagnosticReporter;
     }
     /**
      * Host to create watch with config file

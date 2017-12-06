@@ -144,17 +144,16 @@ namespace ts {
         enableStatistics(compilerOptions);
 
         const program = createProgram(rootFileNames, compilerOptions, compilerHost);
-        const exitStatus = compileProgram(program);
-
+        const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
         reportStatistics(program);
         return sys.exit(exitStatus);
     }
 
     function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost) {
-        const compilerWithBuilderState = watchCompilerHost.afterProgramCreate;
+        const compileUsingBuilder = watchCompilerHost.afterProgramCreate;
         watchCompilerHost.beforeProgramCreate = enableStatistics;
-        watchCompilerHost.afterProgramCreate = (host, program) => {
-            compilerWithBuilderState(host, program);
+        watchCompilerHost.afterProgramCreate = program => {
+            compileUsingBuilder(program);
             reportStatistics(program);
         };
     }
@@ -173,40 +172,6 @@ namespace ts {
         const watchCompilerHost = ts.createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, sys, reportDiagnostic);
         updateWatchCompilationHost(watchCompilerHost);
         createWatch(watchCompilerHost);
-    }
-
-    function compileProgram(program: Program): ExitStatus {
-        let diagnostics: Diagnostic[];
-
-        // First get and report any syntactic errors.
-        diagnostics = program.getSyntacticDiagnostics().slice();
-
-        // If we didn't have any syntactic errors, then also try getting the global and
-        // semantic errors.
-        if (diagnostics.length === 0) {
-            diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
-
-            if (diagnostics.length === 0) {
-                diagnostics = program.getSemanticDiagnostics().slice();
-            }
-        }
-
-        // Emit and report any errors we ran into.
-        const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit();
-        addRange(diagnostics, emitDiagnostics);
-
-        sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
-        writeFileAndEmittedFileList(sys, program, emittedFiles);
-        if (emitSkipped && diagnostics.length > 0) {
-            // If the emitter didn't emit anything, then pass that value along.
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        else if (diagnostics.length > 0) {
-            // The emitter emitted something, inform the caller if that happened in the presence
-            // of diagnostics or not.
-            return ExitStatus.DiagnosticsPresent_OutputsGenerated;
-        }
-        return ExitStatus.Success;
     }
 
     function enableStatistics(compilerOptions: CompilerOptions) {

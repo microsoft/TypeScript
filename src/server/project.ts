@@ -202,6 +202,9 @@ namespace ts.server {
         readonly currentDirectory: string;
 
         /*@internal*/
+        public directoryStructureHost: DirectoryStructureHost;
+
+        /*@internal*/
         constructor(
             /*@internal*/readonly projectName: string,
             readonly projectKind: ProjectKind,
@@ -211,8 +214,9 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
-            /*@internal*/public directoryStructureHost: DirectoryStructureHost,
+            directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined) {
+            this.directoryStructureHost = directoryStructureHost;
             this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
 
             this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);

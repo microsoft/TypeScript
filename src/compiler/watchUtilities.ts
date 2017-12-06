@@ -49,12 +49,12 @@ namespace ts {
         return {
             useCaseSensitiveFileNames,
             fileExists,
-            readFile: getBoundFunction(host.readFile, host),
+            readFile: (path, encoding) => host.readFile(path, encoding),
             directoryExists: host.directoryExists && directoryExists,
             getDirectories,
             readDirectory,
-            createDirectory,
-            writeFile,
+            createDirectory: host.createDirectory && createDirectory,
+            writeFile: host.writeFile && writeFile,
             addOrDeleteFileOrDirectory,
             addOrDeleteFile,
             clearCache

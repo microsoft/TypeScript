@@ -7270,7 +7270,6 @@ declare namespace ts.server {
         private documentRegistry;
         private compilerOptions;
         compileOnSaveEnabled: boolean;
-        directoryStructureHost: DirectoryStructureHost;
         private rootFiles;
         private rootFilesMap;
         private program;
@@ -7741,7 +7740,9 @@ declare namespace ts.server {
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
         private watchClosedScriptInfo(info);
         private stopWatchingScriptInfo(info);
-        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost): ScriptInfo;
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: {
+            fileExists(path: string): boolean;
+        }): ScriptInfo;
         private getOrCreateScriptInfoWorker(fileName, currentDirectory, openedByClient, fileContent?, scriptKind?, hasMixedContent?, hostToQueryFileExistsOn?);
         /**
          * This gets the script info for the normalized path. If the path is not rooted disk path then the open script info with project root context is preferred
