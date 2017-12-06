@@ -21,7 +21,7 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    let reportDiagnostic = createDiagnosticReporter();
+    let reportDiagnostic = createDiagnosticReporter(sys);
     function udpateReportDiagnostic(options: CompilerOptions) {
         if (options.pretty) {
             reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
@@ -150,33 +150,28 @@ namespace ts {
         return sys.exit(exitStatus);
     }
 
-    function createWatchCompilerHost(): WatchCompilerHost {
-        const watchCompilerHost = ts.createWatchCompilerHost(sys, reportDiagnostic);
+    function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost) {
         const compilerWithBuilderState = watchCompilerHost.afterProgramCreate;
         watchCompilerHost.beforeProgramCreate = enableStatistics;
         watchCompilerHost.afterProgramCreate = (host, program) => {
             compilerWithBuilderState(host, program);
             reportStatistics(program);
         };
-        return watchCompilerHost;
     }
 
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {
-        const watchCompilerHost = createWatchCompilerHost() as WatchCompilerHostOfConfigFile;
-        watchCompilerHost.onConfigFileDiagnostic = reportDiagnostic;
+        const watchCompilerHost = ts.createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, reportDiagnostic);
+        updateWatchCompilationHost(watchCompilerHost);
         watchCompilerHost.rootFiles = configParseResult.fileNames;
         watchCompilerHost.options = configParseResult.options;
-        watchCompilerHost.configFileName = configParseResult.options.configFilePath;
-        watchCompilerHost.optionsToExtend = optionsToExtend;
         watchCompilerHost.configFileSpecs = configParseResult.configFileSpecs;
         watchCompilerHost.configFileWildCardDirectories = configParseResult.wildcardDirectories;
         createWatch(watchCompilerHost);
     }
 
     function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions) {
-        const watchCompilerHost = createWatchCompilerHost() as WatchCompilerHostOfFilesAndCompilerOptions;
-        watchCompilerHost.rootFiles = rootFiles;
-        watchCompilerHost.options = options;
+        const watchCompilerHost = ts.createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, sys, reportDiagnostic);
+        updateWatchCompilationHost(watchCompilerHost);
         createWatch(watchCompilerHost);
     }
 

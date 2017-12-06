@@ -15,7 +15,7 @@ namespace ts {
      * Create a function that reports error by writing to the system and handles the formating of the diagnostic
      */
     /*@internal*/
-    export function createDiagnosticReporter(system = sys, pretty?: boolean): DiagnosticReporter {
+    export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
         const host: FormatDiagnosticsHost = system === sys ? sysFormatDiagnosticsHost : {
             getCurrentDirectory: () => system.getCurrentDirectory(),
             getNewLine: () => system.newLine,
@@ -266,6 +266,7 @@ namespace ts {
      */
     /*@internal*/
     export interface WatchCompilerHostOfConfigFile extends WatchCompilerHost {
+        cachedDirectoryStructureHost?: CachedDirectoryStructureHost;
         rootFiles?: string[];
         options?: CompilerOptions;
         optionsToExtend?: CompilerOptions;
@@ -298,8 +299,7 @@ namespace ts {
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
-    /*@internal*/
-    export function createWatchCompilerHost(system = sys, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHost {
+    function createWatchCompilerHost(system = sys, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHost {
         return {
             useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,
@@ -325,26 +325,42 @@ namespace ts {
     }
 
     /**
-     * Create the watched program for config file
+     * Creates the watch compiler host from system for config file in watch mode
      */
-    export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system?: System, reportDiagnostic?: DiagnosticReporter): WatchOfConfigFile {
+    /*@internal*/
+    export function createWatchCompilerHostOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHostOfConfigFile {
         reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
         const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfConfigFile;
         host.onConfigFileDiagnostic = reportDiagnostic;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
         host.configFileName = configFileName;
         host.optionsToExtend = optionsToExtend;
-        return createWatch(host);
+        return host;
+    }
+
+    /**
+     * Creates the watch compiler host from system for compiling root files and options in watch mode
+     */
+    /*@internal*/
+    export function createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHostOfFilesAndCompilerOptions {
+        const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfFilesAndCompilerOptions;
+        host.rootFiles = rootFiles;
+        host.options = options;
+        return host;
+    }
+
+    /**
+     * Create the watched program for config file
+     */
+    export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfConfigFile {
+        return createWatch(createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend, system, reportDiagnostic));
     }
 
     /**
      * Create the watched program for root files and compiler options
      */
     export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfFilesAndCompilerOptions {
-        const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfFilesAndCompilerOptions;
-        host.rootFiles = rootFiles;
-        host.options = options;
-        return createWatch(host);
+        return createWatch(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system, reportDiagnostic));
     }
 
     /**
