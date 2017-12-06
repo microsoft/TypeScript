@@ -932,7 +932,7 @@ namespace ts {
             return value;
         }
 
-        function scanString(allowEscapes = true): string {
+        function scanString(jsxAttributeString = false): string {
             const quote = text.charCodeAt(pos);
             pos++;
             let result = "";
@@ -950,13 +950,13 @@ namespace ts {
                     pos++;
                     break;
                 }
-                if (ch === CharacterCodes.backslash && allowEscapes) {
+                if (ch === CharacterCodes.backslash && !jsxAttributeString) {
                     result += text.substring(start, pos);
                     result += scanEscapeSequence();
                     start = pos;
                     continue;
                 }
-                if (isLineBreak(ch)) {
+                if (isLineBreak(ch) && !jsxAttributeString) {
                     result += text.substring(start, pos);
                     tokenFlags |= TokenFlags.Unterminated;
                     error(Diagnostics.Unterminated_string_literal);
@@ -1811,7 +1811,7 @@ namespace ts {
             switch (text.charCodeAt(pos)) {
                 case CharacterCodes.doubleQuote:
                 case CharacterCodes.singleQuote:
-                    tokenValue = scanString(/*allowEscapes*/ false);
+                    tokenValue = scanString(/*jsxAttributeString*/ true);
                     return token = SyntaxKind.StringLiteral;
                 default:
                     // If this scans anything other than `{`, it's a parse error.
@@ -1873,7 +1873,17 @@ namespace ts {
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.dot:
                     pos++;
+                    if (text.substr(tokenPos, pos + 2) === "...") {
+                        pos += 2;
+                        return token = SyntaxKind.DotDotDotToken;
+                    }
                     return token = SyntaxKind.DotToken;
+                case CharacterCodes.exclamation:
+                    pos++;
+                    return token = SyntaxKind.ExclamationToken;
+                case CharacterCodes.question:
+                    pos++;
+                    return token = SyntaxKind.QuestionToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
@@ -1881,6 +1891,7 @@ namespace ts {
                 while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
                     pos++;
                 }
+                tokenValue = text.substring(tokenPos, pos);
                 return token = SyntaxKind.Identifier;
             }
             else {

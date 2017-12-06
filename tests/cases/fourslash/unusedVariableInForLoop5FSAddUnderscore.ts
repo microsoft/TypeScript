@@ -8,6 +8,6 @@
 //// }
 
 verify.codeFix({
-    description: "Prefix 'elem' with an underscore.",
+    description: "Prefix 'elem' with an underscore",
     newRangeContent: 'for (const _elem in ["a", "b", "c"])'
 });

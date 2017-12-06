@@ -7,6 +7,6 @@
 ////}
 
 verify.codeFix({
-    description: "Add 'this.' to unresolved variable.",
+    description: "Add 'this.' to unresolved variable",
     newRangeContent: "this.foo = 10",
 });

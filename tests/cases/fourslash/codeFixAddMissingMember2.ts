@@ -7,7 +7,7 @@
 ////}
 
 verify.codeFix({
-    description: "Add index signature for property 'foo'.",
+    description: "Add index signature for property 'foo'",
     index: 1,
     // TODO: GH#18445
     newFileContent: `class C {

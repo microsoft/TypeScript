@@ -139,7 +139,7 @@ interface Array<T> {}`
     function checkMapKeys(caption: string, map: Map<any>, expectedKeys: ReadonlyArray<string>) {
         verifyMapSize(caption, map, expectedKeys);
         for (const name of expectedKeys) {
-            assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
+            assert(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
     }
 
@@ -251,6 +251,7 @@ interface Array<T> {}`
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
+        private screenClears = 0;
 
         readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
@@ -604,6 +605,10 @@ interface Array<T> {}`
             this.timeoutCallbacks.unregister(timeoutId);
         }
 
+        clearScreen(): void {
+            this.screenClears += 1;
+        }
+
         checkTimeoutQueueLengthAndRun(expected: number) {
             this.checkTimeoutQueueLength(expected);
             this.runQueuedTimeoutCallbacks();
@@ -636,6 +641,10 @@ interface Array<T> {}`
 
         clearImmediate(timeoutId: any): void {
             this.immediateCallbacks.unregister(timeoutId);
+        }
+
+        checkScreenClears(expected: number): void {
+            assert.equal(this.screenClears, expected);
         }
 
         createDirectory(directoryName: string): void {

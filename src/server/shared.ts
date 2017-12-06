@@ -4,8 +4,8 @@ namespace ts.server {
     // tslint:disable variable-name
     export const ActionSet: ActionSet = "action::set";
     export const ActionInvalidate: ActionInvalidate = "action::invalidate";
+    export const ActionPackageInstalled: ActionPackageInstalled = "action::packageInstalled";
     export const EventTypesRegistry: EventTypesRegistry = "event::typesRegistry";
-    export const EventPackageInstalled: EventPackageInstalled = "event::packageInstalled";
     export const EventBeginInstallTypes: EventBeginInstallTypes = "event::beginInstallTypes";
     export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
     export const EventInitializationFailed: EventInitializationFailed = "event::initializationFailed";

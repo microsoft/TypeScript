@@ -9,7 +9,7 @@
 ////class C extends A {[| |]}
 
 verify.codeFix({
-    description: "Implement inherited abstract class.",
+    description: "Implement inherited abstract class",
     // TODO: GH#18795
     newRangeContent: `x: number;\r
 y: this;\r
