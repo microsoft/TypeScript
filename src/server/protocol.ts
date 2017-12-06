@@ -217,16 +217,13 @@ namespace ts.server.protocol {
         projectFileName?: string;
     }
 
-    /**
-     * Requests status information from the server
-     */
     export interface StatusRequest extends Request {
         command: CommandTypes.Status;
     }
 
     export interface StatusResponseBody {
         /**
-         * the version of the currently-running server.
+         * The TypeScript version (`ts.version`).
          */
         version: string;
     }

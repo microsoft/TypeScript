@@ -5006,15 +5006,12 @@ declare namespace ts.server.protocol {
         file: string;
         projectFileName?: string;
     }
-    /**
-     * Requests status information from the server
-     */
     interface StatusRequest extends Request {
         command: CommandTypes.Status;
     }
     interface StatusResponseBody {
         /**
-         * the version of the currently-running server.
+         * The TypeScript version (`ts.version`).
          */
         version: string;
     }
