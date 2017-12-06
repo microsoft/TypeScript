@@ -3844,6 +3844,8 @@ declare namespace ts {
         readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         /** Symbol links resolution */
         realpath?(path: string): string;
+        /** If provided would be used to write log about compilation */
+        trace?(s: string): void;
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         /** Used to watch changes in source files, missing files needed to update the program or config file */

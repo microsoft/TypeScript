@@ -96,6 +96,7 @@ namespace ts {
             watchDirectory: getBoundFunction(system.watchDirectory, system),
             setTimeout: getBoundFunction(system.setTimeout, system),
             clearTimeout: getBoundFunction(system.clearTimeout, system),
+            trace: getBoundFunction(system.write, system),
             onWatchStatusChange,
             system,
             afterProgramCreate: createProgramCompilerWithBuilderState(system, reportDiagnostic)
@@ -276,6 +277,8 @@ namespace ts {
 
         /** Symbol links resolution */
         realpath?(path: string): string;
+        /** If provided would be used to write log about compilation */
+        trace?(s: string): void;
 
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
@@ -436,8 +439,9 @@ namespace ts {
             parseConfigFile();
         }
 
-        const loggingEnabled = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
-        const writeLog: (s: string) => void = loggingEnabled ? s => { system.write(s); system.write(newLine); } : noop;
+        const trace = host.trace && ((s: string) => { host.trace(s + newLine) });
+        const loggingEnabled = trace && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
+        const writeLog = loggingEnabled ? trace : noop;
         const watchFile = compilerOptions.extendedDiagnostics ? ts.addFileWatcherWithLogging : loggingEnabled ? ts.addFileWatcherWithOnlyTriggerLogging : ts.addFileWatcher;
         const watchFilePath = compilerOptions.extendedDiagnostics ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
         const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
@@ -462,7 +466,7 @@ namespace ts {
             getNewLine: () => newLine,
             fileExists,
             readFile,
-            trace: s => system.write(s + newLine),
+            trace,
             directoryExists: getBoundFunction(directoryStructureHost.directoryExists, directoryStructureHost),
             getDirectories: getBoundFunction(directoryStructureHost.getDirectories, directoryStructureHost),
             realpath: getBoundFunction(host.realpath, host),
