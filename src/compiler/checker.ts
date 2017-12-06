@@ -3199,7 +3199,7 @@ namespace ts {
             if ((symbol as TransientSymbol).syntheticLiteralTypeOrigin) {
                 const stringValue = (symbol as TransientSymbol).syntheticLiteralTypeOrigin.value;
                 if (!isIdentifierText(stringValue, compilerOptions.target)) {
-                    return `"${escapeString(stringValue, CharacterCodes.doubleQuote)}"`;
+                    return '"' + escapeString(stringValue, CharacterCodes.doubleQuote) + '"';
                 }
             }
             return symbolName(symbol);
@@ -5562,9 +5562,9 @@ namespace ts {
         /**
          * Gets the symbolic name for a late-bound member from its type.
          */
-        function getLateBoundNameFromType(type: LiteralType | UniqueESSymbolType) {
+        function getLateBoundNameFromType(type: LiteralType | UniqueESSymbolType): __String | undefined {
             if (type.flags & TypeFlags.UniqueESSymbol) {
-                return `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
+                return "__@" + type.symbol.escapedName + "@" + getSymbolId(type.symbol) as __String;
             }
             if (type.flags & TypeFlags.StringOrNumberLiteral) {
                 return escapeLeadingUnderscores("" + (<LiteralType>type).value);
@@ -17176,21 +17176,22 @@ namespace ts {
             const candidate = candidates[bestIndex];
 
             const { typeParameters } = candidate;
-            if (typeParameters && callLikeExpressionMayHaveTypeArguments(node) && node.typeArguments) {
-                const typeArguments = node.typeArguments.map(getTypeOfNode);
-                while (typeArguments.length > typeParameters.length) {
-                    typeArguments.pop();
-                }
-                while (typeArguments.length < typeParameters.length) {
-                    typeArguments.push(getDefaultTypeArgumentType(isInJavaScriptFile(node)));
-                }
-
-                const instantiated = createSignatureInstantiation(candidate, typeArguments);
-                candidates[bestIndex] = instantiated;
-                return instantiated;
+            if (!typeParameters) {
+                return candidate;
             }
 
-            return candidate;
+            const typeArgumentNodes: ReadonlyArray<TypeNode> = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments || emptyArray : emptyArray;
+            const typeArguments = typeArgumentNodes.map(getTypeOfNode);
+            while (typeArguments.length > typeParameters.length) {
+                typeArguments.pop();
+            }
+            while (typeArguments.length < typeParameters.length) {
+                typeArguments.push(getDefaultTypeArgumentType(isInJavaScriptFile(node)));
+            }
+
+            const instantiated = createSignatureInstantiation(candidate, typeArguments);
+            candidates[bestIndex] = instantiated;
+            return instantiated;
         }
 
         function getLongestCandidateIndex(candidates: ReadonlyArray<Signature>, argsCount: number): number {

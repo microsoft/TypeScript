@@ -37,7 +37,7 @@ namespace assert {
         assert(!expr, msg);
     }
     export function equal<T>(a: T, b: T, msg = "Expected values to be equal."): void {
-        assert(a === b, msg);
+        assert(a === b, () => `${msg} Expected:\n${stringify(a)}\nActual:\n${stringify(b)}`);
     }
     export function notEqual<T>(a: T, b: T, msg = "Expected values to not be equal."): void {
         assert(a !== b, msg);
@@ -49,7 +49,7 @@ namespace assert {
         assert(x === undefined, msg);
     }
     export function deepEqual<T>(a: T, b: T, msg?: string): void {
-        assert(isDeepEqual(a, b), msg || (() => `Expected values to be deeply equal:\nExpected:\n${JSON.stringify(a, undefined, 4)}\nActual:\n${JSON.stringify(b, undefined, 4)}`));
+        assert(isDeepEqual(a, b), msg || (() => `Expected values to be deeply equal:\nExpected:\n${stringify(a)}\nActual:\n${stringify(b)}`));
     }
     export function lengthOf(a: ReadonlyArray<{}>, length: number, msg = "Expected length to match."): void {
         assert(a.length === length, msg);
@@ -75,6 +75,10 @@ namespace assert {
         const aKeys = Object.keys(a).sort();
         const bKeys = Object.keys(b).sort();
         return aKeys.length === bKeys.length && aKeys.every((key, i) => bKeys[i] === key && isDeepEqual((a as any)[key], (b as any)[key]));
+    }
+
+    function stringify(value: {} | null | undefined): string {
+        return JSON.stringify(value, undefined, 4);
     }
 }
 declare var __dirname: string; // Node-specific
