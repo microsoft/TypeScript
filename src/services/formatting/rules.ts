@@ -198,7 +198,7 @@ namespace ts.formatting {
                 RuleAction.Delete),
 
             // decorators
-            rule("SpaceBeforeAt", anyToken, SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
+            rule("SpaceBeforeAt", anyToken, SyntaxKind.AtToken, [isNonJsxSameLineTokenContext, isNotDecoratorWithFirstParameterContext], RuleAction.Space),
             rule("NoSpaceAfterAt", SyntaxKind.AtToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
             // Insert space after @ in decorator
             rule("SpaceAfterDecorator",
@@ -719,5 +719,14 @@ namespace ts.formatting {
 
     function isNonNullAssertionContext(context: FormattingContext): boolean {
         return context.contextNode.kind === SyntaxKind.NonNullExpression;
+    }
+
+    function isDecoratorWithFirstParameterContext(context: FormattingContext): boolean {
+        return context.currentTokenSpan.kind === SyntaxKind.OpenParenToken && context.nextTokenParent.kind === SyntaxKind.Decorator &&
+            context.nextTokenParent.parent && context.nextTokenParent.parent.kind === SyntaxKind.Parameter;
+    }
+
+    function isNotDecoratorWithFirstParameterContext(context: FormattingContext): boolean {
+        return !isDecoratorWithFirstParameterContext(context);
     }
 }
