@@ -3758,87 +3758,6 @@ declare namespace ts {
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
 }
 declare namespace ts {
-    interface EmitOutput {
-        outputFiles: OutputFile[];
-        emitSkipped: boolean;
-    }
-    interface OutputFile {
-        name: string;
-        writeByteOrderMark: boolean;
-        text: string;
-    }
-    type AffectedFileResult<T> = {
-        result: T;
-        affected: SourceFile | Program;
-    } | undefined;
-    interface BuilderHost {
-        /**
-         * return true if file names are treated with case sensitivity
-         */
-        useCaseSensitiveFileNames(): boolean;
-        /**
-         * If provided this would be used this hash instead of actual file shape text for detecting changes
-         */
-        createHash?: (data: string) => string;
-    }
-    /**
-     * Builder to manage the program state changes
-     */
-    interface BaseBuilder {
-        /**
-         * Updates the program in the builder to represent new state
-         */
-        updateProgram(newProgram: Program): void;
-        /**
-         * Get all the dependencies of the file
-         */
-        getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): string[];
-    }
-    /**
-     * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
-     */
-    interface SemanticDiagnosticsBuilder extends BaseBuilder {
-        /**
-         * Gets the semantic diagnostics from the program for the next affected file and caches it
-         * Returns undefined if the iteration is complete
-         */
-        getSemanticDiagnosticsOfNextAffectedFile(programOfThisState: Program, cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
-        /**
-         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
-         * The semantic diagnostics are cached and managed here
-         * Note that it is assumed that the when asked about semantic diagnostics through this API,
-         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
-         */
-        getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-    }
-    /**
-     * The builder that can handle the changes in program and iterate through changed file to emit the files
-     * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
-     */
-    interface EmitAndSemanticDiagnosticsBuilder extends BaseBuilder {
-        /**
-         * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
-         */
-        emitNextAffectedFile(programOfThisState: Program, writeFileCallback: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
-        /**
-         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
-         * The semantic diagnostics are cached and managed here
-         * Note that it is assumed that the when asked about semantic diagnostics through this API,
-         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
-         */
-        getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-    }
-    /**
-     * Create the builder to manage semantic diagnostics and cache them
-     */
-    function createSemanticDiagnosticsBuilder(host: BuilderHost): SemanticDiagnosticsBuilder;
-    /**
-     * Create the builder that can handle the changes in program and iterate through changed files
-     * to emit the those files and manage semantic diagnostics cache as well
-     */
-    function createEmitAndSemanticDiagnosticsBuilder(host: BuilderHost): EmitAndSemanticDiagnosticsBuilder;
-}
-declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
@@ -7231,6 +7150,17 @@ declare namespace ts.server {
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]): void;
         deleteTypingsForProject(projectName: string): void;
         onProjectClosed(project: Project): void;
+    }
+}
+declare namespace ts {
+    interface EmitOutput {
+        outputFiles: OutputFile[];
+        emitSkipped: boolean;
+    }
+    interface OutputFile {
+        name: string;
+        writeByteOrderMark: boolean;
+        text: string;
     }
 }
 declare namespace ts.server {

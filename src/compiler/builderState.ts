@@ -46,7 +46,76 @@ namespace ts {
             return map1 === undefined;
         }
         // Has same size and every key is present in both maps
-        return map1.size === map2.size && !forEachEntry(map1, (_value, key) => !map2.has(key));
+        return map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
+    }
+
+    /**
+     * For script files that contains only ambient external modules, although they are not actually external module files,
+     * they can only be consumed via importing elements from them. Regular script files cannot consume them. Therefore,
+     * there are no point to rebuild all script files if these special files have changed. However, if any statement
+     * in the file is not ambient external module, we treat it as a regular script file.
+     */
+    function containsOnlyAmbientModules(sourceFile: SourceFile) {
+        for (const statement of sourceFile.statements) {
+            if (!isModuleWithStringLiteralName(statement)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
+     */
+    function getReferencedFiles(program: Program, sourceFile: SourceFile, getCanonicalFileName: GetCanonicalFileName): Map<true> | undefined {
+        let referencedFiles: Map<true> | undefined;
+
+        // We need to use a set here since the code can contain the same import twice,
+        // but that will only be one dependency.
+        // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
+        if (sourceFile.imports && sourceFile.imports.length > 0) {
+            const checker: TypeChecker = program.getTypeChecker();
+            for (const importName of sourceFile.imports) {
+                const symbol = checker.getSymbolAtLocation(importName);
+                if (symbol && symbol.declarations && symbol.declarations[0]) {
+                    const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
+                    if (declarationSourceFile) {
+                        addReferencedFile(declarationSourceFile.path);
+                    }
+                }
+            }
+        }
+
+        const sourceFileDirectory = getDirectoryPath(sourceFile.path);
+        // Handle triple slash references
+        if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
+            for (const referencedFile of sourceFile.referencedFiles) {
+                const referencedPath = toPath(referencedFile.fileName, sourceFileDirectory, getCanonicalFileName);
+                addReferencedFile(referencedPath);
+            }
+        }
+
+        // Handle type reference directives
+        if (sourceFile.resolvedTypeReferenceDirectiveNames) {
+            sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
+                if (!resolvedTypeReferenceDirective) {
+                    return;
+                }
+
+                const fileName = resolvedTypeReferenceDirective.resolvedFileName;
+                const typeFilePath = toPath(fileName, sourceFileDirectory, getCanonicalFileName);
+                addReferencedFile(typeFilePath);
+            });
+        }
+
+        return referencedFiles;
+
+        function addReferencedFile(referencedPath: Path) {
+            if (!referencedFiles) {
+                referencedFiles = createMap<true>();
+            }
+            referencedFiles.set(referencedPath, true);
+        }
     }
 
     export interface BuilderStateHost {
@@ -76,6 +145,15 @@ namespace ts {
          * Gets the files affected by the file path
          */
         getFilesAffectedBy(programOfThisState: Program, path: Path, cancellationToken: CancellationToken, cacheToUpdateSignature?: Map<string>): ReadonlyArray<SourceFile>;
+        /**
+         * Updates the signatures from the cache
+         * This should be called whenever it is safe to commit the state of the builder
+         */
+        updateSignaturesFromCache(signatureCache: Map<string>): void;
+        /**
+         * Get all the dependencies of the sourceFile
+         */
+        getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): ReadonlyArray<string>;
     }
 
     export function createBuilderState(host: BuilderStateHost): BuilderState {
@@ -121,11 +199,17 @@ namespace ts {
          * Cache of all files excluding default library file for the current program
          */
         let allFilesExcludingDefaultLibraryFile: ReadonlyArray<SourceFile> | undefined;
+        /**
+         * Cache of all the file names
+         */
+        let allFileNames: ReadonlyArray<string> | undefined;
 
         return {
             updateProgram,
             getFilesAffectedBy,
-        };        
+            getAllDependencies,
+            updateSignaturesFromCache
+        };
 
         /**
          * Update current state to reflect new program
@@ -155,11 +239,12 @@ namespace ts {
             // Clear datas that cant be retained beyond previous state
             hasCalledUpdateShapeSignature.clear();
             allFilesExcludingDefaultLibraryFile = undefined;
+            allFileNames = undefined;
 
             // Create the reference map and update changed files
             for (const sourceFile of newProgram.getSourceFiles()) {
                 const version = sourceFile.version;
-                const newReferences = referencedMap && getReferencedFiles(newProgram, sourceFile);
+                const newReferences = referencedMap && getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
                 const oldInfo = fileInfos.get(sourceFile.path);
                 let oldReferences: ReferencedSet;
 
@@ -174,7 +259,7 @@ namespace ts {
                     // Referenced files changed
                     !hasSameKeys(newReferences, (oldReferences = oldReferencedMap && oldReferencedMap.get(sourceFile.path))) ||
                     // Referenced file was deleted in the new program
-                    newReferences && forEachEntry(newReferences, (_value, path) => !newProgram.getSourceFileByPath(path as Path) && fileInfos.has(path))) {
+                    newReferences && forEachKey(newReferences, path => !newProgram.getSourceFileByPath(path as Path) && fileInfos.has(path))) {
 
                     // Changed file: Update the version, set as changed file
                     oldInfo.version = version;
@@ -231,6 +316,58 @@ namespace ts {
         }
 
         /**
+         * Get all the dependencies of the sourceFile
+         */
+        function getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): ReadonlyArray<string> {
+            const compilerOptions = programOfThisState.getCompilerOptions();
+            // With --out or --outFile all outputs go into single file, all files depend on each other
+            if (compilerOptions.outFile || compilerOptions.out) {
+                return getAllFileNames(programOfThisState);
+            }
+
+            // If this is non module emit, or its a global file, it depends on all the source files
+            if (!isModuleEmit || (!isExternalModule(sourceFile) && !containsOnlyAmbientModules(sourceFile))) {
+                return getAllFileNames(programOfThisState);
+            }
+
+            // Get the references, traversing deep from the referenceMap
+            Debug.assert(!!referencedMap);
+            const seenMap = createMap<true>();
+            const queue = [sourceFile.path];
+            while (queue.length) {
+                const path = queue.pop();
+                if (!seenMap.has(path)) {
+                    seenMap.set(path, true);
+                    const references = referencedMap.get(path);
+                    if (references) {
+                        const iterator = references.keys();
+                        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
+                            queue.push(value as Path);
+                        }
+                    }
+                }
+            }
+
+            return flatMapIter(seenMap.keys(), path => {
+                const file = programOfThisState.getSourceFileByPath(path as Path);
+                if (file) {
+                    return file.fileName;
+                }
+                return path;
+            });
+        }
+
+        /**
+         * Gets the names of all files from the program
+         */
+        function getAllFileNames(programOfThisState: Program): ReadonlyArray<string> {
+            if (!allFileNames) {
+                allFileNames = programOfThisState.getSourceFiles().map(file => file.fileName);
+            }
+            return allFileNames;
+        }
+
+        /**
          * Updates the signatures from the cache
          * This should be called whenever it is safe to commit the state of the builder
          */
@@ -239,21 +376,6 @@ namespace ts {
                 fileInfos.get(path).signature = signature;
                 hasCalledUpdateShapeSignature.set(path, true);
             });
-        }
-
-        /**
-         * For script files that contains only ambient external modules, although they are not actually external module files,
-         * they can only be consumed via importing elements from them. Regular script files cannot consume them. Therefore,
-         * there are no point to rebuild all script files if these special files have changed. However, if any statement
-         * in the file is not ambient external module, we treat it as a regular script file.
-         */
-        function containsOnlyAmbientModules(sourceFile: SourceFile) {
-            for (const statement of sourceFile.statements) {
-                if (!isModuleWithStringLiteralName(statement)) {
-                    return false;
-                }
-            }
-            return true;
         }
 
         /**
@@ -288,60 +410,6 @@ namespace ts {
             cacheToUpdateSignature.set(sourceFile.path, latestSignature);
 
             return !prevSignature || latestSignature !== prevSignature;
-        }
-
-        /**
-         * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
-         */
-        function getReferencedFiles(program: Program, sourceFile: SourceFile): Map<true> | undefined {
-            let referencedFiles: Map<true> | undefined;
-
-            // We need to use a set here since the code can contain the same import twice,
-            // but that will only be one dependency.
-            // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            if (sourceFile.imports && sourceFile.imports.length > 0) {
-                const checker: TypeChecker = program.getTypeChecker();
-                for (const importName of sourceFile.imports) {
-                    const symbol = checker.getSymbolAtLocation(importName);
-                    if (symbol && symbol.declarations && symbol.declarations[0]) {
-                        const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
-                        if (declarationSourceFile) {
-                            addReferencedFile(declarationSourceFile.path);
-                        }
-                    }
-                }
-            }
-
-            const sourceFileDirectory = getDirectoryPath(sourceFile.path);
-            // Handle triple slash references
-            if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
-                for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = toPath(referencedFile.fileName, sourceFileDirectory, getCanonicalFileName);
-                    addReferencedFile(referencedPath);
-                }
-            }
-
-            // Handle type reference directives
-            if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
-                    if (!resolvedTypeReferenceDirective) {
-                        return;
-                    }
-
-                    const fileName = resolvedTypeReferenceDirective.resolvedFileName;
-                    const typeFilePath = toPath(fileName, sourceFileDirectory, getCanonicalFileName);
-                    addReferencedFile(typeFilePath);
-                });
-            }
-
-            return referencedFiles;
-
-            function addReferencedFile(referencedPath: Path) {
-                if (!referencedFiles) {
-                    referencedFiles = createMap<true>();
-                }
-                referencedFiles.set(referencedPath, true);
-            }
         }
 
         /**

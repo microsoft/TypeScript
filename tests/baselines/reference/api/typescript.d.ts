@@ -3705,6 +3705,35 @@ declare namespace ts {
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
 }
 declare namespace ts {
+    function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
+    function resolveTripleslashReference(moduleName: string, containingFile: string): string;
+    function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
+    function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+    interface FormatDiagnosticsHost {
+        getCurrentDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+    }
+    function formatDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
+    function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
+    function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
+    /**
+     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+     * that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     *
+     * @param rootNames - A set of root files.
+     * @param options - The compiler options which should be used.
+     * @param host - The host interacts with the underlying file system.
+     * @param oldProgram - Reuses an old program structure.
+     * @returns A 'Program' object.
+     */
+    function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;
+}
+declare namespace ts {
     interface EmitOutput {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
@@ -3714,6 +3743,8 @@ declare namespace ts {
         writeByteOrderMark: boolean;
         text: string;
     }
+}
+declare namespace ts {
     type AffectedFileResult<T> = {
         result: T;
         affected: SourceFile | Program;
@@ -3739,7 +3770,7 @@ declare namespace ts {
         /**
          * Get all the dependencies of the file
          */
-        getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): string[];
+        getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): ReadonlyArray<string>;
     }
     /**
      * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
@@ -3784,35 +3815,6 @@ declare namespace ts {
      * to emit the those files and manage semantic diagnostics cache as well
      */
     function createEmitAndSemanticDiagnosticsBuilder(host: BuilderHost): EmitAndSemanticDiagnosticsBuilder;
-}
-declare namespace ts {
-    function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
-    function resolveTripleslashReference(moduleName: string, containingFile: string): string;
-    function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
-    function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
-    interface FormatDiagnosticsHost {
-        getCurrentDirectory(): string;
-        getCanonicalFileName(fileName: string): string;
-        getNewLine(): string;
-    }
-    function formatDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
-    function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
-    function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
-    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
-    /**
-     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
-     * that represent a compilation unit.
-     *
-     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
-     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
-     *
-     * @param rootNames - A set of root files.
-     * @param options - The compiler options which should be used.
-     * @param host - The host interacts with the underlying file system.
-     * @param oldProgram - Reuses an old program structure.
-     * @returns A 'Program' object.
-     */
-    function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;
 }
 declare namespace ts {
     type DiagnosticReporter = (diagnostic: Diagnostic) => void;
