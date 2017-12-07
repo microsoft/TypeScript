@@ -13,7 +13,7 @@ namespace ts {
         /**
          * State corresponding to all the file references and shapes of the module etc
          */
-        const state = createBuilderState({
+        const state = createBuilderStateOld({
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
             createHash: host.createHash,
             onUpdateProgramInitialized,

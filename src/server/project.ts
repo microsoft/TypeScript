@@ -139,7 +139,7 @@ namespace ts.server {
         /*@internal*/
         resolutionCache: ResolutionCache;
 
-        private builder: BuilderState | undefined;
+        private builderState: BuilderState | undefined;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
@@ -460,18 +460,8 @@ namespace ts.server {
                 return [];
             }
             this.updateGraph();
-            if (!this.builder) {
-                this.builder = createBuilderState({
-                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames(),
-                    createHash: data => this.projectService.host.createHash(data),
-                    onUpdateProgramInitialized: noop,
-                    onSourceFileAdd: noop,
-                    onSourceFileChanged: noop,
-                    onSourceFileRemoved: noop
-                });
-            }
-            this.builder.updateProgram(this.program);
-            return mapDefined(this.builder.getFilesAffectedBy(this.program, scriptInfo.path, this.cancellationToken),
+            this.builderState = createBuilderState(this.program, this.projectService.toCanonicalFileName, this.builderState);
+            return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash(data)),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 
@@ -507,7 +497,7 @@ namespace ts.server {
             }
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
-            this.builder = undefined;
+            this.builderState = undefined;
             this.resolutionCache.closeTypeRootsWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
@@ -548,7 +538,7 @@ namespace ts.server {
             this.rootFilesMap = undefined;
             this.externalFiles = undefined;
             this.program = undefined;
-            this.builder = undefined;
+            this.builderState = undefined;
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
