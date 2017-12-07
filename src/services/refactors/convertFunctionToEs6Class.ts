@@ -263,7 +263,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         function getModifierKindFromSource(source: Node, kind: SyntaxKind) {
-            return filter(source.modifiers, modifier => modifier.kind === kind);
+            return source.modifiers && source.modifiers.filter(modifier => modifier.kind === kind);
         }
     }
 

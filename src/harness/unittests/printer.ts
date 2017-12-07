@@ -143,7 +143,7 @@ namespace ts {
                     /*decorators*/ undefined,
                     /*modifiers*/ [createToken(SyntaxKind.DeclareKeyword)],
                     createIdentifier("global"),
-                    createModuleBlock(emptyArray),
+                    createModuleBlock([]),
                     NodeFlags.GlobalAugmentation),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
@@ -154,7 +154,7 @@ namespace ts {
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     createIdentifier("global"),
-                    createModuleBlock(emptyArray),
+                    createModuleBlock([]),
                     NodeFlags.GlobalAugmentation),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));

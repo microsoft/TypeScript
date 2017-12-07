@@ -2,7 +2,8 @@
 
 /* @internal */
 namespace ts {
-    export const emptyArray: never[] = [] as never[];
+    // TODO: GH#16312 Should be a ReadonlyArray<never>
+    export const emptyArray: never[] = Object.freeze([]) as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
 
     export const externalHelpersModuleNameText = "tslib";
@@ -2842,7 +2843,7 @@ namespace ts {
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters, checkJSDoc?: boolean): ReadonlyArray<TypeParameterDeclaration> {
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters, checkJSDoc?: boolean): NodeArray<TypeParameterDeclaration> {
         if (node.typeParameters) {
             return node.typeParameters;
         }

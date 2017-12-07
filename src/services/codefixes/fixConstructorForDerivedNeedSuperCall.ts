@@ -11,7 +11,7 @@ namespace ts.codefix {
             }
 
             const changeTracker = textChanges.ChangeTracker.fromContext(context);
-            const superCall = createStatement(createCall(createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray));
+            const superCall = createStatement(createCall(createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ []));
             changeTracker.insertNodeAtConstructorStart(sourceFile, <ConstructorDeclaration>token.parent, superCall, context.newLineCharacter);
 
             return [{

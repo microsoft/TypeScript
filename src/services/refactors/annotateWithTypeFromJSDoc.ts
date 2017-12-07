@@ -157,7 +157,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         switch (node.kind) {
             case SyntaxKind.JSDocAllType:
             case SyntaxKind.JSDocUnknownType:
-                return createTypeReferenceNode("any", emptyArray);
+                return createTypeReferenceNode("any", []);
             case SyntaxKind.JSDocOptionalType:
                 return transformJSDocOptionalType(node as JSDocOptionalType);
             case SyntaxKind.JSDocNonNullableType:
@@ -180,11 +180,11 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
     }
 
     function transformJSDocOptionalType(node: JSDocOptionalType) {
-        return createUnionTypeNode([visitNode(node.type, transformJSDocType), createTypeReferenceNode("undefined", emptyArray)]);
+        return createUnionTypeNode([visitNode(node.type, transformJSDocType), createTypeReferenceNode("undefined", [])]);
     }
 
     function transformJSDocNullableType(node: JSDocNullableType) {
-        return createUnionTypeNode([visitNode(node.type, transformJSDocType), createTypeReferenceNode("null", emptyArray)]);
+        return createUnionTypeNode([visitNode(node.type, transformJSDocType), createTypeReferenceNode("null", [])]);
     }
 
     function transformJSDocVariadicType(node: JSDocVariadicType) {
@@ -193,7 +193,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
 
     function transformJSDocFunctionType(node: JSDocFunctionType) {
         const parameters = node.parameters && node.parameters.map(transformJSDocType);
-        return createFunctionTypeNode(emptyArray, parameters as ParameterDeclaration[], node.type);
+        return createFunctionTypeNode([], parameters as ParameterDeclaration[], node.type);
     }
 
     function transformJSDocParameter(node: ParameterDeclaration) {
@@ -227,7 +227,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             }
             name = createIdentifier(text);
             if ((text === "Array" || text === "Promise") && !node.typeArguments) {
-                args = createNodeArray([createTypeReferenceNode("any", emptyArray)]);
+                args = createNodeArray([createTypeReferenceNode("any", [])]);
             }
             else {
                 args = visitNodes(node.typeArguments, transformJSDocType);
