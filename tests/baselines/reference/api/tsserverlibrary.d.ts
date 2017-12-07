@@ -3925,6 +3925,7 @@ declare namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         readFile?(path: string, encoding?: string): string | undefined;
+        realpath?(path: string): string;
         fileExists?(path: string): boolean;
         getTypeRootsVersion?(): number;
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
@@ -4904,6 +4905,7 @@ declare namespace ts.server.protocol {
         Rename = "rename",
         Saveto = "saveto",
         SignatureHelp = "signatureHelp",
+        Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
         ReloadProjects = "reloadProjects",
@@ -5004,6 +5006,21 @@ declare namespace ts.server.protocol {
          */
         file: string;
         projectFileName?: string;
+    }
+    interface StatusRequest extends Request {
+        command: CommandTypes.Status;
+    }
+    interface StatusResponseBody {
+        /**
+         * The TypeScript version (`ts.version`).
+         */
+        version: string;
+    }
+    /**
+     * Response to StatusRequest
+     */
+    interface StatusResponse extends Response {
+        body: StatusResponseBody;
     }
     /**
      * Requests a JS Doc comment template for a given position
@@ -7296,6 +7313,7 @@ declare namespace ts.server {
         disableLanguageService(): void;
         getProjectName(): string;
         abstract getTypeAcquisition(): TypeAcquisition;
+        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
         getSourceFile(path: Path): SourceFile;
         close(): void;
@@ -7316,12 +7334,12 @@ declare namespace ts.server {
         removeFile(info: ScriptInfo, fileExists: boolean, detachFromProject: boolean): void;
         registerFileUpdate(fileName: string): void;
         markAsDirty(): void;
-        private extractUnresolvedImportsFromSourceFile(file, result);
         /**
          * Updates set of files that contribute to this project
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean;
+        protected removeExistingTypings(include: string[]): string[];
         private setTypings(typings);
         private updateGraphWorker();
         private detachScriptInfoFromProject(uncheckedFileName);

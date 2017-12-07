@@ -27,6 +27,7 @@ namespace FourSlash {
         // The contents of the file (with markers, etc stripped out)
         content: string;
         fileName: string;
+        symlinks?: string[];
         version: number;
         // File-specific options (name/value pairs)
         fileOptions: Harness.TestCaseParser.CompilerSettings;
@@ -106,15 +107,16 @@ namespace FourSlash {
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
     // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
-    const metadataOptionNames = {
-        baselineFile: "BaselineFile",
-        emitThisFile: "emitThisFile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
-        fileName: "Filename",
-        resolveReference: "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
-    };
+    const enum MetadataOptionNames {
+        baselineFile = "BaselineFile",
+        emitThisFile = "emitThisFile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
+        fileName = "Filename",
+        resolveReference = "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+        symlink = "Symlink",
+    }
 
     // List of allowed metadata names
-    const fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
+    const fileMetadataNames = [MetadataOptionNames.fileName, MetadataOptionNames.emitThisFile, MetadataOptionNames.resolveReference, MetadataOptionNames.symlink];
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCaseParser.CompilerSettings): ts.CompilerOptions {
         const settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
@@ -281,7 +283,7 @@ namespace FourSlash {
                     configFileName = file.fileName;
                 }
 
-                if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
+                if (!startResolveFileRef && file.fileOptions[MetadataOptionNames.resolveReference] === "true") {
                     startResolveFileRef = file;
                 }
                 else if (startResolveFileRef) {
@@ -352,6 +354,10 @@ namespace FourSlash {
                 });
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                     Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
+            }
+
+            for (const file of testData.files) {
+                ts.forEach(file.symlinks, link => this.languageServiceAdapterHost.addSymlink(link, file.fileName));
             }
 
             this.formatCodeSettings = {
@@ -653,7 +659,7 @@ namespace FourSlash {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
             else if (ts.isArray(arg0)) {
-                const pairs: ReadonlyArray<[string | string[], string | string[]]> = arg0;
+                const pairs = arg0 as ReadonlyArray<[string | string[], string | string[]]>;
                 for (const [start, end] of pairs) {
                     this.verifyGoToXPlain(start, end, getDefs);
                 }
@@ -1562,7 +1568,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineCurrentFileBreakpointLocations() {
-            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            let baselineFile = this.testData.globalOptions[MetadataOptionNames.baselineFile];
             if (!baselineFile) {
                 baselineFile = this.activeFile.fileName.replace(this.basePath + "/breakpointValidation", "bpSpan");
                 baselineFile = baselineFile.replace(ts.Extension.Ts, ".baseline");
@@ -1581,7 +1587,7 @@ Actual: ${stringify(fullActual)}`);
 
             const allFourSlashFiles = this.testData.files;
             for (const file of allFourSlashFiles) {
-                if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
+                if (file.fileOptions[MetadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
                     emitFiles.push(file);
                 }
@@ -1593,7 +1599,7 @@ Actual: ${stringify(fullActual)}`);
             }
 
             Harness.Baseline.runBaseline(
-                this.testData.globalOptions[metadataOptionNames.baselineFile],
+                this.testData.globalOptions[MetadataOptionNames.baselineFile],
                 () => {
                     let resultString = "";
                     // Loop through all the emittedFiles and emit them one by one
@@ -1633,7 +1639,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineQuickInfo() {
-            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            let baselineFile = this.testData.globalOptions[MetadataOptionNames.baselineFile];
             if (!baselineFile) {
                 baselineFile = ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
             }
@@ -2243,7 +2249,7 @@ Actual: ${stringify(fullActual)}`);
 
         public baselineCurrentFileNameOrDottedNameSpans() {
             Harness.Baseline.runBaseline(
-                this.testData.globalOptions[metadataOptionNames.baselineFile],
+                this.testData.globalOptions[MetadataOptionNames.baselineFile],
                 () => {
                     return this.baselineCurrentFileLocations(pos =>
                         this.getNameOrDottedNameSpan(pos));
@@ -3281,12 +3287,21 @@ ${code}
         // Stuff related to the subfile we're parsing
         let currentFileContent: string = undefined;
         let currentFileName = fileName;
+        let currentFileSymlinks: string[] | undefined;
         let currentFileOptions: { [s: string]: string } = {};
 
-        function resetLocalData() {
+        function nextFile() {
+            const file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
+            file.fileOptions = currentFileOptions;
+            file.symlinks = currentFileSymlinks;
+
+            // Store result file
+            files.push(file);
+
             currentFileContent = undefined;
             currentFileOptions = {};
             currentFileName = fileName;
+            currentFileSymlinks = undefined;
         }
 
         for (let line of lines) {
@@ -3315,8 +3330,7 @@ ${code}
                 const match = optionRegex.exec(line.substr(2));
                 if (match) {
                     const [key, value] = match.slice(1);
-                    const fileMetadataNamesIndex = fileMetadataNames.indexOf(key);
-                    if (fileMetadataNamesIndex === -1) {
+                    if (!ts.contains(fileMetadataNames, key)) {
                         // Check if the match is already existed in the global options
                         if (globalOptions[key] !== undefined) {
                             throw new Error(`Global option '${key}' already exists`);
@@ -3324,24 +3338,22 @@ ${code}
                         globalOptions[key] = value;
                     }
                     else {
-                        if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
-                            // Found an @FileName directive, if this is not the first then create a new subfile
-                            if (currentFileContent) {
-                                const file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
-                                file.fileOptions = currentFileOptions;
+                        switch (key) {
+                            case MetadataOptionNames.fileName:
+                                // Found an @FileName directive, if this is not the first then create a new subfile
+                                if (currentFileContent) {
+                                    nextFile();
+                                }
 
-                                // Store result file
-                                files.push(file);
-
-                                resetLocalData();
-                            }
-
-                            currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
-                            currentFileOptions[key] = value;
-                        }
-                        else {
-                            // Add other fileMetadata flag
-                            currentFileOptions[key] = value;
+                                currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
+                                currentFileOptions[key] = value;
+                                break;
+                            case MetadataOptionNames.symlink:
+                                currentFileSymlinks = ts.append(currentFileSymlinks, value);
+                                break;
+                            default:
+                                // Add other fileMetadata flag
+                                currentFileOptions[key] = value;
                         }
                     }
                 }
@@ -3353,13 +3365,7 @@ ${code}
             else {
                 // Empty line or code line, terminate current subfile if there is one
                 if (currentFileContent) {
-                    const file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
-                    file.fileOptions = currentFileOptions;
-
-                    // Store result file
-                    files.push(file);
-
-                    resetLocalData();
+                    nextFile();
                 }
             }
         }
@@ -3394,7 +3400,7 @@ ${code}
 
     function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): string {
         for (const option in optionObject) {
-            if (option !== metadataOptionNames.fileName) {
+            if (option !== MetadataOptionNames.fileName) {
                 return option;
             }
         }

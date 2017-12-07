@@ -191,6 +191,19 @@ namespace ts {
         return undefined;
     }
 
+    export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) {
+                return undefined;
+            }
+            const result = callback(value);
+            if (result !== undefined) {
+                return result;
+            }
+        }
+    }
+
     /**
      * Iterates through the parent chain of a node and performs the callback on each parent until the callback
      * returns a truthy value, then returns that value.
@@ -488,22 +501,32 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U | U[] | undefined): U[] {
-        const result: U[] = [];
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) break;
-            const res = mapfn(value);
-            if (res) {
-                if (isArray(res)) {
-                    result.push(...res);
-                }
-                else {
-                    result.push(res);
-                }
-            }
+    export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | Iterator<U> | undefined): Iterator<U> {
+        const first = iter.next();
+        if (first.done) {
+            return emptyIterator;
         }
-        return result;
+        let currentIter = getIterator(first.value);
+        return {
+            next() {
+                while (true) {
+                    const currentRes = currentIter.next();
+                    if (!currentRes.done) {
+                        return currentRes;
+                    }
+                    const iterRes = iter.next();
+                    if (iterRes.done) {
+                        return iterRes;
+                    }
+                    currentIter = getIterator(iterRes.value);
+                }
+            },
+        };
+
+        function getIterator(x: T): Iterator<U> {
+            const res = mapfn(x);
+            return res === undefined ? emptyIterator : isArray(res) ? arrayIterator(res) : res;
+        }
     }
 
     /**
@@ -551,17 +574,34 @@ namespace ts {
         return result;
     }
 
-    export function mapDefinedIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): U[] {
-        const result: U[] = [];
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) break;
-            const res = mapFn(value);
-            if (res !== undefined) {
-                result.push(res);
+    export function mapDefinedIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): Iterator<U> {
+        return {
+            next() {
+                while (true) {
+                    const res = iter.next();
+                    if (res.done) {
+                        return res;
+                    }
+                    const value = mapFn(res.value);
+                    if (value !== undefined) {
+                        return { value, done: false };
+                    }
+                }
             }
-        }
-        return result;
+        };
+    }
+
+    export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
+
+    export function singleIterator<T>(value: T): Iterator<T> {
+        let done = false;
+        return {
+            next() {
+                const wasDone = done;
+                done = true;
+                return wasDone ? { value: undefined as never, done: true } : { value, done: false };
+            }
+        };
     }
 
     /**
@@ -1373,7 +1413,7 @@ namespace ts {
     /**
      * Tests whether a value is an array.
      */
-    export function isArray(value: any): value is ReadonlyArray<any> {
+    export function isArray(value: any): value is ReadonlyArray<{}> {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 

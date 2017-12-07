@@ -389,6 +389,19 @@ namespace ts {
             checkResolvedModulesCache(program4, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts"), c: undefined }));
         });
 
+        it("set the resolvedImports after re-using an ambient external module declaration", () => {
+            const files = [
+                { name: "/a.ts", text: SourceText.New("", "", 'import * as a from "a";') },
+                { name: "/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
+            ];
+            const options: CompilerOptions = { target, typeRoots: ["/types"] };
+            const program1 = newProgram(files, ["/a.ts"], options);
+            const program2 = updateProgram(program1, ["/a.ts"], options, files => {
+                files[0].text = files[0].text.updateProgram('import * as aa from "a";');
+            });
+            assert.isDefined(program2.getSourceFile("/a.ts").resolvedModules.get("a"), "'a' is not an unresolved module after re-use");
+        });
+
         it("resolved type directives cache follows type directives", () => {
             const files = [
                 { name: "/a.ts", text: SourceText.New("/// <reference types='typedefs'/>", "", "var x = $") },

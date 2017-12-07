@@ -145,12 +145,11 @@ namespace ts.codefix {
         }
 
         const types = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
-            map(containingFunction.parameters, p => isIdentifier(p.name) && inferTypeForVariableFromUsage(p.name, sourceFile, program, cancellationToken));
+            containingFunction.parameters.map(p => isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, sourceFile, program, cancellationToken) : undefined);
         if (!types) return undefined;
 
-        const textChanges = mapDefinedIter(zipToIterator(containingFunction.parameters, types), ([parameter, type]) =>
-            type && !parameter.type && !parameter.initializer ? makeChange(containingFunction, parameter.end, type, program) : undefined);
-
+        const textChanges = arrayFrom(mapDefinedIterator(zipToIterator(containingFunction.parameters, types), ([parameter, type]) =>
+            type && !parameter.type && !parameter.initializer ? makeChange(containingFunction, parameter.end, type, program) : undefined));
         return textChanges.length ? { declaration: parameterDeclaration, textChanges } : undefined;
     }
 
@@ -202,7 +201,7 @@ namespace ts.codefix {
         return InferFromReference.inferTypeFromReferences(getReferences(token, sourceFile, program, cancellationToken), program.getTypeChecker(), cancellationToken);
     }
 
-    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): Type[] | undefined {
+    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionExpression:
