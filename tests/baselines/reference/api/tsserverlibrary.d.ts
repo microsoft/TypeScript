@@ -3983,8 +3983,7 @@ declare namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeFixAction[];
-        getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -3999,10 +3998,6 @@ declare namespace ts {
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
-    }
-    interface CombinedCodeFixScope {
-        type: "file";
-        fileName: string;
     }
     interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
@@ -4079,14 +4074,6 @@ declare namespace ts {
          * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
          */
         commands?: CodeActionCommand[];
-    }
-    interface CodeFixAction extends CodeAction {
-        /** If present, one may call 'getCombinedCodeFix' with this fixId. */
-        fixId?: {};
-    }
-    interface CombinedCodeActions {
-        changes: FileTextChanges[];
-        commands: CodeActionCommand[] | undefined;
     }
     type CodeActionCommand = InstallPackageAction;
     interface InstallPackageAction {
@@ -4929,7 +4916,6 @@ declare namespace ts.server.protocol {
         DocCommentTemplate = "docCommentTemplate",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
-        GetCombinedCodeFix = "getCombinedCodeFix",
         ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
@@ -5277,13 +5263,6 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
     }
-    interface GetCombinedCodeFixRequest extends Request {
-        command: CommandTypes.GetCombinedCodeFix;
-        arguments: GetCombinedCodeFixRequestArgs;
-    }
-    interface GetCombinedCodeFixResponse extends Response {
-        body: CombinedCodeActions;
-    }
     interface ApplyCodeActionCommandRequest extends Request {
         command: CommandTypes.ApplyCodeActionCommand;
         arguments: ApplyCodeActionCommandRequestArgs;
@@ -5316,14 +5295,6 @@ declare namespace ts.server.protocol {
          * Errorcodes we want to get the fixes for.
          */
         errorCodes?: number[];
-    }
-    interface GetCombinedCodeFixRequestArgs {
-        scope: GetCombinedCodeFixScope;
-        fixId: {};
-    }
-    interface GetCombinedCodeFixScope {
-        type: "file";
-        args: FileRequestArgs;
     }
     interface ApplyCodeActionCommandRequestArgs {
         /** May also be an array of commands. */
@@ -6067,7 +6038,7 @@ declare namespace ts.server.protocol {
     }
     interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        body?: CodeFixAction[];
+        body?: CodeAction[];
     }
     interface CodeAction {
         /** Description of the code action to display in the UI of the editor */
@@ -6076,14 +6047,6 @@ declare namespace ts.server.protocol {
         changes: FileCodeEdits[];
         /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
         commands?: {}[];
-    }
-    interface CombinedCodeActions {
-        changes: FileCodeEdits[];
-        commands?: {}[];
-    }
-    interface CodeFixAction extends CodeAction {
-        /** If present, one may call 'getCombinedCodeFix' with this fixId. */
-        fixId?: {};
     }
     /**
      * Format and format on key response message.

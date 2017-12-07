@@ -294,7 +294,10 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeFixAction[];
+        // TODO: GH#20538 return `CodeFixAction[]`
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        // TODO: GH#20538
+        /* @internal */
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
@@ -323,6 +326,8 @@ namespace ts {
         dispose(): void;
     }
 
+    // TODO: GH#20538
+    /* @internal */
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
     export interface GetCompletionsAtPositionOptions {
@@ -412,11 +417,15 @@ namespace ts {
         commands?: CodeActionCommand[];
     }
 
+    // TODO: GH#20538
+    /* @internal */
     export interface CodeFixAction extends CodeAction {
         /** If present, one may call 'getCombinedCodeFix' with this fixId. */
         fixId?: {};
     }
 
+    // TODO: GH#20538
+    /* @internal */
     export interface CombinedCodeActions {
         changes: FileTextChanges[];
         commands: CodeActionCommand[] | undefined;

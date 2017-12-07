@@ -559,7 +559,8 @@ namespace ts.server {
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
+            // TODO: GH#20538 shouldn't need cast
+            return (response.body as protocol.CodeFixAction[]).map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
         }
 
         getCombinedCodeFix = notImplemented;
