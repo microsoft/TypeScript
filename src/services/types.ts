@@ -295,8 +295,8 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
-        // TODO: GH#20538 return `CodeFixAction[]`
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        // TODO: GH#20538 return `ReadonlyArray<CodeFixAction>`
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeAction>;
         // TODO: GH#20538
         /* @internal */
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
@@ -428,8 +428,8 @@ namespace ts {
     // TODO: GH#20538
     /* @internal */
     export interface CombinedCodeActions {
-        changes: FileTextChanges[];
-        commands: CodeActionCommand[] | undefined;
+        changes: ReadonlyArray<FileTextChanges>;
+        commands: ReadonlyArray<CodeActionCommand> | undefined;
     }
 
     // Publicly, this type is just `{}`. Internally it is a union of all the actions we use.

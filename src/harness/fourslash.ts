@@ -2435,6 +2435,7 @@ Actual: ${stringify(fullActual)}`);
             ts.Debug.assert(ts.contains(fixIds, fixId), "No available code fix has that group id.", () => `Expected '${fixId}'. Available action ids: ${fixIds}`);
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings);
             assert.deepEqual(commands, options.commands);
+            assert(changes.every(c => c.fileName === this.activeFile.fileName), "TODO: support testing codefixes that touch multiple files");
             this.applyChanges(changes);
             this.verifyCurrentFileContent(newFileContent);
         }

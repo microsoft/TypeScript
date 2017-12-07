@@ -619,7 +619,7 @@ namespace ts.server.protocol {
         /**
          * Errorcodes we want to get the fixes for.
          */
-        errorCodes?: number[];
+        errorCodes?: ReadonlyArray<number>;
     }
 
     // TODO: GH#20538
@@ -1634,8 +1634,8 @@ namespace ts.server.protocol {
     // TODO: GH#20538
     /* @internal */
     export interface CombinedCodeActions {
-        changes: FileCodeEdits[];
-        commands?: {}[];
+        changes: ReadonlyArray<FileCodeEdits>;
+        commands?: ReadonlyArray<{}>;
     }
 
     // TODO: GH#20538

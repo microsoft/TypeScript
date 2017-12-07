@@ -1545,7 +1545,7 @@ namespace ts.server {
             }
         }
 
-        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
+        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeAction> | ReadonlyArray<CodeAction> {
             if (args.errorCodes.length === 0) {
                 return undefined;
             }
@@ -1618,7 +1618,7 @@ namespace ts.server {
             return { description, changes, commands };
         }
 
-        private mapTextChangesToCodeEdits(project: Project, textChanges: FileTextChanges[]): protocol.FileCodeEdits[] {
+        private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
             return textChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))));
         }
 
