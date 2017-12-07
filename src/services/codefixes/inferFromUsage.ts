@@ -196,8 +196,9 @@ namespace ts.codefix {
             sourceFile,
             token.getStart(sourceFile));
 
-        Debug.assert(!!references, "Found no references!");
-        Debug.assert(references.length === 1, "Found more references than expected");
+        if (!references || references.length !== 1) {
+            return [];
+        }
 
         return references[0].references.map(r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start, /*includeJsDocComment*/ false));
     }
@@ -286,6 +287,10 @@ namespace ts.codefix {
         }
 
         export function inferTypeForParametersFromReferences(references: Identifier[], declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
+            if (references.length === 0) {
+                return undefined;
+            }
+
             if (declaration.parameters) {
                 const usageContext: UsageContext = {};
                 for (const reference of references) {
