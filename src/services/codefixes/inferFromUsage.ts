@@ -71,6 +71,10 @@ namespace ts.codefix {
         }
 
         const containingFunction = getContainingFunction(token);
+        if (containingFunction === undefined) {
+            // Possible in certain syntax error cases
+            return undefined;
+        }
         switch (errorCode) {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
