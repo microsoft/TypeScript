@@ -1641,7 +1641,10 @@ namespace ts.server.protocol {
     // TODO: GH#20538
     /* @internal */
     export interface CodeFixAction extends CodeAction {
-        /** If present, one may call 'getCombinedCodeFix' with this fixId. */
+        /**
+         * If present, one may call 'getCombinedCodeFix' with this fixId.
+         * This may be omitted to indicate that the code fix can't be applied in a group.
+         */
         fixId?: {};
     }
 
