@@ -3,7 +3,7 @@
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="..\compiler\resolutionCache.ts"/>
 /// <reference path="typingsCache.ts"/>
-/// <reference path="..\compiler\builder.ts"/>
+/// <reference path="..\compiler\builderState.ts"/>
 
 namespace ts.server {
 
@@ -139,7 +139,7 @@ namespace ts.server {
         /*@internal*/
         resolutionCache: ResolutionCache;
 
-        private builder: InternalBuilder | undefined;
+        private builder: BuilderState | undefined;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
@@ -461,9 +461,13 @@ namespace ts.server {
             }
             this.updateGraph();
             if (!this.builder) {
-                this.builder = createInternalBuilder({
-                    useCaseSensitiveFileNames: () => this.useCaseSensitiveFileNames(),
-                    createHash: data => this.projectService.host.createHash(data)
+                this.builder = createBuilderState({
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames(),
+                    createHash: data => this.projectService.host.createHash(data),
+                    onUpdateProgramInitialized: noop,
+                    onSourceFileAdd: noop,
+                    onSourceFileChanged: noop,
+                    onSourceFileRemoved: noop
                 });
             }
             this.builder.updateProgram(this.program);
