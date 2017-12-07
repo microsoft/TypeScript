@@ -322,7 +322,7 @@ namespace ts {
     /**
      * Host needed to emit files and report errors using builder
      */
-    export interface BuilderEmitHost extends BuilderOptions {
+    export interface BuilderEmitHost extends BuilderHost {
         writeFile: WriteFileCallback;
         reportDiagnostic: DiagnosticReporter;
         writeFileName?: (s: string) => void;

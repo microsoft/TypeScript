@@ -28,14 +28,14 @@ namespace ts {
     /**
      * Create the internal builder to get files affected by sourceFile
      */
-    export function createInternalBuilder(options: BuilderOptions): InternalBuilder {
-        return createBuilder(options, BuilderType.InternalBuilder);
+    export function createInternalBuilder(host: BuilderHost): InternalBuilder {
+        return createBuilder(host, BuilderKind.BuilderKindInternal);
     }
 
-    export enum BuilderType {
-        InternalBuilder,
-        SemanticDiagnosticsBuilder,
-        EmitAndSemanticDiagnosticsBuilder
+    export enum BuilderKind {
+        BuilderKindInternal,
+        BuilderKindSemanticDiagnostics,
+        BuilderKindEmitAndSemanticDiagnostics
     }
 
     /**
@@ -62,18 +62,18 @@ namespace ts {
         return map1.size === map2.size && !forEachEntry(map1, (_value, key) => !map2.has(key));
     }
 
-    export function createBuilder(options: BuilderOptions, builderType: BuilderType.InternalBuilder): InternalBuilder;
-    export function createBuilder(options: BuilderOptions, builderType: BuilderType.SemanticDiagnosticsBuilder): SemanticDiagnosticsBuilder;
-    export function createBuilder(options: BuilderOptions, builderType: BuilderType.EmitAndSemanticDiagnosticsBuilder): EmitAndSemanticDiagnosticsBuilder;
-    export function createBuilder(options: BuilderOptions, builderType: BuilderType) {
+    export function createBuilder(host: BuilderHost, builderKind: BuilderKind.BuilderKindInternal): InternalBuilder;
+    export function createBuilder(host: BuilderHost, builderKind: BuilderKind.BuilderKindSemanticDiagnostics): SemanticDiagnosticsBuilder;
+    export function createBuilder(host: BuilderHost, builderKind: BuilderKind.BuilderKindEmitAndSemanticDiagnostics): EmitAndSemanticDiagnosticsBuilder;
+    export function createBuilder(host: BuilderHost, builderKind: BuilderKind) {
         /**
          * Create the canonical file name for identity
          */
-        const getCanonicalFileName = createGetCanonicalFileName(options.useCaseSensitiveFileNames());
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         /**
          * Computing hash to for signature verification
          */
-        const computeHash = options.createHash || identity;
+        const computeHash = host.createHash || identity;
 
         /**
          * Information of the file eg. its version, signature etc
@@ -141,12 +141,12 @@ namespace ts {
          */
         const seenAffectedFiles = createMap<true>();
 
-        switch (builderType) {
-            case BuilderType.InternalBuilder:
+        switch (builderKind) {
+            case BuilderKind.BuilderKindInternal:
                 return getInternalBuilder();
-            case BuilderType.SemanticDiagnosticsBuilder:
+            case BuilderKind.BuilderKindSemanticDiagnostics:
                 return getSemanticDiagnosticsBuilder();
-            case BuilderType.EmitAndSemanticDiagnosticsBuilder:
+            case BuilderKind.BuilderKindEmitAndSemanticDiagnostics:
                 return getEmitAndSemanticDiagnosticsBuilder();
             default:
                 notImplemented();
@@ -746,7 +746,7 @@ namespace ts {
 
     export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
 
-    export interface BuilderOptions {
+    export interface BuilderHost {
         /**
          * return true if file names are treated with case sensitivity
          */
@@ -813,15 +813,15 @@ namespace ts {
     /**
      * Create the builder to manage semantic diagnostics and cache them
      */
-    export function createSemanticDiagnosticsBuilder(options: BuilderOptions): SemanticDiagnosticsBuilder {
-        return createBuilder(options, BuilderType.SemanticDiagnosticsBuilder);
+    export function createSemanticDiagnosticsBuilder(host: BuilderHost): SemanticDiagnosticsBuilder {
+        return createBuilder(host, BuilderKind.BuilderKindSemanticDiagnostics);
     }
 
     /**
      * Create the builder that can handle the changes in program and iterate through changed files
      * to emit the those files and manage semantic diagnostics cache as well
      */
-    export function createEmitAndSemanticDiagnosticsBuilder(options: BuilderOptions): EmitAndSemanticDiagnosticsBuilder {
-        return createBuilder(options, BuilderType.EmitAndSemanticDiagnosticsBuilder);
+    export function createEmitAndSemanticDiagnosticsBuilder(host: BuilderHost): EmitAndSemanticDiagnosticsBuilder {
+        return createBuilder(host, BuilderKind.BuilderKindEmitAndSemanticDiagnostics);
     }
 }

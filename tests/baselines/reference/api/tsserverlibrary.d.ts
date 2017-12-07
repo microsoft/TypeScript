@@ -3771,7 +3771,7 @@ declare namespace ts {
         result: T;
         affected: SourceFile | Program;
     } | undefined;
-    interface BuilderOptions {
+    interface BuilderHost {
         /**
          * return true if file names are treated with case sensitivity
          */
@@ -3831,12 +3831,12 @@ declare namespace ts {
     /**
      * Create the builder to manage semantic diagnostics and cache them
      */
-    function createSemanticDiagnosticsBuilder(options: BuilderOptions): SemanticDiagnosticsBuilder;
+    function createSemanticDiagnosticsBuilder(host: BuilderHost): SemanticDiagnosticsBuilder;
     /**
      * Create the builder that can handle the changes in program and iterate through changed files
      * to emit the those files and manage semantic diagnostics cache as well
      */
-    function createEmitAndSemanticDiagnosticsBuilder(options: BuilderOptions): EmitAndSemanticDiagnosticsBuilder;
+    function createEmitAndSemanticDiagnosticsBuilder(host: BuilderHost): EmitAndSemanticDiagnosticsBuilder;
 }
 declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
