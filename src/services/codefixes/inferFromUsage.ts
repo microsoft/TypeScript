@@ -75,17 +75,17 @@ namespace ts.codefix {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
-                return getCodeActionForVariableDeclaration(<PropertyDeclaration | PropertySignature | VariableDeclaration>token.parent, sourceFile, program, cancellationToken);
+                return getCodeActionForVariableDeclaration(<PropertyDeclaration | PropertySignature | VariableDeclaration>token.parent, program, cancellationToken);
 
             case Diagnostics.Variable_0_implicitly_has_an_1_type.code: {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
-                return symbol && symbol.valueDeclaration && getCodeActionForVariableDeclaration(<VariableDeclaration>symbol.valueDeclaration, sourceFile, program, cancellationToken);
+                return symbol && symbol.valueDeclaration && getCodeActionForVariableDeclaration(<VariableDeclaration>symbol.valueDeclaration, program, cancellationToken);
             }
 
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
                 if (isSetAccessor(containingFunction)) {
-                    return getCodeActionForSetAccessor(containingFunction, sourceFile, program, cancellationToken);
+                    return getCodeActionForSetAccessor(containingFunction, program, cancellationToken);
                 }
                 // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
@@ -100,7 +100,7 @@ namespace ts.codefix {
 
             // Set Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
-                return isSetAccessor(containingFunction) ? getCodeActionForSetAccessor(containingFunction, sourceFile, program, cancellationToken) : undefined;
+                return isSetAccessor(containingFunction) ? getCodeActionForSetAccessor(containingFunction, program, cancellationToken) : undefined;
 
             default:
                 throw Debug.fail(String(errorCode));
@@ -121,9 +121,9 @@ namespace ts.codefix {
         }
     }
 
-    function getCodeActionForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration | PropertySignature, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): Fix | undefined {
+    function getCodeActionForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration | PropertySignature, program: Program, cancellationToken: CancellationToken): Fix | undefined {
         if (!isIdentifier(declaration.name)) return undefined;
-        const type = inferTypeForVariableFromUsage(declaration.name, sourceFile, program, cancellationToken);
+        const type = inferTypeForVariableFromUsage(declaration.name, program, cancellationToken);
         return makeFix(declaration, declaration.name.getEnd(), type, program);
     }
 
@@ -145,7 +145,7 @@ namespace ts.codefix {
         }
 
         const types = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
-            containingFunction.parameters.map(p => isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, sourceFile, program, cancellationToken) : undefined);
+            containingFunction.parameters.map(p => isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined);
         if (!types) return undefined;
 
         const textChanges = arrayFrom(mapDefinedIterator(zipToIterator(containingFunction.parameters, types), ([parameter, type]) =>
@@ -153,14 +153,14 @@ namespace ts.codefix {
         return textChanges.length ? { declaration: parameterDeclaration, textChanges } : undefined;
     }
 
-    function getCodeActionForSetAccessor(setAccessorDeclaration: SetAccessorDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): Fix | undefined {
+    function getCodeActionForSetAccessor(setAccessorDeclaration: SetAccessorDeclaration, program: Program, cancellationToken: CancellationToken): Fix | undefined {
         const setAccessorParameter = setAccessorDeclaration.parameters[0];
         if (!setAccessorParameter || !isIdentifier(setAccessorDeclaration.name) || !isIdentifier(setAccessorParameter.name)) {
             return undefined;
         }
 
-        const type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, sourceFile, program, cancellationToken) ||
-            inferTypeForVariableFromUsage(setAccessorParameter.name, sourceFile, program, cancellationToken);
+        const type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken) ||
+            inferTypeForVariableFromUsage(setAccessorParameter.name, program, cancellationToken);
         return makeFix(setAccessorParameter, setAccessorParameter.name.getEnd(), type, program);
     }
 
@@ -169,7 +169,7 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const type = inferTypeForVariableFromUsage(getAccessorDeclaration.name, sourceFile, program, cancellationToken);
+        const type = inferTypeForVariableFromUsage(getAccessorDeclaration.name, program, cancellationToken);
         const closeParenToken = getFirstChildOfKind(getAccessorDeclaration, sourceFile, SyntaxKind.CloseParenToken);
         return makeFix(getAccessorDeclaration, closeParenToken.getEnd(), type, program);
     }
@@ -183,22 +183,13 @@ namespace ts.codefix {
         return typeString === undefined ? undefined : { span: createTextSpan(start, 0), newText: `: ${typeString}` };
     }
 
-    function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): Identifier[] {
-        const references = FindAllReferences.findReferencedSymbols(
-            program,
-            cancellationToken,
-            program.getSourceFiles(),
-            sourceFile,
-            token.getStart(sourceFile));
-
-        Debug.assert(!!references, "Found no references!");
-        Debug.assert(references.length === 1, "Found more references than expected");
-
-        return references[0].references.map(r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start, /*includeJsDocComment*/ false));
+    function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> {
+        return mapDefined(FindAllReferences.getReferenceEntriesForNode(token, program, program.getSourceFiles(), cancellationToken), entry =>
+            entry.type === "node" ? tryCast(entry.node, isIdentifier) : undefined);
     }
 
-    function inferTypeForVariableFromUsage(token: Identifier, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): Type | undefined {
-        return InferFromReference.inferTypeFromReferences(getReferences(token, sourceFile, program, cancellationToken), program.getTypeChecker(), cancellationToken);
+    function inferTypeForVariableFromUsage(token: Identifier, program: Program, cancellationToken: CancellationToken): Type | undefined {
+        return InferFromReference.inferTypeFromReferences(getReferences(token, program, cancellationToken), program.getTypeChecker(), cancellationToken);
     }
 
     function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
@@ -212,7 +203,7 @@ namespace ts.codefix {
                     <Token<SyntaxKind.ConstructorKeyword>>getFirstChildOfKind(containingFunction, sourceFile, SyntaxKind.ConstructorKeyword) :
                     containingFunction.name;
                 if (searchToken) {
-                    return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, sourceFile, program, cancellationToken), containingFunction, program.getTypeChecker(), cancellationToken);
+                    return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program.getTypeChecker(), cancellationToken);
                 }
         }
     }
@@ -271,7 +262,7 @@ namespace ts.codefix {
             stringIndexContext?: UsageContext;
         }
 
-        export function inferTypeFromReferences(references: Identifier[], checker: TypeChecker, cancellationToken: CancellationToken): Type | undefined {
+        export function inferTypeFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type | undefined {
             const usageContext: UsageContext = {};
             for (const reference of references) {
                 cancellationToken.throwIfCancellationRequested();
@@ -280,39 +271,41 @@ namespace ts.codefix {
             return getTypeFromUsageContext(usageContext, checker);
         }
 
-        export function inferTypeForParametersFromReferences(references: Identifier[], declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
-            if (declaration.parameters) {
-                const usageContext: UsageContext = {};
-                for (const reference of references) {
-                    cancellationToken.throwIfCancellationRequested();
-                    inferTypeFromContext(reference, checker, usageContext);
-                }
-                const isConstructor = declaration.kind === SyntaxKind.Constructor;
-                const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-                if (callContexts) {
-                    const paramTypes: Type[] = [];
-                    for (let parameterIndex = 0; parameterIndex < declaration.parameters.length; parameterIndex++) {
-                        let types: Type[] = [];
-                        const isRestParameter = ts.isRestParameter(declaration.parameters[parameterIndex]);
-                        for (const callContext of callContexts) {
-                            if (callContext.argumentTypes.length > parameterIndex) {
-                                if (isRestParameter) {
-                                    types = concatenate(types, map(callContext.argumentTypes.slice(parameterIndex), a => checker.getBaseTypeOfLiteralType(a)));
-                                }
-                                else {
-                                    types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
-                                }
-                            }
-                        }
-                        if (types.length) {
-                            const type = checker.getWidenedType(checker.getUnionType(types, /*subtypeReduction*/ true));
-                            paramTypes[parameterIndex] = isRestParameter ? checker.createArrayType(type) : type;
+        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
+            if (!declaration.parameters) {
+                return undefined;
+            }
+
+            const usageContext: UsageContext = {};
+            for (const reference of references) {
+                cancellationToken.throwIfCancellationRequested();
+                inferTypeFromContext(reference, checker, usageContext);
+            }
+            const isConstructor = declaration.kind === SyntaxKind.Constructor;
+            const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
+            return callContexts && declaration.parameters.map((parameter, parameterIndex) => {
+                const types: Type[] = [];
+                const isRestParameter = ts.isRestParameter(parameter);
+                for (const callContext of callContexts) {
+                    if (callContext.argumentTypes.length <= parameterIndex) {
+                        continue;
+                    }
+
+                    if (isRestParameter) {
+                        for (let i = parameterIndex; i < callContext.argumentTypes.length; i++) {
+                            types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                         }
                     }
-                    return paramTypes;
+                    else {
+                        types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
+                    }
                 }
-            }
-            return undefined;
+                if (!types.length) {
+                    return undefined;
+                }
+                const type = checker.getWidenedType(checker.getUnionType(types, /*subtypeReduction*/ true));
+                return isRestParameter ? checker.createArrayType(type) : type;
+            });
         }
 
         function inferTypeFromContext(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
