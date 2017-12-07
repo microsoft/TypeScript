@@ -12723,9 +12723,12 @@ namespace ts {
             }
 
             function isTypePresencePossible(type: Type, propName: __String, assumeTrue: boolean) {
+                if (getIndexInfoOfType(type, IndexKind.String)) {
+                    return true;
+                }
                 const prop = getPropertyOfType(type, propName);
                 if (prop) {
-                    return (prop.flags & SymbolFlags.Optional) ? true : assumeTrue;
+                    return prop.flags & SymbolFlags.Optional ? true : assumeTrue;
                 }
                 return !assumeTrue;
             }
@@ -12733,7 +12736,7 @@ namespace ts {
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
                 if ((type.flags & (TypeFlags.Union | TypeFlags.Object)) || (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType)) {
                     const propName = escapeLeadingUnderscores(literal.text);
-                    return filterType(type, t => isTypePresencePossible(t, propName, /* assumeTrue */ assumeTrue));
+                    return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }
                 return type;
             }
