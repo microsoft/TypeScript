@@ -8925,7 +8925,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types may not be used on a variable declaration with a binding name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["unique symbol" nie dopuszcza się typy w deklaracji zmiennej o nazwie wiązania.]]></Val>
+            <Val><![CDATA[Typów „unique symbol” nie można używać w deklaracji zmiennej z nazwą powiązania.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
