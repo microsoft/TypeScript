@@ -1,10 +1,19 @@
 /// <reference path='fourslash.ts' />
 
-////enum Foo {
-////    X, Y, '☆'
-////}
-////Foo./*a*/;
-////Foo["/*b*/"];
+// TODO: we should probably support this like we do in completionListInvalidMemberNames.ts
 
-verify.completionsAt("a", ["X", "Y"]);
-verify.completionsAt("b", ["X", "Y", "☆"]);
+////declare var Symbol: SymbolConstructor;
+////interface SymbolConstructor {
+////    readonly hasInstance: symbol;
+////}
+////interface Function {
+////    [Symbol.hasInstance](value: any): boolean;
+////}
+////interface SomeInterface {
+////    (value: number): any;
+////}
+////var _ : SomeInterface;
+////_./**/
+
+goTo.marker();
+verify.not.completionListContains("[Symbol.hasInstance]");

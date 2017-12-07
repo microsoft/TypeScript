@@ -3890,5 +3890,9 @@
     "Install '{0}'": {
         "category": "Message",
         "code": 95014
+    },
+    "Use bracket notation instead of dot notation": {
+        "category": "Message",
+        "code": 95015
     }
 }
