@@ -70,11 +70,6 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const containingFunction = getContainingFunction(token);
-        if (containingFunction === undefined) {
-            // Possible in certain syntax error cases
-            return undefined;
-        }
         switch (errorCode) {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
@@ -85,6 +80,13 @@ namespace ts.codefix {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
                 return symbol && symbol.valueDeclaration && getCodeActionForVariableDeclaration(<VariableDeclaration>symbol.valueDeclaration, sourceFile, program, cancellationToken);
             }
+        }
+
+        const containingFunction = getContainingFunction(token);
+        if (containingFunction === undefined) {
+            return undefined;
+        }
+        switch (errorCode) {
 
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
@@ -156,7 +158,7 @@ namespace ts.codefix {
         if (containingFunction.parameters.length !== types.length) {
             return undefined;
         }
-        
+
         const textChanges = arrayFrom(mapDefinedIterator(zipToIterator(containingFunction.parameters, types), ([parameter, type]) =>
             type && !parameter.type && !parameter.initializer ? makeChange(containingFunction, parameter.end, type, program) : undefined));
         return textChanges.length ? { declaration: parameterDeclaration, textChanges } : undefined;
