@@ -174,11 +174,25 @@ namespace ts {
 
     export function zipWith<T, U, V>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => V): V[] {
         const result: V[] = [];
-        Debug.assert(arrayA.length === arrayB.length);
+        Debug.assertEqual(arrayA.length, arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
             result.push(callback(arrayA[i], arrayB[i], i));
         }
         return result;
+    }
+
+    export function zipToIterator<T, U>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>): Iterator<[T, U]> {
+        Debug.assertEqual(arrayA.length, arrayB.length);
+        let i = 0;
+        return {
+            next() {
+                if (i === arrayA.length) {
+                    return { value: undefined as never, done: true };
+                }
+                i++;
+                return { value: [arrayA[i - 1], arrayB[i - 1]], done: false };
+            }
+        };
     }
 
     export function zipToMap<T>(keys: ReadonlyArray<string>, values: ReadonlyArray<T>): Map<T> {
@@ -1311,7 +1325,6 @@ namespace ts {
             this.set(key, values = [value]);
         }
         return values;
-
     }
     function multiMapRemove<T>(this: MultiMap<T>, key: string, value: T) {
         const values = this.get(key);
