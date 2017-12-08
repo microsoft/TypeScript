@@ -223,6 +223,14 @@ namespace ts {
     export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BaseBuilderProgram | undefined, kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
     export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BaseBuilderProgram | undefined, kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
     export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BaseBuilderProgram | undefined, kind: BuilderProgramKind) {
+        // Return same program if underlying program doesnt change
+        let oldState = oldProgram && oldProgram.getState();
+        if (oldState && newProgram === oldState.program) {
+            newProgram = undefined;
+            oldState = undefined;
+            return oldProgram;
+        }
+
         /**
          * Create the canonical file name for identity
          */
@@ -231,11 +239,12 @@ namespace ts {
          * Computing hash to for signature verification
          */
         const computeHash = host.createHash || identity;
-        const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldProgram && oldProgram.getState());
+        const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined;
         oldProgram = undefined;
+        oldState = undefined;
 
         const result: BaseBuilderProgram = {
             getState: () => state,

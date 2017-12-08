@@ -376,24 +376,24 @@ namespace ts {
         configFileWildCardDirectories?: MapLike<WatchDirectoryFlags>;
     }
 
-    export interface Watch {
+    export interface Watch<T> {
         /** Synchronize with host and get updated program */
-        getProgram(): Program;
+        getProgram(): T;
         /** Gets the existing program without synchronizing with changes on host */
         /*@internal*/
-        getExistingProgram(): Program;
+        getExistingProgram(): T;
     }
 
     /**
      * Creates the watch what generates program using the config file
      */
-    export interface WatchOfConfigFile extends Watch {
+    export interface WatchOfConfigFile<T> extends Watch<T> {
     }
 
     /**
      * Creates the watch that generates program using the root files and compiler options
      */
-    export interface WatchOfFilesAndCompilerOptions extends Watch {
+    export interface WatchOfFilesAndCompilerOptions<T> extends Watch<T> {
         /** Updates the root files in the program, only if this is not config file compilation */
         updateRootFileNames(fileNames: string[]): void;
     }
@@ -401,26 +401,26 @@ namespace ts {
     /**
      * Create the watched program for config file
      */
-    export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfConfigFile {
-        return createWatch(createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend, system, reportDiagnostic));
+    export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfConfigFile<Program> {
+        return createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend, system, reportDiagnostic));
     }
 
     /**
      * Create the watched program for root files and compiler options
      */
-    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfFilesAndCompilerOptions {
-        return createWatch(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system, reportDiagnostic));
+    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfFilesAndCompilerOptions<Program> {
+        return createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system, reportDiagnostic));
     }
 
     /**
      * Creates the watch from the host for root files and compiler options
      */
-    export function createWatch(host: WatchCompilerHostOfFilesAndCompilerOptions): WatchOfFilesAndCompilerOptions;
+    export function createWatchProgram(host: WatchCompilerHostOfFilesAndCompilerOptions): WatchOfFilesAndCompilerOptions<Program>;
     /**
      * Creates the watch from the host for config file
      */
-    export function createWatch(host: WatchCompilerHostOfConfigFile): WatchOfConfigFile;
-    export function createWatch(host: WatchCompilerHostOfFilesAndCompilerOptions & WatchCompilerHostOfConfigFile): WatchOfFilesAndCompilerOptions | WatchOfConfigFile {
+    export function createWatchProgram(host: WatchCompilerHostOfConfigFile): WatchOfConfigFile<Program>;
+    export function createWatchProgram(host: WatchCompilerHostOfFilesAndCompilerOptions & WatchCompilerHostOfConfigFile): WatchOfFilesAndCompilerOptions<Program> | WatchOfConfigFile<Program> {
         interface HostFileInfo {
             version: number;
             sourceFile: SourceFile;
@@ -889,5 +889,23 @@ namespace ts {
                 flags
             );
         }
+    }
+
+    /**
+     * Creates the watch from the host for root files and compiler options
+     */
+    export function createBuilderWatchProgram<T extends BaseBuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfFilesAndCompilerOptions<T>;
+    /**
+     * Creates the watch from the host for config file
+     */
+    export function createBuilderWatchProgram<T extends BaseBuilderProgram>(host: WatchCompilerHostOfConfigFile & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfConfigFile<T>;
+    export function createBuilderWatchProgram<T extends BaseBuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions & WatchCompilerHostOfConfigFile & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
+        const watch = createWatchProgram(host);
+        let builderProgram: T | undefined;
+        return {
+            getProgram: () => builderProgram = createBuilderProgram(watch.getProgram(), host, builderProgram),
+            getExistingProgram: () => builderProgram = createBuilderProgram(watch.getExistingProgram(), host, builderProgram),
+            updateRootFileNames: watch.updateRootFileNames && (fileNames => watch.updateRootFileNames(fileNames))
+        };
     }
 }

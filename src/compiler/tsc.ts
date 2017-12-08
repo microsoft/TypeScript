@@ -165,13 +165,13 @@ namespace ts {
         watchCompilerHost.options = configParseResult.options;
         watchCompilerHost.configFileSpecs = configParseResult.configFileSpecs;
         watchCompilerHost.configFileWildCardDirectories = configParseResult.wildcardDirectories;
-        createWatch(watchCompilerHost);
+        createWatchProgram(watchCompilerHost);
     }
 
     function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions) {
         const watchCompilerHost = ts.createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, sys, reportDiagnostic);
         updateWatchCompilationHost(watchCompilerHost);
-        createWatch(watchCompilerHost);
+        createWatchProgram(watchCompilerHost);
     }
 
     function enableStatistics(compilerOptions: CompilerOptions) {
