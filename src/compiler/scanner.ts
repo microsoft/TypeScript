@@ -1800,7 +1800,7 @@ namespace ts {
                         break;
                     }
                 }
-                tokenValue += text.substr(firstCharPosition, pos - firstCharPosition);
+                tokenValue += text.substring(firstCharPosition, pos);
             }
             return token;
         }
@@ -1873,7 +1873,7 @@ namespace ts {
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.dot:
                     pos++;
-                    if (text.substr(tokenPos, pos + 2) === "...") {
+                    if (text.substring(tokenPos, pos + 2) === "...") {
                         pos += 2;
                         return token = SyntaxKind.DotDotDotToken;
                     }
