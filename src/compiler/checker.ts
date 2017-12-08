@@ -4338,7 +4338,7 @@ namespace ts {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
             return declaration.initializer ?
-                getUnionType([type, checkExpressionCached(declaration.initializer)], /*subtypeReduction*/ true) :
+                getUnionType([type, checkExpressionCached(declaration.initializer)], UnionReductionLevel.Subtype) :
                 type;
         }
 
@@ -4506,7 +4506,7 @@ namespace ts {
                 }
             }
 
-            const type = jsDocType || getUnionType(types, /*subtypeReduction*/ true);
+            const type = jsDocType || getUnionType(types, UnionReductionLevel.Subtype);
             return getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
         }
 
@@ -5339,7 +5339,7 @@ namespace ts {
                     }
                 }
                 if (memberTypeList.length) {
-                    const enumType = getUnionType(memberTypeList, /*subtypeReduction*/ false, symbol, /*aliasTypeArguments*/ undefined);
+                    const enumType = getUnionType(memberTypeList, UnionReductionLevel.Literal, symbol, /*aliasTypeArguments*/ undefined);
                     if (enumType.flags & TypeFlags.Union) {
                         enumType.flags |= TypeFlags.EnumLiteral;
                         enumType.symbol = symbol;
@@ -5902,7 +5902,7 @@ namespace ts {
                             if (unionSignatures.length > 1) {
                                 let thisParameter = signature.thisParameter;
                                 if (forEach(unionSignatures, sig => sig.thisParameter)) {
-                                    const thisType = getUnionType(map(unionSignatures, sig => getTypeOfSymbol(sig.thisParameter) || anyType), /*subtypeReduction*/ true);
+                                    const thisType = getUnionType(map(unionSignatures, sig => getTypeOfSymbol(sig.thisParameter) || anyType), UnionReductionLevel.Subtype);
                                     thisParameter = createSymbolWithType(signature.thisParameter, thisType);
                                 }
                                 s = cloneSignature(signature);
@@ -5928,7 +5928,7 @@ namespace ts {
                 indexTypes.push(indexInfo.type);
                 isAnyReadonly = isAnyReadonly || indexInfo.isReadonly;
             }
-            return createIndexInfo(getUnionType(indexTypes, /*subtypeReduction*/ true), isAnyReadonly);
+            return createIndexInfo(getUnionType(indexTypes, UnionReductionLevel.Subtype), isAnyReadonly);
         }
 
         function resolveUnionTypeMembers(type: UnionType) {
@@ -6616,7 +6616,7 @@ namespace ts {
                     }
                 }
                 if (propTypes.length) {
-                    return getUnionType(propTypes, /*subtypeReduction*/ true);
+                    return getUnionType(propTypes, UnionReductionLevel.Subtype);
                 }
             }
             return undefined;
@@ -7003,7 +7003,7 @@ namespace ts {
                     type = instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper);
                 }
                 else if (signature.unionSignatures) {
-                    type = getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
+                    type = getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReductionLevel.Subtype);
                 }
                 else {
                     type = getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration);
@@ -7845,7 +7845,7 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[], noReductions?: boolean): Type {
+        function getUnionType(types: Type[], subtypeReduction: UnionReductionLevel = UnionReductionLevel.Literal, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -7857,13 +7857,15 @@ namespace ts {
             if (typeSet.containsAny) {
                 return anyType;
             }
-            if (!noReductions) {
-                if (subtypeReduction) {
+            switch (subtypeReduction) {
+                case UnionReductionLevel.Literal:
+                    if (typeSet.containsLiteralOrUniqueESSymbol) {
+                        removeRedundantLiteralTypes(typeSet);
+                    }
+                    break;
+                case UnionReductionLevel.Subtype:
                     removeSubtypes(typeSet);
-                }
-                else if (typeSet.containsLiteralOrUniqueESSymbol) {
-                    removeRedundantLiteralTypes(typeSet);
-                }
+                    break;
             }
             if (typeSet.length === 0) {
                 return typeSet.containsNull ? typeSet.containsNonWideningType ? nullType : nullWideningType :
@@ -7939,7 +7941,7 @@ namespace ts {
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*subtypeReduction*/ false,
+                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), UnionReductionLevel.Literal,
                     getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
             }
             return links.resolvedType;
@@ -8014,7 +8016,7 @@ namespace ts {
                 // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
                 const unionType = <UnionType>typeSet[unionIndex];
                 return getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
-                    /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
+                UnionReductionLevel.Literal, aliasSymbol, aliasTypeArguments);
             }
             const id = getTypeListId(typeSet);
             let type = intersectionTypes.get(id);
@@ -8853,7 +8855,7 @@ namespace ts {
                     }
                 }
                 if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
-                    return getUnionType(instantiateTypes((<UnionType>type).types, mapper), /*subtypeReduction*/ false, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                    return getUnionType(instantiateTypes((<UnionType>type).types, mapper), UnionReductionLevel.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateTypes((<IntersectionType>type).types, mapper), type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
@@ -10715,7 +10717,7 @@ namespace ts {
             const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
             return primaryTypes.length ?
                 getNullableType(getSupertypeOrUnion(primaryTypes), getFalsyFlagsOfTypes(types) & TypeFlags.Nullable) :
-                getUnionType(types, /*subtypeReduction*/ true);
+                getUnionType(types, UnionReductionLevel.Subtype);
         }
 
         // Return the leftmost type for which no type to the right is a subtype.
@@ -11006,7 +11008,7 @@ namespace ts {
                     // Widening an empty object literal transitions from a highly restrictive type to
                     // a highly inclusive one. For that reason we perform subtype reduction here if the
                     // union includes empty object types (e.g. reducing {} | string to just {}).
-                    return getUnionType(widenedTypes, some(widenedTypes, isEmptyObjectType));
+                    return getUnionType(widenedTypes, some(widenedTypes, isEmptyObjectType) ? UnionReductionLevel.Subtype : UnionReductionLevel.Literal);
                 }
                 if (isArrayType(type) || isTupleType(type)) {
                     return createTypeReference((<TypeReference>type).target, sameMap((<TypeReference>type).typeArguments, getWidenedType));
@@ -11253,7 +11255,7 @@ namespace ts {
             function inferTargetType(sourceType: Type): Type {
                 inference.candidates = undefined;
                 inferTypes(inferences, sourceType, templateType, 0, mappedTypeStack);
-                return inference.candidates ? getUnionType(inference.candidates, /*subtypeReduction*/ true) : emptyObjectType;
+                return inference.candidates ? getUnionType(inference.candidates, UnionReductionLevel.Subtype) : emptyObjectType;
             }
         }
 
@@ -11612,7 +11614,7 @@ namespace ts {
             if (candidates.length > 1) {
                 const objectLiterals = filter(candidates, isObjectLiteralType);
                 if (objectLiterals.length) {
-                    const objectLiteralsType = getWidenedType(getUnionType(objectLiterals, /*subtypeReduction*/ true));
+                    const objectLiteralsType = getWidenedType(getUnionType(objectLiterals, UnionReductionLevel.Subtype));
                     return concatenate(filter(candidates, t => !isObjectLiteralType(t)), [objectLiteralsType]);
                 }
             }
@@ -11639,7 +11641,7 @@ namespace ts {
                     // union types were requested or if all inferences were made from the return type position, infer a
                     // union type. Otherwise, infer a common supertype.
                     const unwidenedType = inference.priority & InferencePriority.Contravariant ? getCommonSubtype(baseCandidates) :
-                        context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ? getUnionType(baseCandidates, /*subtypeReduction*/ true) :
+                        context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ? getUnionType(baseCandidates, UnionReductionLevel.Subtype) :
                         getCommonSupertype(baseCandidates);
                     inferredType = getWidenedType(unwidenedType);
                 }
@@ -12234,7 +12236,7 @@ namespace ts {
                     }
                 }
             }
-            return mappedTypes ? getUnionType(mappedTypes, /*subtypeReduction*/ undefined, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, noReductions) : mappedType;
+            return mappedTypes ? getUnionType(mappedTypes, noReductions ? UnionReductionLevel.None : UnionReductionLevel.Literal) : mappedType;
         }
 
         function extractTypesOfKind(type: Type, kind: TypeFlags) {
@@ -12293,7 +12295,7 @@ namespace ts {
             return elementType.flags & TypeFlags.Never ?
                 autoArrayType :
                 createArrayType(elementType.flags & TypeFlags.Union ?
-                    getUnionType((<UnionType>elementType).types, /*subtypeReduction*/ true) :
+                    getUnionType((<UnionType>elementType).types, UnionReductionLevel.Subtype) :
                     elementType);
         }
 
@@ -12326,7 +12328,7 @@ namespace ts {
         // At flow control branch or loop junctions, if the type along every antecedent code path
         // is an evolving array type, we construct a combined evolving array type. Otherwise we
         // finalize all evolving array types.
-        function getUnionOrEvolvingArrayType(types: Type[], subtypeReduction: boolean) {
+        function getUnionOrEvolvingArrayType(types: Type[], subtypeReduction: UnionReductionLevel) {
             return isEvolvingArrayTypeList(types) ?
                 getEvolvingArrayType(getUnionType(map(types, getElementTypeOfEvolvingArrayType))) :
                 getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction);
@@ -12618,7 +12620,7 @@ namespace ts {
                         seenIncomplete = true;
                     }
                 }
-                return createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction), seenIncomplete);
+                return createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReductionLevel.Subtype : UnionReductionLevel.Literal), seenIncomplete);
             }
 
             function getTypeAtFlowLoopLabel(flow: FlowLabel): FlowType {
@@ -12647,7 +12649,7 @@ namespace ts {
                 // path that leads to the top.
                 for (let i = flowLoopStart; i < flowLoopCount; i++) {
                     if (flowLoopNodes[i] === flow && flowLoopKeys[i] === key && flowLoopTypes[i].length) {
-                        return createFlowType(getUnionOrEvolvingArrayType(flowLoopTypes[i], /*subtypeReduction*/ false), /*incomplete*/ true);
+                        return createFlowType(getUnionOrEvolvingArrayType(flowLoopTypes[i], UnionReductionLevel.Literal), /*incomplete*/ true);
                     }
                 }
                 // Add the flow loop junction and reference to the in-process stack and analyze
@@ -12689,7 +12691,7 @@ namespace ts {
                 }
                 // The result is incomplete if the first antecedent (the non-looping control flow path)
                 // is incomplete.
-                const result = getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction);
+                const result = getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReductionLevel.Subtype : UnionReductionLevel.Literal);
                 if (isIncomplete(firstAntecedentType)) {
                     return createFlowType(result, /*incomplete*/ true);
                 }
@@ -14459,7 +14461,7 @@ namespace ts {
                 }
             }
             return createArrayType(elementTypes.length ?
-                getUnionType(elementTypes, /*subtypeReduction*/ true) :
+                getUnionType(elementTypes, UnionReductionLevel.Subtype) :
                 strictNullChecks ? implicitNeverType : undefinedWideningType);
         }
 
@@ -14538,7 +14540,7 @@ namespace ts {
                     propTypes.push(getTypeOfSymbol(properties[i]));
                 }
             }
-            const unionType = propTypes.length ? getUnionType(propTypes, /*subtypeReduction*/ true) : undefinedType;
+            const unionType = propTypes.length ? getUnionType(propTypes, UnionReductionLevel.Subtype) : undefinedType;
             return createIndexInfo(unionType, /*isReadonly*/ false);
         }
 
@@ -14885,7 +14887,7 @@ namespace ts {
                     const childrenPropSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, jsxChildrenPropertyName);
                     childrenPropSymbol.type = childrenTypes.length === 1 ?
                         childrenTypes[0] :
-                        createArrayType(getUnionType(childrenTypes,  /*subtypeReduction*/ false));
+                        createArrayType(getUnionType(childrenTypes));
                     attributesTable.set(jsxChildrenPropertyName, childrenPropSymbol);
                 }
             }
@@ -15021,7 +15023,7 @@ namespace ts {
                 }
             }
 
-            return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
+            return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReductionLevel.Subtype);
         }
 
         /**
@@ -15213,7 +15215,7 @@ namespace ts {
                 const types = (elementType as UnionType).types;
                 return getUnionType(types.map(type => {
                     return resolveCustomJsxElementAttributesType(openingLikeElement, shouldIncludeAllStatelessAttributesType, type, elementClassType);
-                }), /*subtypeReduction*/ true);
+                }), UnionReductionLevel.Subtype);
             }
 
             // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
@@ -17966,7 +17968,7 @@ namespace ts {
                 }
 
                 // Return a union of the return expression types.
-                type = getUnionType(types, /*subtypeReduction*/ true);
+                type = getUnionType(types, UnionReductionLevel.Subtype);
             }
 
             if (!contextualSignature) {
@@ -18874,7 +18876,7 @@ namespace ts {
                         leftType;
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
-                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], /*subtypeReduction*/ true) :
+                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReductionLevel.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
@@ -19034,7 +19036,7 @@ namespace ts {
             checkExpression(node.condition);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
-            return getUnionType([type1, type2], /*subtypeReduction*/ true);
+            return getUnionType([type1, type2], UnionReductionLevel.Subtype);
         }
 
         function checkTemplateExpression(node: TemplateExpression): Type {
@@ -20475,7 +20477,7 @@ namespace ts {
                 return undefined;
             }
 
-            return typeAsPromise.promisedTypeOfPromise = getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature), /*subtypeReduction*/ true);
+            return typeAsPromise.promisedTypeOfPromise = getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature), UnionReductionLevel.Subtype);
         }
 
         /**
@@ -21906,7 +21908,7 @@ namespace ts {
                     const arrayTypes = (<UnionType>inputType).types;
                     const filteredTypes = filter(arrayTypes, t => !(t.flags & TypeFlags.StringLike));
                     if (filteredTypes !== arrayTypes) {
-                        arrayType = getUnionType(filteredTypes, /*subtypeReduction*/ true);
+                        arrayType = getUnionType(filteredTypes, UnionReductionLevel.Subtype);
                     }
                 }
                 else if (arrayType.flags & TypeFlags.StringLike) {
@@ -21956,7 +21958,7 @@ namespace ts {
                     return stringType;
                 }
 
-                return getUnionType([arrayElementType, stringType], /*subtypeReduction*/ true);
+                return getUnionType([arrayElementType, stringType], UnionReductionLevel.Subtype);
             }
 
             return arrayElementType;
@@ -22054,7 +22056,7 @@ namespace ts {
                     return undefined;
                 }
 
-                const returnType = getUnionType(map(signatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
+                const returnType = getUnionType(map(signatures, getReturnTypeOfSignature), UnionReductionLevel.Subtype);
                 const iteratedType = getIteratedTypeOfIterator(returnType, errorNode, /*isAsyncIterator*/ !!asyncMethodType);
                 if (checkAssignability && errorNode && iteratedType) {
                     // If `checkAssignability` was specified, we were called from
@@ -22129,7 +22131,7 @@ namespace ts {
                 return undefined;
             }
 
-            let nextResult = getUnionType(map(nextMethodSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
+            let nextResult = getUnionType(map(nextMethodSignatures, getReturnTypeOfSignature), UnionReductionLevel.Subtype);
             if (isTypeAny(nextResult)) {
                 return undefined;
             }

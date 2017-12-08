@@ -2786,7 +2786,7 @@ namespace ts {
         /* @internal */ getNullType(): Type;
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
-        /* @internal */ getUnionType(types: Type[], subtypeReduction?: boolean): Type;
+        /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReductionLevel): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ createPromiseType(type: Type): Type;
 
@@ -2839,6 +2839,13 @@ namespace ts {
          * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
+    }
+
+    /* @internal */
+    export const enum UnionReductionLevel {
+        None = 0,
+        Literal,
+        Subtype
     }
 
     export enum NodeBuilderFlags {
