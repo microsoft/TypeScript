@@ -220,9 +220,9 @@ namespace ts {
         EmitAndSemanticDiagnosticsBuilderProgram
     }
 
-    export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BaseBuilderProgram | undefined, kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
-    export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BaseBuilderProgram | undefined, kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
-    export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BaseBuilderProgram | undefined, kind: BuilderProgramKind) {
+    export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BuilderProgram | undefined, kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
+    export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BuilderProgram | undefined, kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BuilderProgram | undefined, kind: BuilderProgramKind) {
         // Return same program if underlying program doesnt change
         let oldState = oldProgram && oldProgram.getState();
         if (oldState && newProgram === oldState.program) {
@@ -246,7 +246,7 @@ namespace ts {
         oldProgram = undefined;
         oldState = undefined;
 
-        const result: BaseBuilderProgram = {
+        const result: BuilderProgram = {
             getState: () => state,
             getProgram: () => state.program,
             getCompilerOptions: () => state.program.getCompilerOptions(),
@@ -429,7 +429,7 @@ namespace ts {
     /**
      * Builder to manage the program state changes
      */
-    export interface BaseBuilderProgram {
+    export interface BuilderProgram {
         /*@internal*/
         getState(): BuilderProgramState;
         /**
@@ -490,7 +490,7 @@ namespace ts {
     /**
      * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
      */
-    export interface SemanticDiagnosticsBuilderProgram extends BaseBuilderProgram {
+    export interface SemanticDiagnosticsBuilderProgram extends BuilderProgram {
         /**
          * Gets the semantic diagnostics from the program for the next affected file and caches it
          * Returns undefined if the iteration is complete
@@ -502,7 +502,7 @@ namespace ts {
      * The builder that can handle the changes in program and iterate through changed file to emit the files
      * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
      */
-    export interface EmitAndSemanticDiagnosticsBuilderProgram extends BaseBuilderProgram {
+    export interface EmitAndSemanticDiagnosticsBuilderProgram extends BuilderProgram {
         /**
          * Get the current directory of the program
          */

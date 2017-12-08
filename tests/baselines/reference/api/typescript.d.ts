@@ -3767,7 +3767,7 @@ declare namespace ts {
     /**
      * Builder to manage the program state changes
      */
-    interface BaseBuilderProgram {
+    interface BuilderProgram {
         /**
          * Returns current program
          */
@@ -3825,7 +3825,7 @@ declare namespace ts {
     /**
      * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
      */
-    interface SemanticDiagnosticsBuilderProgram extends BaseBuilderProgram {
+    interface SemanticDiagnosticsBuilderProgram extends BuilderProgram {
         /**
          * Gets the semantic diagnostics from the program for the next affected file and caches it
          * Returns undefined if the iteration is complete
@@ -3836,7 +3836,7 @@ declare namespace ts {
      * The builder that can handle the changes in program and iterate through changed file to emit the files
      * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
      */
-    interface EmitAndSemanticDiagnosticsBuilderProgram extends BaseBuilderProgram {
+    interface EmitAndSemanticDiagnosticsBuilderProgram extends BuilderProgram {
         /**
          * Get the current directory of the program
          */
@@ -3974,11 +3974,11 @@ declare namespace ts {
     /**
      * Creates the watch from the host for root files and compiler options
      */
-    function createBuilderWatchProgram<T extends BaseBuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfFilesAndCompilerOptions<T>;
+    function createWatchBuilderProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfFilesAndCompilerOptions<T>;
     /**
      * Creates the watch from the host for config file
      */
-    function createBuilderWatchProgram<T extends BaseBuilderProgram>(host: WatchCompilerHostOfConfigFile & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfConfigFile<T>;
+    function createWatchBuilderProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfConfigFile<T>;
 }
 declare namespace ts {
     function parseCommandLine(commandLine: ReadonlyArray<string>, readFile?: (path: string) => string | undefined): ParsedCommandLine;

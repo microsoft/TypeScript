@@ -894,12 +894,12 @@ namespace ts {
     /**
      * Creates the watch from the host for root files and compiler options
      */
-    export function createBuilderWatchProgram<T extends BaseBuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfFilesAndCompilerOptions<T>;
+    export function createWatchBuilderProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfFilesAndCompilerOptions<T>;
     /**
      * Creates the watch from the host for config file
      */
-    export function createBuilderWatchProgram<T extends BaseBuilderProgram>(host: WatchCompilerHostOfConfigFile & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfConfigFile<T>;
-    export function createBuilderWatchProgram<T extends BaseBuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions & WatchCompilerHostOfConfigFile & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
+    export function createWatchBuilderProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfConfigFile<T>;
+    export function createWatchBuilderProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions & WatchCompilerHostOfConfigFile & BuilderProgramHost, createBuilderProgram: (newProgram: Program, host: BuilderProgramHost, oldProgram?: T) => T): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
         const watch = createWatchProgram(host);
         let builderProgram: T | undefined;
         return {
