@@ -193,7 +193,7 @@ namespace ts.textChanges {
 
     export class ChangeTracker {
         private changes: Change[] = [];
-        private readonly newLineCharacter: string;
+        readonly newLineCharacter: string;
         private readonly deletedNodesInLists: true[] = []; // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
         // Map from class id to nodes to insert at the start
         private readonly nodesInsertedAtClassStarts = createMap<{ sourceFile: SourceFile, cls: ClassLikeDeclaration, members: ClassElement[] }>();
@@ -351,17 +351,17 @@ namespace ts.textChanges {
             return this.replaceWithSingle(sourceFile, startPosition, startPosition, newNode, options);
         }
 
-        public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement, newLineCharacter: string): void {
+        public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
             const firstStatement = firstOrUndefined(ctr.body.statements);
             if (!firstStatement || !ctr.body.multiLine) {
                 this.replaceNode(sourceFile, ctr.body, createBlock([newStatement, ...ctr.body.statements], /*multiLine*/ true), { useNonAdjustedEndPosition: true });
             }
             else {
-                this.insertNodeBefore(sourceFile, firstStatement, newStatement, { suffix: newLineCharacter });
+                this.insertNodeBefore(sourceFile, firstStatement, newStatement, { suffix: this.newLineCharacter });
             }
         }
 
-        public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration, newElement: ClassElement, newLineCharacter: string): void {
+        public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration, newElement: ClassElement): void {
             const firstMember = firstOrUndefined(cls.members);
             if (!firstMember) {
                 const id = getNodeId(cls).toString();
@@ -375,7 +375,7 @@ namespace ts.textChanges {
                 }
             }
             else {
-                this.insertNodeBefore(sourceFile, firstMember, newElement, { suffix: newLineCharacter });
+                this.insertNodeBefore(sourceFile, firstMember, newElement, { suffix: this.newLineCharacter });
             }
         }
 

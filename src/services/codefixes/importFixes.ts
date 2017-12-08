@@ -257,7 +257,7 @@ namespace ts.codefix {
     }
 
     function getCodeActionForNewImport(context: SymbolContext & { kind: ImportKind }, moduleSpecifier: string): ImportCodeAction {
-        const { kind, sourceFile, newLineCharacter, symbolName } = context;
+        const { kind, sourceFile, symbolName } = context;
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
@@ -275,6 +275,7 @@ namespace ts.codefix {
                 createExternalModuleReference(quotedModuleSpecifier));
 
         const changes = ChangeTracker.with(context, changeTracker => {
+            const { newLineCharacter } = changeTracker;
             if (lastImportDeclaration) {
                 changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: newLineCharacter });
             }

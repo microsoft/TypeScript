@@ -810,13 +810,14 @@ namespace ts.refactor.extractSymbol {
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
         const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
+        const { newLineCharacter } = changeTracker;
         if (nodeToInsertBefore) {
-            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
+            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: newLineCharacter + newLineCharacter });
         }
         else {
             changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, {
-                prefix: isLineBreak(file.text.charCodeAt(scope.getLastToken().pos)) ? context.newLineCharacter : context.newLineCharacter + context.newLineCharacter,
-                suffix: context.newLineCharacter
+                prefix: isLineBreak(file.text.charCodeAt(scope.getLastToken().pos)) ? newLineCharacter : newLineCharacter + newLineCharacter,
+                suffix: newLineCharacter
             });
         }
 
@@ -963,7 +964,7 @@ namespace ts.refactor.extractSymbol {
         const replacementRange = isReadonlyArray(range.range)
             ? { pos: first(range.range).getStart(), end: last(range.range).end }
             : { pos: range.range.getStart(), end: range.range.end };
-        changeTracker.replaceRangeWithNodes(context.file, replacementRange, newNodes, { nodeSeparator: context.newLineCharacter });
+        changeTracker.replaceRangeWithNodes(context.file, replacementRange, newNodes, { nodeSeparator: newLineCharacter });
 
         const edits = changeTracker.getChanges();
         const renameRange = isReadonlyArray(range.range) ? first(range.range) : range.range;
@@ -1014,6 +1015,7 @@ namespace ts.refactor.extractSymbol {
         suppressLeadingAndTrailingTrivia(initializer);
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
+        const { newLineCharacter } = changeTracker;
 
         if (isClassLike(scope)) {
             Debug.assert(!isJS); // See CannotExtractToJSClass
@@ -1041,7 +1043,7 @@ namespace ts.refactor.extractSymbol {
             // Declare
             const maxInsertionPos = node.pos;
             const nodeToInsertBefore = getNodeToInsertPropertyBefore(maxInsertionPos, scope);
-            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, { suffix: context.newLineCharacter + context.newLineCharacter });
+            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, { suffix: newLineCharacter + newLineCharacter });
 
             // Consume
             changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
@@ -1084,12 +1086,12 @@ namespace ts.refactor.extractSymbol {
                     // for imports.
                     const insertionPos = getSourceFileImportLocation(file);
                     changeTracker.insertNodeAt(context.file, insertionPos, newVariableStatement, {
-                        prefix: insertionPos === 0 ? undefined : context.newLineCharacter,
-                        suffix: isLineBreak(file.text.charCodeAt(insertionPos)) ? context.newLineCharacter : context.newLineCharacter + context.newLineCharacter
+                        prefix: insertionPos === 0 ? undefined : newLineCharacter,
+                        suffix: isLineBreak(file.text.charCodeAt(insertionPos)) ? newLineCharacter : newLineCharacter + newLineCharacter
                     });
                 }
                 else {
-                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, { suffix: context.newLineCharacter + context.newLineCharacter });
+                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, { suffix: newLineCharacter + newLineCharacter });
                 }
 
                 // Consume
