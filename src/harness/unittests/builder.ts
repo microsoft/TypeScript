@@ -81,20 +81,22 @@ namespace ts {
     });
 
     function makeAssertChanges(getProgram: () => Program): (fileNames: ReadonlyArray<string>) => void {
-        const builder = createEmitAndSemanticDiagnosticsBuilder({ useCaseSensitiveFileNames: returnTrue, });
+        const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
+        let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
         return fileNames => {
             const program = getProgram();
-            builder.updateProgram(program);
+            builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
             const outputFileNames: string[] = [];
             // tslint:disable-next-line no-empty
-            while (builder.emitNextAffectedFile(program, fileName => outputFileNames.push(fileName))) {
+            while (builderProgram.emitNextAffectedFile(fileName => outputFileNames.push(fileName))) {
             }
             assert.deepEqual(outputFileNames, fileNames);
         };
     }
 
     function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fileNames: ReadonlyArray<string>, cancelAfterEmitLength?: number) => void {
-        const builder = createEmitAndSemanticDiagnosticsBuilder({ useCaseSensitiveFileNames: returnTrue, });
+        const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
+        let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
         let cancel = false;
         const cancellationToken: CancellationToken = {
             isCancellationRequested: () => cancel,
@@ -108,7 +110,7 @@ namespace ts {
             cancel = false;
             let operationWasCancelled = false;
             const program = getProgram();
-            builder.updateProgram(program);
+            builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
             const outputFileNames: string[] = [];
             try {
                 // tslint:disable-next-line no-empty
@@ -117,7 +119,7 @@ namespace ts {
                     if (outputFileNames.length === cancelAfterEmitLength) {
                         cancel = true;
                     }
-                } while (builder.emitNextAffectedFile(program, fileName => outputFileNames.push(fileName), cancellationToken));
+                } while (builderProgram.emitNextAffectedFile(fileName => outputFileNames.push(fileName), cancellationToken));
             }
             catch (e) {
                 assert.isFalse(operationWasCancelled);

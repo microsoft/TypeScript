@@ -37,6 +37,7 @@
         "../compiler/declarationEmitter.ts",
         "../compiler/emitter.ts",
         "../compiler/program.ts",
+        "../compiler/builderState.ts",
         "../compiler/builder.ts",
         "../compiler/resolutionCache.ts",
         "../compiler/watch.ts",

@@ -146,62 +146,23 @@ namespace ts {
         return ExitStatus.Success;
     }
 
-    /**
-     * Creates the function that emits files and reports errors when called with program
-     */
-    function createEmitFilesAndReportErrorsWithBuilderUsingSystem(system: System, reportDiagnostic: DiagnosticReporter) {
-        const emitErrorsAndReportErrorsWithBuilder = createEmitFilesAndReportErrorsWithBuilder({
-            useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
-            createHash: system.createHash && (s => system.createHash(s)),
-            writeFile,
-            reportDiagnostic,
-            writeFileName: s => system.write(s + system.newLine)
-        });
-        let host: CachedDirectoryStructureHost | undefined;
-        return {
-            emitFilesAndReportError: (program: Program) => emitErrorsAndReportErrorsWithBuilder(program),
-            setHost: (cachedDirectoryStructureHost: CachedDirectoryStructureHost) => host = cachedDirectoryStructureHost
-        };
-
-        function getHost() {
-            return host || system;
-        }
-
-        function ensureDirectoriesExist(directoryPath: string) {
-            if (directoryPath.length > getRootLength(directoryPath) && !getHost().directoryExists(directoryPath)) {
-                const parentDirectory = getDirectoryPath(directoryPath);
-                ensureDirectoriesExist(parentDirectory);
-                getHost().createDirectory(directoryPath);
-            }
-        }
-
-        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
-            try {
-                performance.mark("beforeIOWrite");
-                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-
-                getHost().writeFile(fileName, text, writeByteOrderMark);
-
-                performance.mark("afterIOWrite");
-                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
-            }
-            catch (e) {
-                if (onError) {
-                    onError(e.message);
-                }
-            }
-        }
-    }
-
     const noopFileWatcher: FileWatcher = { close: noop };
 
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
     function createWatchCompilerHost(system = sys, reportDiagnostic: DiagnosticReporter): WatchCompilerHost {
-        const { emitFilesAndReportError, setHost } = createEmitFilesAndReportErrorsWithBuilderUsingSystem(system, reportDiagnostic);
-        const host: WatchCompilerHost = {
-            useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
+        let host: DirectoryStructureHost = system;
+        const useCaseSensitiveFileNames = () => system.useCaseSensitiveFileNames;
+        const writeFileName = (s: string) => system.write(s + system.newLine);
+        const builderProgramHost: BuilderProgramHost = {
+            useCaseSensitiveFileNames,
+            createHash: system.createHash && (s => system.createHash(s)),
+            writeFile
+        };
+        let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+        return {
+            useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,
             getCurrentDirectory: () => system.getCurrentDirectory(),
             getDefaultLibLocation,
@@ -220,10 +181,9 @@ namespace ts {
             onWatchStatusChange,
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
-            onCachedDirectoryStructureHostCreate: host => setHost(host),
-            afterProgramCreate: emitFilesAndReportError,
+            onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
+            afterProgramCreate: emitFilesAndReportErrorUsingBuilder,
         };
-        return host;
 
         function getDefaultLibLocation() {
             return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
@@ -234,6 +194,36 @@ namespace ts {
                 system.clearScreen();
             }
             system.write(`${new Date().toLocaleTimeString()} - ${flattenDiagnosticMessageText(diagnostic.messageText, newLine)}${newLine + newLine + newLine}`);
+        }
+
+        function emitFilesAndReportErrorUsingBuilder(program: Program) {
+            builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, builderProgramHost, builderProgram);
+            emitFilesAndReportErrors(builderProgram, reportDiagnostic, writeFileName);
+        }
+
+        function ensureDirectoriesExist(directoryPath: string) {
+            if (directoryPath.length > getRootLength(directoryPath) && !host.directoryExists(directoryPath)) {
+                const parentDirectory = getDirectoryPath(directoryPath);
+                ensureDirectoriesExist(parentDirectory);
+                host.createDirectory(directoryPath);
+            }
+        }
+
+        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
+            try {
+                performance.mark("beforeIOWrite");
+                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+
+                host.writeFile(fileName, text, writeByteOrderMark);
+
+                performance.mark("afterIOWrite");
+                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+            }
+            catch (e) {
+                if (onError) {
+                    onError(e.message);
+                }
+            }
         }
     }
 
@@ -271,73 +261,6 @@ namespace ts {
 
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
-
-    interface BuilderProgram extends ProgramToEmitFilesAndReportErrors {
-        updateProgram(program: Program): void;
-    }
-
-    function createBuilderProgram(host: BuilderEmitHost): BuilderProgram {
-        const builder = createEmitAndSemanticDiagnosticsBuilder(host);
-        let program: Program;
-        return {
-            getCurrentDirectory: () => program.getCurrentDirectory(),
-            getCompilerOptions: () => program.getCompilerOptions(),
-            getSourceFiles: () => program.getSourceFiles(),
-            getSyntacticDiagnostics: () => program.getSyntacticDiagnostics(),
-            getOptionsDiagnostics: () => program.getOptionsDiagnostics(),
-            getGlobalDiagnostics: () => program.getGlobalDiagnostics(),
-            getSemanticDiagnostics: () => builder.getSemanticDiagnostics(program),
-            emit,
-            updateProgram
-        };
-
-        function updateProgram(p: Program) {
-            program = p;
-            builder.updateProgram(p);
-        }
-
-        function emit(): EmitResult {
-            // Emit and report any errors we ran into.
-            let sourceMaps: SourceMapData[];
-            let emitSkipped: boolean;
-            let diagnostics: Diagnostic[];
-            let emittedFiles: string[];
-
-            let affectedEmitResult: AffectedFileResult<EmitResult>;
-            while (affectedEmitResult = builder.emitNextAffectedFile(program, host.writeFile)) {
-                emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
-                diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
-                emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
-                sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
-            }
-            return {
-                emitSkipped,
-                diagnostics,
-                emittedFiles,
-                sourceMaps
-            };
-        }
-    }
-
-    /**
-     * Host needed to emit files and report errors using builder
-     */
-    export interface BuilderEmitHost extends BuilderHost {
-        writeFile: WriteFileCallback;
-        reportDiagnostic: DiagnosticReporter;
-        writeFileName?: (s: string) => void;
-    }
-
-    /**
-     * Creates the function that reports the program errors and emit files every time it is called with argument as program
-     */
-    export function createEmitFilesAndReportErrorsWithBuilder(host: BuilderEmitHost) {
-        const builderProgram = createBuilderProgram(host);
-        return (program: Program) => {
-            builderProgram.updateProgram(program);
-            emitFilesAndReportErrors(builderProgram, host.reportDiagnostic, host.writeFileName);
-        };
-    }
 
     export interface WatchCompilerHost {
         /** If provided, callback to invoke before each program creation */

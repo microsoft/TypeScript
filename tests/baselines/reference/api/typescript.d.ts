@@ -3749,7 +3749,7 @@ declare namespace ts {
         result: T;
         affected: SourceFile | Program;
     } | undefined;
-    interface BuilderHost {
+    interface BuilderProgramHost {
         /**
          * return true if file names are treated with case sensitivity
          */
@@ -3758,78 +3758,104 @@ declare namespace ts {
          * If provided this would be used this hash instead of actual file shape text for detecting changes
          */
         createHash?: (data: string) => string;
+        /**
+         * When emit or emitNextAffectedFile are called without writeFile,
+         * this callback if present would be used to write files
+         */
+        writeFile?: WriteFileCallback;
     }
     /**
      * Builder to manage the program state changes
      */
-    interface BaseBuilder {
+    interface BaseBuilderProgram {
         /**
-         * Updates the program in the builder to represent new state
+         * Get compiler options of the program
          */
-        updateProgram(newProgram: Program): void;
+        getCompilerOptions(): CompilerOptions;
+        /**
+         * Get the source file in the program with file name
+         */
+        getSourceFile(fileName: string): SourceFile | undefined;
+        /**
+         * Get a list of files in the program
+         */
+        getSourceFiles(): ReadonlyArray<SourceFile>;
+        /**
+         * Get the diagnostics for compiler options
+         */
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the diagnostics that dont belong to any file
+         */
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the syntax diagnostics, for all source files if source file is not supplied
+         */
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         /**
          * Get all the dependencies of the file
          */
-        getAllDependencies(programOfThisState: Program, sourceFile: SourceFile): ReadonlyArray<string>;
+        getAllDependencies(sourceFile: SourceFile): ReadonlyArray<string>;
+        /**
+         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
+         * The semantic diagnostics are cached and managed here
+         * Note that it is assumed that when asked about semantic diagnostics through this API,
+         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
+         * In case of SemanticDiagnosticsBuilderProgram if the source file is not provided,
+         * it will iterate through all the affected files, to ensure that cache stays valid and yet provide a way to get all semantic diagnostics
+         */
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Emits the JavaScript and declaration files.
+         * When targetSource file is specified, emits the files corresponding to that source file,
+         * otherwise for the whole program.
+         * In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
+         * it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
+         * it will only emit all the affected files instead of whole program
+         *
+         * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+         * in that order would be used to write the files
+         */
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
     }
     /**
      * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
      */
-    interface SemanticDiagnosticsBuilder extends BaseBuilder {
+    interface SemanticDiagnosticsBuilderProgram extends BaseBuilderProgram {
         /**
          * Gets the semantic diagnostics from the program for the next affected file and caches it
          * Returns undefined if the iteration is complete
          */
-        getSemanticDiagnosticsOfNextAffectedFile(programOfThisState: Program, cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
-        /**
-         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
-         * The semantic diagnostics are cached and managed here
-         * Note that it is assumed that the when asked about semantic diagnostics through this API,
-         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
-         */
-        getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
     }
     /**
      * The builder that can handle the changes in program and iterate through changed file to emit the files
      * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
      */
-    interface EmitAndSemanticDiagnosticsBuilder extends BaseBuilder {
+    interface EmitAndSemanticDiagnosticsBuilderProgram extends BaseBuilderProgram {
+        /**
+         * Get the current directory of the program
+         */
+        getCurrentDirectory(): string;
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
+         * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+         * in that order would be used to write the files
          */
-        emitNextAffectedFile(programOfThisState: Program, writeFileCallback: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
-        /**
-         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
-         * The semantic diagnostics are cached and managed here
-         * Note that it is assumed that the when asked about semantic diagnostics through this API,
-         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
-         */
-        getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
     /**
      * Create the builder to manage semantic diagnostics and cache them
      */
-    function createSemanticDiagnosticsBuilder(host: BuilderHost): SemanticDiagnosticsBuilder;
+    function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
     /**
      * Create the builder that can handle the changes in program and iterate through changed files
      * to emit the those files and manage semantic diagnostics cache as well
      */
-    function createEmitAndSemanticDiagnosticsBuilder(host: BuilderHost): EmitAndSemanticDiagnosticsBuilder;
+    function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
 }
 declare namespace ts {
     type DiagnosticReporter = (diagnostic: Diagnostic) => void;
-    /**
-     * Host needed to emit files and report errors using builder
-     */
-    interface BuilderEmitHost extends BuilderHost {
-        writeFile: WriteFileCallback;
-        reportDiagnostic: DiagnosticReporter;
-        writeFileName?: (s: string) => void;
-    }
-    /**
-     * Creates the function that reports the program errors and emit files every time it is called with argument as program
-     */
-    function createEmitFilesAndReportErrorsWithBuilder(host: BuilderEmitHost): (program: Program) => void;
     interface WatchCompilerHost {
         /** If provided, callback to invoke before each program creation */
         beforeProgramCreate?(compilerOptions: CompilerOptions): void;
