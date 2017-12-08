@@ -248,6 +248,7 @@ namespace ts {
 
         const result: BaseBuilderProgram = {
             getState: () => state,
+            getProgram: () => state.program,
             getCompilerOptions: () => state.program.getCompilerOptions(),
             getSourceFile: fileName => state.program.getSourceFile(fileName),
             getSourceFiles: () => state.program.getSourceFiles(),
@@ -431,6 +432,10 @@ namespace ts {
     export interface BaseBuilderProgram {
         /*@internal*/
         getState(): BuilderProgramState;
+        /**
+         * Returns current program
+         */
+        getProgram(): Program;
         /**
          * Get compiler options of the program
          */

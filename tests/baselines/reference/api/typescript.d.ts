@@ -3769,6 +3769,10 @@ declare namespace ts {
      */
     interface BaseBuilderProgram {
         /**
+         * Returns current program
+         */
+        getProgram(): Program;
+        /**
          * Get compiler options of the program
          */
         getCompilerOptions(): CompilerOptions;
