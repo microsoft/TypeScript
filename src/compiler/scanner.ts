@@ -1873,10 +1873,6 @@ namespace ts {
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.dot:
                     pos++;
-                    if (text.substring(tokenPos, pos + 2) === "...") {
-                        pos += 2;
-                        return token = SyntaxKind.DotDotDotToken;
-                    }
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.exclamation:
                     pos++;
