@@ -460,7 +460,7 @@ namespace ts.server {
                 return [];
             }
             this.updateGraph();
-            this.builderState = createBuilderState(this.program, this.projectService.toCanonicalFileName, this.builderState);
+            this.builderState = BuilderState.create(this.program, this.projectService.toCanonicalFileName, this.builderState);
             return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash(data)),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }

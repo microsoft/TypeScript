@@ -7,52 +7,118 @@ namespace ts {
         BuilderKindEmitAndSemanticDiagnostics
     }
 
-    export function createBuilder(host: BuilderHost, builderKind: BuilderKind.BuilderKindSemanticDiagnostics): SemanticDiagnosticsBuilder;
-    export function createBuilder(host: BuilderHost, builderKind: BuilderKind.BuilderKindEmitAndSemanticDiagnostics): EmitAndSemanticDiagnosticsBuilder;
-    export function createBuilder(host: BuilderHost, builderKind: BuilderKind) {
-        /**
-         * State corresponding to all the file references and shapes of the module etc
-         */
-        const state = createBuilderStateOld({
-            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
-            createHash: host.createHash,
-            onUpdateProgramInitialized,
-            onSourceFileAdd: addToChangedFilesSet,
-            onSourceFileChanged: path => { addToChangedFilesSet(path); deleteSemanticDiagnostics(path); },
-            onSourceFileRemoved: deleteSemanticDiagnostics
-        });
-
+    interface BuilderStateWithChangedFiles extends BuilderState {
         /**
          * Cache of semantic diagnostics for files with their Path being the key
          */
-        const semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
-
+        semanticDiagnosticsPerFile: Map<ReadonlyArray<Diagnostic>> | undefined;
         /**
          * The map has key by source file's path that has been changed
          */
-        const changedFilesSet = createMap<true>();
-
+        changedFilesSet: Map<true>;
         /**
          * Set of affected files being iterated
          */
-        let affectedFiles: ReadonlyArray<SourceFile> | undefined;
+        affectedFiles: ReadonlyArray<SourceFile> | undefined;
         /**
          * Current index to retrieve affected file from
          */
-        let affectedFilesIndex = 0;
+        affectedFilesIndex: number | undefined;
         /**
          * Current changed file for iterating over affected files
          */
-        let currentChangedFilePath: Path | undefined;
+        currentChangedFilePath: Path | undefined;
         /**
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be commited whenever the iteration through affected files of current changed file is complete
          */
-        const currentAffectedFilesSignatures = createMap<string>();
+        currentAffectedFilesSignatures: Map<string> | undefined;
         /**
          * Already seen affected files
          */
-        const seenAffectedFiles = createMap<true>();
+        seenAffectedFiles: Map<true> | undefined;
+    }
+
+    function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined) {
+        if (map1 === undefined) {
+            return map2 === undefined;
+        }
+        if (map2 === undefined) {
+            return map1 === undefined;
+        }
+        // Has same size and every key is present in both maps
+        return map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
+    }
+
+    /**
+     * Create the state so that we can iterate on changedFiles/affected files
+     */
+    function createBuilderStateWithChangedFiles(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderStateWithChangedFiles>): BuilderStateWithChangedFiles {
+        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderStateWithChangedFiles;
+        const compilerOptions = newProgram.getCompilerOptions();
+        if (!compilerOptions.outFile && !compilerOptions.out) {
+            state.semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
+        }
+        state.changedFilesSet = createMap<true>();
+        const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
+        const canCopySemanticDiagnostics = useOldState && oldState.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile;
+        if (useOldState) {
+            // Verify the sanity of old state
+            if (!oldState.currentChangedFilePath) {
+                Debug.assert(!oldState.affectedFiles && (!oldState.currentAffectedFilesSignatures || !oldState.currentAffectedFilesSignatures.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
+            }
+            if (canCopySemanticDiagnostics) {
+                Debug.assert(!forEachKey(oldState.changedFilesSet, path => oldState.semanticDiagnosticsPerFile.has(path)), "Semantic diagnostics shouldnt be available for changed files");
+            }
+
+            // Copy old state's changed files set
+            copyEntries(oldState.changedFilesSet, state.changedFilesSet);
+        }
+
+        // Update changed files and copy semantic diagnostics if we can
+        const referencedMap = state.referencedMap;
+        const oldReferencedMap = useOldState && oldState.referencedMap;
+        state.fileInfos.forEach((info, sourceFilePath) => {
+            let oldInfo: Readonly<BuilderState.FileInfo>;
+            let newReferences: BuilderState.ReferencedSet;
+
+            // if not using old state, every file is changed
+            if (!useOldState ||
+                // File wasnt present in old state
+                !(oldInfo = oldState.fileInfos.get(sourceFilePath)) ||
+                // versions dont match
+                oldInfo.version !== info.version ||
+                // Referenced files changed
+                !hasSameKeys(newReferences = referencedMap && referencedMap.get(sourceFilePath), oldReferencedMap && oldReferencedMap.get(sourceFilePath)) ||
+                // Referenced file was deleted in the new program
+                newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState.fileInfos.has(path))) {
+                // Register file as changed file and do not copy semantic diagnostics, since all changed files need to be re-evaluated
+                state.changedFilesSet.set(sourceFilePath, true);
+            }
+            else if (canCopySemanticDiagnostics) {
+                // Unchanged file copy diagnostics
+                const diagnostics = oldState.semanticDiagnosticsPerFile.get(sourceFilePath);
+                if (diagnostics) {
+                    state.semanticDiagnosticsPerFile.set(sourceFilePath, diagnostics);
+                }
+            }
+        });
+
+        return state;
+    }
+
+    export function createBuilder(host: BuilderHost, builderKind: BuilderKind.BuilderKindSemanticDiagnostics): SemanticDiagnosticsBuilder;
+    export function createBuilder(host: BuilderHost, builderKind: BuilderKind.BuilderKindEmitAndSemanticDiagnostics): EmitAndSemanticDiagnosticsBuilder;
+    export function createBuilder(host: BuilderHost, builderKind: BuilderKind) {
+        /**
+         * Create the canonical file name for identity
+         */
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        /**
+         * Computing hash to for signature verification
+         */
+        const computeHash = host.createHash || identity;
+        let state: BuilderStateWithChangedFiles;
 
         switch (builderKind) {
             case BuilderKind.BuilderKindSemanticDiagnostics:
@@ -82,54 +148,11 @@ namespace ts {
         }
 
         /**
-         * Initialize changedFiles, affected files set, cached diagnostics, signatures
-         */
-        function onUpdateProgramInitialized(isModuleEmitChanged: boolean) {
-            if (isModuleEmitChanged) {
-                // Changes in the module emit, clear out everything and initialize as if first time
-
-                // Clear file information and semantic diagnostics
-                semanticDiagnosticsPerFile.clear();
-
-                // Clear changed files and affected files information
-                changedFilesSet.clear();
-                affectedFiles = undefined;
-                currentChangedFilePath = undefined;
-                currentAffectedFilesSignatures.clear();
-            }
-            else {
-                if (currentChangedFilePath) {
-                    // Remove the diagnostics for all the affected files since we should resume the state such that
-                    // the whole iteration on currentChangedFile never happened
-                    affectedFiles.forEach(sourceFile => deleteSemanticDiagnostics(sourceFile.path));
-                    affectedFiles = undefined;
-                    currentAffectedFilesSignatures.clear();
-                }
-                else {
-                    // Verify the sanity of old state
-                    Debug.assert(!affectedFiles && !currentAffectedFilesSignatures.size, "Cannot reuse if only few affected files of currentChangedFile were iterated");
-                }
-                Debug.assert(!forEachKey(changedFilesSet, path => semanticDiagnosticsPerFile.has(path)), "Semantic diagnostics shouldnt be available for changed files");
-            }
-        }
-
-        /**
-         * Add file to the changed files set
-         */
-        function addToChangedFilesSet(path: Path) {
-            changedFilesSet.set(path, true);
-        }
-
-        function deleteSemanticDiagnostics(path: Path) {
-            semanticDiagnosticsPerFile.delete(path);
-        }
-
-        /**
          * Update current state to reflect new program
          * Updates changed files, references, file infos etc which happens through the state callbacks
          */
         function updateProgram(newProgram: Program) {
-            state.updateProgram(newProgram);
+            state = createBuilderStateWithChangedFiles(newProgram, getCanonicalFileName, state);
         }
 
         /**
@@ -140,11 +163,15 @@ namespace ts {
          */
         function getNextAffectedFile(programOfThisState: Program, cancellationToken: CancellationToken | undefined): SourceFile | Program | undefined {
             while (true) {
+                const { affectedFiles } = state;
                 if (affectedFiles) {
+                    const { seenAffectedFiles, semanticDiagnosticsPerFile } = state;
+                    let { affectedFilesIndex } = state;
                     while (affectedFilesIndex < affectedFiles.length) {
                         const affectedFile = affectedFiles[affectedFilesIndex];
                         if (!seenAffectedFiles.has(affectedFile.path)) {
                             // Set the next affected file as seen and remove the cached semantic diagnostics
+                            state.affectedFilesIndex = affectedFilesIndex;
                             semanticDiagnosticsPerFile.delete(affectedFile.path);
                             return affectedFile;
                         }
@@ -153,16 +180,16 @@ namespace ts {
                     }
 
                     // Remove the changed file from the change set
-                    changedFilesSet.delete(currentChangedFilePath);
-                    currentChangedFilePath = undefined;
+                    state.changedFilesSet.delete(state.currentChangedFilePath);
+                    state.currentChangedFilePath = undefined;
                     // Commit the changes in file signature
-                    state.updateSignaturesFromCache(currentAffectedFilesSignatures);
-                    currentAffectedFilesSignatures.clear();
-                    affectedFiles = undefined;
+                    BuilderState.updateSignaturesFromCache(state, state.currentAffectedFilesSignatures);
+                    state.currentAffectedFilesSignatures.clear();
+                    state.affectedFiles = undefined;
                 }
 
                 // Get next changed file
-                const nextKey = changedFilesSet.keys().next();
+                const nextKey = state.changedFilesSet.keys().next();
                 if (nextKey.done) {
                     // Done
                     return undefined;
@@ -172,16 +199,17 @@ namespace ts {
                 // With --out or --outFile all outputs go into single file
                 // so operations are performed directly on program, return program
                 if (compilerOptions.outFile || compilerOptions.out) {
-                    Debug.assert(semanticDiagnosticsPerFile.size === 0);
+                    Debug.assert(!state.semanticDiagnosticsPerFile);
                     return programOfThisState;
                 }
 
                 // Get next batch of affected files
-                currentAffectedFilesSignatures.clear();
-                affectedFiles = state.getFilesAffectedBy(programOfThisState, nextKey.value as Path, cancellationToken, currentAffectedFilesSignatures);
-                currentChangedFilePath = nextKey.value as Path;
-                semanticDiagnosticsPerFile.delete(currentChangedFilePath);
-                affectedFilesIndex = 0;
+                state.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures || createMap();
+                state.affectedFiles = BuilderState.getFilesAffectedBy(state, programOfThisState, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures);
+                state.currentChangedFilePath = nextKey.value as Path;
+                state.semanticDiagnosticsPerFile.delete(nextKey.value as Path);
+                state.affectedFilesIndex = 0;
+                state.seenAffectedFiles = state.seenAffectedFiles || createMap<true>();
             }
         }
 
@@ -191,11 +219,11 @@ namespace ts {
          */
         function doneWithAffectedFile(programOfThisState: Program, affected: SourceFile | Program) {
             if (affected === programOfThisState) {
-                changedFilesSet.clear();
+                state.changedFilesSet.clear();
             }
             else {
-                seenAffectedFiles.set((<SourceFile>affected).path, true);
-                affectedFilesIndex++;
+                state.seenAffectedFiles.set((affected as SourceFile).path, true);
+                state.affectedFilesIndex++;
             }
         }
 
@@ -277,10 +305,10 @@ namespace ts {
          * Note that it is assumed that the when asked about semantic diagnostics, the file has been taken out of affected files
          */
         function getSemanticDiagnostics(programOfThisState: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
-            Debug.assert(!affectedFiles || affectedFiles[affectedFilesIndex - 1] !== sourceFile || !semanticDiagnosticsPerFile.has(sourceFile.path));
+            Debug.assert(!state.affectedFiles || state.affectedFiles[state.affectedFilesIndex - 1] !== sourceFile || !state.semanticDiagnosticsPerFile.has(sourceFile.path));
             const compilerOptions = programOfThisState.getCompilerOptions();
             if (compilerOptions.outFile || compilerOptions.out) {
-                Debug.assert(semanticDiagnosticsPerFile.size === 0);
+                Debug.assert(!state.semanticDiagnosticsPerFile);
                 // We dont need to cache the diagnostics just return them from program
                 return programOfThisState.getSemanticDiagnostics(sourceFile, cancellationToken);
             }
@@ -302,7 +330,7 @@ namespace ts {
          */
         function getSemanticDiagnosticsOfFile(program: Program, sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
             const path = sourceFile.path;
-            const cachedDiagnostics = semanticDiagnosticsPerFile.get(path);
+            const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
             // Report the semantic diagnostics from the cache if we already have those diagnostics present
             if (cachedDiagnostics) {
                 return cachedDiagnostics;
@@ -310,7 +338,7 @@ namespace ts {
 
             // Diagnostics werent cached, get them from program, and cache the result
             const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
-            semanticDiagnosticsPerFile.set(path, diagnostics);
+            state.semanticDiagnosticsPerFile.set(path, diagnostics);
             return diagnostics;
         }
 
@@ -318,7 +346,7 @@ namespace ts {
          * Get all the dependencies of the sourceFile
          */
         function getAllDependencies(programOfThisState: Program, sourceFile: SourceFile) {
-            return state.getAllDependencies(programOfThisState, sourceFile);
+            return BuilderState.getAllDependencies(state, programOfThisState, sourceFile);
         }
     }
 }
