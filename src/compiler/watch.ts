@@ -302,6 +302,8 @@ namespace ts {
         // There is no extra check needed since we can just rely on the program to decide emit
         const builder = createBuilder({ getCanonicalFileName, computeHash });
 
+        clearHostScreen();
+        reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode));
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -492,7 +494,15 @@ namespace ts {
             scheduleProgramUpdate();
         }
 
+        function clearHostScreen() {
+            if (watchingHost.system.clearScreen) {
+                watchingHost.system.clearScreen();
+            }
+        }
+
         function updateProgram() {
+            clearHostScreen();
+
             timerToUpdateProgram = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
 

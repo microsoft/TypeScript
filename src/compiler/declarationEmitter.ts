@@ -1249,10 +1249,18 @@ namespace ts {
             writeLine();
         }
 
+        function bindingNameContainsVisibleBindingElement(node: BindingName): boolean {
+            return !!node && isBindingPattern(node) && some(node.elements, elem => !isOmittedExpression(elem) && isVariableDeclarationVisible(elem));
+        }
+
+        function isVariableDeclarationVisible(node: VariableDeclaration | BindingElement) {
+            return resolver.isDeclarationVisible(node) || bindingNameContainsVisibleBindingElement(node.name);
+        }
+
         function emitVariableDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration) {
             // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
             // so there is no check needed to see if declaration is visible
-            if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
+            if (node.kind !== SyntaxKind.VariableDeclaration || isVariableDeclarationVisible(node)) {
                 if (isBindingPattern(node.name)) {
                     emitBindingPattern(<BindingPattern>node.name);
                 }
@@ -1324,14 +1332,14 @@ namespace ts {
             }
 
             function emitBindingPattern(bindingPattern: BindingPattern) {
-                // Only select non-omitted expression from the bindingPattern's elements.
+                // Only select visible, non-omitted expression from the bindingPattern's elements.
                 // We have to do this to avoid emitting trailing commas.
                 // For example:
                 //      original: var [, c,,] = [ 2,3,4]
                 //      emitted: declare var c: number; // instead of declare var c:number, ;
                 const elements: Node[] = [];
                 for (const element of bindingPattern.elements) {
-                    if (element.kind !== SyntaxKind.OmittedExpression) {
+                    if (element.kind !== SyntaxKind.OmittedExpression && isVariableDeclarationVisible(element)) {
                         elements.push(element);
                     }
                 }
@@ -1371,7 +1379,7 @@ namespace ts {
         }
 
         function isVariableStatementVisible(node: VariableStatement) {
-            return forEach(node.declarationList.declarations, varDeclaration => resolver.isDeclarationVisible(varDeclaration));
+            return forEach(node.declarationList.declarations, varDeclaration => isVariableDeclarationVisible(varDeclaration));
         }
 
         function writeVariableStatement(node: VariableStatement) {
@@ -1390,7 +1398,7 @@ namespace ts {
             else {
                 write("var ");
             }
-            emitCommaList(node.declarationList.declarations, emitVariableDeclaration, resolver.isDeclarationVisible);
+            emitCommaList(node.declarationList.declarations, emitVariableDeclaration, isVariableDeclarationVisible);
             write(";");
             writeLine();
         }

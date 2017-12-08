@@ -20,6 +20,7 @@ const enum Enum1 {
     N = E << 1,
     O = E >> B,
     P = E >> 1,
+    PQ = E ** 2,
     Q = -D,
     R = C & 5,
     S = 5 & C,
@@ -127,6 +128,7 @@ function foo(x: Enum1) {
         case Enum1.N:
         case Enum1.O:
         case Enum1.P:
+        case Enum1.PQ:
         case Enum1.Q:
         case Enum1.R:
         case Enum1.S:

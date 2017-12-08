@@ -10,7 +10,7 @@
 //// }
 
 verify.codeFix({
-    description: "Declare static method 'm1'.",
+    description: "Declare static method 'm1'",
     index: 0,
     // TODO: GH#18445
     newRangeContent: `
@@ -21,7 +21,7 @@ verify.codeFix({
 });
 
 verify.codeFix({
-    description: "Declare static method 'm2'.",
+    description: "Declare static method 'm2'",
     index: 0,
     newRangeContent: `
     static m2(arg0: any, arg1: any): any {\r
@@ -34,7 +34,7 @@ verify.codeFix({
 });
 
 verify.codeFix({
-    description: "Declare static property 'prop1'.",
+    description: "Declare static property 'prop1'",
     index: 0,
     newRangeContent: `
     static prop1: number;\r
@@ -48,7 +48,7 @@ verify.codeFix({
 });
 
 verify.codeFix({
-    description: "Declare static property 'prop2'.",
+    description: "Declare static property 'prop2'",
     index: 0,
     newRangeContent: `
     static prop2: string;\r

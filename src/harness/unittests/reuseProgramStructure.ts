@@ -193,14 +193,14 @@ namespace ts {
 
     function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T>, getCache: (f: SourceFile) => Map<T>, entryChecker: (expected: T, original: T) => boolean): void {
         const file = program.getSourceFile(fileName);
-        assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
+        assert(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file);
         if (expectedContent === undefined) {
-            assert.isTrue(cache === undefined, `expected ${caption} to be undefined`);
+            assert(cache === undefined, `expected ${caption} to be undefined`);
         }
         else {
-            assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            assert.isTrue(mapsAreEqual(expectedContent, cache, entryChecker), `contents of ${caption} did not match the expected contents.`);
+            assert(cache !== undefined, `expected ${caption} to be set`);
+            assert(mapsAreEqual(expectedContent, cache, entryChecker), `contents of ${caption} did not match the expected contents.`);
         }
     }
 
@@ -329,7 +329,7 @@ namespace ts {
             const options: CompilerOptions = { target, noLib: true };
 
             const program1 = newProgram(files, ["a.ts"], options);
-            assert.notDeepEqual(emptyArray, program1.getMissingFilePaths());
+            assert(program1.getMissingFilePaths().length !== 0);
 
             const program2 = updateProgram(program1, ["a.ts"], options, noop);
             assert.deepEqual(program1.getMissingFilePaths(), program2.getMissingFilePaths());
@@ -341,11 +341,11 @@ namespace ts {
             const options: CompilerOptions = { target, noLib: true };
 
             const program1 = newProgram(files, ["a.ts"], options);
-            assert.notDeepEqual(emptyArray, program1.getMissingFilePaths());
+            assert(program1.getMissingFilePaths().length !== 0);
 
             const newTexts: NamedSourceText[] = files.concat([{ name: "non-existing-file.ts", text: SourceText.New("", "", `var x = 1`) }]);
             const program2 = updateProgram(program1, ["a.ts"], options, noop, newTexts);
-            assert.deepEqual(emptyArray, program2.getMissingFilePaths());
+            assert.lengthOf(program2.getMissingFilePaths(), 0);
 
             assert.equal(StructureIsReused.Not, program1.structureIsReused);
         });
@@ -387,6 +387,19 @@ namespace ts {
             });
             assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedModulesCache(program4, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts"), c: undefined }));
+        });
+
+        it("set the resolvedImports after re-using an ambient external module declaration", () => {
+            const files = [
+                { name: "/a.ts", text: SourceText.New("", "", 'import * as a from "a";') },
+                { name: "/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
+            ];
+            const options: CompilerOptions = { target, typeRoots: ["/types"] };
+            const program1 = newProgram(files, ["/a.ts"], options);
+            const program2 = updateProgram(program1, ["/a.ts"], options, files => {
+                files[0].text = files[0].text.updateProgram('import * as aa from "a";');
+            });
+            assert.isDefined(program2.getSourceFile("/a.ts").resolvedModules.get("a"), "'a' is not an unresolved module after re-use");
         });
 
         it("resolved type directives cache follows type directives", () => {
@@ -826,12 +839,12 @@ namespace ts {
                     updateProgramText(files, root, "const x = 1;");
                 });
                 assert.equal(program1.structureIsReused, StructureIsReused.Completely);
-                assert.deepEqual(program2.getSemanticDiagnostics(), emptyArray);
+                assert.lengthOf(program2.getSemanticDiagnostics(), 0);
             });
 
             it("Target changes -> redirect broken", () => {
                 const program1 = createRedirectProgram();
-                assert.deepEqual(program1.getSemanticDiagnostics(), emptyArray);
+                assert.lengthOf(program1.getSemanticDiagnostics(), 0);
 
                 const program2 = updateRedirectProgram(program1, files => {
                     updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");
@@ -860,7 +873,7 @@ namespace ts {
                     updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.3" }));
                 });
                 assert.equal(program1.structureIsReused, StructureIsReused.Not);
-                assert.deepEqual(program2.getSemanticDiagnostics(), []);
+                assert.lengthOf(program2.getSemanticDiagnostics(), 0);
             });
         });
     });
@@ -888,7 +901,7 @@ namespace ts {
                 /*hasInvalidatedResolution*/ returnFalse,
                 /*hasChangedAutomaticTypeDirectiveNames*/ false
             );
-            assert.isTrue(actual);
+            assert(actual);
         }
 
         function duplicate(options: CompilerOptions): CompilerOptions;
