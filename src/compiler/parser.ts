@@ -99,6 +99,7 @@ namespace ts {
                     visitNode(cbNode, (<VariableLikeDeclaration>node).dotDotDotToken) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).name) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).questionToken) ||
+                    visitNode(cbNode, (<VariableLikeDeclaration>node).exclamationToken) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).type) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).initializer);
             case SyntaxKind.FunctionType:
@@ -3283,7 +3284,7 @@ namespace ts {
                 // Check for "(xxx yyy", where xxx is a modifier and yyy is an identifier. This
                 // isn't actually allowed, but we want to treat it as a lambda so we can provide
                 // a good error message.
-                if (isModifierKind(second) && lookAhead(nextTokenIsIdentifier)) {
+                if (isModifierKind(second) && second !== SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsIdentifier)) {
                     return Tristate.True;
                 }
 
@@ -3300,7 +3301,7 @@ namespace ts {
                         return Tristate.True;
                     case SyntaxKind.QuestionToken:
                         nextToken();
-                        // If we have "(a?:" or "(a?," or "(a?=" or "(a?)" then it is definitely a lamnda.
+                        // If we have "(a?:" or "(a?," or "(a?=" or "(a?)" then it is definitely a lambda.
                         if (token() === SyntaxKind.ColonToken || token() === SyntaxKind.CommaToken || token() === SyntaxKind.EqualsToken || token() === SyntaxKind.CloseParenToken) {
                             return Tristate.True;
                         }
@@ -5255,9 +5256,17 @@ namespace ts {
             return parseIdentifier();
         }
 
-        function parseVariableDeclaration(): VariableDeclaration {
+        function parseVariableDeclarationAllowExclamation() {
+            return parseVariableDeclaration(/*allowExclamation*/ true);
+        }
+
+        function parseVariableDeclaration(allowExclamation?: boolean): VariableDeclaration {
             const node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.name = parseIdentifierOrPattern();
+            if (allowExclamation && node.name.kind === SyntaxKind.Identifier &&
+                token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                node.exclamationToken = parseTokenNode<Token<SyntaxKind.ExclamationToken>>();
+            }
             node.type = parseTypeAnnotation();
             if (!isInOrOfKeyword(token())) {
                 node.initializer = parseInitializer();
@@ -5299,7 +5308,8 @@ namespace ts {
                 const savedDisallowIn = inDisallowInContext();
                 setDisallowInContext(inForStatementInitializer);
 
-                node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+                node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations,
+                    inForStatementInitializer ? parseVariableDeclaration : parseVariableDeclarationAllowExclamation);
 
                 setDisallowInContext(savedDisallowIn);
             }
@@ -5350,6 +5360,9 @@ namespace ts {
 
         function parsePropertyDeclaration(node: PropertyDeclaration): PropertyDeclaration {
             node.kind = SyntaxKind.PropertyDeclaration;
+            if (!node.questionToken && token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                node.exclamationToken = parseTokenNode<Token<SyntaxKind.ExclamationToken>>();
+            }
             node.type = parseTypeAnnotation();
 
             // For instance properties specifically, since they are evaluated inside the constructor,
@@ -6133,16 +6146,14 @@ namespace ts {
             }
 
             // Parses out a JSDoc type expression.
-            export function parseJSDocTypeExpression(): JSDocTypeExpression;
-            export function parseJSDocTypeExpression(requireBraces: true): JSDocTypeExpression | undefined;
-            export function parseJSDocTypeExpression(requireBraces?: boolean): JSDocTypeExpression | undefined {
+            export function parseJSDocTypeExpression(mayOmitBraces?: boolean): JSDocTypeExpression {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
-                if (!parseExpected(SyntaxKind.OpenBraceToken) && requireBraces) {
-                    return undefined;
-                }
+                const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
-                parseExpected(SyntaxKind.CloseBraceToken);
+                if (!mayOmitBraces || hasBrace) {
+                    parseExpected(SyntaxKind.CloseBraceToken);
+                }
 
                 fixupParentReferences(result);
                 return finishNode(result);
@@ -6597,7 +6608,7 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = parseJSDocTypeExpression(/*requireBraces*/ true);
+                    result.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     return finishNode(result);
                 }
 

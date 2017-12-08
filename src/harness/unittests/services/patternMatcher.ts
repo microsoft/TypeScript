@@ -140,25 +140,25 @@ describe("PatternMatcher", () => {
         it("PreferCaseSensitiveCamelCaseMatchToLongPattern1", () => {
             const match = getFirstMatch("FogBar", "FBB");
 
-            assert.isTrue(match === undefined);
+            assert(match === undefined);
         });
 
         it("PreferCaseSensitiveCamelCaseMatchToLongPattern2", () => {
             const match = getFirstMatch("FogBar", "FoooB");
 
-            assert.isTrue(match === undefined);
+            assert(match === undefined);
         });
 
         it("CamelCaseMatchPartiallyUnmatched", () => {
             const match = getFirstMatch("FogBarBaz", "FZ");
 
-            assert.isTrue(match === undefined);
+            assert(match === undefined);
         });
 
         it("CamelCaseMatchCompletelyUnmatched", () => {
             const match = getFirstMatch("FogBarBaz", "ZZ");
 
-            assert.isTrue(match === undefined);
+            assert(match === undefined);
         });
 
         it("TwoUppercaseCharacters", () => {
@@ -220,7 +220,7 @@ describe("PatternMatcher", () => {
         it("PreferCaseSensitiveMiddleUnderscore3", () => {
             const match = getFirstMatch("Fog_Bar", "F__B");
 
-            assert.isTrue(undefined === match);
+            assert(undefined === match);
         });
 
         it("PreferCaseSensitiveMiddleUnderscore4", () => {
@@ -264,25 +264,25 @@ describe("PatternMatcher", () => {
         it("AllLowerPattern1", () => {
             const match = getFirstMatch("FogBarChangedEventArgs", "changedeventargs");
 
-            assert.isTrue(undefined !== match);
+            assert(undefined !== match);
         });
 
         it("AllLowerPattern2", () => {
             const match = getFirstMatch("FogBarChangedEventArgs", "changedeventarrrgh");
 
-            assert.isTrue(undefined === match);
+            assert(undefined === match);
         });
 
         it("AllLowerPattern3", () => {
             const match = getFirstMatch("ABCDEFGH", "bcd");
 
-            assert.isTrue(undefined !== match);
+            assert(undefined !== match);
         });
 
         it("AllLowerPattern4", () => {
             const match = getFirstMatch("AbcdefghijEfgHij", "efghij");
 
-            assert.isTrue(undefined === match);
+            assert(undefined === match);
         });
     });
 
@@ -370,13 +370,13 @@ describe("PatternMatcher", () => {
         it("BlankPattern", () => {
             const matches = getAllMatches("AddMetadataReference", "");
 
-            assert.isTrue(matches === undefined);
+            assert(matches === undefined);
         });
 
         it("WhitespaceOnlyPattern", () => {
             const matches = getAllMatches("AddMetadataReference", " ");
 
-            assert.isTrue(matches === undefined);
+            assert(matches === undefined);
         });
 
         it("EachWordSeparately1", () => {
@@ -403,13 +403,13 @@ describe("PatternMatcher", () => {
         it("MixedCasing", () => {
             const matches = getAllMatches("AddMetadataReference", "mEta");
 
-            assert.isTrue(matches === undefined);
+            assert(matches === undefined);
         });
 
         it("MixedCasing2", () => {
             const matches = getAllMatches("AddMetadataReference", "Data");
 
-            assert.isTrue(matches === undefined);
+            assert(matches === undefined);
         });
 
         it("AsteriskSplit", () => {
@@ -421,7 +421,7 @@ describe("PatternMatcher", () => {
         it("LowercaseSubstring1", () => {
             const matches = getAllMatches("Operator", "a");
 
-            assert.isTrue(matches === undefined);
+            assert(matches === undefined);
         });
 
         it("LowercaseSubstring2", () => {
@@ -441,7 +441,7 @@ describe("PatternMatcher", () => {
 
         it("DottedPattern2", () => {
             const match = getFirstMatchForDottedPattern("Foo.Bar.Baz", "Quux", "C.Q");
-            assert.isTrue(match === undefined);
+            assert(match === undefined);
         });
 
         it("DottedPattern3", () => {
@@ -464,13 +464,13 @@ describe("PatternMatcher", () => {
 
         it("DottedPattern6", () => {
             const match = getFirstMatchForDottedPattern("Foo.Bar.Baz", "Quux", "F.F.B.B.Quux");
-            assert.isTrue(match === undefined);
+            assert(match === undefined);
         });
 
         it("DottedPattern7", () => {
             let match = getFirstMatch("UIElement", "UIElement");
             match = getFirstMatch("GetKeyword", "UIElement");
-            assert.isTrue(match === undefined);
+            assert(match === undefined);
         });
     });
 
@@ -508,8 +508,8 @@ describe("PatternMatcher", () => {
     }
 
     function assertInRange(val: number, low: number, high: number) {
-        assert.isTrue(val >= low);
-        assert.isTrue(val <= high);
+        assert(val >= low);
+        assert(val <= high);
     }
 
     function verifyBreakIntoCharacterSpans(original: string, ...parts: string[]): void {
@@ -521,6 +521,6 @@ describe("PatternMatcher", () => {
     }
 
     function assertContainsKind(kind: ts.PatternMatchKind, results: ts.PatternMatch[]) {
-        assert.isTrue(ts.forEach(results, r => r.kind === kind));
+        assert(results.some(r => r.kind === kind));
     }
 });

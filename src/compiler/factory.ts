@@ -1271,7 +1271,7 @@ namespace ts {
         modifiers: ReadonlyArray<Modifier> | undefined,
         name: string | Identifier | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        heritageClauses: ReadonlyArray<HeritageClause>,
+        heritageClauses: ReadonlyArray<HeritageClause> | undefined,
         members: ReadonlyArray<ClassElement>) {
         const node = <ClassExpression>createSynthesizedNode(SyntaxKind.ClassExpression);
         node.decorators = undefined;
@@ -1288,7 +1288,7 @@ namespace ts {
         modifiers: ReadonlyArray<Modifier> | undefined,
         name: Identifier | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        heritageClauses: ReadonlyArray<HeritageClause>,
+        heritageClauses: ReadonlyArray<HeritageClause> | undefined,
         members: ReadonlyArray<ClassElement>) {
         return node.modifiers !== modifiers
             || node.name !== name
@@ -1723,7 +1723,7 @@ namespace ts {
         modifiers: ReadonlyArray<Modifier> | undefined,
         name: Identifier | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        heritageClauses: ReadonlyArray<HeritageClause>,
+        heritageClauses: ReadonlyArray<HeritageClause> | undefined,
         members: ReadonlyArray<ClassElement>) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers

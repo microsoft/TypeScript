@@ -468,9 +468,9 @@ namespace ts {
             }
 
             function getReferencedByPaths(referencedFilePath: Path) {
-                return mapDefinedIter(references.entries(), ([filePath, referencesInFile]) =>
+                return arrayFrom(mapDefinedIterator(references.entries(), ([filePath, referencesInFile]) =>
                     referencesInFile.has(referencedFilePath) ? filePath as Path : undefined
-                );
+                ));
             }
 
             function getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile): ReadonlyArray<SourceFile> {
@@ -504,7 +504,7 @@ namespace ts {
                 }
 
                 // Return array of values that needs emit
-                return flatMapIter(seenFileNamesMap.values(), value => value);
+                return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
             }
         }
     }

@@ -60,7 +60,7 @@ namespace ts {
                 if (isAmbientModule(<ModuleDeclaration>node)) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
-                else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
+                else if (getModuleInstanceState(node as ModuleDeclaration) === ModuleInstanceState.Instantiated) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
                 else {
@@ -366,7 +366,7 @@ namespace ts {
                         const rightKind = getNodeKind(right);
                         return rightKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : rightKind;
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
-                        return ScriptElementKind.memberFunctionElement; // instance method
+                        return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
                     case SpecialPropertyAssignmentKind.ThisProperty:
                         return ScriptElementKind.memberVariableElement; // property
                     case SpecialPropertyAssignmentKind.Property:
@@ -1101,6 +1101,24 @@ namespace ts {
             return !seen[id] && (seen[id] = true);
         };
     }
+
+    /** Add a value to a set, and return true if it wasn't already present. */
+    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+        key = String(key);
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.set(key, true);
+        return true;
+    }
+
+    export function singleElementArray<T>(t: T | undefined): T[] | undefined {
+        return t === undefined ? undefined : [t];
+    }
+
+    export function getFirstChildOfKind(node: Node, sourceFile: SourceFile, kind: SyntaxKind): Node | undefined {
+        return find(node.getChildren(sourceFile), c => c.kind === kind);
+    }
 }
 
 // Display-part writer helpers
@@ -1322,22 +1340,17 @@ namespace ts {
         return position;
     }
 
-    export function getOpenBrace(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
-        // First token is the open curly, this is where we want to put the 'super' call.
-        return constructor.body!.getFirstToken(sourceFile);
-    }
-
-    export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
-        return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
-    }
-
-    export function getSourceFileImportLocation(node: SourceFile) {
-        // For a source file, it is possible there are detached comments we should not skip
-        const text = node.text;
-        const textLength = text.length;
-        let ranges = getLeadingCommentRanges(text, 0);
-        if (!ranges) return 0;
+    export function getSourceFileImportLocation({ text }: SourceFile) {
+        const shebang = getShebang(text);
         let position = 0;
+        if (shebang !== undefined) {
+            position = shebang.length;
+            advancePastLineBreak();
+        }
+
+        // For a source file, it is possible there are detached comments we should not skip
+        let ranges = getLeadingCommentRanges(text, position);
+        if (!ranges) return position;
         // However we should still skip a pinned comment at the top
         if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
             position = ranges[0].end;
@@ -1346,7 +1359,7 @@ namespace ts {
         }
         // As well as any triple slash references
         for (const range of ranges) {
-            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
+            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(text, range.pos, range.end)) {
                 position = range.end;
                 advancePastLineBreak();
                 continue;
@@ -1356,12 +1369,12 @@ namespace ts {
         return position;
 
         function advancePastLineBreak() {
-            if (position < textLength) {
+            if (position < text.length) {
                 const charCode = text.charCodeAt(position);
                 if (isLineBreak(charCode)) {
                     position++;
 
-                    if (position < textLength && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
+                    if (position < text.length && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
                         position++;
                     }
                 }

@@ -194,6 +194,9 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
+        private readonly deletedNodesInLists: true[] = []; // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
+        // Map from class id to nodes to insert at the start
+        private readonly nodesInsertedAtClassStarts = createMap<{ sourceFile: SourceFile, cls: ClassLikeDeclaration, members: ClassElement[] }>();
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
             return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.formatContext);
@@ -220,14 +223,14 @@ namespace ts.textChanges {
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = {}) {
             const startPosition = getAdjustedStartPosition(sourceFile, node, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, node, options);
-            this.changes.push({ kind: ChangeKind.Remove, sourceFile, range: { pos: startPosition, end: endPosition } });
+            this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
             return this;
         }
 
         public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = {}) {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
-            this.changes.push({ kind: ChangeKind.Remove, sourceFile, range: { pos: startPosition, end: endPosition } });
+            this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
             return this;
         }
 
@@ -245,6 +248,9 @@ namespace ts.textChanges {
                 this.deleteNode(sourceFile, node);
                 return this;
             }
+            const id = getNodeId(node);
+            Debug.assert(!this.deletedNodesInLists[id], "Deleting a node twice");
+            this.deletedNodesInLists[id] = true;
             if (index !== containingList.length - 1) {
                 const nextToken = getTokenAtPosition(sourceFile, node.end, /*includeJsDocComment*/ false);
                 if (nextToken && isSeparator(node, nextToken)) {
@@ -258,9 +264,17 @@ namespace ts.textChanges {
                 }
             }
             else {
-                const previousToken = getTokenAtPosition(sourceFile, containingList[index - 1].end, /*includeJsDocComment*/ false);
-                if (previousToken && isSeparator(node, previousToken)) {
-                    this.deleteNodeRange(sourceFile, previousToken, node);
+                const prev = containingList[index - 1];
+                if (this.deletedNodesInLists[getNodeId(prev)]) {
+                    const pos = skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+                    const end = getAdjustedEndPosition(sourceFile, node, {});
+                    this.deleteRange(sourceFile, { pos, end });
+                }
+                else {
+                    const previousToken = getTokenAtPosition(sourceFile, containingList[index - 1].end, /*includeJsDocComment*/ false);
+                    if (previousToken && isSeparator(node, previousToken)) {
+                        this.deleteNodeRange(sourceFile, previousToken, node);
+                    }
                 }
             }
             return this;
@@ -337,8 +351,37 @@ namespace ts.textChanges {
             return this.replaceWithSingle(sourceFile, startPosition, startPosition, newNode, options);
         }
 
-        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}) {
-            if ((isStatementButNotDeclaration(after)) ||
+        public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement, newLineCharacter: string): void {
+            const body = ctr.body!;
+            const firstStatement = firstOrUndefined(body.statements);
+            if (!firstStatement || !body.multiLine) {
+                this.replaceNode(sourceFile, body, createBlock([newStatement, ...body.statements], /*multiLine*/ true), { useNonAdjustedEndPosition: true });
+            }
+            else {
+                this.insertNodeBefore(sourceFile, firstStatement, newStatement, { suffix: newLineCharacter });
+            }
+        }
+
+        public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration, newElement: ClassElement, newLineCharacter: string): void {
+            const firstMember = firstOrUndefined(cls.members);
+            if (!firstMember) {
+                const id = getNodeId(cls).toString();
+                const newMembers = this.nodesInsertedAtClassStarts.get(id);
+                if (newMembers) {
+                    Debug.assert(newMembers.sourceFile === sourceFile && newMembers.cls === cls);
+                    newMembers.members.push(newElement);
+                }
+                else {
+                    this.nodesInsertedAtClassStarts.set(id, { sourceFile, cls, members: [newElement] });
+                }
+            }
+            else {
+                this.insertNodeBefore(sourceFile, firstMember, newElement, { suffix: newLineCharacter });
+            }
+        }
+
+        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}): this {
+            if (isStatementButNotDeclaration(after) ||
                 after.kind === SyntaxKind.PropertyDeclaration ||
                 after.kind === SyntaxKind.PropertySignature ||
                 after.kind === SyntaxKind.MethodSignature) {
@@ -502,7 +545,18 @@ namespace ts.textChanges {
             return this;
         }
 
+        private finishInsertNodeAtClassStart(): void {
+            this.nodesInsertedAtClassStarts.forEach(({ sourceFile, cls, members }) => {
+                const newCls = cls.kind === SyntaxKind.ClassDeclaration
+                    ? updateClassDeclaration(cls, cls.decorators, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members)
+                    : updateClassExpression(cls, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members);
+                this.replaceNode(sourceFile, cls, newCls, { useNonAdjustedEndPosition: true });
+            });
+        }
+
         public getChanges(): FileTextChanges[] {
+            this.finishInsertNodeAtClassStart();
+
             const changesPerFile = createMap<Change[]>();
             // group changes per file
             for (const c of this.changes) {

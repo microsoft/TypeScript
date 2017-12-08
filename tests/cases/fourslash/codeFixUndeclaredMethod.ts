@@ -11,7 +11,7 @@
 //// }
 
 verify.codeFix({
-    description: "Declare method 'foo1'.",
+    description: "Declare method 'foo1'",
     index: 0,
     // TODO: GH#18445
     newRangeContent: `
@@ -22,7 +22,7 @@ verify.codeFix({
 });
 
 verify.codeFix({
-    description: "Declare method 'foo2'.",
+    description: "Declare method 'foo2'",
     index: 0,
     newRangeContent: `
     foo2<T, U, V, W, X, Y, Z>(): any {\r
@@ -35,7 +35,7 @@ verify.codeFix({
 });
 
 verify.codeFix({
-    description: "Declare method 'foo3'.",
+    description: "Declare method 'foo3'",
     index: 0,
     newRangeContent:`
     foo3<T0, T1, T2, T3, T4, T5, T6, T7>(): any {\r

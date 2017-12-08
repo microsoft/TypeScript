@@ -123,9 +123,6 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);
             }
 
-            // respond with whatever cached typings we have now
-            this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
-
             // start watching files
             this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch);
 
@@ -134,6 +131,7 @@ namespace ts.server.typingsInstaller {
                 this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
             }
             else {
+                this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`No new typings were requested as a result of typings discovery`);
                 }
@@ -207,35 +205,29 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet.set(cacheLocation, true);
         }
 
-        private filterTypings(typingsToInstall: string[]) {
-            if (typingsToInstall.length === 0) {
-                return typingsToInstall;
-            }
-            const result: string[] = [];
-            for (const typing of typingsToInstall) {
-                if (this.missingTypingsSet.get(typing) || this.packageNameToTypingLocation.get(typing)) {
-                    continue;
+        private filterTypings(typingsToInstall: ReadonlyArray<string>): ReadonlyArray<string> {
+            return typingsToInstall.filter(typing => {
+                if (this.missingTypingsSet.get(typing)) {
+                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}' is in missingTypingsSet - skipping...`);
+                    return false;
+                }
+                if (this.packageNameToTypingLocation.get(typing)) {
+                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}' already has a typing - skipping...`);
+                    return false;
                 }
                 const validationResult = JsTyping.validatePackageName(typing);
-                if (validationResult === JsTyping.PackageNameValidationResult.Ok) {
-                    if (this.typesRegistry.has(typing)) {
-                        result.push(typing);
-                    }
-                    else {
-                        if (this.log.isEnabled()) {
-                            this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
-                        }
-                    }
-                }
-                else {
+                if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
                     // add typing name to missing set so we won't process it again
                     this.missingTypingsSet.set(typing, true);
-                    if (this.log.isEnabled()) {
-                        this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
-                    }
+                    if (this.log.isEnabled()) this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
+                    return false;
                 }
-            }
-            return result;
+                if (!this.typesRegistry.has(typing)) {
+                    if (this.log.isEnabled()) this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
+                    return false;
+                }
+                return true;
+            });
         }
 
         protected ensurePackageDirectoryExists(directory: string) {
@@ -259,8 +251,9 @@ namespace ts.server.typingsInstaller {
             const filteredTypings = this.filterTypings(typingsToInstall);
             if (filteredTypings.length === 0) {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`All typings are known to be missing or invalid - no need to go any further`);
+                    this.log.writeLine(`All typings are known to be missing or invalid - no need to install more typings`);
                 }
+                this.sendResponse(this.createSetTypings(req, currentlyCachedTypings));
                 return;
             }
 

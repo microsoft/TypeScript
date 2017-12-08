@@ -191,6 +191,19 @@ namespace ts {
         return undefined;
     }
 
+    export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) {
+                return undefined;
+            }
+            const result = callback(value);
+            if (result !== undefined) {
+                return result;
+            }
+        }
+    }
+
     /**
      * Iterates through the parent chain of a node and performs the callback on each parent until the callback
      * returns a truthy value, then returns that value.
@@ -215,11 +228,25 @@ namespace ts {
 
     export function zipWith<T, U, V>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => V): V[] {
         const result: V[] = [];
-        Debug.assert(arrayA.length === arrayB.length);
+        Debug.assertEqual(arrayA.length, arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
             result.push(callback(arrayA[i], arrayB[i], i));
         }
         return result;
+    }
+
+    export function zipToIterator<T, U>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>): Iterator<[T, U]> {
+        Debug.assertEqual(arrayA.length, arrayB.length);
+        let i = 0;
+        return {
+            next() {
+                if (i === arrayA.length) {
+                    return { value: undefined as never, done: true };
+                }
+                i++;
+                return { value: [arrayA[i - 1], arrayB[i - 1]], done: false };
+            }
+        };
     }
 
     export function zipToMap<T>(keys: ReadonlyArray<string>, values: ReadonlyArray<T>): Map<T> {
@@ -400,6 +427,14 @@ namespace ts {
         return result;
     }
 
+    export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
+        return { next };
+        function next(): { value: U, done: false } | { value: never, done: true } {
+            const iterRes = iter.next();
+            return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+        }
+    }
+
     // Maps from T to T and avoids allocation if all elements map to themselves
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
     export function sameMap<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => T): ReadonlyArray<T>;
@@ -478,22 +513,32 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U | U[] | undefined): U[] {
-        const result: U[] = [];
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) break;
-            const res = mapfn(value);
-            if (res) {
-                if (isArray(res)) {
-                    result.push(...res);
-                }
-                else {
-                    result.push(res);
-                }
-            }
+    export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | Iterator<U> | undefined): Iterator<U> {
+        const first = iter.next();
+        if (first.done) {
+            return emptyIterator;
         }
-        return result;
+        let currentIter = getIterator(first.value);
+        return {
+            next() {
+                while (true) {
+                    const currentRes = currentIter.next();
+                    if (!currentRes.done) {
+                        return currentRes;
+                    }
+                    const iterRes = iter.next();
+                    if (iterRes.done) {
+                        return iterRes;
+                    }
+                    currentIter = getIterator(iterRes.value);
+                }
+            },
+        };
+
+        function getIterator(x: T): Iterator<U> {
+            const res = mapfn(x);
+            return res === undefined ? emptyIterator : isArray(res) ? arrayIterator(res) : res;
+        }
     }
 
     /**
@@ -541,17 +586,34 @@ namespace ts {
         return result;
     }
 
-    export function mapDefinedIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): U[] {
-        const result: U[] = [];
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) break;
-            const res = mapFn(value);
-            if (res !== undefined) {
-                result.push(res);
+    export function mapDefinedIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): Iterator<U> {
+        return {
+            next() {
+                while (true) {
+                    const res = iter.next();
+                    if (res.done) {
+                        return res;
+                    }
+                    const value = mapFn(res.value);
+                    if (value !== undefined) {
+                        return { value, done: false };
+                    }
+                }
             }
-        }
-        return result;
+        };
+    }
+
+    export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
+
+    export function singleIterator<T>(value: T): Iterator<T> {
+        let done = false;
+        return {
+            next() {
+                const wasDone = done;
+                done = true;
+                return wasDone ? { value: undefined as never, done: true } : { value, done: false };
+            }
+        };
     }
 
     /**
@@ -653,6 +715,7 @@ namespace ts {
         return false;
     }
 
+    export function concatenate<T>(array1: T[], array2: T[] | undefined): T[];
     export function concatenate<T>(array1: T[] | undefined, array2: T[]): T[];
     export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[] | undefined;
     export function concatenate<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T>): ReadonlyArray<T>;
@@ -945,6 +1008,36 @@ namespace ts {
      */
     export function sort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>): T[] {
         return array.slice().sort(comparer);
+    }
+
+    export function best<T>(iter: Iterator<T>, isBetter: (a: T, b: T) => boolean): T | undefined {
+        const x = iter.next();
+        if (x.done) {
+            return undefined;
+        }
+        let best = x.value;
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) {
+                return best;
+            }
+            if (isBetter(value, best)) {
+                best = value;
+            }
+        }
+    }
+
+    export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
+        let i = 0;
+        return { next: () => {
+            if (i === array.length) {
+                return { value: undefined as never, done: true };
+            }
+            else {
+                i++;
+                return { value: array[i - 1], done: false };
+            }
+        }};
     }
 
     /**
@@ -1254,10 +1347,12 @@ namespace ts {
         return result;
     }
 
-    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[] {
-        const result: T[] = [];
+    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[];
+    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => V): V[];
+    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue?: (value: T) => V): V[] {
+        const result: V[] = [];
         for (const value of array) {
-            result[makeKey(value)] = value;
+            result[makeKey(value)] = makeValue ? makeValue(value) : value as any as V;
         }
         return result;
     }
@@ -1337,7 +1432,6 @@ namespace ts {
             this.set(key, values = [value]);
         }
         return values;
-
     }
     function multiMapRemove<T>(this: MultiMap<T>, key: string, value: T) {
         const values = this.get(key);
@@ -1352,8 +1446,14 @@ namespace ts {
     /**
      * Tests whether a value is an array.
      */
-    export function isArray(value: any): value is ReadonlyArray<any> {
+    export function isArray(value: any): value is ReadonlyArray<{}> {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
+    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
+    export function toArray<T>(value: T | T[]): T[];
+    export function toArray<T>(value: T | T[]): T[] {
+        return isArray(value) ? value : [value];
     }
 
     /**
@@ -1953,7 +2053,7 @@ namespace ts {
             : moduleKind === ModuleKind.System;
     }
 
-    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict";
+    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
@@ -2744,6 +2844,12 @@ namespace ts {
         VeryAggressive = 3,
     }
 
+    /**
+     * Safer version of `Function` which should not be called.
+     * Every function should be assignable to this, but this should not be assignable to every function.
+     */
+    export type AnyFunction = (...args: never[]) => void;
+
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
         export let isDebugging = false;
@@ -2752,7 +2858,7 @@ namespace ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: Function): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): void {
             if (!expression) {
                 if (verboseDebugInfo) {
                     message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
@@ -2786,7 +2892,7 @@ namespace ts {
             }
         }
 
-        export function fail(message?: string, stackCrawlMark?: Function): never {
+        export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
@@ -2795,11 +2901,11 @@ namespace ts {
             throw e;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: Function): never {
+        export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
             return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
 
-        export function getFunctionName(func: Function) {
+        export function getFunctionName(func: AnyFunction) {
             if (typeof func !== "function") {
                 return "";
             }
