@@ -4337,10 +4337,9 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            type = declaration.initializer ?
+            return declaration.initializer ?
                 getUnionType([type, checkExpressionCached(declaration.initializer)], /*subtypeReduction*/ true) :
                 type;
-            return shouldKeepLiteralType(declaration) ? type : getWidenedLiteralType(type);
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -19085,15 +19084,10 @@ namespace ts {
 
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
             const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
-            return shouldKeepLiteralType(declaration) ? type : getWidenedLiteralType(type);
-        }
-
-        function shouldKeepLiteralType(declaration: VariableLikeDeclaration) {
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
-                getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
-                (declaration.initializer && isTypeAssertion(declaration.initializer));
+                (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
+                isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
         }
-
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {
             if (contextualType) {
@@ -19110,7 +19104,6 @@ namespace ts {
                     // this a literal context for literals of that primitive type. For example, given a
                     // type parameter 'T extends string', infer string literal types for T.
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-
                     return constraint.flags & TypeFlags.String && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
                         constraint.flags & TypeFlags.Number && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                         constraint.flags & TypeFlags.Boolean && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
