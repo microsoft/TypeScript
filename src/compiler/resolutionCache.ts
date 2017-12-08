@@ -14,7 +14,7 @@ namespace ts {
 
         invalidateResolutionOfFile(filePath: Path): void;
         removeResolutionsOfFile(filePath: Path): void;
-        createHasInvalidatedResolution(): HasInvalidatedResolution;
+        createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
 
         startCachingPerDirectoryResolution(): void;
         finishCachingPerDirectoryResolution(): void;
@@ -159,8 +159,8 @@ namespace ts {
             return collected;
         }
 
-        function createHasInvalidatedResolution(): HasInvalidatedResolution {
-            if (allFilesHaveInvalidatedResolution) {
+        function createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution {
+            if (allFilesHaveInvalidatedResolution || forceAllFilesAsInvalidated) {
                 // Any file asked would have invalidated resolution
                 filesWithInvalidatedResolutions = undefined;
                 return returnTrue;

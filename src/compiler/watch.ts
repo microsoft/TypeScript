@@ -302,6 +302,8 @@ namespace ts {
 
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+        /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
 
         /** Used to watch changes in source files, missing files needed to update the program or config file */
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
@@ -520,7 +522,10 @@ namespace ts {
         compilerHost.resolveModuleNames = host.resolveModuleNames ?
             ((moduleNames, containingFile, reusedNames) => host.resolveModuleNames(moduleNames, containingFile, reusedNames)) :
             ((moduleNames, containingFile, reusedNames) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames));
-        compilerHost.resolveTypeReferenceDirectives = resolutionCache.resolveTypeReferenceDirectives.bind(resolutionCache);
+        compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
+            ((typeDirectiveNames, containingFile) => host.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile)) :
+            ((typeDirectiveNames, containingFile) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile));
+        const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
         reportWatchDiagnostic(Diagnostics.Starting_compilation_in_watch_mode);
         synchronizeProgram();
@@ -542,7 +547,8 @@ namespace ts {
                 }
             }
 
-            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution();
+            // All resolutions are invalid if user provided resolutions
+            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution);
             if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames)) {
                 return program;
             }
