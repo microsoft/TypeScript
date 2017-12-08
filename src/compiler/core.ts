@@ -1992,11 +1992,6 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(path);
     }
 
-    /** @deprecated Use `!isExternalModuleNameRelative(moduleName)` instead. */
-    export function moduleHasNonRelativeName(moduleName: string): boolean {
-        return !isExternalModuleNameRelative(moduleName);
-    }
-
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
