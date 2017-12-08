@@ -466,7 +466,7 @@ namespace ts.Completions {
     }
 
     export function getCompletionEntryDetails(
-        typeChecker: TypeChecker,
+        program: Program,
         log: (message: string) => void,
         compilerOptions: CompilerOptions,
         sourceFile: SourceFile,
@@ -477,6 +477,7 @@ namespace ts.Completions {
         formatContext: formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
     ): CompletionEntryDetails {
+        const typeChecker = program.getTypeChecker();
         const { name } = entryId;
         // Compute all the completion symbols again.
         const symbolCompletion = getSymbolCompletionFromEntryId(typeChecker, log, compilerOptions, sourceFile, position, entryId, allSourceFiles);
@@ -496,7 +497,7 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, symbolToOriginInfoMap } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, typeChecker, host, compilerOptions, sourceFile, formatContext, getCanonicalFileName, allSourceFiles);
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, formatContext, getCanonicalFileName, allSourceFiles);
                 const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
                 return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: sourceDisplay };
@@ -523,6 +524,7 @@ namespace ts.Completions {
     function getCompletionEntryCodeActionsAndSourceDisplay(
         symbolToOriginInfoMap: SymbolOriginInfoMap,
         symbol: Symbol,
+        program: Program,
         checker: TypeChecker,
         host: LanguageServiceHost,
         compilerOptions: CompilerOptions,
@@ -541,9 +543,10 @@ namespace ts.Completions {
         const moduleSymbols = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
         Debug.assert(contains(moduleSymbols, moduleSymbol));
 
-        const sourceDisplay = [textPart(first(codefix.getModuleSpecifiersForNewImport(sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host)))];
+        const sourceDisplay = [textPart(first(codefix.getModuleSpecifiersForNewImport(program, sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host)))];
         const codeActions = codefix.getCodeActionForImport(moduleSymbols, {
             host,
+            program,
             checker,
             newLineCharacter: host.getNewLine(),
             compilerOptions,

@@ -1538,18 +1538,14 @@ namespace ts.server {
                     const oldText = snapshot.getText(0, snapshot.getLength());
                     mappedRenameLocation = getLocationInNewDocument(oldText, renameFilename, renameLocation, edits);
                 }
-                return {
-                    renameLocation: mappedRenameLocation,
-                    renameFilename,
-                    edits: edits.map(change => this.mapTextChangesToCodeEdits(project, change))
-                };
+                return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(project, edits) };
             }
             else {
                 return result;
             }
         }
 
-        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
+        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeAction> | ReadonlyArray<CodeAction> {
             if (args.errorCodes.length === 0) {
                 return undefined;
             }
@@ -1568,6 +1564,19 @@ namespace ts.server {
             }
             else {
                 return codeActions;
+            }
+        }
+
+        private getCombinedCodeFix({ scope, fixId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
+            Debug.assert(scope.type === "file");
+            const { file, project } = this.getFileAndProject(scope.args);
+            const formatOptions = this.projectService.getFormatCodeOptions(file);
+            const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, fixId, formatOptions);
+            if (simplifiedResult) {
+                return { changes: this.mapTextChangesToCodeEdits(project, res.changes), commands: res.commands };
+            }
+            else {
+                return res;
             }
         }
 
@@ -1605,15 +1614,15 @@ namespace ts.server {
         }
 
         private mapCodeAction({ description, changes: unmappedChanges, commands }: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
-            const changes = unmappedChanges.map(change => ({
-                fileName: change.fileName,
-                textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
-            }));
+            const changes = unmappedChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, scriptInfo));
             return { description, changes, commands };
         }
 
-        private mapTextChangesToCodeEdits(project: Project, textChanges: FileTextChanges): protocol.FileCodeEdits {
-            const scriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(textChanges.fileName));
+        private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
+            return textChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))));
+        }
+
+        private mapTextChangesToCodeEditsUsingScriptinfo(textChanges: FileTextChanges, scriptInfo: ScriptInfo): protocol.FileCodeEdits {
             return {
                 fileName: textChanges.fileName,
                 textChanges: textChanges.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
@@ -1703,6 +1712,10 @@ namespace ts.server {
         }
 
         private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
+            [CommandNames.Status]: () => {
+                const response: protocol.StatusResponseBody = { version };
+                return this.requiredResponse(response);
+            },
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
                 // TODO: GH#20447 report errors
@@ -1955,6 +1968,12 @@ namespace ts.server {
             },
             [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.GetCombinedCodeFix]: (request: protocol.GetCombinedCodeFixRequest) => {
+                return this.requiredResponse(this.getCombinedCodeFix(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.GetCombinedCodeFixFull]: (request: protocol.GetCombinedCodeFixRequest) => {
+                return this.requiredResponse(this.getCombinedCodeFix(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
                 return this.requiredResponse(this.applyCodeActionCommand(request.arguments));

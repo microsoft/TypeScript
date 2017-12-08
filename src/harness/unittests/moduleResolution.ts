@@ -313,7 +313,7 @@ namespace ts {
                 const host = createModuleResolutionHost(/*hasDirectoryExists*/ true, { name: realFileName, symlinks: [symlinkFileName] });
                 const resolution = nodeModuleNameResolver("linked", "/app/app.ts", { preserveSymlinks }, host);
                 const resolvedFileName = preserveSymlinks ? symlinkFileName : realFileName;
-                checkResolvedModule(resolution.resolvedModule, { resolvedFileName, isExternalLibraryImport: true, extension: Extension.Dts });
+                checkResolvedModule(resolution.resolvedModule, createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/ true));
             });
         }
     });
@@ -338,7 +338,7 @@ namespace ts {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
                     return files.has(path);
                 },
-                readFile: notImplemented
+                readFile: notImplemented,
             };
 
             const program = createProgram(rootFiles, options, host);
@@ -426,7 +426,7 @@ export = C;
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
                     return files.has(path);
                 },
-                readFile: notImplemented
+                readFile: notImplemented,
             };
             const program = createProgram(rootFiles, options, host);
             const diagnostics = sortAndDeduplicateDiagnostics([...program.getSemanticDiagnostics(), ...program.getOptionsDiagnostics()]);
@@ -1067,7 +1067,7 @@ import b = require("./moduleB");
                 readFile: fileName => {
                     const file = sourceFiles.get(fileName);
                     return file && file.text;
-                }
+                },
             };
             const program1 = createProgram(names, {}, compilerHost);
             const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();

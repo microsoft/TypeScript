@@ -101,6 +101,7 @@ namespace ts {
         return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
             oldResolution.extension === newResolution.extension &&
             oldResolution.resolvedFileName === newResolution.resolvedFileName &&
+            oldResolution.originalPath === newResolution.originalPath &&
             packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
     }
 
@@ -3695,6 +3696,10 @@ namespace ts {
 
     export function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker) {
         return checker.getSignaturesOfType(type, SignatureKind.Call).length !== 0 || checker.getSignaturesOfType(type, SignatureKind.Construct).length !== 0;
+    }
+
+    export function forSomeAncestorDirectory(directory: string, callback: (directory: string) => boolean): boolean {
+        return !!forEachAncestorDirectory(directory, d => callback(d) ? true : undefined);
     }
 }
 

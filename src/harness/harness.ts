@@ -36,8 +36,8 @@ namespace assert {
     export function isFalse(expr: boolean, msg = "Expected value to be false."): void {
         assert(!expr, msg);
     }
-    export function equal<T>(a: T, b: T, msg = "Expected values to be equal."): void {
-        assert(a === b, msg);
+    export function equal<T>(a: T, b: T, msg?: string): void {
+        assert(a === b, msg || (() => `Expected to be equal:\nExpected:\n${JSON.stringify(a)}\nActual:\n${JSON.stringify(b)}`));
     }
     export function notEqual<T>(a: T, b: T, msg = "Expected values to not be equal."): void {
         assert(a !== b, msg);

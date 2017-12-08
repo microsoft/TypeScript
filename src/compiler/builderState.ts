@@ -265,13 +265,10 @@ namespace ts.BuilderState {
             }
         }
 
-        return flatMapIter(seenMap.keys(), path => {
+        return arrayFrom(mapDefinedIterator(seenMap.keys(), path => {
             const file = programOfThisState.getSourceFileByPath(path as Path);
-            if (file) {
-                return file.fileName;
-            }
-            return path;
-        });
+            return file ? file.fileName : path;
+        }));
     }
 
     /**
@@ -289,9 +286,9 @@ namespace ts.BuilderState {
      * Gets the files referenced by the the file path
      */
     function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
-        return mapDefinedIter(state.referencedMap.entries(), ([filePath, referencesInFile]) =>
+        return arrayFrom(mapDefinedIterator(state.referencedMap.entries(), ([filePath, referencesInFile]) =>
             referencesInFile.has(referencedFilePath) ? filePath as Path : undefined
-        );
+        ));
     }
 
     /**
@@ -381,6 +378,7 @@ namespace ts.BuilderState {
         }
 
         // Return array of values that needs emit
-        return flatMapIter(seenFileNamesMap.values(), value => value);
+        // Return array of values that needs emit
+        return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
     }
 }

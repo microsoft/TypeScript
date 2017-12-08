@@ -138,7 +138,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nazwa właściwości obliczanej w deklaracji właściwości klasy musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w deklaracji właściwości klasy musi odwoływać się do wyrażenia, którego typem jest literał lub „unique symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -147,7 +147,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nazwa właściwości obliczanej w przeciążeniu metody musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w przeciążeniu metody musi odwoływać się do wyrażenia, którego typem jest literał lub „unique symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -156,7 +156,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nazwa właściwości obliczanej w typie literału musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w typie literału musi odwoływać się do wyrażenia, którego typem jest literał lub „unique symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -165,7 +165,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nazwa właściwości obliczanej w otaczającym kontekście musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w otaczającym kontekście musi odwoływać się do wyrażenia, którego typem jest literał lub „unique symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -174,7 +174,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nazwa właściwości obliczanej w interfejsie musi odwoływać się do wyrażenia, którego typem jest typ literału lub typ „unikatowy symbol”.]]></Val>
+            <Val><![CDATA[Nazwa właściwości obliczanej w interfejsie musi odwoływać się do wyrażenia, którego typem jest literał lub „unique symbol”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -525,7 +525,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Właściwość klasy, której typem jest typ „unikatowy symbol”, musi być „static” i „readonly”.]]></Val>
+            <Val><![CDATA[Właściwość klasy, której typem jest „unique symbol”, musi być określona zarówno jako „static”, jak i „readonly”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -534,7 +534,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Właściwość interfejsu lub typu, którego typem jest typ „unikatowy symbol”, musi być „readonly”.]]></Val>
+            <Val><![CDATA[Właściwość klasy, której typem jest literał lub „unique symbol”, musi być określona zarówno jako „static”, jak i „readonly”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -786,7 +786,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zmienna, której typem jest typ „unikatowy symbol”, musi być „const”.]]></Val>
+            <Val><![CDATA[Zmienna, której typem „unique symbol”, musi być określona jako „const”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1964,8 +1964,8 @@
       <Item ItemId=";Change_extends_to_implements_90003" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change 'extends' to 'implements']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Zmień atrybut „extends” na „implements”.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Zmień atrybut „extends” na „implements”]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
@@ -3758,8 +3758,8 @@
       <Item ItemId=";Implement_inherited_abstract_class_90007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Implement inherited abstract class]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Implementuj odziedziczoną klasę abstrakcyjną.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wdróż odziedziczoną klasę abstrakcyjną]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Implement inherited abstract class.]]></Val>
@@ -6539,6 +6539,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Starting_compilation_in_watch_mode_6031" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Starting compilation in watch mode...]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Statement_expected_1129" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Statement expected.]]></Val>
@@ -8901,7 +8907,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typy „unikatowy symbol” nie są dozwolone w tym miejscu.]]></Val>
+            <Val><![CDATA[Typy „unique symbol” nie są dozwolone w tym miejscu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8910,7 +8916,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are only allowed on variables in a variable statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typy „unikatowy symbol” są dozwolone tylko w zmiennych w instrukcji zmiennej.]]></Val>
+            <Val><![CDATA[Typy „unique symbol” są dozwolone tylko w zmiennych w instrukcji zmiennej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8919,7 +8925,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types may not be used on a variable declaration with a binding name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typów „unikatowy symbol” nie można używać w deklaracji zmiennej z nazwą powiązania.]]></Val>
+            <Val><![CDATA[Typów „unique symbol” nie można używać w deklaracji zmiennej z nazwą powiązania.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
