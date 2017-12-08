@@ -1,8 +1,8 @@
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(2,10): error TS2304: Cannot find name 'T'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(2,12): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(4,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' has type '<T>() => number' at tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts 0:4, but here has type '<T>(a: any) => number'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' has type '<T>() => number' at tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts 0:4, but here has type '<T>(a: any, b: any) => number'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' has type '<T>() => number' at tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts 0:4, but here has type '<T>(a?: number, b?: number) => number'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(4,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any) => number'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any, b: any) => number'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a?: number, b?: number) => number'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(8,10): error TS2304: Cannot find name 'T'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(8,13): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(9,10): error TS2304: Cannot find name 'T'.
@@ -24,13 +24,13 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunctio
     
     var v = <T>(a) => 1;
         ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' has type '<T>() => number' at tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts 0:4, but here has type '<T>(a: any) => number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any) => number'.
     var v = <T>(a, b) => 1;
         ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' has type '<T>() => number' at tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts 0:4, but here has type '<T>(a: any, b: any) => number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any, b: any) => number'.
     var v = <T>(a = 1, b = 2) => 1;
         ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' has type '<T>() => number' at tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts 0:4, but here has type '<T>(a?: number, b?: number) => number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a?: number, b?: number) => number'.
     
     var v = <T>(a);
              ~

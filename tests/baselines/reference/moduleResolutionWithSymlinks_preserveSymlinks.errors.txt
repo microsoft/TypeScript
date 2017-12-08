@@ -1,4 +1,4 @@
-/app/app.ts(9,1): error TS90010: Type 'C' is not assignable to type 'C'. Two different types with this name exist, but they are unrelated.
+/app/app.ts(9,1): error TS2719: Type 'C' is not assignable to type 'C'. Two different types with this name exist, but they are unrelated.
   Types have separate declarations of a private property 'x'.
 
 
@@ -13,8 +13,8 @@
     // Should fail. We no longer resolve any symlinks.
     x = new C2();
     ~
-!!! error TS90010: Type 'C' is not assignable to type 'C'. Two different types with this name exist, but they are unrelated.
-!!! error TS90010:   Types have separate declarations of a private property 'x'.
+!!! error TS2719: Type 'C' is not assignable to type 'C'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   Types have separate declarations of a private property 'x'.
     
 ==== /linked/index.d.ts (0 errors) ====
     export { real } from "real";

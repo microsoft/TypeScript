@@ -82,12 +82,13 @@ namespace ts {
                 es2015: ScriptTarget.ES2015,
                 es2016: ScriptTarget.ES2016,
                 es2017: ScriptTarget.ES2017,
+                es2018: ScriptTarget.ES2018,
                 esnext: ScriptTarget.ESNext,
             }),
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_or_ESNEXT,
         },
         {
             name: "module",
@@ -120,6 +121,7 @@ namespace ts {
                     "es7": "lib.es2016.d.ts",
                     "es2016": "lib.es2016.d.ts",
                     "es2017": "lib.es2017.d.ts",
+                    "es2018": "lib.es2018.d.ts",
                     "esnext": "lib.esnext.d.ts",
                     // Host only
                     "dom": "lib.dom.d.ts",
@@ -709,12 +711,11 @@ namespace ts {
     export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
         // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
         if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
-            const result: TypeAcquisition = {
+            return {
                 enable: typeAcquisition.enableAutoDiscovery,
                 include: typeAcquisition.include || [],
                 exclude: typeAcquisition.exclude || []
             };
-            return result;
         }
         return typeAcquisition;
     }
@@ -1797,9 +1798,8 @@ namespace ts {
         return options;
     }
 
-    function getDefaultTypeAcquisition(configFileName?: string) {
-        const options: TypeAcquisition = { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
-        return options;
+    function getDefaultTypeAcquisition(configFileName?: string): TypeAcquisition {
+        return { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
     }
 
     function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,

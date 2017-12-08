@@ -749,6 +749,10 @@ namespace ts {
             return expr1.kind === SyntaxKind.TypeOfExpression && isNarrowableOperand((<TypeOfExpression>expr1).expression) && expr2.kind === SyntaxKind.StringLiteral;
         }
 
+        function isNarrowableInOperands(left: Expression, right: Expression) {
+            return left.kind === SyntaxKind.StringLiteral && isNarrowingExpression(right);
+        }
+
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
             switch (expr.operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
@@ -761,6 +765,8 @@ namespace ts {
                         isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right);
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowableOperand(expr.left);
+                case SyntaxKind.InKeyword:
+                    return isNarrowableInOperands(expr.left, expr.right);
                 case SyntaxKind.CommaToken:
                     return isNarrowingExpression(expr.right);
             }
@@ -2006,6 +2012,9 @@ namespace ts {
                     if (currentFlow && isNarrowableReference(<Expression>node)) {
                         node.flowNode = currentFlow;
                     }
+                    if (isSpecialPropertyDeclaration(node as PropertyAccessExpression)) {
+                        bindSpecialPropertyDeclaration(node as PropertyAccessExpression);
+                    }
                     break;
                 case SyntaxKind.BinaryExpression:
                     const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
@@ -2314,7 +2323,7 @@ namespace ts {
             declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule, SymbolFlags.None);
         }
 
-        function bindThisPropertyAssignment(node: BinaryExpression) {
+        function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
             Debug.assert(isInJavaScriptFile(node));
             const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             switch (container.kind) {
@@ -2340,8 +2349,19 @@ namespace ts {
             }
         }
 
+        function bindSpecialPropertyDeclaration(node: PropertyAccessExpression) {
+            Debug.assert(isInJavaScriptFile(node));
+            if (node.expression.kind === SyntaxKind.ThisKeyword) {
+                bindThisPropertyAssignment(node);
+            }
+            else if ((node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression) &&
+                node.parent.parent.kind === SyntaxKind.SourceFile) {
+                bindStaticPropertyAssignment(node);
+            }
+        }
+
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
-            // We saw a node of the form 'x.prototype.y = z'. Declare a 'member' y on x if x was a function.
+            // We saw a node of the form 'x.prototype.y = z'. Declare a 'member' y on x if x is a function or class, or not declared.
 
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
@@ -2357,24 +2377,27 @@ namespace ts {
             bindPropertyAssignment(constructorFunction.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ true);
         }
 
-        function bindStaticPropertyAssignment(node: BinaryExpression) {
-            // We saw a node of the form 'x.y = z'. Declare a 'member' y on x if x was a function.
-
-            // Look up the function in the local scope, since prototype assignments should
+        /**
+         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function or class, or not declared.
+         * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
+         */
+        function bindStaticPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
+            // Look up the function in the local scope, since static assignments should
             // follow the function declaration
-            const leftSideOfAssignment = node.left as PropertyAccessExpression;
+            const leftSideOfAssignment = node.kind === SyntaxKind.PropertyAccessExpression ? node : node.left as PropertyAccessExpression;
             const target = leftSideOfAssignment.expression;
 
             if (isIdentifier(target)) {
                 // Fix up parent pointers since we're going to use these nodes before we bind into them
-                leftSideOfAssignment.parent = node;
                 target.parent = leftSideOfAssignment;
-
+                if (node.kind === SyntaxKind.BinaryExpression) {
+                    leftSideOfAssignment.parent = node;
+                }
                 if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
                     // This can be an alias for the 'exports' or 'module.exports' names, e.g.
                     //    var util = module.exports;
                     //    util.property = function ...
-                    bindExportsPropertyAssignment(node);
+                    bindExportsPropertyAssignment(node as BinaryExpression);
                 }
                 else {
                     bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
@@ -2383,17 +2406,41 @@ namespace ts {
         }
 
         function lookupSymbolForName(name: __String) {
-            return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || (container.locals && container.locals.get(name));
+            const local = container.locals && container.locals.get(name);
+            if (local) {
+                return local.exportSymbol || local;
+            }
+            return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
         }
 
-        function bindPropertyAssignment(functionName: __String, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
-            let targetSymbol = lookupSymbolForName(functionName);
-
-            if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
-                targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
+        function bindPropertyAssignment(functionName: __String, propertyAccess: PropertyAccessExpression, isPrototypeProperty: boolean) {
+            const symbol = lookupSymbolForName(functionName);
+            let targetSymbol = symbol && isDeclarationOfFunctionOrClassExpression(symbol) ?
+                (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
+                symbol;
+            Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression || propertyAccess.parent.kind === SyntaxKind.ExpressionStatement);
+            let isLegalPosition: boolean;
+            if (propertyAccess.parent.kind === SyntaxKind.BinaryExpression) {
+                const initializerKind = (propertyAccess.parent as BinaryExpression).right.kind;
+                isLegalPosition = (initializerKind === SyntaxKind.ClassExpression || initializerKind === SyntaxKind.FunctionExpression) &&
+                    propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile;
             }
-
-            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class))) {
+            else {
+                isLegalPosition = propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+            }
+            if (!isPrototypeProperty && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
+                Debug.assert(isIdentifier(propertyAccess.expression));
+                const identifier = propertyAccess.expression as Identifier;
+                const flags =  SymbolFlags.Module | SymbolFlags.JSContainer;
+                const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
+                if (targetSymbol) {
+                    addDeclarationToSymbol(symbol, identifier, flags);
+                }
+                else {
+                    targetSymbol = declareSymbol(container.locals, /*parent*/ undefined, identifier, flags, excludeFlags);
+                }
+            }
+            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule))) {
                 return;
             }
 
@@ -2403,7 +2450,7 @@ namespace ts {
                 (targetSymbol.exports || (targetSymbol.exports = createSymbolTable()));
 
             // Declare the method/property
-            declareSymbol(symbolTable, targetSymbol, propertyAccessExpression, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            declareSymbol(symbolTable, targetSymbol, propertyAccess, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         function bindCallExpression(node: CallExpression) {

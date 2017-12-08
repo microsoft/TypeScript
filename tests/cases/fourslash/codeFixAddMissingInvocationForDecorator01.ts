@@ -9,6 +9,6 @@
 ////}
 
 verify.codeFix({
-    description: "Call decorator expression.",
+    description: "Call decorator expression",
     newRangeContent: `@foo()`
 });

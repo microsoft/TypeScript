@@ -39,7 +39,7 @@ namespace ts {
             assert.equal(end, expectedRange.end, "incorrect end of range");
         }
         else {
-            assert.isTrue(!result.targetRange, `expected range to extract to be undefined`);
+            assert(!result.targetRange, `expected range to extract to be undefined`);
         }
     }
 
