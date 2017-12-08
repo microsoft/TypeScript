@@ -35,7 +35,7 @@ namespace ts {
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): SyntaxKind;
         scanJsxToken(): SyntaxKind;
-        scanJSDocToken(): SyntaxKind;
+        scanJSDocToken(): JsDocSyntaxKind;
         scan(): SyntaxKind;
         getText(): string;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
@@ -1819,7 +1819,7 @@ namespace ts {
             }
         }
 
-        function scanJSDocToken(): SyntaxKind {
+        function scanJSDocToken(): JsDocSyntaxKind {
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
@@ -1862,9 +1862,6 @@ namespace ts {
                 case CharacterCodes.lessThan:
                     pos++;
                     return token = SyntaxKind.LessThanToken;
-                case CharacterCodes.greaterThan:
-                    pos++;
-                    return token = SyntaxKind.GreaterThanToken;
                 case CharacterCodes.equals:
                     pos++;
                     return token = SyntaxKind.EqualsToken;
@@ -1874,12 +1871,6 @@ namespace ts {
                 case CharacterCodes.dot:
                     pos++;
                     return token = SyntaxKind.DotToken;
-                case CharacterCodes.exclamation:
-                    pos++;
-                    return token = SyntaxKind.ExclamationToken;
-                case CharacterCodes.question:
-                    pos++;
-                    return token = SyntaxKind.QuestionToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {

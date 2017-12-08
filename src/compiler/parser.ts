@@ -6240,17 +6240,17 @@ namespace ts {
                         indent += text.length;
                     }
 
-                    nextJSDocToken();
-                    while (token() === SyntaxKind.WhitespaceTrivia) {
-                        nextJSDocToken();
+                    let t = nextJSDocToken();
+                    while (t === SyntaxKind.WhitespaceTrivia) {
+                        t = nextJSDocToken();
                     }
-                    if (token() === SyntaxKind.NewLineTrivia) {
+                    if (t === SyntaxKind.NewLineTrivia) {
                         state = JSDocState.BeginningOfLine;
                         indent = 0;
-                        nextJSDocToken();
+                        t = nextJSDocToken();
                     }
-                    while (token() !== SyntaxKind.EndOfFileToken) {
-                        switch (token()) {
+                    loop: while (true) {
+                        switch (t) {
                             case SyntaxKind.AtToken:
                                 if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
                                     removeTrailingNewlines(comments);
@@ -6304,7 +6304,7 @@ namespace ts {
                                 indent += whitespace.length;
                                 break;
                             case SyntaxKind.EndOfFileToken:
-                                break;
+                                break loop;
                             default:
                                 // anything other than whitespace or asterisk at the beginning of the line starts the comment text
                                 state = JSDocState.SavingComments;
@@ -6312,10 +6312,11 @@ namespace ts {
                                 break;
                         }
                         if (advanceToken) {
-                            nextJSDocToken();
+                            t = nextJSDocToken();
                         }
                         else {
                             advanceToken = true;
+                            t = currentToken as JsDocSyntaxKind;
                         }
                     }
                     removeLeadingNewlines(comments);
@@ -6426,8 +6427,9 @@ namespace ts {
                         comments.push(text);
                         indent += text.length;
                     }
-                    while (token() !== SyntaxKind.AtToken && token() !== SyntaxKind.EndOfFileToken) {
-                        switch (token()) {
+                    let tok = token() as JsDocSyntaxKind;
+                    loop: while (true) {
+                        switch (tok) {
                             case SyntaxKind.NewLineTrivia:
                                 if (state >= JSDocState.SawAsterisk) {
                                     state = JSDocState.BeginningOfLine;
@@ -6436,8 +6438,9 @@ namespace ts {
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
+                            case SyntaxKind.EndOfFileToken:
                                 // Done
-                                break;
+                                break loop;
                             case SyntaxKind.WhitespaceTrivia:
                                 if (state === JSDocState.SavingComments) {
                                     pushComment(scanner.getTokenText());
@@ -6465,11 +6468,7 @@ namespace ts {
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
-                        if (token() === SyntaxKind.AtToken) {
-                            // Done
-                            break;
-                        }
-                        nextJSDocToken();
+                        tok = nextJSDocToken();
                     }
 
                     removeLeadingNewlines(comments);
@@ -6747,8 +6746,7 @@ namespace ts {
                     let canParseTag = true;
                     let seenAsterisk = false;
                     while (true) {
-                        nextJSDocToken();
-                        switch (token()) {
+                        switch (nextJSDocToken()) {
                             case SyntaxKind.AtToken:
                                 if (canParseTag) {
                                     const child = tryParseChildTag(target);
@@ -6844,7 +6842,7 @@ namespace ts {
                     return result;
                 }
 
-                function nextJSDocToken(): SyntaxKind {
+                function nextJSDocToken(): JsDocSyntaxKind {
                     return currentToken = scanner.scanJSDocToken();
                 }
 
