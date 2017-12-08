@@ -3397,11 +3397,17 @@ namespace ts {
                     }
                     else if (type.flags & TypeFlags.Conditional) {
                         writeType((<ConditionalType>type).checkType, TypeFormatFlags.InElementType);
+                        writeSpace(writer);
                         writer.writeKeyword("extends");
+                        writeSpace(writer);
                         writeType((<ConditionalType>type).extendsType, TypeFormatFlags.InElementType);
+                        writeSpace(writer);
                         writePunctuation(writer, SyntaxKind.QuestionToken);
+                        writeSpace(writer);
                         writeType((<ConditionalType>type).trueType, TypeFormatFlags.InElementType);
+                        writeSpace(writer);
                         writePunctuation(writer, SyntaxKind.ColonToken);
+                        writeSpace(writer);
                         writeType((<ConditionalType>type).falseType, TypeFormatFlags.InElementType);
                     }
                     else {
@@ -6374,6 +6380,11 @@ namespace ts {
                     const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
                 }
+                if (t.flags & TypeFlags.Conditional) {
+                    const trueBaseType = getBaseConstraint((<ConditionalType>t).trueType);
+                    const falseBaseType = getBaseConstraint((<ConditionalType>t).trueType);
+                    return trueBaseType && falseBaseType ? getUnionType([trueBaseType, falseBaseType]) : undefined;
+                }
                 if (isGenericMappedType(t)) {
                     return emptyObjectType;
                 }
@@ -8221,6 +8232,8 @@ namespace ts {
             type.extendsType = extendsType;
             type.trueType = trueType;
             type.falseType = falseType;
+            type.aliasSymbol = aliasSymbol;
+            type.aliasTypeArguments = aliasTypeArguments;
             return type;
         }
 
@@ -8793,6 +8806,23 @@ namespace ts {
             return result;
         }
 
+        function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper): Type {
+            const checkType = type.checkType;
+            if (checkType.flags & TypeFlags.TypeParameter) {
+                const instantiatedType = mapper(<TypeParameter>checkType);
+                if (checkType !== instantiatedType && instantiatedType.flags & TypeFlags.Union) {
+                    return mapType(instantiatedType, t => instantiateConditionalType(type, createReplacementMapper(checkType, t, mapper)));
+                }
+            }
+            return instantiateConditionalType(type, mapper);
+        }
+
+        function instantiateConditionalType(type: ConditionalType, mapper: TypeMapper): Type {
+            return getConditionalType(instantiateType((<ConditionalType>type).checkType, mapper), instantiateType((<ConditionalType>type).extendsType, mapper),
+                instantiateType((<ConditionalType>type).trueType, mapper), instantiateType((<ConditionalType>type).falseType, mapper),
+                type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+        }
+
         function instantiateType(type: Type, mapper: TypeMapper): Type {
             if (type && mapper !== identityMapper) {
                 if (type.flags & TypeFlags.TypeParameter) {
@@ -8826,9 +8856,7 @@ namespace ts {
                     return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
                 }
                 if (type.flags & TypeFlags.Conditional) {
-                    return getConditionalType(instantiateType((<ConditionalType>type).checkType, mapper), instantiateType((<ConditionalType>type).extendsType, mapper),
-                        instantiateType((<ConditionalType>type).trueType, mapper), instantiateType((<ConditionalType>type).falseType, mapper),
-                        type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                    return getConditionalTypeInstantiation(<ConditionalType>type, mapper);
                 }
             }
             return type;
@@ -9888,6 +9916,15 @@ namespace ts {
                         // if we have indexed access types with identical index types, see if relationship holds for
                         // the two object types.
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
+                    }
+                }
+                else if (source.flags & TypeFlags.Conditional) {
+                    const constraint = getConstraintOfType(source);
+                    if (constraint) {
+                        if (result = isRelatedTo(constraint, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
