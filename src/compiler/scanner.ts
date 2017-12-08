@@ -1828,6 +1828,7 @@ namespace ts {
             tokenPos = pos;
 
             const ch = text.charCodeAt(pos);
+            pos++;
             switch (ch) {
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -1838,43 +1839,31 @@ namespace ts {
                     }
                     return token = SyntaxKind.WhitespaceTrivia;
                 case CharacterCodes.at:
-                    pos++;
                     return token = SyntaxKind.AtToken;
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
-                    pos++;
                     return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:
-                    pos++;
                     return token = SyntaxKind.AsteriskToken;
                 case CharacterCodes.openBrace:
-                    pos++;
                     return token = SyntaxKind.OpenBraceToken;
                 case CharacterCodes.closeBrace:
-                    pos++;
                     return token = SyntaxKind.CloseBraceToken;
                 case CharacterCodes.openBracket:
-                    pos++;
                     return token = SyntaxKind.OpenBracketToken;
                 case CharacterCodes.closeBracket:
-                    pos++;
                     return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.lessThan:
-                    pos++;
                     return token = SyntaxKind.LessThanToken;
                 case CharacterCodes.equals:
-                    pos++;
                     return token = SyntaxKind.EqualsToken;
                 case CharacterCodes.comma:
-                    pos++;
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.dot:
-                    pos++;
                     return token = SyntaxKind.DotToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
-                pos++;
                 while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
                     pos++;
                 }
@@ -1882,7 +1871,7 @@ namespace ts {
                 return token = SyntaxKind.Identifier;
             }
             else {
-                return pos += 1, token = SyntaxKind.Unknown;
+                return token = SyntaxKind.Unknown;
             }
         }
 
