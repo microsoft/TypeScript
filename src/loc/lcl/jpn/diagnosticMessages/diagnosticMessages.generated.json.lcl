@@ -145,7 +145,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[クラス プロパティ宣言内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[クラス プロパティ宣言内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -154,7 +154,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[メソッド オーバーロード内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[メソッド オーバーロード内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -163,7 +163,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型リテラル内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[型リテラル内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -172,7 +172,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[環境コンテキスト内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[環境コンテキスト内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -181,7 +181,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インターフェイス内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[インターフェイス内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -532,7 +532,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型が '一意のシンボル' 型のクラスのプロパティは、'static' と 'readonly' の両方である必要があります。]]></Val>
+            <Val><![CDATA[型が 'unique symbol' 型のクラスのプロパティは、'static' と 'readonly' の両方である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -541,7 +541,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型が '一意のシンボル' 型のインターフェイスまたは型リテラルのプロパティは、'readonly' である必要があります。]]></Val>
+            <Val><![CDATA[型が 'unique symbol' 型のインターフェイスまたは型リテラルのプロパティは、'readonly' である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -796,7 +796,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型が '一意のシンボル' 型の変数は、'const' である必要があります。]]></Val>
+            <Val><![CDATA[型が 'unique symbol' 型の変数は、'const' である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6639,6 +6639,9 @@
       <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_must_be_of_type_1_but_here_has_t_2717" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[後続のプロパティ宣言は同じ型でなければなりません。プロパティ '{0}' の型は '{1}' である必要がありますが、ここでは型が '{2}' になっています。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8920,7 +8923,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['一意のシンボル' 型はここでは許可されていません。]]></Val>
+            <Val><![CDATA['unique symbol' 型はここでは許可されていません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8929,7 +8932,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are only allowed on variables in a variable statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['一意のシンボル' 型は変数ステートメントの変数でのみ許可されています。]]></Val>
+            <Val><![CDATA['unique symbol' 型は変数ステートメントの変数でのみ許可されています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8938,7 +8941,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types may not be used on a variable declaration with a binding name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['一意のシンボル' 型は、バインディング名を持つ変数の宣言では使用できません。]]></Val>
+            <Val><![CDATA['unique symbol' 型は、バインディング名を持つ変数の宣言では使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
