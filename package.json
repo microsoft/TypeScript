@@ -30,7 +30,7 @@
     },
     "devDependencies": {
         "@types/browserify": "latest",
-        "@types/colors": "latest",
+        "@types/chalk": "latest",
         "@types/convert-source-map": "latest",
         "@types/del": "latest",
         "@types/glob": "latest",
@@ -78,7 +78,7 @@
         "ts-node": "latest",
         "tslint": "latest",
         "vinyl": "latest",
-        "colors": "latest",
+        "chalk": "latest",
         "typescript": "next"
     },
     "scripts": {
