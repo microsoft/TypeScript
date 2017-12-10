@@ -1,7 +1,7 @@
 === tests/cases/compiler/base.d.ts ===
 declare const x: "foo".charCodeAt(0);
 >x : "foo"
->charCodeAt : 0
+>charCodeAt : any
 >(0) : 0
 >0 : 0
 

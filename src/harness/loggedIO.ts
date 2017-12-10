@@ -251,7 +251,7 @@ namespace Playback {
                 let i = 0;
                 const getBase = () => recordLogFileNameBase + i;
                 while (underlying.fileExists(ts.combinePaths(getBase(), "test.json"))) i++;
-                const newLog = oldStyleLogIntoNewStyleLog(recordLog, (path, string) => underlying.writeFile(path, string), getBase());
+                const newLog = oldStyleLogIntoNewStyleLog(recordLog, (path, str) => underlying.writeFile(path, str), getBase());
                 underlying.writeFile(ts.combinePaths(getBase(), "test.json"), JSON.stringify(newLog, null, 4)); // tslint:disable-line:no-null-keyword
                 const syntheticTsconfig = generateTsconfig(newLog);
                 if (syntheticTsconfig) {
@@ -364,7 +364,7 @@ namespace Playback {
         };
     }
 
-    function recordReplay<T extends Function>(original: T, underlying: any) {
+    function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
             // tslint:disable-next-line only-arrow-functions
             return <any>(function () {

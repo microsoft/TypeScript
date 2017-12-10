@@ -192,6 +192,64 @@ namespace ts {
                 };
             }
         });
+
+        // https://github.com/Microsoft/TypeScript/issues/19618
+        testBaseline("transformAddImportStar", () => {
+            return ts.transpileModule("", {
+                transformers: {
+                    before: [transformAddImportStar],
+                },
+                compilerOptions: {
+                    target: ts.ScriptTarget.ES5,
+                    module: ts.ModuleKind.System,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function transformAddImportStar(_context: ts.TransformationContext) {
+                return (sourceFile: ts.SourceFile): ts.SourceFile => {
+                    return visitNode(sourceFile);
+                };
+                function visitNode(sf: ts.SourceFile) {
+                    // produce `import * as i0 from './comp';
+                    const importStar = ts.createImportDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        /*importClause*/ ts.createImportClause(
+                            /*name*/ undefined,
+                            ts.createNamespaceImport(ts.createIdentifier("i0"))
+                        ),
+                        /*moduleSpecifier*/ ts.createLiteral("./comp1"));
+                    return ts.updateSourceFileNode(sf, [importStar]);
+                }
+            }
+        });
+
+        // https://github.com/Microsoft/TypeScript/issues/17384
+        testBaseline("transformAddDecoratedNode", () => {
+            return ts.transpileModule("", {
+                transformers: {
+                    before: [transformAddDecoratedNode],
+                },
+                compilerOptions: {
+                    target: ts.ScriptTarget.ES5,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function transformAddDecoratedNode(_context: ts.TransformationContext) {
+                return (sourceFile: ts.SourceFile): ts.SourceFile => {
+                    return visitNode(sourceFile);
+                };
+                function visitNode(sf: ts.SourceFile) {
+                    // produce `class Foo { @Bar baz() {} }`;
+                    const classDecl = ts.createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        ts.createMethod([ts.createDecorator(ts.createIdentifier("Bar"))], [], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, ts.createBlock([]))
+                    ]);
+                    return ts.updateSourceFileNode(sf, [classDecl]);
+                }
+            }
+        });
     });
 }
 

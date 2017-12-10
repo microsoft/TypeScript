@@ -25,9 +25,9 @@ namespace ts {
         },
         "/dev/configs/tests.json": {
             compilerOptions: {
-                "preserveConstEnums": true,
-                "removeComments": false,
-                "sourceMap": true
+                preserveConstEnums: true,
+                removeComments: false,
+                sourceMap: true
             },
             exclude: [
                 "../tests/baselines",
@@ -52,7 +52,7 @@ namespace ts {
         "/dev/missing.json": {
             extends: "./missing2",
             compilerOptions: {
-                "types": []
+                types: []
             }
         },
         "/dev/failure.json": {
@@ -113,7 +113,7 @@ namespace ts {
     const caseSensitiveHost = new Utils.MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, testContents);
 
     function verifyDiagnostics(actual: Diagnostic[], expected: {code: number, category: DiagnosticCategory, messageText: string}[]) {
-        assert.isTrue(expected.length === actual.length, `Expected error: ${JSON.stringify(expected)}. Actual error: ${JSON.stringify(actual)}.`);
+        assert(expected.length === actual.length, `Expected error: ${JSON.stringify(expected)}. Actual error: ${JSON.stringify(actual)}.`);
         for (let i = 0; i < actual.length; i++) {
             const actualError = actual[i];
             const expectedError = expected[i];

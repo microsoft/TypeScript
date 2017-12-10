@@ -8,7 +8,7 @@ sources: sourceMap-Comment1.ts
 emittedFile:tests/cases/compiler/sourceMap-Comment1.js
 sourceFile:sourceMap-Comment1.ts
 -------------------------------------------------------------------
->>>// Comment 
+>>>// Comment
 1 >
 2 >^^^^^^^^^^
 3 >          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->

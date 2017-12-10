@@ -352,8 +352,8 @@ function f12(t: [Shape, boolean]) {
 >Shape : Shape
 
     let len = getProperty(t, "length");
->len : number
->getProperty(t, "length") : number
+>len : 2
+>getProperty(t, "length") : 2
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >t : [Shape, boolean]
 >"length" : "length"
@@ -572,7 +572,7 @@ function f31<K extends keyof Shape>(key: K) {
     const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
 >shape : Shape
 >Shape : Shape
->{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: true; }
+>{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: boolean; }
 >name : string
 >"foo" : "foo"
 >width : number
@@ -597,7 +597,7 @@ function f32<K extends "width" | "height">(key: K) {
     const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
 >shape : Shape
 >Shape : Shape
->{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: true; }
+>{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: boolean; }
 >name : string
 >"foo" : "foo"
 >width : number
@@ -952,7 +952,7 @@ function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
+>{ c: true } : { c: boolean; }
 >c : boolean
 >true : true
 
@@ -999,7 +999,7 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
+>{ c: true } : { c: boolean; }
 >c : boolean
 >true : true
 >'a' : "a"
@@ -1013,7 +1013,7 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
+>{ c: true } : { c: boolean; }
 >c : boolean
 >true : true
 >'b' : "b"
@@ -1027,7 +1027,7 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
+>{ c: true } : { c: boolean; }
 >c : boolean
 >true : true
 >'c' : "c"
@@ -1060,7 +1060,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
+>{ c: true } : { c: boolean; }
 >c : boolean
 >true : true
 >'a' : "a"
@@ -1074,7 +1074,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
+>{ c: true } : { c: boolean; }
 >c : boolean
 >true : true
 >'b' : "b"
@@ -1088,7 +1088,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
+>{ c: true } : { c: boolean; }
 >c : boolean
 >true : true
 >'c' : "c"
@@ -1121,7 +1121,7 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ a: 2, b: true } : { a: number; b: true; }
+>{ a: 2, b: true } : { a: number; b: boolean; }
 >a : number
 >2 : 2
 >b : boolean
@@ -1137,7 +1137,7 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ a: 2, b: true } : { a: number; b: true; }
+>{ a: 2, b: true } : { a: number; b: boolean; }
 >a : number
 >2 : 2
 >b : boolean

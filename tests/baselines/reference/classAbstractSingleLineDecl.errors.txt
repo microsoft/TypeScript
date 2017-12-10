@@ -1,6 +1,6 @@
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSingleLineDecl.ts(3,1): error TS2304: Cannot find name 'abstract'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSingleLineDecl.ts(6,1): error TS2304: Cannot find name 'abstract'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSingleLineDecl.ts(10,1): error TS2511: Cannot create an instance of the abstract class 'A'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSingleLineDecl.ts(10,1): error TS2511: Cannot create an instance of an abstract class.
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSingleLineDecl.ts (3 errors) ====
@@ -19,6 +19,6 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     
     new A;
     ~~~~~
-!!! error TS2511: Cannot create an instance of the abstract class 'A'.
+!!! error TS2511: Cannot create an instance of an abstract class.
     new B;
     new C;

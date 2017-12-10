@@ -31,10 +31,10 @@ class C {
 >s : Symbol(s, Decl(computedPropertyNames12_ES6.ts, 0, 3))
 
     static [""]: number;
->"" : Symbol(C[[""]], Decl(computedPropertyNames12_ES6.ts, 8, 19))
+>"" : Symbol(C[""], Decl(computedPropertyNames12_ES6.ts, 8, 19))
 
     [0]: number;
->0 : Symbol(C[[0]], Decl(computedPropertyNames12_ES6.ts, 9, 24))
+>0 : Symbol(C[0], Decl(computedPropertyNames12_ES6.ts, 9, 24))
 
     [a]: number;
 >a : Symbol(a, Decl(computedPropertyNames12_ES6.ts, 2, 3))

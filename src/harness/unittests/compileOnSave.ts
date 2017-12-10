@@ -13,8 +13,8 @@ namespace ts.projectSystem {
     describe("CompileOnSave affected list", () => {
         function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: FileOrFolder[] }[]) {
             const response = session.executeCommand(request).response as server.protocol.CompileOnSaveAffectedFileListSingleProject[];
-            const actualResult = response.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
-            expectedFileList = expectedFileList.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
+            const actualResult = response.sort((list1, list2) => ts.compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
+            expectedFileList = expectedFileList.sort((list1, list2) => ts.compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
 
             assert.equal(actualResult.length, expectedFileList.length, `Actual result project number is different from the expected project number`);
 
@@ -25,7 +25,7 @@ namespace ts.projectSystem {
 
                 const actualResultSingleProjectFileNameList = actualResultSingleProject.fileNames.sort();
                 const expectedResultSingleProjectFileNameList = map(expectedResultSingleProject.files, f => f.path).sort();
-                assert.isTrue(
+                assert(
                     arrayIsEqualTo(actualResultSingleProjectFileNameList, expectedResultSingleProjectFileNameList),
                     `For project ${actualResultSingleProject.projectFileName}, the actual result is ${actualResultSingleProjectFileNameList}, while expected ${expectedResultSingleProjectFileNameList}`);
             }
@@ -304,6 +304,24 @@ namespace ts.projectSystem {
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
             });
 
+            it("should return empty array if noEmit is set", () => {
+                configFile = {
+                    path: "/a/b/tsconfig.json",
+                    content: `{
+                        "compileOnSave": true,
+                        "compilerOptions": {
+                            "noEmit": true
+                        }
+                    }`
+                };
+
+                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
+                const typingsInstaller = createTestTypingsInstaller(host);
+                const session = createSession(host, typingsInstaller);
+                openFilesForSession([moduleFile1], session);
+                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
+            });
+
             it("should save when compileOnSave is enabled in base tsconfig.json", () => {
                 configFile = {
                     path: "/a/b/tsconfig.json",
@@ -545,7 +563,7 @@ namespace ts.projectSystem {
             session.executeCommand(compileFileRequest);
 
             const expectedEmittedFileName = "/a/b/f1.js";
-            assert.isTrue(host.fileExists(expectedEmittedFileName));
+            assert(host.fileExists(expectedEmittedFileName));
             assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
@@ -582,11 +600,11 @@ namespace ts.projectSystem {
             session.executeCommand(emitRequest);
 
             const expectedOutFileName = "/a/b/dist.js";
-            assert.isTrue(host.fileExists(expectedOutFileName));
+            assert(host.fileExists(expectedOutFileName));
             const outFileContent = host.readFile(expectedOutFileName);
-            assert.isTrue(outFileContent.indexOf(file1.content) !== -1);
-            assert.isTrue(outFileContent.indexOf(file2.content) === -1);
-            assert.isTrue(outFileContent.indexOf(file3.content) === -1);
+            assert(outFileContent.indexOf(file1.content) !== -1);
+            assert(outFileContent.indexOf(file2.content) === -1);
+            assert(outFileContent.indexOf(file3.content) === -1);
         });
 
         it("should use project root as current directory so that compile on save results in correct file mapping", () => {
@@ -616,19 +634,19 @@ namespace ts.projectSystem {
 
             // Verify js file
             const expectedOutFileName = "/root/TypeScriptProject3/TypeScriptProject3/" + outFileName;
-            assert.isTrue(host.fileExists(expectedOutFileName));
+            assert(host.fileExists(expectedOutFileName));
             const outFileContent = host.readFile(expectedOutFileName);
             verifyContentHasString(outFileContent, file1.content);
             verifyContentHasString(outFileContent, `//# ${"sourceMappingURL"}=${outFileName}.map`); // Sometimes tools can sometimes see this line as a source mapping url comment, so we obfuscate it a little
 
             // Verify map file
             const expectedMapFileName = expectedOutFileName + ".map";
-            assert.isTrue(host.fileExists(expectedMapFileName));
+            assert(host.fileExists(expectedMapFileName));
             const mapFileContent = host.readFile(expectedMapFileName);
             verifyContentHasString(mapFileContent, `"sources":["${inputFileName}"]`);
 
-            function verifyContentHasString(content: string, string: string) {
-                assert.isTrue(content.indexOf(string) !== -1, `Expected "${content}" to have "${string}"`);
+            function verifyContentHasString(content: string, str: string) {
+                assert(stringContains(content, str), `Expected "${content}" to have "${str}"`);
             }
         });
     });
