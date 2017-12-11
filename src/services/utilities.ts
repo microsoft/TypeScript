@@ -1110,10 +1110,6 @@ namespace ts {
         return true;
     }
 
-    export function singleElementArray<T>(t: T | undefined): T[] {
-        return t === undefined ? undefined : [t];
-    }
-
     export function getFirstChildOfKind(node: Node, sourceFile: SourceFile, kind: SyntaxKind): Node | undefined {
         return find(node.getChildren(sourceFile), c => c.kind === kind);
     }

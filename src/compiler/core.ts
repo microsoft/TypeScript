@@ -1417,8 +1417,8 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
-    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
     export function toArray<T>(value: T | T[]): T[];
+    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
     export function toArray<T>(value: T | T[]): T[] {
         return isArray(value) ? value : [value];
     }
@@ -3260,5 +3260,9 @@ namespace ts {
         function clearCache() {
             cachedReadDirectoryResult.clear();
         }
+    }
+
+    export function singleElementArray<T>(t: T | undefined): T[] {
+        return t === undefined ? undefined : [t];
     }
 }
