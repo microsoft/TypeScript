@@ -11217,7 +11217,7 @@ namespace ts {
          * property is computed by inferring from the source property type to X for the type
          * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
          */
-        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, visited: Map<Type | undefined>): Type {
+        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, mappedTypeCache: Map<Type | undefined>): Type {
             if (source.flags & TypeFlags.Primitive) {
                 return source;
             }
@@ -11253,7 +11253,7 @@ namespace ts {
 
             function inferTargetType(sourceType: Type): Type {
                 inference.candidates = undefined;
-                inferTypes(inferences, sourceType, templateType, 0, visited);
+                inferTypes(inferences, sourceType, templateType, 0, mappedTypeCache);
                 return inference.candidates ? getUnionType(inference.candidates, /*subtypeReduction*/ true) : emptyObjectType;
             }
         }
@@ -11271,8 +11271,9 @@ namespace ts {
             return undefined;
         }
 
-        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, visited?: Map<Type | undefined>) {
+        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, mappedTypeCache?: Map<Type | undefined>) {
             let symbolStack: Symbol[];
+            let visited: Map<true>;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
@@ -11427,11 +11428,11 @@ namespace ts {
                         source = getApparentType(source);
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
-                        const key = "T" + source.id + "," + target.id;
-                        if (visited && visited.get(key)) {
+                        const key = "T" + source.id + ",T" + target.id;
+                        if (visited && visited.has(key)) {
                             return;
                         }
-                        (visited || (visited = createMap<Type | undefined>())).set(key, undefined);
+                        (visited || (visited = createMap<true>())).set(key, undefined);
                         // If we are already processing another target type with the same associated symbol (such as
                         // an instantiation of the same generic type), we do not explore this target as it would yield
                         // no further inferences. We exclude the static side of classes from this check since it shares
@@ -11492,15 +11493,15 @@ namespace ts {
                         // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                         const inference = getInferenceInfoForType((<IndexType>constraintType).type);
                         if (inference && !inference.isFixed) {
-                            const key = (source.symbol ? "S" + getSymbolId(source.symbol) : "T" + source.id) + "," + getSymbolId(target.symbol);
+                            const key = (source.symbol ? "S" + getSymbolId(source.symbol) : "T" + source.id) + ",S" + getSymbolId(target.symbol);
                             let inferredType: Type;
-                            if (visited && visited.has(key)) {
-                                inferredType = visited.get(key);
+                            if (mappedTypeCache && mappedTypeCache.has(key)) {
+                                inferredType = mappedTypeCache.get(key);
                             }
                             else {
-                                (visited || (visited = createMap<Type | undefined>())).set(key, undefined);
-                                inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target, visited);
-                                (visited || (visited = createMap<Type | undefined>())).set(key, inferredType);
+                                (mappedTypeCache || (mappedTypeCache = createMap<Type | undefined>())).set(key, undefined);
+                                inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target, mappedTypeCache);
+                                mappedTypeCache.set(key, inferredType);
                             }
                             if (inferredType) {
                                 const savePriority = priority;
