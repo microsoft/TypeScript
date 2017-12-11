@@ -658,11 +658,10 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.Constructor:
                 return "constructor";
             case SyntaxKind.FunctionExpression:
-                return scope.name
-                    ? `function expression '${scope.name.text}'`
-                    : "anonymous function expression";
             case SyntaxKind.FunctionDeclaration:
-                return `function '${scope.name.text}'`;
+                return scope.name
+                    ? `function '${scope.name.text}'`
+                    : "anonymous function";
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
             case SyntaxKind.MethodDeclaration:
