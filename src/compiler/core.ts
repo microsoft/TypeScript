@@ -3262,7 +3262,7 @@ namespace ts {
         }
     }
 
-    export function singleElementArray<T>(t: T | undefined): T[] {
+    export function singleElementArray<T>(t: T | undefined): T[] | undefined {
         return t === undefined ? undefined : [t];
     }
 }
