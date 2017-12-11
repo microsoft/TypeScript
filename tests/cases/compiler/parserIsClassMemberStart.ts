@@ -1,3 +1,3 @@
 class C {
-    type: number;
+    type!: number;
 }

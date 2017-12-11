@@ -1,6 +1,6 @@
 //// [parserIsClassMemberStart.ts]
 class C {
-    type: number;
+    type!: number;
 }
 
 

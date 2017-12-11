@@ -2,7 +2,7 @@
 class C {
 >C : C
 
-    type: number;
+    type!: number;
 >type : number
 }
 
