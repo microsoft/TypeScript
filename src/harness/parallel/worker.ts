@@ -37,10 +37,14 @@ namespace Harness.Parallel.Worker {
     }
 
     function executeSuiteCallback(name: string, callback: MochaCallback) {
+        let timeout: number;
         const fakeContext: Mocha.ISuiteCallbackContext = {
             retries() { return this; },
             slow() { return this; },
-            timeout() { return this; },
+            timeout(n) {
+                timeout = n;
+                return this;
+            },
         };
         namestack.push(name);
         let beforeFunc: Callable;
@@ -71,7 +75,17 @@ namespace Harness.Parallel.Worker {
         finally {
             beforeFunc = undefined;
         }
+
+        if (timeout !== undefined) {
+            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
+            process.send(timeoutMsg);
+        }
         testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
+        if (timeout !== undefined) {
+            // Reset timeout
+            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: -1 } };
+            process.send(timeoutMsg);
+        }
 
         try {
             if (afterFunc) {
@@ -103,9 +117,13 @@ namespace Harness.Parallel.Worker {
     }
 
     function executeTestCallback(name: string, callback: MochaCallback) {
+        let timeout: number;
         const fakeContext: Mocha.ITestCallbackContext = {
             skip() { return this; },
-            timeout() { return this; },
+            timeout(n) {
+                timeout = n;
+                return this;
+            },
             retries() { return this; },
             slow() { return this; },
         };
@@ -121,6 +139,10 @@ namespace Harness.Parallel.Worker {
             }
         }
         if (callback.length === 0) {
+            if (timeout !== undefined) {
+                const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
+                process.send(timeoutMsg);
+            }
             try {
                 // TODO: If we ever start using async test completions, polyfill promise return handling
                 callback.call(fakeContext);
@@ -130,6 +152,11 @@ namespace Harness.Parallel.Worker {
                 return;
             }
             finally {
+                if (timeout !== undefined) {
+                    // Reset timeout
+                    const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: -1 } };
+                    process.send(timeoutMsg);
+                }
                 namestack.pop();
             }
             passing++;
