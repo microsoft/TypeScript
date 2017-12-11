@@ -1151,7 +1151,7 @@ The only possible values for the Void type are `null` and `undefined`. The Void 
 
 ### <a name="3.2.6"/>3.2.6 The Null Type
 
-The Null type corresponds to the similarly named JavaScript primitive value and is the type of the `null` literal.
+The Null type corresponds to the similarly named JavaScript primitive type and is the type of the `null` literal.
 
 The `null` literal references the one and only value of the Null type. The `null` keyword references the Null type.
 
@@ -1190,6 +1190,23 @@ The non-primitive object type is assignable to some other type *T* if the empty 
 
 All object types are assignable to the non-primitive object type.
 Primitive types and unconstrained type parameters are not assignable to the non-primitive object type.
+
+For example, assignment of a primitive type to a variable of the non-primitive type will fail:
+
+```ts
+function assign(target: object, source: object) {
+    // ...
+}
+assign("hello", null);
+```
+
+Structural compatibility permits indirect assignments of primitives to the non-primitive type via intermediate assignment to a compatible object type:
+
+```ts
+let s: string = "hello";
+let intermediate: {} = s;
+let o: object = intermediate;
+```
 
 ## <a name="3.3"/>3.3 Object Types
 
