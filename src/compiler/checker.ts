@@ -11217,7 +11217,7 @@ namespace ts {
          * property is computed by inferring from the source property type to X for the type
          * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
          */
-        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, visited: Map<true>): Type {
+        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, visited: Map<Type | undefined>): Type {
             if (source.flags & TypeFlags.Primitive) {
                 return source;
             }
@@ -11271,7 +11271,7 @@ namespace ts {
             return undefined;
         }
 
-        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, visited?: Map<true>) {
+        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, visited?: Map<Type | undefined>) {
             let symbolStack: Symbol[];
             inferFromTypes(originalSource, originalTarget);
 
@@ -11431,7 +11431,7 @@ namespace ts {
                         if (visited && visited.get(key)) {
                             return;
                         }
-                        (visited || (visited = createMap<true>())).set(key, true);
+                        (visited || (visited = createMap<Type | undefined>())).set(key, undefined);
                         // If we are already processing another target type with the same associated symbol (such as
                         // an instantiation of the same generic type), we do not explore this target as it would yield
                         // no further inferences. We exclude the static side of classes from this check since it shares
@@ -11492,12 +11492,16 @@ namespace ts {
                         // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                         const inference = getInferenceInfoForType((<IndexType>constraintType).type);
                         if (inference && !inference.isFixed) {
-                            const key = "S" + (source.symbol ? getSymbolId(source.symbol) + "," : "") + getSymbolId(target.symbol);
+                            const key = (source.symbol ? "S" + getSymbolId(source.symbol) : "T" + source.id) + "," + getSymbolId(target.symbol);
+                            let inferredType: Type;
                             if (visited && visited.has(key)) {
-                                return;
+                                inferredType = visited.get(key);
                             }
-                            (visited || (visited = createMap<true>())).set(key, true);
-                            const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target, visited);
+                            else {
+                                (visited || (visited = createMap<Type | undefined>())).set(key, undefined);
+                                inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target, visited);
+                                (visited || (visited = createMap<Type | undefined>())).set(key, inferredType);
+                            }
                             if (inferredType) {
                                 const savePriority = priority;
                                 priority |= InferencePriority.MappedType;
