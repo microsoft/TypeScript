@@ -55,7 +55,7 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
         case "fourslash-server":
             return new FourSlashRunner(FourSlashTestType.Server);
         case "project":
-            return new ProjectRunner();
+            return new project.ProjectRunner();
         case "rwc":
             return new RWCRunner();
         case "test262":
@@ -149,13 +149,13 @@ function handleTestConfig() {
                     case "compiler":
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
-                        runners.push(new ProjectRunner());
+                        runners.push(new project.ProjectRunner());
                         break;
                     case "conformance":
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                         break;
                     case "project":
-                        runners.push(new ProjectRunner());
+                        runners.push(new project.ProjectRunner());
                         break;
                     case "fourslash":
                         runners.push(new FourSlashRunner(FourSlashTestType.Native));
@@ -196,7 +196,7 @@ function handleTestConfig() {
 
         // TODO: project tests don"t work in the browser yet
         if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
-            runners.push(new ProjectRunner());
+            runners.push(new project.ProjectRunner());
         }
 
         // language services

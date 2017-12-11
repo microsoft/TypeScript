@@ -595,6 +595,21 @@ namespace Harness {
             }
         }
 
+        function createDirectory(path: string) {
+            try {
+                fs.mkdirSync(path);
+            }
+            catch (e) {
+                if (e.code === "ENOENT") {
+                    createDirectory(vpath.dirname(path));
+                    createDirectory(path);
+                }
+                else if (!ts.sys.directoryExists(path)) {
+                    throw e;
+                }
+            }
+        }
+
         return {
             newLine: () => harnessNewLine,
             getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
@@ -604,7 +619,7 @@ namespace Harness {
             writeFile: (path, content) => ts.sys.writeFile(path, content),
             directoryName,
             getDirectories: path => ts.sys.getDirectories(path),
-            createDirectory: path => ts.sys.createDirectory(path),
+            createDirectory,
             fileExists: path => ts.sys.fileExists(path),
             directoryExists: path => ts.sys.directoryExists(path),
             deleteFile,

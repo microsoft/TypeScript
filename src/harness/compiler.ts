@@ -115,12 +115,7 @@ namespace compiler {
                 if (content !== undefined) {
                     content = core.removeByteOrderMark(content);
 
-                    // We cache and reuse source files for files we know shouldn't change.
-                    const shouldCache = vpath.isDefaultLibrary(fileName) ||
-                        vpath.beneath("/.ts", file.path, !this.vfs.useCaseSensitiveFileNames) ||
-                        vpath.beneath("/.lib", file.path, !this.vfs.useCaseSensitiveFileNames);
-
-                    const cacheKey = shouldCache && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
+                    const cacheKey = file.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
                     if (cacheKey) {
                         const sourceFileFromMetadata = file.metadata.get(cacheKey) as ts.SourceFile | undefined;
                         if (sourceFileFromMetadata) {
@@ -128,7 +123,6 @@ namespace compiler {
                             return sourceFileFromMetadata;
                         }
                     }
-
 
                     const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
                     if (this.shouldAssertInvariants) {
@@ -138,9 +132,12 @@ namespace compiler {
                     this._sourceFiles.set(canonicalFileName, parsed);
 
                     if (cacheKey) {
-                        // store the cached source file on the unshadowed file.
+                        // store the cached source file on the unshadowed file with the same version.
                         let rootFile = file;
-                        while (rootFile.shadowRoot) rootFile = rootFile.shadowRoot;
+                        while (rootFile.shadowRoot && rootFile.shadowRoot.version === file.version) {
+                            rootFile = rootFile.shadowRoot;
+                        }
+
                         rootFile.metadata.set(cacheKey, parsed);
                     }
 

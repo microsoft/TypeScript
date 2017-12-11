@@ -112,7 +112,7 @@ namespace vpath {
 
         let start: number;
         for (start = 0; start < fromComponents.length && start < toComponents.length; start++) {
-            if (stringEqualityComparer(fromComponents[start], toComponents[start])) {
+            if (!stringEqualityComparer(fromComponents[start], toComponents[start])) {
                 break;
             }
         }

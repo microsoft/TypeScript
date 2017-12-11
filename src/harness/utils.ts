@@ -110,4 +110,8 @@ namespace utils {
             assert.isTrue(actualFileNames.indexOf(f) >= 0, `${caption}: expected to find ${f} in ${actualFileNames}`);
         }
     }
+
+    export function toUtf8(text: string): string {
+        return new Buffer(text).toString("utf8");
+    }
 }

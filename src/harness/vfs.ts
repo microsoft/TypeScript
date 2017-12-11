@@ -273,8 +273,21 @@ namespace vfs {
             return vfs;
         }
 
+        /**
+         * Creates a mutable virtual file system with the following directories:
+         *
+         * | path   | physical/virtual      |
+         * |:-------|:----------------------|
+         * | /.ts   | physical: built/local |
+         * | /.lib  | physical: tests/lib   |
+         * | /.src  | virtual               |
+         */
+        public static createFromFileSystem(useCaseSensitiveFileNames: boolean) {
+            return this.getBuiltLocal(useCaseSensitiveFileNames).shadow();
+        }
+
         public static createFromDocuments(useCaseSensitiveFileNames: boolean, documents: documents.TextDocument[], options?: { currentDirectory?: string, overwrite?: boolean }) {
-            const vfs = this.getBuiltLocal(useCaseSensitiveFileNames).shadow();
+            const vfs = this.createFromFileSystem(useCaseSensitiveFileNames);
             if (options && options.currentDirectory) {
                 vfs.addDirectory(options.currentDirectory);
                 vfs.changeDirectory(options.currentDirectory);
@@ -1702,6 +1715,7 @@ namespace vfs {
         private _content: string | undefined;
         private _contentWasSet: boolean;
         private _resolver: FileSystemResolver | ContentResolver | undefined;
+        private _version: number;
 
         constructor(parent: VirtualDirectory, name: string, content?: FileSystemResolver | ContentResolver | string) {
             super(parent, name);
@@ -1709,6 +1723,11 @@ namespace vfs {
             this._resolver = typeof content !== "string" ? content : undefined;
             this._shadowRoot = undefined;
             this._contentWasSet = this._content !== undefined;
+            this._version = this._contentWasSet ? 1 : 0;
+        }
+
+        public get version(): number {
+            return this._contentWasSet ? this._shadowRoot ? this._shadowRoot.version : 0 : this._version;
         }
 
         /**
@@ -1755,10 +1774,12 @@ namespace vfs {
                     this._resolver = undefined;
                     this._content = typeof resolver === "function" ? resolver(this) : resolver.getContent(this);
                     this._contentWasSet = true;
+                    this._version = 1;
                 }
                 else if (shadowRoot) {
                     this._content = shadowRoot.content;
                     this._contentWasSet = true;
+                    this._version = shadowRoot.version;
                 }
             }
             if (this._content && updateAccessTime) {
@@ -1775,7 +1796,13 @@ namespace vfs {
                 this.writePreamble();
                 this._resolver = undefined;
                 this._content = content;
-                this._contentWasSet = true;
+                if (!this._contentWasSet) {
+                    this._contentWasSet = true;
+                    if (this._shadowRoot) {
+                        this._version = this._shadowRoot.version;
+                    }
+                }
+                this._version++;
                 if (content && updateModificationTime) {
                     this.updateModificationTime();
                 }
@@ -1804,6 +1831,10 @@ namespace vfs {
             this._onTargetParentChildRemoved = entry => this.onTargetParentChildRemoved(entry);
             this._onTargetContentChanged = () => this.onTargetContentChanged();
             this._onTargetFileSystemChange = (path, change) => this.onTargetFileSystemChange(path, change);
+        }
+
+        public get version() {
+            return this.target ? this.target.version : 0;
         }
 
         /**
