@@ -13123,6 +13123,12 @@ namespace ts {
             return type;
         }
 
+        function markAliasReferenced(symbol: Symbol, location: Node) {
+            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
+                markAliasSymbolAsReferenced(symbol);
+            }
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -13151,9 +13157,9 @@ namespace ts {
             }
 
             // We should only mark aliases as referenced if there isn't a local value declaration
-            // for the symbol.
-            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
-                markAliasSymbolAsReferenced(symbol);
+            // for the symbol. Also, don't mark any property access expression LHS - checkPropertyAccessExpression will handle that
+            if (!(node.parent && isPropertyAccessExpression(node.parent) && node.parent.expression === node)) {
+                markAliasReferenced(symbol, node);
             }
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
@@ -15711,15 +15717,20 @@ namespace ts {
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             let propType: Type;
-            let leftSymbol = getNodeLinks(left) && getNodeLinks(left).resolvedSymbol;
-            const leftWasReferenced = leftSymbol && getSymbolLinks(leftSymbol).referenced;
             const leftType = checkNonNullExpression(left);
+            const parentSymbol = getNodeLinks(left).resolvedSymbol;
             const apparentType = getApparentType(getWidenedType(leftType));
             if (isTypeAny(apparentType) || apparentType === silentNeverType) {
+                if (isIdentifier(left) && parentSymbol) {
+                    markAliasReferenced(parentSymbol, node);
+                }
                 return apparentType;
             }
             const assignmentKind = getAssignmentTargetKind(node);
             const prop = getPropertyOfType(apparentType, right.escapedText);
+            if (isIdentifier(left) && parentSymbol && !(prop && isConstEnumOrConstEnumOnlyModule(prop))) {
+                markAliasReferenced(parentSymbol, node);
+            }
             if (!prop) {
                 const indexInfo = getIndexInfoOfType(apparentType, IndexKind.String);
                 if (!(indexInfo && indexInfo.type)) {
@@ -15736,13 +15747,6 @@ namespace ts {
             else {
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
-                // Reset the referenced-ness of the LHS expression if this access refers to a const enum or const enum only module
-                leftSymbol = getNodeLinks(left) && getNodeLinks(left).resolvedSymbol;
-                if (leftSymbol && !leftWasReferenced && getSymbolLinks(leftSymbol).referenced &&
-                    !(isNonLocalAlias(leftSymbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(prop))
-                ) {
-                    getSymbolLinks(leftSymbol).referenced = undefined;
-                }
                 getNodeLinks(node).resolvedSymbol = prop;
                 checkPropertyAccessibility(node, left, apparentType, prop);
                 if (assignmentKind) {
