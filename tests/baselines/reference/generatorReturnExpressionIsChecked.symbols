@@ -1,0 +1,8 @@
+=== tests/cases/compiler/generatorReturnExpressionIsChecked.ts ===
+function* f(): Iterator<number> {
+>f : Symbol(f, Decl(generatorReturnExpressionIsChecked.ts, 0, 0))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    return invalid;
+}
+
