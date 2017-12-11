@@ -1308,7 +1308,6 @@ namespace ts {
                     if (separatorAllowed) {
                         separatorAllowed = false;
                         isPreviousTokenSeparator = true;
-                    // tslint:disable-next-line:next-line
                     }
                     else if (isPreviousTokenSeparator) {
                         error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
