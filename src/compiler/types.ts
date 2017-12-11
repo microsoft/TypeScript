@@ -2786,7 +2786,7 @@ namespace ts {
         /* @internal */ getNullType(): Type;
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
-        /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReductionLevel): Type;
+        /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ createPromiseType(type: Type): Type;
 
@@ -2842,7 +2842,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum UnionReductionLevel {
+    export const enum UnionReduction {
         None = 0,
         Literal,
         Subtype
