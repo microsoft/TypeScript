@@ -2262,6 +2262,7 @@ namespace ts {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
+    export const fileExtensionIs = endsWith;
 
     export function removeSuffix(str: string, suffix: string): string {
         return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
@@ -2273,20 +2274,6 @@ namespace ts {
 
     export function hasExtension(fileName: string): boolean {
         return stringContains(getBaseFileName(fileName), ".");
-    }
-
-    export function fileExtensionIs(path: string, extension: string): boolean {
-        return path.length > extension.length && endsWith(path, extension);
-    }
-
-    export function fileExtensionIsOneOf(path: string, extensions: ReadonlyArray<string>): boolean {
-        for (const extension of extensions) {
-            if (fileExtensionIs(path, extension)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
@@ -2515,7 +2502,7 @@ namespace ts {
             for (const current of sort(files, comparer)) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
+                if (some(extensions, e => fileExtensionIs(name, e))) continue;
                 if (excludeRegex && excludeRegex.test(absoluteName)) continue;
                 if (!includeFileRegexes) {
                     results[0].push(name);
