@@ -12,6 +12,7 @@ goTo.file("/b.ts");
 
 verify.importFixAtPosition([
 `#!/usr/bin/env node
+
 import { foo } from "./a";
 
 foo`,

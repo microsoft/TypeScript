@@ -24,6 +24,7 @@ verify.importFixAtPosition([
 /// <reference types="node" />
 /// <reference path="./a.ts" />
 /// <amd-dependency path="./b.ts" />
+
 import { f1 } from "./module";
 
 /**

@@ -103,14 +103,13 @@ namespace ts.codefix {
     }
 
     function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): void {
-        const { newLineCharacter } = changeTracker;
         if (makeStatic) {
             if (classDeclaration.kind === SyntaxKind.ClassExpression) {
                 return;
             }
             const className = classDeclaration.name.getText();
             const staticInitialization = initializePropertyToUndefined(createIdentifier(className), tokenName);
-            changeTracker.insertNodeAfter(classDeclarationSourceFile, classDeclaration, staticInitialization, { prefix: newLineCharacter, suffix: newLineCharacter });
+            changeTracker.insertNodeAfter(classDeclarationSourceFile, classDeclaration, staticInitialization);
         }
         else {
             const classConstructor = getFirstConstructorWithBody(classDeclaration);
@@ -118,7 +117,7 @@ namespace ts.codefix {
                 return;
             }
             const propertyInitialization = initializePropertyToUndefined(createThis(), tokenName);
-            changeTracker.insertNodeBefore(classDeclarationSourceFile, classConstructor.body.getLastToken(), propertyInitialization, { suffix: newLineCharacter });
+            changeTracker.insertNodeAtConstructorEnd(classDeclarationSourceFile, classConstructor, propertyInitialization);
         }
     }
 

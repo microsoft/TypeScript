@@ -275,12 +275,11 @@ namespace ts.codefix {
                 createExternalModuleReference(quotedModuleSpecifier));
 
         const changes = ChangeTracker.with(context, changeTracker => {
-            const { newLineCharacter } = changeTracker;
             if (lastImportDeclaration) {
-                changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: newLineCharacter });
+                changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
             }
             else {
-                changeTracker.insertNodeAt(sourceFile, getSourceFileImportLocation(sourceFile), importDecl, { suffix: `${newLineCharacter}${newLineCharacter}` });
+                changeTracker.insertNodeAtTopOfFile(sourceFile, importDecl);
             }
         });
 

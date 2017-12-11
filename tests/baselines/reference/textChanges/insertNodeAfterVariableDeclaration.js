@@ -12,7 +12,7 @@ var a = 4; // comment 7
 // comment 1
 var x = 1; // comment 2
 // comment 3
-var yz1 = {
+var y, z1 = {
     p1: 1
 }; // comment 4
 var z = 3; // comment 5
