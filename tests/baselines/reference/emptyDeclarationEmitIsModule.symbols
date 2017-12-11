@@ -1,0 +1,15 @@
+=== tests/cases/compiler/module.ts ===
+import * as i from "./index";
+>i : Symbol(i, Decl(module.ts, 0, 6))
+
+class Foo {}
+>Foo : Symbol(Foo, Decl(module.ts, 0, 29))
+
+=== tests/cases/compiler/index.ts ===
+import {} from "./module";
+export interface Bar {
+>Bar : Symbol(Bar, Decl(index.ts, 0, 26))
+
+    x: string
+>x : Symbol(Bar.x, Decl(index.ts, 1, 22))
+}

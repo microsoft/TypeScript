@@ -148,8 +148,8 @@ namespace ts {
                 moduleElementDeclarationEmitInfo = [];
             }
 
-            if (!isBundledEmit && isExternalModule(sourceFile) && sourceFile.moduleAugmentations.length && !resultHasExternalModuleIndicator) {
-                // if file was external module with augmentations - this fact should be preserved in .d.ts as well.
+            if (!isBundledEmit && isExternalModule(sourceFile) && !resultHasExternalModuleIndicator) {
+                // if file was external module this fact should be preserved in .d.ts as well.
                 // in case if we didn't write any external module specifiers in .d.ts we need to emit something
                 // that will force compiler to think that this file is an external module - 'export {}' is a reasonable choice here.
                 write("export {};");
@@ -651,6 +651,9 @@ namespace ts {
         }
 
         function emitExportAssignment(node: ExportAssignment) {
+            if (isSourceFile(node.parent)) {
+                resultHasExternalModuleIndicator = true; // Top-level exports are external module indicators
+            }
             if (node.expression.kind === SyntaxKind.Identifier) {
                 write(node.isExportEquals ? "export = " : "export default ");
                 writeTextOfNode(currentText, node.expression);
@@ -745,6 +748,7 @@ namespace ts {
                 const modifiers = getModifierFlags(node);
                 // If the node is exported
                 if (modifiers & ModifierFlags.Export) {
+                    resultHasExternalModuleIndicator = true; // Top-level exports are external module indicators
                     write("export ");
                 }
 
@@ -901,6 +905,7 @@ namespace ts {
         }
 
         function emitExportDeclaration(node: ExportDeclaration) {
+            resultHasExternalModuleIndicator = true; // Top-level exports are external module indicators
             emitJsDocComments(node);
             write("export ");
             if (node.exportClause) {

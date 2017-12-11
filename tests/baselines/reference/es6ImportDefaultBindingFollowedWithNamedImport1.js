@@ -41,3 +41,4 @@ var x1 = defaultBinding6;
 declare var a: number;
 export default a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1_1.d.ts]
+export {};

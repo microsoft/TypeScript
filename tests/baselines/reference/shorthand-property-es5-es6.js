@@ -11,3 +11,4 @@ var bar = { foo: foo, baz: baz };
 
 
 //// [test.d.ts]
+export {};

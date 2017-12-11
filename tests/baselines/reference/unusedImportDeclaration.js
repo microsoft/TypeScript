@@ -38,3 +38,4 @@ declare class TesterB {
 }
 export = TesterB;
 //// [unusedImportDeclaration_testerA.d.ts]
+export {};

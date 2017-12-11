@@ -28,3 +28,4 @@ foo_1.x + bar_1.y;
 
 //// [/app/bin/index.d.ts]
 /// <reference path="../../types/bar.d.ts" />
+export {};

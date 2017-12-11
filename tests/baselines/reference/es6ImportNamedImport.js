@@ -87,3 +87,4 @@ export declare var z1: number;
 export declare var z2: number;
 export declare var aaaa: number;
 //// [es6ImportNamedImport_1.d.ts]
+export {};

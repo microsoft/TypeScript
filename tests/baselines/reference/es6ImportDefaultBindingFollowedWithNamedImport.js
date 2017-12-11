@@ -51,3 +51,4 @@ export declare var m: number;
 declare const _default: {};
 export default _default;
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.d.ts]
+export {};
