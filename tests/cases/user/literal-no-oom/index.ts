@@ -1,4 +1,5 @@
-// @lib: es6
+// This is a regression test to ensure we don't run OOM while creating a type for the ES6 map below
+// https://github.com/Microsoft/TypeScript/issues/20279
 const m = new Map([
     ['0', ['0', false]],
     ['1', ['1', false]],
