@@ -2563,7 +2563,7 @@ Object literals are extended to support type annotations in methods and get and 
 &emsp;&emsp;&emsp;`set`&emsp;*PropertyName*&emsp;`(`&emsp;*BindingIdentifierOrPattern*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
 
 The type of an object literal is an object type with the set of properties specified by the property assignments in the object literal, plus any properties from spread assignments.
-A get and set accessor may specify the same property name, but otherwise it is an error to specify multiple property assignments for the same property unless they come from spread assignments.
+A get and set accessor may specify the same property name, and spread assignments may contain properties that have already been declared by other members in the object literal, but otherwise it is an error to specify multiple property assignments for the same property.
 
 ### Object literal property assignment { #object-literal-property-assignment }
 
@@ -2614,27 +2614,27 @@ If a get accessor is declared for a property, the return type of the get accesso
 
 ### Object literal spread assignment { #object-literal-spread-assignment }
 
-A spread assignment inserts properties into the object literal as if they all were written at the point of the spread assignment.
-Unlike normal property assignments, however, duplicates are allowed.
+A spread assignment inserts properties from the type of the spread assignment expression into the object literal as if they were all written at the point of the spread assignment.
+Unlike property assignments, however, duplicates are allowed.
 In the case of duplicates, the last assignment is the one that is that in the resulting object type.
 
 The only allowed types of expressions allowed in a spread assignment are
-  * The any type.
-  * The number, boolean, string or non-primitive object types.
-  * Mapped types.
-  * Unions or intersections of the above types.
+* The Any type.
+* Object types that are not mapped types.
+* A union type that contains the Void, Undefined, or Null types, or the literal types `"0"`, `0`, `false`, and that contains at least one member that is allowed in a spread assignment.
+* A union or intersection type whose members are all allowed in a spread assignment.
+
 Spreading other types results in an error.
 
 When a spread assignment in encountered in an object literal, the resulting type is defined as a combination of the type of the spread assignment and the object type built from the assignments preceding the spread assignment.
 For a preceding object type *O*, spreading:
 
-* The any type results in the any type.
+* The Any type results in the Any type.
 * The never type results in *O*.
-* A union type *U* results in the union of `{ O, ...u }` for all *u* in *U*.
-* The non-primitive object type results in the non-primitive object type.
-* The boolean, number or string types results in *O*.
+* A union type *U* results in the union of `{ O, ...T }` for all *T* in *U*.
+* The Boolean, Number, String, or non-primitive object types results in *O*.
 * An enum type results in *O*.
-* Any other type *O'* results in object type with properties:
+* Any other type *O'* results in an object type with properties:
   * of type *T* for every required, public property of type *T* in *O'* that is not a method of a class.
   * of type *T* for every required, public property of type *T* in *O* that is not a method of a class and is not a private property of *O'*.
   * of type *T | U* for every optional, public property of type *T* in *O'* that has the name same in *O* with type *U* and is not a method of a class.
