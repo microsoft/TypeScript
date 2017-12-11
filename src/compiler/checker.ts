@@ -11218,6 +11218,9 @@ namespace ts {
          * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
          */
         function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, visited: Map<true>): Type {
+            if (source.flags & TypeFlags.Primitive) {
+                return source;
+            }
             const properties = getPropertiesOfType(source);
             let indexInfo = getIndexInfoOfType(source, IndexKind.String);
             if (properties.length === 0 && !indexInfo) {
@@ -11417,9 +11420,14 @@ namespace ts {
                     }
                 }
                 else {
-                    source = getApparentType(source);
+                    if (getObjectFlags(target) & ObjectFlags.Mapped && source.flags & TypeFlags.Primitive) {
+                        inferFromObjectTypes(source, target);
+                    }
+                    else {
+                        source = getApparentType(source);
+                    }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
-                        const key = source.id + "," + target.id;
+                        const key = "T" + source.id + "," + target.id;
                         if (visited && visited.get(key)) {
                             return;
                         }
@@ -11484,7 +11492,7 @@ namespace ts {
                         // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                         const inference = getInferenceInfoForType((<IndexType>constraintType).type);
                         if (inference && !inference.isFixed) {
-                            const key = (source.symbol ? getSymbolId(source.symbol) + "s" : "") + getSymbolId(target.symbol);
+                            const key = "S" + (source.symbol ? getSymbolId(source.symbol) + "," : "") + getSymbolId(target.symbol);
                             if (visited && visited.has(key)) {
                                 return;
                             }
