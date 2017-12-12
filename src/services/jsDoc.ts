@@ -205,6 +205,7 @@ namespace ts.JsDoc {
      *          - namespace declarations
      *          - interface declarations
      *          - method signatures
+     *          - type alias declarations
      *
      * Hosts should ideally check that:
      * - The line is all whitespace up to 'position' before performing the insertion.
