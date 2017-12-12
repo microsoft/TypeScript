@@ -1449,7 +1449,7 @@ _.isRegExp(/moe/);
 >_.isRegExp : (object: any) => boolean
 >_ : Underscore.Static
 >isRegExp : (object: any) => boolean
->/moe/ : RegExp
+>/moe/ : RegExp</moe/>
 
 _.isNaN(NaN);
 >_.isNaN(NaN) : boolean
@@ -1688,15 +1688,15 @@ compiled2({ epithet: "stooge" });
 >"stooge" : "stooge"
 
 _.templateSettings = {
->_.templateSettings = {    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
+>_.templateSettings = {    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp</\{\{(.+?)\}\}/g>; }
 >_.templateSettings : Underscore.TemplateSettings
 >_ : Underscore.Static
 >templateSettings : Underscore.TemplateSettings
->{    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
+>{    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp</\{\{(.+?)\}\}/g>; }
 
     interpolate: /\{\{(.+?)\}\}/g
->interpolate : RegExp
->/\{\{(.+?)\}\}/g : RegExp
+>interpolate : RegExp</\{\{(.+?)\}\}/g>
+>/\{\{(.+?)\}\}/g : RegExp</\{\{(.+?)\}\}/g>
 
 };
 var template2 = _.template("Hello {{ name }}!");
@@ -4061,16 +4061,16 @@ module Underscore {
 >TemplateSettings : TemplateSettings
 
         evaluate?: RegExp;
->evaluate : RegExp
->RegExp : RegExp
+>evaluate : RegExp<string>
+>RegExp : RegExp<T>
 
         interpolate?: RegExp;
->interpolate : RegExp
->RegExp : RegExp
+>interpolate : RegExp<string>
+>RegExp : RegExp<T>
 
         escape?: RegExp;
->escape : RegExp
->RegExp : RegExp
+>escape : RegExp<string>
+>RegExp : RegExp<T>
 
         variable?: string;
 >variable : string

@@ -1,0 +1,94 @@
+=== tests/cases/conformance/types/regexValidated/regexValidated.controlFlow.ts ===
+const isA = /a/i;
+>isA : RegExp</a/i>
+>/a/i : RegExp</a/i>
+
+let mustBeA: /a/i;
+>mustBeA : /a/i
+>/a/i : RegExp</a/i>
+
+declare var s: string;
+>s : string
+
+if (isA.test(s)) {
+>isA.test(s) : boolean
+>isA.test : (string: string) => string is /a/i
+>isA : RegExp</a/i>
+>test : (string: string) => string is /a/i
+>s : string
+
+    mustBeA = s;
+>mustBeA = s : /a/i
+>mustBeA : /a/i
+>s : /a/i
+}
+
+const isB = /b/i;
+>isB : RegExp</b/i>
+>/b/i : RegExp</b/i>
+
+let mustBeB: /b/i;
+>mustBeB : /b/i
+>/b/i : RegExp</b/i>
+
+if (isB.test(s)) {
+>isB.test(s) : boolean
+>isB.test : (string: string) => string is /b/i
+>isB : RegExp</b/i>
+>test : (string: string) => string is /b/i
+>s : string
+
+    mustBeB = s;
+>mustBeB = s : /b/i
+>mustBeB : /b/i
+>s : /b/i
+}
+
+let mustBeBOrA: /b/i | /a/i;
+>mustBeBOrA : /a/i | /b/i
+>/b/i : RegExp</b/i>
+>/a/i : RegExp</a/i>
+
+if (isB.test(s) || isA.test(s)) {
+>isB.test(s) || isA.test(s) : boolean
+>isB.test(s) : boolean
+>isB.test : (string: string) => string is /b/i
+>isB : RegExp</b/i>
+>test : (string: string) => string is /b/i
+>s : string
+>isA.test(s) : boolean
+>isA.test : (string: string) => string is /a/i
+>isA : RegExp</a/i>
+>test : (string: string) => string is /a/i
+>s : string
+
+    mustBeBOrA = s;
+>mustBeBOrA = s : /a/i | /b/i
+>mustBeBOrA : /a/i | /b/i
+>s : /a/i | /b/i
+}
+
+let mustBeBAndA: /b/i & /a/i;
+>mustBeBAndA : /b/i & /a/i
+>/b/i : RegExp</b/i>
+>/a/i : RegExp</a/i>
+
+if (isB.test(s) && isA.test(s)) {
+>isB.test(s) && isA.test(s) : boolean
+>isB.test(s) : boolean
+>isB.test : (string: string) => string is /b/i
+>isB : RegExp</b/i>
+>test : (string: string) => string is /b/i
+>s : string
+>isA.test(s) : boolean
+>isA.test : (string: string) => string is /a/i
+>isA : RegExp</a/i>
+>test : (string: string) => string is /a/i
+>s : /b/i
+
+    mustBeBOrA = s;
+>mustBeBOrA = s : /b/i & /a/i
+>mustBeBOrA : /a/i | /b/i
+>s : /b/i & /a/i
+}
+

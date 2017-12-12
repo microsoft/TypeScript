@@ -21,9 +21,9 @@ declare module "express" {
 >ExpressServer : ExpressServer
 
             post(path: RegExp, handler: (req: Function) => void ): void;
->post : (path: RegExp, handler: (req: Function) => void) => void
->path : RegExp
->RegExp : RegExp
+>post : (path: RegExp<string>, handler: (req: Function) => void) => void
+>path : RegExp<string>
+>RegExp : RegExp<T>
 >handler : (req: Function) => void
 >req : Function
 >Function : Function

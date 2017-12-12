@@ -12,7 +12,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/4.ts ===
 /\u{10_ffff}/u
->/\u{10_ffff}/u : RegExp
+>/\u{10_ffff}/u : RegExp</\u{10_ffff}/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/5.ts ===
 "\uff_ff"
@@ -28,7 +28,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/8.ts ===
 /\uff_ff/u
->/\uff_ff/u : RegExp
+>/\uff_ff/u : RegExp</\uff_ff/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/9.ts ===
 "\xf_f"
@@ -44,7 +44,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/12.ts ===
 /\xf_f/u
->/\xf_f/u : RegExp
+>/\xf_f/u : RegExp</\xf_f/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/13.ts ===
 "\u{_10ffff}"
@@ -60,7 +60,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/16.ts ===
 /\u{_10ffff}/u
->/\u{_10ffff}/u : RegExp
+>/\u{_10ffff}/u : RegExp</\u{_10ffff}/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/17.ts ===
 "\u_ffff"
@@ -76,7 +76,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/20.ts ===
 /\u_ffff/u
->/\u_ffff/u : RegExp
+>/\u_ffff/u : RegExp</\u_ffff/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/21.ts ===
 "\x_ff"
@@ -92,7 +92,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/24.ts ===
 /\x_ff/u
->/\x_ff/u : RegExp
+>/\x_ff/u : RegExp</\x_ff/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/25.ts ===
 "\u{10ffff_}"
@@ -108,7 +108,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/28.ts ===
 /\u{10ffff_}/u
->/\u{10ffff_}/u : RegExp
+>/\u{10ffff_}/u : RegExp</\u{10ffff_}/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/29.ts ===
 "\uffff_"
@@ -124,7 +124,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/32.ts ===
 /\uffff_/u
->/\uffff_/u : RegExp
+>/\uffff_/u : RegExp</\uffff_/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/33.ts ===
 "\xff_"
@@ -140,7 +140,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/36.ts ===
 /\xff_/u
->/\xff_/u : RegExp
+>/\xff_/u : RegExp</\xff_/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/37.ts ===
 "\u{10__ffff}"
@@ -156,7 +156,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/40.ts ===
 /\u{10__ffff}/u
->/\u{10__ffff}/u : RegExp
+>/\u{10__ffff}/u : RegExp</\u{10__ffff}/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/41.ts ===
 "\uff__ff"
@@ -172,7 +172,7 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/44.ts ===
 /\uff__ff/u
->/\uff__ff/u : RegExp
+>/\uff__ff/u : RegExp</\uff__ff/u>
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/45.ts ===
 "\xf__f"
@@ -188,5 +188,5 @@
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/48.ts ===
 /\xf__f/u
->/\xf__f/u : RegExp
+>/\xf__f/u : RegExp</\xf__f/u>
 

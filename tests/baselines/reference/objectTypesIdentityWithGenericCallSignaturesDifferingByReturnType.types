@@ -51,11 +51,11 @@ interface I2 {
 >I2 : I2
 
     foo<T>(x: T): RegExp;
->foo : <T>(x: T) => RegExp
+>foo : <T>(x: T) => RegExp<string>
 >T : T
 >x : T
 >T : T
->RegExp : RegExp
+>RegExp : RegExp<T>
 }
 
 var a: { foo<T>(x: T): T }

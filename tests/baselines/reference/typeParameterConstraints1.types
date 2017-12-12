@@ -25,9 +25,9 @@ function foo4<T extends Date>(test: T) { } // valid
 >T : T
 
 function foo5<T extends RegExp>(test: T) { } // valid
->foo5 : <T extends RegExp>(test: T) => void
+>foo5 : <T extends RegExp<string>>(test: T) => void
 >T : T
->RegExp : RegExp
+>RegExp : RegExp<T>
 >test : T
 >T : T
 

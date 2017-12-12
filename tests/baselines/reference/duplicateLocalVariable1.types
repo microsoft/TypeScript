@@ -1,6 +1,6 @@
 === tests/cases/compiler/duplicateLocalVariable1.ts ===
 / /@module: commonjs
->/ / : RegExp
+>/ / : RegExp</ />
 >module : any
 >commonjs : any
 
@@ -148,8 +148,8 @@ export class TestRunner {
 >message : any
 
                         var regex = new RegExp(testcase.errorMessageRegEx);
->regex : RegExp
->new RegExp(testcase.errorMessageRegEx) : RegExp
+>regex : RegExp<string>
+>new RegExp(testcase.errorMessageRegEx) : RegExp<string>
 >RegExp : RegExpConstructor
 >testcase.errorMessageRegEx : string
 >testcase : TestCase
@@ -159,9 +159,9 @@ export class TestRunner {
 >testResult = regex.test(e.message) : boolean
 >testResult : boolean
 >regex.test(e.message) : boolean
->regex.test : (string: string) => boolean
->regex : RegExp
->test : (string: string) => boolean
+>regex.test : (string: string) => string is string
+>regex : RegExp<string>
+>test : (string: string) => string is string
 >e.message : any
 >e : any
 >message : any

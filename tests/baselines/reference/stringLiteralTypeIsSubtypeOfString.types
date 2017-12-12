@@ -91,16 +91,16 @@ function f7(x: any) { }
 >x : any
 
 function f8(x: 'a');
->f8 : { (x: "a"): any; (x: RegExp): any; }
+>f8 : { (x: "a"): any; (x: RegExp<string>): any; }
 >x : "a"
 
 function f8(x: RegExp);
->f8 : { (x: "a"): any; (x: RegExp): any; }
->x : RegExp
->RegExp : RegExp
+>f8 : { (x: "a"): any; (x: RegExp<string>): any; }
+>x : RegExp<string>
+>RegExp : RegExp<T>
 
 function f8(x: any) { }
->f8 : { (x: "a"): any; (x: RegExp): any; }
+>f8 : { (x: "a"): any; (x: RegExp<string>): any; }
 >x : any
 
 function f9(x: 'a');

@@ -4,12 +4,12 @@ var x: Object;
 >Object : Object
 
 var y: RegExp;
->y : RegExp
->RegExp : RegExp
+>y : RegExp<string>
+>RegExp : RegExp<T>
 
 y = x;
 >y = x : Object
->y : RegExp
+>y : RegExp<string>
 >x : Object
 
 var a: String = Object.create<Object>("");

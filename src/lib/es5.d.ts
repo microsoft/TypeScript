@@ -808,7 +808,7 @@ interface RegExpExecArray extends Array<string> {
     input: string;
 }
 
-interface RegExp {
+interface RegExp<T extends string = string> {
     /**
       * Executes a search on a string using a regular expression pattern, and returns an array containing the results of that search.
       * @param string The String object or string literal on which to perform the search.
@@ -819,7 +819,7 @@ interface RegExp {
       * Returns a Boolean value that indicates whether or not a pattern exists in a searched string.
       * @param string String on which to perform the search.
       */
-    test(string: string): boolean;
+    test(string: string): string is T;
 
     /** Returns a copy of the text of the regular expression pattern. Read-only. The regExp argument is a Regular expression object. It can be a variable name or a literal. */
     readonly source: string;

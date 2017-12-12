@@ -178,7 +178,7 @@ function hyphenToCamelCase(string) {
 >string.replace : any
 >string : any
 >replace : any
->/-(.)/g : RegExp
+>/-(.)/g : RegExp</-(.)/g>
 >function(match, chr) {    return chr.toUpperCase();  } : (match: any, chr: any) => any
 >match : any
 >chr : any
@@ -202,9 +202,9 @@ function isEmpty(string) {
    return !/[^\s]/.test(string);
 >!/[^\s]/.test(string) : boolean
 >/[^\s]/.test(string) : boolean
->/[^\s]/.test : (string: string) => boolean
->/[^\s]/ : RegExp
->test : (string: string) => boolean
+>/[^\s]/.test : (string: string) => string is /[^\s]/
+>/[^\s]/ : RegExp</[^\s]/>
+>test : (string: string) => string is /[^\s]/
 >string : any
 }
 
@@ -221,9 +221,9 @@ function isConvertiblePixelValue(value) {
 
   return /^\d+px$/.test(value);
 >/^\d+px$/.test(value) : boolean
->/^\d+px$/.test : (string: string) => boolean
->/^\d+px$/ : RegExp
->test : (string: string) => boolean
+>/^\d+px$/.test : (string: string) => string is /^\d+px$/
+>/^\d+px$/ : RegExp</^\d+px$/>
+>test : (string: string) => string is /^\d+px$/
 >value : any
 }
 
@@ -295,19 +295,19 @@ export class HTMLtoJSX {
 >text = text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
 >text : string
 >text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
->text        .replace(/\r/g, '')        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text        .replace(/\r/g, '')        .replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >text        .replace(/\r/g, '') : string
->text        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text        .replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >text : string
 
         .replace(/\r/g, '')
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->/\r/g : RegExp
+>replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
+>/\r/g : RegExp</\r/g>
 >'' : ""
 
         .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->/( {2,}|\n|\t|\{|\})/g : RegExp
+>replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
+>/( {2,}|\n|\t|\{|\})/g : RegExp</( {2,}|\n|\t|\{|\})/g>
 >function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        } : (whitespace: string) => string
 >whitespace : string
 

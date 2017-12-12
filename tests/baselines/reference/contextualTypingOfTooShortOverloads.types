@@ -85,8 +85,8 @@ interface IRouterMatcher<T> {
 
 type PathParams = string | RegExp | (string | RegExp)[];
 >PathParams : PathParams
->RegExp : RegExp
->RegExp : RegExp
+>RegExp : RegExp<T>
+>RegExp : RegExp<T>
 
 type RequestHandlerParams = RequestHandler | ErrorRequestHandler | (RequestHandler | ErrorRequestHandler)[];
 >RequestHandlerParams : RequestHandlerParams

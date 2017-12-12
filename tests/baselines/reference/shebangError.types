@@ -6,7 +6,7 @@ var foo = 'Shebang is only allowed on the first line';
 #!/usr/bin/env node
 >!/usr/bin/env : number
 >!/usr/bin : boolean
->/usr/bin : RegExp
+>/usr/bin : RegExp</usr/bin>
 >env : any
 >node : any
 

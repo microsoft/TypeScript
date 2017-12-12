@@ -1,0 +1,74 @@
+=== tests/cases/conformance/types/regexValidated/regexValidated.controlFlow.ts ===
+const isA = /a/i;
+>isA : Symbol(isA, Decl(regexValidated.controlFlow.ts, 0, 5))
+
+let mustBeA: /a/i;
+>mustBeA : Symbol(mustBeA, Decl(regexValidated.controlFlow.ts, 1, 3))
+
+declare var s: string;
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+
+if (isA.test(s)) {
+>isA.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>isA : Symbol(isA, Decl(regexValidated.controlFlow.ts, 0, 5))
+>test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+
+    mustBeA = s;
+>mustBeA : Symbol(mustBeA, Decl(regexValidated.controlFlow.ts, 1, 3))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+}
+
+const isB = /b/i;
+>isB : Symbol(isB, Decl(regexValidated.controlFlow.ts, 7, 5))
+
+let mustBeB: /b/i;
+>mustBeB : Symbol(mustBeB, Decl(regexValidated.controlFlow.ts, 8, 3))
+
+if (isB.test(s)) {
+>isB.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>isB : Symbol(isB, Decl(regexValidated.controlFlow.ts, 7, 5))
+>test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+
+    mustBeB = s;
+>mustBeB : Symbol(mustBeB, Decl(regexValidated.controlFlow.ts, 8, 3))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+}
+
+let mustBeBOrA: /b/i | /a/i;
+>mustBeBOrA : Symbol(mustBeBOrA, Decl(regexValidated.controlFlow.ts, 13, 3))
+
+if (isB.test(s) || isA.test(s)) {
+>isB.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>isB : Symbol(isB, Decl(regexValidated.controlFlow.ts, 7, 5))
+>test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+>isA.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>isA : Symbol(isA, Decl(regexValidated.controlFlow.ts, 0, 5))
+>test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+
+    mustBeBOrA = s;
+>mustBeBOrA : Symbol(mustBeBOrA, Decl(regexValidated.controlFlow.ts, 13, 3))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+}
+
+let mustBeBAndA: /b/i & /a/i;
+>mustBeBAndA : Symbol(mustBeBAndA, Decl(regexValidated.controlFlow.ts, 18, 3))
+
+if (isB.test(s) && isA.test(s)) {
+>isB.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>isB : Symbol(isB, Decl(regexValidated.controlFlow.ts, 7, 5))
+>test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+>isA.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>isA : Symbol(isA, Decl(regexValidated.controlFlow.ts, 0, 5))
+>test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+
+    mustBeBOrA = s;
+>mustBeBOrA : Symbol(mustBeBOrA, Decl(regexValidated.controlFlow.ts, 13, 3))
+>s : Symbol(s, Decl(regexValidated.controlFlow.ts, 2, 11))
+}
+

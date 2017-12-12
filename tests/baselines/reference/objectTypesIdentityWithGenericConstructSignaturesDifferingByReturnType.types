@@ -40,7 +40,7 @@ interface I2 {
 >T : T
 >x : T
 >T : T
->RegExp : RegExp
+>RegExp : RegExp<T>
 }
 
 var a: { new<T>(x: T): T }

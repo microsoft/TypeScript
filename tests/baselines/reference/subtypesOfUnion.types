@@ -64,8 +64,8 @@ interface I1<T> {
 >Date : Date
 
     foo7: RegExp; // error
->foo7 : RegExp
->RegExp : RegExp
+>foo7 : RegExp<string>
+>RegExp : RegExp<T>
 
     foo8: { bar: number }; // error
 >foo8 : { bar: number; }
@@ -142,8 +142,8 @@ interface I2<T> {
 >Date : Date
 
     foo7: RegExp; // error
->foo7 : RegExp
->RegExp : RegExp
+>foo7 : RegExp<string>
+>RegExp : RegExp<T>
 
     foo8: { bar: number }; // error
 >foo8 : { bar: number; }

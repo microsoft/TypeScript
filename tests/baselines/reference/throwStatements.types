@@ -246,7 +246,7 @@ throw ['a', ['b']];
 >'b' : "b"
 
 throw /[a-z]/;
->/[a-z]/ : RegExp
+>/[a-z]/ : RegExp</[a-z]/>
 
 throw new Date();
 >new Date() : Date

@@ -25,7 +25,7 @@ class C6 extends Date { }
 
 class C7 extends RegExp { }
 >C7 : C7
->RegExp : RegExp
+>RegExp : RegExp<string>
 
 class C8 extends Error { }
 >C8 : C8

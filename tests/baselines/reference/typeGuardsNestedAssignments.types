@@ -118,8 +118,8 @@ function f4() {
 // Repro from #8851
 
 const re = /./g
->re : RegExp
->/./g : RegExp
+>re : RegExp</./g>
+>/./g : RegExp</./g>
 
 let match: RegExpExecArray | null
 >match : RegExpExecArray | null
@@ -133,7 +133,7 @@ while ((match = re.exec("xxx")) != null) {
 >match : RegExpExecArray | null
 >re.exec("xxx") : RegExpExecArray | null
 >re.exec : (string: string) => RegExpExecArray | null
->re : RegExp
+>re : RegExp</./g>
 >exec : (string: string) => RegExpExecArray | null
 >"xxx" : "xxx"
 >null : null

@@ -5,8 +5,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(29,5): error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'boolean'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(35,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'Date'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(36,5): error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'Date'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(42,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'RegExp'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(43,5): error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'RegExp'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(42,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'RegExp<string>'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(43,5): error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'RegExp<string>'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(49,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type '{ bar: number; }'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(50,5): error TS2411: Property 'foo2' of type 'number' is not assignable to string index type '{ bar: number; }'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts(56,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'number[]'.
@@ -88,10 +88,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
         [x: string]: RegExp;
         foo: string | number;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'RegExp'.
+!!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'RegExp<string>'.
         foo2: e | number;
         ~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'RegExp'.
+!!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'RegExp<string>'.
     }
     
     

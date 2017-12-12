@@ -97,12 +97,12 @@ function e() {
 >e : () => void
 
     let x: string | number | boolean | RegExp;
->x : string | number | boolean | RegExp
->RegExp : RegExp
+>x : string | number | boolean | RegExp<string>
+>RegExp : RegExp<T>
 
     for (x = "" || 0; typeof x !== "string"; x = "" || true) {
 >x = "" || 0 : 0
->x : string | number | boolean | RegExp
+>x : string | number | boolean | RegExp<string>
 >"" || 0 : 0
 >"" : ""
 >0 : 0
@@ -111,7 +111,7 @@ function e() {
 >x : number | true
 >"string" : "string"
 >x = "" || true : true
->x : string | number | boolean | RegExp
+>x : string | number | boolean | RegExp<string>
 >"" || true : true
 >"" : ""
 >true : true

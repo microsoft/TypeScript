@@ -44,7 +44,7 @@ interface I2 {
 >Date : Date
 >x : T
 >T : T
->RegExp : RegExp
+>RegExp : RegExp<T>
 }
 
 var a: { new<T extends Date>(x: T): T }

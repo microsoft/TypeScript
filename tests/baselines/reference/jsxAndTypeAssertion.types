@@ -66,9 +66,9 @@ x = <foo>x</foo>, x = <foo/>;
 >foo : typeof foo
 >/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo> : any
 >/foo/.test(x) : boolean
->/foo/.test : (string: string) => boolean
->/foo/ : RegExp
->test : (string: string) => boolean
+>/foo/.test : (string: string) => string is /foo/
+>/foo/ : RegExp</foo/>
+>test : (string: string) => string is /foo/
 >x : any
 ><foo><foo></foo> : <foo><foo></foo>}</foo>}</foo> : any
 >foo : typeof foo

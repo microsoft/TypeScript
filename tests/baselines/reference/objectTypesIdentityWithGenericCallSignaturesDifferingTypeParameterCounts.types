@@ -326,36 +326,36 @@ function foo12b(x: any) { }
 >x : any
 
 function foo13(x: I<string, Date, RegExp, Date>);
->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: { foo<Z, A, B, C, D>(x: Z): Z; }): any; }
->x : I<string, Date, RegExp, Date>
+>foo13 : { (x: I<string, Date, RegExp<string>, Date>): any; (x: { foo<Z, A, B, C, D>(x: Z): Z; }): any; }
+>x : I<string, Date, RegExp<string>, Date>
 >I : I<X, Y, Z, A>
 >Date : Date
->RegExp : RegExp
+>RegExp : RegExp<T>
 >Date : Date
 
 function foo13(x: typeof a); // ok
->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: { foo<Z, A, B, C, D>(x: Z): Z; }): any; }
+>foo13 : { (x: I<string, Date, RegExp<string>, Date>): any; (x: { foo<Z, A, B, C, D>(x: Z): Z; }): any; }
 >x : { foo<Z, A, B, C, D>(x: Z): Z; }
 >a : { foo<Z, A, B, C, D>(x: Z): Z; }
 
 function foo13(x: any) { }
->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: { foo<Z, A, B, C, D>(x: Z): Z; }): any; }
+>foo13 : { (x: I<string, Date, RegExp<string>, Date>): any; (x: { foo<Z, A, B, C, D>(x: Z): Z; }): any; }
 >x : any
 
 function foo14(x: I<string, Date, RegExp, boolean>);
->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { foo<A, B, C, D, E, F>(x: A): A; }): any; }
->x : I<string, Date, RegExp, boolean>
+>foo14 : { (x: I<string, Date, RegExp<string>, boolean>): any; (x: { foo<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : I<string, Date, RegExp<string>, boolean>
 >I : I<X, Y, Z, A>
 >Date : Date
->RegExp : RegExp
+>RegExp : RegExp<T>
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { foo<A, B, C, D, E, F>(x: A): A; }): any; }
+>foo14 : { (x: I<string, Date, RegExp<string>, boolean>): any; (x: { foo<A, B, C, D, E, F>(x: A): A; }): any; }
 >x : { foo<A, B, C, D, E, F>(x: A): A; }
 >b : { foo<A, B, C, D, E, F>(x: A): A; }
 
 function foo14(x: any) { }
->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { foo<A, B, C, D, E, F>(x: A): A; }): any; }
+>foo14 : { (x: I<string, Date, RegExp<string>, boolean>): any; (x: { foo<A, B, C, D, E, F>(x: A): A; }): any; }
 >x : any
 
 function foo15(x: I2);

@@ -71,7 +71,7 @@ interface I6 {
 
     [x: string]: RegExp;
 >x : string
->RegExp : RegExp
+>RegExp : RegExp<T>
 
     foo: E;
 >foo : E

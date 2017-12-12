@@ -5,5 +5,5 @@ class C {
     0: number;
     [x: number]: RegExp;
 >x : number
->RegExp : RegExp
+>RegExp : RegExp<T>
 }

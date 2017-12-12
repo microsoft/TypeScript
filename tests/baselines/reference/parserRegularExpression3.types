@@ -3,5 +3,5 @@ Foo(!/(\\?|&)adurl=/);
 >Foo(!/(\\?|&)adurl=/) : any
 >Foo : any
 >!/(\\?|&)adurl=/ : boolean
->/(\\?|&)adurl=/ : RegExp
+>/(\\?|&)adurl=/ : RegExp</(\\?|&)adurl=/>
 

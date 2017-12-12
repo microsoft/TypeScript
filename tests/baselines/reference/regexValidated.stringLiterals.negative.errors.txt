@@ -1,0 +1,37 @@
+tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(1,5): error TS2322: Type '"#0000"' is not assignable to type '/^#([0-9a-f]{3}|[0-9a-f]{6})$/i'.
+tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(3,5): error TS2322: Type '"cat,fish,dog,fosh,cat"' is not assignable to type '/^(dog|cat|fish)(,(dog|cat|fish))*$/'.
+tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(5,5): error TS2322: Type '"02338374729O"' is not assignable to type '/^[0-9]+$/'.
+tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(7,5): error TS2322: Type '"X0F12A"' is not assignable to type '/^([0-9]|[A-F])+$/'.
+tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(10,5): error TS2322: Type '"type★script@microsoft.com"' is not assignable to type '/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i'.
+tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(13,5): error TS2322: Type '"example@GMAIL.ORG"' is not assignable to type '/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@gmail\.com$/i'.
+
+
+==== tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts (6 errors) ====
+    let fontColor: /^#([0-9a-f]{3}|[0-9a-f]{6})$/i = '#0000'; // not 3 or 6 characters
+        ~~~~~~~~~
+!!! error TS2322: Type '"#0000"' is not assignable to type '/^#([0-9a-f]{3}|[0-9a-f]{6})$/i'.
+    
+    let catdogfish: /^(dog|cat|fish)(,(dog|cat|fish))*$/ = 'cat,fish,dog,fosh,cat'; // misspelled fish
+        ~~~~~~~~~~
+!!! error TS2322: Type '"cat,fish,dog,fosh,cat"' is not assignable to type '/^(dog|cat|fish)(,(dog|cat|fish))*$/'.
+    
+    let digits: /^[0-9]+$/ = '02338374729O'; // Capital O isn't 0
+        ~~~~~~
+!!! error TS2322: Type '"02338374729O"' is not assignable to type '/^[0-9]+$/'.
+    
+    let hexDigits: /^([0-9]|[A-F])+$/ = 'X0F12A'; // X isn't a hex digit
+        ~~~~~~~~~
+!!! error TS2322: Type '"X0F12A"' is not assignable to type '/^([0-9]|[A-F])+$/'.
+    
+    type Email = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+    let address: Email = 'type★script@microsoft.com'; // ★ isn't part of the validated range for addresses
+        ~~~~~~~
+!!! error TS2322: Type '"type★script@microsoft.com"' is not assignable to type '/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i'.
+    
+    type Gmail = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@gmail\.com$/i;
+    let gmailAddress: Gmail = 'example@GMAIL.ORG'; // wrong tld
+        ~~~~~~~~~~~~
+!!! error TS2322: Type '"example@GMAIL.ORG"' is not assignable to type '/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@gmail\.com$/i'.
+    
+    
+    

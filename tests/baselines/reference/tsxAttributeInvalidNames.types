@@ -36,5 +36,5 @@ declare module JSX {
 >test2 : any
 >data : any
 >32 : 32
->/>; : RegExp
+>/>; : RegExp</>;>
 

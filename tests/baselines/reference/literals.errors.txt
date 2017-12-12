@@ -4,9 +4,11 @@ tests/cases/conformance/expressions/literals/literals.ts(9,9): error TS2532: Obj
 tests/cases/conformance/expressions/literals/literals.ts(9,21): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/literals/literals.ts(19,9): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'.
 tests/cases/conformance/expressions/literals/literals.ts(24,9): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '-0o3'.
+tests/cases/conformance/expressions/literals/literals.ts(36,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r' must be of type 'RegExp<string>', but here has type 'RegExp</what/>'.
+tests/cases/conformance/expressions/literals/literals.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r' must be of type 'RegExp<string>', but here has type 'RegExp</\\\\/>'.
 
 
-==== tests/cases/conformance/expressions/literals/literals.ts (6 errors) ====
+==== tests/cases/conformance/expressions/literals/literals.ts (8 errors) ====
     //typeof null is Null
     //typeof true is Boolean
     //typeof false is Boolean
@@ -55,5 +57,9 @@ tests/cases/conformance/expressions/literals/literals.ts(24,9): error TS1085: Oc
     
     var r: RegExp;
     var r = /what/;
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r' must be of type 'RegExp<string>', but here has type 'RegExp</what/>'.
     var r = /\\\\/;
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r' must be of type 'RegExp<string>', but here has type 'RegExp</\\\\/>'.
     

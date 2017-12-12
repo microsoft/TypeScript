@@ -3,12 +3,12 @@ namespace Validation {
 >Validation : typeof Validation
 
     const lettersRegexp = /^[A-Za-z]+$/;
->lettersRegexp : RegExp
->/^[A-Za-z]+$/ : RegExp
+>lettersRegexp : RegExp</^[A-Za-z]+$/>
+>/^[A-Za-z]+$/ : RegExp</^[A-Za-z]+$/>
 
     const numberRegexp = /^[0-9]+$/;
->numberRegexp : RegExp
->/^[0-9]+$/ : RegExp
+>numberRegexp : RegExp</^[0-9]+$/>
+>/^[0-9]+$/ : RegExp</^[0-9]+$/>
 
     export class LettersOnlyValidator {
 >LettersOnlyValidator : LettersOnlyValidator
@@ -19,9 +19,9 @@ namespace Validation {
 
             return lettersRegexp.test(s2);
 >lettersRegexp.test(s2) : boolean
->lettersRegexp.test : (string: string) => boolean
->lettersRegexp : RegExp
->test : (string: string) => boolean
+>lettersRegexp.test : (string: string) => string is /^[A-Za-z]+$/
+>lettersRegexp : RegExp</^[A-Za-z]+$/>
+>test : (string: string) => string is /^[A-Za-z]+$/
 >s2 : string
         }
     }

@@ -101,7 +101,7 @@ false **= value;
 
 /d+/ **= value;
 >/d+/ **= value : number
->/d+/ : RegExp
+>/d+/ : RegExp</d+/>
 >value : any
 
 // object literals
@@ -232,8 +232,8 @@ foo() **= value;
 
 (/d+/) **= value;
 >(/d+/) **= value : number
->(/d+/) : RegExp
->/d+/ : RegExp
+>(/d+/) : RegExp</d+/>
+>/d+/ : RegExp</d+/>
 >value : any
 
 ({}) **= value;

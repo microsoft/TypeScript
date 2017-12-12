@@ -1,0 +1,13 @@
+=== tests/cases/conformance/types/regexValidated/regexValidated.unsupportedFlags.ts ===
+let a: /a/l = "a"; // Should error, runtime has no `l` flag, so type cannot be matched
+>a : /a/l
+>/a/l : RegExp</a/l>
+>"a" : "a"
+
+let b: /b/l = "b" as /b/l; // Should be fine, cast can work around inoperable flags
+>b : /b/l
+>/b/l : RegExp</b/l>
+>"b" as /b/l : /b/l
+>"b" : "b"
+>/b/l : RegExp</b/l>
+
