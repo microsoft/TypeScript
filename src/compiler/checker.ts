@@ -22199,57 +22199,58 @@ namespace ts {
 
         function checkReturnStatement(node: ReturnStatement) {
             // Grammar checking
-            if (!checkGrammarStatementInAmbientContext(node)) {
-                const functionBlock = getContainingFunction(node);
-                if (!functionBlock) {
-                    grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
-                }
+            if (checkGrammarStatementInAmbientContext(node)) {
+                return;
             }
 
             const func = getContainingFunction(node);
-            if (func) {
-                const signature = getSignatureFromDeclaration(func);
-                const returnType = getReturnTypeOfSignature(signature);
-                const functionFlags = getFunctionFlags(func);
-                if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
+            if (!func) {
+                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+                return;
+            }
+
+            const signature = getSignatureFromDeclaration(func);
+            const returnType = getReturnTypeOfSignature(signature);
+            const functionFlags = getFunctionFlags(func);
+            const isGenerator = functionFlags & FunctionFlags.Generator;
+            if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
+                const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
+                if (isGenerator) { // AsyncGenerator function or Generator function
                     // A generator does not need its return expressions checked against its return type.
                     // Instead, the yield expressions are checked against the element type.
-                    // TODO: Check return expressions of generators when return type tracking is added
+                    // TODO: Check return types of generators when return type tracking is added
                     // for generators.
                     return;
                 }
-                if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
-                    const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
-                    if (func.kind === SyntaxKind.SetAccessor) {
-                        if (node.expression) {
-                            error(node, Diagnostics.Setters_cannot_return_a_value);
-                        }
-                    }
-                    else if (func.kind === SyntaxKind.Constructor) {
-                        if (node.expression && !checkTypeAssignableTo(exprType, returnType, node)) {
-                            error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
-                        }
-                    }
-                    else if (getEffectiveReturnTypeNode(func) || isGetAccessorWithAnnotatedSetAccessor(func)) {
-                        if (functionFlags & FunctionFlags.Async) { // Async function
-                            const promisedType = getPromisedTypeOfPromise(returnType);
-                            const awaitedType = checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
-                            if (promisedType) {
-                                // If the function has a return type, but promisedType is
-                                // undefined, an error will be reported in checkAsyncFunctionReturnType
-                                // so we don't need to report one here.
-                                checkTypeAssignableTo(awaitedType, promisedType, node);
-                            }
-                        }
-                        else {
-                            checkTypeAssignableTo(exprType, returnType, node);
-                        }
+                else if (func.kind === SyntaxKind.SetAccessor) {
+                    if (node.expression) {
+                        error(node, Diagnostics.Setters_cannot_return_a_value);
                     }
                 }
-                else if (func.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType)) {
-                    // The function has a return type, but the return statement doesn't have an expression.
-                    error(node, Diagnostics.Not_all_code_paths_return_a_value);
+                else if (func.kind === SyntaxKind.Constructor) {
+                    if (node.expression && !checkTypeAssignableTo(exprType, returnType, node)) {
+                        error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
+                    }
                 }
+                else if (getEffectiveReturnTypeNode(func) || isGetAccessorWithAnnotatedSetAccessor(func)) {
+                    if (functionFlags & FunctionFlags.Async) { // Async function
+                        const promisedType = getPromisedTypeOfPromise(returnType);
+                        const awaitedType = checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+                        if (promisedType) {
+                            // If the function has a return type, but promisedType is
+                            // undefined, an error will be reported in checkAsyncFunctionReturnType
+                            // so we don't need to report one here.
+                            checkTypeAssignableTo(awaitedType, promisedType, node);
+                        }
+                    }
+                    else {
+                        checkTypeAssignableTo(exprType, returnType, node);
+                    }
+                }
+            }
+            else if (func.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType) && !isGenerator) {
+                // The function has a return type, but the return statement doesn't have an expression.
+                error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
         }
 
