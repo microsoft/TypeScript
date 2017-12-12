@@ -133,7 +133,7 @@ namespace ts.tscWatch {
 
     function assertWatchDiagnosticAt(host: WatchedSystem, outputAt: number, diagnosticMessage: DiagnosticMessage) {
         const output = host.getOutput()[outputAt];
-        assert(endsWith(output, getWatchDiagnosticWithoutDate(host, diagnosticMessage)), "outputs[" + outputAt + "] is " + output);
+        assert.isTrue(endsWith(output, getWatchDiagnosticWithoutDate(host, diagnosticMessage)), "outputs[" + outputAt + "] is " + output);
     }
 
     function getWatchDiagnosticWithoutDate(host: WatchedSystem, diagnosticMessage: DiagnosticMessage) {
@@ -1543,11 +1543,11 @@ namespace ts.tscWatch {
         function verifyEmittedFiles(host: WatchedSystem, emittedFiles: EmittedFile[]) {
             for (const { path, content, shouldBeWritten } of emittedFiles) {
                 if (shouldBeWritten) {
-                    assert(host.fileExists(path), `Expected file ${path} to be present`);
+                    assert.isTrue(host.fileExists(path), `Expected file ${path} to be present`);
                     assert.equal(host.readFile(path), content, `Contents of file ${path} do not match`);
                 }
                 else {
-                    assert(!host.fileExists(path), `Expected file ${path} to be absent`);
+                    assert.isNotTrue(host.fileExists(path), `Expected file ${path} to be absent`);
                 }
             }
         }
@@ -1723,7 +1723,7 @@ namespace ts.tscWatch {
                         return false;
                     }
                     fileExistsIsCalled = true;
-                    assert(fileName.indexOf("/f2.") !== -1);
+                    assert.isTrue(fileName.indexOf("/f2.") !== -1);
                     return originalFileExists.call(host, fileName);
                 };
 
@@ -1738,7 +1738,7 @@ namespace ts.tscWatch {
                     getDiagnosticModuleNotFoundOfFile(watch(), root, "f2")
                 ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
-                assert(fileExistsIsCalled);
+                assert.isTrue(fileExistsIsCalled);
             }
             {
                 let fileExistsCalled = false;
@@ -1747,7 +1747,7 @@ namespace ts.tscWatch {
                         return false;
                     }
                     fileExistsCalled = true;
-                    assert(fileName.indexOf("/f1.") !== -1);
+                    assert.isTrue(fileName.indexOf("/f1.") !== -1);
                     return originalFileExists.call(host, fileName);
                 };
 
@@ -1758,7 +1758,7 @@ namespace ts.tscWatch {
                 host.runQueuedTimeoutCallbacks();
 
                 checkOutputErrors(host, [f1IsNotModule, cannotFindFoo], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
-                assert(fileExistsCalled);
+                assert.isTrue(fileExistsCalled);
             }
         });
 
@@ -1791,7 +1791,7 @@ namespace ts.tscWatch {
 
             const watch = createWatchModeWithoutConfigFile([root.path], host, { module: ModuleKind.AMD });
 
-            assert(fileExistsCalledForBar, "'fileExists' should be called");
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             checkOutputErrors(host, [
                 getDiagnosticModuleNotFoundOfFile(watch(), root, "bar")
             ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
@@ -1802,7 +1802,7 @@ namespace ts.tscWatch {
 
             host.runQueuedTimeoutCallbacks();
             checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
-            assert(fileExistsCalledForBar, "'fileExists' should be called.");
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
         });
 
         it("should compile correctly when resolved module goes missing and then comes back (module is not part of the root)", () => {
@@ -1833,13 +1833,13 @@ namespace ts.tscWatch {
 
             const watch = createWatchModeWithoutConfigFile([root.path], host, { module: ModuleKind.AMD });
 
-            assert(fileExistsCalledForBar, "'fileExists' should be called");
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
             fileExistsCalledForBar = false;
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
-            assert(fileExistsCalledForBar, "'fileExists' should be called.");
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
             checkOutputErrors(host, [
                 getDiagnosticModuleNotFoundOfFile(watch(), root, "bar")
             ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
@@ -1848,7 +1848,7 @@ namespace ts.tscWatch {
             host.reloadFS(filesWithImported);
             host.checkTimeoutQueueLengthAndRun(1);
             checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
-            assert(fileExistsCalledForBar, "'fileExists' should be called.");
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
         });
 
         it("works when module resolution changes to ambient module", () => {
@@ -2050,7 +2050,7 @@ declare module "fs" {
 
             checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
             const outputFile1 = changeExtension((outputFolder + getBaseFileName(file1.path)), ".js");
-            assert(host.fileExists(outputFile1));
+            assert.isTrue(host.fileExists(outputFile1));
             assert.equal(host.readFile(outputFile1), file1.content + host.newLine);
         });
     });

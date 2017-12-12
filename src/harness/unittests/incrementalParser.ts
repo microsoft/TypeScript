@@ -66,7 +66,7 @@ namespace ts {
         assertSameDiagnostics(newTree, incrementalNewTree);
 
         // There should be no reused nodes between two trees that are fully parsed.
-        assert(reusedElements(oldTree, newTree) === 0);
+        assert.isTrue(reusedElements(oldTree, newTree) === 0);
 
         assert.equal(newTree.fileName, incrementalNewTree.fileName, "newTree.fileName !== incrementalNewTree.fileName");
         assert.equal(newTree.text, incrementalNewTree.text, "newTree.text !== incrementalNewTree.text");

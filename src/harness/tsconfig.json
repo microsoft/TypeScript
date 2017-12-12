@@ -5,7 +5,7 @@
         "outFile": "../../built/local/run.js",
         "declaration": false,
         "types": [
-            "node", "mocha"
+            "node", "mocha", "chai"
         ],
         "lib": [
             "es6",
