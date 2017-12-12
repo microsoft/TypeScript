@@ -8109,22 +8109,11 @@ namespace ts {
         }
 
         function isGenericObjectType(type: Type): boolean {
-            return type.flags & TypeFlags.TypeVariable ? true :
-                getObjectFlags(type) & ObjectFlags.Mapped ? isGenericIndexType(getConstraintTypeFromMappedType(<MappedType>type)) :
-                type.flags & TypeFlags.UnionOrIntersection ? forEach((<UnionOrIntersectionType>type).types, isGenericObjectType) :
-                false;
+            return maybeTypeOfKind(type, TypeFlags.TypeVariable | TypeFlags.GenericMappedType);
         }
 
         function isGenericIndexType(type: Type): boolean {
-            return type.flags & (TypeFlags.TypeVariable | TypeFlags.Index) ? true :
-                type.flags & TypeFlags.UnionOrIntersection ? forEach((<UnionOrIntersectionType>type).types, isGenericIndexType) :
-                false;
-        }
-
-        function isGenericConditionType(type: Type): boolean {
-            return type.flags & (TypeFlags.TypeVariable | TypeFlags.Extends) ? true :
-                type.flags & TypeFlags.UnionOrIntersection ? forEach((<UnionOrIntersectionType>type).types, isGenericConditionType) :
-                false;
+            return maybeTypeOfKind(type, TypeFlags.TypeVariable | TypeFlags.Index);
         }
 
         // Return true if the given type is a non-generic object type with a string index signature and no
@@ -8234,6 +8223,10 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function isGenericConditionType(type: Type) {
+            return maybeTypeOfKind(type, TypeFlags.TypeVariable | TypeFlags.Extends);
+        }
+
         function createConditionalType(conditionType: Type, whenTrueType: Type, whenFalseType: Type, aliasSymbol: Symbol, aliasTypeArguments: Type[]) {
             const type = <ConditionalType>createType(TypeFlags.Conditional);
             type.conditionType = conditionType;
@@ -8271,6 +8264,10 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function isGenericExtendsType(type: Type) {
+            return maybeTypeOfKind(type, TypeFlags.TypeVariable | TypeFlags.GenericMappedType | TypeFlags.Index | TypeFlags.Extends);
+        }
+
         function createExtendsType(checkType: Type, extendsType: Type) {
             const type = <ExtendsType>createType(TypeFlags.Extends);
             type.checkType = checkType;
@@ -8286,7 +8283,7 @@ namespace ts {
             if (checkType.flags & TypeFlags.Any) {
                 return booleanType;
             }
-            if (!isGenericObjectType(checkType) && !isGenericObjectType(extendsType)) {
+            if (!isGenericExtendsType(checkType) && !isGenericExtendsType(extendsType)) {
                 return isTypeAssignableTo(checkType, extendsType) ? trueType : falseType;
             }
             const id = checkType.id + "," + extendsType.id;
@@ -18459,7 +18456,7 @@ namespace ts {
         // Return true if type might be of the given kind. A union or intersection type might be of a given
         // kind if at least one constituent type is of the given kind.
         function maybeTypeOfKind(type: Type, kind: TypeFlags): boolean {
-            if (type.flags & kind) {
+            if (type.flags & kind || kind & TypeFlags.GenericMappedType && isGenericMappedType(type)) {
                 return true;
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
