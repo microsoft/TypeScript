@@ -1,18 +1,47 @@
 /* @internal */
 namespace ts.codefix {
-    registerCodeFix({
-        errorCodes: getApplicableDiagnosticCodes(),
-        getCodeActions: getDisableJsDiagnosticsCodeActions
+    const fixId = "disableJsDiagnostics";
+    const errorCodes = mapDefined(Object.keys(Diagnostics), key => {
+        const diag = (Diagnostics as MapLike<DiagnosticMessage>)[key];
+        return diag.category === DiagnosticCategory.Error ? diag.code : undefined;
     });
 
-    function getApplicableDiagnosticCodes(): number[] {
-        const allDiagnostcs = <MapLike<DiagnosticMessage>>Diagnostics;
-        return Object.keys(allDiagnostcs)
-            .filter(d => allDiagnostcs[d] && allDiagnostcs[d].category === DiagnosticCategory.Error)
-            .map(d => allDiagnostcs[d].code);
-    }
+    registerCodeFix({
+        errorCodes,
+        getCodeActions(context) {
+            const { sourceFile, program, newLineCharacter, span } = context;
 
-    function getIgnoreCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string) {
+            if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
+                return undefined;
+            }
+
+            return [{
+                description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
+                changes: [createFileTextChanges(sourceFile.fileName, [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter)])],
+                fixId,
+            },
+            {
+                description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
+                changes: [createFileTextChanges(sourceFile.fileName, [{
+                    span: {
+                        start: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.pos : 0,
+                        length: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.end - sourceFile.checkJsDirective.pos : 0
+                    },
+                    newText: `// @ts-nocheck${newLineCharacter}`
+                }])],
+                // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
+                fixId: undefined,
+            }];
+        },
+        fixIds: [fixId], // No point applying as a group, doing it once will fix all errors
+        getAllCodeActions: context => codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
+            if (err.start !== undefined) {
+                changes.push(getIgnoreCommentLocationForLocation(err.file!, err.start, context.newLineCharacter));
+            }
+        }),
+    });
+
+    function getIgnoreCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string): TextChange {
         const { line } = getLineAndCharacterOfPosition(sourceFile, position);
         const lineStartPosition = getStartPositionOfLine(line, sourceFile);
         const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
@@ -37,34 +66,5 @@ namespace ts.codefix {
             span: { start: position, length: 0 },
             newText: `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`
         };
-    }
-
-    function getDisableJsDiagnosticsCodeActions(context: CodeFixContext): CodeAction[] | undefined {
-        const { sourceFile, program, newLineCharacter, span } = context;
-
-        if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
-            return undefined;
-        }
-
-        return [{
-            description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter)]
-            }]
-        },
-        {
-            description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [{
-                    span: {
-                        start: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.pos : 0,
-                        length: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.end - sourceFile.checkJsDirective.pos : 0
-                    },
-                    newText: `// @ts-nocheck${newLineCharacter}`
-                }]
-            }]
-        }];
     }
 }

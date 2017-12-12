@@ -561,9 +561,9 @@ namespace ts {
         return false;
     }
 
-    function scanConflictMarkerTrivia(text: string, pos: number, error?: ErrorCallback) {
+    function scanConflictMarkerTrivia(text: string, pos: number, error?: (diag: DiagnosticMessage, pos?: number, len?: number) => void) {
         if (error) {
-            error(Diagnostics.Merge_conflict_marker_encountered, mergeConflictMarkerLength);
+            error(Diagnostics.Merge_conflict_marker_encountered, pos, mergeConflictMarkerLength);
         }
 
         const ch = text.charCodeAt(pos);
@@ -852,34 +852,92 @@ namespace ts {
             scanRange,
         };
 
-        function error(message: DiagnosticMessage, length?: number): void {
+        function error(message: DiagnosticMessage): void;
+        function error(message: DiagnosticMessage, errPos: number, length: number): void;
+        function error(message: DiagnosticMessage, errPos: number = pos, length?: number): void {
             if (onError) {
+                const oldPos = pos;
+                pos = errPos;
                 onError(message, length || 0);
+                pos = oldPos;
             }
+        }
+
+        function scanNumberFragment(): string {
+            let start = pos;
+            let allowSeparator = false;
+            let isPreviousTokenSeparator = false;
+            let result = "";
+            while (true) {
+                const ch = text.charCodeAt(pos);
+                if (ch === CharacterCodes._) {
+                    tokenFlags |= TokenFlags.ContainsSeparator;
+                    if (allowSeparator) {
+                        allowSeparator = false;
+                        isPreviousTokenSeparator = true;
+                        result += text.substring(start, pos);
+                    }
+                    else if (isPreviousTokenSeparator) {
+                        error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
+                    }
+                    else {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    }
+                    pos++;
+                    start = pos;
+                    continue;
+                }
+                if (isDigit(ch)) {
+                    allowSeparator = true;
+                    isPreviousTokenSeparator = false;
+                    pos++;
+                    continue;
+                }
+                break;
+            }
+            if (text.charCodeAt(pos - 1) === CharacterCodes._) {
+                error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
+            }
+            return result + text.substring(start, pos);
         }
 
         function scanNumber(): string {
             const start = pos;
-            while (isDigit(text.charCodeAt(pos))) pos++;
+            const mainFragment = scanNumberFragment();
+            let decimalFragment: string;
+            let scientificFragment: string;
             if (text.charCodeAt(pos) === CharacterCodes.dot) {
                 pos++;
-                while (isDigit(text.charCodeAt(pos))) pos++;
+                decimalFragment = scanNumberFragment();
             }
             let end = pos;
             if (text.charCodeAt(pos) === CharacterCodes.E || text.charCodeAt(pos) === CharacterCodes.e) {
                 pos++;
                 tokenFlags |= TokenFlags.Scientific;
                 if (text.charCodeAt(pos) === CharacterCodes.plus || text.charCodeAt(pos) === CharacterCodes.minus) pos++;
-                if (isDigit(text.charCodeAt(pos))) {
-                    pos++;
-                    while (isDigit(text.charCodeAt(pos))) pos++;
-                    end = pos;
-                }
-                else {
+                const preNumericPart = pos;
+                const finalFragment = scanNumberFragment();
+                if (!finalFragment) {
                     error(Diagnostics.Digit_expected);
                 }
+                else {
+                    scientificFragment = text.substring(end, preNumericPart) + finalFragment;
+                    end = pos;
+                }
             }
-            return "" + +(text.substring(start, end));
+            if (tokenFlags & TokenFlags.ContainsSeparator) {
+                let result = mainFragment;
+                if (decimalFragment) {
+                    result += "." + decimalFragment;
+                }
+                if (scientificFragment) {
+                    result += scientificFragment;
+                }
+                return "" + +result;
+            }
+            else {
+                return "" + +(text.substring(start, end)); // No need to use all the fragments; no _ removal needed
+            }
         }
 
         function scanOctalDigits(): number {
@@ -894,23 +952,41 @@ namespace ts {
          * Scans the given number of hexadecimal digits in the text,
          * returning -1 if the given number is unavailable.
          */
-        function scanExactNumberOfHexDigits(count: number): number {
-            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false);
+        function scanExactNumberOfHexDigits(count: number, canHaveSeparators: boolean): number {
+            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false, canHaveSeparators);
         }
 
         /**
          * Scans as many hexadecimal digits as are available in the text,
          * returning -1 if the given number of digits was unavailable.
          */
-        function scanMinimumNumberOfHexDigits(count: number): number {
-            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ true);
+        function scanMinimumNumberOfHexDigits(count: number, canHaveSeparators: boolean): number {
+            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ true, canHaveSeparators);
         }
 
-        function scanHexDigits(minCount: number, scanAsManyAsPossible: boolean): number {
+        function scanHexDigits(minCount: number, scanAsManyAsPossible: boolean, canHaveSeparators: boolean): number {
             let digits = 0;
             let value = 0;
+            let allowSeparator = false;
+            let isPreviousTokenSeparator = false;
             while (digits < minCount || scanAsManyAsPossible) {
                 const ch = text.charCodeAt(pos);
+                if (canHaveSeparators && ch === CharacterCodes._) {
+                    tokenFlags |= TokenFlags.ContainsSeparator;
+                    if (allowSeparator) {
+                        allowSeparator = false;
+                        isPreviousTokenSeparator = true;
+                    }
+                    else if (isPreviousTokenSeparator) {
+                        error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
+                    }
+                    else {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    }
+                    pos++;
+                    continue;
+                }
+                allowSeparator = canHaveSeparators;
                 if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
                     value = value * 16 + ch - CharacterCodes._0;
                 }
@@ -925,9 +1001,13 @@ namespace ts {
                 }
                 pos++;
                 digits++;
+                isPreviousTokenSeparator = false;
             }
             if (digits < minCount) {
                 value = -1;
+            }
+            if (text.charCodeAt(pos - 1) === CharacterCodes._) {
+                error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
             }
             return value;
         }
@@ -1097,7 +1177,7 @@ namespace ts {
         }
 
         function scanHexadecimalEscape(numDigits: number): string {
-            const escapedValue = scanExactNumberOfHexDigits(numDigits);
+            const escapedValue = scanExactNumberOfHexDigits(numDigits, /*canHaveSeparators*/ false);
 
             if (escapedValue >= 0) {
                 return String.fromCharCode(escapedValue);
@@ -1109,7 +1189,7 @@ namespace ts {
         }
 
         function scanExtendedUnicodeEscape(): string {
-            const escapedValue = scanMinimumNumberOfHexDigits(1);
+            const escapedValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
             let isInvalidExtendedEscape = false;
 
             // Validate the value of the digit
@@ -1162,7 +1242,7 @@ namespace ts {
             if (pos + 5 < end && text.charCodeAt(pos + 1) === CharacterCodes.u) {
                 const start = pos;
                 pos += 2;
-                const value = scanExactNumberOfHexDigits(4);
+                const value = scanExactNumberOfHexDigits(4, /*canHaveSeparators*/ false);
                 pos = start;
                 return value;
             }
@@ -1218,8 +1298,27 @@ namespace ts {
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
             // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
             let numberOfDigits = 0;
+            let separatorAllowed = false;
+            let isPreviousTokenSeparator = false;
             while (true) {
                 const ch = text.charCodeAt(pos);
+                // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another separator
+                if (ch === CharacterCodes._) {
+                    tokenFlags |= TokenFlags.ContainsSeparator;
+                    if (separatorAllowed) {
+                        separatorAllowed = false;
+                        isPreviousTokenSeparator = true;
+                    }
+                    else if (isPreviousTokenSeparator) {
+                        error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
+                    }
+                    else {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    }
+                    pos++;
+                    continue;
+                }
+                separatorAllowed = true;
                 const valueOfCh = ch - CharacterCodes._0;
                 if (!isDigit(ch) || valueOfCh >= base) {
                     break;
@@ -1227,10 +1326,16 @@ namespace ts {
                 value = value * base + valueOfCh;
                 pos++;
                 numberOfDigits++;
+                isPreviousTokenSeparator = false;
             }
             // Invalid binaryIntegerLiteral or octalIntegerLiteral
             if (numberOfDigits === 0) {
                 return -1;
+            }
+            if (text.charCodeAt(pos - 1) === CharacterCodes._) {
+                // Literal ends with underscore - not allowed
+                error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
+                return value;
             }
             return value;
         }
@@ -1435,7 +1540,7 @@ namespace ts {
                     case CharacterCodes._0:
                         if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
-                            let value = scanMinimumNumberOfHexDigits(1);
+                            let value = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
                             if (value < 0) {
                                 error(Diagnostics.Hexadecimal_digit_expected);
                                 value = 0;

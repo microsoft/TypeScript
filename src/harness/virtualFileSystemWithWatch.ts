@@ -168,7 +168,7 @@ interface Array<T> {}`
                 mapSeen.set(f, true);
             }
         }
-        assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(flatMapIter(mapExpected.keys(), key => key))} in ${JSON.stringify(host.getOutput())}`);
+        assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(arrayFrom(mapExpected.keys()))} in ${JSON.stringify(host.getOutput())}`);
     }
 
     export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
@@ -241,7 +241,7 @@ interface Array<T> {}`
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
     }
 
-    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
+    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
         private readonly output: string[] = [];

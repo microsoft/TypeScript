@@ -1099,6 +1099,24 @@ namespace ts {
             return !seen[id] && (seen[id] = true);
         };
     }
+
+    /** Add a value to a set, and return true if it wasn't already present. */
+    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+        key = String(key);
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.set(key, true);
+        return true;
+    }
+
+    export function singleElementArray<T>(t: T | undefined): T[] {
+        return t === undefined ? undefined : [t];
+    }
+
+    export function getFirstChildOfKind(node: Node, sourceFile: SourceFile, kind: SyntaxKind): Node | undefined {
+        return find(node.getChildren(sourceFile), c => c.kind === kind);
+    }
 }
 
 // Display-part writer helpers
@@ -1318,15 +1336,6 @@ namespace ts {
             position += 1;
         }
         return position;
-    }
-
-    export function getOpenBrace(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
-        // First token is the open curly, this is where we want to put the 'super' call.
-        return constructor.body.getFirstToken(sourceFile);
-    }
-
-    export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
-        return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
     }
 
     export function getSourceFileImportLocation({ text }: SourceFile) {
