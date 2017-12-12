@@ -148,13 +148,15 @@ namespace ts {
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNode, cbNodes, (<UnionOrIntersectionTypeNode>node).types);
             case SyntaxKind.ConditionalType:
-                return visitNode(cbNode, (<ConditionalTypeNode>node).checkType) ||
-                    visitNode(cbNode, (<ConditionalTypeNode>node).extendsType) ||
+                return visitNode(cbNode, (<ConditionalTypeNode>node).conditionType) ||
                     visitNode(cbNode, (<ConditionalTypeNode>node).trueType) ||
                     visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+            case SyntaxKind.BinaryType:
+                return visitNode(cbNode, (<BinaryTypeNode>node).left) ||
+                    visitNode(cbNode, (<BinaryTypeNode>node).right);
             case SyntaxKind.IndexedAccessType:
                 return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
                     visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
@@ -2848,13 +2850,23 @@ namespace ts {
             return parseUnionOrIntersectionType(SyntaxKind.UnionType, parseIntersectionTypeOrHigher, SyntaxKind.BarToken);
         }
 
+        function parseBinaryTypeOrHigher(): TypeNode {
+            let type = parseUnionTypeOrHigher();
+            while (parseOptional(SyntaxKind.ExtendsKeyword)) {
+                const node = <BinaryTypeNode>createNode(SyntaxKind.BinaryType, type.pos);
+                node.left = type;
+                node.operator = SyntaxKind.ExtendsKeyword;
+                node.right = parseUnionTypeOrHigher();
+                type = finishNode(node);
+            }
+            return type;
+        }
+
         function parseConditionalTypeOrHigher(): TypeNode {
-            const type = parseUnionTypeOrHigher();
-            if (parseOptional(SyntaxKind.ExtendsKeyword)) {
+            const type = parseBinaryTypeOrHigher();
+            if (parseOptional(SyntaxKind.QuestionToken)) {
                 const node = <ConditionalTypeNode>createNode(SyntaxKind.ConditionalType, type.pos);
-                node.checkType = type;
-                node.extendsType = parseUnionTypeOrHigher();
-                parseExpected(SyntaxKind.QuestionToken);
+                node.conditionType = type;
                 node.trueType = parseConditionalTypeOrHigher();
                 parseExpected(SyntaxKind.ColonToken);
                 node.falseType = parseConditionalTypeOrHigher();

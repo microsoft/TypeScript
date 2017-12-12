@@ -720,21 +720,19 @@ namespace ts {
             : node;
     }
 
-    export function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+    export function createConditionalTypeNode(conditionType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.ConditionalType) as ConditionalTypeNode;
-        node.checkType = parenthesizeConditionalTypeMember(checkType);
-        node.extendsType = parenthesizeConditionalTypeMember(extendsType);
+        node.conditionType = parenthesizeConditionalTypeMember(conditionType);
         node.trueType = trueType;
         node.falseType = falseType;
         return node;
     }
 
-    export function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
-        return node.checkType !== checkType
-            || node.extendsType !== extendsType
+    export function updateConditionalTypeNode(node: ConditionalTypeNode, conditionType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+        return node.conditionType !== conditionType
             || node.trueType !== trueType
             || node.falseType !== falseType
-            ? updateNode(createConditionalTypeNode(checkType, extendsType, trueType, falseType), node)
+            ? updateNode(createConditionalTypeNode(conditionType, trueType, falseType), node)
             : node;
     }
 
@@ -765,6 +763,22 @@ namespace ts {
 
     export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
         return node.type !== type ? updateNode(createTypeOperatorNode(node.operator, type), node) : node;
+    }
+
+    export function createBinaryTypeNode(left: TypeNode, operator: SyntaxKind.ExtendsKeyword, right: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.BinaryType) as BinaryTypeNode;
+        node.left = parenthesizeBinaryTypeMember(left);
+        node.operator = operator;
+        node.right = parenthesizeBinaryTypeMember(right);
+        return node;
+    }
+
+    export function updateBinaryTypeNode(node: BinaryTypeNode, left: TypeNode, operator: SyntaxKind.ExtendsKeyword, right: TypeNode) {
+        return node.left !== left
+            || node.operator !== operator
+            || node.right !== right
+            ? updateNode(createBinaryTypeNode(left, operator, right), node)
+            : node;
     }
 
     export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
@@ -4103,6 +4117,10 @@ namespace ts {
         return member.kind === SyntaxKind.ConditionalType ? createParenthesizedType(member) : member;
     }
 
+    export function parenthesizeBinaryTypeMember(member: TypeNode) {
+        return member.kind === SyntaxKind.BinaryType ? createParenthesizedType(member) : parenthesizeConditionalTypeMember(member);
+    }
+
     export function parenthesizeElementTypeMember(member: TypeNode) {
         switch (member.kind) {
             case SyntaxKind.UnionType:
@@ -4111,7 +4129,7 @@ namespace ts {
             case SyntaxKind.ConstructorType:
                 return createParenthesizedType(member);
         }
-        return parenthesizeConditionalTypeMember(member);
+        return parenthesizeBinaryTypeMember(member);
     }
 
     export function parenthesizeArrayTypeMember(member: TypeNode) {

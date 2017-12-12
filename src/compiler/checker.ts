@@ -264,6 +264,8 @@ namespace ts {
         const intersectionTypes = createMap<IntersectionType>();
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
+        const conditionalTypes = createMap<ConditionalType>();
+        const extendsTypes = createMap<ExtendsType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -2621,11 +2623,15 @@ namespace ts {
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.Conditional) {
-                    const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
-                    const extendskTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
+                    const conditionTypeNode = typeToTypeNodeHelper((<ConditionalType>type).conditionType, context);
                     const trueTypeNode = typeToTypeNodeHelper((<ConditionalType>type).trueType, context);
                     const falseTypeNode = typeToTypeNodeHelper((<ConditionalType>type).falseType, context);
-                    return createConditionalTypeNode(checkTypeNode, extendskTypeNode, trueTypeNode, falseTypeNode);
+                    return createConditionalTypeNode(conditionTypeNode, trueTypeNode, falseTypeNode);
+                }
+                if (type.flags & TypeFlags.Extends) {
+                    const leftTypeNode = typeToTypeNodeHelper((<ExtendsType>type).checkType, context);
+                    const rightTypeNode = typeToTypeNodeHelper((<ExtendsType>type).extendsType, context);
+                    return createBinaryTypeNode(leftTypeNode, SyntaxKind.ExtendsKeyword, rightTypeNode);
                 }
 
                 Debug.fail("Should be unreachable.");
@@ -3396,11 +3402,7 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
                     else if (type.flags & TypeFlags.Conditional) {
-                        writeType((<ConditionalType>type).checkType, TypeFormatFlags.InElementType);
-                        writeSpace(writer);
-                        writer.writeKeyword("extends");
-                        writeSpace(writer);
-                        writeType((<ConditionalType>type).extendsType, TypeFormatFlags.InElementType);
+                        writeType((<ConditionalType>type).conditionType, TypeFormatFlags.InElementType);
                         writeSpace(writer);
                         writePunctuation(writer, SyntaxKind.QuestionToken);
                         writeSpace(writer);
@@ -3409,6 +3411,13 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
                         writeType((<ConditionalType>type).falseType, TypeFormatFlags.InElementType);
+                    }
+                    else if (type.flags & TypeFlags.Extends) {
+                        writeType((<ExtendsType>type).checkType, TypeFormatFlags.InElementType);
+                        writeSpace(writer);
+                        writer.writeKeyword("extends");
+                        writeSpace(writer);
+                        writeType((<ExtendsType>type).extendsType, TypeFormatFlags.InElementType);
                     }
                     else {
                         // Should never get here
@@ -6385,6 +6394,9 @@ namespace ts {
                     const falseBaseType = getBaseConstraint((<ConditionalType>t).trueType);
                     return trueBaseType && falseBaseType ? getUnionType([trueBaseType, falseBaseType]) : undefined;
                 }
+                if (t.flags & TypeFlags.Extends) {
+                    return booleanType;
+                }
                 if (isGenericMappedType(t)) {
                     return emptyObjectType;
                 }
@@ -8109,6 +8121,12 @@ namespace ts {
                 false;
         }
 
+        function isGenericConditionType(type: Type): boolean {
+            return type.flags & (TypeFlags.TypeVariable | TypeFlags.Extends) ? true :
+                type.flags & TypeFlags.UnionOrIntersection ? forEach((<UnionOrIntersectionType>type).types, isGenericConditionType) :
+                false;
+        }
+
         // Return true if the given type is a non-generic object type with a string index signature and no
         // other members.
         function isStringIndexOnlyType(type: Type) {
@@ -8216,33 +8234,73 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getConditionalType(checkType: Type, extendsType: Type, trueType: Type, falseType: Type, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
-            if (checkType.flags & TypeFlags.Union) {
-                return getUnionType(map((<UnionType>checkType).types, t => getConditionalType(t, extendsType, trueType, falseType)),
-                    /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
-            }
-            if (isTypeAssignableTo(checkType, extendsType)) {
-                return trueType;
-            }
-            if (!isGenericObjectType(checkType) && !isGenericObjectType(extendsType)) {
-                return falseType;
-            }
+        function createConditionalType(conditionType: Type, whenTrueType: Type, whenFalseType: Type, aliasSymbol: Symbol, aliasTypeArguments: Type[]) {
             const type = <ConditionalType>createType(TypeFlags.Conditional);
-            type.checkType = checkType;
-            type.extendsType = extendsType;
-            type.trueType = trueType;
-            type.falseType = falseType;
+            type.conditionType = conditionType;
+            type.trueType = whenTrueType;
+            type.falseType = whenFalseType;
             type.aliasSymbol = aliasSymbol;
             type.aliasTypeArguments = aliasTypeArguments;
+            return type;
+        }
+
+        function getConditionalType(condition: Type, whenTrue: Type, whenFalse: Type, aliasSymbol: Symbol, aliasTypeArguments: Type[], mapper: TypeMapper): Type {
+            if (!isGenericConditionType(condition)) {
+                return condition.flags & TypeFlags.Never ? neverType : getUnionType([
+                    typeMaybeAssignableTo(condition, trueType) ? instantiateType(whenTrue, mapper) : neverType,
+                    typeMaybeAssignableTo(condition, falseType) ? instantiateType(whenFalse, mapper) : neverType]);
+            }
+            const resultTrueType = instantiateType(whenTrue, mapper);
+            const resultFalseType = instantiateType(whenFalse, mapper);
+            const resultTypeArguments = instantiateTypes(aliasTypeArguments, mapper);
+            const id = condition.id + "," + resultTrueType.id + "," + resultFalseType.id;
+            let type = conditionalTypes.get(id);
+            if (!type) {
+                conditionalTypes.set(id, type = createConditionalType(condition, resultTrueType, resultFalseType, aliasSymbol, resultTypeArguments));
+            }
             return type;
         }
 
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getConditionalType(getTypeFromTypeNode(node.checkType), getTypeFromTypeNode(node.extendsType),
+                links.resolvedType = getConditionalType(getTypeFromTypeNode(node.conditionType),
                     getTypeFromTypeNode(node.trueType), getTypeFromTypeNode(node.falseType),
-                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node), identityMapper);
+            }
+            return links.resolvedType;
+        }
+
+        function createExtendsType(checkType: Type, extendsType: Type) {
+            const type = <ExtendsType>createType(TypeFlags.Extends);
+            type.checkType = checkType;
+            type.extendsType = extendsType;
+            return type;
+        }
+
+        function getExtendsType(checkType: Type, extendsType: Type): Type {
+            // sys.write(`getExtendsType(${typeToString(checkType)}, ${typeToString(extendsType)})\n`);
+            if (checkType.flags & TypeFlags.Union) {
+                return getUnionType(map((<UnionType>checkType).types, t => getExtendsType(t, extendsType)), /*subtypeReduction*/ false);
+            }
+            if (checkType.flags & TypeFlags.Any) {
+                return booleanType;
+            }
+            if (!isGenericObjectType(checkType) && !isGenericObjectType(extendsType)) {
+                return isTypeAssignableTo(checkType, extendsType) ? trueType : falseType;
+            }
+            const id = checkType.id + "," + extendsType.id;
+            let type = extendsTypes.get(id);
+            if (!type) {
+                extendsTypes.set(id, type = createExtendsType(checkType, extendsType));
+            }
+            return type;
+        }
+
+        function getTypeFromBinaryTypeNode(node: BinaryTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getExtendsType(getTypeFromTypeNode(node.left), getTypeFromTypeNode(node.right));
             }
             return links.resolvedType;
         }
@@ -8541,6 +8599,8 @@ namespace ts {
                     return getTypeFromMappedTypeNode(<MappedTypeNode>node);
                 case SyntaxKind.ConditionalType:
                     return getTypeFromConditionalTypeNode(<ConditionalTypeNode>node);
+                case SyntaxKind.BinaryType:
+                    return getTypeFromBinaryTypeNode(<BinaryTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -8807,20 +8867,23 @@ namespace ts {
         }
 
         function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper): Type {
-            const checkType = type.checkType;
-            if (checkType.flags & TypeFlags.TypeParameter) {
-                const instantiatedType = mapper(<TypeParameter>checkType);
-                if (checkType !== instantiatedType && instantiatedType.flags & TypeFlags.Union) {
-                    return mapType(instantiatedType, t => instantiateConditionalType(type, createReplacementMapper(checkType, t, mapper)));
+            const conditionType = type.conditionType;
+            if (conditionType.flags & TypeFlags.Extends) {
+                const checkType = (<ExtendsType>conditionType).checkType;
+                if (checkType.flags & TypeFlags.TypeParameter) {
+                    const instantiatedType = mapper(<TypeParameter>checkType);
+                    if (checkType !== instantiatedType && instantiatedType.flags & TypeFlags.Union) {
+                        return mapType(instantiatedType, t => instantiateConditionalType(type, createReplacementMapper(checkType, t, mapper)));
+                    }
                 }
             }
             return instantiateConditionalType(type, mapper);
         }
 
         function instantiateConditionalType(type: ConditionalType, mapper: TypeMapper): Type {
-            return getConditionalType(instantiateType((<ConditionalType>type).checkType, mapper), instantiateType((<ConditionalType>type).extendsType, mapper),
-                instantiateType((<ConditionalType>type).trueType, mapper), instantiateType((<ConditionalType>type).falseType, mapper),
-                type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+            return getConditionalType(instantiateType((<ConditionalType>type).conditionType, mapper),
+                (<ConditionalType>type).trueType, (<ConditionalType>type).falseType,
+                type.aliasSymbol, type.aliasTypeArguments, mapper);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper): Type {
@@ -8857,6 +8920,9 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Conditional) {
                     return getConditionalTypeInstantiation(<ConditionalType>type, mapper);
+                }
+                if (type.flags & TypeFlags.Extends) {
+                    return getExtendsType(instantiateType((<ExtendsType>type).checkType, mapper), instantiateType((<ExtendsType>type).extendsType, mapper));
                 }
             }
             return type;
@@ -20047,6 +20113,11 @@ namespace ts {
             checkSourceElement(node.type);
         }
 
+        function checkConditionalType(node: ConditionalTypeNode) {
+            forEachChild(node, checkSourceElement);
+            checkTypeAssignableTo(getTypeFromTypeNode(node.conditionType), booleanType, node.conditionType);
+        }
+
         function isPrivateWithinAmbient(node: Node): boolean {
             return hasModifier(node, ModifierFlags.Private) && !!(node.flags & NodeFlags.Ambient);
         }
@@ -23687,6 +23758,11 @@ namespace ts {
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
                 case SyntaxKind.TypeOperator:
                     return checkTypeOperator(<TypeOperatorNode>node);
+                case SyntaxKind.ConditionalType:
+                    return checkConditionalType(<ConditionalTypeNode>node);
+                case SyntaxKind.BinaryType:
+                    forEachChild(node, checkSourceElement);
+                    return;
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:

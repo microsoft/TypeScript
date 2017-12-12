@@ -572,6 +572,8 @@ namespace ts {
                     return emitThisType();
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>node);
+                case SyntaxKind.BinaryType:
+                    return emitBinaryType(<BinaryTypeNode>node);
                 case SyntaxKind.IndexedAccessType:
                     return emitIndexedAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
@@ -1132,9 +1134,7 @@ namespace ts {
         }
 
         function emitConditionalType(node: ConditionalTypeNode) {
-            emit(node.checkType);
-            write(" extends ");
-            emit(node.extendsType);
+            emit(node.conditionType);
             write(" ? ");
             emit(node.trueType);
             write(" : ");
@@ -1155,6 +1155,12 @@ namespace ts {
             writeTokenText(node.operator);
             write(" ");
             emit(node.type);
+        }
+
+        function emitBinaryType(node: BinaryTypeNode) {
+            emit(node.left);
+            write(" extends ");
+            emit(node.right);
         }
 
         function emitIndexedAccessType(node: IndexedAccessTypeNode) {

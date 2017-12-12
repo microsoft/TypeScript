@@ -3422,6 +3422,7 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.ThisType:
             case SyntaxKind.TypeOperator:
+            case SyntaxKind.BinaryType:
             case SyntaxKind.IndexedAccessType:
             case SyntaxKind.MappedType:
             case SyntaxKind.LiteralType:

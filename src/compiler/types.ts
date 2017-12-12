@@ -252,6 +252,7 @@ namespace ts {
         ParenthesizedType,
         ThisType,
         TypeOperator,
+        BinaryType,
         IndexedAccessType,
         MappedType,
         LiteralType,
@@ -1068,8 +1069,7 @@ namespace ts {
 
     export interface ConditionalTypeNode extends TypeNode {
         kind: SyntaxKind.ConditionalType;
-        checkType: TypeNode;
-        extendsType: TypeNode;
+        conditionType: TypeNode;
         trueType: TypeNode;
         falseType: TypeNode;
     }
@@ -1083,6 +1083,13 @@ namespace ts {
         kind: SyntaxKind.TypeOperator;
         operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword;
         type: TypeNode;
+    }
+
+    export interface BinaryTypeNode extends TypeNode {
+        kind: SyntaxKind.BinaryType;
+        left: TypeNode;
+        operator: SyntaxKind.ExtendsKeyword;
+        right: TypeNode;
     }
 
     /* @internal */
@@ -3348,19 +3355,20 @@ namespace ts {
         Intersection            = 1 << 18,  // Intersection (T & U)
         Index                   = 1 << 19,  // keyof T
         IndexedAccess           = 1 << 20,  // T[K]
-        Conditional             = 1 << 21,  // A extends B ? T : U
+        Conditional             = 1 << 21,  // C ? T : U
+        Extends                 = 1 << 22,  // T extends U
         /* @internal */
-        FreshLiteral            = 1 << 22,  // Fresh literal or unique type
+        FreshLiteral            = 1 << 23,  // Fresh literal or unique type
         /* @internal */
-        ContainsWideningType    = 1 << 23,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 24,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 25,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 26,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
+        NonPrimitive            = 1 << 27,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 27,  // Jsx attributes type
-        MarkerType              = 1 << 28,  // Marker type used for variance probing
+        JsxAttributes           = 1 << 28,  // Jsx attributes type
+        MarkerType              = 1 << 29,  // Marker type used for variance probing
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3378,13 +3386,13 @@ namespace ts {
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
         StringLike = String | StringLiteral | Index,
         NumberLike = Number | NumberLiteral | Enum,
-        BooleanLike = Boolean | BooleanLiteral,
+        BooleanLike = Boolean | BooleanLiteral | Extends,
         EnumLike = Enum | EnumLiteral,
         ESSymbolLike = ESSymbol | UniqueESSymbol,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess | Conditional,
-        StructuredOrTypeVariable = StructuredType | TypeVariable | Index,
+        StructuredOrTypeVariable = StructuredType | TypeVariable | Index | Extends,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
@@ -3637,10 +3645,14 @@ namespace ts {
     }
 
     export interface ConditionalType extends TypeVariable {
-        checkType: Type;
-        extendsType: Type;
+        conditionType: Type;
         trueType: Type;
         falseType: Type;
+    }
+
+    export interface ExtendsType extends TypeVariable {
+        checkType: Type;
+        extendsType: Type;
     }
 
     export const enum SignatureKind {
