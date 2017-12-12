@@ -123,7 +123,13 @@ The only possible values for the Void type are `null` and `undefined`. The Void 
 
 *NOTE: We might consider disallowing declaring variables of type Void as they serve no useful purpose. However, because Void is permitted as a type argument to a generic type or function it is not feasible to disallow Void properties or parameters*.
 
-### The Null Type { #the-null-type }
+### Unit Types { #unit-types }
+
+Unit types are types with a single value. The unit types in TypeScript are `null`, `undefined`, string literal types, number literal types and boolean literal types.
+
+TODO: Update the null and undefined sections in my other draft PR.
+
+#### The Null Type { #the-null-type }
 
 The Null type corresponds to the similarly named JavaScript primitive type and is the type of the `null` literal.
 
@@ -139,7 +145,7 @@ var x = null;           // Same as x: any = null
 var e: Null;            // Error, can't reference Null type
 ```
 
-### The Undefined Type { #the-undefined-type }
+#### The Undefined Type { #the-undefined-type }
 
 The Undefined type corresponds to the similarly named JavaScript primitive type and is the type of the `undefined` literal.
 
@@ -155,11 +161,37 @@ var x = undefined;      // Same as x: any = undefined
 var e: Undefined;       // Error, can't reference Undefined type
 ```
 
+#### Literal types { #literal-types }
+
+TypeScript supports string, number and boolean literal types, but not regular expression literal types.
+
+Literal types use the syntax of their respective literal values.
+For example, the boolean literal type `true` uses the same keyword as the boolean literal value `true`.
+
+Similarly, literal types are subclasses of their respective literal values' types:
+
+* The supertype of the literal types `true` and `false` is the Boolean primitive type.
+* The supertype of numeric literal types is the Number primitive type.
+* The supertype of string literal types is the String primitive type.
+
+TODO: Maybe a note about the numeric syntax since that support is a bit wobbly.
+
+#### Example with unions and narrowing
+
+TODO: An ADT example here.
+
 ### Enum Types { #enum-types }
 
 Enum types are distinct user defined subtypes of the Number primitive type. Enum types are declared using enum declarations (section [#enum-declarations]<!--9.1-->) and referenced using type references (section [#type-references]<!--3.8.2-->).
 
 Enum types are assignable to the Number primitive type, and vice versa, but different enum types are not assignable to each other.
+
+TODO: This section should be updated to discuss:
+1. Normal versus Const enums
+2. Computed versus Union enums
+3. Exceptions to enum nominality
+4. Union enums in detail
+5. Enum type relations to the number type.
 
 ### String Literal Types { #string-literal-types }
 
