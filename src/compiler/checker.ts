@@ -6807,7 +6807,7 @@ namespace ts {
 
                     // Record a new minimum argument count if this is not an optional parameter
                     const isOptionalParameter = param.initializer || param.questionToken || param.dotDotDotToken ||
-                        iife && parameters.length > iife.arguments.length && !param.type ||
+                        iife && parameters.length > iife.arguments.length && !param.type || param.type && param.type.kind === SyntaxKind.VoidKeyword ||
                         isJSDocOptionalParameter(param) ||
                         isUntypedSignatureInJSFile;
                     if (!isOptionalParameter) {
