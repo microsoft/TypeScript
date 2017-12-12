@@ -144,7 +144,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Имя вычисляемого свойства в объявлении свойств класса должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+            <Val><![CDATA[Имя вычисляемого свойства в объявлении свойств класса должно ссылаться на выражение, тип которого — литерал или "unique symbol".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -153,7 +153,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Имя вычисляемого свойства в перегрузке метода должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+            <Val><![CDATA[Имя вычисляемого свойства в перегрузке метода должно ссылаться на выражение, тип которого — литерал или "unique symbol".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -162,7 +162,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Имя вычисляемого свойства в литерале должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+            <Val><![CDATA[Имя вычисляемого свойства в литерале должно ссылаться на выражение, тип которого — литерал или "unique symbol".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -171,7 +171,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Имя вычисляемого свойства в окружающем контексте должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+            <Val><![CDATA[Имя вычисляемого свойства в окружающем контексте должно ссылаться на выражение, тип которого — литерал или "unique symbol".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -180,7 +180,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Имя вычисляемого свойства в интерфейсе должно ссылаться на выражение, тип которого — литерал или уникальный символ.]]></Val>
+            <Val><![CDATA[Имя вычисляемого свойства в интерфейсе должно ссылаться на выражение, тип которого — литерал или "unique symbol".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -531,7 +531,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Свойство класса, тип которого — уникальный символ, должно быть задано как "static" и "readonly".]]></Val>
+            <Val><![CDATA[Свойство класса, тип которого — "unique symbol", должно быть задано как "static" и "readonly".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -540,7 +540,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Свойство интерфейса или литерала, тип которого — уникальный символ, должно быть задано как "readonly".]]></Val>
+            <Val><![CDATA[Свойство интерфейса или литерала, тип которого — "unique symbol", должно быть задано как "readonly".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -795,7 +795,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Переменная типа "уникальный символ" должна быть задана как "const".]]></Val>
+            <Val><![CDATA[Переменная, тип которой — "unique symbol", должна быть задана как "const".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4748,6 +4748,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Multiple_constructor_implementations_are_not_allowed_2392" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple constructor implementations are not allowed.]]></Val>
@@ -4835,6 +4841,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Тип числового индекса "{0}" нельзя назначить типу строкового индекса "{1}".]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8922,7 +8934,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Типы "уникальный символ" здесь запрещены.]]></Val>
+            <Val><![CDATA[Типы "unique symbol" здесь запрещены.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8931,7 +8943,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are only allowed on variables in a variable statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Типы "уникальный символ" разрешены только в переменных в операторе с переменной.]]></Val>
+            <Val><![CDATA[Типы "unique symbol" разрешены только у переменных в операторах с переменными.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8940,7 +8952,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types may not be used on a variable declaration with a binding name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Типы "уникальный символ" невозможно использовать в объявлении переменной с именем привязки.]]></Val>
+            <Val><![CDATA[Типы "unique symbol" невозможно использовать в объявлении переменной с именем привязки.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
