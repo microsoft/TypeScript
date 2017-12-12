@@ -445,7 +445,7 @@ namespace ts {
         return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
-    export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
+    function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
         if (nodeIsMissing(n)) {
             return false;
         }
@@ -512,7 +512,7 @@ namespace ts {
 
             case SyntaxKind.ExpressionStatement:
                 return isCompletedNode((<ExpressionStatement>n).expression, sourceFile) ||
-                    hasChildOfKind(n, SyntaxKind.SemicolonToken);
+                    hasChildOfKind(n, SyntaxKind.SemicolonToken, sourceFile);
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
@@ -540,11 +540,9 @@ namespace ts {
                 return isCompletedNode((<IterationStatement>n).statement, sourceFile);
             case SyntaxKind.DoStatement:
                 // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
-                const hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
-                if (hasWhileKeyword) {
-                    return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
-                }
-                return isCompletedNode((<DoStatement>n).statement, sourceFile);
+                return hasChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile)
+                    ? nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile)
+                    : isCompletedNode((<DoStatement>n).statement, sourceFile);
 
             case SyntaxKind.TypeQuery:
                 return isCompletedNode((<TypeQueryNode>n).exprName, sourceFile);
@@ -619,12 +617,12 @@ namespace ts {
         };
     }
 
-    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): boolean {
+    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile: SourceFile): boolean {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFileLike): Node | undefined {
-        return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
+    export function findChildOfKind<T extends Node>(n: Node, kind: T["kind"], sourceFile: SourceFileLike): T | undefined {
+        return find(n.getChildren(sourceFile), (c): c is T => c.kind === kind);
     }
 
     export function findContainingList(node: Node): SyntaxList | undefined {
@@ -1112,10 +1110,6 @@ namespace ts {
 
     export function singleElementArray<T>(t: T | undefined): T[] {
         return t === undefined ? undefined : [t];
-    }
-
-    export function getFirstChildOfKind(node: Node, sourceFile: SourceFile, kind: SyntaxKind): Node | undefined {
-        return find(node.getChildren(sourceFile), c => c.kind === kind);
     }
 }
 

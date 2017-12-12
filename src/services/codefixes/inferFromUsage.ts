@@ -170,7 +170,7 @@ namespace ts.codefix {
         }
 
         const type = inferTypeForVariableFromUsage(getAccessorDeclaration.name, sourceFile, program, cancellationToken);
-        const closeParenToken = getFirstChildOfKind(getAccessorDeclaration, sourceFile, SyntaxKind.CloseParenToken);
+        const closeParenToken = findChildOfKind(getAccessorDeclaration, SyntaxKind.CloseParenToken, sourceFile);
         return makeFix(getAccessorDeclaration, closeParenToken.getEnd(), type, program);
     }
 
@@ -209,7 +209,7 @@ namespace ts.codefix {
             case SyntaxKind.MethodDeclaration:
                 const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
                 const searchToken = isConstructor ?
-                    <Token<SyntaxKind.ConstructorKeyword>>getFirstChildOfKind(containingFunction, sourceFile, SyntaxKind.ConstructorKeyword) :
+                    findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile) :
                     containingFunction.name;
                 if (searchToken) {
                     return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, sourceFile, program, cancellationToken), containingFunction, program.getTypeChecker(), cancellationToken);
