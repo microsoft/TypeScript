@@ -1332,48 +1332,6 @@ namespace ts {
         return position;
     }
 
-    export function getSourceFileImportLocation({ text }: SourceFile) {
-        const shebang = getShebang(text);
-        let position = 0;
-        if (shebang !== undefined) {
-            position = shebang.length;
-            advancePastLineBreak();
-        }
-
-        // For a source file, it is possible there are detached comments we should not skip
-        let ranges = getLeadingCommentRanges(text, position);
-        if (!ranges) return position;
-        // However we should still skip a pinned comment at the top
-        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
-            position = ranges[0].end;
-            advancePastLineBreak();
-            ranges = ranges.slice(1);
-        }
-        // As well as any triple slash references
-        for (const range of ranges) {
-            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(text, range.pos, range.end)) {
-                position = range.end;
-                advancePastLineBreak();
-                continue;
-            }
-            break;
-        }
-        return position;
-
-        function advancePastLineBreak() {
-            if (position < text.length) {
-                const charCode = text.charCodeAt(position);
-                if (isLineBreak(charCode)) {
-                    position++;
-
-                    if (position < text.length && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
-                        position++;
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Creates a deep, memberwise clone of a node with no source map location.
      *

@@ -288,6 +288,8 @@ namespace ts {
         return undefined;
     }
 
+    export function findLast<T, U extends T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => element is U): U | undefined;
+    export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined;
     export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = array.length - 1; i >= 0; i--) {
             const value = array[i];
