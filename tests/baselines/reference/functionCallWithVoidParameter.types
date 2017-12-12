@@ -1,0 +1,240 @@
+=== tests/cases/conformance/functions/functionCallWithVoidParameter.ts ===
+function f1(a: number, b: void) { }
+>f1 : (a: number, b: void) => void
+>a : number
+>b : void
+
+function f2(a: void) { }
+>f2 : (a: void) => void
+>a : void
+
+function f3(a: void, b: number) { }
+>f3 : (a: void, b: number) => void
+>a : void
+>b : number
+
+function f4(a: number | void) { }
+>f4 : (a: number | void) => void
+>a : number | void
+
+function f5(a: number | void, b: void) { }
+>f5 : (a: number | void, b: void) => void
+>a : number | void
+>b : void
+
+function f6(a: number | void, b: number | void) { }
+>f6 : (a: number | void, b: number | void) => void
+>a : number | void
+>b : number | void
+
+function f7(a: void, b: number | void) { }
+>f7 : (a: void, b: number | void) => void
+>a : void
+>b : number | void
+
+function f8(a: void, b: void) { }
+>f8 : (a: void, b: void) => void
+>a : void
+>b : void
+
+function f9<T, U>(a: T, b: U) {}
+>f9 : <T, U>(a: T, b: U) => void
+>T : T
+>U : U
+>a : T
+>T : T
+>b : U
+>U : U
+
+f1(1);
+>f1(1) : void
+>f1 : (a: number, b: void) => void
+>1 : 1
+
+f1(1, void 0);
+>f1(1, void 0) : void
+>f1 : (a: number, b: void) => void
+>1 : 1
+>void 0 : undefined
+>0 : 0
+
+f2();
+>f2() : void
+>f2 : (a: void) => void
+
+f2(void 0);
+>f2(void 0) : void
+>f2 : (a: void) => void
+>void 0 : undefined
+>0 : 0
+
+f3(void 0, 1);
+>f3(void 0, 1) : void
+>f3 : (a: void, b: number) => void
+>void 0 : undefined
+>0 : 0
+>1 : 1
+
+f4();
+>f4() : void
+>f4 : (a: number | void) => void
+
+f4(1);
+>f4(1) : void
+>f4 : (a: number | void) => void
+>1 : 1
+
+f4(void 0);
+>f4(void 0) : void
+>f4 : (a: number | void) => void
+>void 0 : undefined
+>0 : 0
+
+f5();
+>f5() : void
+>f5 : (a: number | void, b: void) => void
+
+f5(1);
+>f5(1) : void
+>f5 : (a: number | void, b: void) => void
+>1 : 1
+
+f5(1, void 0);
+>f5(1, void 0) : void
+>f5 : (a: number | void, b: void) => void
+>1 : 1
+>void 0 : undefined
+>0 : 0
+
+f5(void 0, void 0);
+>f5(void 0, void 0) : void
+>f5 : (a: number | void, b: void) => void
+>void 0 : undefined
+>0 : 0
+>void 0 : undefined
+>0 : 0
+
+f5(void 0);
+>f5(void 0) : void
+>f5 : (a: number | void, b: void) => void
+>void 0 : undefined
+>0 : 0
+
+f6();
+>f6() : void
+>f6 : (a: number | void, b: number | void) => void
+
+f6(1);
+>f6(1) : void
+>f6 : (a: number | void, b: number | void) => void
+>1 : 1
+
+f6(void 0);
+>f6(void 0) : void
+>f6 : (a: number | void, b: number | void) => void
+>void 0 : undefined
+>0 : 0
+
+f6(1, 1);
+>f6(1, 1) : void
+>f6 : (a: number | void, b: number | void) => void
+>1 : 1
+>1 : 1
+
+f6(1, void 0);
+>f6(1, void 0) : void
+>f6 : (a: number | void, b: number | void) => void
+>1 : 1
+>void 0 : undefined
+>0 : 0
+
+f6(void 0, void 0);
+>f6(void 0, void 0) : void
+>f6 : (a: number | void, b: number | void) => void
+>void 0 : undefined
+>0 : 0
+>void 0 : undefined
+>0 : 0
+
+f6(void 0, 1);
+>f6(void 0, 1) : void
+>f6 : (a: number | void, b: number | void) => void
+>void 0 : undefined
+>0 : 0
+>1 : 1
+
+f7();
+>f7() : void
+>f7 : (a: void, b: number | void) => void
+
+f7(void 0);
+>f7(void 0) : void
+>f7 : (a: void, b: number | void) => void
+>void 0 : undefined
+>0 : 0
+
+f7(void 0, 1);
+>f7(void 0, 1) : void
+>f7 : (a: void, b: number | void) => void
+>void 0 : undefined
+>0 : 0
+>1 : 1
+
+f7(void 0, void 0);
+>f7(void 0, void 0) : void
+>f7 : (a: void, b: number | void) => void
+>void 0 : undefined
+>0 : 0
+>void 0 : undefined
+>0 : 0
+
+f8();
+>f8() : void
+>f8 : (a: void, b: void) => void
+
+f8(void 0);
+>f8(void 0) : void
+>f8 : (a: void, b: void) => void
+>void 0 : undefined
+>0 : 0
+
+f8(void 0, void 0);
+>f8(void 0, void 0) : void
+>f8 : (a: void, b: void) => void
+>void 0 : undefined
+>0 : 0
+>void 0 : undefined
+>0 : 0
+
+class X<T>
+>X : X<T>
+>T : T
+{
+    f(t: T) { return { a: t }; }
+>f : (t: T) => { a: T; }
+>t : T
+>T : T
+>{ a: t } : { a: T; }
+>a : T
+>t : T
+}
+
+var x2: X<void>; 
+>x2 : X<void>
+>X : X<T>
+
+const t2b = x2.f();
+>t2b : { a: void; }
+>x2.f() : { a: void; }
+>x2.f : (t: void) => { a: void; }
+>x2 : X<void>
+>f : (t: void) => { a: void; }
+
+t2b.a = void 0;
+>t2b.a = void 0 : undefined
+>t2b.a : void
+>t2b : { a: void; }
+>a : void
+>void 0 : undefined
+>0 : 0
+

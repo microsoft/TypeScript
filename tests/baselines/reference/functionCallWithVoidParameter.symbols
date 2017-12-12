@@ -1,0 +1,156 @@
+=== tests/cases/conformance/functions/functionCallWithVoidParameter.ts ===
+function f1(a: number, b: void) { }
+>f1 : Symbol(f1, Decl(functionCallWithVoidParameter.ts, 0, 0))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 0, 12))
+>b : Symbol(b, Decl(functionCallWithVoidParameter.ts, 0, 22))
+
+function f2(a: void) { }
+>f2 : Symbol(f2, Decl(functionCallWithVoidParameter.ts, 0, 35))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 1, 12))
+
+function f3(a: void, b: number) { }
+>f3 : Symbol(f3, Decl(functionCallWithVoidParameter.ts, 1, 24))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 2, 12))
+>b : Symbol(b, Decl(functionCallWithVoidParameter.ts, 2, 20))
+
+function f4(a: number | void) { }
+>f4 : Symbol(f4, Decl(functionCallWithVoidParameter.ts, 2, 35))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 3, 12))
+
+function f5(a: number | void, b: void) { }
+>f5 : Symbol(f5, Decl(functionCallWithVoidParameter.ts, 3, 33))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 4, 12))
+>b : Symbol(b, Decl(functionCallWithVoidParameter.ts, 4, 29))
+
+function f6(a: number | void, b: number | void) { }
+>f6 : Symbol(f6, Decl(functionCallWithVoidParameter.ts, 4, 42))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 5, 12))
+>b : Symbol(b, Decl(functionCallWithVoidParameter.ts, 5, 29))
+
+function f7(a: void, b: number | void) { }
+>f7 : Symbol(f7, Decl(functionCallWithVoidParameter.ts, 5, 51))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 6, 12))
+>b : Symbol(b, Decl(functionCallWithVoidParameter.ts, 6, 20))
+
+function f8(a: void, b: void) { }
+>f8 : Symbol(f8, Decl(functionCallWithVoidParameter.ts, 6, 42))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 7, 12))
+>b : Symbol(b, Decl(functionCallWithVoidParameter.ts, 7, 20))
+
+function f9<T, U>(a: T, b: U) {}
+>f9 : Symbol(f9, Decl(functionCallWithVoidParameter.ts, 7, 33))
+>T : Symbol(T, Decl(functionCallWithVoidParameter.ts, 8, 12))
+>U : Symbol(U, Decl(functionCallWithVoidParameter.ts, 8, 14))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 8, 18))
+>T : Symbol(T, Decl(functionCallWithVoidParameter.ts, 8, 12))
+>b : Symbol(b, Decl(functionCallWithVoidParameter.ts, 8, 23))
+>U : Symbol(U, Decl(functionCallWithVoidParameter.ts, 8, 14))
+
+f1(1);
+>f1 : Symbol(f1, Decl(functionCallWithVoidParameter.ts, 0, 0))
+
+f1(1, void 0);
+>f1 : Symbol(f1, Decl(functionCallWithVoidParameter.ts, 0, 0))
+
+f2();
+>f2 : Symbol(f2, Decl(functionCallWithVoidParameter.ts, 0, 35))
+
+f2(void 0);
+>f2 : Symbol(f2, Decl(functionCallWithVoidParameter.ts, 0, 35))
+
+f3(void 0, 1);
+>f3 : Symbol(f3, Decl(functionCallWithVoidParameter.ts, 1, 24))
+
+f4();
+>f4 : Symbol(f4, Decl(functionCallWithVoidParameter.ts, 2, 35))
+
+f4(1);
+>f4 : Symbol(f4, Decl(functionCallWithVoidParameter.ts, 2, 35))
+
+f4(void 0);
+>f4 : Symbol(f4, Decl(functionCallWithVoidParameter.ts, 2, 35))
+
+f5();
+>f5 : Symbol(f5, Decl(functionCallWithVoidParameter.ts, 3, 33))
+
+f5(1);
+>f5 : Symbol(f5, Decl(functionCallWithVoidParameter.ts, 3, 33))
+
+f5(1, void 0);
+>f5 : Symbol(f5, Decl(functionCallWithVoidParameter.ts, 3, 33))
+
+f5(void 0, void 0);
+>f5 : Symbol(f5, Decl(functionCallWithVoidParameter.ts, 3, 33))
+
+f5(void 0);
+>f5 : Symbol(f5, Decl(functionCallWithVoidParameter.ts, 3, 33))
+
+f6();
+>f6 : Symbol(f6, Decl(functionCallWithVoidParameter.ts, 4, 42))
+
+f6(1);
+>f6 : Symbol(f6, Decl(functionCallWithVoidParameter.ts, 4, 42))
+
+f6(void 0);
+>f6 : Symbol(f6, Decl(functionCallWithVoidParameter.ts, 4, 42))
+
+f6(1, 1);
+>f6 : Symbol(f6, Decl(functionCallWithVoidParameter.ts, 4, 42))
+
+f6(1, void 0);
+>f6 : Symbol(f6, Decl(functionCallWithVoidParameter.ts, 4, 42))
+
+f6(void 0, void 0);
+>f6 : Symbol(f6, Decl(functionCallWithVoidParameter.ts, 4, 42))
+
+f6(void 0, 1);
+>f6 : Symbol(f6, Decl(functionCallWithVoidParameter.ts, 4, 42))
+
+f7();
+>f7 : Symbol(f7, Decl(functionCallWithVoidParameter.ts, 5, 51))
+
+f7(void 0);
+>f7 : Symbol(f7, Decl(functionCallWithVoidParameter.ts, 5, 51))
+
+f7(void 0, 1);
+>f7 : Symbol(f7, Decl(functionCallWithVoidParameter.ts, 5, 51))
+
+f7(void 0, void 0);
+>f7 : Symbol(f7, Decl(functionCallWithVoidParameter.ts, 5, 51))
+
+f8();
+>f8 : Symbol(f8, Decl(functionCallWithVoidParameter.ts, 6, 42))
+
+f8(void 0);
+>f8 : Symbol(f8, Decl(functionCallWithVoidParameter.ts, 6, 42))
+
+f8(void 0, void 0);
+>f8 : Symbol(f8, Decl(functionCallWithVoidParameter.ts, 6, 42))
+
+class X<T>
+>X : Symbol(X, Decl(functionCallWithVoidParameter.ts, 36, 19))
+>T : Symbol(T, Decl(functionCallWithVoidParameter.ts, 38, 8))
+{
+    f(t: T) { return { a: t }; }
+>f : Symbol(X.f, Decl(functionCallWithVoidParameter.ts, 39, 1))
+>t : Symbol(t, Decl(functionCallWithVoidParameter.ts, 40, 6))
+>T : Symbol(T, Decl(functionCallWithVoidParameter.ts, 38, 8))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 40, 22))
+>t : Symbol(t, Decl(functionCallWithVoidParameter.ts, 40, 6))
+}
+
+var x2: X<void>; 
+>x2 : Symbol(x2, Decl(functionCallWithVoidParameter.ts, 43, 3))
+>X : Symbol(X, Decl(functionCallWithVoidParameter.ts, 36, 19))
+
+const t2b = x2.f();
+>t2b : Symbol(t2b, Decl(functionCallWithVoidParameter.ts, 44, 5))
+>x2.f : Symbol(X.f, Decl(functionCallWithVoidParameter.ts, 39, 1))
+>x2 : Symbol(x2, Decl(functionCallWithVoidParameter.ts, 43, 3))
+>f : Symbol(X.f, Decl(functionCallWithVoidParameter.ts, 39, 1))
+
+t2b.a = void 0;
+>t2b.a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 40, 22))
+>t2b : Symbol(t2b, Decl(functionCallWithVoidParameter.ts, 44, 5))
+>a : Symbol(a, Decl(functionCallWithVoidParameter.ts, 40, 22))
+
