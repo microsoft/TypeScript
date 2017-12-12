@@ -19094,7 +19094,7 @@ namespace ts {
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {
             if (contextualType) {
-                if (contextualType.flags & TypeFlags.Union && !(contextualType.flags & TypeFlags.Boolean)) {
+                if (contextualType.flags & TypeFlags.UnionOrIntersection && !(contextualType.flags & TypeFlags.Boolean)) {
                     // If the contextual type is a union containing both of the 'true' and 'false' types we
                     // don't consider it a literal context for boolean literals.
                     const types = (<UnionType>contextualType).types;
