@@ -345,7 +345,7 @@ namespace ts {
 
             const newTexts: NamedSourceText[] = files.concat([{ name: "non-existing-file.ts", text: SourceText.New("", "", `var x = 1`) }]);
             const program2 = updateProgram(program1, ["a.ts"], options, noop, newTexts);
-            assert.deepEqual(emptyArray, program2.getMissingFilePaths());
+            assert.lengthOf(program2.getMissingFilePaths(), 0);
 
             assert.equal(StructureIsReused.Not, program1.structureIsReused);
         });
@@ -839,12 +839,12 @@ namespace ts {
                     updateProgramText(files, root, "const x = 1;");
                 });
                 assert.equal(program1.structureIsReused, StructureIsReused.Completely);
-                assert.deepEqual(program2.getSemanticDiagnostics(), emptyArray);
+                assert.lengthOf(program2.getSemanticDiagnostics(), 0);
             });
 
             it("Target changes -> redirect broken", () => {
                 const program1 = createRedirectProgram();
-                assert.deepEqual(program1.getSemanticDiagnostics(), emptyArray);
+                assert.lengthOf(program1.getSemanticDiagnostics(), 0);
 
                 const program2 = updateRedirectProgram(program1, files => {
                     updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");
