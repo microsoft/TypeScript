@@ -11416,7 +11416,7 @@ namespace ts {
                         return;
                     }
                 }
-                else if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
+                if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // If source and target are references to the same generic type, infer from type arguments
                     const sourceTypes = (<TypeReference>source).typeArguments || emptyArray;
                     const targetTypes = (<TypeReference>target).typeArguments || emptyArray;
@@ -11445,6 +11445,15 @@ namespace ts {
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                     inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
                     inferFromTypes((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType);
+                }
+                else if (source.flags & TypeFlags.Conditional && target.flags & TypeFlags.Conditional) {
+                    inferFromTypes((<ConditionalType>source).conditionType, (<ConditionalType>target).conditionType);
+                    inferFromTypes((<ConditionalType>source).trueType, (<ConditionalType>target).trueType);
+                    inferFromTypes((<ConditionalType>source).falseType, (<ConditionalType>target).falseType);
+                }
+                else if (source.flags & TypeFlags.Extends && target.flags & TypeFlags.Extends) {
+                    inferFromTypes((<ExtendsType>source).checkType, (<ExtendsType>target).checkType);
+                    inferFromTypes((<ExtendsType>source).extendsType, (<ExtendsType>target).extendsType);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
