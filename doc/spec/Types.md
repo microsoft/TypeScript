@@ -1493,14 +1493,13 @@ If the type is:
 * A union type, the result is the widened type of each of its members.
 * Any other type, the result is the original type.
 
-Note that literal types that arise from type syntax do not widen. That is,
+Literal types widen in the following locations:
 
-```ts
-let choice: "yes" | "no";
-```
+* The right-hand side of a compound assignment.
+* The right-hand side of any assignment to a variable with an evolving type.
+* An expression that adds an element type to an evolving array type. (see [#evolving-array-types])
 
-declares a variable with the type `"yes" | "no"`, not the type string.
-In contrast, literal types that arise from expressions, except the expression of a case clause, widen in the following locations.
+Literal types that arise from expressions, except the expression of a case clause, widen in the following locations:
 
 * An argument to an immediately invoked function expression widens before providing the contextual type to the IIFE's parameter.
 * Declaration initializers, except for `const` declarations, `readonly` declarations that are not parameter properties, or initializers that are type assertions.
@@ -1529,4 +1528,3 @@ In the first example, `one` has the type `1` because the literal type from the e
 However, `num` has the type `number` because the type of `one` is a literal type from an expression, and `num` is not declared const.
 In the second example, `origin` has the type `0` because the literal type `0` of `zero` comes from the type annotation on the declaration.
 
-TODO: Check uses of getBaseLiteral
