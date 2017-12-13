@@ -1,35 +1,7 @@
 === tests/cases/compiler/literalIntersectionYieldsLiteral.ts ===
-export type BaseAttribute<T> = {
->BaseAttribute : Symbol(BaseAttribute, Decl(literalIntersectionYieldsLiteral.ts, 0, 0))
->T : Symbol(T, Decl(literalIntersectionYieldsLiteral.ts, 0, 26))
-
-    type?: string;
->type : Symbol(type, Decl(literalIntersectionYieldsLiteral.ts, 0, 32))
-}
-export type StringAttribute = BaseAttribute<string> & {
->StringAttribute : Symbol(StringAttribute, Decl(literalIntersectionYieldsLiteral.ts, 2, 1))
->BaseAttribute : Symbol(BaseAttribute, Decl(literalIntersectionYieldsLiteral.ts, 0, 0))
-
-    type: "string";
->type : Symbol(type, Decl(literalIntersectionYieldsLiteral.ts, 3, 55))
-}
-export type NumberAttribute = BaseAttribute<string> & {
->NumberAttribute : Symbol(NumberAttribute, Decl(literalIntersectionYieldsLiteral.ts, 5, 1))
->BaseAttribute : Symbol(BaseAttribute, Decl(literalIntersectionYieldsLiteral.ts, 0, 0))
-
-    type: "number";
->type : Symbol(type, Decl(literalIntersectionYieldsLiteral.ts, 6, 55))
-}
-export type Attribute = StringAttribute | NumberAttribute;
->Attribute : Symbol(Attribute, Decl(literalIntersectionYieldsLiteral.ts, 8, 1))
->StringAttribute : Symbol(StringAttribute, Decl(literalIntersectionYieldsLiteral.ts, 2, 1))
->NumberAttribute : Symbol(NumberAttribute, Decl(literalIntersectionYieldsLiteral.ts, 5, 1))
-
-const foo: Attribute = {
->foo : Symbol(foo, Decl(literalIntersectionYieldsLiteral.ts, 11, 5))
->Attribute : Symbol(Attribute, Decl(literalIntersectionYieldsLiteral.ts, 8, 1))
-
-    type: "string"
->type : Symbol(type, Decl(literalIntersectionYieldsLiteral.ts, 11, 24))
-}
+const x: { type: string } & { type: "string" } = { type: "string" };
+>x : Symbol(x, Decl(literalIntersectionYieldsLiteral.ts, 0, 5))
+>type : Symbol(type, Decl(literalIntersectionYieldsLiteral.ts, 0, 10))
+>type : Symbol(type, Decl(literalIntersectionYieldsLiteral.ts, 0, 29))
+>type : Symbol(type, Decl(literalIntersectionYieldsLiteral.ts, 0, 50))
 
