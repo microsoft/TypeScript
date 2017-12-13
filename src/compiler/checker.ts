@@ -6394,7 +6394,7 @@ namespace ts {
                 }
                 if (t.flags & TypeFlags.Conditional) {
                     const trueBaseType = getBaseConstraint((<ConditionalType>t).trueType);
-                    const falseBaseType = getBaseConstraint((<ConditionalType>t).trueType);
+                    const falseBaseType = getBaseConstraint((<ConditionalType>t).falseType);
                     return trueBaseType && falseBaseType ? getUnionType([trueBaseType, falseBaseType]) : undefined;
                 }
                 if (t.flags & TypeFlags.Extends) {
