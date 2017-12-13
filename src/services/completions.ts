@@ -539,38 +539,22 @@ namespace ts.Completions {
             return { codeActions: undefined, sourceDisplay: undefined };
         }
 
-        const { moduleSymbol, isDefaultExport } = symbolOriginInfo;
+        const { moduleSymbol } = symbolOriginInfo;
         const exportedSymbol = skipAlias(symbol.exportSymbol || symbol, checker);
-        const moduleSymbols = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
-        Debug.assert(contains(moduleSymbols, moduleSymbol));
-
-        const sourceDisplay = [textPart(first(codefix.getModuleSpecifiersForNewImport(program, sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host)))];
-        const codeActions = codefix.getCodeActionForImport(moduleSymbols, {
+        const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
+            exportedSymbol,
+            moduleSymbol,
+            sourceFile,
+            getSymbolName(symbol, symbolOriginInfo, compilerOptions.target),
             host,
             program,
             checker,
-            newLineCharacter: host.getNewLine(),
             compilerOptions,
-            sourceFile,
+            allSourceFiles,
             formatContext,
-            symbolName: getSymbolName(symbol, symbolOriginInfo, compilerOptions.target),
             getCanonicalFileName,
-            symbolToken: tryCast(previousToken, isIdentifier),
-            kind: isDefaultExport ? codefix.ImportKind.Default : codefix.ImportKind.Named,
-        }).slice(0, 1); // Only take the first code action
-        return { sourceDisplay, codeActions };
-    }
-
-    function getAllReExportingModules(exportedSymbol: Symbol, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<Symbol> {
-        const result: Symbol[] = [];
-        codefix.forEachExternalModule(checker, allSourceFiles, module => {
-            for (const exported of checker.getExportsOfModule(module)) {
-                if (skipAlias(exported, checker) === exportedSymbol) {
-                    result.push(module);
-                }
-            }
-        });
-        return result;
+            tryCast(previousToken, isIdentifier));
+        return { sourceDisplay: [textPart(moduleSpecifier)], codeActions: [codeAction] };
     }
 
     export function getCompletionEntrySymbol(
@@ -1116,6 +1100,9 @@ namespace ts.Completions {
                     let { name } = symbol;
 
                     // Don't add a completion for a re-export, only for the original.
+                    // The actual import fix might end up coming from a re-export -- we don't compute that until getting completion details.
+                    // This is just to avoid adding duplicate completion entries.
+                    //
                     // If `symbol.parent !== moduleSymbol`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
                     // If `some(...)`, this comes from an `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
                     if (symbol.parent !== moduleSymbol || some(symbol.declarations, d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
