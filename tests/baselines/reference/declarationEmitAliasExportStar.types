@@ -1,27 +1,12 @@
-=== tests/cases/compiler/thingA.ts ===
-export interface ThingA { }
->ThingA : ThingA
-
 === tests/cases/compiler/thingB.ts ===
 export interface ThingB { }
 >ThingB : ThingB
 
 === tests/cases/compiler/things.ts ===
-export { ThingA } from "./thingA";
->ThingA : any
-
 export * from "./thingB";
-=== tests/cases/compiler/index.ts ===
+No type information for this code.=== tests/cases/compiler/index.ts ===
 import * as things from "./things";
 >things : typeof things
-
-export const thing1 = (param: things.ThingA) => null;
->thing1 : (param: things.ThingA) => any
->(param: things.ThingA) => null : (param: things.ThingA) => any
->param : things.ThingA
->things : any
->ThingA : things.ThingA
->null : null
 
 export const thing2 = (param: things.ThingB) => null;
 >thing2 : (param: things.ThingB) => any
