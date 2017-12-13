@@ -11,20 +11,20 @@ namespace ts {
         function assertParseError(jsonText: string) {
              const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
              assert.deepEqual(parsed.config, {});
-             assert(undefined !== parsed.error);
+             assert.isTrue(undefined !== parsed.error);
         }
 
         function assertParseErrorWithExcludesKeyword(jsonText: string) {
             {
                 const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
                 const parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "tests/cases/unittests");
-                assert(parsedCommand.errors && parsedCommand.errors.length === 1 &&
+                assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
                     parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
             }
             {
                 const parsed = ts.parseJsonText("/apath/tsconfig.json", jsonText);
                 const parsedCommand = ts.parseJsonSourceFileConfigFileContent(parsed, ts.sys, "tests/cases/unittests");
-                assert(parsedCommand.errors && parsedCommand.errors.length === 1 &&
+                assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
                     parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
             }
         }
@@ -44,26 +44,26 @@ namespace ts {
         function assertParseFileList(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedFileList: string[]) {
             {
                 const parsed = getParsedCommandJson(jsonText, configFileName, basePath, allFileList);
-                assert(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
+                assert.isTrue(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
             }
             {
                 const parsed = getParsedCommandJsonNode(jsonText, configFileName, basePath, allFileList);
-                assert(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
+                assert.isTrue(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
             }
         }
 
         function assertParseFileDiagnostics(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedDiagnosticCode: number, noLocation?: boolean) {
             {
                 const parsed = getParsedCommandJson(jsonText, configFileName, basePath, allFileList);
-                assert(parsed.errors.length >= 0);
-                assert(parsed.errors.filter(e => e.code === expectedDiagnosticCode).length > 0, `Expected error code ${expectedDiagnosticCode} to be in ${JSON.stringify(parsed.errors)}`);
+                assert.isTrue(parsed.errors.length >= 0);
+                assert.isTrue(parsed.errors.filter(e => e.code === expectedDiagnosticCode).length > 0, `Expected error code ${expectedDiagnosticCode} to be in ${JSON.stringify(parsed.errors)}`);
             }
             {
                 const parsed = getParsedCommandJsonNode(jsonText, configFileName, basePath, allFileList);
-                assert(parsed.errors.length >= 0);
-                assert(parsed.errors.filter(e => e.code === expectedDiagnosticCode).length > 0, `Expected error code ${expectedDiagnosticCode} to be in ${JSON.stringify(parsed.errors)}`);
+                assert.isTrue(parsed.errors.length >= 0);
+                assert.isTrue(parsed.errors.filter(e => e.code === expectedDiagnosticCode).length > 0, `Expected error code ${expectedDiagnosticCode} to be in ${JSON.stringify(parsed.errors)}`);
                 if (!noLocation) {
-                    assert(parsed.errors.filter(e => e.code === expectedDiagnosticCode && e.file && e.start && e.length).length > 0, `Expected error code ${expectedDiagnosticCode} to be in ${JSON.stringify(parsed.errors)} with location information`);
+                    assert.isTrue(parsed.errors.filter(e => e.code === expectedDiagnosticCode && e.file && e.start && e.length).length > 0, `Expected error code ${expectedDiagnosticCode} to be in ${JSON.stringify(parsed.errors)} with location information`);
                 }
             }
         }
@@ -241,7 +241,7 @@ namespace ts {
                 },
                 files: ["file1.ts"]
             };
-            assert(diagnostics.length === 2);
+            assert.isTrue(diagnostics.length === 2);
             assert.equal(JSON.stringify(configJsonObject), JSON.stringify(expectedResult));
         });
 

@@ -34,7 +34,7 @@ var p:Point=new Point();
 var q:Point=<Point>p;`;
 
             const { lines } = server.LineIndex.linesFromText(testContent);
-            assert(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
+            assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
             const lineIndex = new server.LineIndex();
             lineIndex.load(lines);
@@ -94,7 +94,7 @@ that was purple at the tips
 and grew 1cm per day`;
 
             ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
-            assert(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
+            assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
             const lineIndex = new server.LineIndex();
             lineIndex.load(lines);
@@ -203,10 +203,10 @@ and grew 1cm per day`;
             const testFileName = "src/compiler/scanner.ts";
             testContent = Harness.IO.readFile(testFileName);
             const totalChars = testContent.length;
-            assert(totalChars > 0, "Failed to read test file.");
+            assert.isTrue(totalChars > 0, "Failed to read test file.");
 
             ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
-            assert(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
+            assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
             lineIndex = new server.LineIndex();
             lineIndex.load(lines);
