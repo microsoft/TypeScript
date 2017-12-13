@@ -255,11 +255,18 @@ A type is said to be a ***tuple-like type*** if it has a property with the numer
 
 ### Function Types { #function-types }
 
-An object type containing one or more call signatures is said to be a ***function type***. Function types may be written using function type literals (section [#function-type-literals]<!--3.8.8-->) or by including call signatures in object type literals.
+An object type containing one or more call signatures is said to be a ***function type***.
+Function types may be written using function type literals (section [#function-type-literals]<!--3.8.8-->) or by including call signatures in object type literals.
 
 ### Constructor Types { #constructor-types }
 
-An object type containing one or more construct signatures is said to be a ***constructor type***. Constructor types may be written using constructor type literals (section [#constructor-type-literals]<!--3.8.9-->) or by including construct signatures in object type literals.
+An object type containing one or more construct signatures is said to be a ***constructor type***.
+Constructor types may be written using constructor type literals (section [#constructor-type-literals]<!--3.8.9-->) or by including construct signatures in object type literals.
+
+#### Mixin Constructor Types { #mixin-constructor-types }
+
+A ***mixin constructor type*** is an object type containing exactly one construct signature.
+The signature has no type parameters, a single rest parameter of type `any[]`, and a return type that is an object type.
 
 ### Members { #members }
 
