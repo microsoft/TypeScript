@@ -3951,7 +3951,12 @@ namespace ts {
                     writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     writePunctuation(writer, SyntaxKind.ColonToken);
                     writeSpace(writer);
-                    buildTypeDisplay(info.type, writer, enclosingDeclaration, globalFlags, symbolStack);
+                    if (info.type) {
+                        buildTypeDisplay(info.type, writer, enclosingDeclaration, globalFlags, symbolStack);
+                    }
+                    else {
+                        writeKeyword(writer, SyntaxKind.AnyKeyword);
+                    }
                     writePunctuation(writer, SyntaxKind.SemicolonToken);
                     writer.writeLine();
                 }

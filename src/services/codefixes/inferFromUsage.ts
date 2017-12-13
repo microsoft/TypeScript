@@ -70,7 +70,6 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const containingFunction = getContainingFunction(token);
         switch (errorCode) {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
@@ -81,6 +80,13 @@ namespace ts.codefix {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
                 return symbol && symbol.valueDeclaration && getCodeActionForVariableDeclaration(<VariableDeclaration>symbol.valueDeclaration, sourceFile, program, cancellationToken);
             }
+        }
+
+        const containingFunction = getContainingFunction(token);
+        if (containingFunction === undefined) {
+            return undefined;
+        }
+        switch (errorCode) {
 
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
@@ -148,6 +154,11 @@ namespace ts.codefix {
             containingFunction.parameters.map(p => isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, sourceFile, program, cancellationToken) : undefined);
         if (!types) return undefined;
 
+        // We didn't actually find a set of type inference positions matching each parameter position
+        if (containingFunction.parameters.length !== types.length) {
+            return undefined;
+        }
+
         const textChanges = arrayFrom(mapDefinedIterator(zipToIterator(containingFunction.parameters, types), ([parameter, type]) =>
             type && !parameter.type && !parameter.initializer ? makeChange(containingFunction, parameter.end, type, program) : undefined));
         return textChanges.length ? { declaration: parameterDeclaration, textChanges } : undefined;
@@ -191,8 +202,9 @@ namespace ts.codefix {
             sourceFile,
             token.getStart(sourceFile));
 
-        Debug.assert(!!references, "Found no references!");
-        Debug.assert(references.length === 1, "Found more references than expected");
+        if (!references || references.length !== 1) {
+            return [];
+        }
 
         return references[0].references.map(r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start, /*includeJsDocComment*/ false));
     }
@@ -281,6 +293,10 @@ namespace ts.codefix {
         }
 
         export function inferTypeForParametersFromReferences(references: Identifier[], declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
+            if (references.length === 0) {
+                return undefined;
+            }
+
             if (declaration.parameters) {
                 const usageContext: UsageContext = {};
                 for (const reference of references) {
