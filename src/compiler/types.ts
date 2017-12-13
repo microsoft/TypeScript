@@ -3391,12 +3391,15 @@ namespace ts {
         ESSymbolLike = ESSymbol | UniqueESSymbol,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        TypeVariable = TypeParameter | IndexedAccess | Conditional,
-        StructuredOrTypeVariable = StructuredType | TypeVariable | Index | Extends,
+        TypeVariable = TypeParameter | IndexedAccess,
+        InstantiableNonPrimitive = TypeVariable | Conditional,
+        InstantiablePrimitive = Index | Extends,
+        Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
+        StructuredOrInstantiable = StructuredType | Instantiable,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredOrTypeVariable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
