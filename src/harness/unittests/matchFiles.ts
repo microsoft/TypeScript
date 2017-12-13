@@ -50,6 +50,7 @@ namespace ts {
         "/dev/x/b.ts",
         "/dev/x/y/a.ts",
         "/dev/x/y/b.ts",
+        "/dev/q/a/c/b/d.ts",
         "/dev/js/a.js",
         "/dev/js/b.js",
     ]);
@@ -1443,6 +1444,7 @@ namespace ts {
                         "/dev/a.ts",
                         "/dev/b.ts",
                         "/dev/c.d.ts",
+                        "/dev/q/a/c/b/d.ts",
                         "/dev/z/a.ts",
                         "/dev/z/aba.ts",
                         "/dev/z/abz.ts",
@@ -1459,7 +1461,8 @@ namespace ts {
             it("can include dirs whose pattern starts with **", () => {
                 const json = {
                     include: [
-                        "**/x"
+                        "**/x",
+                        "**/a/**/b"
                     ]
                 };
                 const expected: ts.ParsedCommandLine = {
@@ -1470,6 +1473,7 @@ namespace ts {
                         "/dev/x/b.ts",
                         "/dev/x/y/a.ts",
                         "/dev/x/y/b.ts",
+                        "/dev/q/a/c/b/d.ts",
                     ],
                     wildcardDirectories: {
                         "/dev": ts.WatchDirectoryFlags.Recursive
