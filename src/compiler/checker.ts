@@ -6294,7 +6294,7 @@ namespace ts {
             return arrayFrom(props.values());
         }
 
-        function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
+        function getConstraintOfType(type: InstantiableType | UnionOrIntersectionType): Type {
             return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) :
                 type.flags & TypeFlags.IndexedAccess ? getConstraintOfIndexedAccess(<IndexedAccessType>type) :
                     getBaseConstraintOfType(type);
@@ -6316,7 +6316,7 @@ namespace ts {
 
         function getBaseConstraintOfType(type: Type): Type {
             if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection)) {
-                const constraint = getResolvedBaseConstraint(<TypeVariable | UnionOrIntersectionType>type);
+                const constraint = getResolvedBaseConstraint(<InstantiableType | UnionOrIntersectionType>type);
                 if (constraint !== noConstraintType && constraint !== circularConstraintType) {
                     return constraint;
                 }
@@ -6330,7 +6330,7 @@ namespace ts {
             return undefined;
         }
 
-        function hasNonCircularBaseConstraint(type: TypeVariable): boolean {
+        function hasNonCircularBaseConstraint(type: InstantiableType): boolean {
             return getResolvedBaseConstraint(type) !== circularConstraintType;
         }
 
@@ -6339,7 +6339,7 @@ namespace ts {
          * type variable has no constraint, and the circularConstraintType singleton is returned if the constraint
          * circularly references the type variable.
          */
-        function getResolvedBaseConstraint(type: TypeVariable | UnionOrIntersectionType): Type {
+        function getResolvedBaseConstraint(type: InstantiableType | UnionOrIntersectionType): Type {
             let typeStack: Type[];
             let circular: boolean;
             if (!type.resolvedBaseConstraint) {
@@ -7995,7 +7995,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForGenericType(type: TypeVariable | UnionOrIntersectionType) {
+        function getIndexTypeForGenericType(type: InstantiableType | UnionOrIntersectionType) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
                 type.resolvedIndexType.type = type;
@@ -8014,7 +8014,7 @@ namespace ts {
         }
 
         function getIndexType(type: Type): Type {
-            return maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType>type) :
+            return maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
                 getLiteralTypeFromPropertyNames(type);
@@ -11449,11 +11449,11 @@ namespace ts {
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeVariableCount = 0;
-                    let typeVariable: TypeVariable;
+                    let typeVariable: TypeParameter | IndexedAccessType;
                     // First infer to each type in union or intersection that isn't a type variable
                     for (const t of targetTypes) {
                         if (getInferenceInfoForType(t)) {
-                            typeVariable = <TypeVariable>t;
+                            typeVariable = <InstantiableType>t;
                             typeVariableCount++;
                         }
                         else {

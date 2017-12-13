@@ -3612,7 +3612,7 @@ namespace ts {
         syntheticType?: Type;
     }
 
-    export interface TypeVariable extends Type {
+    export interface InstantiableType extends Type {
         /* @internal */
         resolvedBaseConstraint?: Type;
         /* @internal */
@@ -3620,7 +3620,7 @@ namespace ts {
     }
 
     // Type parameters (TypeFlags.TypeParameter)
-    export interface TypeParameter extends TypeVariable {
+    export interface TypeParameter extends InstantiableType {
         /** Retrieve using getConstraintFromTypeParameter */
         /* @internal */
         constraint?: Type;        // Constraint
@@ -3638,24 +3638,24 @@ namespace ts {
 
     // Indexed access types (TypeFlags.IndexedAccess)
     // Possible forms are T[xxx], xxx[T], or xxx[keyof T], where T is a type variable
-    export interface IndexedAccessType extends TypeVariable {
+    export interface IndexedAccessType extends InstantiableType {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
     }
 
     // keyof T types (TypeFlags.Index)
-    export interface IndexType extends Type {
-        type: TypeVariable | UnionOrIntersectionType;
+    export interface IndexType extends InstantiableType {
+        type: InstantiableType | UnionOrIntersectionType;
     }
 
-    export interface ConditionalType extends TypeVariable {
+    export interface ConditionalType extends InstantiableType {
         conditionType: Type;
         trueType: Type;
         falseType: Type;
     }
 
-    export interface ExtendsType extends TypeVariable {
+    export interface ExtendsType extends InstantiableType {
         checkType: Type;
         extendsType: Type;
     }
