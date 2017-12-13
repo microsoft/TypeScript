@@ -1240,14 +1240,27 @@ the variables 'a' and 'b' are of identical types because the two type references
 
 * *S* and *T* are identical types.
 * *T* is the Any type.
-* *S* is the Undefined type.
-* *S* is the Null type and *T* is not the Undefined type.
-* *S* is an enum type and *T* is the primitive type Number.
+* *S* is the Never type.
+* *S* is the Undefined type and *T* is the Void type.
+* *S* is either the Undefined or Null type, and strict null checks ([#strict-null-checks]) are disabled.
+* *S* is an object type and *T* is the non-primitive `object` type.
+* *S* is a numeric enum or numeric enum member type and *T* is the primitive type Number.
+* *S* and *T* are both enum member types with respective containing enum types *E* and *F* and
+    * *E* is a subtype of *F*.
+* *S* and *T* are both non-const enum types with the same declared name, and
+  * for each enum member *M* in *E*, there exists an enum member declaration *N* in *F* such that *M* and *N* have the same declared name and value.
+* *S* is an enum member type, *T* is a literal type, and the literal values of *S* and *T* are identical.
 * *S* is a string literal type and *T* is the primitive type String.
 * *S* is a union type and each constituent type of *S* is a subtype of *T*.
 * *S* is an intersection type and at least one constituent type of *S* is a subtype of *T*.
 * *T* is a union type and *S* is a subtype of at least one constituent type of *T*.
 * *T* is an intersection type and *S* is a subtype of each constituent type of *T*.
+* *T* is a type parameter and *S* is a mapped type *{ [P in keyof X]: Y }*, and *Y* is a subtype of *X[P]*.
+* *T* is a key query type *keyof T'* and
+  * *S* is a key query type *keyof S'* and *T'* is a subtype of *S'*.
+  * *S* is a subtype of *keyof C* where *C* is the constraint of *S*.
+* *T* is an indexed access type *T'[K]* and *S* is a subtype of *C[K]* where *C* is the constraint of *T'*.
+* *T* is a mapped type *{ [P in K]: X }*, *S* is not a mapped type, *keyof S* is identical to *K*, and *S[K]* is a subtype of *X*.
 * *S* is a type parameter and the constraint of *S* is a subtype of *T*.
 * *S* is an object type, an intersection type, an enum type, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
   * *M* is a property and *S* has an apparent property *N* where
@@ -1263,7 +1276,7 @@ the variables 'a' and 'b' are of identical types because the two type references
   * *M* is a string index signature of type *U*, and *U* is the Any type or *S* has an apparent string index signature of a type that is a subtype of *U*.
   * *M* is a numeric index signature of type *U*, and *U* is the Any type or *S* has an apparent string or numeric index signature of a type that is a subtype of *U*.
 
-When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
+When relating call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 
 Note that specialized call and construct signatures (section [#specialized-signatures]<!--3.9.2.4-->) are not significant when determining subtype and supertype relationships.
 
@@ -1271,20 +1284,37 @@ Also note that type parameters are not considered object types. Thus, the only s
 
 ### Assignment Compatibility { #assignment-compatibility }
 
+*TODO: Document weak type checks.*
+
+*TODO: Document signature instantiation*
+
 Types are required to be assignment compatible in certain circumstances, such as expression and variable types in assignment statements and argument and parameter types in function calls.
 
 *S* is ***assignable to*** a type *T*, and *T* is ***assignable from*** *S*, if *S* has no excess properties with respect to *T* ([#excess-properties]<!--3.11.5-->) and one of the following is true:
 
 * *S* and *T* are identical types.
 * *S* or *T* is the Any type.
-* *S* is the Undefined type.
-* *S* is the Null type and *T* is not the Undefined type.
-* *S* or *T* is an enum type and the other is the primitive type Number.
+* *S* is the Never type.
+* *S* is the Undefined type and *T* is the Void type.
+* *S* is either the Undefined or Null type, and strict null checks ([#strict-null-checks]) are disabled.
+* *S* is an object type and *T* is the non-primitive `object` type.
+* *S* or *T* is a numeric enum or numeric enum member type and the other is the primitive type Number.
+* *S* and *T* are both enum member types with respective containing enum types *E* and *F* and
+    * *E* is assignable to *F*.
+* *S* and *T* are both non-const enum types with the same declared name, and
+  * for each enum member *M* in *E*, there exists an enum member declaration *N* in *F* such that *M* and *N* have the same declared name and value.
+* *S* is an enum member type, *T* is a literal type, and the literal values of *S* and *T* are identical.
 * *S* is a string literal type and *T* is the primitive type String.
 * *S* is a union type and each constituent type of *S* is assignable to *T*.
 * *S* is an intersection type and at least one constituent type of *S* is assignable to *T*.
 * *T* is a union type and *S* is assignable to at least one constituent type of *T*.
 * *T* is an intersection type and *S* is assignable to each constituent type of *T*.
+* *T* is a type parameter and *S* is a mapped type *{ [P in keyof X]: Y }*, and *Y* is assignable to *X[P]*.
+* *T* is a key query type *keyof T'* and
+  * *S* is a key query type *keyof S'* and *T'* is assignable to *S'*.
+  * *S* is assignable to *keyof C* where *C* is the constraint of *S*.
+* *T* is an indexed access type *T'[K]* and *S* is assignable to *C[K]* where *C* is the constraint of *T'*.
+* *T* is a mapped type *{ [P in K]: X }*, *S* is not a mapped type, *keyof S* is identical to *K*, and *S[K]* is assignable to *X*.
 * *S* is a type parameter and the constraint of *S* is assignable to *T*.
 * *S* is an object type, an intersection type, an enum type, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
   * *M* is a property and *S* has an apparent property *N* where
@@ -1301,7 +1331,7 @@ Types are required to be assignment compatible in certain circumstances, such as
   * *M* is a string index signature of type *U*, and *U* is the Any type or *S* has an apparent string index signature of a type that is assignable to *U*.
   * *M* is a numeric index signature of type *U*, and *U* is the Any type or *S* has an apparent string or numeric index signature of a type that is assignable to *U*.
 
-When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
+When relating call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 
 Note that specialized call and construct signatures (section [#specialized-signatures]<!--3.9.2.4-->) are not significant when determining assignment compatibility.
 
@@ -1321,6 +1351,81 @@ foo({ id: 1234, name: "hello" });  // Ok
 foo({ id: 1234, name: false });    // Error, name of wrong type
 foo({ name: "hello" });            // Error, id required but missing
 ```
+
+### Comparability
+
+*TODO: Document the base primitive type.*
+
+Types are required to be *comparable* in certain circumstances, such as part of when checking whether two values of given types might be equal at runtime using operators like '===', or when using a type assertion.
+
+*S* is ***comparable to*** a type *T*, and *T* is ***comparable from*** *S*, if *S* has no excess properties with respect to *T* ([#excess-properties]<!--3.11.5-->) and one of the following is true:
+
+* *S* and *T* are identical types.
+* *S* or *T* is the Any type.
+* *S* is the Never type.
+* *S* is the Undefined type and *T* is the Void type.
+* *T* is the Undefined type and *S* is the Void type.
+* *S* is either the Undefined or Null type, and strict null checks ([#strict-null-checks]) are disabled.
+* *S* is an object type and *T* is the non-primitive `object` type.
+* *T* is an object type and *S* is the non-primitive `object` type.
+* *S* or *T* is a numeric enum or numeric enum member type and the other is the primitive type Number.
+* *S* and *T* are both enum member types with respective containing enum types *E* and *F*, and
+    * *E* is comparable to *F*.
+    * *F* is comparable to *E*.
+* *S* and *T* are both non-const enum types with the same declared name, and
+  * for each enum member *M* in *E*, there exists an enum member declaration *N* in *F* such that *M* and *N* have the same declared name and value.
+  * for each enum member *N* in *F*, there exists an enum member declaration *M* in *E* such that *N* and *M* have the same declared name and value.
+* *S* is an enum member type, *T* is a literal type, and the literal values of *S* and *T* are identical.
+* *T* is an enum member type, *S* is a literal type, and the literal values of *S* and *T* are identical.
+* *S* is a literal type and *T* is the base primitive type of *S*.
+* *T* is a literal type and *S* is the base primitive type of *T*.
+* *S* is a union type and some constituent type of *S* is comparable to *T*.
+* *S* is an intersection type and at least one constituent type of *S* is comparable to *T*.
+* *T* is a union type and *S* is comparable to at least one constituent type of *T*.
+* *T* is an intersection type and *S* is comparable to each constituent type of *T*.
+* *T* is a type parameter and *S* is a mapped type *{ [P in keyof X]: Y }*, and *Y* is comparable to *X[P]*.
+* *T* is a key query type *keyof T'* and
+  * *S* is a key query type *keyof S'* and *T'* is comparable to *S'*.
+  * *S* is comparable to *keyof C* where *C* is the constraint of *S*.
+* *T* is an indexed access type *T'[K]* and *S* is comparable to *C[K]* where *C* is the constraint of *T'*.
+* *T* is a mapped type *{ [P in K]: X }*, *S* is not a mapped type, *keyof S* is identical to *K*, and *S[K]* is comparable to *X*.
+* *S* is a type parameter and the constraint of *S* is comparable to *T*.
+* *S* is an object type, an intersection type, an enum type, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
+  * *M* is a property and *S* has an apparent property *N* where
+    * *M* and *N* have the same name,
+    * the type of *N* is comparable to that of *M*,
+    * *M* and *N* are both public, *M* and *N* are both private and originate in the same declaration, *M* and *N* are both protected and originate in the same declaration, or *M* is protected and *N* is declared in a class derived from the class in which *M* is declared.
+  * *M* is an optional property and *S* has no apparent property of the same name as *M*.
+  * *M* is a non-specialized call or construct signature and *S* has an apparent call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
+    * the signatures are of the same kind (call or construct),
+    * *M* has a rest parameter or the number of non-optional parameters in *N* is less than or equal to the total number of parameters in *M*,
+    * for parameter positions that are present in both signatures, each parameter type in *N* is comparable to or from the corresponding parameter type in *M*, and
+    * the result type of *M* is Void, or the result type of *N* is comparable to that of *M*.
+  * *M* is a string index signature of type *U*, and *U* is the Any type or *S* has an apparent string index signature of a type that is comparable to *U*.
+  * *M* is a numeric index signature of type *U*, and *U* is the Any type or *S* has an apparent string or numeric index signature of a type that is comparable to *U*.
+
+*TODO: Cover this-parameters.*
+*TODO: Cover relatability of spreads to non-spread parameters.*
+*TODO: Cover stricter variance checks.*
+
+When relating call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
+
+Note that specialized call and construct signatures (section [#specialized-signatures]<!--3.9.2.4-->) are not significant when determining comparability.
+
+The comparability and assignment compatibility rules differ only in that
+
+* a union type is comparable to a target type if any of its constituents, rather than all of its constituents, are comparable to that target type,
+* whether a type is considered weak ([#type-inference]<!--#3.11.7-->) has no bearing on whether two types are comparable,
+* an object type with some optional property is comparable to an object type containing a property of the same name if it has a compatible type, regardless of whether that property is optional,
+* literal types and enum member types are comparable both to and from their base primitive types,
+* a literal type and an enum member type are comparable to and from each other, provided that they have the same literal value,
+* the Undefined type is comparable to and from the Void type,
+* the non-primitive object type is comparable to and from any other object type, and
+* when relating any two signatures, each signature is always instantiated using type Any for all type arguments.
+
+While the comparable relation is often applied bidirectionally on a pair of types, it is not a symmetric relationship.
+
+*TODO: Give an example of the comparable relation.*
 
 ### Excess Properties { #excess-properties }
 
@@ -1404,7 +1509,7 @@ In certain contexts, inferences for a given set of type parameters are made *fro
   * If *M* is a numeric index signature and *S* contains a numeric index signature *N*, inferences are made from the type of *N* to the type of *M*.
   * If *M* is a numeric index signature and *S* contains a string index signature *N*, inferences are made from the type of *N* to the type of *M*.
 
-When comparing call or construct signatures, signatures in *S* correspond to signatures of the same kind in *T* pairwise in declaration order. If *S* and *T* have different numbers of a given kind of signature, the excess *first* signatures in declaration order of the longer list are ignored.
+When relating call or construct signatures, signatures in *S* correspond to signatures of the same kind in *T* pairwise in declaration order. If *S* and *T* have different numbers of a given kind of signature, the excess *first* signatures in declaration order of the longer list are ignored.
 
 *TODO: Update to reflect [improved union and intersection type inference](https://github.com/Microsoft/TypeScript/pull/5738)*.
 
@@ -1416,7 +1521,7 @@ Classes and interfaces can reference themselves in their internal structure, in 
 interface A { next: A; }
 ```
 
-contains an infinitely nested sequence of 'next' properties. Types such as this are perfectly valid but require special treatment when determining type relationships. Specifically, when comparing types *S* and *T* for a given relationship (identity, subtype, or assignability), the relationship in question is assumed to be true for every directly or indirectly nested occurrence of the same *S* and the same *T* (where same means originating in the same declaration and, if applicable, having identical type arguments). For example, consider the identity relationship between 'A' above and 'B' below:
+contains an infinitely nested sequence of 'next' properties. Types such as this are perfectly valid but require special treatment when determining type relationships. Specifically, when relating types *S* and *T* for a given relationship (identity, subtype, or assignability), the relationship in question is assumed to be true for every directly or indirectly nested occurrence of the same *S* and the same *T* (where same means originating in the same declaration and, if applicable, having identical type arguments). For example, consider the identity relationship between 'A' above and 'B' below:
 
 ```TypeScript
 interface B { next: C; }
@@ -1426,9 +1531,9 @@ interface C { next: D; }
 interface D { next: B; }
 ```
 
-To determine whether 'A' and 'B' are identical, first the 'next' properties of type 'A' and 'C' are compared. That leads to comparing the 'next' properties of type 'A' and 'D', which leads to comparing the 'next' properties of type 'A' and 'B'. Since 'A' and 'B' are already being compared this relationship is by definition true. That in turn causes the other comparisons to be true, and therefore the final result is true.
+To determine whether 'A' and 'B' are identical, first the 'next' properties of type 'A' and 'C' are related. That leads to relating the 'next' properties of type 'A' and 'D', which leads to relating the 'next' properties of type 'A' and 'B'. Since 'A' and 'B' are already being related this relationship is by definition true. That in turn causes the other relations to be true, and therefore the final result is true.
 
-When this same technique is used to compare generic type references, two type references are considered the same when they originate in the same declaration and have identical type arguments.
+When this same technique is used to relate generic type references, two type references are considered the same when they originate in the same declaration and have identical type arguments.
 
 In certain circumstances, generic types that directly or indirectly reference themselves in a recursive fashion can lead to infinite series of distinct instantiations. For example, in the type
 
