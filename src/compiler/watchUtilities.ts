@@ -2,6 +2,12 @@
 
 /* @internal */
 namespace ts {
+    class NoopFileWatcher implements FileWatcher {
+        close() { /* empty */ }
+    }
+
+    const noopFileWatcher = new NoopFileWatcher();
+
     export enum ConfigFileProgramReloadLevel {
         None,
         /** Update the file name list from the disk */
@@ -112,6 +118,10 @@ namespace ts {
     }
 
     export function addDirectoryWatcher(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher {
+        if (!host.watchDirectory) {
+            return noopFileWatcher;
+        }
+
         const recursive = (flags & WatchDirectoryFlags.Recursive) !== 0;
         return host.watchDirectory(directory, cb, recursive);
     }
