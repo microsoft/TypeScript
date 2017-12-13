@@ -24594,7 +24594,7 @@ namespace ts {
 
         function getRootSymbols(symbol: Symbol): Symbol[] {
             const roots = getImmediateRootSymbols(symbol);
-            return roots === undefined ? [symbol] : flatMap(roots, getRootSymbols);
+            return roots ? flatMap(roots, getRootSymbols) : [symbol];
         }
         function getImmediateRootSymbols(symbol: Symbol): ReadonlyArray<Symbol> | undefined {
             if (getCheckFlags(symbol) & CheckFlags.Synthetic) {
@@ -24602,7 +24602,9 @@ namespace ts {
             }
             else if (symbol.flags & SymbolFlags.Transient) {
                 const { leftSpread, rightSpread, syntheticOrigin } = symbol as TransientSymbol;
-                return leftSpread ? [leftSpread, rightSpread] : syntheticOrigin ? [syntheticOrigin] : singleElementArray(tryGetAliasTarget(symbol));
+                return leftSpread ? [leftSpread, rightSpread]
+                    : syntheticOrigin ? [syntheticOrigin]
+                    : singleElementArray(tryGetAliasTarget(symbol));
             }
             return undefined;
         }
