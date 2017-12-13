@@ -6297,7 +6297,8 @@ namespace ts {
         function getConstraintOfType(type: InstantiableType | UnionOrIntersectionType): Type {
             return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) :
                 type.flags & TypeFlags.IndexedAccess ? getConstraintOfIndexedAccess(<IndexedAccessType>type) :
-                    getBaseConstraintOfType(type);
+                type.flags & TypeFlags.Conditional ? getConstraintOfConditionalType(<ConditionalType>type) :
+                getBaseConstraintOfType(type);
         }
 
         function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
@@ -6312,6 +6313,10 @@ namespace ts {
             const baseObjectType = getBaseConstraintOfType(type.objectType);
             const baseIndexType = getBaseConstraintOfType(type.indexType);
             return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
+        }
+
+        function getConstraintOfConditionalType(type: ConditionalType) {
+            return getUnionType([type.trueType, type.falseType]);
         }
 
         function getBaseConstraintOfType(type: Type): Type {
@@ -6393,9 +6398,7 @@ namespace ts {
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
                 }
                 if (t.flags & TypeFlags.Conditional) {
-                    const trueBaseType = getBaseConstraint((<ConditionalType>t).trueType);
-                    const falseBaseType = getBaseConstraint((<ConditionalType>t).falseType);
-                    return trueBaseType && falseBaseType ? getUnionType([trueBaseType, falseBaseType]) : undefined;
+                    return getBaseConstraint(getConstraintOfConditionalType(<ConditionalType>t));
                 }
                 if (t.flags & TypeFlags.Extends) {
                     return booleanType;
@@ -9988,12 +9991,9 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.Conditional) {
-                    const constraint = getConstraintOfType(source);
-                    if (constraint) {
-                        if (result = isRelatedTo(constraint, target, reportErrors)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
-                        }
+                    if (result = isRelatedTo(getConstraintOfConditionalType(<ConditionalType>source), target, reportErrors)) {
+                        errorInfo = saveErrorInfo;
+                        return result;
                     }
                 }
                 else {
