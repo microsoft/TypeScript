@@ -866,6 +866,7 @@ namespace ts {
         function scanNumberFragment(): string {
             let start = pos;
             let allowSeparator = false;
+            let isPreviousTokenSeparator = false;
             let result = "";
             while (true) {
                 const ch = text.charCodeAt(pos);
@@ -873,7 +874,11 @@ namespace ts {
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     if (allowSeparator) {
                         allowSeparator = false;
+                        isPreviousTokenSeparator = true;
                         result += text.substring(start, pos);
+                    }
+                    else if (isPreviousTokenSeparator) {
+                        error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
                     }
                     else {
                         error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
@@ -884,6 +889,7 @@ namespace ts {
                 }
                 if (isDigit(ch)) {
                     allowSeparator = true;
+                    isPreviousTokenSeparator = false;
                     pos++;
                     continue;
                 }
@@ -962,12 +968,17 @@ namespace ts {
             let digits = 0;
             let value = 0;
             let allowSeparator = false;
+            let isPreviousTokenSeparator = false;
             while (digits < minCount || scanAsManyAsPossible) {
                 const ch = text.charCodeAt(pos);
                 if (canHaveSeparators && ch === CharacterCodes._) {
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     if (allowSeparator) {
                         allowSeparator = false;
+                        isPreviousTokenSeparator = true;
+                    }
+                    else if (isPreviousTokenSeparator) {
+                        error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
                     }
                     else {
                         error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
@@ -990,6 +1001,7 @@ namespace ts {
                 }
                 pos++;
                 digits++;
+                isPreviousTokenSeparator = false;
             }
             if (digits < minCount) {
                 value = -1;
@@ -1287,6 +1299,7 @@ namespace ts {
             // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
             let numberOfDigits = 0;
             let separatorAllowed = false;
+            let isPreviousTokenSeparator = false;
             while (true) {
                 const ch = text.charCodeAt(pos);
                 // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another separator
@@ -1294,6 +1307,10 @@ namespace ts {
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     if (separatorAllowed) {
                         separatorAllowed = false;
+                        isPreviousTokenSeparator = true;
+                    }
+                    else if (isPreviousTokenSeparator) {
+                        error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
                     }
                     else {
                         error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
@@ -1309,6 +1326,7 @@ namespace ts {
                 value = value * base + valueOfCh;
                 pos++;
                 numberOfDigits++;
+                isPreviousTokenSeparator = false;
             }
             // Invalid binaryIntegerLiteral or octalIntegerLiteral
             if (numberOfDigits === 0) {

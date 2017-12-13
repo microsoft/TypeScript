@@ -193,14 +193,14 @@ namespace ts {
 
     function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T>, getCache: (f: SourceFile) => Map<T>, entryChecker: (expected: T, original: T) => boolean): void {
         const file = program.getSourceFile(fileName);
-        assert(file !== undefined, `cannot find file ${fileName}`);
+        assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file);
         if (expectedContent === undefined) {
-            assert(cache === undefined, `expected ${caption} to be undefined`);
+            assert.isTrue(cache === undefined, `expected ${caption} to be undefined`);
         }
         else {
-            assert(cache !== undefined, `expected ${caption} to be set`);
-            assert(mapsAreEqual(expectedContent, cache, entryChecker), `contents of ${caption} did not match the expected contents.`);
+            assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
+            assert.isTrue(mapsAreEqual(expectedContent, cache, entryChecker), `contents of ${caption} did not match the expected contents.`);
         }
     }
 
@@ -329,7 +329,7 @@ namespace ts {
             const options: CompilerOptions = { target, noLib: true };
 
             const program1 = newProgram(files, ["a.ts"], options);
-            assert(program1.getMissingFilePaths().length !== 0);
+            assert.notDeepEqual(emptyArray, program1.getMissingFilePaths());
 
             const program2 = updateProgram(program1, ["a.ts"], options, noop);
             assert.deepEqual(program1.getMissingFilePaths(), program2.getMissingFilePaths());
@@ -341,7 +341,7 @@ namespace ts {
             const options: CompilerOptions = { target, noLib: true };
 
             const program1 = newProgram(files, ["a.ts"], options);
-            assert(program1.getMissingFilePaths().length !== 0);
+            assert.notDeepEqual(emptyArray, program1.getMissingFilePaths());
 
             const newTexts: NamedSourceText[] = files.concat([{ name: "non-existing-file.ts", text: SourceText.New("", "", `var x = 1`) }]);
             const program2 = updateProgram(program1, ["a.ts"], options, noop, newTexts);
@@ -873,7 +873,7 @@ namespace ts {
                     updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.3" }));
                 });
                 assert.equal(program1.structureIsReused, StructureIsReused.Not);
-                assert.lengthOf(program2.getSemanticDiagnostics(), 0);
+                assert.deepEqual(program2.getSemanticDiagnostics(), []);
             });
         });
     });
@@ -901,7 +901,7 @@ namespace ts {
                 /*hasInvalidatedResolution*/ returnFalse,
                 /*hasChangedAutomaticTypeDirectiveNames*/ false
             );
-            assert(actual);
+            assert.isTrue(actual);
         }
 
         function duplicate(options: CompilerOptions): CompilerOptions;

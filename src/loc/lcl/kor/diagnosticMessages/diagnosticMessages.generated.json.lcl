@@ -867,8 +867,8 @@
       <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '{0}' to existing import declaration from "{1}"]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA["{1}"에서 기존 가져오기 선언에 '{0}'을(를) 추가합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{1}"에서 기존 가져오기 선언에 '{0}' 추가]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
@@ -879,8 +879,8 @@
       <Item ItemId=";Add_index_signature_for_property_0_90017" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add index signature for property '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA['{0}' 속성에 대해 인덱스 시그니처를 추가합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 속성에 대해 인덱스 시그니처 추가]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Add index signature for property '{0}'.]]></Val>
@@ -891,8 +891,8 @@
       <Item ItemId=";Add_missing_super_call_90001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add missing 'super()' call]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[누락된 'super()' 호출을 추가하세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[누락된 'super()' 호출 추가]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Add missing 'super()' call.]]></Val>
@@ -903,8 +903,8 @@
       <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[확인되지 않은 변수에 'this.'을 추가하세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[확인되지 않은 변수에 'this.' 추가]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
@@ -915,6 +915,9 @@
       <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__5068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[tsconfig.json 파일을 추가하면 TypeScript 파일과 JavaScript 파일이 둘 다 포함된 프로젝트를 정리하는 데 도움이 됩니다. 자세한 내용은 https://aka.ms/tsconfig를 참조하세요.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1545,8 +1548,8 @@
       <Item ItemId=";Call_decorator_expression_90028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Call decorator expression]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[decorator 식을 호출합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[데코레이터 식 호출]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Call decorator expression.]]></Val>
@@ -1962,8 +1965,8 @@
       <Item ItemId=";Change_0_to_1_90014" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change '{0}' to '{1}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA['{0}'을(를) '{1}'(으)로 변경합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'을(를) '{1}'(으)로 변경]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
@@ -1986,8 +1989,8 @@
       <Item ItemId=";Change_spelling_to_0_90022" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change spelling to '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[철자를 '{0}'(으)로 변경하세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[맞춤법을 '{0}'(으)로 변경]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Change spelling to '{0}'.]]></Val>
@@ -2364,8 +2367,8 @@
       <Item ItemId=";Declare_method_0_90023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare method '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA['{0}' 메서드를 선언합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 메서드 선언]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Declare method '{0}'.]]></Val>
@@ -2376,8 +2379,8 @@
       <Item ItemId=";Declare_property_0_90016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare property '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA['{0}' 속성을 선언합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 속성 선언]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Declare property '{0}'.]]></Val>
@@ -2388,8 +2391,8 @@
       <Item ItemId=";Declare_static_method_0_90024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare static method '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA['{0}' 정적 메서드를 선언합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 정적 메서드 선언]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Declare static method '{0}'.]]></Val>
@@ -2400,8 +2403,8 @@
       <Item ItemId=";Declare_static_property_0_90027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare static property '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[정적 속성 '{0}'을(를) 선언합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 정적 속성 선언]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Declare static property '{0}'.]]></Val>
@@ -2484,8 +2487,8 @@
       <Item ItemId=";Disable_checking_for_this_file_90018" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable checking for this file]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이 파일 확인을 사용하지 않도록 설정합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 파일 확인을 사용하지 않도록 설정]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disable checking for this file.]]></Val>
@@ -3756,8 +3759,8 @@
       <Item ItemId=";Ignore_this_error_message_90019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Ignore this error message]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이 오류 메시지를 무시합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 오류 메시지 무시]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Ignore this error message.]]></Val>
@@ -3780,8 +3783,8 @@
       <Item ItemId=";Implement_interface_0_90006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Implement interface '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA['{0}' 인터페이스를 구현하세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 인터페이스 구현]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Implement interface '{0}'.]]></Val>
@@ -3801,8 +3804,8 @@
       <Item ItemId=";Import_0_from_module_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Import '{0}' from module "{1}"]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA["{1}" 모듈에서 '{0}'을(를) 가져옵니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{1}" 모듈에서 '{0}' 가져오기]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
@@ -3954,8 +3957,8 @@
       <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Infer parameter types from usage]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[사용량에서 매개 변수 형식을 유추합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[사용량에서 매개 변수 형식 유추]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Infer parameter types from usage.]]></Val>
@@ -3966,8 +3969,8 @@
       <Item ItemId=";Infer_type_of_0_from_usage_95011" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Infer type of '{0}' from usage]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[사용량에서 '{0}'의 형식을 유추합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[사용량에서 '{0}'의 형식 유추]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
@@ -3978,8 +3981,8 @@
       <Item ItemId=";Initialize_property_0_in_the_constructor_90020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Initialize property '{0}' in the constructor]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[생성자에서 속성 '{0}'을(를) 초기화합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[생성자에서 속성 '{0}' 초기화]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
@@ -3990,8 +3993,8 @@
       <Item ItemId=";Initialize_static_property_0_90021" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Initialize static property '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[정적 속성 '{0}'을(를) 초기화합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[정적 속성 '{0}' 초기화]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Initialize static property '{0}'.]]></Val>
@@ -4527,8 +4530,8 @@
       <Item ItemId=";Make_super_call_the_first_statement_in_the_constructor_90002" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Make 'super()' call the first statement in the constructor]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[생성자의 첫 번째 문을 'super()'로 호출하세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[생성자의 첫 번째 문을 'super()'로 호출]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Make 'super()' call the first statement in the constructor.]]></Val>
@@ -4749,6 +4752,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Multiple_constructor_implementations_are_not_allowed_2392" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple constructor implementations are not allowed.]]></Val>
@@ -4836,6 +4845,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[숫자 인덱스 형식 '{0}'을(를) 문자열 인덱스 형식 '{1}'에 할당할 수 없습니다.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5445,8 +5460,8 @@
       <Item ItemId=";Prefix_0_with_an_underscore_90025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Prefix '{0}' with an underscore]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA['{0}' 앞에 밑줄을 붙이세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 앞에 밑줄 추가]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Prefix '{0}' with an underscore.]]></Val>
@@ -5901,8 +5916,8 @@
       <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove declaration for: '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA['{0}'에 대한 선언을 제거합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'에 대한 선언 제거]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
@@ -6330,8 +6345,8 @@
       <Item ItemId=";Rewrite_as_the_indexed_access_type_0_90026" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Rewrite as the indexed access type '{0}']]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[인덱싱된 액세스 형식 '{0}'(으)로 다시 작성하세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[인덱싱된 액세스 형식 '{0}'(으)로 다시 작성]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Rewrite as the indexed access type '{0}'.]]></Val>
@@ -6450,6 +6465,9 @@
       <Item ItemId=";Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_or_ESNEXT_6015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ECMAScript 대상 버전을 'ES3'(기본값), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018' 또는 'ESNEXT'로 지정합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6558,6 +6576,9 @@
       <Item ItemId=";Starting_compilation_in_watch_mode_6031" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Starting compilation in watch mode...]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[감시 모드에서 컴파일을 시작하는 중...]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7413,6 +7434,9 @@
       <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_2719" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 형식을 '{1}' 형식에 할당할 수 없습니다. 이름이 같은 2개의 서로 다른 형식이 있지만 서로 관련은 없습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

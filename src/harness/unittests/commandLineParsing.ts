@@ -12,7 +12,7 @@ namespace ts {
 
             const parsedErrors = parsed.errors;
             const expectedErrors = expectedParsedCommandLine.errors;
-            assert(parsedErrors.length === expectedErrors.length, `Expected error: ${JSON.stringify(expectedErrors)}. Actual error: ${JSON.stringify(parsedErrors)}.`);
+            assert.isTrue(parsedErrors.length === expectedErrors.length, `Expected error: ${JSON.stringify(expectedErrors)}. Actual error: ${JSON.stringify(parsedErrors)}.`);
             for (let i = 0; i < parsedErrors.length; i++) {
                 const parsedError = parsedErrors[i];
                 const expectedError = expectedErrors[i];
@@ -23,7 +23,7 @@ namespace ts {
 
             const parsedFileNames = parsed.fileNames;
             const expectedFileNames = expectedParsedCommandLine.fileNames;
-            assert(parsedFileNames.length === expectedFileNames.length, `Expected fileNames: [${JSON.stringify(expectedFileNames)}]. Actual fileNames: [${JSON.stringify(parsedFileNames)}].`);
+            assert.isTrue(parsedFileNames.length === expectedFileNames.length, `Expected fileNames: [${JSON.stringify(expectedFileNames)}]. Actual fileNames: [${JSON.stringify(parsedFileNames)}].`);
             for (let i = 0; i < parsedFileNames.length; i++) {
                 const parsedFileName = parsedFileNames[i];
                 const expectedFileName = expectedFileNames[i];
