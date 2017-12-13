@@ -11277,7 +11277,7 @@ namespace ts {
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, mappedTypeCache?: Map<Type | undefined>) {
             let symbolStack: Symbol[];
-            let visited: Map<true>;
+            let visited: Map<boolean>;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
@@ -11432,11 +11432,11 @@ namespace ts {
                         source = getApparentType(source);
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
-                        const key = "T" + source.id + ",T" + target.id;
+                        const key = source.id + "," + target.id;
                         if (visited && visited.has(key)) {
                             return;
                         }
-                        (visited || (visited = createMap<true>())).set(key, undefined);
+                        (visited || (visited = createMap<boolean>())).set(key, true);
                         // If we are already processing another target type with the same associated symbol (such as
                         // an instantiation of the same generic type), we do not explore this target as it would yield
                         // no further inferences. We exclude the static side of classes from this check since it shares
