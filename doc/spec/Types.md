@@ -1482,16 +1482,44 @@ In several situations TypeScript infers types from context, alleviating the need
 var name = "Steve";
 ```
 
-infers the type of 'name' to be the String primitive type since that is the type of the value used to initialize it. When inferring the type of a variable, property or function result from an expression, the ***widened*** form of the source type is used as the inferred type of the target. The widened form of a type is the type in which all occurrences of the Null and Undefined types have been replaced with the type `any`.
+infers the type of 'name' to be the String primitive type since that is the type of the value used to initialize it.
+When inferring the type of a variable, property or function result from an expression, the ***widened*** form of the source type is used as the inferred type of the target.
+The widened form of a type is the type in which all literal types have been replaced with their base types, according to the following rule:
 
-The following example shows the results of widening types to produce inferred variable types.
+If the type is:
+* A string literal type, the result is the String type
+* A number literal type, the result is the Number type.
+* A boolean literal type, the result is the Boolean type.
+* A union type, the result is the widened type of each of its members.
+* Any other type, the result is the original type.
 
-```TypeScript
-var a = null;                 // var a: any
-var b = undefined;            // var b: any
-var c = { x: 0, y: null };    // var c: { x: number, y: any }
-var d = [ null, undefined ];  // var d: any[]
+Note that literal types that arise from type syntax do not widen. That is,
+
+```ts
+let choice: "yes" | "no";
 ```
 
-<br/>
+declares a variable with the type `"yes" | "no"`, not the type string.
+In contrast, literal types that arise from expressions, except the expression of a case clause, widen in the following locations.
+
+* An argument to an immediately invoked function expression widens before providing the contextual type to the IIFE's parameter.
+* Declaration initializers, except for `const` declarations, `readonly` declarations that are not parameter properties, or initializers that are type assertions.
+
+In three more locations,
+* The returned expression of a function, unless the expression is Contextually Narrowed.
+* Property assignments and shorthand property assignments in object literals, unless the assignment is Contextually Narrowed.
+* Elements in an array literal, unless the element is Contextually Narrowed.
+
+An expression with a literal type is Contextually Narrowed when the expression is contextually typed by:
+* a literal of the same type,
+* a union or intersection, and some element Contextually Narrows the expression,
+* a constrained type parameter, and the constraint Contextually Narrows the expression.
+
+Notice that the origin of the *type* determines whether it widens or not.
+That means widening may happen at some distance from the expression that created the type.
+For example:
+
+```ts
+COOL EKSEMPL HERE
+```
 
