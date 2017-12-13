@@ -1504,22 +1504,29 @@ In contrast, literal types that arise from expressions, except the expression of
 
 * An argument to an immediately invoked function expression widens before providing the contextual type to the IIFE's parameter.
 * Declaration initializers, except for `const` declarations, `readonly` declarations that are not parameter properties, or initializers that are type assertions.
+* The returned expression of a function, unless the expression is contextually typed by a related literal type.
+* Property assignments and shorthand property assignments in object literals, unless the assignment is contextually typed by a related literal type.
+* Elements in an array literal, unless the element is contextually typed by a related literal type.
 
-In three more locations,
-* The returned expression of a function, unless the expression is Contextually Narrowed.
-* Property assignments and shorthand property assignments in object literals, unless the assignment is Contextually Narrowed.
-* Elements in an array literal, unless the element is Contextually Narrowed.
-
-An expression with a literal type is Contextually Narrowed when the expression is contextually typed by:
-* a literal of the same type,
-* a union or intersection, and some element Contextually Narrows the expression,
-* a constrained type parameter, and the constraint Contextually Narrows the expression.
+An expression with a literal type is contextually typed by a related literal type when the contextual type is:
+* a literal of the same base type as the expression,
+* or a union or intersection, and some element is a related literal type,
+* or a constrained type parameter, and the constraint is a related literal type.
 
 Notice that the origin of the *type* determines whether it widens or not.
 That means widening may happen at some distance from the expression that created the type.
 For example:
 
 ```ts
-COOL EKSEMPL HERE
+const one = 1; // 'one' has type: 1
+let num = one; // 'num has type: number
+
+const zero: 0 = 0; // 'zero' has type: 0
+let origin = zero; // 'origin'
 ```
 
+In the first example, `one` has the type `1` because the literal type from the expression `1` does not widen; it is the initializer of a const declaration.
+However, `num` has the type `number` because the type of `one` is a literal type from an expression, and `num` is not declared const.
+In the second example, `origin` has the type `0` because the literal type `0` of `zero` comes from the type annotation on the declaration.
+
+TODO: Check uses of getBaseLiteral
