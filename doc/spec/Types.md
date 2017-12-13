@@ -165,8 +165,8 @@ var e: Undefined;       // Error, can't reference Undefined type
 
 TypeScript supports string, number and boolean literal types, but not regular expression literal types.
 
-Literal types use the syntax of their respective literal values.
-For example, the boolean literal type `true` uses the same keyword as the boolean literal value `true`.
+Literal types use the syntax of their respective literal values and have the identities of their respective literal values.
+For example, `10` and `1e1` are the same type, even though the two are written differently.
 
 Similarly, literal types are subclasses of their respective literal values' types:
 
@@ -174,11 +174,32 @@ Similarly, literal types are subclasses of their respective literal values' type
 * The supertype of numeric literal types is the Number primitive type.
 * The supertype of string literal types is the String primitive type.
 
-TODO: Maybe a note about the numeric syntax since that support is a bit wobbly.
+Literal types can be used as discriminants for narrowing.
+This combination allows the construction of algebraic data types:
 
-#### Example with unions and narrowing
-
-TODO: An ADT example here.
+```ts
+interface Square {
+    kind: "square";
+    size: number;
+}
+interface Rectangle {
+    kind: "rectangle";
+    width: number;
+    height: number;
+}
+interface Circle {
+    kind: "circle";
+    radius: number;
+}
+type Shape = Square | Rectangle | Circle;
+function area(s: Shape) {
+    switch (s.kind) {
+        case "square": return s.size * s.size;
+        case "rectangle": return s.height * s.width;
+        case "circle": return Math.PI * s.radius ** 2;
+    }
+}
+```
 
 ### Enum Types { #enum-types }
 
