@@ -765,23 +765,25 @@ namespace ts.codefix {
 
         forEachExternalModuleToImportFrom(checker, sourceFile, allSourceFiles, moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
-            // check the default export
-            const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
-            if (defaultExport) {
-                const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if ((localSymbol && localSymbol.escapedName === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName)
-                    && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
-                    // check if this symbol is already used
-                    const symbolId = getUniqueSymbolId(localSymbol || defaultExport, checker);
-                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, { ...context, kind: ImportKind.Default }));
-                }
-            }
 
             // check exports with the same name
             const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol);
             if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName, checker);
                 symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, { ...context, kind: ImportKind.Named }));
+            }
+            else {
+                // check the default export
+                const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
+                if (defaultExport) {
+                    const localSymbol = getLocalSymbolForExportDefault(defaultExport);
+                    if ((localSymbol && localSymbol.escapedName === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName)
+                        && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
+                        // check if this symbol is already used
+                        const symbolId = getUniqueSymbolId(localSymbol || defaultExport, checker);
+                        symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, { ...context, kind: ImportKind.Default }));
+                    }
+                }
             }
         });
 
