@@ -2554,7 +2554,7 @@ Object literals are extended to support type annotations in methods and get and 
 &emsp;&emsp;&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`  
 &emsp;&emsp;&emsp;*GetAccessor*  
 &emsp;&emsp;&emsp;*SetAccessor*
-&emsp;&emsp;&emsp;`...`*SpreadAssignment*
+&emsp;&emsp;&emsp;`...` *SpreadAssignment*
 
 &emsp;&emsp;*GetAccessor:*  
 &emsp;&emsp;&emsp;`get`&emsp;*PropertyName*&emsp;`(`&emsp;`)`&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
@@ -2562,7 +2562,7 @@ Object literals are extended to support type annotations in methods and get and 
 &emsp;&emsp;*SetAccessor:*  
 &emsp;&emsp;&emsp;`set`&emsp;*PropertyName*&emsp;`(`&emsp;*BindingIdentifierOrPattern*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
 
-The type of an object literal is an object type with the set of properties specified by the property assignments in the object literal, plus any properties from spread assignments.
+The type of an object literal is an object type with the set of properties specified by the named members in the object literal, plus any properties from spread assignments.
 A get and set accessor may specify the same property name, and spread assignments may contain properties that have already been declared by other members in the object literal, but otherwise it is an error to specify multiple property assignments for the same property.
 
 ### Object literal property assignment { #object-literal-property-assignment }
