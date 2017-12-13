@@ -3339,6 +3339,9 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+
+    readonly timeline:DocumentTimeline
+    getAnimations():Animation[]
 }
 
 declare var Document: {
@@ -3567,7 +3570,7 @@ interface ElementEventMap extends GlobalEventHandlersEventMap {
     "webkitfullscreenerror": Event;
 }
 
-interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode, ParentNode {
+interface Element extends Animatable,Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode, ParentNode {
     readonly classList: DOMTokenList;
     className: string;
     readonly clientHeight: number;
@@ -15379,3 +15382,100 @@ type Transport = "usb" | "nfc" | "ble";
 type VideoFacingModeEnum = "user" | "environment" | "left" | "right";
 type VisibilityState = "hidden" | "visible" | "prerender" | "unloaded";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+
+interface Animation extends EventTarget {
+    currentTime?: number;
+    effect: AnimationEffectReadOnly;
+    readonly finished: Promise<Animation>;
+    id: string;
+    readonly pending: boolean;
+    readonly playState: AnimationPlayState;
+    playbackRate: number;
+    readonly ready: Promise<Animation>;
+    startTime?: number;
+    timeline?: AnimationTimeLine;
+    oncancel: (e: any) => any;
+    onfinish: (e: any) => any;
+    cancel(): void;
+    finish(): void;
+    pause(): void;
+    play(): void;
+    reverse(): void;
+  }
+  
+  declare var Animation: {
+    prototype: Animation;
+    new (): Animation;
+  };
+  
+  interface AnimationTimeLine {
+    readonly currentTime?: number;
+  }
+  interface DocumentTimeline extends AnimationTimeLine {}
+  interface AnimationEffectReadOnly {
+    readonly timing: AnimationEffectTimingReadOnly;
+    getComputedTiming(): ComputedTimingProperties;
+  }
+  
+  type AnimationPlayState = "idle" | "running" | "paused" | "finished";
+  
+  type FillMode = "none" | "forwards" | "backwards" | "both" | "auto";
+  
+  interface AnimationEffectTimingReadOnly {
+    readonly delay: number;
+    readonly endDelay: number;
+    readonly fill: FillMode;
+    readonly iterationStart: number;
+    readonly iterations: number | "Infinity";
+    readonly duration: number | string;
+    readonly direction: PlaybackDirection;
+    readonly easing: string;
+  }
+  
+  type PlaybackDirection =
+    | "normal"
+    | "reverse"
+    | "alternate"
+    | "alternate-reverse";
+  
+  interface ComputedTimingProperties extends AnimationEffectTimingProperties {
+    endTime: number;
+    activeDuration: number;
+    localTime?: number;
+    progress?: number;
+    currentIteration?: number;
+  }
+  
+  interface AnimationEffectTimingProperties {
+    delay?: number;
+    endDelay?: number;
+    fill?: FillMode;
+    iterationStart?: number;
+    iterations?: number | "Infinity";
+    duration?: number | string;
+    direction?: PlaybackDirection;
+    easing?: string;
+  }
+  
+  type IterationCompositeOperation = "replace" | "accumulate";
+  
+  type CompositeOperation = "replace" | "add" | "accumulate";
+  
+  interface KeyframeEffectOptions extends AnimationEffectTimingProperties {
+    iterationComposite?: IterationCompositeOperation;
+    composite?: CompositeOperation;
+  }
+  
+  interface KeyframeAnimationOptions extends KeyframeEffectOptions {
+    id?: string;
+  }
+  
+  interface Animatable {
+    animate: (
+      keyframes: { [key: string]: any } | {}[],
+      options?: number | KeyframeAnimationOptions
+    ) => Animation;
+  
+    getAnimations(): Animation[];
+  }
+  
