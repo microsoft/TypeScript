@@ -61,4 +61,8 @@
 ////[|declare|] module dm { }
 ////export class EC { }
 
-verify.rangesAreOccurrences(false);
+const [r0, r1, r2, r3] = test.ranges();
+goTo.eachRange([r0, r1, r3], () => verify.occurrencesAtPositionCount(4));
+// r2 has a grammar error, so no occurrences
+goTo.rangeStart(r2);
+verify.occurrencesAtPositionCount(0);

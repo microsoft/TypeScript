@@ -1581,7 +1581,7 @@ namespace ts {
             synchronizeHostData();
             const sourceFilesToSearch = map(filesToSearch, f => program.getSourceFile(f));
             const sourceFile = getValidSourceFile(fileName);
-            return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
+            return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch, program.getTypeChecker().nodeHasBadModifier);
         }
 
         function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {

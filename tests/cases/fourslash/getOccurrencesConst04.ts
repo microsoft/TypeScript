@@ -1,14 +1,12 @@
 /// <reference path='fourslash.ts' />
 
 ////export const class C {
-////    private static c/*1*/onst f/*2*/oo;
-////    constructor(public con/*3*/st foo) {
+////    private static [|const|] [|foo|];
+////    constructor(public [|const|] foo) {
 ////    }
 ////}
 
-goTo.marker("1");
-verify.occurrencesAtPositionCount(0);
-goTo.marker("2");
+const [r0, r1, r2] = test.ranges();
+goTo.eachRange([r0, r2], () => verify.occurrencesAtPositionCount(0));
+goTo.rangeStart(r1);
 verify.occurrencesAtPositionCount(1);
-goTo.marker("3");
-verify.occurrencesAtPositionCount(0);

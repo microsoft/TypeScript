@@ -2284,7 +2284,7 @@ namespace ts {
             }
 
             node.decorators = parseDecorators();
-            node.modifiers = parseModifiers();
+            node.modifiers = parseModifiers(/*permitConstAsModifier*/ true);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
             // FormalParameter [Yield,Await]:

@@ -8,7 +8,7 @@
 /////*2*/const c = 0;
 
 goTo.marker("1");
-verify.occurrencesAtPositionCount(0);
+verify.occurrencesAtPositionCount(1);
 
 goTo.marker("2");
 verify.occurrencesAtPositionCount(0);

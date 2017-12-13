@@ -6,15 +6,9 @@
 ////    [|abstract|] makeSound(): void;
 ////}
 ////// abstract cannot appear here, won't get highlighted
-////let c = /*1*/abstract class Foo {
-////    /*2*/abstract foo(): void;
+////let c = [|abstract|] class Foo {
+////    [|abstract|] foo(): void;
 ////    abstract bar(): void;
 ////}
 
-verify.rangesAreOccurrences(false);
-
-goTo.marker("1");
-verify.occurrencesAtPositionCount(0);
-
-goTo.marker("2");
-verify.occurrencesAtPositionCount(2);
+goTo.eachRange(() => verify.occurrencesAtPositionCount(0));

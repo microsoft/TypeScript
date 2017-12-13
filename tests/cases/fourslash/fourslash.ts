@@ -124,6 +124,7 @@ declare namespace FourSlashInterface {
         marker(name?: string | Marker): void;
         eachMarker(action: () => void): void;
         rangeStart(range: Range): void;
+        eachRange(ranges: ReadonlyArray<Range>, action: () => void): void;
         eachRange(action: () => void): void;
         bof(): void;
         eof(): void;

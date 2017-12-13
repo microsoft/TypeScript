@@ -268,6 +268,18 @@ namespace ts {
             },
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
             getAccessibleSymbolChain,
+            nodeHasBadModifier: node => {
+                const sourceFile = getSourceFileOfNode(node);
+                // Make `parseDiagnostics` empty so we actually get grammar errors. But shadow `diagnostics` so grammar errors don't stick.
+                const saveParseDiagnostics = sourceFile.parseDiagnostics;
+                const saveDiagnostics = diagnostics;
+                sourceFile.parseDiagnostics = [];
+                diagnostics = createDiagnosticCollection();
+                const res = checkGrammarModifiers(node);
+                sourceFile.parseDiagnostics = saveParseDiagnostics;
+                diagnostics = saveDiagnostics;
+                return res;
+            }
         };
 
         const tupleTypes: GenericType[] = [];
@@ -405,7 +417,7 @@ namespace ts {
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
-        const diagnostics = createDiagnosticCollection();
+        let diagnostics = createDiagnosticCollection();
 
         const enum TypeFacts {
             None = 0,
@@ -25403,7 +25415,7 @@ namespace ts {
                 }
                 switch (modifier.kind) {
                     case SyntaxKind.ConstKeyword:
-                        if (node.kind !== SyntaxKind.EnumDeclaration && node.parent.kind === SyntaxKind.ClassDeclaration) {
+                        if (node.kind !== SyntaxKind.EnumDeclaration) {
                             return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));
                         }
                         break;
