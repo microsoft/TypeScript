@@ -2554,7 +2554,7 @@ Object literals are extended to support type annotations in methods and get and 
 &emsp;&emsp;&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`  
 &emsp;&emsp;&emsp;*GetAccessor*  
 &emsp;&emsp;&emsp;*SetAccessor*
-&emsp;&emsp;&emsp;`...` *SpreadAssignment*
+&emsp;&emsp;&emsp;`...`&emsp;*SpreadAssignment*
 
 &emsp;&emsp;*GetAccessor:*  
 &emsp;&emsp;&emsp;`get`&emsp;*PropertyName*&emsp;`(`&emsp;`)`&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
