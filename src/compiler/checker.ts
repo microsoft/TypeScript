@@ -335,7 +335,6 @@ namespace ts {
 
         const globals = createSymbolTable();
         const deferredInferenceCache = createMap<Type | undefined>();
-        const deferredMappedTypeInstantiationStack: string[] = [];
         let ambientModulesCache: Symbol[] | undefined;
         /**
          * List of every ambient module with a "*" wildcard.
@@ -2868,23 +2867,7 @@ namespace ts {
                     }
 
                     for (const propertySymbol of properties) {
-                        let propertyType: Type;
-                        if (getCheckFlags(propertySymbol) & CheckFlags.DeferredInferred) {
-                            const deferred = propertySymbol as DeferredTransientSymbol;
-                            const key = deferred.propertyType.id + "," + (deferred.mappedType.symbol ? deferred.mappedType.symbol.id : "");
-                            // Temporary solution to recursive printing: zero out repeated types.
-                            if (contains(deferredMappedTypeInstantiationStack, key)) {
-                                // TODO: Could probably be an actual cache that returns {} when it contains undefined.
-                                propertyType = emptyObjectType;
-                            }
-                            else {
-                                deferredMappedTypeInstantiationStack.push(key)
-                                propertyType = getTypeOfSymbol(propertySymbol);
-                            }
-                        }
-                        else {
-                            propertyType = getTypeOfSymbol(propertySymbol);
-                        }
+                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.DeferredInferred ? emptyObjectType : getTypeOfSymbol(propertySymbol);
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -2910,9 +2893,6 @@ namespace ts {
                                 propertyTypeNode,
                                /*initializer*/ undefined);
                             typeElements.push(propertySignature);
-                        }
-                        if (getCheckFlags(propertySymbol) & CheckFlags.DeferredInferred) {
-                            deferredMappedTypeInstantiationStack.pop();
                         }
                     }
                     return typeElements.length ? typeElements : undefined;
@@ -11278,7 +11258,7 @@ namespace ts {
                     const checkFlags = CheckFlags.DeferredInferred | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
                     const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as DeferredTransientSymbol;
                     inferredProp.declarations = prop.declarations;
-                    inferredProp.propertyType = propType; // not sure I need this.
+                    inferredProp.propertyType = propType;
                     inferredProp.mappedType = target;
                     members.set(prop.escapedName, inferredProp);
                 }
@@ -11295,7 +11275,6 @@ namespace ts {
             const typeParameter = <TypeParameter>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
             const templateType = getTemplateTypeFromMappedType(target);
             const inference = createInferenceInfo(typeParameter);
-            inference.candidates = undefined;
             inferTypes([inference], sourceType, templateType);
             return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) : emptyObjectType;
         }
