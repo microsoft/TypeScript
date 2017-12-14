@@ -1801,8 +1801,8 @@ var hashOfEmpty1 = on({ test: () => {} });  // {}
 >() => {} : () => void
 
 var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
->hashOfEmpty2 : { test: boolean; }
->on({ test: (x: boolean) => {} }) : { test: boolean; }
+>hashOfEmpty2 : { test: {}; }
+>on({ test: (x: boolean) => {} }) : { test: {}; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: (x: boolean) => {} } : { test: (x: boolean) => void; }
 >test : (x: boolean) => void
