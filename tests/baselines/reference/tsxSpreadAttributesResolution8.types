@@ -64,7 +64,7 @@ let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
 >OverWriteAttr : typeof OverWriteAttr
 >obj : {}
 >y : true
->overwrite : string
+>overwrite : "hi"
 >obj1 : { x: number; }
 
 let x1 = <OverWriteAttr {...obj1} {...obj3}  />

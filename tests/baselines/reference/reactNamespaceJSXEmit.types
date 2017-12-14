@@ -38,7 +38,7 @@ declare var x: any;
 ><Bar { ...x } y={2} /> : any
 >Bar : any
 >x : any
->y : number
+>y : 2
 >2 : 2
 
 <_Bar { ...x } />;

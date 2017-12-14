@@ -34,6 +34,6 @@ var SFCComp = SFC1 || SFC2;
 <SFCComp x={"hi"}/>
 ><SFCComp x={"hi"}/> : JSX.Element
 >SFCComp : ((prop: { x: number; }) => JSX.Element) | ((prop: { x: boolean; }) => JSX.Element)
->x : string
+>x : "hi"
 >"hi" : "hi"
 

@@ -22,17 +22,17 @@ declare module JSX {
 <div n='x' />;
 ><div n='x' /> : JSX.Element
 >div : any
->n : string
+>n : "x"
 
 // OK
 <span m='ok' />;
 ><span m='ok' /> : JSX.Element
 >span : any
->m : string
+>m : "ok"
 
 // Error
 <span q='' />;
 ><span q='' /> : JSX.Element
 >span : any
->q : string
+>q : ""
 

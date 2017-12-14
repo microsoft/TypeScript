@@ -29,7 +29,7 @@ var Obj1: Obj1type;
 <Obj1 x={10} />; // Error, no render member
 ><Obj1 x={10} /> : JSX.Element
 >Obj1 : Obj1type
->x : number
+>x : 10
 >10 : 10
 
 interface Obj2type {
@@ -47,8 +47,8 @@ var Obj2: Obj2type;
 <Obj2 x={32} render={100} />; // OK
 ><Obj2 x={32} render={100} /> : JSX.Element
 >Obj2 : Obj2type
->x : number
+>x : 32
 >32 : 32
->render : number
+>render : 100
 >100 : 100
 

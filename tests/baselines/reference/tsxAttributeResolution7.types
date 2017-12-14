@@ -17,25 +17,25 @@ declare module JSX {
 <test1 data-foo={32} />;
 ><test1 data-foo={32} /> : JSX.Element
 >test1 : any
->data-foo : number
+>data-foo : 32
 >32 : 32
 
 // OK
 <test1 data-foo={'32'} />;
 ><test1 data-foo={'32'} /> : JSX.Element
 >test1 : any
->data-foo : string
+>data-foo : "32"
 >'32' : "32"
 
 <test1 data-bar={'32'} />;
 ><test1 data-bar={'32'} /> : JSX.Element
 >test1 : any
->data-bar : string
+>data-bar : "32"
 >'32' : "32"
 
 <test1 data-bar={32} />;
 ><test1 data-bar={32} /> : JSX.Element
 >test1 : any
->data-bar : number
+>data-bar : 32
 >32 : 32
 

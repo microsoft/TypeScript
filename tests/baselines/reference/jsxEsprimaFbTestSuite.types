@@ -31,19 +31,19 @@ declare var props;
 <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
 ><a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" /> : any
 >a : any
->b : string
+>b : " "
 >" " : " "
->c : string
->d : string
->e : string
->f : string
->g : string
->h : string
+>c : " "
+>d : "&amp;"
+>e : "id=1&group=2"
+>f : "&#123456789"
+>g : "&#123*;"
+>h : "&#x;"
 
 <a b="&notanentity;" />;
 ><a b="&notanentity;" /> : any
 >a : any
->b : string
+>b : "&notanentity;"
 
 <a
 ><a/> : any
@@ -61,7 +61,7 @@ declare var props;
 >AbC_def : any
 
   test="&#x0026;&#38;">
->test : string
+>test : "&#x0026;&#38;"
 
 bar
 baz
@@ -155,13 +155,13 @@ baz
 ><div {...props} post="attribute" /> : any
 >div : any
 >props : any
->post : string
+>post : "attribute"
 
 <div pre="leading" pre2="attribute" {...props}></div>;
 ><div pre="leading" pre2="attribute" {...props}></div> : any
 >div : any
->pre : string
->pre2 : string
+>pre : "leading"
+>pre2 : "attribute"
 >props : any
 >div : any
 

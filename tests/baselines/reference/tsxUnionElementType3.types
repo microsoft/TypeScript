@@ -85,7 +85,7 @@ let a = <RCComp x="Hi" />;
 >a : JSX.Element
 ><RCComp x="Hi" /> : JSX.Element
 >RCComp : typeof RC1 | typeof RC2
->x : string
+>x : "Hi"
 
 let a1 = <EmptyRCComp />;
 >a1 : JSX.Element
@@ -96,7 +96,7 @@ let a2 = <EmptyRCComp data-prop="hello" />;
 >a2 : JSX.Element
 ><EmptyRCComp data-prop="hello" /> : JSX.Element
 >EmptyRCComp : typeof RC3
->data-prop : string
+>data-prop : "hello"
 
 let b = <PartRCComp />
 >b : JSX.Element
@@ -107,5 +107,5 @@ let c = <PartRCComp data-extra="hello" />
 >c : JSX.Element
 ><PartRCComp data-extra="hello" /> : JSX.Element
 >PartRCComp : typeof RC4
->data-extra : string
+>data-extra : "hello"
 

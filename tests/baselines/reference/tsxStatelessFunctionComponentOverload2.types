@@ -82,7 +82,7 @@ const c5 = <OneThing {...obj1} yy={42} {...{yy1: "hi"}}/>
 ><OneThing {...obj1} yy={42} {...{yy1: "hi"}}/> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >obj1 : { yy: boolean; }
->yy : number
+>yy : 42
 >42 : 42
 >{yy1: "hi"} : { yy1: string; }
 >yy1 : string
@@ -111,7 +111,7 @@ const c8 = <OneThing ignore-prop={100} />
 >c8 : JSX.Element
 ><OneThing ignore-prop={100} /> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->ignore-prop : number
+>ignore-prop : 100
 >100 : 100
 
 const c9 = <OneThing {...{ "ignore-prop":200 }} />;
@@ -126,5 +126,5 @@ const c10 = <OneThing {...obj2} yy1="boo" />;
 ><OneThing {...obj2} yy1="boo" /> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >obj2 : { yy: number; "ignore-prop": string; }
->yy1 : string
+>yy1 : "boo"
 

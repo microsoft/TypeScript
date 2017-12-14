@@ -51,23 +51,23 @@ function VerticalNav() {
       <VerticalNavMenuItem primaryText={2} />  // error
 ><VerticalNavMenuItem primaryText={2} /> : JSX.Element
 >VerticalNavMenuItem : (prop: IProps) => JSX.Element
->primaryText : number
+>primaryText : 2
 >2 : 2
 
       <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok
 ><VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} /> : JSX.Element
 >VerticalNavMenuItem : (prop: IProps) => JSX.Element
->justRandomProp : number
+>justRandomProp : 2
 >2 : 2
->primaryText : string
+>primaryText : "hello"
 >"hello" : "hello"
 
       <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error
 ><VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} /> : JSX.Element
 >VerticalNavMenuItem : (prop: IProps) => JSX.Element
->justRandomProp1 : boolean
+>justRandomProp1 : true
 >true : true
->primaryText : string
+>primaryText : "hello"
 >"hello" : "hello"
 
     </div>

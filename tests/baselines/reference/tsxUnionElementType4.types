@@ -91,7 +91,7 @@ let b = <PartRCComp x={10} />
 >b : JSX.Element
 ><PartRCComp x={10} /> : JSX.Element
 >PartRCComp : typeof RC4
->x : number
+>x : 10
 >10 : 10
 
 let c = <EmptyRCComp prop />;

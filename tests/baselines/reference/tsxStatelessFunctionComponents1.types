@@ -45,13 +45,13 @@ let a = <Greet name='world' />;
 >a : JSX.Element
 ><Greet name='world' /> : JSX.Element
 >Greet : (x: { name: string; }) => JSX.Element
->name : string
+>name : "world"
 
 let a1 = <Greet name='world' extra-prop />;
 >a1 : JSX.Element
 ><Greet name='world' extra-prop /> : JSX.Element
 >Greet : (x: { name: string; }) => JSX.Element
->name : string
+>name : "world"
 >extra-prop : true
 
 // Error
@@ -59,7 +59,7 @@ let b = <Greet naaame='world' />;
 >b : JSX.Element
 ><Greet naaame='world' /> : JSX.Element
 >Greet : (x: { name: string; }) => JSX.Element
->naaame : string
+>naaame : "world"
 
 // OK
 let c = <Meet />;
@@ -78,14 +78,14 @@ let d = <Meet name='me' />;
 >d : JSX.Element
 ><Meet name='me' /> : JSX.Element
 >Meet : ({ name }: { name?: string; }) => JSX.Element
->name : string
+>name : "me"
 
 // Error
 let e = <Meet name={42} />;
 >e : JSX.Element
 ><Meet name={42} /> : JSX.Element
 >Meet : ({ name }: { name?: string; }) => JSX.Element
->name : number
+>name : 42
 >42 : 42
 
 // Error
@@ -93,21 +93,21 @@ let f = <Meet naaaaaaame='no' />;
 >f : JSX.Element
 ><Meet naaaaaaame='no' /> : JSX.Element
 >Meet : ({ name }: { name?: string; }) => JSX.Element
->naaaaaaame : string
+>naaaaaaame : "no"
 
 // OK
 let g = <MeetAndGreet prop-name="Bob" />;
 >g : JSX.Element
 ><MeetAndGreet prop-name="Bob" /> : JSX.Element
 >MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
->prop-name : string
+>prop-name : "Bob"
 
 // Error
 let h = <MeetAndGreet extra-prop-name="World" />;
 >h : JSX.Element
 ><MeetAndGreet extra-prop-name="World" /> : JSX.Element
 >MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
->extra-prop-name : string
+>extra-prop-name : "World"
 
 // Error
 let i = <EmptyPropSFC prop1 />

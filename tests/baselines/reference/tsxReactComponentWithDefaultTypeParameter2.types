@@ -36,5 +36,5 @@ let x1 = <MyComp a="hi"/>
 >x1 : JSX.Element
 ><MyComp a="hi"/> : JSX.Element
 >MyComp : typeof MyComp
->a : string
+>a : "hi"
 

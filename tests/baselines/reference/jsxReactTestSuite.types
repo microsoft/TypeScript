@@ -153,7 +153,7 @@ var x =
       // Extra line here.
     }
     attr4="baz">
->attr4 : string
+>attr4 : "baz"
 
   </div>;
 >div : any
@@ -197,14 +197,14 @@ var x =
     /* a multi-line
        comment */
     attr1="foo">
->attr1 : string
+>attr1 : "foo"
 
     <span // a double-slash comment
 ><span // a double-slash comment      attr2="bar"    /> : any
 >span : any
 
       attr2="bar"
->attr2 : string
+>attr2 : "bar"
 
     />
   </div>
@@ -230,7 +230,7 @@ var x =
 <Component constructor="foo" />;
 ><Component constructor="foo" /> : any
 >Component : any
->constructor : string
+>constructor : "foo"
 
 <Namespace.Component />;
 ><Namespace.Component /> : any
@@ -250,7 +250,7 @@ var x =
 ><Component { ... x } y={2 } z /> : any
 >Component : any
 >x : any
->y : number
+>y : 2
 
 ={2 } z />;
 >2 : 2
@@ -264,7 +264,7 @@ var x =
 >this.props : any
 >this : any
 >props : any
->sound : string
+>sound : "moo"
 
 <font-face />;
 ><font-face /> : any
@@ -289,21 +289,21 @@ var x =
 ><Component { ...x } y={2} /> : any
 >Component : any
 >x : any
->y : number
+>y : 2
 >2 : 2
 
 <Component { ... x } y={2} z />;
 ><Component { ... x } y={2} z /> : any
 >Component : any
 >x : any
->y : number
+>y : 2
 >2 : 2
 >z : true
 
 <Component x={1} {...y} />;
 ><Component x={1} {...y} /> : any
 >Component : any
->x : number
+>x : 1
 >1 : 1
 >y : any
 
@@ -311,9 +311,9 @@ var x =
 <Component x={1} y="2" {...z} {...z}><Child /></Component>;
 ><Component x={1} y="2" {...z} {...z}><Child /></Component> : any
 >Component : any
->x : number
+>x : 1
 >1 : 1
->y : string
+>y : "2"
 >z : any
 >z : any
 ><Child /> : any
@@ -323,7 +323,7 @@ var x =
 <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
 ><Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component> : any
 >Component : any
->x : string
+>x : "1"
 >(z = { y: 2 }, z) : any
 >z = { y: 2 }, z : any
 >z = { y: 2 } : { y: number; }
@@ -332,7 +332,7 @@ var x =
 >y : number
 >2 : 2
 >z : any
->z : number
+>z : 3
 >3 : 3
 >Component : any
 

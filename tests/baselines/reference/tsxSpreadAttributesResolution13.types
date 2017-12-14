@@ -39,7 +39,7 @@ export default function Component(props: ComponentProps) {
 ><ChildComponent {...props} property1="NewString" /> : JSX.Element
 >ChildComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
 >props : ComponentProps
->property1 : string
+>property1 : "NewString"
     }
 }
 

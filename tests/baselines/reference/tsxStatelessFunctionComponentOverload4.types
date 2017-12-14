@@ -41,7 +41,7 @@ const c1 = <OneThing yy={10}/>;  // missing property;
 >c1 : JSX.Element
 ><OneThing yy={10}/> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->yy : number
+>yy : 10
 >10 : 10
 
 const c2 = <OneThing {...obj} yy1 />; // type incompatible;
@@ -65,7 +65,7 @@ const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
 ><OneThing {...obj} y1={10000} /> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >obj : { yy: number; yy1: string; }
->y1 : number
+>y1 : 10000
 >10000 : 10000
 
 const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
@@ -118,8 +118,8 @@ const d2 = <TestingOneThing yy="hello" direction="left" />
 >d2 : JSX.Element
 ><TestingOneThing yy="hello" direction="left" /> : JSX.Element
 >TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
->yy : string
->direction : string
+>yy : "hello"
+>direction : "left"
 
 declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
@@ -155,14 +155,14 @@ const e1 = <TestingOptional y1 y3="hello"/>
 ><TestingOptional y1 y3="hello"/> : JSX.Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
 >y1 : true
->y3 : string
+>y3 : "hello"
 
 const e2 = <TestingOptional y1="hello" y2={1000} y3 />
 >e2 : JSX.Element
 ><TestingOptional y1="hello" y2={1000} y3 /> : JSX.Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->y1 : string
->y2 : number
+>y1 : "hello"
+>y2 : 1000
 >1000 : 1000
 >y3 : true
 
@@ -170,17 +170,17 @@ const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
 >e3 : JSX.Element
 ><TestingOptional y1="hello" y2={1000} children="hi" /> : JSX.Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->y1 : string
->y2 : number
+>y1 : "hello"
+>y2 : 1000
 >1000 : 1000
->children : string
+>children : "hi"
 
 const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
 >e4 : JSX.Element
 ><TestingOptional y1="hello" y2={1000}>Hi</TestingOptional> : JSX.Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->y1 : string
->y2 : number
+>y1 : "hello"
+>y2 : 1000
 >1000 : 1000
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
 

@@ -30,7 +30,7 @@ var spread1 = <div x='' {...foo} y='' />;
 >spread1 : JSX.Element
 ><div x='' {...foo} y='' /> : JSX.Element
 >div : any
->x : string
+>x : ""
 >foo : any
->y : string
+>y : ""
 

@@ -18,11 +18,11 @@ declare module JSX {
 <div n='x' />;
 ><div n='x' /> : JSX.Element
 >div : any
->n : string
+>n : "x"
 
 // Error
 <span w='err' />;
 ><span w='err' /> : JSX.Element
 >span : any
->w : string
+>w : "err"
 

@@ -44,14 +44,14 @@ let b = <Greet key="k" />;
 >b : JSX.Element
 ><Greet key="k" /> : JSX.Element
 >Greet : (x: { name?: string; }) => JSX.Element
->key : string
+>key : "k"
 
 // Error - not allowed to specify 'ref' on SFCs
 let c = <Greet ref="myRef" />;
 >c : JSX.Element
 ><Greet ref="myRef" /> : JSX.Element
 >Greet : (x: { name?: string; }) => JSX.Element
->ref : string
+>ref : "myRef"
 
 
 // OK - ref is valid for classes
@@ -103,7 +103,7 @@ let g = <BigGreeter key={100} />;
 >g : JSX.Element
 ><BigGreeter key={100} /> : JSX.Element
 >BigGreeter : typeof BigGreeter
->key : number
+>key : 100
 >100 : 100
 
 // OK - contextually typed intrinsic ref callback parameter
