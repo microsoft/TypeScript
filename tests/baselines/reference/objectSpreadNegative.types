@@ -222,13 +222,13 @@ let obj: object = { a: 123 };
 >123 : 123
 
 let spreadObj = { ...obj };
->spreadObj : object
->{ ...obj } : object
+>spreadObj : {}
+>{ ...obj } : {}
 >obj : object
 
 spreadObj.a; // error 'a' is not in {}
 >spreadObj.a : any
->spreadObj : object
+>spreadObj : {}
 >a : any
 
 // generics

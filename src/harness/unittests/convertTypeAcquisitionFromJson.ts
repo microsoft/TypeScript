@@ -17,16 +17,16 @@ namespace ts {
 
         function verifyErrors(actualErrors: Diagnostic[], expectedResult: ExpectedResult, hasLocation?: boolean) {
             const expectedErrors = expectedResult.errors;
-            assert(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
+            assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
             for (let i = 0; i < actualErrors.length; i++) {
                 const actualError = actualErrors[i];
                 const expectedError = expectedErrors[i];
                 assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
                 assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
                 if (hasLocation) {
-                    assert.isDefined(actualError.file);
-                    assert(actualError.start > 0);
-                    assert(actualError.length > 0);
+                    assert(actualError.file);
+                    assert(actualError.start);
+                    assert(actualError.length);
                 }
             }
         }
