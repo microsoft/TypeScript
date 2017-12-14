@@ -2867,7 +2867,7 @@ namespace ts {
                     }
 
                     for (const propertySymbol of properties) {
-                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.DeferredInferred ? emptyObjectType : getTypeOfSymbol(propertySymbol);
+                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.Deferred ? emptyObjectType : getTypeOfSymbol(propertySymbol);
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -4868,7 +4868,7 @@ namespace ts {
             if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
-            if (getCheckFlags(symbol) & CheckFlags.DeferredInferred) {
+            if (getCheckFlags(symbol) & CheckFlags.Deferred) {
                 return inferDeferredMappedType((symbol as DeferredTransientSymbol).propertyType, (symbol as DeferredTransientSymbol).mappedType);
             }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
@@ -11255,7 +11255,7 @@ namespace ts {
                     if (propType.flags & TypeFlags.ContainsAnyFunctionType) {
                         return undefined;
                     }
-                    const checkFlags = CheckFlags.DeferredInferred | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
+                    const checkFlags = CheckFlags.Deferred | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
                     const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as DeferredTransientSymbol;
                     inferredProp.declarations = prop.declarations;
                     inferredProp.propertyType = propType;

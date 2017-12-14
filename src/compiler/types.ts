@@ -3217,7 +3217,7 @@ namespace ts {
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
         Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
-        DeferredInferred  = 1 << 11,        // Deferred inferred property of homomorphic mapped type. It is HILARIOUS.
+        Deferred          = 1 << 11,        // Deferred inferred property of homomorphic mapped type.
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 
