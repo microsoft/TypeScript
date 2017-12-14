@@ -335,6 +335,7 @@ namespace ts {
 
         const globals = createSymbolTable();
         const deferredInferenceCache = createMap<Type | undefined>();
+        const deferredMappedTypeInstantiationStack: string[] = [];
         let ambientModulesCache: Symbol[] | undefined;
         /**
          * List of every ambient module with a "*" wildcard.
@@ -2867,7 +2868,23 @@ namespace ts {
                     }
 
                     for (const propertySymbol of properties) {
-                        const propertyType = getTypeOfSymbol(propertySymbol);
+                        let propertyType: Type;
+                        if (getCheckFlags(propertySymbol) & CheckFlags.DeferredInferred) {
+                            const deferred = propertySymbol as DeferredTransientSymbol;
+                            const key = deferred.propertyType.id + "," + (deferred.mappedType.symbol ? deferred.mappedType.symbol.id : "");
+                            // Temporary solution to recursive printing: zero out repeated types.
+                            if (contains(deferredMappedTypeInstantiationStack, key)) {
+                                // TODO: Could probably be an actual cache that returns {} when it contains undefined.
+                                propertyType = emptyObjectType;
+                            }
+                            else {
+                                deferredMappedTypeInstantiationStack.push(key)
+                                propertyType = getTypeOfSymbol(propertySymbol);
+                            }
+                        }
+                        else {
+                            propertyType = getTypeOfSymbol(propertySymbol);
+                        }
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -2893,6 +2910,9 @@ namespace ts {
                                 propertyTypeNode,
                                /*initializer*/ undefined);
                             typeElements.push(propertySignature);
+                        }
+                        if (getCheckFlags(propertySymbol) & CheckFlags.DeferredInferred) {
+                            deferredMappedTypeInstantiationStack.pop();
                         }
                     }
                     return typeElements.length ? typeElements : undefined;
@@ -4869,7 +4889,7 @@ namespace ts {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
             if (getCheckFlags(symbol) & CheckFlags.DeferredInferred) {
-                return inferTargetType((symbol as DeferredTransientSymbol).propertyType, (symbol as DeferredTransientSymbol).mappedType);
+                return inferDeferredMappedType((symbol as DeferredTransientSymbol).propertyType, (symbol as DeferredTransientSymbol).mappedType);
             }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
                 return getTypeOfVariableOrParameterOrProperty(symbol);
@@ -11233,7 +11253,13 @@ namespace ts {
             if (deferredInferenceCache.has(key)) {
                 return deferredInferenceCache.get(key);
             }
-            deferredInferenceCache.set(key, function() {
+            deferredInferenceCache.set(key, undefined);
+            const type = createDeferredMappedType(source, target);
+            deferredInferenceCache.set(key, type);
+            return type;
+        }
+
+        function createDeferredMappedType(source: Type, target: MappedType) {
                 const properties = getPropertiesOfType(source);
                 let indexInfo = getIndexInfoOfType(source, IndexKind.String);
                 if (properties.length === 0 && !indexInfo) {
@@ -11257,14 +11283,15 @@ namespace ts {
                     members.set(prop.escapedName, inferredProp);
                 }
                 if (indexInfo) {
-                    // TODO: Defer this too. BARREL OF LAUGHS RIGHT THERE
-                    indexInfo = createIndexInfo(inferTargetType(indexInfo.type, target), readonlyMask && indexInfo.isReadonly);
+                    // TODO: Defer this too.
+                    // (probably the simplest way is to have a special type that defers the creation of (at least) its index info in
+                    // resolveStructuredTypeMembers
+                    indexInfo = createIndexInfo(inferDeferredMappedType(indexInfo.type, target), readonlyMask && indexInfo.isReadonly);
                 }
                 return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
-            }());
         }
 
-        function inferTargetType(sourceType: Type, target: MappedType): Type {
+        function inferDeferredMappedType(sourceType: Type, target: MappedType): Type {
             const typeParameter = <TypeParameter>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
             const templateType = getTemplateTypeFromMappedType(target);
             const inference = createInferenceInfo(typeParameter);

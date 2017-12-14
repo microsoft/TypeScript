@@ -3227,6 +3227,7 @@ namespace ts {
         isRestParameter?: boolean;
     }
 
+    /* @internal */
     export interface DeferredTransientSymbol extends TransientSymbol {
         propertyType: Type;
         mappedType: MappedType;

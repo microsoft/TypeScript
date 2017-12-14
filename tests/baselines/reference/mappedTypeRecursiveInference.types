@@ -26,8 +26,8 @@ declare function foo<T>(deep: Deep<T>): T;
 >T : T
 
 const out = foo(a);
->out : { a: {}; }
->foo(a) : { a: {}; }
+>out : { a: { a: {}; }; }
+>foo(a) : { a: { a: {}; }; }
 >foo : <T>(deep: Deep<T>) => T
 >a : A
 
