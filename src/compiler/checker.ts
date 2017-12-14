@@ -334,6 +334,7 @@ namespace ts {
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
 
         const globals = createSymbolTable();
+        const deferredInferenceCache = createMap<Type | undefined>();
         let ambientModulesCache: Symbol[] | undefined;
         /**
          * List of every ambient module with a "*" wildcard.
@@ -4866,6 +4867,9 @@ namespace ts {
         function getTypeOfSymbol(symbol: Symbol): Type {
             if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
+            }
+            if (getCheckFlags(symbol) & CheckFlags.DeferredInferred) {
+                return inferTargetType((symbol as DeferredTransientSymbol).propertyType, (symbol as DeferredTransientSymbol).mappedType);
             }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
                 return getTypeOfVariableOrParameterOrProperty(symbol);
@@ -11224,42 +11228,49 @@ namespace ts {
          * property is computed by inferring from the source property type to X for the type
          * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
          */
-        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, mappedTypeStack: string[]): Type {
-            const properties = getPropertiesOfType(source);
-            let indexInfo = getIndexInfoOfType(source, IndexKind.String);
-            if (properties.length === 0 && !indexInfo) {
-                return undefined;
+        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType): Type {
+            const key = source.id + "," + target.id;
+            if (deferredInferenceCache.has(key)) {
+                return deferredInferenceCache.get(key);
             }
-            const typeParameter = <TypeParameter>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
-            const inference = createInferenceInfo(typeParameter);
-            const inferences = [inference];
-            const templateType = getTemplateTypeFromMappedType(target);
-            const readonlyMask = target.declaration.readonlyToken ? false : true;
-            const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
-            const members = createSymbolTable();
-            for (const prop of properties) {
-                const propType = getTypeOfSymbol(prop);
-                // If any property contains context sensitive functions that have been skipped, the source type
-                // is incomplete and we can't infer a meaningful input type.
-                if (propType.flags & TypeFlags.ContainsAnyFunctionType) {
+            deferredInferenceCache.set(key, function() {
+                const properties = getPropertiesOfType(source);
+                let indexInfo = getIndexInfoOfType(source, IndexKind.String);
+                if (properties.length === 0 && !indexInfo) {
                     return undefined;
                 }
-                const checkFlags = readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0;
-                const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags);
-                inferredProp.declarations = prop.declarations;
-                inferredProp.type = inferTargetType(propType);
-                members.set(prop.escapedName, inferredProp);
-            }
-            if (indexInfo) {
-                indexInfo = createIndexInfo(inferTargetType(indexInfo.type), readonlyMask && indexInfo.isReadonly);
-            }
-            return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
+                const readonlyMask = target.declaration.readonlyToken ? false : true;
+                const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
+                const members = createSymbolTable();
+                for (const prop of properties) {
+                    const propType = getTypeOfSymbol(prop);
+                    // If any property contains context sensitive functions that have been skipped, the source type
+                    // is incomplete and we can't infer a meaningful input type.
+                    if (propType.flags & TypeFlags.ContainsAnyFunctionType) {
+                        return undefined;
+                    }
+                    const checkFlags = CheckFlags.DeferredInferred | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
+                    const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as DeferredTransientSymbol;
+                    inferredProp.declarations = prop.declarations;
+                    inferredProp.propertyType = propType; // not sure I need this.
+                    inferredProp.mappedType = target;
+                    members.set(prop.escapedName, inferredProp);
+                }
+                if (indexInfo) {
+                    // TODO: Defer this too. BARREL OF LAUGHS RIGHT THERE
+                    indexInfo = createIndexInfo(inferTargetType(indexInfo.type, target), readonlyMask && indexInfo.isReadonly);
+                }
+                return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
+            }());
+        }
 
-            function inferTargetType(sourceType: Type): Type {
-                inference.candidates = undefined;
-                inferTypes(inferences, sourceType, templateType, 0, mappedTypeStack);
-                return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) : emptyObjectType;
-            }
+        function inferTargetType(sourceType: Type, target: MappedType): Type {
+            const typeParameter = <TypeParameter>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
+            const templateType = getTemplateTypeFromMappedType(target);
+            const inference = createInferenceInfo(typeParameter);
+            inference.candidates = undefined;
+            inferTypes([inference], sourceType, templateType);
+            return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) : emptyObjectType;
         }
 
         function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean) {
@@ -11275,7 +11286,7 @@ namespace ts {
             return undefined;
         }
 
-        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, mappedTypeStack?: string[]) {
+        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
             inferFromTypes(originalSource, originalTarget);
@@ -11492,13 +11503,7 @@ namespace ts {
                         // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                         const inference = getInferenceInfoForType((<IndexType>constraintType).type);
                         if (inference && !inference.isFixed) {
-                            const key = (source.symbol ? getSymbolId(source.symbol) + "," : "") + getSymbolId(target.symbol);
-                            if (contains(mappedTypeStack, key)) {
-                                return;
-                            }
-                            (mappedTypeStack || (mappedTypeStack = [])).push(key);
-                            const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target, mappedTypeStack);
-                            mappedTypeStack.pop();
+                            const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target);
                             if (inferredType) {
                                 const savePriority = priority;
                                 priority |= InferencePriority.MappedType;
