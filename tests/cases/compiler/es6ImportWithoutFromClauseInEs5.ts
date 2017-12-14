@@ -6,4 +6,4 @@
 export var a = 10;
 
 // @filename: es6ImportWithoutFromClauseInEs5_1.ts
-import "es6ImportWithoutFromClauseInEs5_0";
+import "./es6ImportWithoutFromClauseInEs5_0";

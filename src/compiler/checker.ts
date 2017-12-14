@@ -23439,17 +23439,20 @@ namespace ts {
                 grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
             if (checkExternalImportOrExportDeclaration(node)) {
-                const importClause = node.importClause;
-                if (importClause) {
-                    if (importClause.name) {
-                        checkImportBinding(importClause);
-                    }
-                    if (importClause.namedBindings) {
-                        if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            checkImportBinding(<NamespaceImport>importClause.namedBindings);
+                const resolvedModule = resolveExternalModuleName(node, node.moduleSpecifier);
+                if (resolvedModule) {
+                    const importClause = node.importClause;
+                    if (importClause) {
+                        if (importClause.name) {
+                            checkImportBinding(importClause);
                         }
-                        else {
-                            forEach((<NamedImports>importClause.namedBindings).elements, checkImportBinding);
+                        if (importClause.namedBindings) {
+                            if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                checkImportBinding(<NamespaceImport>importClause.namedBindings);
+                            }
+                            else {
+                                forEach((<NamedImports>importClause.namedBindings).elements, checkImportBinding);
+                            }
                         }
                     }
                 }
