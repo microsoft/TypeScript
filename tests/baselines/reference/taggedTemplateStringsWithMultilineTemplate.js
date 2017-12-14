@@ -13,9 +13,5 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 function f() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
 }
 f(__makeTemplateObject(["\n\n"], ["\n\\\n\n"]));

@@ -97,23 +97,10 @@ new i["a-b"][1](1, 2, ...a, "string");
 
 //// [newWithSpreadES5.js]
 function f(x, y) {
-    var z = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        z[_i - 2] = arguments[_i];
-    }
 }
-function f2() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
-}
+function f2() { }
 var B = /** @class */ (function () {
     function B(x, y) {
-        var z = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            z[_i - 2] = arguments[_i];
-        }
     }
     return B;
 }());

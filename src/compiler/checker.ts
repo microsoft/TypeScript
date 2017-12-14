@@ -13251,6 +13251,14 @@ namespace ts {
             // or parameter. The flow container is the innermost function starting with which we analyze the control
             // flow graph to determine the control flow based type.
             const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
+
+            if (isParameter) {
+                const parameterDeclaration = getRootDeclaration(declaration) as ParameterDeclaration;
+                if (parameterDeclaration.dotDotDotToken) {
+                    getNodeLinks(parameterDeclaration).flags |= NodeCheckFlags.EmitRestParam;
+                }
+            }
+
             const declarationContainer = getControlFlowContainer(declaration);
             let flowContainer = getControlFlowContainer(node);
             const isOuterVariable = flowContainer !== declarationContainer;

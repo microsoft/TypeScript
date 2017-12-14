@@ -32,16 +32,8 @@ function f3(_c) {
     var _a = _c[0], __b = _c[2];
 }
 function f4() {
-    var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
-    }
 }
 function f5() {
-    var _arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        _arg[_i] = arguments[_i];
-    }
 }
 function f6(arg, _arg) {
 }

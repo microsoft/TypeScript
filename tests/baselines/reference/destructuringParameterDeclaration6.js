@@ -37,25 +37,10 @@ while (, )
     for (, public; ; )
         ;
 { }
-function a5() {
-    var  = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        [_i] = arguments[_i];
-    }
-}
+function a5() { }
 while () { }
-function a6() {
-    var public = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        public[_i] = arguments[_i];
-    }
-}
-function a7() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-}
+function a6() { }
+function a7() { }
 a({ "while": 1 });
 // No Error
 function b1(_a) {
