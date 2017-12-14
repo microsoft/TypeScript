@@ -9,14 +9,17 @@ namespace ts.codefix {
             Diagnostics.Cannot_find_namespace_0.code,
             Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
         ],
-        getCodeActions: getImportCodeActions
+        getCodeActions: getImportCodeActions,
+        // TODO: GH#20315
+        fixIds: [],
+        getAllCodeActions: notImplemented,
     });
 
     type ImportCodeActionKind = "CodeChange" | "InsertingIntoExistingImport" | "NewImport";
     // Map from module Id to an array of import declarations in that module.
     type ImportDeclarationMap = AnyImportSyntax[][];
 
-    interface ImportCodeAction extends CodeAction {
+    interface ImportCodeAction extends CodeFixAction {
         kind: ImportCodeActionKind;
         moduleSpecifier?: string;
     }
@@ -32,6 +35,7 @@ namespace ts.codefix {
 
     interface ImportCodeFixContext extends SymbolAndTokenContext {
         host: LanguageServiceHost;
+        program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
         getCanonicalFileName: GetCanonicalFileName;
@@ -154,6 +158,8 @@ namespace ts.codefix {
         return {
             description: formatMessage.apply(undefined, [undefined, description].concat(<any[]>diagnosticArgs)),
             changes,
+            // TODO: GH#20315
+            fixId: undefined,
             kind,
             moduleSpecifier
         };
@@ -161,15 +167,17 @@ namespace ts.codefix {
 
     function convertToImportCodeFixContext(context: CodeFixContext): ImportCodeFixContext {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
-        const checker = context.program.getTypeChecker();
+        const { program } = context;
+        const checker = program.getTypeChecker();
         const symbolToken = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
         return {
             host: context.host,
             newLineCharacter: context.newLineCharacter,
             formatContext: context.formatContext,
             sourceFile: context.sourceFile,
+            program,
             checker,
-            compilerOptions: context.program.getCompilerOptions(),
+            compilerOptions: program.getCompilerOptions(),
             cachedImportDeclarations: [],
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
             symbolName: symbolToken.getText(),
@@ -249,7 +257,7 @@ namespace ts.codefix {
     }
 
     function getCodeActionForNewImport(context: SymbolContext & { kind: ImportKind }, moduleSpecifier: string): ImportCodeAction {
-        const { kind, sourceFile, newLineCharacter, symbolName } = context;
+        const { kind, sourceFile, symbolName } = context;
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
@@ -268,10 +276,10 @@ namespace ts.codefix {
 
         const changes = ChangeTracker.with(context, changeTracker => {
             if (lastImportDeclaration) {
-                changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: newLineCharacter });
+                changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
             }
             else {
-                changeTracker.insertNodeAt(sourceFile, getSourceFileImportLocation(sourceFile), importDecl, { suffix: `${newLineCharacter}${newLineCharacter}` });
+                changeTracker.insertNodeAtTopOfFile(sourceFile, importDecl);
             }
         });
 
@@ -309,6 +317,7 @@ namespace ts.codefix {
     }
 
     export function getModuleSpecifiersForNewImport(
+        program: Program,
         sourceFile: SourceFile,
         moduleSymbols: ReadonlyArray<Symbol>,
         options: CompilerOptions,
@@ -316,68 +325,79 @@ namespace ts.codefix {
         host: LanguageServiceHost,
     ): string[] {
         const { baseUrl, paths, rootDirs } = options;
-        const choicesForEachExportingModule = mapIterator(arrayIterator(moduleSymbols), moduleSymbol => {
-            const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
-            const sourceDirectory = getDirectoryPath(sourceFile.fileName);
-            const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
-                || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName)
-                || tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory)
-                || rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName);
-            if (global) {
-                return [global];
-            }
-
-            const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
-            if (!baseUrl) {
-                return [relativePath];
-            }
-
-            const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);
-            if (!relativeToBaseUrl) {
-                return [relativePath];
-            }
-
-            const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, options);
-            if (paths) {
-                const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
-                if (fromPaths) {
-                    return [fromPaths];
+        const choicesForEachExportingModule = flatMap(moduleSymbols, moduleSymbol =>
+            getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()).map(moduleFileName => {
+                const sourceDirectory = getDirectoryPath(sourceFile.fileName);
+                const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
+                    || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName)
+                    || tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory)
+                    || rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName);
+                if (global) {
+                    return [global];
                 }
-            }
 
-            /*
-            Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
+                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
+                if (!baseUrl) {
+                    return [relativePath];
+                }
 
-            Suppose we have:
-                baseUrl = /base
-                sourceDirectory = /base/a/b
-                moduleFileName = /base/foo/bar
-            Then:
-                relativePath = ../../foo/bar
-                getRelativePathNParents(relativePath) = 2
-                pathFromSourceToBaseUrl = ../../
-                getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-                2 < 2 = false
-            In this case we should prefer using the baseUrl path "/a/b" instead of the relative path "../../foo/bar".
+                const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);
+                if (!relativeToBaseUrl) {
+                    return [relativePath];
+                }
 
-            Suppose we have:
-                baseUrl = /base
-                sourceDirectory = /base/foo/a
-                moduleFileName = /base/foo/bar
-            Then:
-                relativePath = ../a
-                getRelativePathNParents(relativePath) = 1
-                pathFromSourceToBaseUrl = ../../
-                getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-                1 < 2 = true
-            In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
-            */
-            const pathFromSourceToBaseUrl = getRelativePath(baseUrl, sourceDirectory, getCanonicalFileName);
-            const relativeFirst = getRelativePathNParents(pathFromSourceToBaseUrl) < getRelativePathNParents(relativePath);
-            return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
-        });
+                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, options);
+                if (paths) {
+                    const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
+                    if (fromPaths) {
+                        return [fromPaths];
+                    }
+                }
+
+                /*
+                Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
+
+                Suppose we have:
+                    baseUrl = /base
+                    sourceDirectory = /base/a/b
+                    moduleFileName = /base/foo/bar
+                Then:
+                    relativePath = ../../foo/bar
+                    getRelativePathNParents(relativePath) = 2
+                    pathFromSourceToBaseUrl = ../../
+                    getRelativePathNParents(pathFromSourceToBaseUrl) = 2
+                    2 < 2 = false
+                In this case we should prefer using the baseUrl path "/a/b" instead of the relative path "../../foo/bar".
+
+                Suppose we have:
+                    baseUrl = /base
+                    sourceDirectory = /base/foo/a
+                    moduleFileName = /base/foo/bar
+                Then:
+                    relativePath = ../a
+                    getRelativePathNParents(relativePath) = 1
+                    pathFromSourceToBaseUrl = ../../
+                    getRelativePathNParents(pathFromSourceToBaseUrl) = 2
+                    1 < 2 = true
+                In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
+                */
+                const pathFromSourceToBaseUrl = getRelativePath(baseUrl, sourceDirectory, getCanonicalFileName);
+                const relativeFirst = getRelativePathNParents(pathFromSourceToBaseUrl) < getRelativePathNParents(relativePath);
+                return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
+            }));
         // Only return results for the re-export with the shortest possible path (and also give the other path even if that's long.)
-        return best(choicesForEachExportingModule, (a, b) => a[0].length < b[0].length);
+        return best(arrayIterator(choicesForEachExportingModule), (a, b) => a[0].length < b[0].length);
+    }
+
+    /**
+     * Looks for a existing imports that use symlinks to this module.
+     * Only if no symlink is available, the real path will be used.
+     */
+    function getAllModulePaths(program: Program, { fileName }: SourceFile): ReadonlyArray<string> {
+        const symlinks = mapDefined(program.getSourceFiles(), sf =>
+            sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res =>
+                res && res.resolvedFileName === fileName ? res.originalPath : undefined));
+        return symlinks.length === 0 ? [fileName] : symlinks;
     }
 
     function getRelativePathNParents(relativePath: string): number {
@@ -613,7 +633,7 @@ namespace ts.codefix {
         }
 
         const existingDeclaration = firstDefined(declarations, moduleSpecifierFromAnyImport);
-        const moduleSpecifiers = existingDeclaration ? [existingDeclaration] : getModuleSpecifiersForNewImport(ctx.sourceFile, moduleSymbols, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
+        const moduleSpecifiers = existingDeclaration ? [existingDeclaration] : getModuleSpecifiersForNewImport(ctx.program, ctx.sourceFile, moduleSymbols, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
         return moduleSpecifiers.map(spec => getCodeActionForNewImport(ctx, spec));
     }
 

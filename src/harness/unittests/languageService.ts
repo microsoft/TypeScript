@@ -40,12 +40,9 @@ export function Component(x: Config): any;`
                 getDefaultLibFileName(options) {
                     return ts.getDefaultLibFilePath(options);
                 },
-                fileExists: noop as any,
-                readFile: noop as any,
-                readDirectory: noop as any,
             });
             const definitions = languageService.getDefinitionAtPosition("foo.ts", 160); // 160 is the latter `vueTemplateHtml` position
-            assert.isDefined(definitions);
+            expect(definitions).to.exist; // tslint:disable-line no-unused-expression
         });
     });
 }

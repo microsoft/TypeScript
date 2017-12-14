@@ -5462,6 +5462,7 @@ namespace ts {
                 switch (token()) {
                     case SyntaxKind.OpenParenToken:     // Method declaration
                     case SyntaxKind.LessThanToken:      // Generic Method declaration
+                    case SyntaxKind.ExclamationToken:   // Non-null assertion on property name
                     case SyntaxKind.ColonToken:         // Type Annotation for declaration
                     case SyntaxKind.EqualsToken:        // Initializer for declaration
                     case SyntaxKind.QuestionToken:      // Not valid, but permitted so that it gets caught later on.
