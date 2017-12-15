@@ -229,6 +229,43 @@ interface B {
 
 Note that static declarations in a class do not contribute to the class type—rather, static declarations introduce properties on the constructor function object. Also note that the declaration of 'g' in 'B' overrides the member inherited from 'A'.
 
+#### Mixin Class Types { #mixin-class-types }
+
+A mixin class is class declaration or expression that `extends` an expression whose type is a type parameter. The following rules apply to mixin class declarations:
+
+* The type parameter type of the `extends` expression must be constrained to a mixin constructor type (see [#mixin-constructor-types]).
+* If a mixin class has a constructor, it must have a mixin constructor type.
+
+Given an expression `Base` of type *T*, a type parameter constrained to *typeof X*, the mixin class `class C extends Base { ... }` is processed as if *Base* had type *typeof X*, where *X* is some object type.
+Then *C* has a constructor function whose return type is the intersection of *C* and *X*.
+That is, a mixin class is represented as an intersection between the mixin class constructor type and the parametric base class constructor type.
+
+Mixin classes can be used as in the following example:
+
+```ts
+class Person {
+    constructor(public name: string) {}
+}
+
+type Constructor<T> = new(...args: any[]) => T;
+
+function Mixer<T extends Constructor<{}>>(Base: T) {
+    return class extends Base {
+        mix: string;
+        constructor(...args: any[]) {
+            super(...args);
+            this.mix = "";
+        }
+    }
+}
+
+const MixPerson = Mixer(Person);
+
+let person = new MixPerson("Alice");
+person.mix = "string";
+person.name = "Bob";
+```
+
 ### Constructor Function Types { #constructor-function-types }
 
 The type of the constructor function introduced by a class declaration is called the constructor function type. The constructor function type has the following members:
