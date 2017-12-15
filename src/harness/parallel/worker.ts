@@ -36,6 +36,19 @@ namespace Harness.Parallel.Worker {
         }) as Mocha.ITestDefinition;
     }
 
+    function setTimeoutAndExecute(timeout: number | undefined, f: () => void) {
+        if (timeout !== undefined) {
+            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
+            process.send(timeoutMsg);
+        }
+        f();
+        if (timeout !== undefined) {
+            // Reset timeout
+            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
+            process.send(timeoutMsg);
+        }
+    }
+
     function executeSuiteCallback(name: string, callback: MochaCallback) {
         let timeout: number;
         const fakeContext: Mocha.ISuiteCallbackContext = {
@@ -76,16 +89,9 @@ namespace Harness.Parallel.Worker {
             beforeFunc = undefined;
         }
 
-        if (timeout !== undefined) {
-            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
-            process.send(timeoutMsg);
-        }
-        testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
-        if (timeout !== undefined) {
-            // Reset timeout
-            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: -1 } };
-            process.send(timeoutMsg);
-        }
+        setTimeoutAndExecute(timeout, () => {
+            testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
+        });
 
         try {
             if (afterFunc) {
@@ -139,27 +145,20 @@ namespace Harness.Parallel.Worker {
             }
         }
         if (callback.length === 0) {
-            if (timeout !== undefined) {
-                const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
-                process.send(timeoutMsg);
-            }
-            try {
-                // TODO: If we ever start using async test completions, polyfill promise return handling
-                callback.call(fakeContext);
-            }
-            catch (error) {
-                errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
-                return;
-            }
-            finally {
-                if (timeout !== undefined) {
-                    // Reset timeout
-                    const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: -1 } };
-                    process.send(timeoutMsg);
+            setTimeoutAndExecute(timeout, () => {
+                try {
+                    // TODO: If we ever start using async test completions, polyfill promise return handling
+                    callback.call(fakeContext);
                 }
-                namestack.pop();
-            }
-            passing++;
+                catch (error) {
+                    errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
+                    return;
+                }
+                finally {
+                    namestack.pop();
+                }
+                passing++;
+            });
         }
         else {
             // Uses `done` callback

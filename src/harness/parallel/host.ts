@@ -176,7 +176,7 @@ namespace Harness.Parallel.Host {
                         return process.exit(2);
                     }
                     case "timeout": {
-                        if (data.payload.duration === -1) {
+                        if (data.payload.duration === "reset") {
                             currentTimeout = timeoutStack.pop() || defaultTimeout;
                         }
                         else {

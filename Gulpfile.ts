@@ -871,7 +871,7 @@ function cleanTestDirs(done: (e?: any) => void) {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests: string, runners: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string, testTimeout?: number) {
+function writeTestConfigFile(tests: string, runners: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string, timeout?: number) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         runner: runners ? runners.split(",") : undefined,
@@ -880,7 +880,7 @@ function writeTestConfigFile(tests: string, runners: string, light: boolean, tas
         stackTraceLimit,
         taskConfigsFolder,
         noColor: !cmdLineOptions.colors,
-        timeout: testTimeout,
+        timeout,
     });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
