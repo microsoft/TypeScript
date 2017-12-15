@@ -993,9 +993,12 @@ interface Document {
 
 states that calls to 'createElement' with the string literals "div", "span", and "canvas" return values of type 'HTMLDivElement', 'HTMLSpanElement', and 'HTMLCanvasElement' respectively, and that calls with all other string expressions return values of type 'HTMLElement'.
 
-When writing overloaded declarations such as the one above it is important to list the non-specialized signature last. This is because overload resolution (section [#overload-resolution]<!--4.15.1-->) processes the candidates in declaration order and picks the first one that matches.
+When writing overloaded declarations such as the one above it is important to list the non-specialized signature last.
+This is because overload resolution (section [#overload-resolution]<!--4.15.1-->) processes the candidates in declaration order and picks the first one that matches.
 
-Every specialized call or construct signature in an object type must be assignable to at least one non-specialized call or construct signature in the same object type (where a call signature *A* is considered assignable to another call signature *B* if an object type containing only *A* would be assignable to an object type containing only *B*). For example, the 'createElement' property in the example above is of a type that contains three specialized signatures, all of which are assignable to the non-specialized signature in the type.
+TODO: This part might be wrong now
+Every specialized call or construct signature in an object type must be assignable to at least one non-specialized call or construct signature in the same object type (where a call signature *A* is considered assignable to another call signature *B* if an object type containing only *A* would be assignable to an object type containing only *B*).
+For example, the 'createElement' property in the example above is of a type that contains three specialized signatures, all of which are assignable to the non-specialized signature in the type.
 
 ### Construct Signatures { #construct-signatures }
 
