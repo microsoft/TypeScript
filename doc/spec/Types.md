@@ -1352,7 +1352,7 @@ foo({ id: 1234, name: false });    // Error, name of wrong type
 foo({ name: "hello" });            // Error, id required but missing
 ```
 
-### Comparability
+### Comparability { #comparability }
 
 *TODO: Document the base primitive type.*
 
@@ -1423,9 +1423,48 @@ The comparability and assignment compatibility rules differ only in that
 * the non-primitive object type is comparable to and from any other object type, and
 * when relating any two signatures, each signature is always instantiated using type Any for all type arguments.
 
-While the comparable relation is often applied bidirectionally on a pair of types, it is not a symmetric relationship.
+Switch statements, like equality checks, consult the comparability of two types to validate whether comparisons appear reasonable.
+The following switch statement 
 
-*TODO: Give an example of the comparable relation.*
+```ts
+declare let foo: number | string;
+declare let bar: string | boolean;
+
+switch (foo) {
+    case "hello":
+    case 42:
+    case bar:
+        console.log("These are valid!");
+
+    // Error: Booleans are not comparable with 'number | string'.
+    case true:
+    case false:
+        throw new Error();
+}
+```
+
+While the comparable relation is often applied bidirectionally on a pair of types, it is not a symmetric relationship.
+For example, the type `number | "hello"` is comparable to `string`, but not the other way around.
+This is because the type `"hello"` is a string literal type that is comparable to `string`, but `string` is not comparable to `"hello"`.
+While somewhat undesirable, the limitation means that neither of the following two interfaces are comparable to the other.
+
+```ts
+interface Foo {
+    abc: number | "hello";
+    def: string;
+}
+interface Bar {
+    abc: string;
+    def: number | "hello";
+}
+
+declare let x: Foo;
+declare let y: Bar;
+
+// Both of these type assertons are errors.
+x as Bar
+y as Foo;
+```
 
 ### Excess Properties { #excess-properties }
 

@@ -581,7 +581,7 @@ TypeScript extends the JavaScript expression grammar with the ability to assert 
 
 A type assertion expression consists of a type enclosed in `<` and `>` followed by a unary expression. Type assertion expressions are purely a compile-time construct. Type assertions are *not* checked at run-time and have no impact on the emitted JavaScript (and therefore no run-time cost). The type and the enclosing `<` and `>` are simply removed from the generated code.
 
-In a type assertion expression of the form &lt; *T* > *e*, *e* is contextually typed (section [#contextually-typed-expressions]<!--4.23-->) by *T* and the resulting type of* e* is required to be assignable to *T*, or *T* is required to be assignable to the widened form of the resulting type of *e*, or otherwise a compile-time error occurs. The type of the result is *T*.
+In a type assertion expression of the form &lt; *T* > *e*, *e* is contextually typed (section [#contextually-typed-expressions]<!--4.23-->) by *T* and the resulting type of* e* is required to be comparable to *T*, or *T* is required to be comparable to the widened form of the resulting type of *e*, or otherwise a compile-time error occurs. The type of the result is *T*.
 
 Type assertions check for assignment compatibility in both directions. Thus, type assertions allow type conversions that *might* be correct, but aren't *known* to be correct. In the example
 
@@ -714,15 +714,41 @@ The example above converts the result of 'getValue()' to a string if it isn't a 
 
 ### The &lt;, >, &lt;=, >=, ==, !=, ===, and !== operators { #the-comparison-operators }
 
-These operators require one or both of the operand types to be assignable to the other. The result is always of the Boolean primitive type.
+These operators require one or both of the operand types to be comparable to the other.
+The result is always of the Boolean primitive type.
 
-||Any|Boolean|Number|String|Other|
-|:---:|:---:|:---:|:---:|:---:|:---:|
-|Any|Boolean|Boolean|Boolean|Boolean|Boolean|
-|Boolean|Boolean|Boolean||||
-|Number|Boolean||Boolean|||
-|String|Boolean|||Boolean||
-|Other|Boolean||||Boolean|
+|       |Any    |Boolean|Number |String |Other  |
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+|Any    |Boolean|Boolean|Boolean|Boolean|Boolean|
+|Boolean|Boolean|Boolean|       |       |       |
+|Number |Boolean|       |Boolean|       |       |
+|String |Boolean|       |       |Boolean|       |
+|Other  |Boolean|       |       |       |Boolean|
+
+### ==, !=, ===, and !== operators { #the-equality-operators }
+
+These operators require one or both of the operand types to be comparable to the other, or for at least operand to be the Null or Undefined type.
+The result is always of the Boolean primitive type.
+
+|       |Any    |Boolean|Number |String |Other  |
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+|Any    |Boolean|Boolean|Boolean|Boolean|Boolean|
+|Boolean|Boolean|Boolean|       |       |       |
+|Number |Boolean|       |Boolean|       |       |
+|String |Boolean|       |       |Boolean|       |
+|Other  |Boolean|       |       |       |Boolean|
+
+Permitting operands of any type to be compared directly to the Null and Undefined type is the principal difference from [the comparison operators](#the-comparison-operators).
+This can be useful for performing runtime checks on arguments passed in from unchecked JavaScript code.
+
+```TypeScript
+function greetPerson(person: Person) {
+    if (person == null) {
+        throw new Error("Expected 'person' to be defined.");
+    }
+    // ...
+}
+```
 
 ### The instanceof operator { #the-instanceof-operator }
 

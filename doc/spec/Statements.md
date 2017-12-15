@@ -288,7 +288,7 @@ Use of the 'with' statement in TypeScript is an error, as is the case in ECMAScr
 
 ## Switch Statements { #switch-statements }
 
-In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from (section [#assignment-compatibility]<!--3.11.4-->) the type of the 'switch' expression.
+In a 'switch' statement, each 'case' expression must be the Null type, the Undefined type, or a type that is comparable to or from (section [#comarability]) the type of the 'switch' expression.
 
 ## Throw Statements { #throw-statements }
 
