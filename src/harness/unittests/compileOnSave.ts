@@ -13,8 +13,8 @@ namespace ts.projectSystem {
     describe("CompileOnSave affected list", () => {
         function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: FileOrFolder[] }[]) {
             const response = session.executeCommand(request).response as server.protocol.CompileOnSaveAffectedFileListSingleProject[];
-            const actualResult = response.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
-            expectedFileList = expectedFileList.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
+            const actualResult = response.sort((list1, list2) => ts.compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
+            expectedFileList = expectedFileList.sort((list1, list2) => ts.compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
 
             assert.equal(actualResult.length, expectedFileList.length, `Actual result project number is different from the expected project number`);
 
@@ -295,6 +295,24 @@ namespace ts.projectSystem {
                 configFile = {
                     path: "/a/b/tsconfig.json",
                     content: `{}`
+                };
+
+                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
+                const typingsInstaller = createTestTypingsInstaller(host);
+                const session = createSession(host, typingsInstaller);
+                openFilesForSession([moduleFile1], session);
+                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
+            });
+
+            it("should return empty array if noEmit is set", () => {
+                configFile = {
+                    path: "/a/b/tsconfig.json",
+                    content: `{
+                        "compileOnSave": true,
+                        "compilerOptions": {
+                            "noEmit": true
+                        }
+                    }`
                 };
 
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
@@ -627,8 +645,8 @@ namespace ts.projectSystem {
             const mapFileContent = host.readFile(expectedMapFileName);
             verifyContentHasString(mapFileContent, `"sources":["${inputFileName}"]`);
 
-            function verifyContentHasString(content: string, string: string) {
-                assert.isTrue(content.indexOf(string) !== -1, `Expected "${content}" to have "${string}"`);
+            function verifyContentHasString(content: string, str: string) {
+                assert.isTrue(stringContains(content, str), `Expected "${content}" to have "${str}"`);
             }
         });
     });

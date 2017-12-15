@@ -19,14 +19,17 @@ class Derived extends Base {
 > : any
 
     b() {
->b : () => void
+>b() : any
+>b : any
 
         super();
 >super() : void
 >super : any
     }
     get C() {
->C : number
+>get : any
+>C() : any
+>C : any
 
         super();
 >super() : void
@@ -36,8 +39,10 @@ class Derived extends Base {
 >1 : 1
     }
     set C(v) {
->C : number
->v : number
+>set : any
+>C(v) : any
+>C : any
+>v : any
 
         super();
 >super() : void
@@ -46,19 +51,21 @@ class Derived extends Base {
 
     static a: super();
 >a : any
->super : No type information available!
->() : any
-> : any
+>super() : void
+>super : any
 
     static b() {
->b : () => void
+>b() : any
+>b : any
 
         super();
 >super() : void
 >super : any
     }
     static get C() {
->C : number
+>get : any
+>C() : any
+>C : any
 
         super();
 >super() : void
@@ -68,8 +75,10 @@ class Derived extends Base {
 >1 : 1
     }
     static set C(v) {
->C : number
->v : number
+>set : any
+>C(v) : any
+>C : any
+>v : any
 
         super();
 >super() : void

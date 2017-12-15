@@ -228,6 +228,37 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
         });
 
+        it("external project - deduplicate from local @types packages", () => {
+            const appJs = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const nodeDts = {
+                path: "/node_modules/@types/node/index.d.ts",
+                content: "declare var node;"
+            };
+            const host = createServerHost([appJs, nodeDts]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("node") });
+                }
+                installWorker() {
+                    assert(false, "nothing should get installed");
+                }
+            })();
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: {},
+                rootFiles: [toExternalFile(appJs.path)],
+                typeAcquisition: { enable: true, include: ["node"] }
+            });
+            installer.checkPendingCommands(/*expectedCount*/ 0);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+        });
+
         it("external project - no auto in typing acquisition, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
@@ -304,35 +335,35 @@ namespace ts.projectSystem {
             // 1. react typings are installed for .jsx
             // 2. loose files names are matched against safe list for typings if
             //    this is a JS project (only js, jsx, d.ts files are present)
-            const file1 = {
+            const lodashJs = {
                 path: "/a/b/lodash.js",
                 content: ""
             };
-            const file2 = {
+            const file2Jsx = {
                 path: "/a/b/file2.jsx",
                 content: ""
             };
-            const file3 = {
+            const file3dts = {
                 path: "/a/b/file3.d.ts",
                 content: ""
             };
-            const react = {
+            const reactDts = {
                 path: "/a/data/node_modules/@types/react/index.d.ts",
                 content: "declare const react: { x: number }"
             };
-            const lodash = {
+            const lodashDts = {
                 path: "/a/data/node_modules/@types/lodash/index.d.ts",
                 content: "declare const lodash: { x: number }"
             };
 
-            const host = createServerHost([file1, file2, file3, customTypesMap]);
+            const host = createServerHost([lodashJs, file2Jsx, file3dts, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("lodash", "react") });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/lodash", "@types/react"];
-                    const typingFiles = [lodash, react];
+                    const typingFiles = [lodashDts, reactDts];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -342,35 +373,31 @@ namespace ts.projectSystem {
             projectService.openExternalProject({
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
-                rootFiles: [toExternalFile(file1.path), toExternalFile(file2.path), toExternalFile(file3.path)],
-                typeAcquisition: {}
+                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(file2Jsx.path), toExternalFile(file3dts.path)],
+                typeAcquisition: { }
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path, file3.path]);
+            checkProjectActualFiles(p, [file2Jsx.path, file3dts.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path, file3.path, lodash.path, react.path]);
+            checkProjectActualFiles(p, [file2Jsx.path, file3dts.path, lodashDts.path, reactDts.path]);
         });
 
-        it("external project - no type acquisition, with js & ts files", () => {
+        it("external project - type acquisition with enable: false", () => {
             // Tests:
-            // 1. No typings are included for JS projects when the project contains ts files
-            const file1 = {
+            // Exclude
+            const jqueryJs = {
                 path: "/a/b/jquery.js",
                 content: ""
             };
-            const file2 = {
-                path: "/a/b/file2.ts",
-                content: ""
-            };
 
-            const host = createServerHost([file1, file2]);
+            const host = createServerHost([jqueryJs]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
@@ -390,18 +417,62 @@ namespace ts.projectSystem {
             projectService.openExternalProject({
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
-                rootFiles: [toExternalFile(file1.path), toExternalFile(file2.path)],
+                rootFiles: [toExternalFile(jqueryJs.path)],
+                typeAcquisition: { enable: false }
+            });
+
+            const p = projectService.externalProjects[0];
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+
+            checkProjectActualFiles(p, [jqueryJs.path]);
+
+            installer.checkPendingCommands(/*expectedCount*/ 0);
+        });
+        it("external project - no type acquisition, with js & ts files", () => {
+            // Tests:
+            // 1. No typings are included for JS projects when the project contains ts files
+            const jqueryJs = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+            const file2Ts = {
+                path: "/a/b/file2.ts",
+                content: ""
+            };
+
+            const host = createServerHost([jqueryJs, file2Ts]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
+                }
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+                    super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+                    const installedTypings: string[] = [];
+                    const typingFiles: FileOrFolder[] = [];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
+                rootFiles: [toExternalFile(jqueryJs.path), toExternalFile(file2Ts.path)],
                 typeAcquisition: {}
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [file2.path]);
+
+            checkProjectActualFiles(p, [jqueryJs.path, file2Ts.path]);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [file2.path]);
+            checkProjectActualFiles(p, [jqueryJs.path, file2Ts.path]);
         });
 
         it("external project - with type acquisition, with only js, d.ts files", () => {
@@ -409,15 +480,15 @@ namespace ts.projectSystem {
             // 1. Safelist matching, type acquisition includes/excludes and package.json typings are all acquired
             // 2. Types for safelist matches are not included when they also appear in the type acquisition exclude list
             // 3. Multiple includes and excludes are respected in type acquisition
-            const file1 = {
+            const lodashJs = {
                 path: "/a/b/lodash.js",
                 content: ""
             };
-            const file2 = {
+            const commanderJs = {
                 path: "/a/b/commander.js",
                 content: ""
             };
-            const file3 = {
+            const file3dts = {
                 path: "/a/b/file3.d.ts",
                 content: ""
             };
@@ -448,7 +519,7 @@ namespace ts.projectSystem {
                 content: "declare const moment: { x: number }"
             };
 
-            const host = createServerHost([file1, file2, file3, packageJson, customTypesMap]);
+            const host = createServerHost([lodashJs, commanderJs, file3dts, packageJson, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery", "commander", "moment", "express") });
@@ -465,20 +536,25 @@ namespace ts.projectSystem {
             projectService.openExternalProject({
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
-                rootFiles: [toExternalFile(file1.path), toExternalFile(file2.path), toExternalFile(file3.path)],
-                typeAcquisition: { include: ["jquery", "moment"], exclude: ["lodash"] }
+                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3dts.path)],
+                typeAcquisition: { enable: true, include: ["jquery", "moment"], exclude: ["lodash"] }
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path, file3.path]);
+            checkProjectActualFiles(p, [file3dts.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path, file3.path, commander.path, express.path, jquery.path, moment.path]);
+            // Commander: Existed as a JS file
+            // JQuery: Specified in 'include'
+            // Moment: Specified in 'include'
+            // Express: Specified in package.json
+            // lodash: Excluded (not present)
+            checkProjectActualFiles(p, [file3dts.path, commander.path, jquery.path, moment.path, express.path]);
         });
 
         it("Throttle - delayed typings to install", () => {
@@ -548,7 +624,7 @@ namespace ts.projectSystem {
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [lodashJs.path, commanderJs.path, file3.path]);
+            checkProjectActualFiles(p, [file3.path]);
             installer.checkPendingCommands(/*expectedCount*/ 1);
             installer.executePendingCommands();
             // expected all typings file to exist
@@ -557,7 +633,7 @@ namespace ts.projectSystem {
             }
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [lodashJs.path, commanderJs.path, file3.path, commander.path, express.path, jquery.path, moment.path, lodash.path]);
+            checkProjectActualFiles(p, [file3.path, commander.path, express.path, jquery.path, moment.path, lodash.path]);
         });
 
         it("Throttle - delayed run install requests", () => {
@@ -648,7 +724,7 @@ namespace ts.projectSystem {
             const p1 = projectService.externalProjects[0];
             const p2 = projectService.externalProjects[1];
             projectService.checkNumberOfProjects({ externalProjects: 2 });
-            checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path]);
+            checkProjectActualFiles(p1, [file3.path]);
             checkProjectActualFiles(p2, [file3.path]);
 
             installer.executePendingCommands();
@@ -659,7 +735,7 @@ namespace ts.projectSystem {
 
             installer.executePendingCommands();
             host.checkTimeoutQueueLengthAndRun(3); // for 2 projects and 1 refreshing inferred project
-            checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
+            checkProjectActualFiles(p1, [file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
         });
 
@@ -776,8 +852,8 @@ namespace ts.projectSystem {
             const bowerJson = {
                 path: "/bower.json",
                 content: JSON.stringify({
-                    "dependencies": {
-                        "jquery": "^3.1.0"
+                    dependencies: {
+                        jquery: "^3.1.0"
                     }
                 })
             };
@@ -933,7 +1009,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
         });
 
-        it("cached unresolved typings are not recomputed if program structure did not change", () => {
+        it("should recompute resolutions after typings are installed", () => {
             const host = createServerHost([]);
             const session = createSession(host);
             const f = {
@@ -975,7 +1051,7 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
             host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
             const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
-            assert.equal(version1, version2, "set of unresolved imports should not change");
+            assert.notEqual(version1, version2, "set of unresolved imports should change");
         });
     });
 
@@ -1012,7 +1088,7 @@ namespace ts.projectSystem {
             const packageJson = {
                 path: "/a/b/package.json",
                 content: JSON.stringify({
-                    "dependencies": {
+                    dependencies: {
                         "; say ‘Hello from TypeScript!’ #": "0.0.x"
                     }
                 })
@@ -1057,11 +1133,12 @@ namespace ts.projectSystem {
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true }, emptyArray);
-            assert.deepEqual(logger.finish(), [
+            const finish = logger.finish();
+            assert.deepEqual(finish, [
                 'Inferred typings from file names: ["jquery","chroma-js"]',
                 "Inferred typings from unresolved imports: []",
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","chroma-js"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
-            ]);
+            ], finish.join("\r\n"));
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
         });
 
@@ -1094,7 +1171,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<string>({ "node": node.path });
+            const cache = createMapFromTemplate<string>({ node: node.path });
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"]);
             assert.deepEqual(logger.finish(), [
@@ -1144,7 +1221,7 @@ namespace ts.projectSystem {
             };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
             const cachePath = "/a/cache/";
             const commander = {
@@ -1194,7 +1271,7 @@ namespace ts.projectSystem {
             };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
             const cachePath = "/a/cache/";
             const commander = {
@@ -1246,7 +1323,7 @@ namespace ts.projectSystem {
             };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
             const cachePath = "/a/cache/";
             const host = createServerHost([f1, packageFile]);

@@ -19,6 +19,7 @@ namespace ts.JsDoc {
         "fileOverview",
         "function",
         "ignore",
+        "inheritDoc",
         "inner",
         "lends",
         "link",
@@ -202,6 +203,9 @@ namespace ts.JsDoc {
      *          - class declarations
      *          - variable statements
      *          - namespace declarations
+     *          - interface declarations
+     *          - method signatures
+     *          - type alias declarations
      *
      * Hosts should ideally check that:
      * - The line is all whitespace up to 'position' before performing the insertion.
@@ -212,7 +216,8 @@ namespace ts.JsDoc {
      * @param position The (character-indexed) position in the file where the check should
      * be performed.
      */
-    export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number): TextInsertion {
+
+    export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number): TextInsertion | undefined {
         // Check if in a context where we don't want to perform any insertion
         if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
             return undefined;
@@ -233,6 +238,12 @@ namespace ts.JsDoc {
             return undefined;
         }
 
+        if (!parameters || parameters.length === 0) {
+            // if there are no parameters, just complete to a single line JSDoc comment
+            const singleLineResult = "/** */";
+            return { newText: singleLineResult, caretOffset: 3 };
+        }
+
         const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
         const lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
@@ -241,18 +252,16 @@ namespace ts.JsDoc {
         const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
 
         let docParams = "";
-        if (parameters) {
-            for (let i = 0; i < parameters.length; i++) {
-                const currentName = parameters[i].name;
-                const paramName = currentName.kind === SyntaxKind.Identifier ?
-                    (<Identifier>currentName).escapedText :
-                    "param" + i;
-                if (isJavaScriptFile) {
-                    docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
-                }
-                else {
-                    docParams += `${indentationStr} * @param ${paramName}${newLine}`;
-                }
+        for (let i = 0; i < parameters.length; i++) {
+            const currentName = parameters[i].name;
+            const paramName = currentName.kind === SyntaxKind.Identifier ?
+                (<Identifier>currentName).escapedText :
+                "param" + i;
+            if (isJavaScriptFile) {
+                docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
+            }
+            else {
+                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
             }
         }
 
@@ -279,20 +288,21 @@ namespace ts.JsDoc {
         readonly parameters?: ReadonlyArray<ParameterDeclaration>;
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
-        // TODO: add support for:
-        // - enums/enum members
-        // - interfaces
-        // - property declarations
-        // - potentially property assignments
         for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
             switch (commentOwner.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.Constructor:
-                    const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration;
+                case SyntaxKind.MethodSignature:
+                    const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
                     return { commentOwner, parameters };
 
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.TypeAliasDeclaration:
                     return { commentOwner };
 
                 case SyntaxKind.VariableStatement: {

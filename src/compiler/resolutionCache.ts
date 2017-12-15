@@ -69,9 +69,8 @@ namespace ts {
 
     export const maxNumberOfFilesToIterateForInvalidation = 256;
 
-    interface GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> {
-        (resolution: T): R;
-    }
+    type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
+        (resolution: T) => R;
 
     export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
@@ -320,6 +319,10 @@ namespace ts {
             return endsWith(dirPath, "/node_modules");
         }
 
+        function isNodeModulesAtTypesDirectory(dirPath: Path) {
+            return endsWith(dirPath, "/node_modules/@types");
+        }
+
         function isDirectoryAtleastAtLevelFromFSRoot(dirPath: Path, minLevels: number) {
             for (let searchIndex = getRootLength(dirPath); minLevels > 0; minLevels--) {
                 searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
@@ -560,11 +563,21 @@ namespace ts {
             else {
                 // Some file or directory in the watching directory is created
                 // Return early if it does not have any of the watching extension or not the custom failed lookup path
-                if (!isPathWithDefaultFailedLookupExtension(fileOrDirectoryPath) && !customFailedLookupPaths.has(fileOrDirectoryPath)) {
-                    return false;
+                const dirOfFileOrDirectory = getDirectoryPath(fileOrDirectoryPath);
+                if (isNodeModulesAtTypesDirectory(dirOfFileOrDirectory) || isNodeModulesDirectory(dirOfFileOrDirectory)) {
+                    // Invalidate any resolution from this directory
+                    isChangedFailedLookupLocation = location => {
+                        const locationPath = resolutionHost.toPath(location);
+                        return locationPath === fileOrDirectoryPath || startsWith(resolutionHost.toPath(location), fileOrDirectoryPath);
+                    };
                 }
-                // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
-                isChangedFailedLookupLocation = location => resolutionHost.toPath(location) === fileOrDirectoryPath;
+                else {
+                    if (!isPathWithDefaultFailedLookupExtension(fileOrDirectoryPath) && !customFailedLookupPaths.has(fileOrDirectoryPath)) {
+                        return false;
+                    }
+                    // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
+                    isChangedFailedLookupLocation = location => resolutionHost.toPath(location) === fileOrDirectoryPath;
+                }
             }
             const hasChangedFailedLookupLocation = (resolution: ResolutionWithFailedLookupLocations) => some(resolution.failedLookupLocations, isChangedFailedLookupLocation);
             const invalidatedFilesCount = filesWithInvalidatedResolutions && filesWithInvalidatedResolutions.size;

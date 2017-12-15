@@ -1,4 +1,4 @@
-tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): error TS90010: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 
 
 ==== tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts (1 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): erro
         fn() {
             this.x = a;
             ~~~~~~
-!!! error TS90010: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
         }
     }
     

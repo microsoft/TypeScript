@@ -15,6 +15,8 @@ namespace ts.server.protocol {
         /* @internal */
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
+        /* @internal */
+        CompletionDetailsFull = "completionEntryDetails-full",
         CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
@@ -69,6 +71,7 @@ namespace ts.server.protocol {
         SignatureHelp = "signatureHelp",
         /* @internal */
         SignatureHelpFull = "signatureHelp-full",
+        Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
         ReloadProjects = "reloadProjects",
@@ -97,9 +100,14 @@ namespace ts.server.protocol {
         BreakpointStatement = "breakpointStatement",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
-        ApplyCodeActionCommand = "applyCodeActionCommand",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
+        // TODO: GH#20538
+        /* @internal */
+        GetCombinedCodeFix = "getCombinedCodeFix",
+        /* @internal */
+        GetCombinedCodeFixFull = "getCombinedCodeFix-full",
+        ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
 
         GetApplicableRefactors = "getApplicableRefactors",
@@ -212,6 +220,24 @@ namespace ts.server.protocol {
         * Optional name of project that contains file
         */
         projectFileName?: string;
+    }
+
+    export interface StatusRequest extends Request {
+        command: CommandTypes.Status;
+    }
+
+    export interface StatusResponseBody {
+        /**
+         * The TypeScript version (`ts.version`).
+         */
+        version: string;
+    }
+
+    /**
+     * Response to StatusRequest
+     */
+    export interface StatusResponse extends Response {
+        body: StatusResponseBody;
     }
 
     /**
@@ -531,6 +557,19 @@ namespace ts.server.protocol {
         arguments: CodeFixRequestArgs;
     }
 
+    // TODO: GH#20538
+    /* @internal */
+    export interface GetCombinedCodeFixRequest extends Request {
+        command: CommandTypes.GetCombinedCodeFix;
+        arguments: GetCombinedCodeFixRequestArgs;
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface GetCombinedCodeFixResponse  extends Response {
+        body: CombinedCodeActions;
+    }
+
     export interface ApplyCodeActionCommandRequest extends Request {
         command: CommandTypes.ApplyCodeActionCommand;
         arguments: ApplyCodeActionCommandRequestArgs;
@@ -580,10 +619,25 @@ namespace ts.server.protocol {
         /**
          * Errorcodes we want to get the fixes for.
          */
-        errorCodes?: number[];
+        errorCodes?: ReadonlyArray<number>;
     }
 
-    export interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+    // TODO: GH#20538
+    /* @internal */
+    export interface GetCombinedCodeFixRequestArgs {
+        scope: GetCombinedCodeFixScope;
+        fixId: {};
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface GetCombinedCodeFixScope {
+        type: "file";
+        args: FileRequestArgs;
+    }
+
+    export interface ApplyCodeActionCommandRequestArgs {
+        /** May also be an array of commands. */
         command: {};
     }
 
@@ -1565,7 +1619,7 @@ namespace ts.server.protocol {
 
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        body?: CodeAction[];
+        body?: CodeAction[]; // TODO: GH#20538 CodeFixAction[]
     }
 
     export interface CodeAction {
@@ -1575,6 +1629,23 @@ namespace ts.server.protocol {
         changes: FileCodeEdits[];
         /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
         commands?: {}[];
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface CombinedCodeActions {
+        changes: ReadonlyArray<FileCodeEdits>;
+        commands?: ReadonlyArray<{}>;
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface CodeFixAction extends CodeAction {
+        /**
+         * If present, one may call 'getCombinedCodeFix' with this fixId.
+         * This may be omitted to indicate that the code fix can't be applied in a group.
+         */
+        fixId?: {};
     }
 
     /**
@@ -1617,6 +1688,11 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
+        includeExternalModuleExports: boolean;
     }
 
     /**
@@ -1693,8 +1769,9 @@ namespace ts.server.protocol {
          */
         sortText: string;
         /**
-         * An optional span that indicates the text to be replaced by this completion item. If present,
-         * this span should be used instead of the default one.
+         * An optional span that indicates the text to be replaced by this completion item.
+         * If present, this span should be used instead of the default one.
+         * It will be set if the required span differs from the one generated by the default replacement behavior.
          */
         replacementSpan?: TextSpan;
         /**
@@ -1706,6 +1783,12 @@ namespace ts.server.protocol {
          * Identifier (not necessarily human-readable) identifying where this completion came from.
          */
         source?: string;
+        /**
+         * If true, this completion should be highlighted as recommended. There will only be one of these.
+         * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
+         * Then either that enum/class or a namespace containing it will be the recommended symbol.
+         */
+        isRecommended?: true;
     }
 
     /**

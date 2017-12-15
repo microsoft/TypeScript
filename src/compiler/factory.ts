@@ -13,9 +13,6 @@ namespace ts {
         if (updated !== original) {
             setOriginalNode(updated, original);
             setTextRange(updated, original);
-            if (original.startsOnNewLine) {
-                updated.startsOnNewLine = true;
-            }
             aggregateTransformFlags(updated);
         }
         return updated;
@@ -73,11 +70,10 @@ namespace ts {
 
     // Literals
 
-    export function createLiteral(value: string): StringLiteral;
+    /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
+    export function createLiteral(value: string | StringLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: number): NumericLiteral;
     export function createLiteral(value: boolean): BooleanLiteral;
-    /** Create a string literal whose source text is read from a source node during emit. */
-    export function createLiteral(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: string | number | boolean): PrimaryExpression;
     export function createLiteral(value: string | number | boolean | StringLiteral | NumericLiteral | Identifier): PrimaryExpression {
         if (typeof value === "number") {
@@ -116,6 +112,7 @@ namespace ts {
 
     export function createIdentifier(text: string): Identifier;
     /* @internal */
+    // tslint:disable-next-line unified-signatures
     export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode>): Identifier;
     export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode>): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
@@ -168,11 +165,15 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier {
+    export function getGeneratedNameForNode(node: Node): Identifier;
+    // tslint:disable-next-line unified-signatures
+    /*@internal*/ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier;
+    export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
         const name = createIdentifier("");
         name.autoGenerateKind = GeneratedIdentifierKind.Node;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
+        name.skipNameGenerationScope = !!shouldSkipNameGenerationScope;
         nextAutoGenerateId++;
         return name;
     }
@@ -735,15 +736,17 @@ namespace ts {
         return <ThisTypeNode>createSynthesizedNode(SyntaxKind.ThisType);
     }
 
-    export function createTypeOperatorNode(type: TypeNode) {
+    export function createTypeOperatorNode(type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword, type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | TypeNode, type?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
-        node.operator = SyntaxKind.KeyOfKeyword;
-        node.type = parenthesizeElementTypeMember(type);
+        node.operator = typeof operatorOrType === "number" ? operatorOrType : SyntaxKind.KeyOfKeyword;
+        node.type = parenthesizeElementTypeMember(typeof operatorOrType === "number" ? type : operatorOrType);
         return node;
     }
 
     export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
-        return node.type !== type ? updateNode(createTypeOperatorNode(type), node) : node;
+        return node.type !== type ? updateNode(createTypeOperatorNode(node.operator, type), node) : node;
     }
 
     export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
@@ -2641,7 +2644,7 @@ namespace ts {
     /**
      * Gets a custom text range to use when emitting source maps.
      */
-    export function getSourceMapRange(node: Node) {
+    export function getSourceMapRange(node: Node): SourceMapRange {
         const emitNode = node.emitNode;
         return (emitNode && emitNode.sourceMapRange) || node;
     }
@@ -2654,6 +2657,7 @@ namespace ts {
         return node;
     }
 
+    // tslint:disable-next-line variable-name
     let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 
     /**
@@ -2679,6 +2683,24 @@ namespace ts {
         const emitNode = getOrCreateEmitNode(node);
         const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
+        return node;
+    }
+
+    /**
+     * Gets a custom text range to use when emitting comments.
+     */
+    /*@internal*/
+    export function getStartsOnNewLine(node: Node) {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.startsOnNewLine;
+    }
+
+    /**
+     * Sets a custom text range to use when emitting comments.
+     */
+    /*@internal*/
+    export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
+        getOrCreateEmitNode(node).startsOnNewLine = newLine;
         return node;
     }
 
@@ -2840,7 +2862,8 @@ namespace ts {
             sourceMapRange,
             tokenSourceMapRanges,
             constantValue,
-            helpers
+            helpers,
+            startsOnNewLine,
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
@@ -2852,6 +2875,7 @@ namespace ts {
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges);
         if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
         if (helpers) destEmitNode.helpers = addRange(destEmitNode.helpers, helpers);
+        if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;
         return destEmitNode;
     }
 
@@ -3013,7 +3037,7 @@ namespace ts {
 
             if (children.length > 1) {
                 for (const child of children) {
-                    child.startsOnNewLine = true;
+                    startOnNewLine(child);
                     argumentsList.push(child);
                 }
             }
@@ -3044,7 +3068,7 @@ namespace ts {
         if (children && children.length > 0) {
             if (children.length > 1) {
                 for (const child of children) {
-                    child.startsOnNewLine = true;
+                    startOnNewLine(child);
                     argumentsList.push(child);
                 }
             }
@@ -3619,8 +3643,8 @@ namespace ts {
         );
         setOriginalNode(updated, node);
         setTextRange(updated, node);
-        if (node.startsOnNewLine) {
-            updated.startsOnNewLine = true;
+        if (getStartsOnNewLine(node)) {
+            setStartsOnNewLine(updated, /*newLine*/ true);
         }
         aggregateTransformFlags(updated);
         return updated;
@@ -3687,7 +3711,7 @@ namespace ts {
         while (statementOffset < numStatements) {
             const statement = source[statementOffset];
             if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
-                target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
+                append(target, visitor ? visitNode(statement, visitor, isStatement) : statement);
             }
             else {
                 break;
@@ -4249,8 +4273,7 @@ namespace ts {
     }
 
     export function startOnNewLine<T extends Node>(node: T): T {
-        node.startsOnNewLine = true;
-        return node;
+        return setStartsOnNewLine(node, /*newLine*/ true);
     }
 
     export function getExternalHelpersModuleName(node: SourceFile) {
@@ -4298,7 +4321,7 @@ namespace ts {
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
         if (namespaceDeclaration && !isDefaultImport(node)) {
             const name = namespaceDeclaration.name;
-            return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, namespaceDeclaration.name));
+            return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
         }
         if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
             return getGeneratedNameForNode(node);

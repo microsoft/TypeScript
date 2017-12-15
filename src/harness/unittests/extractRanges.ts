@@ -191,7 +191,7 @@ function f() {
 }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalReturnStatement.message
+            refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed2",
@@ -210,7 +210,7 @@ function f() {
 }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
+            refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed3",
@@ -229,7 +229,7 @@ function f() {
 }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
+            refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed4",
@@ -248,7 +248,7 @@ function f() {
 }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange.message
+            refactor.extractSymbol.Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed5",
@@ -269,7 +269,7 @@ function f2() {
 }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalReturnStatement.message
+            refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed6",
@@ -290,7 +290,7 @@ function f2() {
 }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalReturnStatement.message
+            refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed7",
@@ -303,7 +303,7 @@ while (x) {
 }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
+            refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed8",
@@ -316,13 +316,13 @@ switch (x) {
 }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
+            refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed9",
         `var x = ([#||]1 + 2);`,
         [
-            refactor.extractSymbol.Messages.CannotExtractEmpty.message
+            refactor.extractSymbol.Messages.cannotExtractEmpty.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed10",
@@ -333,7 +333,7 @@ switch (x) {
             }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRange.message
+            refactor.extractSymbol.Messages.cannotExtractRange.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed11",
@@ -350,21 +350,21 @@ switch (x) {
             }
         `,
         [
-            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
+            refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed12",
         `let [#|x|];`,
         [
-            refactor.extractSymbol.Messages.StatementOrExpressionExpected.message
+            refactor.extractSymbol.Messages.statementOrExpressionExpected.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed13",
         `[#|return;|]`,
         [
-            refactor.extractSymbol.Messages.CannotExtractRange.message
+            refactor.extractSymbol.Messages.cannotExtractRange.message
         ]);
 
-        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.CannotExtractIdentifier.message]);
+        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.cannotExtractIdentifier.message]);
     });
 }

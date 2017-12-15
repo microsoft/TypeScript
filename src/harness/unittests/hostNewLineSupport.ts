@@ -5,10 +5,10 @@ namespace ts {
             function snapFor(path: string): IScriptSnapshot {
                 if (path === "lib.d.ts") {
                     return {
-                        dispose() {},
+                        dispose: noop,
                         getChangeRange() { return undefined; },
                         getLength() { return 0; },
-                        getText(_start, _end) {
+                        getText() {
                             return "";
                         }
                     };
@@ -16,7 +16,7 @@ namespace ts {
                 const result = forEach(files, f => f.unitName === path ? f : undefined);
                 if (result) {
                     return {
-                        dispose() {},
+                        dispose: noop,
                         getChangeRange() { return undefined; },
                         getLength() { return result.content.length; },
                         getText(start, end) {

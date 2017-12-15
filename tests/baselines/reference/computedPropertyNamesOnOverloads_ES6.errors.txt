@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNamesOnOverloads_ES6.ts(4,5): error TS1168: A computed property name in a method overload must directly refer to a built-in symbol.
-tests/cases/conformance/es6/computedProperties/computedPropertyNamesOnOverloads_ES6.ts(5,5): error TS1168: A computed property name in a method overload must directly refer to a built-in symbol.
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesOnOverloads_ES6.ts(4,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesOnOverloads_ES6.ts(5,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
 
 
 ==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesOnOverloads_ES6.ts (2 errors) ====
@@ -8,9 +8,9 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNamesOnOverloads_
     class C {
         [methodName](v: string);
         ~~~~~~~~~~~~
-!!! error TS1168: A computed property name in a method overload must directly refer to a built-in symbol.
+!!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         [methodName]();
         ~~~~~~~~~~~~
-!!! error TS1168: A computed property name in a method overload must directly refer to a built-in symbol.
+!!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         [methodName](v?: string) { }
     }

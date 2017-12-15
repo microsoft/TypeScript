@@ -315,29 +315,30 @@ var TypeScriptAllInOne;
             finally {
             }
         };
-        Program.prototype["if"] = function (retValue) {
-            if (retValue === void 0) { retValue =  != 0; }
-            return 1;
-                ^
-                    retValue;
-            bfs.TYPES();
-            if (retValue != 0) {
-                return 1 &&
-                ;
-            }
-            retValue = bfs.OPERATOR;
-            ' );;
-            if (retValue != 0) {
-                return 1;
-            }
-        };
-        Program.prototype["catch"] = function (e) {
-            console.log(e);
-        };
+        Program.prototype["if"] = function (retValue) { };
         return Program;
     }());
     TypeScriptAllInOne.Program = Program;
+     != 0;
+    {
+        return 1;
+            ^
+                retValue;
+        bfs.TYPES();
+        if (retValue != 0) {
+            return 1 &&
+            ;
+        }
+        retValue = bfs.OPERATOR;
+        ' );;
+        if (retValue != 0) {
+            return 1;
+        }
+    }
     try {
+    }
+    catch (e) {
+        console.log(e);
     }
     finally {
     }

@@ -64,4 +64,4 @@ interface I2<V, T, U> {
 //    y: U;
 //    z: V;
 //    foo<W extends V>(x: W): T;
-//} 
+//}

@@ -16,7 +16,7 @@ tests/cases/compiler/giant.ts(33,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(34,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(35,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(35,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(60,5): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+tests/cases/compiler/giant.ts(60,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(60,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(61,5): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(62,6): error TS1096: An index signature must have exactly one parameter.
@@ -39,7 +39,7 @@ tests/cases/compiler/giant.ts(97,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(98,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(99,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(99,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(124,9): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+tests/cases/compiler/giant.ts(124,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(124,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(125,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(126,10): error TS1096: An index signature must have exactly one parameter.
@@ -63,7 +63,7 @@ tests/cases/compiler/giant.ts(176,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(177,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(178,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(178,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(203,9): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+tests/cases/compiler/giant.ts(203,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(203,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(204,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(205,10): error TS1096: An index signature must have exactly one parameter.
@@ -119,7 +119,7 @@ tests/cases/compiler/giant.ts(291,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(292,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(293,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(293,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(318,5): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+tests/cases/compiler/giant.ts(318,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(318,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(319,5): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(320,6): error TS1096: An index signature must have exactly one parameter.
@@ -142,7 +142,7 @@ tests/cases/compiler/giant.ts(355,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(356,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(357,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(357,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(382,9): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+tests/cases/compiler/giant.ts(382,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(382,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(383,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(384,10): error TS1096: An index signature must have exactly one parameter.
@@ -166,7 +166,7 @@ tests/cases/compiler/giant.ts(434,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(435,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(436,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(436,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(461,9): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+tests/cases/compiler/giant.ts(461,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(461,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(462,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(463,10): error TS1096: An index signature must have exactly one parameter.
@@ -238,7 +238,7 @@ tests/cases/compiler/giant.ts(555,21): error TS1036: Statements are not allowed 
 tests/cases/compiler/giant.ts(557,24): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(560,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(562,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(586,9): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+tests/cases/compiler/giant.ts(586,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(586,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(587,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(588,10): error TS1096: An index signature must have exactly one parameter.
@@ -255,7 +255,7 @@ tests/cases/compiler/giant.ts(620,26): error TS1183: An implementation cannot be
 tests/cases/compiler/giant.ts(622,24): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(625,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(627,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(652,9): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+tests/cases/compiler/giant.ts(652,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 tests/cases/compiler/giant.ts(652,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(653,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(654,10): error TS1096: An index signature must have exactly one parameter.
@@ -363,7 +363,7 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
         //Index Signature
         [p];
         ~~~
-!!! error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
          ~
 !!! error TS2304: Cannot find name 'p'.
         [p1: string];
@@ -473,7 +473,7 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
             //Index Signature
             [p];
             ~~~
-!!! error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
              ~
 !!! error TS2304: Cannot find name 'p'.
             [p1: string];
@@ -600,7 +600,7 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
             //Index Signature
             [p];
             ~~~
-!!! error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
              ~
 !!! error TS2304: Cannot find name 'p'.
             [p1: string];
@@ -827,7 +827,7 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
         //Index Signature
         [p];
         ~~~
-!!! error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
          ~
 !!! error TS2304: Cannot find name 'p'.
         [p1: string];
@@ -937,7 +937,7 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
             //Index Signature
             [p];
             ~~~
-!!! error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
              ~
 !!! error TS2304: Cannot find name 'p'.
             [p1: string];
@@ -1064,7 +1064,7 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
             //Index Signature
             [p];
             ~~~
-!!! error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
              ~
 !!! error TS2304: Cannot find name 'p'.
             [p1: string];
@@ -1333,7 +1333,7 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
             //Index Signature
             [p];
             ~~~
-!!! error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
              ~
 !!! error TS2304: Cannot find name 'p'.
             [p1: string];
@@ -1433,7 +1433,7 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
             //Index Signature
             [p];
             ~~~
-!!! error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
              ~
 !!! error TS2304: Cannot find name 'p'.
             [p1: string];

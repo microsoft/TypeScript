@@ -230,7 +230,7 @@ namespace ts {
 
     function createWatchMode(rootFileNames: string[], compilerOptions: CompilerOptions, watchingHost?: WatchingSystemHost, configFileName?: string, configFileSpecs?: ConfigFileSpecs, configFileWildCardDirectories?: MapLike<WatchDirectoryFlags>, optionsToExtendForConfigFile?: CompilerOptions) {
         let program: Program;
-        let needsReload: boolean;                                           // true if the config file changed and needs to reload it from the disk
+        let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
         let missingFilesMap: Map<FileWatcher>;                              // Map of file watchers for the missing files
         let watchedWildcardDirectories: Map<WildcardDirectoryWatcher>;      // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
@@ -302,6 +302,8 @@ namespace ts {
         // There is no extra check needed since we can just rely on the program to decide emit
         const builder = createBuilder({ getCanonicalFileName, computeHash });
 
+        clearHostScreen();
+        reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode));
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -488,25 +490,46 @@ namespace ts {
 
         function scheduleProgramReload() {
             Debug.assert(!!configFileName);
-            needsReload = true;
+            reloadLevel = ConfigFileProgramReloadLevel.Full;
             scheduleProgramUpdate();
         }
 
+        function clearHostScreen() {
+            if (watchingHost.system.clearScreen) {
+                watchingHost.system.clearScreen();
+            }
+        }
+
         function updateProgram() {
+            clearHostScreen();
+
             timerToUpdateProgram = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
 
-            if (needsReload) {
-                reloadConfigFile();
+            switch (reloadLevel) {
+                case ConfigFileProgramReloadLevel.Partial:
+                    return reloadFileNamesFromConfigFile();
+                case ConfigFileProgramReloadLevel.Full:
+                    return reloadConfigFile();
+                default:
+                    return synchronizeProgram();
             }
-            else {
-                synchronizeProgram();
+        }
+
+        function reloadFileNamesFromConfigFile() {
+            const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, directoryStructureHost);
+            if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
+                reportDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
             }
+            rootFileNames = result.fileNames;
+
+            // Update the program
+            synchronizeProgram();
         }
 
         function reloadConfigFile() {
             writeLog(`Reloading config file: ${configFileName}`);
-            needsReload = false;
+            reloadLevel = ConfigFileProgramReloadLevel.None;
 
             const cachedHost = directoryStructureHost as CachedDirectoryStructureHost;
             cachedHost.clearCache();
@@ -611,18 +634,14 @@ namespace ts {
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrDirectoryPath !== directory && !isSupportedSourceFileName(fileOrDirectory, compilerOptions)) {
+                    if (fileOrDirectoryPath !== directory && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, compilerOptions)) {
                         writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
                         return;
                     }
 
                     // Reload is pending, do the reload
-                    if (!needsReload) {
-                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, directoryStructureHost);
-                        if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
-                            reportDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
-                        }
-                        rootFileNames = result.fileNames;
+                    if (reloadLevel !== ConfigFileProgramReloadLevel.Full) {
+                        reloadLevel = ConfigFileProgramReloadLevel.Partial;
 
                         // Schedule Update the program
                         scheduleProgramUpdate();

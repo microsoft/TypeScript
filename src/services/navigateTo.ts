@@ -173,14 +173,10 @@ namespace ts.NavigateTo {
         return bestMatchKind;
     }
 
-    function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem): number {
+    function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {
         // TODO(cyrusn): get the gamut of comparisons that VS already uses here.
-        // Right now we just sort by kind first, and then by name of the item.
-        // We first sort case insensitively.  So "Aaa" will come before "bar".
-        // Then we sort case sensitively, so "aaa" will come before "Aaa".
-        return i1.matchKind - i2.matchKind ||
-            ts.compareStringsCaseInsensitive(i1.name, i2.name) ||
-            ts.compareStrings(i1.name, i2.name);
+        return compareValues(i1.matchKind, i2.matchKind)
+            || compareStringsCaseSensitiveUI(i1.name, i2.name);
     }
 
     function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {

@@ -53,6 +53,11 @@ namespace ts.server {
     }
 
     /* @internal */
+    export function hasNoTypeScriptSource(fileNames: string[]): boolean {
+        return !fileNames.some(fileName => (fileExtensionIs(fileName, Extension.Ts) && !fileExtensionIs(fileName, Extension.Dts)) || fileExtensionIs(fileName, Extension.Tsx));
+    }
+
+    /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
         projectErrors: ReadonlyArray<Diagnostic>;
     }
@@ -98,9 +103,7 @@ namespace ts.server {
         getExternalFiles?(proj: Project): string[];
     }
 
-    export interface PluginModuleFactory {
-        (mod: { typescript: typeof ts }): PluginModule;
-    }
+    export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
 
     /**
      * The project root can be script info - if root is present,
@@ -246,7 +249,7 @@ namespace ts.server {
             return this.typingsCache.isKnownTypesPackageName(name);
         }
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
-            return this.typingsCache.installPackage({ ...options, projectRootPath: this.toPath(this.currentDirectory) });
+            return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
         }
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
@@ -287,7 +290,7 @@ namespace ts.server {
         }
 
         private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.directoryStructureHost);
+            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
                 if (existingValue !== scriptInfo && existingValue !== undefined) {
@@ -367,7 +370,7 @@ namespace ts.server {
 
         /*@internal*/
         toPath(fileName: string) {
-            return this.projectService.toPath(fileName);
+            return toPath(fileName, this.currentDirectory, this.projectService.toCanonicalFileName);
         }
 
         /*@internal*/
@@ -502,6 +505,14 @@ namespace ts.server {
             return this.projectName;
         }
         abstract getTypeAcquisition(): TypeAcquisition;
+
+        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition {
+            if (!newTypeAcquisition || !newTypeAcquisition.include) {
+                // Nothing to filter out, so just return as-is
+                return newTypeAcquisition;
+            }
+            return { ...newTypeAcquisition, include: this.removeExistingTypings(newTypeAcquisition.include) };
+        }
 
         getExternalFiles(): SortedReadonlyArray<string> {
             return emptyArray as SortedReadonlyArray<string>;
@@ -660,7 +671,7 @@ namespace ts.server {
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean) {
-            const info = this.projectService.getScriptInfoForNormalizedPath(filename);
+            const info = this.projectService.getScriptInfoForPath(this.toPath(filename));
             if (info && (info.isScriptOpen() || !requireOpen)) {
                 return this.containsScriptInfo(info);
             }
@@ -715,7 +726,8 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>) {
+        /* @internal */
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>, ambientModules: string[]) {
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
@@ -728,7 +740,7 @@ namespace ts.server {
             if (file.resolvedModules) {
                 file.resolvedModules.forEach((resolvedModule, name) => {
                     // pick unresolved non-relative names
-                    if (!resolvedModule && !isExternalModuleNameRelative(name)) {
+                    if (!resolvedModule && !isExternalModuleNameRelative(name) && !isAmbientlyDeclaredModule(name)) {
                         // for non-scoped names extract part up-to the first slash
                         // for scoped names - extract up to the second slash
                         let trimmed = name.trim();
@@ -745,6 +757,10 @@ namespace ts.server {
                 });
             }
             this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
+
+            function isAmbientlyDeclaredModule(name: string) {
+                return ambientModules.some(m => m === name);
+            }
         }
 
         /**
@@ -774,8 +790,9 @@ namespace ts.server {
                 // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
                 if (hasChanges || changedFiles.length) {
                     const result: string[] = [];
+                    const ambientModules = this.program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
                     for (const sourceFile of this.program.getSourceFiles()) {
-                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
+                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result, ambientModules);
                     }
                     this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
                 }
@@ -799,6 +816,13 @@ namespace ts.server {
                 this.projectStructureVersion++;
             }
             return !hasChanges;
+        }
+
+
+
+        protected removeExistingTypings(include: string[]): string[] {
+            const existing = ts.getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
+            return include.filter(i => existing.indexOf(i) < 0);
         }
 
         private setTypings(typings: SortedReadonlyArray<string>): boolean {
@@ -857,10 +881,11 @@ namespace ts.server {
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.directoryStructureHost);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
                     scriptInfo.attachToProject(this);
                 },
-                removed => this.detachScriptInfoFromProject(removed)
+                removed => this.detachScriptInfoFromProject(removed),
+                compareStringsCaseSensitive
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} structureChanged: ${hasChanges} Elapsed: ${elapsed}ms`);
@@ -903,7 +928,7 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
+            const scriptInfo = this.projectService.getScriptInfoForPath(this.toPath(fileName));
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
             }
@@ -1123,7 +1148,7 @@ namespace ts.server {
         readonly canonicalConfigFilePath: NormalizedPath;
 
         /* @internal */
-        pendingReload: boolean;
+        pendingReload: ConfigFileProgramReloadLevel;
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs;
@@ -1163,12 +1188,17 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
-            if (this.pendingReload) {
-                this.pendingReload = false;
-                this.projectService.reloadConfiguredProject(this);
-                return true;
+            const reloadLevel = this.pendingReload;
+            this.pendingReload = ConfigFileProgramReloadLevel.None;
+            switch (reloadLevel) {
+                case ConfigFileProgramReloadLevel.Partial:
+                    return this.projectService.reloadFileNamesOfConfiguredProject(this);
+                case ConfigFileProgramReloadLevel.Full:
+                    this.projectService.reloadConfiguredProject(this);
+                    return true;
+                default:
+                    return super.updateGraph();
             }
-            return super.updateGraph();
         }
 
         /*@internal*/
@@ -1290,7 +1320,7 @@ namespace ts.server {
         }
 
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
-            this.typeAcquisition = newTypeAcquisition;
+            this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
         }
 
         getTypeAcquisition() {
@@ -1432,27 +1462,11 @@ namespace ts.server {
         }
 
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
-            if (!newTypeAcquisition) {
-                // set default typings options
-                newTypeAcquisition = {
-                    enable: allRootFilesAreJsOrDts(this),
-                    include: [],
-                    exclude: []
-                };
-            }
-            else {
-                if (newTypeAcquisition.enable === undefined) {
-                    // if autoDiscovery was not specified by the caller - set it based on the content of the project
-                    newTypeAcquisition.enable = allRootFilesAreJsOrDts(this);
-                }
-                if (!newTypeAcquisition.include) {
-                    newTypeAcquisition.include = [];
-                }
-                if (!newTypeAcquisition.exclude) {
-                    newTypeAcquisition.exclude = [];
-                }
-            }
-            this.typeAcquisition = newTypeAcquisition;
+            Debug.assert(!!newTypeAcquisition, "newTypeAcquisition may not be null/undefined");
+            Debug.assert(!!newTypeAcquisition.include, "newTypeAcquisition.include may not be null/undefined");
+            Debug.assert(!!newTypeAcquisition.exclude, "newTypeAcquisition.exclude may not be null/undefined");
+            Debug.assert(typeof newTypeAcquisition.enable === "boolean", "newTypeAcquisition.enable may not be null/undefined");
+            this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
         }
     }
 }

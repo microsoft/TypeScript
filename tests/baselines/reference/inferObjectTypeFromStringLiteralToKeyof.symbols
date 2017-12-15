@@ -1,0 +1,22 @@
+=== tests/cases/compiler/inferObjectTypeFromStringLiteralToKeyof.ts ===
+declare function inference<T>(target: T, name: keyof T): void;
+>inference : Symbol(inference, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 0, 0))
+>T : Symbol(T, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 0, 27))
+>target : Symbol(target, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 0, 30))
+>T : Symbol(T, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 0, 27))
+>name : Symbol(name, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 0, 40))
+>T : Symbol(T, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 0, 27))
+
+declare var two: "a" | "d";
+>two : Symbol(two, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 1, 11))
+
+inference({ a: 1, b: 2, c: 3, d(n) { return n } }, two);
+>inference : Symbol(inference, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 0, 0))
+>a : Symbol(a, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 2, 11))
+>b : Symbol(b, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 2, 17))
+>c : Symbol(c, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 2, 23))
+>d : Symbol(d, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 2, 29))
+>n : Symbol(n, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 2, 32))
+>n : Symbol(n, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 2, 32))
+>two : Symbol(two, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 1, 11))
+
