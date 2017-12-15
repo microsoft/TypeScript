@@ -65,6 +65,18 @@ interface Q {
     [u: NonIndexableUnion2]: A;
 }
 
+type NonIndexableUnion3 = 42 | string;
+
+interface R {
+    [u: NonIndexableUnion3]: A;
+}
+
+type NonIndexableUnion4 = "foo" | number;
+
+interface S {
+    [u: NonIndexableUnion4]: A;
+}
+
 //// [indexerConstraints2.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||

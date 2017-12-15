@@ -63,3 +63,15 @@ type NonIndexableUnion2 = string | number;
 interface Q {
     [u: NonIndexableUnion2]: A;
 }
+
+type NonIndexableUnion3 = 42 | string;
+
+interface R {
+    [u: NonIndexableUnion3]: A;
+}
+
+type NonIndexableUnion4 = "foo" | number;
+
+interface S {
+    [u: NonIndexableUnion4]: A;
+}

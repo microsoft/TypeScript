@@ -135,3 +135,27 @@ interface Q {
 >NonIndexableUnion2 : NonIndexableUnion2
 >A : A
 }
+
+type NonIndexableUnion3 = 42 | string;
+>NonIndexableUnion3 : NonIndexableUnion3
+
+interface R {
+>R : R
+
+    [u: NonIndexableUnion3]: A;
+>u : NonIndexableUnion3
+>NonIndexableUnion3 : NonIndexableUnion3
+>A : A
+}
+
+type NonIndexableUnion4 = "foo" | number;
+>NonIndexableUnion4 : NonIndexableUnion4
+
+interface S {
+>S : S
+
+    [u: NonIndexableUnion4]: A;
+>u : NonIndexableUnion4
+>NonIndexableUnion4 : NonIndexableUnion4
+>A : A
+}
