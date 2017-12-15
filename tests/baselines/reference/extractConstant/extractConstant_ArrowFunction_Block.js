@@ -11,7 +11,6 @@ const f = () => {
 };
 // ==SCOPE::Extract to constant in global scope==
 const newLocal = 2 + 1;
-
 const f = () => {
     return /*RENAME*/newLocal;
 };

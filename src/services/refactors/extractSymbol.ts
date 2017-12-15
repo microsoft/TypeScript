@@ -1077,7 +1077,7 @@ namespace ts.refactor.extractSymbol {
                 // Declare
                 const nodeToInsertBefore = getNodeToInsertConstantBefore(node, scope);
                 if (nodeToInsertBefore.pos === 0) {
-                    changeTracker.insertNodeAtTopOfFile(context.file, newVariableStatement);
+                    changeTracker.insertNodeAtTopOfFile(context.file, newVariableStatement, /*blankLineBetween*/ false);
                 }
                 else {
                     changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, /*blankLineBetween*/ false);

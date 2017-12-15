@@ -9,7 +9,6 @@ namespace N {
 }
 // ==SCOPE::Extract to constant in global scope==
 const newLocal = 1;
-
 namespace N {
     let x = /*RENAME*/newLocal;
 }
