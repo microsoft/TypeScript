@@ -1325,7 +1325,7 @@ namespace ts.Completions {
                 // through type declaration or inference.
                 // Also proceed if rootDeclaration is a parameter and if its containing function expression/arrow function is contextually typed -
                 // type of parameter will flow in from the contextual type of the function
-                let canGetType = rootDeclaration.initializer || rootDeclaration.type || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
+                let canGetType = hasInitializer(rootDeclaration) || hasType(rootDeclaration) || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
                 if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
                     if (isExpression(rootDeclaration.parent)) {
                         canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
