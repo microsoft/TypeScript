@@ -1080,7 +1080,7 @@ namespace ts.refactor.extractSymbol {
                     changeTracker.insertNodeAtTopOfFile(context.file, newVariableStatement);
                 }
                 else {
-                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, /*blankLineBetween*/ true);
+                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, /*blankLineBetween*/ false);
                 }
 
                 // Consume

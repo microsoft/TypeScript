@@ -16,7 +16,6 @@ class C {
     M2() { }
     M3() {
         const newLocal = 1;
-
         let x = /*RENAME*/newLocal;
     }
 }

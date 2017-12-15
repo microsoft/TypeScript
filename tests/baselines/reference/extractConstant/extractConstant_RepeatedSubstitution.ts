@@ -7,7 +7,6 @@ namespace X {
 namespace X {
     export const j = 10;
     const newLocal = j * j;
-
     export const y = /*RENAME*/newLocal;
 }
 // ==SCOPE::Extract to constant in global scope==

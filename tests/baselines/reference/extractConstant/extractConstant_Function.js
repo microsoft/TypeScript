@@ -5,7 +5,6 @@ function F() {
 // ==SCOPE::Extract to constant in enclosing scope==
 function F() {
     const newLocal = 1;
-
     let x = /*RENAME*/newLocal;
 }
 // ==SCOPE::Extract to constant in global scope==
