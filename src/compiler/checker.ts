@@ -14802,6 +14802,12 @@ namespace ts {
             }
         }
 
+        function checkJsxAttribute(node: JsxAttribute, checkMode?: CheckMode) {
+            return node.initializer
+                ? checkExpressionForMutableLocation(node.initializer, checkMode)
+                : trueType;  // <Elem attr /> is sugar for <Elem attr={true} />
+        }
+
         /**
          * Get attributes type of the JSX opening-like element. The result is from resolving "attributes" property of the opening-like element.
          *
@@ -14824,9 +14830,7 @@ namespace ts {
             for (const attributeDecl of attributes.properties) {
                 const member = attributeDecl.symbol;
                 if (isJsxAttribute(attributeDecl)) {
-                    const exprType = attributeDecl.initializer ?
-                        checkExpression(attributeDecl.initializer, checkMode) :
-                        trueType;  // <Elem attr /> is sugar for <Elem attr={true} />
+                    const exprType = checkJsxAttribute(attributeDecl, checkMode);
 
                     const attributeSymbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.escapedName);
                     attributeSymbol.declarations = member.declarations;
