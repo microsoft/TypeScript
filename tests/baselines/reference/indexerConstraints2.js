@@ -47,6 +47,24 @@ interface N {
     [b: AliasedBoolean]: A;
 }
 
+type IndexableUnion = "foo" | 42;
+
+interface O {
+    [u: IndexableUnion]: A;
+}
+
+type NonIndexableUnion = boolean | {};
+
+interface P {
+    [u: NonIndexableUnion]: A;
+}
+
+type NonIndexableUnion2 = string | number;
+
+interface Q {
+    [u: NonIndexableUnion2]: A;
+}
+
 //// [indexerConstraints2.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||

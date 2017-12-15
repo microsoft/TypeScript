@@ -4,9 +4,12 @@ tests/cases/compiler/indexerConstraints2.ts(26,5): error TS2413: Numeric index t
 tests/cases/compiler/indexerConstraints2.ts(34,6): error TS1336: An index signature parameter type cannot be a type alias. Use '[index: number]' instead.
 tests/cases/compiler/indexerConstraints2.ts(40,6): error TS1336: An index signature parameter type cannot be a type alias. Use '[index: string]' instead.
 tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
+tests/cases/compiler/indexerConstraints2.ts(52,6): error TS1337: An index signature parameter type cannot be a union type. Use '[K in IndexableUnion]' instead.
+tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
+tests/cases/compiler/indexerConstraints2.ts(64,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 
 
-==== tests/cases/compiler/indexerConstraints2.ts (6 errors) ====
+==== tests/cases/compiler/indexerConstraints2.ts (9 errors) ====
     class A { a: number; }
     class B extends A { b: number; }
     
@@ -63,6 +66,30 @@ tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1023: An index signat
     
     interface N {
         [b: AliasedBoolean]: A;
+         ~
+!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
+    }
+    
+    type IndexableUnion = "foo" | 42;
+    
+    interface O {
+        [u: IndexableUnion]: A;
+         ~
+!!! error TS1337: An index signature parameter type cannot be a union type. Use '[K in IndexableUnion]' instead.
+    }
+    
+    type NonIndexableUnion = boolean | {};
+    
+    interface P {
+        [u: NonIndexableUnion]: A;
+         ~
+!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
+    }
+    
+    type NonIndexableUnion2 = string | number;
+    
+    interface Q {
+        [u: NonIndexableUnion2]: A;
          ~
 !!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }

@@ -45,3 +45,21 @@ type AliasedBoolean = boolean;
 interface N {
     [b: AliasedBoolean]: A;
 }
+
+type IndexableUnion = "foo" | 42;
+
+interface O {
+    [u: IndexableUnion]: A;
+}
+
+type NonIndexableUnion = boolean | {};
+
+interface P {
+    [u: NonIndexableUnion]: A;
+}
+
+type NonIndexableUnion2 = string | number;
+
+interface Q {
+    [u: NonIndexableUnion2]: A;
+}

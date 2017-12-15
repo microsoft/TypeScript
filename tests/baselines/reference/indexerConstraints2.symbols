@@ -99,3 +99,39 @@ interface N {
 >AliasedBoolean : Symbol(AliasedBoolean, Decl(indexerConstraints2.ts, 40, 1))
 >A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
 }
+
+type IndexableUnion = "foo" | 42;
+>IndexableUnion : Symbol(IndexableUnion, Decl(indexerConstraints2.ts, 46, 1))
+
+interface O {
+>O : Symbol(O, Decl(indexerConstraints2.ts, 48, 33))
+
+    [u: IndexableUnion]: A;
+>u : Symbol(u, Decl(indexerConstraints2.ts, 51, 5))
+>IndexableUnion : Symbol(IndexableUnion, Decl(indexerConstraints2.ts, 46, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+type NonIndexableUnion = boolean | {};
+>NonIndexableUnion : Symbol(NonIndexableUnion, Decl(indexerConstraints2.ts, 52, 1))
+
+interface P {
+>P : Symbol(P, Decl(indexerConstraints2.ts, 54, 38))
+
+    [u: NonIndexableUnion]: A;
+>u : Symbol(u, Decl(indexerConstraints2.ts, 57, 5))
+>NonIndexableUnion : Symbol(NonIndexableUnion, Decl(indexerConstraints2.ts, 52, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+type NonIndexableUnion2 = string | number;
+>NonIndexableUnion2 : Symbol(NonIndexableUnion2, Decl(indexerConstraints2.ts, 58, 1))
+
+interface Q {
+>Q : Symbol(Q, Decl(indexerConstraints2.ts, 60, 42))
+
+    [u: NonIndexableUnion2]: A;
+>u : Symbol(u, Decl(indexerConstraints2.ts, 63, 5))
+>NonIndexableUnion2 : Symbol(NonIndexableUnion2, Decl(indexerConstraints2.ts, 58, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}

@@ -943,6 +943,10 @@
         "category": "Error",
         "code": 1336
     },
+    "An index signature parameter type cannot be a union type. Use '[K in {0}]' instead.": {
+        "category": "Error",
+        "code": 1337
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
