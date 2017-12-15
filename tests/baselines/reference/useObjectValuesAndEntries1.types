@@ -42,7 +42,7 @@ var entries2 = Object.entries({a: true, b: 2}) // ['a' | 'b', number | boolean][
 >Object.entries : { <T>(o: { [s: string]: T; } | { [n: number]: T; }): [string, T][]; (o: any): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: { [s: string]: T; } | { [n: number]: T; }): [string, T][]; (o: any): [string, any][]; }
->{a: true, b: 2} : { a: true; b: 2; }
+>{a: true, b: 2} : { a: boolean; b: number; }
 >a : boolean
 >true : true
 >b : number

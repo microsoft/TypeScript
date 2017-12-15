@@ -65,10 +65,11 @@ function main(): void {
      * There are three exceptions, zh-CN, zh-TW and pt-BR.
      */
     function getPreferedLocaleName(localeName: string) {
+        localeName = localeName.toLowerCase();
         switch (localeName) {
-            case "zh-CN":
-            case "zh-TW":
-            case "pt-BR":
+            case "zh-cn":
+            case "zh-tw":
+            case "pt-br":
                 return localeName;
             default:
                 return localeName.split("-")[0];
@@ -86,9 +87,9 @@ function main(): void {
         const out: any = {};
         for (const item of o.LCX.Item[0].Item[0].Item) {
             let ItemId = item.$.ItemId;
-            let Val = item.Str[0].Tgt ? item.Str[0].Tgt[0].Val[0] : item.Str[0].Val[0];
+            let val = item.Str[0].Tgt ? item.Str[0].Tgt[0].Val[0] : item.Str[0].Val[0];
 
-            if (typeof ItemId !== "string" || typeof Val !== "string") {
+            if (typeof ItemId !== "string" || typeof val !== "string") {
                 console.error("Unexpected XML file structure");
                 process.exit(1);
             }
@@ -97,8 +98,8 @@ function main(): void {
                 ItemId = ItemId.slice(1); // remove leading semicolon
             }
 
-            Val = Val.replace(/]5D;/, "]"); // unescape `]`
-            out[ItemId] = Val;
+            val = val.replace(/]5D;/, "]"); // unescape `]`
+            out[ItemId] = val;
         }
         return JSON.stringify(out, undefined, 2);
     }

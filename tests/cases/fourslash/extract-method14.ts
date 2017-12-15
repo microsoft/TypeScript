@@ -7,7 +7,7 @@
 // @Filename: foo.js
 //// function foo() {
 ////     var i = 10;
-////     /*a*/return i++;/*b*/
+////     /*a*/return i + 1;/*b*/
 //// }
 
 goTo.select('a', 'b');
@@ -18,13 +18,11 @@ edit.applyRefactor({
     newContent:
 `function foo() {
     var i = 10;
-    let __return;
-    ({ __return, i } = /*RENAME*/newFunction(i));
-    return __return;
+    return /*RENAME*/newFunction(i);
 }
 
 function newFunction(i) {
-    return { __return: i++, i };
+    return i + 1;
 }
 `
 });

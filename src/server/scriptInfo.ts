@@ -67,7 +67,10 @@ namespace ts.server {
             this.lineMap = undefined;
         }
 
-        /** returns true if text changed */
+        /**
+         * Set the contents as newText
+         * returns true if text changed
+         */
         public reload(newText: string) {
             Debug.assert(newText !== undefined);
 
@@ -87,29 +90,29 @@ namespace ts.server {
             }
         }
 
-        /** returns true if text changed */
-        public reloadFromDisk() {
-            let reloaded = false;
-            if (!this.pendingReloadFromDisk && !this.ownFileText) {
-                reloaded = this.reload(this.getFileText());
-                this.ownFileText = true;
-            }
+        /**
+         * Reads the contents from tempFile(if supplied) or own file and sets it as contents
+         * returns true if text changed
+         */
+        public reloadWithFileText(tempFileName?: string) {
+            const reloaded = this.reload(this.getFileText(tempFileName));
+            this.ownFileText = !tempFileName || tempFileName === this.fileName;
             return reloaded;
+        }
+
+        /**
+         * Reloads the contents from the file if there is no pending reload from disk or the contents of file are same as file text
+         * returns true if text changed
+         */
+        public reloadFromDisk() {
+            if (!this.pendingReloadFromDisk && !this.ownFileText) {
+                return this.reloadWithFileText();
+            }
+            return false;
         }
 
         public delayReloadFromFileIntoText() {
             this.pendingReloadFromDisk = true;
-        }
-
-        /** returns true if text changed */
-        public reloadFromFile(tempFileName: string) {
-            let reloaded = false;
-            // Reload if different file or we dont know if we are working with own file text
-            if (tempFileName !== this.fileName || !this.ownFileText) {
-                reloaded = this.reload(this.getFileText(tempFileName));
-                this.ownFileText = !tempFileName || tempFileName === this.fileName;
-            }
-            return reloaded;
         }
 
         public getSnapshot(): IScriptSnapshot {
@@ -180,8 +183,7 @@ namespace ts.server {
         private getOrLoadText() {
             if (this.text === undefined || this.pendingReloadFromDisk) {
                 Debug.assert(!this.svc || this.pendingReloadFromDisk, "ScriptVersionCache should not be set when reloading from disk");
-                this.reload(this.getFileText());
-                this.ownFileText = true;
+                this.reloadWithFileText();
             }
             return this.text;
         }
@@ -246,9 +248,9 @@ namespace ts.server {
             }
         }
 
-        public close() {
+        public close(fileExists = true) {
             this.textStorage.isOpen = false;
-            if (this.isDynamicOrHasMixedContent()) {
+            if (this.isDynamicOrHasMixedContent() || !fileExists) {
                 if (this.textStorage.reload("")) {
                     this.markContainingProjectsAsDirty();
                 }
@@ -385,7 +387,7 @@ namespace ts.server {
                 this.markContainingProjectsAsDirty();
             }
             else {
-                if (this.textStorage.reloadFromFile(tempFileName)) {
+                if (this.textStorage.reloadWithFileText(tempFileName)) {
                     this.markContainingProjectsAsDirty();
                 }
             }

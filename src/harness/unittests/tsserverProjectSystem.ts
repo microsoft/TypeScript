@@ -85,8 +85,7 @@ namespace ts.projectSystem {
             assert.equal(this.postExecActions.length, expectedCount, `Expected ${expectedCount} post install actions`);
         }
 
-        onProjectClosed() {
-        }
+        onProjectClosed = noop;
 
         attach(projectService: server.ProjectService) {
             this.projectService = projectService;
@@ -211,6 +210,8 @@ namespace ts.projectSystem {
 
     class TestSession extends server.Session {
         private seq = 0;
+        public events: protocol.Event[] = [];
+        public host: TestServerHost;
 
         getProjectService() {
             return this.projectService;
@@ -229,6 +230,16 @@ namespace ts.projectSystem {
             request.seq = this.seq;
             request.type = "request";
             return this.executeCommand(<T>request);
+        }
+
+        public event<T extends object>(body: T, eventName: string) {
+            this.events.push(server.toEvent(eventName, body));
+            super.event(body, eventName);
+        }
+
+        public clearMessages() {
+            clear(this.events);
+            this.host.clearOutput();
         }
     }
 
@@ -356,7 +367,7 @@ namespace ts.projectSystem {
     }
 
     function checkOpenFiles(projectService: server.ProjectService, expectedFiles: FileOrFolder[]) {
-        checkFileNames("Open files", projectService.openFiles.map(info => info.fileName), expectedFiles.map(file => file.path));
+        checkFileNames("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path).fileName), expectedFiles.map(file => file.path));
     }
 
     /**
@@ -437,7 +448,32 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
-    describe("tsserverProjectSystem", () => {
+    function checkErrorMessage(session: TestSession, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
+        checkNthEvent(session, ts.server.toEvent(eventName, diagnostics), 0, /*isMostRecent*/ false);
+    }
+
+    function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number) {
+        checkNthEvent(session, ts.server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, /*isMostRecent*/ true);
+    }
+
+    function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
+        checkNthEvent(session, ts.server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
+    }
+
+    function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
+        const events = session.events;
+        assert.deepEqual(events[index], expectedEvent);
+
+        const outputs = session.host.getOutput();
+        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
+
+        if (isMostRecent) {
+            assert.strictEqual(events.length, index + 1, JSON.stringify(events));
+            assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
+        }
+    }
+
+    describe("tsserverProjectSystem general functionality", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
             content: "let x = 1"
@@ -1248,13 +1284,13 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2);
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false });
             // should contain completions for string
             assert.isTrue(completions1.entries.some(e => e.name === "charAt"), "should contain 'charAt'");
             assert.isFalse(completions1.entries.some(e => e.name === "toExponential"), "should not contain 'toExponential'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2);
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false });
             // should contain completions for string
             assert.isFalse(completions2.entries.some(e => e.name === "charAt"), "should not contain 'charAt'");
             assert.isTrue(completions2.entries.some(e => e.name === "toExponential"), "should contain 'toExponential'");
@@ -1280,11 +1316,11 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0);
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false });
             assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0);
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false });
             assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
             const sf2 = service.externalProjects[0].getLanguageService().getProgram().getSourceFile(f2.path);
             assert.equal(sf2.text, "");
@@ -1439,7 +1475,7 @@ namespace ts.projectSystem {
 
         it("ignores files excluded by a custom safe type list", () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/a/b/f1.js",
                 content: "export let x = 5"
             };
             const office = {
@@ -1460,7 +1496,7 @@ namespace ts.projectSystem {
 
         it("ignores files excluded by the default type list", () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/a/b/f1.js",
                 content: "export let x = 5"
             };
             const minFile = {
@@ -1475,6 +1511,10 @@ namespace ts.projectSystem {
                 path: "/q/lib/kendo/kendo.ui.min.js",
                 content: "unspecified"
             };
+            const kendoFile3 = {
+                path: "/q/lib/kendo-ui/kendo.all.js",
+                content: "unspecified"
+            };
             const officeFile1 = {
                 path: "/scripts/Office/1/excel-15.debug.js",
                 content: "unspecified"
@@ -1483,7 +1523,7 @@ namespace ts.projectSystem {
                 path: "/scripts/Office/1/powerpoint.js",
                 content: "unspecified"
             };
-            const files = [file1, minFile, kendoFile1, kendoFile2, officeFile1, officeFile2];
+            const files = [file1, minFile, kendoFile1, kendoFile2, kendoFile3, officeFile1, officeFile2];
             const host = createServerHost(files);
             const projectService = createProjectService(host);
             try {
@@ -1491,6 +1531,46 @@ namespace ts.projectSystem {
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
                 assert.deepEqual(proj.getTypeAcquisition().include, ["kendo-ui", "office"]);
+            } finally {
+                projectService.resetSafeList();
+            }
+        });
+
+        it("removes version numbers correctly", () => {
+            const testData: [string, string][] = [
+                ["jquery-max", "jquery-max"],
+                ["jquery.min", "jquery"],
+                ["jquery-min.4.2.3", "jquery"],
+                ["jquery.min.4.2.1", "jquery"],
+                ["minimum", "minimum"],
+                ["min", "min"],
+                ["min.3.2", "min"],
+                ["jquery", "jquery"]
+            ];
+            for (const t of testData) {
+                assert.equal(removeMinAndVersionNumbers(t[0]), t[1], t[0]);
+            }
+        });
+
+        it("ignores files excluded by a legacy safe type list", () => {
+            const file1 = {
+                path: "/a/b/bliss.js",
+                content: "let x = 5"
+            };
+            const file2 = {
+                path: "/a/b/foo.js",
+                content: ""
+            };
+            const file3 = {
+                path: "/a/b/Bacon.js",
+                content: "let y = 5"
+            };
+            const host = createServerHost([file1, file2, file3, customTypesMap]);
+            const projectService = createProjectService(host);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]), typeAcquisition: { enable: true } });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(), [file2.path]);
             } finally {
                 projectService.resetSafeList();
             }
@@ -1826,7 +1906,7 @@ namespace ts.projectSystem {
             // Specify .html extension as mixed content
             const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
             const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             // The configured project should now be updated to include html file
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1845,7 +1925,7 @@ namespace ts.projectSystem {
 
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
-            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1);
+            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, { includeExternalModuleExports: false });
             assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
 
             // Close HTML file
@@ -1859,7 +1939,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
-            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5);
+            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, { includeExternalModuleExports: false });
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
         });
 
@@ -1885,7 +1965,7 @@ namespace ts.projectSystem {
             // Specify .html extension as mixed content in a configure host request
             const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
             const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             let projectService = session.getProjectService();
@@ -1904,7 +1984,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config2, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -1923,7 +2003,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config3, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -1942,7 +2022,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config4, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -1961,7 +2041,7 @@ namespace ts.projectSystem {
             host = createServerHost([file1, file2, config5, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
             session = createSession(host);
 
-            session.executeCommand(configureHostRequest).response;
+            session.executeCommand(configureHostRequest);
 
             openFilesForSession([file1], session);
             projectService = session.getProjectService();
@@ -2563,7 +2643,7 @@ namespace ts.projectSystem {
                 projectFileName,
                 rootFiles: [toExternalFile(site.path), toExternalFile(configFile.path)],
                 options: { allowJs: false },
-                typeAcquisition: { "include": [] }
+                typeAcquisition: { include: [] }
             };
 
             projectService.openExternalProjects([externalProject]);
@@ -2723,9 +2803,10 @@ namespace ts.projectSystem {
             watchedRecursiveDirectories.push(`${root}/a/b/src`, `${root}/a/b/node_modules`);
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
         });
+
     });
 
-    describe("Proper errors", () => {
+    describe("tsserverProjectSystem Proper errors", () => {
         it("document is not contained in project", () => {
             const file1 = {
                 path: "/a/b/app.ts",
@@ -2744,9 +2825,142 @@ namespace ts.projectSystem {
             const project = projectService.findProject(corruptedConfig.path);
             checkProjectRootFiles(project, [file1.path]);
         });
+
+        describe("when opening new file that doesnt exist on disk yet", () => {
+            function verifyNonExistentFile(useProjectRoot: boolean) {
+                const host = createServerHost([libFile]);
+                let hasError = false;
+                const errLogger: server.Logger = {
+                    close: noop,
+                    hasLevel: () => true,
+                    loggingEnabled: () => true,
+                    perftrc: noop,
+                    info: noop,
+                    msg: (_s, type) => {
+                        if (type === server.Msg.Err) {
+                            hasError = true;
+                        }
+                    },
+                    startGroup: noop,
+                    endGroup: noop,
+                    getLogFileName: (): string => undefined
+                };
+                const session = createSession(host, { canUseEvents: true, logger: errLogger, useInferredProjectPerProjectRoot: true });
+
+                const folderPath = "/user/someuser/projects/someFolder";
+                const projectService = session.getProjectService();
+                const untitledFile = "untitled:Untitled-1";
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: server.CommandNames.Open,
+                    arguments: {
+                        file: untitledFile,
+                        fileContent: "",
+                        scriptKindName: "JS",
+                        projectRootPath: useProjectRoot ? folderPath : undefined
+                    }
+                });
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                const infoForUntitledAtProjectRoot = projectService.getScriptInfoForPath(`${folderPath.toLowerCase()}/${untitledFile.toLowerCase()}` as Path);
+                const infoForUnitiledAtRoot = projectService.getScriptInfoForPath(`/${untitledFile.toLowerCase()}` as Path);
+                if (useProjectRoot) {
+                    assert.isDefined(infoForUntitledAtProjectRoot);
+                    assert.isUndefined(infoForUnitiledAtRoot);
+                }
+                else {
+                    assert.isDefined(infoForUnitiledAtRoot);
+                    assert.isUndefined(infoForUntitledAtProjectRoot);
+                }
+                host.checkTimeoutQueueLength(2);
+
+                const newTimeoutId = host.getNextTimeoutId();
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: server.CommandNames.Geterr,
+                    arguments: {
+                        delay: 0,
+                        files: [untitledFile]
+                    }
+                });
+                host.checkTimeoutQueueLength(3);
+
+                // Run the last one = get error request
+                host.runQueuedTimeoutCallbacks(newTimeoutId);
+
+                assert.isFalse(hasError);
+                host.checkTimeoutQueueLength(2);
+                checkErrorMessage(session, "syntaxDiag", { file: untitledFile, diagnostics: [] });
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks();
+                assert.isFalse(hasError);
+                checkErrorMessage(session, "semanticDiag", { file: untitledFile, diagnostics: [] });
+
+                checkCompleteEvent(session, 2, expectedSequenceId);
+            }
+
+            it("has projectRoot", () => {
+                verifyNonExistentFile(/*useProjectRoot*/ true);
+            });
+
+            it("does not have projectRoot", () => {
+                verifyNonExistentFile(/*useProjectRoot*/ false);
+            });
+        });
+
+        it("folder rename updates project structure and reports no errors", () => {
+            const projectDir = "/a/b/projects/myproject";
+            const app: FileOrFolder = {
+                path: `${projectDir}/bar/app.ts`,
+                content: "class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }"
+            };
+            const foo: FileOrFolder = {
+                path: `${projectDir}/foo/foo.ts`,
+                content: "declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }"
+            };
+            const configFile: FileOrFolder = {
+                path: `${projectDir}/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] })
+            };
+            const host = createServerHost([app, foo, configFile]);
+            const session = createSession(host, { canUseEvents: true, });
+            const projectService = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: app.path, }
+            });
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.isDefined(projectService.configuredProjects.get(configFile.path));
+            verifyErrorsInApp();
+
+            host.renameFolder(`${projectDir}/foo`, `${projectDir}/foo2`);
+            host.runQueuedTimeoutCallbacks();
+            host.runQueuedTimeoutCallbacks();
+            verifyErrorsInApp();
+
+            function verifyErrorsInApp() {
+                session.clearMessages();
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: server.CommandNames.Geterr,
+                    arguments: {
+                        delay: 0,
+                        files: [app.path]
+                    }
+                });
+                host.checkTimeoutQueueLengthAndRun(1);
+                checkErrorMessage(session, "syntaxDiag", { file: app.path, diagnostics: [] });
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks();
+                checkErrorMessage(session, "semanticDiag", { file: app.path, diagnostics: [] });
+                checkCompleteEvent(session, 2, expectedSequenceId);
+                session.clearMessages();
+            }
+        });
     });
 
-    describe("autoDiscovery", () => {
+    describe("tsserverProjectSystem autoDiscovery", () => {
         it("does not depend on extension", () => {
             const file1 = {
                 path: "/a/b/app.html",
@@ -2769,7 +2983,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("extra resolution pass in lshost", () => {
+    describe("tsserverProjectSystem extra resolution pass in lshost", () => {
         it("can load typings that are proper modules", () => {
             const file1 = {
                 path: "/a/b/app.js",
@@ -2811,7 +3025,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("navigate-to for javascript project", () => {
+    describe("tsserverProjectSystem navigate-to for javascript project", () => {
         function containsNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
             return find(items, item => item.name === itemName && item.kind === itemKind) !== undefined;
         }
@@ -2840,7 +3054,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("external projects", () => {
+    describe("tsserverProjectSystem external projects", () => {
         it("correctly handling add/remove tsconfig - 1", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -2989,12 +3203,12 @@ namespace ts.projectSystem {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify(
                     {
-                        "compilerOptions": {
-                            "module": "commonjs",
-                            "target": "es5",
-                            "noImplicitAny": true,
-                            "sourceMap": false,
-                            "lib": [
+                        compilerOptions: {
+                            module: "commonjs",
+                            target: "es5",
+                            noImplicitAny: true,
+                            sourceMap: false,
+                            lib: [
                                 "es5"
                             ]
                         }
@@ -3004,12 +3218,12 @@ namespace ts.projectSystem {
                 path: config1.path,
                 content: JSON.stringify(
                     {
-                        "compilerOptions": {
-                            "module": "commonjs",
-                            "target": "es5",
-                            "noImplicitAny": true,
-                            "sourceMap": false,
-                            "lib": [
+                        compilerOptions: {
+                            module: "commonjs",
+                            target: "es5",
+                            noImplicitAny: true,
+                            sourceMap: false,
+                            lib: [
                                 "es5",
                                 "es2015.promise"
                             ]
@@ -3066,7 +3280,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("prefer typings to js", () => {
+    describe("tsserverProjectSystem prefer typings to js", () => {
         it("during second resolution pass", () => {
             const typingsCacheLocation = "/a/typings";
             const f1 = {
@@ -3094,7 +3308,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("format settings", () => {
+    describe("tsserverProjectSystem format settings", () => {
         it("can be set globally", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -3135,7 +3349,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("watching @types", () => {
+    describe("tsserverProjectSystem watching @types", () => {
         it("works correctly when typings are added or removed", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -3181,7 +3395,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("Open-file", () => {
+    describe("tsserverProjectSystem Open-file", () => {
         it("can be reloaded with empty content", () => {
             const f = {
                 path: "/a/b/app.ts",
@@ -3256,7 +3470,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("Language service", () => {
+    describe("tsserverProjectSystem Language service", () => {
         it("should work correctly on case-sensitive file systems", () => {
             const lib = {
                 path: "/a/Lib/lib.d.ts",
@@ -3274,7 +3488,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("rename a module file and rename back", () => {
+    describe("tsserverProjectSystem rename a module file and rename back", () => {
         it("should restore the states for inferred projects", () => {
             const moduleFile = {
                 path: "/a/b/moduleFile.ts",
@@ -3409,7 +3623,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("add the missing module file for inferred project", () => {
+    describe("tsserverProjectSystem add the missing module file for inferred project", () => {
         it("should remove the `module not found` error", () => {
             const moduleFile = {
                 path: "/a/b/moduleFile.ts",
@@ -3445,9 +3659,77 @@ namespace ts.projectSystem {
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
         });
+
+        it("npm install @types works", () => {
+            const folderPath = "/a/b/projects/temp";
+            const file1: FileOrFolder = {
+                path: `${folderPath}/a.ts`,
+                content: 'import f = require("pad")'
+            };
+            const files = [file1, libFile];
+            const host = createServerHost(files);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: {
+                    file: file1.path,
+                    fileContent: file1.content,
+                    scriptKindName: "TS",
+                    projectRootPath: folderPath
+                }
+            });
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file1.path]
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks();
+            const moduleNotFound = Diagnostics.Cannot_find_module_0;
+            const startOffset = file1.content.indexOf('"') + 1;
+            checkErrorMessage(session, "semanticDiag", {
+                file: file1.path, diagnostics: [{
+                    start: { line: 1, offset: startOffset },
+                    end: { line: 1, offset: startOffset + '"pad"'.length },
+                    text: formatStringFromArgs(moduleNotFound.message, ["pad"]),
+                    code: moduleNotFound.code,
+                    category: DiagnosticCategory[moduleNotFound.category].toLowerCase(),
+                    source: undefined
+                }]
+            });
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
+
+            const padIndex: FileOrFolder = {
+                path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
+                content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
+            };
+            files.push(padIndex);
+            host.reloadFS(files, { ignoreWatchInvokedWithTriggerAsFileCreate: true });
+            host.runQueuedTimeoutCallbacks();
+            checkProjectUpdatedInBackgroundEvent(session, [file1.path]);
+            session.clearMessages();
+
+            host.runQueuedTimeoutCallbacks();
+            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks();
+            checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
+        });
     });
 
-    describe("Configure file diagnostics events", () => {
+    describe("tsserverProjectSystem Configure file diagnostics events", () => {
 
         it("are generated when the config file has errors", () => {
             const file = {
@@ -3563,7 +3845,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("skipLibCheck", () => {
+    describe("tsserverProjectSystem skipLibCheck", () => {
         it("should be turned on for js-only inferred projects", () => {
             const file1 = {
                 path: "/a/b/file1.js",
@@ -3791,7 +4073,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("non-existing directories listed in config file input array", () => {
+    describe("tsserverProjectSystem non-existing directories listed in config file input array", () => {
         it("should be tolerated without crashing the server", () => {
             const configFile = {
                 path: "/a/b/tsconfig.json",
@@ -3846,7 +4128,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("reload", () => {
+    describe("tsserverProjectSystem reload", () => {
         it("should work with temp file", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -3893,9 +4175,99 @@ namespace ts.projectSystem {
             assert.equal(snap2.getText(0, snap2.getLength()), f1.content, "content should be equal to the content of original file");
 
         });
+
+        it("should work when script info doesnt have any project open", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const tmp = {
+                path: "/a/b/app.tmp",
+                content: "const y = 42"
+            };
+            const host = createServerHost([f1, tmp, libFile]);
+            const session = createSession(host);
+            const openContent = "let z = 1";
+            // send open request
+            session.executeCommandSeq(<server.protocol.OpenRequest>{
+                command: server.protocol.CommandTypes.Open,
+                arguments: { file: f1.path, fileContent: openContent }
+            });
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const info = projectService.getScriptInfo(f1.path);
+            assert.isDefined(info);
+            checkScriptInfoContents(openContent, "contents set during open request");
+
+            // send close request
+            session.executeCommandSeq(<server.protocol.CloseRequest>{
+                command: server.protocol.CommandTypes.Close,
+                arguments: { file: f1.path }
+            });
+            checkScriptInfoAndProjects(0, f1.content, "contents of closed file");
+
+            // Can reload contents of the file when its not open and has no project
+            // reload from temp file
+            session.executeCommandSeq(<server.protocol.ReloadRequest>{
+                command: server.protocol.CommandTypes.Reload,
+                arguments: { file: f1.path, tmpfile: tmp.path }
+            });
+            checkScriptInfoAndProjects(0, tmp.content, "contents of temp file");
+
+            // reload from own file
+            session.executeCommandSeq(<server.protocol.ReloadRequest>{
+                command: server.protocol.CommandTypes.Reload,
+                arguments: { file: f1.path }
+            });
+            checkScriptInfoAndProjects(0, f1.content, "contents of closed file");
+
+            // Open file again without setting its content
+            session.executeCommandSeq(<server.protocol.OpenRequest>{
+                command: server.protocol.CommandTypes.Open,
+                arguments: { file: f1.path }
+            });
+            checkScriptInfoAndProjects(1, f1.content, "contents of file when opened without specifying contents");
+            const snap = info.getSnapshot();
+
+            // send close request
+            session.executeCommandSeq(<server.protocol.CloseRequest>{
+                command: server.protocol.CommandTypes.Close,
+                arguments: { file: f1.path }
+            });
+            checkScriptInfoAndProjects(0, f1.content, "contents of closed file");
+            assert.strictEqual(info.getSnapshot(), snap);
+
+            // reload from temp file
+            session.executeCommandSeq(<server.protocol.ReloadRequest>{
+                command: server.protocol.CommandTypes.Reload,
+                arguments: { file: f1.path, tmpfile: tmp.path }
+            });
+            checkScriptInfoAndProjects(0, tmp.content, "contents of temp file");
+            assert.notStrictEqual(info.getSnapshot(), snap);
+
+            // reload from own file
+            session.executeCommandSeq(<server.protocol.ReloadRequest>{
+                command: server.protocol.CommandTypes.Reload,
+                arguments: { file: f1.path }
+            });
+            checkScriptInfoAndProjects(0, f1.content, "contents of closed file");
+            assert.notStrictEqual(info.getSnapshot(), snap);
+
+            function checkScriptInfoAndProjects(inferredProjects: number, contentsOfInfo: string, captionForContents: string) {
+                checkNumberOfProjects(projectService, { inferredProjects });
+                assert.strictEqual(projectService.getScriptInfo(f1.path), info);
+                checkScriptInfoContents(contentsOfInfo, captionForContents);
+            }
+
+            function checkScriptInfoContents(contentsOfInfo: string, captionForContents: string) {
+                const snap = info.getSnapshot();
+                assert.equal(snap.getText(0, snap.getLength()), contentsOfInfo, "content should be equal to " + captionForContents);
+            }
+        });
     });
 
-    describe("Inferred projects", () => {
+    describe("tsserverProjectSystem Inferred projects", () => {
         it("should support files without extensions", () => {
             const f = {
                 path: "/a/compile",
@@ -4123,7 +4495,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("No overwrite emit error", () => {
+    describe("tsserverProjectSystem No overwrite emit error", () => {
         it("for inferred project", () => {
             const f1 = {
                 path: "/a/b/f1.js",
@@ -4206,7 +4578,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("emit with outFile or out setting", () => {
+    describe("tsserverProjectSystem emit with outFile or out setting", () => {
         function test(opts: CompilerOptions, expectedUsesOutFile: boolean) {
             const f1 = {
                 path: "/a/a.ts",
@@ -4254,7 +4626,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("import helpers", () => {
+    describe("tsserverProjectSystem import helpers", () => {
         it("should not crash in tsserver", () => {
             const f1 = {
                 path: "/a/app.ts",
@@ -4271,7 +4643,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("searching for config file", () => {
+    describe("tsserverProjectSystem searching for config file", () => {
         it("should stop at projectRootPath if given", () => {
             const f1 = {
                 path: "/a/file1.ts",
@@ -4293,9 +4665,88 @@ namespace ts.projectSystem {
             checkNumberOfConfiguredProjects(service, 1);
             checkNumberOfInferredProjects(service, 0);
         });
+
+        it("should use projectRootPath when searching for inferred project again", () => {
+            const projectDir = "/a/b/projects/project";
+            const configFileLocation = `${projectDir}/src`;
+            const f1 = {
+                path: `${configFileLocation}/file1.ts`,
+                content: ""
+            };
+            const configFile = {
+                path: `${configFileLocation}/tsconfig.json`,
+                content: "{}"
+            };
+            const configFile2 = {
+                path: "/a/b/projects/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, libFile, configFile, configFile2]);
+            const service = createProjectService(host);
+            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            assert.isDefined(service.configuredProjects.get(configFile.path));
+            checkWatchedFiles(host, [libFile.path, configFile.path]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            const typeRootLocations = getTypeRootsFromLocation(configFileLocation);
+            checkWatchedDirectories(host, typeRootLocations.concat(configFileLocation), /*recursive*/ true);
+
+            // Delete config file - should create inferred project and not configured project
+            host.reloadFS([f1, libFile, configFile2]);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            checkWatchedFiles(host, [libFile.path, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, typeRootLocations, /*recursive*/ true);
+        });
+
+        it("should use projectRootPath when searching for inferred project again 2", () => {
+            const projectDir = "/a/b/projects/project";
+            const configFileLocation = `${projectDir}/src`;
+            const f1 = {
+                path: `${configFileLocation}/file1.ts`,
+                content: ""
+            };
+            const configFile = {
+                path: `${configFileLocation}/tsconfig.json`,
+                content: "{}"
+            };
+            const configFile2 = {
+                path: "/a/b/projects/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, libFile, configFile, configFile2]);
+            const service = createProjectService(host, { useSingleInferredProject: true }, { useInferredProjectPerProjectRoot: true });
+            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            assert.isDefined(service.configuredProjects.get(configFile.path));
+            checkWatchedFiles(host, [libFile.path, configFile.path]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, getTypeRootsFromLocation(configFileLocation).concat(configFileLocation), /*recursive*/ true);
+
+            // Delete config file - should create inferred project with project root path set
+            host.reloadFS([f1, libFile, configFile2]);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            assert.equal(service.inferredProjects[0].projectRootPath, projectDir);
+            checkWatchedFiles(host, [libFile.path, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, getTypeRootsFromLocation(projectDir), /*recursive*/ true);
+        });
     });
 
-    describe("cancellationToken", () => {
+    describe("tsserverProjectSystem cancellationToken", () => {
+        // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
+        let oldPrepare: ts.AnyFunction;
+        before(() => {
+            oldPrepare = (Error as any).prepareStackTrace;
+            delete (Error as any).prepareStackTrace;
+        });
+
+        after(() => {
+            (Error as any).prepareStackTrace = oldPrepare;
+        });
+
         it("is attached to request", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -4356,7 +4807,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, config]);
             const session = createSession(host, {
                 canUseEvents: true,
-                eventHandler: () => { },
+                eventHandler: noop,
                 cancellationToken
             });
             {
@@ -4388,7 +4839,7 @@ namespace ts.projectSystem {
                     command: "projectInfo",
                     arguments: { file: f1.path }
                 });
-                host.clearOutput();
+                session.clearMessages();
 
                 // cancel previously issued Geterr
                 cancellationToken.setRequestToCancel(getErrId);
@@ -4412,7 +4863,7 @@ namespace ts.projectSystem {
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 const e1 = <protocol.Event>getMessage(0);
                 assert.equal(e1.event, "syntaxDiag");
-                host.clearOutput();
+                session.clearMessages();
 
                 cancellationToken.setRequestToCancel(getErrId);
                 host.runQueuedImmediateCallbacks();
@@ -4434,7 +4885,7 @@ namespace ts.projectSystem {
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 const e1 = <protocol.Event>getMessage(0);
                 assert.equal(e1.event, "syntaxDiag");
-                host.clearOutput();
+                session.clearMessages();
 
                 // the semanticDiag message
                 host.runQueuedImmediateCallbacks();
@@ -4457,7 +4908,7 @@ namespace ts.projectSystem {
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 const e1 = <protocol.Event>getMessage(0);
                 assert.equal(e1.event, "syntaxDiag");
-                host.clearOutput();
+                session.clearMessages();
 
                 session.executeCommandSeq(<protocol.GeterrRequest>{
                     command: "geterr",
@@ -4471,7 +4922,7 @@ namespace ts.projectSystem {
                 const event = <protocol.RequestCompletedEvent>getMessage(n);
                 assert.equal(event.event, "requestCompleted");
                 assert.equal(event.body.request_seq, expectedSeq, "expectedSeq");
-                host.clearOutput();
+                session.clearMessages();
             }
 
             function getMessage(n: number) {
@@ -4493,7 +4944,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, config]);
             const session = createSession(host, {
                 canUseEvents: true,
-                eventHandler: () => { },
+                eventHandler: noop,
                 cancellationToken,
                 throttleWaitMilliseconds: 0
             });
@@ -4547,7 +4998,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("occurence highlight on string", () => {
+    describe("tsserverProjectSystem occurence highlight on string", () => {
         it("should be marked if only on string values", () => {
             const file1: FileOrFolder = {
                 path: "/a/b/file1.ts",
@@ -4593,7 +5044,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("maxNodeModuleJsDepth for inferred projects", () => {
+    describe("tsserverProjectSystem maxNodeModuleJsDepth for inferred projects", () => {
         it("should be set to 2 if the project has js root files", () => {
             const file1: FileOrFolder = {
                 path: "/a/b/file1.js",
@@ -4647,7 +5098,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("Options Diagnostic locations reported correctly with changes in configFile contents", () => {
+    describe("tsserverProjectSystem Options Diagnostic locations reported correctly with changes in configFile contents", () => {
         it("when options change", () => {
             const file = {
                 path: "/a/b/app.ts",
@@ -4711,7 +5162,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("refactors", () => {
+    describe("tsserverProjectSystem refactors", () => {
         it("use formatting options", () => {
             const file = {
                 path: "/a.ts",
@@ -4767,7 +5218,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("CachingFileSystemInformation", () => {
+    describe("tsserverProjectSystem CachingFileSystemInformation", () => {
         enum CalledMapsWithSingleArg {
             fileExists = "fileExists",
             directoryExists = "directoryExists",
@@ -5122,31 +5573,31 @@ namespace ts.projectSystem {
                 const tsconfigFile: FileOrFolder = {
                     path: `${frontendDir}/tsconfig.json`,
                     content: JSON.stringify({
-                        "compilerOptions": {
-                            "strict": true,
-                            "strictNullChecks": true,
-                            "target": "es2016",
-                            "module": "commonjs",
-                            "moduleResolution": "node",
-                            "sourceMap": true,
-                            "noEmitOnError": true,
-                            "experimentalDecorators": true,
-                            "emitDecoratorMetadata": true,
+                        compilerOptions: {
+                            strict: true,
+                            strictNullChecks: true,
+                            target: "es2016",
+                            module: "commonjs",
+                            moduleResolution: "node",
+                            sourceMap: true,
+                            noEmitOnError: true,
+                            experimentalDecorators: true,
+                            emitDecoratorMetadata: true,
                             types,
-                            "noUnusedLocals": true,
-                            "outDir": "./compiled",
+                            noUnusedLocals: true,
+                            outDir: "./compiled",
                             typeRoots,
-                            "baseUrl": ".",
-                            "paths": {
+                            baseUrl: ".",
+                            paths: {
                                 "*": [
                                     "types/*"
                                 ]
                             }
                         },
-                        "include": [
+                        include: [
                             "src/**/*"
                         ],
-                        "exclude": [
+                        exclude: [
                             "node_modules",
                             "compiled"
                         ]
@@ -5271,66 +5722,66 @@ namespace ts.projectSystem {
 
                 // Simulate npm install
                 const filesAndFoldersToAdd: FileOrFolder[] = [
-                    { "path": "/a/b/node_modules" },
-                    { "path": "/a/b/node_modules/.staging/@types" },
-                    { "path": "/a/b/node_modules/.staging/lodash-b0733faa" },
-                    { "path": "/a/b/node_modules/.staging/@types/lodash-e56c4fe7" },
-                    { "path": "/a/b/node_modules/.staging/symbol-observable-24bcbbff" },
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61" },
-                    { "path": "/a/b/node_modules/.staging/typescript-8493ea5d" },
-                    { "path": "/a/b/node_modules/.staging/symbol-observable-24bcbbff/package.json", "content": "{\n  \"name\": \"symbol-observable\",\n  \"version\": \"1.0.4\",\n  \"description\": \"Symbol.observable ponyfill\",\n  \"license\": \"MIT\",\n  \"repository\": \"blesh/symbol-observable\",\n  \"author\": {\n    \"name\": \"Ben Lesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"engines\": {\n    \"node\": \">=0.10.0\"\n  },\n  \"scripts\": {\n    \"test\": \"npm run build && mocha && tsc ./ts-test/test.ts && node ./ts-test/test.js && check-es3-syntax -p lib/ --kill\",\n    \"build\": \"babel es --out-dir lib\",\n    \"prepublish\": \"npm test\"\n  },\n  \"files\": [\n    \"" },
-                    { "path": "/a/b/node_modules/.staging/lodash-b0733faa/package.json", "content": "{\n  \"name\": \"lodash\",\n  \"version\": \"4.17.4\",\n  \"description\": \"Lodash modular utilities.\",\n  \"keywords\": \"modules, stdlib, util\",\n  \"homepage\": \"https://lodash.com/\",\n  \"repository\": \"lodash/lodash\",\n  \"icon\": \"https://lodash.com/icon.svg\",\n  \"license\": \"MIT\",\n  \"main\": \"lodash.js\",\n  \"author\": \"John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)\",\n  \"contributors\": [\n    \"John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)\",\n    \"Mathias Bynens <mathias@qiwi." },
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/package.json", "content": "{\n  \"name\": \"rxjs\",\n  \"version\": \"5.4.3\",\n  \"description\": \"Reactive Extensions for modern JavaScript\",\n  \"main\": \"Rx.js\",\n  \"config\": {\n    \"commitizen\": {\n      \"path\": \"cz-conventional-changelog\"\n    }\n  },\n  \"lint-staged\": {\n    \"*.@(js)\": [\n      \"eslint --fix\",\n      \"git add\"\n    ],\n    \"*.@(ts)\": [\n      \"tslint --fix\",\n      \"git add\"\n    ]\n  },\n  \"scripts-info\": {\n    \"info\": \"List available script\",\n    \"build_all\": \"Build all packages (ES6, CJS, UMD) and generate packages\",\n    \"build_cjs\": \"Build CJS package with clean up existing build, copy source into dist\",\n    \"build_es6\": \"Build ES6 package with clean up existing build, copy source into dist\",\n    \"build_closure_core\": \"Minify Global core build using closure compiler\",\n    \"build_global\": \"Build Global package, then minify build\",\n    \"build_perf\": \"Build CJS & Global build, run macro performance test\",\n    \"build_test\": \"Build CJS package & test spec, execute mocha test runner\",\n    \"build_cover\": \"Run lint to current code, build CJS & test spec, execute test coverage\",\n    \"build_docs\": \"Build ES6 & global package, create documentation using it\",\n    \"build_spec\": \"Build test specs\",\n    \"check_circular_dependencies\": \"Check codebase has circular dependencies\",\n    \"clean_spec\": \"Clean up existing test spec build output\",\n    \"clean_dist_cjs\": \"Clean up existing CJS package output\",\n    \"clean_dist_es6\": \"Clean up existing ES6 package output\",\n    \"clean_dist_global\": \"Clean up existing Global package output\",\n    \"commit\": \"Run git commit wizard\",\n    \"compile_dist_cjs\": \"Compile codebase into CJS module\",\n    \"compile_module_es6\": \"Compile codebase into ES6\",\n    \"cover\": \"Execute test coverage\",\n    \"lint_perf\": \"Run lint against performance test suite\",\n    \"lint_spec\": \"Run lint against test spec\",\n    \"lint_src\": \"Run lint against source\",\n    \"lint\": \"Run lint against everything\",\n    \"perf\": \"Run macro performance benchmark\",\n    \"perf_micro\": \"Run micro performance benchmark\",\n    \"test_mocha\": \"Execute mocha test runner against existing test spec build\",\n    \"test_browser\": \"Execute mocha test runner on browser against existing test spec build\",\n    \"test\": \"Clean up existing test spec build, build test spec and execute mocha test runner\",\n    \"tests2png\": \"Generate marble diagram image from test spec\",\n    \"watch\": \"Watch codebase, trigger compile when source code changes\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git@github.com:ReactiveX/RxJS.git\"\n  },\n  \"keywords\": [\n    \"Rx\",\n    \"RxJS\",\n    \"ReactiveX\",\n    \"ReactiveExtensions\",\n    \"Streams\",\n    \"Observables\",\n    \"Observable\",\n    \"Stream\",\n    \"ES6\",\n    \"ES2015\"\n  ],\n  \"author\": \"Ben Lesh <ben@benlesh.com>\",\n  \"contributors\": [\n    {\n      \"name\": \"Ben Lesh\",\n      \"email\": \"ben@benlesh.com\"\n    },\n    {\n      \"name\": \"Paul Taylor\",\n      \"email\": \"paul.e.taylor@me.com\"\n    },\n    {\n      \"name\": \"Jeff Cross\",\n      \"email\": \"crossj@google.com\"\n    },\n    {\n      \"name\": \"Matthew Podwysocki\",\n      \"email\": \"matthewp@microsoft.com\"\n    },\n    {\n      \"name\": \"OJ Kwon\",\n      \"email\": \"kwon.ohjoong@gmail.com\"\n    },\n    {\n      \"name\": \"Andre Staltz\",\n      \"email\": \"andre@staltz.com\"\n    }\n  ],\n  \"license\": \"Apache-2.0\",\n  \"bugs\": {\n    \"url\": \"https://github.com/ReactiveX/RxJS/issues\"\n  },\n  \"homepage\": \"https://github.com/ReactiveX/RxJS\",\n  \"devDependencies\": {\n    \"babel-polyfill\": \"^6.23.0\",\n    \"benchmark\": \"^2.1.0\",\n    \"benchpress\": \"2.0.0-beta.1\",\n    \"chai\": \"^3.5.0\",\n    \"color\": \"^0.11.1\",\n    \"colors\": \"1.1.2\",\n    \"commitizen\": \"^2.8.6\",\n    \"coveralls\": \"^2.11.13\",\n    \"cz-conventional-changelog\": \"^1.2.0\",\n    \"danger\": \"^1.1.0\",\n    \"doctoc\": \"^1.0.0\",\n    \"escape-string-regexp\": \"^1.0.5 \",\n    \"esdoc\": \"^0.4.7\",\n    \"eslint\": \"^3.8.0\",\n    \"fs-extra\": \"^2.1.2\",\n    \"get-folder-size\": \"^1.0.0\",\n    \"glob\": \"^7.0.3\",\n    \"gm\": \"^1.22.0\",\n    \"google-closure-compiler-js\": \"^20170218.0.0\",\n    \"gzip-size\": \"^3.0.0\",\n    \"http-server\": \"^0.9.0\",\n    \"husky\": \"^0.13.3\",\n    \"lint-staged\": \"3.2.5\",\n    \"lodash\": \"^4.15.0\",\n    \"madge\": \"^1.4.3\",\n    \"markdown-doctest\": \"^0.9.1\",\n    \"minimist\": \"^1.2.0\",\n    \"mkdirp\": \"^0.5.1\",\n    \"mocha\": \"^3.0.2\",\n    \"mocha-in-sauce\": \"0.0.1\",\n    \"npm-run-all\": \"^4.0.2\",\n    \"npm-scripts-info\": \"^0.3.4\",\n    \"nyc\": \"^10.2.0\",\n    \"opn-cli\": \"^3.1.0\",\n    \"platform\": \"^1.3.1\",\n    \"promise\": \"^7.1.1\",\n    \"protractor\": \"^3.1.1\",\n    \"rollup\": \"0.36.3\",\n    \"rollup-plugin-inject\": \"^2.0.0\",\n    \"rollup-plugin-node-resolve\": \"^2.0.0\",\n    \"rx\": \"latest\",\n    \"rxjs\": \"latest\",\n    \"shx\": \"^0.2.2\",\n    \"sinon\": \"^2.1.0\",\n    \"sinon-chai\": \"^2.9.0\",\n    \"source-map-support\": \"^0.4.0\",\n    \"tslib\": \"^1.5.0\",\n    \"tslint\": \"^4.4.2\",\n    \"typescript\": \"~2.0.6\",\n    \"typings\": \"^2.0.0\",\n    \"validate-commit-msg\": \"^2.14.0\",\n    \"watch\": \"^1.0.1\",\n    \"webpack\": \"^1.13.1\",\n    \"xmlhttprequest\": \"1.8.0\"\n  },\n  \"engines\": {\n    \"npm\": \">=2.0.0\"\n  },\n  \"typings\": \"Rx.d.ts\",\n  \"dependencies\": {\n    \"symbol-observable\": \"^1.0.1\"\n  }\n}" },
-                    { "path": "/a/b/node_modules/.staging/typescript-8493ea5d/package.json", "content": "{\n    \"name\": \"typescript\",\n    \"author\": \"Microsoft Corp.\",\n    \"homepage\": \"http://typescriptlang.org/\",\n    \"version\": \"2.4.2\",\n    \"license\": \"Apache-2.0\",\n    \"description\": \"TypeScript is a language for application scale JavaScript development\",\n    \"keywords\": [\n        \"TypeScript\",\n        \"Microsoft\",\n        \"compiler\",\n        \"language\",\n        \"javascript\"\n    ],\n    \"bugs\": {\n        \"url\": \"https://github.com/Microsoft/TypeScript/issues\"\n    },\n    \"repository\": {\n        \"type\": \"git\",\n        \"url\": \"https://github.com/Microsoft/TypeScript.git\"\n    },\n    \"main\": \"./lib/typescript.js\",\n    \"typings\": \"./lib/typescript.d.ts\",\n    \"bin\": {\n        \"tsc\": \"./bin/tsc\",\n        \"tsserver\": \"./bin/tsserver\"\n    },\n    \"engines\": {\n        \"node\": \">=4.2.0\"\n    },\n    \"devDependencies\": {\n        \"@types/browserify\": \"latest\",\n        \"@types/chai\": \"latest\",\n        \"@types/convert-source-map\": \"latest\",\n        \"@types/del\": \"latest\",\n        \"@types/glob\": \"latest\",\n        \"@types/gulp\": \"latest\",\n        \"@types/gulp-concat\": \"latest\",\n        \"@types/gulp-help\": \"latest\",\n        \"@types/gulp-newer\": \"latest\",\n        \"@types/gulp-sourcemaps\": \"latest\",\n        \"@types/merge2\": \"latest\",\n        \"@types/minimatch\": \"latest\",\n        \"@types/minimist\": \"latest\",\n        \"@types/mkdirp\": \"latest\",\n        \"@types/mocha\": \"latest\",\n        \"@types/node\": \"latest\",\n        \"@types/q\": \"latest\",\n        \"@types/run-sequence\": \"latest\",\n        \"@types/through2\": \"latest\",\n        \"browserify\": \"latest\",\n        \"chai\": \"latest\",\n        \"convert-source-map\": \"latest\",\n        \"del\": \"latest\",\n        \"gulp\": \"latest\",\n        \"gulp-clone\": \"latest\",\n        \"gulp-concat\": \"latest\",\n        \"gulp-help\": \"latest\",\n        \"gulp-insert\": \"latest\",\n        \"gulp-newer\": \"latest\",\n        \"gulp-sourcemaps\": \"latest\",\n        \"gulp-typescript\": \"latest\",\n        \"into-stream\": \"latest\",\n        \"istanbul\": \"latest\",\n        \"jake\": \"latest\",\n        \"merge2\": \"latest\",\n        \"minimist\": \"latest\",\n        \"mkdirp\": \"latest\",\n        \"mocha\": \"latest\",\n        \"mocha-fivemat-progress-reporter\": \"latest\",\n        \"q\": \"latest\",\n        \"run-sequence\": \"latest\",\n        \"sorcery\": \"latest\",\n        \"through2\": \"latest\",\n        \"travis-fold\": \"latest\",\n        \"ts-node\": \"latest\",\n        \"tslint\": \"latest\",\n        \"typescript\": \"^2.4\"\n    },\n    \"scripts\": {\n        \"pretest\": \"jake tests\",\n        \"test\": \"jake runtests-parallel\",\n        \"build\": \"npm run build:compiler && npm run build:tests\",\n        \"build:compiler\": \"jake local\",\n        \"build:tests\": \"jake tests\",\n        \"start\": \"node lib/tsc\",\n        \"clean\": \"jake clean\",\n        \"gulp\": \"gulp\",\n        \"jake\": \"jake\",\n        \"lint\": \"jake lint\",\n        \"setup-hooks\": \"node scripts/link-hooks.js\"\n    },\n    \"browser\": {\n        \"buffer\": false,\n        \"fs\": false,\n        \"os\": false,\n        \"path\": false\n    }\n}" },
-                    { "path": "/a/b/node_modules/.staging/symbol-observable-24bcbbff/index.js", "content": "module.exports = require('./lib/index');\n" },
-                    { "path": "/a/b/node_modules/.staging/symbol-observable-24bcbbff/index.d.ts", "content": "declare const observableSymbol: symbol;\nexport default observableSymbol;\n" },
-                    { "path": "/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib" },
-                    { "path": "/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js", "content": "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _ponyfill = require('./ponyfill');\n\nvar _ponyfill2 = _interopRequireDefault(_ponyfill);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }\n\nvar root; /* global window */\n\n\nif (typeof self !== 'undefined') {\n  root = self;\n} else if (typeof window !== 'undefined') {\n  root = window;\n} else if (typeof global !== 'undefined') {\n  root = global;\n} else if (typeof module !== 'undefined') {\n  root = module;\n} else {\n  root = Function('return this')();\n}\n\nvar result = (0, _ponyfill2['default'])(root);\nexports['default'] = result;" },
+                    { path: "/a/b/node_modules" },
+                    { path: "/a/b/node_modules/.staging/@types" },
+                    { path: "/a/b/node_modules/.staging/lodash-b0733faa" },
+                    { path: "/a/b/node_modules/.staging/@types/lodash-e56c4fe7" },
+                    { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff" },
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61" },
+                    { path: "/a/b/node_modules/.staging/typescript-8493ea5d" },
+                    { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/package.json", content: "{\n  \"name\": \"symbol-observable\",\n  \"version\": \"1.0.4\",\n  \"description\": \"Symbol.observable ponyfill\",\n  \"license\": \"MIT\",\n  \"repository\": \"blesh/symbol-observable\",\n  \"author\": {\n    \"name\": \"Ben Lesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"engines\": {\n    \"node\": \">=0.10.0\"\n  },\n  \"scripts\": {\n    \"test\": \"npm run build && mocha && tsc ./ts-test/test.ts && node ./ts-test/test.js && check-es3-syntax -p lib/ --kill\",\n    \"build\": \"babel es --out-dir lib\",\n    \"prepublish\": \"npm test\"\n  },\n  \"files\": [\n    \"" },
+                    { path: "/a/b/node_modules/.staging/lodash-b0733faa/package.json", content: "{\n  \"name\": \"lodash\",\n  \"version\": \"4.17.4\",\n  \"description\": \"Lodash modular utilities.\",\n  \"keywords\": \"modules, stdlib, util\",\n  \"homepage\": \"https://lodash.com/\",\n  \"repository\": \"lodash/lodash\",\n  \"icon\": \"https://lodash.com/icon.svg\",\n  \"license\": \"MIT\",\n  \"main\": \"lodash.js\",\n  \"author\": \"John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)\",\n  \"contributors\": [\n    \"John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)\",\n    \"Mathias Bynens <mathias@qiwi." },
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/package.json", content: "{\n  \"name\": \"rxjs\",\n  \"version\": \"5.4.3\",\n  \"description\": \"Reactive Extensions for modern JavaScript\",\n  \"main\": \"Rx.js\",\n  \"config\": {\n    \"commitizen\": {\n      \"path\": \"cz-conventional-changelog\"\n    }\n  },\n  \"lint-staged\": {\n    \"*.@(js)\": [\n      \"eslint --fix\",\n      \"git add\"\n    ],\n    \"*.@(ts)\": [\n      \"tslint --fix\",\n      \"git add\"\n    ]\n  },\n  \"scripts-info\": {\n    \"info\": \"List available script\",\n    \"build_all\": \"Build all packages (ES6, CJS, UMD) and generate packages\",\n    \"build_cjs\": \"Build CJS package with clean up existing build, copy source into dist\",\n    \"build_es6\": \"Build ES6 package with clean up existing build, copy source into dist\",\n    \"build_closure_core\": \"Minify Global core build using closure compiler\",\n    \"build_global\": \"Build Global package, then minify build\",\n    \"build_perf\": \"Build CJS & Global build, run macro performance test\",\n    \"build_test\": \"Build CJS package & test spec, execute mocha test runner\",\n    \"build_cover\": \"Run lint to current code, build CJS & test spec, execute test coverage\",\n    \"build_docs\": \"Build ES6 & global package, create documentation using it\",\n    \"build_spec\": \"Build test specs\",\n    \"check_circular_dependencies\": \"Check codebase has circular dependencies\",\n    \"clean_spec\": \"Clean up existing test spec build output\",\n    \"clean_dist_cjs\": \"Clean up existing CJS package output\",\n    \"clean_dist_es6\": \"Clean up existing ES6 package output\",\n    \"clean_dist_global\": \"Clean up existing Global package output\",\n    \"commit\": \"Run git commit wizard\",\n    \"compile_dist_cjs\": \"Compile codebase into CJS module\",\n    \"compile_module_es6\": \"Compile codebase into ES6\",\n    \"cover\": \"Execute test coverage\",\n    \"lint_perf\": \"Run lint against performance test suite\",\n    \"lint_spec\": \"Run lint against test spec\",\n    \"lint_src\": \"Run lint against source\",\n    \"lint\": \"Run lint against everything\",\n    \"perf\": \"Run macro performance benchmark\",\n    \"perf_micro\": \"Run micro performance benchmark\",\n    \"test_mocha\": \"Execute mocha test runner against existing test spec build\",\n    \"test_browser\": \"Execute mocha test runner on browser against existing test spec build\",\n    \"test\": \"Clean up existing test spec build, build test spec and execute mocha test runner\",\n    \"tests2png\": \"Generate marble diagram image from test spec\",\n    \"watch\": \"Watch codebase, trigger compile when source code changes\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git@github.com:ReactiveX/RxJS.git\"\n  },\n  \"keywords\": [\n    \"Rx\",\n    \"RxJS\",\n    \"ReactiveX\",\n    \"ReactiveExtensions\",\n    \"Streams\",\n    \"Observables\",\n    \"Observable\",\n    \"Stream\",\n    \"ES6\",\n    \"ES2015\"\n  ],\n  \"author\": \"Ben Lesh <ben@benlesh.com>\",\n  \"contributors\": [\n    {\n      \"name\": \"Ben Lesh\",\n      \"email\": \"ben@benlesh.com\"\n    },\n    {\n      \"name\": \"Paul Taylor\",\n      \"email\": \"paul.e.taylor@me.com\"\n    },\n    {\n      \"name\": \"Jeff Cross\",\n      \"email\": \"crossj@google.com\"\n    },\n    {\n      \"name\": \"Matthew Podwysocki\",\n      \"email\": \"matthewp@microsoft.com\"\n    },\n    {\n      \"name\": \"OJ Kwon\",\n      \"email\": \"kwon.ohjoong@gmail.com\"\n    },\n    {\n      \"name\": \"Andre Staltz\",\n      \"email\": \"andre@staltz.com\"\n    }\n  ],\n  \"license\": \"Apache-2.0\",\n  \"bugs\": {\n    \"url\": \"https://github.com/ReactiveX/RxJS/issues\"\n  },\n  \"homepage\": \"https://github.com/ReactiveX/RxJS\",\n  \"devDependencies\": {\n    \"babel-polyfill\": \"^6.23.0\",\n    \"benchmark\": \"^2.1.0\",\n    \"benchpress\": \"2.0.0-beta.1\",\n    \"chai\": \"^3.5.0\",\n    \"color\": \"^0.11.1\",\n    \"colors\": \"1.1.2\",\n    \"commitizen\": \"^2.8.6\",\n    \"coveralls\": \"^2.11.13\",\n    \"cz-conventional-changelog\": \"^1.2.0\",\n    \"danger\": \"^1.1.0\",\n    \"doctoc\": \"^1.0.0\",\n    \"escape-string-regexp\": \"^1.0.5 \",\n    \"esdoc\": \"^0.4.7\",\n    \"eslint\": \"^3.8.0\",\n    \"fs-extra\": \"^2.1.2\",\n    \"get-folder-size\": \"^1.0.0\",\n    \"glob\": \"^7.0.3\",\n    \"gm\": \"^1.22.0\",\n    \"google-closure-compiler-js\": \"^20170218.0.0\",\n    \"gzip-size\": \"^3.0.0\",\n    \"http-server\": \"^0.9.0\",\n    \"husky\": \"^0.13.3\",\n    \"lint-staged\": \"3.2.5\",\n    \"lodash\": \"^4.15.0\",\n    \"madge\": \"^1.4.3\",\n    \"markdown-doctest\": \"^0.9.1\",\n    \"minimist\": \"^1.2.0\",\n    \"mkdirp\": \"^0.5.1\",\n    \"mocha\": \"^3.0.2\",\n    \"mocha-in-sauce\": \"0.0.1\",\n    \"npm-run-all\": \"^4.0.2\",\n    \"npm-scripts-info\": \"^0.3.4\",\n    \"nyc\": \"^10.2.0\",\n    \"opn-cli\": \"^3.1.0\",\n    \"platform\": \"^1.3.1\",\n    \"promise\": \"^7.1.1\",\n    \"protractor\": \"^3.1.1\",\n    \"rollup\": \"0.36.3\",\n    \"rollup-plugin-inject\": \"^2.0.0\",\n    \"rollup-plugin-node-resolve\": \"^2.0.0\",\n    \"rx\": \"latest\",\n    \"rxjs\": \"latest\",\n    \"shx\": \"^0.2.2\",\n    \"sinon\": \"^2.1.0\",\n    \"sinon-chai\": \"^2.9.0\",\n    \"source-map-support\": \"^0.4.0\",\n    \"tslib\": \"^1.5.0\",\n    \"tslint\": \"^4.4.2\",\n    \"typescript\": \"~2.0.6\",\n    \"typings\": \"^2.0.0\",\n    \"validate-commit-msg\": \"^2.14.0\",\n    \"watch\": \"^1.0.1\",\n    \"webpack\": \"^1.13.1\",\n    \"xmlhttprequest\": \"1.8.0\"\n  },\n  \"engines\": {\n    \"npm\": \">=2.0.0\"\n  },\n  \"typings\": \"Rx.d.ts\",\n  \"dependencies\": {\n    \"symbol-observable\": \"^1.0.1\"\n  }\n}" },
+                    { path: "/a/b/node_modules/.staging/typescript-8493ea5d/package.json", content: "{\n    \"name\": \"typescript\",\n    \"author\": \"Microsoft Corp.\",\n    \"homepage\": \"http://typescriptlang.org/\",\n    \"version\": \"2.4.2\",\n    \"license\": \"Apache-2.0\",\n    \"description\": \"TypeScript is a language for application scale JavaScript development\",\n    \"keywords\": [\n        \"TypeScript\",\n        \"Microsoft\",\n        \"compiler\",\n        \"language\",\n        \"javascript\"\n    ],\n    \"bugs\": {\n        \"url\": \"https://github.com/Microsoft/TypeScript/issues\"\n    },\n    \"repository\": {\n        \"type\": \"git\",\n        \"url\": \"https://github.com/Microsoft/TypeScript.git\"\n    },\n    \"main\": \"./lib/typescript.js\",\n    \"typings\": \"./lib/typescript.d.ts\",\n    \"bin\": {\n        \"tsc\": \"./bin/tsc\",\n        \"tsserver\": \"./bin/tsserver\"\n    },\n    \"engines\": {\n        \"node\": \">=4.2.0\"\n    },\n    \"devDependencies\": {\n        \"@types/browserify\": \"latest\",\n        \"@types/chai\": \"latest\",\n        \"@types/convert-source-map\": \"latest\",\n        \"@types/del\": \"latest\",\n        \"@types/glob\": \"latest\",\n        \"@types/gulp\": \"latest\",\n        \"@types/gulp-concat\": \"latest\",\n        \"@types/gulp-help\": \"latest\",\n        \"@types/gulp-newer\": \"latest\",\n        \"@types/gulp-sourcemaps\": \"latest\",\n        \"@types/merge2\": \"latest\",\n        \"@types/minimatch\": \"latest\",\n        \"@types/minimist\": \"latest\",\n        \"@types/mkdirp\": \"latest\",\n        \"@types/mocha\": \"latest\",\n        \"@types/node\": \"latest\",\n        \"@types/q\": \"latest\",\n        \"@types/run-sequence\": \"latest\",\n        \"@types/through2\": \"latest\",\n        \"browserify\": \"latest\",\n        \"chai\": \"latest\",\n        \"convert-source-map\": \"latest\",\n        \"del\": \"latest\",\n        \"gulp\": \"latest\",\n        \"gulp-clone\": \"latest\",\n        \"gulp-concat\": \"latest\",\n        \"gulp-help\": \"latest\",\n        \"gulp-insert\": \"latest\",\n        \"gulp-newer\": \"latest\",\n        \"gulp-sourcemaps\": \"latest\",\n        \"gulp-typescript\": \"latest\",\n        \"into-stream\": \"latest\",\n        \"istanbul\": \"latest\",\n        \"jake\": \"latest\",\n        \"merge2\": \"latest\",\n        \"minimist\": \"latest\",\n        \"mkdirp\": \"latest\",\n        \"mocha\": \"latest\",\n        \"mocha-fivemat-progress-reporter\": \"latest\",\n        \"q\": \"latest\",\n        \"run-sequence\": \"latest\",\n        \"sorcery\": \"latest\",\n        \"through2\": \"latest\",\n        \"travis-fold\": \"latest\",\n        \"ts-node\": \"latest\",\n        \"tslint\": \"latest\",\n        \"typescript\": \"^2.4\"\n    },\n    \"scripts\": {\n        \"pretest\": \"jake tests\",\n        \"test\": \"jake runtests-parallel\",\n        \"build\": \"npm run build:compiler && npm run build:tests\",\n        \"build:compiler\": \"jake local\",\n        \"build:tests\": \"jake tests\",\n        \"start\": \"node lib/tsc\",\n        \"clean\": \"jake clean\",\n        \"gulp\": \"gulp\",\n        \"jake\": \"jake\",\n        \"lint\": \"jake lint\",\n        \"setup-hooks\": \"node scripts/link-hooks.js\"\n    },\n    \"browser\": {\n        \"buffer\": false,\n        \"fs\": false,\n        \"os\": false,\n        \"path\": false\n    }\n}" },
+                    { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/index.js", content: "module.exports = require('./lib/index');\n" },
+                    { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/index.d.ts", content: "declare const observableSymbol: symbol;\nexport default observableSymbol;\n" },
+                    { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib" },
+                    { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js", content: "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _ponyfill = require('./ponyfill');\n\nvar _ponyfill2 = _interopRequireDefault(_ponyfill);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }\n\nvar root; /* global window */\n\n\nif (typeof self !== 'undefined') {\n  root = self;\n} else if (typeof window !== 'undefined') {\n  root = window;\n} else if (typeof global !== 'undefined') {\n  root = global;\n} else if (typeof module !== 'undefined') {\n  root = module;\n} else {\n  root = Function('return this')();\n}\n\nvar result = (0, _ponyfill2['default'])(root);\nexports['default'] = result;" },
                 ].map(getRootedFileOrFolder);
                 verifyAfterPartialOrCompleteNpmInstall(2);
 
                 filesAndFoldersToAdd.push(...[
-                    { "path": "/a/b/node_modules/.staging/typescript-8493ea5d/lib" },
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/add/operator" },
-                    { "path": "/a/b/node_modules/.staging/@types/lodash-e56c4fe7/package.json", "content": "{\n    \"name\": \"@types/lodash\",\n    \"version\": \"4.14.74\",\n    \"description\": \"TypeScript definitions for Lo-Dash\",\n    \"license\": \"MIT\",\n    \"contributors\": [\n        {\n            \"name\": \"Brian Zengel\",\n            \"url\": \"https://github.com/bczengel\"\n        },\n        {\n            \"name\": \"Ilya Mochalov\",\n            \"url\": \"https://github.com/chrootsu\"\n        },\n        {\n            \"name\": \"Stepan Mikhaylyuk\",\n            \"url\": \"https://github.com/stepancar\"\n        },\n        {\n            \"name\": \"Eric L Anderson\",\n            \"url\": \"https://github.com/ericanderson\"\n        },\n        {\n            \"name\": \"AJ Richardson\",\n            \"url\": \"https://github.com/aj-r\"\n        },\n        {\n            \"name\": \"Junyoung Clare Jang\",\n            \"url\": \"https://github.com/ailrun\"\n        }\n    ],\n    \"main\": \"\",\n    \"repository\": {\n        \"type\": \"git\",\n        \"url\": \"https://www.github.com/DefinitelyTyped/DefinitelyTyped.git\"\n    },\n    \"scripts\": {},\n    \"dependencies\": {},\n    \"typesPublisherContentHash\": \"12af578ffaf8d86d2df37e591857906a86b983fa9258414326544a0fe6af0de8\",\n    \"typeScriptVersion\": \"2.2\"\n}" },
-                    { "path": "/a/b/node_modules/.staging/lodash-b0733faa/index.js", "content": "module.exports = require('./lodash');" },
-                    { "path": "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594" }
+                    { path: "/a/b/node_modules/.staging/typescript-8493ea5d/lib" },
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/add/operator" },
+                    { path: "/a/b/node_modules/.staging/@types/lodash-e56c4fe7/package.json", content: "{\n    \"name\": \"@types/lodash\",\n    \"version\": \"4.14.74\",\n    \"description\": \"TypeScript definitions for Lo-Dash\",\n    \"license\": \"MIT\",\n    \"contributors\": [\n        {\n            \"name\": \"Brian Zengel\",\n            \"url\": \"https://github.com/bczengel\"\n        },\n        {\n            \"name\": \"Ilya Mochalov\",\n            \"url\": \"https://github.com/chrootsu\"\n        },\n        {\n            \"name\": \"Stepan Mikhaylyuk\",\n            \"url\": \"https://github.com/stepancar\"\n        },\n        {\n            \"name\": \"Eric L Anderson\",\n            \"url\": \"https://github.com/ericanderson\"\n        },\n        {\n            \"name\": \"AJ Richardson\",\n            \"url\": \"https://github.com/aj-r\"\n        },\n        {\n            \"name\": \"Junyoung Clare Jang\",\n            \"url\": \"https://github.com/ailrun\"\n        }\n    ],\n    \"main\": \"\",\n    \"repository\": {\n        \"type\": \"git\",\n        \"url\": \"https://www.github.com/DefinitelyTyped/DefinitelyTyped.git\"\n    },\n    \"scripts\": {},\n    \"dependencies\": {},\n    \"typesPublisherContentHash\": \"12af578ffaf8d86d2df37e591857906a86b983fa9258414326544a0fe6af0de8\",\n    \"typeScriptVersion\": \"2.2\"\n}" },
+                    { path: "/a/b/node_modules/.staging/lodash-b0733faa/index.js", content: "module.exports = require('./lodash');" },
+                    { path: "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594" }
                 ].map(getRootedFileOrFolder));
-                // Since we didnt add any supported extension file, there wont be any timeout scheduled
-                verifyAfterPartialOrCompleteNpmInstall(0);
+                // Since we added/removed folder, scheduled project update
+                verifyAfterPartialOrCompleteNpmInstall(2);
 
                 // Remove file "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594"
                 filesAndFoldersToAdd.length--;
                 verifyAfterPartialOrCompleteNpmInstall(0);
 
                 filesAndFoldersToAdd.push(...[
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/bundles" },
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/operator" },
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/src/add/observable/dom" },
-                    { "path": "/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts", "content": "\n// Stub for lodash\nexport = _;\nexport as namespace _;\ndeclare var _: _.LoDashStatic;\ndeclare namespace _ {\n    interface LoDashStatic {\n        someProp: string;\n    }\n    class SomeClass {\n        someMethod(): void;\n    }\n}" }
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/bundles" },
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/operator" },
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/src/add/observable/dom" },
+                    { path: "/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts", content: "\n// Stub for lodash\nexport = _;\nexport as namespace _;\ndeclare var _: _.LoDashStatic;\ndeclare namespace _ {\n    interface LoDashStatic {\n        someProp: string;\n    }\n    class SomeClass {\n        someMethod(): void;\n    }\n}" }
                 ].map(getRootedFileOrFolder));
                 verifyAfterPartialOrCompleteNpmInstall(2);
 
                 filesAndFoldersToAdd.push(...[
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/src/scheduler" },
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/src/util" },
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/symbol" },
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/testing" },
-                    { "path": "/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041", "content": "{\n  \"_args\": [\n    [\n      {\n        \"raw\": \"rxjs@^5.4.2\",\n        \"scope\": null,\n        \"escapedName\": \"rxjs\",\n        \"name\": \"rxjs\",\n        \"rawSpec\": \"^5.4.2\",\n        \"spec\": \">=5.4.2 <6.0.0\",\n        \"type\": \"range\"\n      },\n      \"C:\\\\Users\\\\shkamat\\\\Desktop\\\\app\"\n    ]\n  ],\n  \"_from\": \"rxjs@>=5.4.2 <6.0.0\",\n  \"_id\": \"rxjs@5.4.3\",\n  \"_inCache\": true,\n  \"_location\": \"/rxjs\",\n  \"_nodeVersion\": \"7.7.2\",\n  \"_npmOperationalInternal\": {\n    \"host\": \"s3://npm-registry-packages\",\n    \"tmp\": \"tmp/rxjs-5.4.3.tgz_1502407898166_0.6800217325799167\"\n  },\n  \"_npmUser\": {\n    \"name\": \"blesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"_npmVersion\": \"5.3.0\",\n  \"_phantomChildren\": {},\n  \"_requested\": {\n    \"raw\": \"rxjs@^5.4.2\",\n    \"scope\": null,\n    \"escapedName\": \"rxjs\",\n    \"name\": \"rxjs\",\n    \"rawSpec\": \"^5.4.2\",\n    \"spec\": \">=5.4.2 <6.0.0\",\n    \"type\": \"range\"\n  },\n  \"_requiredBy\": [\n    \"/\"\n  ],\n  \"_resolved\": \"https://registry.npmjs.org/rxjs/-/rxjs-5.4.3.tgz\",\n  \"_shasum\": \"0758cddee6033d68e0fd53676f0f3596ce3d483f\",\n  \"_shrinkwrap\": null,\n  \"_spec\": \"rxjs@^5.4.2\",\n  \"_where\": \"C:\\\\Users\\\\shkamat\\\\Desktop\\\\app\",\n  \"author\": {\n    \"name\": \"Ben Lesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"bugs\": {\n    \"url\": \"https://github.com/ReactiveX/RxJS/issues\"\n  },\n  \"config\": {\n    \"commitizen\": {\n      \"path\": \"cz-conventional-changelog\"\n    }\n  },\n  \"contributors\": [\n    {\n      \"name\": \"Ben Lesh\",\n      \"email\": \"ben@benlesh.com\"\n    },\n    {\n      \"name\": \"Paul Taylor\",\n      \"email\": \"paul.e.taylor@me.com\"\n    },\n    {\n      \"name\": \"Jeff Cross\",\n      \"email\": \"crossj@google.com\"\n    },\n    {\n      \"name\": \"Matthew Podwysocki\",\n      \"email\": \"matthewp@microsoft.com\"\n    },\n    {\n      \"name\": \"OJ Kwon\",\n      \"email\": \"kwon.ohjoong@gmail.com\"\n    },\n    {\n      \"name\": \"Andre Staltz\",\n      \"email\": \"andre@staltz.com\"\n    }\n  ],\n  \"dependencies\": {\n    \"symbol-observable\": \"^1.0.1\"\n  },\n  \"description\": \"Reactive Extensions for modern JavaScript\",\n  \"devDependencies\": {\n    \"babel-polyfill\": \"^6.23.0\",\n    \"benchmark\": \"^2.1.0\",\n    \"benchpress\": \"2.0.0-beta.1\",\n    \"chai\": \"^3.5.0\",\n    \"color\": \"^0.11.1\",\n    \"colors\": \"1.1.2\",\n    \"commitizen\": \"^2.8.6\",\n    \"coveralls\": \"^2.11.13\",\n    \"cz-conventional-changelog\": \"^1.2.0\",\n    \"danger\": \"^1.1.0\",\n    \"doctoc\": \"^1.0.0\",\n    \"escape-string-regexp\": \"^1.0.5 \",\n    \"esdoc\": \"^0.4.7\",\n    \"eslint\": \"^3.8.0\",\n    \"fs-extra\": \"^2.1.2\",\n    \"get-folder-size\": \"^1.0.0\",\n    \"glob\": \"^7.0.3\",\n    \"gm\": \"^1.22.0\",\n    \"google-closure-compiler-js\": \"^20170218.0.0\",\n    \"gzip-size\": \"^3.0.0\",\n    \"http-server\": \"^0.9.0\",\n    \"husky\": \"^0.13.3\",\n    \"lint-staged\": \"3.2.5\",\n    \"lodash\": \"^4.15.0\",\n    \"madge\": \"^1.4.3\",\n    \"markdown-doctest\": \"^0.9.1\",\n    \"minimist\": \"^1.2.0\",\n    \"mkdirp\": \"^0.5.1\",\n    \"mocha\": \"^3.0.2\",\n    \"mocha-in-sauce\": \"0.0.1\",\n    \"npm-run-all\": \"^4.0.2\",\n    \"npm-scripts-info\": \"^0.3.4\",\n    \"nyc\": \"^10.2.0\",\n    \"opn-cli\": \"^3.1.0\",\n    \"platform\": \"^1.3.1\",\n    \"promise\": \"^7.1.1\",\n    \"protractor\": \"^3.1.1\",\n    \"rollup\": \"0.36.3\",\n    \"rollup-plugin-inject\": \"^2.0.0\",\n    \"rollup-plugin-node-resolve\": \"^2.0.0\",\n    \"rx\": \"latest\",\n    \"rxjs\": \"latest\",\n    \"shx\": \"^0.2.2\",\n    \"sinon\": \"^2.1.0\",\n    \"sinon-chai\": \"^2.9.0\",\n    \"source-map-support\": \"^0.4.0\",\n    \"tslib\": \"^1.5.0\",\n    \"tslint\": \"^4.4.2\",\n    \"typescript\": \"~2.0.6\",\n    \"typings\": \"^2.0.0\",\n    \"validate-commit-msg\": \"^2.14.0\",\n    \"watch\": \"^1.0.1\",\n    \"webpack\": \"^1.13.1\",\n    \"xmlhttprequest\": \"1.8.0\"\n  },\n  \"directories\": {},\n  \"dist\": {\n    \"integrity\": \"sha512-fSNi+y+P9ss+EZuV0GcIIqPUK07DEaMRUtLJvdcvMyFjc9dizuDjere+A4V7JrLGnm9iCc+nagV/4QdMTkqC4A==\",\n    \"shasum\": \"0758cddee6033d68e0fd53676f0f3596ce3d483f\",\n    \"tarball\": \"https://registry.npmjs.org/rxjs/-/rxjs-5.4.3.tgz\"\n  },\n  \"engines\": {\n    \"npm\": \">=2.0.0\"\n  },\n  \"homepage\": \"https://github.com/ReactiveX/RxJS\",\n  \"keywords\": [\n    \"Rx\",\n    \"RxJS\",\n    \"ReactiveX\",\n    \"ReactiveExtensions\",\n    \"Streams\",\n    \"Observables\",\n    \"Observable\",\n    \"Stream\",\n    \"ES6\",\n    \"ES2015\"\n  ],\n  \"license\": \"Apache-2.0\",\n  \"lint-staged\": {\n    \"*.@(js)\": [\n      \"eslint --fix\",\n      \"git add\"\n    ],\n    \"*.@(ts)\": [\n      \"tslint --fix\",\n      \"git add\"\n    ]\n  },\n  \"main\": \"Rx.js\",\n  \"maintainers\": [\n    {\n      \"name\": \"blesh\",\n      \"email\": \"ben@benlesh.com\"\n    }\n  ],\n  \"name\": \"rxjs\",\n  \"optionalDependencies\": {},\n  \"readme\": \"ERROR: No README data found!\",\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+ssh://git@github.com/ReactiveX/RxJS.git\"\n  },\n  \"scripts-info\": {\n    \"info\": \"List available script\",\n    \"build_all\": \"Build all packages (ES6, CJS, UMD) and generate packages\",\n    \"build_cjs\": \"Build CJS package with clean up existing build, copy source into dist\",\n    \"build_es6\": \"Build ES6 package with clean up existing build, copy source into dist\",\n    \"build_closure_core\": \"Minify Global core build using closure compiler\",\n    \"build_global\": \"Build Global package, then minify build\",\n    \"build_perf\": \"Build CJS & Global build, run macro performance test\",\n    \"build_test\": \"Build CJS package & test spec, execute mocha test runner\",\n    \"build_cover\": \"Run lint to current code, build CJS & test spec, execute test coverage\",\n    \"build_docs\": \"Build ES6 & global package, create documentation using it\",\n    \"build_spec\": \"Build test specs\",\n    \"check_circular_dependencies\": \"Check codebase has circular dependencies\",\n    \"clean_spec\": \"Clean up existing test spec build output\",\n    \"clean_dist_cjs\": \"Clean up existing CJS package output\",\n    \"clean_dist_es6\": \"Clean up existing ES6 package output\",\n    \"clean_dist_global\": \"Clean up existing Global package output\",\n    \"commit\": \"Run git commit wizard\",\n    \"compile_dist_cjs\": \"Compile codebase into CJS module\",\n    \"compile_module_es6\": \"Compile codebase into ES6\",\n    \"cover\": \"Execute test coverage\",\n    \"lint_perf\": \"Run lint against performance test suite\",\n    \"lint_spec\": \"Run lint against test spec\",\n    \"lint_src\": \"Run lint against source\",\n    \"lint\": \"Run lint against everything\",\n    \"perf\": \"Run macro performance benchmark\",\n    \"perf_micro\": \"Run micro performance benchmark\",\n    \"test_mocha\": \"Execute mocha test runner against existing test spec build\",\n    \"test_browser\": \"Execute mocha test runner on browser against existing test spec build\",\n    \"test\": \"Clean up existing test spec build, build test spec and execute mocha test runner\",\n    \"tests2png\": \"Generate marble diagram image from test spec\",\n    \"watch\": \"Watch codebase, trigger compile when source code changes\"\n  },\n  \"typings\": \"Rx.d.ts\",\n  \"version\": \"5.4.3\"\n}\n" }
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/src/scheduler" },
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/src/util" },
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/symbol" },
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/testing" },
+                    { path: "/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041", content: "{\n  \"_args\": [\n    [\n      {\n        \"raw\": \"rxjs@^5.4.2\",\n        \"scope\": null,\n        \"escapedName\": \"rxjs\",\n        \"name\": \"rxjs\",\n        \"rawSpec\": \"^5.4.2\",\n        \"spec\": \">=5.4.2 <6.0.0\",\n        \"type\": \"range\"\n      },\n      \"C:\\\\Users\\\\shkamat\\\\Desktop\\\\app\"\n    ]\n  ],\n  \"_from\": \"rxjs@>=5.4.2 <6.0.0\",\n  \"_id\": \"rxjs@5.4.3\",\n  \"_inCache\": true,\n  \"_location\": \"/rxjs\",\n  \"_nodeVersion\": \"7.7.2\",\n  \"_npmOperationalInternal\": {\n    \"host\": \"s3://npm-registry-packages\",\n    \"tmp\": \"tmp/rxjs-5.4.3.tgz_1502407898166_0.6800217325799167\"\n  },\n  \"_npmUser\": {\n    \"name\": \"blesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"_npmVersion\": \"5.3.0\",\n  \"_phantomChildren\": {},\n  \"_requested\": {\n    \"raw\": \"rxjs@^5.4.2\",\n    \"scope\": null,\n    \"escapedName\": \"rxjs\",\n    \"name\": \"rxjs\",\n    \"rawSpec\": \"^5.4.2\",\n    \"spec\": \">=5.4.2 <6.0.0\",\n    \"type\": \"range\"\n  },\n  \"_requiredBy\": [\n    \"/\"\n  ],\n  \"_resolved\": \"https://registry.npmjs.org/rxjs/-/rxjs-5.4.3.tgz\",\n  \"_shasum\": \"0758cddee6033d68e0fd53676f0f3596ce3d483f\",\n  \"_shrinkwrap\": null,\n  \"_spec\": \"rxjs@^5.4.2\",\n  \"_where\": \"C:\\\\Users\\\\shkamat\\\\Desktop\\\\app\",\n  \"author\": {\n    \"name\": \"Ben Lesh\",\n    \"email\": \"ben@benlesh.com\"\n  },\n  \"bugs\": {\n    \"url\": \"https://github.com/ReactiveX/RxJS/issues\"\n  },\n  \"config\": {\n    \"commitizen\": {\n      \"path\": \"cz-conventional-changelog\"\n    }\n  },\n  \"contributors\": [\n    {\n      \"name\": \"Ben Lesh\",\n      \"email\": \"ben@benlesh.com\"\n    },\n    {\n      \"name\": \"Paul Taylor\",\n      \"email\": \"paul.e.taylor@me.com\"\n    },\n    {\n      \"name\": \"Jeff Cross\",\n      \"email\": \"crossj@google.com\"\n    },\n    {\n      \"name\": \"Matthew Podwysocki\",\n      \"email\": \"matthewp@microsoft.com\"\n    },\n    {\n      \"name\": \"OJ Kwon\",\n      \"email\": \"kwon.ohjoong@gmail.com\"\n    },\n    {\n      \"name\": \"Andre Staltz\",\n      \"email\": \"andre@staltz.com\"\n    }\n  ],\n  \"dependencies\": {\n    \"symbol-observable\": \"^1.0.1\"\n  },\n  \"description\": \"Reactive Extensions for modern JavaScript\",\n  \"devDependencies\": {\n    \"babel-polyfill\": \"^6.23.0\",\n    \"benchmark\": \"^2.1.0\",\n    \"benchpress\": \"2.0.0-beta.1\",\n    \"chai\": \"^3.5.0\",\n    \"color\": \"^0.11.1\",\n    \"colors\": \"1.1.2\",\n    \"commitizen\": \"^2.8.6\",\n    \"coveralls\": \"^2.11.13\",\n    \"cz-conventional-changelog\": \"^1.2.0\",\n    \"danger\": \"^1.1.0\",\n    \"doctoc\": \"^1.0.0\",\n    \"escape-string-regexp\": \"^1.0.5 \",\n    \"esdoc\": \"^0.4.7\",\n    \"eslint\": \"^3.8.0\",\n    \"fs-extra\": \"^2.1.2\",\n    \"get-folder-size\": \"^1.0.0\",\n    \"glob\": \"^7.0.3\",\n    \"gm\": \"^1.22.0\",\n    \"google-closure-compiler-js\": \"^20170218.0.0\",\n    \"gzip-size\": \"^3.0.0\",\n    \"http-server\": \"^0.9.0\",\n    \"husky\": \"^0.13.3\",\n    \"lint-staged\": \"3.2.5\",\n    \"lodash\": \"^4.15.0\",\n    \"madge\": \"^1.4.3\",\n    \"markdown-doctest\": \"^0.9.1\",\n    \"minimist\": \"^1.2.0\",\n    \"mkdirp\": \"^0.5.1\",\n    \"mocha\": \"^3.0.2\",\n    \"mocha-in-sauce\": \"0.0.1\",\n    \"npm-run-all\": \"^4.0.2\",\n    \"npm-scripts-info\": \"^0.3.4\",\n    \"nyc\": \"^10.2.0\",\n    \"opn-cli\": \"^3.1.0\",\n    \"platform\": \"^1.3.1\",\n    \"promise\": \"^7.1.1\",\n    \"protractor\": \"^3.1.1\",\n    \"rollup\": \"0.36.3\",\n    \"rollup-plugin-inject\": \"^2.0.0\",\n    \"rollup-plugin-node-resolve\": \"^2.0.0\",\n    \"rx\": \"latest\",\n    \"rxjs\": \"latest\",\n    \"shx\": \"^0.2.2\",\n    \"sinon\": \"^2.1.0\",\n    \"sinon-chai\": \"^2.9.0\",\n    \"source-map-support\": \"^0.4.0\",\n    \"tslib\": \"^1.5.0\",\n    \"tslint\": \"^4.4.2\",\n    \"typescript\": \"~2.0.6\",\n    \"typings\": \"^2.0.0\",\n    \"validate-commit-msg\": \"^2.14.0\",\n    \"watch\": \"^1.0.1\",\n    \"webpack\": \"^1.13.1\",\n    \"xmlhttprequest\": \"1.8.0\"\n  },\n  \"directories\": {},\n  \"dist\": {\n    \"integrity\": \"sha512-fSNi+y+P9ss+EZuV0GcIIqPUK07DEaMRUtLJvdcvMyFjc9dizuDjere+A4V7JrLGnm9iCc+nagV/4QdMTkqC4A==\",\n    \"shasum\": \"0758cddee6033d68e0fd53676f0f3596ce3d483f\",\n    \"tarball\": \"https://registry.npmjs.org/rxjs/-/rxjs-5.4.3.tgz\"\n  },\n  \"engines\": {\n    \"npm\": \">=2.0.0\"\n  },\n  \"homepage\": \"https://github.com/ReactiveX/RxJS\",\n  \"keywords\": [\n    \"Rx\",\n    \"RxJS\",\n    \"ReactiveX\",\n    \"ReactiveExtensions\",\n    \"Streams\",\n    \"Observables\",\n    \"Observable\",\n    \"Stream\",\n    \"ES6\",\n    \"ES2015\"\n  ],\n  \"license\": \"Apache-2.0\",\n  \"lint-staged\": {\n    \"*.@(js)\": [\n      \"eslint --fix\",\n      \"git add\"\n    ],\n    \"*.@(ts)\": [\n      \"tslint --fix\",\n      \"git add\"\n    ]\n  },\n  \"main\": \"Rx.js\",\n  \"maintainers\": [\n    {\n      \"name\": \"blesh\",\n      \"email\": \"ben@benlesh.com\"\n    }\n  ],\n  \"name\": \"rxjs\",\n  \"optionalDependencies\": {},\n  \"readme\": \"ERROR: No README data found!\",\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+ssh://git@github.com/ReactiveX/RxJS.git\"\n  },\n  \"scripts-info\": {\n    \"info\": \"List available script\",\n    \"build_all\": \"Build all packages (ES6, CJS, UMD) and generate packages\",\n    \"build_cjs\": \"Build CJS package with clean up existing build, copy source into dist\",\n    \"build_es6\": \"Build ES6 package with clean up existing build, copy source into dist\",\n    \"build_closure_core\": \"Minify Global core build using closure compiler\",\n    \"build_global\": \"Build Global package, then minify build\",\n    \"build_perf\": \"Build CJS & Global build, run macro performance test\",\n    \"build_test\": \"Build CJS package & test spec, execute mocha test runner\",\n    \"build_cover\": \"Run lint to current code, build CJS & test spec, execute test coverage\",\n    \"build_docs\": \"Build ES6 & global package, create documentation using it\",\n    \"build_spec\": \"Build test specs\",\n    \"check_circular_dependencies\": \"Check codebase has circular dependencies\",\n    \"clean_spec\": \"Clean up existing test spec build output\",\n    \"clean_dist_cjs\": \"Clean up existing CJS package output\",\n    \"clean_dist_es6\": \"Clean up existing ES6 package output\",\n    \"clean_dist_global\": \"Clean up existing Global package output\",\n    \"commit\": \"Run git commit wizard\",\n    \"compile_dist_cjs\": \"Compile codebase into CJS module\",\n    \"compile_module_es6\": \"Compile codebase into ES6\",\n    \"cover\": \"Execute test coverage\",\n    \"lint_perf\": \"Run lint against performance test suite\",\n    \"lint_spec\": \"Run lint against test spec\",\n    \"lint_src\": \"Run lint against source\",\n    \"lint\": \"Run lint against everything\",\n    \"perf\": \"Run macro performance benchmark\",\n    \"perf_micro\": \"Run micro performance benchmark\",\n    \"test_mocha\": \"Execute mocha test runner against existing test spec build\",\n    \"test_browser\": \"Execute mocha test runner on browser against existing test spec build\",\n    \"test\": \"Clean up existing test spec build, build test spec and execute mocha test runner\",\n    \"tests2png\": \"Generate marble diagram image from test spec\",\n    \"watch\": \"Watch codebase, trigger compile when source code changes\"\n  },\n  \"typings\": \"Rx.d.ts\",\n  \"version\": \"5.4.3\"\n}\n" }
                 ].map(getRootedFileOrFolder));
-                verifyAfterPartialOrCompleteNpmInstall(0);
+                verifyAfterPartialOrCompleteNpmInstall(2);
 
                 // remove /a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041
                 filesAndFoldersToAdd.length--;
                 // and add few more folders/files
                 filesAndFoldersToAdd.push(...[
-                    { "path": "/a/b/node_modules/symbol-observable" },
-                    { "path": "/a/b/node_modules/@types" },
-                    { "path": "/a/b/node_modules/@types/lodash" },
-                    { "path": "/a/b/node_modules/lodash" },
-                    { "path": "/a/b/node_modules/rxjs" },
-                    { "path": "/a/b/node_modules/typescript" },
-                    { "path": "/a/b/node_modules/.bin" }
+                    { path: "/a/b/node_modules/symbol-observable" },
+                    { path: "/a/b/node_modules/@types" },
+                    { path: "/a/b/node_modules/@types/lodash" },
+                    { path: "/a/b/node_modules/lodash" },
+                    { path: "/a/b/node_modules/rxjs" },
+                    { path: "/a/b/node_modules/typescript" },
+                    { path: "/a/b/node_modules/.bin" }
                 ].map(getRootedFileOrFolder));
                 // From the type root update
                 verifyAfterPartialOrCompleteNpmInstall(2);
@@ -5384,7 +5835,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("ProjectsChangedInBackground", () => {
+    describe("tsserverProjectSystem ProjectsChangedInBackground", () => {
         function verifyFiles(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
             assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
             const seen = createMap<true>();
@@ -5974,13 +6425,13 @@ namespace ts.projectSystem {
                     });
 
                     // Verified the events, reset them
-                    host.clearOutput();
+                    session.clearMessages();
                 }
             }
         });
     });
 
-    describe("Watched recursive directories with windows style file system", () => {
+    describe("tsserverProjectSystem Watched recursive directories with windows style file system", () => {
         function verifyWatchedDirectories(useProjectAtRoot: boolean) {
             const root = useProjectAtRoot ? "c:/" : "c:/myfolder/allproject/";
             const configFile: FileOrFolder = {

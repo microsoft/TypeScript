@@ -25,9 +25,9 @@ namespace ts {
         },
         "/dev/configs/tests.json": {
             compilerOptions: {
-                "preserveConstEnums": true,
-                "removeComments": false,
-                "sourceMap": true
+                preserveConstEnums: true,
+                removeComments: false,
+                sourceMap: true
             },
             exclude: [
                 "../tests/baselines",
@@ -52,7 +52,7 @@ namespace ts {
         "/dev/missing.json": {
             extends: "./missing2",
             compilerOptions: {
-                "types": []
+                types: []
             }
         },
         "/dev/failure.json": {

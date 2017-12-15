@@ -170,8 +170,8 @@ namespace ts.server {
             };
         }
 
-        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
-            const args: protocol.CompletionsRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo {
+            const args: protocol.CompletionsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), ...options };
 
             const request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
             const response = this.processResponse<protocol.CompletionsResponse>(request);
@@ -180,26 +180,27 @@ namespace ts.server {
                 isGlobalCompletion: false,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body.map(entry => {
-
+                entries: response.body.map<CompletionEntry>(entry => {
                     if (entry.replacementSpan !== undefined) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
-                        return { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName) };
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended } = entry;
+                        // TODO: GH#241
+                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, isRecommended };
+                        return res;
                     }
 
-                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string };
+                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
                 })
             };
         }
 
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
-            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [entryName] };
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, _options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails {
+            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [{ name: entryName, source }] };
 
             const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
 
-            const convertedCodeActions = map(response.body[0].codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
+            const convertedCodeActions = map(response.body[0].codeActions, ({ description, changes }) => ({ description, changes: this.convertChanges(changes, fileName) }));
             return { ...response.body[0], codeActions: convertedCodeActions };
         }
 
@@ -270,6 +271,25 @@ namespace ts.server {
             }));
         }
 
+        getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+            const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+
+            const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
+            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
+
+            return {
+                definitions: response.body.definitions.map(entry => ({
+                    containerKind: ScriptElementKind.unknown,
+                    containerName: "",
+                    fileName: entry.file,
+                    textSpan: this.decodeSpan(entry),
+                    kind: ScriptElementKind.unknown,
+                    name: ""
+                })),
+                textSpan: this.decodeSpan(response.body.textSpan, request.arguments.file)
+            };
+        }
+
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
@@ -324,7 +344,7 @@ namespace ts.server {
         }
 
         getSyntacticDiagnostics(file: string): Diagnostic[] {
-            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file,  includeLinePosition: true };
+            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file, includeLinePosition: true };
 
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest>(CommandNames.SyntacticDiagnosticsSync, args);
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse>(request);
@@ -533,14 +553,17 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
+        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: ReadonlyArray<number>): ReadonlyArray<CodeFixAction> {
             const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(entry => this.convertCodeActions(entry, file));
+            // TODO: GH#20538 shouldn't need cast
+            return (response.body as ReadonlyArray<protocol.CodeFixAction>).map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
         }
+
+        getCombinedCodeFix = notImplemented;
 
         applyCodeActionCommand = notImplemented;
 
@@ -618,14 +641,11 @@ namespace ts.server {
             });
         }
 
-        convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {
-            return {
-                description: entry.description,
-                changes: entry.changes.map(change => ({
-                    fileName: change.fileName,
-                    textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
-                }))
-            };
+        private convertChanges(changes: protocol.FileCodeEdits[], fileName: string): FileTextChanges[] {
+            return changes.map(change => ({
+                fileName: change.fileName,
+                textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
+            }));
         }
 
         convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): ts.TextChange {

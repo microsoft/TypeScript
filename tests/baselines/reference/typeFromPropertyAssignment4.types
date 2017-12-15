@@ -1,0 +1,34 @@
+=== tests/cases/conformance/salsa/def.js ===
+var Outer = {};
+>Outer : { [x: string]: any; }
+>{} : { [x: string]: any; }
+
+=== tests/cases/conformance/salsa/a.js ===
+Outer.Inner = class {
+>Outer.Inner = class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof (Anonymous class)
+>Outer.Inner : any
+>Outer : { [x: string]: any; }
+>Inner : any
+>class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof (Anonymous class)
+
+    constructor() {
+        /** @type {number} */
+        this.y = 12
+>this.y = 12 : 12
+>this.y : number
+>this : this
+>y : number
+>12 : 12
+    }
+}
+
+=== tests/cases/conformance/salsa/b.js ===
+/** @type {Outer.Inner} */
+var x;
+>x : (Anonymous class)
+
+x.y
+>x.y : number
+>x : (Anonymous class)
+>y : number
+

@@ -39,11 +39,11 @@ interface A {
 
     1:number;
     [2]:number;
->2 : Symbol(A[[2]], Decl(literalsInComputedProperties1.ts, 12, 13))
+>2 : Symbol(A[2], Decl(literalsInComputedProperties1.ts, 12, 13))
 
     "3":number;
     ["4"]:number;
->"4" : Symbol(A[["4"]], Decl(literalsInComputedProperties1.ts, 14, 15))
+>"4" : Symbol(A["4"], Decl(literalsInComputedProperties1.ts, 14, 15))
 }
 
 let y:A;
@@ -59,7 +59,7 @@ y[1].toExponential();
 y[2].toExponential();
 >y[2].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 >y : Symbol(y, Decl(literalsInComputedProperties1.ts, 18, 3))
->2 : Symbol(A[[2]], Decl(literalsInComputedProperties1.ts, 12, 13))
+>2 : Symbol(A[2], Decl(literalsInComputedProperties1.ts, 12, 13))
 >toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 
 y[3].toExponential();
@@ -71,7 +71,7 @@ y[3].toExponential();
 y[4].toExponential();
 >y[4].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 >y : Symbol(y, Decl(literalsInComputedProperties1.ts, 18, 3))
->4 : Symbol(A[["4"]], Decl(literalsInComputedProperties1.ts, 14, 15))
+>4 : Symbol(A["4"], Decl(literalsInComputedProperties1.ts, 14, 15))
 >toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 
 class C {
@@ -79,11 +79,11 @@ class C {
 
     1:number;
     [2]:number;
->2 : Symbol(C[[2]], Decl(literalsInComputedProperties1.ts, 25, 13))
+>2 : Symbol(C[2], Decl(literalsInComputedProperties1.ts, 25, 13))
 
     "3":number;
     ["4"]:number;
->"4" : Symbol(C[["4"]], Decl(literalsInComputedProperties1.ts, 27, 15))
+>"4" : Symbol(C["4"], Decl(literalsInComputedProperties1.ts, 27, 15))
 }
 
 let z:C;
@@ -99,7 +99,7 @@ z[1].toExponential();
 z[2].toExponential();
 >z[2].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 >z : Symbol(z, Decl(literalsInComputedProperties1.ts, 31, 3))
->2 : Symbol(C[[2]], Decl(literalsInComputedProperties1.ts, 25, 13))
+>2 : Symbol(C[2], Decl(literalsInComputedProperties1.ts, 25, 13))
 >toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 
 z[3].toExponential();
@@ -111,7 +111,7 @@ z[3].toExponential();
 z[4].toExponential();
 >z[4].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 >z : Symbol(z, Decl(literalsInComputedProperties1.ts, 31, 3))
->4 : Symbol(C[["4"]], Decl(literalsInComputedProperties1.ts, 27, 15))
+>4 : Symbol(C["4"], Decl(literalsInComputedProperties1.ts, 27, 15))
 >toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 
 enum X {
@@ -119,15 +119,15 @@ enum X {
 
     1 = 1,
     [2] = 2,
->2 : Symbol(X[[2]], Decl(literalsInComputedProperties1.ts, 38, 10))
+>2 : Symbol(X[2], Decl(literalsInComputedProperties1.ts, 38, 10))
 
     "3" = 3,
     ["4"] = 4,
->"4" : Symbol(X[["4"]], Decl(literalsInComputedProperties1.ts, 40, 12))
+>"4" : Symbol(X["4"], Decl(literalsInComputedProperties1.ts, 40, 12))
 
     "foo" = 5,
     ["bar"] = 6
->"bar" : Symbol(X[["bar"]], Decl(literalsInComputedProperties1.ts, 42, 14))
+>"bar" : Symbol(X["bar"], Decl(literalsInComputedProperties1.ts, 42, 14))
 }
 
 let a = X["foo"];
@@ -138,6 +138,6 @@ let a = X["foo"];
 let a0 = X["bar"];
 >a0 : Symbol(a0, Decl(literalsInComputedProperties1.ts, 47, 3))
 >X : Symbol(X, Decl(literalsInComputedProperties1.ts, 35, 21))
->"bar" : Symbol(X[["bar"]], Decl(literalsInComputedProperties1.ts, 42, 14))
+>"bar" : Symbol(X["bar"], Decl(literalsInComputedProperties1.ts, 42, 14))
 
 // TODO: make sure that enum still disallow template literals as member names

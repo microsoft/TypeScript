@@ -47,8 +47,8 @@ declare var props;
 />;
 
 <日本語></日本語>;
->日本語 : Symbol(unknown)
->日本語 : Symbol(unknown)
+>日本語 : Symbol(日本語, Decl(jsxEsprimaFbTestSuite.tsx, 1, 11))
+>日本語 : Symbol(日本語, Decl(jsxEsprimaFbTestSuite.tsx, 1, 11))
 
 <AbC_def
 >AbC_def : Symbol(AbC_def, Decl(jsxEsprimaFbTestSuite.tsx, 2, 11))

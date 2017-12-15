@@ -1,0 +1,27 @@
+=== tests/cases/compiler/inferObjectTypeFromStringLiteralToKeyof.ts ===
+declare function inference<T>(target: T, name: keyof T): void;
+>inference : <T>(target: T, name: keyof T) => void
+>T : T
+>target : T
+>T : T
+>name : keyof T
+>T : T
+
+declare var two: "a" | "d";
+>two : "a" | "d"
+
+inference({ a: 1, b: 2, c: 3, d(n) { return n } }, two);
+>inference({ a: 1, b: 2, c: 3, d(n) { return n } }, two) : void
+>inference : <T>(target: T, name: keyof T) => void
+>{ a: 1, b: 2, c: 3, d(n) { return n } } : { a: number; b: number; c: number; d(n: any): any; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>c : number
+>3 : 3
+>d : (n: any) => any
+>n : any
+>n : any
+>two : "a" | "d"
+

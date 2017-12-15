@@ -5,6 +5,6 @@
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'T'.",
+    description: "Remove declaration for: 'T'",
     newRangeContent: "class greeter ",
 });

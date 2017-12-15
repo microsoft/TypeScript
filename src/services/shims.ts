@@ -106,7 +106,7 @@ namespace ts {
     ///
     // Note: This is being using by the host (VS) and is marshaled back and forth.
     // When changing this make sure the changes are reflected in the managed side as well
-    export interface IFileReference {
+    export interface ShimsFileReference {
         path: string;
         position: number;
         length: number;
@@ -140,8 +140,8 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
-        getCompletionsAtPosition(fileName: string, position: number): string;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/): string;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): string;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/, source: string | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -169,6 +169,8 @@ namespace ts {
          * Or undefined value if no definition can be found.
          */
         getDefinitionAtPosition(fileName: string, position: number): string;
+
+        getDefinitionAndBoundSpan(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -328,7 +330,7 @@ namespace ts {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
-                this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
+                this.resolveModuleNames = (moduleNames: string[], containingFile: string): ResolvedModuleFull[] => {
                     const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
@@ -772,6 +774,17 @@ namespace ts {
             );
         }
 
+        /**
+         * Computes the definition location and file for the symbol
+         * at the requested position.
+         */
+        public getDefinitionAndBoundSpan(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getDefinitionAndBoundSpan('${fileName}', ${position})`,
+                () => this.languageService.getDefinitionAndBoundSpan(fileName, position)
+            );
+        }
+
         /// GOTO Type
 
         /**
@@ -885,20 +898,20 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number) {
+        public getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined) {
             return this.forwardJSONCall(
-                `getCompletionsAtPosition('${fileName}', ${position})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position)
+                `getCompletionsAtPosition('${fileName}', ${position}, ${options})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position, options)
             );
         }
 
         /** Get a string based representation of a completion list entry details */
-        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/) {
+        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/, source: string | undefined) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
                     const localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions);
+                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source);
                 }
             );
         }
@@ -1091,11 +1104,11 @@ namespace ts {
             );
         }
 
-        private convertFileReferences(refs: FileReference[]): IFileReference[] {
+        private convertFileReferences(refs: FileReference[]): ShimsFileReference[] {
             if (!refs) {
                 return undefined;
             }
-            const result: IFileReference[] = [];
+            const result: ShimsFileReference[] = [];
             for (const ref of refs) {
                 result.push({
                     path: normalizeSlashes(ref.fileName),

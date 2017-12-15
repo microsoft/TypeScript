@@ -105,6 +105,7 @@ var harnessCoreSources = [
     "projectsRunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
+    "externalCompileRunner.ts",
     "test262Runner.ts",
     "./parallel/shared.ts",
     "./parallel/host.ts",
@@ -129,6 +130,7 @@ var harnessSources = harnessCoreSources.concat([
     "textStorage.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",
+    "asserts.ts",
     "builder.ts",
     "commandLineParsing.ts",
     "projectReferences.ts",
@@ -197,10 +199,17 @@ var es2017LibrarySource = [
     "es2017.object.d.ts",
     "es2017.sharedmemory.d.ts",
     "es2017.string.d.ts",
-    "es2017.intl.d.ts"
+    "es2017.intl.d.ts",
+    "es2017.typedarrays.d.ts",
 ];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+});
+
+var es2018LibrarySource = [];
+
+var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
@@ -226,6 +235,7 @@ var librarySourceMap = [
     { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
     { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
     { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
+    { target: "lib.es2018.d.ts", sources: ["header.d.ts", "es2018.d.ts"] },
     { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
 
     // JavaScript + all host library
@@ -233,8 +243,9 @@ var librarySourceMap = [
     { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.es2018.full.d.ts", sources: ["header.d.ts", "es2018.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, es2018LibrarySourceMap, esnextLibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
@@ -730,7 +741,10 @@ compileFile(word2mdJs,
     [word2mdTs],
     [word2mdTs],
     [],
-            /*useBuiltCompiler*/ false);
+    /*useBuiltCompiler*/ false,
+    {
+        lib: "scripthost,es5"
+    });
 
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
@@ -844,8 +858,9 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
     var testConfigContents = JSON.stringify({
+        runners: runners ? runners.split(",") : undefined,
         test: tests ? [tests] : undefined,
         light: light,
         workerCount: workerCount,
@@ -871,6 +886,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     var debug = process.env.debug || process.env["debug-brk"] || process.env.d;
     var inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     var testTimeout = process.env.timeout || defaultTestTimeout;
+    var runners = process.env.runners || process.env.runner || process.env.ru;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light === undefined || process.env.light !== "false";
     var stackTraceLimit = process.env.stackTraceLimit;
@@ -892,8 +908,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
         workerCount = process.env.workerCount || process.env.p || os.cpus().length;
     }
 
-    if (tests || light || taskConfigsFolder) {
-        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
+    if (tests || runners || light || taskConfigsFolder) {
+        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -1028,14 +1044,15 @@ task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
     var browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
+    var runners = process.env.runners || process.env.runner || process.env.ru;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
-    if (tests || light) {
-        writeTestConfigFile(tests, light);
+    if (tests || runners || light) {
+        writeTestConfigFile(tests, runners, light);
     }
 
     tests = tests ? tests : '';
@@ -1283,7 +1300,7 @@ task("lint", ["build-rules"], () => {
     const fileMatcher = process.env.f || process.env.file || process.env.files;
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude 'src/lib/*.d.ts'";
     const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
     jake.exec([cmd], { interactive: true }, () => {

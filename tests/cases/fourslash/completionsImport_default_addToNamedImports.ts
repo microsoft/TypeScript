@@ -9,11 +9,15 @@
 ////f/**/;
 
 goTo.marker("");
-verify.completionListContains("foo", "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
+verify.completionListContains({ name: "foo", source: "/a" }, "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, {
+    includeExternalModuleExports: true,
+    sourceDisplay: "./a",
+});
 
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    description: `Add 'foo' to existing import declaration from "./a".`,
+    source: "/a",
+    description: `Add 'foo' to existing import declaration from "./a"`,
     newFileContent: `import foo, { x } from "./a";
 f;`,
 });

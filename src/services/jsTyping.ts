@@ -115,7 +115,10 @@ namespace ts.JsTyping {
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            const module = deduplicate(unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId));
+            const module = deduplicate(
+                unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
+                equateStringsCaseSensitive,
+                compareStringsCaseSensitive);
             addInferredTypings(module, "Inferred typings from unresolved imports");
         }
         // Add the cached typing locations for inferred typings that are already installed
@@ -180,7 +183,7 @@ namespace ts.JsTyping {
                 if (!hasJavaScriptFileExtension(j)) return undefined;
 
                 const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
-                const cleanedTypingName = inferredTypingName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
+                const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
                 return safeList.get(cleanedTypingName);
             });
             if (fromFileNames.length) {
@@ -257,7 +260,7 @@ namespace ts.JsTyping {
         NameContainsNonURISafeCharacters
     }
 
-    const MaxPackageNameLength = 214;
+    const maxPackageNameLength = 214;
 
     /**
      * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
@@ -266,7 +269,7 @@ namespace ts.JsTyping {
         if (!packageName) {
             return PackageNameValidationResult.EmptyName;
         }
-        if (packageName.length > MaxPackageNameLength) {
+        if (packageName.length > maxPackageNameLength) {
             return PackageNameValidationResult.NameTooLong;
         }
         if (packageName.charCodeAt(0) === CharacterCodes.dot) {
@@ -292,7 +295,7 @@ namespace ts.JsTyping {
             case PackageNameValidationResult.EmptyName:
                 return `Package name '${typing}' cannot be empty`;
             case PackageNameValidationResult.NameTooLong:
-                return `Package name '${typing}' should be less than ${MaxPackageNameLength} characters`;
+                return `Package name '${typing}' should be less than ${maxPackageNameLength} characters`;
             case PackageNameValidationResult.NameStartsWithDot:
                 return `Package name '${typing}' cannot start with '.'`;
             case PackageNameValidationResult.NameStartsWithUnderscore:

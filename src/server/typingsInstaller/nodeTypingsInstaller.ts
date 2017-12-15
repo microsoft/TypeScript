@@ -63,9 +63,9 @@ namespace ts.server.typingsInstaller {
         }
     }
 
-    const TypesRegistryPackageName = "types-registry";
+    const typesRegistryPackageName = "types-registry";
     function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
-        return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${TypesRegistryPackageName}/index.json`);
+        return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
     }
 
     interface ExecSyncOptions {
@@ -105,16 +105,16 @@ namespace ts.server.typingsInstaller {
 
             try {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Updating ${TypesRegistryPackageName} npm package...`);
+                    this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
                 }
-                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation });
+                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}`, { cwd: globalTypingsCacheLocation });
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Updated ${TypesRegistryPackageName} npm package`);
+                    this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
                 }
             }
             catch (e) {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Error updating ${TypesRegistryPackageName} package: ${(<Error>e).message}`);
+                    this.log.writeLine(`Error updating ${typesRegistryPackageName} package: ${(<Error>e).message}`);
                 }
                 // store error info to report it later when it is known that server is already listening to events from typings installer
                 this.delayedInitializationError = {
@@ -150,17 +150,17 @@ namespace ts.server.typingsInstaller {
                         break;
                     }
                     case "installPackage": {
-                        const { fileName, packageName, projectRootPath } = req;
+                        const { fileName, packageName, projectName, projectRootPath } = req;
                         const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost) || projectRootPath;
                         if (cwd) {
                             this.installWorker(-1, [packageName], cwd, success => {
                                 const message = success ? `Package ${packageName} installed.` : `There was an error installing ${packageName}.`;
-                                const response: PackageInstalledResponse = { kind: EventPackageInstalled, success, message };
+                                const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success, message };
                                 this.sendResponse(response);
                             });
                         }
                         else {
-                            const response: PackageInstalledResponse = { kind: EventPackageInstalled, success: false, message: "Could not determine a project root path." };
+                            const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
                             this.sendResponse(response);
                         }
                         break;
@@ -243,7 +243,7 @@ namespace ts.server.typingsInstaller {
     const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, /*throttleLimit*/5, log);
     installer.listen();
 
-    function indent(newline: string, string: string): string {
-        return `${newline}    ` + string.replace(/\r?\n/, `${newline}    `);
+    function indent(newline: string, str: string): string {
+        return `${newline}    ` + str.replace(/\r?\n/, `${newline}    `);
     }
 }

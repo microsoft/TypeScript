@@ -2,7 +2,7 @@
 // @noImplicitReferences: true
 
 // @Filename: /node_modules/a/index.d.ts
-////import /*useAX*/[|{| "isWriteAccess": true, "isDefinition": true |}X|] from "x";
+////import [|{| "name": "useAX", "isWriteAccess": true, "isDefinition": true |}X|] from "x";
 ////export function a(x: [|X|]): void;
 
 // @Filename: /node_modules/a/node_modules/x/index.d.ts
@@ -14,7 +14,7 @@
 ////{ "name": "x", "version": "1.2.3" }
 
 // @Filename: /node_modules/b/index.d.ts
-////import /*useBX*/[|{| "isWriteAccess": true, "isDefinition": true |}X|] from "x";
+////import [|{| "name": "useBX", "isWriteAccess": true, "isDefinition": true |}X|] from "x";
 ////export const b: [|X|];
 
 // @Filename: /node_modules/b/node_modules/x/index.d.ts

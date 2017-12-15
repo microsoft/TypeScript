@@ -264,7 +264,7 @@ var b1: b is A;
 >A : any
 
 function b2(a: b is A) {};
->b2 : (a: any, A: any) => void
+>b2 : (a: any, is: any, A: any) => void
 >a : any
 >b : No type information available!
 >is : any

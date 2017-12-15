@@ -74,8 +74,8 @@ module TypeScriptAllInOne {
 >4 : 4
 
                 if (retValue != 0) {
->if : (retValue?: boolean) => any
->retValue : boolean
+>if : (retValue: any) => any
+>retValue : any
 >!= 0 : boolean
 > : any
 >0 : 0
@@ -89,7 +89,7 @@ module TypeScriptAllInOne {
 
 
                 retValue = bfs.TYPES();
->retValue : boolean
+>retValue : any
 >bfs.TYPES() : any
 >bfs.TYPES : any
 >bfs : any
@@ -97,7 +97,7 @@ module TypeScriptAllInOne {
 
                 if (retValue != 0) {
 >retValue != 0 : boolean
->retValue : boolean
+>retValue : any
 >0 : 0
 
                     return 1 && 
@@ -108,7 +108,7 @@ module TypeScriptAllInOne {
 
                 retValue = bfs.OPERATOR ' );
 >retValue = bfs.OPERATOR : any
->retValue : boolean
+>retValue : any
 >bfs.OPERATOR : any
 >bfs : any
 >OPERATOR : any
@@ -116,7 +116,7 @@ module TypeScriptAllInOne {
 
                 if (retValue != 0) {
 >retValue != 0 : boolean
->retValue : boolean
+>retValue : any
 >0 : 0
 
                     return 1;
@@ -124,7 +124,6 @@ module TypeScriptAllInOne {
                 }
             }
             catch (e) {
->catch : (e: any) => void
 >e : any
 
                 console.log(e);

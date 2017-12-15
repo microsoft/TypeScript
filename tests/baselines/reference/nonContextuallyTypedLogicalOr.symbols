@@ -28,8 +28,8 @@ var e: Ellement;
 >Ellement : Symbol(Ellement, Decl(nonContextuallyTypedLogicalOr.ts, 3, 1))
 
 (c || e).dummy;
->(c || e).dummy : Symbol(Contextual.dummy, Decl(nonContextuallyTypedLogicalOr.ts, 0, 22))
+>(c || e).dummy : Symbol(dummy, Decl(nonContextuallyTypedLogicalOr.ts, 0, 22), Decl(nonContextuallyTypedLogicalOr.ts, 5, 20))
 >c : Symbol(c, Decl(nonContextuallyTypedLogicalOr.ts, 10, 3))
 >e : Symbol(e, Decl(nonContextuallyTypedLogicalOr.ts, 11, 3))
->dummy : Symbol(Contextual.dummy, Decl(nonContextuallyTypedLogicalOr.ts, 0, 22))
+>dummy : Symbol(dummy, Decl(nonContextuallyTypedLogicalOr.ts, 0, 22), Decl(nonContextuallyTypedLogicalOr.ts, 5, 20))
 

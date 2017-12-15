@@ -2,6 +2,14 @@
 
 /* @internal */
 namespace ts {
+    export enum ConfigFileProgramReloadLevel {
+        None,
+        /** Update the file name list from the disk */
+        Partial,
+        /** Reload completely by re-reading contents of config file from disk and updating program */
+        Full
+    }
+
     /**
      * Updates the existing missing file watches with the new set of missing files after new program is created
      */
