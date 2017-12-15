@@ -42,13 +42,13 @@ const a = <Info status="hidden" />;
 >a : JSX.Element
 ><Info status="hidden" /> : JSX.Element
 >Info : (props: { status: "hidden"; } | { status: "visible"; content: string; }) => JSX.Element
->status : string
+>status : "hidden"
 
 const b = <Info status="visible" content="hello world" />;
 >b : JSX.Element
 ><Info status="visible" content="hello world" /> : JSX.Element
 >Info : (props: { status: "hidden"; } | { status: "visible"; content: string; }) => JSX.Element
->status : string
+>status : "visible"
 >content : string
 
 declare const infoProps: InfoProps;
