@@ -25781,7 +25781,7 @@ namespace ts {
                     return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_type_alias_Use_index_Colon_0_instead, typeToString(type));
                 }
 
-                if (type.flags & TypeFlags.Union && every((<UnionType>type).types, t => !!(t.flags & TypeFlags.StringOrNumberLiteral))) {
+                if (type.flags & TypeFlags.Union && every((<UnionType>type).types, t => !!(t.flags & TypeFlags.StringLiteral))) {
                     return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Use_K_in_0_instead, symbolName(type.aliasSymbol));
                 }
 

@@ -46,7 +46,7 @@ interface N {
     [b: AliasedBoolean]: A;
 }
 
-type IndexableUnion = "foo" | 42;
+type IndexableUnion = "foo" | "bar";
 
 interface O {
     [u: IndexableUnion]: A;
@@ -64,14 +64,8 @@ interface Q {
     [u: NonIndexableUnion2]: A;
 }
 
-type NonIndexableUnion3 = 42 | string;
+type NonIndexableUnion3 = "foo" | 42;
 
 interface R {
     [u: NonIndexableUnion3]: A;
-}
-
-type NonIndexableUnion4 = "foo" | number;
-
-interface S {
-    [u: NonIndexableUnion4]: A;
 }

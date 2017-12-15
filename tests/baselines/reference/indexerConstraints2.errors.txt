@@ -8,10 +8,9 @@ tests/cases/compiler/indexerConstraints2.ts(52,6): error TS1337: An index signat
 tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 tests/cases/compiler/indexerConstraints2.ts(64,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 tests/cases/compiler/indexerConstraints2.ts(70,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
-tests/cases/compiler/indexerConstraints2.ts(76,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 
 
-==== tests/cases/compiler/indexerConstraints2.ts (11 errors) ====
+==== tests/cases/compiler/indexerConstraints2.ts (10 errors) ====
     class A { a: number; }
     class B extends A { b: number; }
     
@@ -72,7 +71,7 @@ tests/cases/compiler/indexerConstraints2.ts(76,6): error TS1023: An index signat
 !!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }
     
-    type IndexableUnion = "foo" | 42;
+    type IndexableUnion = "foo" | "bar";
     
     interface O {
         [u: IndexableUnion]: A;
@@ -96,18 +95,10 @@ tests/cases/compiler/indexerConstraints2.ts(76,6): error TS1023: An index signat
 !!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }
     
-    type NonIndexableUnion3 = 42 | string;
+    type NonIndexableUnion3 = "foo" | 42;
     
     interface R {
         [u: NonIndexableUnion3]: A;
-         ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
-    }
-    
-    type NonIndexableUnion4 = "foo" | number;
-    
-    interface S {
-        [u: NonIndexableUnion4]: A;
          ~
 !!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }

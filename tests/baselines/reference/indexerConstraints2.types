@@ -100,7 +100,7 @@ interface N {
 >A : A
 }
 
-type IndexableUnion = "foo" | 42;
+type IndexableUnion = "foo" | "bar";
 >IndexableUnion : IndexableUnion
 
 interface O {
@@ -136,7 +136,7 @@ interface Q {
 >A : A
 }
 
-type NonIndexableUnion3 = 42 | string;
+type NonIndexableUnion3 = "foo" | 42;
 >NonIndexableUnion3 : NonIndexableUnion3
 
 interface R {
@@ -145,17 +145,5 @@ interface R {
     [u: NonIndexableUnion3]: A;
 >u : NonIndexableUnion3
 >NonIndexableUnion3 : NonIndexableUnion3
->A : A
-}
-
-type NonIndexableUnion4 = "foo" | number;
->NonIndexableUnion4 : NonIndexableUnion4
-
-interface S {
->S : S
-
-    [u: NonIndexableUnion4]: A;
->u : NonIndexableUnion4
->NonIndexableUnion4 : NonIndexableUnion4
 >A : A
 }

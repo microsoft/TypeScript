@@ -100,11 +100,11 @@ interface N {
 >A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
 }
 
-type IndexableUnion = "foo" | 42;
+type IndexableUnion = "foo" | "bar";
 >IndexableUnion : Symbol(IndexableUnion, Decl(indexerConstraints2.ts, 46, 1))
 
 interface O {
->O : Symbol(O, Decl(indexerConstraints2.ts, 48, 33))
+>O : Symbol(O, Decl(indexerConstraints2.ts, 48, 36))
 
     [u: IndexableUnion]: A;
 >u : Symbol(u, Decl(indexerConstraints2.ts, 51, 5))
@@ -136,26 +136,14 @@ interface Q {
 >A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
 }
 
-type NonIndexableUnion3 = 42 | string;
+type NonIndexableUnion3 = "foo" | 42;
 >NonIndexableUnion3 : Symbol(NonIndexableUnion3, Decl(indexerConstraints2.ts, 64, 1))
 
 interface R {
->R : Symbol(R, Decl(indexerConstraints2.ts, 66, 38))
+>R : Symbol(R, Decl(indexerConstraints2.ts, 66, 37))
 
     [u: NonIndexableUnion3]: A;
 >u : Symbol(u, Decl(indexerConstraints2.ts, 69, 5))
 >NonIndexableUnion3 : Symbol(NonIndexableUnion3, Decl(indexerConstraints2.ts, 64, 1))
->A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
-}
-
-type NonIndexableUnion4 = "foo" | number;
->NonIndexableUnion4 : Symbol(NonIndexableUnion4, Decl(indexerConstraints2.ts, 70, 1))
-
-interface S {
->S : Symbol(S, Decl(indexerConstraints2.ts, 72, 41))
-
-    [u: NonIndexableUnion4]: A;
->u : Symbol(u, Decl(indexerConstraints2.ts, 75, 5))
->NonIndexableUnion4 : Symbol(NonIndexableUnion4, Decl(indexerConstraints2.ts, 70, 1))
 >A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
 }
