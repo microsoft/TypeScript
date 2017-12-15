@@ -385,6 +385,17 @@ namespace ts {
             description: Diagnostics.Type_declaration_files_to_be_included_in_compilation
         },
         {
+            name: "references",
+            type: "list",
+            element: {
+                name: "references",
+                type: "object"
+            },
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Module_Resolution_Options,
+            description: Diagnostics.Projects_to_reference
+        },
+        {
             name: "allowSyntheticDefaultImports",
             type: "boolean",
             category: Diagnostics.Module_Resolution_Options,
@@ -902,8 +913,9 @@ namespace ts {
      */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
+        const config = convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics);
         return {
-            config: convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics),
+            config,
             error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
         };
     }
@@ -963,6 +975,22 @@ namespace ts {
                     type: "list",
                     element: {
                         name: "files",
+                        type: "string"
+                    }
+                },
+                {
+                    name: "references",
+                    type: "list",
+                    element: {
+                        name: "references",
+                        type: "object"
+                    }
+                },
+                {
+                    name: "projects",
+                    type: "list",
+                    element: {
+                        name: "projects",
                         type: "string"
                     }
                 },

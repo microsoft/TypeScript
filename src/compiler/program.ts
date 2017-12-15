@@ -333,12 +333,12 @@ namespace ts {
                 }
 
                 output += host.getNewLine();
-                output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+                output += `${relativeFileName}(${firstLine + 1},${firstLineChar + 1}): `;
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }`;
+            output += `${formatAndReset(category, categoryColor)} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}`;
 
             if (diagnostic.file) {
                 output += host.getNewLine();
@@ -561,6 +561,10 @@ namespace ts {
             const loader = (typesRef: string, containingFile: string) => resolveTypeReferenceDirective(typesRef, containingFile, options, host).resolvedTypeReferenceDirective;
             resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(checkAllDefined(typeReferenceDirectiveNames), containingFile, loader);
         }
+
+        const projectReferenceRedirects = createProjectReferenceRedirects(options);
+        checkProjectReferenceGraph();
+        void getReferencesSyntax;
 
         // Map from a stringified PackageId to the source file with that id.
         // Only one source file may have a given packageId. Others become redirects (see createRedirectSourceFile).
@@ -1098,7 +1102,7 @@ namespace ts {
             // If '--lib' is not specified, include default library file according to '--target'
             // otherwise, using options specified in '--lib' instead of '--target' default library file
             if (!options.lib) {
-               return compareStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+                return compareStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
             }
             else {
                 return forEach(options.lib, libFileName => compareStrings(file.fileName, combinePaths(defaultLibraryPath, libFileName), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo);
@@ -1695,7 +1699,13 @@ namespace ts {
                 const sourceFile = getSourceFile(fileName);
                 if (fail) {
                     if (!sourceFile) {
-                        fail(Diagnostics.File_0_not_found, fileName);
+                        const redirect = getProjectReferenceRedirect(fileName);
+                        if (redirect) {
+                            fail(Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect, fileName);
+                        }
+                        else {
+                            fail(Diagnostics.File_0_not_found, fileName);
+                        }
                     }
                     else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
                         fail(Diagnostics.A_file_cannot_have_a_reference_to_itself);
@@ -1791,6 +1801,9 @@ namespace ts {
                 return file;
             }
 
+            const redirect = getProjectReferenceRedirect(fileName);
+            fileName = redirect || fileName;
+
             // We haven't looked for this file, do so now and cache result
             const file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
                 if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
@@ -1858,6 +1871,23 @@ namespace ts {
             }
 
             return file;
+        }
+
+        function getProjectReferenceRedirect(fileName: string): string | undefined {
+            const path = toPath(fileName);
+            // If this file is produced by a referenced project, we need to rewrite it to
+            // look in the output folder of the referenced project rather than the input
+            const normalized = getNormalizedAbsolutePath(fileName, path);
+            let result: string | undefined = undefined;
+            projectReferenceRedirects.forEach((v, k) => {
+                if (result !== undefined) {
+                    return undefined;
+                }
+                if (normalized.indexOf(k) === 0) {
+                    result = changeExtension(fileName.replace(k, v), ".d.ts");
+                }
+            });
+            return result;
         }
 
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
@@ -2030,6 +2060,59 @@ namespace ts {
             }
 
             return allFilesBelongToPath;
+        }
+
+        function createProjectReferenceRedirects(rootOptions: CompilerOptions): Map<string> {
+            const result = createMap<string>();
+            walkProjectReferenceGraph(host, rootOptions, createMapping);
+
+            function createMapping(_resolvedFile: string, referencedProject: CompilerOptions) {
+                // No rootDir in target set; this will be an error later on in the process
+                if (referencedProject.rootDir === undefined) return;
+                result.set(referencedProject.rootDir, referencedProject.outDir);
+                // If this project uses outFile, add the outFile to our compilation
+                if (referencedProject.outFile) {
+                    const outFile = combinePaths(referencedProject.outDir, referencedProject.outFile);
+                    processSourceFile(outFile, /*isDefaultLib*/ false, /*packageId*/ undefined);
+                }
+            }
+            return result;
+        }
+
+        function checkProjectReferenceGraph() {
+            // Checks the following conditions:
+            //  * Any referenced project has declaration: true
+            //  * Any referenced project has an explicit rootDir
+            //  * No circularities exist
+            //  * TODO No project root is a subfolder of any other project root
+
+            const illegalRefs = createMap<true>();
+            const cycleName: string[] = [options.configFilePath || host.getCurrentDirectory()];
+
+            walkProjectReferenceGraph(host, options, checkReference, createDiagnosticForOptionName);
+
+            function checkReference(fileName: string, opts: CompilerOptions) {
+                const normalizedPath = ts.normalizePath(fileName);
+                if (illegalRefs.has(normalizedPath)) {
+                    createDiagnosticForOptionName(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, cycleName.map(normalizePath).map(s => host.getNewLine() + "    " + s).join(" -> "));
+                    return;
+                }
+                if (opts === undefined) {
+                    Debug.fail("Options cannot be undefined");
+                    return;
+                }
+                if (!opts.declaration) {
+                    createDiagnosticForOptionName(Diagnostics.Referenced_project_0_must_have_declaration_Colon_true, fileName);
+                }
+                if (!opts.rootDir) {
+                    createDiagnosticForOptionName(Diagnostics.Referenced_project_0_must_have_an_explicit_rootDir_setting, fileName);
+                }
+                illegalRefs.set(normalizedPath, true);
+                cycleName.push(normalizedPath);
+                walkProjectReferenceGraph(host, opts, checkReference, createDiagnosticForOptionName);
+                cycleName.pop();
+                illegalRefs.delete(normalizedPath);
+            }
         }
 
         function verifyCompilerOptions() {
@@ -2277,12 +2360,20 @@ namespace ts {
             }
         }
 
-        function getOptionPathsSyntax() {
+        function getOptionsSyntaxByName(name: string): object | undefined {
             const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
             if (compilerOptionsObjectLiteralSyntax) {
-                return getPropertyAssignment(compilerOptionsObjectLiteralSyntax, "paths");
+                return getPropertyAssignment(compilerOptionsObjectLiteralSyntax, name);
             }
-            return emptyArray;
+            return undefined;
+        }
+
+        function getReferencesSyntax(): ObjectLiteralExpression[] | undefined {
+            return getOptionsSyntaxByName("references") as ObjectLiteralExpression[] | undefined;
+        }
+
+        function getOptionPathsSyntax(): PropertyAssignment[] {
+            return getOptionsSyntaxByName("paths") as PropertyAssignment[] || emptyArray;
         }
 
         function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string) {
@@ -2329,6 +2420,46 @@ namespace ts {
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName), true);
             programDiagnostics.add(diag);
+        }
+    }
+
+    function parseConfigHostFromCompilerHost(host: CompilerHost): ParseConfigHost {
+        return {
+            fileExists: host.fileExists,
+            readDirectory: () => [],
+            readFile: host.readFile,
+            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames()
+        };
+    }
+
+    export function walkProjectReferenceGraph(host: CompilerHost, rootOptions: CompilerOptions,
+        callback: (resolvedFile: string, referencedProject: CompilerOptions) => void,
+        error?: (message: DiagnosticMessage | DiagnosticMessageChain | string, option1?: string) => void) {
+        if (rootOptions.references === undefined) return;
+
+        const configHost = parseConfigHostFromCompilerHost(host);
+        const rootPath = rootOptions.configFilePath ? getDirectoryPath(rootOptions.configFilePath) : host.getCurrentDirectory();
+        for (const ref of rootOptions.references) {
+            let refPath = combinePaths(rootPath, ref.path);
+            if (!host.fileExists(refPath)) {
+                refPath = combinePaths(refPath, "tsconfig.json");
+            }
+            if (!host.fileExists(refPath)) {
+                if (error) {
+                    error(Diagnostics.File_0_not_found, refPath);
+                }
+                continue;
+            }
+
+            const referenceJsonSource = parseJsonText(refPath, host.readFile(refPath));
+            const cmdLine = parseJsonSourceFileConfigFileContent(referenceJsonSource, configHost, getDirectoryPath(refPath), /*existingOptions*/ undefined, refPath);
+            cmdLine.options.configFilePath = refPath;
+            if (cmdLine.errors && cmdLine.errors.length) {
+                // TODO: Pass along errors
+            }
+            if (cmdLine.options) {
+                callback(refPath, cmdLine.options);
+            }
         }
     }
 

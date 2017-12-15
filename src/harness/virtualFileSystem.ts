@@ -220,4 +220,67 @@ namespace Utils {
             return ts.matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, depth, (path: string) => this.getAccessibleFileSystemEntries(path));
         }
     }
+
+    export class MockProjectReferenceCompilerHost implements ts.CompilerHost {
+        public configHost: ts.ParseConfigHost = new MockParseConfigHost(this.currentDirectory, this.ignoreCase, this.files);
+        private readonly getCanonicalFileNameImpl = ts.createGetCanonicalFileName(!this.ignoreCase);
+        constructor(private currentDirectory: string, private ignoreCase: boolean, private files: ts.Map<string> | string[]) {
+        }
+
+        getCanonicalFileName = (fileName: string): string => {
+            return this.getCanonicalFileNameImpl(fileName);
+        }
+        fileExists = (fileName: string): boolean => {
+            return this.configHost.fileExists(fileName);
+        }
+
+        // TODO try deleting this
+        directoryExists = (dirName: string): boolean => {
+            const fullName = this.getCanonicalFileName(dirName);
+            let exists = false;
+            if (Array.isArray(this.files)) {
+                for (const k of this.files) {
+                    if (this.getCanonicalFileName(k).indexOf(fullName) === 0) {
+                        exists = true;
+                    }
+                }
+            }
+            else {
+                this.files.forEach((_v, k) => {
+                    if (this.getCanonicalFileName(k).indexOf(fullName) === 0) {
+                        exists = true;
+                    }
+                });
+            }
+            return exists;
+        }
+        readFile = (fileName: string): string => {
+            if (fileName === "lib.d.ts") return "declare var window: any;";
+
+            return this.configHost.readFile(fileName);
+        }
+        getSourceFile = (fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile => {
+            const content = this.readFile(fileName);
+            if (content === undefined) {
+                return undefined;
+            }
+            return ts.createSourceFile(fileName, content, languageVersion);
+        }
+        getDefaultLibFileName(options: ts.CompilerOptions): string {
+            return ts.getDefaultLibFileName(options);
+        }
+        writeFile: ts.WriteFileCallback;
+        getCurrentDirectory = (): string => {
+            return this.currentDirectory;
+        }
+        getNewLine(): string {
+            return "\r\n";
+        }
+        getDirectories(): string[] {
+            return [];
+        }
+        useCaseSensitiveFileNames = () => {
+            return this.ignoreCase;
+        }
+    }
 }

@@ -3675,7 +3675,11 @@ namespace ts {
         name: string;
     }
 
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | null | undefined;
+    export interface ProjectReference {
+        path: string;
+    }
+
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
     export interface CompilerOptions {
         /*@internal*/ all?: boolean;
@@ -3743,6 +3747,7 @@ namespace ts {
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
         jsxFactory?: string;
+        references?: ProjectReference[];
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
