@@ -4634,6 +4634,13 @@ namespace ts {
             return isPrivateWithinAmbient(memberDeclaration);
         }
 
+        function tryGetTypeFromEffectiveTypeNode(declaration: Declaration) {
+            const typeNode = getEffectiveTypeAnnotationNode(declaration);
+            if (typeNode) {
+                return getTypeFromTypeNode(typeNode);
+            }
+        }
+
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
@@ -4668,30 +4675,23 @@ namespace ts {
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
                     type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
-                else if (isJSDocPropertyTag(declaration)) {
-                    type = anyType; // TODO: Mimics old behavior from incorrect usage of getWidenedTypeForVariableLikeDeclaration, but seems incorrect
-                }
-                else if (isPropertyAccessExpression(declaration) || isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration)) {
-                    // TODO: Mimics old behavior from incorrect usage of getWidenedTypeForVariableLikeDeclaration, but seems lacking
-                    const typeNode = getEffectiveTypeAnnotationNode(declaration);
-                    if (typeNode) {
-                        type = getTypeFromTypeNode(typeNode);
-                    }
-                    else {
-                        type = anyType;
-                    }
+                else if (isJSDocPropertyTag(declaration)
+                    || isPropertyAccessExpression(declaration)
+                    || isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration)) {
+                    // TODO: Mimics old behavior from incorrect usage of getWidenedTypeForVariableLikeDeclaration, but seems incorrect
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
                 }
                 else if (isPropertyAssignment(declaration)) {
-                    type = checkPropertyAssignment(declaration);
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkPropertyAssignment(declaration);
                 }
                 else if (isJsxAttribute(declaration)) {
-                    type = checkJsxAttribute(declaration);
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkJsxAttribute(declaration);
                 }
                 else if (isShorthandPropertyAssignment(declaration)) {
-                    type = checkExpressionForMutableLocation(declaration.name, CheckMode.Normal);
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionForMutableLocation(declaration.name, CheckMode.Normal);
                 }
                 else if (isObjectLiteralMethod(declaration)) {
-                    type = checkObjectLiteralMethod(declaration, CheckMode.Normal);
+                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkObjectLiteralMethod(declaration, CheckMode.Normal);
                 }
                 else if (isParameter(declaration)
                     || isPropertyDeclaration(declaration)
