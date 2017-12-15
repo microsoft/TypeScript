@@ -7092,7 +7092,7 @@ declare namespace ts.server {
         private getCombinedCodeFix({scope, fixId}, simplifiedResult);
         private applyCodeActionCommand(args);
         private getStartAndEndPosition(args, scriptInfo);
-        private mapCodeAction({description, changes: unmappedChanges, commands}, scriptInfo);
+        private mapCodeAction(project, {description, changes: unmappedChanges, commands});
         private mapTextChangesToCodeEdits(project, textChanges);
         private mapTextChangesToCodeEditsUsingScriptinfo(textChanges, scriptInfo);
         private convertTextChangeToCodeEdit(change, scriptInfo);
