@@ -584,6 +584,40 @@ namespace ts {
         | JSDocFunctionType
         | EndOfFileToken;
 
+    export type HasType =
+        | SignatureDeclaration
+        | VariableDeclaration
+        | ParameterDeclaration
+        | PropertySignature
+        | PropertyDeclaration
+        | TypePredicateNode
+        | ParenthesizedTypeNode
+        | TypeOperatorNode
+        | MappedTypeNode
+        | AssertionExpression
+        | TypeAliasDeclaration
+        | JSDocTypeExpression
+        | JSDocNonNullableType
+        | JSDocNullableType
+        | JSDocOptionalType
+        | JSDocVariadicType;
+
+    export type HasInitializer =
+        | HasExpressionInitializer
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | JsxAttribute;
+
+    export type HasExpressionInitializer =
+        | VariableDeclaration
+        | ParameterDeclaration
+        | BindingElement
+        | PropertySignature
+        | PropertyDeclaration
+        | PropertyAssignment
+        | EnumMember;
+
     /* @internal */
     export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
 
@@ -793,6 +827,9 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
+    /*@internal*/
+    export type BindingElementGrandparent = BindingElement["parent"]["parent"];
+
     export interface PropertySignature extends TypeElement, JSDocContainer {
         kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
@@ -848,25 +885,18 @@ namespace ts {
         expression: Expression;
     }
 
-    // SyntaxKind.VariableDeclaration
-    // SyntaxKind.Parameter
-    // SyntaxKind.BindingElement
-    // SyntaxKind.Property
-    // SyntaxKind.PropertyAssignment
-    // SyntaxKind.JsxAttribute
-    // SyntaxKind.ShorthandPropertyAssignment
-    // SyntaxKind.EnumMember
-    // SyntaxKind.JSDocPropertyTag
-    // SyntaxKind.JSDocParameterTag
-    export interface VariableLikeDeclaration extends NamedDeclaration {
-        propertyName?: PropertyName;
-        dotDotDotToken?: DotDotDotToken;
-        name: DeclarationName;
-        questionToken?: QuestionToken;
-        exclamationToken?: ExclamationToken;
-        type?: TypeNode;
-        initializer?: Expression;
-    }
+    export type VariableLikeDeclaration =
+        | VariableDeclaration
+        | ParameterDeclaration
+        | BindingElement
+        | PropertyDeclaration
+        | PropertyAssignment
+        | PropertySignature
+        | JsxAttribute
+        | ShorthandPropertyAssignment
+        | EnumMember
+        | JSDocPropertyTag
+        | JSDocParameterTag;
 
     export interface PropertyLikeDeclaration extends NamedDeclaration {
         name: PropertyName;
