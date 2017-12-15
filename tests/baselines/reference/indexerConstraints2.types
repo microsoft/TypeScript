@@ -62,3 +62,40 @@ class K extends J {
 >s : string
 >B : B
 }
+
+
+type AliasedNumber = number;
+>AliasedNumber : number
+
+interface L {
+>L : L
+
+    [n: AliasedNumber]: A;
+>n : number
+>AliasedNumber : number
+>A : A
+}
+
+type AliasedString = string;
+>AliasedString : string
+
+interface M {
+>M : M
+
+    [s: AliasedString]: A;
+>s : string
+>AliasedString : string
+>A : A
+}
+
+type AliasedBoolean = boolean;
+>AliasedBoolean : boolean
+
+interface N {
+>N : N
+
+    [b: AliasedBoolean]: A;
+>b : boolean
+>AliasedBoolean : boolean
+>A : A
+}

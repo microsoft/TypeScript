@@ -28,6 +28,25 @@ class K extends J {
     [s: string]: B;
 }
 
+
+type AliasedNumber = number;
+
+interface L {
+    [n: AliasedNumber]: A;
+}
+
+type AliasedString = string;
+
+interface M {
+    [s: AliasedString]: A;
+}
+
+type AliasedBoolean = boolean;
+
+interface N {
+    [b: AliasedBoolean]: A;
+}
+
 //// [indexerConstraints2.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||

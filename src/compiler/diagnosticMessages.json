@@ -939,6 +939,10 @@
         "category": "Error",
         "code": 1335
     },
+    "An index signature parameter type cannot be a type alias. Use '[index: {0}]' instead.": {
+        "category": "Error",
+        "code": 1336
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

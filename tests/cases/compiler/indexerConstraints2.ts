@@ -26,3 +26,22 @@ class K extends J {
     [n: number]: A;
     [s: string]: B;
 }
+
+
+type AliasedNumber = number;
+
+interface L {
+    [n: AliasedNumber]: A;
+}
+
+type AliasedString = string;
+
+interface M {
+    [s: AliasedString]: A;
+}
+
+type AliasedBoolean = boolean;
+
+interface N {
+    [b: AliasedBoolean]: A;
+}

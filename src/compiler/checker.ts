@@ -25775,6 +25775,12 @@ namespace ts {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
+                const type = getTypeFromTypeNode(parameter.type);
+
+                if (type.flags & TypeFlags.String || type.flags & TypeFlags.Number) {
+                    return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_type_alias_Use_index_Colon_0_instead, typeToString(type));
+                }
+
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_or_number);
             }
             if (!node.type) {

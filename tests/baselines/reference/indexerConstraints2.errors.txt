@@ -1,9 +1,12 @@
 tests/cases/compiler/indexerConstraints2.ts(9,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
 tests/cases/compiler/indexerConstraints2.ts(17,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
 tests/cases/compiler/indexerConstraints2.ts(26,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+tests/cases/compiler/indexerConstraints2.ts(34,6): error TS1336: An index signature parameter type cannot be a type alias. Use '[index: number]' instead.
+tests/cases/compiler/indexerConstraints2.ts(40,6): error TS1336: An index signature parameter type cannot be a type alias. Use '[index: string]' instead.
+tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 
 
-==== tests/cases/compiler/indexerConstraints2.ts (3 errors) ====
+==== tests/cases/compiler/indexerConstraints2.ts (6 errors) ====
     class A { a: number; }
     class B extends A { b: number; }
     
@@ -37,4 +40,29 @@ tests/cases/compiler/indexerConstraints2.ts(26,5): error TS2413: Numeric index t
         ~~~~~~~~~~~~~~~
 !!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
         [s: string]: B;
+    }
+    
+    
+    type AliasedNumber = number;
+    
+    interface L {
+        [n: AliasedNumber]: A;
+         ~
+!!! error TS1336: An index signature parameter type cannot be a type alias. Use '[index: number]' instead.
+    }
+    
+    type AliasedString = string;
+    
+    interface M {
+        [s: AliasedString]: A;
+         ~
+!!! error TS1336: An index signature parameter type cannot be a type alias. Use '[index: string]' instead.
+    }
+    
+    type AliasedBoolean = boolean;
+    
+    interface N {
+        [b: AliasedBoolean]: A;
+         ~
+!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }
