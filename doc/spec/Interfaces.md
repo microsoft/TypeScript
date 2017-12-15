@@ -23,7 +23,7 @@ An interface declaration declares an ***interface type***.
 &emsp;&emsp;&emsp;*ClassOrInterfaceTypeList*&emsp;`,`&emsp;*ClassOrInterfaceType*
 
 &emsp;&emsp;*ClassOrInterfaceType:*
-&emsp;&emsp;&emsp;*TypeReference*
+&emsp;&emsp;&emsp;*Expression*&emsp;*ClassOrInterfaceType*
 
 An *InterfaceDeclaration* introduces a named type (section [#named-types]<!--3.7-->) in the containing declaration space. The *BindingIdentifier* of an interface declaration may not be one of the predefined type names (section [#predefined-types]<!--3.8.1-->).
 

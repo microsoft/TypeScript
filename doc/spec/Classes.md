@@ -67,7 +67,7 @@ The heritage specification of a class consists of optional `extends` and `implem
 &emsp;&emsp;&emsp;`extends`&emsp; *ClassType*
 
 &emsp;&emsp;*ClassType:*
-&emsp;&emsp;&emsp;*TypeReference*
+&emsp;&emsp;&emsp;*Expression*&emsp*TypeArguments*
 
 &emsp;&emsp;*ImplementsClause:*
 &emsp;&emsp;&emsp;`implements`&emsp;*ClassOrInterfaceTypeList*

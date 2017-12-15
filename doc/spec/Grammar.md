@@ -267,7 +267,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*ClassOrInterfaceTypeList*&emsp;`,`&emsp;*ClassOrInterfaceType*
 
 &emsp;&emsp;*ClassOrInterfaceType:*
-&emsp;&emsp;&emsp;*TypeReference*
+&emsp;&emsp;&emsp;*Expression*&emsp;*TypeArguments*
 
 ## Classes { #grammar-classes }
 
@@ -281,7 +281,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;`extends`&emsp; *ClassType*
 
 &emsp;&emsp;*ClassType:*
-&emsp;&emsp;&emsp;*TypeReference*
+&emsp;&emsp;&emsp;*Expression*&emsp;*TypeArguments*
 
 &emsp;&emsp;*ImplementsClause:*
 &emsp;&emsp;&emsp;`implements`&emsp;*ClassOrInterfaceTypeList*
