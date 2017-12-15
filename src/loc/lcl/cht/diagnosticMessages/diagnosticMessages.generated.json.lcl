@@ -4845,6 +4845,9 @@
       <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[這裡不允許數字分隔符號。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

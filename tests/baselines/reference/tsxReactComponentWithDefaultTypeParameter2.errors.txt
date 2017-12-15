@@ -1,9 +1,9 @@
 tests/cases/conformance/jsx/file.tsx(13,9): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
   Type '{}' is not assignable to type 'Prop'.
     Property 'a' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(14,18): error TS2322: Type '{ a: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
-  Type '{ a: "hi"; }' is not assignable to type 'Prop'.
-    Property 'b' is missing in type '{ a: "hi"; }'.
+tests/cases/conformance/jsx/file.tsx(14,18): error TS2322: Type '{ a: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+  Type '{ a: string; }' is not assignable to type 'Prop'.
+    Property 'b' is missing in type '{ a: string; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -26,6 +26,6 @@ tests/cases/conformance/jsx/file.tsx(14,18): error TS2322: Type '{ a: "hi"; }' i
 !!! error TS2322:     Property 'a' is missing in type '{}'.
     let x1 = <MyComp a="hi"/>
                      ~~~~~~
-!!! error TS2322: Type '{ a: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
-!!! error TS2322:   Type '{ a: "hi"; }' is not assignable to type 'Prop'.
-!!! error TS2322:     Property 'b' is missing in type '{ a: "hi"; }'.
+!!! error TS2322: Type '{ a: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+!!! error TS2322:   Type '{ a: string; }' is not assignable to type 'Prop'.
+!!! error TS2322:     Property 'b' is missing in type '{ a: string; }'.

@@ -14826,7 +14826,7 @@ namespace ts {
 
         function checkJsxAttribute(node: JsxAttribute, checkMode?: CheckMode) {
             return node.initializer
-                ? checkExpression(node.initializer, checkMode)
+                ? checkExpressionForMutableLocation(node.initializer, checkMode)
                 : trueType;  // <Elem attr /> is sugar for <Elem attr={true} />
         }
 
