@@ -9,7 +9,7 @@ const obj = {
 
   /** @type {string|undefined} */
   bar: 42,
->bar : string | undefined
+>bar : number
 >42 : 42
 
   /** @type {function(number): number} */
@@ -23,14 +23,14 @@ const obj = {
   },
   /** @type {function(number): number} */
   method2: (n1) => "lol",
->method2 : (arg0: number) => number
+>method2 : (n1: any) => string
 >(n1) => "lol" : (n1: any) => string
 >n1 : any
 >"lol" : "lol"
 
   /** @type {function(number): number} */
   arrowFunc: (num="0") => num + 42,
->arrowFunc : (arg0: number) => number
+>arrowFunc : (num?: string) => string
 >(num="0") => num + 42 : (num?: string) => string
 >num : string
 >"0" : "0"
@@ -40,7 +40,7 @@ const obj = {
 
   /** @type {string} */
   lol
->lol : string
+>lol : undefined
 }
 lol = "string"
 >lol = "string" : "string"

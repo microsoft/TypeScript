@@ -48,7 +48,7 @@
 
 verify.quickInfos({
     1: "function MainButton(linkProps: LinkProps): any (+1 overload)",
-    2: "(JSX attribute) to: string",
+    2: "(JSX attribute) to: \"/some/path\"",
     3: "function MainButton(buttonProps: ButtonProps): any (+1 overload)",
     4: "(JSX attribute) onClick: () => void",
     5: "(JSX attribute) extra-prop: true"

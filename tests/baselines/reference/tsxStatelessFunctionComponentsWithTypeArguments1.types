@@ -41,7 +41,7 @@ function Baz<T,U>(key1: T, value: U) {
 >key1 : T
 >value : U
 >value : U
->key : string
+>key : "Component"
 }
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;

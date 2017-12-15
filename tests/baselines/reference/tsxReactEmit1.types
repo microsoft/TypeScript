@@ -27,36 +27,36 @@ var selfClosed2 = <div x="1" />;
 >selfClosed2 : JSX.Element
 ><div x="1" /> : JSX.Element
 >div : any
->x : string
+>x : "1"
 
 var selfClosed3 = <div x='1' />;
 >selfClosed3 : JSX.Element
 ><div x='1' /> : JSX.Element
 >div : any
->x : string
+>x : "1"
 
 var selfClosed4 = <div x="1" y='0' />;
 >selfClosed4 : JSX.Element
 ><div x="1" y='0' /> : JSX.Element
 >div : any
->x : string
->y : string
+>x : "1"
+>y : "0"
 
 var selfClosed5 = <div x={0} y='0' />;
 >selfClosed5 : JSX.Element
 ><div x={0} y='0' /> : JSX.Element
 >div : any
->x : number
+>x : 0
 >0 : 0
->y : string
+>y : "0"
 
 var selfClosed6 = <div x={"1"} y='0' />;
 >selfClosed6 : JSX.Element
 ><div x={"1"} y='0' /> : JSX.Element
 >div : any
->x : string
+>x : "1"
 >"1" : "1"
->y : string
+>y : "0"
 
 var selfClosed7 = <div x={p} y='p' b />;
 >selfClosed7 : JSX.Element
@@ -64,7 +64,7 @@ var selfClosed7 = <div x={p} y='p' b />;
 >div : any
 >x : any
 >p : any
->y : string
+>y : "p"
 >b : true
 
 var openClosed1 = <div></div>;
@@ -77,14 +77,14 @@ var openClosed2 = <div n='m'>foo</div>;
 >openClosed2 : JSX.Element
 ><div n='m'>foo</div> : JSX.Element
 >div : any
->n : string
+>n : "m"
 >div : any
 
 var openClosed3 = <div n='m'>{p}</div>;
 >openClosed3 : JSX.Element
 ><div n='m'>{p}</div> : JSX.Element
 >div : any
->n : string
+>n : "m"
 >p : any
 >div : any
 
@@ -92,7 +92,7 @@ var openClosed4 = <div n='m'>{p < p}</div>;
 >openClosed4 : JSX.Element
 ><div n='m'>{p < p}</div> : JSX.Element
 >div : any
->n : string
+>n : "m"
 >p < p : boolean
 >p : any
 >p : any
@@ -102,7 +102,7 @@ var openClosed5 = <div n='m' b>{p > p}</div>;
 >openClosed5 : JSX.Element
 ><div n='m' b>{p > p}</div> : JSX.Element
 >div : any
->n : string
+>n : "m"
 >b : true
 >p > p : boolean
 >p : any

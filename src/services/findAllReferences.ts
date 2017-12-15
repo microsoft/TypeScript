@@ -1060,7 +1060,7 @@ namespace ts.FindAllReferences.Core {
         const containingTypeReference = getContainingTypeReference(refNode);
         if (containingTypeReference && state.markSeenContainingTypeReference(containingTypeReference)) {
             const parent = containingTypeReference.parent;
-            if (isVariableLike(parent) && parent.type === containingTypeReference && parent.initializer && isImplementationExpression(parent.initializer)) {
+            if (hasType(parent) && parent.type === containingTypeReference && hasInitializer(parent) && isImplementationExpression(parent.initializer)) {
                 addReference(parent.initializer);
             }
             else if (isFunctionLike(parent) && parent.type === containingTypeReference && (parent as FunctionLikeDeclaration).body) {
@@ -1670,14 +1670,12 @@ namespace ts.FindAllReferences.Core {
         if (!node) {
             return false;
         }
-        else if (isVariableLike(node)) {
-            if (node.initializer) {
-                return true;
-            }
-            else if (node.kind === SyntaxKind.VariableDeclaration) {
-                const parentStatement = getParentStatementOfVariableDeclaration(<VariableDeclaration>node);
-                return parentStatement && hasModifier(parentStatement, ModifierFlags.Ambient);
-            }
+        else if (isVariableLike(node) && hasInitializer(node)) {
+            return true;
+        }
+        else if (node.kind === SyntaxKind.VariableDeclaration) {
+            const parentStatement = getParentStatementOfVariableDeclaration(<VariableDeclaration>node);
+            return parentStatement && hasModifier(parentStatement, ModifierFlags.Ambient);
         }
         else if (isFunctionLike(node)) {
             return !!(node as FunctionLikeDeclaration).body || hasModifier(node, ModifierFlags.Ambient);

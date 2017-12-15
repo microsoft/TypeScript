@@ -4216,7 +4216,7 @@ namespace ts {
 
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
         // assigned by contextual typing.
-        function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
+        function getTypeForBindingElementParent(node: BindingElement["parent"]["parent"]) {
             const symbol = getSymbolOfNode(node);
             return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false);
         }
@@ -4371,7 +4371,7 @@ namespace ts {
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
-        function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
+        function getTypeForVariableLikeDeclaration(declaration: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement, includeOptionality: boolean): Type {
             // A variable declared in a for..in statement is of type string, or of type keyof T when the
             // right hand expression is of a type parameter type.
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
@@ -4392,11 +4392,12 @@ namespace ts {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
 
+            const isOptional = !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken && includeOptionality;
             // Use type from type annotation if one is present
             const typeNode = getEffectiveTypeAnnotationNode(declaration);
             if (typeNode) {
                 const declaredType = getTypeFromTypeNode(typeNode);
-                return addOptionality(declaredType, /*optional*/ !!declaration.questionToken && includeOptionality);
+                return addOptionality(declaredType, isOptional);
             }
 
             if ((noImplicitAny || isInJavaScriptFile(declaration)) &&
@@ -4440,25 +4441,20 @@ namespace ts {
                     type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 }
                 if (type) {
-                    return addOptionality(type, /*optional*/ !!declaration.questionToken && includeOptionality);
+                    return addOptionality(type, isOptional);
                 }
             }
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 const type = checkDeclarationInitializer(declaration);
-                return addOptionality(type, /*optional*/ !!declaration.questionToken && includeOptionality);
+                return addOptionality(type, isOptional);
             }
 
             if (isJsxAttribute(declaration)) {
                 // if JSX attribute doesn't have initializer, by default the attribute will have boolean value of true.
                 // I.e <Elem attr /> is sugar for <Elem attr={true} />
                 return trueType;
-            }
-
-            // If it is a short-hand property assignment, use the type of the identifier
-            if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                return checkIdentifier(<Identifier>declaration.name);
             }
 
             // If the declaration specifies a binding pattern, use the type implied by the binding pattern
@@ -4672,11 +4668,30 @@ namespace ts {
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
                     type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
+                else if (isJSDocPropertyTag(declaration)) {
+                    type = anyType; // TODO: Mimics old behavior from incorrect usage of getWidenedTypeForVariableLikeDeclaration, but seems incorrect
+                }
+                else if (isPropertyAccessExpression(declaration) || isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration)) {
+                    // TODO: Mimics old behavior from incorrect usage of getWidenedTypeForVariableLikeDeclaration, but seems lacking
+                    const typeNode = getEffectiveTypeAnnotationNode(declaration);
+                    if (typeNode) {
+                        type = getTypeFromTypeNode(typeNode);
+                    }
+                    else {
+                        type = anyType;
+                    }
+                }
                 else if (isPropertyAssignment(declaration)) {
                     type = checkPropertyAssignment(declaration);
                 }
                 else if (isJsxAttribute(declaration)) {
                     type = checkJsxAttribute(declaration);
+                }
+                else if (isShorthandPropertyAssignment(declaration)) {
+                    type = checkExpressionForMutableLocation(declaration.name, CheckMode.Normal);
+                }
+                else if (isObjectLiteralMethod(declaration)) {
+                    type = checkObjectLiteralMethod(declaration, CheckMode.Normal);
                 }
                 else if (isParameter(declaration)
                     || isPropertyDeclaration(declaration)
@@ -5458,7 +5473,7 @@ namespace ts {
          */
         function isThislessVariableLikeDeclaration(node: VariableLikeDeclaration): boolean {
             const typeNode = getEffectiveTypeAnnotationNode(node);
-            return typeNode ? isThislessType(typeNode) : !node.initializer;
+            return typeNode ? isThislessType(typeNode) : !hasInitializer(node);
         }
 
         /**
@@ -13899,7 +13914,7 @@ namespace ts {
         //   the contextual type of an initializer expression is the type annotation of the containing declaration, if present.
         function getContextualTypeForInitializerExpression(node: Expression): Type {
             const declaration = <VariableLikeDeclaration>node.parent;
-            if (node === declaration.initializer || node.kind === SyntaxKind.EqualsToken) {
+            if (hasInitializer(declaration) && node === declaration.initializer || node.kind === SyntaxKind.EqualsToken) {
                 const typeNode = getEffectiveTypeAnnotationNode(declaration);
                 if (typeNode) {
                     return getTypeFromTypeNode(typeNode);
@@ -13915,7 +13930,7 @@ namespace ts {
                 }
                 if (isBindingPattern(declaration.parent)) {
                     const parentDeclaration = declaration.parent.parent;
-                    const name = declaration.propertyName || declaration.name;
+                    const name = (declaration as BindingElement).propertyName || (declaration as BindingElement).name;
                     if (parentDeclaration.kind !== SyntaxKind.BindingElement) {
                         const parentTypeNode = getEffectiveTypeAnnotationNode(parentDeclaration);
                         if (parentTypeNode && !isBindingPattern(name)) {
@@ -17818,7 +17833,7 @@ namespace ts {
             const type = getTypeOfSymbol(symbol);
             if (strictNullChecks) {
                 const declaration = symbol.valueDeclaration;
-                if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
+                if (declaration && hasInitializer(declaration)) {
                     return getOptionalType(type);
                 }
             }
@@ -19102,7 +19117,7 @@ namespace ts {
             return node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression;
         }
 
-        function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
+        function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
             const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
@@ -21465,7 +21480,7 @@ namespace ts {
         }
 
         // Check that a parameter initializer contains no references to parameters declared to the right of itself
-        function checkParameterInitializer(node: VariableLikeDeclaration): void {
+        function checkParameterInitializer(node: HasExpressionInitializer): void {
             if (getRootDeclaration(node).kind !== SyntaxKind.Parameter) {
                 return;
             }
@@ -21552,7 +21567,7 @@ namespace ts {
             // We want to perform checkComputedPropertyName for all computed properties, including
             // well known symbols.
             if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-                checkComputedPropertyName(<ComputedPropertyName>node.name);
+                checkComputedPropertyName(node.name);
                 if (node.initializer) {
                     checkExpressionCached(node.initializer);
                 }
@@ -21564,11 +21579,11 @@ namespace ts {
                 }
                 // check computed properties inside property names of binding elements
                 if (node.propertyName && node.propertyName.kind === SyntaxKind.ComputedPropertyName) {
-                    checkComputedPropertyName(<ComputedPropertyName>node.propertyName);
+                    checkComputedPropertyName(node.propertyName);
                 }
 
                 // check private/protected variable access
-                const parent = <VariableLikeDeclaration>(<BindingPattern>node.parent).parent;
+                const parent = node.parent.parent;
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
@@ -24514,7 +24529,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node)) {
-                return getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>node.parent, /*includeOptionality*/ true);
+                return getTypeForVariableLikeDeclaration(node.parent, /*includeOptionality*/ true);
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {

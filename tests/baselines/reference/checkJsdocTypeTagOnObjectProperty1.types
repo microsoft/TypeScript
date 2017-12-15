@@ -10,12 +10,12 @@ const obj = {
 
   /** @type {string|undefined} */
   foo: undefined,
->foo : string | undefined
+>foo : undefined
 >undefined : undefined
 
   /** @type {string|undefined} */
   bar: "42",
->bar : string | undefined
+>bar : string
 >"42" : "42"
 
   /** @type {function(number): number} */
@@ -42,7 +42,7 @@ const obj = {
 
   /** @type {function(number): number} */
   arrowFunc: (num) => num + 42
->arrowFunc : (arg0: number) => number
+>arrowFunc : (num: any) => any
 >(num) => num + 42 : (num: any) => any
 >num : any
 >num + 42 : any
