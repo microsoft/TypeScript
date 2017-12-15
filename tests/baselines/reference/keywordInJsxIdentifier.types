@@ -15,10 +15,10 @@ declare var React: any;
 <foo class-id="1"/>;
 ><foo class-id="1"/> : any
 >foo : any
->class-id : "1"
+>class-id : string
 
 <foo class="1"/>;
 ><foo class="1"/> : any
 >foo : any
->class : "1"
+>class : string
 

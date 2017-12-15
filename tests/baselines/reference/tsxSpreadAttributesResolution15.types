@@ -25,7 +25,7 @@ export default function Component(props: ComponentProps) {
 >AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
 >props : ComponentProps
 >property2 : true
->AnotherProperty1 : "hi"
+>AnotherProperty1 : string
 
     );
 }

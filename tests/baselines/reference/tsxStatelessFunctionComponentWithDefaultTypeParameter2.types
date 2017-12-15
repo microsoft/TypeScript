@@ -28,6 +28,6 @@ let i1 = <MyComponent1 values={5}/>;
 >i1 : JSX.Element
 ><MyComponent1 values={5}/> : JSX.Element
 >MyComponent1 : <T extends MyComponentProp>(attr: T) => JSX.Element
->values : 5
+>values : number
 >5 : 5
 

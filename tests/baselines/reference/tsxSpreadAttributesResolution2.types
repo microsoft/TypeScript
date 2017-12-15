@@ -71,5 +71,5 @@ let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
 >5 : 5
 >y : "2"
 >"2" : "2"
->X : "hi"
+>X : string
 

@@ -134,7 +134,7 @@ const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // ex
 >b0 : JSX.Element
 ><MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->to : "/some/path"
+>to : string
 >onClick : (e: React.MouseEvent<any>) => void
 >(e)=>{} : (e: React.MouseEvent<any>) => void
 >e : React.MouseEvent<any>
@@ -194,7 +194,7 @@ const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrec
 >{ onClick(e: any){} } : { onClick(e: any): void; }
 >onClick : (e: any) => void
 >e : any
->children : 10
+>children : number
 >10 : 10
 
 const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
@@ -204,7 +204,7 @@ const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;
 >{ onClick(e: any){} } : { onClick(e: any): void; }
 >onClick : (e: any) => void
 >e : any
->children : "hello"
+>children : string
 >className : true
 
 const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name

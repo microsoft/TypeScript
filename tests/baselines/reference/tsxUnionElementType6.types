@@ -54,7 +54,7 @@ let b = <SFC2AndEmptyComp x="hi" />;
 >b : JSX.Element
 ><SFC2AndEmptyComp x="hi" /> : JSX.Element
 >SFC2AndEmptyComp : (prop: { x: boolean; }) => JSX.Element
->x : "hi"
+>x : string
 
 let c = <SFC2AndEmptyComp />;
 >c : JSX.Element

@@ -75,7 +75,7 @@ var obj4 = { x: 32, y: 32 };
 ><test1 {...obj4} x="ok" /> : JSX.Element
 >test1 : any
 >obj4 : { x: number; y: number; }
->x : "ok"
+>x : string
 
 // Error
 var obj5 = { x: 32, y: 32 };
@@ -89,7 +89,7 @@ var obj5 = { x: 32, y: 32 };
 <test1 x="ok" {...obj5} />
 ><test1 x="ok" {...obj5} /> : JSX.Element
 >test1 : any
->x : "ok"
+>x : string
 >obj5 : { x: number; y: number; }
 
 // Ok
@@ -118,7 +118,7 @@ var obj7 = { x: 'foo' };
 <test1 x={32} {...obj7} />
 ><test1 x={32} {...obj7} /> : JSX.Element
 >test1 : any
->x : 32
+>x : number
 >32 : 32
 >obj7 : { x: string; }
 

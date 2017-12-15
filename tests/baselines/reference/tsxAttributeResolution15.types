@@ -25,7 +25,7 @@ let a = <BigGreeter prop1="hello" />
 >a : JSX.Element
 ><BigGreeter prop1="hello" /> : JSX.Element
 >BigGreeter : typeof BigGreeter
->prop1 : "hello"
+>prop1 : string
 
 // OK
 let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
@@ -45,5 +45,5 @@ let c = <BigGreeter data-extra="hi" />
 >c : JSX.Element
 ><BigGreeter data-extra="hi" /> : JSX.Element
 >BigGreeter : typeof BigGreeter
->data-extra : "hi"
+>data-extra : string
 

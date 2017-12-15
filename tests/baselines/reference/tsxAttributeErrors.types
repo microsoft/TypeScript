@@ -27,14 +27,14 @@ declare namespace JSX {
 <div text={42} />;
 ><div text={42} /> : JSX.Element
 >div : any
->text : 42
+>text : number
 >42 : 42
 
 // Error, string is not assignable to number
 <div width={'foo'} />;
 ><div width={'foo'} /> : JSX.Element
 >div : any
->width : "foo"
+>width : string
 >'foo' : "foo"
 
 // Error, number is not assignable to string
@@ -53,7 +53,7 @@ var attribs = { text: 100 };
 <span foo='bar' bar={'foo'} />;
 ><span foo='bar' bar={'foo'} /> : JSX.Element
 >span : any
->foo : "bar"
->bar : "foo"
+>foo : string
+>bar : string
 >'foo' : "foo"
 

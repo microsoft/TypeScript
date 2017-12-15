@@ -33,9 +33,9 @@ const two2 = <ZeroThingOrTwoThing yy={100}  yy1="hello"/>;
 >two2 : JSX.Element
 ><ZeroThingOrTwoThing yy={100}  yy1="hello"/> : JSX.Element
 >ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
->yy : 100
+>yy : number
 >100 : 100
->yy1 : "hello"
+>yy1 : string
 
 const two3 = <ZeroThingOrTwoThing {...obj2} />;  // it is just any so we allow it to pass through
 >two3 : JSX.Element
@@ -47,7 +47,7 @@ const two4 = <ZeroThingOrTwoThing  yy={1000} {...obj2} />;  // it is just any so
 >two4 : JSX.Element
 ><ZeroThingOrTwoThing  yy={1000} {...obj2} /> : JSX.Element
 >ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
->yy : 1000
+>yy : number
 >1000 : 1000
 >obj2 : any
 
@@ -56,7 +56,7 @@ const two5 = <ZeroThingOrTwoThing  {...obj2} yy={1000} />;  // it is just any so
 ><ZeroThingOrTwoThing  {...obj2} yy={1000} /> : JSX.Element
 >ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
 >obj2 : any
->yy : 1000
+>yy : number
 >1000 : 1000
 
 declare function ThreeThing(l: {y1: string}): JSX.Element;
@@ -89,21 +89,21 @@ const three1 = <ThreeThing yy={99} yy1="hello world" />;
 >three1 : JSX.Element
 ><ThreeThing yy={99} yy1="hello world" /> : JSX.Element
 >ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
->yy : 99
+>yy : number
 >99 : 99
->yy1 : "hello world"
+>yy1 : string
 
 const three2 = <ThreeThing y2="Bye" />;
 >three2 : JSX.Element
 ><ThreeThing y2="Bye" /> : JSX.Element
 >ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
->y2 : "Bye"
+>y2 : string
 
 const three3 = <ThreeThing {...obj2} y2={10} />;  // it is just any so we allow it to pass through
 >three3 : JSX.Element
 ><ThreeThing {...obj2} y2={10} /> : JSX.Element
 >ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
 >obj2 : any
->y2 : 10
+>y2 : number
 >10 : 10
 

@@ -4,14 +4,14 @@ var a1 = <div id="foo" />;
 >a1 : any
 ><div id="foo" /> : any
 >div : any
->id : "foo"
+>id : string
 
 // A built-in element with a mistyped property (error)
 var a2 = <img srce="foo.jpg" />
 >a2 : any
 ><img srce="foo.jpg" /> : any
 >img : any
->srce : "foo.jpg"
+>srce : string
 
 // A built-in element with a badly-typed attribute value (error)
 var thing = { oops: 100 };
@@ -32,7 +32,7 @@ var e1 = <imag src="bar.jpg" />
 >e1 : any
 ><imag src="bar.jpg" /> : any
 >imag : any
->src : "bar.jpg"
+>src : string
 
 // A custom type
 class MyClass {
@@ -60,7 +60,7 @@ var b1 = <MyClass reqd={true} />;
 >b1 : any
 ><MyClass reqd={true} /> : any
 >MyClass : typeof MyClass
->reqd : true
+>reqd : boolean
 >true : true
 
 // Mistyped attribute member

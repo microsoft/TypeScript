@@ -21,7 +21,7 @@ module my {
 >my.div : any
 >my : typeof my
 >div : any
->n : "x"
+>n : string
 
 // Error
 <my.other />;
@@ -43,7 +43,7 @@ module q {
 >mine.div : any
 >mine : typeof mine
 >div : any
->n : "x"
+>n : string
 
     // Error
     <mine.non />;

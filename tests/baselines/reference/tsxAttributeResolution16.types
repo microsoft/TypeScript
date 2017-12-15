@@ -52,7 +52,7 @@ let a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" />
 >a : JSX.Element
 ><AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" /> : JSX.Element
 >AddressComp : typeof AddressComp
->postalCode : "T1B 0L3"
->street : "vancouver"
->country : "CA"
+>postalCode : string
+>street : string
+>country : string
 

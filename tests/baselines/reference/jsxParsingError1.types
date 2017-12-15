@@ -26,7 +26,7 @@ const elem = <div className={class1, class2}/>;
 >elem : JSX.Element
 ><div className={class1, class2 : JSX.Element
 >div : any
->className : "foo"
+>className : string
 >class1 : "foo"
 >class2 : true
 >/>; : RegExp

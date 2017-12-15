@@ -65,9 +65,9 @@ let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
 >k1 : JSX.Element
 ><Comp a={10} b="hi"><Button />  <AnotherButton /></Comp> : JSX.Element
 >Comp : (p: Prop) => JSX.Element
->a : 10
+>a : number
 >10 : 10
->b : "hi"
+>b : string
 ><Button /> : JSX.Element
 >Button : typeof Button
 ><AnotherButton /> : JSX.Element
@@ -78,9 +78,9 @@ let k2 = <Comp a={10} b="hi"><Button />
 >k2 : JSX.Element
 ><Comp a={10} b="hi"><Button />    <AnotherButton />  </Comp> : JSX.Element
 >Comp : (p: Prop) => JSX.Element
->a : 10
+>a : number
 >10 : 10
->b : "hi"
+>b : string
 ><Button /> : JSX.Element
 >Button : typeof Button
 
@@ -93,9 +93,9 @@ let k3 = <Comp a={10} b="hi">    <Button />
 >k3 : JSX.Element
 ><Comp a={10} b="hi">    <Button />    <AnotherButton /></Comp> : JSX.Element
 >Comp : (p: Prop) => JSX.Element
->a : 10
+>a : number
 >10 : 10
->b : "hi"
+>b : string
 ><Button /> : JSX.Element
 >Button : typeof Button
 
@@ -108,9 +108,9 @@ let k4 = <Comp a={10} b="hi"><Button />  </Comp>;
 >k4 : JSX.Element
 ><Comp a={10} b="hi"><Button />  </Comp> : JSX.Element
 >Comp : (p: Prop) => JSX.Element
->a : 10
+>a : number
 >10 : 10
->b : "hi"
+>b : string
 ><Button /> : JSX.Element
 >Button : typeof Button
 >Comp : (p: Prop) => JSX.Element

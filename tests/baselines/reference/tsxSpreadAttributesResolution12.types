@@ -72,14 +72,14 @@ let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
 >OverWriteAttr : typeof OverWriteAttr
 >obj : {}
 >y : true
->overwrite : "hi"
+>overwrite : string
 >obj1 : { x: 2; }
 
 let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
 >x1 : JSX.Element
 ><OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
->overwrite : "hi"
+>overwrite : string
 >obj1 : { x: 2; }
 >x : 3
 >3 : 3
@@ -99,7 +99,7 @@ let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
 >x3 : JSX.Element
 ><OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
->overwrite : "hi"
+>overwrite : string
 >obj1 : { x: 2; }
 >{y: true} : { y: true; }
 >y : true

@@ -50,7 +50,7 @@ declare var React: any;
 <a foo="bar;
 ><a foo="bar; : any
 >a : any
->foo : "bar;"
+>foo : string
 
 === tests/cases/conformance/jsx/8.tsx ===
 <a:b></b>;
@@ -195,8 +195,8 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <span className="a", id="b" />;
 ><span className="a", id="b" /> : any
 >span : any
->className : "a"
->id : "b"
+>className : string
+>id : string
 
 === tests/cases/conformance/jsx/22.tsx ===
 <div className"app">;

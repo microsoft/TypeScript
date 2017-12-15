@@ -25,7 +25,7 @@ var Obj1: Obj1type;
 <Obj1 x={10} />; // OK
 ><Obj1 x={10} /> : JSX.Element
 >Obj1 : Obj1type
->x : 10
+>x : number
 >10 : 10
 
 interface Obj2type {
@@ -42,7 +42,7 @@ var Obj2: Obj2type;
 <Obj2 x={10} />; // Error
 ><Obj2 x={10} /> : JSX.Element
 >Obj2 : Obj2type
->x : 10
+>x : number
 >10 : 10
 
 interface Obj3type {
@@ -59,6 +59,6 @@ var Obj3: Obj3type;
 <Obj3 x={10} />; // OK
 ><Obj3 x={10} /> : JSX.Element
 >Obj3 : Obj3type
->x : 10
+>x : number
 >10 : 10
 

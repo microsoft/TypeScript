@@ -38,6 +38,6 @@ class B<U> extends React.Component<U, {}> {
 >this.props : U & { children?: React.ReactNode; }
 >this : this
 >props : U & { children?: React.ReactNode; }
->x : "hi"
+>x : string
     }
 }

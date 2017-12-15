@@ -252,7 +252,7 @@ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number
 >a : JSX.Element
 ><App4 state={100} foo={s => s} /> : JSX.Element
 >App4 : <State, Actions extends ActionsObjectOr<State>>(props: (string & { state: State; }) | (Actions & { state: State; })) => JSX.Element
->state : 100
+>state : number
 >100 : 100
 >foo : (s: any) => any
 >s => s : (s: any) => any

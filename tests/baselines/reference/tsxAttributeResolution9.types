@@ -39,11 +39,11 @@ export class MyComponent {
 <MyComponent foo="bar" />; // ok  
 ><MyComponent foo="bar" /> : JSX.Element
 >MyComponent : typeof MyComponent
->foo : "bar"
+>foo : string
 
 <MyComponent foo={0} />; // should be an error
 ><MyComponent foo={0} /> : JSX.Element
 >MyComponent : typeof MyComponent
->foo : 0
+>foo : number
 >0 : 0
 

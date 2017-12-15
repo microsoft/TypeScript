@@ -33,5 +33,5 @@ let i1 = <MyComponent values="Hello"/>;
 >i1 : JSX.Element
 ><MyComponent values="Hello"/> : JSX.Element
 >MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
->values : "Hello"
+>values : string
 

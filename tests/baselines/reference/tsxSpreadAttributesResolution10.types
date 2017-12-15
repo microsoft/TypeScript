@@ -55,7 +55,7 @@ let y1 = <Opt {...obj1} x="Hi"/>;
 ><Opt {...obj1} x="Hi"/> : JSX.Element
 >Opt : typeof Opt
 >obj1 : OptionProp
->x : "Hi"
+>x : string
 
 let y2 = <Opt {...obj1} x={3}/>;
 >y2 : JSX.Element

@@ -42,6 +42,6 @@ class B<U> extends React.Component<U, {}> {
 >this.props : U
 >this : this
 >props : U
->x : "hi"
+>x : string
     }
 }

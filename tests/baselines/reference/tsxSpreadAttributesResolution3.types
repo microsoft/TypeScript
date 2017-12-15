@@ -54,7 +54,7 @@ let y = <Poisoned x="hi" y={2} />;
 >y : JSX.Element
 ><Poisoned x="hi" y={2} /> : JSX.Element
 >Poisoned : typeof Poisoned
->x : "hi"
->y : 2
+>x : string
+>y : number
 >2 : 2
 

@@ -27,6 +27,6 @@ var Obj1: Obj1type;
 <Obj1 x={10} />; // Error
 ><Obj1 x={10} /> : JSX.Element
 >Obj1 : Obj1type
->x : 10
+>x : number
 >10 : 10
 

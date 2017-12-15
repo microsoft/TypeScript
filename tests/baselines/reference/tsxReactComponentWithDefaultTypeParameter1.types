@@ -30,7 +30,7 @@ let x = <MyComp a={10} b="hi" />
 >x : JSX.Element
 ><MyComp a={10} b="hi" /> : JSX.Element
 >MyComp : typeof MyComp
->a : 10
+>a : number
 >10 : 10
->b : "hi"
+>b : string
 

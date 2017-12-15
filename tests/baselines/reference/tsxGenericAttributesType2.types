@@ -21,7 +21,7 @@ const decorator4 = function <T extends { x: number }>(Component: React.Stateless
 ><Component {...props} y={"blah"} ></Component> : JSX.Element
 >Component : React.StatelessComponent<T>
 >props : T & { children?: React.ReactNode; }
->y : "blah"
+>y : string
 >"blah" : "blah"
 >Component : React.StatelessComponent<T>
 

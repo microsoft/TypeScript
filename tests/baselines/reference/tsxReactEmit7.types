@@ -17,28 +17,28 @@ var m = <div x-y="val"></div>;
 >m : JSX.Element
 ><div x-y="val"></div> : JSX.Element
 >div : any
->x-y : "val"
+>x-y : string
 >div : any
 
 var n = <div xx-y="val"></div>;
 >n : JSX.Element
 ><div xx-y="val"></div> : JSX.Element
 >div : any
->xx-y : "val"
+>xx-y : string
 >div : any
 
 var o = <div x-yy="val"></div>;
 >o : JSX.Element
 ><div x-yy="val"></div> : JSX.Element
 >div : any
->x-yy : "val"
+>x-yy : string
 >div : any
 
 var p = <div xx-yy="val"></div>;
 >p : JSX.Element
 ><div xx-yy="val"></div> : JSX.Element
 >div : any
->xx-yy : "val"
+>xx-yy : string
 >div : any
 
 // Investigation
@@ -46,34 +46,34 @@ var a = <div x="val"></div>;
 >a : JSX.Element
 ><div x="val"></div> : JSX.Element
 >div : any
->x : "val"
+>x : string
 >div : any
 
 var b = <div xx="val"></div>;
 >b : JSX.Element
 ><div xx="val"></div> : JSX.Element
 >div : any
->xx : "val"
+>xx : string
 >div : any
 
 var c = <div xxx="val"></div>;
 >c : JSX.Element
 ><div xxx="val"></div> : JSX.Element
 >div : any
->xxx : "val"
+>xxx : string
 >div : any
 
 var d = <div xxxx="val"></div>;
 >d : JSX.Element
 ><div xxxx="val"></div> : JSX.Element
 >div : any
->xxxx : "val"
+>xxxx : string
 >div : any
 
 var e = <div xxxxx="val"></div>;
 >e : JSX.Element
 ><div xxxxx="val"></div> : JSX.Element
 >div : any
->xxxxx : "val"
+>xxxxx : string
 >div : any
 

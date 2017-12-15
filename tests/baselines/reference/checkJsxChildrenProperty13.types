@@ -34,7 +34,7 @@ class Button extends React.Component<ButtonProp, any> {
 >this.props : ButtonProp & { children?: React.ReactNode; }
 >this : this
 >props : ButtonProp & { children?: React.ReactNode; }
->children : "hi"
+>children : string
 
             <div>Hello World</div>
 ><div>Hello World</div> : JSX.Element

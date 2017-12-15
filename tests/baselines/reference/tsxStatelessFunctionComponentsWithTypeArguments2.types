@@ -33,7 +33,7 @@ function Bar<T extends {prop: number}>(arg: T) {
 ><ComponentSpecific1 {...arg} ignore-prop={10} /> : JSX.Element
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => JSX.Element
 >arg : T
->ignore-prop : 10
+>ignore-prop : number
 >10 : 10
  }
 
