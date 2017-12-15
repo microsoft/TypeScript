@@ -46,7 +46,7 @@ namespace project {
         }
 
         public initializeTests() {
-            describe.only("projects tests", () => {
+            describe("projects tests", () => {
                 const tests = this.tests.length === 0 ? this.enumerateTestFiles() : this.tests;
                 for (const test of tests) {
                     this.runProjectTestCase(test);
