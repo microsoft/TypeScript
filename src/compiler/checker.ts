@@ -4394,9 +4394,8 @@ namespace ts {
 
             const isOptional = !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken && includeOptionality;
             // Use type from type annotation if one is present
-            const typeNode = getEffectiveTypeAnnotationNode(declaration);
-            if (typeNode) {
-                const declaredType = getTypeFromTypeNode(typeNode);
+            const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
+            if (declaredType) {
                 return addOptionality(declaredType, isOptional);
             }
 
