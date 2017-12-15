@@ -784,7 +784,7 @@ namespace ts {
                     case SyntaxKind.PropertySignature:
                     case SyntaxKind.Parameter:
                     case SyntaxKind.VariableDeclaration:
-                        return node === (parent as Node & { type: Node }).type;
+                        return node === (parent as HasType).type;
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
@@ -1340,7 +1340,7 @@ namespace ts {
             case SyntaxKind.EnumMember:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.BindingElement:
-                return (parent as Node & { initializer: Node }).initializer === node;
+                return (parent as HasInitializer).initializer === node;
             case SyntaxKind.ExpressionStatement:
             case SyntaxKind.IfStatement:
             case SyntaxKind.DoStatement:
@@ -5816,13 +5816,13 @@ namespace ts {
     /** True if has type node attached to it. */
     /* @internal */
     export function hasType(node: Node): node is HasType {
-        return !!(node as TypeContainer).type;
+        return !!(node as HasType).type;
     }
 
     /** True if has initializer node attached to it. */
     /* @internal */
     export function hasInitializer(node: Node): node is HasInitializer {
-        return !!(node as InitializerContainer).initializer;
+        return !!(node as HasInitializer).initializer;
     }
 
     /** True if has initializer node attached to it. */

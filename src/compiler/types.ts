@@ -584,11 +584,6 @@ namespace ts {
         | JSDocFunctionType
         | EndOfFileToken;
 
-    /* @internal */
-    export interface TypeContainer {
-        type?: TypeNode;
-    }
-
     export type HasType =
         | SignatureDeclaration
         | VariableDeclaration
@@ -606,11 +601,6 @@ namespace ts {
         | JSDocNullableType
         | JSDocOptionalType
         | JSDocVariadicType;
-
-    /* @internal */
-    export interface InitializerContainer {
-        initializer?: Expression;
-    }
 
     export type HasInitializer =
         | HasExpressionInitializer
@@ -836,6 +826,9 @@ namespace ts {
         name: BindingName;                  // Declared binding element name
         initializer?: Expression;           // Optional initializer
     }
+
+    /*@internal*/
+    export type BindingElementGrandparent = BindingElement["parent"]["parent"];
 
     export interface PropertySignature extends TypeElement, JSDocContainer {
         kind: SyntaxKind.PropertySignature;
