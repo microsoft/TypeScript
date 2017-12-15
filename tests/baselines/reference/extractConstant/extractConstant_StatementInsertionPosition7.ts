@@ -15,7 +15,7 @@ const i = 0;
 class C {
     M() {
         for (let j = 0; j < 10; j++) {
-            const newLocal: any = i + 1;
+            const newLocal = i + 1;
             x = /*RENAME*/newLocal;
         }
     }
@@ -25,7 +25,7 @@ class C {
 
 const i = 0;
 class C {
-    private readonly newProperty: any = i + 1;
+    private readonly newProperty = i + 1;
 
     M() {
         for (let j = 0; j < 10; j++) {
@@ -37,7 +37,7 @@ class C {
 // ==SCOPE::Extract to constant in global scope==
 
 const i = 0;
-const newLocal: any = i + 1;
+const newLocal = i + 1;
 class C {
     M() {
         for (let j = 0; j < 10; j++) {
