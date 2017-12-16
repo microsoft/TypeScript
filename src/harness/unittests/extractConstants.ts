@@ -268,6 +268,12 @@ namespace N { // Force this test to be TS-only
 interface I { a: 1 | 2 | 3 }
 let i: I = [#|{ a: 1 }|];
 `);
+
+        testExtractConstant("extractConstant_ContextualType_Lambda", `
+const myObj: { member(x: number, y: string): void } = {
+    member: [#|(x, y) => x + y|],
+}
+`);
     });
 
     function testExtractConstant(caption: string, text: string) {
