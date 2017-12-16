@@ -252,18 +252,19 @@ namespace ts {
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
         let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
-        const loggingEnabled = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
-        const writeLog: (s: string) => void = loggingEnabled ? s => { system.write(s); system.write(system.newLine); } : noop;
-        const watchFile = compilerOptions.extendedDiagnostics ? ts.addFileWatcherWithLogging : loggingEnabled ? ts.addFileWatcherWithOnlyTriggerLogging : ts.addFileWatcher;
-        const watchFilePath = compilerOptions.extendedDiagnostics ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
-        const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
+        const watchLogLevel = compilerOptions.extendedDiagnostics ? WatchLogLevel.Verbose :
+            compilerOptions.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
+        const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? s => { system.write(s); system.write(system.newLine); } : noop;
+        const watchFile = createWatchFile(watchLogLevel, writeLog);
+        const watchFilePath = createWatchFilePath(watchLogLevel, writeLog);
+        const watchDirectoryWorker = createWatchDirectory(watchLogLevel, writeLog);
 
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
 
         const directoryStructureHost = configFileName ? createCachedDirectoryStructureHost(system) : system;
         if (configFileName) {
-            watchFile(system, configFileName, scheduleProgramReload, writeLog);
+            watchFile(system, configFileName, scheduleProgramReload, /*pollingInterval*/ undefined);
         }
 
         const getCurrentDirectory = memoize(() => directoryStructureHost.getCurrentDirectory());
@@ -416,7 +417,7 @@ namespace ts {
                         hostSourceFile.sourceFile = sourceFile;
                         sourceFile.version = hostSourceFile.version.toString();
                         if (!hostSourceFile.fileWatcher) {
-                            hostSourceFile.fileWatcher = watchFilePath(system, fileName, onSourceFileChange, path, writeLog);
+                            hostSourceFile.fileWatcher = watchFilePath(system, fileName, onSourceFileChange, /*pollingInterval*/ undefined, path);
                         }
                     }
                     else {
@@ -429,7 +430,7 @@ namespace ts {
                     let fileWatcher: FileWatcher;
                     if (sourceFile) {
                         sourceFile.version = "0";
-                        fileWatcher = watchFilePath(system, fileName, onSourceFileChange, path, writeLog);
+                        fileWatcher = watchFilePath(system, fileName, onSourceFileChange, /*pollingInterval*/ undefined, path);
                         sourceFilesCache.set(path, { sourceFile, version: 0, fileWatcher });
                     }
                     else {
@@ -599,11 +600,11 @@ namespace ts {
         }
 
         function watchDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return watchDirectoryWorker(system, directory, cb, flags, writeLog);
+            return watchDirectoryWorker(system, directory, cb, flags);
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
-            return watchFilePath(system, missingFilePath, onMissingFileChange, missingFilePath, writeLog);
+            return watchFilePath(system, missingFilePath, onMissingFileChange, /*pollingInterval*/ undefined, missingFilePath);
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {

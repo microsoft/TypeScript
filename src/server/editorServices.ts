@@ -321,9 +321,13 @@ namespace ts.server {
         typesMapLocation?: string;
     }
 
-    type WatchFile = (host: ServerHost, file: string, cb: FileWatcherCallback, watchType: WatchType, project?: Project) => FileWatcher;
-    type WatchFilePath = (host: ServerHost, file: string, cb: FilePathWatcherCallback, path: Path, watchType: WatchType, project?: Project) => FileWatcher;
-    type WatchDirectory = (host: ServerHost, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, watchType: WatchType, project?: Project) => FileWatcher;
+    export type WatchFile = (host: ServerHost, file: string, cb: FileWatcherCallback, pollingInterval: number | undefined, watchType: WatchType, project?: Project) => FileWatcher;
+    export type WatchFilePath = (host: ServerHost, file: string, cb: FilePathWatcherCallback, pollingInterval: number | undefined, path: Path, watchType: WatchType, project?: Project) => FileWatcher;
+    export type WatchDirectory = (host: ServerHost, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, watchType: WatchType, project?: Project) => FileWatcher;
+
+    function getDetailWatchInfo(watchType: WatchType, project: Project | undefined) {
+        return `Project: ${project ? project.getProjectName() : ""} WatchType: ${watchType}`;
+    }
 
     export class ProjectService {
 
@@ -450,26 +454,12 @@ namespace ts.server {
             };
 
             this.documentRegistry = createDocumentRegistry(this.host.useCaseSensitiveFileNames, this.currentDirectory);
-            if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.watchFile = (host, file, cb, watchType, project) => ts.addFileWatcherWithLogging(host, file, cb, this.createWatcherLog(watchType, project));
-                this.watchFilePath = (host, file, cb, path, watchType, project) => ts.addFilePathWatcherWithLogging(host, file, cb, path, this.createWatcherLog(watchType, project));
-                this.watchDirectory = (host, dir, cb, flags, watchType, project) => ts.addDirectoryWatcherWithLogging(host, dir, cb, flags, this.createWatcherLog(watchType, project));
-            }
-            else if (this.logger.loggingEnabled()) {
-                this.watchFile = (host, file, cb, watchType, project) => ts.addFileWatcherWithOnlyTriggerLogging(host, file, cb, this.createWatcherLog(watchType, project));
-                this.watchFilePath = (host, file, cb, path, watchType, project) => ts.addFilePathWatcherWithOnlyTriggerLogging(host, file, cb, path, this.createWatcherLog(watchType, project));
-                this.watchDirectory = (host, dir, cb, flags, watchType, project) => ts.addDirectoryWatcherWithOnlyTriggerLogging(host, dir, cb, flags, this.createWatcherLog(watchType, project));
-            }
-            else {
-                this.watchFile = ts.addFileWatcher;
-                this.watchFilePath = ts.addFilePathWatcher;
-                this.watchDirectory = ts.addDirectoryWatcher;
-            }
-        }
-
-        private createWatcherLog(watchType: WatchType, project: Project | undefined): (s: string) => void {
-            const detailedInfo = ` Project: ${project ? project.getProjectName() : ""} WatchType: ${watchType}`;
-            return s => this.logger.info(s + detailedInfo);
+            const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
+                this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
+            const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
+            this.watchFile = createWatchFile(watchLogLevel, log, getDetailWatchInfo);
+            this.watchFilePath = createWatchFilePath(watchLogLevel, log, getDetailWatchInfo);
+            this.watchDirectory = createWatchDirectory(watchLogLevel, log, getDetailWatchInfo);
         }
 
         toPath(fileName: string) {
@@ -755,8 +745,8 @@ namespace ts.server {
             }
         }
 
-        private onSourceFileChanged(fileName: NormalizedPath, eventKind: FileWatcherEventKind) {
-            const info = this.getScriptInfoForNormalizedPath(fileName);
+        private onSourceFileChanged(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
+            const info = this.getScriptInfoForPath(path);
             if (!info) {
                 this.logger.msg(`Error: got watch notification for unknown file: ${fileName}`);
             }
@@ -1136,6 +1126,7 @@ namespace ts.server {
                 this.host,
                 configFileName,
                 (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
+                /*pollingInterval*/ undefined,
                 WatchType.ConfigFileForInferredRoot
             );
             this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
@@ -1519,6 +1510,7 @@ namespace ts.server {
                 this.host,
                 configFileName,
                 (_fileName, eventKind) => this.onConfigChangedForConfiguredProject(project, eventKind),
+                /*pollingInterval*/ undefined,
                 WatchType.ConfigFilePath,
                 project
             );
@@ -1741,10 +1733,12 @@ namespace ts.server {
             // do not watch files with mixed content - server doesn't know how to interpret it
             if (!info.isDynamicOrHasMixedContent()) {
                 const { fileName } = info;
-                info.fileWatcher = this.watchFile(
+                info.fileWatcher = this.watchFilePath(
                     this.host,
                     fileName,
-                    (_fileName, eventKind) => this.onSourceFileChanged(fileName, eventKind),
+                    (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
+                    /*pollingInterval*/ undefined,
+                    info.path,
                     WatchType.ClosedScriptInfo
                 );
             }
