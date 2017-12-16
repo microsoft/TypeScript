@@ -279,7 +279,7 @@ namespace ts.codefix {
                 changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
             }
             else {
-                changeTracker.insertNodeAtTopOfFile(sourceFile, importDecl);
+                changeTracker.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
             }
         });
 

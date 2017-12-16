@@ -332,11 +332,11 @@ namespace ts.textChanges {
             return this;
         }
 
-        public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement): void {
+        public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
             const pos = getInsertionPositionAtSourceFileTop(sourceFile);
             this.insertNodeAt(sourceFile, pos, newNode, {
                 prefix: pos === 0 ? undefined : this.newLineCharacter,
-                suffix: isLineBreak(sourceFile.text.charCodeAt(pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
+                suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
             });
         }
 
