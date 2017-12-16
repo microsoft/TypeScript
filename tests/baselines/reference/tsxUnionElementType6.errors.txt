@@ -6,9 +6,9 @@ tests/cases/conformance/jsx/file.tsx(19,27): error TS2322: Type '{ x: string; }'
 tests/cases/conformance/jsx/file.tsx(20,9): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
   Type '{}' is not assignable to type '{ x: boolean; }'.
     Property 'x' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(21,27): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
-  Type '{}' is not assignable to type '{ x: boolean; }'.
-    Property 'x' is missing in type '{}'.
+tests/cases/conformance/jsx/file.tsx(21,27): error TS2322: Type '{ data-prop: true; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
+  Type '{ data-prop: true; }' is not assignable to type '{ x: boolean; }'.
+    Property 'x' is missing in type '{ data-prop: true; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
@@ -45,8 +45,8 @@ tests/cases/conformance/jsx/file.tsx(21,27): error TS2322: Type '{}' is not assi
 !!! error TS2322:     Property 'x' is missing in type '{}'.
     let d = <SFC2AndEmptyComp data-prop />;
                               ~~~~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
-!!! error TS2322:   Type '{}' is not assignable to type '{ x: boolean; }'.
-!!! error TS2322:     Property 'x' is missing in type '{}'.
+!!! error TS2322: Type '{ data-prop: true; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
+!!! error TS2322:   Type '{ data-prop: true; }' is not assignable to type '{ x: boolean; }'.
+!!! error TS2322:     Property 'x' is missing in type '{ data-prop: true; }'.
     
     

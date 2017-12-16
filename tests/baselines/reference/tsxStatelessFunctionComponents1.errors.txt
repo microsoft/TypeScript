@@ -6,9 +6,9 @@ tests/cases/conformance/jsx/file.tsx(27,15): error TS2322: Type '{ name: number;
     Types of property 'name' are incompatible.
       Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(29,15): error TS2559: Type '{ naaaaaaame: string; }' has no properties in common with type 'IntrinsicAttributes & { name?: string; }'.
-tests/cases/conformance/jsx/file.tsx(34,23): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
-  Type '{}' is not assignable to type '{ "prop-name": string; }'.
-    Property '"prop-name"' is missing in type '{}'.
+tests/cases/conformance/jsx/file.tsx(34,23): error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
+  Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
+    Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
 tests/cases/conformance/jsx/file.tsx(37,23): error TS2559: Type '{ prop1: true; }' has no properties in common with type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(38,24): error TS2559: Type '{ ref: (x: any) => any; }' has no properties in common with type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(41,16): error TS1005: ',' expected.
@@ -62,9 +62,9 @@ tests/cases/conformance/jsx/file.tsx(45,24): error TS2559: Type '{ prop1: boolea
     // Error
     let h = <MeetAndGreet extra-prop-name="World" />;
                           ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
-!!! error TS2322:   Type '{}' is not assignable to type '{ "prop-name": string; }'.
-!!! error TS2322:     Property '"prop-name"' is missing in type '{}'.
+!!! error TS2322: Type '{ extra-prop-name: string; }' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
+!!! error TS2322:   Type '{ extra-prop-name: string; }' is not assignable to type '{ "prop-name": string; }'.
+!!! error TS2322:     Property '"prop-name"' is missing in type '{ extra-prop-name: string; }'.
     
     // Error
     let i = <EmptyPropSFC prop1 />
