@@ -6315,8 +6315,31 @@ namespace ts {
             return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
         }
 
-        function getConstraintOfConditionalType(type: ConditionalType) {
+        function getDefaultConstraintOfConditionalType(type: ConditionalType) {
             return getUnionType([type.trueType, type.falseType]);
+        }
+
+        function getConstraintOfDistributiveConditionalType(type: ConditionalType) {
+            // Check if we have a conditional type of the form 'T extends U ? X : Y', where T is a constrained
+            // type parameter. If so, create an instantiation of the conditional type where T is replaced
+            // with its constraint. We do this because if the constraint is a union type it will be distributed
+            // over the conditional type and possibly reduced. For example, 'T extends undefined ? never : T'
+            // removes 'undefined' from T.
+            const conditionType = type.conditionType;
+            if (conditionType.flags & TypeFlags.Extends) {
+                const checkType = (<ExtendsType>conditionType).checkType;
+                if (checkType.flags & TypeFlags.TypeParameter) {
+                    const constraint = getConstraintOfTypeParameter(<TypeParameter>checkType);
+                    if (constraint) {
+                        return instantiateType(type, createTypeMapper([<TypeParameter>checkType], [constraint]));
+                    }
+                }
+            }
+            return undefined;
+        }
+
+        function getConstraintOfConditionalType(type: ConditionalType) {
+            return getConstraintOfDistributiveConditionalType(type) || getDefaultConstraintOfConditionalType(type);
         }
 
         function getBaseConstraintOfType(type: Type): Type {
@@ -8870,6 +8893,9 @@ namespace ts {
         }
 
         function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper): Type {
+            // Check if we have a conditional type of the form T extends U ? X : Y, where T is a type parameter.
+            // If so, the conditional type is distributive over a union type and when T is instantiated to a union
+            // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
             const conditionType = type.conditionType;
             if (conditionType.flags & TypeFlags.Extends) {
                 const checkType = (<ExtendsType>conditionType).checkType;
@@ -9991,7 +10017,14 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.Conditional) {
-                    if (result = isRelatedTo(getConstraintOfConditionalType(<ConditionalType>source), target, reportErrors)) {
+                    const constraint = getConstraintOfDistributiveConditionalType(<ConditionalType>source);
+                    if (constraint) {
+                        if (result = isRelatedTo(constraint, target, reportErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
+                    }
+                    if (result = isRelatedTo(getDefaultConstraintOfConditionalType(<ConditionalType>source), target, reportErrors)) {
                         errorInfo = saveErrorInfo;
                         return result;
                     }
