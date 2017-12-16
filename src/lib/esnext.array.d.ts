@@ -15,13 +15,101 @@ interface ReadonlyArray<T> {
         thisArg?: This
     ): U[]
 
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this:
+        ReadonlyArray<U[][][][]> |
+
+        ReadonlyArray<ReadonlyArray<U[][][]>> |
+        ReadonlyArray<ReadonlyArray<U[][]>[]> |
+        ReadonlyArray<ReadonlyArray<U[]>[][]> |
+        ReadonlyArray<ReadonlyArray<U>[][][]> |
+
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U[][]>>> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>[][]>> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>[][]> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>[]>[]> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U[]>>[]> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U[]>[]>> |
+
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U[]>>>> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>[]>>> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>[]>> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>[]> |
+
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>,
+        depth: 4): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this:
+        ReadonlyArray<U[][][]> |
+
+        ReadonlyArray<ReadonlyArray<U>[][]> |
+        ReadonlyArray<ReadonlyArray<U[]>[]> |
+        ReadonlyArray<ReadonlyArray<U[][]>> |
+
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U[]>>> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>[]>> |
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>[]> |
+
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>,
+        depth: 3): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this:
+        ReadonlyArray<U[][]> |
+
+        ReadonlyArray<ReadonlyArray<U[]>> |
+        ReadonlyArray<ReadonlyArray<U>[]> |
+
+        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>,
+        depth: 2): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this:
+        ReadonlyArray<U[]> |
+        ReadonlyArray<ReadonlyArray<U>>,
+        depth?: 1
+    ): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this:
+        ReadonlyArray<U>,
+        depth: 0
+    ): U[];
+
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
      * specified depth. If no depth is provided, flatten method defaults to the depth of 1.
      *
      * @param depth The maximum recursion depth
      */
-    flatten<U>(this: ReadonlyArray<U>, depth?: number): U[];
+    flatten<U>(depth?: number): any[];
   }
 
 interface Array<T> {
@@ -43,9 +131,73 @@ interface Array<T> {
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this: U[][][][][][][][], depth: 7): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this: U[][][][][][][], depth: 6): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this: U[][][][][][], depth: 5): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this: U[][][][][], depth: 4): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this: U[][][][], depth: 3): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this: U[][][], depth: 2): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this: U[][], depth?: 1): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flatten<U>(this: U[], depth: 0): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
      * specified depth. If no depth is provided, flatten method defaults to the depth of 1.
      *
      * @param depth The maximum recursion depth
      */
-    flatten<U>(this: U[], depth?: number): U[];
+    flatten<U>(depth?: number): any[];
 }
