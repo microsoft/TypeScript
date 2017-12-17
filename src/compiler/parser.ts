@@ -88,20 +88,48 @@ namespace ts {
             case SyntaxKind.SpreadAssignment:
                 return visitNode(cbNode, (<SpreadAssignment>node).expression);
             case SyntaxKind.Parameter:
+                return visitNodes(cbNode, cbNodes, node.decorators) ||
+                    visitNodes(cbNode, cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ParameterDeclaration>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<ParameterDeclaration>node).name) ||
+                    visitNode(cbNode, (<ParameterDeclaration>node).questionToken) ||
+                    visitNode(cbNode, (<ParameterDeclaration>node).type) ||
+                    visitNode(cbNode, (<ParameterDeclaration>node).initializer);
             case SyntaxKind.PropertyDeclaration:
+                return visitNodes(cbNode, cbNodes, node.decorators) ||
+                    visitNodes(cbNode, cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<PropertyDeclaration>node).name) ||
+                    visitNode(cbNode, (<PropertyDeclaration>node).questionToken) ||
+                    visitNode(cbNode, (<PropertyDeclaration>node).exclamationToken) ||
+                    visitNode(cbNode, (<PropertyDeclaration>node).type) ||
+                    visitNode(cbNode, (<PropertyDeclaration>node).initializer);
             case SyntaxKind.PropertySignature:
+                return visitNodes(cbNode, cbNodes, node.decorators) ||
+                    visitNodes(cbNode, cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<PropertySignature>node).name) ||
+                    visitNode(cbNode, (<PropertySignature>node).questionToken) ||
+                    visitNode(cbNode, (<PropertySignature>node).type) ||
+                    visitNode(cbNode, (<PropertySignature>node).initializer);
             case SyntaxKind.PropertyAssignment:
+                return visitNodes(cbNode, cbNodes, node.decorators) ||
+                    visitNodes(cbNode, cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<PropertyAssignment>node).name) ||
+                    visitNode(cbNode, (<PropertyAssignment>node).questionToken) ||
+                    visitNode(cbNode, (<PropertyAssignment>node).initializer);
             case SyntaxKind.VariableDeclaration:
+                return visitNodes(cbNode, cbNodes, node.decorators) ||
+                    visitNodes(cbNode, cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<VariableDeclaration>node).name) ||
+                    visitNode(cbNode, (<VariableDeclaration>node).exclamationToken) ||
+                    visitNode(cbNode, (<VariableDeclaration>node).type) ||
+                    visitNode(cbNode, (<VariableDeclaration>node).initializer);
             case SyntaxKind.BindingElement:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).propertyName) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).name) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).questionToken) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).exclamationToken) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).type) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).initializer);
+                    visitNode(cbNode, (<BindingElement>node).propertyName) ||
+                    visitNode(cbNode, (<BindingElement>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<BindingElement>node).name) ||
+                    visitNode(cbNode, (<BindingElement>node).initializer);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
@@ -5462,6 +5490,7 @@ namespace ts {
                 switch (token()) {
                     case SyntaxKind.OpenParenToken:     // Method declaration
                     case SyntaxKind.LessThanToken:      // Generic Method declaration
+                    case SyntaxKind.ExclamationToken:   // Non-null assertion on property name
                     case SyntaxKind.ColonToken:         // Type Annotation for declaration
                     case SyntaxKind.EqualsToken:        // Initializer for declaration
                     case SyntaxKind.QuestionToken:      // Not valid, but permitted so that it gets caught later on.

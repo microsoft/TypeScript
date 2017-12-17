@@ -584,6 +584,40 @@ namespace ts {
         | JSDocFunctionType
         | EndOfFileToken;
 
+    export type HasType =
+        | SignatureDeclaration
+        | VariableDeclaration
+        | ParameterDeclaration
+        | PropertySignature
+        | PropertyDeclaration
+        | TypePredicateNode
+        | ParenthesizedTypeNode
+        | TypeOperatorNode
+        | MappedTypeNode
+        | AssertionExpression
+        | TypeAliasDeclaration
+        | JSDocTypeExpression
+        | JSDocNonNullableType
+        | JSDocNullableType
+        | JSDocOptionalType
+        | JSDocVariadicType;
+
+    export type HasInitializer =
+        | HasExpressionInitializer
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | JsxAttribute;
+
+    export type HasExpressionInitializer =
+        | VariableDeclaration
+        | ParameterDeclaration
+        | BindingElement
+        | PropertySignature
+        | PropertyDeclaration
+        | PropertyAssignment
+        | EnumMember;
+
     /* @internal */
     export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
 
@@ -793,6 +827,9 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
+    /*@internal*/
+    export type BindingElementGrandparent = BindingElement["parent"]["parent"];
+
     export interface PropertySignature extends TypeElement, JSDocContainer {
         kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
@@ -848,25 +885,18 @@ namespace ts {
         expression: Expression;
     }
 
-    // SyntaxKind.VariableDeclaration
-    // SyntaxKind.Parameter
-    // SyntaxKind.BindingElement
-    // SyntaxKind.Property
-    // SyntaxKind.PropertyAssignment
-    // SyntaxKind.JsxAttribute
-    // SyntaxKind.ShorthandPropertyAssignment
-    // SyntaxKind.EnumMember
-    // SyntaxKind.JSDocPropertyTag
-    // SyntaxKind.JSDocParameterTag
-    export interface VariableLikeDeclaration extends NamedDeclaration {
-        propertyName?: PropertyName;
-        dotDotDotToken?: DotDotDotToken;
-        name: DeclarationName;
-        questionToken?: QuestionToken;
-        exclamationToken?: ExclamationToken;
-        type?: TypeNode;
-        initializer?: Expression;
-    }
+    export type VariableLikeDeclaration =
+        | VariableDeclaration
+        | ParameterDeclaration
+        | BindingElement
+        | PropertyDeclaration
+        | PropertyAssignment
+        | PropertySignature
+        | JsxAttribute
+        | ShorthandPropertyAssignment
+        | EnumMember
+        | JSDocPropertyTag
+        | JSDocParameterTag;
 
     export interface PropertyLikeDeclaration extends NamedDeclaration {
         name: PropertyName;
@@ -2739,6 +2769,8 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        /* @internal */ isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean;
+
         /**
          * returns unknownSignature in the case of an error.
          * @param argumentCount Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
@@ -2787,7 +2819,7 @@ namespace ts {
         /* @internal */ getNullType(): Type;
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
-        /* @internal */ getUnionType(types: Type[], subtypeReduction?: boolean): Type;
+        /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ createPromiseType(type: Type): Type;
 
@@ -2840,6 +2872,13 @@ namespace ts {
          * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
+    }
+
+    /* @internal */
+    export const enum UnionReduction {
+        None = 0,
+        Literal,
+        Subtype
     }
 
     export enum NodeBuilderFlags {
