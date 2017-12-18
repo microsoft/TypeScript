@@ -52,7 +52,7 @@ namespace ts.Completions {
 
         switch (completionData.kind) {
             case CompletionDataKind.Data:
-                return completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData);
+                return completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData, options.includeBracketCompletions);
             case CompletionDataKind.JsDocTagName:
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
                 return jsdocCompletionInfo(JsDoc.getJSDocTagNameCompletions());
@@ -70,8 +70,8 @@ namespace ts.Completions {
         return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false,  entries };
     }
 
-    function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData): CompletionInfo {
-        const { symbols, completionKind, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion } = completionData;
+    function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, includeBracketCompletions: boolean): CompletionInfo {
+        const { symbols, completionKind, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, symbolToOriginInfoMap, recommendedCompletion } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX && location && location.parent && isJsxClosingElement(location.parent)) {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
@@ -91,7 +91,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, typeChecker, compilerOptions.target, log, completionKind, recommendedCompletion, symbolToOriginInfoMap);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, typeChecker, compilerOptions.target, log, completionKind, includeBracketCompletions, propertyAccessToConvert, recommendedCompletion, symbolToOriginInfoMap);
             getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target, entries);
         }
         else {
@@ -99,7 +99,7 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            getCompletionEntriesFromSymbols(symbols, entries, location, typeChecker, compilerOptions.target, log, completionKind, recommendedCompletion, symbolToOriginInfoMap);
+            getCompletionEntriesFromSymbols(symbols, entries, location, typeChecker, compilerOptions.target, log, completionKind, includeBracketCompletions, propertyAccessToConvert, recommendedCompletion, symbolToOriginInfoMap);
         }
 
         // TODO add filter for keyword based on type/value/namespace and also location
@@ -157,12 +157,18 @@ namespace ts.Completions {
         kind: CompletionKind,
         origin: SymbolOriginInfo | undefined,
         recommendedCompletion: Symbol | undefined,
+        propertyAccessToConvert: PropertyAccessExpression | undefined,
+        includeBracketCompletions: boolean,
     ): CompletionEntry | undefined {
         const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind);
         if (!info) {
             return undefined;
         }
         const { name, needsConvertPropertyAccess } = info;
+        Debug.assert(!(needsConvertPropertyAccess && !propertyAccessToConvert));
+        if (needsConvertPropertyAccess && !includeBracketCompletions) {
+            return undefined;
+        }
 
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
         // 'getSymbolKind' which is permissible given that it is backwards compatible; but
@@ -178,10 +184,16 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText: "0",
             source: getSourceFromOrigin(origin),
+            // TODO: GH#20619 Use configured quote style
+            insertText: needsConvertPropertyAccess ? `["${name}"]` : undefined,
+            replacementSpan: needsConvertPropertyAccess
+                ? createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken)!.getStart(), propertyAccessToConvert.name.end)
+                : undefined,
             hasAction: trueOrUndefined(needsConvertPropertyAccess || origin !== undefined),
             isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
         };
     }
+
 
     function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion: Symbol, checker: TypeChecker): boolean {
         return localSymbol === recommendedCompletion ||
@@ -204,6 +216,8 @@ namespace ts.Completions {
         target: ScriptTarget,
         log: Log,
         kind: CompletionKind,
+        includeBracketCompletions?: boolean,
+        propertyAccessToConvert?: PropertyAccessExpression | undefined,
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
     ): Map<true> {
@@ -216,7 +230,7 @@ namespace ts.Completions {
         if (symbols) {
             for (const symbol of symbols) {
                 const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
-                const entry = createCompletionEntry(symbol, location, typeChecker, target, kind, origin, recommendedCompletion);
+                const entry = createCompletionEntry(symbol, location, typeChecker, target, kind, origin, recommendedCompletion, propertyAccessToConvert, includeBracketCompletions);
                 if (!entry) {
                     continue;
                 }
@@ -436,7 +450,6 @@ namespace ts.Completions {
     interface SymbolCompletion {
         type: "symbol";
         symbol: Symbol;
-        propertyAccessToConvert: PropertyAccessExpression | undefined;
         location: Node;
         symbolToOriginInfoMap: SymbolOriginInfoMap;
     }
@@ -449,7 +462,7 @@ namespace ts.Completions {
         { name, source }: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExports: true }, compilerOptions.target);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExports: true, includeBracketCompletions: true }, compilerOptions.target);
         if (!completionData) {
             return { type: "none" };
         }
@@ -457,7 +470,7 @@ namespace ts.Completions {
             return { type: "request", request: completionData };
         }
 
-        const { symbols, location, completionKind, propertyAccessToConvert, symbolToOriginInfoMap } = completionData;
+        const { symbols, location, completionKind, symbolToOriginInfoMap } = completionData;
 
         // Find the symbol with the matching entry name.
         // We don't need to perform character checks here because we're only comparing the
@@ -466,7 +479,7 @@ namespace ts.Completions {
         return firstDefined<Symbol, SymbolCompletion>(symbols, (symbol): SymbolCompletion => { // TODO: Shouldn't need return type annotation (GH#12632)
             const origin = symbolToOriginInfoMap[getSymbolId(symbol)];
             const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target, origin, completionKind);
-            return info && info.name === name && getSourceFromOrigin(origin) === source ? { type: "symbol" as "symbol", symbol, propertyAccessToConvert: info.needsConvertPropertyAccess ? propertyAccessToConvert : undefined, location, symbolToOriginInfoMap } : undefined;
+            return info && info.name === name && getSourceFromOrigin(origin) === source ? { type: "symbol" as "symbol", symbol, location, symbolToOriginInfoMap } : undefined;
         }) ||  { type: "none" };
     }
 
@@ -512,8 +525,8 @@ namespace ts.Completions {
                 }
             }
             case "symbol": {
-                const { symbol, location, propertyAccessToConvert, symbolToOriginInfoMap } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, formatContext, getCanonicalFileName, allSourceFiles, propertyAccessToConvert);
+                const { symbol, location, symbolToOriginInfoMap } = symbolCompletion;
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, formatContext, getCanonicalFileName, allSourceFiles);
                 const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
                 return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: sourceDisplay };
@@ -552,30 +565,11 @@ namespace ts.Completions {
         formatContext: formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
         allSourceFiles: ReadonlyArray<SourceFile>,
-        propertyAccessToConvert: PropertyAccessExpression | undefined,
     ): CodeActionsAndSourceDisplay {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
-        Debug.assert(!(symbolOriginInfo && propertyAccessToConvert));
-        return propertyAccessToConvert
-            ? { codeActions: convertDotToBracketAccess(propertyAccessToConvert), sourceDisplay: undefined }
-            : symbolOriginInfo
+        return symbolOriginInfo
             ? getCodeActionsAndSourceDisplayForImport(symbolOriginInfo, symbol, program, checker, host, compilerOptions, sourceFile, formatContext, getCanonicalFileName, allSourceFiles)
             : { codeActions: undefined, sourceDisplay: undefined };
-    }
-
-    function convertDotToBracketAccess(prop: PropertyAccessExpression): CodeAction[] {
-        const sourceFile = prop.getSourceFile();
-        const changes: ts.FileTextChanges[] = [
-            {
-                fileName: sourceFile.fileName,
-                textChanges: [
-                    { span: { start: ts.getFirstChildOfKind(prop, sourceFile, SyntaxKind.DotToken)!.getStart(), length: 1 }, newText: '["', },
-                    { span: { start: prop.name.getEnd(), length: 0 }, newText: '"]', },
-                ],
-            },
-        ];
-        const description = formatMessage(/*dummy*/ undefined, Diagnostics.Use_bracket_notation_instead_of_dot_notation);
-        return [{ changes, description }];
     }
 
     function getCodeActionsAndSourceDisplayForImport(
@@ -642,6 +636,7 @@ namespace ts.Completions {
         readonly kind: CompletionDataKind.Data;
         readonly symbols: ReadonlyArray<Symbol>;
         readonly completionKind: CompletionKind;
+        /** Note that the presence of this alone doesn't mean that we need a conversion. Only do that if the completion is not an ordinary identifier. */
         readonly propertyAccessToConvert: PropertyAccessExpression | undefined;
         readonly isNewIdentifierLocation: boolean;
         readonly location: Node | undefined;

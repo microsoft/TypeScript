@@ -333,6 +333,7 @@ namespace ts {
 
     export interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
+        includeBracketCompletions: boolean;
     }
 
     export interface ApplyCodeActionCommandResult {
@@ -746,6 +747,7 @@ namespace ts {
         kind: ScriptElementKind;
         kindModifiers: string; // see ScriptElementKindModifier, comma separated
         sortText: string;
+        insertText?: string;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.

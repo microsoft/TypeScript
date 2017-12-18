@@ -11,14 +11,21 @@
 ////    "\u0031\u0062": "invalid unicode identifer name (1b)"
 ////};
 ////
-////[|x./*a*/;|]
+////x[|./*a*/|];
 ////x["/*b*/"];
 
 verify.completionsAt("b", ["foo ", "bar", "break", "any", "#", "$", "b", "1b"]);
 
-verify.completionsAt("a", ["foo ", "bar", "break", "any", "#", "$", "b", "1b"]);
-verify.applyCodeActionFromCompletion("a", {
-    name: "foo ",
-    description: "Use bracket notation instead of dot notation",
-    newRangeContent: 'x[""];',
+const replacementSpan = test.ranges()[0];
+verify.completionsAt("a", [
+    { name: "foo ", insertText: '["foo "]', replacementSpan },
+    "bar",
+    "break",
+    "any",
+    { name: "#", insertText: '["#"]', replacementSpan },
+    "$",
+    "b",
+    { name: "1b", insertText: '["1b"]', replacementSpan },
+], {
+    includeBracketCompletions: true,
 });

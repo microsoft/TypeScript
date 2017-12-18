@@ -12,10 +12,11 @@
 ////not read
 
 // @Filename: /src/a.ts
-////import {} from "/*1*/";
+////import {} from "[|/*1*/|]";
 
 // @Filename: /src/folder/b.ts
-////import {} from "x//*2*/";
+////import {} from "x/[|/*2*/|]";
 
-verify.completionsAt("1", ["y", "x"]);
-verify.completionsAt("2", ["bar", "foo"]);
+const [r0, r1] = test.ranges();
+verify.completionsAt("1", [{ name: "y", replacementSpan: r0 }, { name: "x", replacementSpan: r0 }]);
+verify.completionsAt("2", [{ name: "bar", replacementSpan: r1 }, { name: "foo", replacementSpan: r1 }]);
