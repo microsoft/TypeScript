@@ -918,9 +918,8 @@ namespace ts.Completions {
                 symbols.push(...getPropertiesForCompletion(type, typeChecker, /*isForAccess*/ true));
             }
             else {
-                // Filter private properties
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                    if (typeChecker.isValidPropertyAccessForCompletions(<PropertyAccessExpression>(node.parent), type, symbol)) {
                         symbols.push(symbol);
                     }
                 }
@@ -2119,8 +2118,7 @@ namespace ts.Completions {
 
     /**
      * Gets all properties on a type, but if that type is a union of several types,
-     * tries to only include those types which declare properties, not methods.
-     * This ensures that we don't try providing completions for all the methods on e.g. Array.
+     * excludes array-like types or callable/constructable types.
      */
     function getPropertiesForCompletion(type: Type, checker: TypeChecker, isForAccess: boolean): Symbol[] {
         if (!(type.flags & TypeFlags.Union)) {

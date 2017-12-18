@@ -186,7 +186,11 @@ namespace ts {
             },
             isValidPropertyAccess: (node, propertyName) => {
                 node = getParseTreeNode(node, isPropertyAccessOrQualifiedName);
-                return node ? isValidPropertyAccess(node, escapeLeadingUnderscores(propertyName)) : false;
+                return !!node && isValidPropertyAccess(node, escapeLeadingUnderscores(propertyName));
+            },
+            isValidPropertyAccessForCompletions: (node, type, property) => {
+                node = getParseTreeNode(node, isPropertyAccessExpression);
+                return !!node && isValidPropertyAccessForCompletions(node, type, property);
             },
             getSignatureFromDeclaration: declaration => {
                 declaration = getParseTreeNode(declaration, isFunctionLike);
@@ -16042,11 +16046,22 @@ namespace ts {
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: __String): boolean {
-            const left = node.kind === SyntaxKind.PropertyAccessExpression
-                ? (<PropertyAccessExpression>node).expression
-                : (<QualifiedName>node).left;
-
+            const left = node.kind === SyntaxKind.PropertyAccessExpression ? node.expression : node.left;
             return isValidPropertyAccessWithType(node, left, propertyName, getWidenedType(checkExpression(left)));
+        }
+
+        function isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean {
+            return isValidPropertyAccessWithType(node, node.expression, property.escapedName, type)
+                && (!(property.flags & ts.SymbolFlags.Method) || isValidMethodAccess(property, type));
+        }
+        function isValidMethodAccess(method: Symbol, type: Type) {
+            const propType = getTypeOfFuncClassEnumModule(method);
+            const signatures = getSignaturesOfType(propType, SignatureKind.Call);
+            Debug.assert(signatures.length !== 0);
+            return signatures.some(sig => {
+                const thisType = getThisTypeOfSignature(sig);
+                return !thisType || isTypeAssignableTo(type, thisType);
+            });
         }
 
         function isValidPropertyAccessWithType(
