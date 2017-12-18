@@ -1,0 +1,33 @@
+=== tests/cases/compiler/mappedTypeRecursiveInference.ts ===
+interface A { a: A }
+>A : A
+>a : A
+>A : A
+
+declare let a: A;
+>a : A
+>A : A
+
+type Deep<T> = { [K in keyof T]: Deep<T[K]> }
+>Deep : Deep<T>
+>T : T
+>K : K
+>T : T
+>Deep : Deep<T>
+>T : T
+>K : K
+
+declare function foo<T>(deep: Deep<T>): T;
+>foo : <T>(deep: Deep<T>) => T
+>T : T
+>deep : Deep<T>
+>Deep : Deep<T>
+>T : T
+>T : T
+
+const out = foo(a);
+>out : { a: {}; }
+>foo(a) : { a: {}; }
+>foo : <T>(deep: Deep<T>) => T
+>a : A
+

@@ -364,7 +364,7 @@ namespace Playback {
         };
     }
 
-    function recordReplay<T extends Function>(original: T, underlying: any) {
+    function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
             // tslint:disable-next-line only-arrow-functions
             return <any>(function () {

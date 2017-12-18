@@ -97,7 +97,7 @@
 >constructor : any
 >prototype : any
 >"constructor" : "constructor"
->{ value: constructor, writable: true, configurable: true, enumerable: true } : { value: any; writable: true; configurable: true; enumerable: true; }
+>{ value: constructor, writable: true, configurable: true, enumerable: true } : { value: any; writable: boolean; configurable: boolean; enumerable: boolean; }
 >value : any
 >constructor : any
 >writable : boolean

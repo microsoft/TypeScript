@@ -138,38 +138,35 @@ namespace ts.Completions.PathCompletions {
     function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string, span: TextSpan, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): CompletionEntry[] {
         const { baseUrl, paths } = compilerOptions;
 
-        let result: CompletionEntry[];
+        const result: CompletionEntry[] = [];
 
         const fileExtensions = getSupportedExtensions(compilerOptions);
         if (baseUrl) {
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
-            result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, span, host);
+            getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, span, host, /*exclude*/ undefined, result);
 
-            if (paths) {
-                for (const path in paths) {
-                    if (paths.hasOwnProperty(path)) {
-                        if (path === "*") {
-                            if (paths[path]) {
-                                for (const pattern of paths[path]) {
-                                    for (const match of getModulesForPathsPattern(fragment, baseUrl, pattern, fileExtensions, host)) {
-                                        result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName, span));
-                                    }
-                                }
-                            }
-                        }
-                        else if (startsWith(path, fragment)) {
-                            const entry = paths[path] && paths[path].length === 1 && paths[path][0];
-                            if (entry) {
-                                result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName, span));
-                            }
+            for (const path in paths) {
+                if (!paths.hasOwnProperty(path)) continue;
+                const patterns = paths[path];
+                if (!patterns) continue;
+
+                if (path === "*") {
+                    for (const pattern of patterns) {
+                        for (const match of getModulesForPathsPattern(fragment, baseUrl, pattern, fileExtensions, host)) {
+                            // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
+                            if (result.some(entry => entry.name === match)) continue;
+                            result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName, span));
                         }
                     }
                 }
+                else if (startsWith(path, fragment)) {
+                    if (patterns.length === 1) {
+                        if (result.some(entry => entry.name === path)) continue;
+                        result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName, span));
+                    }
+                }
             }
-        }
-        else {
-            result = [];
         }
 
         if (compilerOptions.moduleResolution === ts.ModuleResolutionKind.NodeJs) {
