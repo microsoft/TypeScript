@@ -2034,7 +2034,6 @@ declare namespace ts {
         Conditional = 2097152,
         Extends = 4194304,
         NonPrimitive = 134217728,
-        MarkerType = 536870912,
         Literal = 224,
         Unit = 13536,
         StringOrNumberLiteral = 96,
@@ -2090,6 +2089,8 @@ declare namespace ts {
         EvolvingArray = 256,
         ObjectLiteralPatternWithComputedProperties = 512,
         ContainsSpread = 1024,
+        JsxAttributes = 2048,
+        MarkerType = 4096,
         ClassOrInterface = 3,
     }
     interface ObjectType extends Type {
