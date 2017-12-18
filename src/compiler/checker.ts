@@ -9656,7 +9656,7 @@ namespace ts {
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
-                    const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
+                    const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
                     if ((relation === assignableRelation || relation === comparableRelation) &&
                         (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                         return false;
@@ -10031,7 +10031,7 @@ namespace ts {
                 }
                 else {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target &&
-                        !(source.flags & TypeFlags.MarkerType || target.flags & TypeFlags.MarkerType)) {
+                        !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
                         // We have type references to the same generic type, and the type references are not marker
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
@@ -10245,7 +10245,7 @@ namespace ts {
             }
 
             function hasCommonProperties(source: Type, target: Type) {
-                const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
+                const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
                 for (const prop of getPropertiesOfType(source)) {
                     if (isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
                         return true;
@@ -10489,7 +10489,7 @@ namespace ts {
         // type, and flag the result as a marker type reference.
         function getMarkerTypeReference(type: GenericType, source: TypeParameter, target: Type) {
             const result = createTypeReference(type, map(type.typeParameters, t => t === source ? target : t));
-            result.flags |= TypeFlags.MarkerType;
+            result.objectFlags |= ObjectFlags.MarkerType;
             return result;
         }
 
@@ -14983,8 +14983,8 @@ namespace ts {
              */
             function createJsxAttributesType(symbol: Symbol, attributesTable: UnderscoreEscapedMap<Symbol>) {
                 const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-                result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral;
-                result.objectFlags |= ObjectFlags.ObjectLiteral;
+                result.flags |= TypeFlags.ContainsObjectLiteral;
+                result.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.JsxAttributes;
                 return result;
             }
         }

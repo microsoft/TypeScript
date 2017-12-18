@@ -3367,8 +3367,7 @@ namespace ts {
         ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
         NonPrimitive            = 1 << 27,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 28,  // Jsx attributes type
-        MarkerType              = 1 << 29,  // Marker type used for variance probing
+        GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3406,7 +3405,6 @@ namespace ts {
         /* @internal */
         PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType,
         /* @internal */
-        GenericMappedType = MarkerType,  // Flag used by maybeTypeOfKind
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -3465,6 +3463,8 @@ namespace ts {
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ContainsSpread   = 1 << 10, // Object literal contains spread operation
+        JsxAttributes    = 1 << 11, // Jsx attributes type
+        MarkerType       = 1 << 12, // Marker type used for variance probing
         ClassOrInterface = Class | Interface
     }
 
