@@ -17216,8 +17216,13 @@ namespace ts {
                 return candidate;
             }
 
-            const typeArgumentNodes: ReadonlyArray<TypeNode> = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments || emptyArray : emptyArray;
-            const typeArguments = typeArgumentNodes.map(getTypeOfNode);
+            if (!callLikeExpressionMayHaveTypeArguments(node) || !node.typeArguments) {
+                // TODO: This leaks a type parameter! See GH#19854
+                // Could use `callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments || emptyArray : emptyArray;` instead of `node.typeArguments`.
+                return candidate;
+            }
+
+            const typeArguments = node.typeArguments.map(getTypeOfNode);
             while (typeArguments.length > typeParameters.length) {
                 typeArguments.pop();
             }
